@@ -1,6 +1,6 @@
 # CuongMini ↔ CT Work — đối chiếu quyền (parity) với người dùng
 
-Cập nhật 21/10/2026, đợt 2 cùng ngày (nhánh `ctw-mcp-full`). Bảng đầy đủ mọi tuyến GHI ở cuối file được sinh từ router thật
+Cập nhật 21/10/2026 — đợt 1, 2, 3 cùng ngày (nhánh `ctw-mcp-full`). Sau đợt 3: **mọi tuyến ghi không thuộc diện "chỉ người" đều có lệnh** (0 thiếu). Bảng đầy đủ mọi tuyến GHI ở cuối file được sinh từ router thật
 (`work.routes.ts` + các router con) đối chiếu với registry lệnh (`src/services/work/toolRegistry/*`, `src/mcp/tools/*`).
 
 ## 1. CuongMini đăng nhập CT Work bằng gì?
@@ -27,8 +27,8 @@ ma trận bằng `PUT …/matrix`) chỉ có trên web. Thêm vào đó luật p
 | Ai cầm token | Làm được gì | Rào |
 |---|---|---|
 | **Người** (CuongMini, Claude Code, Cursor… với token cá nhân) | Mọi việc vai của người đó làm được trên web, kể cả sửa/xoá | Lệnh xoá khai `destructive` ⇒ MCP `annotations.destructiveHint: true` ⇒ app CuongMini **luôn hỏi** (kể cả `tu-ghi on` / "Bỏ qua hết"), thẻ duyệt mở đầu `⚠ XOÁ ·`. Mô tả lệnh bắt đầu bằng `DESTRUCTIVE:`. Thẻ và trang Docs vào thùng rác, khôi phục được (`issue_restore`, `docs_page_restore`). |
-| **Agent thành viên** (`kind = AGENT`, scope `agent`) | Như trước: làm thẻ của mình, ghi kết quả test, bình luận… | Lệnh xoá `personOnly` (không có trong `tools/list`) + `requirePerson` (gọi thẳng ⇒ `WORK_AGENT_FORBIDDEN`) + `AGENT_DENIED_ROUTES` thêm `DELETE` của sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources, mục SRS; đợt 2: mục SWR302, Change Request, review, test plan, test design (REST cũng 403). |
-| **Ask AI trên web / agent BUILTIN** | Như trước | 97 lệnh mới của hai đợt chỉ ở MCP (`mcpOnly`): mục lục lệnh GHI của Ask AI đã ~17k ký tự/câu hỏi, web có nút riêng — không thêm tiền prompt ở đó. |
+| **Agent thành viên** (`kind = AGENT`, scope `agent`) | Như trước: làm thẻ của mình, ghi kết quả test, bình luận… | Lệnh xoá `personOnly` (không có trong `tools/list`) + `requirePerson` (gọi thẳng ⇒ `WORK_AGENT_FORBIDDEN`) + `AGENT_DENIED_ROUTES` thêm `DELETE` của sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources, mục SRS; đợt 2: mục SWR302, Change Request, review, test plan, test design; đợt 3: dashboard, bộ lọc, baseline, phiên thăm dò, problem service desk, nhóm Resources, báo cáo tuần + AI usage (REST cũng 403). |
+| **Ask AI trên web / agent BUILTIN** | Như trước | 119 lệnh mới của ba đợt chỉ ở MCP (`mcpOnly`): mục lục lệnh GHI của Ask AI đã ~17k ký tự/câu hỏi, web có nút riêng — không thêm tiền prompt ở đó. |
 
 ### Chỉ người (cố ý KHÔNG có lệnh, kể cả với token người)
 
@@ -39,6 +39,8 @@ ma trận bằng `PUT …/matrix`) chỉ có trên web. Thêm vào đó luật p
 | Mọi thứ hướng khách/ra ngoài: cổng khách, share link, `client-visible`, gửi báo cáo khách, mời họp ra ngoài, mở link khảo sát/form công khai, Slack/Notion/OneDrive/webhook/chat-hooks, xuất dữ liệu | Không lấy lại được khi đã gửi ra ngoài. |
 | Cấu hình & thành viên dự án (workflow, trạng thái, loại thẻ, nhãn, trường tuỳ chỉnh, studio/mô-đun, GitHub/GitLab connection, automation), xoá/lưu trữ dự án hay không gian, xoá vĩnh viễn khỏi thùng rác | Ảnh hưởng cả nhóm, khó hoàn tác. (Thêm/đổi vai/bớt thành viên và sprint đã có lệnh `personOnly` từ 19/10.) |
 | Làm quiz, điểm danh check-in, chấm điểm / trả bài / sổ điểm lớp học | Liêm chính học thuật; quyết định của giảng viên. |
+| Nhận / bỏ đề xuất của AI web (biên bản AI, đề xuất sơ đồ, phát hiện soát spec), các nút AI của web (autofill, fill-srs, ghi chú release AI, tóm tắt retro, gợi ý câu hỏi quiz…), phiên âm / ghi âm | CuongMini chính là AI — không gọi AI web thay người (tốn lượt AI của web, và nhận đề xuất AI là quyết định của người). |
+| Cấu hình còn lại: bật Tests, thuộc tính test, cài đặt test plan, cài đặt SWR, ma trận ước lượng WBS, giai đoạn (stages), nhập dự án ZIP/CSV, đồng soạn cấp dự án | Cấu hình dự án — như mục trên. |
 | Ghi âm/tham gia họp trực tiếp, báo cáo nội dung cho kiểm duyệt | Cần người có mặt / là việc của người. |
 
 Nếu sau này cần mở thêm một việc ở bảng này, làm theo kiểu lệnh xoá: `destructive: true` (app luôn hỏi) + `personOnly`.
@@ -100,6 +102,22 @@ Nếu sau này cần mở thêm một việc ở bảng này, làm theo kiểu l
 | Duyệt — gửi duyệt | `POST /approvals` | ✅ `approval_request`, `request_review` · quyết định: 👤 |
 | Cài đặt dự án — đọc | `GET /projects/:pid` | ✅ qua `get_issue` (workflow, transitions, DoD), `whoami`, `list_projects`, tài nguyên `ctwork://{project}/dod` |
 
+### Đợt 3 — lệnh gộp theo `action`
+
+| Khu | Lệnh |
+|---|---|
+| Lớp học (giảng viên, không chấm) | `class_admin` (tạo/sửa lớp, cài đặt, mã tham gia, vào lớp, roster xem trước/nhập/mời, lịch, buổi học, sắp xếp, bình luận stream + ẩn, tải tệp) · `class_quiz` (ngân hàng câu hỏi, nhập Aiken/GIFT/bảng, ảnh câu hỏi, soạn + công bố quiz) · `class_content` (đọc lớp/roster/stream/tài liệu/ngân hàng/quiz) · `class_content_delete` thêm: học viên, lịch, buổi, bình luận, câu hỏi, quiz, tệp |
+| SWR302 phụ | `swr_extras` (RACI, seed ưu tiên + stakeholder, ước lượng, đánh dấu chất lượng, đề xuất từ elicitation, NFR từ mẫu, gửi mockup, liên kết họp elicitation) · `swr_delete` thêm `raci_activity` |
+| Thẻ | `issue_extras` (ghi chú cá nhân, react bình luận, chuyển dự án, bàn giao + nhận/trả/huỷ, lưu web link vào Resources, huỷ yêu cầu duyệt của mình) · `issue_bulk` · `service_desk` (ticket, chờ khách, problem, sự cố, postmortem) |
+| Chat · Docs · họp | `chat_extras` (gửi tệp, chuyển tiếp, thông báo kênh, đã đọc, nhắn riêng `/chat/dm`) · `docs_extras` (bình luận NEO đoạn văn — chèn mark `commentAnchor` vào đúng một nút chữ bằng bản sửa có `baseVersion`, đoạn trích không nằm trọn trong một đoạn ⇒ lỗi rõ; bật/tắt đồng soạn trang) · `meeting_extras` (nhân bản, áp mẫu, link ghi hình, tạo/sửa chuỗi họp) |
+| Kế hoạch · báo cáo | `dashboard_save` · `planning_extras` (baseline, bộ lọc, OKR mục tiêu dự án) · `wbs_manage` · `resource_extras` · `fpt_reports_manage` (thông tin môn/nhóm, báo cáo tuần, AI usage) · `contrib_manage` (cài đặt, tác giả git, vòng đánh giá chéo, chấm chéo CỦA NGƯỜI DÙNG — mô tả cấm bịa điểm) · `form_manage` · `governance_extras` (liên kết RAID, rủi ro mẫu, Q&A cũ ⇒ mục mới, phạm vi CR, thẻ thực hiện CR đã duyệt) |
+| Test · sơ đồ | `exploratory_manage` · `test_extras` (nhập test, rủi ro test, phân tích defect, reset flaky, phát hiện phân tích tĩnh) · `diagram_extras` (bình luận, khôi phục phiên bản, nhúng vào Docs, nhập .drawio/.mmd/.puml) · `poker_session` thêm `timer` |
+| Gom | `ctwork_read` (15 loại danh sách có id) · `ctwork_delete` (12 loại, destructive) |
+
+**Sự cố gốc 5.1 ("không có tool xoá/ẩn UTCID")**: `fpt_unit_get` / `fpt_unit_list` / `fpt_it_get` nay in dòng máy sinh chỉ đúng lệnh
+(Executed By ⇒ `fpt_unit_update_function`, xoá/ẩn UTCID ⇒ `fpt_unit_delete_cases notRun=true`…), mô tả `fpt_unit_delete_cases` có
+các chữ "remove / delete / hide UTCID", kỹ năng `ctwork_huong_dan` có từ khoá "xoá UTCID / ẩn UTCID / dòng nháp".
+
 ## 4. Repo chưa có trên máy
 
 `project_repos` trả các repo của dự án (kết nối GitHub/GitLab trên trang Code + link github/gitlab/bitbucket trong
@@ -108,25 +126,21 @@ Resources) kèm `cloneHttps`, `cloneSsh`, `defaultBranch` (GitHub API công khai
 mở không phải repo của dự án (`git remote -v`) ⇒ gọi `project_repos` rồi **đề nghị `git clone`**, đừng nói "không tìm
 thấy code". CLI/app chạy được git sẵn — không cần sửa app cho phần này.
 
-## 5. Còn thiếu (sau đợt 2, theo thứ tự đáng làm)
+## 5. Còn thiếu
 
-1. Lớp học phía giảng viên ngoài nội dung: danh sách lớp/roster (nhập, mời), lịch + buổi học, ngân hàng câu hỏi + tạo quiz
-   (soạn đề — không phải làm bài/chấm), cài đặt lớp, bình luận stream.
-2. SWR302 phần phụ: vòng đời yêu cầu (`/lifecycle` — có `swr_requirement_set_status`), RACI (agent cấm; người: —), seed, ước
-   lượng, chất lượng thủ công, đề xuất từ elicitation, NFR từ mẫu.
-3. Thẻ: ghi chú cá nhân (Notes ↔ thẻ), react bình luận, chuyển sang dự án khác, sửa hàng loạt, handoff, service desk.
-4. Chat: tệp/voice trong kênh, chuyển tiếp, gọi, thông báo kênh, nhắn riêng (`/chat/dm`).
-5. Docs: thêm bình luận NEO đoạn văn (cần chèn neo vào nội dung), đồng soạn bật/tắt, autofill/fill-srs (AI web).
-6. Họp: nhân bản, áp mẫu, link ghi hình, gợi ý action (AI web).
-7. Dashboard (widget), exploratory session, phân bổ tài nguyên, WBS, báo cáo trạng thái, đóng góp (cài đặt + đánh giá chéo).
+Không còn tuyến ghi nào thiếu lệnh (ngoài danh sách "chỉ người"). Giới hạn đã biết:
+- Lệnh nhận tệp lớn đi bằng base64 (≤ 6 MB; nhập Excel ≤ 6 MB) — app CuongMini chỉ tự đọc tệp từ đường dẫn với `attach_file`.
+- Lệnh có thân phức tạp nhận JSON dạng chuỗi (`questionJson`, `seriesJson`, `formJson`, `estimationJson`, `docJson`, `updateJson`,
+  `inputJson` của test design) và được kiểm bằng đúng schema zod của service.
+- Mục lục: token người thấy **277** lệnh (trần kiểm thử 280, trần máy chủ 300, trần app 300) — lệnh mới phải gộp vào `action` sẵn có.
 
 ## 6. Số liệu
 
-- Lệnh registry: **167 ⇒ 224 (đợt 1) ⇒ 264 (đợt 2)** (+97; 30 lệnh `destructive`). MCP: token người thấy **255** lệnh,
-  token agent 211. App gửi 23 lệnh kèm schema + ~232 vào mục lục (trần máy chủ 300 — `registry.test` giữ ≤ 280). Đợt 2 gộp
-  theo `action` (`change_request_manage`, `poker_session`, `review_manage`…) để không nở mục lục.
-- Tuyến GHI của CT Work (router thật, 21/10/2026): **731**. Có lệnh: **144 ⇒ 227** · cố ý chỉ người (👤): **306** · còn
-  thiếu: **280 ⇒ 198** (xem mục 5).
+- Lệnh registry: **167 ⇒ 224 (đợt 1) ⇒ 264 (đợt 2) ⇒ 286 (đợt 3)** (+119; 31 lệnh `destructive`). MCP: token người thấy
+  **277** lệnh, token agent 226. App gửi 23 lệnh kèm schema + ~254 vào mục lục (trần máy chủ 300 — `registry.test` giữ ≤ 280). Đợt 2–3
+  gộp theo `action` để không nở mục lục.
+- Tuyến GHI của CT Work (router thật, 21/10/2026): **731**. Có lệnh: **144 ⇒ 227 ⇒ 369** · cố ý chỉ người / không phải thao tác
+  dữ liệu (👤): **362** · còn thiếu: **280 ⇒ 198 ⇒ 0**.
 - Cách sinh lại bảng dưới: liệt kê router bằng cách duyệt `router.stack` của `work.routes.ts`, khớp với các cặp
   `[METHOD, path]` mà mỗi lệnh truyền cho `projectFor` (+ bảng đối chiếu tay cho lệnh dùng đường động), phân loại 👤 theo
   danh sách ở mục 2.
@@ -149,47 +163,47 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/agents/me/leases/:id/release` | 👤 | workspace admin / account / setup (outside a project) |
 | POST | `/agents/me/events/ack` | 👤 | workspace admin / account / setup (outside a project) |
 
-### (outside project) /chat — 0 tool · 0 chỉ người · 1 thiếu
+### (outside project) /chat — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/chat/prefs` | — |  |
+| PUT | `/chat/prefs` | 👤 | external OAuth / webhook / personal app setting |
 
-### (outside project) /classes — 16 tool · 14 chỉ người · 36 thiếu
+### (outside project) /classes — 50 tool · 16 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/classes` | — |  |
-| POST | `/classes/join/:code` | — |  |
-| PATCH | `/classes/:id` | — |  |
-| POST | `/classes/:id/join-code` | — |  |
-| POST | `/classes/:id/roster/preview` | — |  |
-| POST | `/classes/:id/roster/import` | — |  |
-| POST | `/classes/:id/roster/invite` | — |  |
-| DELETE | `/classes/:id/roster/:sid` | — |  |
-| PATCH | `/classes/:id/classroom-settings` | — |  |
+| POST | `/classes` | ✅ | class_admin |
+| POST | `/classes/join/:code` | ✅ | class_admin (join) |
+| PATCH | `/classes/:id` | ✅ | class_admin |
+| POST | `/classes/:id/join-code` | ✅ | class_admin |
+| POST | `/classes/:id/roster/preview` | ✅ | class_admin |
+| POST | `/classes/:id/roster/import` | ✅ | class_admin |
+| POST | `/classes/:id/roster/invite` | ✅ | class_admin |
+| DELETE | `/classes/:id/roster/:sid` | ✅ | class_content_delete |
+| PATCH | `/classes/:id/classroom-settings` | ✅ | class_admin |
 | POST | `/classes/:id/stream` | ✅ | class_post |
 | PATCH | `/classes/:id/stream/:pid` | ✅ | class_post |
 | DELETE | `/classes/:id/stream/:pid` | ✅ | class_content_delete |
-| POST | `/classes/:id/stream/:pid/comments` | — |  |
-| PATCH | `/classes/:id/stream-comments/:cid` | — |  |
-| DELETE | `/classes/:id/stream-comments/:cid` | — |  |
-| POST | `/classes/:id/stream-files` | — |  |
-| DELETE | `/classes/:id/stream-files/:fid` | — |  |
+| POST | `/classes/:id/stream/:pid/comments` | ✅ | class_admin |
+| PATCH | `/classes/:id/stream-comments/:cid` | ✅ | class_admin |
+| DELETE | `/classes/:id/stream-comments/:cid` | ✅ | class_content_delete |
+| POST | `/classes/:id/stream-files` | ✅ | class_admin (file_upload) |
+| DELETE | `/classes/:id/stream-files/:fid` | ✅ | class_content_delete |
 | POST | `/classes/:id/materials` | ✅ | class_material |
-| PUT | `/classes/:id/materials-order` | — |  |
+| PUT | `/classes/:id/materials-order` | ✅ | class_admin |
 | PATCH | `/classes/:id/materials/:mid` | ✅ | class_material |
 | DELETE | `/classes/:id/materials/:mid` | ✅ | class_content_delete |
-| POST | `/classes/:id/materials/:mid/view` | — |  |
+| POST | `/classes/:id/materials/:mid/view` | 👤 | UI helper / draft upload discard (no team data change) |
 | POST | `/classes/:id/topics` | ✅ | class_material |
-| PUT | `/classes/:id/topics-order` | — |  |
+| PUT | `/classes/:id/topics-order` | ✅ | class_admin |
 | PATCH | `/classes/:id/topics/:tid` | ✅ | class_material |
 | DELETE | `/classes/:id/topics/:tid` | ✅ | class_content_delete |
-| POST | `/classes/:id/schedules` | — |  |
-| DELETE | `/classes/:id/schedules/:sid` | — |  |
-| POST | `/classes/:id/sessions` | — |  |
-| PATCH | `/classes/:id/sessions/:sid` | — |  |
-| DELETE | `/classes/:id/sessions/:sid` | — |  |
+| POST | `/classes/:id/schedules` | ✅ | class_admin |
+| DELETE | `/classes/:id/schedules/:sid` | ✅ | class_content_delete |
+| POST | `/classes/:id/sessions` | ✅ | class_admin |
+| PATCH | `/classes/:id/sessions/:sid` | ✅ | class_admin |
+| DELETE | `/classes/:id/sessions/:sid` | ✅ | class_content_delete |
 | POST | `/classes/:id/sessions/:sid/checkin` | 👤 | academic integrity (taking a quiz / attendance check-in) |
 | DELETE | `/classes/:id/sessions/:sid/checkin` | 👤 | academic integrity (taking a quiz / attendance check-in) |
 | PUT | `/classes/:id/sessions/:sid/attendance` | 👤 | grading / attendance decision (lecturer) |
@@ -197,29 +211,29 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/classes/:id/assignments` | ✅ | class_assignment |
 | PATCH | `/classes/:id/assignments/:aid` | ✅ | class_assignment |
 | DELETE | `/classes/:id/assignments/:aid` | ✅ | class_content_delete |
-| POST | `/classes/:id/assignments/:aid/files` | — |  |
-| DELETE | `/classes/:id/assignments/:aid/files/:fid` | — |  |
+| POST | `/classes/:id/assignments/:aid/files` | ✅ | class_admin (file_upload) |
+| DELETE | `/classes/:id/assignments/:aid/files/:fid` | ✅ | class_content_delete |
 | PUT | `/classes/:id/assignments/:aid/my` | ✅ | class_submit |
 | POST | `/classes/:id/assignments/:aid/my/files` | ✅ | class_submit |
-| DELETE | `/classes/:id/assignments/:aid/my/files/:fid` | — |  |
+| DELETE | `/classes/:id/assignments/:aid/my/files/:fid` | ✅ | class_content_delete (my_file) |
 | POST | `/classes/:id/assignments/:aid/my/turn-in` | ✅ | class_submit |
 | POST | `/classes/:id/assignments/:aid/my/unsubmit` | ✅ | class_unsubmit |
 | PUT | `/classes/:id/assignments/:aid/grade` | 👤 | grading / attendance decision (lecturer) |
 | POST | `/classes/:id/assignments/:aid/return` | 👤 | grading / attendance decision (lecturer) |
-| POST | `/classes/:id/submission-comments` | — |  |
+| POST | `/classes/:id/submission-comments` | ✅ | class_submit (comment) |
 | PUT | `/classes/:id/gradebook/settings` | 👤 | grading / attendance decision (lecturer) |
 | POST | `/classes/:id/gradebook/import/preview` | 👤 | grading / attendance decision (lecturer) |
 | POST | `/classes/:id/gradebook/import` | 👤 | grading / attendance decision (lecturer) |
-| POST | `/classes/:id/quiz-bank` | — |  |
-| PATCH | `/classes/:id/quiz-bank/:qid` | — |  |
-| DELETE | `/classes/:id/quiz-bank/:qid` | — |  |
-| POST | `/classes/:id/quiz-bank/image` | — |  |
-| POST | `/classes/:id/quiz-bank/import` | — |  |
-| POST | `/classes/:id/quiz-bank/ai-suggest` | — |  |
-| POST | `/classes/:id/quizzes` | — |  |
-| PATCH | `/classes/:id/quizzes/:quizId` | — |  |
-| DELETE | `/classes/:id/quizzes/:quizId` | — |  |
-| POST | `/classes/:id/quizzes/:quizId/publish` | — |  |
+| POST | `/classes/:id/quiz-bank` | ✅ | class_quiz |
+| PATCH | `/classes/:id/quiz-bank/:qid` | ✅ | class_quiz |
+| DELETE | `/classes/:id/quiz-bank/:qid` | ✅ | class_content_delete |
+| POST | `/classes/:id/quiz-bank/image` | ✅ | class_quiz (question_image) |
+| POST | `/classes/:id/quiz-bank/import` | ✅ | class_quiz |
+| POST | `/classes/:id/quiz-bank/ai-suggest` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| POST | `/classes/:id/quizzes` | ✅ | class_quiz |
+| PATCH | `/classes/:id/quizzes/:quizId` | ✅ | class_quiz |
+| DELETE | `/classes/:id/quizzes/:quizId` | ✅ | class_content_delete |
+| POST | `/classes/:id/quizzes/:quizId/publish` | ✅ | class_quiz |
 | POST | `/classes/:id/quizzes/:quizId/attempts` | 👤 | academic integrity (taking a quiz / attendance check-in) |
 | PUT | `/classes/:id/quizzes/:quizId/attempts/:aid/answers` | 👤 | academic integrity (taking a quiz / attendance check-in) |
 | POST | `/classes/:id/quizzes/:quizId/attempts/:aid/submit` | 👤 | academic integrity (taking a quiz / attendance check-in) |
@@ -250,7 +264,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | POST | `/help/ask` | 👤 | workspace admin / account / setup (outside a project) |
 
-### (outside project) /intake — 0 tool · 4 chỉ người · 1 thiếu
+### (outside project) /intake — 0 tool · 5 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -258,7 +272,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/intake/discord/:token` | 👤 | inbound webhook (not a user action) |
 | POST | `/intake/zalo/:token` | 👤 | inbound webhook (not a user action) |
 | POST | `/intake/slack/commands` | 👤 | inbound webhook (not a user action) |
-| POST | `/intake/slack/events` | — |  |
+| POST | `/intake/slack/events` | 👤 | external OAuth / webhook / personal app setting |
 
 ### (outside project) /integrations — 0 tool · 3 chỉ người · 0 thiếu
 
@@ -290,11 +304,11 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/me/timer/stop` | 👤 | workspace admin / account / setup (outside a project) |
 | POST | `/me/timer/discard` | 👤 | workspace admin / account / setup (outside a project) |
 
-### (outside project) /notion — 0 tool · 0 chỉ người · 1 thiếu
+### (outside project) /notion — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/notion/search` | — |  |
+| POST | `/notion/search` | 👤 | external OAuth / webhook / personal app setting |
 
 ### (outside project) /okrs — 0 tool · 8 chỉ người · 0 thiếu
 
@@ -449,13 +463,13 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/ai/retro` | 👤 | web AI assistant (CuongMini is itself the AI) |
 | POST | `/projects/:pid/ai/daily-brief` | 👤 | web AI assistant (CuongMini is itself the AI) |
 
-### approvals — 1 tool · 1 chỉ người · 1 thiếu
+### approvals — 2 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/approvals` | ✅ | request_review, approval_request |
 | POST | `/projects/:pid/approvals/:aid/decide` | 👤 | approval decision |
-| POST | `/projects/:pid/approvals/:aid/cancel` | — |  |
+| POST | `/projects/:pid/approvals/:aid/cancel` | ✅ | issue_extras |
 
 ### archive — 0 tool · 1 chỉ người · 0 thiếu
 
@@ -463,22 +477,22 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | POST | `/projects/:pid/archive` | 👤 | project configuration / membership |
 
-### assets — 0 tool · 0 chỉ người · 4 thiếu
+### assets — 0 tool · 4 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/assets` | — |  |
-| PATCH | `/projects/:pid/assets/:num` | — |  |
-| DELETE | `/projects/:pid/assets/:num` | — |  |
-| PUT | `/projects/:pid/assets/:num/links` | — |  |
+| POST | `/projects/:pid/assets` | 👤 | finance / contracts / stage gates (configuration) |
+| PATCH | `/projects/:pid/assets/:num` | 👤 | finance / contracts / stage gates (configuration) |
+| DELETE | `/projects/:pid/assets/:num` | 👤 | finance / contracts / stage gates (configuration) |
+| PUT | `/projects/:pid/assets/:num/links` | 👤 | finance / contracts / stage gates (configuration) |
 
-### attachments — 1 tool · 1 chỉ người · 1 thiếu
+### attachments — 1 tool · 2 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | DELETE | `/projects/:pid/attachments/:aid` | ✅ | attachment_delete |
 | PATCH | `/projects/:pid/attachments/:aid/client` | 👤 | client-facing |
-| POST | `/projects/:pid/attachments/:aid/transcribe` | — |  |
+| POST | `/projects/:pid/attachments/:aid/transcribe` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
 ### automation — 0 tool · 9 chỉ người · 0 thiếu
 
@@ -523,7 +537,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/capacity/:userId` | 👤 | project configuration / membership |
 
-### changes — 7 tool · 1 chỉ người · 2 thiếu
+### changes — 9 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -535,33 +549,33 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/changes/:num/approval` | ✅ | change_request_manage |
 | POST | `/projects/:pid/changes/:num/links` | ✅ | change_request_manage |
 | DELETE | `/projects/:pid/changes/:num/links/:linkId` | ✅ | change_request_manage |
-| POST | `/projects/:pid/changes/:num/implement` | — |  |
-| PUT | `/projects/:pid/changes/:num/affected` | — |  |
+| POST | `/projects/:pid/changes/:num/implement` | ✅ | governance_extras |
+| PUT | `/projects/:pid/changes/:num/affected` | ✅ | governance_extras |
 
-### chat — 9 tool · 1 chỉ người · 10 thiếu
+### chat — 15 tool · 5 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/chat/channels` | ✅ | chat_channel_manage |
 | PATCH | `/projects/:pid/chat/channels/:cid` | ✅ | chat_channel_manage |
 | PUT | `/projects/:pid/chat/channels/:cid/members` | ✅ | chat_channel_manage |
-| PUT | `/projects/:pid/chat/channels/:cid/notify` | — |  |
-| POST | `/projects/:pid/chat/channels/:cid/read` | — |  |
-| POST | `/projects/:pid/chat/read-all` | — |  |
-| POST | `/projects/:pid/chat/channels/:cid/call` | — |  |
+| PUT | `/projects/:pid/chat/channels/:cid/notify` | ✅ | chat_extras |
+| POST | `/projects/:pid/chat/channels/:cid/read` | ✅ | chat_extras |
+| POST | `/projects/:pid/chat/read-all` | ✅ | chat_extras |
+| POST | `/projects/:pid/chat/channels/:cid/call` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 | POST | `/projects/:pid/chat/channels/:cid/messages` | ✅ | chat_post |
 | PATCH | `/projects/:pid/chat/channels/:cid/messages/:mid` | ✅ | chat_edit |
 | DELETE | `/projects/:pid/chat/channels/:cid/messages/:mid` | ✅ | chat_delete |
 | PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/reactions/:emoji` | ✅ | chat_message_act |
 | PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/pin` | ✅ | chat_message_act |
 | POST | `/projects/:pid/chat/channels/:cid/messages/:mid/issue` | ✅ | chat_message_act |
-| POST | `/projects/:pid/chat/channels/:cid/messages/:mid/forward` | — |  |
-| POST | `/projects/:pid/chat/channels/:cid/files` | — |  |
-| POST | `/projects/:pid/chat/channels/:cid/voice` | — |  |
-| DELETE | `/projects/:pid/chat/files/:fid` | — |  |
-| POST | `/projects/:pid/chat/files/:fid/transcribe` | — |  |
+| POST | `/projects/:pid/chat/channels/:cid/messages/:mid/forward` | ✅ | chat_extras |
+| POST | `/projects/:pid/chat/channels/:cid/files` | ✅ | chat_extras |
+| POST | `/projects/:pid/chat/channels/:cid/voice` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| DELETE | `/projects/:pid/chat/files/:fid` | 👤 | UI helper / draft upload discard (no team data change) |
+| POST | `/projects/:pid/chat/files/:fid/transcribe` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 | POST | `/projects/:pid/chat/channels/:cid/messages/:mid/report` | 👤 | content report to moderators |
-| POST | `/projects/:pid/chat/dm` | — |  |
+| POST | `/projects/:pid/chat/dm` | ✅ | chat_extras |
 
 ### chat-hooks — 0 tool · 4 chỉ người · 0 thiếu
 
@@ -583,11 +597,11 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/cloud/sheets/:id/sync` | 👤 | finance / client / external integration or export |
 | DELETE | `/projects/:pid/cloud/sheets/:id` | 👤 | finance / client / external integration or export |
 
-### comment-files — 0 tool · 0 chỉ người · 1 thiếu
+### comment-files — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| DELETE | `/projects/:pid/comment-files/:aid` | — |  |
+| DELETE | `/projects/:pid/comment-files/:aid` | 👤 | UI helper / draft upload discard (no team data change) |
 
 ### components — 0 tool · 3 chỉ người · 0 thiếu
 
@@ -597,16 +611,16 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/components/:cid` | 👤 | project configuration / membership |
 | DELETE | `/projects/:pid/components/:cid` | 👤 | project configuration / membership |
 
-### contrib — 0 tool · 0 chỉ người · 6 thiếu
+### contrib — 6 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/contrib/settings` | — |  |
-| PUT | `/projects/:pid/contrib/git-authors` | — |  |
-| POST | `/projects/:pid/contrib/peer/rounds` | — |  |
-| PATCH | `/projects/:pid/contrib/peer/rounds/:rid` | — |  |
-| DELETE | `/projects/:pid/contrib/peer/rounds/:rid` | — |  |
-| PUT | `/projects/:pid/contrib/peer/rounds/:rid/reviews/:uid` | — |  |
+| PUT | `/projects/:pid/contrib/settings` | ✅ | contrib_manage |
+| PUT | `/projects/:pid/contrib/git-authors` | ✅ | contrib_manage |
+| POST | `/projects/:pid/contrib/peer/rounds` | ✅ | contrib_manage |
+| PATCH | `/projects/:pid/contrib/peer/rounds/:rid` | ✅ | contrib_manage |
+| DELETE | `/projects/:pid/contrib/peer/rounds/:rid` | ✅ | ctwork_delete |
+| PUT | `/projects/:pid/contrib/peer/rounds/:rid/reviews/:uid` | ✅ | contrib_manage (peer_review) |
 
 ### cover — 0 tool · 2 chỉ người · 0 thiếu
 
@@ -630,56 +644,56 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/custom-fields/:fieldId` | 👤 | project configuration / membership |
 | DELETE | `/projects/:pid/custom-fields/:fieldId` | 👤 | project configuration / membership |
 
-### dashboards — 0 tool · 0 chỉ người · 3 thiếu
+### dashboards — 2 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/dashboards` | — |  |
-| DELETE | `/projects/:pid/dashboards/:dashId` | — |  |
-| POST | `/projects/:pid/dashboards/overview` | — |  |
+| POST | `/projects/:pid/dashboards` | ✅ | dashboard_save |
+| DELETE | `/projects/:pid/dashboards/:dashId` | ✅ | ctwork_delete |
+| POST | `/projects/:pid/dashboards/overview` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
-### desk — 0 tool · 1 chỉ người · 7 thiếu
+### desk — 7 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | PUT | `/projects/:pid/desk/settings` | 👤 | project configuration / membership |
-| POST | `/projects/:pid/desk/tickets` | — |  |
-| POST | `/projects/:pid/desk/problems` | — |  |
-| PATCH | `/projects/:pid/desk/problems/:num` | — |  |
-| DELETE | `/projects/:pid/desk/problems/:num` | — |  |
-| POST | `/projects/:pid/desk/problems/:num/incidents` | — |  |
-| DELETE | `/projects/:pid/desk/problems/:num/incidents/:inum` | — |  |
-| POST | `/projects/:pid/desk/problems/:num/postmortem` | — |  |
+| POST | `/projects/:pid/desk/tickets` | ✅ | service_desk |
+| POST | `/projects/:pid/desk/problems` | ✅ | service_desk |
+| PATCH | `/projects/:pid/desk/problems/:num` | ✅ | service_desk |
+| DELETE | `/projects/:pid/desk/problems/:num` | ✅ | ctwork_delete |
+| POST | `/projects/:pid/desk/problems/:num/incidents` | ✅ | service_desk |
+| DELETE | `/projects/:pid/desk/problems/:num/incidents/:inum` | ✅ | service_desk |
+| POST | `/projects/:pid/desk/problems/:num/postmortem` | ✅ | service_desk |
 
-### diagram-renders — 0 tool · 0 chỉ người · 1 thiếu
+### diagram-renders — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/diagram-renders` | — |  |
+| POST | `/projects/:pid/diagram-renders` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
-### diagrams — 5 tool · 0 chỉ người · 8 thiếu
+### diagrams — 11 tool · 2 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/diagrams` | ✅ | diagram_sql_create |
 | POST | `/projects/:pid/diagrams/generate` | ✅ | diagram_generate |
-| POST | `/projects/:pid/diagrams/import` | — |  |
+| POST | `/projects/:pid/diagrams/import` | ✅ | diagram_extras |
 | POST | `/projects/:pid/diagrams/fill-report` | ✅ | diagram_fill_report |
 | PATCH | `/projects/:pid/diagrams/:n` | ✅ | diagram_update |
 | DELETE | `/projects/:pid/diagrams/:n` | ✅ | diagram_delete |
-| POST | `/projects/:pid/diagrams/:n/versions/:v/restore` | — |  |
-| POST | `/projects/:pid/diagrams/:n/versions/:v/:action(accept\|discard)` | — |  |
-| POST | `/projects/:pid/diagrams/:n/:action(approve\|unapprove)` | — |  |
-| POST | `/projects/:pid/diagrams/:n/embed` | — |  |
-| POST | `/projects/:pid/diagrams/:n/comments` | — |  |
-| PATCH | `/projects/:pid/diagrams/:n/comments/:cid` | — |  |
-| DELETE | `/projects/:pid/diagrams/:n/comments/:cid` | — |  |
+| POST | `/projects/:pid/diagrams/:n/versions/:v/restore` | ✅ | diagram_extras |
+| POST | `/projects/:pid/diagrams/:n/versions/:v/:action(accept\|discard)` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/diagrams/:n/:action(approve\|unapprove)` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/diagrams/:n/embed` | ✅ | diagram_extras |
+| POST | `/projects/:pid/diagrams/:n/comments` | ✅ | diagram_extras |
+| PATCH | `/projects/:pid/diagrams/:n/comments/:cid` | ✅ | diagram_extras |
+| DELETE | `/projects/:pid/diagrams/:n/comments/:cid` | ✅ | ctwork_delete |
 
-### docs — 0 tool · 0 chỉ người · 1 thiếu
+### docs — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/docs/collab` | — |  |
+| PUT | `/projects/:pid/docs/collab` | 👤 | project configuration / data import |
 
 ### edit-lock — 0 tool · 1 chỉ người · 0 thiếu
 
@@ -687,16 +701,16 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/edit-lock` | 👤 | project configuration / membership |
 
-### exploratory — 0 tool · 0 chỉ người · 6 thiếu
+### exploratory — 6 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/exploratory` | — |  |
-| PATCH | `/projects/:pid/exploratory/:num` | — |  |
-| DELETE | `/projects/:pid/exploratory/:num` | — |  |
-| POST | `/projects/:pid/exploratory/:num/start` | — |  |
-| POST | `/projects/:pid/exploratory/:num/stop` | — |  |
-| POST | `/projects/:pid/exploratory/:num/notes` | — |  |
+| POST | `/projects/:pid/exploratory` | ✅ | exploratory_manage |
+| PATCH | `/projects/:pid/exploratory/:num` | ✅ | exploratory_manage |
+| DELETE | `/projects/:pid/exploratory/:num` | ✅ | ctwork_delete |
+| POST | `/projects/:pid/exploratory/:num/start` | ✅ | exploratory_manage |
+| POST | `/projects/:pid/exploratory/:num/stop` | ✅ | exploratory_manage |
+| POST | `/projects/:pid/exploratory/:num/notes` | ✅ | exploratory_manage |
 
 ### exports — 0 tool · 2 chỉ người · 0 thiếu
 
@@ -711,19 +725,19 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/figma/token` | 👤 | finance / client / external integration or export |
 
-### filters — 0 tool · 0 chỉ người · 2 thiếu
+### filters — 2 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/filters` | — |  |
-| DELETE | `/projects/:pid/filters/:filterId` | — |  |
+| POST | `/projects/:pid/filters` | ✅ | planning_extras |
+| DELETE | `/projects/:pid/filters/:filterId` | ✅ | ctwork_delete |
 
-### final-report — 1 tool · 0 chỉ người · 1 thiếu
+### final-report — 2 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/final-report/assemble` | ✅ | final_report_assemble |
-| POST | `/projects/:pid/final-report/export` | — |  |
+| POST | `/projects/:pid/final-report/export` | ✅ | export_file |
 
 ### finance — 1 tool · 18 chỉ người · 0 thiếu
 
@@ -749,29 +763,29 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/projects/:pid/finance/payments/:num` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/finance/payments/:num/status` | 👤 | finance / client / external integration or export |
 
-### forms — 0 tool · 2 chỉ người · 3 thiếu
+### forms — 3 tool · 2 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/forms` | — |  |
-| PATCH | `/projects/:pid/forms/:form` | — |  |
-| DELETE | `/projects/:pid/forms/:form` | — |  |
+| POST | `/projects/:pid/forms` | ✅ | form_manage |
+| PATCH | `/projects/:pid/forms/:form` | ✅ | form_manage |
+| DELETE | `/projects/:pid/forms/:form` | ✅ | ctwork_delete |
 | POST | `/projects/:pid/forms/:form/status` | 👤 | opens a public link (external) |
 | POST | `/projects/:pid/forms/:form/rotate` | 👤 | opens a public link (external) |
 
-### fpt-reports — 1 tool · 0 chỉ người · 8 thiếu
+### fpt-reports — 9 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/fpt-reports/doc` | — |  |
+| PUT | `/projects/:pid/fpt-reports/doc` | ✅ | fpt_reports_manage |
 | POST | `/projects/:pid/fpt-reports/weekly` | ✅ | weekly_report_generate |
-| PUT | `/projects/:pid/fpt-reports/weekly/:id` | — |  |
-| POST | `/projects/:pid/fpt-reports/weekly/:id/refresh` | — |  |
-| DELETE | `/projects/:pid/fpt-reports/weekly/:id` | — |  |
-| POST | `/projects/:pid/fpt-reports/ai-usage/sync` | — |  |
-| POST | `/projects/:pid/fpt-reports/ai-usage` | — |  |
-| PATCH | `/projects/:pid/fpt-reports/ai-usage/:id` | — |  |
-| DELETE | `/projects/:pid/fpt-reports/ai-usage/:id` | — |  |
+| PUT | `/projects/:pid/fpt-reports/weekly/:id` | ✅ | fpt_reports_manage |
+| POST | `/projects/:pid/fpt-reports/weekly/:id/refresh` | ✅ | fpt_reports_manage |
+| DELETE | `/projects/:pid/fpt-reports/weekly/:id` | ✅ | ctwork_delete |
+| POST | `/projects/:pid/fpt-reports/ai-usage/sync` | ✅ | fpt_reports_manage |
+| POST | `/projects/:pid/fpt-reports/ai-usage` | ✅ | fpt_reports_manage |
+| PATCH | `/projects/:pid/fpt-reports/ai-usage/:id` | ✅ | fpt_reports_manage |
+| DELETE | `/projects/:pid/fpt-reports/ai-usage/:id` | ✅ | ctwork_delete |
 
 ### fpt-tests — 19 tool · 0 chỉ người · 0 thiếu
 
@@ -821,31 +835,31 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/grades/publish` | 👤 | finance / client / external integration or export |
 | DELETE | `/projects/:pid/grades/:gid` | 👤 | finance / client / external integration or export |
 
-### handoffs — 0 tool · 0 chỉ người · 3 thiếu
+### handoffs — 3 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/handoffs/:hid/accept` | — |  |
-| POST | `/projects/:pid/handoffs/:hid/return` | — |  |
-| POST | `/projects/:pid/handoffs/:hid/cancel` | — |  |
+| POST | `/projects/:pid/handoffs/:hid/accept` | ✅ | issue_extras |
+| POST | `/projects/:pid/handoffs/:hid/return` | ✅ | issue_extras |
+| POST | `/projects/:pid/handoffs/:hid/cancel` | ✅ | issue_extras |
 
-### images — 0 tool · 0 chỉ người · 1 thiếu
-
-| Method | Route | | Tool / lý do |
-|---|---|---|---|
-| POST | `/projects/:pid/images` | — |  |
-
-### import — 0 tool · 0 chỉ người · 1 thiếu
+### images — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/import` | — |  |
+| POST | `/projects/:pid/images` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
-### imports — 0 tool · 0 chỉ người · 1 thiếu
+### import — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/imports` | — |  |
+| POST | `/projects/:pid/import` | 👤 | project configuration / data import |
+
+### imports — 0 tool · 1 chỉ người · 0 thiếu
+
+| Method | Route | | Tool / lý do |
+|---|---|---|---|
+| POST | `/projects/:pid/imports` | 👤 | project configuration / data import |
 
 ### intake — 0 tool · 6 chỉ người · 0 thiếu
 
@@ -871,7 +885,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/issue-types` | 👤 | project configuration / membership |
 | PATCH | `/projects/:pid/issue-types/:typeId` | 👤 | project configuration / membership |
 
-### issues — 27 tool · 3 chỉ người · 10 thiếu
+### issues — 36 tool · 4 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -882,8 +896,8 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/issues/:num/clone` | ✅ | issue_clone |
 | POST | `/projects/:pid/issues/:num/links` | ✅ | issue_link |
 | DELETE | `/projects/:pid/issues/:num/links/:linkId` | ✅ | issue_unlink |
-| POST | `/projects/:pid/issues/:num/notes` | — |  |
-| DELETE | `/projects/:pid/issues/:num/notes/:noteId` | — |  |
+| POST | `/projects/:pid/issues/:num/notes` | ✅ | issue_extras |
+| DELETE | `/projects/:pid/issues/:num/notes/:noteId` | ✅ | issue_extras |
 | PUT | `/projects/:pid/issues/:num/flag` | ✅ | ask_lead |
 | DELETE | `/projects/:pid/issues/:num/flag` | ✅ | issue_flag |
 | PUT | `/projects/:pid/issues/:num/watch` | ✅ | issue_watch |
@@ -894,24 +908,24 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/projects/:pid/issues/:num/comments/:cid` | ✅ | comment_delete |
 | POST | `/projects/:pid/issues/:num/attachments/presign` | ✅ | attach_file, attach_from_url |
 | POST | `/projects/:pid/issues/:num/attachments/complete` | ✅ | attach_file, attach_complete, attach_from_url |
-| POST | `/projects/:pid/issues/bulk` | — |  |
+| POST | `/projects/:pid/issues/bulk` | ✅ | issue_bulk |
 | PUT | `/projects/:pid/issues/:num/custom-values` | ✅ | issue_custom_fields_set |
 | PUT | `/projects/:pid/issues/:num/schedule` | ✅ | update_issue (startDate/dueDate) |
 | POST | `/projects/:pid/issues/:num/worklogs` | ✅ | log_work, worklog_update |
 | DELETE | `/projects/:pid/issues/:num/worklogs/:logId` | ✅ | worklog_update, worklog_delete |
-| PUT | `/projects/:pid/issues/:num/comments/:cid/reactions/:emoji` | — |  |
-| POST | `/projects/:pid/issues/:num/handoffs` | — |  |
-| POST | `/projects/:pid/issues/:num/move-project` | — |  |
+| PUT | `/projects/:pid/issues/:num/comments/:cid/reactions/:emoji` | ✅ | issue_extras |
+| POST | `/projects/:pid/issues/:num/handoffs` | ✅ | issue_extras |
+| POST | `/projects/:pid/issues/:num/move-project` | ✅ | issue_extras |
 | PUT | `/projects/:pid/issues/:num/client-visible` | 👤 | client-facing |
-| PATCH | `/projects/:pid/issues/:num/desk` | — |  |
-| POST | `/projects/:pid/issues/:num/desk/waiting` | — |  |
+| PATCH | `/projects/:pid/issues/:num/desk` | ✅ | service_desk |
+| POST | `/projects/:pid/issues/:num/desk/waiting` | ✅ | service_desk |
 | POST | `/projects/:pid/issues/:num/web-links` | ✅ | issue_web_link_add |
 | DELETE | `/projects/:pid/issues/:num/web-links/:lid` | ✅ | issue_web_link_remove |
-| POST | `/projects/:pid/issues/:num/web-links/:lid/save` | — |  |
+| POST | `/projects/:pid/issues/:num/web-links/:lid/save` | ✅ | issue_extras |
 | POST | `/projects/:pid/issues/:num/claim` | ✅ | claim_issue |
 | POST | `/projects/:pid/issues/:num/agent-runs` | 👤 | web AI assistant (CuongMini is itself the AI) |
 | POST | `/projects/:pid/issues/:num/comment-files` | ✅ | attach_file (for="comment") |
-| POST | `/projects/:pid/issues/:num/comment-voice` | — |  |
+| POST | `/projects/:pid/issues/:num/comment-voice` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 | PUT | `/projects/:pid/issues/:num/defect` | ✅ | defect_set |
 | PATCH | `/projects/:pid/issues/:num/worklogs/:logId` | ✅ | worklog_update |
 | POST | `/projects/:pid/issues/:num/timer` | ✅ | log_work |
@@ -935,13 +949,13 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/labels/:labelId` | 👤 | project configuration / membership |
 | DELETE | `/projects/:pid/labels/:labelId` | 👤 | project configuration / membership |
 
-### meeting-series — 0 tool · 0 chỉ người · 3 thiếu
+### meeting-series — 3 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/meeting-series` | — |  |
-| PATCH | `/projects/:pid/meeting-series/:sid` | — |  |
-| DELETE | `/projects/:pid/meeting-series/:sid` | — |  |
+| POST | `/projects/:pid/meeting-series` | ✅ | meeting_extras |
+| PATCH | `/projects/:pid/meeting-series/:sid` | ✅ | meeting_extras |
+| DELETE | `/projects/:pid/meeting-series/:sid` | ✅ | ctwork_delete |
 
 ### meeting-settings — 0 tool · 1 chỉ người · 0 thiếu
 
@@ -949,7 +963,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/meeting-settings` | 👤 | project configuration / membership |
 
-### meetings — 9 tool · 16 chỉ người · 4 thiếu
+### meetings — 12 tool · 17 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -959,12 +973,12 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PUT | `/projects/:pid/meetings/:num/attendees` | ✅ | meeting_attendees_set |
 | PUT | `/projects/:pid/meetings/:num/actions` | ✅ | meeting_add_actions |
 | POST | `/projects/:pid/meetings/:num/actions/issues` | ✅ | meeting_create_issues |
-| POST | `/projects/:pid/meetings/:num/actions/suggest` | — |  |
+| POST | `/projects/:pid/meetings/:num/actions/suggest` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 | POST | `/projects/:pid/meetings/:num/share` | 👤 | client-facing |
-| POST | `/projects/:pid/meetings/:num/duplicate` | — |  |
+| POST | `/projects/:pid/meetings/:num/duplicate` | ✅ | meeting_extras |
 | POST | `/projects/:pid/meetings/:num/invites` | 👤 | client-facing |
 | PUT | `/projects/:pid/meetings/:num/agenda-items` | ✅ | meeting_agenda_set |
-| PUT | `/projects/:pid/meetings/:num/recording-link` | — |  |
+| PUT | `/projects/:pid/meetings/:num/recording-link` | ✅ | meeting_extras |
 | POST | `/projects/:pid/meetings/:num/rsvp` | ✅ | meeting_rsvp |
 | POST | `/projects/:pid/meetings/:num/join` | 👤 | live meeting / recording (needs the person present) |
 | POST | `/projects/:pid/meetings/:num/leave` | 👤 | live meeting / recording (needs the person present) |
@@ -980,7 +994,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/meetings/:num/minutes-ai` | ✅ | meeting_minutes_propose |
 | POST | `/projects/:pid/meetings/:num/minutes-ai/:did/apply` | 👤 | decision / approval |
 | POST | `/projects/:pid/meetings/:num/minutes-ai/:did/dismiss` | 👤 | decision / approval |
-| POST | `/projects/:pid/meetings/:num/apply-template` | — |  |
+| POST | `/projects/:pid/meetings/:num/apply-template` | ✅ | meeting_extras |
 | POST | `/projects/:pid/meetings/:num/report` | 👤 | content report to moderators |
 
 ### members — 0 tool · 2 chỉ người · 0 thiếu
@@ -998,13 +1012,13 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/notion/export-page` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/notion/import-database` | 👤 | finance / client / external integration or export |
 
-### okrs — 0 tool · 0 chỉ người · 1 thiếu
+### okrs — 1 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/okrs/objectives` | — |  |
+| POST | `/projects/:pid/okrs/objectives` | ✅ | planning_extras (okr_objective) |
 
-### pages — 11 tool · 0 chỉ người · 6 thiếu
+### pages — 14 tool · 3 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1018,22 +1032,22 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/projects/:pid/pages/:num/issues/:issueNum` | ✅ | docs_page_link_issue |
 | POST | `/projects/:pid/pages/:num/comments` | ✅ | docs_comment |
 | DELETE | `/projects/:pid/pages/:num/comments/:cid` | ✅ | docs_comment_delete |
-| POST | `/projects/:pid/pages/:num/export` | — |  |
-| POST | `/projects/:pid/pages/:num/autofill` | — |  |
-| POST | `/projects/:pid/pages/:num/fill-srs` | — |  |
-| PUT | `/projects/:pid/pages/:num/collab` | — |  |
-| POST | `/projects/:pid/pages/:num/collab/flush` | — |  |
-| POST | `/projects/:pid/pages/:num/inline-comments` | — |  |
+| POST | `/projects/:pid/pages/:num/export` | ✅ | export_file |
+| POST | `/projects/:pid/pages/:num/autofill` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| POST | `/projects/:pid/pages/:num/fill-srs` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| PUT | `/projects/:pid/pages/:num/collab` | ✅ | docs_extras |
+| POST | `/projects/:pid/pages/:num/collab/flush` | 👤 | UI helper / draft upload discard (no team data change) |
+| POST | `/projects/:pid/pages/:num/inline-comments` | ✅ | docs_extras |
 | POST | `/projects/:pid/pages/:num/inline-comments/:cid/resolve` | ✅ | docs_comment_resolve |
 
-### poker — 11 tool · 0 chỉ người · 1 thiếu
+### poker — 12 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/poker` | ✅ | poker_session |
 | DELETE | `/projects/:pid/poker/:sid` | ✅ | agile_delete |
 | POST | `/projects/:pid/poker/:sid/items` | ✅ | poker_session |
-| POST | `/projects/:pid/poker/:sid/timer` | — |  |
+| POST | `/projects/:pid/poker/:sid/timer` | ✅ | poker_session (timer) |
 | POST | `/projects/:pid/poker/:sid/close` | ✅ | poker_session |
 | DELETE | `/projects/:pid/poker/:sid/items/:iid` | ✅ | agile_delete |
 | POST | `/projects/:pid/poker/:sid/items/:iid/start` | ✅ | poker_session |
@@ -1058,25 +1072,25 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/portal/kb/:id/deflected` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/portal/meetings/:num/rsvp` | 👤 | finance / client / external integration or export |
 
-### qna — 3 tool · 0 chỉ người · 1 thiếu
+### qna — 4 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/qna` | ✅ | qna_ask |
 | PATCH | `/projects/:pid/qna/:n` | ✅ | qna_update, qna_answer |
 | DELETE | `/projects/:pid/qna/:n` | ✅ | qna_delete |
-| POST | `/projects/:pid/qna/:n/convert` | — |  |
+| POST | `/projects/:pid/qna/:n/convert` | ✅ | governance_extras |
 
-### raid — 3 tool · 0 chỉ người · 3 thiếu
+### raid — 6 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/raid` | ✅ | raid_create |
-| POST | `/projects/:pid/raid/starter` | — |  |
+| POST | `/projects/:pid/raid/starter` | ✅ | governance_extras |
 | PATCH | `/projects/:pid/raid/:num` | ✅ | raid_update |
 | DELETE | `/projects/:pid/raid/:num` | ✅ | raid_delete |
-| POST | `/projects/:pid/raid/:num/links` | — |  |
-| DELETE | `/projects/:pid/raid/:num/links/:linkId` | — |  |
+| POST | `/projects/:pid/raid/:num/links` | ✅ | governance_extras |
+| DELETE | `/projects/:pid/raid/:num/links/:linkId` | ✅ | governance_extras |
 
 ### report-builder — 0 tool · 6 chỉ người · 0 thiếu
 
@@ -1099,38 +1113,38 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/report-plans/:id/send` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/report-plans/:id/recipients/decide` | 👤 | finance / client / external integration or export |
 
-### reports — 0 tool · 0 chỉ người · 3 thiếu
+### reports — 0 tool · 3 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/reports/client-weekly/schedule` | — |  |
-| POST | `/projects/:pid/reports/client-weekly/send` | — |  |
-| POST | `/projects/:pid/reports/client-weekly/polish` | — |  |
+| PUT | `/projects/:pid/reports/client-weekly/schedule` | 👤 | client-facing |
+| POST | `/projects/:pid/reports/client-weekly/send` | 👤 | client-facing |
+| POST | `/projects/:pid/reports/client-weekly/polish` | 👤 | client-facing |
 
-### resource-groups — 0 tool · 0 chỉ người · 4 thiếu
+### resource-groups — 4 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/resource-groups` | — |  |
-| PUT | `/projects/:pid/resource-groups/reorder` | — |  |
-| PATCH | `/projects/:pid/resource-groups/:gid` | — |  |
-| DELETE | `/projects/:pid/resource-groups/:gid` | — |  |
+| POST | `/projects/:pid/resource-groups` | ✅ | resource_extras |
+| PUT | `/projects/:pid/resource-groups/reorder` | ✅ | resource_extras |
+| PATCH | `/projects/:pid/resource-groups/:gid` | ✅ | resource_extras |
+| DELETE | `/projects/:pid/resource-groups/:gid` | ✅ | ctwork_delete |
 
-### resources — 3 tool · 0 chỉ người · 6 thiếu
+### resources — 7 tool · 2 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/resources` | ✅ | resource_add |
-| POST | `/projects/:pid/resources/preview` | — |  |
-| POST | `/projects/:pid/resources/import` | — |  |
-| PUT | `/projects/:pid/resources/reorder` | — |  |
-| POST | `/projects/:pid/resources/check` | — |  |
+| POST | `/projects/:pid/resources/preview` | 👤 | UI helper / draft upload discard (no team data change) |
+| POST | `/projects/:pid/resources/import` | ✅ | resource_extras |
+| PUT | `/projects/:pid/resources/reorder` | ✅ | resource_extras |
+| POST | `/projects/:pid/resources/check` | ✅ | resource_extras |
 | PATCH | `/projects/:pid/resources/:id` | ✅ | resource_update |
 | DELETE | `/projects/:pid/resources/:id` | ✅ | resource_delete |
-| POST | `/projects/:pid/resources/:id/open` | — |  |
-| POST | `/projects/:pid/resources/:id/refresh` | — |  |
+| POST | `/projects/:pid/resources/:id/open` | 👤 | UI helper / draft upload discard (no team data change) |
+| POST | `/projects/:pid/resources/:id/refresh` | ✅ | resource_extras |
 
-### retros — 9 tool · 0 chỉ người · 1 thiếu
+### retros — 9 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1143,7 +1157,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/retros/:rid/cards/:cid/vote` | ✅ | retro_vote |
 | POST | `/projects/:pid/retros/:rid/actions` | ✅ | retro_session |
 | DELETE | `/projects/:pid/retros/:rid/actions/:aid` | ✅ | agile_delete |
-| POST | `/projects/:pid/retros/:rid/summary` | — |  |
+| POST | `/projects/:pid/retros/:rid/summary` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
 ### reviews — 7 tool · 0 chỉ người · 0 thiếu
 
@@ -1180,14 +1194,14 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/projects/:pid/slack/channels/:id` | 👤 | finance / client / external integration or export |
 | POST | `/projects/:pid/slack/channels/:id/test` | 👤 | finance / client / external integration or export |
 
-### spec-reviews — 1 tool · 0 chỉ người · 4 thiếu
+### spec-reviews — 1 tool · 4 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/spec-reviews/page/:num` | — |  |
-| POST | `/projects/:pid/spec-reviews/issues` | — |  |
-| POST | `/projects/:pid/spec-reviews/:rid/findings/:fid/apply` | — |  |
-| POST | `/projects/:pid/spec-reviews/:rid/findings/:fid/dismiss` | — |  |
+| POST | `/projects/:pid/spec-reviews/page/:num` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/spec-reviews/issues` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/spec-reviews/:rid/findings/:fid/apply` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/spec-reviews/:rid/findings/:fid/dismiss` | 👤 | decision / approval of AI proposals |
 | POST | `/projects/:pid/spec-reviews/:rid/findings/:fid/bug` | ✅ | spec_finding_to_bug |
 
 ### spec-settings — 0 tool · 1 chỉ người · 0 thiếu
@@ -1206,7 +1220,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/sprints/:sid/start` | ✅ | sprint_start |
 | POST | `/projects/:pid/sprints/:sid/complete` | ✅ | sprint_complete |
 
-### srs — 17 tool · 0 chỉ người · 3 thiếu
+### srs — 18 tool · 2 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1216,7 +1230,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/srs/use-cases` | ✅ | srs_propose_use_case |
 | PATCH | `/projects/:pid/srs/use-cases/:n` | ✅ | srs_use_case_update |
 | DELETE | `/projects/:pid/srs/use-cases/:n` | ✅ | srs_delete |
-| POST | `/projects/:pid/srs/use-cases/:n/status` | — |  |
+| POST | `/projects/:pid/srs/use-cases/:n/status` | 👤 | decision / approval of AI proposals |
 | POST | `/projects/:pid/srs/rules` | ✅ | srs_propose_business_rule |
 | PATCH | `/projects/:pid/srs/rules/:n` | ✅ | srs_rule_update |
 | DELETE | `/projects/:pid/srs/rules/:n` | ✅ | srs_delete |
@@ -1228,25 +1242,25 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/srs/functions/:id` | ✅ | srs_function_update |
 | DELETE | `/projects/:pid/srs/functions/:id` | ✅ | srs_delete |
 | POST | `/projects/:pid/srs/suggest` | ✅ | srs_suggest_use_cases |
-| POST | `/projects/:pid/srs/proposals/discard` | — |  |
-| POST | `/projects/:pid/srs/report3/export` | — |  |
+| POST | `/projects/:pid/srs/proposals/discard` | 👤 | decision / approval of AI proposals |
+| POST | `/projects/:pid/srs/report3/export` | ✅ | export_file |
 
-### stages — 0 tool · 2 chỉ người · 3 thiếu
+### stages — 0 tool · 5 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/stages` | — |  |
-| PATCH | `/projects/:pid/stages/:sid` | — |  |
-| DELETE | `/projects/:pid/stages/:sid` | — |  |
+| POST | `/projects/:pid/stages` | 👤 | finance / contracts / stage gates (configuration) |
+| PATCH | `/projects/:pid/stages/:sid` | 👤 | finance / contracts / stage gates (configuration) |
+| DELETE | `/projects/:pid/stages/:sid` | 👤 | finance / contracts / stage gates (configuration) |
 | POST | `/projects/:pid/stages/:sid/activate` | 👤 | stage gate |
 | POST | `/projects/:pid/stages/:sid/request-gate` | 👤 | stage gate |
 
-### static-analysis — 0 tool · 0 chỉ người · 2 thiếu
+### static-analysis — 1 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/static-analysis/findings/:id/:action(ignore\|reopen\|issue)` | — |  |
-| POST | `/projects/:pid/static-analysis/vg` | — |  |
+| POST | `/projects/:pid/static-analysis/findings/:id/:action(ignore\|reopen\|issue)` | ✅ | test_extras (finding) |
+| POST | `/projects/:pid/static-analysis/vg` | 👤 | CI upload (tests:write token) |
 
 ### statuses — 0 tool · 2 chỉ người · 0 thiếu
 
@@ -1262,7 +1276,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PUT | `/projects/:pid/studio` | 👤 | project configuration / membership |
 | POST | `/projects/:pid/studio/apply-defaults` | 👤 | project configuration / membership |
 
-### swr — 34 tool · 4 chỉ người · 17 thiếu
+### swr — 47 tool · 8 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1272,33 +1286,33 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/swr/features/:fe/links` | ✅ | swr_feature_link |
 | DELETE | `/projects/:pid/swr/features/:fe/links/:id` | ✅ | swr_delete |
 | PUT | `/projects/:pid/swr/requirements/:num` | ✅ | swr_requirement_classify |
-| POST | `/projects/:pid/swr/requirements/:num/lifecycle` | — |  |
+| POST | `/projects/:pid/swr/requirements/:num/lifecycle` | ✅ | swr_requirement_set_status |
 | POST | `/projects/:pid/swr/priority/rows` | ✅ | swr_priority_set |
 | PATCH | `/projects/:pid/swr/priority/rows/:id` | ✅ | swr_priority_update |
 | DELETE | `/projects/:pid/swr/priority/rows/:id` | ✅ | swr_delete |
-| POST | `/projects/:pid/swr/priority/seed` | — |  |
+| POST | `/projects/:pid/swr/priority/seed` | ✅ | swr_extras |
 | POST | `/projects/:pid/swr/glossary` | ✅ | swr_glossary_add |
 | PATCH | `/projects/:pid/swr/glossary/:id` | ✅ | swr_glossary_update |
 | DELETE | `/projects/:pid/swr/glossary/:id` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/dictionary` | ✅ | swr_dictionary_add |
 | PATCH | `/projects/:pid/swr/dictionary/:id` | ✅ | swr_dictionary_update |
 | DELETE | `/projects/:pid/swr/dictionary/:id` | ✅ | swr_delete |
-| PUT | `/projects/:pid/swr/settings` | — |  |
+| PUT | `/projects/:pid/swr/settings` | 👤 | project configuration / data import |
 | POST | `/projects/:pid/swr/docs/:kind/fill` | ✅ | swr_doc_fill |
-| POST | `/projects/:pid/swr/docs/:kind/export` | — |  |
+| POST | `/projects/:pid/swr/docs/:kind/export` | ✅ | export_file |
 | POST | `/projects/:pid/swr/stakeholders` | ✅ | swr_stakeholder_add |
-| POST | `/projects/:pid/swr/stakeholders/seed-actors` | — |  |
+| POST | `/projects/:pid/swr/stakeholders/seed-actors` | ✅ | swr_extras |
 | PATCH | `/projects/:pid/swr/stakeholders/:sh` | ✅ | swr_stakeholder_update |
 | DELETE | `/projects/:pid/swr/stakeholders/:sh` | ✅ | swr_delete |
-| POST | `/projects/:pid/swr/raci/activities` | — |  |
-| DELETE | `/projects/:pid/swr/raci/activities/:id` | — |  |
-| PUT | `/projects/:pid/swr/raci/cells` | — |  |
+| POST | `/projects/:pid/swr/raci/activities` | ✅ | swr_extras |
+| DELETE | `/projects/:pid/swr/raci/activities/:id` | ✅ | swr_delete |
+| PUT | `/projects/:pid/swr/raci/cells` | ✅ | swr_extras |
 | POST | `/projects/:pid/swr/elicitation` | ✅ | swr_elicitation_add |
 | PATCH | `/projects/:pid/swr/elicitation/:elc` | ✅ | swr_elicitation_update |
 | DELETE | `/projects/:pid/swr/elicitation/:elc` | ✅ | swr_delete |
-| POST | `/projects/:pid/swr/elicitation/:elc/meeting` | — |  |
+| POST | `/projects/:pid/swr/elicitation/:elc/meeting` | ✅ | swr_extras (elicitation_meeting) |
 | POST | `/projects/:pid/swr/elicitation/:elc/propose` | ✅ | swr_elicitation_propose |
-| POST | `/projects/:pid/swr/elicitation/:elc/proposals` | — |  |
+| POST | `/projects/:pid/swr/elicitation/:elc/proposals` | ✅ | swr_extras |
 | POST | `/projects/:pid/swr/elicitation/:elc/proposals/:id/decide` | 👤 | decision / approval |
 | POST | `/projects/:pid/swr/origins` | ✅ | swr_requirement_source_add |
 | DELETE | `/projects/:pid/swr/origins/:id` | ✅ | swr_delete |
@@ -1311,22 +1325,22 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/swr/mockups` | ✅ | swr_mockup_add_link |
 | PATCH | `/projects/:pid/swr/mockups/:id` | ✅ | swr_mockup_update |
 | DELETE | `/projects/:pid/swr/mockups/:id` | ✅ | swr_delete |
-| POST | `/projects/:pid/swr/mockups/:id/submit` | — |  |
+| POST | `/projects/:pid/swr/mockups/:id/submit` | ✅ | swr_extras |
 | POST | `/projects/:pid/swr/mockups/:id/review` | 👤 | decision / approval |
-| PUT | `/projects/:pid/swr/quality/:num` | — |  |
-| POST | `/projects/:pid/swr/quality/:num/ai-fix` | — |  |
-| POST | `/projects/:pid/swr/nfr/from-template` | — |  |
+| PUT | `/projects/:pid/swr/quality/:num` | ✅ | swr_extras |
+| POST | `/projects/:pid/swr/quality/:num/ai-fix` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| POST | `/projects/:pid/swr/nfr/from-template` | ✅ | swr_extras |
 | PUT | `/projects/:pid/swr/nfr/:num` | ✅ | swr_nfr_set |
 | DELETE | `/projects/:pid/swr/nfr/:num` | ✅ | swr_delete |
-| PUT | `/projects/:pid/swr/estimation` | — |  |
-| POST | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | — |  |
-| DELETE | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | — |  |
+| PUT | `/projects/:pid/swr/estimation` | ✅ | swr_extras |
+| POST | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
+| DELETE | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
-### test-automation — 0 tool · 0 chỉ người · 1 thiếu
+### test-automation — 1 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/test-automation/tests/:id/reset-flaky` | — |  |
+| POST | `/projects/:pid/test-automation/tests/:id/reset-flaky` | ✅ | test_extras |
 
 ### test-cycles — 3 tool · 0 chỉ người · 0 thiếu
 
@@ -1336,35 +1350,35 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/test-cycles/:cycleId` | ✅ | test_cycle_update |
 | DELETE | `/projects/:pid/test-cycles/:cycleId` | ✅ | test_cycle_delete |
 
-### test-defects — 0 tool · 0 chỉ người · 1 thiếu
+### test-defects — 1 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/test-defects/:num` | — |  |
+| PUT | `/projects/:pid/test-defects/:num` | ✅ | test_extras |
 
-### test-designs — 3 tool · 0 chỉ người · 1 thiếu
+### test-designs — 3 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/test-designs/preview` | — |  |
+| POST | `/projects/:pid/test-designs/preview` | 👤 | UI helper / draft upload discard (no team data change) |
 | POST | `/projects/:pid/test-designs` | ✅ | test_design_save |
 | DELETE | `/projects/:pid/test-designs/:num` | ✅ | test_design_delete |
 | POST | `/projects/:pid/test-designs/:num/export` | ✅ | test_design_export |
 
-### test-plans — 3 tool · 0 chỉ người · 1 thiếu
+### test-plans — 3 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/test-plans` | ✅ | test_plan_manage |
 | PATCH | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_manage |
 | DELETE | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_delete |
-| PUT | `/projects/:pid/test-plans/:planId/settings` | — |  |
+| PUT | `/projects/:pid/test-plans/:planId/settings` | 👤 | project configuration / data import |
 
-### test-risks — 0 tool · 0 chỉ người · 1 thiếu
+### test-risks — 1 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/test-risks` | — |  |
+| POST | `/projects/:pid/test-risks` | ✅ | test_extras |
 
 ### test-runs — 5 tool · 0 chỉ người · 0 thiếu
 
@@ -1376,29 +1390,29 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PUT | `/projects/:pid/test-runs/:runId/defects/:num` | ✅ | test_run_defect |
 | DELETE | `/projects/:pid/test-runs/:runId/defects/:num` | ✅ | test_run_defect |
 
-### tests — 2 tool · 0 chỉ người · 4 thiếu
+### tests — 3 tool · 3 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/tests/enable` | — |  |
+| POST | `/projects/:pid/tests/enable` | 👤 | project configuration / data import |
 | POST | `/projects/:pid/tests` | ✅ | test_create |
-| POST | `/projects/:pid/tests/import` | — |  |
+| POST | `/projects/:pid/tests/import` | ✅ | test_extras |
 | PUT | `/projects/:pid/tests/:num` | ✅ | test_update |
-| POST | `/projects/:pid/tests/automation/import` | — |  |
-| POST | `/projects/:pid/tests/automation/static` | — |  |
+| POST | `/projects/:pid/tests/automation/import` | 👤 | CI upload (tests:write token) |
+| POST | `/projects/:pid/tests/automation/static` | 👤 | CI upload (tests:write token) |
 
-### tests-attributes — 0 tool · 0 chỉ người · 1 thiếu
-
-| Method | Route | | Tool / lý do |
-|---|---|---|---|
-| PATCH | `/projects/:pid/tests-attributes` | — |  |
-
-### timeline — 0 tool · 0 chỉ người · 2 thiếu
+### tests-attributes — 0 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/timeline/baselines` | — |  |
-| DELETE | `/projects/:pid/timeline/baselines/:bid` | — |  |
+| PATCH | `/projects/:pid/tests-attributes` | 👤 | project configuration / data import |
+
+### timeline — 2 tool · 0 chỉ người · 0 thiếu
+
+| Method | Route | | Tool / lý do |
+|---|---|---|---|
+| POST | `/projects/:pid/timeline/baselines` | ✅ | planning_extras |
+| DELETE | `/projects/:pid/timeline/baselines/:bid` | ✅ | ctwork_delete |
 
 ### trace-links — 2 tool · 0 chỉ người · 0 thiếu
 
@@ -1416,7 +1430,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/trash/pages/:num/restore` | ✅ | docs_page_restore |
 | DELETE | `/projects/:pid/trash/pages/:num` | 👤 | permanent purge |
 
-### versions — 4 tool · 0 chỉ người · 1 thiếu
+### versions — 4 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1424,15 +1438,15 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/versions/:versionId` | ✅ | version_manage |
 | POST | `/projects/:pid/versions/:versionId/release` | ✅ | version_manage |
 | DELETE | `/projects/:pid/versions/:versionId` | ✅ | version_delete |
-| POST | `/projects/:pid/versions/:versionId/ai-notes` | — |  |
+| POST | `/projects/:pid/versions/:versionId/ai-notes` | 👤 | web AI assistant / voice & media helpers (CuongMini is itself the AI) |
 
-### wbs — 0 tool · 0 chỉ người · 3 thiếu
+### wbs — 2 tool · 1 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| PUT | `/projects/:pid/wbs/matrix` | — |  |
-| PUT | `/projects/:pid/wbs/items/:num` | — |  |
-| PUT | `/projects/:pid/wbs/items/:num/move` | — |  |
+| PUT | `/projects/:pid/wbs/matrix` | 👤 | project configuration / data import |
+| PUT | `/projects/:pid/wbs/items/:num` | ✅ | wbs_manage |
+| PUT | `/projects/:pid/wbs/items/:num/move` | ✅ | wbs_manage |
 
 ### workflows — 0 tool · 5 chỉ người · 0 thiếu
 

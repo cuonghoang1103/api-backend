@@ -179,7 +179,11 @@ export class MessagesService {
     const existing = await this.timHoiThoaiCuaCap(userId, peerId, userId);
     if (existing) return existing;
 
-    if (!peer.allowMessagesFromStrangers) {
+    // Đồng nghiệp cùng không gian CT Work KHÔNG phải "người lạ" (21/10/2026 — app CT Work › Thành viên › Nhắn tin):
+    // tắt "nhận tin từ người lạ" là để chặn người ngoài mạng xã hội, không phải chặn người cùng nhóm đồ án.
+    const nhanTuNguoiLa = peer.allowMessagesFromStrangers
+      || await (await import('./work/people.service.js')).coChungKhongGian(userId, peerId).catch(() => false);
+    if (!nhanTuNguoiLa) {
       throw new AppError(
         'Người dùng này hiện không nhận tin nhắn từ người lạ',
         403,
@@ -805,19 +809,31 @@ export class MessagesService {
         ? message.content.slice(0, 180)
         : 'Đã gửi một tệp đính kèm';
 
+      const { coChungKhongGian } = await import('./work/people.service.js');
+      const { kenhDayTinNhan } = await import('./push/goiDayCtw.js');
       for (const uid of nguoiNhan) {
         const pref = this.getPreferenceForViewer((thread as { preferences?: unknown }).preferences, uid);
         const tatToi = pref?.mutedUntil ? new Date(pref.mutedUntil) : null;
         if (tatToi && tatToi > new Date()) continue;
 
         const chuaDoc = await this.getUnreadCount(uid).catch(() => 0);
+        // 21/10/2026: đồng nghiệp CT Work nhắn nhau ⇒ tới app CT Work (nếu người nhận đã cài; không bắn đôi sang app
+        // chính). Huy hiệu app CT Work = thông báo WORK_* chưa đọc + tin nhắn riêng chưa đọc — đúng công thức
+        // `AppState.taiSoChuaDoc` của app đó, không thì số trên biểu tượng nhảy mỗi lần có đẩy.
+        const kenh = kenhDayTinNhan(await coChungKhongGian(senderId, uid).catch(() => false));
+        const soCtw = kenh === 'ctwork'
+          ? await prisma.socialNotification
+            .count({ where: { receiverId: uid, isRead: false, type: { startsWith: 'WORK_' } } })
+            .then((n) => n + (typeof chuaDoc === 'number' ? chuaDoc : 0))
+            .catch(() => undefined)
+          : undefined;
         await guiThongBao(uid, {
           tieuDe: ten,
           than,
           huyHieu: typeof chuaDoc === 'number' ? chuaDoc : undefined,
           nhom: `thread-${thread.id}`,
           duLieu: { loai: 'tin-nhan', threadId: thread.id },
-        });
+        }, kenh, soCtw);
       }
     } catch {
       // Đẩy hỏng KHÔNG được làm hỏng việc gửi tin.

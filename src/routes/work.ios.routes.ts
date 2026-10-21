@@ -8,6 +8,7 @@
  *   POST /projects/:pid/chat/dm {userId}                           nhắn riêng 1-1 (trả kênh cũ nếu đã có)
  *   GET  /me/agenda?from&to                                        lịch xuyên dự án của tôi
  *   GET  /me/timesheet?week=                                       giờ của tôi trong tuần, mọi dự án
+ *   GET  /me/people                                                Thành viên mọi không gian của tôi + trạng thái hoạt động (21/10)
  *   GET  /projects/:pid/dashboards/:dashId                         một dashboard
  *   GET  /projects/:pid/swr/requirements/:num                      một yêu cầu SWR302 (gọn, không dựng cả danh sách)
  *
@@ -25,6 +26,8 @@ import { REPORT_KINDS, REPORT_REASONS, reportContent } from '../services/work/co
 import { myAgenda, myTimesheet } from '../services/work/meAgenda.service.js';
 import { getDashboard } from '../services/work/search.service.js';
 import { getRequirement } from '../services/work/swr.service.js';
+import { listPeople } from '../services/work/people.service.js';
+import { loadGate } from '../services/work/twoFactor.js';
 
 const router = Router();
 
@@ -94,6 +97,15 @@ router.get('/me/agenda', asyncHandler(async (req, res) => {
 }));
 router.get('/me/timesheet', asyncHandler(async (req, res) => {
   ok(res, await myTimesheet(callerId(req), parse(z.object({ week: ymd.optional() }), req.query)));
+}));
+// Thành viên (21/10/2026, app iOS tab Chat › Thành viên): mọi người cùng không gian + trạng thái hoạt động kiểu Messenger.
+// Không gian đang bị cổng 2FA chặn (không phải GRACE) ⇒ bỏ qua, đúng như GET /workspaces không đếm người ở đó.
+router.get('/me/people', asyncHandler(async (req, res) => {
+  const userId = callerId(req);
+  const gate = req.workToken ? new Map() : await loadGate(userId, req.user);
+  const boQua = new Set<number>([...gate.entries()].filter(([, g]) => g.state !== 'GRACE').map(([wsId]) => wsId));
+  const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
+  ok(res, await listPeople(userId, { boQua, dangNoi: getOnlineUserIds() }));
 }));
 
 // ─── Đọc gọn một mục ─────────────────────────────────────────────

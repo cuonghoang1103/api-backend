@@ -544,6 +544,10 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         .filter((s) => (s.data.user as { id: number } | undefined)?.id === user.id);
       if (socketsForUser.length === 0) {
         onlineUserIds.delete(user.id);
+        // Mốc "hoạt động lần cuối" = lúc đóng kết nối cuối cùng (21/10/2026). App iOS CT Work không gửi nhịp
+        // `POST /users/status` lúc chạy nền, nên thiếu dòng này thì "Hoạt động N phút trước" tính từ nhịp cũ. Không
+        // phát gì thêm — cờ showActiveStatus vẫn che mốc này ở mọi API đọc.
+        void prisma.user.update({ where: { id: user.id }, data: { lastActiveAt: new Date() } }).catch(() => undefined);
         // Emit "went offline" only to this user's presence audience
         // (friends ∪ thread peers) computed at connect. Fall back to a
         // global broadcast if the audience wasn't computed (early

@@ -87,3 +87,26 @@ export function goiDayCtw(type: string, payload: unknown, opts: { dangChoDuyet?:
   }
   return { category, threadId: threadId.slice(0, 64), them };
 }
+
+// ─── Âm thanh + kênh cho tin nhắn riêng (21/10/2026) ─────────────────────────────
+
+/**
+ * Tên tệp âm thanh thông báo của app CT Work (`aps.sound`). App gói tệp này ở `CTWorkApp/Resources/Sounds/`
+ * (.caf/.aiff/.wav, ≤ 30 s). iOS KHÔNG tìm thấy tệp ⇒ tự phát âm mặc định, nên gửi tên này trước khi tệp có
+ * trong bản phát hành là an toàn. Đổi âm ⇒ đổi tệp trong app (giữ tên), hoặc đổi MỘT hằng này.
+ */
+export const AM_THANH_CTWORK = 'ctwork.caf';
+
+/** `aps.sound` theo `apns-topic`: app CT Work ⇒ âm riêng, app chính ⇒ `default` như cũ. */
+export function amThanhChoTopic(topic: string): string {
+  return topic === 'com.cuongthai.ctwork' ? AM_THANH_CTWORK : 'default';
+}
+
+/**
+ * Kênh đẩy cho MỘT tin nhắn riêng (Messenger của web, dùng chung app chính + app CT Work):
+ * người gửi và người nhận cùng ít nhất một không gian CT Work ⇒ `ctwork` (tới app CT Work nếu người nhận đã cài,
+ * chưa cài thì về app chính — `guiThongBao` không bắn cả hai); còn lại ⇒ `chinh` như trước.
+ */
+export function kenhDayTinNhan(chungKhongGian: boolean): 'ctwork' | 'chinh' {
+  return chungKhongGian ? 'ctwork' : 'chinh';
+}

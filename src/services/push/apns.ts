@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
+import { amThanhChoTopic } from './goiDayCtw.js';
 
 const BUNDLE_ID = process.env.APNS_BUNDLE_ID ?? 'com.cuongthai.app';
 /** App iOS CT Work riêng (17/10/2026) — cùng khoá APNs của đội, khác `apns-topic`. */
@@ -87,7 +88,8 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay, topic: 
       const than = JSON.stringify({
         aps: {
           alert: { title: noi.tieuDe, body: noi.than },
-          sound: 'default',
+          // App CT Work: âm riêng `ctwork.caf` (goiDayCtw.ts › AM_THANH_CTWORK); iOS thiếu tệp ⇒ tự phát âm mặc định.
+          sound: amThanhChoTopic(topic),
           ...(noi.huyHieu !== undefined ? { badge: noi.huyHieu } : {}),
           ...(noi.nhom ? { 'thread-id': noi.nhom } : {}),
           ...(noi.phanLoai ? { category: noi.phanLoai } : {}),

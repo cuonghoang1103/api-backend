@@ -243,9 +243,6 @@ async function dayRaNgoaiApp(row: {
     // 18/10/2026: CT Work có category (nút trên thông báo) + thread-id theo thẻ/kênh + công tắc đẩy theo loại.
     const ctw = laCtw ? await chuanBiDayCtw(row) : null;
     if (laCtw && !ctw) return; // người nhận tắt đẩy loại này
-    const soCtw = laCtw
-      ? await prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false, type: { startsWith: 'WORK_' } } }).catch(() => undefined)
-      : undefined;
     const [soTin, soTb] = await Promise.all([
       // `messagesService` là bản dựng sẵn được xuất ra ở cuối file đó —
       // không có `default`, nên gọi thẳng tên.
@@ -254,6 +251,13 @@ async function dayRaNgoaiApp(row: {
         .catch(() => 0),
       prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false } }),
     ]);
+    // Huy hiệu app CT Work = WORK_* chưa đọc + tin nhắn riêng chưa đọc (21/10/2026 — app CT Work có tab Tin nhắn;
+    // cùng công thức `AppState.taiSoChuaDoc` của app đó và đẩy tin nhắn ở messages.service.ts).
+    const soCtw = laCtw
+      ? await prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false, type: { startsWith: 'WORK_' } } })
+        .then((n) => n + (typeof soTin === 'number' ? soTin : 0))
+        .catch(() => undefined)
+      : undefined;
 
     await guiThongBao(row.receiverId, {
       tieuDe: row.type === 'ADMIN_ANNOUNCEMENT' ? 'Thông báo từ Admin' : ten,

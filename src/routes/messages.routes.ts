@@ -588,10 +588,20 @@ adminRouter.get('/messages/threads', async (req: Request, res: Response, next: N
 });
 
 // GET /api/v1/messages/online — currently-connected user IDs
-router.get('/online', async (_req: Request, res: Response<ApiResponse<{ userIds: number[] }>>, next: NextFunction) => {
+// Riêng tư (21/10/2026): ai tắt "Hiển thị trạng thái hoạt động" thì KHÔNG có trong danh sách này (trước đây lộ qua
+// đây dù API khác đã che), và người XEM tự tắt thì nhận danh sách rỗng — luật đối ứng như Messenger.
+router.get('/online', async (req: Request, res: Response<ApiResponse<{ userIds: number[] }>>, next: NextFunction) => {
   try {
     const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
-    res.json({ success: true, data: { userIds: getOnlineUserIds() } });
+    const { prisma } = await import('../config/database.js');
+    const ids = getOnlineUserIds();
+    const me = await prisma.user.findUnique({ where: { id: req.userId! }, select: { showActiveStatus: true } });
+    if (!ids.length || me?.showActiveStatus === false) {
+      res.json({ success: true, data: { userIds: [] } });
+      return;
+    }
+    const hien = await prisma.user.findMany({ where: { id: { in: ids }, showActiveStatus: true }, select: { id: true } });
+    res.json({ success: true, data: { userIds: hien.map((u) => u.id) } });
   } catch (error) {
     next(error);
   }

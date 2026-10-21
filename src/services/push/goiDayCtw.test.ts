@@ -48,3 +48,16 @@ test('công tắc đẩy: thiếu khoá = bật; loại ⇒ khoá', () => {
   assert.equal(pushKeyFor('WORK_ALERT', {}), 'alert');
   assert.equal(pushKeyFor('WORK_INVITE', {}), null);
 });
+
+test('âm thanh: app CT Work ⇒ ctwork.caf (một hằng), app chính ⇒ default', async () => {
+  const { AM_THANH_CTWORK, amThanhChoTopic } = await import('./goiDayCtw.js');
+  assert.equal(AM_THANH_CTWORK, 'ctwork.caf');
+  assert.equal(amThanhChoTopic('com.cuongthai.ctwork'), 'ctwork.caf');
+  assert.equal(amThanhChoTopic('com.cuongthai.app'), 'default');
+});
+
+test('tin nhắn riêng: cùng không gian CT Work ⇒ kênh ctwork, không ⇒ chinh', async () => {
+  const { kenhDayTinNhan } = await import('./goiDayCtw.js');
+  assert.equal(kenhDayTinNhan(true), 'ctwork');
+  assert.equal(kenhDayTinNhan(false), 'chinh');
+});

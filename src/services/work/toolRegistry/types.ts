@@ -39,6 +39,12 @@ export interface ToolDef {
   agentOnly?: boolean;
   /** Chỉ token NGƯỜI (quản trị thành viên, mời người, sprint…) — agent không thấy trong tools/list; server vẫn chặn agent. */
   personOnly?: boolean;
+  /**
+   * 21/10/2026 (CuongMini ngang quyền người): lệnh XOÁ / gỡ không lấy lại được (hoặc chỉ lấy lại qua thùng rác).
+   * MCP khai `annotations.destructiveHint: true` ⇒ client (app CuongMini, Claude Code…) LUÔN hỏi người dùng trước khi chạy —
+   * app CuongMini hỏi cả khi người dùng bật "tự ghi" (`/ctwork tu-ghi on`). Mô tả lệnh phải nói rõ là xoá.
+   */
+  destructive?: boolean;
   surfaces?: CommandSurfaces;
   /** Nhóm để xếp mục lục: issues | docs | tests | export | planning | agent. */
   group?: string;
@@ -47,10 +53,16 @@ export interface ToolDef {
 }
 
 export function defineTool<S extends z.AnyZodObject>(t: {
-  name: string; title: string; description: string; write: boolean; agentOnly?: boolean; personOnly?: boolean; surfaces?: CommandSurfaces; group?: string; input: S;
+  name: string; title: string; description: string; write: boolean; agentOnly?: boolean; personOnly?: boolean; destructive?: boolean; surfaces?: CommandSurfaces; group?: string; input: S;
   run: (ctx: CmdCtx, args: z.infer<S>) => Promise<ToolOutput>;
 }): ToolDef {
   return t as unknown as ToolDef;
 }
 
 export const onSurface = (t: ToolDef, s: keyof CommandSurfaces): boolean => t.surfaces?.[s] !== false;
+
+/**
+ * 21/10/2026: lệnh chỉ cho MCP (CuongMini / AI bên ngoài cầm token). Ask AI trên web và agent BUILTIN không thấy — mục lục
+ * lệnh GHI của Ask AI đã ~17k ký tự mỗi câu hỏi; lệnh sửa/xoá ngang quyền người không đáng thêm tiền prompt ở đó (web có nút).
+ */
+export const mcpOnly = (t: ToolDef): ToolDef => ({ ...t, surfaces: { ...t.surfaces, ask: false, builtin: false } });

@@ -195,6 +195,10 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/retros/2/cards'], ['POST', '/retros/2/cards/5/vote'], ['PATCH', '/retros/2'], ['DELETE', '/retros/2/cards/5'],
     // 19/10/2026: sprint (sprint_create / sprint_start / sprint_complete của MCP) — sprint.manage, agent cấm cả tầng tuyến
     ['POST', '/sprints'], ['POST', '/sprints/3/start'], ['POST', '/sprints/3/complete'], ['PATCH', '/sprints/3'], ['DELETE', '/sprints/3'],
+    // 21/10/2026: xoá dữ liệu của nhóm (lệnh xoá của registry chỉ token người) — agent cấm cả tầng tuyến
+    ['DELETE', '/fpt-tests/unit/4'], ['DELETE', '/fpt-tests/integration/4'], ['DELETE', '/fpt-tests/system/4'], ['DELETE', '/fpt-tests/changes/4'],
+    ['DELETE', '/pages/2'], ['DELETE', '/raid/3'], ['DELETE', '/meetings/3'], ['DELETE', '/qna/3'], ['DELETE', '/diagrams/3'],
+    ['DELETE', '/test-cycles/3'], ['DELETE', '/resources/3'], ['DELETE', '/srs/use-cases/3'], ['DELETE', '/srs/actors/3'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -221,6 +225,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/issues/12/web-links'], ['GET', '/sprints'],
     // 20/10/2026: trình xem tệp — agent ĐỌC tệp như đã đọc được qua /url (tuyến đọc, không đối ngoại)
     ['GET', '/attachments/5/url'], ['GET', '/attachments/5/content'], ['GET', '/attachments/5/preview'],
+    // 21/10/2026: agent vẫn SỬA ma trận 5.1 / case 5.2 (ghi kết quả), sửa trang Docs, gỡ liên kết — chỉ XOÁ cả mục bị cấm
+    ['PUT', '/fpt-tests/unit/4/matrix'], ['PATCH', '/fpt-tests/unit/4'], ['PUT', '/fpt-tests/integration/4/cases'], ['PATCH', '/pages/2'],
+    ['DELETE', '/issues/12/web-links/3'], ['DELETE', '/issues/12/comments/5'], ['PATCH', '/srs/use-cases/3'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

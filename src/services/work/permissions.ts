@@ -777,6 +777,12 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // 19/10/2026 (CuongMini làm thay người — sprint_create/start/complete qua MCP): tạo/sửa/bắt đầu/kết thúc/xoá sprint là
   // `sprint.manage` (đã trong AGENT_DENIED_ACTIONS) — chặn thêm ở tầng tuyến cho đủ hai lớp. Đọc sprint vẫn mở.
   ['POST', /^\/sprints(\/\d+\/(start|complete))?$/], ['PATCH', /^\/sprints\/\d+$/], ['DELETE', /^\/sprints\/\d+$/],
+  // 21/10/2026 (CuongMini ngang quyền người — lệnh xoá của registry chỉ token NGƯỜI): agent không XOÁ dữ liệu của nhóm —
+  // sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources. (Tự sửa worklog /
+  // bình luận / tệp của chính mình vẫn theo luật service như trước.)
+  ['DELETE', /^\/fpt-tests\/(unit|integration|system|changes)\/\d+$/], ['DELETE', /^\/pages\/\d+$/], ['DELETE', /^\/raid\/\d+$/],
+  ['DELETE', /^\/meetings\/\d+$/], ['DELETE', /^\/qna\/\d+$/], ['DELETE', /^\/diagrams\/\d+$/], ['DELETE', /^\/test-cycles\/\d+$/],
+  ['DELETE', /^\/resources\/\d+$/], ['DELETE', /^\/srs\/(actors|use-cases|rules|screens|functions)\/\d+$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

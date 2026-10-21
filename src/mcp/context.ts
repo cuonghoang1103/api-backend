@@ -123,3 +123,11 @@ export async function touchLease(ctx: McpCtx, issueId: number | null): Promise<v
   const min = new Date(now.getTime() + 30 * 60_000);
   await prisma.workAgentLease.update({ where: { id: l.id }, data: { heartbeatAt: now, ...(l.expiresAt < min ? { expiresAt: min } : {}) } }).catch(() => undefined);
 }
+
+/**
+ * 21/10/2026 (CuongMini ngang quyền người): lệnh XOÁ của registry chỉ cho token NGƯỜI. Agent thành viên ⇒ 403
+ * WORK_AGENT_FORBIDDEN kèm tên owner (như mọi chốt agent) — "agent không tự xoá dấu vết" (AGENT_DENIED_ACTIONS).
+ */
+export async function requirePerson(ctx: McpCtx, verb: string): Promise<void> {
+  if (ctx.agent) throw await agentForbidden(ctx.agent.userId, verb);
+}

@@ -783,6 +783,10 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['DELETE', /^\/fpt-tests\/(unit|integration|system|changes)\/\d+$/], ['DELETE', /^\/pages\/\d+$/], ['DELETE', /^\/raid\/\d+$/],
   ['DELETE', /^\/meetings\/\d+$/], ['DELETE', /^\/qna\/\d+$/], ['DELETE', /^\/diagrams\/\d+$/], ['DELETE', /^\/test-cycles\/\d+$/],
   ['DELETE', /^\/resources\/\d+$/], ['DELETE', /^\/srs\/(actors|use-cases|rules|screens|functions)\/\d+$/],
+  // 21/10/2026 đợt 2: SWR302 (feature + liên kết, ưu tiên, glossary, dictionary, stakeholder, elicitation, nguồn, khảo sát, mockup,
+  // NFR), Change Request, review, test plan, test design.
+  ['DELETE', /^\/swr\/(features(\/[^/]+\/links)?|priority\/rows|glossary|dictionary|stakeholders|elicitation|origins|surveys|mockups|nfr)\/[^/]+$/i],
+  ['DELETE', /^\/changes\/\d+$/], ['DELETE', /^\/reviews\/\d+$/], ['DELETE', /^\/test-plans\/\d+$/], ['DELETE', /^\/test-designs\/\d+$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

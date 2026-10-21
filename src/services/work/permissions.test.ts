@@ -199,6 +199,11 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['DELETE', '/fpt-tests/unit/4'], ['DELETE', '/fpt-tests/integration/4'], ['DELETE', '/fpt-tests/system/4'], ['DELETE', '/fpt-tests/changes/4'],
     ['DELETE', '/pages/2'], ['DELETE', '/raid/3'], ['DELETE', '/meetings/3'], ['DELETE', '/qna/3'], ['DELETE', '/diagrams/3'],
     ['DELETE', '/test-cycles/3'], ['DELETE', '/resources/3'], ['DELETE', '/srs/use-cases/3'], ['DELETE', '/srs/actors/3'],
+    // 21/10/2026 đợt 2
+    ['DELETE', '/swr/features/FE-3'], ['DELETE', '/swr/features/3/links/9'], ['DELETE', '/swr/priority/rows/4'], ['DELETE', '/swr/glossary/2'],
+    ['DELETE', '/swr/dictionary/2'], ['DELETE', '/swr/stakeholders/SH-2'], ['DELETE', '/swr/elicitation/ELC-1'], ['DELETE', '/swr/origins/5'],
+    ['DELETE', '/swr/surveys/SV-1'], ['DELETE', '/swr/mockups/3'], ['DELETE', '/swr/nfr/12'], ['DELETE', '/changes/3'], ['DELETE', '/reviews/2'],
+    ['DELETE', '/test-plans/2'], ['DELETE', '/test-designs/2'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -228,6 +233,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // 21/10/2026: agent vẫn SỬA ma trận 5.1 / case 5.2 (ghi kết quả), sửa trang Docs, gỡ liên kết — chỉ XOÁ cả mục bị cấm
     ['PUT', '/fpt-tests/unit/4/matrix'], ['PATCH', '/fpt-tests/unit/4'], ['PUT', '/fpt-tests/integration/4/cases'], ['PATCH', '/pages/2'],
     ['DELETE', '/issues/12/web-links/3'], ['DELETE', '/issues/12/comments/5'], ['PATCH', '/srs/use-cases/3'],
+    ['PATCH', '/swr/glossary/2'], ['PATCH', '/swr/surveys/SV-1'], ['PATCH', '/changes/3'], ['PUT', '/reviews/2/items'], ['GET', '/trace-links'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

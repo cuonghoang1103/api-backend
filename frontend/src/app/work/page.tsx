@@ -14,15 +14,18 @@ import { EmptyState, Popover, relativeTime, Spinner, useToggle, PageLoading } fr
 import { PageHeader, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateWorkspaceDialog from '@/components/work/workspace/CreateWorkspaceDialog';
 import MyWork from '@/components/work/MyWork';
+import FeedView from '@/components/work/feed/FeedView';
 import HelpTourCard from '@/components/work/help/HelpTourCard';
 import { cn } from '@/lib/utils';
 import { openHelp } from '@/components/work/help/store';
 import { wt } from '@/components/work/i18n';
 import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 
-type HomeTab = 'my-work' | 'workspaces';
+type HomeTab = 'my-work' | 'feed' | 'workspaces';
 const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
   { id: 'my-work', get label() { return wt('home.myWork'); } },
+  // 21/10/2026: Bảng tin nhóm — gộp bài của mọi không gian/dự án (lọc theo không gian/dự án trong tab).
+  { id: 'feed', get label() { return wt('feed.title'); } },
   { id: 'workspaces', get label() { return wt('home.workspaces'); } },
 ];
 
@@ -84,7 +87,7 @@ function WorkspacesHome() {
   // Mặc định "My work" khi đã có ít nhất một không gian; chưa có thì là Workspaces (để thấy nút tạo).
   const rawTab = params?.get('tab');
   const hasWorkspace = !!q.data?.length;
-  const tab: HomeTab = rawTab === 'my-work' || rawTab === 'workspaces' ? rawTab : hasWorkspace ? 'my-work' : 'workspaces';
+  const tab: HomeTab = rawTab === 'my-work' || rawTab === 'workspaces' || rawTab === 'feed' ? rawTab : hasWorkspace ? 'my-work' : 'workspaces';
   const setTab = useCallback((id: HomeTab) => {
     const p = new URLSearchParams(params?.toString());
     p.set('tab', id);
@@ -107,7 +110,7 @@ function WorkspacesHome() {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title={q.isLoading ? 'CT Work' : !hasWorkspace ? wt('home.welcome') : tab === 'my-work' ? wt('home.myWork') : wt('home.workspaces')}
+        title={q.isLoading ? 'CT Work' : !hasWorkspace ? wt('home.welcome') : tab === 'my-work' ? wt('home.myWork') : tab === 'feed' ? wt('feed.title') : wt('home.workspaces')}
         actions={hasWorkspace ? (
           <>
             <button type="button" className="w-btn w-btn-sm max-sm:!hidden" onClick={dialog.open}>
@@ -139,6 +142,11 @@ function WorkspacesHome() {
           </div>
         </div>
       )}
+      {hasWorkspace && tab === 'feed' ? (
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden" data-testid="feed-scroll">
+          <FeedView mode="all" />
+        </div>
+      ) : (
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[1120px] px-4 py-6 md:px-8 md:py-8">
           {q.isLoading ? (
@@ -187,6 +195,7 @@ function WorkspacesHome() {
           {!q.isLoading && tab === 'workspaces' && <DeletedWorkspaces />}
         </div>
       </div>
+      )}
       <CreateWorkspaceDialog open={dialog.on} onClose={closeDialog} />
     </div>
   );

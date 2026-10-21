@@ -90,6 +90,16 @@ export function tepBaiTapLop(classId: number, f: Dong): TepXem {
   };
 }
 
+/** Ảnh / video / tệp của Bảng tin nhóm (21/10/2026). URL ký sẵn xin lại mỗi lần mở (sống 10 phút). */
+export function tepBangTinNhom(f: Dong): TepXem {
+  const goc = `/work/feed/attachments/${f.id}`;
+  return {
+    ...chung('fd', f),
+    url: (inline) => api.get<{ data: { url: string } }>(`${goc}/url${inline ? '' : '?download=1'}`).then((r) => r.data.data.url),
+    ...hai(goc),
+  };
+}
+
 /** Ảnh đã có sẵn địa chỉ (ảnh trong nội dung mô tả/bình luận/Docs — `/api/v1/work/projects/:pid/images/:id`). */
 export function anhCoSan(src: string, name: string): TepXem {
   return { id: `img:${src}`, fileName: name, mime: 'image/*', url: async () => src };

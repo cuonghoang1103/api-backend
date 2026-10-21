@@ -170,6 +170,7 @@ describe('khopTuyenWeb', () => {
       ['/work/invite/abc123', '/work/invite/:token', { token: 'abc123' }],
       ['/work/share/tok-9', '/work/share/:token', { token: 'tok-9' }],
       ['/work/acme/settings', '/work/:ws/settings', { ws: 'acme' }],
+      ['/work/acme/feed', '/work/:ws/feed', { ws: 'acme' }], // 21/10/2026: "feed" không bao giờ là mã dự án (mã VIẾT HOA)
     ];
     for (const [duong, mau, thamSo] of cap) {
       const k = khopTuyenWeb(duong);
@@ -185,7 +186,7 @@ describe('khopTuyenWeb', () => {
     expect(d?.thamSo).toEqual({ ws: 'acme', key: 'WEB' });
 
     for (const v of ['board', 'backlog', 'list', 'timeline', 'releases', 'reports',
-                     'dashboards', 'tests', 'settings', 'spec', 'chat']) {
+                     'dashboards', 'tests', 'settings', 'spec', 'chat', 'feed']) {
       const k = khopTuyenWeb(`/work/acme/WEB/${v}`);
       expect(k?.tuyen.mau, v).toBe(`/work/:ws/:key/${v}`);
       expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });

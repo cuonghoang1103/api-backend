@@ -53,6 +53,7 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   { mau: '/work/:ws/agents/:id', nap: () => import('@/app/work/[ws]/agents/[id]/page') },
   { mau: '/work/:ws/ai-usage', nap: () => import('@/app/work/[ws]/ai-usage/page') }, // CTW đợt 8B: AI trong không gian (tĩnh, trước /:key)
   { mau: '/work/:ws/setup', nap: () => import('@/app/work/[ws]/setup/page') }, // 20/10/2026: Create with CuongMini (tĩnh, trước /:key)
+  { mau: '/work/:ws/feed', nap: () => import('@/app/work/[ws]/feed/page') }, // 21/10/2026: Bảng tin của không gian (tĩnh, trước /:key)
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },
@@ -98,6 +99,7 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/resources', nap: () => import('@/app/work/[ws]/[key]/resources/page') },
   /* CTW K-3 (10/10/2026): kênh chat dự án (?c= kênh, ?m= tin, ?t= luồng). */
   { mau: '/work/:ws/:key/chat', nap: () => import('@/app/work/[ws]/[key]/chat/page') },
+  { mau: '/work/:ws/:key/feed', nap: () => import('@/app/work/[ws]/[key]/feed/page') }, // 21/10/2026: Bảng tin của dự án
   /* CTW Diagram (10/10/2026): Diagram Studio (?d= mở một sơ đồ). */
   { mau: '/work/:ws/:key/diagrams', nap: () => import('@/app/work/[ws]/[key]/diagrams/page') },
   /* CTW đợt 4b (10/10/2026): hồ sơ SWR302 theo Wiegers (?tab= overview|features|requirements|priority|glossary|dictionary|six-links). */

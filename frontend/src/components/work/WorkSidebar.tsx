@@ -47,7 +47,7 @@ import { CtWorkMark } from './brand/CtWorkMark';
 import { ChatNavBadge } from './chat/ChatNotifier';
 import { chatApi, chatKeys } from '@/lib/work-chat-api';
 // CTW đợt 5: hub giảng viên + lớp học (link chỉ hiện với người có vai TEACHER / có lớp).
-import { GraduationCap, School } from 'lucide-react';
+import { GraduationCap, Newspaper, School } from 'lucide-react';
 import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đợt 7a
 import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
 import { PlugZap } from 'lucide-react'; // CTW đợt 8a
@@ -63,7 +63,7 @@ import { coreFor, isCustomized, matchesQuery, primaryOrder, togglePin } from './
 import { useNavPins } from './shell/navPins';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
-const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage', 'setup']); // 'ai-usage': CTW đợt 8B · 'setup': Create with CuongMini
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage', 'setup', 'feed']); // 'feed': Bảng tin nhóm (21/10/2026) // 'ai-usage': CTW đợt 8B · 'setup': Create with CuongMini
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -144,6 +144,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'list', get label() { return wt('nav.n_Issues'); }, icon: List, match: (v) => v === 'list' || v === 'issue' },
       // CTW K-3: kênh chat dự án (badge số chưa đọc). Khách (CLIENT) chỉ thấy kênh khách — mục riêng trong cổng khách.
       { path: 'chat', get label() { return wt('nav.n_Chat'); }, icon: MessagesSquare, match: (v) => v === 'chat', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // 21/10/2026: Bảng tin của dự án — đội dự án + giảng viên (vai CLIENT không bao giờ thấy; máy chủ cũng chặn).
+      { path: 'feed', get label() { return wt('feed.nav'); }, icon: Newspaper, match: (v) => v === 'feed', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW Code (18/10/2026): hoạt động Git như GitHub (push/nhánh/PR/mã nguồn) — chỉ khi đã nối repo; khách không thấy.
       { path: 'code', get label() { return wt('code.navCode'); }, icon: Code2, match: (v) => v === 'code', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'], git: true },
       { path: 'tests', get label() { return wt('nav.n_Tests'); }, icon: FlaskConical, match: (v) => v === 'tests' },
@@ -270,6 +272,8 @@ const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon; module?: Studi
 
 const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: StudioModule; staffOnly?: boolean }[] = [
   { path: '', get label() { return wt('nav.n_Projects'); }, icon: LayoutGrid },
+  // 21/10/2026: Bảng tin nhóm — mọi thành viên trừ khách cổng (portalOnly đã lọc ở dưới); máy chủ quyết phạm vi.
+  { path: '/feed', get label() { return wt('feed.nav'); }, icon: Newspaper },
   { path: '/teams', get label() { return wt('nav.n_Teams'); }, icon: Network, module: 'teams' },
   // Đợt S3a — chỉ người trong đội (không phải khách GUEST); phạm vi dữ liệu do server quyết.
   { path: '/portfolio', get label() { return wt('nav.n_Portfolio'); }, icon: BriefcaseBusiness, staffOnly: true },

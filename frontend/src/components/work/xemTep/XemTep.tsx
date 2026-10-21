@@ -31,7 +31,7 @@ import XemChu from './XemChu';
 import XemOffice from './XemOffice';
 
 export type { TepXem } from './nguonTep';
-export { anhCoSan, tepBaiTapLop, tepBangTinLop, tepChat, tepDinhKem } from './nguonTep';
+export { anhCoSan, tepBaiTapLop, tepBangTinLop, tepBangTinNhom, tepChat, tepDinhKem } from './nguonTep';
 
 /** App desktop (Electron): mở tab mới = mở trình duyệt của máy. */
 const laAppDesktop = () => typeof navigator !== 'undefined' && /Electron/i.test(navigator.userAgent);

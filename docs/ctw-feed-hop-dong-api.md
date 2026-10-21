@@ -138,6 +138,7 @@ hướng, ≤ 4 chặng, hết giờ 6 s, trần 512 KB HTML / 3 MB ảnh).
   "commentsOff": false,
   "pinned": true, "pinnedAt": "…",
   "saved": false,
+  "hiddenForMe": false,                  // true = chính mình đã "Ẩn bài này" (chỉ gặp khi mở thẳng bài — bảng tin đã lọc)
   "hidden": false,                       // true = đã bị quản trị viên gỡ (chỉ tác giả + quản trị thấy)
   "editedAt": null, "createdAt": "…",
   "url": "/work/acme/feed?post=12",      // đường dẫn sâu (xem §6)

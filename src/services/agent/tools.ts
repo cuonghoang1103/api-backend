@@ -1691,14 +1691,16 @@ export function parseToolMcp(raw: unknown): ToolMcpNgoai[] {
 
 /**
  * ĐỢT 6 — MỤC LỤC tool MCP chưa nạp schema (`mcpMucLuc` app gửi): `[{ name, mo }]`. Lọc như `parseToolMcp`: tên đúng
- * khuôn, mô tả một dòng ≤ 120 ký tự (chữ của server MCP — vẫn là dữ liệu bên thứ ba), tối đa 220 mục.
+ * khuôn, mô tả một dòng ≤ 120 ký tự (chữ của server MCP — vẫn là dữ liệu bên thứ ba), tối đa 300 mục (21/10/2026: 220 ⇒ 300 —
+ * CT Work có ~215 lệnh cho token người, app gửi 23 kèm schema + ~192 vào mục lục; cắt xảy ra TRƯỚC khi xếp tên nên trần sát
+ * sẽ lặng lẽ rụng các lệnh cuối danh sách — đúng các lệnh sửa/xoá mới).
  */
 export function parseMucLucMcp(raw: unknown): Array<{ name: string; mo: string }> {
   if (!Array.isArray(raw)) return [];
   const ra: Array<{ name: string; mo: string }> = [];
   const daCo = new Set<string>();
   for (const t of raw) {
-    if (ra.length >= 220) break;
+    if (ra.length >= 300) break;
     if (!t || typeof t !== 'object') continue;
     const o = t as Record<string, unknown>;
     const name = typeof o.name === 'string' ? o.name : '';

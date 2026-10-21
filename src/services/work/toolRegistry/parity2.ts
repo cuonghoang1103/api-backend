@@ -619,15 +619,16 @@ const fptImport = defineTool({
 
 // ═══ Planning poker / retro: điều phối phiên ═════════════════════
 
-const POKER_ACTIONS = ['create', 'add_items', 'start', 'reveal', 'revote', 'finalize', 'skip', 'close'] as const;
+const POKER_ACTIONS = ['create', 'add_items', 'start', 'reveal', 'revote', 'finalize', 'skip', 'close', 'timer'] as const;
 const pokerSession = defineTool({
   name: 'poker_session', title: 'Run a planning-poker session (facilitator)', group: 'planning',
-  description: 'action create (title, deck FIBONACCI…, sprint id or issues) | add_items (issues) | start (issue ⇒ voting) | reveal | revote | finalize (value = the agreed estimate, written to the issue) | skip | close. Facilitator rights as on the web. Voting: poker_vote.',
+  description: 'action create (title, deck FIBONACCI…, sprint id or issues) | add_items (issues) | start (issue ⇒ voting) | reveal | revote | finalize (value = the agreed estimate, written to the issue) | skip | close | timer (seconds: 30, 60, 90, 120, 180 or 300; 0 stops). Facilitator rights as on the web. Voting: poker_vote.',
   write: true, personOnly: true,
   input: z.object({
     project: projectArg, action: z.enum(POKER_ACTIONS), session: z.number().int().positive().optional(), title: z.string().min(1).max(120).optional(),
     deck: z.string().max(20).optional(), sprintId: z.number().int().positive().optional(), issues: z.array(issueArg).max(100).optional(),
     issue: issueArg.optional().describe('start/reveal/revote/finalize/skip: the issue (default: the one being voted)'), value: z.string().min(1).max(8).optional(),
+    seconds: z.number().int().min(0).max(3600).optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'run planning poker');
@@ -644,6 +645,7 @@ const pokerSession = defineTool({
     const sid = a.session;
     if (a.action === 'add_items') { await projectFor(ctx, a.project, [['POST', `/poker/${sid}/items`]]); await poker.addItems(ctx.userId, p0.id, sid, { issues: nums }); return { session: sid, added: nums.length }; }
     if (a.action === 'close') { await projectFor(ctx, a.project, [['POST', `/poker/${sid}/close`]]); await poker.closeSession(ctx.userId, p0.id, sid); return { session: sid, closed: true }; }
+    if (a.action === 'timer') { await projectFor(ctx, a.project, [['POST', `/poker/${sid}/timer`]]); await poker.setTimer(ctx.userId, p0.id, sid, poker.timerInput.parse({ seconds: a.seconds ?? 0 }).seconds); return { session: sid, timer: a.seconds ?? 0 }; }
     let item: { id: number } | null;
     if (a.issue !== undefined) {
       const n = issueNumber(p0.key, a.issue);
@@ -927,11 +929,12 @@ const classPost = defineTool({
   input: z.object({
     classId: z.number().int().positive(), post: z.number().int().positive().optional(), title: z.string().max(255).nullable().optional(), markdown: z.string().max(30_000).optional(),
     links: linkArr.optional(), pinned: z.boolean().optional(), publishAt: z.string().max(40).nullable().optional(), commentsOff: z.boolean().optional(),
+    fileIds: z.array(z.number().int().positive()).max(10).optional().describe('Files uploaded with class_admin file_upload'),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'post to classes');
     W(ctx);
-    const input: stream.PostInput = patchOf({ title: a.title, bodyJson: a.markdown !== undefined ? docOf(a.markdown) : undefined, links: a.links, pinned: a.pinned, publishAt: a.publishAt, commentsOff: a.commentsOff }, []);
+    const input: stream.PostInput = patchOf({ title: a.title, bodyJson: a.markdown !== undefined ? docOf(a.markdown) : undefined, links: a.links, pinned: a.pinned, publishAt: a.publishAt, commentsOff: a.commentsOff, fileIds: a.fileIds }, []);
     if (a.post) {
       await topRoute(ctx, 'PATCH', `/classes/${a.classId}/stream/${a.post}`, 'post to classes');
       await stream.updatePost(ctx.userId, a.classId, a.post, input);
@@ -991,13 +994,14 @@ const classAssignment = defineTool({
 
 const classContentDelete = defineTool({
   name: 'class_content_delete', title: 'Delete a class post / material / topic / assignment', group: 'teaching',
-  description: 'DESTRUCTIVE: teachers delete a stream post, material, topic, assignment (takes its submissions with it), stream comment, student from the roster, schedule (future sessions), session, bank question (archived) or quiz. The user must confirm.',
+  description: 'DESTRUCTIVE: teachers delete a stream post, material, topic, assignment (takes its submissions with it), stream comment, student from the roster, schedule (future sessions), session, bank question (archived), quiz, uploaded stream file, assignment file, or a file of YOUR submission (my_file). The user must confirm.',
   ...DEL,
-  input: z.object({ classId: z.number().int().positive(), kind: z.enum(['post', 'material', 'topic', 'assignment', 'stream_comment', 'student', 'schedule', 'session', 'question', 'quiz']), id: z.number().int().positive() }),
+  input: z.object({ classId: z.number().int().positive(), kind: z.enum(['post', 'material', 'topic', 'assignment', 'stream_comment', 'student', 'schedule', 'session', 'question', 'quiz', 'stream_file', 'assignment_file', 'my_file']), id: z.number().int().positive(), assignment: z.number().int().positive().optional().describe('assignment_file / my_file: the assignment') }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'delete class content');
     W(ctx);
-    const seg = { post: 'stream', material: 'materials', topic: 'topics', assignment: 'assignments', stream_comment: 'stream-comments', student: 'roster', schedule: 'schedules', session: 'sessions', question: 'quiz-bank', quiz: 'quizzes' }[a.kind];
+    const seg = { post: 'stream', material: 'materials', topic: 'topics', assignment: 'assignments', stream_comment: 'stream-comments', student: 'roster', schedule: 'schedules', session: 'sessions', question: 'quiz-bank', quiz: 'quizzes', stream_file: 'stream-files', assignment_file: `assignments/${a.assignment}/files`, my_file: `assignments/${a.assignment}/my/files` }[a.kind];
+    if ((a.kind === 'assignment_file' || a.kind === 'my_file') && !a.assignment) throw new BadRequestError(`${a.kind} needs assignment`, 'VALIDATION_ERROR');
     await topRoute(ctx, 'DELETE', `/classes/${a.classId}/${seg}/${a.id}`, 'delete class content');
     const u = ctx.userId, c = a.classId, i = a.id;
     switch (a.kind) {
@@ -1011,6 +1015,9 @@ const classContentDelete = defineTool({
       case 'session': await cal.deleteSession(u, c, i); break;
       case 'question': await quiz.archiveQuestion(u, c, i); break;
       case 'quiz': await quiz.deleteQuiz(u, c, i); break;
+      case 'stream_file': await stream.deleteDraftFile(u, c, i); break;
+      case 'assignment_file': await classwork.removeAssignmentFile(u, c, a.assignment!, i); break;
+      case 'my_file': await classwork.removeSubmissionFile(u, c, a.assignment!, i); break;
     }
     return { deleted: { kind: a.kind, id: a.id } };
   },

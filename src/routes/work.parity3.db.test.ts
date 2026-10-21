@@ -140,7 +140,10 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
     ok(await tool(leadTok, 'class_admin', { action: 'settings', classId, streamComments: true }));
     const s = ok(await tool(leadTok, 'class_admin', { action: 'session_add', classId, title: 'Slot 1', startsAt: '2026-11-02T07:30:00+07:00', durationMin: 90 })).out;
     ok(await tool(leadTok, 'class_admin', { action: 'schedule_add', classId, title: 'Weekly', recurrence: { freq: 'WEEKLY', byWeekday: [1], hour: 7, minute: 30, startDate: '2026-11-02', endDate: '2026-12-20' }, durationMin: 90 }));
-    const post = ok(await tool(leadTok, 'class_post', { classId, title: 'Hello', markdown: 'Welcome' })).out;
+    const up = ok(await tool(leadTok, 'class_admin', { action: 'file_upload', classId, base64: Buffer.from('syllabus').toString('base64'), fileName: 'syllabus.txt', mime: 'text/plain' })).out;
+    const fid = up.file.id ?? up.file.file?.id;
+    assert.ok(fid, JSON.stringify(up));
+    const post = ok(await tool(leadTok, 'class_post', { classId, title: 'Hello', markdown: 'Welcome', fileIds: [fid] })).out;
     const cm = ok(await tool(leadTok, 'class_admin', { action: 'comment_add', classId, post: post.posted, text: 'Questions here' })).out;
     assert.ok(cm.comment);
     const q = ok(await tool(leadTok, 'class_quiz', { action: 'question_add', classId, questionJson: JSON.stringify({ type: 'TRUE_FALSE', prompt: 'HTTP is stateless', answer: { value: true }, topic: 'web' }) })).out;

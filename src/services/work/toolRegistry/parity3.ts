@@ -31,6 +31,7 @@ import * as crs from '../changeRequests.service.js';
 import * as cal from '../classCalendar.service.js';
 import * as mats from '../classMaterials.service.js';
 import * as classroom from '../classroom.service.js';
+import * as classwork from '../classwork.service.js';
 import * as stream from '../classStream.service.js';
 import * as collab from '../collab.service.js';
 import * as contrib from '../contrib.service.js';
@@ -65,6 +66,8 @@ import * as elic from '../swrElic.service.js';
 import * as pack from '../swrPack.service.js';
 import { CLASS_SUBJECTS } from '../teachingRules.js';
 import * as autoTests from '../testAutomation.service.js';
+import * as stat from '../staticAnalysis.service.js';
+import * as okr from '../okr.service.js';
 import { PHASES, ROOT_CAUSES, TEST_LEVELS } from '../testMetrics.js';
 import * as t from '../testMgmt.service.js';
 import * as tests from '../tests.service.js';
@@ -107,10 +110,10 @@ async function hit(ctx: McpCtx, project: string, method: string, path: string): 
 
 // ═══ Lớp học — quản trị (không chấm) ═════════════════════════════
 
-const CLASS_ACTIONS = ['create_class', 'update_class', 'settings', 'join_code', 'join', 'roster_preview', 'roster_import', 'roster_invite', 'schedule_add', 'session_add', 'session_update', 'reorder_materials', 'reorder_topics', 'comment_add', 'comment_hide', 'comment_unhide'] as const;
+const CLASS_ACTIONS = ['create_class', 'update_class', 'settings', 'join_code', 'join', 'roster_preview', 'roster_import', 'roster_invite', 'schedule_add', 'session_add', 'session_update', 'reorder_materials', 'reorder_topics', 'comment_add', 'comment_hide', 'comment_unhide', 'file_upload'] as const;
 const classAdmin = defineTool({
   name: 'class_admin', title: 'Manage a class (roster, schedule, settings)', group: 'teaching',
-  description: 'Classroom admin for teachers (and joining for students). action: create_class (subject, classCode, term, name, iAmTeacher, maxGroupSize, week1Start, timezone) | update_class (name, maxGroupSize, joinOpen, archived, week1Start, timezone, teacherEmail) | settings (streamComments, absenceThreshold, lateAfterMin) | join_code (new code; joinExpiresInDays) | join (code, joinAction JOIN/JOIN_GROUP/CREATE_GROUP/TEACH, groupId/groupName, studentCode) | roster_preview / roster_import (csv text or xlsxBase64; confirm) | roster_invite (studentIds, confirm) | schedule_add (title, recurrence {freq, interval, byWeekday, hour, minute, startDate, endDate}, durationMin, location, meetingUrl) | session_add / session_update (session id; title, startsAt ISO, durationMin, location, meetingUrl, status SCHEDULED/CANCELLED) | reorder_materials (topicId, ids) | reorder_topics (ids) | comment_add (post, text) | comment_hide / comment_unhide (comment). Grading, returning work and taking attendance stay with the teacher on the web; removals: class_content_delete.',
+  description: 'Classroom admin for teachers (and joining for students). action: create_class (subject, classCode, term, name, iAmTeacher, maxGroupSize, week1Start, timezone) | update_class (name, maxGroupSize, joinOpen, archived, week1Start, timezone, teacherEmail) | settings (streamComments, absenceThreshold, lateAfterMin) | join_code (new code; joinExpiresInDays) | join (code, joinAction JOIN/JOIN_GROUP/CREATE_GROUP/TEACH, groupId/groupName, studentCode) | roster_preview / roster_import (csv text or xlsxBase64; confirm) | roster_invite (studentIds, confirm) | schedule_add (title, recurrence {freq, interval, byWeekday, hour, minute, startDate, endDate}, durationMin, location, meetingUrl) | session_add / session_update (session id; title, startsAt ISO, durationMin, location, meetingUrl, status SCHEDULED/CANCELLED) | reorder_materials (topicId, ids) | reorder_topics (ids) | comment_add (post, text) | comment_hide / comment_unhide (comment) | file_upload (base64 ≤ 6 MB, fileName, mime; assignment id ⇒ attached to that assignment, else a stream file whose id goes in class_post fileIds). Grading, returning work and taking attendance stay with the teacher on the web; removals: class_content_delete.',
   write: true, personOnly: true,
   input: z.object({
     action: z.enum(CLASS_ACTIONS), classId: z.number().int().positive().optional(),
@@ -131,6 +134,7 @@ const classAdmin = defineTool({
     session: z.number().int().positive().optional(), startsAt: z.string().max(40).optional(), status: z.enum(['SCHEDULED', 'CANCELLED']).optional(),
     topicId: z.number().int().positive().nullable().optional(), ids: z.array(z.number().int().positive()).max(400).optional(),
     post: z.number().int().positive().optional(), comment: z.number().int().positive().optional(), text: z.string().min(1).max(4000).optional(),
+    base64: z.string().max(8_500_000).optional(), fileName: z.string().max(255).optional(), mime: z.string().max(100).optional(), assignment: z.number().int().positive().optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'manage classes');
@@ -169,6 +173,14 @@ const classAdmin = defineTool({
       case 'reorder_topics': await go('PUT', '/topics-order'); return { order: await mats.reorderTopics(ctx.userId, cid, need(a.ids, 'ids')) };
       case 'comment_add': { const pid = need(a.post, 'post'); await go('POST', `/stream/${pid}/comments`); return { comment: await stream.addComment(ctx.userId, cid, pid, need(a.text, 'text')) }; }
       case 'comment_hide': case 'comment_unhide': { const c = need(a.comment, 'comment'); await go('PATCH', `/stream-comments/${c}`); return { comment: await stream.setCommentHidden(ctx.userId, cid, c, a.action === 'comment_hide') }; }
+      case 'file_upload': {
+        const buffer = Buffer.from(need(a.base64, 'base64').replace(/^data:[^,]*,/, ''), 'base64');
+        if (!buffer.length) throw bad('The file is empty');
+        const fileName = need(a.fileName, 'fileName');
+        if (a.assignment) { await go('POST', `/assignments/${a.assignment}/files`); return { file: await classwork.uploadAssignmentFile(ctx.userId, cid, a.assignment, { buffer, fileName }) }; }
+        await go('POST', '/stream-files');
+        return { file: await stream.uploadClassFile(ctx.userId, cid, { buffer, fileName, mime: a.mime ?? 'application/octet-stream' }), note: 'Pass this file id in class_post fileIds' };
+      }
     }
     throw bad('Unknown action');
   },
@@ -176,10 +188,11 @@ const classAdmin = defineTool({
 
 const classQuiz = defineTool({
   name: 'class_quiz', title: 'Author class quizzes (question bank + quizzes)', group: 'teaching',
-  description: 'Teachers author quizzes — never take or grade them. action: question_add (questionJson = {type SINGLE|MULTI|TRUE_FALSE|SHORT|MATCH, topic, prompt, options, answer {correct|value|accepted}, points, explanation}) | question_update (question id, questionJson) | question_approve (question id — approves a draft into the bank) | questions_import (format table|aiken|gift, text or xlsxBase64, topic, confirm) | quiz_create / quiz_update (quiz id; title, description, topic, items [{questionId, points} or {drawTopic, count}], openAt, closeAt, timeLimitMin, maxAttempts, shuffleQuestions, shuffleOptions) | quiz_publish / quiz_unpublish. Remove: class_content_delete (question / quiz).',
+  description: 'Teachers author quizzes — never take or grade them. action: question_add (questionJson = {type SINGLE|MULTI|TRUE_FALSE|SHORT|MATCH, topic, prompt, options, answer {correct|value|accepted}, points, explanation}) | question_update (question id, questionJson) | question_approve (question id — approves a draft into the bank) | questions_import (format table|aiken|gift, text or xlsxBase64, topic, confirm) | quiz_create / quiz_update (quiz id; title, description, topic, items [{questionId, points} or {drawTopic, count}], openAt, closeAt, timeLimitMin, maxAttempts, shuffleQuestions, shuffleOptions) | quiz_publish / quiz_unpublish | question_image (imageBase64 ⇒ an image URL to use as imageUrl in questionJson). Remove: class_content_delete (question / quiz).',
   write: true, personOnly: true,
   input: z.object({
-    action: z.enum(['question_add', 'question_update', 'question_approve', 'questions_import', 'quiz_create', 'quiz_update', 'quiz_publish', 'quiz_unpublish']),
+    action: z.enum(['question_add', 'question_update', 'question_approve', 'questions_import', 'question_image', 'quiz_create', 'quiz_update', 'quiz_publish', 'quiz_unpublish']),
+    imageBase64: z.string().max(4_200_000).optional(),
     classId: z.number().int().positive(), question: z.number().int().positive().optional(), questionJson: z.string().max(40_000).optional(),
     format: z.enum(['table', 'aiken', 'gift']).optional(), text: z.string().max(1_000_000).optional(), xlsxBase64: z.string().max(4_000_000).optional(), topic: z.string().max(80).optional(), confirm: z.boolean().optional(),
     quiz: z.number().int().positive().optional(), title: z.string().max(200).optional(), description: z.string().max(8000).nullable().optional(),
@@ -199,6 +212,7 @@ const classQuiz = defineTool({
         await go('PATCH', `/quiz-bank/${qid}`);
         return { question: await quiz.updateQuestion(ctx.userId, cid, qid, a.action === 'question_approve' ? { approve: true } : { question: parseJson(need(a.questionJson, 'questionJson'), 'questionJson') }) };
       }
+      case 'question_image': await go('POST', '/quiz-bank/image'); return { image: await quiz.uploadImage(ctx.userId, cid, { dataBase64: need(a.imageBase64, 'imageBase64') }) };
       case 'questions_import': await go('POST', '/quiz-bank/import'); return { imported: await quiz.importQuestions(ctx.userId, cid, defined({ format: need(a.format, 'format'), text: a.text, xlsxBase64: a.xlsxBase64, topic: a.topic, confirm: a.confirm }) as Parameters<typeof quiz.importQuestions>[2]) };
       case 'quiz_create': case 'quiz_update': {
         const items = a.items?.map((i) => (i.questionId ? { kind: 'Q' as const, questionId: i.questionId, points: i.points ?? null } : { kind: 'DRAW' as const, topic: need(i.drawTopic, 'drawTopic'), count: i.count ?? 1, points: i.points ?? null }));
@@ -218,10 +232,11 @@ const classQuiz = defineTool({
 
 const swrExtras = defineTool({
   name: 'swr_extras', title: 'SWR302 extras (RACI, seeding, estimation, quality, proposals)', group: 'srs',
-  description: 'action: raci_activity_add (name, or defaults=true for the standard activities) | raci_set (activityId, stakeholder SH-2, role R/A/C/I or null) | seed_priority (kind FE/UC — one priority row per feature/use case) | seed_stakeholders (from SRS actors) | estimation_set (estimationJson = {counts, project, factors, minutes} as on the Estimation tab) | quality_mark (requirement issue, criteria [{criterion, value true/false/null}]) | proposal_add (session ELC-1; title, text, reqType, priority, stakeholder) | nfr_from_template (template key, title) | mockup_submit (mockup id, share).',
+  description: 'action: raci_activity_add (name, or defaults=true for the standard activities) | raci_set (activityId, stakeholder SH-2, role R/A/C/I or null) | seed_priority (kind FE/UC — one priority row per feature/use case) | seed_stakeholders (from SRS actors) | estimation_set (estimationJson = {counts, project, factors, minutes} as on the Estimation tab) | quality_mark (requirement issue, criteria [{criterion, value true/false/null}]) | proposal_add (session ELC-1; title, text, reqType, priority, stakeholder) | nfr_from_template (template key, title) | mockup_submit (mockup id, share) | elicitation_meeting (session ELC-1; meeting number to link, or createMeeting=true).',
   write: true, personOnly: true,
   input: z.object({
-    project: projectArg, action: z.enum(['raci_activity_add', 'raci_set', 'seed_priority', 'seed_stakeholders', 'estimation_set', 'quality_mark', 'proposal_add', 'nfr_from_template', 'mockup_submit']),
+    project: projectArg, action: z.enum(['raci_activity_add', 'raci_set', 'seed_priority', 'seed_stakeholders', 'estimation_set', 'quality_mark', 'proposal_add', 'nfr_from_template', 'mockup_submit', 'elicitation_meeting']),
+    meeting: z.number().int().positive().nullable().optional(), createMeeting: z.boolean().optional(),
     name: z.string().max(160).optional(), defaults: z.boolean().optional(), activityId: z.number().int().positive().optional(),
     stakeholder: z.union([z.number().int().positive(), z.string().max(12)]).optional(), role: z.enum(RACI_ROLES).nullable().optional(), kind: z.enum(['FE', 'UC']).optional(),
     estimationJson: z.string().max(100_000).optional(), requirement: issueArg.optional(),
@@ -258,6 +273,11 @@ const swrExtras = defineTool({
         return { proposal: await elic.addProposal(ctx.userId, p.id, s, defined({ title: need(a.title, 'title'), text: a.text, reqType: a.reqType, priority: a.priority, stakeholder: a.stakeholder }) as Parameters<typeof elic.addProposal>[3]) };
       }
       case 'nfr_from_template': { const p = await P('POST', '/swr/nfr/from-template'); return { nfr: await deep.createNfrFromTemplate(ctx.userId, p.id, { template: need(a.template, 'template'), title: a.title ?? null }) }; }
+      case 'elicitation_meeting': {
+        const s = numOf(need(a.session, 'session'), 'elicitation session');
+        const p = await P('POST', `/swr/elicitation/${s}/meeting`);
+        return { linked: await elic.linkMeeting(ctx.userId, p.id, s, defined({ create: a.createMeeting, meeting: a.meeting })) };
+      }
       case 'mockup_submit': { const m = need(a.mockup, 'mockup'); const p = await P('POST', `/swr/mockups/${m}/submit`); return { submitted: await deep.submitMockup(ctx.userId, p.id, m, { share: a.share }) }; }
     }
     throw bad('Unknown action');
@@ -623,11 +643,19 @@ const resourceExtras = defineTool({
 
 const planningExtras = defineTool({
   name: 'planning_extras', title: 'Timeline baselines and saved filters', group: 'planning',
-  description: 'action: baseline_add (name, note — snapshots the timeline to compare later) | filter_save (id to replace; name, JQL query, shared). Read: ctwork_read baselines / filters; delete: ctwork_delete.',
+  description: 'action: baseline_add (name, note — snapshots the timeline to compare later) | filter_save (id to replace; name, JQL query, shared) | okr_objective (project objective: cycleId, name = title, note = description, owner). Read: ctwork_read baselines / filters; delete: ctwork_delete.',
   write: true,
-  input: z.object({ project: projectArg, action: z.enum(['baseline_add', 'filter_save']), id: z.number().int().positive().optional(), name: z.string().min(1).max(120), note: z.string().max(500).nullable().optional(), query: z.string().max(4000).optional(), shared: z.boolean().optional() }),
+  input: z.object({
+    project: projectArg, action: z.enum(['baseline_add', 'filter_save', 'okr_objective']), id: z.number().int().positive().optional(), name: z.string().min(1).max(200),
+    note: z.string().max(5000).nullable().optional(), query: z.string().max(4000).optional(), shared: z.boolean().optional(), cycleId: z.number().int().positive().optional(), owner: z.string().max(254).optional(),
+  }),
   run: async (ctx, a) => {
-    if (a.action === 'baseline_add') { const p = await hit(ctx, a.project, 'POST', '/timeline/baselines'); return { baseline: await uxc.createBaseline(ctx.userId, p.id, { name: a.name, note: a.note ?? null }) }; }
+    if (a.action === 'baseline_add') { const p = await hit(ctx, a.project, 'POST', '/timeline/baselines'); return { baseline: await uxc.createBaseline(ctx.userId, p.id, { name: a.name.slice(0, 120), note: a.note?.slice(0, 500) ?? null }) }; }
+    if (a.action === 'okr_objective') {
+      const p = await hit(ctx, a.project, 'POST', '/okrs/objectives');
+      const body = okr.objectiveInput.parse(defined({ cycleId: need(a.cycleId, 'cycleId'), title: a.name, description: a.note, ownerId: a.owner ? await assigneeIdOf(ctx, p, a.owner) : undefined }));
+      return { objective: await okr.createObjective(ctx.userId, { projectId: p.id }, body) };
+    }
     const p = await hit(ctx, a.project, 'POST', '/filters');
     return { filter: await search.saveFilter(ctx.userId, p.id, { id: a.id, name: a.name.slice(0, 100), query: need(a.query, 'query'), shared: a.shared }) };
   },
@@ -776,10 +804,11 @@ const diagramExtras = defineTool({
 
 const testExtras = defineTool({
   name: 'test_extras', title: 'Test extras (import, risks, defect analysis, flaky)', group: 'tests',
-  description: 'action: import_tests (rows [{title, preconditions, steps [{action, data, expected}], requirements}] ⇒ Xray test cases) | risk_save (number to edit; title, likelihood 1–5, impact 1–5, riskKind PRODUCT/PROJECT, mitigation, issues) | defect_analysis (bug issue; rootCause, injectedPhase, detectedByTool, testLevel, fixNote) | reset_flaky (automated test id).',
+  description: 'action: import_tests (rows [{title, preconditions, steps [{action, data, expected}], requirements}] ⇒ Xray test cases) | risk_save (number to edit; title, likelihood 1–5, impact 1–5, riskKind PRODUCT/PROJECT, mitigation, issues) | defect_analysis (bug issue; rootCause, injectedPhase, detectedByTool, testLevel, fixNote) | reset_flaky (automated test id) | finding (static-analysis finding id; findingAction ignore / reopen / issue = file a bug).',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['import_tests', 'risk_save', 'defect_analysis', 'reset_flaky']),
+    project: projectArg, action: z.enum(['import_tests', 'risk_save', 'defect_analysis', 'reset_flaky', 'finding']),
+    finding: z.number().int().positive().optional(), findingAction: z.enum(['ignore', 'reopen', 'issue']).optional(),
     rows: z.array(z.object({ title: z.string().min(1).max(255), preconditions: z.string().max(10_000).nullable().optional(), steps: z.array(z.object({ action: z.string().max(5000), data: z.string().max(5000).nullable().optional(), expected: z.string().max(5000).nullable().optional() })).max(100).optional(), requirements: z.array(z.string().max(20)).max(50).optional() })).max(500).optional(),
     number: z.number().int().positive().optional(), title: z.string().max(255).optional(), likelihood: z.number().int().min(1).max(5).nullable().optional(), impact: z.number().int().min(1).max(5).nullable().optional(),
     riskKind: z.enum(['PRODUCT', 'PROJECT']).nullable().optional(), mitigation: z.string().max(4000).nullable().optional(), issues: z.array(issueArg).max(200).optional(),
@@ -796,6 +825,11 @@ const testExtras = defineTool({
       }
       case 'risk_save': { const p = await hit(ctx, a.project, 'POST', '/test-risks'); return { risk: await t.saveRisk(ctx.userId, p.id, defined({ number: a.number ?? null, title: a.title, likelihood: a.likelihood, impact: a.impact, riskKind: a.riskKind, mitigation: a.mitigation, issueNumbers: a.issues?.map((i) => issueNumber(p0.key, i)) })) }; }
       case 'defect_analysis': { const n = issueNumber(p0.key, need(a.issue, 'issue')); const p = await hit(ctx, a.project, 'PUT', `/test-defects/${n}`); return { defect: await t.setDefectExtra(ctx.userId, p.id, n, defined({ rootCause: a.rootCause, injectedPhase: a.injectedPhase, detectedByTool: a.detectedByTool, testLevel: a.testLevel, fixNote: a.fixNote }) as Parameters<typeof t.setDefectExtra>[3]) }; }
+      case 'finding': {
+        const f = need(a.finding, 'finding'); const act = need(a.findingAction, 'findingAction');
+        const p = await hit(ctx, a.project, 'POST', `/static-analysis/findings/${f}/${act}`);
+        return { finding: act === 'issue' ? await stat.findingToIssue(ctx.userId, p.id, f) : await stat.setFindingStatus(ctx.userId, p.id, f, act === 'ignore' ? 'IGNORED' : 'OPEN') };
+      }
       case 'reset_flaky': { const id = need(a.autoTest, 'autoTest'); const p = await hit(ctx, a.project, 'POST', `/test-automation/tests/${id}/reset-flaky`); return { reset: await autoTests.resetFlaky(ctx.userId, p.id, id) }; }
     }
     throw bad('Unknown action');

@@ -22,8 +22,9 @@ import {
 import { chatAudience, canPostInChannel, canViewChannel } from './chatRules.js';
 import { requireProject, type ProjectAccess } from './permissions.js';
 import { chatRoom } from './chat.service.js';
+import { tooLargeMessage } from './limits.js';
 
-export const MAX_CHAT_FILE_BYTES = MAX_COMMENT_FILE_BYTES; // 25 MB — như K-1
+export const MAX_CHAT_FILE_BYTES = MAX_COMMENT_FILE_BYTES; // limits.ts fileBytes — như K-1
 const MAX_DRAFTS_PER_USER = 30;
 
 const FILE_SELECT = { id: true, fileName: true, mime: true, size: true, durationMs: true, transcriptStatus: true, transcript: true, language: true, createdAt: true } as const;
@@ -66,7 +67,7 @@ export async function uploadChatFile(userId: number, projectId: number, channelI
   const { ch } = await channelAccess(userId, projectId, channelId, true);
   assertCommentStorage();
   if (!input.buffer.length) throw new BadRequestError('The file is empty', 'WORK_FILE_EMPTY');
-  if (input.buffer.length > MAX_CHAT_FILE_BYTES) throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (input.buffer.length > MAX_CHAT_FILE_BYTES) throw new BadRequestError(tooLargeMessage(MAX_CHAT_FILE_BYTES), 'WORK_FILE_TOO_LARGE');
   await draftRoom(ch.id, userId);
   const fileName = input.fileName.slice(0, 255) || 'file';
   // SVG/HTML có thể mang script ⇒ lưu như tệp tải về (không phải ảnh xem trong trang).

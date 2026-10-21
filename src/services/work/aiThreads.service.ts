@@ -17,6 +17,7 @@
  * rằng nó tồn tại) — cùng quy ước với `requireProject`.
  */
 
+import { noiDungChoLichSu } from './aiTep.js'; // 22/10/2026: dấu tệp đính kèm ⇒ một dòng tên tệp trong lịch sử
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
@@ -81,7 +82,7 @@ export async function historyText(threadId: number, beforeId?: number): Promise<
     select: { role: true, content: true, title: true, author: { select: { username: true } } },
   });
   return rows.reverse().map((m) => (m.role === 'user'
-    ? `User @${m.author?.username ?? 'former-member'}: ${clip(m.content, 2500)}`
+    ? `User @${m.author?.username ?? 'former-member'}: ${clip(noiDungChoLichSu(m.content), 2500)}`
     : `Assistant${m.title ? ` (${m.title})` : ''}: ${clip(m.content, 2500)}`)).join('\n');
 }
 

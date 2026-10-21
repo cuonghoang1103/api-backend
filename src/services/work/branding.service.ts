@@ -23,8 +23,9 @@ import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { emitWorkEvent } from './events.js';
 import { requireProject, requireWorkspace } from './permissions.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
-export const BRAND_MAX_BYTES = 2 * 1024 * 1024;
+export const BRAND_MAX_BYTES = WORK_LIMITS.imageBytes;
 const IMAGE_EXT: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' };
 
 const projectPrefix = (projectId: number) => `work/branding/p${projectId}/`;
@@ -37,7 +38,7 @@ function assertStorage() {
 
 function checkImage(contentType: string, size: number) {
   if (!IMAGE_EXT[contentType]) throw new BadRequestError('Use a PNG, JPEG, WebP or GIF image', 'WORK_BAD_IMAGE');
-  if (!Number.isFinite(size) || size <= 0 || size > BRAND_MAX_BYTES) throw new BadRequestError('Images must be 2 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (!Number.isFinite(size) || size <= 0 || size > BRAND_MAX_BYTES) throw new BadRequestError(tooLargeMessage(BRAND_MAX_BYTES, 'Images'), 'WORK_FILE_TOO_LARGE');
 }
 
 async function presign(prefix: string, input: { contentType: string; size: number }) {
@@ -56,7 +57,7 @@ async function verifyUpload(prefix: string, key: string): Promise<string> {
   if (!head) throw new BadRequestError('Upload not found. Please try again.', 'WORK_UPLOAD_MISSING');
   if (head.size > BRAND_MAX_BYTES || !IMAGE_EXT[head.contentType]) {
     await deleteObject(key).catch(() => undefined);
-    throw new BadRequestError(head.size > BRAND_MAX_BYTES ? 'Images must be 2 MB or smaller' : 'Use a PNG, JPEG, WebP or GIF image', head.size > BRAND_MAX_BYTES ? 'WORK_FILE_TOO_LARGE' : 'WORK_BAD_IMAGE');
+    throw new BadRequestError(head.size > BRAND_MAX_BYTES ? tooLargeMessage(BRAND_MAX_BYTES, 'Images') : 'Use a PNG, JPEG, WebP or GIF image', head.size > BRAND_MAX_BYTES ? 'WORK_FILE_TOO_LARGE' : 'WORK_BAD_IMAGE');
   }
   return buildPublicUrl(key);
 }

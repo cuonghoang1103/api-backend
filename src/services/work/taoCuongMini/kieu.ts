@@ -7,6 +7,7 @@
 
 import { z } from 'zod';
 import { PROJECT_KINDS, PROJECT_TEMPLATES, PROJECT_TYPES } from '../constants.js';
+import { WORK_LIMITS } from '../limits.js';
 
 // ─── Trần ────────────────────────────────────────────────────────
 
@@ -30,7 +31,7 @@ export const CAP = {
   /** Nguồn (tệp + link) một bản nháp. */
   sources: 40,
   /** Tệp tải lên: như đính kèm thẻ (issues.service MAX_ATTACHMENT_BYTES). */
-  fileBytes: 25 * 1024 * 1024,
+  fileBytes: WORK_LIMITS.fileBytes,
   /** Chữ rút từ MỘT nguồn / tổng chữ đưa cho model. */
   sourceChars: 60_000,
   contextChars: 160_000,

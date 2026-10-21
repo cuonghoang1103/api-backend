@@ -24,6 +24,7 @@ import {
   chatUrlOf,
   costUsd as gatewayCostUsd,
   baoRamboHong,
+  laLoiKhoaRambo,
   RAMBO_PURPOSES_CO_DINH,
   baoRamboOk,
   fallbackEndpoint,
@@ -116,6 +117,18 @@ class LLMError extends Error {
   ) {
     super(message);
   }
+  /** Mã HTTP cổng trả (22/10/2026) — để nơi gọi phân biệt lỗi KHOÁ (401/403/410, không tự khỏi) với lỗi tạm. */
+  httpStatus?: number;
+}
+/** LLMError kèm mã HTTP của cổng (không đổi `statusCode` — cái đó là mã trả cho NGƯỜI DÙNG). */
+function loiHttp(prefix: string, status: number): LLMError {
+  const e = new LLMError(`${prefix} HTTP ${status}`, status === 429 || status === 529 || status >= 500);
+  e.httpStatus = status;
+  return e;
+}
+/** Mã HTTP của một lỗi từ cổng (nếu có). */
+export function httpStatusCua(e: unknown): number | undefined {
+  return e instanceof LLMError ? e.httpStatus : undefined;
 }
 
 // ── Anthropic adapter (raw fetch — no SDK dep) ────────────────────
@@ -126,12 +139,17 @@ class LLMError extends Error {
 const anthropicProvider: LLMProvider = {
   name: 'anthropic',
   async complete(model, system, messages, opts) {
-    const key = gatewayKey();
+    /* ⚠️ 22/10/2026 — SỬA LỖI ÂM THẦM từ 07/09: adapter này bỏ qua `opts.ep` và LUÔN gọi `/v1/messages` của MODELAPI bằng
+       khoá modelapi. Mọi việc "đi rambo" qua `llmComplete` (CT Work, exam_tutor, lab_room…) chọn đúng adapter Anthropic
+       nhưng thực ra chạy Claude Ở MODELAPI (giá ~3,3×), chưa từng chạm rambo — và khoá rambo hết hạn (410) cũng không ai
+       thấy. Nay: điểm cuối nói giao thức Anthropic (rambo) ⇒ gọi đúng gốc + khoá của nó. */
+    const epAnthropic = opts.ep && !opts.ep.local && opts.ep.giaoThuc === 'anthropic' ? opts.ep : null;
+    const key = epAnthropic?.key ?? gatewayKey();
     if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     let timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    const url = messagesUrl();
+    const url = epAnthropic ? chatUrlOf(epAnthropic) : messagesUrl();
 
     // A big answer has to STREAM, or it never arrives.
     //
@@ -167,10 +185,7 @@ const anthropicProvider: LLMProvider = {
         }),
         signal: ctrl.signal,
       });
-      if (!res.ok) {
-        const retryable = res.status === 429 || res.status === 529 || res.status >= 500;
-        throw new LLMError(`anthropic HTTP ${res.status}`, retryable);
-      }
+      if (!res.ok) throw loiHttp('anthropic', res.status);
 
       if (useStream) {
         // The timeout becomes an IDLE timeout: as long as tokens keep coming we
@@ -249,10 +264,7 @@ const openAiCompatProvider: LLMProvider = {
         }),
         signal: ctrl.signal,
       });
-      if (!res.ok) {
-        const retryable = res.status === 429 || res.status === 529 || res.status >= 500;
-        throw new LLMError(`openai_compat HTTP ${res.status}`, retryable);
-      }
+      if (!res.ok) throw loiHttp('openai_compat', res.status);
 
       if (useStream) {
         return await readOpenAiStream(res, model, () => {
@@ -661,10 +673,14 @@ async function logLlmCall(d: {
   outputTokens: number;
   success: boolean;
   purpose?: string | null;
+  /** Đè giá: rambo (gói trọn) = 0; cổng chính hãng = số USD đo được từ usage thật. */
+  costUsd?: number;
+  provider?: string;
 }): Promise<void> {
+  const tien = d.costUsd ?? costUsd(d.model, d.inputTokens, d.outputTokens);
   for (const fn of llmLogListeners) {
     try {
-      fn({ userId: d.userId ?? null, feature: d.feature ?? null, purpose: d.purpose ?? null, model: d.model, inputTokens: d.inputTokens, outputTokens: d.outputTokens, costUsd: costUsd(d.model, d.inputTokens, d.outputTokens), success: d.success });
+      fn({ userId: d.userId ?? null, feature: d.feature ?? null, purpose: d.purpose ?? null, model: d.model, inputTokens: d.inputTokens, outputTokens: d.outputTokens, costUsd: tien, success: d.success });
     } catch { /* người nghe lỗi không làm hỏng lời gọi */ }
   }
   await prisma.interviewLLMCallLog.create({
@@ -673,14 +689,22 @@ async function logLlmCall(d: {
       sessionId: d.sessionId ?? null,
       feature: d.feature ?? null,
       step: d.step,
-      provider: getProvider().name,
+      provider: d.provider ?? getProvider().name,
       model: d.model,
       inputTokens: d.inputTokens,
       outputTokens: d.outputTokens,
-      costUsd: costUsd(d.model, d.inputTokens, d.outputTokens),
+      costUsd: tien,
       success: d.success,
     },
   });
+}
+
+/**
+ * Ghi sổ một lượt gọi model KHÔNG đi qua `llmComplete` (22/10/2026: trợ lý CT Work lùi sang cổng Anthropic chính hãng) —
+ * để trần TIỀN/ngày của cả web (`budget.ts`, đọc sổ này) và trần token/ngày của người (`checkTokenQuota`) thấy nó.
+ */
+export async function ghiSoLlm(d: Parameters<typeof logLlmCall>[0]): Promise<void> {
+  await logLlmCall(d);
 }
 
 /**
@@ -707,6 +731,19 @@ export async function llmComplete(opts: {
   /** Nhận từng mẩu văn bản khi model đang stream (chat "gõ từng chữ"). Có mặt
    *  ⇒ buộc stream. Không đổi hành vi caller cũ (không truyền ⇒ như trước). */
   onToken?: (delta: string) => void;
+  /**
+   * 22/10/2026 (chuỗi cổng CT Work) — ÉP điểm cuối + model cho lượt này (bỏ qua `endpointFor`/`modelFor`). Dùng cùng
+   * `khongLui: true` để KHÔNG tự lùi rambo → modelapi bên trong: nơi gọi tự đi chuỗi lùi của nó (rambo → chính hãng →
+   * modelapi).
+   */
+  diemCuoi?: LlmEndpoint;
+  model?: string;
+  khongLui?: boolean;
+  /**
+   * Lượt thử MỚI sắp bắt đầu sau một lượt hỏng (thử lại / đổi cổng) — chữ đã phát qua `onToken` của lượt hỏng là chữ bỏ đi.
+   * Nơi stream ra giao diện dùng để xoá nháp (không thì người dùng thấy hai câu dính nhau).
+   */
+  onRestart?: () => void;
 }): Promise<LLMResult> {
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
@@ -732,9 +769,10 @@ export async function llmComplete(opts: {
   // `LLM_LOCAL_PURPOSES` thì xin một slot trên máy nhà, và nếu robot đang giữ
   // máy hay hàng đã dài thì nó tự đổi sang cổng thay vì bắt người dùng chờ.
   // Xem `src/services/llm/hangDoi.ts`.
-  const xin = await xinDiemCuoi(purpose);
+  const xin = opts.diemCuoi ? { ep: opts.diemCuoi, tra: () => {}, choMs: 0 } : await xinDiemCuoi(purpose);
   let ep = xin.ep;
-  let model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
+  let model = opts.model ?? modelForStep(opts.step, opts.feature, opts.purpose, ep);
+  let daGoi = false;
 
   try {
     // Cầu dao ngân sách. Việc chạy nền bị cắt trước, ở mức thấp hơn — nó là thứ
@@ -789,6 +827,8 @@ export async function llmComplete(opts: {
         /* 18/10/2026: model GPT ⇒ `reasoning_effort` theo việc + sàn trần ra (token suy luận tính vào trần). */
         const suyLuan = provider === openAiCompatProvider && !ep.local ? suyLuanCho(purpose, model) : null;
         const maxTokens = suyLuan ? tranRaCho(opts.maxTokens ?? 1500, suyLuan) : opts.maxTokens;
+        if (daGoi) opts.onRestart?.();
+        daGoi = true;
         const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan });
         if (ep.label === 'cong-agent') baoRamboOk();
         /* Chạm trần độ dài — ghi WARN để CÒN LẦN RA ĐƯỢC. Trước đây không chỗ
@@ -803,7 +843,9 @@ export async function llmComplete(opts: {
           );
         }
         recordSuccess(opts.feature);
-        await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true, purpose }).catch(() => {});
+        // Rambo là gói TRẢ TRỌN ⇒ chi phí biên 0 (22/10/2026). Trước đây ghi theo giá niêm yết Claude ⇒ trần tiền/ngày của
+        // cả web (budget.ts) bị ăn bởi tiền ẢO — dùng nhiều trên rambo có thể cắt AI của cả web vì một khoản không tốn xu.
+        await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true, purpose, ...(ep.label === 'cong-agent' ? { costUsd: 0, provider: 'rambo' } : {}) }).catch(() => {});
         return result;
       } catch (e) {
         lastErr = e;
@@ -846,7 +888,15 @@ export async function llmComplete(opts: {
         // ⚠️ TRỪ `agent_code`/`exam_tutor`: modelapi KHÔNG phục vụ được model
         // Claude (đo 20/08: liệt kê đủ 6 model nhưng gọi thật thì 500/503/hết
         // giờ), nên lùi hai việc đó sang modelapi chỉ đổi một lỗi lấy một lỗi.
-        if (ep.label === 'cong-agent' && !RAMBO_PURPOSES_CO_DINH.has(purpose)) {
+        // 22/10/2026: lỗi KHOÁ (401/403/410 — khoá rambo hết hạn) không bao giờ tự khỏi ⇒ việc "luôn đi rambo" (lab_room…)
+        // cũng được lùi, trừ exam_tutor (nó tự đi chuỗi riêng: chính hãng rồi chat_max). `khongLui` ⇒ nơi gọi tự lùi.
+        const khoaHong = laLoiKhoaRambo(httpStatusCua(e));
+        if (ep.label === 'cong-agent' && opts.khongLui) {
+          // Ném THẲNG (không recordFailure): rambo hỏng không có nghĩa "AI của tính năng này hỏng" — nơi gọi còn cổng khác.
+          baoRamboHong({ khoaHong });
+          throw e;
+        }
+        if (ep.label === 'cong-agent' && (!RAMBO_PURPOSES_CO_DINH.has(purpose) || (khoaHong && purpose !== 'exam_tutor'))) {
           // Rambo hỏng CHẬP CHỜN: đo 25/09/2026, cùng một request trợ lý CT Work
           // lần đầu 502 (`bad response status code 502` từ nhà cung cấp phía sau
           // rambo), phát lại nguyên văn 7 lần liền đều 200. Nên lỗi máy chủ (5xx /
@@ -862,7 +912,7 @@ export async function llmComplete(opts: {
             attempt--;
             continue;
           }
-          baoRamboHong();
+          baoRamboHong({ khoaHong });
           logger.warn('llm: rambo hỏng, lượt này lùi sang modelapi', {
             purpose, feature: opts.feature ?? null, model,
             error: e instanceof Error ? e.message : String(e),

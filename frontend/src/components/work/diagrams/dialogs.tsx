@@ -20,6 +20,7 @@ import { TEMPLATES } from './templates';
 import { isDarkTheme } from './render';
 import { BLANK_SQL, SQL_TEMPLATES } from './sql/sqlTemplates';
 import { DIALECT_LABEL, joinMeta, SOURCE_DIALECTS, type Dialect } from '@/lib/sqlDesign';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const SqlPreview = dynamic(() => import('./sql/SqlPreview'), { ssr: false, loading: () => <div className="grid h-[340px] place-items-center"><Spinner /></div> });
 
@@ -154,7 +155,7 @@ export function ImportDialog({ pid, open, onClose, onDone }: { pid: number; open
   const run = useMutation({
     mutationFn: async () => {
       if (!file) throw new Error(t('diagram.chooseFile'));
-      if (file.size > 8 * 1024 * 1024) throw new Error(t('diagram.fileTooLarge'));
+      if (file.size > workLimits().importBytes) throw new Error(t('diagram.fileTooLarge', { mb: mb(workLimits().importBytes) }));
       const buf = new Uint8Array(await file.arrayBuffer());
       let bin = '';
       for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));

@@ -539,7 +539,15 @@ export interface TraceabilityData {
 
 // ─── Đợt 4: AI ───────────────────────────────────────────────────
 
-export interface AiQuota { pro: boolean; used: number; limit: number | null; remaining: number | null; available: boolean }
+/** 22/10/2026: tài trợ CuongMini — người hỏi tự có Pro (`self`), hoặc trưởng nhóm của dự án là Pro (`lead` ⇒ cả nhóm). */
+export interface AiSponsorship {
+  sponsored: boolean;
+  by: 'self' | 'lead' | null;
+  sponsor: { username: string; name: string; role: 'project_lead' | 'project_admin' | 'workspace_owner' | 'workspace_admin' } | null;
+}
+export interface AiQuota { pro: boolean; used: number; limit: number | null; remaining: number | null; available: boolean; sponsorship?: AiSponsorship }
+/** Ảnh/tệp đã tải lên, gửi kèm câu hỏi CuongMini (POST /projects/:pid/ai/files). */
+export interface AiFileRef { key: string; name: string; mime: string; size: number; kind: 'image' | 'document' }
 export type AiAction =
   | { type: 'create_issue'; issueType: string; title: string; description?: string | null; acceptanceCriteria?: string[] | null; priority?: number | null; assignee?: string | null; storyPoints?: number | null; parent?: number | null; sprint?: string | null }
   | { type: 'update_issue'; number: number; title?: string | null; description?: string | null; priority?: number | null; assignee?: string | null; storyPoints?: number | null; status?: string | null; sprint?: string | null; dueDate?: string | null }
@@ -772,6 +780,12 @@ export function isAiQuotaError(err: unknown): boolean {
   const e = err as { response?: { status?: number; data?: { code?: string } } };
   return e?.response?.status === 402 || e?.response?.data?.code === 'WORK_AI_QUOTA_EXCEEDED';
 }
+/** 22/10/2026: hết trần token/ngày chung (không được tài trợ) ⇒ hộp thoại chỉ cách được tài trợ. */
+export function isAiTokenCapError(err: unknown): boolean {
+  const e = err as { response?: { data?: { code?: string; error?: { code?: string } } } };
+  const code = e?.response?.data?.code ?? e?.response?.data?.error?.code;
+  return code === 'WORK_AI_TOKEN_CAP';
+}
 
 // ─── Gọi API ─────────────────────────────────────────────────────
 
@@ -957,11 +971,20 @@ export const workApi = {
   traceability: (pid: number) => d<TraceabilityData>(api.get(`${B}/projects/${pid}/reports/traceability`)),
 
   // AI
-  aiQuota: () => d<AiQuota>(api.get(`${B}/ai/quota`)),
+  aiQuota: (projectId?: number | null) => d<AiQuota>(api.get(`${B}/ai/quota`, projectId ? { params: { projectId } } : undefined)),
+  /** 22/10/2026: tải ảnh/tệp cho câu hỏi CuongMini (≤ 15 MB) — qua backend (chạy cả app desktop). */
+  aiUploadFile: (pid: number, file: File, onProgress?: (pct: number) => void) => {
+    const form = new FormData();
+    form.append('file', file, file.name);
+    return d<AiFileRef>(api.post(`${B}/projects/${pid}/ai/files`, form, {
+      timeout: 180_000, onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
+    }));
+  },
+  aiFileUrl: (pid: number, key: string) => d<{ url: string }>(api.get(`${B}/projects/${pid}/ai/files/url`, { params: { key } })),
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000 })),
   /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
-  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null }, signal?: AbortSignal) =>
+  aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null }, signal?: AbortSignal) =>
     d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000, signal })),
   // Hội thoại AI lưu ở server, dùng chung trong dự án
   aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>

@@ -14,7 +14,8 @@ import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { authenticate } from '../middleware/auth.js';
 import { AppError, asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
-import { agentForbidden, agentRouteAllowed, clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds } from '../services/work/permissions.js';
+import { agentForbidden, agentRouteAllowed, clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds, tokenDeleteAllowed } from '../services/work/permissions.js';
+import { markTokenCall } from '../services/work/deleteRequests.service.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import {
@@ -29,6 +30,9 @@ import * as reports from '../services/work/reports.service.js';
 import * as sprints from '../services/work/sprints.service.js';
 import * as tests from '../services/work/tests.service.js';
 import * as ai from '../services/work/ai.service.js';
+import { chayTrongLuot } from '../services/work/aiTaiTro.js';
+import { MAX_AI_FILES, tepRefSchema } from '../services/work/aiTep.js';
+import { ipChongSpam } from '../services/agent/defaultGioiHan.js';
 import * as helpGuide from '../services/work/helpGuide.js';
 import * as aiThreads from '../services/work/aiThreads.service.js';
 import { myWork } from '../services/work/myWork.service.js';
@@ -75,10 +79,12 @@ import agentsRoutes from './work.agents.routes.js';
 import mcpRoutes from '../mcp/server.js';
 import agentsUiRoutes from './work.agentsUi.routes.js';
 import fptTestRoutes from './work.fpt.routes.js';
+import trashBinRoutes from './work.trashBin.routes.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày + yêu cầu xoá chờ duyệt
 import docs3aRoutes from './work.docs3a.routes.js';
 import fptReportRoutes from './work.fptReports.routes.js';
 import ctw3cRoutes from './work.ctw3c.routes.js';
-import ctw5bRoutes from './work.ctw5b.routes.js'; // CTW đợt 5b K-1: tệp/voice note trong bình luận
+import ctw5bRoutes from './work.ctw5b.routes.js';
+import aiTepRoutes from './work.aiTep.routes.js'; // 22/10/2026: ảnh/tệp trong ô hỏi CuongMini // CTW đợt 5b K-1: tệp/voice note trong bình luận
 import ctw4Routes from './work.ctw4.routes.js';
 import ctw4bRoutes from './work.ctw4b.routes.js'; // CTW đợt 4b: SWR302 hồ sơ Wiegers + sáu liên kết
 import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự án
@@ -111,6 +117,7 @@ import { enterProjectScope } from '../services/work/aiUsage.service.js';
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -274,11 +281,24 @@ router.use('/mcp', mcpRoutes);
 // API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
 router.use(apiTokens.apiTokenAuth);
 router.use((req, res, next) => (req.workToken ? next() : authenticate(req, res, next)));
+// 22/10/2026 (sự cố SWT301 — mất bảng 5.1): token ctw_ của NGƯỜI = AI / script ⇒ xoá không bao giờ chạy ngay. Đánh dấu
+// lời gọi (service xếp lệnh xoá thành yêu cầu chờ trưởng nhóm duyệt) + chặn DELETE không có cửa xếp hàng (permissions.ts).
+router.use((req, _res, next) => {
+  if (!req.workToken || req.agent) return next();
+  markTokenCall();
+  if (!tokenDeleteAllowed(req.method, req.path, req.body)) {
+    return next(new AppError('Deleting with an API token needs the team lead\'s approval: use the CT Work MCP delete command (it sends a deletion request) or delete on the web.', 403, 'WORK_TOKEN_DELETE_NEEDS_APPROVAL'));
+  }
+  next();
+});
 // CTW đợt 7c (C17): không gian bật "ép 2FA" ⇒ phiên người chưa bật/chưa xác minh 2FA bị chặn khỏi không gian đó
 // (sau ân hạn). Token API / token agent đi thẳng — xem services/work/twoFactor.ts.
 router.use(twoFactor.workTwoFactorGate);
 // Khoá chỉnh sửa cá nhân: lệnh ghi trong dự án đang khoá ⇒ 423 (xem editLock.service.ts).
 router.use(editLock.editLockGuard());
+// 22/10/2026 — CuongMini được tài trợ (aiTaiTro.ts): mỗi request chạy trong ngữ cảnh có IP chống spam + dự án của tuyến,
+// để "một câu hỏi = một lần đếm" dù model được gọi nhiều vòng, và mọi service AI biết dự án để xét tài trợ.
+router.use((req, _res, next) => chayTrongLuot(ipChongSpam(req), Number(/^\/projects\/(\d+)(?:\/|$)/.exec(req.path)?.[1]) || null, next));
 
 // Cổng khách (đợt S2b): khách bị cách ly (vai CLIENT ở dự án bật clientPortal) chỉ
 // gọi được tuyến trong DANH SÁCH TRẮNG (permissions.ts clientPortalRouteAllowed).
@@ -1002,7 +1022,10 @@ router.get('/projects/:pid/reports/traceability', asyncHandler(async (req, res) 
 // ═══ Trợ lý AI (đợt 4) ══════════════════════════════════════════════
 
 router.get('/ai/quota', asyncHandler(async (req, res) => {
-  ok(res, await ai.aiQuota(callerId(req)));
+  // 22/10/2026: `?projectId=` ⇒ kèm thông tin tài trợ của dự án đó (trưởng nhóm Pro ⇒ cả nhóm được tài trợ).
+  const q = parse(z.object({ projectId: id.optional() }), req.query);
+  if (q.projectId) await loadProjectAccess(callerId(req), q.projectId).then((a) => { if (!a) throw new NotFoundError('Project not found'); });
+  ok(res, await ai.aiQuota(callerId(req), q.projectId ?? null));
 }));
 // "Ask AI how to use" — trợ lý hướng dẫn trong ứng dụng. KHÔNG cần dự án: mọi thành viên
 // đã đăng nhập đều hỏi được (sibling của /ai/quota, ngoài /projects/:pid).
@@ -1020,6 +1043,7 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
     history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(12000) })).max(20).optional(),
     issueNumber: id.nullable().optional(),
     threadId: id.nullable().optional(),
+    attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
   }), req.body);
   ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
 }));
@@ -1048,6 +1072,8 @@ router.post('/projects/:pid/ai/chat/stream', asyncHandler(async (req, res) => {
     threadId: id.nullable().optional(),
     /** Hỏi lại câu đã lưu mà chưa có trả lời (như POST /ai/messages/:mid/retry); `message` khi đó bị bỏ qua. */
     retryMessageId: id.nullable().optional(),
+    /** 22/10/2026: ảnh/tệp đã tải lên qua POST /projects/:pid/ai/files. */
+    attachments: z.array(tepRefSchema).max(MAX_AI_FILES).nullable().optional(),
   }), req.body);
   const uid = callerId(req);
   const pid = idParam(req, 'pid');
@@ -1582,7 +1608,7 @@ router.get('/projects/:pid/test-cycles/:cycleId/export', asyncHandler(async (req
   }
 }));
 router.post('/projects/:pid/import', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ csv: z.string().min(1).max(8_000_000), dryRun: z.boolean().default(true) }), req.body);
+  const body = parse(z.object({ csv: z.string().min(1).max(WORK_LIMITS.importBytes), dryRun: z.boolean().default(true) }), req.body);
   ok(res, await exchange.importCsv(callerId(req), idParam(req, 'pid'), body));
 }));
 
@@ -2165,6 +2191,7 @@ router.use(agentsRoutes);
 router.use(agentsUiRoutes);
 // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT (Report 5.1 Unit + 5.2 Integration, xuất/nhập Excel) — work.fpt.routes.ts.
 router.use(fptTestRoutes);
+router.use(trashBinRoutes);
 // CTW đợt 3A (09/10/2026): ảnh trong trình soạn thảo · xuất .docx/PDF · Record of Changes · điền Report từ dữ liệu — work.docs3a.routes.ts.
 router.use(docs3aRoutes);
 // CTW đợt 3B (09/10/2026): WBS + bảng quy đổi, Weekly Report, AI Usage Report, thông tin môn học — work.fptReports.routes.ts.
@@ -2173,6 +2200,8 @@ router.use(fptReportRoutes);
 router.use(ctw3cRoutes);
 // CTW đợt 5b K-1: tệp + voice note trong bình luận (work.ctw5b.routes.ts).
 router.use(ctw5bRoutes);
+// 22/10/2026: ảnh/tệp gửi kèm câu hỏi CuongMini (work.aiTep.routes.ts).
+router.use(aiTepRoutes);
 // CTW đợt 4: SRS có cấu trúc, RTM, defect log, Q&A, Report 7, activity worklog (work.ctw4.routes.ts).
 router.use(ctw4Routes);
 // CTW đợt 4b: SWR302 — feature FE-n, phân loại/vòng đời yêu cầu, bảng ưu tiên Wiegers, glossary, data dictionary, sáu liên kết, mẫu Wiegers.

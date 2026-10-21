@@ -45,6 +45,12 @@ export interface ToolDef {
    * app CuongMini hỏi cả khi người dùng bật "tự ghi" (`/ctwork tu-ghi on`). Mô tả lệnh phải nói rõ là xoá.
    */
   destructive?: boolean;
+  /**
+   * 22/10/2026: lệnh `destructive` gọi qua AI (MCP / Ask AI) KHÔNG chạy ngay — thành yêu cầu chờ trưởng nhóm duyệt trên web
+   * (deleteRequests.service). `destructiveWhen` thu hẹp lúc nào là phá huỷ (vd nhập Excel: chỉ mode "replace", không dryRun).
+   * Không khai ⇒ mọi lời gọi đều xếp hàng.
+   */
+  destructiveWhen?: (args: Record<string, unknown>) => boolean;
   surfaces?: CommandSurfaces;
   /** Nhóm để xếp mục lục: issues | docs | tests | export | planning | agent. */
   group?: string;
@@ -54,6 +60,7 @@ export interface ToolDef {
 
 export function defineTool<S extends z.AnyZodObject>(t: {
   name: string; title: string; description: string; write: boolean; agentOnly?: boolean; personOnly?: boolean; destructive?: boolean; surfaces?: CommandSurfaces; group?: string; input: S;
+  destructiveWhen?: (args: z.infer<S>) => boolean;
   run: (ctx: CmdCtx, args: z.infer<S>) => Promise<ToolOutput>;
 }): ToolDef {
   return t as unknown as ToolDef;

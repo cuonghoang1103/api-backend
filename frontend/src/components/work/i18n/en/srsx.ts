@@ -79,7 +79,7 @@ export const srsx = {
   designLink: 'Design link',
   designLinkHint: 'A share link from Figma, Excalidraw, Penpot or Miro (view access).',
   imageFile: 'Image',
-  imageHint: 'PNG, JPEG, WebP or GIF, up to 10 MB.',
+  imageHint: 'PNG, JPEG, WebP or GIF, up to {mb}.',
   protoTitle: 'Title',
   protoTitlePh: 'e.g. Checkout v2',
   whatChange: 'What should change?',

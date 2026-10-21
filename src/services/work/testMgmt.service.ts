@@ -27,6 +27,7 @@ import {
   cycleStats, defectStats, defectTrend, DEFAULT_CRITERIA, DEFAULT_ESTIMATION, estimateTesting, evaluateExit, retestStats, riskLevel,
   RISK_TEST_POLICY, sCurve, tsrMarkdown, type DefectRow, type EstimationInput, type ExitCriteria,
 } from './testMetrics.js';
+import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 type Tx = Prisma.TransactionClient;
 
@@ -94,8 +95,15 @@ export async function saveDesign(userId: number, projectId: number, input: { num
 
 export async function deleteDesign(userId: number, projectId: number, number: number) {
   await ctx(userId, projectId, 'issue.edit');
-  await prisma.workTestDesign.deleteMany({ where: { projectId, number } });
-  return { ok: true };
+  // 22/10/2026: thiết kế test vào thùng rác 30 ngày trước khi xoá.
+  const trashId = await prisma.$transaction(async (tx) => {
+    const d = await tx.workTestDesign.findFirst({ where: { projectId, number }, select: { id: true, name: true } });
+    if (!d) return null;
+    const t = await trashGraph(tx, { projectId, userId, kind: 'graph.work_test_designs', label: `Test design TD-${number} "${d.name}"`, roots: [{ table: 'work_test_designs', ids: [d.id] }] });
+    await tx.workTestDesign.deleteMany({ where: { projectId, number } });
+    return t.trashId;
+  });
+  return { ok: true, trashId };
 }
 
 /** Đổ case vào Xray (thẻ Test) hoặc ma trận 5.1 (hàm mới). `caseIds` rỗng ⇒ mọi case. */

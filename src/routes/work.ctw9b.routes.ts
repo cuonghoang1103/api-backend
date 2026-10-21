@@ -39,6 +39,7 @@ import { AppError, asyncHandler, BadRequestError, UnauthorizedError } from '../m
 import * as classwork from '../services/work/classwork.service.js';
 import * as gradebook from '../services/work/classGradebook.service.js';
 import { GRADEBOOK_MODES, MAX_SUBMISSION_FILE_BYTES } from '../services/work/classworkRules.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -151,7 +152,7 @@ router.post('/classes/:id/submission-comments', asyncHandler(async (req, res) =>
 
 // ─── Sổ điểm ─────────────────────────────────────────────────────
 
-const importBody = z.object({ xlsxBase64: z.string().max(4_200_000).optional(), csv: z.string().max(2_000_000).optional(), confirm: z.boolean().optional() }).strict();
+const importBody = z.object({ xlsxBase64: z.string().max(Math.ceil((WORK_LIMITS.importBytes * 4) / 3) + 1024).optional(), csv: z.string().max(WORK_LIMITS.importBytes).optional(), confirm: z.boolean().optional() }).strict();
 
 router.get('/classes/:id/gradebook', asyncHandler(async (req, res) => ok(res, await gradebook.gradebook(callerId(req), P(req, 'id')))));
 router.put('/classes/:id/gradebook/settings', asyncHandler(async (req, res) => {

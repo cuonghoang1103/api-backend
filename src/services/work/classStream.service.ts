@@ -33,6 +33,7 @@ import { assertCommentStorage, commentStore, MAX_COMMENT_FILE_BYTES } from './co
 import { notifyWork } from './notify.js';
 import { agentForbidden, principalOf } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
+import { tooLargeMessage } from './limits.js';
 
 // ─── Ngữ cảnh + quyền (dùng chung cho tài liệu + lịch lớp) ───────────
 
@@ -94,7 +95,7 @@ export async function uploadClassFile(userId: number, classId: number, input: { 
   assertWritable(ctx);
   assertCommentStorage();
   if (!input.buffer.length) throw new BadRequestError('The file is empty', 'WORK_FILE_EMPTY');
-  if (input.buffer.length > MAX_COMMENT_FILE_BYTES) throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (input.buffer.length > MAX_COMMENT_FILE_BYTES) throw new BadRequestError(tooLargeMessage(MAX_COMMENT_FILE_BYTES), 'WORK_FILE_TOO_LARGE');
   // Nháp > 24 giờ của chính người này ⇒ dọn; trần số nháp đang treo.
   const stale = await prisma.workClassStreamFile.findMany({ where: { uploaderId: userId, postId: null, materialId: null, createdAt: { lt: new Date(Date.now() - 86_400_000) } }, select: { id: true, r2Key: true }, take: 50 });
   if (stale.length) {

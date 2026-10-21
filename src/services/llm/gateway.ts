@@ -759,10 +759,22 @@ const RAMBO_PURPOSES = RAMBO_PURPOSES_CO_DINH;
 const RAMBO_NGHI_MS = Math.max(15_000, Number(process.env.RAMBO_NGHI_MS) || 60_000);
 let ramboHongToi = 0;
 
-/** Nơi gọi báo: lượt vừa rồi qua rambo đã hỏng ⇒ cho cổng nghỉ một lát. */
-export function baoRamboHong(): void {
-  ramboHongToi = Date.now() + RAMBO_NGHI_MS;
+/**
+ * Lỗi KHOÁ vĩnh viễn (401/403/410 — vd 22/10/2026 khoá rambo hết hạn: `HTTP 410 Key Expired`): gõ lại sau 60 s vẫn hỏng y
+ * vậy ⇒ cho nghỉ LÂU hơn (mặc định 10 phút, `RAMBO_NGHI_KHOA_MS`). Mũi dò vẫn gõ cửa mỗi `RAMBO_DO_LAI_MS` — chủ app thay
+ * khoá mới là đóng cầu dao ngay ở nhịp dò kế tiếp, không phải chờ hết 10 phút.
+ */
+const RAMBO_NGHI_KHOA_MS = Math.max(60_000, Number(process.env.RAMBO_NGHI_KHOA_MS) || 600_000);
+
+/** Nơi gọi báo: lượt vừa rồi qua rambo đã hỏng ⇒ cho cổng nghỉ một lát (`khoaHong` ⇒ nghỉ lâu, xem trên). */
+export function baoRamboHong(o: { khoaHong?: boolean } = {}): void {
+  ramboHongToi = Math.max(ramboHongToi, Date.now() + (o.khoaHong ? RAMBO_NGHI_KHOA_MS : RAMBO_NGHI_MS));
   batDauDo();
+}
+
+/** Mã HTTP này có phải lỗi KHOÁ (không tự khỏi) không. THUẦN — test đọc. */
+export function laLoiKhoaRambo(status: number | undefined | null): boolean {
+  return status === 401 || status === 403 || status === 410;
 }
 
 /** Rambo vừa trả lời được ⇒ mở cầu dao ngay, không phải chờ hết hạn nghỉ. */
@@ -804,7 +816,9 @@ const DO_LAI_MS = Math.max(10_000, Number(process.env.RAMBO_DO_LAI_MS) || 30_000
 let dangDo = false;
 
 async function goCuaRambo(): Promise<boolean> {
-  const ep = congAgent();
+  /* 22/10/2026: gõ bằng CẤU HÌNH rambo (không phụ thuộc công tắc toàn cục) — CT Work đi rambo theo cờ riêng
+     (`ctworkDiRambo`), nên cầu dao phải đóng được kể cả khi công tắc chung đang tắt. */
+  const ep = congRamboCauHinh();
   if (!ep) return false;
   try {
     const r = await fetch(`${ep.root}/v1/messages`, {
@@ -843,7 +857,7 @@ export function lanKiemRamboGanNhat(): { luc: number; song: boolean } | null { r
  * ⚠️ Danh sách là QUẢNG CÁO (trả 200 kể cả không khoá) — không chứng minh gọi được; `thuRambo()` mới gọi thật.
  */
 export async function docModelRambo(): Promise<string[] | null> {
-  const ep = congAgent();
+  const ep = congRamboCauHinh(); // 22/10: CT Work dùng rambo theo cờ riêng ⇒ đọc danh sách kể cả khi công tắc chung tắt
   if (!ep) return null;
   try {
     const r = await fetch(`${ep.root}/v1/models`, {
@@ -875,7 +889,7 @@ export function ketQuaThuRamboGanNhat(): KetQuaThuRambo | null { return thuGanNh
  * khoá. Gọi được ⇒ đóng cầu dao (`baoRamboOk`); mọi model hỏng ⇒ không tự mở cầu dao (để lượt thật quyết).
  */
 export async function thuRambo(models: string[]): Promise<KetQuaThuRambo> {
-  const ep = congAgent();
+  const ep = congRamboCauHinh();
   const ra: KetQuaThuRambo = { luc: Date.now(), coCauHinh: Boolean(ep), dsModel: null, models: [] };
   if (!ep) { thuGanNhat = ra; return ra; }
   ra.dsModel = await docModelRambo();
@@ -1061,10 +1075,30 @@ export function ramboBat(): boolean {
  */
 export function congAgent(): LlmEndpoint | null {
   if (!ramboBat()) return null;
+  return congRamboCauHinh();
+}
+
+/** Điểm cuối rambo theo CẤU HÌNH (`AGENT_GATEWAY_BASE_URL` + `_API_KEY`) — KHÔNG xét công tắc toàn cục. */
+export function congRamboCauHinh(): LlmEndpoint | null {
   const root = process.env.AGENT_GATEWAY_BASE_URL?.trim().replace(/\/+$/, '');
   const key = process.env.AGENT_GATEWAY_API_KEY?.trim();
   if (!root || !key) return null;
   return { root, key, local: false, label: 'cong-agent', giaoThuc: 'anthropic' };
+}
+
+/**
+ * ============================================================
+ * CT WORK ƯU TIÊN RAMBO — CỜ RIÊNG (22/10/2026)
+ * ============================================================
+ * Chủ web chốt: trợ lý CT Work (work_assistant / work_spec_review / work_digest + ảnh) MẶC ĐỊNH đi rambo (gói trọn ⇒ chi
+ * phí biên 0) bằng Sonnet mới nhất rambo có (`ramboSonic()`), KỂ CẢ khi công tắc rambo toàn cục đang tắt. Chuỗi lùi tự
+ * động (xem `services/work/aiCong.ts`): rambo → cổng Anthropic chính hãng ("CuongMini Code Max") → modelapi `gpt-6-sol`.
+ * Tắt riêng cho CT Work: `CTWORK_RAMBO=0`. Thiếu cấu hình rambo ⇒ coi như tắt.
+ */
+export function ctworkDiRambo(): LlmEndpoint | null {
+  const env = process.env.CTWORK_RAMBO?.trim();
+  if (env === '0' || env === 'false') return null;
+  return congRamboCauHinh();
 }
 
 /**
@@ -1353,6 +1387,11 @@ const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>(['news_bulletin']);
  * ở đây thì phải biết hệ số, đừng suy từ "model nào mạnh hơn".
  */
 const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-6-sol';
+
+/** Model lùi CUỐI ở modelapi (đã qua lưới thiếu khoá) — đường lùi cuối của chuỗi CT Work. */
+export function modelDuPhongModelapi(): string {
+  return modelGoiDuoc(MODELAPI_DU_PHONG);
+}
 
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();

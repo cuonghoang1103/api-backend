@@ -19,6 +19,7 @@ import {
 } from './agileRules.js';
 import { auditProject } from './audit.js';
 import type { PublicUser } from './common.js';
+import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 export const retroInput = z.object({
   title: z.string().trim().min(1).max(120),
@@ -143,7 +144,11 @@ export async function updateRetro(userId: number, projectId: number, retroId: nu
 
 export async function deleteRetro(userId: number, projectId: number, retroId: number) {
   const { r } = await facilitatorFor(userId, projectId, retroId);
-  await prisma.workRetro.delete({ where: { id: r.id } });
+  // 22/10/2026: retro + thẻ + hành động vào thùng rác 30 ngày trước khi xoá.
+  await prisma.$transaction(async (tx) => {
+    await trashGraph(tx, { projectId, userId, kind: 'graph.work_retros', label: `Retro "${r.title}"`, roots: [{ table: 'work_retros', ids: [r.id] }] });
+    await tx.workRetro.delete({ where: { id: r.id } });
+  });
   await auditProject(projectId, { actorId: userId, action: 'retro.delete', targetType: 'retro', targetId: r.id, summary: `Deleted retro "${r.title}"` });
   emitAgile(projectId, 'retro', r.id, 'deleted');
   return { ok: true };

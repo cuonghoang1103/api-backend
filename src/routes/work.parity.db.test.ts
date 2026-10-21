@@ -69,6 +69,25 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
   }
   const ok = <T extends { isError: boolean; text: string }>(r: T): T => { assert.equal(r.isError, false, r.text); return r; };
   const denied = (r: { isError: boolean; text: string }, code: RegExp) => { assert.equal(r.isError, true, r.text); assert.match(r.text, code); };
+  // 22/10/2026: lệnh xoá của AI KHÔNG chạy ngay — thành yêu cầu chờ trưởng nhóm duyệt; lead duyệt trên web ⇒ lệnh chạy dưới
+  // quyền người gửi. okDel/deniedDel = gửi lệnh ⇒ thấy PENDING_APPROVAL (chưa xoá gì) ⇒ duyệt ⇒ kết quả thật.
+  async function viaApproval(p: Promise<{ isError: boolean; text: string; out: any }>) {
+    const r = ok(await p);
+    assert.equal(r.out?.status, 'PENDING_APPROVAL', r.text);
+    const a = await call(lead, 'POST', `/delete-requests/${r.out.request}/approve`, {});
+    assert.equal(a.status, 200, JSON.stringify(a.raw));
+    return a.data as { status: string; error: string | null; result: { output: any; trash: Array<{ id: number }> } };
+  }
+  const okDel = async (p: Promise<{ isError: boolean; text: string; out: any }>) => {
+    const v = await viaApproval(p);
+    assert.equal(v.status, 'APPROVED', v.error ?? '');
+    return { isError: false, out: v.result.output, text: JSON.stringify(v.result.output) };
+  };
+  const deniedDel = async (p: Promise<{ isError: boolean; text: string; out: any }>, code: RegExp) => {
+    const v = await viaApproval(p);
+    assert.equal(v.status, 'FAILED');
+    assert.match(String(v.error), code);
+  };
   const typeId = (k: string) => cfg.issueTypes.find((t: any) => t.key === k).id;
 
   before(async () => {
@@ -140,7 +159,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     // Tầng tuyến REST: agent không DELETE sheet test.
     const r = await fetch(`${base}/api/v1/work/projects/${pid}/fpt-tests/unit/${f}`, { method: 'DELETE', headers: { Authorization: `Bearer ${agentTok}` } });
     assert.equal(r.status, 403);
-    ok(await tool(devTok, 'fpt_unit_delete_function', { project: 'LF', function: f }));
+    await okDel(tool(devTok, 'fpt_unit_delete_function', { project: 'LF', function: f }));
   });
 
   it('5.1: Executed By / LOC, xoá UTCID nháp + dòng thừa, sửa dòng, dời, nhân bản, xoá hàm', async () => {
@@ -168,13 +187,13 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     assert.match(list, /"executedBy": "Long Bui"/);
     assert.match(list, /"notRun": 3/); // 1 case N mẫu + 2 case A/B chưa chạy
     // Xoá UTCID chưa chạy (nháp): còn đúng case đã P, đánh số lại UTCID01
-    const d = ok(await tool(devTok, 'fpt_unit_delete_cases', { project: 'LF', function: fid, notRun: true })).out;
+    const d = (await okDel(tool(devTok, 'fpt_unit_delete_cases', { project: 'LF', function: fid, notRun: true }))).out;
     assert.equal(d.deleted.length, 3);
     assert.equal(d.matrix.cases.length, 1);
     assert.equal(d.matrix.cases[0].utcid, 'UTCID01');
     assert.equal(d.matrix.cases[0].result, 'P');
     // Dòng không case nào đánh "O" ⇒ xoá được bằng unused
-    const r = ok(await tool(devTok, 'fpt_unit_delete_rows', { project: 'LF', function: fid, unused: true })).out;
+    const r = (await okDel(tool(devTok, 'fpt_unit_delete_rows', { project: 'LF', function: fid, unused: true }))).out;
     assert.ok(r.deleted.some((x: any) => x.value === 'draft-unused'));
     assert.ok(r.matrix.rows.every((x: any) => x.value !== 'expired'));
     assert.ok(r.matrix.rows.some((x: any) => x.value === 'valid'));
@@ -195,10 +214,10 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     // Nhân bản + xoá hàm
     const dup = ok(await tool(devTok, 'fpt_unit_duplicate_function', { project: 'LF', function: fid })).out;
     assert.match(dup.created.function, /verifyEmail \(copy\)/);
-    const del = ok(await tool(devTok, 'fpt_unit_delete_function', { project: 'LF', function: dup.created.id })).out;
+    const del = (await okDel(tool(devTok, 'fpt_unit_delete_function', { project: 'LF', function: dup.created.id }))).out;
     assert.equal(del.deleted.id, dup.created.id);
     assert.equal(await prisma.workUnitFunction.count({ where: { id: dup.created.id } }), 0);
-    denied(await tool(devTok, 'fpt_unit_delete_cases', { project: 'LF', function: fid }), /notRun/);
+    await deniedDel(tool(devTok, 'fpt_unit_delete_cases', { project: 'LF', function: fid }), /notRun/);
   });
 
   it('bìa + Record of change', async () => {
@@ -208,7 +227,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     ok(await tool(devTok, 'fpt_change_update', { project: 'LF', id: c.created.id, description: 'Filled Executed By' }));
     const g = ok(await tool(devTok, 'fpt_doc_get', { project: 'LF' })).text;
     assert.match(g, /Filled Executed By/);
-    ok(await tool(devTok, 'fpt_change_delete', { project: 'LF', id: c.created.id }));
+    await okDel(tool(devTok, 'fpt_change_delete', { project: 'LF', id: c.created.id }));
     assert.equal(await prisma.workFptChange.count({ where: { id: c.created.id } }), 0);
   });
 
@@ -219,7 +238,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     const u = ok(await tool(devTok, 'fpt_it_update_cases', { project: 'LF', kind: 'integration', module: m.id, cases: [{ case: 'AT02', expected: 'Error 401', clearRound: 1 }] })).out;
     assert.equal(u.sheet.cases[1].expected, 'Error 401');
     assert.equal(u.sheet.cases[1].rounds[0].status, null);
-    const d = ok(await tool(devTok, 'fpt_it_delete_cases', { project: 'LF', kind: 'integration', module: m.id, notRun: true })).out;
+    const d = (await okDel(tool(devTok, 'fpt_it_delete_cases', { project: 'LF', kind: 'integration', module: m.id, notRun: true }))).out;
     assert.deepEqual(d.deleted.map((x: any) => x.id), ['AT02', 'AT03']);
     assert.equal(d.sheet.cases.length, 1);
     ok(await tool(devTok, 'fpt_it_add_cases', { project: 'LF', kind: 'integration', module: m.id, cases: [{ description: 'logout' }] }));
@@ -228,14 +247,14 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     const up = ok(await tool(devTok, 'fpt_it_update_module', { project: 'LF', kind: 'integration', module: m.id, name: 'Auth integration', testRequirement: 'Login + logout' })).out;
     assert.equal(up.sheet.module.name, 'Auth integration');
     // Sai loại (system) ⇒ không đụng
-    denied(await tool(devTok, 'fpt_it_delete_module', { project: 'LF', kind: 'system', module: m.id }), /not a system test workflow|NOT_FOUND/i);
-    ok(await tool(devTok, 'fpt_it_delete_module', { project: 'LF', kind: 'integration', module: m.id }));
+    await deniedDel(tool(devTok, 'fpt_it_delete_module', { project: 'LF', kind: 'system', module: m.id }), /not a system test workflow|NOT_FOUND/i);
+    await okDel(tool(devTok, 'fpt_it_delete_module', { project: 'LF', kind: 'integration', module: m.id }));
     assert.equal(await prisma.workItModule.count({ where: { id: m.id } }), 0);
   });
 
   it('thẻ: xoá đúng quyền (reporter / admin), khôi phục, sửa/xoá bình luận, trường tuỳ chỉnh không rõ ⇒ lỗi rõ', async () => {
     const leadIssue = (await call(lead, 'POST', `/projects/${pid}/issues`, { typeId: typeId('TASK'), title: 'lead task' })).data;
-    denied(await tool(devTok, 'issue_delete', { project: 'LF', issue: leadIssue.number }), /FORBIDDEN|reporter/i);
+    await deniedDel(tool(devTok, 'issue_delete', { project: 'LF', issue: leadIssue.number }), /FORBIDDEN|reporter/i);
     const mine = ok(await tool(devTok, 'create_issue', { project: 'LF', type: 'TASK', title: 'mine' })).out;
     const n = mine.number ?? Number(String(mine.key ?? mine.created).split('-')[1]);
     const c = ok(await tool(devTok, 'comment', { project: 'LF', issue: n, markdown: 'first draft' })).out;
@@ -244,9 +263,9 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     ok(await tool(devTok, 'comment_edit', { project: 'LF', issue: n, comment: cid, markdown: 'edited text' }));
     const cm = await prisma.workComment.findUniqueOrThrow({ where: { id: cid } });
     assert.match(JSON.stringify(cm.bodyJson), /edited text/);
-    ok(await tool(devTok, 'comment_delete', { project: 'LF', issue: n, comment: cid }));
+    await okDel(tool(devTok, 'comment_delete', { project: 'LF', issue: n, comment: cid }));
     denied(await tool(devTok, 'issue_custom_fields_set', { project: 'LF', issue: n, fields: [{ field: 'Nope', value: 'x' }] }), /Unknown custom field/);
-    ok(await tool(devTok, 'issue_delete', { project: 'LF', issue: n }));
+    await okDel(tool(devTok, 'issue_delete', { project: 'LF', issue: n }));
     assert.ok((await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: n } })).deletedAt);
     ok(await tool(leadTok, 'issue_restore', { project: 'LF', issue: n }));
     assert.equal((await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: n } })).deletedAt, null);
@@ -266,7 +285,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     ok(await tool(devTok, 'docs_page_move', { project: 'LF', page: pg.number, parent: parent.number }));
     const moved = await prisma.workPage.findFirstOrThrow({ where: { projectId: pid, number: pg.number }, select: { parentId: true } });
     assert.ok(moved.parentId);
-    ok(await tool(devTok, 'docs_page_delete', { project: 'LF', page: pg.number }));
+    await okDel(tool(devTok, 'docs_page_delete', { project: 'LF', page: pg.number }));
     assert.ok((await prisma.workPage.findFirstOrThrow({ where: { projectId: pid, number: pg.number } })).deletedAt);
     ok(await tool(devTok, 'docs_page_restore', { project: 'LF', page: pg.number }));
     assert.equal((await prisma.workPage.findFirstOrThrow({ where: { projectId: pid, number: pg.number } })).deletedAt, null);
@@ -282,7 +301,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     ok(await tool(devTok, 'srs_actor_update', { project: 'LF', actor: 'student', description: 'FPT student' }));
     const a = await prisma.workSrsActor.findFirstOrThrow({ where: { projectId: pid, name: 'Student' } });
     assert.equal(a.description, 'FPT student');
-    ok(await tool(devTok, 'srs_delete', { project: 'LF', kind: 'actor', item: 'Student' }));
+    await okDel(tool(devTok, 'srs_delete', { project: 'LF', kind: 'actor', item: 'Student' }));
     assert.equal(await prisma.workSrsActor.count({ where: { id: a.id } }), 0);
     const pg = ok(await tool(devTok, 'docs_draft_page', { project: 'LF', title: 'SRS', markdown: 'x' })).out;
     const iss = ok(await tool(devTok, 'create_issue', { project: 'LF', type: 'TASK', title: 'linked' })).out;
@@ -299,7 +318,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     const cy = ok(await tool(devTok, 'test_cycle_create', { project: 'LF', name: 'Sprint 1', tests: [t.number] })).out;
     ok(await tool(devTok, 'test_cycle_update', { project: 'LF', cycle: cy.cycle, name: 'Sprint 1 — rerun', build: 'v1.0.1' }));
     assert.equal((await prisma.workTestCycle.findUniqueOrThrow({ where: { id: cy.cycle } })).name, 'Sprint 1 — rerun');
-    ok(await tool(devTok, 'test_cycle_delete', { project: 'LF', cycle: cy.cycle }));
+    await okDel(tool(devTok, 'test_cycle_delete', { project: 'LF', cycle: cy.cycle }));
     assert.equal(await prisma.workTestCycle.count({ where: { id: cy.cycle } }), 0);
   });
 
@@ -309,7 +328,7 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     const row = await prisma.workMeeting.findFirstOrThrow({ where: { projectId: pid, number: m.out.created } });
     assert.equal(row.status, 'DONE');
     assert.match(JSON.stringify(row.minutesJson), /ship/);
-    ok(await tool(devTok, 'meeting_delete', { project: 'LF', meeting: m.out.created }));
+    await okDel(tool(devTok, 'meeting_delete', { project: 'LF', meeting: m.out.created }));
   });
 
   it('project_repos: kết nối GitHub + link repo trong Resources ⇒ URL clone + nhánh mặc định; không có repo ⇒ câu hướng dẫn', async () => {
@@ -324,8 +343,8 @@ describe('CT Work — CuongMini ngang quyền người (MCP)', { skip: !RUN }, (
     assert.match(r, /git clone/);
     // resource_update / resource_delete theo URL
     ok(await tool(devTok, 'resource_update', { project: 'LF', resource: 'https://gitlab.com/acme/labflow-mobile', description: 'Flutter app' }));
-    const del = await tool(devTok, 'resource_delete', { project: 'LF', resource: 'https://gitlab.com/acme/labflow-mobile' });
+    const del = okDel(tool(devTok, 'resource_delete', { project: 'LF', resource: 'https://gitlab.com/acme/labflow-mobile' }));
     // Xoá link của người khác / của mình theo luật Resources (người thêm hoặc admin) — người thêm là dev ⇒ được.
-    ok(del);
+    await del;
   });
 });

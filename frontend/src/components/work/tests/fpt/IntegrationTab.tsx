@@ -20,6 +20,8 @@ import { Dialog, EmptyState, Field, PageLoading, Popover, Spinner } from '../../
 import { fptApi, fptKeys, IT_STATUSES, pct, roundsOf, type ItCase, type ItKind, type ItModule, type ItRound, type ItStatus } from './fptApi';
 import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
+import TrashLink from './TrashLink';
+import { afterDelete, undoToast } from '../../settings/binApi';
 import { ExportButton, InlineText, ResultBar, SaveState, shortDate, Stat, todayIso } from './shared';
 import { KpiRow } from '../../KpiTile';
 import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
@@ -82,6 +84,7 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
           <ExportButton pid={pid} report={T.report} label={T.exportLabel} />
+          {canEdit && <TrashLink />}
         </div>
       </div>
 
@@ -165,7 +168,12 @@ function ModulePane({ pid, id, kind, canEdit, onDeleted }: { pid: number; id: nu
         {canEdit && (
           <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={async () => {
             if (!window.confirm(wt('fpt.deleteModQ', { x: TEXT[kind].unit, name: m.name, n: m.cases.length }))) return;
-            try { await fptApi.deleteModule(pid, id); qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
+            try {
+              const out = await fptApi.deleteModule(pid, id);
+              qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
+              if (out.deleted) onDeleted();
+              afterDelete(pid, out, () => qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) }));
+            } catch (e) { toast.error(workError(e)); }
           }}><Trash2 size={13} /> {wt('common.delete')}</button>
         )}
       </div>
@@ -215,6 +223,8 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
       setState(rev.current === sending ? 'saved' : 'dirty');
       qc.setQueryData(fptKeys.mod(pid, mod.id), res);
       qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
+      // 22/10/2026: case bị bớt ⇒ vào thùng rác; Hoàn tác = thêm lại vào cuối rồi tải lại module (bộ soạn dựng lại).
+      if (res.trashed) undoToast(pid, res.trashed.id, () => qc.resetQueries({ queryKey: fptKeys.mod(pid, mod.id) }), wt('bin.itCasesTrashed', { n: res.trashed.cases }));
     } catch (e) {
       setState('error');
       if (workErrorStatus(e) === 409) toast.error(wt('fpt.someoneSavedMod'), { action: { label: wt('fpt.reload'), onClick: () => qc.resetQueries({ queryKey: fptKeys.mod(pid, mod.id) }) }, duration: 12_000 });

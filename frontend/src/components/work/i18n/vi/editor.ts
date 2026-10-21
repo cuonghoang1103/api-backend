@@ -6,7 +6,7 @@ export const editor: Strings<typeof En> = {
   diagramError: 'Lỗi sơ đồ:',
   hideSource: 'Ẩn mã nguồn',
   showSource: 'Xem mã nguồn',
-  imgTooBig: '{name} lớn hơn 10 MB',
+  imgTooBig: '{name} lớn hơn {mb}',
   image: 'Ảnh',
   uploadingX: 'Đang tải lên {name}…',
   cannotHold: 'Trình soạn thảo này không chèn ảnh được',

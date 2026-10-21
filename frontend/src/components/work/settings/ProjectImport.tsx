@@ -17,8 +17,8 @@ import { wk } from '../hooks';
 import { formatBytes, Spinner } from '../ui';
 import { ConfirmDialog, Section } from './shared';
 import { wt, wfmt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
-const MAX_BYTES = 8 * 1024 * 1024;
 const MAX_ROWS = 2000;
 
 const columns = (): Array<[string, string]> => [
@@ -153,7 +153,7 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   const pick = (f: File | undefined) => {
     if (!f) return;
     if (!/\.csv$/i.test(f.name) && f.type !== 'text/csv') { toast.error(wt('pimport.chooseCsv')); return; }
-    if (f.size > MAX_BYTES) { toast.error(wt('pimport.tooBig', { s: formatBytes(f.size) })); return; }
+    if (f.size > workLimits().importBytes) { toast.error(wt('pimport.tooBig', { s: formatBytes(f.size), mb: mb(workLimits().importBytes) })); return; }
     const reader = new FileReader();
     reader.onload = () => {
       // Bỏ BOM của Excel để cột đầu tiên khớp tên.
@@ -294,7 +294,7 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   // ── Bước 1: chọn file ──
   return (
     <>
-      <Section title={wt('pimport.importIssues')} description={wt('pimport.bulkDesc', { n: MAX_ROWS.toLocaleString(wfmt.intl()) })}>
+      <Section title={wt('pimport.importIssues')} description={wt('pimport.bulkDesc', { n: MAX_ROWS.toLocaleString(wfmt.intl()), mb: mb(workLimits().importBytes) })}>
         <div
           role="button"
           tabIndex={0}

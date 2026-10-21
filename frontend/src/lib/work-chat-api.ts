@@ -5,12 +5,14 @@
 
 import { api } from '@/lib/api';
 import type { WorkUser } from '@/lib/work-api';
+import { DEFAULT_WORK_LIMITS, mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
 const B = '/work/projects';
 
-export const CHAT_MAX_FILE_BYTES = 25 * 1024 * 1024;
+/** Mặc định; trần thật lấy từ máy chủ qua `workLimits().fileBytes` (limits.ts). */
+export const CHAT_MAX_FILE_BYTES = DEFAULT_WORK_LIMITS.fileBytes;
 export const CHAT_MAX_FILES = 10;
 export const CHAT_MAX_BODY = 8000;
 export const CHAT_VOICE_MAX_SECONDS = 180;
@@ -129,13 +131,14 @@ export const chatApi = {
     d<ChatMessage>(api.post(`${B}/${pid}/chat/channels/${cid}/messages/${mid}/forward`, body)),
   call: (pid: number, cid: number, url?: string | null) => d<{ url: string; reused: boolean }>(api.post(`${B}/${pid}/chat/channels/${cid}/call`, url ? { url } : {})),
 
-  /** Tệp LUÔN qua backend (≤ 25 MB) — chạy cả app desktop (CSP chặn PUT thẳng R2). */
+  /** Tệp LUÔN qua backend (≤ workLimits().fileBytes) — chạy cả app desktop (CSP chặn PUT thẳng R2). */
   uploadFile: (pid: number, cid: number, file: File, onProgress?: (pct: number) => void) => {
-    if (file.size > CHAT_MAX_FILE_BYTES) return Promise.reject(new Error(`${file.name} is larger than 25 MB`));
+    const max = workLimits().fileBytes;
+    if (file.size > max) return Promise.reject(new Error(`${file.name} is larger than ${mb(max)}`));
     const form = new FormData();
     form.append('file', file, file.name);
     return d<ChatFile>(api.post(`${B}/${pid}/chat/channels/${cid}/files`, form, {
-      timeout: 180_000, onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
+      timeout: uploadTimeoutMs(file.size), onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
     }));
   },
   uploadVoice: (pid: number, cid: number, file: File, durationMs: number) => {

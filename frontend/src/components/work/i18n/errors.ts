@@ -50,7 +50,6 @@ const BY_CODE: Record<string, WKey> = {
 const BY_MESSAGE: Record<string, WKey> = {
   'Title is required': 'errors.titleRequired',
   'Nothing to change': 'errors.nothingToChange',
-  'Files must be 25 MB or smaller': 'errors.fileTooBig25',
   '"From" must be before "to"': 'errors.fromBeforeTo',
   'The end date must be after the start date': 'errors.endAfterStart',
   'This issue is already done': 'errors.alreadyDone',
@@ -86,6 +85,11 @@ export function localizeError(locale: WorkLocale, e: ErrorShape): string | null 
   if (e.status && e.status >= 500) return translate(locale, 'errors.server');
   if (locale === 'en') return null;
   const msg = (e.message ?? '').trim();
+  // Trần kích thước lấy từ cấu hình máy chủ (src/services/work/limits.ts) ⇒ câu có SỐ THẬT, không viết cứng "25 MB".
+  const size = /(?:must be|larger than|\(max)\s+([\d.]+ ?MB)\b/i.exec(msg);
+  if (size && (e.status === 413 || /TOO_(LARGE|BIG)$/.test(e.code ?? '') || /or smaller|larger than|too large/i.test(msg))) {
+    return translate(locale, 'errors.fileTooBig25', { mb: size[1] });
+  }
   if (e.code && BY_CODE[e.code]) return translate(locale, BY_CODE[e.code]);
   if (msg && BY_MESSAGE[msg]) return translate(locale, BY_MESSAGE[msg]);
   const nf = /^(.+?) not found(?: in this (?:project|workspace|team queue))?\.?$/i.exec(msg);

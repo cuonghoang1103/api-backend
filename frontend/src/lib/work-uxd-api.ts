@@ -4,13 +4,15 @@
 import { api } from './api';
 import { translate as wtr, type WKey } from '@/components/work/i18n/core';
 import { currentWorkLocale } from '@/components/work/i18n/store';
+import { DEFAULT_WORK_LIMITS, mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
 
-export const MAX_COVER_BYTES = 8 * 1024 * 1024;
+/** Mặc định; trần thật lấy từ máy chủ qua `workLimits().imageBytes` (limits.ts). */
+export const MAX_COVER_BYTES = DEFAULT_WORK_LIMITS.imageBytes;
 export const COVER_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 
 export interface CoverState { coverUrl: string | null; coverPositionY: number | null }
@@ -24,10 +26,10 @@ export const workCoverApi = {
   /** Gửi BYTE ảnh làm thân request (không FormData — instance axios đặt cứng JSON sẽ biến FormData thành `{}`). */
   uploadCover: async (pid: number, file: Blob, positionY = 50): Promise<CoverState> => {
     if (!COVER_IMAGE_TYPES.includes(file.type)) throw new Error(wt('detail.imgTypes3'));
-    if (file.size > MAX_COVER_BYTES) throw new Error(wt('detail.cover8mb'));
+    if (file.size > workLimits().imageBytes) throw new Error(wt('detail.cover8mb', { mb: mb(workLimits().imageBytes) }));
     const buf = await file.arrayBuffer();
     return d<CoverState>(api.post(`${B}/projects/${pid}/cover/upload?positionY=${Math.round(positionY)}`, buf, {
-      headers: { 'Content-Type': file.type }, timeout: 120_000, transformRequest: [(x) => x],
+      headers: { 'Content-Type': file.type }, timeout: uploadTimeoutMs(file.size), transformRequest: [(x) => x],
     }));
   },
 };

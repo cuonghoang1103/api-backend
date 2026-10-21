@@ -14,6 +14,7 @@ import { workError } from '@/lib/work-api';
 import { Dialog, Spinner } from '../../ui';
 import { fptApi, fptKeys, type ImportResult, type ReportKind } from './fptApi';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const NAME: Record<ReportKind, string> = { unit: 'Unit (5.1)', integration: 'Integration (5.2)', system: 'System (5.3)' };
 const ITEM: Record<ReportKind, string> = { get unit() { return wt('fpt.itFunctions'); }, integration: 'module', system: 'workflow' };
@@ -25,11 +26,14 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
   const [preview, setPreview] = useState<ImportResult | null>(null);
   const [mode, setMode] = useState<'append' | 'replace'>('append');
   const [busy, setBusy] = useState(false);
-  useEffect(() => { if (open) { setFile(null); setPreview(null); setMode('append'); } }, [open]);
+  // 22/10/2026 (sự cố SWT301): "Thay thế" phải gõ đúng số mục sẽ bị xoá; thành viên ⇒ gửi trưởng nhóm duyệt.
+  const [typed, setTyped] = useState('');
+  useEffect(() => { if (open) { setFile(null); setPreview(null); setMode('append'); setTyped(''); } }, [open]);
 
   const pick = async (f: File | undefined) => {
     if (!f) return;
-    if (f.size > 10 * 1024 * 1024) { toast.error(wt('fpt.over10')); return; }
+    // Trần chung của mọi lần nhập (limits.ts, env WORK_MAX_IMPORT_MB) — trước 22/10/2026 cứng 10 MB nên mẫu 5.2 có ảnh chụp màn hình (~20 MB) bị chặn.
+    if (f.size > workLimits().importBytes) { toast.error(wt('fpt.over10', { mb: mb(workLimits().importBytes) })); return; }
     // Đọc NGAY (FileList sống — đặt lại input là mất tệp).
     const buf = await f.arrayBuffer();
     setFile({ name: f.name, buf });
@@ -48,9 +52,10 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
     if (!file) return;
     setBusy(true);
     try {
-      const r = await fptApi.importXlsx(pid, file.buf, { report, mode, dryRun: false });
+      const r = await fptApi.importXlsx(pid, file.buf, { report, mode, dryRun: false, confirm: mode === 'replace' ? typed.trim() : undefined });
       await qc.invalidateQueries({ queryKey: fptKeys.all(pid) });
-      toast.success(wt('fpt.importedN', { n: r.functions ?? r.modules ?? 0, item: ITEM[report], cases: r.cases }));
+      if (r.queued) toast.info(wt('bin.queuedToast'), { duration: 10_000 });
+      else toast.success(`${wt('fpt.importedN', { n: r.functions ?? r.modules ?? 0, item: ITEM[report], cases: r.cases })}${r.trashId ? ` · ${wt('bin.movedToTrash', { days: 30 })}` : ''}`);
       onClose();
     } catch (e) {
       toast.error(workError(e, wt('tests.importFailed')));
@@ -60,6 +65,9 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
   };
 
   const wrongKind = preview && preview.report !== report;
+  const del = preview?.replaceDeletes;
+  const destroys = mode === 'replace' && !!del && del.items + del.changes > 0;
+  const confirmOk = !destroys || typed.trim() === String(del!.items);
   return (
     <Dialog
       open={open}
@@ -69,7 +77,9 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
       footer={
         <>
           <button type="button" className="w-btn" onClick={onClose} disabled={busy}>{wt('common.cancel')}</button>
-          <button type="button" className="w-btn w-btn-primary" onClick={run} disabled={busy || !preview || !!wrongKind}>{busy && file && preview && <Spinner size={12} />} {wt('common.import')}</button>
+          <button type="button" className={cn('w-btn', destroys ? 'w-btn-danger-solid' : 'w-btn-primary')} onClick={run} disabled={busy || !preview || !!wrongKind || !confirmOk}>
+            {busy && file && preview && <Spinner size={12} />} {destroys ? (preview?.replaceNeedsApproval ? wt('bin.sendRequest') : wt('bin.replaceNow')) : wt('common.import')}
+          </button>
         </>
       }
     >
@@ -110,12 +120,23 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
             </ul>
           )}
           <div role="radiogroup" aria-label={wt('fpt.importMode')} className="space-y-1.5">
-            {([['append', wt('fpt.append')], ['replace', wt('fpt.replaceAll', { r: report === 'unit' ? 'unit test' : report === 'system' ? 'system test' : 'integration test' })]] as const).map(([v, l]) => (
+            {([['append', wt('bin.appendDefault')], ['replace', wt('fpt.replaceAll', { r: report === 'unit' ? 'unit test' : report === 'system' ? 'system test' : 'integration test' })]] as const).map(([v, l]) => (
               <label key={v} className={cn('flex cursor-pointer items-center gap-2', v === 'replace' && mode === 'replace' && 'text-[var(--w-red)]')}>
                 <input type="radio" name="fpt-mode" checked={mode === v} onChange={() => setMode(v)} /> {l}
               </label>
             ))}
           </div>
+          {destroys && del && (
+            <div role="alert" className="space-y-2 rounded-[8px] border border-[var(--w-red)] bg-[color-mix(in_srgb,var(--w-red)_8%,transparent)] px-3 py-2.5 text-[12.5px]">
+              <p className="flex gap-1.5 font-medium text-[var(--w-red)]"><AlertTriangle size={14} className="mt-0.5 shrink-0" /> {wt('bin.willDelete', { items: del.items, what: ITEM[report], changes: del.changes })}</p>
+              <p className="text-[var(--w-text-2)]">{wt('bin.willDeleteTrash')}</p>
+              {preview?.replaceNeedsApproval && <p className="text-[var(--w-text-2)]">{wt('bin.needsApproval')}</p>}
+              <label className="block text-[var(--w-text-2)]">
+                {wt('bin.typeToConfirm', { n: del.items })}
+                <input className="w-input mt-1 w-[120px] font-mono" inputMode="numeric" value={typed} onChange={(e) => setTyped(e.target.value)} aria-invalid={!confirmOk} />
+              </label>
+            </div>
+          )}
         </div>
       )}
     </Dialog>

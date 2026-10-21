@@ -82,6 +82,13 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.ok(!(r.commandByName('change_request_manage')!.input.shape.action.options as string[]).some((x) => /approve|reject/.test(x)));
     assert.ok(!('decision' in r.commandByName('review_manage')!.input.shape));
     assert.equal(r.commandByName('fpt_import_excel')!.destructive, true, 'replace ghi đè ⇒ luôn hỏi');
+    // 22/10/2026: lệnh xoá qua AI ⇒ yêu cầu chờ trưởng nhóm duyệt (runGuarded); nhập Excel chỉ "replace" thật mới là xoá.
+    const imp = r.commandByName('fpt_import_excel')!;
+    assert.equal(r.isDestructiveCall(imp, { mode: 'replace' }), true);
+    assert.equal(r.isDestructiveCall(imp, { mode: 'replace', dryRun: true }), false);
+    assert.equal(r.isDestructiveCall(imp, { mode: 'append' }), false);
+    for (const t of r.COMMANDS.filter((x) => /delete/.test(x.name))) assert.equal(r.isDestructiveCall(t, {}), true, `${t.name} ⇒ yêu cầu chờ duyệt`);
+    assert.equal(r.isDestructiveCall(r.commandByName('fpt_unit_update_function')!, {}), false);
     // Đợt 3 (21/10/2026) — gộp theo action
     for (const n of [
       'class_admin', 'class_quiz', 'swr_extras', 'issue_extras', 'issue_bulk', 'service_desk', 'chat_extras', 'docs_extras', 'meeting_extras', 'dashboard_save',

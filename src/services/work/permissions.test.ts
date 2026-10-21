@@ -197,6 +197,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/sprints'], ['POST', '/sprints/3/start'], ['POST', '/sprints/3/complete'], ['PATCH', '/sprints/3'], ['DELETE', '/sprints/3'],
     // 21/10/2026: xoá dữ liệu của nhóm (lệnh xoá của registry chỉ token người) — agent cấm cả tầng tuyến
     ['DELETE', '/fpt-tests/unit/4'], ['DELETE', '/fpt-tests/integration/4'], ['DELETE', '/fpt-tests/system/4'], ['DELETE', '/fpt-tests/changes/4'],
+    // 22/10/2026: thùng rác dữ liệu + yêu cầu xoá chờ duyệt — agent không xem/khôi phục/xoá vĩnh viễn, không đọc yêu cầu
+    ['GET', '/trash/data'], ['POST', '/trash/data/3/restore'], ['DELETE', '/trash/data/3'], ['GET', '/trash/requests'],
     ['DELETE', '/pages/2'], ['DELETE', '/raid/3'], ['DELETE', '/meetings/3'], ['DELETE', '/qna/3'], ['DELETE', '/diagrams/3'],
     ['DELETE', '/test-cycles/3'], ['DELETE', '/resources/3'], ['DELETE', '/srs/use-cases/3'], ['DELETE', '/srs/actors/3'],
     // 21/10/2026 đợt 2
@@ -276,7 +278,9 @@ describe('AI agent — tuyến ngoài dự án là DANH SÁCH TRẮNG (agentTopR
       ['GET', '/feed'], ['GET', '/feed/scopes'], ['GET', '/feed/new-count'], ['POST', '/feed/posts'], ['GET', '/feed/posts/3'], ['PATCH', '/feed/posts/3'],
       ['DELETE', '/feed/posts/3'], ['PUT', '/feed/posts/3/reaction'], ['POST', '/feed/posts/3/comments'], ['POST', '/feed/uploads'],
       ['POST', '/feed/uploads/presign'], ['GET', '/feed/attachments/3/url'], ['GET', '/feed/attachments/3/content'], ['GET', '/feed/reports'],
-      ['POST', '/feed/reports/1/resolve'], ['PUT', '/feed/follow'], ['POST', '/feed/link-preview']] as const) {
+      ['POST', '/feed/reports/1/resolve'], ['PUT', '/feed/follow'], ['POST', '/feed/link-preview'],
+      // 22/10/2026: yêu cầu xoá — agent không đọc, không duyệt, không rút
+      ['GET', '/me/delete-requests'], ['POST', '/delete-requests/4/approve'], ['POST', '/delete-requests/4/reject'], ['POST', '/delete-requests/4/cancel']] as const) {
       assert.equal(agentTopRouteAllowed(m, p), false, `${m} ${p}`);
     }
   });
@@ -325,5 +329,23 @@ describe('AI agent — hàm quyền thuần (lớp phủ principal)', async () =
     assert.equal(o.allowSelfAssign, false);
     assert.deepEqual(o.reviewerIds, [3]);
     assert.equal(P.agentOptionsOf({ agents: { doneToReview: false } }).doneToReview, false);
+  });
+});
+
+describe('22/10/2026 — token ctw_ của NGƯỜI (AI / script): xoá không bao giờ chạy ngay', async () => {
+  const P = await import('./permissions.js');
+  it('DELETE có cửa xếp hàng ở service (FPT) ⇒ cho qua để thành yêu cầu; DELETE khác ⇒ chặn', () => {
+    for (const p of ['/projects/5/fpt-tests/unit/4', '/projects/5/fpt-tests/integration/4', '/projects/5/fpt-tests/system/4', '/projects/5/fpt-tests/changes/4']) {
+      assert.equal(P.tokenDeleteAllowed('DELETE', p), true, p);
+    }
+    for (const p of ['/projects/5/issues/12', '/projects/5/pages/2', '/projects/5/trash/data/3', '/projects/5/meetings/3', '/workspaces/3', '/classes/2/stream/4', '/projects/5/fpt-tests/unit']) {
+      assert.equal(P.tokenDeleteAllowed('DELETE', p), false, p);
+    }
+  });
+  it('xoá hàng loạt thẻ ⇒ chặn; sửa hàng loạt / ghi khác ⇒ cho', () => {
+    assert.equal(P.tokenDeleteAllowed('POST', '/projects/5/issues/bulk', { numbers: [1], patch: { delete: true } }), false);
+    assert.equal(P.tokenDeleteAllowed('POST', '/projects/5/issues/bulk', { numbers: [1], patch: { priority: 2 } }), true);
+    assert.equal(P.tokenDeleteAllowed('POST', '/projects/5/fpt-tests/import'), true, 'import replace ⇒ service xếp hàng');
+    assert.equal(P.tokenDeleteAllowed('PUT', '/projects/5/fpt-tests/unit/4/matrix'), true, 'lưu làm mất UTCID ⇒ service trả 409');
   });
 });

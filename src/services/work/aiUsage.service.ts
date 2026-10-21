@@ -54,6 +54,14 @@ export function noteProjectHit(h: Hit): void {
   if (s && !s.hits.some((x) => x.id === h.id)) s.hits.push({ id: h.id, key: h.key, workspaceId: h.workspaceId });
 }
 
+/**
+ * 22/10/2026: lời gọi hiện tại có đến từ AI không (MCP / CuongMini / Ask AI / agent dựng sẵn) — `runInAiScope` đặt `client`.
+ * Lệnh xoá đi qua AI ⇒ thành YÊU CẦU chờ trưởng nhóm duyệt (deleteRequests.service.ts), không bao giờ xoá ngay.
+ */
+export function currentAiClient(): AiClient | undefined {
+  return als.getStore()?.client;
+}
+
 /** Chạy `fn` trong một phạm vi mới; trả kèm danh sách dự án lời gọi đã mở (kể cả khi lỗi). */
 export async function runInAiScope<T>(client: AiClient, fn: () => Promise<T>): Promise<{ hits: Hit[]; result?: T; error?: unknown }> {
   const parent = als.getStore();

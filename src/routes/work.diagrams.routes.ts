@@ -25,6 +25,7 @@ import { z, ZodError } from 'zod';
 import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/errorHandler.js';
 import { DIAGRAM_FORMATS, DIAGRAM_STATUSES, DIAGRAM_TYPES, GENERATABLE } from '../services/work/diagram.js';
 import * as dg from '../services/work/diagrams.service.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -79,7 +80,7 @@ router.post('/projects/:pid/diagrams/generate', asyncHandler(async (req, res) =>
 }));
 
 router.post('/projects/:pid/diagrams/import', asyncHandler(async (req, res) => {
-  const b = parse(z.object({ fileName: z.string().min(1).max(255), content: z.string().min(1).max(9_000_000), base64: z.boolean().optional(), page: z.number().int().min(0).max(99).optional(), to: z.enum(['mermaid', 'native']).optional(), title: z.string().max(200).nullable().optional() }), req.body);
+  const b = parse(z.object({ fileName: z.string().min(1).max(255), content: z.string().min(1).max(Math.ceil((WORK_LIMITS.importBytes * 4) / 3) + 1024), base64: z.boolean().optional(), page: z.number().int().min(0).max(99).optional(), to: z.enum(['mermaid', 'native']).optional(), title: z.string().max(200).nullable().optional() }), req.body);
   ok(res, await dg.importDiagram(callerId(req), P(req, 'pid'), b), 201);
 }));
 

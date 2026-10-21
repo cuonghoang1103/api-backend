@@ -17,6 +17,7 @@ import { useWT, wt, type WKey } from '@/components/work/i18n';
 import KpiTile, { KpiRow } from '../KpiTile';
 import { Dialog, EmptyState, Field, PageLoading, publicOrigin, Spinner } from '../ui';
 import { Chip, Note, TabIntro, TextArea, use6bRefresh } from './shared';
+import { mb, workLimits } from '@/lib/work-limits';
 
 export const MOCKUP_STATUS_KEY: Record<Mockup['status'], WKey> = { DRAFT: 'common.draft', SUBMITTED: 'srsx.pkSubmitted', APPROVED: 'srsx.pkApproved', CHANGES: 'srsx.pkChanges' };
 export const MOCKUP_TONE: Record<Mockup['status'], 'muted' | 'yellow' | 'green' | 'orange'> = { DRAFT: 'muted', SUBMITTED: 'yellow', APPROVED: 'green', CHANGES: 'orange' };
@@ -124,7 +125,7 @@ export default function PrototypesTab({ pid, base }: { pid: number; base: string
         {kind === 'LINK' ? (
           <Field label={wt('srsx.designLink')} hint={wt('srsx.designLinkHint')}><input className="w-input" autoFocus value={url} maxLength={1000} placeholder="https://www.figma.com/design/…" onChange={(e) => setUrl(e.target.value)} /></Field>
         ) : (
-          <Field label={wt('srsx.imageFile')} hint={wt('srsx.imageHint')}>
+          <Field label={wt('srsx.imageFile')} hint={wt('srsx.imageHint', { mb: mb(workLimits().imageBytes) })}>
             <input ref={fileRef} className="w-input py-1" type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
           </Field>
         )}

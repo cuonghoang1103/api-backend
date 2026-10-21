@@ -6,6 +6,8 @@
  */
 
 import { api } from '@/lib/api';
+import type { DeleteOutcome, QueuedRequest } from '../../settings/binApi';
+import { uploadTimeoutMs } from '@/lib/work-limits';
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
@@ -80,6 +82,9 @@ export type ModuleInput = Partial<Pick<ItModuleHead, 'name' | 'sheetName' | 'idP
 export interface ImportResult {
   report: ReportKind; dryRun: boolean; mode: 'append' | 'replace'; functions?: number; modules?: number; cases: number; changes: number;
   warnings: string[]; preview: Array<{ name: string; module?: string; cases: number; rows?: number }>;
+  /** 22/10/2026: "Thay thế" xoá bao nhiêu thứ đang có; người gọi có phải gửi trưởng nhóm duyệt không. */
+  replaceDeletes?: { items: number; changes: number }; replaceNeedsApproval?: boolean;
+  queued?: QueuedRequest; trashId?: number;
 }
 
 export const fptKeys = {
@@ -96,14 +101,14 @@ export const fptApi = {
   updateDoc: (pid: number, body: Partial<Omit<DocMeta, 'projectName' | 'projectCode'>> & { projectName?: string | null; projectCode?: string | null }) => d<FptDoc>(api.put(`${B(pid)}/doc`, body)),
   addChange: (pid: number, body: Omit<ChangeRecord, 'id' | 'position'>) => d<ChangeRecord>(api.post(`${B(pid)}/changes`, body)),
   updateChange: (pid: number, id: number, body: Partial<Omit<ChangeRecord, 'id' | 'position'>>) => d<ChangeRecord>(api.patch(`${B(pid)}/changes/${id}`, body)),
-  deleteChange: (pid: number, id: number) => d(api.delete(`${B(pid)}/changes/${id}`)),
+  deleteChange: (pid: number, id: number) => d<DeleteOutcome>(api.delete(`${B(pid)}/changes/${id}`)),
 
   functions: (pid: number) => d<{ tcPerKloc: number; summary: UnitSummary; functions: UnitFunctionListItem[] }>(api.get(`${B(pid)}/unit`)),
   createFunction: (pid: number, body: FunctionInput & { moduleName: string; methodName: string; starter?: boolean }) => d<UnitFunction>(api.post(`${B(pid)}/unit`, body)),
   fn: (pid: number, id: number) => d<UnitFunction>(api.get(`${B(pid)}/unit/${id}`)),
   updateFunction: (pid: number, id: number, body: FunctionInput) => d<UnitFunction>(api.patch(`${B(pid)}/unit/${id}`, body)),
-  deleteFunction: (pid: number, id: number) => d(api.delete(`${B(pid)}/unit/${id}`)),
-  saveMatrix: (pid: number, id: number, body: MatrixInput) => d<UnitFunction>(api.put(`${B(pid)}/unit/${id}/matrix`, body)),
+  deleteFunction: (pid: number, id: number) => d<DeleteOutcome>(api.delete(`${B(pid)}/unit/${id}`)),
+  saveMatrix: (pid: number, id: number, body: MatrixInput) => d<UnitFunction & { trashed?: { id: number; cases: number; rows: number } | null }>(api.put(`${B(pid)}/unit/${id}/matrix`, body)),
   duplicateFunction: (pid: number, id: number) => d<UnitFunction>(api.post(`${B(pid)}/unit/${id}/duplicate`, {})),
   aiSuggest: (pid: number, id: number, body: { signature?: string | null; extra?: string | null }) =>
     d<AiSuggestion>(api.post(`${B(pid)}/unit/${id}/ai-suggest`, body, { timeout: 120_000 })),
@@ -112,8 +117,8 @@ export const fptApi = {
   createModule: (pid: number, body: ModuleInput & { name: string }, kind: ItKind = 'INT') => d<ItModule>(api.post(`${B(pid)}/${itPath(kind)}`, body)),
   mod: (pid: number, id: number) => d<ItModule>(api.get(`${B(pid)}/integration/${id}`)),
   updateModule: (pid: number, id: number, body: ModuleInput) => d<ItModule>(api.patch(`${B(pid)}/integration/${id}`, body)),
-  deleteModule: (pid: number, id: number) => d(api.delete(`${B(pid)}/integration/${id}`)),
-  saveCases: (pid: number, id: number, body: { version?: string; cases: Array<Omit<ItCase, 'id'>> }) => d<ItModule>(api.put(`${B(pid)}/integration/${id}/cases`, body)),
+  deleteModule: (pid: number, id: number) => d<DeleteOutcome>(api.delete(`${B(pid)}/integration/${id}`)),
+  saveCases: (pid: number, id: number, body: { version?: string; cases: Array<Omit<ItCase, 'id'>> }) => d<ItModule & { trashed?: { id: number; cases: number } | null }>(api.put(`${B(pid)}/integration/${id}/cases`, body)),
 
   exportXlsx: async (pid: number, report: ReportKind, module?: string) => {
     const q = new URLSearchParams({ report, ...(module ? { module } : {}) });
@@ -124,9 +129,9 @@ export const fptApi = {
     return { blob: res.data as Blob, fileName: name };
   },
   /** Gửi tệp NHỊ PHÂN (ArrayBuffer) — không dùng FormData: instance axios đặt cứng JSON sẽ biến FormData thành `{}`. */
-  importXlsx: (pid: number, file: ArrayBuffer, opts: { report: 'auto' | ReportKind; mode: 'append' | 'replace'; dryRun: boolean }) =>
-    d<ImportResult>(api.post(`${B(pid)}/import?${new URLSearchParams({ report: opts.report, mode: opts.mode, dryRun: opts.dryRun ? '1' : '0' })}`, file, {
-      headers: { 'Content-Type': 'application/octet-stream' }, timeout: 180_000, transformRequest: [(x) => x],
+  importXlsx: (pid: number, file: ArrayBuffer, opts: { report: 'auto' | ReportKind; mode: 'append' | 'replace'; dryRun: boolean; confirm?: string }) =>
+    d<ImportResult>(api.post(`${B(pid)}/import?${new URLSearchParams({ report: opts.report, mode: opts.mode, dryRun: opts.dryRun ? '1' : '0', ...(opts.confirm ? { confirm: opts.confirm } : {}) })}`, file, {
+      headers: { 'Content-Type': 'application/octet-stream' }, timeout: uploadTimeoutMs(file.byteLength), transformRequest: [(x) => x],
     })),
 };
 

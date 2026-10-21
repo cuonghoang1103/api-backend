@@ -19,6 +19,7 @@ import { gradebookSources, type GradebookCell, type GradebookCtx, type Gradebook
 import { GRADEBOOK_MODES, normalizeWeights, parseGradeImport, totalOf, type GbCell, type GradebookMode, type ImportPreview } from './classworkRules.js';
 import { parseCsv } from './teachingRules.js';
 import { readXlsx, writeXlsx, XSheet, type XStyle } from './xlsxStyled.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
 async function settingsOf(classId: number) {
   const s = await prisma.workClassGradebook.findUnique({ where: { classId } });
@@ -153,12 +154,12 @@ export interface GradeImportSource { xlsxBase64?: string; csv?: string; confirm?
 
 function tableOf(src: GradeImportSource): string[][] {
   if (src.csv !== undefined) {
-    if (src.csv.length > 2_000_000) throw new BadRequestError('The file is too large (max 2 MB)', 'WORK_GRADEBOOK_IMPORT');
+    if (src.csv.length > WORK_LIMITS.importBytes) throw new BadRequestError(`The file is too large (max ${mbText(WORK_LIMITS.importBytes)})`, 'WORK_GRADEBOOK_IMPORT');
     return parseCsv(src.csv);
   }
   if (!src.xlsxBase64) throw new BadRequestError('Upload an .xlsx or .csv file', 'WORK_GRADEBOOK_IMPORT');
   const buf = Buffer.from(src.xlsxBase64, 'base64');
-  if (buf.length > 3_000_000) throw new BadRequestError('The file is too large (max 3 MB)', 'WORK_GRADEBOOK_IMPORT');
+  if (buf.length > WORK_LIMITS.importBytes) throw new BadRequestError(`The file is too large (max ${mbText(WORK_LIMITS.importBytes)})`, 'WORK_GRADEBOOK_IMPORT');
   let sheets;
   try { sheets = readXlsx(buf); } catch { throw new BadRequestError('This is not an .xlsx file', 'WORK_GRADEBOOK_IMPORT'); }
   const first = sheets.find((s) => s.maxRow > 0 && s.maxCol > 0);

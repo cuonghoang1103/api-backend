@@ -37,6 +37,7 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
   let server: import('node:http').Server;
   let lead: U, dev: U, viewer: U;
   let pid = 0;
+  let slugOf = '';
   /** Mỗi phần tử: chuỗi trả về, hoặc hàm (để chờ / đếm). */
   let script: Array<string | (() => Promise<string>)> = [];
   let calls = 0;
@@ -100,6 +101,7 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     const ws = await call(lead, 'POST', '/workspaces', { name: `AIS ${tag}` });
     assert.equal(ws.status, 201, JSON.stringify(ws.raw));
     wsIds.push(ws.data.id);
+    slugOf = ws.data.slug;
     await call(lead, 'POST', `/workspaces/${ws.data.id}/invites`, { emails: [dev.email, viewer.email], role: 'MEMBER' });
     const p = await call(lead, 'POST', `/workspaces/${ws.data.id}/projects`, { key: 'NT', name: 'Nha tro', template: 'COMPANY' });
     assert.equal(p.status, 201, JSON.stringify(p.raw));
@@ -151,7 +153,9 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
 
     const done = r.events.at(-1)!.data;
     assert.equal(done.type, 'done');
-    assert.equal(done.reply, reply);
+    // 22/10/2026: link sâu do MÃ dựng — đường bịa `/work/x` bị thay bằng link THẬT của thẻ NT-1 (bản chuẩn ở `done`).
+    const chuan = reply.replace('(/work/x)', `(/work/${slugOf}/NT/issue/1)`);
+    assert.equal(done.reply, chuan);
     assert.equal(done.actions.length, 1);
     assert.ok(done.threadId && done.question?.id && done.answer?.id);
     assert.ok('quota' in done);
@@ -159,7 +163,7 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     assert.equal(pre.threadId, done.threadId);
     assert.equal(pre.questionId, done.question.id);
     const saved = await prisma.workAiMessage.findUniqueOrThrow({ where: { id: done.answer.id } });
-    assert.equal(saved.content, reply);
+    assert.equal(saved.content, chuan);
     assert.equal((saved.actions as any[]).length, 1);
     assert.equal((await prisma.workAiMessage.findUniqueOrThrow({ where: { id: done.question.id } })).error, null);
   });

@@ -37,6 +37,7 @@ import * as sprints from '../sprints.service.js';
 import * as teams from '../teams.service.js';
 import * as workspaces from '../workspaces.service.js';
 import { defineTool, type ToolDef } from './types.js';
+import { mbText } from '../limits.js';
 
 const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
 const userArg = z.string().min(1).max(254).describe('Username (with or without @) or email of a workspace member');
@@ -153,7 +154,7 @@ const gdocImages = defineTool({
 
 const attachFromUrl = defineTool({
   name: 'attach_from_url', title: 'Attach file from a link', group: 'issues',
-  description: 'Downloads a file from a public link ON THE SERVER and attaches it to an issue (≤ 25 MB) — no need for the user to save and upload. Google links are converted: Drawings ⇒ PNG, Docs ⇒ PDF, Slides ⇒ PDF (or one slide as PNG with #slide=id.<pageId>), Sheets ⇒ XLSX, Drive file ⇒ the file. image = number from gdoc_images (an image inside a Google Doc/web page). for="comment" = draft for your next comment.',
+  description: `Downloads a file from a public link ON THE SERVER and attaches it to an issue (≤ ${mbText(TRAN_TEP)}) — no need for the user to save and upload. Google links are converted: Drawings ⇒ PNG, Docs ⇒ PDF, Slides ⇒ PDF (or one slide as PNG with #slide=id.<pageId>), Sheets ⇒ XLSX, Drive file ⇒ the file. image = number from gdoc_images (an image inside a Google Doc/web page). for="comment" = draft for your next comment.`,
   write: true, surfaces: { ask: false, builtin: false },
   input: z.object({
     project: projectArg, issue: issueArg,

@@ -816,3 +816,23 @@ export function agentTopRouteAllowed(method: string, path: string, scoped = fals
   if (!scoped && /^\/search(\/(docs|facets))?$/.test(p)) return true;
   return false;
 }
+
+/**
+ * 22/10/2026 (sự cố SWT301 — mất bảng 5.1): token ctw_ của NGƯỜI (CuongMini, AI bên ngoài, script) gọi REST thì lệnh XOÁ
+ * KHÔNG BAO GIỜ chạy ngay. Tuyến xoá có cửa chặn ở service (`gateDelete` ⇒ yêu cầu chờ trưởng nhóm duyệt) thì cho qua để
+ * service xếp hàng; mọi DELETE khác + xoá hàng loạt ⇒ 403 WORK_TOKEN_DELETE_NEEDS_APPROVAL (dùng lệnh MCP — nó tạo yêu cầu —
+ * hoặc xoá trên web). Token agent đã có luật riêng (AGENT_DENIED_ROUTES) — hàm này chỉ cho token người.
+ */
+const TOKEN_GATED_DELETES: RegExp[] = [
+  /^\/projects\/\d+\/fpt-tests\/(unit|integration|system|changes)\/\d+$/,
+];
+export function tokenDeleteAllowed(method: string, path: string, body?: unknown): boolean {
+  const m = method.toUpperCase();
+  const p = path.replace(/\/+$/, '');
+  if (m === 'POST' && /^\/projects\/\d+\/issues\/bulk$/.test(p)) {
+    const patch = (body as { patch?: { delete?: unknown } } | undefined)?.patch;
+    return patch?.delete !== true;
+  }
+  if (m !== 'DELETE') return true;
+  return TOKEN_GATED_DELETES.some((re) => re.test(p));
+}

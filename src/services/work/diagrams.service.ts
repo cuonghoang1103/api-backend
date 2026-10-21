@@ -15,10 +15,12 @@
 
 import { Prisma } from '@prisma/client';
 import type { z } from 'zod';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { checkTokenQuota, extractJson, isAiAvailable, llmComplete, type LLMMessage } from '../interview/llm/index.js';
+import { extractJson, isAiAvailable, type LLMMessage } from '../interview/llm/index.js';
 import { auditProject } from './audit.js';
 import { displayName } from './common.js';
 import {
@@ -45,6 +47,7 @@ import { getPage, updatePage } from './pages.service.js';
 import { can, canViewPage, isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
 import { findReportPage, loadSrs } from './srs.service.js';
 import { refNumber, ucKey } from './srs.js';
+import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 // ─── Quyền ───────────────────────────────────────────────────────
 
@@ -426,9 +429,10 @@ export async function deleteDiagram(userId: number, projectId: number, number: n
   const d = await findDiagram(projectId, number);
   if (ctx.isAgent && !(d.status === 'PROPOSED' && d.createdById === userId)) throw new ForbiddenError('An AI agent can only delete its own proposals');
   await prisma.workDiagram.update({ where: { id: d.id }, data: { deletedAt: new Date(), updatedById: userId } });
+  const trashId = await trashSoft({ projectId, userId, table: 'work_diagrams', id: d.id, label: `Diagram ${diagramKey(d.number)} "${d.title}"` });
   await auditProject(projectId, { actorId: userId, action: 'diagram.delete', targetType: 'project', targetId: projectId, summary: `Deleted diagram ${diagramKey(d.number)} "${d.title}"` });
   touch(projectId, userId);
-  return { deleted: diagramKey(d.number) };
+  return { deleted: diagramKey(d.number), trashId };
 }
 
 // ─── Bình luận ───────────────────────────────────────────────────
@@ -592,7 +596,7 @@ const aiReady = () => !!askOverride || isAiAvailable('work');
 async function askerFor(userId: number, ctx: DiagramCtx): Promise<Ask> {
   if (askOverride) { const f = askOverride; return async (s, m) => ({ text: await f(s, m), model: 'test-model' }); }
   if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-  if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
+  await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
   if (!ctx.isAgent) {
     if (!can(ctx.access.role, 'ai.use', ctx.access.options, ctx.access.principal)) throw new ForbiddenError('Drawing with AI needs a member or admin role');
     const { aiQuota } = await import('./ai.service.js');
@@ -601,7 +605,7 @@ async function askerFor(userId: number, ctx: DiagramCtx): Promise<Ask> {
   }
   // purpose work_assistant (sẵn có) — xem báo cáo: nên có purpose riêng `work_diagram` nếu muốn tách model/chi phí.
   return async (system, messages) => {
-    const r = await llmComplete({ step: 'report', system, messages, maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
+    const r = await goiAiCtWork({ step: 'report', system, messages, maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
     return { text: r.text, model: r.model ?? null };
   };
 }

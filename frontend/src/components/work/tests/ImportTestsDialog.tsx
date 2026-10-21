@@ -17,6 +17,7 @@ import { Dialog, PRIORITIES, Spinner } from '../ui';
 import { parseTestsCsv, templateCsv } from './csv';
 import { isTestsDisabledError } from './testing-ui';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 type Result = { created: number[]; failed: Array<{ row: number; title: string; error: string }> };
 
@@ -41,7 +42,7 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
 
   const readFile = (f: File | undefined) => {
     if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { toast.error(wt('tests.over5mb')); return; }
+    if (f.size > workLimits().importBytes) { toast.error(wt('tests.over5mb', { mb: mb(workLimits().importBytes) })); return; }
     const r = new FileReader();
     r.onload = () => { setText(String(r.result ?? '')); setFileName(f.name); };
     r.onerror = () => toast.error(wt('tests.readFailed'));

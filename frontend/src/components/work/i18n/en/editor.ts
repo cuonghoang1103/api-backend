@@ -3,7 +3,7 @@ export const editor = {
   diagramError: 'Diagram error:',
   hideSource: 'Hide source',
   showSource: 'Show source',
-  imgTooBig: '{name} is larger than 10 MB',
+  imgTooBig: '{name} is larger than {mb}',
   image: 'Image',
   uploadingX: 'Uploading {name}…',
   cannotHold: 'This editor cannot hold images',

@@ -226,10 +226,10 @@ export const tcm: Strings<typeof En> = {
   groupsHint: 'Hoặc dùng cột “Nhóm” trong danh sách thành viên.',
 
   chooseFiles: 'Chọn tệp',
-  dropHint: 'Thả tệp vào đây — PDF, DOCX, XLSX, PPTX, ZIP, ảnh, văn bản (mỗi tệp ≤ 25 MB)',
+  dropHint: 'Thả tệp vào đây — PDF, DOCX, XLSX, PPTX, ZIP, ảnh, văn bản (mỗi tệp ≤ {mb})',
   uploading: 'Đang tải {name} · {pct}%',
   uploadFailed: 'Tải lên không thành công',
-  fileTooBig: '{name} lớn hơn 25 MB',
+  fileTooBig: '{name} lớn hơn {mb}',
   notePh: 'Ghi chú cho CuongMini (tuỳ chọn)',
   noteLabel: 'Ghi chú',
   linkPh: 'Dán link',

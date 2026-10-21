@@ -19,8 +19,9 @@ import { auditProject } from './audit.js';
 import { emitWorkEvent } from './events.js';
 import { requireProject, requireWorkspace } from './permissions.js';
 import { clampCoverY, isCoverPreset } from './covers.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
-export const MAX_COVER_BYTES = 8 * 1024 * 1024;
+export const MAX_COVER_BYTES = WORK_LIMITS.imageBytes;
 const COVER_FORMATS = new Set(['png', 'jpeg', 'webp']);
 const MAX_W = 1600;
 const coverPrefix = (projectId: number) => `work/branding/p${projectId}/cover-`;
@@ -66,7 +67,7 @@ export async function setCover(userId: number, projectId: number, input: { prese
 export async function uploadCover(userId: number, projectId: number, body: Buffer, positionY?: number) {
   await requireProject(userId, projectId, 'project.settings');
   if (!body.length) throw new BadRequestError('Send the image as the request body', 'WORK_IMAGE_EMPTY');
-  if (body.length > MAX_COVER_BYTES) throw new BadRequestError('Cover images must be 8 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (body.length > MAX_COVER_BYTES) throw new BadRequestError(tooLargeMessage(MAX_COVER_BYTES, 'Cover images'), 'WORK_FILE_TOO_LARGE');
   let meta: Awaited<ReturnType<ReturnType<typeof sharp>["metadata"]>>;
   try {
     meta = await sharp(body, { animated: false }).metadata();
@@ -93,12 +94,12 @@ export async function uploadCover(userId: number, projectId: number, body: Buffe
 // backend, backend kiểm bằng sharp rồi tự ghi vào kho — không còn phụ thuộc CORS/CSP nào ngoài API của chính mình.
 // Ảnh được chuẩn hoá: xoay theo EXIF, bỏ metadata, thu về ≤ 512 px, lưu PNG (giữ nền trong suốt của logo; email/OG
 // vẽ được — WebP/GIF thì không).
-export const MAX_BRAND_UPLOAD_BYTES = 5 * 1024 * 1024;
+export const MAX_BRAND_UPLOAD_BYTES = WORK_LIMITS.imageBytes;
 const BRAND_FORMATS = new Set(['png', 'jpeg', 'webp', 'gif']);
 
 async function normalizeBrandImage(body: Buffer): Promise<Buffer> {
   if (!body.length) throw new BadRequestError('Send the image as the request body', 'WORK_IMAGE_EMPTY');
-  if (body.length > MAX_BRAND_UPLOAD_BYTES) throw new BadRequestError('Images must be 5 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (body.length > MAX_BRAND_UPLOAD_BYTES) throw new BadRequestError(tooLargeMessage(MAX_BRAND_UPLOAD_BYTES, 'Images'), 'WORK_FILE_TOO_LARGE');
   let format: string | undefined;
   try { format = (await sharp(body, { animated: false }).metadata()).format; } catch { format = undefined; }
   if (!format || !BRAND_FORMATS.has(format)) throw new BadRequestError('Use a PNG, JPEG, WebP or GIF image', 'WORK_BAD_IMAGE');

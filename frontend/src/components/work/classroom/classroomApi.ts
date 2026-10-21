@@ -5,6 +5,7 @@
 
 import { api } from '@/lib/api';
 import type { TiptapDoc, WorkUser } from '@/lib/work-api';
+import { mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
@@ -98,10 +99,11 @@ export const classroomApi = {
   deleteComment: (id: number, cid: number) => d<{ deleted: boolean }>(api.delete(`${B(id)}/stream-comments/${cid}`)),
 
   uploadFile: (id: number, file: File) => {
-    if (file.size > 25 * 1024 * 1024) return Promise.reject(new Error(`${file.name} is larger than 25 MB`));
+    const max = workLimits().fileBytes;
+    if (file.size > max) return Promise.reject(new Error(`${file.name} is larger than ${mb(max)}`));
     const form = new FormData();
     form.append('file', file, file.name);
-    return d<ClassFile>(api.post(`${B(id)}/stream-files`, form, { timeout: 180_000 }));
+    return d<ClassFile>(api.post(`${B(id)}/stream-files`, form, { timeout: uploadTimeoutMs(file.size) }));
   },
   discardFile: (id: number, fid: number) => d<{ deleted: boolean }>(api.delete(`${B(id)}/stream-files/${fid}`)),
   fileUrl: (id: number, fid: number, inline = false) => d<{ url: string }>(api.get(`${B(id)}/stream-files/${fid}/url${inline ? '?inline=1' : ''}`)).then((r) => r.url),

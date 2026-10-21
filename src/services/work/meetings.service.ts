@@ -37,6 +37,7 @@ import { portalPath, routeForClient } from './portalNotify.js';
 import { tiptapToText } from './tiptapText.js';
 // CTW-18: ngày họp theo múi giờ của cuộc họp (startsAt là DateTime — toISOString in ra ngày UTC).
 import { dayInZone } from './projectTime.js';
+import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 const MAX_ATTENDEES = 100;
 const MAX_ACTIONS = 100;
@@ -514,11 +515,12 @@ export async function deleteMeeting(userId: number, projectId: number, number: n
   const m = await findMeeting(projectId, number);
   if (!canDeleteGovernance(ctx.access.role, ctx.access.workspaceRole, userId, m.organizerId)) throw new ForbiddenError('Only the organizer or a project admin can delete this meeting');
   await prisma.workMeeting.update({ where: { id: m.id }, data: { deletedAt: new Date() } });
+  const trashId = await trashSoft({ projectId, userId, table: 'work_meetings', id: m.id, label: `Meeting M-${number}: ${m.title}` });
   // CTW đợt 8c: buổi của chuỗi định kỳ ⇒ EXDATE (không sinh lại ngày đó).
   if (m.seriesId) await import('./meetingSeries.service.js').then((x) => x.addExdate(m.seriesId!, m.occurrenceDate));
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'meeting', number, action: 'deleted', actor: { kind: 'USER', userId } });
   await auditProject(projectId, { actorId: userId, action: 'meeting.delete', targetType: 'meeting', targetId: m.id, summary: `Deleted meeting M-${number}: ${m.title}`.slice(0, 300) });
-  return { deleted: true };
+  return { deleted: true, trashId };
 }
 
 // ─── .ics + lời mời ──────────────────────────────────────────────

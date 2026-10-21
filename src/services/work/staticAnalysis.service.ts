@@ -25,9 +25,10 @@ import {
   complexityRisk, complexitySummary, cyclomatic, cyclomaticFromDecisions, fixedFingerprints, parseStatic, unitKey,
   type Finding, type ParsedStatic, type StaticKind,
 } from './staticAnalysis.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
 export const MAX_STATIC_ISSUES = 20;
-const MAX_BYTES = 15 * 1024 * 1024;
+const MAX_BYTES = WORK_LIMITS.importBytes;
 const PER_10_MIN = 30;
 
 export interface StaticInput {
@@ -84,7 +85,7 @@ export async function importStatic(userId: number, projectId: number, input: Sta
   await requireProject(userId, projectId, 'issue.edit');
   const raw = typeof input.report === 'string' ? input.report : JSON.stringify(input.report ?? '');
   if (!raw.trim()) throw new BadRequestError('The report is empty', 'WORK_STATIC_REPORT');
-  if (Buffer.byteLength(raw) > MAX_BYTES) throw new BadRequestError('The report is larger than 15 MB', 'WORK_STATIC_REPORT');
+  if (Buffer.byteLength(raw) > MAX_BYTES) throw new BadRequestError(`The report is larger than ${mbText(MAX_BYTES)}`, 'WORK_STATIC_REPORT');
   let parsed: ParsedStatic;
   try { parsed = parseStatic(input.report, input.kind); } catch (err) { throw new BadRequestError((err as Error).message, 'WORK_STATIC_REPORT'); }
   if (!parsed.findings.length && !parsed.complexity.length && parsed.kind !== 'SARIF') throw new BadRequestError('The report has nothing to import', 'WORK_STATIC_REPORT');

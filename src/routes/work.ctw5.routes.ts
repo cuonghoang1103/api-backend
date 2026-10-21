@@ -37,6 +37,7 @@ import * as classroom from '../services/work/classroom.service.js';
 import * as recurring from '../services/work/recurring.service.js';
 import * as teaching from '../services/work/teaching.service.js';
 import { CLASS_SUBJECTS } from '../services/work/teachingRules.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -112,7 +113,7 @@ const joinBody = z.object({
   action: z.enum(['JOIN', 'JOIN_GROUP', 'CREATE_GROUP', 'TEACH']), groupId: id.optional(), groupName: z.string().max(80).optional(),
   projectKey: z.string().max(10).optional(), studentCode: z.string().max(20).optional(),
 }).strict();
-const rosterSrc = z.object({ csv: z.string().max(1_000_000).optional(), xlsxBase64: z.string().max(3_000_000).optional(), confirm: z.boolean().optional() }).strict();
+const rosterSrc = z.object({ csv: z.string().max(WORK_LIMITS.importBytes).optional(), xlsxBase64: z.string().max(Math.ceil((WORK_LIMITS.importBytes * 4) / 3) + 1024).optional(), confirm: z.boolean().optional() }).strict();
 const code = (req: Request) => parse(z.string().min(1).max(32), req.params.code);
 
 router.get('/classes', asyncHandler(async (req, res) => ok(res, await classroom.listMyClasses(callerId(req)))));

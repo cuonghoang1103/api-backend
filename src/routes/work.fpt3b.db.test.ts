@@ -146,7 +146,9 @@ describe('CT Work — đợt 3B: báo cáo Excel theo mẫu FPT (HTTP + DB thậ
     assert.equal(dry.status, 200, JSON.stringify(dry.raw));
     assert.equal(dry.data.report, 'system');
     assert.equal((await upload(owner, `/projects/${pid2}/fpt-tests/import`, x.buf)).status, 200);
-    assert.equal((await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=system`, x.buf)).status, 200);
+    // 22/10/2026: "Thay thế" của ADMIN phải gõ đúng số workflow sẽ bị xoá (dữ liệu cũ vào thùng rác).
+    assert.equal((await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=system`, x.buf)).status, 400);
+    assert.equal((await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=system&confirm=1`, x.buf)).status, 200);
     const mods = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system`);
     assert.equal(mods.data.modules.length, 1);
     const m = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system/${mods.data.modules[0].id}`);

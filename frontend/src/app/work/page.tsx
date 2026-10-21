@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import { openHelp } from '@/components/work/help/store';
 import { wt } from '@/components/work/i18n';
 import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
+import { MyPendingDeletes } from '@/components/work/settings/DeleteRequests'; // 22/10/2026: yêu cầu xoá chờ tôi duyệt
 
 type HomeTab = 'my-work' | 'feed' | 'workspaces';
 const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
@@ -159,6 +160,7 @@ function WorkspacesHome() {
             <>
               <PageIntro title={wt('home.myWork')} sub={wt('home.myWorkSub')} />
               <HelpTourCard />
+              <MyPendingDeletes />
               <MyWork />
             </>
           ) : (

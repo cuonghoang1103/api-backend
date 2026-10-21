@@ -64,6 +64,20 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
   }
   const ok = <T extends { isError: boolean; text: string }>(r: T): T => { assert.equal(r.isError, false, r.text); return r; };
   const denied = (r: { isError: boolean; text: string }, code: RegExp) => { assert.equal(r.isError, true, r.text); assert.match(r.text, code); };
+  // 22/10/2026: lệnh xoá của AI KHÔNG chạy ngay — thành yêu cầu chờ trưởng nhóm duyệt; lead duyệt trên web ⇒ lệnh chạy dưới
+  // quyền người gửi. okDel = gửi lệnh ⇒ thấy PENDING_APPROVAL (chưa xoá gì) ⇒ duyệt ⇒ kết quả thật.
+  async function viaApproval(p: Promise<{ isError: boolean; text: string; out: any }>) {
+    const r = ok(await p);
+    assert.equal(r.out?.status, 'PENDING_APPROVAL', r.text);
+    const a = await call(lead, 'POST', `/delete-requests/${r.out.request}/approve`, {});
+    assert.equal(a.status, 200, JSON.stringify(a.raw));
+    return a.data as { status: string; error: string | null; result: { output: any; trash: Array<{ id: number }> } };
+  }
+  const okDel = async (p: Promise<{ isError: boolean; text: string; out: any }>) => {
+    const v = await viaApproval(p);
+    assert.equal(v.status, 'APPROVED', v.error ?? '');
+    return { isError: false, out: v.result.output, text: JSON.stringify(v.result.output) };
+  };
 
   before(async () => {
     (emailService as any).send = async () => ({ success: true });
@@ -153,10 +167,10 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
     const quizId = qz.quiz.id ?? qz.quiz.quiz?.id;
     assert.ok(quizId, JSON.stringify(qz));
     assert.match(ok(await tool(leadTok, 'class_content', { classId, what: 'quizzes' })).text, /Quiz 1/);
-    ok(await tool(leadTok, 'class_content_delete', { classId, kind: 'quiz', id: quizId }));
-    ok(await tool(leadTok, 'class_content_delete', { classId, kind: 'question', id: qid }));
+    await okDel(tool(leadTok, 'class_content_delete', { classId, kind: 'quiz', id: quizId }));
+    await okDel(tool(leadTok, 'class_content_delete', { classId, kind: 'question', id: qid }));
     const sid = s.session.id ?? s.session.session?.id;
-    if (sid) ok(await tool(leadTok, 'class_content_delete', { classId, kind: 'session', id: sid }));
+    if (sid) await okDel(tool(leadTok, 'class_content_delete', { classId, kind: 'session', id: sid }));
     await prisma.workClass.deleteMany({ where: { id: classId } });
   });
 
@@ -181,7 +195,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
     const num = pr.out.problem.number;
     ok(await tool(leadTok, 'service_desk', { project: 'LF', action: 'problem_update', problem: num, rootCause: 'Token expiry', status: 'KNOWN_ERROR' }).then((r) => (r.isError && /status/.test(r.text) ? tool(leadTok, 'service_desk', { project: 'LF', action: 'problem_update', problem: num, rootCause: 'Token expiry' }) : r)));
     assert.match(ok(await tool(leadTok, 'ctwork_read', { project: 'LF', what: 'desk_problems' })).text, /Login outages/);
-    ok(await tool(leadTok, 'ctwork_delete', { project: 'LF', kind: 'desk_problem', id: num }));
+    await okDel(tool(leadTok, 'ctwork_delete', { project: 'LF', kind: 'desk_problem', id: num }));
   });
 
   it('chat: gửi tệp, nhắn riêng, chuyển tiếp, thông báo kênh', async () => {
@@ -214,7 +228,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
     const sch = issueNo(ok(await tool(leadTok, 'create_issue', { project: 'LF', type: 'TASK', title: 'scheduled' })).out);
     ok(await tool(leadTok, 'update_issue', { project: 'LF', issue: sch, startDate: '2026-10-22', dueDate: '2026-10-30' }));
     ok(await tool(leadTok, 'planning_extras', { project: 'LF', action: 'baseline_add', name: 'Plan v1' }));
-    ok(await tool(devTok, 'ctwork_delete', { project: 'LF', kind: 'dashboard', id: d.dashboard }));
+    await okDel(tool(devTok, 'ctwork_delete', { project: 'LF', kind: 'dashboard', id: d.dashboard }));
     const ex = ok(await tool(devTok, 'exploratory_manage', { project: 'LF', action: 'create', charter: 'Explore login with bad input', timeboxMin: 30 })).out;
     const exNum = ex.session.number;
     ok(await tool(devTok, 'exploratory_manage', { project: 'LF', action: 'start', number: exNum }));
@@ -259,7 +273,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 3 (MCP)', { skip: 
     const c = ok(await tool(devTok, 'diagram_extras', { project: 'LF', action: 'comment_add', diagram: dn, text: 'Add a failure path' })).out;
     const cid = c.comment.id ?? c.comment.comment?.id;
     ok(await tool(devTok, 'diagram_extras', { project: 'LF', action: 'comment_update', diagram: dn, comment: cid, resolved: true }));
-    ok(await tool(devTok, 'ctwork_delete', { project: 'LF', kind: 'diagram_comment', id: cid, diagram: dn }));
+    await okDel(tool(devTok, 'ctwork_delete', { project: 'LF', kind: 'diagram_comment', id: cid, diagram: dn }));
     const pg = ok(await tool(devTok, 'docs_draft_page', { project: 'LF', title: 'Live', markdown: 'x' })).out;
     ok(await tool(devTok, 'docs_extras', { project: 'LF', action: 'live_editing', page: pg.number, enabled: false }));
     const { MEETING_TEMPLATES } = await import('../services/work/meetingSeries.js');

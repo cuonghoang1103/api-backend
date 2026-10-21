@@ -6,6 +6,7 @@
 import { api } from './api';
 import { translate as wtr, type WKey } from '@/components/work/i18n/core';
 import { currentWorkLocale } from '@/components/work/i18n/store';
+import { DEFAULT_WORK_LIMITS, mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
@@ -53,7 +54,8 @@ export function errorCodeOf(err: unknown): string | null {
 
 // ─── CTW-23: nhận diện dự án / không gian ────────────────────────
 
-export const BRAND_MAX_BYTES = 5 * 1024 * 1024;
+/** Mặc định; trần thật lấy từ máy chủ qua `workLimits().imageBytes` (limits.ts). */
+export const BRAND_MAX_BYTES = DEFAULT_WORK_LIMITS.imageBytes;
 export const BRAND_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
 
 /**
@@ -63,9 +65,9 @@ export const BRAND_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'imag
  */
 async function uploadBrand(uploadPath: string, file: File): Promise<Record<string, string | null>> {
   if (!BRAND_IMAGE_TYPES.includes(file.type)) throw new Error(wt('detail.imgTypes'));
-  if (file.size > BRAND_MAX_BYTES) throw new Error(wt('detail.img5mb'));
+  if (file.size > workLimits().imageBytes) throw new Error(wt('detail.img5mb', { mb: mb(workLimits().imageBytes) }));
   const buf = await file.arrayBuffer();
-  return d<Record<string, string | null>>(api.post(uploadPath, buf, { headers: { 'Content-Type': file.type }, timeout: 60_000, transformRequest: [(x) => x] }));
+  return d<Record<string, string | null>>(api.post(uploadPath, buf, { headers: { 'Content-Type': file.type }, timeout: uploadTimeoutMs(file.size), transformRequest: [(x) => x] }));
 }
 
 export const workBrandApi = {

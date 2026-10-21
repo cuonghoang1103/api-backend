@@ -65,7 +65,7 @@ export const classroom: Strings<typeof En> = {
   importTitle: 'Nhập danh sách sinh viên (CSV hoặc Excel)',
   importHint: 'Các cột: MSSV, họ tên, email. Dòng tiêu đề không bắt buộc; tiêu đề tiếng Việt hay tiếng Anh đều được.',
   chooseFile: 'Chọn tệp .csv hoặc .xlsx',
-  fileTooBig: 'Tệp quá lớn (tối đa 2 MB)',
+  fileTooBig: 'Tệp quá lớn (tối đa {mb})',
   rowsValid: '{count} dòng sẵn sàng nhập',
   rowsInvalid: '{count} dòng có lỗi (bỏ qua)',
   line: 'Dòng',

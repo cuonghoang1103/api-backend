@@ -5,6 +5,7 @@
 import { api } from './api';
 import type { WorkUser } from './work-api';
 import type { MeetingType, PortalMeeting } from './work-s3b-api';
+import { uploadTimeoutMs } from '@/lib/work-limits';
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -85,7 +86,7 @@ export interface StaticOverview {
 }
 export const staticApi = {
   overview: (pid: number, status = 'OPEN') => d<StaticOverview>(api.get(`${P(pid)}/static-analysis`, { params: { status } })),
-  importReport: (pid: number, report: string, kind: 'sarif' | 'jacoco' | 'lizard' | 'auto', createIssues = false) => d<{ findings: number; newFindings: number; fixed: number; issuesCreated: number; complexityUnits: number }>(api.post(`${P(pid)}/tests/automation/static`, { report, kind, createIssues }, { timeout: 120_000 })),
+  importReport: (pid: number, report: string, kind: 'sarif' | 'jacoco' | 'lizard' | 'auto', createIssues = false) => d<{ findings: number; newFindings: number; fixed: number; issuesCreated: number; complexityUnits: number }>(api.post(`${P(pid)}/tests/automation/static`, { report, kind, createIssues }, { timeout: Math.max(120_000, uploadTimeoutMs(report.length)) })),
   act: (pid: number, id: number, action: 'ignore' | 'reopen' | 'issue') => d<{ number?: number; key?: string; created?: boolean; status?: string }>(api.post(`${P(pid)}/static-analysis/findings/${id}/${action}`, {})),
   vg: (pid: number, body: { edges?: number; nodes?: number; components?: number; decisions?: number }) => d<{ vg: number; basisPaths: number; risk: Risk }>(api.post(`${P(pid)}/static-analysis/vg`, body)),
 };

@@ -17,6 +17,7 @@ import { Field, ProjectMark, Spinner } from '../ui';
 import { Section, Select } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const SWATCHES = ['#2563eb', '#7c3aed', '#db2777', '#dc2626', '#ea580c', '#ca8a04', '#16a34a', '#0d9488', '#0891b2', '#475569'];
 const EMOJIS = ['🚀', '🌍', '🎮', '📱', '🛒', '🏗️', '🎨', '🧪', '📚', '🤖', '💡', '⚙️'];
@@ -67,7 +68,7 @@ export function ProjectIdentity({ config, slug }: { config: ProjectConfig; slug:
             {canEdit && config.avatarUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={remove.isPending} onClick={() => remove.mutate()}><Trash2 size={13} /> {wt('settings.removePic')}</button>}
           </div>
           {picker.input}
-          <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('settings.picHint')}</p>
+          <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('settings.picHint', { mb: mb(workLimits().imageBytes) })}</p>
         </div>
         <Field label="Emoji">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -121,7 +122,7 @@ export function WorkspaceLogo({ wsId, name, logoUrl, canEdit, onChanged }: { wsI
         {canEdit && <button type="button" className="w-btn w-btn-sm" disabled={upload.isPending} onClick={picker.open}>{upload.isPending ? <Spinner size={11} /> : <ImagePlus size={13} />} {logoUrl ? wt('settings.changeLogo') : wt('settings.uploadLogo')}</button>}
         {canEdit && logoUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={remove.isPending} onClick={() => remove.mutate()}><Trash2 size={13} /> {wt('common.remove')}</button>}
         {picker.input}
-        <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('settings.logoHint')}</p>
+        <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('settings.logoHint', { mb: mb(workLimits().imageBytes) })}</p>
       </div>
     </Section>
   );

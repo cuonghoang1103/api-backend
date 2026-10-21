@@ -63,7 +63,7 @@ export const classroom = {
   importTitle: 'Import students (CSV or Excel)',
   importHint: 'Columns: student ID (MSSV), full name, email. A header row is optional; Vietnamese or English headers both work.',
   chooseFile: 'Choose a .csv or .xlsx file',
-  fileTooBig: 'The file is too large (max 2 MB)',
+  fileTooBig: 'The file is too large (max {mb})',
   rowsValid: '{count} ready to import',
   rowsInvalid: '{count} with problems (skipped)',
   line: 'Line',

@@ -8,13 +8,15 @@ import { api } from '@/lib/api';
 import { workApi, type CommentVisibility, type TiptapDoc, type WorkComment, type WorkUser } from '@/lib/work-api';
 import { translate as wtr, type WKey } from '@/components/work/i18n/core';
 import { currentWorkLocale } from '@/components/work/i18n/store';
+import { DEFAULT_WORK_LIMITS, mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
 const B = '/work/projects';
 
-export const MAX_COMMENT_FILE_BYTES = 25 * 1024 * 1024;
+/** Mặc định; trần thật lấy từ máy chủ qua `workLimits().fileBytes` (limits.ts). */
+export const MAX_COMMENT_FILE_BYTES = DEFAULT_WORK_LIMITS.fileBytes;
 export const MAX_FILES_PER_COMMENT = 10;
 /** Trần voice note — khớp server (commentThreads.ts). */
 export const VOICE_MAX_SECONDS = 180;
@@ -69,7 +71,8 @@ export const workCommentsApi = {
    * PUT thẳng R2 hỏng ở tầng mạng (app desktop chặn bằng CSP) ⇒ lùi về đường qua backend.
    */
   async uploadFile(pid: number, num: number, file: File, onProgress?: (pct: number) => void): Promise<CommentFile> {
-    if (file.size > MAX_COMMENT_FILE_BYTES) throw new Error(`${file.name} is larger than 25 MB`);
+    const max = workLimits().fileBytes;
+    if (file.size > max) throw new Error(`${file.name} is larger than ${mb(max)}`);
     // Máy chủ không có R2 ⇒ presign báo WORK_NO_STORAGE — không còn đường nào khác.
     const pre = await d<{ uploadUrl: string; key: string; headers: Record<string, string> }>(
       api.post(`${B}/${pid}/issues/${num}/attachments/presign`, { fileName: file.name, contentType: file.type || 'application/octet-stream', size: file.size, forComment: true }),
@@ -82,7 +85,7 @@ export const workCommentsApi = {
       const form = new FormData();
       form.append('file', file, file.name);
       return d<CommentFile>(api.post(`${B}/${pid}/issues/${num}/comment-files`, form, {
-        timeout: 180_000, onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
+        timeout: uploadTimeoutMs(file.size), onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
       }));
     }
   },

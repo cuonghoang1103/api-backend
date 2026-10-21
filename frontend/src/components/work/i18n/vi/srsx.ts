@@ -79,7 +79,7 @@ export const srsx: Strings<typeof En> = {
   designLink: 'Link thiết kế',
   designLinkHint: 'Link chia sẻ từ Figma, Excalidraw, Penpot hoặc Miro (quyền xem).',
   imageFile: 'Ảnh',
-  imageHint: 'PNG, JPEG, WebP hoặc GIF, tối đa 10 MB.',
+  imageHint: 'PNG, JPEG, WebP hoặc GIF, tối đa {mb}.',
   protoTitle: 'Tiêu đề',
   protoTitlePh: 'vd Thanh toán v2',
   whatChange: 'Cần sửa gì?',

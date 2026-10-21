@@ -15,7 +15,9 @@
  */
 
 import { AppError } from '../../middleware/errorHandler.js';
-import { checkTokenQuota, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { isAiAvailable } from '../interview/llm/index.js';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work
+import { kiemHanMucAi } from './aiTaiTro.js';
 
 export type HelpLang = 'en' | 'vi';
 export interface LText { en: string; vi: string }
@@ -507,15 +509,13 @@ export async function askHelp(
   if (!isAiAvailable('work')) {
     throw new AppError('The help assistant is temporarily unavailable. Please try again later.', 503, 'WORK_HELP_UNAVAILABLE');
   }
-  if (!(await checkTokenQuota(userId))) {
-    throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
-  }
+  await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro + chống spam — aiTaiTro.ts
 
   const q = input.q.trim().slice(0, 500);
   const pageHint = input.page ? `\n\n(The user is currently on the page: ${input.page.slice(0, 200)})` : '';
   const user = `${q}${pageHint}`;
 
-  const r = await llmComplete({
+  const r = await goiAiCtWork({
     step: 'report',
     system: buildSystem(input.lang),
     messages: [{ role: 'user', content: user }],

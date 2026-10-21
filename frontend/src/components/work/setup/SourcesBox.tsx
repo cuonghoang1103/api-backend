@@ -11,8 +11,8 @@ import { setupApi, type SetupDraft, type SourceCategory } from '@/lib/work-setup
 import { Spinner } from '@/components/work/ui';
 import { wt } from '@/components/work/i18n';
 import { SourceChip } from './bits';
+import { mb, workLimits } from '@/lib/work-limits';
 
-const MAX = 25 * 1024 * 1024;
 
 export default function SourcesBox({ draft, category, accept, onDraft, linkPlaceholder, allowLink = true, notePlaceholder, disabled }: {
   draft: SetupDraft; category: SourceCategory; accept: string; onDraft: (d: SetupDraft) => void;
@@ -28,7 +28,7 @@ export default function SourcesBox({ draft, category, accept, onDraft, linkPlace
 
   const upload = async (files: FileList | File[]) => {
     for (const f of Array.from(files)) {
-      if (f.size > MAX) { toast.error(wt('tcm.fileTooBig', { name: f.name })); continue; }
+      if (f.size > workLimits().fileBytes) { toast.error(wt('tcm.fileTooBig', { name: f.name, mb: mb(workLimits().fileBytes) })); continue; }
       setUploading({ name: f.name, pct: 0 });
       try {
         const r = await setupApi.addFile(draft.id, f, category, note.trim(), (pct) => setUploading({ name: f.name, pct }));
@@ -67,7 +67,7 @@ export default function SourcesBox({ draft, category, accept, onDraft, linkPlace
             {uploading ? <Spinner size={12} /> : <Upload size={13} />} {wt('tcm.chooseFiles')}
           </button>
           <span className="min-w-0 flex-1 text-[12px] text-[var(--w-text-3)]">
-            {uploading ? wt('tcm.uploading', { name: uploading.name, pct: uploading.pct }) : wt('tcm.dropHint')}
+            {uploading ? wt('tcm.uploading', { name: uploading.name, pct: uploading.pct }) : wt('tcm.dropHint', { mb: mb(workLimits().fileBytes) })}
           </span>
           <input ref={fileRef} type="file" hidden multiple accept={accept} onChange={(e) => { const fs = e.target.files; if (fs?.length) void upload([...fs]); e.target.value = ''; }} />
         </div>

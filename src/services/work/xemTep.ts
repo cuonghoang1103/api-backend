@@ -18,13 +18,18 @@ import { config } from '../../config/env.js';
 import { getR2Client } from '../../config/r2.js';
 import { AppError, NotFoundError } from '../../middleware/errorHandler.js';
 import { colName, readXlsx } from './xlsxStyled.js';
+import { WORK_LIMITS } from './limits.js';
+import { withRam } from './uploadGate.js';
 
 /** Trần byte đọc cho xem trước dạng chữ (quá ⇒ cắt, báo `truncated`). */
 export const TEXT_PREVIEW_MAX = 2 * 1024 * 1024;
-/** Trần kích thước tệp Office được dựng xem trước. */
-export const OFFICE_PREVIEW_MAX = 10 * 1024 * 1024;
-/** Trần tổng dung lượng GIẢI NÉN của tệp Office (chặn zip bomb). */
-export const OFFICE_UNZIP_MAX = 80 * 1024 * 1024;
+/** Trần kích thước tệp Office được dựng xem trước (limits.ts, env WORK_OFFICE_PREVIEW_MAX_MB; trước 22/10/2026 là 10 MB). */
+export const OFFICE_PREVIEW_MAX = WORK_LIMITS.officePreviewBytes;
+/**
+ * Trần tổng dung lượng GIẢI NÉN của tệp Office (chặn zip bomb). Ảnh (`word/media`, `xl/media`) chỉ tính với docx —
+ * xlsx không bao giờ giải nén ảnh (readXlsx chỉ đọc phần XML).
+ */
+export const OFFICE_UNZIP_MAX = WORK_LIMITS.zipXmlBytes;
 /** Trần HTML docx trả về (ảnh nhúng data: làm phình) — quá ⇒ bỏ ảnh. */
 export const DOCX_HTML_MAX = 4 * 1024 * 1024;
 export const XLSX_MAX_SHEETS = 10;
@@ -103,11 +108,12 @@ export type XemTruocOffice =
   | { kind: 'xlsx'; sheets: Array<{ name: string; rows: string[][]; cols: string[]; totalRows: number; totalCols: number; truncated: boolean }>; moreSheets: number };
 
 /** Zip bomb: tổng dung lượng giải nén khai trong mục lục zip vượt trần ⇒ từ chối trước khi giải. */
-export function kiemZip(buf: Buffer, max = OFFICE_UNZIP_MAX): void {
+export function kiemZip(buf: Buffer, max = OFFICE_UNZIP_MAX, boQuaAnh = false): void {
   let zip: AdmZip;
   try { zip = new AdmZip(buf); } catch { throw new AppError('This file is damaged or not an Office document', 422, 'WORK_PREVIEW_BAD_FILE'); }
   let total = 0;
   for (const e of zip.getEntries()) {
+    if (boQuaAnh && /^xl\/media\//.test(e.entryName)) continue;
     total += e.header.size;
     if (total > max) throw new AppError('This document is too large to preview', 413, 'WORK_PREVIEW_TOO_LARGE');
   }
@@ -116,7 +122,10 @@ export function kiemZip(buf: Buffer, max = OFFICE_UNZIP_MAX): void {
 /** Bảng giá trị của xlsx (chuỗi đã định dạng), tối đa XLSX_MAX_SHEETS × XLSX_MAX_ROWS × XLSX_MAX_COLS. */
 export function bangXlsx(buf: Buffer): Extract<XemTruocOffice, { kind: 'xlsx' }> {
   let sheets;
-  try { sheets = readXlsx(buf); } catch { throw new AppError('This file is damaged or not an Excel workbook', 422, 'WORK_PREVIEW_BAD_FILE'); }
+  try { sheets = readXlsx(buf); } catch (err) {
+    if ((err as Error)?.message === 'XLSX_TOO_BIG') throw new AppError('This document is too large to preview', 413, 'WORK_PREVIEW_TOO_LARGE');
+    throw new AppError('This file is damaged or not an Excel workbook', 422, 'WORK_PREVIEW_BAD_FILE');
+  }
   const out = sheets.slice(0, XLSX_MAX_SHEETS).map((s) => {
     const nRows = Math.min(s.maxRow, XLSX_MAX_ROWS);
     const nCols = Math.min(s.maxCol, XLSX_MAX_COLS);
@@ -139,8 +148,12 @@ export function bangXlsx(buf: Buffer): Extract<XemTruocOffice, { kind: 'xlsx' }>
 /** docx ⇒ HTML (mammoth thoát chữ sẵn; frontend vẫn lọc bằng DOMPurify). HTML quá trần ⇒ dựng lại không ảnh. */
 export async function htmlDocx(buf: Buffer): Promise<Extract<XemTruocOffice, { kind: 'docx' }>> {
   try {
-    const { value } = await mammoth.convertToHtml({ buffer: buf }, { externalFileAccess: false });
-    if (value.length <= DOCX_HTML_MAX) return { kind: 'docx', html: value, imagesDropped: false };
+    // Ảnh nhúng chắc chắn làm HTML vượt trần (data: base64 ≈ 4/3 kích thước) ⇒ đi thẳng lượt không ảnh, khỏi dựng
+    // một chuỗi HTML hàng chục MB rồi vứt (tệp xem trước nay tới 50 MB).
+    let anh = 0;
+    try { for (const e of new AdmZip(buf).getEntries()) if (/^word\/media\//.test(e.entryName)) anh += e.header.size; } catch { /* mammoth tự báo hỏng */ }
+    const value = anh * 1.34 > DOCX_HTML_MAX ? null : (await mammoth.convertToHtml({ buffer: buf }, { externalFileAccess: false })).value;
+    if (value !== null && value.length <= DOCX_HTML_MAX) return { kind: 'docx', html: value, imagesDropped: false };
     const boAnh = mammoth.images.imgElement(async () => ({ src: '' }));
     const { value: gon } = await mammoth.convertToHtml({ buffer: buf }, { convertImage: boAnh, externalFileAccess: false });
     return { kind: 'docx', html: gon.replace(/<img src="">/g, '').slice(0, DOCX_HTML_MAX), imagesDropped: true };
@@ -155,8 +168,11 @@ export async function xemTruocOffice(f: TepNguon): Promise<XemTruocOffice> {
   const xlsx = !docx && laXlsx(f.fileName, f.mime);
   if (!docx && !xlsx) throw new AppError('This file type has no preview', 415, 'WORK_PREVIEW_UNSUPPORTED');
   if (f.size > OFFICE_PREVIEW_MAX) throw new AppError('This document is too large to preview', 413, 'WORK_PREVIEW_TOO_LARGE');
-  const { buf } = await docDau(f.r2Key, OFFICE_PREVIEW_MAX + 1, f.size);
-  if (buf.length > OFFICE_PREVIEW_MAX) throw new AppError('This document is too large to preview', 413, 'WORK_PREVIEW_TOO_LARGE');
-  kiemZip(buf);
-  return docx ? htmlDocx(buf) : bangXlsx(buf);
+  // Dựng xem trước nằm trong RAM (tệp + phần giải nén + HTML/bảng) ⇒ giữ chỗ trong ngân sách chung với tệp tải lên.
+  return withRam(Math.max(f.size, 1) * 3, async () => {
+    const { buf } = await docDau(f.r2Key, OFFICE_PREVIEW_MAX + 1, f.size);
+    if (buf.length > OFFICE_PREVIEW_MAX) throw new AppError('This document is too large to preview', 413, 'WORK_PREVIEW_TOO_LARGE');
+    kiemZip(buf, OFFICE_UNZIP_MAX, xlsx);
+    return docx ? htmlDocx(buf) : bangXlsx(buf);
+  });
 }

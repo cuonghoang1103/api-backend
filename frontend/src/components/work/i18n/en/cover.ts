@@ -15,7 +15,7 @@ export const cover = {
   uploadImg: 'Upload image',
   removeCover: 'Remove cover',
   vertical: 'Vertical position',
-  hint: 'PNG, JPEG or WebP up to 8 MB. Wide images (about 1600 × 640) look best{own}.',
+  hint: 'PNG, JPEG or WebP up to {mb}. Wide images (about 1600 × 640) look best{own}.',
   own: ' — you are using your own image',
   collections: 'Cover collections',
   xCover: '{x} cover',

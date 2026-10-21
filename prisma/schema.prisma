@@ -500,6 +500,11 @@ model User {
   crmDealsOwned            CrmDeal[]                 @relation("CrmDealOwner")
   // CTW đợt 8a: kết nối OAuth theo người (Microsoft 365 / Google; 8b: Notion / Slack)
   workOAuthConnections     WorkOAuthConnection[]     @relation("WorkOAuthConnectionUser")
+  // CT Work 22/10/2026: thùng rác dữ liệu 30 ngày + yêu cầu xoá chờ trưởng nhóm duyệt
+  workTrashDeleted         WorkTrashItem[]           @relation("WorkTrashDeletedBy")
+  workTrashRestored        WorkTrashItem[]           @relation("WorkTrashRestoredBy")
+  workDeleteRequests       WorkDeleteRequest[]       @relation("WorkDeleteRequestBy")
+  workDeleteDecisions      WorkDeleteRequest[]       @relation("WorkDeleteRequestDecider")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -10388,6 +10393,9 @@ model WorkProject {
   fptChanges          WorkFptChange[]
   unitFunctions       WorkUnitFunction[]
   itModules           WorkItModule[]
+  /// 22/10/2026: thùng rác dữ liệu 30 ngày + yêu cầu xoá chờ trưởng nhóm duyệt.
+  trashItems          WorkTrashItem[]
+  deleteRequests      WorkDeleteRequest[]
   /// CTW đợt 3B: WBS + ước lượng, thông tin môn học, Weekly Report, AI Usage Report.
   wbsItems            WorkWbsItem[]
   /// UX-C: baseline của Timeline (kế hoạch gốc để so với hiện tại — C5).
@@ -17265,4 +17273,75 @@ model WorkFeedFollow {
   @@unique([userId, scopeKey], map: "uk_work_feed_follow")
   @@index([scopeKey, level], map: "idx_work_feed_follow_scope")
   @@map("work_feed_follows")
+}
+
+/// CT Work — THÙNG RÁC DỮ LIỆU 30 ngày (22/10/2026). Sự cố gốc: nhóm SWT301 bấm "Nhập Excel → Thay thế" ⇒ mất cả bảng
+/// 5.1 (24 hàm) vì xoá CỨNG, không thùng rác. Mỗi lần xoá dữ liệu công sức (hàm 5.1, module 5.2/5.3, UTCID, Record of
+/// change, nhập thay thế, test cycle/plan/design, retro, họp, RAID, sơ đồ, CR, review) để lại MỘT dòng ở đây với ẢNH
+/// CHỤP ĐẦY ĐỦ (dòng DB nguyên bản theo bảng + quan hệ con, xem services/work/dataTrash.ts) ⇒ khôi phục y nguyên, giữ id.
+model WorkTrashItem {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  /// fpt.unit_function | fpt.it_module | fpt.change | fpt.import_replace | fpt.unit_cases | fpt.it_cases | graph.<bảng> | soft.<bảng>
+  kind         String    @db.VarChar(40)
+  label        String    @db.VarChar(300)
+  /// Số mục bên trong (hàm, UTCID, test case…) — hiện ở danh sách.
+  itemCount    Int       @default(1) @map("item_count")
+  payload      Json
+  /// web | ai | token | approved
+  source       String    @default("web") @db.VarChar(16)
+  requestId    Int?      @map("request_id")
+  deletedById  Int?      @map("deleted_by_id")
+  deletedAt    DateTime  @default(now()) @map("deleted_at")
+  expiresAt    DateTime  @map("expires_at")
+  restoredAt   DateTime? @map("restored_at")
+  restoredById Int?      @map("restored_by_id")
+  restoreNote  String?   @map("restore_note") @db.VarChar(500)
+
+  project    WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  deletedBy  User?       @relation("WorkTrashDeletedBy", fields: [deletedById], references: [id], onDelete: SetNull)
+  restoredBy User?       @relation("WorkTrashRestoredBy", fields: [restoredById], references: [id], onDelete: SetNull)
+
+  @@index([projectId, deletedAt], map: "idx_work_trash_project")
+  @@index([expiresAt], map: "idx_work_trash_expires")
+  @@map("work_trash")
+}
+
+/// CT Work — YÊU CẦU XOÁ chờ trưởng nhóm duyệt (22/10/2026). Ba nguồn: thành viên không phải ADMIN làm thao tác phá huỷ
+/// HÀNG LOẠT ("Nhập Excel → Thay thế"…); MỌI lệnh xoá của AI (MCP / token ctw_ / Ask AI) — kể cả khi người cầm token là
+/// trưởng nhóm, vì AI có thể hiểu sai. Duyệt ⇒ chạy đúng thao tác dưới quyền NGƯỜI GỬI (duyệt không mở thêm quyền) và
+/// kết quả vẫn vào thùng rác. `classId` thay `projectId` cho lệnh xoá của lớp học (người duyệt = chủ lớp / giảng viên).
+model WorkDeleteRequest {
+  id            Int       @id @default(autoincrement())
+  projectId     Int?      @map("project_id")
+  classId       Int?      @map("class_id")
+  /// tool | fpt.import_replace | fpt.unit_delete | fpt.it_delete | fpt.change_delete
+  kind          String    @db.VarChar(40)
+  label         String    @db.VarChar(300)
+  itemCount     Int       @default(1) @map("item_count")
+  params        Json      @default("{}")
+  /// Tệp kèm (vd .xlsx của "Nhập Excel → Thay thế") — duyệt thì chạy lại ĐÚNG tệp đó. Xoá khi đã quyết.
+  file          Bytes?
+  /// web | ai | token
+  via           String    @db.VarChar(16)
+  aiClient      String?   @map("ai_client") @db.VarChar(16)
+  /// PENDING | APPROVED | REJECTED | CANCELLED | FAILED | EXPIRED
+  status        String    @default("PENDING") @db.VarChar(12)
+  requestedById Int       @map("requested_by_id")
+  decidedById   Int?      @map("decided_by_id")
+  decidedAt     DateTime? @map("decided_at")
+  decisionNote  String?   @map("decision_note") @db.VarChar(500)
+  result        Json?
+  error         String?   @db.VarChar(1000)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  expiresAt     DateTime  @map("expires_at")
+
+  project     WorkProject? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  requestedBy User         @relation("WorkDeleteRequestBy", fields: [requestedById], references: [id], onDelete: Cascade)
+  decidedBy   User?        @relation("WorkDeleteRequestDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+
+  @@index([projectId, status, createdAt], map: "idx_work_delete_req_project")
+  @@index([classId, status], map: "idx_work_delete_req_class")
+  @@index([status, expiresAt], map: "idx_work_delete_req_status")
+  @@map("work_delete_requests")
 }

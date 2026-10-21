@@ -63,6 +63,7 @@ import {
   EmptyState, isTyping,
   publicOrigin, PageLoading} from './ui';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const LINK_PHRASE: Record<LinkType, [string, string]> = {
   get BLOCKS(): [string, string] { return [wt('detail.lBlocks'), wt('detail.lBlockedBy')]; },
@@ -372,7 +373,7 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
 
   const upload = async (files: FileList | File[]) => {
     for (const file of Array.from(files)) {
-      if (file.size > 25 * 1024 * 1024) { toast.error(wt('detail.tooBig25', { f: file.name })); continue; }
+      if (file.size > workLimits().fileBytes) { toast.error(wt('detail.tooBig25', { f: file.name, mb: mb(workLimits().fileBytes) })); continue; }
       setUploads((u) => [...u, { name: file.name, pct: 0 }]);
       try {
         await workApi.uploadAttachment(pid, issue.number, file, (pct) => setUploads((u) => u.map((x) => (x.name === file.name ? { ...x, pct } : x))));
@@ -418,7 +419,7 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
           </div>
         ))}
         {!issue.attachments.length && !uploads.length && (
-          <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.dropHint')}</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.dropHint', { mb: mb(workLimits().fileBytes) })}</p>
         )}
       </div>
       {xem.khung}

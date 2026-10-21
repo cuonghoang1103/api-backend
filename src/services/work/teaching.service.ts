@@ -16,10 +16,12 @@
 
 import PDFDocument from 'pdfkit';
 import { Prisma } from '@prisma/client';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { checkTokenQuota, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { isAiAvailable } from '../interview/llm/index.js';
 import { notoSansViBoldBuffer, notoSansViBuffer } from '../cv/export/font.js';
 import { displayName, PUBLIC_USER } from './common.js';
 import { summary as contribSummary } from './contrib.service.js';
@@ -403,8 +405,8 @@ export async function aiSummary(userId: number, f: OverviewFilter & { language?:
   if (askOverride) text = await askOverride(system, facts);
   else {
     if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-    if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
-    const r = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: facts }], maxTokens: 1600, userId, feature: 'work', purpose: 'work_digest', timeoutMs: 90_000, maxRetries: 2 });
+    await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
+    const r = await goiAiCtWork({ step: 'report', system, messages: [{ role: 'user', content: facts }], maxTokens: 1600, userId, feature: 'work', purpose: 'work_digest', timeoutMs: 90_000, maxRetries: 2 });
     text = r.text;
   }
   let summary = text;

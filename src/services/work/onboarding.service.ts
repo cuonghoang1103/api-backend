@@ -410,7 +410,7 @@ export async function removeSampleData(userId: number, projectId: number) {
   const rec = readRecord(p.settings);
   if (!rec) throw new BadRequestError('This project has no sample data', 'WORK_NO_SAMPLE');
 
-  for (const planId of rec.planIds) await deletePlan(userId, projectId, planId).catch(() => undefined);
+  for (const planId of rec.planIds) await deletePlan(userId, projectId, planId, { trash: false }).catch(() => undefined);
 
   // Xoá HẲN (không vào thùng rác): thẻ mẫu không phải công việc thật.
   // Thẻ của người dùng treo dưới thẻ mẫu chỉ mất cha (onDelete SetNull).

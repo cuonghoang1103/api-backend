@@ -118,7 +118,7 @@ export const c8c: Strings<typeof En> = {
   saCreateBugs: 'Tạo bug cho lỗi MỚI (tối đa 20)',
   saUpload: 'Nhập',
   saPickFile: 'Chọn tệp báo cáo trước',
-  saTooBig: 'Tệp lớn hơn 10 MB',
+  saTooBig: 'Tệp lớn hơn {mb}',
   saUploaded: 'Đã nhập: {total} phát hiện, {n} mới, {f} đã sửa, {u} hàm có V(G)',
   vgTitle: 'Độ phức tạp chu trình V(G)',
   vgDesc: 'Đọc từ báo cáo độ phủ / lint có sẵn — V(G) cũng là số đường cơ sở, tức số test tối thiểu để phủ đường cơ sở.',

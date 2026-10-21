@@ -32,10 +32,11 @@ import {
   failSignature, flakiness, historyChar, keyHash, parseCoverage, parseReport, pushHistory, summarize, testKey,
   type CoverageFormat, type ParsedCoverage, type ResultFormat, type TestResult,
 } from './testResults.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
 export const MAX_NEW_CASES = 1000;
 export const MAX_NEW_BUGS = 20;
-const MAX_REPORT_BYTES = 10 * 1024 * 1024;
+const MAX_REPORT_BYTES = WORK_LIMITS.importBytes;
 const IMPORTS_PER_10_MIN = 30;
 
 export interface ImportInput {
@@ -133,14 +134,14 @@ export async function importResults(userId: number, projectId: number, input: Im
   const access = await requireProject(userId, projectId, 'issue.edit');
   const raw = typeof input.report === 'string' ? input.report : JSON.stringify(input.report ?? '');
   if (!raw.trim()) throw new BadRequestError('The report is empty', 'WORK_TEST_REPORT');
-  if (Buffer.byteLength(raw) > MAX_REPORT_BYTES) throw new BadRequestError('The report is larger than 10 MB', 'WORK_TEST_REPORT');
+  if (Buffer.byteLength(raw) > MAX_REPORT_BYTES) throw new BadRequestError(`The report is larger than ${mbText(MAX_REPORT_BYTES)}`, 'WORK_TEST_REPORT');
   let parsed;
   try { parsed = parseReport(input.report, input.format); } catch (err) {
     throw new BadRequestError((err as Error).message, 'WORK_TEST_REPORT');
   }
   let coverage: ParsedCoverage | null = null;
   if (input.coverage?.report?.trim()) {
-    if (Buffer.byteLength(input.coverage.report) > MAX_REPORT_BYTES) throw new BadRequestError('The coverage report is larger than 10 MB', 'WORK_COVERAGE_REPORT');
+    if (Buffer.byteLength(input.coverage.report) > MAX_REPORT_BYTES) throw new BadRequestError(`The coverage report is larger than ${mbText(MAX_REPORT_BYTES)}`, 'WORK_COVERAGE_REPORT');
     try { coverage = parseCoverage(input.coverage.report, input.coverage.format); } catch (err) {
       throw new BadRequestError(`Coverage: ${(err as Error).message}`, 'WORK_COVERAGE_REPORT');
     }

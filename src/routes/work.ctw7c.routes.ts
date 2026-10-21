@@ -20,6 +20,7 @@ import * as assets from '../services/work/assets.service.js';
 import * as autoTests from '../services/work/testAutomation.service.js';
 import * as widgets from '../services/work/widgets7c.service.js';
 import type { MfaClaims } from '../services/mfa/adminMfa.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -136,19 +137,19 @@ const importQuery = z.object({
   close: z.enum(['true', 'false', '1', '0']).optional(), jobs: z.coerce.number().int().min(1).max(200).optional(), closeAfterMin: z.coerce.number().int().min(0).max(10_080).optional(),
 });
 const importJson = z.object({
-  report: z.union([z.string().max(11_000_000), z.record(z.unknown())]),
+  report: z.union([z.string().max(WORK_LIMITS.importBytes + 1024), z.record(z.unknown())]),
   format: z.enum(['junit', 'playwright', 'jest', 'auto']).optional(),
   build: z.string().max(80).nullable().optional(), branch: z.string().max(120).nullable().optional(), commit: z.string().max(64).nullable().optional(),
   runUrl: z.string().max(500).nullable().optional(), environment: z.string().max(120).nullable().optional(), cycle: z.string().max(120).nullable().optional(),
   createBugs: z.boolean().optional(),
   close: z.boolean().optional(), jobs: z.number().int().min(1).max(200).nullable().optional(), closeAfterMin: z.number().int().min(0).max(10_080).nullable().optional(),
-  coverage: z.object({ report: z.string().max(11_000_000), format: z.enum(['lcov', 'jacoco', 'cobertura', 'istanbul', 'auto']).optional() }).nullable().optional(),
+  coverage: z.object({ report: z.string().max(WORK_LIMITS.importBytes + 1024), format: z.enum(['lcov', 'jacoco', 'cobertura', 'istanbul', 'auto']).optional() }).nullable().optional(),
 }).strict();
 const FMT = { junit: 'JUNIT', playwright: 'PLAYWRIGHT', jest: 'JEST', auto: 'AUTO' } as const;
 const CFMT = { lcov: 'LCOV', jacoco: 'JACOCO', cobertura: 'COBERTURA', istanbul: 'ISTANBUL', auto: 'AUTO' } as const;
 
 // Thân thô (curl --data-binary @report.xml -H 'Content-Type: application/xml') — JSON vẫn đi express.json toàn cục.
-const rawText = express.text({ type: ['application/xml', 'text/xml', 'text/plain', 'application/octet-stream'], limit: '10mb' });
+const rawText = express.text({ type: ['application/xml', 'text/xml', 'text/plain', 'application/octet-stream'], limit: WORK_LIMITS.importBytes + 1024 });
 
 router.post('/projects/:pid/tests/automation/import', rawText, asyncHandler(async (req, res) => {
   const meta = { source: (req.workToken ? 'API' : 'UPLOAD') as 'API' | 'UPLOAD', tokenId: req.workToken?.id ?? null };

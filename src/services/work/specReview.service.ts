@@ -18,10 +18,12 @@
  */
 
 import type { Prisma } from '@prisma/client';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { extractJson, isAiAvailable } from '../interview/llm/index.js';
 import { auditProject } from './audit.js';
 import { displayName } from './common.js';
 import { emitWorkEvent } from './events.js';
@@ -159,11 +161,11 @@ async function semanticReview(userId: number, access: ProjectAccess, items: Spec
       model = 'test-model';
     } else {
       if (!isAiAvailable('work')) return { status: 'UNAVAILABLE', findings: [], model: null, reason: 'The AI service is not available right now' };
-      if (!(await checkTokenQuota(userId))) return { status: 'UNAVAILABLE', findings: [], model: null, reason: 'Today’s AI usage limit is reached' };
+      try { await kiemHanMucAi(userId, null); } catch (e) { return { status: 'UNAVAILABLE', findings: [], model: null, reason: (e as Error).message }; }
       const { aiQuota } = await import('./ai.service.js');
       const q = await aiQuota(userId);
       if (q.limit !== null && (q.remaining ?? 0) <= 0) return { status: 'UNAVAILABLE', findings: [], model: null, reason: 'No free AI requests left today' };
-      const r = await llmComplete({
+      const r = await goiAiCtWork({
         step: 'report', system: SEMANTIC_SYSTEM, messages: [{ role: 'user', content: user }], maxTokens: 2500,
         userId, feature: 'work', purpose: 'work_spec_review', timeoutMs: 90_000, maxRetries: 1,
       });

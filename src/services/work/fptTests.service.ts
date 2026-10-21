@@ -20,22 +20,41 @@ import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
-import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { extractJson, isAiAvailable } from '../interview/llm/index.js';
+import { goiAiCtWork } from './aiCong.js';
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { emitWorkEvent } from './events.js';
 import {
   buildIntegrationSheets, buildSystemSheets, buildUnitSheets, SYS_ROUNDS, CASE_RESULTS, CASE_TYPES, defaultIdPrefix, defaultSheetName, detectReport, IT_STATUSES,
   itStats, MAX_ROUNDS, parseIntegrationWorkbook, parseUnitWorkbook, requiredCases, unitStats, unitSummary, itCoverage,
   type ChangeData, type DocMeta, type ItCaseData, type ItModuleData, type ItRound, type UnitFunctionData,
 } from './fptTests.js';
-import { requireProject } from './permissions.js';
+import { gateDelete, isUnapprovedMachineCall, type QueuedRequest } from './deleteRequests.service.js';
+import { can, loadProjectAccess, requireProject } from './permissions.js';
+import { putInTrash, trashGraph } from './trashBin.service.js';
 import { readXlsx, writeXlsx } from './xlsxStyled.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
 export const MAX_FUNCTIONS = 500;
 export const MAX_ROWS = 300;
 export const MAX_CASES = 200;
 export const MAX_IT_MODULES = 100;
 export const MAX_IT_CASES = 500;
-export const MAX_IMPORT_BYTES = 10 * 1024 * 1024;
+/** Trần tệp .xlsx nhập 5.1–5.3 — chung với mọi lần nhập của CT Work (limits.ts, env WORK_MAX_IMPORT_MB). */
+export const MAX_IMPORT_BYTES = WORK_LIMITS.importBytes;
+
+/**
+ * 22/10/2026 (sự cố SWT301 — "Nhập Excel → Thay thế" xoá cứng cả bảng 5.1): mọi lệnh xoá ở đây đi qua `gateDelete`
+ * (AI / token ⇒ yêu cầu chờ trưởng nhóm duyệt; hàng loạt của thành viên ⇒ yêu cầu; ADMIN hàng loạt ⇒ phải xác nhận số) và
+ * để lại ảnh chụp đầy đủ trong THÙNG RÁC 30 ngày (trashBin.service) ⇒ khôi phục y nguyên. Lưu ma trận / case làm MẤT
+ * UTCID, dòng, case cũng vào thùng rác (khôi phục = thêm lại vào cuối, không ghi đè).
+ */
+export type DeleteOutcome = { deleted: true; trashId: number } | { deleted: false; queued: QueuedRequest };
+
+const machineDeleteError = (what: string, tool: string) => new AppError(
+  `This change would delete ${what}. AI assistants and API tokens cannot delete directly — use ${tool}: it sends the deletion to the team lead for approval.`,
+  409, 'WORK_DELETE_NEEDS_APPROVAL',
+);
 
 const touch = (projectId: number, userId: number) => emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
 const iso = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : null);
@@ -173,11 +192,21 @@ export async function updateChange(userId: number, projectId: number, id: number
   return changeOut(c);
 }
 
-export async function deleteChange(userId: number, projectId: number, id: number) {
+export async function deleteChange(userId: number, projectId: number, id: number): Promise<DeleteOutcome> {
   await requireProject(userId, projectId, 'issue.edit');
-  const r = await prisma.workFptChange.deleteMany({ where: { id, projectId } });
-  if (!r.count) throw new NotFoundError('Change record not found');
+  const c = await prisma.workFptChange.findFirst({ where: { id, projectId }, select: { report: true, version: true, action: true, description: true } });
+  if (!c) throw new NotFoundError('Change record not found');
+  const label = `Record of change (${c.report}) v${c.version} ${c.action}${c.description ? ` — ${c.description.slice(0, 120)}` : ''}`;
+  const queued = await gateDelete(userId, projectId, { kind: 'fpt.change_delete', label, params: { id }, bulk: false });
+  if (queued) return { deleted: false, queued };
+  const trashId = await prisma.$transaction(async (tx) => {
+    const t = await trashGraph(tx, { projectId, userId, kind: 'fpt.change', label, roots: [{ table: 'work_fpt_changes', ids: [id] }] });
+    const r = await tx.workFptChange.deleteMany({ where: { id, projectId } });
+    if (!r.count) throw new NotFoundError('Change record not found');
+    return t.trashId;
+  });
   touch(projectId, userId);
+  return { deleted: true, trashId };
 }
 
 // ─── Unit test: hàm ──────────────────────────────────────────────
@@ -316,11 +345,21 @@ export async function updateFunction(userId: number, projectId: number, id: numb
   return getFunction(userId, projectId, id);
 }
 
-export async function deleteFunction(userId: number, projectId: number, id: number) {
+export async function deleteFunction(userId: number, projectId: number, id: number): Promise<DeleteOutcome> {
   await requireProject(userId, projectId, 'issue.edit');
-  const r = await prisma.workUnitFunction.deleteMany({ where: { id, projectId } });
-  if (!r.count) throw new NotFoundError('Function not found');
+  const f = await prisma.workUnitFunction.findFirst({ where: { id, projectId }, select: { moduleName: true, methodName: true, _count: { select: { cases: true } } } });
+  if (!f) throw new NotFoundError('Function not found');
+  const label = `Function ${f.moduleName}.${f.methodName} (${f._count.cases} UTCID)`;
+  const queued = await gateDelete(userId, projectId, { kind: 'fpt.unit_delete', label, itemCount: 1, params: { id }, bulk: false });
+  if (queued) return { deleted: false, queued };
+  const trashId = await prisma.$transaction(async (tx) => {
+    const t = await trashGraph(tx, { projectId, userId, kind: 'fpt.unit_function', label, itemCount: 1, roots: [{ table: 'work_unit_functions', ids: [id] }] });
+    const r = await tx.workUnitFunction.deleteMany({ where: { id, projectId } });
+    if (!r.count) throw new NotFoundError('Function not found');
+    return t.trashId;
+  }, { timeout: 30_000 });
   touch(projectId, userId);
+  return { deleted: true, trashId };
 }
 
 export const matrixInput = z.object({
@@ -376,15 +415,109 @@ async function writeMatrix(tx: Prisma.TransactionClient, functionId: number, m: 
   await tx.workUnitFunction.update({ where: { id: functionId }, data: { updatedAt: new Date() } });
 }
 
+/** Khoá của client ⇒ id dòng/case đang có ("12" của AI, "r12"/"c12" của web; khoá mới "n…"/"rn…" ⇒ null). */
+const keyId = (k: string) => { const m = /^[rc]?(\d+)$/.exec(k); return m ? Number(m[1]) : null; };
+export const utcidOf = (i: number) => `UTCID${String(i + 1).padStart(2, '0')}`;
+
 export async function saveMatrix(userId: number, projectId: number, id: number, input: MatrixInput) {
   await requireProject(userId, projectId, 'issue.edit');
   const f = await findFunction(projectId, id);
   if (input.version && new Date(input.version).getTime() !== f.updatedAt.getTime()) {
     throw new AppError('Someone else changed this function a moment ago. Reload to see their changes.', 409, 'WORK_STALE');
   }
-  await prisma.$transaction((tx) => writeMatrix(tx, id, input), { timeout: 20_000 });
+  // Lưu thay trọn ⇒ UTCID / dòng không còn trong bản gửi lên là BỊ XOÁ. Cất chúng vào thùng rác trước.
+  const before = await prisma.workUnitFunction.findUniqueOrThrow({
+    where: { id },
+    select: {
+      moduleName: true, methodName: true,
+      rows: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, section: true, groupName: true, label: true, value: true } },
+      cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, type: true, result: true, executedAt: true, defectId: true, note: true, marks: { select: { rowId: true } } } },
+    },
+  });
+  const keptRows = new Set(input.rows.map((r) => keyId(r.key)).filter((x): x is number => x !== null));
+  const keptCases = new Set(input.cases.map((c) => keyId(c.key)).filter((x): x is number => x !== null));
+  const marked = new Set(before.cases.flatMap((c) => c.marks.map((m) => m.rowId)));
+  const goneCases = before.cases.map((c, i) => ({ c, i })).filter(({ c }) => !keptCases.has(c.id));
+  // Dòng nháp trống, không ai đánh dấu ⇒ không đáng giữ.
+  const goneRows = before.rows.filter((r) => !keptRows.has(r.id) && (r.value?.trim() || r.label?.trim() || marked.has(r.id)));
+  if ((goneCases.length || goneRows.length) && isUnapprovedMachineCall()) {
+    throw machineDeleteError(`${goneCases.length} UTCID(s) and ${goneRows.length} row(s)`, goneCases.length ? 'fpt_unit_delete_cases' : 'fpt_unit_delete_rows');
+  }
+  const fn = `${before.moduleName}.${before.methodName}`;
+  const trashed = await prisma.$transaction(async (tx) => {
+    let t: { id: number; cases: number; rows: number } | null = null;
+    if (goneCases.length || goneRows.length) {
+      const what = [
+        goneCases.length ? `${goneCases.map(({ i }) => utcidOf(i)).slice(0, 8).join(', ')}${goneCases.length > 8 ? '…' : ''}` : '',
+        goneRows.length ? `${goneRows.length} row(s)` : '',
+      ].filter(Boolean).join(' + ');
+      const trashId = await putInTrash(tx, {
+        projectId, userId, kind: 'fpt.unit_cases', label: `${what} of ${fn}`, itemCount: goneCases.length + goneRows.length,
+        payload: {
+          functionId: id, moduleName: before.moduleName, methodName: before.methodName,
+          rows: before.rows,
+          cases: goneCases.map(({ c, i }) => ({ utcid: utcidOf(i), type: c.type, result: c.result, executedAt: iso(c.executedAt), defectId: c.defectId, note: c.note, rowIds: c.marks.map((m) => m.rowId) })),
+          removedRows: goneRows.map((r) => r.id),
+        },
+      });
+      t = { id: trashId, cases: goneCases.length, rows: goneRows.length };
+    }
+    await writeMatrix(tx, id, input);
+    return t;
+  }, { timeout: 20_000 });
   touch(projectId, userId);
-  return getFunction(userId, projectId, id);
+  return { ...(await getFunction(userId, projectId, id)), trashed };
+}
+
+type UnitCasesPayload = {
+  functionId?: number; moduleName?: string; methodName?: string;
+  rows?: Array<{ id: number; section: string; groupName: string; label: string | null; value: string | null }>;
+  cases?: Array<{ utcid?: string; type: string; result: string | null; executedAt: string | null; defectId: string | null; note: string | null; rowIds: number[] }>;
+  removedRows?: number[];
+};
+
+/** Thùng rác ⇒ thêm lại UTCID / dòng đã mất vào CUỐI ma trận hiện tại (dòng trùng nội dung thì dùng dòng đang có). */
+export async function restoreRemovedUnitCases(tx: Prisma.TransactionClient, projectId: number, raw: Record<string, unknown>): Promise<{ restored: number; notes: string[] }> {
+  const p = raw as UnitCasesPayload;
+  const f = await tx.workUnitFunction.findFirst({
+    where: { id: Number(p.functionId), projectId },
+    select: {
+      moduleName: true, methodName: true,
+      rows: { orderBy: [{ position: 'asc' }, { id: 'asc' }] },
+      cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }], include: { marks: true } },
+    },
+  });
+  if (!f) throw new AppError(`The function ${p.moduleName}.${p.methodName} is no longer there — restore the function from the trash first.`, 409, 'WORK_TRASH_MISSING_PARENT');
+  const m: Pick<MatrixInput, 'rows' | 'cases' | 'marks'> = {
+    rows: f.rows.map((r) => ({ key: String(r.id), section: r.section as 'COND' | 'CONFIRM', groupName: r.groupName, label: r.label, value: r.value })),
+    cases: f.cases.map((c) => ({ key: String(c.id), type: c.type as 'N', result: (c.result as 'P' | 'F' | null) ?? null, executedAt: iso(c.executedAt), defectId: c.defectId, note: c.note })),
+    marks: f.cases.flatMap((c) => c.marks.map((x) => [String(x.rowId), String(c.id)] as [string, string])),
+  };
+  const norm = (v: string | null | undefined) => (v ?? '').trim();
+  const rowKey = new Map<number, string>();
+  let addedRows = 0;
+  const need = new Set<number>([...(p.cases ?? []).flatMap((c) => c.rowIds), ...(p.removedRows ?? [])]);
+  for (const rid of need) {
+    const snap = p.rows?.find((r) => r.id === rid);
+    if (!snap) continue;
+    const same = m.rows.find((r) => r.section === snap.section && r.groupName === snap.groupName && norm(r.label) === norm(snap.label) && norm(r.value) === norm(snap.value));
+    if (same) { rowKey.set(rid, same.key); continue; }
+    const key = `t${rid}`;
+    m.rows.push({ key, section: snap.section as 'COND' | 'CONFIRM', groupName: snap.groupName, label: snap.label, value: snap.value });
+    rowKey.set(rid, key);
+    addedRows++;
+  }
+  (p.cases ?? []).forEach((c, i) => {
+    const key = `tc${i}`;
+    m.cases.push({ key, type: (CASE_TYPES as readonly string[]).includes(c.type) ? (c.type as 'N') : 'N', result: c.result === 'P' || c.result === 'F' ? c.result : null, executedAt: c.executedAt, defectId: c.defectId, note: c.note });
+    for (const rid of c.rowIds) { const rk = rowKey.get(rid); if (rk) m.marks.push([rk, key]); }
+  });
+  if (m.rows.length > MAX_ROWS || m.cases.length > MAX_CASES) {
+    throw new AppError(`Restoring would exceed ${MAX_ROWS} rows / ${MAX_CASES} test cases in ${f.moduleName}.${f.methodName}. Delete some first.`, 409, 'WORK_LIMIT');
+  }
+  await writeMatrix(tx, Number(p.functionId), m);
+  const n = p.cases?.length ?? 0;
+  return { restored: n + addedRows, notes: [`${n} UTCID(s)${addedRows ? ` and ${addedRows} row(s)` : ''} added back at the end of ${f.moduleName}.${f.methodName}`] };
 }
 
 export async function duplicateFunction(userId: number, projectId: number, id: number) {
@@ -500,11 +633,21 @@ export async function updateModule(userId: number, projectId: number, id: number
   return getModule(userId, projectId, id);
 }
 
-export async function deleteModule(userId: number, projectId: number, id: number) {
+export async function deleteModule(userId: number, projectId: number, id: number): Promise<DeleteOutcome> {
   await requireProject(userId, projectId, 'issue.edit');
-  const r = await prisma.workItModule.deleteMany({ where: { id, projectId } });
-  if (!r.count) throw new NotFoundError('Module not found');
+  const m = await prisma.workItModule.findFirst({ where: { id, projectId }, select: { name: true, kind: true, _count: { select: { cases: true } } } });
+  if (!m) throw new NotFoundError('Module not found');
+  const label = `${m.kind === 'SYS' ? 'System test workflow' : 'Integration module'} ${m.name} (${m._count.cases} case)`;
+  const queued = await gateDelete(userId, projectId, { kind: 'fpt.it_delete', label, params: { id }, bulk: false });
+  if (queued) return { deleted: false, queued };
+  const trashId = await prisma.$transaction(async (tx) => {
+    const t = await trashGraph(tx, { projectId, userId, kind: 'fpt.it_module', label, roots: [{ table: 'work_it_modules', ids: [id] }] });
+    const r = await tx.workItModule.deleteMany({ where: { id, projectId } });
+    if (!r.count) throw new NotFoundError('Module not found');
+    return t.trashId;
+  }, { timeout: 30_000 });
   touch(projectId, userId);
+  return { deleted: true, trashId };
 }
 
 const txt = (max: number) => z.string().max(max).nullable().optional();
@@ -547,9 +690,51 @@ export async function saveItCases(userId: number, projectId: number, id: number,
     section: c.section ?? null, description: c.description, procedure: c.procedure ?? null, testData: c.testData ?? null, expected: c.expected ?? null,
     actual: c.actual ?? null, preConditions: c.preConditions ?? null, evidence: c.evidence ?? null, note: c.note ?? null, rounds: c.rounds ?? [],
   }));
-  await prisma.$transaction((tx) => writeItCases(tx, id, cases), { timeout: 20_000 });
+  // Case không có id trong bản gửi ⇒ chỉ biết "bớt case" khi số case GIẢM; case mất = case cũ không còn bản nào cùng nội dung.
+  const old = await prisma.workItCase.findMany({ where: { moduleId: id }, orderBy: [{ position: 'asc' }, { id: 'asc' }] });
+  let gone: typeof old = [];
+  if (cases.length < old.length) {
+    const left = new Map<string, number>();
+    for (const c of cases) left.set(itSig(c), (left.get(itSig(c)) ?? 0) + 1);
+    gone = old.filter((c) => { const k = itSig(c); const n = left.get(k) ?? 0; if (n > 0) { left.set(k, n - 1); return false; } return true; });
+  }
+  if (gone.length && isUnapprovedMachineCall()) throw machineDeleteError(`${gone.length} test case(s)`, 'fpt_it_delete_cases');
+  const mod = gone.length ? await prisma.workItModule.findUniqueOrThrow({ where: { id }, select: { name: true, idPrefix: true } }) : null;
+  const trashed = await prisma.$transaction(async (tx) => {
+    let t: { id: number; cases: number } | null = null;
+    if (gone.length && mod) {
+      const trashId = await putInTrash(tx, {
+        projectId, userId, kind: 'fpt.it_cases', label: `${gone.length} test case(s) of ${m.kind === 'SYS' ? 'workflow' : 'module'} ${mod.name}`, itemCount: gone.length,
+        payload: { moduleId: id, kind: m.kind, name: mod.name, cases: gone.map((c) => ({ ...itData(c), position: c.position })) },
+      });
+      t = { id: trashId, cases: gone.length };
+    }
+    await writeItCases(tx, id, cases);
+    return t;
+  }, { timeout: 20_000 });
   touch(projectId, userId);
-  return getModule(userId, projectId, id);
+  return { ...(await getModule(userId, projectId, id)), trashed };
+}
+
+const itData = (c: { section: string | null; description: string; procedure: string | null; testData: string | null; expected: string | null; actual: string | null; preConditions: string | null; evidence: string | null; note: string | null; rounds: unknown }): ItCaseData => ({
+  section: c.section, description: c.description, procedure: c.procedure, testData: c.testData, expected: c.expected, actual: c.actual,
+  preConditions: c.preConditions, evidence: c.evidence, note: c.note, rounds: Array.isArray(c.rounds) ? roundsOf(c.rounds) : [],
+});
+const itSig = (c: { section?: string | null; description: string; procedure?: string | null; testData?: string | null; expected?: string | null }) =>
+  JSON.stringify([(c.section ?? '').trim(), c.description.trim(), (c.procedure ?? '').trim(), (c.testData ?? '').trim(), (c.expected ?? '').trim()]);
+
+/** Thùng rác ⇒ thêm lại case 5.2/5.3 đã mất vào CUỐI module (case cùng nội dung đã có ⇒ bỏ qua, không nhân đôi). */
+export async function restoreRemovedItCases(tx: Prisma.TransactionClient, projectId: number, raw: Record<string, unknown>): Promise<{ restored: number; notes: string[] }> {
+  const p = raw as { moduleId?: number; name?: string; cases?: ItCaseData[] };
+  const mod = await tx.workItModule.findFirst({ where: { id: Number(p.moduleId), projectId }, select: { id: true, name: true, kind: true } });
+  if (!mod) throw new AppError(`${p.name ?? 'The module'} is no longer there — restore it from the trash first.`, 409, 'WORK_TRASH_MISSING_PARENT');
+  const cur = (await tx.workItCase.findMany({ where: { moduleId: mod.id }, orderBy: [{ position: 'asc' }, { id: 'asc' }] })).map(itData);
+  const have = new Set(cur.map(itSig));
+  const add = (p.cases ?? []).filter((c) => c?.description && !have.has(itSig(c))).map((c) => ({ ...itData(c), rounds: (c.rounds ?? []).slice(0, roundsMax(mod.kind)) }));
+  if (cur.length + add.length > MAX_IT_CASES) throw new AppError(`Restoring would exceed ${MAX_IT_CASES} test cases in ${mod.name}.`, 409, 'WORK_LIMIT');
+  if (add.length) await writeItCases(tx, mod.id, [...cur, ...add]);
+  const skipped = (p.cases?.length ?? 0) - add.length;
+  return { restored: add.length, notes: [`${add.length} test case(s) added back at the end of ${mod.name}${skipped ? ` (${skipped} already there)` : ''}`] };
 }
 
 // ─── Xuất Excel ──────────────────────────────────────────────────
@@ -623,14 +808,47 @@ export interface ImportResult {
   changes: number;
   warnings: string[];
   preview: Array<{ name: string; module?: string; cases: number; rows?: number }>;
+  /** "Thay thế" sẽ xoá bao nhiêu thứ đang có (hàm/module của báo cáo này + Record of change của nó) — dryRun cũng trả. */
+  replaceDeletes?: { items: number; changes: number };
+  /** Người gọi KHÔNG được thay thế ngay (không phải ADMIN dự án, hoặc là AI/token) ⇒ "Thay thế" thành yêu cầu chờ duyệt. */
+  replaceNeedsApproval?: boolean;
+  /** Đã xếp hàng chờ trưởng nhóm duyệt — CHƯA nhập/xoá gì. */
+  queued?: QueuedRequest;
+  /** Thay thế đã chạy: mục thùng rác giữ toàn bộ dữ liệu cũ. */
+  trashId?: number;
+}
+
+/** Số thứ "Thay thế" sẽ xoá + người gọi có được thay ngay không. */
+async function replaceImpact(userId: number, projectId: number, report: 'unit' | 'integration' | 'system') {
+  const kind: ItKind = report === 'system' ? 'SYS' : 'INT';
+  const docReport = report === 'unit' ? 'UNIT' : kind;
+  const [items, changes, access] = await Promise.all([
+    report === 'unit' ? prisma.workUnitFunction.count({ where: { projectId } }) : prisma.workItModule.count({ where: { projectId, kind } }),
+    prisma.workFptChange.count({ where: { projectId, report: docReport } }),
+    loadProjectAccess(userId, projectId),
+  ]);
+  const needsApproval = items + changes > 0 && (isUnapprovedMachineCall() || !access || !can(access.role, 'project.settings'));
+  return { items, changes, needsApproval };
+}
+
+/** Gửi lên trước khi xoá: ADMIN phải gõ số mục; thành viên / AI ⇒ yêu cầu chờ duyệt (kèm đúng tệp). */
+async function gateReplace(userId: number, projectId: number, report: 'unit' | 'integration' | 'system', buf: Buffer, confirm: unknown) {
+  const imp = await replaceImpact(userId, projectId, report);
+  if (!imp.items && !imp.changes) return { imp, queued: null };
+  const what = report === 'unit' ? 'unit-tested function(s)' : report === 'system' ? 'system test workflow(s)' : 'integration module(s)';
+  const queued = await gateDelete(userId, projectId, {
+    kind: 'fpt.import_replace', label: `Excel import "Replace" — deletes ${imp.items} ${what} + ${imp.changes} change record(s)`,
+    itemCount: imp.items, params: { report }, file: buf, bulk: true, confirm, expectConfirm: imp.items,
+  });
+  return { imp, queued };
 }
 
 export async function importReport(
   userId: number, projectId: number, buf: Buffer,
-  opts: { report?: 'unit' | 'integration' | 'system' | 'auto'; mode?: 'append' | 'replace'; dryRun?: boolean },
+  opts: { report?: 'unit' | 'integration' | 'system' | 'auto'; mode?: 'append' | 'replace'; dryRun?: boolean; confirm?: unknown },
 ): Promise<ImportResult> {
   await requireProject(userId, projectId, 'issue.edit');
-  if (buf.length > MAX_IMPORT_BYTES) throw new BadRequestError('The file is larger than 10 MB', 'WORK_IMPORT_TOO_LARGE');
+  if (buf.length > MAX_IMPORT_BYTES) throw new BadRequestError(`The file is larger than ${mbText(MAX_IMPORT_BYTES)}`, 'WORK_IMPORT_TOO_LARGE');
   let sheets;
   try { sheets = readXlsx(buf); } catch { throw new BadRequestError('This is not an .xlsx file (Excel 2007+). Save it as .xlsx and try again.', 'WORK_IMPORT_BAD_FILE'); }
   const detected = detectReport(sheets);
@@ -651,11 +869,29 @@ export async function importReport(
       report, dryRun, mode, functions: fns.length, cases: fns.reduce((s, f) => s + f.cases.length, 0), changes: parsed.cover.changes.length,
       warnings: parsed.warnings.slice(0, 50), preview: fns.slice(0, 200).map((f) => ({ name: f.methodName, module: f.moduleName, cases: f.cases.length, rows: f.rows.length })),
     };
-    if (dryRun) return result;
+    if (dryRun) {
+      const imp = await replaceImpact(userId, projectId, 'unit');
+      return { ...result, replaceDeletes: { items: imp.items, changes: imp.changes }, replaceNeedsApproval: imp.needsApproval };
+    }
     const existing = mode === 'append' ? await prisma.workUnitFunction.count({ where: { projectId } }) : 0;
     if (existing + fns.length > MAX_FUNCTIONS) throw new BadRequestError(`This would exceed ${MAX_FUNCTIONS} functions — use "Replace" or remove some first`, 'WORK_LIMIT');
+    if (mode === 'replace') {
+      const g = await gateReplace(userId, projectId, 'unit', buf, opts.confirm);
+      if (g.queued) return { ...result, replaceDeletes: { items: g.imp.items, changes: g.imp.changes }, replaceNeedsApproval: true, queued: g.queued };
+    }
+    let trashId: number | undefined;
     await prisma.$transaction(async (tx) => {
       if (mode === 'replace') {
+        // Sự cố 22/10/2026: TOÀN BỘ hàm cũ vào thùng rác (một mục) TRƯỚC khi xoá — khôi phục y nguyên, giữ id.
+        const fnIds = (await tx.workUnitFunction.findMany({ where: { projectId }, select: { id: true } })).map((x) => x.id);
+        const chIds = (await tx.workFptChange.findMany({ where: { projectId, report: 'UNIT' }, select: { id: true } })).map((x) => x.id);
+        if (fnIds.length || chIds.length) {
+          trashId = (await trashGraph(tx, {
+            projectId, userId, kind: 'fpt.import_replace', itemCount: fnIds.length,
+            label: `Excel import "Replace" (5.1) — ${fnIds.length} function(s) + ${chIds.length} change record(s) before the import`,
+            roots: [{ table: 'work_unit_functions', ids: fnIds }, { table: 'work_fpt_changes', ids: chIds }],
+          })).trashId;
+        }
         await tx.workUnitFunction.deleteMany({ where: { projectId } });
         await tx.workFptChange.deleteMany({ where: { projectId, report: 'UNIT' } });
       }
@@ -676,7 +912,7 @@ export async function importReport(
       }
     }, { timeout: 120_000 });
     touch(projectId, userId);
-    return result;
+    return { ...result, ...(trashId ? { trashId } : {}) };
   }
 
   const kind: ItKind = report === 'system' ? 'SYS' : 'INT';
@@ -690,11 +926,28 @@ export async function importReport(
     report, dryRun, mode, modules: mods.length, cases: mods.reduce((s, m) => s + m.cases.length, 0), changes: parsed.cover.changes.length,
     warnings: parsed.warnings.slice(0, 50), preview: mods.map((m) => ({ name: m.name, cases: m.cases.length })),
   };
-  if (dryRun) return result;
+  if (dryRun) {
+    const imp = await replaceImpact(userId, projectId, report);
+    return { ...result, replaceDeletes: { items: imp.items, changes: imp.changes }, replaceNeedsApproval: imp.needsApproval };
+  }
   const existing = mode === 'append' ? await prisma.workItModule.count({ where: { projectId, kind } }) : 0;
   if (existing + mods.length > MAX_IT_MODULES) throw new BadRequestError(`This would exceed ${MAX_IT_MODULES} modules — use "Replace" or remove some first`, 'WORK_LIMIT');
+  if (mode === 'replace') {
+    const g = await gateReplace(userId, projectId, report, buf, opts.confirm);
+    if (g.queued) return { ...result, replaceDeletes: { items: g.imp.items, changes: g.imp.changes }, replaceNeedsApproval: true, queued: g.queued };
+  }
+  let trashId: number | undefined;
   await prisma.$transaction(async (tx) => {
     if (mode === 'replace') {
+      const modIds = (await tx.workItModule.findMany({ where: { projectId, kind }, select: { id: true } })).map((x) => x.id);
+      const chIds = (await tx.workFptChange.findMany({ where: { projectId, report: docReport }, select: { id: true } })).map((x) => x.id);
+      if (modIds.length || chIds.length) {
+        trashId = (await trashGraph(tx, {
+          projectId, userId, kind: 'fpt.import_replace', itemCount: modIds.length,
+          label: `Excel import "Replace" (${kind === 'SYS' ? '5.3' : '5.2'}) — ${modIds.length} ${kind === 'SYS' ? 'workflow' : 'module'}(s) + ${chIds.length} change record(s) before the import`,
+          roots: [{ table: 'work_it_modules', ids: modIds }, { table: 'work_fpt_changes', ids: chIds }],
+        })).trashId;
+      }
       await tx.workItModule.deleteMany({ where: { projectId, kind } });
       await tx.workFptChange.deleteMany({ where: { projectId, report: docReport } });
     }
@@ -711,7 +964,7 @@ export async function importReport(
     }
   }, { timeout: 120_000 });
   touch(projectId, userId);
-  return result;
+  return { ...result, ...(trashId ? { trashId } : {}) };
 }
 
 /** Cover: chỉ điền chỗ CÒN TRỐNG khi "append"; "replace" thì lấy theo tệp. Record of change thêm vào cuối. */
@@ -798,8 +1051,9 @@ export async function aiSuggest(userId: number, projectId: number, id: number, i
   if (askOverride) text = await askOverride(AI_SYSTEM, user);
   else {
     if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-    if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
-    const r = await llmComplete({
+    // 22/10/2026: cửa chung của CT Work — hạn mức + tài trợ Pro (aiTaiTro) và chuỗi cổng rambo → chính hãng → modelapi (aiCong).
+    await kiemHanMucAi(userId, projectId);
+    const r = await goiAiCtWork({
       step: 'report', system: AI_SYSTEM, messages: [{ role: 'user', content: user }], maxTokens: 2000,
       userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 90_000, maxRetries: 1,
     });

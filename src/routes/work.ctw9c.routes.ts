@@ -34,6 +34,7 @@ import { z, ZodError } from 'zod';
 import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/errorHandler.js';
 import * as quiz from '../services/work/quiz.service.js';
 import { LAYOUTS, SCORING, SHOW_ANSWERS } from '../services/work/quizRules.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -91,11 +92,11 @@ router.patch('/classes/:id/quiz-bank/:qid', asyncHandler(async (req, res) => {
 }));
 router.delete('/classes/:id/quiz-bank/:qid', asyncHandler(async (req, res) => { await quiz.archiveQuestion(callerId(req), P(req, 'id'), P(req, 'qid')); ok(res, { archived: true }); }));
 router.post('/classes/:id/quiz-bank/image', asyncHandler(async (req, res) => {
-  ok(res, await quiz.uploadImage(callerId(req), P(req, 'id'), parse(z.object({ dataBase64: z.string().min(10).max(4_200_000) }).strict(), req.body ?? {})), 201);
+  ok(res, await quiz.uploadImage(callerId(req), P(req, 'id'), parse(z.object({ dataBase64: z.string().min(10).max(Math.ceil((WORK_LIMITS.imageBytes * 4) / 3) + 1024) }).strict(), req.body ?? {})), 201);
 }));
 router.post('/classes/:id/quiz-bank/import', asyncHandler(async (req, res) => {
   const b = parse(z.object({
-    format: z.enum(['table', 'aiken', 'gift']), text: z.string().max(1_000_000).optional(), xlsxBase64: z.string().max(4_000_000).optional(),
+    format: z.enum(['table', 'aiken', 'gift']), text: z.string().max(WORK_LIMITS.importBytes).optional(), xlsxBase64: z.string().max(Math.ceil((WORK_LIMITS.importBytes * 4) / 3) + 1024).optional(),
     topic: z.string().max(80).optional(), confirm: z.boolean().optional(),
   }).strict(), req.body ?? {});
   ok(res, await quiz.importQuestions(callerId(req), P(req, 'id'), b));

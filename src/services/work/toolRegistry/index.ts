@@ -33,13 +33,14 @@ import { ASK_READ_COMMANDS } from './askReads.js'; // 18/10/2026: trợ lý ment
 import { CUONGMINI_COMMANDS } from './cuongMini.js'; // đợt 6 CuongMini: issue_guide / project_resources / my_updates (chỉ MCP)
 import { MEMBER_OPS_COMMANDS } from './memberOps.js'; // đợt 8B: thao tác thành viên còn thiếu (đính kèm, checklist, nộp bài, form, duyệt…)
 import { PERSON_OPS_COMMANDS } from './personOps.js'; // 19/10/2026: CuongMini làm thay người — đính từ link, liên kết, thành viên, mời, sprint
+import { PARITY_COMMANDS } from './parity.js'; // 21/10/2026: CuongMini ngang quyền người — sửa/xoá còn thiếu + repo dự án
 import { recordToolCall, runInAiScope } from '../aiUsage.service.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS, ...PARITY_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');
@@ -87,7 +88,7 @@ export function signatureOf(t: ToolDef, omit: string[] = ['project']): string {
 
 /** Mục lục gọn: một dòng mỗi lệnh — chữ ký + mô tả ngắn (câu đầu). */
 export function commandCatalog(list: ToolDef[]): string {
-  return list.map((t) => `- ${signatureOf(t)} — ${t.description.split(/(?<=\.)\s/)[0].slice(0, 220)}${t.write ? ' [WRITE]' : ''}`).join('\n');
+  return list.map((t) => `- ${signatureOf(t)} — ${t.description.split(/(?<=\.)\s/)[0].slice(0, 220)}${t.write ? ' [WRITE]' : ''}${t.destructive ? ' [DESTRUCTIVE]' : ''}`).join('\n');
 }
 
 // ─── Chạy một lệnh ───────────────────────────────────────────────

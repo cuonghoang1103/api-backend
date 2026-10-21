@@ -36,8 +36,42 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     }
   });
 
-  it('không lệnh nào mang tên phá huỷ/quản trị (test rào chắn MCP dựa vào điều này)', () => {
-    for (const t of r.COMMANDS) assert.doesNotMatch(t.name, /delete|approve|decide|finance|portal|settings/, t.name);
+  it('không lệnh nào mang tên duyệt/tài chính/cổng khách/cấu hình; lệnh xoá chỉ token NGƯỜI (test rào chắn MCP dựa vào điều này)', () => {
+    for (const t of r.COMMANDS) assert.doesNotMatch(t.name, /approve|decide|finance|portal|settings/, t.name);
+    // 21/10/2026: CuongMini ngang quyền người ⇒ CÓ lệnh xoá, nhưng: destructive (client luôn hỏi), personOnly (agent không
+    // thấy + bị chặn), không ở Ask AI / agent dựng sẵn.
+    const del = r.COMMANDS.filter((t) => /delete/.test(t.name));
+    assert.ok(del.length >= 15, `${del.length} lệnh xoá`);
+    for (const t of del) {
+      assert.equal(t.destructive, true, `${t.name} destructive`);
+      assert.equal(t.personOnly, true, `${t.name} personOnly`);
+      assert.ok(!r.askCommands().includes(t) && !r.builtinCommands().includes(t), `${t.name} không ở Ask/BUILTIN`);
+      assert.match(t.description, /^DESTRUCTIVE/, `${t.name} mô tả nói rõ là xoá`);
+    }
+  });
+
+  it('21/10/2026 — CuongMini ngang quyền người: đủ lệnh sửa/xoá 5.1/5.2/5.3, thẻ, Docs, Xray, repo', () => {
+    const mcp = r.mcpCommands().map((t) => t.name);
+    for (const n of [
+      'fpt_unit_update_function', 'fpt_unit_update_rows', 'fpt_unit_delete_rows', 'fpt_unit_delete_cases', 'fpt_unit_move', 'fpt_unit_duplicate_function',
+      'fpt_unit_delete_function', 'fpt_doc_get', 'fpt_doc_update', 'fpt_change_add', 'fpt_change_update', 'fpt_change_delete',
+      'fpt_it_update_module', 'fpt_it_update_cases', 'fpt_it_delete_cases', 'fpt_it_move_case', 'fpt_it_delete_module',
+      'issue_delete', 'issue_restore', 'issue_clone', 'comment_edit', 'comment_delete', 'attachment_delete', 'issue_web_link_remove',
+      'issue_custom_fields_set', 'worklog_delete', 'sprint_update', 'sprint_delete', 'docs_page_update', 'docs_page_move', 'docs_page_delete',
+      'docs_page_restore', 'test_update', 'test_cycle_update', 'test_cycle_delete', 'test_run_defect', 'raid_delete', 'meeting_create',
+      'meeting_update', 'meeting_delete', 'qna_update', 'qna_delete', 'diagram_delete', 'chat_edit', 'chat_delete', 'resource_add',
+      'resource_update', 'resource_delete', 'project_repos', 'docs_page_link_issue', 'docs_page_version_restore',
+      'srs_actor_update', 'srs_use_case_update', 'srs_rule_update', 'srs_screen_update', 'srs_function_update', 'srs_delete',
+    ]) assert.ok(mcp.includes(n), `${n} có trên MCP`);
+    // Executed By / LOC… của hàm 5.1 (lý do của đợt này)
+    for (const f of ['executedBy', 'createdBy', 'loc', 'description', 'preCondition', 'testRequirement', 'codeRef']) {
+      assert.ok(f in r.commandByName('fpt_unit_update_function')!.input.shape, f);
+    }
+    // Trang Docs: AI không tự đặt APPROVED (duyệt là việc của người, qua Approvals)
+    assert.equal(r.commandByName('docs_page_update')!.input.shape.status.safeParse('APPROVED').success, false);
+    assert.equal(r.commandByName('project_repos')!.write, false);
+    assert.ok(!('status' in r.commandByName('srs_use_case_update')!.input.shape), 'AI không tự duyệt use case');
+    assert.ok(!('status' in r.commandByName('srs_rule_update')!.input.shape), 'AI không tự duyệt business rule');
   });
 
   it('Ask AI: không có lệnh riêng agent, không có comment/update_issue/create_issue (Ask AI có hành động tương đương)', () => {

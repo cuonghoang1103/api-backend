@@ -61,3 +61,23 @@ test('tin nhắn riêng: cùng không gian CT Work ⇒ kênh ctwork, không ⇒ 
   assert.equal(kenhDayTinNhan(true), 'ctwork');
   assert.equal(kenhDayTinNhan(false), 'chinh');
 });
+
+test('âm theo loại: giao thẻ / nhắc tên / bình luận / hạn / xong / CuongMini / duyệt / chat', async () => {
+  const { amThanhCtw, AM_THANH, goiDayCtw, amThanhChoTopic } = await import('./goiDayCtw.js');
+  assert.equal(amThanhCtw('WORK_ASSIGN', {}), AM_THANH.giaoThe);
+  assert.equal(amThanhCtw('WORK_MENTION', {}), AM_THANH.nhacTen);
+  assert.equal(amThanhCtw('WORK_COMMENT', {}), AM_THANH.tinNhan);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'is due tomorrow' }), AM_THANH.hanChot);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'Quá hạn 1 ngày' }), AM_THANH.hanChot);
+  assert.equal(amThanhCtw('WORK_ALERT', { meetingUrl: 'https://meet.x/1' }), AM_THANH.hanChot);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'PR #42 merged' }), AM_THANH.xong);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'Đã duyệt yêu cầu' }), AM_THANH.xong);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'CuongMini finished the draft' }), AM_THANH.cuongMini);
+  assert.equal(amThanhCtw('WORK_ALERT', { approvalId: 3, message: 'approved' }), AM_THANH.macDinh);
+  assert.equal(amThanhCtw('WORK_ALERT', { url: '/work/ws/KEY/chat?c=12&m=3' }), AM_THANH.tinNhan);
+  assert.equal(amThanhCtw('WORK_ALERT', { message: 'needs your attention' }), AM_THANH.macDinh);
+  assert.equal(amThanhCtw('WORK_INVITE', {}), AM_THANH.macDinh);
+  assert.equal(goiDayCtw('WORK_ASSIGN', { issueKey: 'A-1' }).amThanh, 'giao-the.caf');
+  assert.equal(amThanhChoTopic('com.cuongthai.ctwork', 'xong.caf'), 'xong.caf');
+  assert.equal(amThanhChoTopic('com.cuongthai.app', 'xong.caf'), 'default');
+});

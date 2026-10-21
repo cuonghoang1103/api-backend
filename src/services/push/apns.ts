@@ -75,6 +75,8 @@ export interface NoiDungDay {
   nhom?: string;
   /** `aps.category` — chọn bộ nút trên thông báo (app CT Work: CTW_REPLY / CTW_APPROVAL / CTW_MEETING / CTW_DEFAULT). */
   phanLoai?: string;
+  /** Tệp âm cho app CT Work (`goiDayCtw.ts › AM_THANH`). App chính luôn `default`. */
+  amThanh?: string;
 }
 
 /** Gửi tới MỘT thẻ. Trả `true` nếu Apple nhận; `false` kèm dọn thẻ chết. */
@@ -88,8 +90,8 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay, topic: 
       const than = JSON.stringify({
         aps: {
           alert: { title: noi.tieuDe, body: noi.than },
-          // App CT Work: âm riêng `ctwork.caf` (goiDayCtw.ts › AM_THANH_CTWORK); iOS thiếu tệp ⇒ tự phát âm mặc định.
-          sound: amThanhChoTopic(topic),
+          // App CT Work: âm thương hiệu theo loại (goiDayCtw.ts › AM_THANH); iOS thiếu tệp ⇒ tự phát âm mặc định.
+          sound: amThanhChoTopic(topic, noi.amThanh),
           ...(noi.huyHieu !== undefined ? { badge: noi.huyHieu } : {}),
           ...(noi.nhom ? { 'thread-id': noi.nhom } : {}),
           ...(noi.phanLoai ? { category: noi.phanLoai } : {}),

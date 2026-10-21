@@ -266,7 +266,7 @@ async function dayRaNgoaiApp(row: {
       // Gom theo LOẠI để iOS xếp chồng thông báo cùng nhóm, thay vì rải ra
       // 20 dòng riêng khi ai đó thả cảm xúc hàng loạt.
       nhom: ctw?.threadId ?? `xh-${row.type}`,
-      ...(ctw ? { phanLoai: ctw.category } : {}),
+      ...(ctw ? { phanLoai: ctw.category, amThanh: ctw.amThanh } : {}),
       // `loai` khác `tin-nhan` để app biết đây là thông báo mạng xã hội và
       // định tuyến khác — xem `ThongBaoDay.didReceive`.
       duLieu: {

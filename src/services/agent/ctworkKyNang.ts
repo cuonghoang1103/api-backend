@@ -80,7 +80,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
     ],
     tool: ['fpt_unit_list', 'fpt_unit_create_function', 'fpt_unit_add_cases', 'fpt_unit_mark', 'fpt_unit_record_results', 'fpt_unit_update_function', 'fpt_unit_update_rows', 'fpt_unit_delete_rows', 'fpt_unit_delete_cases', 'fpt_unit_suggest', 'fpt_it_create_module', 'fpt_it_add_cases', 'fpt_it_record_round', 'fpt_it_update_cases', 'fpt_it_delete_cases', 'fpt_doc_update', 'export_file'],
     trang: [tr('project', 'tests?tab=unit', 'Unit test (5.1)', 'Unit test (5.1)'), tr('project', 'tests?tab=integration', 'Integration (5.2)', 'Integration (5.2)'), tr('project', 'tests?tab=system', 'System (5.3)', 'System (5.3)')],
-    tuKhoa: ['5.1', '5.2', '5.3', 'unit test', 'integration', 'system test', 'report 5', 'bao cao kiem thu', 'test case', 'executed by', 'utcid', 'loc'],
+    tuKhoa: ['5.1', '5.2', '5.3', 'unit test', 'integration', 'system test', 'report 5', 'bao cao kiem thu', 'test case', 'executed by', 'utcid', 'loc', 'xoa utcid', 'an utcid', 'dong nhap'],
   },
   {
     id: 'weekly-report', ten: l('Báo cáo tuần (weekly report)', 'Weekly report'),
@@ -110,7 +110,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'edit-delete', ten: l('Sửa / xoá / khôi phục (thẻ, bình luận, Docs, test, họp…)', 'Edit / delete / restore (issues, comments, Docs, tests, meetings…)'),
     tom: l('CuongMini sửa/xoá được như bạn trên web, theo đúng vai của bạn. Lệnh xoá luôn hỏi lại (thẻ duyệt ⚠ XOÁ); thẻ và trang Docs vào thùng rác, khôi phục được. Duyệt / APPROVED / tài chính / gửi khách: bạn tự bấm.', 'CuongMini edits/deletes what you can on the web, by your role. Deletes always ask again (⚠ DELETE card); issues and Docs pages go to the trash and can be restored. Approvals / APPROVED / finance / client sends: you click them yourself.'),
-    tool: ['issue_delete', 'issue_restore', 'issue_clone', 'comment_edit', 'comment_delete', 'attachment_delete', 'worklog_delete', 'docs_page_update', 'docs_page_move', 'docs_page_delete', 'docs_page_restore', 'test_update', 'test_cycle_update', 'meeting_update', 'raid_delete', 'qna_update', 'resource_update'],
+    tool: ['ctwork_delete', 'issue_bulk', 'issue_extras', 'issue_delete', 'issue_restore', 'issue_clone', 'comment_edit', 'comment_delete', 'attachment_delete', 'worklog_delete', 'docs_page_update', 'docs_page_move', 'docs_page_delete', 'docs_page_restore', 'test_update', 'test_cycle_update', 'meeting_update', 'raid_delete', 'qna_update', 'resource_update'],
     trang: [tr('project', 'settings?tab=trash', 'Trash', 'Thùng rác')], tuKhoa: ['xoa', 'delete', 'sua', 'edit', 'khoi phuc', 'restore', 'thung rac', 'trash', 'nhan ban', 'clone'],
   },
   {
@@ -129,7 +129,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'teacher-guide', ten: l('Giảng viên: tổng quan lớp, nhóm, điểm nghẽn', 'Lecturer: class overview, groups, bottlenecks'),
     tom: l('Hub giảng viên tổng hợp tiến độ từng nhóm (thẻ xong, trễ, đóng góp, buổi họp); xem chi tiết một nhóm để thấy điểm nghẽn.', 'The lecturer hub summarises each group (done, late, contributions, meetings); open one group to see its bottlenecks.'),
-    tool: ['teaching_overview', 'teaching_group', 'class_content', 'class_post', 'class_material', 'class_assignment'], trang: [tr('global', '/work/classes', 'Classes', 'Lớp học')], tuKhoa: ['giang vien', 'teacher', 'lop', 'class', 'nhom sinh vien', 'diem nghen'],
+    tool: ['teaching_overview', 'teaching_group', 'class_content', 'class_post', 'class_material', 'class_assignment', 'class_admin', 'class_quiz'], trang: [tr('global', '/work/classes', 'Classes', 'Lớp học')], tuKhoa: ['giang vien', 'teacher', 'lop', 'class', 'nhom sinh vien', 'diem nghen'],
   },
 ];
 

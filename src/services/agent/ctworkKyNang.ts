@@ -43,6 +43,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
     id: 'change-requests', ten: l('Change Request (yêu cầu thay đổi)', 'Change requests'),
     tom: l('Đề xuất đổi phạm vi/yêu cầu: mô tả tác động (giờ, chi phí, rủi ro), gửi duyệt, theo dõi trạng thái.', 'Propose a scope/requirement change: impact (time, cost, risk), send for approval, track the status.'),
     buoc: [l('Changes → Tạo CR, điền lý do + tác động.', 'Changes → New CR, fill the reason + impact.'), l('Gửi duyệt; người duyệt quyết định trong Approvals.', 'Submit; approvers decide in Approvals.')],
+    tool: ['change_requests', 'change_request_manage'],
     trang: [tr('project', 'changes', 'Change Requests', 'Change Requests')], tuKhoa: ['change request', 'cr', 'thay doi pham vi', 'yeu cau thay doi', 'scope'],
   },
   {
@@ -54,7 +55,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'team-chat', ten: l('Chat nhóm của dự án', 'Project team chat'),
     tom: l('Kênh chat theo dự án; nhắc @người, gắn thẻ, gửi tệp. CuongMini soạn tin, bạn duyệt rồi mới gửi.', 'Per-project channels; @mention, link issues, share files. CuongMini drafts, you approve before sending.'),
-    tool: ['chat_channels', 'chat_read', 'chat_post'], trang: [tr('project', 'chat', 'Chat', 'Chat')], tuKhoa: ['chat', 'nhan tin', 'kenh', 'channel', 'bao nhom'],
+    tool: ['chat_channels', 'chat_read', 'chat_post', 'chat_edit', 'chat_channel_manage', 'chat_message_act'], trang: [tr('project', 'chat', 'Chat', 'Chat')], tuKhoa: ['chat', 'nhan tin', 'kenh', 'channel', 'bao nhom'],
   },
   {
     id: 'srs-swr', ten: l('SRS / SWR302 — yêu cầu phần mềm', 'SRS / SWR302 — software requirements'),
@@ -66,7 +67,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'rtm', ten: l('RTM — ma trận truy vết yêu cầu', 'RTM — requirements traceability matrix'),
     tom: l('Nối yêu cầu ⇄ thẻ ⇄ test case để chứng minh mỗi yêu cầu đã làm + đã kiểm.', 'Links requirements ⇄ issues ⇄ test cases to prove every requirement is built and tested.'),
-    tool: ['rtm_get', 'trace_link_add'], trang: [tr('project', 'requirements?tab=traceability', 'Traceability (RTM)', 'Truy vết (RTM)')], tuKhoa: ['rtm', 'truy vet', 'traceability', 'ma tran'],
+    tool: ['rtm_get', 'trace_link_add', 'trace_links', 'trace_link_remove'], trang: [tr('project', 'requirements?tab=traceability', 'Traceability (RTM)', 'Truy vết (RTM)')], tuKhoa: ['rtm', 'truy vet', 'traceability', 'ma tran'],
   },
   {
     id: 'fpt-test-reports', ten: l('Report 5.1 / 5.2 / 5.3 (FPT) — Unit, Integration, System test', 'FPT Report 5.1 / 5.2 / 5.3 — unit, integration, system test'),
@@ -128,7 +129,7 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'teacher-guide', ten: l('Giảng viên: tổng quan lớp, nhóm, điểm nghẽn', 'Lecturer: class overview, groups, bottlenecks'),
     tom: l('Hub giảng viên tổng hợp tiến độ từng nhóm (thẻ xong, trễ, đóng góp, buổi họp); xem chi tiết một nhóm để thấy điểm nghẽn.', 'The lecturer hub summarises each group (done, late, contributions, meetings); open one group to see its bottlenecks.'),
-    tool: ['teaching_overview', 'teaching_group'], trang: [tr('global', '/work/classes', 'Classes', 'Lớp học')], tuKhoa: ['giang vien', 'teacher', 'lop', 'class', 'nhom sinh vien', 'diem nghen'],
+    tool: ['teaching_overview', 'teaching_group', 'class_content', 'class_post', 'class_material', 'class_assignment'], trang: [tr('global', '/work/classes', 'Classes', 'Lớp học')], tuKhoa: ['giang vien', 'teacher', 'lop', 'class', 'nhom sinh vien', 'diem nghen'],
   },
 ];
 

@@ -56,6 +56,8 @@ export interface GoiDayCtw {
   threadId: string;
   /** Khoá thêm vào cấp ngoài cùng của gói (`approvalId`, `meetingUrl`). */
   them: Record<string, unknown>;
+  /** Tệp âm `aps.sound` cho app CT Work (xem `amThanhCtw`). */
+  amThanh: string;
 }
 
 /**
@@ -85,7 +87,7 @@ export function goiDayCtw(type: string, payload: unknown, opts: { dangChoDuyet?:
     them.meetingUrl = p.meetingUrl;
     category = CTW_CATEGORY.meeting;
   }
-  return { category, threadId: threadId.slice(0, 64), them };
+  return { category, threadId: threadId.slice(0, 64), them, amThanh: amThanhCtw(type, payload) };
 }
 
 // ─── Âm thanh + kênh cho tin nhắn riêng (21/10/2026) ─────────────────────────────
@@ -97,9 +99,49 @@ export function goiDayCtw(type: string, payload: unknown, opts: { dangChoDuyet?:
  */
 export const AM_THANH_CTWORK = 'ctwork.caf';
 
-/** `aps.sound` theo `apns-topic`: app CT Work ⇒ âm riêng, app chính ⇒ `default` như cũ. */
-export function amThanhChoTopic(topic: string): string {
-  return topic === 'com.cuongthai.ctwork' ? AM_THANH_CTWORK : 'default';
+/**
+ * Bộ âm thương hiệu CT Work theo LOẠI thông báo (21/10/2026 — chủ app làm bằng ElevenLabs, cùng một họ âm: chuông
+ * thuỷ tinh + marimba, tông C trưởng). Tệp nằm ở `CTWorkApp/Resources/Sounds/<tên>` của app iOS; bản app cũ chưa
+ * có tệp ⇒ iOS tự phát âm mặc định, nên đổi tên ở đây không làm hỏng ai. Thêm âm ⇒ thêm tệp vào app + một dòng ở đây.
+ */
+export const AM_THANH = {
+  macDinh: AM_THANH_CTWORK,
+  tinNhan: 'tin-nhan.caf',
+  giaoThe: 'giao-the.caf',
+  nhacTen: 'nhac-ten.caf',
+  hanChot: 'han-chot.caf',
+  xong: 'xong.caf',
+  cuongMini: 'cuongmini.caf',
+} as const;
+
+const RE_HAN = /\b(due|overdue|deadline|remind|reminder|starts? (in|soon)|sla)\b|hạn|quá hạn|nhắc|sắp tới|sắp bắt đầu/i;
+const RE_XONG = /\b(done|completed?|approved|merged|passed|resolved|closed)\b|hoàn thành|đã duyệt|đã xong|đã gộp|đạt\b/i;
+const RE_AI = /cuongmini|\bai (assistant|answer|draft)\b|trợ lý ai/i;
+
+/** Âm cho MỘT thông báo WORK_* (gửi tới app CT Work). Đoán theo loại + chữ của `payload.message` cho WORK_ALERT. */
+export function amThanhCtw(type: string, payload: unknown): string {
+  const p = (payload ?? {}) as Record<string, unknown>;
+  const url = typeof p.url === 'string' ? p.url : '';
+  switch (type) {
+    case 'WORK_ASSIGN': return AM_THANH.giaoThe;
+    case 'WORK_MENTION': return AM_THANH.nhacTen;
+    case 'WORK_COMMENT': return AM_THANH.tinNhan;
+    case 'WORK_ALERT': {
+      if (typeof p.approvalId === 'number') return AM_THANH.macDinh;
+      if (chatTuDuongDan(url)) return AM_THANH.tinNhan;
+      const chu = `${typeof p.message === 'string' ? p.message : ''} ${typeof p.title === 'string' ? p.title : ''}`;
+      if (RE_AI.test(chu)) return AM_THANH.cuongMini;
+      if ((typeof p.meetingUrl === 'string' && p.meetingUrl) || RE_HAN.test(chu)) return AM_THANH.hanChot;
+      if (RE_XONG.test(chu)) return AM_THANH.xong;
+      return AM_THANH.macDinh;
+    }
+    default: return AM_THANH.macDinh;
+  }
+}
+
+/** `aps.sound` theo `apns-topic`: app CT Work ⇒ âm riêng (âm theo loại nếu bên gọi đưa), app chính ⇒ `default` như cũ. */
+export function amThanhChoTopic(topic: string, amThanh?: string): string {
+  return topic === 'com.cuongthai.ctwork' ? (amThanh ?? AM_THANH_CTWORK) : 'default';
 }
 
 /**

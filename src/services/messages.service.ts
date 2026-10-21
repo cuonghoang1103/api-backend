@@ -810,7 +810,7 @@ export class MessagesService {
         : 'Đã gửi một tệp đính kèm';
 
       const { coChungKhongGian } = await import('./work/people.service.js');
-      const { kenhDayTinNhan } = await import('./push/goiDayCtw.js');
+      const { kenhDayTinNhan, AM_THANH } = await import('./push/goiDayCtw.js');
       for (const uid of nguoiNhan) {
         const pref = this.getPreferenceForViewer((thread as { preferences?: unknown }).preferences, uid);
         const tatToi = pref?.mutedUntil ? new Date(pref.mutedUntil) : null;
@@ -833,6 +833,7 @@ export class MessagesService {
           huyHieu: typeof chuaDoc === 'number' ? chuaDoc : undefined,
           nhom: `thread-${thread.id}`,
           duLieu: { loai: 'tin-nhan', threadId: thread.id },
+          amThanh: AM_THANH.tinNhan,
         }, kenh, soCtw);
       }
     } catch {

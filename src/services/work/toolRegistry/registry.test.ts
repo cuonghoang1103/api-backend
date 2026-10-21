@@ -70,6 +70,18 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     // Trang Docs: AI không tự đặt APPROVED (duyệt là việc của người, qua Approvals)
     assert.equal(r.commandByName('docs_page_update')!.input.shape.status.safeParse('APPROVED').success, false);
     assert.equal(r.commandByName('project_repos')!.write, false);
+    // Đợt 2 (21/10/2026)
+    for (const n of [
+      'swr_glossary_update', 'swr_dictionary_update', 'swr_priority_update', 'swr_survey_update', 'swr_mockup_update', 'swr_delete', 'trace_links', 'trace_link_remove',
+      'change_requests', 'change_request_manage', 'change_request_delete', 'chat_channel_manage', 'chat_message_act', 'docs_comments', 'docs_comment_resolve',
+      'docs_comment_delete', 'meeting_attendees_set', 'meeting_agenda_set', 'test_plans', 'test_plan_manage', 'test_plan_delete', 'test_designs', 'test_design_save',
+      'test_design_export', 'test_design_delete', 'fpt_import_excel', 'poker_session', 'retro_session', 'agile_delete', 'reviews', 'review_manage', 'review_delete',
+      'versions', 'version_manage', 'version_delete', 'class_content', 'class_post', 'class_material', 'class_assignment', 'class_content_delete',
+    ]) assert.ok(mcp.includes(n), `${n} có trên MCP`);
+    // Quyết định vẫn của người: CR không có action duyệt; review không có `decision`.
+    assert.ok(!(r.commandByName('change_request_manage')!.input.shape.action.options as string[]).some((x) => /approve|reject/.test(x)));
+    assert.ok(!('decision' in r.commandByName('review_manage')!.input.shape));
+    assert.equal(r.commandByName('fpt_import_excel')!.destructive, true, 'replace ghi đè ⇒ luôn hỏi');
     assert.ok(!('status' in r.commandByName('srs_use_case_update')!.input.shape), 'AI không tự duyệt use case');
     assert.ok(!('status' in r.commandByName('srs_rule_update')!.input.shape), 'AI không tự duyệt business rule');
   });
@@ -124,6 +136,11 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
       for (const f of fields) assert.ok(f in r.commandByName(tool)!.input.shape, `${tool}.${f}`);
     }
     assert.doesNotMatch(r.commandByName('update_issue')!.description, /assigned to you/);
+  });
+
+  it('mục lục MCP cho token người còn dưới trần 300 của máy chủ (parseMucLucMcp) — có chỗ thở', () => {
+    const nguoi = r.mcpCommands().filter((t) => !t.agentOnly);
+    assert.ok(nguoi.length <= 280, `${nguoi.length} lệnh cho token người — sát trần 300 của mục lục ⇒ nâng trần (tools.ts) hoặc gộp lệnh`);
   });
 
   it('chữ ký cho prompt bỏ `project`; mục lục đánh dấu [WRITE]', () => {

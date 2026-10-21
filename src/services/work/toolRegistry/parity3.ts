@@ -841,8 +841,11 @@ const testExtras = defineTool({
 const DEL_KINDS = ['dashboard', 'filter', 'baseline', 'exploratory', 'desk_problem', 'meeting_series', 'resource_group', 'form', 'weekly_report', 'ai_usage_row', 'peer_round', 'diagram_comment', 'feed_post', 'feed_comment'] as const;
 const ctworkDelete = defineTool({
   name: 'ctwork_delete', title: 'Delete other project items', group: 'planning',
-  description: 'DESTRUCTIVE: deletes one item — kind dashboard | filter | baseline | exploratory (session number) | desk_problem (problem number) | meeting_series (series id; scope all/following, fromMeeting) | resource_group | form (F-2) | weekly_report | ai_usage_row | peer_round | diagram_comment (with diagram) | feed_post / feed_comment (team feed post or comment id — no project needed; your own, or any if you moderate that feed). Issues, pages, tests, SRS/SWR, CRs, reviews, versions, classes have their own *_delete tools. The user must confirm.',
+  description: 'DESTRUCTIVE: deletes one item — kind dashboard | filter | baseline | exploratory (session number) | desk_problem (problem number) | meeting_series (series id; scope all/following, fromMeeting) | resource_group | form (F-2) | weekly_report | ai_usage_row | peer_round | diagram_comment (with diagram) | feed_post / feed_comment (team feed post or comment id — no project needed; your own, or any if you moderate that feed; these two are deleted directly, every other kind becomes a deletion request a team lead approves). Issues, pages, tests, SRS/SWR, CRs, reviews, versions, classes have their own *_delete tools. The user must confirm.',
   write: true, destructive: true, personOnly: true,
+  // 22/10/2026: bài/bình luận Bảng tin là nội dung CÁ NHÂN (chỉ tác giả hoặc người kiểm duyệt phạm vi xoá được) và bài
+  // cấp không gian không có dự án để trưởng nhóm duyệt ⇒ không đi hàng chờ yêu cầu xoá; mọi kind khác vẫn chờ duyệt.
+  destructiveWhen: (a) => a.kind !== 'feed_post' && a.kind !== 'feed_comment',
   input: z.object({
     project: projectArg.optional().describe('Project key — required for every kind except feed_post / feed_comment'), kind: z.enum(DEL_KINDS), id: z.union([z.number().int().positive(), z.string().max(12)]),
     diagram: z.number().int().positive().optional(), scope: z.enum(['all', 'following']).optional(), fromMeeting: z.number().int().positive().optional(),

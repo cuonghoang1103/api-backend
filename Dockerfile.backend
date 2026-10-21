@@ -83,6 +83,9 @@ RUN npx prisma generate 2>&1 | tail -5 || \
      fi)
 
 # TypeScript compilation
+# 22/10/2026: tsc hết bộ nhớ (exit 134, "Aborted (core dumped)") khi bộ lệnh CuongMini/MCP (parity 1–3 + feed, kiểu zod
+# rất nặng) lớn lên — heap mặc định của Node không đủ. Chỉ ở stage dựng; ảnh chạy không mang biến này.
+ENV NODE_OPTIONS="--max-old-space-size=6144"
 RUN npm run build
 
 # ─── Stage 2: Production Runtime ─────────────────────────

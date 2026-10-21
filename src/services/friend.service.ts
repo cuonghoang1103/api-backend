@@ -20,14 +20,7 @@
 
 import { prisma } from '../config/database.js';
 import { notifyFriendRequest, notifyFriendAccept } from './notification.service.js';
-
-/** Matches follow.service's online window (Socket.IO pings ~25s). */
-const ONLINE_THRESHOLD_SECONDS = 60;
-
-function isOnline(lastActiveAt: Date | null): boolean {
-  if (!lastActiveAt) return false;
-  return (Date.now() - lastActiveAt.getTime()) / 1000 <= ONLINE_THRESHOLD_SECONDS;
-}
+import { loadPresenceViewer, presenceFor, type PresenceViewer } from './presencePrivacy.js';
 
 export type FriendStatus =
   | 'none'
@@ -70,7 +63,10 @@ const userSelect = {
   username: true,
   displayName: true,
   avatarUrl: true,
+  // Trạng thái hoạt động đi qua luật chung (presencePrivacy.ts) — công tắc của người kia, luật đối ứng, chặn.
   lastActiveAt: true,
+  showActiveStatus: true,
+  kind: true,
 } as const;
 
 function mapUser(u: {
@@ -79,13 +75,15 @@ function mapUser(u: {
   displayName: string | null;
   avatarUrl: string | null;
   lastActiveAt: Date | null;
-}, since: Date): FriendUserInfo {
+  showActiveStatus: boolean;
+  kind: string;
+}, since: Date, viewer: PresenceViewer | null): FriendUserInfo {
   return {
     id: u.id,
     username: u.username,
     displayName: u.displayName,
     avatarUrl: u.avatarUrl,
-    isOnline: isOnline(u.lastActiveAt),
+    isOnline: presenceFor(viewer, u).isOnline,
     since,
   };
 }
@@ -282,10 +280,9 @@ export async function listFriends(
   const items = hasMore ? rows.slice(0, -1) : rows;
   const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : undefined;
 
-  const users = items.map((r) => {
-    const other = r.requesterId === userId ? r.addressee : r.requester;
-    return mapUser(other, r.respondedAt ?? r.createdAt);
-  });
+  const others = items.map((r) => (r.requesterId === userId ? r.addressee : r.requester));
+  const viewer = await loadPresenceViewer(userId, others.map((o) => o.id));
+  const users = items.map((r, i) => mapUser(others[i], r.respondedAt ?? r.createdAt, viewer));
 
   return { users, nextCursor };
 }
@@ -302,9 +299,10 @@ export async function listIncoming(
     take: limit,
     include: { requester: { select: userSelect } },
   });
+  const viewer = await loadPresenceViewer(userId, rows.map((r) => r.requester.id));
   return rows.map((r) => ({
     friendshipId: r.id,
-    user: mapUser(r.requester, r.createdAt),
+    user: mapUser(r.requester, r.createdAt, viewer),
     createdAt: r.createdAt,
   }));
 }
@@ -319,9 +317,10 @@ export async function listOutgoing(
     take: limit,
     include: { addressee: { select: userSelect } },
   });
+  const viewer = await loadPresenceViewer(userId, rows.map((r) => r.addressee.id));
   return rows.map((r) => ({
     friendshipId: r.id,
-    user: mapUser(r.addressee, r.createdAt),
+    user: mapUser(r.addressee, r.createdAt, viewer),
     createdAt: r.createdAt,
   }));
 }

@@ -13,11 +13,7 @@
 
 import { prisma } from '../config/database.js';
 import { getStatus, getStatusMap, getAcceptedFriendIds, type FriendStatus } from './friend.service.js';
-
-/** Online threshold: a user is considered "online" if they were
- * active within this many seconds. Matches Socket.IO ping interval
- * (which pings every ~25s). */
-const ONLINE_THRESHOLD_SECONDS = 60;
+import { loadPresenceViewer, presenceFor, visibleOnlineIds, type PresenceViewer } from './presencePrivacy.js';
 
 export interface FollowStatus {
   isFollowing: boolean;
@@ -86,9 +82,16 @@ export interface FollowingInfo {
 
 // ─── Helpers ────────────────────────────────────────────────
 
-function isOnline(lastActiveAt: Date | null): boolean {
-  if (!lastActiveAt) return false;
-  return (Date.now() - lastActiveAt.getTime()) / 1000 <= ONLINE_THRESHOLD_SECONDS;
+// Trạng thái hoạt động đi qua MỘT luật (presencePrivacy.ts): khách chưa đăng nhập, người tắt công tắc, luật đối
+// ứng, chặn, người lạ ⇒ isOnline=false / lastActiveAt=null. Các select dưới đây PHẢI lấy `showActiveStatus`
+// (thiếu cờ thì luật coi như tắt — fail-closed, chấm xanh biến mất chứ không rò).
+const PRESENCE_FIELDS = { lastActiveAt: true, showActiveStatus: true, kind: true } as const;
+
+function isOnlineFor(
+  viewer: PresenceViewer | null,
+  u: { id: number; lastActiveAt: Date | null; showActiveStatus?: boolean | null; kind?: string | null },
+): boolean {
+  return presenceFor(viewer, u).isOnline;
 }
 
 // ─── Toggle Follow ──────────────────────────────────────────
@@ -149,6 +152,7 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
       : Promise.resolve(null),
     viewerId ? getStatus(viewerId, targetId) : Promise.resolve<FriendStatus>('none'),
   ]);
+  const presence = presenceFor(await loadPresenceViewer(viewerId, [targetId]), user);
 
   const profile = user.profile;
   return {
@@ -164,8 +168,8 @@ export async function getEnhancedPublicProfile(targetId: number, viewerId?: numb
       user.roles.some((ur) => /^(role_)?(admin|superadmin)$/i.test(ur.role.name)) ||
       (user.isPro && (!user.proExpiresAt || user.proExpiresAt > new Date())),
     createdAt: user.createdAt,
-    isOnline: isOnline(user.lastActiveAt),
-    lastActiveAt: user.lastActiveAt,
+    isOnline: presence.isOnline,
+    lastActiveAt: presence.lastActiveAt,
     followerCount,
     followingCount,
     isFollowing: !!isFollowingRow,
@@ -201,6 +205,7 @@ export async function getFollowers(
   userId: number,
   cursor?: number,
   limit = 20,
+  viewerId?: number | null,
 ): Promise<{ users: FollowerInfo[]; nextCursor?: number }> {
   const follows = await prisma.follow.findMany({
     where: { followingId: userId },
@@ -210,7 +215,7 @@ export async function getFollowers(
     cursor: cursor ? { id: cursor } : undefined,
     include: {
       follower: {
-        select: { id: true, username: true, displayName: true, avatarUrl: true, lastActiveAt: true },
+        select: { id: true, username: true, displayName: true, avatarUrl: true, ...PRESENCE_FIELDS },
       },
     },
   });
@@ -218,6 +223,7 @@ export async function getFollowers(
   const hasMore = follows.length > limit;
   const items = hasMore ? follows.slice(0, -1) : follows;
   const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : undefined;
+  const viewer = await loadPresenceViewer(viewerId, items.map((f) => f.follower.id));
 
   return {
     users: items.map((f) => ({
@@ -225,7 +231,7 @@ export async function getFollowers(
       username: f.follower.username,
       displayName: f.follower.displayName,
       avatarUrl: f.follower.avatarUrl,
-      isOnline: isOnline(f.follower.lastActiveAt),
+      isOnline: isOnlineFor(viewer, f.follower),
       followedAt: f.createdAt,
     })),
     nextCursor,
@@ -236,6 +242,7 @@ export async function getFollowing(
   userId: number,
   cursor?: number,
   limit = 20,
+  viewerId?: number | null,
 ): Promise<{ users: FollowingInfo[]; nextCursor?: number }> {
   const follows = await prisma.follow.findMany({
     where: { followerId: userId },
@@ -245,7 +252,7 @@ export async function getFollowing(
     cursor: cursor ? { id: cursor } : undefined,
     include: {
       following: {
-        select: { id: true, username: true, displayName: true, avatarUrl: true, lastActiveAt: true },
+        select: { id: true, username: true, displayName: true, avatarUrl: true, ...PRESENCE_FIELDS },
       },
     },
   });
@@ -253,6 +260,7 @@ export async function getFollowing(
   const hasMore = follows.length > limit;
   const items = hasMore ? follows.slice(0, -1) : follows;
   const nextCursor = hasMore && items.length > 0 ? items[items.length - 1].id : undefined;
+  const viewer = await loadPresenceViewer(viewerId, items.map((f) => f.following.id));
 
   return {
     users: items.map((f) => ({
@@ -260,7 +268,7 @@ export async function getFollowing(
       username: f.following.username,
       displayName: f.following.displayName,
       avatarUrl: f.following.avatarUrl,
-      isOnline: isOnline(f.following.lastActiveAt),
+      isOnline: isOnlineFor(viewer, f.following),
       followedAt: f.createdAt,
     })),
     nextCursor,
@@ -309,23 +317,27 @@ export async function getNetworkUsers(
 
   const users = await prisma.user.findMany({
     where: { id: { in: [...ids] }, enabled: true },
-    select: { id: true, username: true, displayName: true, avatarUrl: true, lastActiveAt: true },
+    select: { id: true, username: true, displayName: true, avatarUrl: true, ...PRESENCE_FIELDS },
   });
+  const viewer = await loadPresenceViewer(userId, users.map((u) => u.id));
+  // Sắp theo trạng thái ĐÃ CHE: sắp theo mốc thật thì thứ tự trong danh sách tự nói ai vừa hoạt động.
+  const withPresence = users.map((u) => ({ u, p: presenceFor(viewer, u) }));
 
-  return users
+  return withPresence
     .sort((a, b) => {
-      const onlineDelta = Number(isOnline(b.lastActiveAt)) - Number(isOnline(a.lastActiveAt));
+      const onlineDelta = Number(b.p.isOnline) - Number(a.p.isOnline);
       if (onlineDelta !== 0) return onlineDelta;
-      return (b.lastActiveAt?.getTime() ?? 0) - (a.lastActiveAt?.getTime() ?? 0);
+      const t = (b.p.lastActiveAt?.getTime() ?? 0) - (a.p.lastActiveAt?.getTime() ?? 0);
+      return t !== 0 ? t : a.u.username.localeCompare(b.u.username);
     })
     .slice(0, limit)
-    .map((u) => ({
+    .map(({ u, p }) => ({
       id: u.id,
       username: u.username,
       displayName: u.displayName,
       avatarUrl: u.avatarUrl,
-      isOnline: isOnline(u.lastActiveAt),
-      followedAt: u.lastActiveAt ?? new Date(0),
+      isOnline: p.isOnline,
+      followedAt: p.lastActiveAt ?? new Date(0),
     }));
 }
 
@@ -373,15 +385,16 @@ export async function getSuggestedUsers(
 
   const users = await prisma.user.findMany({
     where: { id: { in: filtered } },
-    select: { id: true, username: true, displayName: true, avatarUrl: true, lastActiveAt: true },
+    select: { id: true, username: true, displayName: true, avatarUrl: true, ...PRESENCE_FIELDS },
   });
+  const viewer = await loadPresenceViewer(userId, users.map((u) => u.id));
 
   return users.map((u) => ({
     id: u.id,
     username: u.username,
     displayName: u.displayName,
     avatarUrl: u.avatarUrl,
-    isOnline: isOnline(u.lastActiveAt),
+    isOnline: isOnlineFor(viewer, u),
     followedAt: new Date(),
   }));
 }
@@ -526,7 +539,7 @@ export async function discoverUsers(
       fullName: true,
       displayName: true,
       avatarUrl: true,
-      lastActiveAt: true,
+      ...PRESENCE_FIELDS,
     },
     // Cursor pagination keyed on id keeps the order stable across
     // pages. When searching we still order by id desc (newest first)
@@ -545,7 +558,7 @@ export async function discoverUsers(
   if (items.length === 0) return { users: [], nextCursor: undefined };
 
   const ids = items.map((u) => u.id);
-  const [followingIds, friendStatusMap] = await Promise.all([
+  const [followingIds, friendStatusMap, viewer] = await Promise.all([
     prisma.follow
       .findMany({
         where: { followerId: viewerId, followingId: { in: ids } },
@@ -553,6 +566,7 @@ export async function discoverUsers(
       })
       .then((rows) => new Set(rows.map((r) => r.followingId))),
     getStatusMap(viewerId, ids),
+    loadPresenceViewer(viewerId, ids),
   ]);
 
   const users: DiscoverUser[] = items.map((u) => ({
@@ -561,7 +575,7 @@ export async function discoverUsers(
     fullName: u.fullName,
     displayName: u.displayName,
     avatarUrl: u.avatarUrl,
-    isOnline: isOnline(u.lastActiveAt),
+    isOnline: isOnlineFor(viewer, u),
     isFollowing: followingIds.has(u.id),
     friendStatus: friendStatusMap.get(u.id) ?? 'none',
   }));
@@ -569,15 +583,16 @@ export async function discoverUsers(
   return { users, nextCursor };
 }
 
-// ─── Ai đang online trên CẢ hệ thống (04/10/2026) ───────────────
-// Trang Bạn bè → "Đang online" trước đây chỉ lọc trong danh sách bạn bè. Người dùng
-// muốn thấy MỌI người đang dùng web/app/iOS để kết bạn, nhắn tin ngay. Nguồn sự thật
-// là tập socket đang nối (`getOnlineUserIds`) — không phải `lastActiveAt` (chỉ cập
-// nhật theo nhịp tim, trễ tới 60 giây). Ai tắt "cho người khác thấy trạng thái hoạt
-// động" thì KHÔNG xuất hiện ở đây.
+// ─── "Đang online" (04/10/2026, siết 21/10/2026) ───────────────
+// Nguồn sự thật là tập socket đang nối (`getOnlineUserIds`) — không phải `lastActiveAt`
+// (chỉ cập nhật theo nhịp tim, trễ tới 60 giây).
+// ⚠️ 21/10/2026: trước đây trả MỌI người đang nối (có bật công tắc) cho BẤT KỲ ai đã đăng
+// nhập — người lạ dò được ai đang online. Nay chỉ người có quan hệ (bạn bè, đã nhắn nhau,
+// cùng không gian CT Work), trừ chặn, và luật đối ứng (mình tắt ⇒ danh sách rỗng). Luật ở
+// `visibleOnlineIds` (presencePrivacy.ts), dùng chung với `GET /messages/online`.
 export async function listOnlineUsers(viewerId: number, limit = 100): Promise<DiscoverUser[]> {
   const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
-  const ids = getOnlineUserIds().filter((id) => id !== viewerId);
+  const ids = await visibleOnlineIds(viewerId, getOnlineUserIds());
   if (ids.length === 0) return [];
   const rows = await prisma.user.findMany({
     where: { id: { in: ids }, enabled: true, showActiveStatus: true },

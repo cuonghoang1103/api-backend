@@ -19,7 +19,8 @@ export const CTW_CATEGORY = {
 
 /** Khoá bật/tắt đẩy theo loại (GET|PUT /work/me/notify-settings → `push`). Mặc định bật hết. */
 /** `git` (18/10/2026, trang Code): thông báo hoạt động Git (push, PR mở/merge, yêu cầu review) — tắt ⇒ không chuông/đẩy/email. */
-export const PUSH_KEYS = ['assign', 'comment', 'mention', 'alert', 'approval', 'chatAll', 'git'] as const;
+/** `feed` (21/10/2026, Bảng tin nhóm): bài mới + cảm xúc trên bài của mình (WORK_ALERT có `payload.feed`). @nhắc/bình luận theo `mention`/`comment`. */
+export const PUSH_KEYS = ['assign', 'comment', 'mention', 'alert', 'approval', 'chatAll', 'git', 'feed'] as const;
 export type PushKey = (typeof PUSH_KEYS)[number];
 export type PushPrefs = Record<PushKey, boolean>;
 
@@ -37,7 +38,7 @@ export function pushKeyFor(type: string, payload: unknown): PushKey | null {
     case 'WORK_ASSIGN': return 'assign';
     case 'WORK_COMMENT': return 'comment';
     case 'WORK_MENTION': return 'mention';
-    case 'WORK_ALERT': return typeof p.approvalId === 'number' ? 'approval' : p.git === true ? 'git' : 'alert';
+    case 'WORK_ALERT': return typeof p.approvalId === 'number' ? 'approval' : p.git === true ? 'git' : p.feed && typeof p.feed === 'object' ? 'feed' : 'alert';
     default: return null;
   }
 }
@@ -70,13 +71,22 @@ export function goiDayCtw(type: string, payload: unknown, opts: { dangChoDuyet?:
   const chat = url ? chatTuDuongDan(url) : null;
   const issueKey = typeof p.issueKey === 'string' && p.issueKey.trim() ? p.issueKey.trim() : null;
 
-  const threadId = chat
+  const feed = p.feed && typeof p.feed === 'object' ? (p.feed as { postId?: unknown; commentId?: unknown }) : null;
+  const feedPostId = feed && typeof feed.postId === 'number' ? feed.postId : null;
+  const threadId = feedPostId
+    ? `ctw-feed-${feedPostId}`
+    : chat
     ? `ctw-${chat.projectKey}-chat-${chat.channelId}`
     : issueKey && !issueKey.startsWith('#')
       ? `ctw-${issueKey.replace(/\s+/g, '')}`
       : `ctw-${type}`;
 
   const them: Record<string, unknown> = {};
+  // Bảng tin: iOS mở thẳng bài + nút Reply gửi vào bình luận của bài (không phải bình luận thẻ).
+  if (feedPostId) {
+    them.feedPostId = feedPostId;
+    if (typeof feed?.commentId === 'number') them.feedCommentId = feed.commentId;
+  }
   let category: string = CTW_CATEGORY.thuong;
   if ((type === 'WORK_COMMENT' || type === 'WORK_MENTION') && url) {
     category = CTW_CATEGORY.reply;
@@ -128,6 +138,8 @@ export function amThanhCtw(type: string, payload: unknown): string {
     case 'WORK_COMMENT': return AM_THANH.tinNhan;
     case 'WORK_ALERT': {
       if (typeof p.approvalId === 'number') return AM_THANH.macDinh;
+      // Bảng tin (bài mới, cảm xúc): âm CT Work mặc định — không đoán theo chữ (đoạn trích bài có thể chứa "done", "deadline"…).
+      if (p.feed && typeof p.feed === 'object') return AM_THANH.macDinh;
       if (chatTuDuongDan(url)) return AM_THANH.tinNhan;
       const chu = `${typeof p.message === 'string' ? p.message : ''} ${typeof p.title === 'string' ? p.title : ''}`;
       if (RE_AI.test(chu)) return AM_THANH.cuongMini;

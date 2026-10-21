@@ -402,7 +402,7 @@ function decodeEntities(s: string): string {
     .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 }
 
-function metaContent(html: string, key: string): string | null {
+export function metaContent(html: string, key: string): string | null {
   const re = new RegExp(`<meta\\b[^>]*(?:property|name)\\s*=\\s*["']${key}["'][^>]*>`, 'i');
   const tag = re.exec(html)?.[0];
   if (!tag) return null;

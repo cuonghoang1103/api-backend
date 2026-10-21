@@ -89,6 +89,8 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   if (process.env.WORK_EMAIL_NOTIFICATIONS === 'false' || args.type === 'WORK_INVITE') return;
   // CTW K-3: tin chat không gửi email tức thì (chat là nhịp nhanh) — chỉ thư gộp "tin chưa đọc" khi người dùng BẬT.
   if (args.payload.chat === true) return;
+  // Bảng tin (21/10/2026): bài mới + cảm xúc chỉ chuông/đẩy — email chỉ cho @nhắc / bình luận (theo cài đặt như thường).
+  if (args.payload.noEmail === true) return;
   if (args.receiverId === args.senderId) return;
   const settings = await getNotifySettings(args.receiverId);
   if (settings.emailMode === 'OFF') return;

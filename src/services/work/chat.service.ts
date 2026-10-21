@@ -470,7 +470,7 @@ export interface RefPreview {
  * chia sẻ) / không thấy trang (trang INTERNAL với khách) / không thấy họp ⇒ BỎ HẲN (không nói "có nhưng bị khoá" — không
  * lộ là tồn tại). Một lượt cho cả trang tin.
  */
-async function resolvePreviews(viewerId: number, home: ProjectAccess & { wsSlug: string }, refsList: ChatRef[][]): Promise<Map<string, RefPreview>> {
+async function resolvePreviews(viewerId: number, home: (ProjectAccess & { wsSlug: string }) | { wsSlug: string; projectId?: undefined }, refsList: ChatRef[][]): Promise<Map<string, RefPreview>> {
   const out = new Map<string, RefPreview>();
   const want = new Map<string, { ws: string; key: string; t: string; n: number }>();
   for (const refs of refsList) {
@@ -488,7 +488,7 @@ async function resolvePreviews(viewerId: number, home: ProjectAccess & { wsSlug:
     select: { id: true, key: true, name: true, workspace: { select: { slug: true } } },
   });
   for (const p of projects) {
-    const access = p.id === home.projectId ? home : await loadProjectAccess(viewerId, p.id);
+    const access = 'role' in home && p.id === home.projectId ? home : await loadProjectAccess(viewerId, p.id);
     if (!access) continue;
     const scoped = isClientScoped(access);
     const mine = [...want.values()].filter((w) => w.ws === p.workspace.slug && w.key === p.key);
@@ -538,6 +538,14 @@ async function resolvePreviews(viewerId: number, home: ProjectAccess & { wsSlug:
     }
   }
   return out;
+}
+
+/**
+ * Bảng tin (21/10/2026) dùng lại đúng luật thẻ xem trước của chat: ref đã mang sẵn `ws` (bài thuộc nhiều không gian) ⇒
+ * không có "dự án nhà"; mỗi dự án được hỏi quyền người xem (loadProjectAccess). Khoá Map: `<t>:<ws>:<KEY>:<n>`.
+ */
+export function resolveRefPreviews(viewerId: number, refsList: ChatRef[][]): Promise<Map<string, RefPreview>> {
+  return resolvePreviews(viewerId, { wsSlug: '' }, refsList);
 }
 
 function reactionSummary(rows: MessageRow['reactions'], me: number) {

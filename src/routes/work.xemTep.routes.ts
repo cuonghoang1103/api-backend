@@ -10,6 +10,7 @@
  *   /projects/:pid/chat/files/:fid/…        tệp kênh chat (chatFiles.readableChatFile)
  *   /classes/:id/stream-files/:fid/…        tệp bảng tin / tài liệu lớp (classStream.readableClassStreamFile)
  *   /classes/:id/files/:fid/…               tệp đề + bài nộp (classwork.readableClassFile)
+ *   /feed/attachments/:aid/…                tệp Bảng tin nhóm (feedMedia.readableAttachment)
  *
  * Quyền = ĐÚNG hàm mà tuyến `/url` cùng nơi dùng (khách cổng chỉ tệp đã chia sẻ / bình luận PUBLIC; kênh khách; bài
  * nộp chỉ giảng viên + chủ bài). Cổng khách: tuyến thẻ khai trong CLIENT_ROUTES, tuyến chat nằm sẵn dưới `/chat`.
@@ -24,6 +25,7 @@ import * as classStream from '../services/work/classStream.service.js';
 import * as classwork from '../services/work/classwork.service.js';
 import * as chatFiles from '../services/work/chatFiles.service.js';
 import * as issues from '../services/work/issues.service.js';
+import * as feedMedia from '../services/work/feedMedia.service.js';
 import { dispositionInline, noiDungChu, xemTruocOffice, type TepNguon } from '../services/work/xemTep.js';
 
 const router = Router();
@@ -80,5 +82,7 @@ haiTuyen('/projects/:pid/attachments/:aid', async (req) => (await issues.readabl
 haiTuyen('/projects/:pid/chat/files/:fid', async (req) => (await chatFiles.readableChatFile(callerId(req), P(req, 'pid'), P(req, 'fid'))).f);
 haiTuyen('/classes/:id/stream-files/:fid', (req) => classStream.readableClassStreamFile(callerId(req), P(req, 'id'), P(req, 'fid')));
 haiTuyen('/classes/:id/files/:fid', (req) => classwork.readableClassFile(callerId(req), P(req, 'id'), P(req, 'fid')));
+// 21/10/2026: tệp của Bảng tin nhóm (feedMedia.readableAttachment — thấy bài / nháp của chính mình).
+haiTuyen('/feed/attachments/:aid', (req) => feedMedia.readableAttachment(callerId(req), P(req, 'aid')));
 
 export default router;

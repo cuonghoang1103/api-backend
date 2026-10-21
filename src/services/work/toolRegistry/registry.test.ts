@@ -153,6 +153,27 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.doesNotMatch(r.commandByName('update_issue')!.description, /assigned to you/);
   });
 
+  it('21/10/2026 — Bảng tin nhóm: MỘT lệnh `feed` gộp theo action, chỉ token NGƯỜI, chỉ MCP; xoá qua ctwork_delete', async () => {
+    const t = r.commandByName('feed')!;
+    assert.ok(t, 'feed');
+    assert.equal(t.personOnly, true);
+    assert.equal(t.write, true);
+    assert.ok(r.mcpCommands().includes(t));
+    assert.ok(!r.askCommands().includes(t) && !r.builtinCommands().includes(t), 'không ở Ask/BUILTIN');
+    const acts = t.input.shape.action.options as string[];
+    for (const x of ['list', 'get', 'post', 'edit_post', 'comment', 'edit_comment', 'react', 'save', 'unsave', 'vote']) assert.ok(acts.includes(x), x);
+    assert.ok(!acts.some((x) => /delete|remove|moderat|pin|report/.test(x)), `không xoá/gỡ/ghim/báo cáo trong feed: ${acts.join(',')}`);
+    assert.deepEqual(t.input.shape.kind.unwrap().options, ['like', 'love', 'haha', 'wow', 'sad', 'celebrate', 'none']);
+    const del = r.commandByName('ctwork_delete')!;
+    const kinds = del.input.shape.kind.options as string[];
+    assert.ok(kinds.includes('feed_post') && kinds.includes('feed_comment'));
+    assert.equal(del.input.shape.project.safeParse(undefined).success, true, 'feed_post không cần project');
+    assert.match(del.description, /feed_post/);
+    const { TOOLS } = await import('../../../mcp/server.js');
+    const thay = (agent: boolean) => TOOLS.filter((x) => (!x.agentOnly || agent) && (!x.personOnly || !agent)).map((x) => x.name);
+    assert.ok(thay(false).includes('feed') && !thay(true).includes('feed'), 'agent không thấy feed');
+  });
+
   it('mục lục MCP cho token người còn dưới trần 300 của máy chủ (parseMucLucMcp) — có chỗ thở', () => {
     const nguoi = r.mcpCommands().filter((t) => !t.agentOnly);
     assert.ok(nguoi.length <= 280, `${nguoi.length} lệnh cho token người — sát trần 300 của mục lục ⇒ nâng trần (tools.ts) hoặc gộp lệnh`);

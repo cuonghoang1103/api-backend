@@ -838,19 +838,26 @@ const testExtras = defineTool({
 
 // ═══ Xoá gom + đọc gom ═══════════════════════════════════════════
 
-const DEL_KINDS = ['dashboard', 'filter', 'baseline', 'exploratory', 'desk_problem', 'meeting_series', 'resource_group', 'form', 'weekly_report', 'ai_usage_row', 'peer_round', 'diagram_comment'] as const;
+const DEL_KINDS = ['dashboard', 'filter', 'baseline', 'exploratory', 'desk_problem', 'meeting_series', 'resource_group', 'form', 'weekly_report', 'ai_usage_row', 'peer_round', 'diagram_comment', 'feed_post', 'feed_comment'] as const;
 const ctworkDelete = defineTool({
   name: 'ctwork_delete', title: 'Delete other project items', group: 'planning',
-  description: 'DESTRUCTIVE: deletes one item — kind dashboard | filter | baseline | exploratory (session number) | desk_problem (problem number) | meeting_series (series id; scope all/following, fromMeeting) | resource_group | form (F-2) | weekly_report | ai_usage_row | peer_round | diagram_comment (with diagram). Issues, pages, tests, SRS/SWR, CRs, reviews, versions, classes have their own *_delete tools. The user must confirm.',
+  description: 'DESTRUCTIVE: deletes one item — kind dashboard | filter | baseline | exploratory (session number) | desk_problem (problem number) | meeting_series (series id; scope all/following, fromMeeting) | resource_group | form (F-2) | weekly_report | ai_usage_row | peer_round | diagram_comment (with diagram) | feed_post / feed_comment (team feed post or comment id — no project needed; your own, or any if you moderate that feed). Issues, pages, tests, SRS/SWR, CRs, reviews, versions, classes have their own *_delete tools. The user must confirm.',
   write: true, destructive: true, personOnly: true,
   input: z.object({
-    project: projectArg, kind: z.enum(DEL_KINDS), id: z.union([z.number().int().positive(), z.string().max(12)]),
+    project: projectArg.optional().describe('Project key — required for every kind except feed_post / feed_comment'), kind: z.enum(DEL_KINDS), id: z.union([z.number().int().positive(), z.string().max(12)]),
     diagram: z.number().int().positive().optional(), scope: z.enum(['all', 'following']).optional(), fromMeeting: z.number().int().positive().optional(),
   }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'delete project items');
     const id = numOf(a.id, a.kind);
-    const D = (path: string) => hit(ctx, a.project, 'DELETE', path);
+    // Bảng tin nhóm (21/10/2026): tuyến top-level /feed/** — quyền xoá (tác giả / quản trị phạm vi) ở feed.service.
+    if (a.kind === 'feed_post' || a.kind === 'feed_comment') {
+      W(ctx);
+      const feed = await import('../feed.service.js');
+      if (a.kind === 'feed_post') await feed.deletePost(ctx.userId, id); else await feed.deleteComment(ctx.userId, id);
+      return { deleted: { kind: a.kind, id } };
+    }
+    const D = (path: string) => hit(ctx, need(a.project, 'project'), 'DELETE', path);
     switch (a.kind) {
       case 'dashboard': { const p = await D(`/dashboards/${id}`); await search.deleteDashboard(ctx.userId, p.id, id); break; }
       case 'filter': { const p = await D(`/filters/${id}`); await search.deleteFilter(ctx.userId, p.id, id); break; }

@@ -22,6 +22,8 @@ import { COMMENT_REPORT_REASONS } from './issues.service.js';
 export const REPORT_KINDS = [
   'chat_message', 'issue_comment', 'page_comment', 'meeting_note', 'retro_card', 'change_request', 'raid_item',
   'review_item', 'approval_step', 'intake_message', 'form_answer', 'class_post', 'class_comment', 'diagram_comment',
+  // 21/10/2026: Bảng tin nhóm — đi đường riêng của feed.service (hàng chờ báo cáo trong bảng tin + quản trị site).
+  'feed_post', 'feed_comment',
 ] as const;
 export type ReportKind = (typeof REPORT_KINDS)[number];
 export const REPORT_REASONS = COMMENT_REPORT_REASONS;
@@ -187,6 +189,12 @@ export async function reportContent(userId: number, input: { kind: ReportKind; i
     return reportComment(userId, c.issue.projectId, c.issue.number, input.id, { reason: input.reason, details: input.detail ?? null });
   }
 
+  // Bảng tin nhóm: cùng một luật với POST /feed/posts/:id/report (hàng chờ kiểm duyệt của bảng tin + BAO_CAO của site).
+  if (input.kind === 'feed_post' || input.kind === 'feed_comment') {
+    const feed = await import('./feed.service.js');
+    const body = { reason: input.reason, detail: input.detail ?? null };
+    return input.kind === 'feed_post' ? feed.reportPost(userId, input.id, body) : feed.reportComment(userId, input.id, body);
+  }
   const t = await resolveTarget(userId, input.kind, input.id);
   if (t.authorId === userId) throw new BadRequestError('You cannot report your own content', 'WORK_REPORT_SELF');
   const detail = input.detail?.trim().slice(0, 1000) || null;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chatTuDuongDan, goiDayCtw, pushKeyFor, pushPrefsFrom } from './goiDayCtw.js';
+import { AM_THANH, chatTuDuongDan, CTW_CATEGORY, goiDayCtw, pushKeyFor, pushPrefsFrom } from './goiDayCtw.js';
 
 test('bình luận / @nhắc trên thẻ ⇒ CTW_REPLY, thread theo mã thẻ', () => {
   const g = goiDayCtw('WORK_COMMENT', { issueKey: 'NW-12', url: '/work/acme/NW/issue/12?comment=5' });
@@ -42,7 +42,7 @@ test('còn lại ⇒ CTW_DEFAULT; bình luận không url ⇒ DEFAULT (không tr
 });
 
 test('công tắc đẩy: thiếu khoá = bật; loại ⇒ khoá', () => {
-  assert.deepEqual(pushPrefsFrom(null), { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true, git: true });
+  assert.deepEqual(pushPrefsFrom(null), { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true, git: true, feed: true });
   assert.equal(pushPrefsFrom({ chatAll: false }).chatAll, false);
   assert.equal(pushKeyFor('WORK_ALERT', { approvalId: 2 }), 'approval');
   assert.equal(pushKeyFor('WORK_ALERT', {}), 'alert');
@@ -81,3 +81,22 @@ test('âm theo loại: giao thẻ / nhắc tên / bình luận / hạn / xong / 
   assert.equal(amThanhChoTopic('com.cuongthai.ctwork', 'xong.caf'), 'xong.caf');
   assert.equal(amThanhChoTopic('com.cuongthai.app', 'xong.caf'), 'default');
 });
+
+test('Bảng tin (21/10/2026): thread theo bài, feedPostId/feedCommentId ở cấp ngoài, âm theo loại, công tắc `feed`', () => {
+  const feed = { postId: 12, commentId: 88, workspaceId: 1, projectId: 3, event: 'comment' };
+  const c = goiDayCtw('WORK_COMMENT', { issueKey: 'FP', url: '/work/acme/feed?post=12&comment=88', feed, excerpt: 'done by Friday' });
+  assert.equal(c.threadId, 'ctw-feed-12');
+  assert.equal(c.category, CTW_CATEGORY.reply);
+  assert.deepEqual(c.them, { feedPostId: 12, feedCommentId: 88 });
+  assert.equal(c.amThanh, AM_THANH.tinNhan);
+  assert.equal(goiDayCtw('WORK_MENTION', { url: '/work/acme/feed?post=12', feed: { postId: 12 } }).amThanh, AM_THANH.nhacTen);
+  // Bài mới: chữ trích có "deadline"/"done" vẫn là âm mặc định (không đoán theo chữ).
+  const a = goiDayCtw('WORK_ALERT', { issueKey: 'Acme', message: 'An posted in Acme', excerpt: 'deadline done', url: '/work/acme/feed?post=5', feed: { postId: 5, event: 'post' } });
+  assert.equal(a.amThanh, AM_THANH.macDinh);
+  assert.equal(a.category, CTW_CATEGORY.thuong);
+  assert.deepEqual(a.them, { feedPostId: 5 });
+  assert.equal(pushKeyFor('WORK_ALERT', { feed: { postId: 5 } }), 'feed');
+  assert.equal(pushKeyFor('WORK_MENTION', { feed: { postId: 5 } }), 'mention');
+  assert.equal(pushKeyFor('WORK_ALERT', {}), 'alert');
+});
+

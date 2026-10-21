@@ -271,7 +271,12 @@ describe('AI agent — tuyến ngoài dự án là DANH SÁCH TRẮNG (agentTopR
       // CTW đợt 8a: kết nối OAuth của người
       ['GET', '/integrations'], ['GET', '/integrations/google/start'], ['GET', '/integrations/google/picker'], ['GET', '/integrations/microsoft/files'], ['POST', '/integrations/microsoft/sync'],
       // 18/10/2026 (app iOS): báo cáo nội dung + lịch/giờ xuyên dự án của NGƯỜI
-      ['POST', '/report'], ['GET', '/me/agenda'], ['GET', '/me/timesheet']] as const) {
+      ['POST', '/report'], ['GET', '/me/agenda'], ['GET', '/me/timesheet'],
+      // 21/10/2026: Bảng tin nhóm — chỗ của NGƯỜI: agent không đọc, không đăng, không tải tệp, không kiểm duyệt
+      ['GET', '/feed'], ['GET', '/feed/scopes'], ['GET', '/feed/new-count'], ['POST', '/feed/posts'], ['GET', '/feed/posts/3'], ['PATCH', '/feed/posts/3'],
+      ['DELETE', '/feed/posts/3'], ['PUT', '/feed/posts/3/reaction'], ['POST', '/feed/posts/3/comments'], ['POST', '/feed/uploads'],
+      ['POST', '/feed/uploads/presign'], ['GET', '/feed/attachments/3/url'], ['GET', '/feed/attachments/3/content'], ['GET', '/feed/reports'],
+      ['POST', '/feed/reports/1/resolve'], ['PUT', '/feed/follow'], ['POST', '/feed/link-preview']] as const) {
       assert.equal(agentTopRouteAllowed(m, p), false, `${m} ${p}`);
     }
   });

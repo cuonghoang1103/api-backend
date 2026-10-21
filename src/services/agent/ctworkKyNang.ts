@@ -58,6 +58,12 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
     tool: ['chat_channels', 'chat_read', 'chat_post', 'chat_edit', 'chat_channel_manage', 'chat_message_act'], trang: [tr('project', 'chat', 'Chat', 'Chat')], tuKhoa: ['chat', 'nhan tin', 'kenh', 'channel', 'bao nhom'],
   },
   {
+    id: 'team-feed', ten: l('Bảng tin nhóm (Feed)', 'Team feed'),
+    tom: l('Bảng tin riêng của nhóm như Facebook/LinkedIn: bài cấp không gian và bài của dự án, ảnh/video/tệp, @nhắc, #hashtag, bình chọn, cảm xúc, bình luận một cấp trả lời. Khách cổng và AI agent không thấy.', 'A private Facebook/LinkedIn-style feed for the team: workspace posts and project posts, photos/videos/files, @mentions, #hashtags, polls, reactions, comments with one level of replies. Clients and AI agents never see it.'),
+    buoc: [l('Mở Feed của không gian (thanh bên) hoặc tab Bảng tin trong Việc của tôi.', 'Open the workspace Feed (sidebar) or the Feed tab in My work.'), l('Chọn nơi đăng (không gian/dự án), viết, gắn ảnh/tệp, Đăng.', 'Pick where to post (workspace/project), write, attach photos/files, Post.')],
+    tool: ['feed', 'ctwork_delete'], trang: [tr('workspace', 'feed', 'Bảng tin', 'Feed')], tuKhoa: ['feed', 'bang tin', 'dang bai', 'post', 'thong bao nhom', 'announcement', 'hashtag', 'binh chon', 'poll'],
+  },
+  {
     id: 'srs-swr', ten: l('SRS / SWR302 — yêu cầu phần mềm', 'SRS / SWR302 — software requirements'),
     tom: l('Use case, actor, business rule, màn hình, phân quyền màn hình, chức năng không UI; SWR302: stakeholder, elicitation, khảo sát, glossary, NFR, ưu tiên.', 'Use cases, actors, business rules, screens, screen authorization, non-UI functions; SWR302: stakeholders, elicitation, surveys, glossary, NFRs, priorities.'),
     buoc: [l('Requirements → từng tab theo thứ tự: Actors → Use cases → Rules → Screens → Authorization → Non-UI.', 'Requirements → tabs in order: Actors → Use cases → Rules → Screens → Authorization → Non-UI.'), l('Xuất tài liệu SRS khi đủ: Docs/Export.', 'Export the SRS document when complete: Docs/Export.')],

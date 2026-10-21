@@ -140,6 +140,33 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
     });
   });
 
+  /**
+   * Bảng tin nhóm (21/10/2026): `work:feed:subscribe` ⇒ server tính MỌI phạm vi người này đọc được (feedScopesFor — cùng
+   * hàm của REST) và cho vào phòng `work:feed:ws:<id>` / `work:feed:p:<id>`. Sự kiện `work:feed:event` chỉ mang id + bộ
+   * đếm — nội dung luôn tải lại qua REST (lọc quyền). Agent ⇒ từ chối. Gọi lại sau mỗi lần nối lại (phạm vi có thể đã đổi).
+   */
+  const feedRooms = new Set<string>();
+  socket.on('work:feed:subscribe', async (_raw: unknown, ack?: Ack) => {
+    const reply: Ack = typeof ack === 'function' ? ack : (typeof _raw === 'function' ? (_raw as Ack) : () => {});
+    try {
+      const { feedRoomsFor } = await import('../services/work/feed.service.js');
+      const { principalOf } = await import('../services/work/permissions.js');
+      if ((await principalOf(user.id)) === 'AGENT') return reply({ ok: false, error: 'AI agents cannot use the team feed' });
+      const rooms = await gated(() => feedRoomsFor(user.id));
+      for (const r of feedRooms) if (!rooms.includes(r)) void socket.leave(r);
+      feedRooms.clear();
+      for (const r of rooms) feedRooms.add(r);
+      if (rooms.length) await socket.join(rooms);
+      (reply as (res: { ok: boolean; rooms?: number }) => void)({ ok: true, rooms: rooms.length });
+    } catch {
+      reply({ ok: false, error: 'Could not open the feed' });
+    }
+  });
+  socket.on('work:feed:unsubscribe', () => {
+    for (const r of feedRooms) void socket.leave(r);
+    feedRooms.clear();
+  });
+
   socket.on('disconnect', () => {
     if (!who) return;
     for (const v of present.values()) socket.to(projectRoom(v.projectId)).emit('work:presence', { ...v, state: 'left', user: who, at: Date.now() });

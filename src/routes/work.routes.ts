@@ -106,6 +106,7 @@ import iosRoutes from './work.ios.routes.js'; // 18/10/2026: app iOS CT Work —
 import aiUsageRoutes from './work.aiUsage.routes.js'; // CTW đợt 8B (19/10/2026): AI usage — không gian + tab dự án
 import taoCuongMiniRoutes from './work.taoCuongMini.routes.js'; // 20/10/2026: "Create with CuongMini" — dựng dự án/không gian từ đề bài
 import xemTepRoutes from './work.xemTep.routes.js'; // 20/10/2026: trình xem tệp trong trang — /content (chữ) + /preview (docx/xlsx)
+import feedRoutes from './work.feed.routes.js'; // 21/10/2026: Bảng tin nhóm (Team Feed) — không gian + dự án
 import { enterProjectScope } from '../services/work/aiUsage.service.js';
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
@@ -1446,7 +1447,7 @@ router.get('/me/notify-settings', asyncHandler(async (req, res) => {
 router.put('/me/notify-settings', asyncHandler(async (req, res) => {
   const hour = z.number().int().min(0).max(23).nullable();
   // 18/10/2026 (app iOS CT Work): `push` = công tắc đẩy theo loại, `timezone` = múi giờ IANA cho giờ im lặng.
-  const push = z.object({ assign: z.boolean(), comment: z.boolean(), mention: z.boolean(), alert: z.boolean(), approval: z.boolean(), chatAll: z.boolean(), git: z.boolean() }).partial().strict();
+  const push = z.object({ assign: z.boolean(), comment: z.boolean(), mention: z.boolean(), alert: z.boolean(), approval: z.boolean(), chatAll: z.boolean(), git: z.boolean(), feed: z.boolean() }).partial().strict();
   const body = parse(z.object({
     emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional(),
     push: push.optional(), timezone: z.string().min(1).max(64).nullable().optional(),
@@ -2225,5 +2226,7 @@ router.use(aiUsageRoutes);
 router.use(taoCuongMiniRoutes);
 // 20/10/2026: trình xem tệp CT Work — byte chữ + xem trước Office cho tệp thẻ/bình luận/chat/lớp (work.xemTep.routes.ts).
 router.use(xemTepRoutes);
+// 21/10/2026: Bảng tin nhóm (Team Feed) — /feed/** (top-level ⇒ agent bị agentTopRouteAllowed chặn; service chặn lần nữa).
+router.use(feedRoutes);
 
 export default router;

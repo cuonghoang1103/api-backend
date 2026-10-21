@@ -408,8 +408,16 @@ export interface XemTruocGhi { the: string | null; viec: string; noiDung: string
 
 const BO_KHOA = new Set(['project', 'issue']);
 
-/** Mô tả thao tác GHI lên CT Work cho thẻ duyệt (theo tên tool gốc + tham số). */
-export function moTaGhi(tool: string, args: Record<string, unknown>): XemTruocGhi {
+/**
+ * Mô tả thao tác GHI lên CT Work cho thẻ duyệt (theo tên tool gốc + tham số). `pha` (21/10/2026) = lệnh XOÁ của máy chủ
+ * (`destructiveHint`) ⇒ thẻ duyệt mở đầu bằng cảnh báo xoá để người dùng không bấm "Cho phép" theo thói quen.
+ */
+export function moTaGhi(tool: string, args: Record<string, unknown>, pha = false): XemTruocGhi {
+  const x = moTaGhiGoc(tool, args);
+  return pha ? { ...x, viec: `⚠ ${T('XOÁ', 'DELETE')} · ${x.viec}` } : x;
+}
+
+function moTaGhiGoc(tool: string, args: Record<string, unknown>): XemTruocGhi {
   const duAn = typeof args.project === 'string' ? args.project : '';
   const soThe = args.issue;
   const the = soThe === undefined || soThe === null ? null

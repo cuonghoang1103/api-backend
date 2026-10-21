@@ -2156,7 +2156,8 @@ async function chayToolMcpCoDuyet(
       ...(kq0.anh.length ? { anh: kq0.anh } : {}),
     };
   }
-  const tuGhi = ctw && getSettings().ctworkTuGhi === true;
+  /* 21/10/2026: lệnh XOÁ (`destructiveHint`) ⇒ LUÔN hỏi, kể cả khi người dùng bật `/ctwork tu-ghi on` hay "Bỏ qua hết". */
+  const tuGhi = ctw && getSettings().ctworkTuGhi === true && !t.pha;
 
   /* 20/10/2026: `attach_file { path }` ⇒ CuongMini tự đọc file qua nhà tù đường dẫn (dự án · thư mục đã kéo vào · thư
      mục tải · ảnh dán trong chat) — thẻ duyệt hiện TÊN + CỠ, không bao giờ hiện chuỗi base64. */
@@ -2181,11 +2182,11 @@ async function chayToolMcpCoDuyet(
   }
 
   const id = `mcp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const xemTruoc = ctw ? moTaGhi(t.tenGoc, argsXem) : undefined;
+  const xemTruoc = ctw ? moTaGhi(t.tenGoc, argsXem, t.pha === true) : undefined;
   const quyet = await hoiNguoiDung(
     {
       ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false,
-      ...(ctw ? (tuGhi ? { tuDuyet: true } : { luonHoi: true }) : {}),
+      ...(t.pha ? { luonHoi: true } : ctw ? (tuGhi ? { tuDuyet: true } : { luonHoi: true }) : {}),
     },
     (y) => phat({ loai: 'xinPhepMcp', id: y.id, server: t.server, tool: t.tenGoc, args: thamSo, ...(xemTruoc ? { xemTruoc, ctwork: true } : {}) }),
     signal,

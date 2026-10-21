@@ -266,6 +266,17 @@ describe('attach_file { path } — CuongMini tự đọc file', () => {
     expect(V.moTaGhi('attach_from_url', { project: 'NT', issue: 'NT-13', url: 'https://docs.google.com/document/d/x', image: 2 })).toMatchObject({ the: 'NT-13', viec: 'Đính kèm từ link (ảnh số 2)', noiDung: 'https://docs.google.com/document/d/x' });
   });
 
+  it('21/10/2026 — lệnh XOÁ (destructiveHint) ⇒ thẻ duyệt mở đầu bằng cảnh báo xoá', () => {
+    V.datNgonNgu('vi');
+    const x = V.moTaGhi('fpt_unit_delete_cases', { project: 'LF', function: 'AuthService.verifyEmail', notRun: true }, true);
+    expect(x.viec).toBe('⚠ XOÁ · fpt_unit_delete_cases');
+    expect(x.noiDung).toMatch(/notRun/);
+    expect(V.moTaGhi('comment', { project: 'LF', issue: 3, markdown: 'hi' }).viec).toBe('Bình luận');
+    V.datNgonNgu('en');
+    expect(V.moTaGhi('issue_delete', { project: 'LF', issue: 3 }, true)).toMatchObject({ the: 'LF-3', viec: '⚠ DELETE · issue_delete' });
+    V.datNgonNgu('vi');
+  });
+
   it('schema gửi model: attach_file có `path`, fileName/contentType thành tuỳ chọn; tool khác giữ nguyên', () => {
     const t = { ten: 'mcp__ctwork__attach_file', server: 'ctwork', tenGoc: 'attach_file', moTa: 'Attaches a file', thamSo: { type: 'object', properties: { project: {}, issue: {}, fileName: {}, contentType: {}, base64: {} }, required: ['project', 'issue', 'fileName', 'contentType'] } };
     const c = mcp.chinhSchemaCtw(t);

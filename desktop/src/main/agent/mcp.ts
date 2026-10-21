@@ -84,6 +84,11 @@ export interface ToolMcp {
    * CuongThai (`laCtworkTinCay`) — với server lạ, bên viết mô tả không được là bên quyết định bỏ cửa duyệt.
    */
   chiDoc?: boolean;
+  /**
+   * 21/10/2026: server khai `annotations.destructiveHint: true` (lệnh XOÁ — vd `fpt_unit_delete_cases`, `issue_delete`).
+   * Gợi ý này chỉ làm app THẬN TRỌNG HƠN (luôn hỏi, kể cả "Bỏ qua hết" / `/ctwork tu-ghi on`) nên tin được từ mọi server.
+   */
+  pha?: boolean;
 }
 
 interface ServerDangChay {
@@ -815,6 +820,7 @@ async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<To
       moTa: moTa.slice(0, MAX_MO_TA),
       thamSo: chuanSchema(t.inputSchema),
       ...((t.annotations as { readOnlyHint?: unknown } | undefined)?.readOnlyHint === true ? { chiDoc: true } : {}),
+      ...((t.annotations as { destructiveHint?: unknown } | undefined)?.destructiveHint === true ? { pha: true } : {}),
     });
   }
   return ra;

@@ -907,7 +907,8 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
         daGhiDanh = new Set(rows.map((r) => r.courseId));
       }
 
-      res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
+      // Có người đăng nhập ⇒ phản hồi mang isEnrolled riêng của họ ⇒ KHÔNG cho tầng cache chung giữ (22/10/2026).
+      res.set('Cache-Control', req.userId ? 'private, no-store' : 'public, max-age=120, stale-while-revalidate=600');
       res.json({
         success: true,
         data: danhSach.map((c) => ({
@@ -1183,7 +1184,8 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
     });
 
     const serialized = await Promise.all(courses.map((course) => serializeCourse(course.id, req.userId ? { userId: req.userId } : undefined)));
-    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
+    // Có người đăng nhập ⇒ phản hồi mang isEnrolled riêng của họ ⇒ KHÔNG cho tầng cache chung giữ (22/10/2026).
+    res.set('Cache-Control', req.userId ? 'private, no-store' : 'public, max-age=120, stale-while-revalidate=600');
     res.json({ success: true, data: serialized });
   } catch (error) { next(error); }
 });

@@ -23,7 +23,9 @@ const NGUON_KHOA = {
 const AUD_APPLE = (process.env.APPLE_OAUTH_AUDIENCES
   ?? 'com.cuongthai.app,com.cuongthai.ctwork,com.cuongthai.admin,com.cuongthai.app.macos').split(',').map((s) => s.trim()).filter(Boolean);
 const AUD_GOOGLE = [
-  ...(process.env.GOOGLE_OAUTH_AUDIENCES ?? '650641212127-07fqeii3rqbpduj1ko39sc83bautslrs.apps.googleusercontent.com').split(','),
+  // 22/10/2026: + client iOS của app CT Work (com.cuongthai.ctwork, project Google 20442169272 — khác project của app chính).
+  ...(process.env.GOOGLE_OAUTH_AUDIENCES
+    ?? '650641212127-07fqeii3rqbpduj1ko39sc83bautslrs.apps.googleusercontent.com,20442169272-u34g5m8cu3icggucjmmdmcb6cakc20u5.apps.googleusercontent.com').split(','),
   process.env.GOOGLE_CLIENT_ID ?? '',
 ].map((s) => s.trim()).filter(Boolean);
 

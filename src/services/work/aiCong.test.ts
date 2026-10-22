@@ -224,3 +224,159 @@ describe('llmComplete thật — rambo 410 ⇒ lùi (HTTP giả)', () => {
     ramboStatus = 410;
   });
 });
+
+// ─── Phần 3 (22/10/2026): viết tiếp khi cổng chết GIỮA CHỪNG, tool gốc, hết giờ theo bậc ───
+
+describe('chuỗi cổng CT Work — chuyển cổng giữa chừng + tool gốc', () => {
+  after(() => _datCongChoTest(null));
+  const tinNoi = [{ role: 'user' as const, content: 'hỏi' }, { role: 'assistant' as const, content: 'nửa câu' }, { role: 'user' as const, content: 'viết tiếp' }];
+
+  it('hỏng TRƯỚC mẩu chữ đầu ⇒ chuyển im lặng: không onRestart, không hỏi noiTiep, bậc sau nhận đúng câu hỏi gốc', async () => {
+    let restart = 0;
+    let hoiNoi = 0;
+    let tinBacSau: unknown;
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async () => { throw new Error('ECONNRESET'); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o, m) => { tinBacSau = o.messages; o.onToken?.('đủ'); return ok('chinh_hang', m, 'đủ'); },
+    });
+    const r = await goiAiCtWork({ ...base, onToken: () => {}, onRestart: () => { restart++; }, noiTiep: () => { hoiNoi++; return tinNoi; } });
+    assert.equal(r.cong, 'chinh_hang');
+    assert.equal(restart, 0);
+    assert.equal(hoiNoi, 0);
+    assert.deepEqual(tinBacSau, base.messages);
+  });
+
+  it('hỏng GIỮA CHỪNG + có noiTiep ⇒ bậc sau nhận bộ tin "viết tiếp", nháp GIỮ NGUYÊN (không onRestart)', async () => {
+    let restart = 0;
+    const chu: string[] = [];
+    let tinBacSau: unknown;
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (o) => { o.onToken?.('nửa câu'); throw loi(502); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o, m) => { tinBacSau = o.messages; o.onToken?.(' phần sau'); return ok('chinh_hang', m, ' phần sau'); },
+    });
+    const r = await goiAiCtWork({ ...base, onToken: (d) => chu.push(d), onRestart: () => { restart++; }, noiTiep: () => tinNoi });
+    assert.equal(r.cong, 'chinh_hang');
+    assert.equal(restart, 0);
+    assert.deepEqual(tinBacSau, tinNoi);
+    assert.equal(chu.join(''), 'nửa câu phần sau');
+  });
+
+  it('hỏng giữa chừng HAI bậc ⇒ noiTiep hỏi hai lần, modelapi viết tiếp lần cuối', async () => {
+    let hoiNoi = 0;
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (o) => { o.onToken?.('A'); throw loi(502); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o) => { o.onToken?.('B'); throw new Error('stream gãy'); },
+      baoChinhHangHong: () => {},
+      goiModelapi: async (o, m) => { assert.equal(o.messages.length, 3); o.onToken?.('C'); return ok('modelapi', m, 'C'); },
+    });
+    const r = await goiAiCtWork({ ...base, onToken: () => {}, noiTiep: () => { hoiNoi++; return tinNoi; } });
+    assert.equal(r.cong, 'modelapi');
+    assert.equal(hoiNoi, 2);
+  });
+
+  it('noiTiep trả null ⇒ hành vi cũ: onRestart, bậc sau làm lại từ đầu', async () => {
+    let restart = 0;
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (o) => { o.onToken?.('nửa'); throw loi(502); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o, m) => { assert.deepEqual(o.messages, base.messages); return ok('chinh_hang', m); },
+    });
+    await goiAiCtWork({ ...base, onToken: () => {}, onRestart: () => { restart++; }, noiTiep: () => null });
+    assert.equal(restart, 1);
+  });
+
+  it('tool gốc đi qua mọi bậc; toolCalls trả về; hết giờ theo bậc tới đúng bậc', async () => {
+    const tools = [{ name: 'read_command', description: 'd', parameters: { type: 'object' } }];
+    const thay: Array<{ cong: string; tools?: unknown; t?: number }> = [];
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (o) => { thay.push({ cong: 'rambo', tools: o.tools, t: o.timeoutTheoCong?.rambo }); throw loi(503); },
+      chinhHangSanSang: async () => false,
+      goiModelapi: async (o, m) => {
+        thay.push({ cong: 'modelapi', tools: o.tools, t: o.timeoutTheoCong?.modelapi });
+        return { ...ok('modelapi', m, ''), toolCalls: [{ name: 'read_command', input: { name: 'read_issue' } }] };
+      },
+    });
+    const r = await goiAiCtWork({ ...base, tools, timeoutTheoCong: { rambo: 45_000, modelapi: 120_000 } });
+    assert.deepEqual(r.toolCalls, [{ name: 'read_command', input: { name: 'read_issue' } }]);
+    assert.deepEqual(thay, [{ cong: 'rambo', tools, t: 45_000 }, { cong: 'modelapi', tools, t: 120_000 }]);
+  });
+});
+
+// ─── Phần 4 (22/10/2026): adapter THẬT đọc tool call trong luồng (Anthropic + OpenAI), HTTP giả ───
+
+describe('llmComplete thật — tool gốc trong luồng (HTTP giả)', () => {
+  let srv: http.Server;
+  let goc = '';
+  const than: Array<Record<string, unknown>> = [];
+  before(async () => {
+    srv = http.createServer((req, res) => {
+      let raw = '';
+      req.on('data', (c) => { raw += c; });
+      req.on('end', () => {
+        const body = raw ? JSON.parse(raw) : {};
+        than.push(body);
+        res.writeHead(200, { 'content-type': 'text/event-stream' });
+        const gui = (o: unknown) => res.write(`data: ${JSON.stringify(o)}\n\n`);
+        if (req.url?.startsWith('/an/v1/messages')) {
+          gui({ type: 'message_start', message: { usage: { input_tokens: 9 } } });
+          gui({ type: 'content_block_start', index: 0, content_block: { type: 'text', text: '' } });
+          gui({ type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'Để tôi đọc.' } });
+          gui({ type: 'content_block_start', index: 1, content_block: { type: 'tool_use', id: 't1', name: 'read_command', input: {} } });
+          gui({ type: 'content_block_delta', index: 1, delta: { type: 'input_json_delta', partial_json: '{"name":"read_' } });
+          gui({ type: 'content_block_delta', index: 1, delta: { type: 'input_json_delta', partial_json: 'issue","args":{"issue":75}}' } });
+          gui({ type: 'content_block_start', index: 2, content_block: { type: 'tool_use', id: 't2', name: 'read_page', input: {} } });
+          gui({ type: 'content_block_delta', index: 2, delta: { type: 'input_json_delta', partial_json: '{"number":3}' } });
+          gui({ type: 'message_delta', delta: { stop_reason: 'tool_use' }, usage: { output_tokens: 20 } });
+          res.end();
+          return;
+        }
+        // OpenAI: chỉ tool call, không có chữ — KHÔNG được coi là "stream produced no text".
+        gui({ choices: [{ delta: { tool_calls: [{ index: 0, id: 'c1', type: 'function', function: { name: 'search_pages', arguments: '' } }] } }] });
+        gui({ choices: [{ delta: { tool_calls: [{ index: 0, function: { arguments: '{"query":' } }] } }] });
+        gui({ choices: [{ delta: { tool_calls: [{ index: 0, function: { arguments: '"git"}' } }] } }] });
+        gui({ choices: [{ delta: {}, finish_reason: 'tool_calls' }], usage: { prompt_tokens: 5, completion_tokens: 6 } });
+        res.end('data: [DONE]\n\n');
+      });
+    });
+    await new Promise<void>((r) => srv.listen(0, '127.0.0.1', () => r()));
+    goc = `http://127.0.0.1:${(srv.address() as AddressInfo).port}`;
+    process.env.LLM_DAILY_COST_HARD_USD = '0';
+    process.env.LLM_DAILY_COST_SOFT_USD = '0';
+  });
+  after(() => srv.close());
+  const tools = [{ name: 'read_command', description: 'đọc', parameters: { type: 'object', properties: { name: { type: 'string' } } } }];
+
+  it('Anthropic: tool_use + input_json_delta ⇒ toolCalls; body gửi tools dạng input_schema', async () => {
+    const { llmComplete } = await import('../interview/llm/index.js');
+    than.length = 0;
+    const chu: string[] = [];
+    const r = await llmComplete({
+      step: 'report', system: 's', messages: [{ role: 'user', content: 'hỏi' }], maxTokens: 100, feature: 'work', purpose: 'work_assistant', maxRetries: 0,
+      diemCuoi: { root: `${goc}/an`, key: 'k', local: false, label: 'thu', giaoThuc: 'anthropic' }, model: 'claude-thu', tools, onToken: (d) => chu.push(d),
+    });
+    assert.deepEqual(r.toolCalls, [{ name: 'read_command', input: { name: 'read_issue', args: { issue: 75 } } }, { name: 'read_page', input: { number: 3 } }]);
+    assert.equal(r.text, 'Để tôi đọc.');
+    assert.equal(r.biCat, false);
+    assert.deepEqual((than[0].tools as unknown[])[0], { name: 'read_command', description: 'đọc', input_schema: tools[0].parameters });
+  });
+
+  it('OpenAI: delta.tool_calls ghép theo index ⇒ toolCalls; chữ rỗng KHÔNG phải lỗi; body gửi tools dạng function', async () => {
+    const { llmComplete } = await import('../interview/llm/index.js');
+    than.length = 0;
+    const r = await llmComplete({
+      step: 'report', system: 's', messages: [{ role: 'user', content: 'hỏi' }], maxTokens: 100, feature: 'work', purpose: 'work_assistant', maxRetries: 0,
+      diemCuoi: { root: `${goc}/oa`, key: 'k', local: false, label: 'thu' }, model: 'gpt-thu', tools, onToken: () => {},
+    });
+    assert.deepEqual(r.toolCalls, [{ name: 'search_pages', input: { query: 'git' } }]);
+    assert.equal(r.text, '');
+    assert.deepEqual((than[0].tools as unknown[])[0], { type: 'function', function: { name: 'read_command', description: 'đọc', parameters: tools[0].parameters } });
+  });
+});

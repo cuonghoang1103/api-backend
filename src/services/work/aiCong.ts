@@ -23,7 +23,7 @@
 
 import { AppError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { ghiSoLlm, httpStatusCua, llmComplete, type LLMMessage } from '../interview/llm/index.js';
+import { ghiSoLlm, httpStatusCua, llmComplete, type LLMMessage, type LLMTool, type LLMToolCall } from '../interview/llm/index.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import {
   ctworkDiRambo, fallbackEndpoint, laLoiKhoaRambo, modelDuPhongModelapi, ramboDangNghi, ramboSonic, type LlmEndpoint,
@@ -49,6 +49,16 @@ export interface GoiAiCtWorkOpts {
   signal?: AbortSignal;
   /** Việc phân tích NẶNG, ít lượt (soát Req, sức khoẻ nhóm, luyện bảo vệ…) ⇒ Opus trên rambo; lùi chính hãng vẫn Sonnet 5.5. */
   nang?: boolean;
+  /** 22/10/2026 (aiTraLoi.ts): tool gốc của cổng — trợ lý xin ĐỌC dữ liệu bằng tool call. Cả ba bậc đều nhận. */
+  tools?: LLMTool[];
+  /**
+   * 22/10/2026 — bậc hỏng GIỮA CHỪNG sau khi đã phát chữ: nơi gọi trả bộ tin "viết TIẾP đúng chỗ dở" cho bậc sau (chữ đã
+   * hiện giữ nguyên, bậc sau nối vào) thay vì xoá nháp làm lại. Trả `null` (hoặc không truyền) ⇒ như cũ: `onRestart` rồi
+   * bậc sau làm lại từ đầu. CHỈ gọi khi đã có chữ tới tay nơi gọi (bậc hỏng TRƯỚC mẩu chữ đầu ⇒ chuyển im lặng).
+   */
+  noiTiep?: () => LLMMessage[] | null;
+  /** Hết giờ CHỜ (không có mẩu nào) theo từng bậc — rambo treo thì chuyển sớm thay vì chờ 90 s. */
+  timeoutTheoCong?: Partial<Record<CongCtWork, number>>;
 }
 
 export interface KetQuaAiCtWork {
@@ -58,6 +68,7 @@ export interface KetQuaAiCtWork {
   outputTokens: number;
   biCat?: boolean;
   cong: CongCtWork;
+  toolCalls?: LLMToolCall[];
 }
 
 // ─── Phụ thuộc (test thay được) ─────────────────────────────────
@@ -155,10 +166,10 @@ const THAT: PhuThuocCong = {
   goiRambo: async (o, ep, model) => {
     const r = await llmComplete({
       step: 'report', system: o.system, messages: o.messages, maxTokens: o.maxTokens, userId: o.userId, feature: 'work',
-      purpose: o.purpose, timeoutMs: o.timeoutMs ?? 90_000, maxRetries: 0, diemCuoi: ep, model, khongLui: true,
-      ...(o.onToken ? { onToken: o.onToken } : {}), ...(o.onRestart ? { onRestart: o.onRestart } : {}),
+      purpose: o.purpose, timeoutMs: o.timeoutTheoCong?.rambo ?? o.timeoutMs ?? 90_000, maxRetries: 0, diemCuoi: ep, model, khongLui: true,
+      ...(o.onToken ? { onToken: o.onToken } : {}), ...(o.onRestart ? { onRestart: o.onRestart } : {}), ...(o.tools?.length ? { tools: o.tools } : {}),
     });
-    return { text: r.text, model: r.model, inputTokens: r.inputTokens, outputTokens: r.outputTokens, biCat: r.biCat, cong: 'rambo' };
+    return { text: r.text, model: r.model, inputTokens: r.inputTokens, outputTokens: r.outputTokens, biCat: r.biCat, cong: 'rambo', ...(r.toolCalls ? { toolCalls: r.toolCalls } : {}) };
   },
   chinhHangSanSang: chinhHangSanSangThat,
   goiChinhHang: async (o, model) => {
@@ -167,7 +178,7 @@ const THAT: PhuThuocCong = {
     if (!v.allowed) throw new AppError(budgetMessage(v), 429, 'BUDGET_EXCEEDED');
     const { goiVanBanChinhHang } = await import('../agent/anthropicChinhHang/dinhTuyen.js');
     const ctl = new AbortController();
-    const hen = setTimeout(() => ctl.abort(), o.timeoutMs ?? 90_000);
+    const hen = setTimeout(() => ctl.abort(), o.timeoutTheoCong?.chinh_hang ?? o.timeoutMs ?? 90_000);
     const huy = () => ctl.abort();
     o.signal?.addEventListener('abort', huy, { once: true });
     try {
@@ -176,12 +187,12 @@ const THAT: PhuThuocCong = {
         messages: o.messages.map((m) => ({ role: m.role, content: typeof m.content === 'string' ? m.content : (m.content as unknown as Array<Record<string, unknown>>) })),
         model, hang: 'free', maxTokens: o.maxTokens, userId: o.userId, viec: 'work_ai',
         nhanh: { effort: o.purpose === 'work_digest' ? 'low' : 'medium' },
-        ...(o.onToken ? { onToken: o.onToken } : {}), signal: ctl.signal,
+        ...(o.onToken ? { onToken: o.onToken } : {}), signal: ctl.signal, ...(o.tools?.length ? { tools: o.tools } : {}),
       });
-      if (!r.text.trim()) throw new Error('chinh_hang: empty reply');
+      if (!r.text.trim() && !r.toolCalls?.length) throw new Error('chinh_hang: empty reply');
       const tok = uocToken(o, r.text);
       await ghiSoLlm({ userId: o.userId, feature: 'work', step: 'report', model, ...tok, success: true, purpose: o.purpose, costUsd: r.usd, provider: 'anthropic-chinh-hang' }).catch(() => {});
-      return { text: r.text, model, ...tok, biCat: r.biCat, cong: 'chinh_hang' };
+      return { text: r.text, model, ...tok, biCat: r.biCat, cong: 'chinh_hang', ...(r.toolCalls ? { toolCalls: r.toolCalls } : {}) };
     } finally {
       clearTimeout(hen);
       o.signal?.removeEventListener('abort', huy);
@@ -191,10 +202,10 @@ const THAT: PhuThuocCong = {
   goiModelapi: async (o, model) => {
     const r = await llmComplete({
       step: 'report', system: o.system, messages: o.messages, maxTokens: o.maxTokens, userId: o.userId, feature: 'work',
-      purpose: o.purpose, timeoutMs: o.timeoutMs ?? 90_000, maxRetries: o.maxRetries ?? 2, diemCuoi: fallbackEndpoint(model), model,
-      ...(o.onToken ? { onToken: o.onToken } : {}), ...(o.onRestart ? { onRestart: o.onRestart } : {}),
+      purpose: o.purpose, timeoutMs: o.timeoutTheoCong?.modelapi ?? o.timeoutMs ?? 90_000, maxRetries: o.maxRetries ?? 2, diemCuoi: fallbackEndpoint(model), model,
+      ...(o.onToken ? { onToken: o.onToken } : {}), ...(o.onRestart ? { onRestart: o.onRestart } : {}), ...(o.tools?.length ? { tools: o.tools } : {}),
     });
-    return { text: r.text, model: r.model, inputTokens: r.inputTokens, outputTokens: r.outputTokens, biCat: r.biCat, cong: 'modelapi' };
+    return { text: r.text, model: r.model, inputTokens: r.inputTokens, outputTokens: r.outputTokens, biCat: r.biCat, cong: 'modelapi', ...(r.toolCalls ? { toolCalls: r.toolCalls } : {}) };
   },
 };
 
@@ -215,7 +226,17 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
   let daPhat = false;
   const onToken = o.onToken ? (d: string) => { daPhat = true; o.onToken!(d); } : undefined;
   const xoaNhap = () => { if (daPhat) { daPhat = false; o.onRestart?.(); } };
-  const opts: GoiAiCtWorkOpts = { ...o, ...(onToken ? { onToken } : {}), onRestart: xoaNhap };
+  let opts: GoiAiCtWorkOpts = { ...o, ...(onToken ? { onToken } : {}), onRestart: xoaNhap };
+  /**
+   * Bậc vừa hỏng. Chưa phát chữ ⇒ bậc sau chạy y nguyên (người dùng không thấy gì). Đã phát chữ ⇒ hỏi nơi gọi bộ tin
+   * "viết TIẾP" (`noiTiep`): có ⇒ bậc sau nối tiếp, nháp giữ nguyên; không ⇒ xoá nháp (`onRestart`), bậc sau làm lại.
+   */
+  const sauKhiHong = () => {
+    if (!daPhat) return;
+    const tin = o.noiTiep?.() ?? null;
+    if (tin && tin.length) { daPhat = false; opts = { ...opts, messages: tin }; return; }
+    xoaNhap();
+  };
   const huy = () => { if (o.signal?.aborted) throw new AppError('The connection closed before the answer was ready. Ask again.', 499, 'WORK_AI_CANCELLED'); };
 
   // 1. Rambo
@@ -227,8 +248,8 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
     } catch (e) {
       if (laLoiChinhSach(e)) throw e;
       const st = httpStatusCua(e);
-      logger.warn('[ctwork-ai] rambo lỗi — tự chuyển cổng chính hãng', { purpose: o.purpose, status: st ?? null, khoaHong: laLoiKhoaRambo(st), error: (e as Error).message?.slice(0, 160) });
-      xoaNhap();
+      logger.warn('[ctwork-ai] rambo lỗi — tự chuyển cổng chính hãng', { purpose: o.purpose, status: st ?? null, khoaHong: laLoiKhoaRambo(st), giuaChung: daPhat, error: (e as Error).message?.slice(0, 160) });
+      sauKhiHong();
     }
   }
   huy();
@@ -244,8 +265,8 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
       const thong = (e as Error).message ?? '';
       const { laLoiCongHong } = await import('../agent/bangModel.js');
       if (laLoiCongHong(thong, (e as { code?: string }).code)) pt.baoChinhHangHong();
-      logger.warn('[ctwork-ai] cổng chính hãng lỗi — lùi modelapi', { purpose: o.purpose, error: thong.slice(0, 160) });
-      xoaNhap();
+      logger.warn('[ctwork-ai] cổng chính hãng lỗi — lùi modelapi', { purpose: o.purpose, giuaChung: daPhat, error: thong.slice(0, 160) });
+      sauKhiHong();
     }
   }
   huy();

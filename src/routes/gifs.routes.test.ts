@@ -25,7 +25,7 @@ test('parseGifOffset: trần theo giới hạn GIPHY', () => {
 
 test('giphyUrl: trending khi q rỗng, search mã hoá q, luôn kèm limit + offset', () => {
   const t = giphyUrl('K', '', 0);
-  assert.match(t, /\/trending\?api_key=K&limit=24&offset=0&rating=pg-13$/);
+  assert.match(t, /\/trending\?api_key=K&limit=24&offset=0&rating=pg$/);
   const s = giphyUrl('K', 'chào bạn', 48);
-  assert.match(s, /\/search\?api_key=K&q=ch%C3%A0o%20b%E1%BA%A1n&limit=24&offset=48&rating=pg-13$/);
+  assert.match(s, /\/search\?api_key=K&q=ch%C3%A0o%20b%E1%BA%A1n&limit=24&offset=48&rating=pg$/);
 });

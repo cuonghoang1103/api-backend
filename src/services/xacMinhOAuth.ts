@@ -23,7 +23,9 @@ const NGUON_KHOA = {
 const AUD_APPLE = (process.env.APPLE_OAUTH_AUDIENCES
   ?? 'com.cuongthai.app,com.cuongthai.ctwork,com.cuongthai.admin,com.cuongthai.app.macos').split(',').map((s) => s.trim()).filter(Boolean);
 const AUD_GOOGLE = [
-  ...(process.env.GOOGLE_OAUTH_AUDIENCES ?? '650641212127-07fqeii3rqbpduj1ko39sc83bautslrs.apps.googleusercontent.com').split(','),
+  // 22/10/2026: + client iOS của app CT Work (com.cuongthai.ctwork, project Google 20442169272 — khác project của app chính).
+  ...(process.env.GOOGLE_OAUTH_AUDIENCES
+    ?? '650641212127-07fqeii3rqbpduj1ko39sc83bautslrs.apps.googleusercontent.com,20442169272-u34g5m8cu3icggucjmmdmcb6cakc20u5.apps.googleusercontent.com').split(','),
   process.env.GOOGLE_CLIENT_ID ?? '',
 ].map((s) => s.trim()).filter(Boolean);
 
@@ -82,7 +84,8 @@ function bangNhau(a: string, b: string): boolean {
 const conHan = (than: Record<string, unknown>): boolean => typeof than.exp === 'number' && than.exp * 1000 > Date.now() - 60_000;
 const cungEmail = (a: unknown, b: string): boolean => typeof a === 'string' && a.trim().toLowerCase() === b.trim().toLowerCase();
 
-export type KetQuaXacMinh = { ok: true; cach: 'noiBo' | 'apple' | 'google' } | { ok: false; lyDo: string };
+/** `aud` (chỉ Apple): bundle id của app đã đăng nhập — client_id để đổi authorizationCode / thu hồi token (appleSiwa). */
+export type KetQuaXacMinh = { ok: true; cach: 'noiBo' | 'apple' | 'google'; aud?: string } | { ok: false; lyDo: string };
 
 export async function xacMinhOAuth(
   headers: Record<string, unknown>,
@@ -104,7 +107,7 @@ export async function xacMinhOAuth(
       if (String(t.sub) !== providerId) return { ok: false, lyDo: 'sub Apple khác providerId' };
       // Apple luôn đưa email vào token khi app xin quyền email; thiếu thì không có gì để đối chiếu ⇒ từ chối.
       if (!cungEmail(t.email, email)) return { ok: false, lyDo: 'email khác email trong token Apple' };
-      return { ok: true, cach: 'apple' };
+      return { ok: true, cach: 'apple', aud: String(t.aud) };
     }
     if (body.provider === 'google' && body.idToken) {
       const t = await kiemJwtRs256(body.idToken, 'google');

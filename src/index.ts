@@ -705,6 +705,9 @@ app.use('/api/v1/admin', adminMessagesRoutes);
 // Admin moderation queue for thread reports (block/report system).
 const { default: adminReportsRoutes } = (await import(path.join(__dirname, 'routes', 'admin.reports.routes.js')));
 app.use('/api/v1/admin/reports', adminReportsRoutes);
+// Kiểm duyệt từ hàng chờ báo cáo: gỡ nội dung / khoá người viết (App Store 1.2).
+const { default: adminModerationRoutes } = (await import(path.join(__dirname, 'routes', 'admin.moderation.routes.js')));
+app.use('/api/v1/admin/moderation', adminModerationRoutes);
 // Admin review queue for account erasure requests. Mounted BEFORE the
 // catch-all admin routers would matter only if they shadowed this path;
 // they don't, but keeping it next to the other admin sub-router mounts

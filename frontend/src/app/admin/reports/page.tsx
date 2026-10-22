@@ -369,6 +369,21 @@ function ReportCard({
   tab: Tab;
 }) {
   const router = useRouter();
+  // Kiểm duyệt ngay trên báo cáo (App Store 1.2 — xử lý trong 24 giờ). Tiếp nhận báo cáo vẫn là nút riêng.
+  const kiemDuyet = async (viec: 'remove' | 'lock') => {
+    const hoi = viec === 'remove'
+      ? 'Gỡ tin bị báo cáo với cả hai bên?'
+      : 'Khoá tài khoản người bị báo cáo? Họ bị đăng xuất khỏi mọi ứng dụng.';
+    if (!window.confirm(hoi)) return;
+    try {
+      if (viec === 'remove') await adminReportsApi.removeMessage(report.id);
+      else await adminReportsApi.lockReported(report.id);
+      toast.success(viec === 'remove' ? 'Đã gỡ tin' : 'Đã khoá tài khoản');
+    } catch (e) {
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg || 'Không làm được');
+    }
+  };
   const categoryLabel = report.category
     ? CATEGORY_LABELS[report.category] ?? report.category
     : null;
@@ -489,6 +504,13 @@ function ReportCard({
                       </div>
                     ))}
                   </div>
+                  {/* Tin CỤ THỂ bị báo cáo (nếu có) */}
+                  {report.reportedMessage && (
+                    <p className="mt-2 whitespace-pre-wrap break-words rounded-md border border-red-500/20 bg-red-500/[0.06] p-2 text-[11.5px] text-text-secondary">
+                      <span className="font-semibold text-red-300">Tin bị báo cáo (#{report.reportedMessage.id}): </span>
+                      {report.reportedMessage.content || report.reportedMessage.mediaUrl || '(đính kèm / đã gỡ)'}
+                    </p>
+                  )}
                   {/* Last message preview */}
                   {report.thread.lastMessage && (
                     <p className="mt-2 truncate text-[11px] italic text-text-muted">
@@ -524,6 +546,20 @@ function ReportCard({
                     className="flex-1 rounded-lg border border-amber-500/30 bg-amber-500/15 px-3 py-2 text-[12px] font-semibold text-amber-200 transition-colors hover:bg-amber-500/25"
                   >
                     Tiếp nhận báo cáo
+                  </button>
+                  {report.reportedMessage && (
+                    <button
+                      onClick={() => void kiemDuyet('remove')}
+                      className="flex-1 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[12px] font-semibold text-red-200 transition-colors hover:bg-red-500/20"
+                    >
+                      Gỡ tin
+                    </button>
+                  )}
+                  <button
+                    onClick={() => void kiemDuyet('lock')}
+                    className="flex-1 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[12px] font-semibold text-red-200 transition-colors hover:bg-red-500/20"
+                  >
+                    Khoá người bị báo cáo
                   </button>
                   {report.thread && (
                     <button

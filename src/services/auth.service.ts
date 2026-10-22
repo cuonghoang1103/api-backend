@@ -11,6 +11,7 @@ import { logger } from '../utils/logger.js';
 import { putObject } from '../config/r2.js';
 import { mfaAtConHieuLuc } from './mfa/adminMfa.js';
 import { taoTenDangNhapDep } from './doiTenDangNhap.service.js';
+import { chanNoiDungXau } from './locNoiDung.js';
 
 const SALT_ROUNDS = 12;
 
@@ -209,6 +210,8 @@ export class AuthService {
     if (!passwordCheck.valid) {
       throw new AppError(passwordCheck.errors[0]!, 400, 'WEAK_PASSWORD');
     }
+    // App Store 1.2: tên hiện công khai cạnh mọi bài/tin ⇒ lọc từ nặng ngay khi đăng ký.
+    chanNoiDungXau({ username: data.username, fullName: data.fullName });
 
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -683,6 +686,8 @@ export class AuthService {
     coverPhotoUrl?: string | null;
   }) {
     const updates: Record<string, unknown> = {};
+    // App Store 1.2: tên + giới thiệu hiện trên hồ sơ và cạnh mọi bài/tin ⇒ từ nặng ⇒ 422 CONTENT_BLOCKED.
+    chanNoiDungXau({ fullName: data.fullName, displayName: data.displayName, bio: data.bio });
 
     if (data.fullName !== undefined) {
       const trimmed = data.fullName?.trim() || null;

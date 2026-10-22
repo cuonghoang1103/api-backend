@@ -16,6 +16,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { getIO } from '../../socket/messaging.socket.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 import type { ChatRef } from './chatRules.js';
 import { displayName, PUBLIC_USER, type PublicUser } from './common.js';
 import { accessFor, assertFeedPerson, authorRoles, feedScopesFor, scopeReaders, type FeedScopes } from './feedAccess.js';
@@ -469,6 +470,8 @@ interface Parsed { body: string; mentionIds: number[]; hashtags: string[]; refs:
 async function parseBody(raw: string, scope: { workspaceId: number; wsSlug: string; projectId: number | null; projectKey: string | null }, max: number, readers?: PublicUser[]): Promise<Parsed & { readers: PublicUser[] }> {
   const body = cleanBody(raw);
   if (body.length > max) throw new BadRequestError(`Keep it under ${max.toLocaleString('en-US')} characters`, 'WORK_TOO_LONG');
+  // App Store 1.2: bài + bình luận (tạo và sửa đều qua đây) — từ nặng ⇒ 422 CONTENT_BLOCKED.
+  chanNoiDungXau({ body });
   const names = new Set(mentionsIn(body));
   const rs = readers ?? (names.size ? await scopeReaders(scope.workspaceId, scope.projectId) : []);
   const mentionIds = names.size ? rs.filter((u) => names.has(u.username.toLowerCase())).map((u) => u.id) : [];
@@ -511,6 +514,7 @@ export async function createPost(userId: number, input: CreatePostInput) {
   if (mix) throw new BadRequestError(mix, 'WORK_FEED_TOO_MANY_FILES');
   const poll = normalizePoll(input.poll ?? null);
   if (typeof poll === 'string') throw new BadRequestError(poll, 'WORK_FEED_POLL');
+  if (poll) chanNoiDungXau(Object.fromEntries(poll.options.map((o) => [`poll.${o.id}`, o.text])));
   if (!parsed.body && !drafts.length && !poll) throw new BadRequestError('Write something, add a photo or a file, or create a poll', 'WORK_EMPTY');
 
   const post = await prisma.$transaction(async (tx) => {
@@ -585,6 +589,7 @@ export async function updatePost(userId: number, postId: number, input: UpdatePo
   if (remove.length || add.length) contentChanged = true;
   const finalBody = (data.body as string | undefined) ?? p.body;
   if (!finalBody && !keep.length && !add.length && !p.poll) throw new BadRequestError('A post cannot be empty — delete it instead', 'WORK_EMPTY');
+  chanNoiDungXau(Object.fromEntries((input.alts ?? []).map((a) => [`alt.${a.id}`, a.alt])));
   if (input.commentsOff !== undefined) data.commentsOff = input.commentsOff;
   if (contentChanged) data.editedAt = new Date();
   // Thẻ link: hết link ⇒ bỏ thẻ NGAY (trả về đúng); link mới ⇒ dựng lại ở nền; cùng link ⇒ giữ.

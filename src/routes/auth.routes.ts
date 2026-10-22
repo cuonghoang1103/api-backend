@@ -8,6 +8,7 @@ import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 import mfaRoutes from './mfa.routes.js';
 import { xacMinhOAuth } from '../services/xacMinhOAuth.js';
+import { luuTokenApple } from '../services/appleSiwa.service.js';
 import { logger } from '../utils/logger.js';
 
 const router = Router();
@@ -195,6 +196,10 @@ router.post(
         throw new AppError('Không xác minh được đăng nhập với nhà cung cấp. Thử đăng nhập lại.', 401, 'OAUTH_UNVERIFIED');
       }
       const result = await authService.oauthRegister(req.body);
+      // Sign in with Apple: đổi authorizationCode lấy refresh token (mã hoá) để thu hồi khi xoá tài khoản. Chạy nền.
+      if (xm.cach === 'apple' && req.body?.authorizationCode) {
+        void luuTokenApple(result.userId, xm.aud, String(req.body.providerId), String(req.body.authorizationCode));
+      }
       res.cookie('backend_token', result.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -246,6 +251,10 @@ router.post(
         throw new AppError('Không xác minh được đăng nhập với nhà cung cấp. Thử đăng nhập lại.', 401, 'OAUTH_UNVERIFIED');
       }
       const result = await authService.oauthRegister(req.body);
+      // Sign in with Apple: đổi authorizationCode lấy refresh token (mã hoá) để thu hồi khi xoá tài khoản. Chạy nền.
+      if (xm.cach === 'apple' && req.body?.authorizationCode) {
+        void luuTokenApple(result.userId, xm.aud, String(req.body.providerId), String(req.body.authorizationCode));
+      }
       res.cookie('backend_token', result.token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

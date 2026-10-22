@@ -28,6 +28,7 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError, AppError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 import { auditProject } from './audit.js';
 import { maskUser, peopleFilterFor } from './clientPeople.js';
@@ -698,6 +699,7 @@ export async function addComment(userId: number, projectId: number, num: number,
   const p = await findPage(ctx, num);
   const { json, text } = normDoc(bodyJson);
   if (!text.trim()) throw new BadRequestError('Write something first', 'VALIDATION_ERROR');
+  chanNoiDungXau({ body: text }); // App Store 1.2 — từ nặng ⇒ 422 CONTENT_BLOCKED
   // K-1: trả lời theo luồng — một cấp (trả lời một trả lời ⇒ gắn vào gốc).
   let parentId: number | null = null;
   let parentAuthor: number | null = null;

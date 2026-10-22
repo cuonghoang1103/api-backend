@@ -20,6 +20,7 @@ import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 import { extractJson, isAiAvailable, type LLMMessage } from '../interview/llm/index.js';
 import { auditProject } from './audit.js';
 import { displayName } from './common.js';
@@ -442,6 +443,7 @@ export async function addComment(userId: number, projectId: number, number: numb
   const d = await findDiagram(projectId, number);
   const body = input.body.trim().slice(0, 10_000);
   if (!body) throw new BadRequestError('Write something first', 'VALIDATION_ERROR');
+  chanNoiDungXau({ body });
   if (input.parentId) {
     const p = await prisma.workDiagramComment.findFirst({ where: { id: input.parentId, diagramId: d.id, deletedAt: null }, select: { id: true, parentId: true } });
     if (!p) throw new BadRequestError('The comment you reply to was deleted', 'VALIDATION_ERROR');

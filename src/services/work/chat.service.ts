@@ -18,6 +18,7 @@ import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { getIO, getOnlineUserIds } from '../../socket/messaging.socket.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 import { auditProject } from './audit.js';
 import { displayName, PUBLIC_USER, type PublicUser } from './common.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
@@ -711,6 +712,7 @@ export async function postMessage(userId: number, projectId: number, channelId: 
   const body = cleanBody(input.body);
   const fileIds = [...new Set(input.fileIds ?? [])];
   if (!body && !fileIds.length) throw new BadRequestError('Write a message or attach a file', 'WORK_EMPTY_MESSAGE');
+  chanNoiDungXau({ body }); // App Store 1.2 — từ nặng ⇒ 422 CONTENT_BLOCKED
   if (fileIds.length > MAX_FILES_PER_MESSAGE) throw new BadRequestError(`A message can have at most ${MAX_FILES_PER_MESSAGE} files`, 'WORK_LIMIT');
   const clientKey = input.clientKey?.trim().slice(0, 64) || null;
   // Hàng chờ ngoại tuyến gửi lại cùng khoá ⇒ trả lại đúng tin đã lưu, không thêm tin trùng.
@@ -893,6 +895,7 @@ export async function editMessage(userId: number, projectId: number, channelId: 
   const m = await ownMessage(ctx, channelId, messageId);
   if (m.authorId !== userId || m.kind !== 'USER') throw new ForbiddenError('You can only edit your own messages');
   const body = cleanBody(bodyRaw);
+  chanNoiDungXau({ body });
   const hasFiles = await prisma.workChannelFile.count({ where: { messageId } });
   if (!body && !hasFiles) throw new BadRequestError('A message cannot be empty — delete it instead', 'WORK_EMPTY_MESSAGE');
   if (body === m.body) return getMessage(userId, projectId, channelId, messageId);

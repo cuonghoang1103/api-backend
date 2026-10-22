@@ -3,7 +3,7 @@ import LegalShell from '@/components/legal/LegalShell';
 
 export const metadata: Metadata = {
   title: 'Chính sách bảo mật',
-  description: 'Chính sách bảo mật thông tin của CuongThai và ứng dụng CT Work theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP: dữ liệu thu thập, tin nhắn riêng, trạng thái hoạt động, trợ lý AI, phiên âm giọng nói, thông báo đẩy, thời hạn lưu trữ, xoá tài khoản và quyền của chủ thể dữ liệu. Có bản tóm tắt tiếng Anh.',
+  description: 'Chính sách bảo mật thông tin của CuongThai và ứng dụng CT Work theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP: dữ liệu thu thập, tin nhắn riêng, Bảng tin, ảnh động GIF (GIPHY), lọc nội dung, đăng nhập bằng Apple, trạng thái hoạt động, trợ lý AI, phiên âm giọng nói, thông báo đẩy, thời hạn lưu trữ, xoá tài khoản và quyền của chủ thể dữ liệu. Có bản tóm tắt tiếng Anh.',
   alternates: { canonical: 'https://cuongthai.com/chinh-sach-bao-mat' },
 };
 
@@ -22,9 +22,12 @@ export default function Page() {
 
       <h2>1. Thông tin thu thập</h2>
       <ul>
-        <li><b>Thông tin tài khoản:</b> họ tên, tên đăng nhập, email, mật khẩu (được mã hoá), ảnh đại diện.</li>
+        <li><b>Thông tin tài khoản và hồ sơ:</b> họ tên, tên đăng nhập, email, mật khẩu (được mã hoá), ảnh đại diện, ảnh bìa và phần giới thiệu Quý khách tự thêm.</li>
+        <li><b>Đăng nhập bằng Apple:</b> nếu Quý khách chọn “Đăng nhập bằng Apple”, Apple gửi cho chúng tôi một mã định danh tài khoản Apple dành riêng cho ứng dụng,
+          email của Quý khách (hoặc địa chỉ chuyển tiếp ẩn danh của Apple nếu Quý khách chọn ẩn email) và — ở lần đăng nhập đầu tiên — họ tên. Chúng tôi cũng nhận từ
+          Apple một mã thông báo (token) đăng nhập và lưu nó ở dạng <b>mã hoá</b>, chỉ để có thể yêu cầu Apple thu hồi quyền đăng nhập khi Quý khách xoá tài khoản (mục 5).</li>
         <li><b>Thông tin đơn hàng:</b> họ tên, số điện thoại, email, địa chỉ nhận hàng (với hàng vật lý).</li>
-        <li><b>Nội dung Quý khách tạo:</b> tin nhắn và tệp đính kèm, tin nhắn thoại, bình luận, thẻ công việc, tài liệu và các nội dung khác trong dự án CT Work (xem mục 6, 8 và 9).</li>
+        <li><b>Nội dung Quý khách tạo:</b> tin nhắn và tệp đính kèm, tin nhắn thoại, ảnh động (GIF) và nhãn dán Quý khách gửi, bình luận, thẻ công việc, tài liệu, bài viết trên Bảng tin (kèm ảnh, video, tệp, bình chọn, cảm xúc) và các nội dung khác trong dự án CT Work (xem mục 6, 6a, 6b, 8 và 9).</li>
         <li><b>Trạng thái hoạt động:</b> thời điểm hoạt động gần nhất và việc Quý khách đang kết nối hay không (xem mục 7).</li>
         <li><b>Thẻ thiết bị cho thông báo đẩy</b> (xem mục 10).</li>
         <li><b>Micro:</b> chỉ được dùng trong lúc Quý khách chủ động ghi một tin nhắn thoại hoặc ghi âm cuộc họp.</li>
@@ -49,6 +52,7 @@ export default function Page() {
         <li><b>Hạ tầng lưu trữ &amp; giám sát lỗi</b> (lưu trữ tệp trên <b>Cloudflare R2</b>, theo dõi lỗi kỹ thuật) — để vận hành website và ứng dụng.</li>
         <li><b>Nhà cung cấp mô hình AI</b> (như Anthropic — Claude, OpenAI — GPT), trực tiếp hoặc qua cổng API AI trung gian — chỉ nội dung Quý khách chủ động gửi cho một tính năng AI, kèm phần nội dung cần cho câu trả lời. Chi tiết cho CT Work ở mục 8.</li>
         <li><b>Groq</b> — chuyển giọng nói thành chữ cho tin nhắn thoại và bản ghi âm cuộc họp trong CT Work (xem mục 9).</li>
+        <li><b>GIPHY</b> — tìm ảnh động (GIF) trong tin nhắn: máy chủ của chúng tôi gửi chữ Quý khách gõ vào ô tìm GIF tới GIPHY, không kèm thông tin tài khoản (xem mục 6b).</li>
         <li><b>Apple</b> — đăng nhập bằng Apple và chuyển thông báo đẩy (APNs) tới ứng dụng iOS (xem mục 10).</li>
       </ul>
       <p>Chúng tôi <b>không bán</b> dữ liệu cá nhân cho bên thứ ba.</p>
@@ -76,7 +80,8 @@ export default function Page() {
           ảnh đại diện, ảnh bìa, giới thiệu, số điện thoại, IP và thiết bị đăng nhập gần nhất bị xoá hoặc thay bằng giá trị ẩn danh, và tệp ảnh đại diện/ảnh bìa Quý khách
           đã tải lên bị xoá khỏi kho lưu trữ; thông tin người mua trên đơn hàng được ẩn danh hoá. Đồng thời: <b>mọi thẻ thiết bị bị xoá</b> (không còn thông báo đẩy nào
           tới máy của Quý khách), mọi token API CT Work bị thu hồi và các kết nối tài khoản bên ngoài (như Microsoft, Google) bị gỡ, trạng thái hoạt động bị tắt và xoá mốc,
-          các hội thoại AI riêng của Quý khách (AI Chat trên web và hội thoại “Riêng tư” với trợ lý CT Work) bị xoá.
+          các hội thoại AI riêng của Quý khách (AI Chat trên web và hội thoại “Riêng tư” với trợ lý CT Work) bị xoá. Nếu Quý khách từng đăng nhập bằng Apple, chúng tôi gửi
+          yêu cầu thu hồi token đăng nhập Apple của ứng dụng tới Apple (qua dịch vụ thu hồi token của Apple) rồi xoá token đã lưu.
           Nội dung Quý khách đã chia sẻ với người khác (tin nhắn đã gửi, thẻ, bình luận, tài liệu, hội thoại AI ở chế độ “Dự án” trong CT Work…) vẫn nằm lại trong cuộc
           trò chuyện/dự án của họ nhưng chỉ còn gắn với một tài khoản đã ẩn danh. Muốn gỡ nội dung cụ thể, Quý khách có thể tự xoá trước, hoặc liên hệ chúng tôi.
         </li>
@@ -96,11 +101,49 @@ export default function Page() {
         <li><b>Xoá cuộc trò chuyện:</b> chỉ xoá ở phía Quý khách — người kia vẫn giữ bản của họ. Quý khách có thể khôi phục cuộc trò chuyện (kèm toàn bộ lịch sử) ở mục “Đã xoá”.</li>
         <li><b>Đã xem và đang soạn tin:</b> mốc “đã xem” được lưu và hiển thị cho người còn lại trong cuộc trò chuyện. Tín hiệu “đang soạn tin” chỉ được chuyển tiếp tức thời tới
           người kia và không được lưu.</li>
-        <li><b>Báo cáo và chặn:</b> Quý khách có thể báo cáo một cuộc trò chuyện (lý do và loại vi phạm); đội kiểm duyệt xem báo cáo cùng tin nhắn gần nhất của cuộc trò chuyện đó để xử lý,
-          và có thể gỡ tin vi phạm. Khi Quý khách chặn một người, người đó không thể nhắn tin, mở cuộc trò chuyện mới hay bắt đầu nhắn riêng với Quý khách trong CT Work,
+        <li><b>Báo cáo và chặn:</b> Quý khách có thể báo cáo một cuộc trò chuyện hoặc một tin nhắn cụ thể (lý do và loại vi phạm). Báo cáo được gửi ngay tới đội kiểm duyệt
+          CuongThai, kèm tin bị báo cáo (hoặc các tin gần nhất của người bị báo cáo), và được xem xét <b>trong vòng 24 giờ</b>; tin vi phạm bị gỡ và tài khoản vi phạm có thể bị khoá.
+          Khi Quý khách báo cáo một tin nhắn cụ thể, tin đó được ẩn khỏi cuộc trò chuyện ở phía Quý khách. Khi Quý khách chặn một người, người đó không thể nhắn tin, mở cuộc trò chuyện mới hay bắt đầu nhắn riêng với Quý khách trong CT Work,
           và hai người không còn thấy trạng thái hoạt động của nhau (mục 7).</li>
         <li><b>Nhắn riêng trong CT Work:</b> là một kênh riêng chỉ hai người xem được. Quý khách xoá tin của mình bất kỳ lúc nào; quản trị viên dự án có thể gỡ tin vi phạm;
           tin bị báo cáo được gửi tới quản trị viên dự án và đội kiểm duyệt.</li>
+        <li><b>Tin nhắn thoại trong tin nhắn riêng:</b> bản ghi âm được lưu như một tệp đính kèm và chỉ người trong cuộc trò chuyện nghe được. Tin nhắn thoại trong tin nhắn riêng <b>không</b> được chuyển thành chữ và <b>không</b> được gửi cho bên thứ ba nào (khác với tin nhắn thoại trong kênh chat CT Work — mục 9).</li>
+      </ul>
+
+      <h2 id="bang-tin">6a. Bảng tin (Team Feed) và hồ sơ trong CT Work</h2>
+      <ul>
+        <li><b>Thu gì:</b> bài viết Quý khách đăng (chữ, ảnh, video, tệp, bình chọn), bình luận, cảm xúc, phiếu bầu, bài đã lưu, bài Quý khách ẩn và báo cáo Quý khách gửi.
+          Ảnh và video được lưu trên Cloudflare R2; khi tải ảnh lên, máy chủ <b>xoá dữ liệu EXIF/vị trí</b> trong ảnh và tạo ảnh thu nhỏ.</li>
+        <li><b>Ai thấy:</b> bài cấp không gian làm việc chỉ thành viên không gian đó thấy; bài trong dự án chỉ thành viên dự án thấy. Khách của cổng khách hàng và AI agent
+          không bao giờ thấy Bảng tin. Bài không hiển thị công khai trên Internet.</li>
+        <li><b>Xem trước liên kết:</b> khi bài có một liên kết web, <b>máy chủ</b> của chúng tôi (không phải thiết bị của Quý khách) tải trang đó một lần để lấy tiêu đề, mô tả
+          và ảnh xem trước.</li>
+        <li><b>Kiểm duyệt:</b> Quý khách có thể báo cáo bài hoặc bình luận, ẩn bài khỏi bảng tin của mình và chặn tác giả (bài của người đã chặn không còn hiện).
+          Báo cáo được gửi tới quản trị viên không gian/dự án và đội kiểm duyệt CT Work, được xem xét trong vòng 24 giờ; nội dung vi phạm bị gỡ.</li>
+        <li><b>Xoá:</b> tác giả có thể sửa hoặc xoá bài/bình luận của mình bất kỳ lúc nào; quản trị viên có thể gỡ nội dung vi phạm. Khi bài bị xoá, ảnh, video và tệp của bài
+          bị xoá khỏi kho lưu trữ. Khi xoá tài khoản, bài viết đã chia sẻ trong không gian vẫn ở lại nhưng chỉ gắn với tài khoản đã ẩn danh (mục 5).</li>
+        <li><b>Hồ sơ:</b> ảnh đại diện, ảnh bìa, tên hiển thị và giới thiệu Quý khách đặt (trên web hoặc trong ứng dụng) hiển thị trên trang hồ sơ và cạnh nội dung Quý khách
+          đăng; đổi ở đâu thì đồng bộ ở mọi nơi. Quý khách có thể thay hoặc gỡ bất kỳ lúc nào.</li>
+      </ul>
+
+      <h2 id="giphy">6b. Ảnh động (GIF) qua GIPHY</h2>
+      <ul>
+        <li>Khi Quý khách mở bảng chọn GIF hoặc tìm GIF trong tin nhắn, máy chủ của chúng tôi gửi <b>chữ Quý khách tìm</b> tới dịch vụ GIPHY bằng khoá API của CuongThai —
+          <b>không</b> kèm tên, email hay mã tài khoản của Quý khách. Chúng tôi <b>không lưu</b> chữ tìm kiếm vào cơ sở dữ liệu hay nhật ký (chỉ giữ tạm trong bộ nhớ vài phút
+          để trả kết quả nhanh, không gắn với người tìm).</li>
+        <li>Ảnh GIF được thiết bị của Quý khách tải trực tiếp từ máy chủ của GIPHY, nên GIPHY nhận được địa chỉ IP và thông tin thiết bị như khi tải bất kỳ ảnh nào trên web,
+          theo <a href="https://giphy.com/privacy" target="_blank" rel="noopener noreferrer">chính sách bảo mật của GIPHY</a>. Kết quả được lọc ở mức <b>PG</b>.</li>
+        <li>GIF Quý khách gửi được lưu trong tin nhắn dưới dạng một đường dẫn tới GIPHY và được xoá/thu hồi như mọi tin nhắn khác (mục 6).</li>
+      </ul>
+
+      <h2 id="loc-noi-dung">6c. Lọc nội dung và quy tắc cộng đồng</h2>
+      <ul>
+        <li><b>Bộ lọc tự động:</b> máy chủ kiểm tra chữ trong bài viết và bình luận trên Bảng tin, tin nhắn riêng, tin nhắn kênh chat, bình luận trên thẻ công việc và tài liệu,
+          tên hiển thị và phần giới thiệu. Nội dung chứa từ ngữ tục tĩu nặng, lời lẽ xúc phạm sắc tộc/giới tính/xu hướng tính dục, từ ngữ tình dục trần trụi hoặc lời đe doạ
+          (tiếng Việt và tiếng Anh, kể cả viết không dấu hay biến tấu) bị <b>từ chối trước khi được lưu</b> — Quý khách sẽ thấy thông báo để sửa lại. Bộ lọc chỉ so khớp
+          chữ ngay trên máy chủ của chúng tôi; nội dung không được gửi cho bên thứ ba nào để lọc và chúng tôi không lưu lại nội dung bị từ chối.</li>
+        <li><b>Không khoan nhượng:</b> CT Work không chấp nhận nội dung phản cảm hay người dùng có hành vi lạm dụng. Mọi nội dung có thể bị báo cáo; báo cáo được xem xét
+          trong vòng 24 giờ, nội dung vi phạm bị gỡ và tài khoản vi phạm bị khoá. Xem <a href="/dieu-khoan-su-dung#quy-tac-ct-work">Quy tắc cộng đồng CT Work</a>.</li>
       </ul>
 
       <h2 id="trang-thai-hoat-dong">7. Trạng thái hoạt động</h2>
@@ -147,6 +190,7 @@ export default function Page() {
         <li>Ứng dụng CT Work trên iOS hỏi ý kiến đồng ý trước tin nhắn thoại đầu tiên; không có gì được ghi âm cho tới khi Quý khách bấm micro.</li>
         <li>Ghi âm cuộc họp trong CT Work chỉ bắt đầu khi mọi người đang có mặt trong phòng họp đã đồng ý (với tệp ghi âm tải lên, người tải lên phải xác nhận đã có sự đồng ý);
           bản ghi được phiên âm bằng Groq theo cùng cách.</li>
+        <li>Tin nhắn thoại trong <b>tin nhắn riêng</b> (1-1) không được phiên âm và không được gửi tới Groq.</li>
       </ul>
 
       <h2 id="thong-bao-day">10. Thông báo đẩy</h2>
@@ -204,7 +248,7 @@ export default function Page() {
       <h2 id="english">13. English summary — CT Work app, messaging and AI</h2>
       <div lang="en">
         <p>
-          This section summarises, in English, how cuongthai.com and the <b>CT Work</b> iOS app handle the data described in sections 1–10 above.
+          This section summarises, in English, how cuongthai.com and the <b>CT Work</b> iOS app handle the data described in sections 1–10 (including 6a–6c) above.
           We do not sell personal data and do not use it for advertising.
         </p>
 
@@ -220,10 +264,56 @@ export default function Page() {
             exists, the file is kept until the last message containing it is deleted or unsent.
             Deleting a conversation removes it only for you — the other person keeps their copy — and you can restore it, with its full history, from the “Deleted” tab.</li>
           <li><b>Read receipts and typing:</b> a “seen” marker is stored and shown to the other participant; the “typing…” signal is relayed live and never stored.</li>
-          <li><b>Report and block:</b> you can report a conversation (reason and category); moderators review the report together with the conversation’s latest message
-            and may remove violating messages. A blocked user can no longer message you, start a new conversation with you, or start a CT Work direct message with you,
+          <li><b>Report and block:</b> you can report a conversation or a specific message (reason and category). The report goes straight to the CuongThai moderation
+            team together with the reported message (or the reported person’s latest messages) and is <b>reviewed within 24 hours</b>; violating messages are removed and
+            offending accounts can be locked. When you report a specific message, it is hidden from the conversation on your side. A blocked user can no longer message you, start a new conversation with you, or start a CT Work direct message with you,
             and the two of you no longer see each other’s activity status.
-            CT Work direct messages are private two-person channels; project admins can remove violating messages and reports go to project admins and CT Work moderators.</li>
+            CT Work direct messages are private two-person channels; project admins can remove violating messages and reports go to project admins and CT Work moderators.
+            The same report, hide and block tools exist for <b>Team Feed posts, comments and user profiles</b>: every report reaches the CT Work moderators and is reviewed
+            within 24 hours.</li>
+          <li><b>Voice messages and GIFs in direct messages:</b> voice messages are stored as attachments that only the participants can play; they are <b>not</b> transcribed and <b>not</b> sent to any third party. A GIF you send is stored as a link to GIPHY (see “GIFs” below).</li>
+        </ul>
+
+        <p><b>Team Feed and profiles in CT Work.</b></p>
+        <ul>
+          <li>We store the posts you publish in a workspace or project Team Feed (text, photos, videos, files, polls), your comments, reactions, poll votes, saved and hidden
+            posts, and the reports you send. Photos and videos are stored on Cloudflare R2; when a photo is uploaded our server <b>strips its EXIF/location metadata</b> and makes a thumbnail.</li>
+          <li>Workspace posts are visible only to members of that workspace, project posts only to members of that project. Client-portal guests and AI agents never see the
+            Team Feed, and posts are never public on the internet.</li>
+          <li>When a post contains a web link, <b>our server</b> (not your device) fetches that page once to build the link preview (title, description, image).</li>
+          <li>You can report any post or comment, hide a post from your feed and block its author (posts from people you block no longer appear). Reports go to workspace/project
+            admins and CT Work moderators and are reviewed within 24 hours; violating content is removed.</li>
+          <li>Authors can edit or delete their posts and comments at any time and admins can remove violating content. Deleting a post deletes its photos, videos and files from
+            storage. If you delete your account, posts you shared in a workspace stay but are attached to an anonymised account (section 5).</li>
+          <li>Your profile photo, cover photo, display name and bio (set on the web or in the app) are shown on your profile and next to what you post, and stay in sync
+            everywhere. You can change or remove them at any time.</li>
+        </ul>
+
+        <p><b>GIFs (GIPHY).</b></p>
+        <ul>
+          <li>When you open the GIF picker or search for a GIF in a message, our server sends <b>your search text</b> to GIPHY using CuongThai’s API key — <b>without</b> your
+            name, email or account ID. We <b>do not store</b> GIF searches in our database or logs (they are kept in memory for a few minutes only to serve results quickly,
+            not linked to who searched).</li>
+          <li>GIF images are loaded by your device directly from GIPHY’s servers, so GIPHY receives your IP address and device information as with any web image, under
+            <a href="https://giphy.com/privacy" target="_blank" rel="noopener noreferrer">GIPHY’s privacy policy</a>. Results are filtered to <b>PG</b>.</li>
+          <li>A GIF you send is stored in the message as a link to GIPHY and is deleted or unsent like any other message.</li>
+        </ul>
+
+        <p><b>Content filtering and community rules.</b></p>
+        <ul>
+          <li>Our server checks the text of Team Feed posts and comments, direct messages, chat channel messages, issue and document comments, display names and bios.
+            Text containing severe profanity, slurs, explicit sexual terms or threats (Vietnamese and English, including unaccented and disguised spellings) is
+            <b>rejected before it is saved</b> and you are asked to edit it. The check runs on our own server; the text is not sent to any third party for filtering and
+            rejected text is not stored.</li>
+          <li>There is <b>zero tolerance</b> for objectionable content or abusive users. Anything can be reported; reports are reviewed within 24 hours, violating content is
+            removed and offending accounts are locked. See the <a href="/dieu-khoan-su-dung#quy-tac-ct-work">CT Work community rules</a>.</li>
+        </ul>
+
+        <p><b>Sign in with Apple.</b></p>
+        <ul>
+          <li>If you choose Sign in with Apple, Apple gives us an app-specific Apple account identifier, your email address (or Apple’s private relay address if you chose
+            to hide your email) and, on your first sign-in, your name. We also receive a sign-in token from Apple, which we store <b>encrypted</b> only so that we can ask
+            Apple to revoke it when you delete your account.</li>
         </ul>
 
         <p><b>Activity status (presence).</b></p>
@@ -268,6 +358,7 @@ export default function Page() {
           <li>We do not write audio or transcripts to our system logs; both are kept with the message or comment until it is deleted.</li>
           <li>The CT Work iOS app asks for your consent before your first voice note; nothing is recorded until you tap the microphone. Meeting recordings start only after
             everyone present in the meeting room agrees (for an uploaded recording, the uploader must confirm everyone agreed) and are transcribed the same way.</li>
+          <li>Voice messages in one-to-one <b>direct messages</b> are not transcribed and are not sent to Groq.</li>
         </ul>
 
         <p><b>Push notifications.</b></p>
@@ -292,7 +383,8 @@ export default function Page() {
             you uploaded are deleted from storage, and buyer details on orders are anonymised (the transaction record is kept for accounting). At the same time
             <b>all your device tokens are deleted</b> (no more push notifications reach your devices), every CT Work API token is revoked and connected external accounts
             (such as Microsoft or Google) are removed, your activity status is turned off and cleared, and your private AI conversations (web AI Chat and “Private”
-            CT Work assistant conversations) are deleted.</li>
+            CT Work assistant conversations) are deleted. If you ever signed in with Apple, we ask Apple to revoke the app’s Sign in with Apple token (through Apple’s
+            token revocation service) and delete the stored token.</li>
           <li>Content you shared with others (messages you sent, issues, comments, documents and “Project” AI conversations in CT Work projects…) remains in their
             conversations/projects, attributed to the anonymised account. You can delete specific content yourself beforehand, or contact us.</li>
         </ul>

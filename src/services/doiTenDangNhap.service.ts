@@ -18,6 +18,7 @@
  */
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { kiemNoiDung } from './locNoiDung.js';
 
 const QUAN_TRI_TOI_CAO = new Set(['cuong03dx', 'cuong123']);
 const TEN_GIU = new Set([
@@ -43,6 +44,8 @@ function loiCuaTen(ten: string): string | null {
   if (!MAU.test(ten)) return 'Chỉ dùng chữ thường không dấu (a–z), số, dấu chấm hoặc gạch dưới; bắt đầu và kết thúc bằng chữ hoặc số.';
   if (/[._]{2}/.test(ten)) return 'Không dùng hai dấu chấm/gạch dưới liền nhau.';
   if (TEN_GIU.has(ten)) return 'Tên này được giữ cho hệ thống, bạn chọn tên khác nhé.';
+  // App Store 1.2: tên đăng nhập hiện cạnh mọi thứ người đó viết ⇒ cùng bộ lọc từ nặng.
+  if (kiemNoiDung(ten).chan) return 'Tên này có từ ngữ không được phép. · This name contains words that aren\'t allowed.';
   return null;
 }
 

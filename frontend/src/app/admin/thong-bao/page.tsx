@@ -9,7 +9,7 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, CheckCheck, Loader2, ExternalLink, Inbox } from 'lucide-react';
+import { Check, CheckCheck, Loader2, ExternalLink, Inbox, EyeOff, Lock } from 'lucide-react';
 import { BIEU_TUONG_TIN } from '@/components/admin/bieuTuongTin';
 import { EmptyState, PageHeader, Tabs, relTime } from '@/components/admin/ui';
 import { useAdminT } from '@/components/admin/i18n';
@@ -23,6 +23,8 @@ interface TinAdmin {
   mucDo: string;
   daDoc: boolean;
   daXuLy: boolean;
+  /** Báo cáo có mục tiêu máy đọc được ⇒ có nút gỡ nội dung / khoá người viết. */
+  kiemDuyet?: boolean;
   createdAt: string;
   nguoi: { id: number; username: string | null; fullName: string | null } | null;
 }
@@ -47,7 +49,7 @@ function ngayGio(iso: string): string {
 
 export default function TrangThongBaoAdmin() {
   // `t` đã là tên của từng tin trong map bên dưới → hàm dịch đặt tên `tt`.
-  const { t: tt, vi } = useAdminT();
+  const { t: tt, vi, L } = useAdminT();
   const tenLoai = (ma: string) => (TEN_LOAI[ma] ? TEN_LOAI[ma][vi ? 1 : 0] : ma);
   const [loc, setLoc] = useState<(typeof BO_LOC)[number]['ma']>('can_xu_ly');
   const [loai, setLoai] = useState<string>('');
@@ -72,6 +74,21 @@ export default function TrangThongBaoAdmin() {
 
   async function xong(id: number) {
     await fetch(`/api/v1/admin/thong-bao/${id}/xong`, { method: 'POST', credentials: 'include' }).catch(() => {});
+    nap();
+  }
+  // Kiểm duyệt ngay từ báo cáo (App Store 1.2 — xử lý báo cáo trong 24 giờ): gỡ nội dung / khoá người viết.
+  async function kiemDuyet(id: number, viec: 'remove-content' | 'lock-author') {
+    const hoi = viec === 'remove-content'
+      ? L('Remove the reported content for everyone?', 'Gỡ nội dung bị báo cáo với mọi người?')
+      : L('Lock the account of the person who wrote this? They are signed out of every app.', 'Khoá tài khoản người viết nội dung này? Họ bị đăng xuất khỏi mọi ứng dụng.');
+    if (!window.confirm(hoi)) return;
+    try {
+      const r = await fetch(`/api/v1/admin/moderation/notifications/${id}/${viec}`, { method: 'POST', credentials: 'include' });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) window.alert(j?.message || L('Action failed', 'Không làm được'));
+    } catch {
+      window.alert(L('Action failed', 'Không làm được'));
+    }
     nap();
   }
   async function docHet() {
@@ -156,6 +173,16 @@ export default function TrangThongBaoAdmin() {
                       <Link href={t.duongDan} className="inline-flex items-center gap-1 text-[var(--a-accent-text)] hover:underline">
                         {tt('open')} <ExternalLink className="h-3 w-3" />
                       </Link>
+                    )}
+                    {t.kiemDuyet && (
+                      <>
+                        <button onClick={() => kiemDuyet(t.id, 'remove-content')} className="inline-flex items-center gap-1 hover:text-[var(--a-red,#e5484d)]">
+                          <EyeOff className="h-3 w-3" /> {L('Remove content', 'Gỡ nội dung')}
+                        </button>
+                        <button onClick={() => kiemDuyet(t.id, 'lock-author')} className="inline-flex items-center gap-1 hover:text-[var(--a-red,#e5484d)]">
+                          <Lock className="h-3 w-3" /> {L('Lock author', 'Khoá người viết')}
+                        </button>
+                      </>
                     )}
                     {cho && (
                       <button onClick={() => xong(t.id)} className="inline-flex items-center gap-1 hover:text-[var(--a-green)]">

@@ -738,6 +738,10 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
       return;
     }
 
+    // Sign in with Apple: thu hồi token ở Apple trước khi dòng kết nối bị xoá dây chuyền (không bao giờ ném).
+    const { thuHoiTokenApple } = await import('../services/appleSiwa.service.js');
+    await thuHoiTokenApple(id);
+
     // Cascade deletes via Prisma relations (UserRole, ChatSession, MusicHistory, etc.)
     try {
       await prisma.user.delete({ where: { id } });

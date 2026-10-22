@@ -790,6 +790,8 @@ export function isAiTokenCapError(err: unknown): boolean {
 // ─── Gọi API ─────────────────────────────────────────────────────
 
 const B = '/work';
+/** Chờ tối đa một câu trả lời CuongMini không stream (nginx `proxy_read_timeout 300s`). */
+const AI_CHO_MS = 290_000;
 type Env<T> = { data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
 
@@ -981,11 +983,12 @@ export const workApi = {
     }));
   },
   aiFileUrl: (pid: number, key: string) => d<{ url: string }>(api.get(`${B}/projects/${pid}/ai/files/url`, { params: { key } })),
+  /** 22/10/2026: câu trả lời không còn trần ~300 từ (+ tự viết tiếp, tự chuyển cổng) ⇒ chờ tới 290 s (nginx cắt ở 300 s). */
   aiChat: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null }) =>
-    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000 })),
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS })),
   /** Như aiChat nhưng huỷ được (nút Cancel trong khung AI). */
   aiChatAbortable: (pid: number, body: { message: string; history?: Array<{ role: 'user' | 'assistant'; content: string }>; issueNumber?: number | null; threadId?: number | null; attachments?: AiFileRef[] | null }, signal?: AbortSignal) =>
-    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: 120_000, signal })),
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/chat`, body, { timeout: AI_CHO_MS, signal })),
   // Hội thoại AI lưu ở server, dùng chung trong dự án
   aiThreads: (pid: number, params: { scope?: 'all' | 'mine'; q?: string }) =>
     d<AiThreadSummary[]>(api.get(`${B}/projects/${pid}/ai/threads`, { params })),
@@ -998,7 +1001,7 @@ export const workApi = {
   aiUpdateThread: (pid: number, tid: number, body: { title?: string; visibility?: AiThreadVisibility }) =>
     d<AiThread>(api.patch(`${B}/projects/${pid}/ai/threads/${tid}`, body)),
   aiDeleteThread: (pid: number, tid: number) => d<{ ok: true }>(api.delete(`${B}/projects/${pid}/ai/threads/${tid}`)),
-  aiRetry: (pid: number, mid: number) => d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/retry`, {}, { timeout: 120_000 })),
+  aiRetry: (pid: number, mid: number) => d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/retry`, {}, { timeout: AI_CHO_MS })),
   aiApplyStored: (pid: number, mid: number, idx: number, action?: AiAction) =>
     d<AiStoredAction>(api.post(`${B}/projects/${pid}/ai/messages/${mid}/actions/${idx}/apply`, action ? { action } : {})),
   aiSetStoredStatus: (pid: number, mid: number, idx: number, status: 'dismissed' | 'pending') =>
@@ -1008,7 +1011,7 @@ export const workApi = {
   addSampleData: (pid: number) => d<{ issues: number; labels: number; sprintId: number | null; plans: number }>(api.post(`${B}/projects/${pid}/sample-data`, {}, { timeout: 120_000 })),
   removeSampleData: (pid: number) => d<{ issues: number; labels: number; sprintRemoved: boolean }>(api.delete(`${B}/projects/${pid}/sample-data`, { timeout: 60_000 })),
   aiQuick: (pid: number, body: { task: AiQuickTask; issueNumber?: number | null; pageNumber?: number | null; text?: string | null; threadId?: number | null; label?: string | null }) =>
-    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: 180_000 })),
+    d<AiAnswer>(api.post(`${B}/projects/${pid}/ai/quick`, body, { timeout: AI_CHO_MS })),
   aiFilter: (pid: number, question: string) => d<AiFilterResult>(api.post(`${B}/projects/${pid}/ai/filter`, { question }, { timeout: 60_000 })),
   aiApply: (pid: number, action: AiAction) => d<{ summary: string; number?: number }>(api.post(`${B}/projects/${pid}/ai/apply`, { action })),
   aiWeeklyReport: (pid: number, body: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) =>

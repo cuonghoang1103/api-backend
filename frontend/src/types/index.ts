@@ -646,6 +646,9 @@ export interface Course {
   semesterName?: string;
   semesterCode?: string;
   semesterOrdinal?: number;
+  /** Chương trình đào tạo /courses: kỳ 1–15 và thứ tự trong kỳ (null = chưa xếp). */
+  loTrinhKy?: number | null;
+  loTrinhThuTu?: number | null;
   semester?: Semester;
   sections?: CourseSection[];
   tags?: string[];
@@ -1505,4 +1508,58 @@ export interface NoteTab {
   title: string;
   emoji?: string | null;
   color?: string | null;
+}
+
+// ─── Chương trình đào tạo /courses (GET /courses/chuong-trinh) ─────────────
+/** Một khoá trong chương trình — bản gọn (không có `sections`). Tên/mô tả có thể dạng "EN|||VI" ⇒ dùng pickLang. */
+export interface MonChuongTrinh {
+  id: number;
+  slug: string;
+  title: string;
+  courseCode: string | null;
+  shortDescription: string | null;
+  thumbnailUrl: string | null;
+  price: number;
+  discountPrice: number | null;
+  isFree: boolean;
+  level: string;
+  language: string;
+  totalLessons: number;
+  totalDurationSeconds: number;
+  totalStudents: number;
+  avgRating: number;
+  totalReviews: number;
+  categoryName: string | null;
+  categorySlug: string | null;
+  loTrinhKy: number | null;
+  loTrinhThuTu: number | null;
+  isEnrolled: boolean;
+  /** % bài đã xong — chỉ có khi đăng nhập và đã ghi danh, còn lại null. */
+  progress: number | null;
+}
+
+export interface KyChuongTrinh {
+  so: number;
+  nam: number;
+  ten: string;
+  tenEn: string;
+  moTa: string;
+  moTaEn: string;
+  mon: MonChuongTrinh[];
+}
+
+export interface NamChuongTrinh {
+  so: number;
+  ten: string;
+  tenEn: string;
+  moTa: string;
+  moTaEn: string;
+  ky: KyChuongTrinh[];
+}
+
+export interface ChuongTrinhDaoTao {
+  nam: NamChuongTrinh[];
+  /** Khoá xuất bản chưa gán kỳ — mục "Khoá mới". */
+  chuaXep: MonChuongTrinh[];
+  tong: { khoa: number; bai: number; gio: number };
 }

@@ -19,6 +19,7 @@ import {
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
+import { kyHopLe, xepChuongTrinh } from '../config/chuongTrinhKhoaHoc.js';
 
 const router = Router();
 
@@ -693,6 +694,8 @@ async function serializeCourse(
     semesterName: course.semester?.name,
     semesterCode: course.semester?.code,
     semesterOrdinal: course.semester?.ordinal,
+    loTrinhKy: course.loTrinhKy,
+    loTrinhThuTu: course.loTrinhThuTu,
     tags: course.tags.map((courseTag) => courseTag.tag),
     sections: course.sections.map((section) => ({
       id: section.id,
@@ -966,6 +969,123 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   } catch (error) { next(error); }
 });
 
+/** Các cột mà trang chương trình đào tạo (web + iOS) cần — bản gọn, không có `sections`. */
+const CHON_MON_CHUONG_TRINH = {
+  id: true, slug: true, title: true, courseCode: true,
+  shortDescription: true, thumbnailUrl: true,
+  price: true, discountPrice: true, isFree: true,
+  level: true, language: true,
+  totalLessons: true, totalDurationSeconds: true,
+  avgRating: true, totalReviews: true,
+  loTrinhKy: true, loTrinhThuTu: true,
+  createdAt: true,
+  category: { select: { name: true, slug: true } },
+  _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT } } },
+} as const;
+
+type HangMonChuongTrinh = {
+  id: number; slug: string; title: string; courseCode: string | null;
+  shortDescription: string | null; thumbnailUrl: string | null;
+  price: unknown; discountPrice: unknown; isFree: boolean;
+  level: string; language: string;
+  totalLessons: number; totalDurationSeconds: number;
+  avgRating: unknown; totalReviews: number;
+  loTrinhKy: number | null; loTrinhThuTu: number | null;
+  createdAt: Date;
+  category: { name: string; slug: string } | null;
+  _count: { enrollments: number };
+};
+
+/**
+ * Một khoá trong `GET /courses/chuong-trinh`. Tách ra để kiểm được (bẫy Decimal → chuỗi như `dongGoiMonGon`).
+ * `tienDo` = % bài đã tích xong; chỉ có khi đăng nhập VÀ đã có dòng ghi danh — không thì `null`.
+ */
+export function dongGoiMonChuongTrinh(
+  c: HangMonChuongTrinh,
+  ghiDanh?: { soBaiXong: number } | undefined,
+) {
+  const tienDo = ghiDanh
+    ? (c.totalLessons > 0 ? Math.min(100, Math.round((ghiDanh.soBaiXong / c.totalLessons) * 100)) : 0)
+    : null;
+  return {
+    id: c.id,
+    slug: c.slug,
+    title: c.title,
+    courseCode: c.courseCode,
+    shortDescription: c.shortDescription,
+    thumbnailUrl: c.thumbnailUrl,
+    // ⚠️ Number(...) bắt buộc — Decimal ra JSON là CHUỖI, app iOS khai Double.
+    price: Number(c.price),
+    discountPrice: c.discountPrice != null ? Number(c.discountPrice) : null,
+    isFree: c.isFree,
+    level: c.level,
+    language: c.language,
+    totalLessons: c.totalLessons,
+    totalDurationSeconds: c.totalDurationSeconds,
+    totalStudents: c._count.enrollments,
+    avgRating: Number(c.avgRating),
+    totalReviews: c.totalReviews,
+    categoryName: c.category?.name ?? null,
+    categorySlug: c.category?.slug ?? null,
+    loTrinhKy: c.loTrinhKy,
+    loTrinhThuTu: c.loTrinhThuTu,
+    isEnrolled: Boolean(ghiDanh),
+    progress: tienDo,
+  };
+}
+
+/**
+ * GET /courses/chuong-trinh — CHƯƠNG TRÌNH ĐÀO TẠO của /courses (khoá ngoài Academy): 4 năm → 15 kỳ → khoá.
+ *
+ * Hợp đồng (web + app iOS):
+ *   { nam: [{ so, ten, tenEn, moTa, moTaEn, ky: [{ so, nam, ten, tenEn, moTa, moTaEn, mon: [Mon] }] }],
+ *     chuaXep: [Mon],                 // khoá xuất bản chưa gán kỳ — mục "Khoá mới", KHÔNG BAO GIỜ giấu
+ *     tong: { khoa, bai, gio } }      // đếm trên mọi khoá trả về (đã xếp + chưa xếp)
+ *
+ * Hai truy vấn, không N+1: một lấy mọi khoá, một lấy tiến độ của người đang xem (nếu đăng nhập).
+ * ⚠️ Đặt TRƯỚC `/:slug` — không thì "chuong-trinh" bị đọc thành slug khoá.
+ */
+router.get('/chuong-trinh', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const ds = await prisma.course.findMany({
+      // Cùng điều kiện với danh sách chung `GET /courses`: xuất bản + KHÔNG thuộc học kỳ Academy.
+      where: { isPublished: true, semesterId: null },
+      orderBy: { createdAt: 'desc' },
+      select: CHON_MON_CHUONG_TRINH,
+    });
+
+    const ghiDanh = new Map<number, { soBaiXong: number }>();
+    if (req.userId && ds.length > 0) {
+      const rows = await prisma.enrollment.findMany({
+        where: { userId: req.userId, courseId: { in: ds.map((c) => c.id) } },
+        select: { courseId: true, _count: { select: { lessonProgress: { where: { isCompleted: true } } } } },
+      });
+      for (const r of rows) ghiDanh.set(r.courseId, { soBaiXong: r._count.lessonProgress });
+    }
+
+    const mon = ds.map((c) => dongGoiMonChuongTrinh(c, ghiDanh.get(c.id)));
+    const { nam, chuaXep } = xepChuongTrinh(mon);
+    const tongGiay = mon.reduce((s, m) => s + m.totalDurationSeconds, 0);
+
+    // Có người đăng nhập ⇒ câu trả lời mang tiến độ RIÊNG của họ ⇒ không cho bộ đệm chung giữ.
+    res.set('Cache-Control', req.userId
+      ? 'private, max-age=30'
+      : 'public, max-age=120, stale-while-revalidate=600');
+    res.json({
+      success: true,
+      data: {
+        nam,
+        chuaXep,
+        tong: {
+          khoa: mon.length,
+          bai: mon.reduce((s, m) => s + m.totalLessons, 0),
+          gio: Math.round(tongGiay / 3600),
+        },
+      },
+    });
+  } catch (error) { next(error); }
+});
+
 router.get('/featured', async (req, res: Response<ApiResponse>, next) => {
   try {
     const limit = parseInt(req.query.limit as string) || 6;
@@ -1188,6 +1308,28 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
   } catch (error) { next(error); }
 });
 
+/**
+ * Đọc `loTrinhKy` / `loTrinhThuTu` (chương trình đào tạo) từ body của admin. Chỉ trả những trường CÓ gửi.
+ * '' / null ⇒ gỡ khỏi chương trình (khoá về mục "Khoá mới"). Sai kiểu/ngoài khoảng ⇒ 400, không lặng lẽ bỏ qua.
+ */
+export function docLoTrinh(body: Record<string, unknown>): { loTrinhKy?: number | null; loTrinhThuTu?: number | null } {
+  const ra: { loTrinhKy?: number | null; loTrinhThuTu?: number | null } = {};
+  const so = (v: unknown) => (v === '' || v == null ? null : Number(v));
+  if (body.loTrinhKy !== undefined) {
+    const ky = so(body.loTrinhKy);
+    if (ky !== null && !kyHopLe(ky)) throw new AppError('loTrinhKy phải là số nguyên 1–15 (hoặc để trống)', 400);
+    ra.loTrinhKy = ky;
+  }
+  if (body.loTrinhThuTu !== undefined) {
+    const tt = so(body.loTrinhThuTu);
+    if (tt !== null && !(Number.isInteger(tt) && tt >= 1 && tt <= 99)) {
+      throw new AppError('loTrinhThuTu phải là số nguyên 1–99 (hoặc để trống)', 400);
+    }
+    ra.loTrinhThuTu = tt;
+  }
+  return ra;
+}
+
 router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const title = String(req.body.title || '').trim();
@@ -1225,6 +1367,7 @@ router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Resp
         documentsNote: toNullableString(req.body.documentsNote),
         startDate: toOptionalDate(req.body.startDate) ?? null,
         endDate: toOptionalDate(req.body.endDate) ?? null,
+        ...docLoTrinh(req.body),
         status,
         publishedAt,
       },
@@ -1276,6 +1419,7 @@ router.put('/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Re
         ...(req.body.documentsNote !== undefined ? { documentsNote: toNullableString(req.body.documentsNote) } : {}),
         ...(req.body.startDate !== undefined ? { startDate: toOptionalDate(req.body.startDate) ?? null } : {}),
         ...(req.body.endDate !== undefined ? { endDate: toOptionalDate(req.body.endDate) ?? null } : {}),
+        ...docLoTrinh(req.body),
         ...(req.body.status !== undefined ? { status, isPublished: status === 'PUBLISHED', publishedAt } : {}),
       },
     });

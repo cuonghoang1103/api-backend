@@ -14,7 +14,9 @@ import { after, before, describe, it } from 'node:test';
 
 process.env.STORAGE_SANDBOX ??= '1';
 
-const { goiAiCtWork, _datCongChoTest, modelRamboCho, modelChinhHangCho, modelModelapiCho } = await import('./aiCong.js');
+const {
+  goiAiCtWork, _datCongChoTest, modelRamboCho, modelChinhHangCho, modelModelapiCho, chuoiCtWork, chuoiCongHienTai, tranChinhHang, trongTranChinhHang, laCauLoiCong,
+} = await import('./aiCong.js');
 type Opts = Parameters<typeof goiAiCtWork>[0];
 const { AppError } = await import('../../middleware/errorHandler.js');
 
@@ -30,7 +32,7 @@ const EP = { root: 'http://rambo.test', key: 'k', local: false, label: 'cong-age
 describe('chuỗi cổng CT Work — phụ thuộc giả', () => {
   after(() => _datCongChoTest(null));
 
-  it('rambo sống ⇒ trả lời bằng rambo (Sonnet)', async () => {
+  it('rambo sống ⇒ trả lời bằng rambo (claude-fable-5 cho trợ lý — 22/10)', async () => {
     const goi: string[] = [];
     _datCongChoTest({
       rambo: () => EP, ramboDangNghi: () => false,
@@ -40,7 +42,7 @@ describe('chuỗi cổng CT Work — phụ thuộc giả', () => {
     });
     const r = await goiAiCtWork(base);
     assert.equal(r.cong, 'rambo');
-    assert.match(goi[0], /^rambo:claude-sonnet/);
+    assert.equal(goi[0], 'rambo:claude-fable-5');
     assert.equal(goi.length, 1);
   });
 
@@ -120,7 +122,7 @@ describe('chuỗi cổng CT Work — phụ thuộc giả', () => {
   it('model theo việc: spec_review + việc nặng ⇒ Opus trên rambo; lùi chính hãng vẫn Sonnet 5.5; digest ⇒ Haiku 5.5', async () => {
     assert.equal(modelRamboCho('work_spec_review'), 'claude-opus-5');
     assert.equal(modelRamboCho('work_assistant', true), 'claude-opus-5');
-    assert.match(modelRamboCho('work_assistant'), /^claude-sonnet/);
+    assert.equal(modelRamboCho('work_assistant'), 'claude-fable-5');
     assert.match(modelRamboCho('work_digest'), /^claude-sonnet/);
     assert.equal(modelChinhHangCho('work_spec_review'), 'claude-sonnet-5-5');
     assert.equal(modelChinhHangCho('work_assistant'), 'claude-sonnet-5-5');
@@ -198,7 +200,7 @@ describe('llmComplete thật — rambo 410 ⇒ lùi (HTTP giả)', () => {
     const rambo = daGoi.find((x) => x.url.startsWith('/rambo/v1/messages'));
     assert.ok(rambo, 'phải gọi rambo trước');
     assert.equal(rambo!.auth, 'sk-rambo-gia', 'khoá của rambo, không phải khoá modelapi');
-    assert.match(rambo!.model ?? '', /^claude-sonnet/);
+    assert.equal(rambo!.model, 'claude-fable-5');
     assert.ok(!daGoi.some((x) => x.url.startsWith('/modelapi/v1/messages')), 'không được gọi Claude qua modelapi');
     const g = await import('../llm/gateway.js');
     assert.equal(g.ramboDangNghi(), true, '410 ⇒ cầu dao mở (nghỉ dài)');
@@ -277,7 +279,7 @@ describe('chuỗi cổng CT Work — chuyển cổng giữa chừng + tool gốc
     });
     const r = await goiAiCtWork({ ...base, onToken: () => {}, noiTiep: () => { hoiNoi++; return tinNoi; } });
     assert.equal(r.cong, 'modelapi');
-    assert.equal(hoiNoi, 2);
+    assert.equal(hoiNoi, 3, 'rambo, chính hãng Sonnet, chính hãng Haiku');
   });
 
   it('noiTiep trả null ⇒ hành vi cũ: onRestart, bậc sau làm lại từ đầu', async () => {
@@ -378,5 +380,147 @@ describe('llmComplete thật — tool gốc trong luồng (HTTP giả)', () => {
     assert.deepEqual(r.toolCalls, [{ name: 'search_pages', input: { query: 'git' } }]);
     assert.equal(r.text, '');
     assert.deepEqual((than[0].tools as unknown[])[0], { type: 'function', function: { name: 'read_command', description: 'đọc', parameters: tools[0].parameters } });
+  });
+});
+
+// ─── Phần 5 (22/10/2026, chủ web chốt lần 2): rambo fable-5 → chính hãng Sonnet 5.5 → chính hãng Haiku 5.5 → modelapi ───
+
+describe('chuỗi cổng CT Work — thứ tự mới, Haiku dự phòng, trần $, env', () => {
+  after(() => { _datCongChoTest(null); delete process.env.CTWORK_CHUOI_CONG; });
+
+  it('thứ tự MẶC ĐỊNH: rambo → chính hãng Sonnet → chính hãng Haiku → modelapi', () => {
+    delete process.env.CTWORK_CHUOI_CONG;
+    assert.deepEqual(chuoiCtWork(), ['rambo', 'chinh_hang_sonnet', 'chinh_hang_haiku', 'modelapi']);
+    assert.deepEqual(chuoiCongHienTai('work_assistant').map((b) => [b.bac, b.model]), [
+      ['rambo', 'claude-fable-5'], ['chinh_hang_sonnet', 'claude-sonnet-5-5'], ['chinh_hang_haiku', 'claude-haiku-5-5'], ['modelapi', 'gpt-6-sol'],
+    ]);
+  });
+
+  it('rambo hỏng ⇒ chính hãng SONNET 5.5 (im lặng, đúng bậc)', async () => {
+    const goi: string[] = [];
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async () => { goi.push('rambo'); throw new Error('fetch failed'); },
+      chinhHangSanSang: async (_u, bac) => { goi.push(`san:${bac}`); return true; },
+      goiChinhHang: async (_o, m) => { goi.push(`ch:${m}`); return ok('chinh_hang', m); },
+    });
+    const r = await goiAiCtWork(base);
+    assert.equal(r.bac, 'chinh_hang_sonnet');
+    assert.deepEqual(goi, ['rambo', 'san:sonnet', 'ch:claude-sonnet-5-5']);
+  });
+
+  it('chính hãng Sonnet HẾT TRẦN ⇒ Haiku 5.5 (khoản trần chồng thêm); Sonnet HỎNG ⇒ Haiku, báo cổng hỏng chỉ khi cả Haiku cũng hỏng', async () => {
+    const goi: string[] = [];
+    _datCongChoTest({
+      rambo: () => null,
+      chinhHangSanSang: async (_u, bac) => bac === 'haiku', // Sonnet chạm trần, Haiku còn
+      goiChinhHang: async (_o, m) => { goi.push(m); return ok('chinh_hang', m); },
+    });
+    const r = await goiAiCtWork(base);
+    assert.equal(r.bac, 'chinh_hang_haiku');
+    assert.deepEqual(goi, ['claude-haiku-5-5']);
+
+    let bao = 0;
+    const goi2: string[] = [];
+    _datCongChoTest({
+      rambo: () => null, chinhHangSanSang: async () => true,
+      goiChinhHang: async (_o, m) => { goi2.push(m); if (m === 'claude-sonnet-5-5') throw new Error('Cổng chính hãng HTTP 529'); return ok('chinh_hang', m); },
+      baoChinhHangHong: () => { bao++; },
+    });
+    assert.equal((await goiAiCtWork(base)).bac, 'chinh_hang_haiku');
+    assert.deepEqual(goi2, ['claude-sonnet-5-5', 'claude-haiku-5-5']);
+    assert.equal(bao, 0, 'Haiku chạy được ⇒ cổng không hỏng, không mở cầu dao');
+  });
+
+  it('trần $: mặc định 100/10 cho Sonnet, Haiku thêm 20/2; env đè; 0 = tắt', () => {
+    const cu = process.env.WORK_AI_CHINH_HANG_USD_NGAY;
+    delete process.env.WORK_AI_CHINH_HANG_USD_NGAY; // phần 2 đặt '0' cho cả tiến trình
+    assert.deepEqual(tranChinhHang('sonnet'), { tong: 100, nguoi: 10 });
+    assert.deepEqual(tranChinhHang('haiku'), { tong: 120, nguoi: 12 });
+    assert.equal(trongTranChinhHang('sonnet', { ca: 99, nguoi: 9.9 }), true);
+    assert.equal(trongTranChinhHang('sonnet', { ca: 100, nguoi: 1 }), false);
+    assert.equal(trongTranChinhHang('sonnet', { ca: 5, nguoi: 10 }), false);
+    assert.equal(trongTranChinhHang('haiku', { ca: 5, nguoi: 10 }), true, 'người hết trần Sonnet vẫn còn Haiku');
+    assert.equal(trongTranChinhHang('haiku', { ca: 120, nguoi: 0 }), false);
+    process.env.WORK_AI_CHINH_HANG_USD_NGAY = '0';
+    process.env.WORK_AI_CHINH_HANG_HAIKU_USD_NGAY = '0';
+    assert.equal(trongTranChinhHang('haiku', { ca: 0, nguoi: 0 }), false);
+    process.env.WORK_AI_CHINH_HANG_USD_NGAY = '50';
+    assert.deepEqual(tranChinhHang('sonnet'), { tong: 50, nguoi: 10 });
+    delete process.env.WORK_AI_CHINH_HANG_HAIKU_USD_NGAY;
+    if (cu === undefined) delete process.env.WORK_AI_CHINH_HANG_USD_NGAY; else process.env.WORK_AI_CHINH_HANG_USD_NGAY = cu;
+  });
+
+  it('model rambo: fable-5 ⇒ /v1/models không có ⇒ Sonnet rambo có (claude-sonnet-5); CTWORK_RAMBO_MODEL đè', async () => {
+    const g = await import('../llm/gateway.js');
+    g.datDsModelRambo(['claude-opus-5', 'claude-fable-5', 'claude-sonnet-5', 'claude-haiku-4-5']);
+    assert.equal(modelRamboCho('work_assistant'), 'claude-fable-5');
+    g.datDsModelRambo(['claude-opus-5', 'claude-sonnet-5', 'claude-haiku-4-5']);
+    assert.equal(modelRamboCho('work_assistant'), 'claude-sonnet-5');
+    assert.equal(modelRamboCho('work_spec_review'), 'claude-opus-5');
+    process.env.CTWORK_RAMBO_MODEL = 'claude-opus-5';
+    assert.equal(modelRamboCho('work_assistant'), 'claude-opus-5');
+    process.env.CTWORK_RAMBO_MODEL = 'claude-khong-co';
+    assert.equal(modelRamboCho('work_assistant'), 'claude-sonnet-5');
+    delete process.env.CTWORK_RAMBO_MODEL;
+    g.datDsModelRambo([]);
+    assert.equal(modelRamboCho('work_assistant'), 'claude-fable-5', 'chưa đọc được danh sách ⇒ dùng model đã chọn');
+  });
+
+  it('CTWORK_CHUOI_CONG đè thứ tự (bí danh chinh_hang, tên lạ/trùng bị bỏ, rỗng ⇒ mặc định)', async () => {
+    process.env.CTWORK_CHUOI_CONG = 'modelapi, chinh_hang ,rambo,xyz,modelapi';
+    assert.deepEqual(chuoiCtWork(), ['modelapi', 'chinh_hang_sonnet', 'rambo']);
+    const goi: string[] = [];
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (_o, _ep, m) => { goi.push(`rambo:${m}`); return ok('rambo', m); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (_o, m) => { goi.push(`ch:${m}`); return ok('chinh_hang', m); },
+      goiModelapi: async () => { goi.push('modelapi'); throw new Error('modelapi 503'); },
+    });
+    const r = await goiAiCtWork(base);
+    assert.equal(r.bac, 'chinh_hang_sonnet');
+    assert.deepEqual(goi, ['modelapi', 'ch:claude-sonnet-5-5']);
+    process.env.CTWORK_CHUOI_CONG = 'abc';
+    assert.deepEqual(chuoiCtWork(), ['rambo', 'chinh_hang_sonnet', 'chinh_hang_haiku', 'modelapi']);
+    delete process.env.CTWORK_CHUOI_CONG;
+  });
+
+  it('rambo trả CÂU BÁO LỖI ("Verify your email…") với HTTP 200 ⇒ coi là hỏng: xoá nháp, bậc sau làm lại từ đầu', async () => {
+    assert.equal(laCauLoiCong('Please verify your email address before using the API.'), true);
+    assert.equal(laCauLoiCong('Insufficient balance, please top up.'), true);
+    assert.equal(laCauLoiCong('### Việc hôm nay\n- LFD-7'), false);
+    let restart = 0;
+    let hoiNoi = 0;
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (o, _ep, m) => { o.onToken?.('Verify your email to continue.'); return ok('rambo', m, 'Verify your email to continue.'); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o, m) => { assert.deepEqual(o.messages, base.messages); return ok('chinh_hang', m, 'trả lời thật'); },
+    });
+    const r = await goiAiCtWork({ ...base, onToken: () => {}, onRestart: () => { restart++; }, noiTiep: () => { hoiNoi++; return null; } });
+    assert.equal(r.text, 'trả lời thật');
+    assert.equal(restart, 1);
+    assert.equal(hoiNoi, 0, 'không "viết tiếp" một câu báo lỗi');
+  });
+
+  it('boQuaCong: bỏ qua cổng vừa trả markup — trừ bậc CUỐI', async () => {
+    const goi: string[] = [];
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (_o, _ep, m) => { goi.push('rambo'); return ok('rambo', m); },
+      chinhHangSanSang: async () => false,
+      goiModelapi: async (_o, m) => { goi.push('modelapi'); return ok('modelapi', m); },
+    });
+    assert.equal((await goiAiCtWork({ ...base, boQuaCong: ['rambo'] })).cong, 'modelapi');
+    process.env.CTWORK_CHUOI_CONG = 'modelapi,rambo';
+    _datCongChoTest({
+      rambo: () => EP, ramboDangNghi: () => false,
+      goiRambo: async (_o, _ep, m) => { goi.push('rambo-cuoi'); return ok('rambo', m); },
+      goiModelapi: async () => { throw new Error('modelapi 503'); },
+    });
+    assert.equal((await goiAiCtWork({ ...base, boQuaCong: ['rambo'] })).cong, 'rambo', 'rambo là bậc cuối ⇒ vẫn gọi');
+    delete process.env.CTWORK_CHUOI_CONG;
+    assert.deepEqual(goi, ['modelapi', 'rambo-cuoi']);
   });
 });

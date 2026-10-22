@@ -1,22 +1,27 @@
 /**
  * ============================================================
- * CT WORK — CHUỖI CỔNG CỦA TRỢ LÝ AI (22/10/2026)
+ * CT WORK — CHUỖI CỔNG CỦA TRỢ LÝ AI (22/10/2026, sửa lần 2 cùng ngày)
  * ============================================================
  *
- * Chủ web chốt cho các việc CỐ ĐỊNH của CT Work (work_assistant · work_spec_review · work_digest + ảnh người dùng dán):
+ * Chủ web chốt cho các việc CỐ ĐỊNH của CT Work (work_assistant · work_spec_review · work_digest + ảnh người dùng dán).
+ * Thứ tự MẶC ĐỊNH (đổi không cần sửa mã: `CTWORK_CHUOI_CONG=rambo,chinh_hang_sonnet,chinh_hang_haiku,modelapi`):
  *
- *   1. RAMBO (gói trả trọn ⇒ chi phí biên 0) — Sonnet mới nhất rambo có (`ramboSonic()`: claude-sonnet-5-5 nếu
- *      `/v1/models` có, không thì claude-sonnet-5). Cờ RIÊNG `CTWORK_RAMBO` (mặc định BẬT) — không phụ thuộc công tắc
- *      rambo toàn cục (`ramboBat()`), xem `ctworkDiRambo()` ở gateway.ts.
- *   2. Cổng Anthropic CHÍNH HÃNG ("CuongMini Code Max") — `claude-sonnet-5-5` (work_assistant / spec_review / ảnh),
- *      `claude-haiku-5-5` cho work_digest (việc nhẹ: diễn đạt lại số liệu mã đã tính). Trần $/ngày RIÊNG của CT Work
- *      (`WORK_AI_CHINH_HANG_USD_NGAY`, `…_NGUOI_NGAY`) — chạm trần thì bỏ qua bậc này, không chặn người dùng.
- *   3. modelapi `gpt-6-sol` (lùi CUỐI; nhìn ảnh đúng — đo 27/09).
+ *   1. RAMBO (gói trả trọn ⇒ chi phí biên 0) — trợ lý: `claude-fable-5` (đo prod 22/10: gọi tool đúng 3/3, ~3–7 s;
+ *      `CTWORK_RAMBO_MODEL` đè); việc nặng + spec_review: `claude-opus-5` (`CTWORK_RAMBO_MODEL_NANG`); digest: Sonnet.
+ *      `/v1/models` của rambo không có model đã chọn ⇒ Sonnet mới nhất nó có (`ramboSonic()`, hôm nay claude-sonnet-5).
+ *      Cờ RIÊNG `CTWORK_RAMBO` (mặc định BẬT), xem `ctworkDiRambo()` ở gateway.ts.
+ *   2. Anthropic CHÍNH HÃNG Sonnet 5.5 (`CTWORK_MODEL_CHINH_HANG`; digest: Haiku 5.5) — trần $/ngày RIÊNG của CT Work
+ *      `WORK_AI_CHINH_HANG_USD_NGAY` (100) / `…_NGUOI_NGAY` (10). Chỉ cắn khi rambo hỏng.
+ *   3. Chính hãng Haiku 5.5 (`CTWORK_MODEL_CHINH_HANG_DU_PHONG`) — khi Sonnet hỏng HOẶC đã chạm trần trên: Haiku được
+ *      thêm một khoản trần NHỎ chồng lên (`WORK_AI_CHINH_HANG_HAIKU_USD_NGAY` 20 / `…_HAIKU_USD_NGUOI_NGAY` 2) ⇒ người
+ *      dùng hết trần Sonnet vẫn còn câu trả lời rẻ, tổng tiền chính hãng/ngày vẫn có trần cứng (120 $ / 12 $ mỗi người).
+ *   4. modelapi `gpt-6-sol` (lùi CUỐI; nhìn ảnh đúng — đo 27/09).
  *
- * Bậc nào hỏng (410 Key Expired, 401/403, 5xx, hết giờ, mất kết nối, cầu dao đang mở, hết key) ⇒ TỰ sang bậc sau trong
- * CÙNG lượt — người dùng không thấy lỗi. Chữ đã stream của bậc hỏng ⇒ `onRestart` (giao diện xoá nháp). Rambo hỏng ⇒ cầu
- * dao chung (`baoRamboHong`, lỗi khoá nghỉ 10 phút) + mũi dò tự gõ cửa: rambo sống lại (thay khoá mới) ⇒ lượt sau tự về.
- * Cổng chính hãng hỏng ⇒ `baoCongHong('anthropic')` (nghỉ 60 s như AI Code).
+ * Bậc nào hỏng (DNS/mất kết nối, 410/401/403, 5xx, hết giờ, trả rỗng, trả câu báo lỗi của cổng — "Verify your email…",
+ * cầu dao đang mở, hết key, hết trần) ⇒ TỰ sang bậc sau trong CÙNG lượt — người dùng không thấy lỗi. Hỏng sau khi đã
+ * phát chữ ⇒ bậc sau VIẾT TIẾP (`noiTiep`). Rambo hỏng ⇒ cầu dao chung (`baoRamboHong`, lỗi khoá nghỉ 10 phút) + mũi dò
+ * tự gõ cửa. Cổng chính hãng hỏng ⇒ `baoCongHong('anthropic')` (nghỉ 60 s) — báo SAU khi đã thử cả Haiku.
+ * Model trả markup gọi tool dạng chữ (DSML…) ⇒ nơi gọi bỏ qua cổng đó ở lần làm lại (`boQuaCong`, aiMarkupTool.ts).
  *
  * Không ghi khoá ra log: chỉ ghi mã HTTP / câu lỗi đã có sẵn của adapter (không chứa khoá).
  */
@@ -26,11 +31,30 @@ import { logger } from '../../utils/logger.js';
 import { ghiSoLlm, httpStatusCua, llmComplete, type LLMMessage, type LLMTool, type LLMToolCall } from '../interview/llm/index.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import {
-  ctworkDiRambo, fallbackEndpoint, laLoiKhoaRambo, modelDuPhongModelapi, ramboDangNghi, ramboSonic, type LlmEndpoint,
+  ctworkDiRambo, docDsModelRamboDaNho, fallbackEndpoint, laLoiKhoaRambo, modelDuPhongModelapi, ramboDangNghi, ramboSonic, type LlmEndpoint,
 } from '../llm/gateway.js';
 
 export type ViecCtWork = 'work_assistant' | 'work_digest' | 'work_spec_review';
 export type CongCtWork = 'rambo' | 'chinh_hang' | 'modelapi';
+/** Một BẬC của chuỗi (cổng chính hãng có hai bậc: Sonnet rồi Haiku). */
+export type BacCtWork = 'rambo' | 'chinh_hang_sonnet' | 'chinh_hang_haiku' | 'modelapi';
+export const CHUOI_MAC_DINH: readonly BacCtWork[] = ['rambo', 'chinh_hang_sonnet', 'chinh_hang_haiku', 'modelapi'];
+const congCuaBac = (b: BacCtWork): CongCtWork => (b === 'rambo' ? 'rambo' : b === 'modelapi' ? 'modelapi' : 'chinh_hang');
+
+/**
+ * Thứ tự bậc đang hiệu lực: `CTWORK_CHUOI_CONG` (phẩy ngăn cách; `chinh_hang` = `chinh_hang_sonnet`; tên lạ bị bỏ,
+ * trùng bị bỏ), rỗng/không hợp lệ ⇒ CHUOI_MAC_DINH. Tôn trọng đúng danh sách người cấu hình (không tự thêm bậc).
+ */
+export function chuoiCtWork(): BacCtWork[] {
+  const raw = process.env.CTWORK_CHUOI_CONG?.trim();
+  if (!raw) return [...CHUOI_MAC_DINH];
+  const ra: BacCtWork[] = [];
+  for (const t of raw.split(',').map((x) => x.trim().toLowerCase())) {
+    const b = (t === 'chinh_hang' ? 'chinh_hang_sonnet' : t) as BacCtWork;
+    if (CHUOI_MAC_DINH.includes(b) && !ra.includes(b)) ra.push(b);
+  }
+  return ra.length ? ra : [...CHUOI_MAC_DINH];
+}
 
 export interface GoiAiCtWorkOpts {
   /** Bỏ qua — chỉ để nơi gọi cũ (`llmComplete({ step, feature, … })`) đổi sang hàm này mà không sửa thân lời gọi. */
@@ -74,6 +98,8 @@ export interface KetQuaAiCtWork {
   biCat?: boolean;
   cong: CongCtWork;
   toolCalls?: LLMToolCall[];
+  /** Bậc đã trả lời (cổng chính hãng có hai bậc). */
+  bac?: BacCtWork;
 }
 
 // ─── Phụ thuộc (test thay được) ─────────────────────────────────
@@ -83,8 +109,8 @@ export interface PhuThuocCong {
   rambo: () => LlmEndpoint | null;
   ramboDangNghi: () => boolean;
   goiRambo: (o: GoiAiCtWorkOpts, ep: LlmEndpoint, model: string) => Promise<KetQuaAiCtWork>;
-  /** Cổng chính hãng có dùng được không (còn key, không đang nghỉ, trong trần $ ngày của CT Work). */
-  chinhHangSanSang: (userId: number) => Promise<boolean>;
+  /** Cổng chính hãng có dùng được không (còn key, không đang nghỉ, trong trần $ ngày của CT Work) — theo bậc. */
+  chinhHangSanSang: (userId: number, bac?: 'sonnet' | 'haiku') => Promise<boolean>;
   goiChinhHang: (o: GoiAiCtWorkOpts, model: string) => Promise<KetQuaAiCtWork>;
   baoChinhHangHong: () => void;
   goiModelapi: (o: GoiAiCtWorkOpts, model: string) => Promise<KetQuaAiCtWork>;
@@ -98,21 +124,33 @@ export function modelChinhHangCho(purpose: ViecCtWork): string {
     : process.env.CTWORK_MODEL_CHINH_HANG?.trim() || 'claude-sonnet-5-5';
 }
 
+/** Model chính hãng bậc DỰ PHÒNG (sau Sonnet): Haiku 5.5 — rẻ, nhanh. */
+export function modelChinhHangDuPhong(): string {
+  return process.env.CTWORK_MODEL_CHINH_HANG_DU_PHONG?.trim() || 'claude-haiku-5-5';
+}
+
 /**
  * Model trên RAMBO theo việc (chủ web chốt 22/10/2026 — gói trọn nên chọn theo CHẤT LƯỢNG, không theo giá):
- *   work_assistant (chat/thao tác hằng ngày, kể cả stream) ⇒ Sonnet mới nhất rambo có (`ramboSonic()`; hôm nay
- *     `claude-sonnet-5` — /v1/models của rambo chưa có sonnet-5.5);
- *   work_spec_review + việc PHÂN TÍCH NẶNG ít lượt (`nang: true` — soát Req, sức khoẻ nhóm, luyện bảo vệ, rủi ro sprint)
- *     ⇒ `claude-opus-5`;
- *   work_digest ⇒ Sonnet (như assistant).
- * Đè không cần deploy: `LLM_MODEL_<VIỆC>=claude-…` (env model Claude ⇒ áp ở rambo; env model GPT ⇒ áp ở bậc modelapi),
- * việc nặng: `CTWORK_RAMBO_MODEL_NANG`.
+ *   work_assistant (chat/thao tác hằng ngày, kể cả stream) ⇒ `claude-fable-5` (`CTWORK_RAMBO_MODEL` đè) — đo từ container
+ *     prod 22/10: gọi tool đúng 3/3, ~3–7 s như sonnet-5 (sonnet-5 của rambo từng viết DSML khi không có tool);
+ *   work_spec_review + việc PHÂN TÍCH NẶNG ít lượt (`nang: true`) ⇒ `claude-opus-5` (`CTWORK_RAMBO_MODEL_NANG`);
+ *   work_digest ⇒ Sonnet mới nhất rambo có.
+ * `LLM_MODEL_<VIỆC>=claude-…` vẫn đè (sau `CTWORK_RAMBO_MODEL`). Danh sách `/v1/models` của rambo đã đọc mà KHÔNG có model
+ * đã chọn ⇒ `ramboSonic()` (Sonnet mới nhất rambo có — hôm nay claude-sonnet-5).
  */
 export function modelRamboCho(purpose: ViecCtWork = 'work_assistant', nang = false): string {
+  const ds = docDsModelRamboDaNho()?.ids;
+  const chon = (m: string) => (!ds?.length || ds.includes(m) ? m : ramboSonic());
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();
-  if (nang && purpose === 'work_assistant') return process.env.CTWORK_RAMBO_MODEL_NANG?.trim() || 'claude-opus-5';
-  if (env && env.startsWith('claude-')) return env;
-  if (purpose === 'work_spec_review') return process.env.CTWORK_RAMBO_MODEL_NANG?.trim() || 'claude-opus-5';
+  const nangModel = process.env.CTWORK_RAMBO_MODEL_NANG?.trim() || 'claude-opus-5';
+  if (nang && purpose === 'work_assistant') return chon(nangModel);
+  if (purpose === 'work_assistant') {
+    const rieng = process.env.CTWORK_RAMBO_MODEL?.trim();
+    if (rieng) return chon(rieng);
+  }
+  if (env && env.startsWith('claude-')) return chon(env);
+  if (purpose === 'work_spec_review') return chon(nangModel);
+  if (purpose === 'work_assistant') return chon('claude-fable-5');
   return ramboSonic();
 }
 
@@ -129,12 +167,31 @@ function soEnv(ten: string, mac: number): number {
   const n = Number(raw);
   return Number.isFinite(n) && n >= 0 ? n : mac;
 }
-const TRAN_TONG = () => soEnv('WORK_AI_CHINH_HANG_USD_NGAY', 30);
-const TRAN_NGUOI = () => soEnv('WORK_AI_CHINH_HANG_USD_NGUOI_NGAY', 3);
+/* 22/10/2026 (chủ web: "cho người dùng dùng nhiều hơn") — 30 → 100 $/ngày cả web, 3 → 10 $/ngày mỗi người. Chỉ cắn khi
+   rambo hỏng. Haiku có thêm khoản nhỏ chồng lên (xem đầu file). */
+const TRAN_TONG = () => soEnv('WORK_AI_CHINH_HANG_USD_NGAY', 100);
+const TRAN_NGUOI = () => soEnv('WORK_AI_CHINH_HANG_USD_NGUOI_NGAY', 10);
+const TRAN_HAIKU_TONG = () => soEnv('WORK_AI_CHINH_HANG_HAIKU_USD_NGAY', 20);
+const TRAN_HAIKU_NGUOI = () => soEnv('WORK_AI_CHINH_HANG_HAIKU_USD_NGUOI_NGAY', 2);
 
-async function chinhHangSanSangThat(userId: number): Promise<boolean> {
+/** Trần (cả web, mỗi người) của MỘT bậc chính hãng. THUẦN — test đọc. Trần người 0 = không trần người. */
+export function tranChinhHang(bac: 'sonnet' | 'haiku'): { tong: number; nguoi: number } {
   const tong = TRAN_TONG();
-  if (!(tong > 0)) return false;
+  const nguoi = TRAN_NGUOI();
+  if (bac === 'sonnet') return { tong, nguoi };
+  return { tong: tong + TRAN_HAIKU_TONG(), nguoi: nguoi > 0 ? nguoi + TRAN_HAIKU_NGUOI() : 0 };
+}
+
+/** Đã tiêu (ca, nguoi) có còn trong trần của bậc không. THUẦN — test đọc. */
+export function trongTranChinhHang(bac: 'sonnet' | 'haiku', daTieu: { ca: number; nguoi: number }): boolean {
+  const t = tranChinhHang(bac);
+  if (!(t.tong > 0)) return false;
+  if (daTieu.ca >= t.tong) return false;
+  return !(t.nguoi > 0 && daTieu.nguoi >= t.nguoi);
+}
+
+async function chinhHangSanSangThat(userId: number, bac: 'sonnet' | 'haiku' = 'sonnet'): Promise<boolean> {
+  if (!(tranChinhHang(bac).tong > 0)) return false;
   const { congDangHong } = await import('../agent/bangModel.js');
   if (congDangHong('anthropic')) return false;
   const { coKeyKhaDung } = await import('../agent/anthropicChinhHang/khoKey.js');
@@ -147,15 +204,12 @@ async function chinhHangSanSangThat(userId: number): Promise<boolean> {
       prisma.anthropicUsage.aggregate({ where: { viec: 'work_ai', createdAt: { gte: tu } }, _sum: { costUsd: true } }),
       prisma.anthropicUsage.aggregate({ where: { viec: 'work_ai', userId, createdAt: { gte: tu } }, _sum: { costUsd: true } }),
     ]);
-    if (Number(ca._sum.costUsd ?? 0) >= tong) return false;
-    const tranNguoi = TRAN_NGUOI();
-    if (tranNguoi > 0 && Number(nguoi._sum.costUsd ?? 0) >= tranNguoi) return false;
+    return trongTranChinhHang(bac, { ca: Number(ca._sum.costUsd ?? 0), nguoi: Number(nguoi._sum.costUsd ?? 0) });
   } catch (err) {
-    // Sổ hỏng ⇒ KHÔNG dùng bậc trả tiền này (an toàn về tiền) — modelapi vẫn đỡ.
+    // Sổ hỏng ⇒ KHÔNG dùng bậc trả tiền này (an toàn về tiền) — bậc sau vẫn đỡ.
     logger.warn('[ctwork-ai] không đọc được sổ cổng chính hãng — bỏ qua bậc này', { error: (err as Error).message });
     return false;
   }
-  return true;
 }
 
 /** Ước lượng token (cổng chính hãng trả USD thật, không trả token qua hàm văn bản) — đủ cho trần token/ngày. */
@@ -244,48 +298,82 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
   };
   const huy = () => { if (o.signal?.aborted) throw new AppError('The connection closed before the answer was ready. Ask again.', 499, 'WORK_AI_CANCELLED'); };
 
-  // 1. Rambo
-  const ep = pt.rambo();
-  if (ep && !pt.ramboDangNghi() && !o.boQuaCong?.includes('rambo')) {
-    const model = modelRamboCho(o.purpose, o.nang);
+  const chuoi = chuoiCtWork();
+  const daThuChinhHang = new Set<string>();
+  let chinhHangHong = false;
+  let loiCuoi: unknown = null;
+  for (let i = 0; i < chuoi.length; i++) {
+    const bac = chuoi[i];
+    const cong = congCuaBac(bac);
+    const cuoi = i === chuoi.length - 1;
+    // Cổng vừa trả markup gọi tool dạng chữ ⇒ bỏ qua ở lần làm lại — trừ bậc CUỐI (không còn gì khác để thử).
+    if (!cuoi && o.boQuaCong?.includes(cong)) continue;
+    huy();
+    let model = '';
     try {
-      return await pt.goiRambo(opts, ep, model);
+      let r: KetQuaAiCtWork;
+      if (bac === 'rambo') {
+        const ep = pt.rambo();
+        if (!ep || pt.ramboDangNghi()) continue;
+        model = modelRamboCho(o.purpose, o.nang);
+        r = await pt.goiRambo(opts, ep, model);
+      } else if (bac === 'modelapi') {
+        model = modelModelapiCho(o.purpose);
+        r = await pt.goiModelapi(opts, model);
+      } else {
+        const laSonnet = bac === 'chinh_hang_sonnet';
+        model = laSonnet ? modelChinhHangCho(o.purpose) : modelChinhHangDuPhong();
+        if (daThuChinhHang.has(model)) continue; // digest: bậc Sonnet vốn đã là Haiku
+        if (!(await pt.chinhHangSanSang(o.userId, laSonnet ? 'sonnet' : 'haiku').catch(() => false))) continue;
+        daThuChinhHang.add(model);
+        r = await pt.goiChinhHang(opts, model);
+      }
+      if (!r.toolCalls?.length && laCauLoiCong(r.text)) {
+        throw Object.assign(new Error(`${cong}: cổng trả câu báo lỗi thay vì câu trả lời — ${r.text.trim().slice(0, 120)}`), { code: 'CONG_TRA_LOI_LOI' });
+      }
+      if (chinhHangHong && cong !== 'chinh_hang') pt.baoChinhHangHong();
+      return { ...r, bac };
     } catch (e) {
       if (laLoiChinhSach(e)) throw e;
-      const st = httpStatusCua(e);
-      logger.warn('[ctwork-ai] rambo lỗi — tự chuyển cổng chính hãng', { purpose: o.purpose, status: st ?? null, khoaHong: laLoiKhoaRambo(st), giuaChung: daPhat, error: (e as Error).message?.slice(0, 160) });
-      sauKhiHong();
-    }
-  }
-  huy();
-
-  // 2. Cổng Anthropic chính hãng
-  if (!o.boQuaCong?.includes('chinh_hang') && await pt.chinhHangSanSang(o.userId).catch(() => false)) {
-    const model = modelChinhHangCho(o.purpose);
-    try {
-      return await pt.goiChinhHang(opts, model);
-    } catch (e) {
-      if (laLoiChinhSach(e)) throw e;
-      huy();
+      loiCuoi = e;
       const thong = (e as Error).message ?? '';
-      const { laLoiCongHong } = await import('../agent/bangModel.js');
-      if (laLoiCongHong(thong, (e as { code?: string }).code)) pt.baoChinhHangHong();
-      logger.warn('[ctwork-ai] cổng chính hãng lỗi — lùi modelapi', { purpose: o.purpose, giuaChung: daPhat, error: thong.slice(0, 160) });
-      sauKhiHong();
+      const st = httpStatusCua(e);
+      if (cong === 'chinh_hang') {
+        const { laLoiCongHong } = await import('../agent/bangModel.js');
+        if (laLoiCongHong(thong, (e as { code?: string }).code)) chinhHangHong = true;
+      }
+      // Rời khối chính hãng (bậc sau không phải chính hãng) ⇒ giờ mới báo cổng hỏng: Haiku vẫn được thử trước.
+      if (chinhHangHong && (cuoi || congCuaBac(chuoi[i + 1]) !== 'chinh_hang')) { pt.baoChinhHangHong(); chinhHangHong = false; }
+      logger.warn(`[ctwork-ai] ${bac} lỗi — tự chuyển bậc sau`, {
+        purpose: o.purpose, model, bacSau: cuoi ? null : chuoi[i + 1], status: st ?? null,
+        ...(cong === 'rambo' ? { khoaHong: laLoiKhoaRambo(st) } : {}), giuaChung: daPhat, error: thong.slice(0, 160),
+      });
+      if (cuoi) break;
+      huy();
+      // Câu báo lỗi của cổng không phải câu trả lời dở ⇒ xoá (không "viết tiếp" nó).
+      if ((e as { code?: string }).code === 'CONG_TRA_LOI_LOI') xoaNhap(); else sauKhiHong();
     }
   }
-  huy();
+  if (chinhHangHong) pt.baoChinhHangHong();
+  throw loiCuoi ?? new AppError('CuongMini đang tạm nghỉ (không cổng AI nào dùng được) — thử lại sau ít phút. / The AI assistant is temporarily unavailable.', 503, 'WORK_AI_UNAVAILABLE');
+}
 
-  // 3. modelapi (lùi cuối)
-  return pt.goiModelapi(opts, modelModelapiCho(o.purpose));
+/**
+ * Cổng trả về một CÂU BÁO LỖI dưới dạng câu trả lời (HTTP 200) — "Verify your email…", hết số dư, khoá sai, không có
+ * kênh… Chỉ xét câu NGẮN (câu trả lời thật dài hơn nhiều) và mẫu tiếng Anh/Trung của cổng bán lại. THUẦN — test đọc.
+ */
+export function laCauLoiCong(text: string): boolean {
+  const t = (text ?? '').trim();
+  if (!t || t.length > 400) return false;
+  return /verify your email|email (is )?not verified|insufficient (balance|quota|credits?)|quota (has been )?exceeded|account (is |has been )?(suspended|disabled|banned)|invalid (api )?key|no available channel|please (log ?in|sign ?in|top ?up|recharge)|余额不足|额度不足|请先验证/i.test(t);
 }
 
 /** Tóm tắt chuỗi đang hiệu lực (cho trang admin / báo lỗi) — KHÔNG kèm khoá. */
-export function chuoiCongHienTai(purpose: ViecCtWork = 'work_assistant'): Array<{ cong: CongCtWork; model: string; dungDuoc: boolean }> {
-  const ep = ctworkDiRambo();
-  return [
-    { cong: 'rambo', model: modelRamboCho(purpose), dungDuoc: !!ep && !ramboDangNghi() },
-    { cong: 'chinh_hang', model: modelChinhHangCho(purpose), dungDuoc: TRAN_TONG() > 0 },
-    { cong: 'modelapi', model: modelModelapiCho(purpose), dungDuoc: true },
-  ];
+export function chuoiCongHienTai(purpose: ViecCtWork = 'work_assistant'): Array<{ bac: BacCtWork; cong: CongCtWork; model: string; dungDuoc: boolean }> {
+  return chuoiCtWork().map((bac) => {
+    if (bac === 'rambo') return { bac, cong: 'rambo' as const, model: modelRamboCho(purpose), dungDuoc: !!ctworkDiRambo() && !ramboDangNghi() };
+    if (bac === 'modelapi') return { bac, cong: 'modelapi' as const, model: modelModelapiCho(purpose), dungDuoc: true };
+    const sonnet = bac === 'chinh_hang_sonnet';
+    return { bac, cong: 'chinh_hang' as const, model: sonnet ? modelChinhHangCho(purpose) : modelChinhHangDuPhong(), dungDuoc: tranChinhHang(sonnet ? 'sonnet' : 'haiku').tong > 0 };
+  });
 }

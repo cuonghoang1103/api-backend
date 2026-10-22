@@ -143,8 +143,15 @@ cả câu là `{"name":…,"arguments":…}`):
 
 ## Chuyển cổng (22/10/2026)
 
-Chuỗi `aiCong.ts` (phiên 34ec79f6): **rambo** Sonnet (`ramboSonic()`, gói trọn) → **Anthropic chính hãng** Sonnet 5.5
-(trần $ riêng) → **modelapi `gpt-6-sol`** (lùi cuối, nhìn được ảnh). Thêm 22/10:
+Chuỗi `aiCong.ts` — chủ web chốt lại 22/10/2026 (thứ tự đổi bằng env `CTWORK_CHUOI_CONG`, không cần sửa mã):
+1. **rambo** (gói trọn, 0 $) — trợ lý `claude-fable-5` (`CTWORK_RAMBO_MODEL`; đo từ container prod 22/10: gọi tool đúng
+   3/3, ~3–7 s), việc nặng/spec_review `claude-opus-5`; `/v1/models` không có model đã chọn ⇒ `claude-sonnet-5`.
+2. **Anthropic chính hãng Sonnet 5.5** — trần riêng CT Work 100 $/ngày, 10 $/người (trước 30/3; chỉ cắn khi rambo hỏng).
+3. **Chính hãng Haiku 5.5** — khi Sonnet hỏng HOẶC chạm trần; khoản chồng thêm 20 $/ngày, 2 $/người (tổng ≤ 120/12).
+4. **modelapi `gpt-6-sol`** — lùi cuối, nhìn được ảnh.
+Trần chung của web (`budget.ts`) nâng theo: mềm 15 → 50, cứng 40 → 150 $/ngày (lượt chính hãng ghi cùng sổ). Rambo trả
+câu báo lỗi với HTTP 200 ("Verify your email…", hết số dư…) cũng là hỏng. Bảng chuỗi + số lần markup: admin
+`/admin/commerce` › CuongMini CT Work (`GET /api/v1/admin/cong-anthropic/ctwork-ai`). Ngữ nghĩa chuyển:
 - Hỏng **trước mẩu chữ đầu** (lỗi HTTP, 410 khoá hết hạn, hết giờ, mất kết nối, trả rỗng) ⇒ chuyển bậc im lặng — client
   chỉ thấy `progress thinking` lâu hơn một chút. Hết giờ chờ theo bậc: rambo 45 s, chính hãng 60 s, modelapi 120 s
   (gpt-6-sol suy luận trước khi viết: đo 22/10 chữ đầu sau 19–34 s, có lượt > 90 s).

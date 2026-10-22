@@ -591,16 +591,21 @@ function CongTacRambo({ rambo, classic, onDoi }: {
 // ─── CuongMini trong CT Work (22/10/2026) ───────────────────────────────
 
 interface GioiHanCtw { phutNguoi: number; ngayNguoi: number; ngayIp: number }
-interface BacCong { cong: 'rambo' | 'chinh_hang' | 'modelapi'; model: string; dungDuoc: boolean }
-const TEN_BAC: Record<BacCong['cong'], string> = { rambo: 'Rambo (gói trọn)', chinh_hang: 'Chính hãng (Code Max)', modelapi: 'modelapi (Core)' };
+/** 22/10/2026: thêm `bac` (chính hãng có 2 bậc: Sonnet rồi Haiku) + bảng đếm model trả markup gọi tool dạng chữ. */
+interface BacCong { bac?: 'rambo' | 'chinh_hang_sonnet' | 'chinh_hang_haiku' | 'modelapi'; cong: 'rambo' | 'chinh_hang' | 'modelapi'; model: string; dungDuoc: boolean }
+interface DemMarkup { cong: string; model: string; lan: number; cuoi: string }
+const TEN_BAC: Record<string, string> = {
+  rambo: 'Rambo (gói trọn)', chinh_hang: 'Chính hãng (Code Max)', chinh_hang_sonnet: 'Chính hãng Sonnet',
+  chinh_hang_haiku: 'Chính hãng Haiku (dự phòng)', modelapi: 'modelapi (Core)',
+};
 
 function CtWorkAiAdmin() {
-  const [d, setD] = useState<{ gioiHan: GioiHanCtw; chuoi: Record<string, BacCong[]> } | null>(null);
+  const [d, setD] = useState<{ gioiHan: GioiHanCtw; chuoi: Record<string, BacCong[]>; markupTool?: DemMarkup[] } | null>(null);
   const [nhap, setNhap] = useState({ phutNguoi: '', ngayNguoi: '', ngayIp: '' });
   const [dang, setDang] = useState(false);
   const nap = useCallback(async () => {
     try {
-      const v = await goi<{ gioiHan: GioiHanCtw; chuoi: Record<string, BacCong[]> }>('/ctwork-ai');
+      const v = await goi<{ gioiHan: GioiHanCtw; chuoi: Record<string, BacCong[]>; markupTool?: DemMarkup[] }>('/ctwork-ai');
       setD(v);
       setNhap({ phutNguoi: String(v.gioiHan.phutNguoi), ngayNguoi: String(v.gioiHan.ngayNguoi), ngayIp: String(v.gioiHan.ngayIp) });
     } catch (e) { toast.error((e as Error).message); }
@@ -641,21 +646,24 @@ function CtWorkAiAdmin() {
           </div>
           <div className="overflow-x-auto">
             <table className="text-xs w-full">
-              <thead><tr className="text-text-muted text-left"><th className="pr-3">Việc / Job</th><th className="pr-3">1 · chính</th><th className="pr-3">2 · lùi</th><th>3 · lùi cuối</th></tr></thead>
+              <thead><tr className="text-text-muted text-left"><th className="pr-3">Việc / Job</th><th className="pr-3">1 · chính</th><th className="pr-3">2 · lùi</th><th className="pr-3">3 · lùi</th><th>4 · lùi cuối</th></tr></thead>
               <tbody>
                 {Object.entries(d.chuoi).map(([viec, bac]) => (
                   <tr key={viec}>
                     <td className="pr-3 font-mono">{viec}</td>
                     {bac.map((b) => (
-                      <td key={b.cong} className={`pr-3 ${b.dungDuoc ? 'text-green-400' : 'text-amber-400'}`} title={b.dungDuoc ? 'đang dùng được' : 'đang tắt / cầu dao mở / trần $ = 0'}>
-                        {TEN_BAC[b.cong]}: <span className="font-mono">{b.model}</span>{b.dungDuoc ? '' : ' (tạm bỏ qua)'}
+                      <td key={b.bac ?? b.cong} className={`pr-3 ${b.dungDuoc ? 'text-green-400' : 'text-amber-400'}`} title={b.dungDuoc ? 'đang dùng được' : 'đang tắt / cầu dao mở / trần $ = 0'}>
+                        {TEN_BAC[b.bac ?? b.cong] ?? b.cong}: <span className="font-mono">{b.model}</span>{b.dungDuoc ? '' : ' (tạm bỏ qua)'}
                       </td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
-            <p className="text-[11px] text-text-muted mt-1">Bậc hỏng (410/401/5xx/hết giờ) ⇒ tự sang bậc sau trong cùng lượt; rambo sống lại ⇒ tự về. Đổi model: env <code>LLM_MODEL_&lt;VIỆC&gt;</code>, <code>CTWORK_RAMBO_MODEL_NANG</code>, <code>CTWORK_MODEL_CHINH_HANG(_NHE)</code>; tắt rambo riêng CT Work: <code>CTWORK_RAMBO=0</code>.</p>
+            <p className="text-[11px] text-text-muted mt-1">Bậc hỏng (DNS/410/401/5xx/hết giờ/trả rỗng/câu báo lỗi của cổng/markup gọi tool dạng chữ) ⇒ tự sang bậc sau trong cùng lượt, người dùng không thấy lỗi; rambo sống lại ⇒ tự về. Chính hãng: Sonnet hỏng hoặc chạm trần (100 $/ngày, 10 $/người) ⇒ Haiku (thêm 20 $ / 2 $). Đổi thứ tự: env <code>CTWORK_CHUOI_CONG</code> (rambo, chinh_hang_sonnet, chinh_hang_haiku, modelapi). Đổi model: <code>CTWORK_RAMBO_MODEL</code> (fable-5), <code>CTWORK_RAMBO_MODEL_NANG</code>, <code>CTWORK_MODEL_CHINH_HANG(_NHE|_DU_PHONG)</code>, <code>LLM_MODEL_&lt;VIỆC&gt;</code>; tắt rambo riêng CT Work: <code>CTWORK_RAMBO=0</code>.</p>
+            {d.markupTool?.length ? (
+              <p className="text-[11px] text-amber-400 mt-1">Model trả lời gọi tool dạng chữ (DSML…, đã chặn + đổi cổng) từ khi máy chủ chạy: {d.markupTool.map((x) => `${x.cong}/${x.model}: ${x.lan} lần`).join(' · ')}</p>
+            ) : null}
           </div>
         </>
       )}

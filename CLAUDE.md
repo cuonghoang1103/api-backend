@@ -481,6 +481,13 @@ phát hành bắt buộc phải public.
 > - Ảnh/tệp trong ô hỏi: `POST /projects/:pid/ai/files` (`aiTep.ts`); link sâu do MÃ dựng (`aiLienKet.ts`), model viết `KEY-12` / `[[doc:3]]`.
 >   Test: `npx tsx --test src/services/work/aiCong.test.ts src/services/work/aiCuongMini22.test.ts` + `WORK_DB_TEST=1 … src/routes/work.aiTaiTro.db.test.ts`.
 
+> **⭐⭐⭐ 22/10/2026 — CuongMini trong CT Work (`src/services/work/aiCong.ts`, thắng mọi dòng cũ về chuỗi CT Work):**
+> rambo `claude-fable-5` → chính hãng `claude-sonnet-5-5` → chính hãng `claude-haiku-5-5` (Sonnet hỏng/chạm trần) →
+> modelapi `gpt-6-sol`; đổi thứ tự bằng env `CTWORK_CHUOI_CONG`. Trần chính hãng CT Work 100 $/ngày · 10 $/người (+20/+2
+> cho Haiku); trần chung `budget.ts` nâng 15/40 → 50/150 (prod đặt `LLM_DAILY_COST_*` trong `.env` thì phải sửa ở đó).
+> Model trả câu trả lời Markdown thường + khối `<ctw-actions>`, xin đọc bằng tool gốc; rambo "claude-sonnet-5" từng VIẾT
+> lời gọi tool thành chữ (DSML của DeepSeek) ⇒ `aiMarkupTool.ts` chặn + đổi cổng. Chi tiết: `docs/ctw-ai-stream.md`.
+>
 > **⭐⭐ 19/10/2026 — rambo BẬT lại = MẶC ĐỊNH (thắng dòng 18/10 ngay dưới về rambo).** Chi tiết: `docs/cuongmini-doi-chieu-nang-luc.md` mục 2i.
 > - AI Code mặc định **CuongMini Default** (`cm-default`, `bangModel.ts › giaiDefault`): rambo bật + cầu dao đóng ⇒ **Classic Sonic** =
 >   Sonnet mới nhất rambo có (`ramboSonic()`: 5.5 nếu `/v1/models` có, giờ là `claude-sonnet-5`; ép `RAMBO_MODEL_SONIC`); không ⇒ **Solid**;

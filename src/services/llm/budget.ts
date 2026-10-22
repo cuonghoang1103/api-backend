@@ -9,11 +9,11 @@
  *
  * Hai mức, cố ý khác nhau:
  *
- *   MỀM (mặc định 15 $/ngày) — dừng việc CHẠY NGẦM: sinh nội dung hàng loạt,
+ *   MỀM (mặc định 50 $/ngày — 15 trước 22/10/2026) — dừng việc CHẠY NGẦM: sinh nội dung hàng loạt,
  *   bản tin sáng. Người dùng thật không thấy gì cả, vì họ không chờ mấy việc
  *   đó. Đây là mức sẽ chạm thật trong đời thường, và chạm cũng không sao.
  *
- *   CỨNG (mặc định 40 $/ngày) — dừng TẤT CẢ, kể cả người đang ngồi bấm nút.
+ *   CỨNG (mặc định 150 $/ngày — 40 trước 22/10/2026) — dừng TẤT CẢ, kể cả người đang ngồi bấm nút.
  *   Đây là cầu dao chống thảm hoạ. Chạm tới đây nghĩa là có gì đó thực sự
  *   hỏng, và một trang web câm trong vài giờ vẫn rẻ hơn một cái ví rỗng.
  *
@@ -32,8 +32,11 @@ import { logger } from '../../utils/logger.js';
 /** Việc chạy nền (không ai ngồi chờ) hay việc người dùng đang bấm. */
 export type LlmCallKind = 'background' | 'interactive';
 
-const DEFAULT_SOFT_USD = 15;
-const DEFAULT_HARD_USD = 40;
+/* 22/10/2026: 15/40 → 50/150. Trần riêng của CuongMini CT Work trên cổng Anthropic chính hãng được nâng lên 100 $/ngày
+   (+20 $ cho bậc Haiku) theo yêu cầu chủ web, và lượt chính hãng ghi vào CÙNG sổ này ⇒ trần cứng 40 $ sẽ cắt AI của cả
+   web trước khi trần CT Work cắn. Nâng theo cùng tỉ lệ (~3,3×); trần cứng 150 ≥ 120 $ CT Work + ~30 $ phần còn lại. */
+const DEFAULT_SOFT_USD = 50;
+const DEFAULT_HARD_USD = 150;
 
 function capFromEnv(name: string, fallback: number): number {
   const raw = process.env[name];

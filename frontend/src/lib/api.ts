@@ -1,5 +1,5 @@
 import axios, { type AxiosError, type AxiosInstance } from 'axios';
-import type { ApiResponse, AuthResponse, NoteFull } from '@/types';
+import type { ApiResponse, AuthResponse, NoteFull, ChuongTrinhDaoTao } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 
 const DEFAULT_UPLOAD_CATEGORY = 'images';
@@ -1931,6 +1931,10 @@ export const coursesApi = {
   getFeatured: (limit = 6) =>
     api.get('/courses/featured', { params: { limit } }),
 
+  // Chương trình đào tạo: 4 năm → 15 kỳ → khoá (+ `chuaXep` = khoá mới chưa gán kỳ). Xem
+  // `GET /courses/chuong-trinh` trong src/routes/course.routes.ts — app iOS đọc cùng hình dạng.
+  getChuongTrinh: () => api.get<{ success: boolean; data: ChuongTrinhDaoTao }>('/courses/chuong-trinh'),
+
   // `gon`: bản gọn cho TRANG GIỚI THIỆU — bỏ `content` của từng bài (89%
   // payload) vì trang đó chỉ vẽ mục lục. Trang HỌC phải gọi không có cờ này.
   getBySlug: (slug: string, gon?: boolean) =>
@@ -2169,6 +2173,9 @@ export const adminCoursesApi = {
     accessType?: string;
     requirements?: string;
     whatYouLearn?: string;
+    // Chương trình đào tạo /courses — null = gỡ khỏi kỳ (khoá về mục "Khoá mới").
+    loTrinhKy?: number | null;
+    loTrinhThuTu?: number | null;
     documentsNote?: string;
     status?: string;
     tags?: string[];
@@ -2196,6 +2203,9 @@ export const adminCoursesApi = {
     isPublished: boolean;
     requirements: string;
     whatYouLearn: string;
+    // Chương trình đào tạo /courses — null = gỡ khỏi kỳ (khoá về mục "Khoá mới").
+    loTrinhKy: number | null;
+    loTrinhThuTu: number | null;
     documentsNote: string;
     status: string;
     tags: string[];

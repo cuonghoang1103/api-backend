@@ -1,0 +1,154 @@
+{
+  "slug": "golang",
+  "ma": "go",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started with Go|||Mục 0 — Khởi động với Go", "bai": [
+      "Start here (1/2) — What Go is, where it came from at Google, and why it matters to you|||Bắt đầu tại đây (1/2) — Go là gì, ra đời thế nào ở Google, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Life without it: real outages, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi không có nó: những sự cố thật, và cách học để không bỏ cuộc",
+      "0.1 — Installing Go and gopls, and running your first program|||0.1 — Cài Go và gopls, rồi chạy chương trình đầu tiên",
+      "0.2 — Go Playground, go doc and reading the standard library like a pro|||0.2 — Go Playground, go doc và cách đọc thư viện chuẩn như dân chuyên",
+      "0.3 — Course map: from syntax to a service running on Kubernetes|||0.3 — Bản đồ khoá học: từ cú pháp tới một service chạy trên Kubernetes",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — Toolchain, modules and project layout|||Chương 1 — Toolchain, module và cách tổ chức dự án", "bai": [
+      "1.1 — go build, go run, go install: what each command actually produces|||1.1 — go build, go run, go install: mỗi lệnh thật ra tạo ra cái gì",
+      "1.2 — go.mod and go.sum: module paths, versions and checksums|||1.2 — go.mod và go.sum: đường dẫn module, phiên bản và checksum",
+      "1.3 — Semantic import versioning, v2+ modules and replace directives|||1.3 — Semantic import versioning, module v2 trở lên và chỉ thị replace",
+      "1.4 — Packages, exported names, internal/ and a clean project layout|||1.4 — Package, tên được export, thư mục internal/ và bố cục dự án gọn gàng",
+      "1.5 — Workspaces (go.work), GOPROXY and private modules|||1.5 — Workspace (go.work), GOPROXY và module riêng tư",
+      "1.6 — gofmt, go vet, staticcheck and golangci-lint in your daily loop|||1.6 — gofmt, go vet, staticcheck và golangci-lint trong vòng làm việc hằng ngày",
+      "1.7 — Quiz: toolchain and modules|||1.7 — Kiểm tra: toolchain và module"
+    ]},
+    { "tieuDe": "Chapter 2 — Types, structs, methods and interfaces|||Chương 2 — Kiểu dữ liệu, struct, method và interface", "bai": [
+      "2.1 — Basic types, zero values, constants and iota|||2.1 — Kiểu cơ bản, zero value, hằng số và iota",
+      "2.2 — Structs and embedding: composition instead of inheritance|||2.2 — Struct và embedding: kết hợp thay cho kế thừa",
+      "2.3 — Methods: value receivers vs pointer receivers, and when it matters|||2.3 — Method: value receiver hay pointer receiver, và khi nào điều đó quan trọng",
+      "2.4 — Pointers without fear: escape analysis and stack vs heap|||2.4 — Con trỏ không đáng sợ: escape analysis, stack và heap",
+      "2.5 — Implicit interfaces: io.Reader, io.Writer and small-interface design|||2.5 — Interface ngầm định: io.Reader, io.Writer và nghệ thuật thiết kế interface nhỏ",
+      "2.6 — Type assertions, type switches and the any type|||2.6 — Type assertion, type switch và kiểu any",
+      "2.7 — The nil-interface trap, and “accept interfaces, return structs”|||2.7 — Cái bẫy interface chứa nil, và nguyên tắc “nhận interface, trả struct”",
+      "2.8 — Quiz: types and interfaces|||2.8 — Kiểm tra: kiểu dữ liệu và interface"
+    ]},
+    { "tieuDe": "Chapter 3 — Errors as values|||Chương 3 — Lỗi là giá trị (errors as values)", "bai": [
+      "3.1 — error is just an interface: why Go chose if err != nil over exceptions|||3.1 — error chỉ là một interface: vì sao Go chọn if err != nil thay cho exception",
+      "3.2 — Wrapping errors with %w, errors.Is and errors.As|||3.2 — Bọc lỗi bằng %w, errors.Is và errors.As",
+      "3.3 — Sentinel errors, custom error types and opaque errors: choosing a style|||3.3 — Sentinel error, kiểu lỗi tự định nghĩa và lỗi mờ: chọn phong cách nào",
+      "3.4 — defer for cleanup, errors.Join and errors that happen while closing|||3.4 — defer để dọn dẹp, errors.Join và lỗi xảy ra lúc đóng tài nguyên",
+      "3.5 — panic and recover: the rare cases they belong in your code|||3.5 — panic và recover: những trường hợp hiếm hoi chúng thuộc về code của bạn",
+      "3.6 — Quiz: error handling|||3.6 — Kiểm tra: xử lý lỗi"
+    ]},
+    { "tieuDe": "Chapter 4 — Slices, maps and strings: the internals|||Chương 4 — Slice, map và string: bên trong hoạt động thế nào", "bai": [
+      "4.1 — Arrays vs slices: pointer, length and capacity|||4.1 — Mảng và slice: con trỏ, length và capacity",
+      "4.2 — append, growth and the shared-backing-array bug|||4.2 — append, cơ chế tăng dung lượng và lỗi dùng chung mảng nền",
+      "4.3 — Maps: hashing, random iteration order and concurrent-write crashes|||4.3 — Map: băm, thứ tự duyệt ngẫu nhiên và lỗi sập khi ghi đồng thời",
+      "4.4 — Strings, bytes and runes: handling UTF-8 and Vietnamese text correctly|||4.4 — String, byte và rune: xử lý UTF-8 và tiếng Việt có dấu cho đúng",
+      "4.5 — The slices and maps packages, and range-over-func iterators|||4.5 — Package slices, maps và iterator dùng range-over-func",
+      "4.6 — Reading allocations: preallocating, reusing buffers and allocs/op|||4.6 — Đọc số lần cấp phát: cấp phát trước, tái dùng buffer và chỉ số allocs/op",
+      "4.7 — Quiz: slices, maps and strings|||4.7 — Kiểm tra: slice, map và string"
+    ]},
+    { "tieuDe": "Chapter 5 — Generics|||Chương 5 — Generics", "bai": [
+      "5.1 — Type parameters: when generics beat interfaces and when they don't|||5.1 — Tham số kiểu: khi nào generics hơn interface và khi nào không",
+      "5.2 — Constraints: comparable, cmp.Ordered and ~underlying types|||5.2 — Ràng buộc kiểu: comparable, cmp.Ordered và ~kiểu nền",
+      "5.3 — Writing generic data structures: Set, LRU cache and a typed queue|||5.3 — Viết cấu trúc dữ liệu generic: Set, LRU cache và hàng đợi có kiểu",
+      "5.4 — Generic helpers over slices and maps without over-engineering|||5.4 — Hàm tiện ích generic cho slice và map mà không làm quá tay",
+      "5.5 — The limits of Go generics (no generic methods) and practical workarounds|||5.5 — Giới hạn của generics trong Go (không có method generic) và cách xoay xở thực tế",
+      "5.6 — Quiz: generics|||5.6 — Kiểm tra: generics"
+    ]},
+    { "tieuDe": "Chapter 6 — Goroutines and channels|||Chương 6 — Goroutine và channel", "bai": [
+      "6.1 — Goroutines and the Go scheduler (G, M, P) in plain language|||6.1 — Goroutine và bộ lập lịch của Go (G, M, P) bằng ngôn ngữ đời thường",
+      "6.2 — Unbuffered vs buffered channels: synchronisation vs queueing|||6.2 — Channel không buffer và có buffer: đồng bộ hay xếp hàng",
+      "6.3 — select, timeouts and the nil-channel trick|||6.3 — select, timeout và mẹo dùng channel nil",
+      "6.4 — Closing channels: who closes, ranging over a channel and done signals|||6.4 — Đóng channel: ai được đóng, duyệt channel bằng range và tín hiệu done",
+      "6.5 — Goroutine leaks: how to spot them and how to fix them|||6.5 — Rò rỉ goroutine: cách phát hiện và cách sửa",
+      "6.6 — Data races and the -race detector|||6.6 — Data race và công cụ phát hiện -race",
+      "6.7 — Quiz: goroutines and channels|||6.7 — Kiểm tra: goroutine và channel"
+    ]},
+    { "tieuDe": "Chapter 7 — sync and context|||Chương 7 — sync và context", "bai": [
+      "7.1 — sync.Mutex and RWMutex: protecting shared state correctly|||7.1 — sync.Mutex và RWMutex: bảo vệ trạng thái dùng chung cho đúng",
+      "7.2 — WaitGroup, Once and errgroup for coordinating work|||7.2 — WaitGroup, Once và errgroup để điều phối công việc",
+      "7.3 — Atomics and sync.Pool: when they help and when they hurt|||7.3 — Atomic và sync.Pool: khi nào có lợi, khi nào có hại",
+      "7.4 — context.Context: cancellation, deadlines and request-scoped values|||7.4 — context.Context: huỷ, hạn chót và giá trị gắn theo request",
+      "7.5 — Propagating context through HTTP handlers, RPCs and database calls|||7.5 — Truyền context xuyên qua HTTP handler, RPC và lệnh gọi database",
+      "7.6 — The Go memory model in five practical rules|||7.6 — Mô hình bộ nhớ của Go qua năm quy tắc thực dụng",
+      "7.7 — Quiz: sync and context|||7.7 — Kiểm tra: sync và context"
+    ]},
+    { "tieuDe": "Chapter 8 — Concurrency patterns for real services|||Chương 8 — Các mẫu concurrency cho service thật", "bai": [
+      "8.1 — Worker pools and bounded parallelism|||8.1 — Worker pool và giới hạn mức song song",
+      "8.2 — Pipelines and fan-out/fan-in|||8.2 — Pipeline và fan-out/fan-in",
+      "8.3 — Rate limiting, semaphores and backpressure|||8.3 — Giới hạn tốc độ, semaphore và backpressure",
+      "8.4 — Retries with exponential backoff, jitter and circuit breakers|||8.4 — Thử lại với exponential backoff, jitter và circuit breaker",
+      "8.5 — Graceful shutdown with signal.NotifyContext and draining in-flight work|||8.5 — Tắt êm với signal.NotifyContext và xử lý nốt việc đang chạy",
+      "8.6 — Quiz: concurrency patterns|||8.6 — Kiểm tra: các mẫu concurrency"
+    ]},
+    { "tieuDe": "Chapter 9 — Testing, benchmarks and fuzzing|||Chương 9 — Testing, benchmark và fuzzing", "bai": [
+      "9.1 — The testing package: table-driven tests and subtests|||9.1 — Package testing: test dạng bảng và subtest",
+      "9.2 — Test helpers, testdata folders and golden files|||9.2 — Hàm hỗ trợ test, thư mục testdata và golden file",
+      "9.3 — Fakes vs mocks: testing through small interfaces|||9.3 — Fake hay mock: test thông qua interface nhỏ",
+      "9.4 — httptest: testing HTTP handlers and clients end to end|||9.4 — httptest: test HTTP handler và client từ đầu đến cuối",
+      "9.5 — Integration tests against real PostgreSQL with Testcontainers|||9.5 — Integration test với PostgreSQL thật bằng Testcontainers",
+      "9.6 — Benchmarks, b.Loop and comparing runs with benchstat|||9.6 — Benchmark, b.Loop và so sánh các lần chạy bằng benchstat",
+      "9.7 — Native fuzzing: finding crashes in your parsers before users do|||9.7 — Fuzzing có sẵn: tìm lỗi sập trong parser trước khi người dùng tìm ra",
+      "9.8 — Quiz: testing|||9.8 — Kiểm tra: testing"
+    ]},
+    { "tieuDe": "Chapter 10 — net/http and building REST APIs|||Chương 10 — net/http và xây dựng REST API", "bai": [
+      "10.1 — net/http from first principles: Handler, ServeMux and ResponseWriter|||10.1 — net/http từ gốc: Handler, ServeMux và ResponseWriter",
+      "10.2 — Method and path-pattern routing in the standard ServeMux, and when to reach for chi|||10.2 — Định tuyến theo method và mẫu đường dẫn bằng ServeMux chuẩn, và khi nào cần tới chi",
+      "10.3 — Middleware chains: logging, panic recovery, auth and CORS|||10.3 — Chuỗi middleware: ghi log, bắt panic, xác thực và CORS",
+      "10.4 — JSON in and out: decoding safely, validation and consistent error responses|||10.4 — JSON vào và ra: decode an toàn, validate và phản hồi lỗi nhất quán",
+      "10.5 — Server timeouts, body limits and an HTTP client that never hangs|||10.5 — Timeout phía server, giới hạn body và HTTP client không bao giờ treo",
+      "10.6 — Structuring a service: handlers, services, repositories and dependency wiring|||10.6 — Tổ chức một service: handler, service, repository và cách nối phụ thuộc",
+      "10.7 — Quiz: HTTP and REST|||10.7 — Kiểm tra: HTTP và REST"
+    ]},
+    { "tieuDe": "Chapter 11 — Databases: database/sql, pgx and sqlc|||Chương 11 — Database: database/sql, pgx và sqlc", "bai": [
+      "11.1 — database/sql: the connection pool, Query vs Exec, and always closing rows|||11.1 — database/sql: connection pool, Query và Exec, và luôn đóng rows",
+      "11.2 — pgx: the native PostgreSQL driver, batching and COPY|||11.2 — pgx: driver PostgreSQL gốc, gửi theo lô và COPY",
+      "11.3 — sqlc: write plain SQL, get type-safe Go code|||11.3 — sqlc: viết SQL thuần, nhận về code Go an toàn kiểu",
+      "11.4 — Transactions, isolation levels and a context-aware transaction helper|||11.4 — Transaction, mức cô lập và hàm hỗ trợ transaction có context",
+      "11.5 — Schema migrations with goose or golang-migrate|||11.5 — Migration schema với goose hoặc golang-migrate",
+      "11.6 — Production pitfalls: N+1 queries, pool exhaustion and query timeouts|||11.6 — Bẫy trên production: truy vấn N+1, cạn connection pool và timeout truy vấn",
+      "11.7 — Quiz: databases in Go|||11.7 — Kiểm tra: database trong Go"
+    ]},
+    { "tieuDe": "Chapter 12 — gRPC and service-to-service communication|||Chương 12 — gRPC và giao tiếp giữa các service", "bai": [
+      "12.1 — Protocol Buffers: messages, field numbers and backward compatibility|||12.1 — Protocol Buffers: message, số hiệu trường và tương thích ngược",
+      "12.2 — Your first gRPC service: unary calls generated with buf|||12.2 — Service gRPC đầu tiên: lời gọi unary sinh mã bằng buf",
+      "12.3 — Streaming RPCs: server, client and bidirectional streams|||12.3 — RPC streaming: stream phía server, phía client và hai chiều",
+      "12.4 — Interceptors, deadlines and gRPC status codes|||12.4 — Interceptor, deadline và mã trạng thái gRPC",
+      "12.5 — REST or gRPC? Connect and gRPC-Gateway for browsers and REST clients|||12.5 — REST hay gRPC? Connect và gRPC-Gateway cho trình duyệt và client REST",
+      "12.6 — Quiz: gRPC|||12.6 — Kiểm tra: gRPC"
+    ]},
+    { "tieuDe": "Chapter 13 — Observability: slog, OpenTelemetry and pprof|||Chương 13 — Observability: slog, OpenTelemetry và pprof", "bai": [
+      "13.1 — Structured logging with log/slog: levels, attributes and request IDs|||13.1 — Ghi log có cấu trúc với log/slog: mức log, thuộc tính và request ID",
+      "13.2 — Metrics with Prometheus and OpenTelemetry: counters, histograms and RED|||13.2 — Metric với Prometheus và OpenTelemetry: counter, histogram và phương pháp RED",
+      "13.3 — Distributed tracing across HTTP, gRPC and database calls|||13.3 — Distributed tracing xuyên qua HTTP, gRPC và lệnh gọi database",
+      "13.4 — pprof: CPU, heap and goroutine profiles from a live service|||13.4 — pprof: profile CPU, heap và goroutine từ một service đang chạy",
+      "13.5 — Execution traces and hunting down a latency spike|||13.5 — Execution trace và truy tìm một đợt tăng độ trễ",
+      "13.6 — Quiz: observability|||13.6 — Kiểm tra: observability"
+    ]},
+    { "tieuDe": "Chapter 14 — CLI tools, packaging and deploying|||Chương 14 — Công cụ CLI, đóng gói và triển khai", "bai": [
+      "14.1 — Building CLI tools: the flag package, subcommands and Cobra|||14.1 — Viết công cụ CLI: package flag, subcommand và Cobra",
+      "14.2 — Being a good Unix citizen: stdin/stdout, exit codes and config precedence|||14.2 — Làm công dân Unix tử tế: stdin/stdout, mã thoát và thứ tự ưu tiên cấu hình",
+      "14.3 — Static binaries, cross-compiling, version stamping with ldflags and GoReleaser|||14.3 — Binary tĩnh, biên dịch chéo, gắn phiên bản bằng ldflags và GoReleaser",
+      "14.4 — Multi-stage Dockerfiles, distroless and scratch images|||14.4 — Dockerfile nhiều stage, image distroless và scratch",
+      "14.5 — Go on Kubernetes: probes, graceful shutdown, GOMAXPROCS and GOMEMLIMIT|||14.5 — Go trên Kubernetes: probe, tắt êm, GOMAXPROCS và GOMEMLIMIT",
+      "14.6 — A CI pipeline for Go: lint, test with -race, vulnerability scan, build and push|||14.6 — Pipeline CI cho Go: lint, test với -race, quét lỗ hổng, build và push",
+      "14.7 — Quiz: shipping Go|||14.7 — Kiểm tra: đưa Go lên production"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: a production-ready ticket-booking service in Go|||Chương 15 — Dự án cuối khoá: service đặt vé bằng Go sẵn sàng cho production", "bai": [
+      "15.1 — Brief and design: API contract, database schema and service boundaries|||15.1 — Đề bài và thiết kế: hợp đồng API, schema database và ranh giới service",
+      "15.2 — Milestone 1: REST API on PostgreSQL with sqlc and table-driven tests|||15.2 — Mốc 1: REST API trên PostgreSQL với sqlc và test dạng bảng",
+      "15.3 — Milestone 2: concurrent seat reservation without overbooking|||15.3 — Mốc 2: giữ chỗ đồng thời mà không bán trùng ghế",
+      "15.4 — Milestone 3: a gRPC notification service, retries and graceful shutdown|||15.4 — Mốc 3: service thông báo bằng gRPC, cơ chế thử lại và tắt êm",
+      "15.5 — Milestone 4: slog, OpenTelemetry traces and one pprof-guided optimisation|||15.5 — Mốc 4: slog, trace OpenTelemetry và một lần tối ưu dựa trên pprof",
+      "15.6 — Milestone 5: distroless image, Kubernetes deploy and a load test|||15.6 — Mốc 5: image distroless, triển khai lên Kubernetes và chạy load test",
+      "15.7 — Demo day: present the service and defend your design choices|||15.7 — Ngày demo: trình bày service và bảo vệ các quyết định thiết kế",
+      "15.8 — Quiz: capstone design review|||15.8 — Kiểm tra: rà soát thiết kế dự án cuối khoá"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: the whole course on one concept map|||16.1 — Ôn tập: cả khoá trên một sơ đồ khái niệm",
+      "16.2 — Review: 25 classic Go bugs, from nil interfaces to leaked goroutines|||16.2 — Ôn tập: 25 lỗi Go kinh điển, từ interface chứa nil tới goroutine rò rỉ",
+      "16.3 — Mock exam: theory questions and code-reading tasks with worked answers|||16.3 — Thi thử: câu hỏi lý thuyết và bài đọc code, có lời giải chi tiết",
+      "16.4 — Final exam: theory, code reading and a timed debugging task|||16.4 — Bài thi cuối khoá: lý thuyết, đọc code và một bài debug tính giờ",
+      "16.5 — Retrospective and what to learn next: distributed systems, Kubernetes operators, open-source Go|||16.5 — Nhìn lại và học gì tiếp: hệ phân tán, Kubernetes operator, đóng góp mã nguồn mở Go"
+    ]}
+  ]
+}

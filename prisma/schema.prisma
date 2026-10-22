@@ -1126,6 +1126,11 @@ model Course {
   startDate              DateTime? @map("start_date")
   endDate                DateTime? @map("end_date")
   status                 String    @default("DRAFT") @db.VarChar(20)
+  // Chương trình đào tạo của /courses (22/10/2026): khoá thuộc KỲ nào (1–15) và đứng THỨ MẤY trong kỳ.
+  // Tên năm/kỳ + mô tả sống trong mã (src/config/chuongTrinhKhoaHoc.ts), không trong CSDL. NULL ⇒ khoá
+  // chưa xếp — trang vẫn hiện nó ở mục "Khoá mới", không bao giờ giấu. Chỉ dùng cho khoá ngoài Academy.
+  loTrinhKy              Int?      @map("lo_trinh_ky")
+  loTrinhThuTu           Int?      @map("lo_trinh_thu_tu")
   createdAt              DateTime  @default(now()) @map("created_at")
   updatedAt              DateTime  @updatedAt @map("updated_at")
 
@@ -1154,6 +1159,7 @@ model Course {
   @@index([isPublished, status, createdAt(sort: Desc)], name: "idx_courses_published_status_created")
   @@index([isPublished, isFeatured], name: "idx_courses_published_featured")
   @@index([categoryId, isPublished], name: "idx_courses_category_published")
+  @@index([loTrinhKy], name: "idx_courses_lo_trinh_ky")
   @@map("courses")
 }
 

@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { chanSapRaMat } from '../services/khoaSapRaMat.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { saveUserCode } from './savedCodes.routes.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason } from '../services/interview/llm/index.js';
@@ -378,9 +379,10 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
     // CODE = code-only courses (legacy). PAID = "Trả phí or Mã kích hoạt" (accepts both).
     const course = await prisma.course.findUnique({
       where: { id: courseId },
-      select: { id: true, title: true, accessType: true, isPublished: true },
+      select: { id: true, title: true, accessType: true, isPublished: true, status: true },
     });
     if (!course) throw new AppError('Course not found', 404);
+    chanSapRaMat(course); // khoá "Sắp ra mắt" chưa nhận mã kích hoạt
     if (!course.isPublished) throw new AppError('Khoa hoc chua duoc xuat ban', 400);
     if (course.accessType !== 'CODE' && course.accessType !== 'PAID') {
       throw new AppError('Khoa hoc nay khong chap nhan ma kich hoat', 400);

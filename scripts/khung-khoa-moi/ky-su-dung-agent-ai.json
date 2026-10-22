@@ -1,0 +1,134 @@
+{
+  "slug": "ky-su-dung-agent-ai",
+  "ma": "agt",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started with coding agents|||Mục 0 — Khởi động với coding agent", "bai": [
+      "Start here (1/2) — What coding agents are, where they came from, and why they matter to you|||Bắt đầu tại đây (1/2) — Coding agent là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Without discipline: wiped databases, leaked secrets, and how to keep going|||Bắt đầu tại đây (2/2) — Khi thiếu kỷ luật: database bị xoá, lộ secret, và cách học không bỏ cuộc",
+      "0.1 — Chat, autocomplete, agent: three ways to use AI for code and when each one fits|||0.1 — Chat, autocomplete, agent: ba cách dùng AI để viết code và khi nào dùng cách nào",
+      "0.2 — Setting up the course repository and a safe sandbox to experiment in|||0.2 — Dựng repo của khoá học và một sandbox an toàn để thử nghiệm",
+      "0.3 — Quiz: getting oriented|||0.3 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — How coding agents work|||Chương 1 — Coding agent hoạt động thế nào", "bai": [
+      "1.1 — The tool loop: model, tool call, result, next step — until done|||1.1 — Vòng lặp công cụ: model, gọi tool, nhận kết quả, bước tiếp theo — cho tới khi xong",
+      "1.2 — The context window as working memory: what gets in, what falls out, and compaction|||1.2 — Context window là bộ nhớ làm việc: cái gì được nạp, cái gì rơi ra, và cơ chế nén ngữ cảnh",
+      "1.3 — The agent's tools: read, search, edit, shell and browser|||1.3 — Bộ công cụ của agent: đọc, tìm kiếm, sửa file, shell và trình duyệt",
+      "1.4 — Why agents invent APIs, and how grounding in your codebase stops it|||1.4 — Vì sao agent bịa API, và cách bám vào codebase thật để chặn điều đó",
+      "1.5 — Models, effort levels and speed: matching the model to the task|||1.5 — Model, mức nỗ lực và tốc độ: chọn model hợp với từng việc",
+      "1.6 — Quiz: how agents work|||1.6 — Kiểm tra: agent hoạt động thế nào"
+    ]},
+    { "tieuDe": "Chapter 2 — Setting up Claude Code and Cursor|||Chương 2 — Cài đặt Claude Code và Cursor", "bai": [
+      "2.1 — Installing Claude Code, signing in and a first session in a real repository|||2.1 — Cài Claude Code, đăng nhập và phiên làm việc đầu tiên trong một repo thật",
+      "2.2 — Permission modes, allowlists and sandboxing: deciding what the agent may do alone|||2.2 — Chế độ quyền, allowlist và sandbox: quyết định agent được tự làm những gì",
+      "2.3 — Cursor: agent mode, tab completion, codebase indexing and rules|||2.3 — Cursor: agent mode, gợi ý Tab, đánh chỉ mục codebase và rules",
+      "2.4 — Settings files, slash commands and hooks that run on every tool call|||2.4 — File cấu hình, slash command và hook chạy ở mỗi lần gọi tool",
+      "2.5 — Terminal, IDE and desktop workflows: picking a daily setup that sticks|||2.5 — Làm việc qua terminal, IDE và app desktop: chọn một thiết lập dùng được lâu dài",
+      "2.6 — Quiz: tool setup|||2.6 — Kiểm tra: cài đặt công cụ"
+    ]},
+    { "tieuDe": "Chapter 3 — Project instructions: CLAUDE.md and rules|||Chương 3 — Chỉ dẫn dự án: CLAUDE.md và rules", "bai": [
+      "3.1 — What belongs in CLAUDE.md: commands, conventions and forbidden actions|||3.1 — CLAUDE.md nên chứa gì: lệnh, quy ước và những hành động bị cấm",
+      "3.2 — Writing instructions the model actually follows: specific, checkable, explained|||3.2 — Viết chỉ dẫn mà model thật sự làm theo: cụ thể, kiểm được, có lý do",
+      "3.3 — Layered instructions: global, project and per-directory files, plus Cursor rules|||3.3 — Chỉ dẫn nhiều tầng: toàn cục, theo dự án, theo thư mục, cùng rules của Cursor",
+      "3.4 — Turning incidents into rules: maintaining a known-errors table|||3.4 — Biến sự cố thành quy tắc: duy trì bảng các lỗi đã gặp",
+      "3.5 — Skills and reusable workflows for repeated tasks|||3.5 — Skill và quy trình tái sử dụng cho những việc lặp lại",
+      "3.6 — Keeping instructions fresh: auditing, pruning and resolving contradictions|||3.6 — Giữ chỉ dẫn luôn đúng: rà soát, cắt tỉa và gỡ chỗ mâu thuẫn",
+      "3.7 — Quiz: project instructions|||3.7 — Kiểm tra: chỉ dẫn dự án"
+    ]},
+    { "tieuDe": "Chapter 4 — Planning and task decomposition|||Chương 4 — Lập kế hoạch và chia nhỏ công việc", "bai": [
+      "4.1 — Plan mode: making the agent think and propose before it edits|||4.1 — Plan mode: bắt agent suy nghĩ và đề xuất trước khi sửa code",
+      "4.2 — Writing a task brief: goal, constraints, files in scope and definition of done|||4.2 — Viết brief cho một việc: mục tiêu, ràng buộc, phạm vi file và tiêu chí hoàn thành",
+      "4.3 — Breaking an epic into agent-sized tasks with clear checkpoints|||4.3 — Chia một epic thành các việc vừa sức agent, có điểm kiểm tra rõ ràng",
+      "4.4 — Exploring an unfamiliar codebase with an agent before changing anything|||4.4 — Khám phá một codebase lạ cùng agent trước khi động vào bất cứ thứ gì",
+      "4.5 — Checkpoints, small commits and rolling back an agent's wrong turn|||4.5 — Checkpoint, commit nhỏ và quay lui khi agent rẽ sai hướng",
+      "4.6 — Quiz: planning|||4.6 — Kiểm tra: lập kế hoạch"
+    ]},
+    { "tieuDe": "Chapter 5 — Test-first development with agents|||Chương 5 — Viết test trước khi để agent viết code", "bai": [
+      "5.1 — Why tests are the agent's feedback loop, not an afterthought|||5.1 — Vì sao test là vòng phản hồi của agent, không phải việc làm sau",
+      "5.2 — Red, green, refactor: you write the failing test, the agent makes it pass|||5.2 — Đỏ, xanh, refactor: bạn viết test thất bại, agent làm nó qua",
+      "5.3 — Stopping agents from cheating: edited assertions, mock-everything tests and skipped cases|||5.3 — Chặn agent gian lận: sửa assertion, test mock toàn bộ và bỏ qua ca test",
+      "5.4 — Characterisation tests before letting an agent touch legacy code|||5.4 — Viết characterisation test trước khi cho agent chạm vào code cũ",
+      "5.5 — End-to-end and browser verification: proving the feature works for a real user|||5.5 — Kiểm tra end-to-end và qua trình duyệt: chứng minh tính năng chạy được với người dùng thật",
+      "5.6 — Quiz: test-first with agents|||5.6 — Kiểm tra: test trước cùng agent"
+    ]},
+    { "tieuDe": "Chapter 6 — Reviewing AI-written code|||Chương 6 — Review code do AI viết", "bai": [
+      "6.1 — The reviewer mindset: plausible is not the same as correct|||6.1 — Tư duy người review: trông hợp lý không có nghĩa là đúng",
+      "6.2 — Correctness checklist: edge cases, error paths, concurrency and time zones|||6.2 — Checklist tính đúng: ca biên, nhánh lỗi, concurrency và múi giờ",
+      "6.3 — Hidden regressions: deleted checks, swallowed errors and silently changed defaults|||6.3 — Lỗi hồi quy ẩn: kiểm tra bị xoá, lỗi bị nuốt và giá trị mặc định bị đổi âm thầm",
+      "6.4 — Security review: injection, broken authorisation, hard-coded secrets and hallucinated packages|||6.4 — Review bảo mật: injection, phân quyền hỏng, secret viết cứng và package bị bịa ra",
+      "6.5 — Over-engineering and duplication: when the agent rewrites what already exists|||6.5 — Làm quá tay và trùng lặp: khi agent viết lại thứ đã có sẵn",
+      "6.6 — Reviewing large diffs efficiently: risk-first reading and asking the agent to explain|||6.6 — Review diff lớn hiệu quả: đọc theo mức rủi ro và bắt agent tự giải thích",
+      "6.7 — Quiz: code review|||6.7 — Kiểm tra: review code"
+    ]},
+    { "tieuDe": "Chapter 7 — MCP servers and custom tools|||Chương 7 — MCP server và công cụ tự viết", "bai": [
+      "7.1 — The Model Context Protocol: servers, tools, resources and prompts|||7.1 — Model Context Protocol: server, tool, resource và prompt",
+      "7.2 — Connecting MCP servers for databases, issue trackers and browsers|||7.2 — Kết nối MCP server cho database, công cụ quản lý issue và trình duyệt",
+      "7.3 — Building your own MCP server for an internal API|||7.3 — Tự viết MCP server cho một API nội bộ",
+      "7.4 — Designing tools agents use well: names, descriptions, inputs and error messages|||7.4 — Thiết kế tool để agent dùng tốt: tên, mô tả, tham số và thông báo lỗi",
+      "7.5 — MCP security: tool poisoning, untrusted content and least privilege|||7.5 — Bảo mật MCP: tool bị đầu độc, nội dung không tin cậy và quyền tối thiểu",
+      "7.6 — Quiz: MCP and custom tools|||7.6 — Kiểm tra: MCP và công cụ tự viết"
+    ]},
+    { "tieuDe": "Chapter 8 — Multi-agent work and parallel worktrees|||Chương 8 — Làm việc nhiều agent và worktree song song", "bai": [
+      "8.1 — Subagents: delegating searches, research and reviews to keep context clean|||8.1 — Subagent: giao việc tìm kiếm, nghiên cứu và review để giữ ngữ cảnh gọn",
+      "8.2 — git worktrees: running several agent sessions on one repository at once|||8.2 — git worktree: chạy nhiều phiên agent trên cùng một repo một lúc",
+      "8.3 — Avoiding collisions: shared git index, ports, databases and half-written files|||8.3 — Tránh giẫm chân nhau: git index dùng chung, cổng, database và file đang sửa dở",
+      "8.4 — Orchestration patterns: planner, workers and an independent reviewer|||8.4 — Mẫu điều phối: người lập kế hoạch, các worker và một reviewer độc lập",
+      "8.5 — Merging parallel work and resolving conflicts without losing changes|||8.5 — Gộp kết quả song song và giải quyết xung đột mà không mất thay đổi",
+      "8.6 — Quiz: multi-agent work|||8.6 — Kiểm tra: làm việc nhiều agent"
+    ]},
+    { "tieuDe": "Chapter 9 — Refactors, migrations and debugging with agents|||Chương 9 — Refactor, migration và debug cùng agent", "bai": [
+      "9.1 — Large refactors in small, verifiable steps|||9.1 — Refactor lớn bằng những bước nhỏ, kiểm chứng được",
+      "9.2 — Framework and version migrations: codemods plus agents|||9.2 — Nâng cấp framework và phiên bản: kết hợp codemod với agent",
+      "9.3 — Debugging with an agent: reproduce, hypothesise, bisect and confirm the root cause|||9.3 — Debug cùng agent: tái hiện, đặt giả thuyết, khoanh vùng và xác nhận nguyên nhân gốc",
+      "9.4 — Production incidents: read-only investigation from logs and traces before any fix|||9.4 — Sự cố production: điều tra chỉ-đọc qua log và trace trước khi sửa bất cứ gì",
+      "9.5 — Performance work: measure first, let the agent propose, measure again|||9.5 — Tối ưu hiệu năng: đo trước, để agent đề xuất, rồi đo lại",
+      "9.6 — Quiz: refactors, migrations and debugging|||9.6 — Kiểm tra: refactor, migration và debug"
+    ]},
+    { "tieuDe": "Chapter 10 — CI integration and PR review bots|||Chương 10 — Tích hợp CI và bot review PR", "bai": [
+      "10.1 — Running agents headless: non-interactive mode, output formats and exit codes|||10.1 — Chạy agent không giao diện: chế độ non-interactive, định dạng đầu ra và mã thoát",
+      "10.2 — Agents in GitHub Actions: triaging issues and drafting pull requests|||10.2 — Agent trong GitHub Actions: phân loại issue và soạn pull request nháp",
+      "10.3 — AI PR review bots: configuration, noise control and false positives|||10.3 — Bot review PR bằng AI: cấu hình, giảm nhiễu và báo động giả",
+      "10.4 — Guarding the pipeline: required checks, human approval and protected branches|||10.4 — Giữ an toàn pipeline: check bắt buộc, con người duyệt và nhánh được bảo vệ",
+      "10.5 — Quiz: CI and review bots|||10.5 — Kiểm tra: CI và bot review"
+    ]},
+    { "tieuDe": "Chapter 11 — Security and secrets|||Chương 11 — Bảo mật và secret", "bai": [
+      "11.1 — Threat model of a coding agent running on your machine|||11.1 — Mô hình đe doạ của một coding agent chạy trên máy bạn",
+      "11.2 — Keeping secrets out of context: .env files, ignore rules and sandboxes|||11.2 — Giữ secret ngoài ngữ cảnh: file .env, quy tắc ignore và sandbox",
+      "11.3 — Prompt injection through repo files, issues, web pages and tool output|||11.3 — Prompt injection qua file trong repo, issue, trang web và kết quả của tool",
+      "11.4 — Destructive commands: deny lists, backups and keeping production access away|||11.4 — Lệnh phá huỷ: danh sách chặn, sao lưu và giữ agent xa quyền truy cập production",
+      "11.5 — Supply-chain risks: slopsquatting, lockfiles and verifying new dependencies|||11.5 — Rủi ro chuỗi cung ứng: slopsquatting, lockfile và kiểm tra thư viện mới thêm",
+      "11.6 — Quiz: security and secrets|||11.6 — Kiểm tra: bảo mật và secret"
+    ]},
+    { "tieuDe": "Chapter 12 — Cost, limits and real productivity|||Chương 12 — Chi phí, giới hạn và năng suất thật", "bai": [
+      "12.1 — How agent sessions are billed: tokens, caching, subscriptions and usage limits|||12.1 — Phiên agent được tính tiền thế nào: token, cache, gói thuê bao và giới hạn sử dụng",
+      "12.2 — Context hygiene: clearing, compacting and keeping sessions focused|||12.2 — Vệ sinh ngữ cảnh: xoá, nén và giữ mỗi phiên tập trung một việc",
+      "12.3 — Measuring real productivity: cycle time, rework and review load, not lines of code|||12.3 — Đo năng suất thật: thời gian chu kỳ, công sửa lại và tải review, không phải số dòng code",
+      "12.4 — When not to use an agent: learning, tiny edits and high-stakes changes|||12.4 — Khi nào không nên dùng agent: lúc đang học, sửa vặt và thay đổi rủi ro cao",
+      "12.5 — Quiz: cost and productivity|||12.5 — Kiểm tra: chi phí và năng suất"
+    ]},
+    { "tieuDe": "Chapter 13 — Team policies and ethics|||Chương 13 — Chính sách nhóm và đạo đức nghề nghiệp", "bai": [
+      "13.1 — Writing a team AI-usage policy people will actually follow|||13.1 — Viết chính sách dùng AI cho nhóm mà mọi người chịu làm theo",
+      "13.2 — Ownership, licences and attribution of AI-generated code|||13.2 — Quyền sở hữu, giấy phép và ghi công cho code do AI sinh ra",
+      "13.3 — Juniors and learning: using agents without losing your own skills|||13.3 — Người mới và việc học: dùng agent mà không đánh mất kỹ năng của chính mình",
+      "13.4 — Client data, privacy and compliance when code leaves your machine|||13.4 — Dữ liệu khách hàng, quyền riêng tư và tuân thủ khi code rời khỏi máy bạn",
+      "13.5 — Onboarding a team: shared configs, rules, MCP servers and playbooks|||13.5 — Đưa cả nhóm vào guồng: cấu hình chung, rules, MCP server và sổ tay quy trình",
+      "13.6 — Quiz: team policies and ethics|||13.6 — Kiểm tra: chính sách nhóm và đạo đức"
+    ]},
+    { "tieuDe": "Chapter 14 — Capstone: ship a real feature with agents and defend every line|||Chương 14 — Dự án cuối khoá: đưa một tính năng thật lên bằng agent và bảo vệ từng dòng code", "bai": [
+      "14.1 — Brief: pick the feature, write CLAUDE.md and get the plan approved|||14.1 — Đề bài: chọn tính năng, viết CLAUDE.md và chốt kế hoạch",
+      "14.2 — Milestone 1: failing tests and acceptance criteria written first|||14.2 — Mốc 1: viết trước test thất bại và tiêu chí nghiệm thu",
+      "14.3 — Milestone 2: implement in parallel worktrees with subagents|||14.3 — Mốc 2: triển khai trên các worktree song song cùng subagent",
+      "14.4 — Milestone 3: add a custom MCP tool the feature needs|||14.4 — Mốc 3: thêm một MCP tool tự viết mà tính năng cần tới",
+      "14.5 — Milestone 4: self-review, AI review bot and a human review — then fix|||14.5 — Mốc 4: tự review, bot AI review và người review — rồi sửa",
+      "14.6 — Milestone 5: CI green, merge, and a postmortem of every agent mistake|||14.6 — Mốc 5: CI xanh, merge, và viết postmortem cho mọi lỗi của agent",
+      "14.7 — Demo day: walk through the diff and defend the decisions|||14.7 — Ngày demo: đi qua diff và bảo vệ các quyết định",
+      "14.8 — Quiz: capstone review|||14.8 — Kiểm tra: rà soát dự án cuối khoá"
+    ]},
+    { "tieuDe": "Chapter 15 — Final exam|||Chương 15 — Thi cuối khoá", "bai": [
+      "15.1 — Review: the agent workflow on one page, from brief to merged PR|||15.1 — Ôn tập: quy trình làm việc với agent trên một trang, từ brief tới PR đã merge",
+      "15.2 — Review: 20 real agent failures and the guardrail that catches each|||15.2 — Ôn tập: 20 lỗi thật của agent và lớp bảo vệ bắt được từng lỗi",
+      "15.3 — Mock exam: spot the bug in AI-written diffs, with worked answers|||15.3 — Thi thử: tìm lỗi trong diff do AI viết, có lời giải chi tiết",
+      "15.4 — Final exam: brief, supervise and review an agent on a timed task|||15.4 — Bài thi cuối khoá: viết brief, giám sát và review agent trong một bài tính giờ",
+      "15.5 — Retrospective and what to learn next: building agents, evals and AI platform work|||15.5 — Nhìn lại và học gì tiếp: tự xây agent, eval và công việc nền tảng AI"
+    ]}
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "slug": "tieng-anh-it-viet-tai-lieu",
+  "ma": "eng",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started: English as an engineering tool|||Mục 0 — Khởi động: tiếng Anh là một công cụ kỹ thuật", "bai": [
+      "Start here (1/2) — What tech English and writing are, where they came from, and why they matter|||Bắt đầu tại đây (1/2) — Tiếng Anh kỹ thuật và viết tài liệu là gì, từ đâu ra, vì sao nó quan trọng",
+      "Start here (2/2) — When words go wrong: real incidents from unclear writing, and how not to give up|||Bắt đầu tại đây (2/2) — Khi câu chữ sai: sự cố thật do viết không rõ, và cách học để không bỏ cuộc",
+      "0.1 — Where you stand: a self-check of reading, writing, listening and speaking for IT|||0.1 — Bạn đang ở đâu: tự đánh giá đọc, viết, nghe và nói trong môi trường IT",
+      "0.2 — Your toolkit: learner dictionaries, grammar checkers, and AI as a tutor, not a ghostwriter|||0.2 — Bộ đồ nghề: từ điển cho người học, công cụ soát ngữ pháp, và AI làm gia sư chứ không viết hộ",
+      "0.3 — A 20-minute daily habit: reading one doc page, writing one message, saying one sentence aloud|||0.3 — Thói quen 20 phút mỗi ngày: đọc một trang tài liệu, viết một tin nhắn, đọc to một câu",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — Reading official documentation|||Chương 1 — Đọc tài liệu chính thức", "bai": [
+      "1.1 — How docs are organized: tutorials, how-to guides, reference and explanations|||1.1 — Tài liệu được sắp xếp thế nào: tutorial, how-to guide, reference và explanation",
+      "1.2 — Skimming and scanning: finding the one paragraph you need in a long page|||1.2 — Đọc lướt và dò tìm: tìm đúng đoạn bạn cần trong một trang dài",
+      "1.3 — Reading an API reference: signatures, parameters, return values, defaults and deprecation notes|||1.3 — Đọc API reference: chữ ký hàm, tham số, giá trị trả về, mặc định và ghi chú deprecated",
+      "1.4 — Reading --help, man pages and configuration references|||1.4 — Đọc --help, man page và tài liệu cấu hình",
+      "1.5 — Reading changelogs, release notes and migration guides before you upgrade|||1.5 — Đọc changelog, release notes và hướng dẫn migration trước khi nâng cấp",
+      "1.6 — Quiz: reading documentation|||1.6 — Kiểm tra: đọc tài liệu"
+    ]},
+    { "tieuDe": "Chapter 2 — Reading error messages and searching for answers|||Chương 2 — Đọc thông báo lỗi và tìm câu trả lời", "bai": [
+      "2.1 — Anatomy of an error message: what failed, where, and why, word by word|||2.1 — Giải phẫu một thông báo lỗi: cái gì hỏng, ở đâu, và vì sao, từng chữ một",
+      "2.2 — The vocabulary of errors: unresolved, unexpected, deprecated, mismatch, timeout, refused|||2.2 — Từ vựng của lỗi: unresolved, unexpected, deprecated, mismatch, timeout, refused",
+      "2.3 — Reading stack traces and logs: finding the line that is actually yours|||2.3 — Đọc stack trace và log: tìm đúng dòng thật sự thuộc code của bạn",
+      "2.4 — Searching in English: turning an error into a good query for the web and GitHub issues|||2.4 — Tìm kiếm bằng tiếng Anh: biến một lỗi thành câu truy vấn tốt trên web và GitHub issues",
+      "2.5 — Reading Stack Overflow and long issue threads: the real fix vs outdated advice|||2.5 — Đọc Stack Overflow và chuỗi issue dài: phân biệt bản sửa đúng với lời khuyên đã lỗi thời",
+      "2.6 — Quiz: errors and searching|||2.6 — Kiểm tra: lỗi và tìm kiếm"
+    ]},
+    { "tieuDe": "Chapter 3 — Reading RFCs and specifications|||Chương 3 — Đọc RFC và đặc tả", "bai": [
+      "3.1 — What an RFC is: the IETF process and why the internet runs on documents|||3.1 — RFC là gì: quy trình của IETF và vì sao internet vận hành bằng văn bản",
+      "3.2 — MUST, SHOULD, MAY: requirement keywords from RFC 2119 and why they are capitalized|||3.2 — MUST, SHOULD, MAY: từ khoá yêu cầu theo RFC 2119 và vì sao chúng viết hoa",
+      "3.3 — Walking through a real spec section: HTTP methods and status codes|||3.3 — Đi qua một mục đặc tả thật: phương thức HTTP và mã trạng thái",
+      "3.4 — Reading W3C, WHATWG and language specifications without drowning|||3.4 — Đọc đặc tả của W3C, WHATWG và ngôn ngữ lập trình mà không bị ngợp",
+      "3.5 — Quiz: RFCs and specifications|||3.5 — Kiểm tra: RFC và đặc tả"
+    ]},
+    { "tieuDe": "Chapter 4 — Core vocabulary for software engineers|||Chương 4 — Từ vựng cốt lõi cho kỹ sư phần mềm", "bai": [
+      "4.1 — The verbs of software: deploy, roll back, migrate, refactor, deprecate, provision|||4.1 — Động từ của phần mềm: deploy, roll back, migrate, refactor, deprecate, provision",
+      "4.2 — Phrasal verbs engineers use daily: set up, spin up, roll out, look into, follow up|||4.2 — Phrasal verb kỹ sư dùng hằng ngày: set up, spin up, roll out, look into, follow up",
+      "4.3 — Acronyms and abbreviations: e.g., i.e., etc., FYI, ETA, LGTM, WIP, TL;DR|||4.3 — Từ viết tắt: e.g., i.e., etc., FYI, ETA, LGTM, WIP, TL;DR",
+      "4.4 — Collocations that sound native: fix a bug, raise an issue, ship a feature, run a migration|||4.4 — Cụm từ đi kèm nghe tự nhiên: fix a bug, raise an issue, ship a feature, run a migration",
+      "4.5 — Words Vietnamese developers often misuse: false friends and literal translations|||4.5 — Những từ dân IT Việt hay dùng sai: từ dễ nhầm và lối dịch từng chữ",
+      "4.6 — Building your own glossary with spaced repetition|||4.6 — Tự xây sổ thuật ngữ riêng với phương pháp lặp lại ngắt quãng",
+      "4.7 — Quiz: core vocabulary|||4.7 — Kiểm tra: từ vựng cốt lõi"
+    ]},
+    { "tieuDe": "Chapter 5 — Grammar for clear technical writing|||Chương 5 — Ngữ pháp để viết kỹ thuật cho rõ", "bai": [
+      "5.1 — Present simple for how systems behave, and imperative mood for instructions|||5.1 — Thì hiện tại đơn để mô tả hệ thống hoạt động, và câu mệnh lệnh để viết hướng dẫn",
+      "5.2 — Articles a, an and the: the mistake Vietnamese speakers make most, fixed with simple rules|||5.2 — Mạo từ a, an và the: lỗi người Việt mắc nhiều nhất, sửa bằng vài quy tắc đơn giản",
+      "5.3 — Countable and uncountable nouns: data, code, feedback, software, information|||5.3 — Danh từ đếm được và không đếm được: data, code, feedback, software, information",
+      "5.4 — Active vs passive voice: when 'the server rejects it' beats 'it is rejected'|||5.4 — Chủ động và bị động: khi nào 'the server rejects it' tốt hơn 'it is rejected'",
+      "5.5 — Short sentences, one idea each: cutting filler words and nominalizations|||5.5 — Câu ngắn, mỗi câu một ý: cắt từ đệm và danh từ hoá thừa",
+      "5.6 — Lists, tables and formatting in Markdown so readers can scan|||5.6 — Danh sách, bảng và định dạng Markdown để người đọc lướt được",
+      "5.7 — Quiz: grammar for technical writing|||5.7 — Kiểm tra: ngữ pháp cho viết kỹ thuật"
+    ]},
+    { "tieuDe": "Chapter 6 — Commit messages, pull requests and code review|||Chương 6 — Commit message, pull request và code review", "bai": [
+      "6.1 — A good commit message: subject line in imperative mood, a body that explains why|||6.1 — Một commit message tốt: dòng tiêu đề ở dạng mệnh lệnh, phần thân giải thích vì sao",
+      "6.2 — Conventional Commits: feat, fix, refactor, breaking changes and scopes|||6.2 — Conventional Commits: feat, fix, refactor, breaking change và scope",
+      "6.3 — Writing a pull request description: what changed, why, how it was tested, and screenshots|||6.3 — Viết mô tả pull request: thay đổi gì, vì sao, đã kiểm thử ra sao, và ảnh chụp minh hoạ",
+      "6.4 — Writing review comments: nit, suggestion, question and blocking, with a kind but direct tone|||6.4 — Viết nhận xét review: nit, suggestion, question và blocking, giọng tử tế mà thẳng thắn",
+      "6.5 — Replying to review feedback: agreeing, pushing back politely and resolving threads|||6.5 — Trả lời góp ý review: đồng ý, phản biện lịch sự và đóng thread",
+      "6.6 — Quiz: commits, PRs and reviews|||6.6 — Kiểm tra: commit, PR và review"
+    ]},
+    { "tieuDe": "Chapter 7 — Issues, bug reports and asking for help|||Chương 7 — Issue, báo lỗi và hỏi người khác giúp", "bai": [
+      "7.1 — An actionable bug report: title, steps to reproduce, expected vs actual, environment|||7.1 — Báo cáo lỗi mà dev xử lý được ngay: tiêu đề, các bước tái hiện, kỳ vọng và thực tế, môi trường",
+      "7.2 — The minimal reproducible example, and why it often makes you find the bug yourself|||7.2 — Ví dụ tái hiện tối giản, và vì sao nó hay khiến bạn tự tìm ra lỗi",
+      "7.3 — Feature requests and user stories: describing the problem before the solution|||7.3 — Đề xuất tính năng và user story: mô tả vấn đề trước khi nói giải pháp",
+      "7.4 — Asking good questions on open-source projects, forums and team channels|||7.4 — Hỏi câu hỏi tốt trên dự án mã nguồn mở, diễn đàn và kênh chat của nhóm",
+      "7.5 — Triage language: labels, priorities, duplicates and closing an issue politely|||7.5 — Ngôn ngữ phân loại issue: label, mức ưu tiên, trùng lặp và đóng issue một cách lịch sự",
+      "7.6 — Quiz: issues and bug reports|||7.6 — Kiểm tra: issue và báo lỗi"
+    ]},
+    { "tieuDe": "Chapter 8 — README files and API documentation|||Chương 8 — README và tài liệu API", "bai": [
+      "8.1 — The README that gets a project used: what it is, quickstart, configuration, contributing, license|||8.1 — README khiến dự án được dùng: nó là gì, quickstart, cấu hình, đóng góp, giấy phép",
+      "8.2 — The Diátaxis framework: keeping tutorials, how-tos, reference and explanation apart|||8.2 — Khung Diátaxis: tách bạch tutorial, how-to, reference và explanation",
+      "8.3 — Documenting a REST API: endpoint descriptions, examples and error responses in OpenAPI|||8.3 — Viết tài liệu REST API: mô tả endpoint, ví dụ và phản hồi lỗi trong OpenAPI",
+      "8.4 — Code comments and docstrings: explaining why, not repeating what the code says|||8.4 — Chú thích code và docstring: giải thích vì sao, không nhắc lại điều code đã nói",
+      "8.5 — Changelogs and release notes users actually read|||8.5 — Changelog và release notes mà người dùng thật sự đọc",
+      "8.6 — Quiz: READMEs and API docs|||8.6 — Kiểm tra: README và tài liệu API"
+    ]},
+    { "tieuDe": "Chapter 9 — Design docs, RFCs and ADRs|||Chương 9 — Design doc, RFC và ADR", "bai": [
+      "9.1 — Why teams write before they build: the design doc as a thinking tool|||9.1 — Vì sao các nhóm viết trước khi làm: design doc là công cụ để suy nghĩ",
+      "9.2 — Design doc structure: context, goals, non-goals, proposal and open questions|||9.2 — Cấu trúc design doc: bối cảnh, mục tiêu, phi mục tiêu, đề xuất và câu hỏi mở",
+      "9.3 — Writing alternatives considered and trade-offs honestly|||9.3 — Viết các phương án đã cân nhắc và đánh đổi một cách trung thực",
+      "9.4 — Writing an internal RFC and responding to comments without getting defensive|||9.4 — Viết một RFC nội bộ và trả lời góp ý mà không phòng thủ",
+      "9.5 — Architecture Decision Records: context, decision, status and consequences|||9.5 — Architecture Decision Record (ADR): bối cảnh, quyết định, trạng thái và hệ quả",
+      "9.6 — Diagrams with captions: describing architecture in words a reader can follow|||9.6 — Sơ đồ có chú thích: mô tả kiến trúc bằng lời mà người đọc theo được",
+      "9.7 — Quiz: design docs, RFCs and ADRs|||9.7 — Kiểm tra: design doc, RFC và ADR"
+    ]},
+    { "tieuDe": "Chapter 10 — Incident updates and blameless postmortems|||Chương 10 — Cập nhật sự cố và postmortem không đổ lỗi", "bai": [
+      "10.1 — Writing status updates during an incident: impact, current state, next update time|||10.1 — Viết cập nhật trong lúc có sự cố: ảnh hưởng, tình trạng hiện tại, giờ cập nhật kế tiếp",
+      "10.2 — Blameless language: describing what happened without naming a culprit|||10.2 — Ngôn ngữ không đổ lỗi: mô tả chuyện đã xảy ra mà không chỉ mặt người có lỗi",
+      "10.3 — Writing a precise timeline with times, actors and evidence|||10.3 — Viết dòng thời gian chính xác với giờ, người thực hiện và bằng chứng",
+      "10.4 — Root cause, contributing factors and action items with owners and dates|||10.4 — Nguyên nhân gốc, yếu tố góp phần và đầu việc khắc phục có người phụ trách, có hạn",
+      "10.5 — Reading famous public postmortems and borrowing their phrasing|||10.5 — Đọc những postmortem công khai nổi tiếng và học cách diễn đạt của họ",
+      "10.6 — Quiz: incidents and postmortems|||10.6 — Kiểm tra: sự cố và postmortem"
+    ]},
+    { "tieuDe": "Chapter 11 — Emails, Slack and async communication|||Chương 11 — Email, Slack và giao tiếp bất đồng bộ", "bai": [
+      "11.1 — Bottom line up front: structuring a message so the reader knows what you need in one line|||11.1 — Nói điều chính trước: viết tin nhắn để người đọc biết bạn cần gì ngay dòng đầu",
+      "11.2 — Polite requests, reminders and following up without sounding pushy|||11.2 — Nhờ vả lịch sự, nhắc việc và hỏi lại mà không nghe như hối thúc",
+      "11.3 — Saying no, disagreeing and escalating in writing|||11.3 — Từ chối, không đồng ý và báo lên cấp trên bằng văn bản",
+      "11.4 — Slack etiquette: threads, mentions, tone, emoji and working across time zones|||11.4 — Phép lịch sự trên Slack: thread, mention, giọng điệu, emoji và làm việc khác múi giờ",
+      "11.5 — Formal emails to clients and managers: subject lines, greetings and sign-offs|||11.5 — Email trang trọng gửi khách hàng và quản lý: tiêu đề, lời chào và lời kết",
+      "11.6 — Quiz: emails and Slack|||11.6 — Kiểm tra: email và Slack"
+    ]},
+    { "tieuDe": "Chapter 12 — Meetings: stand-ups, demos and 1:1s|||Chương 12 — Họp: stand-up, demo và 1:1", "bai": [
+      "12.1 — The daily stand-up: yesterday, today, blockers in three clear sentences|||12.1 — Stand-up hằng ngày: hôm qua, hôm nay, vướng mắc trong ba câu rõ ràng",
+      "12.2 — Giving a sprint demo: walking through a feature and handling questions|||12.2 — Demo cuối sprint: trình bày một tính năng và xử lý câu hỏi",
+      "12.3 — Asking for clarification and buying time when you did not catch something|||12.3 — Hỏi lại cho rõ và kéo dài thời gian khi bạn nghe chưa kịp",
+      "12.4 — Disagreeing politely and proposing alternatives in a meeting|||12.4 — Phản đối lịch sự và đề xuất phương án khác trong cuộc họp",
+      "12.5 — 1:1s with your manager: giving updates, asking for feedback and talking about growth|||12.5 — Họp 1:1 với quản lý: báo tiến độ, xin góp ý và nói về con đường phát triển",
+      "12.6 — Small talk before and after meetings with international colleagues|||12.6 — Nói chuyện xã giao trước và sau cuộc họp với đồng nghiệp nước ngoài",
+      "12.7 — Quiz: meetings|||12.7 — Kiểm tra: họp"
+    ]},
+    { "tieuDe": "Chapter 13 — Pronouncing tech terms and reading code aloud|||Chương 13 — Phát âm thuật ngữ kỹ thuật và đọc code thành tiếng", "bai": [
+      "13.1 — The most mispronounced tech words: cache, Linux, GUI, SQL, nginx, Kubernetes, char, sudo|||13.1 — Những từ IT hay bị phát âm sai nhất: cache, Linux, GUI, SQL, nginx, Kubernetes, char, sudo",
+      "13.2 — Ending sounds and consonant clusters: the habit of dropping final consonants and how to fix it|||13.2 — Âm cuối và cụm phụ âm: thói quen nuốt âm cuối của người Việt và cách sửa",
+      "13.3 — Word stress in long technical words: database, developer, configuration, asynchronous|||13.3 — Trọng âm trong từ kỹ thuật dài: database, developer, configuration, asynchronous",
+      "13.4 — Saying symbols, numbers, versions and URLs aloud: brackets, slashes, v2.1.0, localhost:3000|||13.4 — Đọc to ký hiệu, số, phiên bản và URL: ngoặc, dấu gạch chéo, v2.1.0, localhost:3000",
+      "13.5 — Shadowing conference talks to build rhythm and intonation|||13.5 — Nói nhại theo các bài talk hội thảo để luyện nhịp và ngữ điệu",
+      "13.6 — Quiz: pronunciation|||13.6 — Kiểm tra: phát âm"
+    ]},
+    { "tieuDe": "Chapter 14 — Job interviews in English|||Chương 14 — Phỏng vấn xin việc bằng tiếng Anh", "bai": [
+      "14.1 — Tell me about yourself: a 90-second answer built around your projects|||14.1 — Tell me about yourself: câu trả lời 90 giây xoay quanh các dự án của bạn",
+      "14.2 — Behavioral questions with the STAR method: conflict, failure, ownership|||14.2 — Câu hỏi hành vi theo phương pháp STAR: mâu thuẫn, thất bại, tinh thần chịu trách nhiệm",
+      "14.3 — Explaining a project you built: architecture, your role and what you would do differently|||14.3 — Trình bày một dự án bạn đã làm: kiến trúc, vai trò của bạn và điều bạn sẽ làm khác đi",
+      "14.4 — Thinking aloud during live coding and system design rounds|||14.4 — Nói ra suy nghĩ trong vòng live coding và system design",
+      "14.5 — Asking the interviewer questions, and talking about salary and notice period|||14.5 — Đặt câu hỏi cho người phỏng vấn, và nói về lương và thời gian báo nghỉ",
+      "14.6 — Mock interview: a full recorded session with self-review|||14.6 — Phỏng vấn thử: một buổi đầy đủ có ghi hình và tự nhận xét",
+      "14.7 — Quiz: interviews in English|||14.7 — Kiểm tra: phỏng vấn bằng tiếng Anh"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: run a small project entirely in English|||Chương 15 — Dự án cuối khoá: vận hành một dự án nhỏ hoàn toàn bằng tiếng Anh", "bai": [
+      "15.1 — Milestone 1: write the README and a design doc for a small open-source tool|||15.1 — Cột mốc 1: viết README và một design doc cho một công cụ mã nguồn mở nhỏ",
+      "15.2 — Milestone 2: file issues, open pull requests with clean commits and good descriptions|||15.2 — Cột mốc 2: tạo issue, mở pull request với commit gọn và mô tả tốt",
+      "15.3 — Milestone 3: review a peer's pull request and record one ADR|||15.3 — Cột mốc 3: review pull request của bạn cùng nhóm và ghi một ADR",
+      "15.4 — Milestone 4: document the API and write release notes for version 1.0|||15.4 — Cột mốc 4: viết tài liệu API và release notes cho phiên bản 1.0",
+      "15.5 — Milestone 5: simulate an outage and publish a blameless postmortem|||15.5 — Cột mốc 5: giả lập một sự cố và công bố một postmortem không đổ lỗi",
+      "15.6 — Milestone 6: record a five-minute demo video in English|||15.6 — Cột mốc 6: quay một video demo năm phút bằng tiếng Anh",
+      "15.7 — Quiz: capstone checkpoint|||15.7 — Kiểm tra: chốt chặn dự án"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: the whole course on one page, from reading docs to interviewing|||16.1 — Ôn tập: cả khoá trên một trang, từ đọc tài liệu tới phỏng vấn",
+      "16.2 — Mock exam: reading, writing and speaking tasks from real engineering work|||16.2 — Thi thử: bài đọc, viết và nói lấy từ công việc kỹ sư thật",
+      "16.3 — Final exam|||16.3 — Bài thi cuối khoá",
+      "16.4 — Retrospective and what to learn next: public speaking, tech blogging and open source|||16.4 — Nhìn lại và học gì tiếp: nói trước đám đông, viết blog kỹ thuật và đóng góp mã nguồn mở"
+    ]}
+  ]
+}

@@ -1,0 +1,104 @@
+/* Hallmark · macrostructure: Catalogue (numbered terms) · tone: editorial / university catalogue · anchor hue: ink-navy 260 + oxblood 25
+ * Chỉ áp trong trang /courses (lớp .goc). Mọi màu dùng qua biến --p-* bên dưới — không viết màu trần trong JSX.
+ * Giao diện tối của site là lớp `theme-dark` trên <html> (KHÔNG phải `dark` — xem CLAUDE.md, Known Error Patterns).
+ */
+.goc {
+  --p-paper: oklch(97.6% 0.007 85);
+  --p-paper-2: oklch(95.2% 0.009 85);
+  --p-card: oklch(99.3% 0.003 85);
+  --p-ink: oklch(23% 0.035 262);
+  --p-ink-2: oklch(40% 0.025 262);
+  --p-ink-3: oklch(50% 0.02 262);
+  --p-rule: oklch(88.5% 0.01 85);
+  --p-rule-strong: oklch(23% 0.035 262);
+  --p-accent: oklch(44% 0.13 25);
+  --p-accent-soft: oklch(44% 0.13 25 / 0.08);
+  --p-accent-ink: oklch(98% 0.008 85);
+  --p-focus: oklch(50% 0.16 255);
+  --p-thumb: oklch(26% 0.04 262);
+
+  --p-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background: var(--p-paper);
+  color: var(--p-ink);
+  overflow-x: clip;
+  font-feature-settings: 'kern', 'liga';
+}
+
+:global(html.theme-dark) .goc {
+  --p-paper: oklch(17.5% 0.012 262);
+  --p-paper-2: oklch(20.5% 0.014 262);
+  --p-card: oklch(21.5% 0.014 262);
+  --p-ink: oklch(94% 0.008 85);
+  --p-ink-2: oklch(81% 0.012 85);
+  --p-ink-3: oklch(69% 0.014 262);
+  --p-rule: oklch(30% 0.016 262);
+  --p-rule-strong: oklch(88% 0.01 85);
+  --p-accent: oklch(74% 0.11 32);
+  --p-accent-soft: oklch(74% 0.11 32 / 0.1);
+  --p-accent-ink: oklch(17% 0.012 262);
+  --p-focus: oklch(76% 0.12 255);
+  --p-thumb: oklch(24% 0.03 262);
+}
+
+/* Vòng focus: hiện NGAY (không chuyển động), tương phản ≥ 3:1 trên cả hai nền. */
+.goc :where(a, button, input, select):focus-visible {
+  outline: 2px solid var(--p-focus);
+  outline-offset: 2px;
+}
+
+.so {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.tieuDe {
+  overflow-wrap: anywhere;
+  min-width: 0;
+  font-style: normal;
+}
+
+/* Hàng khoá học: nền ngả nhẹ khi rê/focus, tên khoá gạch chân. Chỉ đổi màu nền — không dịch chuyển bố cục. */
+.hang {
+  transition: background-color 160ms var(--p-ease-out);
+}
+.hang:hover,
+.hang:focus-visible {
+  background: var(--p-accent-soft);
+}
+.hang:hover .tenKhoa,
+.hang:focus-visible .tenKhoa {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.hang:hover .muiTen {
+  transform: translateX(3px);
+  color: var(--p-accent);
+}
+.muiTen {
+  transition: transform 160ms var(--p-ease-out), color 160ms var(--p-ease-out);
+}
+
+.the:hover .anhThe {
+  transform: scale(1.025);
+}
+.anhThe {
+  transition: transform 400ms var(--p-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hang,
+  .muiTen,
+  .anhThe {
+    transition: none;
+  }
+  .hang:hover .muiTen,
+  .the:hover .anhThe {
+    transform: none;
+  }
+}
+
+/* Neo cuộn tới học kỳ không bị thanh điều hướng cố định che mất. */
+.neo {
+  scroll-margin-top: 6rem;
+}

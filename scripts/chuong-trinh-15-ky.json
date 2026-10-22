@@ -1,0 +1,497 @@
+[
+ {
+  "ky": 1,
+  "nam": 1,
+  "tenNam": "Năm 1 · Nền tảng",
+  "ten": "Nhập môn & công cụ của lập trình viên",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "web-foundations",
+    "title": "Nền tảng Lập trình Web"
+   },
+   {
+    "thuTu": 2,
+    "slug": "linux-bash",
+    "title": "Linux & Bash"
+   },
+   {
+    "thuTu": 3,
+    "slug": "git",
+    "title": "Git & GitHub"
+   },
+   {
+    "thuTu": 4,
+    "slug": "networking-for-developers",
+    "title": "Networking for Developers"
+   },
+   {
+    "thuTu": 5,
+    "slug": "agile-teamwork",
+    "title": "Software Teamwork: Agile, Scrum & Code Review"
+   }
+  ]
+ },
+ {
+  "ky": 2,
+  "nam": 1,
+  "tenNam": "Năm 1 · Nền tảng",
+  "ten": "Ngôn ngữ & tư duy kỹ thuật",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "typescript",
+    "title": "TypeScript"
+   },
+   {
+    "thuTu": 2,
+    "slug": "python",
+    "title": "Python for Backend & AI"
+   },
+   {
+    "thuTu": 3,
+    "slug": "operating-systems-for-developers",
+    "title": "Operating Systems for Developers"
+   },
+   {
+    "thuTu": 4,
+    "slug": "testing",
+    "title": "Testing"
+   },
+   {
+    "thuTu": 5,
+    "slug": "ai-coding",
+    "title": "Coding with AI"
+   }
+  ]
+ },
+ {
+  "ky": 3,
+  "nam": 1,
+  "tenNam": "Năm 1 · Nền tảng",
+  "ten": "Frontend căn bản",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "tailwind-css",
+    "title": "Tailwind CSS"
+   },
+   {
+    "thuTu": 2,
+    "slug": "react",
+    "title": "React"
+   },
+   {
+    "thuTu": 3,
+    "slug": "ux-ui-for-developers",
+    "title": "UX/UI for Developers"
+   },
+   {
+    "thuTu": 4,
+    "slug": "nextjs",
+    "title": "Next.js: The React Framework"
+   },
+   {
+    "thuTu": 5,
+    "slug": "seo-analytics",
+    "title": "SEO & Analytics for the Web"
+   }
+  ]
+ },
+ {
+  "ky": 4,
+  "nam": 2,
+  "tenNam": "Năm 2 · Cốt lõi",
+  "ten": "Backend căn bản",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "nodejs",
+    "title": "Node.js"
+   },
+   {
+    "thuTu": 2,
+    "slug": "postgresql",
+    "title": "PostgreSQL"
+   },
+   {
+    "thuTu": 3,
+    "slug": "prisma-orm",
+    "title": "Prisma ORM"
+   },
+   {
+    "thuTu": 4,
+    "slug": "authentication",
+    "title": "Authentication"
+   },
+   {
+    "thuTu": 5,
+    "slug": "redis",
+    "title": "Redis"
+   }
+  ]
+ },
+ {
+  "ky": 5,
+  "nam": 2,
+  "tenNam": "Năm 2 · Cốt lõi",
+  "ten": "Đưa sản phẩm lên mạng",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "docker",
+    "title": "Docker"
+   },
+   {
+    "thuTu": 2,
+    "slug": "nginx",
+    "title": "Nginx"
+   },
+   {
+    "thuTu": 3,
+    "slug": "deploy-vps",
+    "title": "Deploy lên VPS"
+   },
+   {
+    "thuTu": 4,
+    "slug": "github-actions",
+    "title": "GitHub Actions"
+   },
+   {
+    "thuTu": 5,
+    "slug": "cloud-aws",
+    "title": "Cloud Fundamentals (AWS)"
+   }
+  ]
+ },
+ {
+  "ky": 6,
+  "nam": 2,
+  "tenNam": "Năm 2 · Cốt lõi",
+  "ten": "Full-stack thực chiến",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "fullstack-project",
+    "title": "Build a Full-Stack App from Scratch"
+   },
+   {
+    "thuTu": 2,
+    "slug": "socket-io",
+    "title": "Socket.IO"
+   },
+   {
+    "thuTu": 3,
+    "slug": "object-storage",
+    "title": "Object Storage (Cloudflare R2)"
+   },
+   {
+    "thuTu": 4,
+    "slug": "media-processing",
+    "title": "Media Processing (Sharp + FFmpeg)"
+   },
+   {
+    "thuTu": 5,
+    "slug": "online-payments",
+    "title": "Online Payments: VNPay, MoMo, Stripe & Secure Webhooks"
+   }
+  ]
+ },
+ {
+  "ky": 7,
+  "nam": 2,
+  "tenNam": "Năm 2 · Cốt lõi",
+  "ten": "Backend nâng cao",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "spring-boot",
+    "title": "Spring Boot"
+   },
+   {
+    "thuTu": 2,
+    "slug": "fastapi",
+    "title": "FastAPI"
+   },
+   {
+    "thuTu": 3,
+    "slug": "api-design",
+    "title": "API & System Design"
+   },
+   {
+    "thuTu": 4,
+    "slug": "background-jobs",
+    "title": "Queues & Background Jobs"
+   },
+   {
+    "thuTu": 5,
+    "slug": "email-infrastructure",
+    "title": "Email Infrastructure & Deliverability"
+   }
+  ]
+ },
+ {
+  "ky": 8,
+  "nam": 3,
+  "tenNam": "Năm 3 · Chuyên sâu",
+  "ten": "Vận hành hệ thống",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "observability-monitoring",
+    "title": "Observability & Monitoring (Node.js trên VPS)"
+   },
+   {
+    "thuTu": 2,
+    "slug": "infrastructure-as-code",
+    "title": "Infrastructure as Code: Terraform & Ansible"
+   },
+   {
+    "thuTu": 3,
+    "slug": "kubernetes",
+    "title": "Kubernetes"
+   },
+   {
+    "thuTu": 4,
+    "slug": "performance-load-testing",
+    "title": "Performance & Load Testing"
+   },
+   {
+    "thuTu": 5,
+    "slug": "self-hosting",
+    "title": "Self-Hosting & Home Lab"
+   }
+  ]
+ },
+ {
+  "ky": 9,
+  "nam": 3,
+  "tenNam": "Năm 3 · Chuyên sâu",
+  "ten": "An toàn thông tin nền tảng",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "web-security",
+    "title": "Web Security"
+   },
+   {
+    "thuTu": 2,
+    "slug": "threat-modeling",
+    "title": "Threat Modeling & Secure Design"
+   },
+   {
+    "thuTu": 3,
+    "slug": "privacy-data-law",
+    "title": "Privacy & Data Protection Law"
+   },
+   {
+    "thuTu": 4,
+    "slug": "devsecops",
+    "title": "DevSecOps: Security in CI/CD"
+   },
+   {
+    "thuTu": 5,
+    "slug": "applied-cryptography",
+    "title": "Applied Cryptography for Developers"
+   }
+  ]
+ },
+ {
+  "ky": 10,
+  "nam": 3,
+  "tenNam": "Năm 3 · Chuyên sâu",
+  "ten": "Trí tuệ nhân tạo ứng dụng",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "math-for-ml",
+    "title": "Math for Machine Learning"
+   },
+   {
+    "thuTu": 2,
+    "slug": "machine-learning",
+    "title": "Machine Learning Fundamentals"
+   },
+   {
+    "thuTu": 3,
+    "slug": "llm-apps",
+    "title": "Building AI Apps with LLMs"
+   },
+   {
+    "thuTu": 4,
+    "slug": "rag-vector-search",
+    "title": "RAG, Embeddings & Vector Search"
+   },
+   {
+    "thuTu": 5,
+    "slug": "deep-learning",
+    "title": "Deep Learning with PyTorch"
+   }
+  ]
+ },
+ {
+  "ky": 11,
+  "nam": 3,
+  "tenNam": "Năm 3 · Chuyên sâu",
+  "ten": "Dữ liệu lớn",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "statistics-data-science",
+    "title": "Statistics & Data Science"
+   },
+   {
+    "thuTu": 2,
+    "slug": "search-elasticsearch",
+    "title": "Search: Elasticsearch, OpenSearch & PostgreSQL Full-Text"
+   },
+   {
+    "thuTu": 3,
+    "slug": "data-engineering",
+    "title": "Data Engineering"
+   },
+   {
+    "thuTu": 4,
+    "slug": "kafka",
+    "title": "Apache Kafka"
+   },
+   {
+    "thuTu": 5,
+    "slug": "spark-lakehouse",
+    "title": "Apache Spark & Lakehouse"
+   }
+  ]
+ },
+ {
+  "ky": 12,
+  "nam": 4,
+  "tenNam": "Năm 4 · Chuyên gia",
+  "ten": "Bảo mật nâng cao",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "network-security",
+    "title": "Network Security & Zero Trust"
+   },
+   {
+    "thuTu": 2,
+    "slug": "ddos-protection",
+    "title": "DDoS Protection & Traffic Defense"
+   },
+   {
+    "thuTu": 3,
+    "slug": "cloud-container-security",
+    "title": "Cloud, Container & Kubernetes Security"
+   },
+   {
+    "thuTu": 4,
+    "slug": "blue-team-siem",
+    "title": "Blue Team: Detection, SIEM & Forensics"
+   },
+   {
+    "thuTu": 5,
+    "slug": "reverse-engineering",
+    "title": "Reverse Engineering & Malware Analysis"
+   }
+  ]
+ },
+ {
+  "ky": 13,
+  "nam": 4,
+  "tenNam": "Năm 4 · Chuyên gia",
+  "ten": "Kiến trúc & độ tin cậy",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "distributed-systems",
+    "title": "Distributed Systems"
+   },
+   {
+    "thuTu": 2,
+    "slug": "software-architecture",
+    "title": "Software Architecture"
+   },
+   {
+    "thuTu": 3,
+    "slug": "system-design",
+    "title": "System Design in Practice"
+   },
+   {
+    "thuTu": 4,
+    "slug": "cloud-architecture",
+    "title": "Cloud Architecture"
+   },
+   {
+    "thuTu": 5,
+    "slug": "incident-response",
+    "title": "Incident Response & SRE On-call"
+   }
+  ]
+ },
+ {
+  "ky": 14,
+  "nam": 4,
+  "tenNam": "Năm 4 · Chuyên gia",
+  "ten": "Công nghệ mới",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "ai-agents",
+    "title": "AI Agents & LLM Evaluation"
+   },
+   {
+    "thuTu": 2,
+    "slug": "mlops-llmops",
+    "title": "MLOps & LLMOps"
+   },
+   {
+    "thuTu": 3,
+    "slug": "react-native",
+    "title": "React Native & Expo"
+   },
+   {
+    "thuTu": 4,
+    "slug": "blockchain-fundamentals",
+    "title": "Blockchain Fundamentals"
+   },
+   {
+    "thuTu": 5,
+    "slug": "smart-contracts-solidity",
+    "title": "Smart Contracts with Solidity"
+   }
+  ]
+ },
+ {
+  "ky": 15,
+  "nam": 4,
+  "tenNam": "Năm 4 · Chuyên gia",
+  "ten": "Ra nghề",
+  "mon": [
+   {
+    "thuTu": 1,
+    "slug": "interview-prep",
+    "title": "IT Interview Prep"
+   },
+   {
+    "thuTu": 2,
+    "slug": "dsa-interview",
+    "title": "Coding Interview Prep"
+   },
+   {
+    "thuTu": 3,
+    "slug": "solo-product",
+    "title": "Solo Product: From Idea to Launch to Revenue"
+   },
+   {
+    "thuTu": 4,
+    "slug": "content-creator",
+    "title": "Content Creator: Quay, Dựng & Đăng Video"
+   },
+   {
+    "thuTu": 5,
+    "slug": "huong-dan-ct-work",
+    "title": "CT Work Tutorial"
+   }
+  ]
+ }
+]

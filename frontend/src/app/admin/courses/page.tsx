@@ -6,7 +6,7 @@ import {
   CheckCircle, Clock, AlertCircle, Eye, EyeOff, Loader2,
   ChevronDown, ChevronUp, BookOpen, Play, FileText, Link, Image, FolderTree
 } from 'lucide-react';
-import { adminCoursesApi, courseCategoryApi } from '@/lib/api';
+import { adminCoursesApi, courseCategoryApi, coursesApi } from '@/lib/api';
 import { toast } from 'sonner';
 import type { Course, CourseCategory, CourseSection as CCSection, LessonDto } from '@/types';
 import ImageUpload from '@/components/admin/ImageUpload';
@@ -37,6 +37,9 @@ const emptyCourse = {
   // discountExpiresAt: date+time after which discountPrice stops applying.
   discountExpiresAt: '',
   enrollmentDays: 0,
+  // Chương trình đào tạo /courses: 0 = chưa xếp (khoá hiện ở mục "Khoá mới").
+  loTrinhKy: 0,
+  loTrinhThuTu: 0,
 };
 
 interface SectionForm {
@@ -141,6 +144,13 @@ export default function AdminCoursesPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [courseForm, setCourseForm] = useState({ ...emptyCourse });
+  // Danh sách kỳ của chương trình đào tạo (tên lấy từ chính API công khai — không chép tay ở frontend).
+  const [cacKy, setCacKy] = useState<{ so: number; ten: string; soMon: number }[]>([]);
+  useEffect(() => {
+    coursesApi.getChuongTrinh()
+      .then(r => setCacKy((r.data.data?.nam ?? []).flatMap(n => n.ky.map(k => ({ so: k.so, ten: k.ten, soMon: k.mon.length })))))
+      .catch(() => setCacKy(Array.from({ length: 15 }, (_, i) => ({ so: i + 1, ten: '', soMon: 0 }))));
+  }, []);
   const [sections, setSections] = useState<SectionForm[]>([]);
   const [saving, setSaving] = useState(false);
   const [loadingSections, setLoadingSections] = useState(false);
@@ -238,6 +248,8 @@ export default function AdminCoursesPage() {
         ? new Date(course.discountExpiresAt).toISOString().slice(0, 16)
         : '',
       enrollmentDays: course.enrollmentDurationDays ?? 0,
+      loTrinhKy: course.loTrinhKy ?? 0,
+      loTrinhThuTu: course.loTrinhThuTu ?? 0,
     });
     setSections([]);
     setExpandedSections(new Set());
@@ -399,6 +411,8 @@ export default function AdminCoursesPage() {
         documentsNote: courseForm.documentsNote,
         status: courseForm.status,
         tags: courseForm.tags,
+        loTrinhKy: courseForm.loTrinhKy || null,
+        loTrinhThuTu: courseForm.loTrinhKy && courseForm.loTrinhThuTu ? courseForm.loTrinhThuTu : null,
       };
 
       // Normalize null -> undefined for fields whose API type is
@@ -838,15 +852,46 @@ export default function AdminCoursesPage() {
                       className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
                     >
                       <option value="DRAFT">Bản nháp</option>
+                      <option value="COMING_SOON">Sắp ra mắt (chỉ hiện khung, chưa học/mua)</option>
                       <option value="PUBLISHED">Đã đăng</option>
                     </select>
                     <p className="text-[11px] mt-1">
                       <span className="text-text-muted">
                         {courseForm.status === 'DRAFT'
                           ? 'Lưu nháp — chỉ admin thấy, không hiện trên Academy.'
-                          : 'Xuất bản — hiện trên trang Academy, học viên có thể đăng ký.'}
+                          : courseForm.status === 'COMING_SOON'
+                            ? 'Sắp ra mắt — /courses hiện ảnh, mô tả và mục lục ở "Môn tự chọn"; chưa ghi danh/mua/mở bài được.'
+                            : 'Xuất bản — hiện trên trang Academy, học viên có thể đăng ký.'}
                       </span>
                     </p>
+                  </div>
+                </div>
+
+                {/* Chương trình đào tạo /courses — chỉ có nghĩa với khoá ngoài Academy */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_9rem] gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1.5">
+                      Kỳ trong chương trình đào tạo
+                      <span className="text-[11px] font-normal text-text-muted ml-1.5">(trang /courses)</span>
+                    </label>
+                    <select value={courseForm.loTrinhKy}
+                      onChange={e => setCourseForm(p => ({ ...p, loTrinhKy: Number(e.target.value) }))}
+                      className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
+                    >
+                      <option value={0}>— Chưa xếp (hiện ở mục &quot;Khoá mới&quot;) —</option>
+                      {cacKy.map(k => (
+                        <option key={k.so} value={k.so}>Kỳ {k.so} · {k.ten} ({k.soMon} khoá)</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-1.5">Thứ tự trong kỳ</label>
+                    <input type="number" min={1} max={99} value={courseForm.loTrinhThuTu || ''}
+                      disabled={!courseForm.loTrinhKy}
+                      onChange={e => setCourseForm(p => ({ ...p, loTrinhThuTu: Math.max(0, Math.min(99, Number(e.target.value) || 0)) }))}
+                      placeholder="1–5"
+                      className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 disabled:opacity-50"
+                    />
                   </div>
                 </div>
 

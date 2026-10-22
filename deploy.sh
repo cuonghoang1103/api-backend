@@ -1017,6 +1017,7 @@ for route in \
     music/tracks \
     xuong-remix/trang-thai \
     courses \
+    courses/chuong-trinh \
     hub/folders \
     snippets \
     video-categories \

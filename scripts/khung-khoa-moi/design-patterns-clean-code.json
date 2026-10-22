@@ -1,0 +1,157 @@
+{
+  "slug": "design-patterns-clean-code",
+  "ma": "dp",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started|||Mục 0 — Khởi động", "bai": [
+      "Start here (1/2) — What clean code and patterns are, where they came from, and why they matter|||Bắt đầu tại đây (1/2) — Clean code và design pattern là gì, ra đời thế nào, vì sao quan trọng với bạn",
+      "Start here (2/2) — Life without it: codebases that collapsed, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi không có nó: những codebase đã sụp đổ, và cách học để không bỏ cuộc",
+      "0.1 — The course map: from readable lines to refactoring a whole codebase|||0.1 — Bản đồ khoá học: từ từng dòng code dễ đọc tới refactor cả một codebase",
+      "0.2 — Setting up: TypeScript and Java projects, linters, formatter and test runner|||0.2 — Chuẩn bị: dự án TypeScript và Java, linter, formatter và bộ chạy test",
+      "0.3 — Meet the messy order-management app we will clean up together|||0.3 — Làm quen ứng dụng quản lý đơn hàng lộn xộn mà ta sẽ cùng dọn dẹp",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định hướng"
+    ]},
+    { "tieuDe": "Chapter 1 — Readable code: naming, comments and formatting|||Chương 1 — Code dễ đọc: đặt tên, comment và định dạng", "bai": [
+      "1.1 — Code is read far more than written: the real cost of unclear code|||1.1 — Code được đọc nhiều hơn viết rất nhiều: cái giá thật của code khó hiểu",
+      "1.2 — Intention-revealing names: variables, booleans and avoiding encodings|||1.2 — Tên nói rõ ý định: biến, biến boolean và tránh mã hoá trong tên",
+      "1.3 — Naming classes, functions and modules in the language of the domain|||1.3 — Đặt tên class, hàm và module theo ngôn ngữ của nghiệp vụ",
+      "1.4 — Good comments vs bad comments: why, not what|||1.4 — Comment tốt và comment tồi: giải thích vì sao, không lặp lại cái gì",
+      "1.5 — Documentation comments with JSDoc and Javadoc that stay true|||1.5 — Comment tài liệu bằng JSDoc và Javadoc sao cho luôn đúng với code",
+      "1.6 — Formatting and vertical structure, enforced by Prettier, ESLint and Checkstyle|||1.6 — Định dạng và bố cục theo chiều dọc, được ép bằng Prettier, ESLint và Checkstyle",
+      "1.7 — Lab: rename and reformat a 300-line file until it reads like prose|||1.7 — Lab: đổi tên và định dạng lại một file 300 dòng cho tới khi đọc trơn như văn xuôi",
+      "1.8 — Quiz: readable code|||1.8 — Kiểm tra: code dễ đọc"
+    ]},
+    { "tieuDe": "Chapter 2 — Functions that do one thing|||Chương 2 — Hàm chỉ làm một việc", "bai": [
+      "2.1 — Small functions and a single level of abstraction|||2.1 — Hàm nhỏ và chỉ một tầng trừu tượng",
+      "2.2 — Arguments: how many, flag arguments and parameter objects|||2.2 — Tham số: bao nhiêu là đủ, tham số cờ và parameter object",
+      "2.3 — Side effects and command-query separation|||2.3 — Tác dụng phụ và nguyên tắc tách command khỏi query",
+      "2.4 — Guard clauses and early returns instead of nested ifs|||2.4 — Guard clause và return sớm thay cho if lồng nhau",
+      "2.5 — Pure functions and immutability in everyday TypeScript and Java|||2.5 — Hàm thuần và tính bất biến trong TypeScript và Java hằng ngày",
+      "2.6 — Lab: break a 120-line function into a readable pipeline|||2.6 — Lab: tách một hàm 120 dòng thành một chuỗi bước dễ đọc",
+      "2.7 — Quiz: functions|||2.7 — Kiểm tra: hàm"
+    ]},
+    { "tieuDe": "Chapter 3 — SOLID principles|||Chương 3 — Các nguyên lý SOLID", "bai": [
+      "3.1 — Single Responsibility: one reason to change, one owner|||3.1 — Single Responsibility: một lý do để thay đổi, một người chịu trách nhiệm",
+      "3.2 — Open/Closed: extending behaviour without editing tested code|||3.2 — Open/Closed: mở rộng hành vi mà không sửa code đã kiểm thử",
+      "3.3 — Liskov Substitution: subtypes that keep their promises|||3.3 — Liskov Substitution: kiểu con phải giữ lời hứa của kiểu cha",
+      "3.4 — Interface Segregation: small, client-shaped interfaces|||3.4 — Interface Segregation: interface nhỏ, vừa với nhu cầu bên dùng",
+      "3.5 — Dependency Inversion: depending on abstractions you own|||3.5 — Dependency Inversion: phụ thuộc vào abstraction do chính bạn sở hữu",
+      "3.6 — SOLID without over-engineering: when a principle is not worth applying|||3.6 — SOLID mà không làm quá: khi nào một nguyên lý không đáng để áp dụng",
+      "3.7 — Quiz: SOLID|||3.7 — Kiểm tra: SOLID"
+    ]},
+    { "tieuDe": "Chapter 4 — Coupling, cohesion and composition over inheritance|||Chương 4 — Coupling, cohesion và ưu tiên composition hơn kế thừa", "bai": [
+      "4.1 — Kinds of coupling, from content coupling to data coupling|||4.1 — Các loại coupling, từ content coupling tới data coupling",
+      "4.2 — Cohesion: keeping things that change together, together|||4.2 — Cohesion: để những thứ thay đổi cùng nhau ở cùng một chỗ",
+      "4.3 — The Law of Demeter and train-wreck method chains|||4.3 — Định luật Demeter và những chuỗi gọi hàm dài như đoàn tàu",
+      "4.4 — Inheritance pitfalls: the fragile base class and deep hierarchies|||4.4 — Những cái bẫy của kế thừa: lớp cha mong manh và cây kế thừa quá sâu",
+      "4.5 — Composition and delegation: rebuilding a class hierarchy with small parts|||4.5 — Composition và uỷ quyền: dựng lại một cây kế thừa bằng các mảnh nhỏ",
+      "4.6 — Interfaces, abstract classes, mixins and traits: choosing the right tool|||4.6 — Interface, abstract class, mixin và trait: chọn đúng công cụ",
+      "4.7 — Quiz: coupling, cohesion and composition|||4.7 — Kiểm tra: coupling, cohesion và composition"
+    ]},
+    { "tieuDe": "Chapter 5 — Dependency injection|||Chương 5 — Dependency injection", "bai": [
+      "5.1 — Dependency inversion vs dependency injection vs inversion of control|||5.1 — Phân biệt dependency inversion, dependency injection và inversion of control",
+      "5.2 — Constructor injection and the composition root|||5.2 — Constructor injection và composition root",
+      "5.3 — DI containers in practice: Spring, NestJS and tsyringe|||5.3 — DI container thực chiến: Spring, NestJS và tsyringe",
+      "5.4 — Lifetimes and scopes: singleton, request and transient, and their bugs|||5.4 — Vòng đời và phạm vi: singleton, theo request và transient, cùng các lỗi hay gặp",
+      "5.5 — The service locator anti-pattern and hidden dependencies|||5.5 — Phản mẫu service locator và những phụ thuộc bị giấu kín",
+      "5.6 — Testing with fakes, stubs and mocks made possible by DI|||5.6 — Kiểm thử bằng fake, stub và mock nhờ có DI",
+      "5.7 — Quiz: dependency injection|||5.7 — Kiểm tra: dependency injection"
+    ]},
+    { "tieuDe": "Chapter 6 — Error handling|||Chương 6 — Xử lý lỗi", "bai": [
+      "6.1 — Exceptions vs error codes vs result types: trade-offs|||6.1 — Exception, mã lỗi hay kiểu Result: các đánh đổi",
+      "6.2 — Checked and unchecked exceptions in Java, and typed errors in TypeScript|||6.2 — Checked và unchecked exception trong Java, và lỗi có kiểu trong TypeScript",
+      "6.3 — Result and Either types: making failure part of the signature|||6.3 — Kiểu Result và Either: đưa thất bại vào chữ ký hàm",
+      "6.4 — Null handling: Optional, strict null checks and the null object pattern|||6.4 — Xử lý null: Optional, strict null checks và mẫu null object",
+      "6.5 — Fail fast and validate at the boundaries|||6.5 — Thất bại sớm và kiểm tra dữ liệu ngay tại biên hệ thống",
+      "6.6 — Error context, logging and never swallowing exceptions|||6.6 — Ngữ cảnh lỗi, ghi log và không bao giờ nuốt exception",
+      "6.7 — Quiz: error handling|||6.7 — Kiểm tra: xử lý lỗi"
+    ]},
+    { "tieuDe": "Chapter 7 — Creational patterns|||Chương 7 — Nhóm mẫu khởi tạo (creational)", "bai": [
+      "7.1 — Why creational patterns: separating object creation from use|||7.1 — Vì sao cần mẫu khởi tạo: tách việc tạo đối tượng khỏi việc dùng nó",
+      "7.2 — Factory Method and simple static factories|||7.2 — Factory Method và static factory đơn giản",
+      "7.3 — Abstract Factory: families of related objects|||7.3 — Abstract Factory: tạo cả họ đối tượng liên quan",
+      "7.4 — Builder: readable construction and fluent APIs in TypeScript and Java|||7.4 — Builder: khởi tạo dễ đọc và fluent API trong TypeScript và Java",
+      "7.5 — Singleton, and why it is usually a global variable in disguise|||7.5 — Singleton, và vì sao nó thường chỉ là biến toàn cục đội lốt",
+      "7.6 — Prototype and object pools, plus modern alternatives: records and module scope|||7.6 — Prototype và object pool, cùng các lựa chọn hiện đại: record và phạm vi module",
+      "7.7 — Quiz: creational patterns|||7.7 — Kiểm tra: nhóm mẫu khởi tạo"
+    ]},
+    { "tieuDe": "Chapter 8 — Structural patterns|||Chương 8 — Nhóm mẫu cấu trúc (structural)", "bai": [
+      "8.1 — Adapter: wrapping a third-party payment SDK behind your own interface|||8.1 — Adapter: bọc SDK thanh toán bên thứ ba sau interface của chính bạn",
+      "8.2 — Facade: one simple entry point to a complicated subsystem|||8.2 — Facade: một lối vào đơn giản cho cả một hệ thống con phức tạp",
+      "8.3 — Decorator: adding caching, logging and retries without touching the class|||8.3 — Decorator: thêm cache, log và retry mà không đụng vào class gốc",
+      "8.4 — Proxy: lazy loading, access control and remote proxies|||8.4 — Proxy: nạp lười, kiểm soát truy cập và proxy từ xa",
+      "8.5 — Composite: treating trees of objects uniformly, from menus to file systems|||8.5 — Composite: xử lý cây đối tượng một cách đồng nhất, từ menu tới hệ thống file",
+      "8.6 — Bridge and Flyweight: when you actually need them|||8.6 — Bridge và Flyweight: khi nào bạn thật sự cần đến chúng",
+      "8.7 — Quiz: structural patterns|||8.7 — Kiểm tra: nhóm mẫu cấu trúc"
+    ]},
+    { "tieuDe": "Chapter 9 — Behavioral patterns I: strategies, events and commands|||Chương 9 — Nhóm mẫu hành vi I: chiến lược, sự kiện và lệnh", "bai": [
+      "9.1 — Strategy: swapping pricing and shipping rules at runtime|||9.1 — Strategy: hoán đổi quy tắc tính giá và giao hàng lúc chạy",
+      "9.2 — Template Method vs Strategy: inheritance or composition for variation|||9.2 — Template Method hay Strategy: dùng kế thừa hay composition cho phần biến đổi",
+      "9.3 — Observer and the event emitter: decoupling who reacts from who acts|||9.3 — Observer và event emitter: tách bên phản ứng khỏi bên hành động",
+      "9.4 — Command: undo, queues and audit trails|||9.4 — Command: hoàn tác, hàng đợi và nhật ký kiểm toán",
+      "9.5 — State: replacing status if-chains with state objects|||9.5 — State: thay chuỗi if theo trạng thái bằng các đối tượng trạng thái",
+      "9.6 — Quiz: behavioral patterns I|||9.6 — Kiểm tra: nhóm mẫu hành vi I"
+    ]},
+    { "tieuDe": "Chapter 10 — Behavioral patterns II and patterns in real frameworks|||Chương 10 — Nhóm mẫu hành vi II và mẫu trong các framework thật", "bai": [
+      "10.1 — Chain of Responsibility: Express and Spring middleware pipelines|||10.1 — Chain of Responsibility: chuỗi middleware của Express và Spring",
+      "10.2 — Iterator and generators: lazy sequences in TypeScript and Java|||10.2 — Iterator và generator: dãy lười trong TypeScript và Java",
+      "10.3 — Visitor vs sealed types and pattern matching|||10.3 — Visitor so với sealed type và pattern matching",
+      "10.4 — Mediator and the in-process event bus|||10.4 — Mediator và event bus trong cùng tiến trình",
+      "10.5 — Memento: snapshots and undo in an editor|||10.5 — Memento: chụp trạng thái và hoàn tác trong trình soạn thảo",
+      "10.6 — Spotting patterns inside Spring, NestJS, React and the JDK|||10.6 — Nhận ra các mẫu bên trong Spring, NestJS, React và JDK",
+      "10.7 — Pattern overuse: when a plain function beats a pattern|||10.7 — Lạm dụng pattern: khi một hàm đơn giản tốt hơn cả một mẫu thiết kế",
+      "10.8 — Quiz: behavioral patterns II|||10.8 — Kiểm tra: nhóm mẫu hành vi II"
+    ]},
+    { "tieuDe": "Chapter 11 — The code smells catalog|||Chương 11 — Danh mục code smell", "bai": [
+      "11.1 — Bloaters: long methods, large classes, long parameter lists, primitive obsession|||11.1 — Nhóm phình to: hàm dài, class lớn, danh sách tham số dài, lạm dụng kiểu nguyên thuỷ",
+      "11.2 — Object-orientation abusers: switch on type, refused bequest, temporary fields|||11.2 — Nhóm lạm dụng hướng đối tượng: switch theo kiểu, từ chối di sản, trường tạm",
+      "11.3 — Change preventers: divergent change and shotgun surgery|||11.3 — Nhóm cản trở thay đổi: divergent change và shotgun surgery",
+      "11.4 — Dispensables: duplicate code, dead code, speculative generality|||11.4 — Nhóm thừa thãi: code trùng lặp, code chết, tổng quát hoá phỏng đoán",
+      "11.5 — Couplers: feature envy, inappropriate intimacy, message chains|||11.5 — Nhóm kết dính: feature envy, thân mật quá mức, chuỗi thông điệp",
+      "11.6 — Finding smells with tools: SonarQube, complexity metrics and git churn|||11.6 — Tìm smell bằng công cụ: SonarQube, chỉ số độ phức tạp và tần suất thay đổi trong git",
+      "11.7 — Quiz: code smells|||11.7 — Kiểm tra: code smell"
+    ]},
+    { "tieuDe": "Chapter 12 — Refactoring safely with tests|||Chương 12 — Refactor an toàn nhờ có test", "bai": [
+      "12.1 — What refactoring is and is not: behaviour stays, structure changes|||12.1 — Refactor là gì và không là gì: hành vi giữ nguyên, cấu trúc thay đổi",
+      "12.2 — The safety net: unit tests fast enough to run after every step|||12.2 — Lưới an toàn: unit test đủ nhanh để chạy sau mỗi bước",
+      "12.3 — Core moves: extract and inline function, extract variable, rename|||12.3 — Các bước cơ bản: tách và gộp hàm, tách biến, đổi tên",
+      "12.4 — Moving features: move function, move field, split phase|||12.4 — Di chuyển tính năng: chuyển hàm, chuyển trường, tách giai đoạn",
+      "12.5 — Simplifying conditionals: decompose, consolidate, replace conditional with polymorphism|||12.5 — Đơn giản hoá điều kiện: tách nhỏ, gộp lại, thay điều kiện bằng đa hình",
+      "12.6 — Automated refactorings in IntelliJ and VS Code, and committing in tiny steps|||12.6 — Refactor tự động trong IntelliJ và VS Code, và commit theo từng bước nhỏ",
+      "12.7 — Quiz: refactoring with tests|||12.7 — Kiểm tra: refactor với test"
+    ]},
+    { "tieuDe": "Chapter 13 — Working with legacy code|||Chương 13 — Làm việc với legacy code", "bai": [
+      "13.1 — Legacy code is code without tests: the legacy change algorithm|||13.1 — Legacy code là code không có test: quy trình thay đổi legacy code",
+      "13.2 — Seams: finding places to change behaviour without editing in place|||13.2 — Seam: tìm chỗ đổi hành vi mà không phải sửa ngay tại chỗ",
+      "13.3 — Characterization tests: pinning down what the code actually does|||13.3 — Characterization test: ghim lại những gì code thật sự đang làm",
+      "13.4 — Breaking dependencies: extract interface, parameterize constructor, subclass and override|||13.4 — Cắt phụ thuộc: tách interface, tham số hoá constructor, tạo lớp con và ghi đè",
+      "13.5 — Sprout method and wrap method: adding features to untested code|||13.5 — Sprout method và wrap method: thêm tính năng vào code chưa có test",
+      "13.6 — Approval and snapshot tests for huge outputs|||13.6 — Approval test và snapshot test cho đầu ra khổng lồ",
+      "13.7 — The Mikado method: planning large refactorings as a dependency graph|||13.7 — Phương pháp Mikado: lên kế hoạch refactor lớn như một đồ thị phụ thuộc",
+      "13.8 — Quiz: legacy code|||13.8 — Kiểm tra: legacy code"
+    ]},
+    { "tieuDe": "Chapter 14 — Refactoring a real codebase|||Chương 14 — Refactor một codebase thật", "bai": [
+      "14.1 — Reading an unfamiliar codebase: finding hotspots with churn times complexity|||14.1 — Đọc một codebase lạ: tìm điểm nóng bằng tần suất thay đổi nhân độ phức tạp",
+      "14.2 — Building the safety net on an open-source Express and Spring application|||14.2 — Dựng lưới an toàn cho một ứng dụng Express và Spring mã nguồn mở",
+      "14.3 — Untangling a god class step by step|||14.3 — Gỡ rối một god class từng bước một",
+      "14.4 — Replacing switch-on-type with Strategy and polymorphism|||14.4 — Thay switch theo kiểu bằng Strategy và đa hình",
+      "14.5 — Introducing ports and dependency injection to make the core testable|||14.5 — Đưa port và dependency injection vào để phần lõi kiểm thử được",
+      "14.6 — Measuring the result and presenting the refactor in a pull request|||14.6 — Đo kết quả và trình bày đợt refactor trong một pull request",
+      "14.7 — Quiz: refactoring a real codebase|||14.7 — Kiểm tra: refactor một codebase thật"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: rescue the legacy order-management app|||Chương 15 — Dự án cuối khoá: giải cứu ứng dụng quản lý đơn hàng legacy", "bai": [
+      "15.1 — Milestone 1: baseline metrics, smells inventory and a refactoring plan|||15.1 — Mốc 1: đo chỉ số ban đầu, lập danh mục smell và kế hoạch refactor",
+      "15.2 — Milestone 2: characterization tests around checkout and invoicing|||15.2 — Mốc 2: viết characterization test bao quanh thanh toán và xuất hoá đơn",
+      "15.3 — Milestone 3: break the god classes and clean up error handling|||15.3 — Mốc 3: phá các god class và dọn dẹp phần xử lý lỗi",
+      "15.4 — Milestone 4: add discount rules with Strategy and notifications with Observer|||15.4 — Mốc 4: thêm quy tắc giảm giá bằng Strategy và thông báo bằng Observer",
+      "15.5 — Milestone 5: introduce DI, then measure coverage and complexity again|||15.5 — Mốc 5: đưa DI vào, rồi đo lại độ bao phủ test và độ phức tạp",
+      "15.6 — Milestone 6: pull request review and a before-and-after write-up|||15.6 — Mốc 6: review pull request và viết báo cáo trước và sau",
+      "15.7 — Quiz: capstone checkpoint — explain each refactoring and pattern you used|||15.7 — Kiểm tra: chốt dự án — giải thích từng lần refactor và từng mẫu bạn đã dùng"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: from smell to refactoring to pattern, the whole course on one map|||16.1 — Ôn tập: từ smell tới refactor tới pattern, cả khoá học trên một tấm bản đồ",
+      "16.2 — Mock exam: code-reading questions and refactoring tasks|||16.2 — Thi thử: câu hỏi đọc code và bài tập refactor",
+      "16.3 — Final exam|||16.3 — Bài thi cuối khoá",
+      "16.4 — Retrospective and next steps: domain-driven design, architecture, functional programming|||16.4 — Nhìn lại và học gì tiếp: domain-driven design, kiến trúc phần mềm và lập trình hàm"
+    ]}
+  ]
+}

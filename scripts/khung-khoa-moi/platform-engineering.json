@@ -1,0 +1,139 @@
+{
+  "slug": "platform-engineering",
+  "ma": "pe",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started with platform engineering|||Mục 0 — Khởi động với Platform Engineering", "bai": [
+      "Start here (1/2) — What platform engineering is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — Platform Engineering là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Life without it: ticket queues, a sync that wiped prod, and how to keep going|||Bắt đầu tại đây (2/2) — Khi không có nó: ticket dồn đống, sync sai xoá production, và cách học bền bỉ",
+      "0.1 — Course map: the reference internal developer platform we will build|||0.1 — Bản đồ khoá học: nền tảng nội bộ mẫu mà ta sẽ cùng dựng",
+      "0.2 — Lab setup: a local kind or k3d cluster, kubectl, Helm and a Git repository|||0.2 — Dựng phòng lab: cluster kind hoặc k3d trên máy, kubectl, Helm và một repo Git",
+      "0.3 — Prerequisites check: containers, Kubernetes basics, Git and Terraform|||0.3 — Kiểm tra nền tảng: container, Kubernetes cơ bản, Git và Terraform",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — What platform engineering is|||Chương 1 — Platform Engineering thực chất là gì", "bai": [
+      "1.1 — DevOps, SRE and platform engineering: overlapping, but not the same job|||1.1 — DevOps, SRE và Platform Engineering: chồng lấn nhưng không phải cùng một việc",
+      "1.2 — Cognitive load and Team Topologies: platform teams vs stream-aligned teams|||1.2 — Tải nhận thức và Team Topologies: đội nền tảng và đội theo luồng giá trị",
+      "1.3 — Anatomy of an internal developer platform: portal, orchestration, infra, delivery, observability|||1.3 — Giải phẫu một IDP: portal, điều phối, hạ tầng, phân phối và observability",
+      "1.4 — Build, buy or assemble: open source, commercial IDPs and cloud-native services|||1.4 — Tự xây, mua hay lắp ghép: mã nguồn mở, IDP thương mại và dịch vụ cloud",
+      "1.5 — Anti-patterns: ticket-ops, a shiny portal with nothing behind it, the platform as gatekeeper|||1.5 — Phản mẫu: vận hành bằng ticket, portal đẹp mà rỗng ruột, nền tảng biến thành trạm gác",
+      "1.6 — Quiz: platform engineering foundations|||1.6 — Kiểm tra: nền tảng của Platform Engineering"
+    ]},
+    { "tieuDe": "Chapter 2 — Platform as a product, developer experience and golden paths|||Chương 2 — Nền tảng như một sản phẩm, trải nghiệm lập trình viên và golden path", "bai": [
+      "2.1 — Platform as a product: users, problems, roadmap and a product owner|||2.1 — Nền tảng như sản phẩm: người dùng, vấn đề, lộ trình và người làm chủ sản phẩm",
+      "2.2 — Researching developers: interviews, journey maps and friction logs|||2.2 — Nghiên cứu lập trình viên: phỏng vấn, bản đồ hành trình và nhật ký điểm vướng",
+      "2.3 — The thinnest viable platform and self-service abstractions: what to hide, what to expose|||2.3 — Nền tảng mỏng nhất còn dùng được và các lớp tự phục vụ: giấu gì, để lộ gì",
+      "2.4 — Golden path vs golden cage: paved roads developers choose freely|||2.4 — Golden path hay lồng vàng: con đường trải sẵn mà lập trình viên tự nguyện chọn",
+      "2.5 — Designing a golden path for a new service, from repository to production|||2.5 — Thiết kế golden path cho một service mới, từ repo tới production",
+      "2.6 — Keeping paths alive: versioning templates and migrating existing services|||2.6 — Giữ cho con đường sống: đánh phiên bản template và chuyển các service cũ sang",
+      "2.7 — Quiz: product thinking and golden paths|||2.7 — Kiểm tra: tư duy sản phẩm và golden path"
+    ]},
+    { "tieuDe": "Chapter 3 — Kubernetes foundations for platforms|||Chương 3 — Nền móng Kubernetes cho người xây nền tảng", "bai": [
+      "3.1 — Kubernetes as a platform for building platforms: the API, controllers and the reconcile loop|||3.1 — Kubernetes là nền để xây nền tảng: API, controller và vòng lặp reconcile",
+      "3.2 — Namespaces, RBAC and ServiceAccounts for many teams on one cluster|||3.2 — Namespace, RBAC và ServiceAccount cho nhiều đội trên cùng một cluster",
+      "3.3 — CRDs and operators: extending Kubernetes with your own resources|||3.3 — CRD và operator: mở rộng Kubernetes bằng tài nguyên của riêng bạn",
+      "3.4 — Packaging: Helm charts vs Kustomize overlays, and when to use each|||3.4 — Đóng gói: Helm chart hay Kustomize overlay, và khi nào dùng cái nào",
+      "3.5 — Networking for platforms: Gateway API, Ingress, cert-manager and external-dns|||3.5 — Mạng cho nền tảng: Gateway API, Ingress, cert-manager và external-dns",
+      "3.6 — Requests, limits, quotas and autoscaling as platform defaults|||3.6 — Request, limit, quota và autoscaling như mặc định của nền tảng",
+      "3.7 — Quiz: Kubernetes for platforms|||3.7 — Kiểm tra: Kubernetes cho nền tảng"
+    ]},
+    { "tieuDe": "Chapter 4 — Backstage I: software catalog and TechDocs|||Chương 4 — Backstage I: software catalog và TechDocs", "bai": [
+      "4.1 — Backstage architecture: frontend, backend, plugins and the database|||4.1 — Kiến trúc Backstage: frontend, backend, plugin và database",
+      "4.2 — The software catalog: entity kinds, relations and catalog-info.yaml|||4.2 — Software catalog: các loại entity, quan hệ và file catalog-info.yaml",
+      "4.3 — Modelling ownership: groups, systems, domains, components and API entities|||4.3 — Mô hình hoá quyền sở hữu: nhóm, system, domain, component và entity API",
+      "4.4 — Ingestion and identity: discovering repositories from GitHub and syncing org data|||4.4 — Nạp dữ liệu và danh tính: tự tìm repo từ GitHub và đồng bộ dữ liệu tổ chức",
+      "4.5 — TechDocs: docs-as-code rendered next to the service that owns it|||4.5 — TechDocs: tài liệu dạng code hiển thị ngay cạnh service sở hữu nó",
+      "4.6 — Quiz: catalog and TechDocs|||4.6 — Kiểm tra: catalog và TechDocs"
+    ]},
+    { "tieuDe": "Chapter 5 — Backstage II: software templates and plugins|||Chương 5 — Backstage II: software template và plugin", "bai": [
+      "5.1 — Software Templates: parameters, steps and scaffolder actions|||5.1 — Software Template: tham số, các bước và scaffolder action",
+      "5.2 — One click, new service: repository, CI pipeline, catalog entry and Argo CD app together|||5.2 — Một cú bấm ra service mới: repo, pipeline CI, mục catalog và app Argo CD cùng lúc",
+      "5.3 — Essential plugins: Kubernetes, Argo CD, CI status and scorecards|||5.3 — Các plugin thiết yếu: Kubernetes, Argo CD, trạng thái CI và scorecard",
+      "5.4 — Writing a custom plugin for an internal tool|||5.4 — Viết plugin tuỳ chỉnh cho một công cụ nội bộ",
+      "5.5 — Running Backstage in production: upgrades, auth, permissions and backups|||5.5 — Vận hành Backstage trên production: nâng cấp, xác thực, phân quyền và sao lưu",
+      "5.6 — Quiz: templates and plugins|||5.6 — Kiểm tra: template và plugin"
+    ]},
+    { "tieuDe": "Chapter 6 — GitOps principles|||Chương 6 — Nguyên lý GitOps", "bai": [
+      "6.1 — The four GitOps principles: declarative, versioned, pulled and continuously reconciled|||6.1 — Bốn nguyên lý GitOps: khai báo, có phiên bản, kéo về và reconcile liên tục",
+      "6.2 — Push-based CI/CD vs pull-based GitOps: security and audit trade-offs|||6.2 — CI/CD kiểu đẩy và GitOps kiểu kéo: đánh đổi về bảo mật và kiểm toán",
+      "6.3 — Repository layout: app repos vs config repos, monorepos and environment folders|||6.3 — Bố cục repo: repo ứng dụng và repo cấu hình, monorepo và thư mục theo môi trường",
+      "6.4 — Promoting changes between environments without copy-paste|||6.4 — Đưa thay đổi qua các môi trường mà không copy-paste",
+      "6.5 — Drift, manual kubectl changes and a safe break-glass procedure|||6.5 — Trôi cấu hình, thay đổi tay bằng kubectl và quy trình phá kính khẩn cấp an toàn",
+      "6.6 — Quiz: GitOps principles|||6.6 — Kiểm tra: nguyên lý GitOps"
+    ]},
+    { "tieuDe": "Chapter 7 — Argo CD in depth|||Chương 7 — Argo CD chuyên sâu", "bai": [
+      "7.1 — Argo CD architecture: API server, repo server and application controller|||7.1 — Kiến trúc Argo CD: API server, repo server và application controller",
+      "7.2 — The Application resource: source, destination, sync policy, self-heal and prune|||7.2 — Tài nguyên Application: source, destination, sync policy, self-heal và prune",
+      "7.3 — App of apps and ApplicationSets with Git, cluster and matrix generators|||7.3 — App of apps và ApplicationSet với generator Git, cluster và matrix",
+      "7.4 — Sync waves, hooks and ordering resources that depend on each other|||7.4 — Sync wave, hook và sắp thứ tự các tài nguyên phụ thuộc nhau",
+      "7.5 — AppProjects, RBAC, SSO and managing multiple clusters|||7.5 — AppProject, RBAC, SSO và quản lý nhiều cluster",
+      "7.6 — Troubleshooting OutOfSync: diffing, ignoreDifferences and stuck syncs|||7.6 — Xử lý OutOfSync: so khác biệt, ignoreDifferences và sync bị kẹt",
+      "7.7 — Quiz: Argo CD|||7.7 — Kiểm tra: Argo CD"
+    ]},
+    { "tieuDe": "Chapter 8 — Progressive delivery with Argo Rollouts|||Chương 8 — Progressive delivery với Argo Rollouts", "bai": [
+      "8.1 — The Rollout resource: blue-green vs canary strategies|||8.1 — Tài nguyên Rollout: chiến lược blue-green và canary",
+      "8.2 — Traffic shaping with Gateway API, ingress controllers and service meshes|||8.2 — Điều phối lưu lượng bằng Gateway API, ingress controller và service mesh",
+      "8.3 — AnalysisTemplates: automatic promotion and rollback driven by metrics|||8.3 — AnalysisTemplate: tự động nâng cấp và quay lui dựa trên metric",
+      "8.4 — Feature flags vs progressive delivery: using both without confusion|||8.4 — Feature flag và progressive delivery: dùng cả hai mà không rối",
+      "8.5 — Quiz: progressive delivery|||8.5 — Kiểm tra: progressive delivery"
+    ]},
+    { "tieuDe": "Chapter 9 — Infrastructure provisioning: Terraform and Crossplane|||Chương 9 — Cấp phát hạ tầng: Terraform và Crossplane", "bai": [
+      "9.1 — Terraform for platform foundations: state, modules and environments|||9.1 — Terraform cho phần móng nền tảng: state, module và môi trường",
+      "9.2 — Terraform the GitOps way: plan on pull request, controlled apply and drift detection|||9.2 — Terraform theo kiểu GitOps: plan trên pull request, apply có kiểm soát và phát hiện trôi",
+      "9.3 — Crossplane: providers and managed resources reconciled by Kubernetes|||9.3 — Crossplane: provider và managed resource được Kubernetes reconcile",
+      "9.4 — Compositions and XRDs: a self-service PostgreSQL database for every team|||9.4 — Composition và XRD: database PostgreSQL tự phục vụ cho mọi đội",
+      "9.5 — Terraform, OpenTofu or Crossplane: choosing per layer of the platform|||9.5 — Terraform, OpenTofu hay Crossplane: chọn theo từng tầng của nền tảng",
+      "9.6 — Quiz: infrastructure provisioning|||9.6 — Kiểm tra: cấp phát hạ tầng"
+    ]},
+    { "tieuDe": "Chapter 10 — Secrets management|||Chương 10 — Quản lý secret", "bai": [
+      "10.1 — Secrets committed to Git: the classic incident and the threat model behind it|||10.1 — Secret bị commit lên Git: sự cố kinh điển và mô hình đe doạ đằng sau",
+      "10.2 — Kubernetes Secrets: why base64 is not encryption, and encryption at rest|||10.2 — Kubernetes Secret: vì sao base64 không phải mã hoá, và mã hoá khi lưu trữ",
+      "10.3 — External Secrets Operator with Vault or a cloud secret manager|||10.3 — External Secrets Operator kết hợp Vault hoặc trình quản lý secret của cloud",
+      "10.4 — Sealed Secrets and SOPS: encrypted secrets that can live in a GitOps repo|||10.4 — Sealed Secrets và SOPS: secret đã mã hoá được phép nằm trong repo GitOps",
+      "10.5 — Rotation, dynamic credentials and workload identity instead of static keys|||10.5 — Xoay vòng, thông tin đăng nhập động và workload identity thay cho khoá tĩnh",
+      "10.6 — Quiz: secrets management|||10.6 — Kiểm tra: quản lý secret"
+    ]},
+    { "tieuDe": "Chapter 11 — Policy as code: OPA and Kyverno|||Chương 11 — Policy as code: OPA và Kyverno", "bai": [
+      "11.1 — Guardrails instead of gates: why policy belongs in code|||11.1 — Lan can thay vì trạm gác: vì sao chính sách nên nằm trong code",
+      "11.2 — Admission control: validating and mutating webhooks explained|||11.2 — Admission control: giải thích webhook kiểm tra và webhook sửa đổi",
+      "11.3 — Kyverno: validate, mutate and generate policies written in YAML|||11.3 — Kyverno: chính sách validate, mutate và generate viết bằng YAML",
+      "11.4 — OPA Gatekeeper and Rego, plus Conftest to catch violations in CI|||11.4 — OPA Gatekeeper và Rego, cùng Conftest để bắt vi phạm ngay trong CI",
+      "11.5 — Rolling out policies safely: audit mode, enforce mode and exceptions|||11.5 — Triển khai chính sách an toàn: chế độ audit, chế độ enforce và ngoại lệ",
+      "11.6 — Supply-chain policies: signed images, SBOMs and allowed registries|||11.6 — Chính sách chuỗi cung ứng: image đã ký, SBOM và registry được phép",
+      "11.7 — Quiz: policy as code|||11.7 — Kiểm tra: policy as code"
+    ]},
+    { "tieuDe": "Chapter 12 — Multi-tenancy|||Chương 12 — Multi-tenancy (nhiều đội trên một nền tảng)", "bai": [
+      "12.1 — Tenancy models: namespace per team, virtual clusters or cluster per tenant|||12.1 — Các mô hình tenancy: namespace theo đội, cluster ảo hay mỗi tenant một cluster",
+      "12.2 — Namespace-as-a-service: quotas, LimitRanges, NetworkPolicies and RBAC in one request|||12.2 — Namespace-as-a-service: quota, LimitRange, NetworkPolicy và RBAC trong một yêu cầu",
+      "12.3 — Virtual clusters with vcluster: stronger isolation without more real clusters|||12.3 — Cluster ảo với vcluster: cô lập mạnh hơn mà không thêm cluster thật",
+      "12.4 — Tenant isolation in GitOps: Argo CD projects, repositories and permissions|||12.4 — Cô lập tenant trong GitOps: project Argo CD, repo và phân quyền",
+      "12.5 — Cost allocation and showback per team|||12.5 — Phân bổ chi phí và báo cáo chi phí theo từng đội",
+      "12.6 — Quiz: multi-tenancy|||12.6 — Kiểm tra: multi-tenancy"
+    ]},
+    { "tieuDe": "Chapter 13 — Observability for the platform and measuring success|||Chương 13 — Observability cho nền tảng và đo lường thành công", "bai": [
+      "13.1 — Observability as a platform capability: metrics, logs and traces on by default|||13.1 — Observability là năng lực của nền tảng: metric, log và trace bật sẵn mặc định",
+      "13.2 — The stack: Prometheus, Grafana, Loki and the OpenTelemetry Collector|||13.2 — Bộ công cụ: Prometheus, Grafana, Loki và OpenTelemetry Collector",
+      "13.3 — Observing the platform itself: SLOs for Argo CD, Backstage and controllers|||13.3 — Quan sát chính nền tảng: SLO cho Argo CD, Backstage và các controller",
+      "13.4 — DORA metrics: deployment frequency, lead time, change failure rate and recovery time|||13.4 — Chỉ số DORA: tần suất deploy, lead time, tỷ lệ thay đổi lỗi và thời gian khôi phục",
+      "13.5 — Adoption and developer experience: golden-path usage, surveys and SPACE|||13.5 — Mức chấp nhận và trải nghiệm lập trình viên: tỷ lệ dùng golden path, khảo sát và SPACE",
+      "13.6 — Scorecards, maturity models and telling the ROI story to leadership|||13.6 — Scorecard, mô hình trưởng thành và kể câu chuyện ROI cho lãnh đạo",
+      "13.7 — Quiz: observability and platform metrics|||13.7 — Kiểm tra: observability và chỉ số nền tảng"
+    ]},
+    { "tieuDe": "Chapter 14 — Capstone: build a mini internal developer platform for a fictional company|||Chương 14 — Dự án cuối khoá: dựng một internal developer platform thu nhỏ cho một công ty giả định", "bai": [
+      "14.1 — Brief: personas, friction log and a platform roadmap|||14.1 — Đề bài: chân dung người dùng, nhật ký điểm vướng và lộ trình nền tảng",
+      "14.2 — Milestone 1: bootstrap clusters with GitOps using app of apps|||14.2 — Mốc 1: khởi tạo cluster theo GitOps bằng mô hình app of apps",
+      "14.3 — Milestone 2: Backstage catalog plus a golden-path service template|||14.3 — Mốc 2: catalog Backstage cùng một template service theo golden path",
+      "14.4 — Milestone 3: self-service PostgreSQL through Crossplane|||14.4 — Mốc 3: PostgreSQL tự phục vụ thông qua Crossplane",
+      "14.5 — Milestone 4: canary releases with Argo Rollouts and metric analysis|||14.5 — Mốc 4: phát hành canary với Argo Rollouts và phân tích metric",
+      "14.6 — Milestone 5: secrets, Kyverno policies and onboarding a new tenant team|||14.6 — Mốc 5: secret, chính sách Kyverno và đưa một đội tenant mới vào",
+      "14.7 — Milestone 6: dashboards, DORA metrics and demo day|||14.7 — Mốc 6: dashboard, chỉ số DORA và ngày demo",
+      "14.8 — Quiz: capstone architecture review|||14.8 — Kiểm tra: rà soát kiến trúc dự án cuối khoá"
+    ]},
+    { "tieuDe": "Chapter 15 — Final exam|||Chương 15 — Thi cuối khoá", "bai": [
+      "15.1 — Review: the whole platform on one architecture diagram|||15.1 — Ôn tập: cả nền tảng trên một sơ đồ kiến trúc",
+      "15.2 — Review: 20 platform incidents and the guardrail that would have prevented each|||15.2 — Ôn tập: 20 sự cố nền tảng và lớp bảo vệ lẽ ra đã ngăn được từng cái",
+      "15.3 — Mock exam: scenario questions and YAML debugging tasks with worked answers|||15.3 — Thi thử: câu hỏi tình huống và bài sửa lỗi YAML, có lời giải chi tiết",
+      "15.4 — Final exam: design, fix and justify a platform under constraints|||15.4 — Bài thi cuối khoá: thiết kế, sửa lỗi và lập luận cho một nền tảng dưới ràng buộc",
+      "15.5 — Retrospective and what to learn next: service mesh, FinOps, platform for AI workloads|||15.5 — Nhìn lại và học gì tiếp: service mesh, FinOps, nền tảng cho workload AI"
+    ]}
+  ]
+}

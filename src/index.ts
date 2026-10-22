@@ -19,6 +19,7 @@ import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { logger } from './utils/logger.js';
+import { caiDnsDuPhong } from './config/dnsDuPhong.js';
 
 // Sentry must be initialised BEFORE any other module imports that
 // could throw. We do it here (the very first thing) so a Prisma
@@ -58,6 +59,9 @@ import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from './config/redis.js';
 import { nanoid } from 'nanoid';
 import { locLoiMoiMuaChoIos } from './utils/appIos.js';
+
+// 22/10/2026: rambo.ai.vn SERVFAIL ⇒ CuongMini đi rambo `fetch failed`. Chỉ tên miền khai trong DNS_DU_PHONG, chỉ khi tra cứu hỏng.
+caiDnsDuPhong();
 
 // Dynamic imports với absolute path
 const { config } = await import(path.join(__dirname, 'config', 'env.js'));

@@ -82,7 +82,8 @@ function bangNhau(a: string, b: string): boolean {
 const conHan = (than: Record<string, unknown>): boolean => typeof than.exp === 'number' && than.exp * 1000 > Date.now() - 60_000;
 const cungEmail = (a: unknown, b: string): boolean => typeof a === 'string' && a.trim().toLowerCase() === b.trim().toLowerCase();
 
-export type KetQuaXacMinh = { ok: true; cach: 'noiBo' | 'apple' | 'google' } | { ok: false; lyDo: string };
+/** `aud` (chỉ Apple): bundle id của app đã đăng nhập — client_id để đổi authorizationCode / thu hồi token (appleSiwa). */
+export type KetQuaXacMinh = { ok: true; cach: 'noiBo' | 'apple' | 'google'; aud?: string } | { ok: false; lyDo: string };
 
 export async function xacMinhOAuth(
   headers: Record<string, unknown>,
@@ -104,7 +105,7 @@ export async function xacMinhOAuth(
       if (String(t.sub) !== providerId) return { ok: false, lyDo: 'sub Apple khác providerId' };
       // Apple luôn đưa email vào token khi app xin quyền email; thiếu thì không có gì để đối chiếu ⇒ từ chối.
       if (!cungEmail(t.email, email)) return { ok: false, lyDo: 'email khác email trong token Apple' };
-      return { ok: true, cach: 'apple' };
+      return { ok: true, cach: 'apple', aud: String(t.aud) };
     }
     if (body.provider === 'google' && body.idToken) {
       const t = await kiemJwtRs256(body.idToken, 'google');

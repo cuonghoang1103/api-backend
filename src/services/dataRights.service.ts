@@ -17,6 +17,7 @@
  *     tài khoản đã ẩn danh (khớp trang /chinh-sach-bao-mat);
  *   · tắt trạng thái hoạt động + xoá mốc hoạt động;
  *   · xoá tệp ảnh đại diện / ảnh bìa đã tải lên khỏi kho lưu trữ (best-effort, chỉ khoá images/avatar|cover).
+ *   22/10/2026: thu hồi token Sign in with Apple ở Apple (`/auth/revoke`, appleSiwa.service) trước khi xoá dòng.
  *   KHÔNG xoá nội dung CT Work dùng chung (thẻ, bình luận, tài liệu) — đồng đội cần chúng; chỉ ẩn danh hoá người viết.
  */
 
@@ -74,6 +75,11 @@ export async function anonymizeAccount(userId: number): Promise<{ anonymized: tr
   const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, avatarUrl: true, coverPhotoUrl: true } });
   if (!user) throw new AppError('User not found', 404, 'USER_NOT_FOUND');
   const now = new Date();
+
+  // Sign in with Apple: thu hồi token ở Apple TRƯỚC khi giao dịch dưới xoá dòng kết nối (App Store 5.1.1(v)).
+  // Không bao giờ ném — thiếu cấu hình / Apple hỏng chỉ ghi WARN, việc xoá vẫn chạy.
+  const { thuHoiTokenApple } = await import('./appleSiwa.service.js');
+  await thuHoiTokenApple(userId);
 
   await prisma.$transaction([
     prisma.user.update({

@@ -4,7 +4,12 @@
  * ============================================================
  *
  * Endpoints:
- *   GET /api/v1/gifs?q=<query>   — search GIFs (trending when q empty)
+ *   GET /api/v1/gifs?q=<query>&offset=<n>   — search GIFs (trending when q empty)
+ *
+ * Paging (22/10/2026, app iOS CT Work 1.1 — bảng chọn GIF cuộn vô tận): `offset` (bội của
+ * GIF_PAGE_SIZE, mặc định 0) đi thẳng sang GIPHY. Phản hồi vẫn là MẢNG như cũ — client tự tính
+ * trang sau = offset + GIF_PAGE_SIZE và dừng khi nhận < GIF_PAGE_SIZE mục. Máy chủ cũ bỏ qua
+ * `offset` ⇒ trả lại đúng trang đầu ⇒ client lọc trùng theo id, không có mục mới ⇒ dừng.
  *
  * Why a proxy instead of calling GIPHY from the browser:
  *   1. The old client-side fallback key (GIPHY's public beta key)
@@ -39,6 +44,27 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 const CACHE_MAX_ENTRIES = 200;
 const cache = new Map<string, { items: GifItem[]; expiresAt: number }>();
 
+/** Số GIF mỗi trang — client iOS dùng cùng số để biết đã hết trang. */
+export const GIF_PAGE_SIZE = 24;
+/** GIPHY từ chối `offset` > 4999 (search) — chặn sớm thay vì để upstream trả lỗi. */
+export const GIF_MAX_OFFSET = 4999 - GIF_PAGE_SIZE;
+
+/** `offset` từ query: số nguyên ≥ 0, làm tròn XUỐNG về bội của trang, trần GIF_MAX_OFFSET. Rác ⇒ 0. */
+export function parseGifOffset(raw: unknown): number {
+  const n = typeof raw === 'string' ? Number.parseInt(raw, 10) : typeof raw === 'number' ? raw : NaN;
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  const capped = Math.min(Math.floor(n), GIF_MAX_OFFSET);
+  return capped - (capped % GIF_PAGE_SIZE);
+}
+
+/** URL gọi GIPHY (thuần — có kiểm thử). */
+export function giphyUrl(apiKey: string, q: string, offset: number): string {
+  const tail = `&limit=${GIF_PAGE_SIZE}&offset=${offset}&rating=pg-13`;
+  return q
+    ? `${GIPHY_BASE}/search?api_key=${apiKey}&q=${encodeURIComponent(q)}${tail}`
+    : `${GIPHY_BASE}/trending?api_key=${apiKey}${tail}`;
+}
+
 function mapGif(g: any): GifItem {
   const img = g?.images ?? {};
   return {
@@ -59,7 +85,9 @@ router.get('/', authenticate, async (req: Request, res: Response<ApiResponse>) =
   }
 
   const q = typeof req.query.q === 'string' ? req.query.q.trim().slice(0, 100) : '';
-  const cacheKey = q.toLowerCase();
+  const offset = parseGifOffset(req.query.offset);
+  // Trang đầu giữ khoá cũ (không hậu tố) — bộ đệm đang nóng của trang đầu không bị bỏ.
+  const cacheKey = offset ? `${q.toLowerCase()}@${offset}` : q.toLowerCase();
 
   const hit = cache.get(cacheKey);
   if (hit && hit.expiresAt > Date.now()) {
@@ -68,9 +96,7 @@ router.get('/', authenticate, async (req: Request, res: Response<ApiResponse>) =
   }
 
   try {
-    const endpoint = q
-      ? `${GIPHY_BASE}/search?api_key=${apiKey}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13`
-      : `${GIPHY_BASE}/trending?api_key=${apiKey}&limit=24&rating=pg-13`;
+    const endpoint = giphyUrl(apiKey, q, offset);
 
     const upstream = await fetch(endpoint, { signal: AbortSignal.timeout(8000) });
     if (!upstream.ok) {

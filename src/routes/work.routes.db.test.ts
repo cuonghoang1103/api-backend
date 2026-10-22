@@ -16,6 +16,7 @@ import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
+import { WORK_LIMITS } from '../services/work/limits.js'; // 22/10/2026: trần tệp đọc từ một chỗ (mặc định 100 MB)
 
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `wa${Date.now().toString(36)}`;
@@ -279,7 +280,7 @@ describe('CT Work API (HTTP + DB thật)', { skip: !RUN }, () => {
   it('đính kèm: không nhận khoá nằm ngoài thư mục của thẻ', async () => {
     const r = await call(member, 'POST', `/projects/${pid}/issues/${storyNum}/attachments/complete`, { key: 'work/999/1/x/evil.png', fileName: 'evil.png' });
     assert.ok([400].includes(r.status), `status ${r.status}`);
-    const big = await call(member, 'POST', `/projects/${pid}/issues/${storyNum}/attachments/presign`, { fileName: 'a.zip', contentType: 'application/zip', size: 26 * 1024 * 1024 });
+    const big = await call(member, 'POST', `/projects/${pid}/issues/${storyNum}/attachments/presign`, { fileName: 'a.zip', contentType: 'application/zip', size: WORK_LIMITS.fileBytes + 1 });
     assert.equal(big.status, 400);
     assert.equal((await call(viewer, 'POST', `/projects/${pid}/issues/${storyNum}/attachments/presign`, { fileName: 'a.png', contentType: 'image/png', size: 10 })).status, 403);
   });

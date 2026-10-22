@@ -2031,8 +2031,9 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
         sections: {
           include: {
             lessons: {
-              // includeDraftLessons is admin-only; for public
-              // we only show published lessons.
+              // Admin thấy cả bài nháp; người học chỉ thấy bài đã xuất bản (như serializeCourse).
+              // Trước 22/10/2026 điều kiện này thiếu ⇒ app iOS (đọc /curriculum) hiện cả bài nháp.
+              where: access.isAdmin ? undefined : { isPublished: true },
               orderBy: { sortOrder: 'asc' },
               include: { details: true },
             },

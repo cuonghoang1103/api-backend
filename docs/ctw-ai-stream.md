@@ -1,9 +1,15 @@
 # CT Work — trợ lý dự án bản stream (SSE)
 
 20/10/2026. Bản STREAM của `POST /api/v1/work/projects/:pid/ai/chat`. Route cũ **giữ nguyên** (web + bản iOS đang chạy).
-Mã: `src/routes/work.routes.ts` (route), `src/services/work/ai.service.ts` (`chat`/`askWithReads` nhận `hooks`),
-`src/services/work/aiReplyStream.ts` (rút `reply` khỏi JSON đang viết). Test: `src/services/work/aiReplyStream.test.ts`,
+Mã: `src/routes/work.routes.ts` (route), `src/services/work/ai.service.ts` (`chat`/`askWithReads`/`motLuotTraLoi`),
+`src/services/work/aiTraLoi.ts` (giao thức trả lời 22/10 — đọc câu trả lời, `TraLoiStreamer`, viết tiếp, tool đọc),
+`src/services/work/aiCong.ts` (chuỗi cổng rambo → chính hãng → modelapi), `src/services/work/aiReplyStream.ts` (rút
+`reply` khỏi JSON kiểu cũ). Test: `src/services/work/aiTraLoi.test.ts`, `aiReplyStream.test.ts`, `aiCong.test.ts`,
 `WORK_DB_TEST=1 npx tsx --test src/routes/work.aiStream.db.test.ts`.
+
+> **22/10/2026 — hợp đồng SSE KHÔNG đổi** (cùng sự kiện, cùng `done` = data của `/ai/chat`). App iOS/web không phải sửa.
+> Đổi ở phía máy chủ: model viết Markdown thường (không còn JSON) ⇒ hết lỗi "AI trả về câu trả lời không đọc được";
+> câu trả lời không còn trần ~300 từ; cổng hỏng thì tự chuyển cổng / tự viết tiếp. Chi tiết ở các mục cuối.
 
 ## Yêu cầu
 
@@ -41,7 +47,7 @@ data: {"type":"<type>", ...}
 | `progress` | `{phase:"thinking", round}` | Đang gọi model (mỗi vòng một lần; tối đa ~4–5 lần). |
 | `progress` | `{phase:"checking"}` | Đề xuất lệnh không hợp lệ, model đang sửa một lượt (chữ lượt này không stream). |
 | `delta` | `{text}` | Mẩu Markdown của câu trả lời — **nối** vào bản nháp. |
-| `reset` | `{}` | **Xoá** bản nháp (lượt đó hoá ra là lượt xin đọc, hoặc nháp lệch bản chuẩn). Các `delta` sau là câu mới. |
+| `reset` | `{}` | **Xoá** bản nháp (lượt đó hoá ra là lượt xin đọc, cổng thử lại đoạn đang viết, hoặc nháp lệch bản chuẩn). Các `delta` sau là câu mới — thường bắt đầu bằng MỘT `delta` chứa lại phần đã chắc chắn. Hiếm từ 22/10 (xem dưới). |
 | `done` | `{reply, actions, quota, threadId, question, answer}` | Kết thúc OK. Đúng `data` mà `/ai/chat` trả. `reply` là bản **chuẩn** ⇒ thay nháp bằng nó (có thể khác nháp, vd. thêm dòng "N suggested change(s) were dropped"). `actions` CHỈ có ở đây. |
 | `error` | `{code, message, status}` | Kết thúc lỗi. Mã như `/ai/chat`: `WORK_AI_BAD_OUTPUT` (502), `BUDGET_EXCEEDED` (429), `WORK_AI_TOKEN_CAP`, `WORK_AI_NOTHING_TO_RETRY`, `INTERNAL_ERROR` (lỗi lạ, câu chung)… Câu hỏi đã được đánh dấu lỗi ⇒ hiện nút Hỏi lại (`retryMessageId = questionId` từ `preparing`). |
 
@@ -75,18 +81,73 @@ data: {"type":"done","reply":"…","actions":[…],"quota":{…},"threadId":34,"
 
 ## Ngắt kết nối
 
-Client đóng luồng (rời màn hình, mất mạng) ⇒ máy chủ không gọi thêm lượt model nào và đánh dấu câu hỏi lỗi
-(`WORK_AI_CANCELLED`, "The connection closed before the answer was ready") ⇒ không có câu hỏi treo "đang chờ". Lượt model
-đang chạy dở không huỷ được (`llmComplete` chưa nhận `AbortSignal`); nếu đó là lượt CUỐI và xong thì câu trả lời vẫn được
-lưu — mở lại hội thoại là thấy.
+Client đóng luồng (rời màn hình, mất mạng) ⇒ máy chủ không gọi thêm lượt model nào (kể cả lượt viết tiếp) và đánh dấu câu
+hỏi lỗi (`WORK_AI_CANCELLED`, "The connection closed before the answer was ready") ⇒ không có câu hỏi treo "đang chờ". Lượt
+model đang chạy dở không huỷ được (`llmComplete` chưa nhận `AbortSignal`); nếu đó là lượt CUỐI và xong thì câu trả lời vẫn
+được lưu — mở lại hội thoại là thấy.
 
-## Stream token hoạt động thế nào
+Bản không stream (`/ai/chat`, web): câu trả lời dài hơn trước ⇒ web chờ tới 290 s (`AI_CHO_MS` trong `work-api.ts`;
+nginx cắt ở 300 s). Quá giờ thì câu trả lời vẫn được lưu và hiện khi mở lại hội thoại.
 
-Mỗi lượt gọi model truyền `onToken` cho `llmComplete` (buộc stream cả tuyến OpenAI lẫn Anthropic/rambo). Model viết JSON
-`{"reply":"…","actions":[…]}`; `ReplyStreamer` đọc tiền tố JSON, giải mã escape (`\n`, `\"`, `\uXXXX`, cặp surrogate) và
-phát phần `reply` ngay khi tới (bỏ rào ```json, bỏ `reply` lồng trong `actions`, im lặng nếu khoá `reads` đứng trước
-`reply`). Xong lượt, câu chuẩn (`readModelOutput`) được so với nháp: thiếu đuôi ⇒ `delta` nốt; lệch ⇒ `reset` + trọn câu.
-Model/cổng không stream được ⇒ cả câu đến trong MỘT `delta` trước `done` (vẫn có `progress`).
+## Stream token hoạt động thế nào (giao thức 22/10/2026)
+
+**Vì sao đổi.** Trước 22/10 model phải trả MỘT khối JSON `{"reply":"<markdown>","actions":[…]}`. Đo thật bằng prompt
+production (câu "tôi cần hiểu rõ 100% hàm, code, luồng, test…"): Claude Sonnet hay bỏ khuôn với câu hỏi sâu —
+(1) viết Markdown thường rồi thêm ```` ```json {"reply":"above","actions":[]} ``` ```` ⇒ người dùng nhận đúng chữ "above";
+(2) viết Markdown có code (`{`) mà không có JSON ⇒ `parseJson` ném 502 `WORK_AI_BAD_OUTPUT` ("không đọc được") — lỗi
+iOS báo, hỏi lại đôi khi được vì lần sau model lại viết JSON. Kiểu (1) còn làm luồng câm tới cuối (không có `{"reply"`).
+
+**Giao thức mới** (một khuôn cho cả ba cổng):
+- Câu trả lời là **Markdown thường, viết trước** — mỗi mẩu token của cổng đi thẳng thành `delta`.
+- Đề xuất thao tác (nếu có) nằm **sau**, trong một khối `<ctw-actions>[…]</ctw-actions>` — không bao giờ hiện ra client
+  (kể cả lúc mới tới nửa thẻ). Khối cụt/hỏng ⇒ giữ các đề xuất còn nguyên, **chữ trả lời không bao giờ mất**.
+- Xin **đọc** dữ liệu ⇒ **tool gốc** của cổng (`read_command` / `read_page` / `search_pages`; Anthropic `tool_use`,
+  OpenAI `tool_calls`) thay cho `{"reply":"","reads":[…]}`. Lượt có tool đọc: máy chủ giữ ~320 ký tự đầu trước khi phát
+  (Sonnet hay viết "Tôi cần đọc thêm… 1. … 2. …" rồi mới gọi tool — không giữ thì đoạn đó hiện ra rồi bị `reset`).
+  Câu trả lời ngắn hơn 320 ký tự ở lượt đó tới một lần lúc xong; câu dài vẫn chảy sau ~1–2 s đầu.
+- Khuôn JSON cũ vẫn đọc được (và vẫn stream qua `ReplyStreamer`); chữ khác rỗng không theo khuôn nào ⇒ chính nó là câu
+  trả lời. Chỉ còn một đường ra `WORK_AI_BAD_OUTPUT`: model trả **rỗng** hai lần liền.
+- Bản nháp đã phát luôn là phần đầu câu chuẩn (khoảng trắng cuối, dòng đang mở rào ```` ```json ````, nửa thẻ được giữ
+  lại tới khi rõ) ⇒ `done.reply` thường chỉ khác nháp ở link sâu do mã dựng (`lienKetHoa`) hoặc dòng "N suggested
+  change(s) were dropped".
+
+## Độ dài — không còn trần nhân tạo (22/10/2026)
+
+- Bỏ luật "dưới ~300 từ": model trả lời **dài đúng bằng câu hỏi cần** (hỏi nhanh ⇒ ngắn; "hiểu rõ 100%", giải thích
+  code/luồng/test, chuẩn bị thuyết trình ⇒ đầy đủ). Vẫn: câu trả lời thẳng ở 1–2 câu đầu, ### + gạch đầu dòng, không bảng.
+  Ngôn ngữ theo câu hỏi (`ngonNguCauHoi`, 12026c1c).
+- Trần token ra mỗi lượt: `ASK_LIMITS.answerTokens` = 16.000 (env `WORK_AI_ANSWER_TOKENS`; trước là 4.000). Rambo không
+  tôn trọng `max_tokens`; chính hãng và modelapi (gpt-6-sol, tính cả token suy luận) thì có.
+- Chạm trần (`stop_reason: max_tokens` / `finish_reason: length`) khi đang viết câu trả lời ⇒ **tự viết tiếp**: gọi lại với
+  [câu hỏi gốc · phần đã viết (assistant) · "viết tiếp ĐÚNG chỗ dở"], tối đa 3 lần; phần model lỡ lặp lại ở đầu đoạn mới
+  bị cắt trước khi phát, nên nháp nối liền, không `reset`. Không dùng "prefill".
+- Trần token/ngày (`checkTokenQuota`), trần $/ngày của web (`budget.ts`) và trần $ riêng của CT Work trên cổng chính
+  hãng (`WORK_AI_CHINH_HANG_USD_NGAY` 30 $ / `…_NGUOI_NGAY` 3 $) giữ nguyên — chạm trần chính hãng ⇒ bỏ qua bậc đó.
+
+## Chuyển cổng (22/10/2026)
+
+Chuỗi `aiCong.ts` (phiên 34ec79f6): **rambo** Sonnet (`ramboSonic()`, gói trọn) → **Anthropic chính hãng** Sonnet 5.5
+(trần $ riêng) → **modelapi `gpt-6-sol`** (lùi cuối, nhìn được ảnh). Thêm 22/10:
+- Hỏng **trước mẩu chữ đầu** (lỗi HTTP, 410 khoá hết hạn, hết giờ, mất kết nối, trả rỗng) ⇒ chuyển bậc im lặng — client
+  chỉ thấy `progress thinking` lâu hơn một chút. Hết giờ chờ theo bậc: rambo 45 s, chính hãng 60 s, modelapi 120 s
+  (gpt-6-sol suy luận trước khi viết: đo 22/10 chữ đầu sau 19–34 s, có lượt > 90 s).
+- Hỏng **giữa chừng** (đã có chữ tới client) ⇒ bậc sau **viết tiếp** đúng chỗ dở (cùng cơ chế với chạm trần độ dài): nháp
+  giữ nguyên, không `reset`, không `error`. Ngoại lệ: modelapi tự thử lại cùng đoạn (`llmComplete` retry) ⇒ `reset` + phát
+  lại phần đã chắc rồi viết lại đoạn đó.
+- Mọi bậc đều hỏng ⇒ `error` (mã của lỗi bậc cuối), câu hỏi đánh dấu lỗi, Hỏi lại được. Hết trần tiền của web
+  (`BUDGET_EXCEEDED`) / client ngắt ⇒ báo thẳng, không lùi sang bậc trả tiền khác.
+
+## Stream theo cổng (đo 22/10/2026)
+
+| Cổng | Stream | Ghi chú |
+|---|---|---|
+| rambo (Anthropic `/v1/messages`) | chảy thật (308–950 ms giữa mẩu đầu và cuối — CLAUDE.md) | không tôn trọng `max_tokens` |
+| Anthropic chính hãng | chảy thật | `thinking: disabled` (`nhanh`), effort medium |
+| modelapi `gpt-6-sol` (tuyến OpenAI) | chảy thật: 544 mẩu trong ~15 s | chữ đầu chậm (19–34 s, suy luận); `LLM_EFFORT_WORK_ASSISTANT=low` rút ngắn |
+| modelapi + model Claude | **gom**: cả câu tới trong ~0,3 s sau ~10 s chờ | không nằm trong chuỗi CT Work |
+
+Log mỗi lượt gọi: `[work] ai: lượt model` {cong, model, ttftMs, ms, chars, biCat, tools, noiTiep, chuyenCongGiuaChung};
+cuối luồng: `[work] ai: stream xong` {ttftMs, ms, replyChars}.
 
 ## nginx
 

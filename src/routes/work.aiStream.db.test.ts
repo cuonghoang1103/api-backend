@@ -11,6 +11,9 @@
  *   4. Client ngắt giữa vòng đọc ⇒ không gọi thêm lượt model, câu hỏi KHÔNG treo "đang chờ" (đánh dấu lỗi), không lưu
  *      câu trả lời.
  *   5. /ai/chat thường vẫn y nguyên.
+ *   6. (22/10/2026) Giao thức mới: lượt đọc bằng TOOL gốc, câu trả lời Markdown + khối <ctw-actions>; câu trả lời có code
+ *      `{` mà không có JSON (đúng lỗi WORK_AI_BAD_OUTPUT trên iOS) ⇒ `done`; câu kiểu cũ "chữ + {"reply":"above"}" ⇒ giữ
+ *      chữ; cổng chết GIỮA CHỪNG (chuỗi cổng giả `_datCongChoTest`) ⇒ cổng sau viết tiếp, luồng KHÔNG có `reset`/`error`.
  */
 
 import assert from 'node:assert/strict';
@@ -38,10 +41,21 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
   let lead: U, dev: U, viewer: U;
   let pid = 0;
   let slugOf = '';
-  /** Mỗi phần tử: chuỗi trả về, hoặc hàm (để chờ / đếm). */
-  let script: Array<string | (() => Promise<string>)> = [];
+  /** Mỗi phần tử: chuỗi trả về, kết quả có tool call, hoặc hàm (để chờ / đếm). */
+  type Buoc = string | { text: string; toolCalls?: Array<{ name: string; input: Record<string, unknown> }> };
+  let script: Array<Buoc | (() => Promise<Buoc>)> = [];
   let calls = 0;
   const prompts: string[] = [];
+  /** Model giả: chạy theo `script`, stream mẩu 5 ký tự như luồng token thật. */
+  const modelGia = async (_system: string, user: string, onToken?: (d: string) => void) => {
+    calls++;
+    prompts.push(user);
+    const next = script.shift() ?? '{"reply":"ok"}';
+    const b = typeof next === 'function' ? await next() : next;
+    const text = typeof b === 'string' ? b : b.text;
+    for (let i = 0; i < text.length; i += 5) onToken?.(text.slice(i, i + 5));
+    return b;
+  };
 
   async function mkUser(name: string): Promise<U> {
     const email = `${tag}_${name}@test.local`;
@@ -80,15 +94,7 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
   };
 
   before(async () => {
-    (await import('../services/work/ai.service.js'))._setAskForTests(async (_system, user, onToken) => {
-      calls++;
-      prompts.push(user);
-      const next = script.shift() ?? '{"reply":"ok"}';
-      const text = typeof next === 'string' ? next : await next();
-      // Như luồng token thật: mẩu 5 ký tự.
-      for (let i = 0; i < text.length; i += 5) onToken?.(text.slice(i, i + 5));
-      return text;
-    });
+    (await import('../services/work/ai.service.js'))._setAskForTests(modelGia);
     (emailService as any).send = async () => ({ success: true });
     const { default: workRoutes } = await import('./work.routes.js');
     const app = express();
@@ -123,13 +129,14 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     await prisma.$disconnect();
   });
 
-  it('vòng đọc + stream: progress → delta → done (cùng hình dạng /ai/chat), câu trả lời được lưu', async () => {
-    const reply = '### Việc gấp\n- [NT-1](/work/x) — **hạn 21/10**\n"trích" 😀 \\ xong';
+  it('vòng đọc (TOOL gốc) + stream: progress → delta → done (cùng hình dạng /ai/chat), câu trả lời được lưu', async () => {
+    // 22/10/2026: khuôn mới — lượt 1 gọi tool read_command (chữ dẫn đi kèm bị giữ, không lộ), lượt 2 Markdown + khối đề xuất.
+    const reply = `### Việc gấp\n- [NT-1](/work/x) — **hạn 21/10**\n"trích" 😀 \\ xong\n\n\`\`\`java\nif (a) { b(); }\n\`\`\`\n${'- Bước tiếp theo: đọc mô tả, sửa code, chạy test.\n'.repeat(8)}Xong.`;
     calls = 0;
     prompts.length = 0;
     script = [
-      '{"reply":"","reads":[{"tool":"command","name":"read_issue","args":{"issue":1}}]}',
-      async () => JSON.stringify({ reply, actions: [{ type: 'add_comment', number: 1, text: 'Đã đọc' }] }),
+      { text: 'Để tôi đọc NT-1 trước.', toolCalls: [{ name: 'read_command', input: { name: 'read_issue', args: { issue: 1 } } }] },
+      async () => `${reply}\n\n<ctw-actions>\n[{"type":"add_comment","number":1,"text":"Đã đọc"}]\n</ctw-actions>`,
     ];
     const r = await stream(dev, { message: 'Tôi làm NT-1 thế nào?' });
     assert.equal(r.status, 200);
@@ -144,6 +151,8 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     assert.equal(r.events[iRead].data.round, 1);
     assert.ok(kinds.indexOf('progress:thinking') < iRead && kinds.lastIndexOf('progress:thinking') > iRead);
     assert.ok(kinds.indexOf('delta') > iRead, 'lượt xin đọc không phát chữ');
+    assert.ok(!kinds.includes('reset'), 'chữ dẫn của lượt tool bị giữ lại ⇒ không cần reset');
+    assert.ok(!r.events.some((e) => e.event === 'delta' && /ctw-actions|Để tôi đọc/.test(e.data.text)), 'không lộ khối đề xuất / chữ dẫn');
     assert.ok(kinds.filter((k) => k === 'progress:thinking').length >= 2);
     assert.ok(kinds.filter((k) => k === 'delta').length > 3, 'stream thật: nhiều delta');
     assert.equal(kinds.at(-1), 'done');
@@ -229,6 +238,56 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     // Chỉ có câu hỏi được thêm (1 tin), không có câu trả lời.
     assert.equal(await prisma.workAiMessage.count({ where: { thread: { projectId: pid } } }), before + 1);
     script = [];
+  });
+
+  it('LỖI THẬT 22/10: Markdown có code `{` mà KHÔNG có JSON ⇒ done (trước: error WORK_AI_BAD_OUTPUT); kiểu "above" ⇒ giữ chữ', async () => {
+    const md = 'Bạn cần hiểu hàm sau:\n\n```js\nfunction approve(r) { if (!r.slot) { throw new Error("full"); } }\n```\n- Luồng: Controller → Service.';
+    script = [md];
+    const r = await stream(dev, { message: 'Tôi cần hiểu rõ 100% hàm, code, luồng, test' });
+    assert.equal(r.events.at(-1)!.event, 'done', JSON.stringify(r.events.at(-1)));
+    assert.equal(r.events.at(-1)!.data.reply, md);
+    assert.equal(draftOf(r.events), md);
+
+    script = [`${md}\n\n\`\`\`json\n{"reply":"above","actions":[]}\n\`\`\``];
+    const r2 = await stream(dev, { message: 'Hỏi lại kiểu cũ' });
+    assert.equal(r2.events.at(-1)!.data.reply, md);
+    const saved = await prisma.workAiMessage.findUniqueOrThrow({ where: { id: r2.events.at(-1)!.data.answer.id } });
+    assert.equal(saved.content, md, 'không bao giờ lưu "above"');
+  });
+
+  it('cổng chết GIỮA CHỪNG (chuỗi cổng giả) ⇒ cổng sau viết tiếp: luồng không reset, không error, câu lưu đủ', async () => {
+    const { _setAskForTests, _boQuaHanMucChoTest } = await import('../services/work/ai.service.js');
+    const { _datCongChoTest } = await import('../services/work/aiCong.js');
+    const dau = `## Phần 1\n${'Hàm approve() kiểm tra slot còn trống rồi ghi bản ghi. '.repeat(8)}Tiếp theo là`;
+    const sau = ' phần test biên: slot = 0, slot đầy.\n## Phần 2\nXong.';
+    let tinSau: unknown[] = [];
+    _setAskForTests(null);
+    _boQuaHanMucChoTest(true);
+    _datCongChoTest({
+      rambo: () => ({ root: 'http://rambo.test', key: 'k', local: false, label: 'cong-agent', giaoThuc: 'anthropic' }),
+      ramboDangNghi: () => false,
+      goiRambo: async (o) => { for (let i = 0; i < dau.length; i += 7) o.onToken?.(dau.slice(i, i + 7)); throw new Error('anthropic stream error: overloaded'); },
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (o, model) => {
+        tinSau = o.messages;
+        const t = `Tiếp theo là${sau}`; // lặp lại đuôi — phải bị cắt
+        for (let i = 0; i < t.length; i += 7) o.onToken?.(t.slice(i, i + 7));
+        return { text: t, model, inputTokens: 1, outputTokens: 1, cong: 'chinh_hang' as const };
+      },
+    });
+    try {
+      const r = await stream(dev, { message: 'Giải thích approve()' });
+      const kinds = r.events.map((e) => e.event);
+      assert.equal(kinds.at(-1), 'done', JSON.stringify(r.events.at(-1)));
+      assert.ok(!kinds.includes('reset') && !kinds.includes('error'), JSON.stringify(kinds));
+      assert.equal(draftOf(r.events), dau + sau);
+      assert.equal(r.events.at(-1)!.data.reply, dau + sau);
+      assert.equal(tinSau.length, 3, 'cổng sau nhận bộ tin "viết tiếp"');
+    } finally {
+      _datCongChoTest(null);
+      _boQuaHanMucChoTest(false);
+      _setAskForTests(modelGia);
+    }
   });
 
   it('/ai/chat thường vẫn y nguyên (JSON, cùng hình dạng)', async () => {

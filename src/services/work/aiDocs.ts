@@ -63,7 +63,7 @@ export async function docsIndex(access: ProjectAccess, limit = 60, opts: { docLi
   }).join('\n')}`;
 }
 
-export const DOCS_READ_DOC = `Reading project documents: if you need a document's content, ask for it FIRST instead of answering — return {"reply":"","reads":[{"tool":"search_pages","query":"…"},{"tool":"read_page","number":3}]} (at most 6 reads per round). You will get the results and then answer. Never guess what a document says.`;
+export const DOCS_READ_DOC = `Reading project documents: if you need a document's content, read it FIRST instead of answering — call the search_pages tool {"query":"…"} or the read_page tool {"number":3} (at most 6 reads per round). You will get the results and then answer. Never guess what a document says.`;
 
 export const DOCS_WRITE_DOC = `Document actions you may PROPOSE (they become a new version only when the user applies them):
 - {"type":"draft_page","title":"…","markdown":"full page in Markdown (## headings, lists, | tables |)","parent":<page number to put it under, optional>}

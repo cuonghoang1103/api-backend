@@ -8,11 +8,16 @@
  * 2. `reconcileReply` — nháp khớp / thiếu đuôi / lệch.
  * 3. `askWithReads` với hooks: model giả CÓ stream ⇒ delta nối lại đúng bằng reply; model giả KHÔNG stream ⇒ một delta
  *    duy nhất = cả câu; lượt trả lời rỗng đã lỡ phát chữ ⇒ reset; client ngắt ⇒ WORK_AI_CANCELLED, không gọi model.
+ * 4. (22/10/2026) TRỌN đường askWithReads → goiAiCtWork với các bậc cổng GIẢ (`_datCongChoTest`, không gọi mạng): bậc
+ *    đầu chết trước chữ đầu ⇒ không ai thấy; chết GIỮA CHỪNG ⇒ bậc sau viết tiếp, nháp nối liền (không reset), phần lặp
+ *    bị cắt; chạm trần độ dài ⇒ tự viết tiếp; trả rỗng ⇒ bậc sau; lượt tool đọc ⇒ đọc rồi trả lời; cổng thử lại ⇒ reset
+ *    rồi nháp đúng; Markdown có code `{` (lỗi WORK_AI_BAD_OUTPUT thật) ⇒ trả lời được.
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ReplyStreamer, reconcileReply } from './aiReplyStream.js';
-import { askWithReads, _setAskForTests, type AskProgress } from './ai.service.js';
+import { askWithReads, _boQuaHanMucChoTest, _setAskForTests, type AskProgress } from './ai.service.js';
+import { _datCongChoTest } from './aiCong.js';
 import type { ProjectAccess } from './permissions.js';
 
 function run(raw: string, cuts: number[] = []): { out: string; deltas: string[]; s: ReplyStreamer } {
@@ -112,7 +117,8 @@ function hooksLog() {
 }
 
 test('askWithReads stream: model giả CÓ stream ⇒ nhiều delta, nối lại = reply; có thinking', async (t) => {
-  const reply = '### Việc gấp\n1. [LFD-75](/w/LFD/issue/75) — **hạn 21/10**\n"trích" 😀';
+  // 22/10/2026: lượt có tool đọc giữ ~320 ký tự đầu (chống nháy đoạn "để tôi đọc…") ⇒ câu thử phải dài hơn thế.
+  const reply = '### Việc gấp\n1. [LFD-75](/w/LFD/issue/75) — **hạn 21/10**\n"trích" 😀\n'.repeat(8);
   const raw = JSON.stringify({ reply, actions: [] });
   _setAskForTests(async (_s, _u, onToken) => {
     for (let i = 0; i < raw.length; i += 7) onToken?.(raw.slice(i, i + 7));
@@ -138,7 +144,7 @@ test('askWithReads stream: model KHÔNG stream ⇒ đúng MỘT delta = cả câ
 test('askWithReads stream: JSON hỏng phải cứu ⇒ nháp lệch ⇒ reset + câu chuẩn', async (t) => {
   // Model "thử lại" giữa chừng (llmComplete retry): hai lượt chữ dồn vào cùng một luồng.
   const second = '{"reply":"Bản đúng","actions":[]}';
-  _setAskForTests(async (_s, _u, onToken) => { onToken?.('{"reply":"Bản hỏ'); onToken?.(second); return second; });
+  _setAskForTests(async (_s, _u, onToken) => { onToken?.(`{"reply":"Bản hỏ${'ng '.repeat(150)}`); onToken?.(second); return second; });
   t.after(() => _setAskForTests(null));
   const h = hooksLog();
   await askWithReads(1, NO_ACCESS, 'sys', 'user', 4000, false, undefined, h.hooks);
@@ -165,9 +171,149 @@ test('askWithReads stream: lượt rỗng ⇒ hỏi lại một lần; hooks KH�
   assert.equal(out.reply, 'Có rồi');
   assert.equal(out.stats.calls, 2);
   assert.equal(h.draft(), 'Có rồi');
-  // Không hooks: hàm giả nhận onToken = undefined.
-  let got: unknown = 'chưa gọi';
-  _setAskForTests(async (_s, _u, onToken) => { got = onToken; return '{"reply":"x"}'; });
-  await askWithReads(1, NO_ACCESS, 'sys', 'user', 4000, false);
-  assert.equal(got, undefined);
+  // Không hooks: vẫn đọc đúng câu (22/10/2026: lượt luôn nhận onToken để gom chữ thô — cần cho "viết tiếp" — nhưng không
+  // có sự kiện nào ra ngoài).
+  _setAskForTests(async (_s, _u, onToken) => { onToken?.('{"reply":"x"}'); return '{"reply":"x"}'; });
+  assert.equal((await askWithReads(1, NO_ACCESS, 'sys', 'user', 4000, false)).reply, 'x');
+});
+
+// ─── 4. Trọn đường qua chuỗi cổng GIẢ (22/10/2026) ───
+
+const EP = { root: 'http://rambo.test', key: 'k', local: false, label: 'cong-agent', giaoThuc: 'anthropic' as const };
+const kq = (cong: 'rambo' | 'chinh_hang' | 'modelapi', text: string, extra: Record<string, unknown> = {}) => ({ text, model: `m-${cong}`, inputTokens: 1, outputTokens: 1, cong, ...extra });
+const tungMau = (o: { onToken?: (d: string) => void }, text: string) => { for (let i = 0; i < text.length; i += 6) o.onToken?.(text.slice(i, i + 6)); };
+const PHAN1 = '## Phần 1 — hàm `approve()`\n```java\nboolean approve(Reservation r) {\n  if (r.slot == null) { return false; }\n```\nHàm kiểm tra slot còn trống, rồi ghi';
+const PHAN2 = ' bản ghi vào bảng reservation.\n## Phần 2 — test\n- Biên: slot = 0, slot đầy.';
+const CAU = PHAN1 + PHAN2;
+
+function chuoiGia(t: { after: (fn: () => void) => void }, p: Parameters<typeof _datCongChoTest>[0]) {
+  _setAskForTests(null);
+  _boQuaHanMucChoTest(true);
+  _datCongChoTest({ chinhHangSanSang: async () => true, baoChinhHangHong: () => {}, ...p });
+  t.after(() => { _datCongChoTest(null); _boQuaHanMucChoTest(false); });
+}
+const resets = (h: ReturnType<typeof hooksLog>) => h.ev.filter((e) => e.t === 'reset').length;
+
+test('chuỗi giả: rambo chết TRƯỚC chữ đầu ⇒ chính hãng trả lời, không reset, nháp = câu (có code `{`)', async (t) => {
+  chuoiGia(t, {
+    rambo: () => EP, ramboDangNghi: () => false,
+    goiRambo: async () => { throw new Error('anthropic stream produced no text'); },
+    goiChinhHang: async (o) => { tungMau(o, CAU); return kq('chinh_hang', CAU); },
+  });
+  const h = hooksLog();
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'Giải thích hàm, code, luồng, test', 16_000, false, undefined, h.hooks);
+  assert.equal(out.reply, CAU);
+  assert.equal(h.draft(), CAU);
+  assert.equal(resets(h), 0);
+});
+
+test('chuỗi giả: rambo chết GIỮA CHỪNG ⇒ chính hãng VIẾT TIẾP (lỡ lặp vài chữ) ⇒ nháp nối liền, không reset', async (t) => {
+  let tinCH: Array<{ role: string; content: unknown }> = [];
+  chuoiGia(t, {
+    rambo: () => EP, ramboDangNghi: () => false,
+    goiRambo: async (o) => { tungMau(o, PHAN1); throw Object.assign(new Error('anthropic HTTP 502'), { httpStatus: 502 }); },
+    goiChinhHang: async (o) => {
+      tinCH = o.messages as typeof tinCH;
+      const tiep = `slot còn trống, rồi ghi${PHAN2}`; // model lặp lại đuôi phần đã viết
+      tungMau(o, tiep);
+      return kq('chinh_hang', tiep);
+    },
+  });
+  const h = hooksLog();
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'Câu hỏi gốc', 16_000, false, undefined, h.hooks);
+  assert.equal(out.reply, CAU);
+  assert.equal(h.draft(), CAU);
+  assert.equal(resets(h), 0, 'không reset — chữ đã hiện giữ nguyên');
+  assert.deepEqual(tinCH.map((m) => m.role), ['user', 'assistant', 'user']);
+  assert.match(String(tinCH[0].content), /Câu hỏi gốc/);
+  assert.equal(tinCH[1].content, PHAN1.trimEnd());
+  assert.match(String(tinCH[2].content), /Continue it EXACTLY/);
+});
+
+test('chuỗi giả: chạm trần độ dài (biCat) ⇒ tự viết tiếp trên cùng cổng, câu đầy đủ, không reset', async (t) => {
+  const goi: number[] = [];
+  chuoiGia(t, {
+    rambo: () => null,
+    goiChinhHang: async (o) => {
+      goi.push(o.messages.length);
+      if (o.messages.length === 1) { tungMau(o, PHAN1); return kq('chinh_hang', PHAN1, { biCat: true }); }
+      tungMau(o, PHAN2);
+      return kq('chinh_hang', PHAN2);
+    },
+  });
+  const h = hooksLog();
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, h.hooks);
+  assert.deepEqual(goi, [1, 3]);
+  assert.equal(out.reply, CAU);
+  assert.equal(h.draft(), CAU);
+  assert.equal(resets(h), 0);
+});
+
+test('chuỗi giả: chạm trần MÃI ⇒ viết tiếp tối đa 3 lần rồi trả phần đã có (không lặp vô hạn, không lỗi)', async (t) => {
+  let n = 0;
+  chuoiGia(t, { rambo: () => null, goiChinhHang: async (o) => { n++; const x = `đoạn ${n}. `; tungMau(o, x); return kq('chinh_hang', x, { biCat: true }); } });
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, hooksLog().hooks);
+  assert.equal(n, 4);
+  assert.equal(out.reply, 'đoạn 1. đoạn 2. đoạn 3. đoạn 4.');
+});
+
+test('chuỗi giả: modelapi THỬ LẠI giữa đoạn (onRestart) ⇒ reset rồi nháp đúng bản cuối', async (t) => {
+  chuoiGia(t, {
+    rambo: () => null, chinhHangSanSang: async () => false,
+    goiModelapi: async (o) => { tungMau(o, 'Bản hỏng bị cắt ngang. '.repeat(30)); o.onRestart?.(); tungMau(o, CAU); return kq('modelapi', CAU); },
+  });
+  const h = hooksLog();
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, h.hooks);
+  assert.equal(out.reply, CAU);
+  assert.equal(h.draft(), CAU);
+  assert.equal(resets(h), 1);
+});
+
+test('chuỗi giả: lượt TOOL đọc (gốc) ⇒ không lộ chữ "để tôi đọc", đọc rồi trả lời; tool không còn ở vòng cuối', async (t) => {
+  const thayTools: boolean[] = [];
+  const prompts: string[] = [];
+  chuoiGia(t, {
+    rambo: () => EP, ramboDangNghi: () => false,
+    goiRambo: async (o) => {
+      thayTools.push(!!o.tools?.length);
+      prompts.push(String(o.messages[0].content));
+      if (thayTools.length === 1) {
+        tungMau(o, 'Tôi cần đọc thêm tài liệu để trả lời chính xác:');
+        return kq('rambo', 'Tôi cần đọc thêm tài liệu để trả lời chính xác:', { toolCalls: [{ name: 'read_page', input: { number: 3 } }] });
+      }
+      tungMau(o, CAU);
+      return kq('rambo', `${CAU}\n<ctw-actions>[{"type":"add_comment","number":1,"text":"ok"}]</ctw-actions>`);
+    },
+  });
+  const ev: string[] = [];
+  let draft = '';
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, {
+    onDelta: (d) => { ev.push('delta'); draft += d; }, onReset: () => { ev.push('reset'); draft = ''; },
+  });
+  assert.deepEqual(thayTools, [true, true]);
+  assert.match(prompts[1], /project documents are not available here/);
+  assert.equal(out.reply, CAU);
+  assert.deepEqual(out.actions, [{ type: 'add_comment', number: 1, text: 'ok' }]);
+  assert.equal(draft, CAU);
+  assert.ok(!ev.includes('reset'), 'đoạn dẫn trước tool call bị giữ lại, không nháy rồi xoá');
+});
+
+test('chuỗi giả: trả lời cũ kiểu "Markdown + {reply: above}" ⇒ giữ câu trả lời thật', async (t) => {
+  const raw = `${CAU}\n\n\`\`\`json\n{"reply":"above","actions":[]}\n\`\`\``;
+  chuoiGia(t, { rambo: () => null, goiChinhHang: async (o) => { tungMau(o, raw); return kq('chinh_hang', raw); } });
+  const h = hooksLog();
+  const out = await askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, h.hooks);
+  assert.equal(out.reply, CAU);
+  assert.equal(h.draft(), CAU);
+  assert.ok(!/above/.test(h.ev.map((e) => String(e.v ?? '')).join('')));
+});
+
+test('chuỗi giả: mọi bậc đều chết ⇒ lỗi của bậc cuối (không nuốt lỗi, không lưu câu rỗng)', async (t) => {
+  chuoiGia(t, {
+    rambo: () => EP, ramboDangNghi: () => false,
+    goiRambo: async () => { throw new Error('rambo chết'); },
+    goiChinhHang: async () => { throw new Error('chính hãng chết'); },
+    goiModelapi: async () => { throw new Error('modelapi chết'); },
+  });
+  await assert.rejects(askWithReads(1, NO_ACCESS, 'sys', 'hỏi', 16_000, false, undefined, hooksLog().hooks), /modelapi chết/);
 });

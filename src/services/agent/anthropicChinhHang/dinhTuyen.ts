@@ -7,6 +7,7 @@
  * cổng hỏng thì `turn.ts` tự chuyển sang model free tương đương ở cổng kia.
  */
 import type { LlmEndpoint } from '../../llm/gateway.js';
+import { docThamSoTool, type LLMTool, type LLMToolCall } from '../../interview/llm/index.js';
 import { logger } from '../../../utils/logger.js';
 import {
   MA_FREE, dsModelChinhHangGoc, gocChinhHang,
@@ -189,13 +190,16 @@ export async function goiVanBanChinhHang(o: {
    * `disabled` ⇒ `banAnToan` gửi lại MỘT lần bằng adaptive + cùng effort.
    */
   nhanh?: { effort: 'low' | 'medium' };
-}): Promise<{ text: string; biCat: boolean; usd: number; ttfbMs: number }> {
+  /** 22/10/2026 (trợ lý CT Work): tool gốc — model xin đọc dữ liệu dự án bằng tool call thay vì JSON trong chữ. */
+  tools?: LLMTool[];
+}): Promise<{ text: string; biCat: boolean; usd: number; ttfbMs: number; toolCalls?: LLMToolCall[] }> {
   const body: ThanAnthropic = {
     model: o.model,
     max_tokens: o.maxTokens,
     stream: true,
     system: o.system,
     messages: o.messages.filter((m) => (typeof m.content === 'string' ? m.content : m.content.length)).map((m) => ({ ...m })),
+    ...(o.tools?.length ? { tools: o.tools.map((t) => ({ name: t.name, description: t.description, input_schema: t.parameters })) } : {}),
   };
   let beta: string[] = [];
   if (o.nhanh) {
@@ -216,6 +220,7 @@ export async function goiVanBanChinhHang(o: {
 
   let text = '';
   let stop: string | null = null;
+  const tools = new Map<number, { name: string; args: string }>();
   const dung = { input: 0, output: 0, cacheDoc: 0, cacheGhi: 0 };
   let thanhCong = false;
   let usd = 0;
@@ -241,6 +246,11 @@ export async function goiVanBanChinhHang(o: {
         } else if (j.type === 'content_block_delta' && j.delta?.type === 'text_delta' && typeof j.delta.text === 'string') {
           text += j.delta.text;
           o.onToken?.(j.delta.text);
+        } else if (j.type === 'content_block_start' && j.content_block?.type === 'tool_use') {
+          tools.set(j.index ?? tools.size, { name: String(j.content_block.name ?? ''), args: '' });
+        } else if (j.type === 'content_block_delta' && j.delta?.type === 'input_json_delta') {
+          const t = tools.get(j.index ?? -1);
+          if (t) t.args += j.delta.partial_json ?? '';
         } else if (j.type === 'message_delta') {
           if (j.delta?.stop_reason) stop = j.delta.stop_reason;
           if (j.usage?.output_tokens) dung.output = j.usage.output_tokens;
@@ -254,5 +264,6 @@ export async function goiVanBanChinhHang(o: {
     usd = await ghiDung({ ...nguCanh, keyId: g.key.id, dung, thanhCong, thoiGianMs: Date.now() - g.batDau, ttfbMs: g.ttfbMs });
     if (!thanhCong) logger.warn('[anthropic] luồng văn bản gãy giữa chừng', { model: o.model, usd });
   }
-  return { text, biCat: stop === 'max_tokens', usd, ttfbMs: g.ttfbMs };
+  const toolCalls = [...tools.entries()].sort((a, b) => a[0] - b[0]).filter(([, t]) => t.name).map(([, t]) => docThamSoTool(t.name, t.args));
+  return { text, biCat: stop === 'max_tokens', usd, ttfbMs: g.ttfbMs, ...(toolCalls.length ? { toolCalls } : {}) };
 }

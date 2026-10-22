@@ -76,7 +76,37 @@ export interface LLMResult {
    * chứng đó ở Code Lab.
    */
   biCat?: boolean;
+  /**
+   * Tool gốc của cổng mà model gọi trong lượt này (22/10/2026 — trợ lý CT Work xin ĐỌC dữ liệu bằng tool thay vì JSON
+   * nhét trong chữ). Chỉ có khi nơi gọi truyền `tools`. Lượt có tool call thì `text` có thể rỗng — không phải lỗi.
+   */
+  toolCalls?: LLMToolCall[];
 }
+/** Tool hàm, khuôn TRUNG LẬP — mỗi adapter tự đổi sang khuôn của tuyến nó (Anthropic `input_schema` / OpenAI `function`). */
+export interface LLMTool {
+  name: string;
+  description: string;
+  /** JSON Schema của tham số. */
+  parameters: Record<string, unknown>;
+}
+export interface LLMToolCall {
+  name: string;
+  input: Record<string, unknown>;
+  /** JSON tham số THÔ khi không đọc được (luồng cụt giữa chừng) — `input` khi đó là `{}`. */
+  raw?: string;
+}
+/** JSON tham số của một tool call (đã gom đủ mẩu) ⇒ object; hỏng/cụt ⇒ `{}` + `raw`. THUẦN — test đọc. */
+export function docThamSoTool(name: string, json: string): LLMToolCall {
+  const t = (json ?? '').trim();
+  if (!t) return { name, input: {} };
+  try {
+    const v = JSON.parse(t) as unknown;
+    if (v && typeof v === 'object' && !Array.isArray(v)) return { name, input: v as Record<string, unknown> };
+  } catch { /* xuống dưới */ }
+  return { name, input: {}, raw: t.slice(0, 2000) };
+}
+const toolAnthropic = (tools: LLMTool[]) => tools.map((t) => ({ name: t.name, description: t.description, input_schema: t.parameters }));
+const toolOpenAi = (tools: LLMTool[]) => tools.map((t) => ({ type: 'function', function: { name: t.name, description: t.description, parameters: t.parameters } }));
 export type LLMStep = 'interview' | 'report' | 'generation';
 
 /**
@@ -90,7 +120,7 @@ export type LLMStep = 'interview' | 'report' | 'generation';
  */
 export interface LLMProvider {
   name: string;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void; reasoningEffort?: string | null }): Promise<LLMResult>;
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void; reasoningEffort?: string | null; tools?: LLMTool[] }): Promise<LLMResult>;
 }
 
 // ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
@@ -181,6 +211,7 @@ const anthropicProvider: LLMProvider = {
         },
         body: JSON.stringify({
           model, max_tokens: maxTokens, system, messages,
+          ...(opts.tools?.length ? { tools: toolAnthropic(opts.tools) } : {}),
           ...(useStream ? { stream: true } : {}),
         }),
         signal: ctrl.signal,
@@ -198,17 +229,20 @@ const anthropicProvider: LLMProvider = {
       }
 
       const json = (await res.json()) as {
-        content?: Array<{ type: string; text?: string }>;
+        content?: Array<{ type: string; text?: string; name?: string; input?: unknown }>;
         stop_reason?: string;
         usage?: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number };
       };
       // Only text blocks (ignore thinking blocks a gateway may return).
       const text = (json.content ?? []).filter((b) => b.type === 'text').map((b) => b.text ?? '').join('');
+      const toolCalls = (json.content ?? []).filter((b) => b.type === 'tool_use' && b.name)
+        .map((b) => docThamSoTool(b.name!, JSON.stringify(b.input ?? {})));
       const u = json.usage ?? {};
       const inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
       return {
         text, inputTokens, outputTokens: u.output_tokens ?? 0, model,
         biCat: laCat(json.stop_reason),
+        ...(toolCalls.length ? { toolCalls } : {}),
       };
     } catch (e) {
       if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
@@ -256,6 +290,7 @@ const openAiCompatProvider: LLMProvider = {
           max_tokens: maxTokens,
           /* 18/10/2026 — xem `suyLuanCho` ở gateway.ts. */
           ...(opts.reasoningEffort ? { reasoning_effort: opts.reasoningEffort } : {}),
+          ...(opts.tools?.length ? { tools: toolOpenAi(opts.tools) } : {}),
           messages: [
             { role: 'system', content: system },
             ...messages.map((m) => ({ role: m.role, content: toOpenAiContent(m.content) })),
@@ -274,14 +309,17 @@ const openAiCompatProvider: LLMProvider = {
       }
 
       const json = (await res.json()) as {
-        choices?: Array<{ message?: { content?: string }; finish_reason?: string }>;
+        choices?: Array<{ message?: { content?: string; tool_calls?: Array<{ function?: { name?: string; arguments?: string } }> }; finish_reason?: string }>;
         usage?: { prompt_tokens?: number; completion_tokens?: number };
       };
       const text = json.choices?.[0]?.message?.content ?? '';
+      const toolCalls = (json.choices?.[0]?.message?.tool_calls ?? []).filter((c) => c.function?.name)
+        .map((c) => docThamSoTool(c.function!.name!, c.function?.arguments ?? ''));
       const u = json.usage ?? {};
       return {
         text, inputTokens: u.prompt_tokens ?? 0, outputTokens: u.completion_tokens ?? 0, model,
         biCat: laCat(json.choices?.[0]?.finish_reason),
+        ...(toolCalls.length ? { toolCalls } : {}),
       };
     } catch (e) {
       if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
@@ -316,6 +354,8 @@ async function readOpenAiStream(
   let inputTokens = 0;
   let outputTokens = 0;
   let biCat = false;
+  /** Tool call gom theo `index` (tên đến ở mẩu đầu, tham số đến từng mẩu). */
+  const tools = new Map<number, { name: string; args: string }>();
 
   for (;;) {
     const { done, value } = await reader.read();
@@ -331,7 +371,7 @@ async function readOpenAiStream(
         const payload = line.slice(5).trim();
         if (!payload || payload === '[DONE]') continue;
         let evt: {
-          choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
+          choices?: Array<{ delta?: { content?: string; tool_calls?: Array<{ index?: number; function?: { name?: string; arguments?: string } }> }; finish_reason?: string }>;
           usage?: { prompt_tokens?: number; completion_tokens?: number };
           error?: { message?: string };
         };
@@ -343,6 +383,13 @@ async function readOpenAiStream(
         if (evt.error) throw new LLMError(`openai_compat stream error: ${evt.error.message ?? 'unknown'}`, true);
         const delta = evt.choices?.[0]?.delta?.content;
         if (delta) { text += delta; onToken?.(delta); }
+        for (const tc of evt.choices?.[0]?.delta?.tool_calls ?? []) {
+          const i = tc.index ?? 0;
+          const cur = tools.get(i) ?? { name: '', args: '' };
+          if (tc.function?.name) cur.name += tc.function.name;
+          if (tc.function?.arguments) cur.args += tc.function.arguments;
+          tools.set(i, cur);
+        }
         // Mẩu CUỐI mang `finish_reason`. 'length' = model bị cắt vì chạm trần,
         // không phải nó nói xong — đọc ở đây mới phân biệt được hai thứ đó.
         if (evt.choices?.[0]?.finish_reason) biCat = laCat(evt.choices[0].finish_reason);
@@ -354,8 +401,9 @@ async function readOpenAiStream(
     }
   }
 
-  if (!text.trim()) throw new LLMError('openai_compat stream produced no text', true);
-  return { text, inputTokens, outputTokens, model, biCat };
+  const toolCalls = [...tools.entries()].sort((a, b) => a[0] - b[0]).filter(([, t]) => t.name).map(([, t]) => docThamSoTool(t.name, t.args));
+  if (!text.trim() && !toolCalls.length) throw new LLMError('openai_compat stream produced no text', true);
+  return { text, inputTokens, outputTokens, model, biCat, ...(toolCalls.length ? { toolCalls } : {}) };
 }
 
 
@@ -385,6 +433,8 @@ async function readStream(
   let inputTokens = 0;
   let outputTokens = 0;
   let biCat = false;
+  /** Khối tool_use theo `index` của content block: tên ở `content_block_start`, tham số ở `input_json_delta`. */
+  const tools = new Map<number, { name: string; args: string }>();
 
   for (;;) {
     const { done, value } = await reader.read();
@@ -404,7 +454,9 @@ async function readStream(
         if (!payload || payload === '[DONE]') continue;
         let evt: {
           type?: string;
-          delta?: { type?: string; text?: string; stop_reason?: string };
+          index?: number;
+          content_block?: { type?: string; name?: string };
+          delta?: { type?: string; text?: string; stop_reason?: string; partial_json?: string };
           message?: { usage?: { input_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number } };
           usage?: { output_tokens?: number };
           error?: { message?: string };
@@ -420,6 +472,11 @@ async function readStream(
         if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
           text += evt.delta.text ?? '';
           onToken?.(evt.delta.text ?? '');
+        } else if (evt.type === 'content_block_start' && evt.content_block?.type === 'tool_use') {
+          tools.set(evt.index ?? tools.size, { name: evt.content_block.name ?? '', args: '' });
+        } else if (evt.type === 'content_block_delta' && evt.delta?.type === 'input_json_delta') {
+          const t = tools.get(evt.index ?? -1);
+          if (t) t.args += evt.delta.partial_json ?? '';
         } else if (evt.type === 'message_start') {
           const u = evt.message?.usage ?? {};
           inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
@@ -431,8 +488,9 @@ async function readStream(
     }
   }
 
-  if (!text.trim()) throw new LLMError('anthropic stream produced no text', true);
-  return { text, inputTokens, outputTokens, model, biCat };
+  const toolCalls = [...tools.entries()].sort((a, b) => a[0] - b[0]).filter(([, t]) => t.name).map(([, t]) => docThamSoTool(t.name, t.args));
+  if (!text.trim() && !toolCalls.length) throw new LLMError('anthropic stream produced no text', true);
+  return { text, inputTokens, outputTokens, model, biCat, ...(toolCalls.length ? { toolCalls } : {}) };
 }
 
 /**
@@ -744,6 +802,8 @@ export async function llmComplete(opts: {
    * Nơi stream ra giao diện dùng để xoá nháp (không thì người dùng thấy hai câu dính nhau).
    */
   onRestart?: () => void;
+  /** 22/10/2026: tool gốc của cổng (trợ lý CT Work xin đọc). Không gửi tới máy nhà (llama.cpp). */
+  tools?: LLMTool[];
 }): Promise<LLMResult> {
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
@@ -829,7 +889,7 @@ export async function llmComplete(opts: {
         const maxTokens = suyLuan ? tranRaCho(opts.maxTokens ?? 1500, suyLuan) : opts.maxTokens;
         if (daGoi) opts.onRestart?.();
         daGoi = true;
-        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan });
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan, ...(opts.tools?.length && !ep.local ? { tools: opts.tools } : {}) });
         if (ep.label === 'cong-agent') baoRamboOk();
         /* Chạm trần độ dài — ghi WARN để CÒN LẦN RA ĐƯỢC. Trước đây không chỗ
            nào đọc `finish_reason`, nên một câu trả lời cụt giữa chừng trông y

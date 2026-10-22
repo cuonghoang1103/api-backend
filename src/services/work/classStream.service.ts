@@ -24,6 +24,7 @@ import { prisma } from '../../config/database.js';
 import { getSignedDownloadUrl } from '../../config/r2.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 import { requireClass, type ClassRole } from './classroom.service.js';
 import {
   COMMENT_MAX, MAX_POST_FILES, POST_KINDS, POST_TEXT_MAX, canComment, normalizeLinks, parseIdList, scheduleOf, visibleToStudent, type PostKind,
@@ -366,6 +367,7 @@ export async function addComment(userId: number, classId: number, postId: number
   }
   const text = cutText(body.trim(), COMMENT_MAX);
   if (!text) throw new BadRequestError('Write a comment', 'WORK_EMPTY');
+  chanNoiDungXau({ body: text });
   // Chống xả: tối đa 20 bình luận / người / phút trong lớp.
   const recent = await prisma.workClassComment.count({ where: { authorId: userId, post: { classId }, createdAt: { gte: new Date(Date.now() - 60_000) } } });
   if (recent >= 20) throw new BadRequestError('You are commenting too fast — wait a moment', 'WORK_RATE');

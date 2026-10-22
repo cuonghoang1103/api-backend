@@ -26,6 +26,7 @@
 
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { chanNoiDungXau } from './locNoiDung.js';
 
 export interface ProfileResponse {
   userId: number;
@@ -174,6 +175,8 @@ export async function getProfileById(userId: number, currentUserId?: number): Pr
 
 export async function updateOwnProfile(userId: number, input: UpdateProfileInput): Promise<ProfileResponse> {
   validateInput(input);
+  // App Store 1.2: giới thiệu + các dòng chữ tự do trên trang hồ sơ ⇒ từ nặng ⇒ 422 CONTENT_BLOCKED.
+  chanNoiDungXau(input as Record<string, unknown>);
   // Make sure the row exists before we update (covers the
   // case where a legacy user updates their profile before
   // ever reading it).

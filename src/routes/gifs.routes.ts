@@ -59,7 +59,7 @@ export function parseGifOffset(raw: unknown): number {
 
 /** URL gọi GIPHY (thuần — có kiểm thử). */
 export function giphyUrl(apiKey: string, q: string, offset: number): string {
-  const tail = `&limit=${GIF_PAGE_SIZE}&offset=${offset}&rating=pg-13`;
+  const tail = `&limit=${GIF_PAGE_SIZE}&offset=${offset}&rating=pg`; // App Store: PG (không PG-13) — khớp hạng tuổi 13+ khai "nội dung tình dục: Không"
   return q
     ? `${GIPHY_BASE}/search?api_key=${apiKey}&q=${encodeURIComponent(q)}${tail}`
     : `${GIPHY_BASE}/trending?api_key=${apiKey}${tail}`;

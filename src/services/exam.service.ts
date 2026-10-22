@@ -377,9 +377,9 @@ export async function buildReview(attemptId: number, userId: number) {
 }
 
 // ── Attempt history ───────────────────────────────────────────────────
-export async function listMyAttempts(userId: number, examId?: number) {
+export async function listMyAttempts(userId: number, examId?: number, dangLam = false) {
   const rows = await prisma.examAttempt.findMany({
-    where: { userId, ...(examId ? { examId } : {}), status: { in: ['SUBMITTED', 'GRADED', 'EXPIRED'] } },
+    where: { userId, ...(examId ? { examId } : {}), status: dangLam ? 'IN_PROGRESS' : { in: ['SUBMITTED', 'GRADED', 'EXPIRED'] } },
     orderBy: { id: 'desc' },
     include: {
       exam: {
@@ -403,6 +403,8 @@ export async function listMyAttempts(userId: number, examId?: number) {
     score: r.score == null ? null : num(r.score),
     maxScore: r.maxScore == null ? null : num(r.maxScore),
     passed: r.passed, gradingMode: r.gradingMode,
+    // aiAssisted: lượt luyện cùng CuongMini — app tách khỏi lịch sử thi thật. startedAt/expiresAt: để "làm tiếp".
+    aiAssisted: r.aiAssisted, startedAt: r.startedAt, expiresAt: r.expiresAt,
     bookmarked: marked.has(r.examId),
     exam: {
       id: r.exam.id, title: r.exam.title, kind: r.exam.kind, peType: r.exam.peType,

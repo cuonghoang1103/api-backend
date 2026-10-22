@@ -46,7 +46,7 @@ router.get('/', async (_req, res: Response<ApiResponse>, next) => {
       where: { isPublished: true },
       select: {
         id: true, courseId: true, kind: true, peType: true, title: true, code: true,
-        durationMinutes: true, totalPoints: true, passMark: true, sortOrder: true,
+        durationMinutes: true, totalPoints: true, passMark: true, sortOrder: true, source: true,
         course: {
           select: {
             title: true, slug: true, courseCode: true,
@@ -69,6 +69,7 @@ router.get('/', async (_req, res: Response<ApiResponse>, next) => {
       id: e.id, courseId: e.courseId, kind: e.kind, peType: e.peType,
       title: e.title, code: e.code, durationMinutes: e.durationMinutes,
       totalPoints: Number(e.totalPoints), passMark: Number(e.passMark),
+      source: e.source, // REAL | SAMPLE — app iOS lọc "đề thật / đề mẫu" (22/10/2026)
       questionCount: e._count.questions,
       course: e.course ? { title: e.course.title, slug: e.course.slug, courseCode: e.course.courseCode } : null,
       semester: e.course?.semester ? { name: e.course.semester.name, ordinal: e.course.semester.ordinal, code: e.course.semester.code } : null,
@@ -422,7 +423,9 @@ router.delete('/comments/:commentId', authenticate, async (req, res: Response<Ap
 router.get('/attempts/mine', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const examId = req.query.examId ? Number(req.query.examId) : undefined;
-    const data = await examSvc.listMyAttempts(req.userId!, examId);
+    // ?status=IN_PROGRESS ⇒ bài đang làm dở ở MỌI đề (app iOS hiện "Đang làm dở" kể cả bài bắt đầu trên web).
+    const dangLam = String(req.query.status ?? '').toUpperCase() === 'IN_PROGRESS';
+    const data = await examSvc.listMyAttempts(req.userId!, examId, dangLam);
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

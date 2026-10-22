@@ -1536,6 +1536,19 @@ export interface MonChuongTrinh {
   isEnrolled: boolean;
   /** % bài đã xong — chỉ có khi đăng nhập và đã ghi danh, còn lại null. */
   progress: number | null;
+  /** Khoá "Sắp ra mắt" (status COMING_SOON): chỉ có khung, chưa học/mua được. */
+  sapRaMat?: boolean;
+  /** Chỉ khoá sắp ra mắt: số phần (chương, gồm Mục 0) và số bài trong khung. */
+  soChuongDuKien?: number;
+  soBaiDuKien?: number;
+}
+
+/** Một nhóm môn tự chọn sắp ra mắt (Mobile · Kiến trúc & Backend · AI · Nghề nghiệp · Môn khác). */
+export interface NhomSapRaMat {
+  ma: string;
+  ten: string;
+  tenEn: string;
+  mon: MonChuongTrinh[];
 }
 
 export interface KyChuongTrinh {
@@ -1561,5 +1574,7 @@ export interface ChuongTrinhDaoTao {
   nam: NamChuongTrinh[];
   /** Khoá xuất bản chưa gán kỳ — mục "Khoá mới". */
   chuaXep: MonChuongTrinh[];
-  tong: { khoa: number; bai: number; gio: number };
+  /** Môn tự chọn sắp ra mắt, theo nhóm. Máy chủ cũ không có trường này ⇒ coi như rỗng. */
+  sapRaMat?: NhomSapRaMat[];
+  tong: { khoa: number; bai: number; gio: number; sapRaMat?: number };
 }

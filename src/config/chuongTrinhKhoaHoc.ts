@@ -219,3 +219,44 @@ export function xepChuongTrinh<M extends MonTrongKy>(ds: M[]): { nam: NamCoKy<M>
   }));
   return { nam, chuaXep };
 }
+
+/* ─────────────── Môn tự chọn · Sắp ra mắt (khoá status = COMING_SOON) ─────────────── */
+
+export interface NhomTuChon {
+  ma: string;
+  ten: string;
+  tenEn: string;
+  /** Slug khoá thuộc nhóm, theo thứ tự hiện. Khoá "Sắp ra mắt" không có ở đây ⇒ nhóm "Môn khác" (không bao giờ mất). */
+  slugs: readonly string[];
+}
+
+export const NHOM_TU_CHON: readonly NhomTuChon[] = [
+  { ma: 'mobile', ten: 'Mobile', tenEn: 'Mobile', slugs: ['ios-swift-swiftui', 'android-kotlin-compose'] },
+  {
+    ma: 'kien-truc-backend', ten: 'Kiến trúc & Backend', tenEn: 'Architecture & Backend',
+    slugs: [
+      'cau-truc-du-lieu-giai-thuat', 'design-patterns-clean-code', 'golang',
+      'domain-driven-design', 'microservices-event-driven', 'platform-engineering',
+    ],
+  },
+  { ma: 'ai', ten: 'AI', tenEn: 'AI', slugs: ['ky-su-dung-agent-ai', 'ai-engineering-thuc-chien'] },
+  { ma: 'nghe-nghiep', ten: 'Nghề nghiệp', tenEn: 'Career', slugs: ['tieng-anh-it-viet-tai-lieu', 'tech-lead'] },
+];
+
+const NHOM_KHAC = { ma: 'khac', ten: 'Môn khác', tenEn: 'Other' } as const;
+
+/** Chia khoá "Sắp ra mắt" theo nhóm (thứ tự nhóm + thứ tự slug như khai ở trên). Nhóm rỗng bị bỏ. */
+export function nhomSapRaMat<M extends { slug: string; title: string }>(
+  ds: M[],
+): Array<{ ma: string; ten: string; tenEn: string; mon: M[] }> {
+  const daXep = new Set<string>();
+  const ra: Array<{ ma: string; ten: string; tenEn: string; mon: M[] }> = [];
+  for (const n of NHOM_TU_CHON) {
+    const mon = n.slugs.map((sl) => ds.find((m) => m.slug === sl)).filter((m): m is M => Boolean(m));
+    mon.forEach((m) => daXep.add(m.slug));
+    if (mon.length) ra.push({ ma: n.ma, ten: n.ten, tenEn: n.tenEn, mon });
+  }
+  const conLai = ds.filter((m) => !daXep.has(m.slug)).sort((a, b) => a.title.localeCompare(b.title));
+  if (conLai.length) ra.push({ ...NHOM_KHAC, mon: conLai });
+  return ra;
+}

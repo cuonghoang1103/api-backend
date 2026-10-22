@@ -32,6 +32,7 @@ import rateLimit from 'express-rate-limit';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { chanSapRaMat } from '../services/khoaSapRaMat.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { vnpayIpnGuard } from '../middleware/vnpayIpnGuard.js';
 import { emailService } from '../services/email.service.js';
@@ -354,6 +355,7 @@ router.post('/course', orderCreateLimiter, authenticate, async (req: Request, re
     if (course.isPublished !== true) {
       throw new AppError('Khoa hoc chua duoc xuat ban', 400);
     }
+    chanSapRaMat(course); // khoá "Sắp ra mắt" không bán
     const isPaid = course.accessType === 'PAID' || (!course.isFree && Number(course.price) > 0);
     if (!isPaid) {
       throw new AppError('Khoa hoc nay khong chap nhan thanh toan. Vui long su dung nut mien phi hoac ma kich hoat.', 400);

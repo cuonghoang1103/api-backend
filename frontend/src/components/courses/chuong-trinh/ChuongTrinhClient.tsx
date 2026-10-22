@@ -89,7 +89,11 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
 
   const tatCa = useMemo<MonChuongTrinh[]>(() => {
     if (!duLieu) return [];
-    return [...duLieu.nam.flatMap((n) => n.ky.flatMap((k) => k.mon)), ...duLieu.chuaXep];
+    return [
+      ...duLieu.nam.flatMap((n) => n.ky.flatMap((k) => k.mon)),
+      ...duLieu.chuaXep,
+      ...(duLieu.sapRaMat ?? []).flatMap((n) => n.mon),
+    ];
   }, [duLieu]);
 
   const khop = useCallback(
@@ -380,7 +384,9 @@ function XemLoTrinh({ duLieu, c, nn, khop, coLoc, xoaLoc }: {
     .map((n) => ({ ...n, ky: n.ky.map((k) => ({ ...k, mon: k.mon.filter(khop) })).filter((k) => k.mon.length > 0 || !coLoc) }))
     .filter((n) => n.ky.some((k) => k.mon.length > 0));
   const moi = duLieu.chuaXep.filter(khop);
-  const soKhop = nam.reduce((t, n) => t + n.ky.reduce((u, k) => u + k.mon.length, 0), 0) + moi.length;
+  const tuChon = (duLieu.sapRaMat ?? []).map((n) => ({ ...n, mon: n.mon.filter(khop) })).filter((n) => n.mon.length > 0);
+  const soKhop = nam.reduce((t, n) => t + n.ky.reduce((u, k) => u + k.mon.length, 0), 0) + moi.length
+    + tuChon.reduce((t, n) => t + n.mon.length, 0);
 
   if (coLoc && soKhop === 0) return <KhongCo c={c} xoaLoc={xoaLoc} />;
 
@@ -458,12 +464,37 @@ function XemLoTrinh({ duLieu, c, nn, khop, coLoc, xoaLoc }: {
           </ol>
         </section>
       )}
+
+      {tuChon.length > 0 && (
+        <section id="tu-chon" aria-labelledby="tu-chon-tieu-de" className={`${s.neo} mt-16 sm:mt-24`}>
+          <div className="grid gap-4 border-t-[3px] border-[var(--p-rule-strong)] pt-5 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-16">
+            <h2 id="tu-chon-tieu-de" className={`${s.tieuDe} font-editorial text-[2.1rem] font-[440] leading-tight tracking-[-0.015em] [text-wrap:balance] sm:text-5xl`}>
+              {c.tuChonTieuDe}
+            </h2>
+            <p className="max-w-[34rem] self-end text-base leading-relaxed text-[var(--p-ink-2)]">{c.tuChonMoTa}</p>
+          </div>
+          {tuChon.map((n) => (
+            <div key={n.ma} className="mt-10 sm:mt-12">
+              <div className="flex items-baseline justify-between gap-4 border-b border-[var(--p-rule)] pb-3">
+                <h3 className={`${s.tieuDe} font-editorial text-2xl font-[460] leading-snug sm:text-[1.7rem]`}>
+                  {chonNgonNgu(n.ten, n.tenEn, nn)}
+                </h3>
+                <p className={`${s.so} shrink-0 text-xs text-[var(--p-ink-3)]`}>{c.khoa(n.mon.length)}</p>
+              </div>
+              <ol>
+                {n.mon.map((m) => <HangKhoa key={m.id} m={m} nn={nn} c={c} />)}
+              </ol>
+            </div>
+          ))}
+        </section>
+      )}
     </>
   );
 }
 
 /** Bản đồ bốn năm — mỗi năm một cột, mỗi kỳ một liên kết neo tới phần chi tiết bên dưới. */
 function BanDo({ duLieu, c, nn }: { duLieu: ChuongTrinhDaoTao; c: BoChu; nn: NgonNgu }) {
+  const soTuChon = (duLieu.sapRaMat ?? []).reduce((t, n) => t + n.mon.length, 0);
   return (
     <section aria-labelledby="ban-do" className="bg-[var(--p-paper-2)] px-4 py-7 sm:px-7 sm:py-9">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
@@ -490,6 +521,14 @@ function BanDo({ duLieu, c, nn }: { duLieu: ChuongTrinhDaoTao; c: BoChu; nn: Ngo
           </li>
         ))}
       </ol>
+      {soTuChon > 0 && (
+        <p className="mt-7 border-t border-[var(--p-rule)] pt-4 text-sm text-[var(--p-ink-2)]">
+          <a href="#tu-chon" className="font-medium text-[var(--p-accent)] underline decoration-1 underline-offset-4 hover:decoration-2">
+            {c.tuChonTieuDe}
+          </a>
+          <span className={`${s.so} text-[var(--p-ink-3)]`}> — {c.khoa(soTuChon)}</span>
+        </p>
+      )}
     </section>
   );
 }

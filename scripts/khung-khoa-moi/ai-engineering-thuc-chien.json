@@ -1,0 +1,144 @@
+{
+  "slug": "ai-engineering-thuc-chien",
+  "ma": "aie",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started with AI engineering|||Mục 0 — Khởi động với AI Engineering", "bai": [
+      "Start here (1/2) — What AI engineering is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — AI Engineering là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Done wrong: runaway bills, made-up answers, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi làm sai: hoá đơn tăng vọt, AI bịa câu trả lời, và cách học không bỏ cuộc",
+      "0.1 — Course map: from a single API call to a self-hosted model running under a budget|||0.1 — Bản đồ khoá học: từ một lệnh gọi API tới model tự host chạy trong ngân sách",
+      "0.2 — Lab setup: Python, uv, notebooks, API keys and renting a GPU without overspending|||0.2 — Dựng phòng lab: Python, uv, notebook, API key và thuê GPU mà không cháy túi",
+      "0.3 — Prerequisites check: the Python, HTTP and linear algebra you actually need|||0.3 — Kiểm tra nền tảng: phần Python, HTTP và đại số tuyến tính bạn thật sự cần",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — How LLMs work, for engineers|||Chương 1 — LLM hoạt động thế nào, nhìn từ góc kỹ sư", "bai": [
+      "1.1 — Tokens and tokenizers: why Vietnamese text costs more tokens than English|||1.1 — Token và tokenizer: vì sao văn bản tiếng Việt tốn token hơn tiếng Anh",
+      "1.2 — The transformer in one picture: embeddings, attention, layers and the next-token loop|||1.2 — Transformer trong một hình: embedding, attention, các tầng và vòng lặp đoán token kế tiếp",
+      "1.3 — Context windows, positional encoding and the lost-in-the-middle problem|||1.3 — Context window, mã hoá vị trí và hiện tượng lạc giữa ngữ cảnh (lost in the middle)",
+      "1.4 — Sampling: temperature, top-p, top-k, seeds and why outputs are not deterministic|||1.4 — Sampling: temperature, top-p, top-k, seed và vì sao kết quả không lặp lại y hệt",
+      "1.5 — Prefill vs decode: where latency and cost really come from|||1.5 — Prefill và decode: độ trễ và chi phí thật sự đến từ đâu",
+      "1.6 — Reasoning models and hidden thinking tokens: what you pay for but never see|||1.6 — Model suy luận và token suy nghĩ ẩn: thứ bạn trả tiền mà không nhìn thấy",
+      "1.7 — Quiz: LLM fundamentals|||1.7 — Kiểm tra: nền tảng về LLM"
+    ]},
+    { "tieuDe": "Chapter 2 — Choosing models: open vs closed|||Chương 2 — Chọn model: mở hay đóng", "bai": [
+      "2.1 — The current model landscape: closed APIs, open-weight families and small models|||2.1 — Bức tranh model hiện nay: API đóng, các họ open-weight và model nhỏ",
+      "2.2 — Reading benchmarks critically: contamination, leaderboards and vibe checks|||2.2 — Đọc benchmark một cách tỉnh táo: rò rỉ dữ liệu test, bảng xếp hạng và cảm tính",
+      "2.3 — Licences, data residency and compliance when using open-weight models|||2.3 — Giấy phép, nơi lưu dữ liệu và tuân thủ khi dùng model open-weight",
+      "2.4 — The cost–latency–quality triangle: building a model-selection matrix|||2.4 — Tam giác chi phí – độ trễ – chất lượng: lập ma trận chọn model",
+      "2.5 — LLM gateways and provider abstraction: switching models without rewriting your app|||2.5 — LLM gateway và lớp trừu tượng nhà cung cấp: đổi model mà không viết lại ứng dụng",
+      "2.6 — Quiz: model selection|||2.6 — Kiểm tra: chọn model"
+    ]},
+    { "tieuDe": "Chapter 3 — Prompting, tool calling and structured output|||Chương 3 — Prompt, tool calling và đầu ra có cấu trúc", "bai": [
+      "3.1 — System prompts, few-shot examples and prompt templates as versioned code|||3.1 — System prompt, ví dụ few-shot và prompt template được quản lý phiên bản như code",
+      "3.2 — Structured output: JSON mode, JSON Schema and constrained decoding|||3.2 — Đầu ra có cấu trúc: JSON mode, JSON Schema và constrained decoding",
+      "3.3 — Tool calling: designing tool schemas the model actually gets right|||3.3 — Tool calling: thiết kế schema công cụ để model gọi đúng",
+      "3.4 — Cache-friendly prompt layout: static prefix first, variable content last|||3.4 — Bố cục prompt thân thiện với cache: phần tĩnh trước, phần thay đổi sau",
+      "3.5 — Handling failures: validation, retries, repair prompts and fallbacks|||3.5 — Xử lý thất bại: validate, thử lại, prompt sửa lỗi và phương án dự phòng",
+      "3.6 — Quiz: prompting and structured output|||3.6 — Kiểm tra: prompt và đầu ra có cấu trúc"
+    ]},
+    { "tieuDe": "Chapter 4 — Evaluation harnesses|||Chương 4 — Xây bộ đánh giá (evaluation harness)", "bai": [
+      "4.1 — Evals before everything: the eval-driven development loop|||4.1 — Eval trước mọi thứ: vòng phát triển dẫn dắt bởi đánh giá",
+      "4.2 — Building a golden dataset: sampling real traffic, labelling and edge cases|||4.2 — Dựng golden dataset: lấy mẫu từ lưu lượng thật, gán nhãn và ca biên",
+      "4.3 — Metrics that fit the task: exact match, rubric scoring and pairwise comparison|||4.3 — Chỉ số hợp với bài toán: khớp tuyệt đối, chấm theo rubric và so sánh từng cặp",
+      "4.4 — LLM-as-judge: calibration, position bias and agreement with human raters|||4.4 — LLM-as-judge: hiệu chỉnh, thiên lệch vị trí và độ đồng thuận với người chấm",
+      "4.5 — Evals in CI: thresholds, regression alerts and the cost of each eval run|||4.5 — Eval trong CI: ngưỡng đạt, cảnh báo tụt chất lượng và chi phí mỗi lần chạy",
+      "4.6 — Online evaluation: A/B tests, user feedback signals and drift|||4.6 — Đánh giá trực tuyến: A/B test, tín hiệu phản hồi người dùng và hiện tượng trôi",
+      "4.7 — Quiz: evaluation|||4.7 — Kiểm tra: đánh giá"
+    ]},
+    { "tieuDe": "Chapter 5 — RAG done properly|||Chương 5 — RAG làm cho đúng", "bai": [
+      "5.1 — RAG, long context or fine-tuning: choosing the right tool for knowledge|||5.1 — RAG, context dài hay fine-tuning: chọn đúng công cụ để nạp tri thức",
+      "5.2 — Ingestion: parsing PDFs and HTML, chunking strategies and metadata|||5.2 — Nạp dữ liệu: bóc tách PDF và HTML, chiến lược chia chunk và metadata",
+      "5.3 — Embeddings and vector stores: pgvector, HNSW and index tuning|||5.3 — Embedding và kho vector: pgvector, HNSW và tinh chỉnh chỉ mục",
+      "5.4 — Hybrid search: BM25 plus vectors plus a reranker|||5.4 — Tìm kiếm lai: BM25 kết hợp vector và reranker",
+      "5.5 — Query rewriting, multi-hop questions and agentic retrieval|||5.5 — Viết lại câu truy vấn, câu hỏi nhiều bước và truy xuất kiểu agent",
+      "5.6 — Citations and grounding: making answers traceable to sources|||5.6 — Trích dẫn và grounding: để mọi câu trả lời truy ngược được về nguồn",
+      "5.7 — Evaluating RAG: retrieval recall vs answer faithfulness|||5.7 — Đánh giá RAG: độ phủ truy xuất và độ trung thực của câu trả lời",
+      "5.8 — Quiz: RAG|||5.8 — Kiểm tra: RAG"
+    ]},
+    { "tieuDe": "Chapter 6 — Fine-tuning I: preparing the data|||Chương 6 — Fine-tuning I: chuẩn bị dữ liệu", "bai": [
+      "6.1 — What fine-tuning can and cannot fix: behaviour and format, not fresh knowledge|||6.1 — Fine-tuning sửa được gì và không sửa được gì: hành vi và định dạng, không phải tri thức mới",
+      "6.2 — Designing the dataset: task format, chat templates and diversity|||6.2 — Thiết kế bộ dữ liệu: định dạng tác vụ, chat template và độ đa dạng",
+      "6.3 — Synthetic data: generating examples with a stronger model and filtering them|||6.3 — Dữ liệu tổng hợp: sinh ví dụ bằng model mạnh hơn rồi lọc lại",
+      "6.4 — Cleaning: deduplication, PII scrubbing and keeping eval data out of training|||6.4 — Làm sạch: khử trùng lặp, xoá dữ liệu cá nhân và giữ dữ liệu eval ngoài tập huấn luyện",
+      "6.5 — Splits and baselines: measure the base model before you train anything|||6.5 — Chia tập và mốc so sánh: đo model gốc trước khi huấn luyện bất cứ thứ gì",
+      "6.6 — Quiz: fine-tuning data|||6.6 — Kiểm tra: dữ liệu cho fine-tuning"
+    ]},
+    { "tieuDe": "Chapter 7 — Fine-tuning II: SFT, LoRA/QLoRA and preference tuning|||Chương 7 — Fine-tuning II: SFT, LoRA/QLoRA và preference tuning", "bai": [
+      "7.1 — Full fine-tuning vs PEFT: the GPU memory math|||7.1 — Fine-tune toàn phần hay PEFT: phép tính bộ nhớ GPU",
+      "7.2 — LoRA explained: rank, alpha and target modules|||7.2 — Giải thích LoRA: rank, alpha và các module đích",
+      "7.3 — QLoRA: training on a 4-bit base model with a single GPU|||7.3 — QLoRA: huấn luyện trên model gốc 4-bit chỉ với một GPU",
+      "7.4 — An SFT run end to end with Hugging Face TRL or Unsloth|||7.4 — Một lượt SFT trọn vẹn với Hugging Face TRL hoặc Unsloth",
+      "7.5 — Reading loss curves: overfitting, learning rate and catastrophic forgetting|||7.5 — Đọc đường loss: overfitting, learning rate và hiện tượng quên thảm hoạ",
+      "7.6 — Preference tuning: DPO and its variants compared with RLHF|||7.6 — Preference tuning: DPO và các biến thể, so với RLHF",
+      "7.7 — Merging adapters, evaluating against the baseline and publishing the model|||7.7 — Gộp adapter, đánh giá so với mốc gốc và phát hành model",
+      "7.8 — Quiz: fine-tuning methods|||7.8 — Kiểm tra: các phương pháp fine-tuning"
+    ]},
+    { "tieuDe": "Chapter 8 — Self-hosting: quantization, llama.cpp and vLLM|||Chương 8 — Tự host: lượng tử hoá, llama.cpp và vLLM", "bai": [
+      "8.1 — Why self-host: privacy, cost at volume and control — and when not to|||8.1 — Vì sao tự host: quyền riêng tư, chi phí khi lưu lượng lớn và quyền kiểm soát — và khi nào không nên",
+      "8.2 — GPU sizing: VRAM for weights, KV cache and activations|||8.2 — Tính cỡ GPU: VRAM cho trọng số, KV cache và activation",
+      "8.3 — Quantization: FP8, INT8, INT4, GPTQ, AWQ and GGUF — quality vs memory|||8.3 — Lượng tử hoá: FP8, INT8, INT4, GPTQ, AWQ và GGUF — đánh đổi chất lượng lấy bộ nhớ",
+      "8.4 — llama.cpp and Ollama for local, laptop and edge inference|||8.4 — llama.cpp và Ollama cho suy luận trên máy cá nhân, laptop và thiết bị biên",
+      "8.5 — vLLM: serving an open model behind an OpenAI-compatible API|||8.5 — vLLM: phục vụ model mở sau một API tương thích OpenAI",
+      "8.6 — Benchmarking your deployment: tokens/s, time to first token, quality after quantization|||8.6 — Đo bản triển khai: token/giây, thời gian tới token đầu, chất lượng sau lượng tử hoá",
+      "8.7 — Quiz: self-hosting|||8.7 — Kiểm tra: tự host"
+    ]},
+    { "tieuDe": "Chapter 9 — Serving at scale|||Chương 9 — Phục vụ ở quy mô lớn", "bai": [
+      "9.1 — Continuous batching and PagedAttention: why throughput jumps|||9.1 — Continuous batching và PagedAttention: vì sao thông lượng tăng vọt",
+      "9.2 — KV cache management and prefix caching for shared prompts|||9.2 — Quản lý KV cache và prefix caching cho các prompt dùng chung",
+      "9.3 — Speculative decoding: draft models, acceptance rate and real speed-ups|||9.3 — Speculative decoding: model nháp, tỷ lệ chấp nhận và mức tăng tốc thật",
+      "9.4 — Multi-GPU serving: tensor and pipeline parallelism|||9.4 — Phục vụ trên nhiều GPU: song song tensor và song song pipeline",
+      "9.5 — Autoscaling GPU inference on Kubernetes and fighting cold starts|||9.5 — Tự co giãn suy luận GPU trên Kubernetes và chống khởi động nguội",
+      "9.6 — Load testing LLM endpoints: concurrency, latency SLOs and saturation points|||9.6 — Load test endpoint LLM: mức đồng thời, SLO độ trễ và điểm bão hoà",
+      "9.7 — Quiz: serving at scale|||9.7 — Kiểm tra: phục vụ ở quy mô lớn"
+    ]},
+    { "tieuDe": "Chapter 10 — Cost optimisation|||Chương 10 — Tối ưu chi phí", "bai": [
+      "10.1 — Unit economics: cost per request, per user and per feature|||10.1 — Kinh tế đơn vị: chi phí mỗi request, mỗi người dùng và mỗi tính năng",
+      "10.2 — Prompt caching and semantic caching: what hits, what misses and why|||10.2 — Prompt caching và semantic caching: cái gì trúng cache, cái gì trượt và vì sao",
+      "10.3 — Model routing and cascades: send easy requests to cheap models|||10.3 — Định tuyến và chuỗi model: đẩy request dễ sang model rẻ",
+      "10.4 — Distillation: teaching a small model to do one expensive model's job|||10.4 — Distillation: dạy model nhỏ làm thay việc của một model đắt tiền",
+      "10.5 — Batch APIs and offline jobs: trading latency for price|||10.5 — Batch API và tác vụ chạy nền: đổi độ trễ lấy giá rẻ",
+      "10.6 — Budgets, quotas and kill switches that stop a bill before it explodes|||10.6 — Ngân sách, hạn mức và công tắc ngắt chặn hoá đơn trước khi nó bùng nổ",
+      "10.7 — Quiz: cost optimisation|||10.7 — Kiểm tra: tối ưu chi phí"
+    ]},
+    { "tieuDe": "Chapter 11 — Guardrails and safety|||Chương 11 — Guardrail và an toàn", "bai": [
+      "11.1 — Threat-modelling LLM apps with the OWASP Top 10 for LLM applications|||11.1 — Mô hình hoá mối đe doạ cho ứng dụng LLM theo OWASP Top 10 cho LLM",
+      "11.2 — Prompt injection: direct, indirect and through retrieved documents|||11.2 — Prompt injection: trực tiếp, gián tiếp và qua tài liệu truy xuất",
+      "11.3 — Input and output guardrails: moderation, PII filters and schema checks|||11.3 — Guardrail đầu vào và đầu ra: kiểm duyệt nội dung, lọc dữ liệu cá nhân và kiểm schema",
+      "11.4 — Agents with tools: least privilege, sandboxing and human-in-the-loop|||11.4 — Agent có công cụ: quyền tối thiểu, sandbox và con người duyệt trong vòng lặp",
+      "11.5 — Red-teaming your own application before someone else does|||11.5 — Tự red-team ứng dụng của mình trước khi người khác làm",
+      "11.6 — Quiz: guardrails and safety|||11.6 — Kiểm tra: guardrail và an toàn"
+    ]},
+    { "tieuDe": "Chapter 12 — Observability and tracing for LLM apps|||Chương 12 — Observability và tracing cho ứng dụng LLM", "bai": [
+      "12.1 — What to log: prompts, outputs, tokens, latency and cost — without leaking user data|||12.1 — Ghi gì: prompt, câu trả lời, token, độ trễ, chi phí — không làm lộ dữ liệu người dùng",
+      "12.2 — Tracing with OpenTelemetry GenAI semantic conventions|||12.2 — Tracing theo quy ước ngữ nghĩa GenAI của OpenTelemetry",
+      "12.3 — LLM observability platforms: Langfuse and alternatives, self-hosted or managed|||12.3 — Nền tảng observability cho LLM: Langfuse và các lựa chọn khác, tự host hay dùng dịch vụ",
+      "12.4 — Dashboards and alerts: cost spikes, error rates and quality drops|||12.4 — Dashboard và cảnh báo: chi phí tăng đột biến, tỷ lệ lỗi và chất lượng tụt",
+      "12.5 — Debugging from traces: walking through a real production incident|||12.5 — Gỡ lỗi từ trace: đi qua một sự cố production có thật",
+      "12.6 — Quiz: LLM observability|||12.6 — Kiểm tra: observability cho LLM"
+    ]},
+    { "tieuDe": "Chapter 13 — Multimodal systems|||Chương 13 — Hệ thống đa phương thức (multimodal)", "bai": [
+      "13.1 — Vision-language models: screenshots, charts, handwriting and where they hallucinate|||13.1 — Model thị giác – ngôn ngữ: ảnh chụp màn hình, biểu đồ, chữ viết tay và chỗ chúng hay bịa",
+      "13.2 — Document understanding: from scanned PDF to structured, validated data|||13.2 — Hiểu tài liệu: từ PDF scan tới dữ liệu có cấu trúc đã được kiểm tra",
+      "13.3 — Speech pipelines: ASR, TTS and the latency budget of a voice agent|||13.3 — Pipeline giọng nói: ASR, TTS và ngân sách độ trễ của một voice agent",
+      "13.4 — Multimodal embeddings and image generation in product features|||13.4 — Embedding đa phương thức và sinh ảnh trong tính năng sản phẩm",
+      "13.5 — Evaluating multimodal outputs: test sets, human review and cost per item|||13.5 — Đánh giá đầu ra đa phương thức: bộ test, người duyệt và chi phí mỗi mục",
+      "13.6 — Quiz: multimodal|||13.6 — Kiểm tra: đa phương thức"
+    ]},
+    { "tieuDe": "Chapter 14 — Capstone: a cost-bounded domain assistant on a fine-tuned, self-hosted model|||Chương 14 — Dự án cuối khoá: trợ lý chuyên ngành chạy trên model tự host đã fine-tune, giữ trong ngân sách", "bai": [
+      "14.1 — Brief: problem, budget, latency SLOs and the eval set — written first|||14.1 — Đề bài: bài toán, ngân sách, SLO độ trễ và bộ eval — viết trước tiên",
+      "14.2 — Milestone 1: a RAG baseline on a closed API, scored by your eval harness|||14.2 — Mốc 1: bản RAG nền trên API đóng, chấm bằng bộ eval của bạn",
+      "14.3 — Milestone 2: fine-tune a small open model with QLoRA on your domain data|||14.3 — Mốc 2: fine-tune một model mở cỡ nhỏ bằng QLoRA trên dữ liệu chuyên ngành",
+      "14.4 — Milestone 3: quantize and serve it with vLLM, then compare quality and cost|||14.4 — Mốc 3: lượng tử hoá và phục vụ bằng vLLM, rồi so chất lượng và chi phí",
+      "14.5 — Milestone 4: router, caching and a budget kill switch with API fallback|||14.5 — Mốc 4: bộ định tuyến, cache và công tắc ngắt ngân sách có dự phòng qua API",
+      "14.6 — Milestone 5: guardrails, tracing and a cost-and-quality dashboard|||14.6 — Mốc 5: guardrail, tracing và dashboard chi phí – chất lượng",
+      "14.7 — Demo day: present the cost/quality report and defend your trade-offs|||14.7 — Ngày demo: trình bày báo cáo chi phí/chất lượng và bảo vệ các đánh đổi",
+      "14.8 — Quiz: capstone architecture review|||14.8 — Kiểm tra: rà soát kiến trúc dự án cuối khoá"
+    ]},
+    { "tieuDe": "Chapter 15 — Final exam|||Chương 15 — Thi cuối khoá", "bai": [
+      "15.1 — Review: the whole course as one decision tree, from prompt to self-hosted model|||15.1 — Ôn tập: cả khoá thành một cây quyết định, từ prompt tới model tự host",
+      "15.2 — Review: 20 production failure stories and what would have prevented each|||15.2 — Ôn tập: 20 câu chuyện sự cố production và điều lẽ ra đã ngăn được từng cái",
+      "15.3 — Mock exam: scenario questions and sizing calculations with worked answers|||15.3 — Thi thử: câu hỏi tình huống và bài tính cỡ hạ tầng, có lời giải chi tiết",
+      "15.4 — Final exam: design, estimate and debug an LLM system under constraints|||15.4 — Bài thi cuối khoá: thiết kế, ước lượng và gỡ lỗi một hệ thống LLM dưới ràng buộc",
+      "15.5 — Retrospective and what to learn next: pretraining basics, agents at scale, ML systems research|||15.5 — Nhìn lại và học gì tiếp: nền tảng pretraining, agent ở quy mô lớn, nghiên cứu hệ thống ML"
+    ]}
+  ]
+}

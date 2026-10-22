@@ -1,0 +1,157 @@
+{
+  "slug": "ios-swift-swiftui",
+  "ma": "ios",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started: your Mac, Xcode and a first app|||Mục 0 — Khởi động: máy Mac, Xcode và ứng dụng đầu tiên", "bai": [
+      "Start here (1/2) — What iOS development is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — Lập trình iOS là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Done wrong: real App Store disasters, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi làm sai: những sự cố thật trên App Store, và cách học để không bỏ cuộc",
+      "0.1 — What you need: which Mac, Apple Account, free vs paid Apple Developer Program|||0.1 — Bạn cần gì: Mac nào, Apple Account, tài khoản miễn phí và Apple Developer Program trả phí",
+      "0.2 — Installing Xcode, simulators and command-line tools, and a tour of the Xcode window|||0.2 — Cài Xcode, simulator và command-line tools, rồi dạo một vòng cửa sổ Xcode",
+      "0.3 — Your first five minutes: run a SwiftUI app on the simulator and on your own iPhone|||0.3 — Năm phút đầu tiên: chạy một ứng dụng SwiftUI trên simulator và trên chính iPhone của bạn",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — Swift from zero|||Chương 1 — Swift từ con số 0", "bai": [
+      "1.1 — Constants, variables and types: let, var, type inference, Int, Double, String, Bool|||1.1 — Hằng, biến và kiểu: let, var, suy luận kiểu, Int, Double, String, Bool",
+      "1.2 — Optionals without fear: nil, if let, guard let, ?? and why force-unwrapping crashes apps|||1.2 — Optional không còn đáng sợ: nil, if let, guard let, ?? và vì sao ép mở (!) làm sập app",
+      "1.3 — Control flow and collections: if, switch, for-in, Array, Dictionary, Set|||1.3 — Điều khiển luồng và collection: if, switch, for-in, Array, Dictionary, Set",
+      "1.4 — Functions and closures: parameters, labels, return values, trailing closures, map/filter/reduce|||1.4 — Hàm và closure: tham số, nhãn, giá trị trả về, trailing closure, map/filter/reduce",
+      "1.5 — Structs, classes and enums: value vs reference types, enums with associated values|||1.5 — Struct, class và enum: kiểu giá trị và kiểu tham chiếu, enum có associated value",
+      "1.6 — Protocols, extensions and generics: the building blocks SwiftUI is made of|||1.6 — Protocol, extension và generic: những viên gạch tạo nên SwiftUI",
+      "1.7 — Error handling: throws, do/try/catch, Result and typed throws in Swift 6|||1.7 — Xử lý lỗi: throws, do/try/catch, Result và typed throws trong Swift 6",
+      "1.8 — Quiz: the Swift language|||1.8 — Kiểm tra: ngôn ngữ Swift"
+    ]},
+    { "tieuDe": "Chapter 2 — SwiftUI layout: building screens|||Chương 2 — Bố cục SwiftUI: dựng màn hình", "bai": [
+      "2.1 — Views and modifiers: how a SwiftUI view is described, and why modifier order matters|||2.1 — View và modifier: một view SwiftUI được mô tả thế nào, và vì sao thứ tự modifier quan trọng",
+      "2.2 — VStack, HStack, ZStack, Spacer and frame: the layout negotiation between parent and child|||2.2 — VStack, HStack, ZStack, Spacer và frame: cuộc thương lượng kích thước giữa view cha và view con",
+      "2.3 — Lists, ForEach and identity: rendering data, swipe actions and pull-to-refresh|||2.3 — List, ForEach và định danh: hiển thị dữ liệu, swipe action và kéo để làm mới",
+      "2.4 — Grids, ScrollView and lazy stacks for large collections|||2.4 — Grid, ScrollView và lazy stack cho danh sách lớn",
+      "2.5 — Text, images, SF Symbols, colors and the system design language|||2.5 — Text, hình ảnh, SF Symbols, màu sắc và ngôn ngữ thiết kế của hệ thống",
+      "2.6 — Adaptive layout: size classes, ViewThatFits, safe areas and Dark Mode|||2.6 — Bố cục thích ứng: size class, ViewThatFits, safe area và Dark Mode",
+      "2.7 — Xcode Previews: designing fast with #Preview and sample data|||2.7 — Xcode Previews: thiết kế nhanh với #Preview và dữ liệu mẫu",
+      "2.8 — Quiz: SwiftUI layout|||2.8 — Kiểm tra: bố cục SwiftUI"
+    ]},
+    { "tieuDe": "Chapter 3 — State and data flow with the Observation framework|||Chương 3 — State và luồng dữ liệu với Observation framework", "bai": [
+      "3.1 — Why the UI is a function of state: @State and the single source of truth|||3.1 — Vì sao giao diện là hàm của state: @State và nguồn sự thật duy nhất",
+      "3.2 — Passing state down and back up: @Binding between parent and child views|||3.2 — Truyền state xuống và đẩy thay đổi lên: @Binding giữa view cha và view con",
+      "3.3 — Model classes with @Observable: what gets tracked and when views redraw|||3.3 — Class model với @Observable: cái gì được theo dõi và khi nào view vẽ lại",
+      "3.4 — Sharing models app-wide: @Environment, @Bindable and dependency injection|||3.4 — Chia sẻ model toàn app: @Environment, @Bindable và dependency injection",
+      "3.5 — Forms and user input: TextField, Picker, Toggle, focus and validation|||3.5 — Form và dữ liệu người dùng nhập: TextField, Picker, Toggle, focus và kiểm tra hợp lệ",
+      "3.6 — Migrating from ObservableObject and @Published, and common state bugs|||3.6 — Chuyển từ ObservableObject và @Published, và những lỗi state hay gặp",
+      "3.7 — Quiz: state and data flow|||3.7 — Kiểm tra: state và luồng dữ liệu"
+    ]},
+    { "tieuDe": "Chapter 4 — Navigation on iPhone and iPad|||Chương 4 — Điều hướng trên iPhone và iPad", "bai": [
+      "4.1 — NavigationStack and value-based NavigationLink with navigationDestination|||4.1 — NavigationStack và NavigationLink theo giá trị với navigationDestination",
+      "4.2 — Programmatic navigation with NavigationPath, and handling deep links|||4.2 — Điều hướng bằng code với NavigationPath, và xử lý deep link",
+      "4.3 — Sheets, full-screen covers, alerts and confirmation dialogs|||4.3 — Sheet, full-screen cover, alert và confirmation dialog",
+      "4.4 — TabView: structuring an app into tabs, and tabs that become a sidebar on iPad|||4.4 — TabView: chia app thành các tab, và tab tự thành sidebar trên iPad",
+      "4.5 — NavigationSplitView: two- and three-column layouts for iPad|||4.5 — NavigationSplitView: bố cục hai và ba cột cho iPad",
+      "4.6 — Restoring navigation state when the app relaunches|||4.6 — Khôi phục trạng thái điều hướng khi app mở lại",
+      "4.7 — Quiz: navigation|||4.7 — Kiểm tra: điều hướng"
+    ]},
+    { "tieuDe": "Chapter 5 — Networking with async/await and Swift concurrency|||Chương 5 — Gọi mạng với async/await và Swift concurrency", "bai": [
+      "5.1 — async/await from scratch: suspension points, Task and the main actor|||5.1 — async/await từ đầu: điểm tạm dừng, Task và main actor",
+      "5.2 — Calling a REST API with URLSession and decoding JSON with Codable|||5.2 — Gọi REST API bằng URLSession và giải mã JSON với Codable",
+      "5.3 — Loading, empty and error states, and the .task modifier with automatic cancellation|||5.3 — Trạng thái đang tải, rỗng và lỗi, và modifier .task tự huỷ khi view biến mất",
+      "5.4 — Swift 6 strict concurrency: actors, Sendable and fixing data-race errors|||5.4 — Swift 6 strict concurrency: actor, Sendable và sửa lỗi data race",
+      "5.5 — Building an API client layer: auth headers, retries, timeouts and mocking for previews|||5.5 — Dựng lớp API client: header xác thực, thử lại, timeout và dữ liệu giả cho preview",
+      "5.6 — Images from the network: AsyncImage, caching and uploading files with multipart|||5.6 — Ảnh từ mạng: AsyncImage, cache và upload tệp bằng multipart",
+      "5.7 — Quiz: networking and concurrency|||5.7 — Kiểm tra: gọi mạng và concurrency"
+    ]},
+    { "tieuDe": "Chapter 6 — Persistence: SwiftData, settings and the Keychain|||Chương 6 — Lưu trữ: SwiftData, cài đặt và Keychain", "bai": [
+      "6.1 — SwiftData basics: @Model, ModelContainer and ModelContext|||6.1 — SwiftData cơ bản: @Model, ModelContainer và ModelContext",
+      "6.2 — Querying with @Query: sorting, filtering with #Predicate and live updates|||6.2 — Truy vấn với @Query: sắp xếp, lọc bằng #Predicate và cập nhật trực tiếp",
+      "6.3 — Relationships, delete rules and schema migrations with VersionedSchema|||6.3 — Quan hệ, delete rule và migration schema với VersionedSchema",
+      "6.4 — Small settings with UserDefaults and @AppStorage, and what must never go there|||6.4 — Cài đặt nhỏ với UserDefaults và @AppStorage, và thứ tuyệt đối không được để ở đó",
+      "6.5 — Storing tokens and secrets safely in the Keychain|||6.5 — Lưu token và bí mật an toàn trong Keychain",
+      "6.6 — Offline-first: caching server data locally and syncing with iCloud via CloudKit|||6.6 — Offline-first: cache dữ liệu server tại máy và đồng bộ iCloud qua CloudKit",
+      "6.7 — Quiz: persistence|||6.7 — Kiểm tra: lưu trữ"
+    ]},
+    { "tieuDe": "Chapter 7 — Authentication: Sign in with Apple, Google and your own backend|||Chương 7 — Xác thực: Sign in with Apple, Google và backend của bạn", "bai": [
+      "7.1 — How mobile login really works: ID tokens, access tokens, refresh tokens and sessions|||7.1 — Đăng nhập trên mobile thật sự hoạt động thế nào: ID token, access token, refresh token và phiên",
+      "7.2 — Sign in with Apple: capability, SignInWithAppleButton and verifying the token on your server|||7.2 — Sign in with Apple: bật capability, SignInWithAppleButton và xác minh token ở server",
+      "7.3 — Sign in with Google on iOS: setting up the SDK, URL schemes and the backend exchange|||7.3 — Sign in with Google trên iOS: cài SDK, URL scheme và bước đổi token với backend",
+      "7.4 — Passkeys and Face ID / Touch ID with LocalAuthentication|||7.4 — Passkey và Face ID / Touch ID với LocalAuthentication",
+      "7.5 — Logout, token refresh and building in-app account deletion from day one|||7.5 — Đăng xuất, làm mới token và làm chức năng xoá tài khoản ngay trong app từ ngày đầu",
+      "7.6 — Quiz: authentication|||7.6 — Kiểm tra: xác thực"
+    ]},
+    { "tieuDe": "Chapter 8 — Push notifications and system integrations|||Chương 8 — Thông báo đẩy và tích hợp với hệ thống", "bai": [
+      "8.1 — How APNs works: device tokens, the .p8 auth key, sandbox vs production environments|||8.1 — APNs hoạt động thế nào: device token, khoá .p8, môi trường sandbox và production",
+      "8.2 — Asking permission at the right moment, registering and sending a push from your backend|||8.2 — Xin quyền đúng lúc, đăng ký và gửi một thông báo đẩy từ backend của bạn",
+      "8.3 — Rich and actionable notifications, notification service extensions and local notifications|||8.3 — Thông báo có ảnh và nút bấm, notification service extension và thông báo cục bộ",
+      "8.4 — Camera and photos: PhotosPicker, capturing with the camera and usage-description strings|||8.4 — Camera và ảnh: PhotosPicker, chụp bằng camera và chuỗi mô tả lý do xin quyền",
+      "8.5 — Widgets with WidgetKit and App Intents, and Live Activities|||8.5 — Widget với WidgetKit và App Intents, và Live Activities",
+      "8.6 — A share extension: receiving content from other apps through an App Group|||8.6 — Share extension: nhận nội dung từ app khác qua App Group",
+      "8.7 — Quiz: push and system integrations|||8.7 — Kiểm tra: thông báo đẩy và tích hợp hệ thống"
+    ]},
+    { "tieuDe": "Chapter 9 — iPad deep-dive: more than a big iPhone|||Chương 9 — Đi sâu iPad: không chỉ là iPhone cỡ lớn", "bai": [
+      "9.1 — What iPad users expect, and how App Review judges iPhone apps stretched onto iPad|||9.1 — Người dùng iPad mong đợi gì, và App Review đánh giá app iPhone bị kéo giãn lên iPad thế nào",
+      "9.2 — Multitasking: Split View, Slide Over, resizable windows and Stage Manager|||9.2 — Đa nhiệm: Split View, Slide Over, cửa sổ đổi kích thước và Stage Manager",
+      "9.3 — Multiple windows and scenes: WindowGroup, openWindow and state per window|||9.3 — Nhiều cửa sổ và scene: WindowGroup, openWindow và state riêng cho từng cửa sổ",
+      "9.4 — Hardware keyboards: keyboardShortcut, menu commands and focus navigation|||9.4 — Bàn phím rời: keyboardShortcut, lệnh trên thanh menu và di chuyển focus",
+      "9.5 — Pointer and trackpad: hover effects, context menus and drag and drop between apps|||9.5 — Con trỏ và trackpad: hover effect, context menu và kéo thả giữa các app",
+      "9.6 — Apple Pencil with PencilKit: a drawing canvas, tool picker, saving drawings and Pencil gestures|||9.6 — Apple Pencil với PencilKit: canvas vẽ, tool picker, lưu bản vẽ và cử chỉ của Pencil",
+      "9.7 — Testing on real iPad sizes: from iPad mini to the 13-inch iPad Pro|||9.7 — Kiểm thử trên các cỡ iPad thật: từ iPad mini tới iPad Pro 13 inch",
+      "9.8 — Quiz: iPad|||9.8 — Kiểm tra: iPad"
+    ]},
+    { "tieuDe": "Chapter 10 — Localization and accessibility|||Chương 10 — Đa ngôn ngữ và trợ năng", "bai": [
+      "10.1 — String Catalogs: localizing an app into English and Vietnamese|||10.1 — String Catalog: dịch app sang tiếng Anh và tiếng Việt",
+      "10.2 — Plurals, dates, numbers and currencies with FormatStyle|||10.2 — Số nhiều, ngày tháng, số và tiền tệ với FormatStyle",
+      "10.3 — Dynamic Type: layouts that survive the largest text sizes|||10.3 — Dynamic Type: bố cục chịu được cỡ chữ lớn nhất",
+      "10.4 — VoiceOver: labels, hints, traits and grouping elements|||10.4 — VoiceOver: label, hint, trait và gộp phần tử",
+      "10.5 — Auditing with Accessibility Inspector: contrast, tap targets and Reduce Motion|||10.5 — Rà soát bằng Accessibility Inspector: độ tương phản, vùng chạm và Reduce Motion",
+      "10.6 — Quiz: localization and accessibility|||10.6 — Kiểm tra: đa ngôn ngữ và trợ năng"
+    ]},
+    { "tieuDe": "Chapter 11 — Testing, debugging and Instruments|||Chương 11 — Kiểm thử, gỡ lỗi và Instruments", "bai": [
+      "11.1 — Unit tests with Swift Testing: @Test, #expect and parameterized tests|||11.1 — Unit test với Swift Testing: @Test, #expect và test có tham số",
+      "11.2 — UI tests with XCTest: launching the app, finding elements and avoiding flaky tests|||11.2 — UI test với XCTest: khởi chạy app, tìm phần tử và tránh test chập chờn",
+      "11.3 — Debugging in Xcode: breakpoints, LLDB, the view hierarchy debugger and runtime warnings|||11.3 — Gỡ lỗi trong Xcode: breakpoint, LLDB, view hierarchy debugger và cảnh báo lúc chạy",
+      "11.4 — Instruments: Time Profiler for slow screens, Allocations and Leaks for memory|||11.4 — Instruments: Time Profiler cho màn hình chậm, Allocations và Leaks cho bộ nhớ",
+      "11.5 — Reading crash reports: symbolication, the Xcode Organizer and MetricKit|||11.5 — Đọc báo cáo crash: symbolication, Xcode Organizer và MetricKit",
+      "11.6 — Quiz: testing and debugging|||11.6 — Kiểm tra: kiểm thử và gỡ lỗi"
+    ]},
+    { "tieuDe": "Chapter 12 — Signing, certificates, provisioning and TestFlight|||Chương 12 — Ký app, chứng chỉ, provisioning profile và TestFlight", "bai": [
+      "12.1 — Joining the Apple Developer Program: individual vs organization, and the D-U-N-S number|||12.1 — Tham gia Apple Developer Program: cá nhân hay tổ chức, và mã D-U-N-S",
+      "12.2 — Code signing demystified: certificates, App IDs, capabilities and provisioning profiles|||12.2 — Giải mã code signing: chứng chỉ, App ID, capability và provisioning profile",
+      "12.3 — Automatic vs manual signing, and fixing the classic signing errors|||12.3 — Ký tự động và ký thủ công, và sửa những lỗi ký app kinh điển",
+      "12.4 — Archiving and uploading a build: version, build number and export compliance|||12.4 — Archive và tải bản build lên: version, build number và khai báo mã hoá (export compliance)",
+      "12.5 — TestFlight Internal Testing: testers on your team, builds available within minutes|||12.5 — TestFlight Internal Testing: người thử trong nhóm, bản build có ngay sau vài phút",
+      "12.6 — TestFlight External Testing: Beta App Review, public links and collecting feedback|||12.6 — TestFlight External Testing: Beta App Review, link công khai và thu thập phản hồi",
+      "12.7 — Automating builds with Xcode Cloud or fastlane|||12.7 — Tự động hoá build với Xcode Cloud hoặc fastlane",
+      "12.8 — Quiz: signing and TestFlight|||12.8 — Kiểm tra: ký app và TestFlight"
+    ]},
+    { "tieuDe": "Chapter 13 — App Store Connect: preparing a submission that passes|||Chương 13 — App Store Connect: chuẩn bị hồ sơ nộp để được duyệt", "bai": [
+      "13.1 — Creating the app record: name, bundle ID, SKU, primary language and categories|||13.1 — Tạo hồ sơ app: tên, bundle ID, SKU, ngôn ngữ chính và danh mục",
+      "13.2 — Screenshots and previews: required sizes for 6.9-inch and 6.3-inch iPhone and 13-inch iPad|||13.2 — Ảnh chụp và video preview: các cỡ bắt buộc cho iPhone 6,9 inch, 6,3 inch và iPad 13 inch",
+      "13.3 — Metadata per localization: subtitle, keywords, description, privacy policy and support URLs|||13.3 — Metadata theo từng ngôn ngữ: subtitle, keyword, mô tả, URL quyền riêng tư và hỗ trợ",
+      "13.4 — App Privacy nutrition labels and the privacy manifest: declaring exactly what you collect|||13.4 — Nhãn quyền riêng tư (App Privacy) và privacy manifest: khai đúng những gì bạn thu thập",
+      "13.5 — Age rating questionnaire, pricing, availability and phased release|||13.5 — Bảng hỏi phân loại độ tuổi, giá, khu vực phát hành và phát hành theo giai đoạn",
+      "13.6 — App Review Information: a working demo account, review notes and contact details|||13.6 — Thông tin cho App Review: tài khoản demo dùng được, ghi chú cho reviewer và thông tin liên hệ",
+      "13.7 — Quiz: App Store Connect|||13.7 — Kiểm tra: App Store Connect"
+    ]},
+    { "tieuDe": "Chapter 14 — Rejected by Apple, and how to get through|||Chương 14 — Bị Apple từ chối và cách qua", "bai": [
+      "14.1 — Anatomy of a rejection: the message, guideline number and screenshots in Resolution Center|||14.1 — Giải phẫu một lần bị từ chối: thư, số hiệu guideline và ảnh chụp trong Resolution Center",
+      "14.2 — Guideline 2.1 App Completeness: crashes, placeholder content, a demo account that fails|||14.2 — Guideline 2.1 App Completeness: crash, nội dung giữ chỗ, tài khoản demo không vào được",
+      "14.3 — Guideline 1.2 User-Generated Content: filtering, reporting, blocking and contact info|||14.3 — Guideline 1.2 User-Generated Content: lọc nội dung, báo cáo, chặn người dùng và thông tin liên hệ",
+      "14.4 — Guideline 4.8 Login Services: when to add an equivalent privacy-focused login|||14.4 — Guideline 4.8 Login Services: khi nào phải có thêm cách đăng nhập tương đương, giữ quyền riêng tư",
+      "14.5 — Guideline 5.1.1(v) Account Deletion: delete the account in the app, not just deactivate it|||14.5 — Guideline 5.1.1(v) Account Deletion: xoá tài khoản ngay trong app, không chỉ vô hiệu hoá",
+      "14.6 — Guideline 3.1.1 In-App Purchase: digital vs physical goods, StoreKit and restoring purchases|||14.6 — Guideline 3.1.1 In-App Purchase: hàng số và hàng vật lý, StoreKit và khôi phục giao dịch",
+      "14.7 — Replying in Resolution Center, resubmitting, and appealing to the App Review Board|||14.7 — Trả lời trong Resolution Center, nộp lại, và khiếu nại lên App Review Board",
+      "14.8 — Quiz: App Review rejections|||14.8 — Kiểm tra: các lỗi bị App Review từ chối"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: ship one app for iPhone and iPad|||Chương 15 — Dự án cuối khoá: đưa một app cho iPhone và iPad lên App Store", "bai": [
+      "15.1 — Milestone 1: scoping the app, wireframes for iPhone and iPad, and the data model|||15.1 — Cột mốc 1: chốt phạm vi app, wireframe cho iPhone và iPad, và mô hình dữ liệu",
+      "15.2 — Milestone 2: core screens, navigation and SwiftData persistence|||15.2 — Cột mốc 2: các màn hình chính, điều hướng và lưu trữ bằng SwiftData",
+      "15.3 — Milestone 3: backend, Sign in with Apple, push notifications and account deletion|||15.3 — Cột mốc 3: backend, Sign in with Apple, thông báo đẩy và xoá tài khoản",
+      "15.4 — Milestone 4: iPad polish with split view, keyboard shortcuts and pointer support|||15.4 — Cột mốc 4: hoàn thiện iPad với split view, phím tắt và hỗ trợ con trỏ",
+      "15.5 — Milestone 5: localization, accessibility audit, tests and a TestFlight beta|||15.5 — Cột mốc 5: đa ngôn ngữ, rà soát trợ năng, kiểm thử và bản beta TestFlight",
+      "15.6 — Milestone 6: App Store submission, handling review feedback and launch day|||15.6 — Cột mốc 6: nộp lên App Store, xử lý phản hồi của reviewer và ngày ra mắt",
+      "15.7 — Quiz: capstone checkpoint before submission|||15.7 — Kiểm tra: chốt chặn dự án trước khi nộp"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: the whole course on one page, from Swift to the App Store|||16.1 — Ôn tập: cả khoá trên một trang, từ Swift tới App Store",
+      "16.2 — Mock exam: 20 situations from real projects and real rejections|||16.2 — Thi thử: 20 tình huống từ dự án thật và những lần bị từ chối thật",
+      "16.3 — Final exam|||16.3 — Bài thi cuối khoá",
+      "16.4 — Retrospective and what to learn next: visionOS, macOS, App Intents and Swift on the server|||16.4 — Nhìn lại và học gì tiếp: visionOS, macOS, App Intents và Swift phía server"
+    ]}
+  ]
+}

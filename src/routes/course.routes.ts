@@ -19,7 +19,8 @@ import {
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
-import { kyHopLe, xepChuongTrinh } from '../config/chuongTrinhKhoaHoc.js';
+import { kyHopLe, nhomSapRaMat, xepChuongTrinh } from '../config/chuongTrinhKhoaHoc.js';
+import { SAP_RA_MAT, chanSapRaMat, laSapRaMat } from '../services/khoaSapRaMat.js';
 
 const router = Router();
 
@@ -70,6 +71,14 @@ const CHI_GHI_DANH_THAT = { source: { not: GHI_DANH_TU_DONG } } as const;
 
 type AccessMode = 'enrolled' | 'preview' | 'admin-or-enrolled';
 
+async function laAdminNguoiDung(userId: number): Promise<boolean> {
+  const u = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { roles: { select: { role: { select: { name: true } } } } },
+  });
+  return (u?.roles ?? []).some((ur) => /^(role_)?(admin|superadmin)$/i.test(ur.role.name));
+}
+
 async function assertCanAccessCourseContent(
   userId: number | null | undefined,
   courseId: number,
@@ -77,9 +86,15 @@ async function assertCanAccessCourseContent(
 ): Promise<{ isAdmin: boolean; isEnrolled: boolean; isFree: boolean; hasCodeEnrollment: boolean }> {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
-    select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true, accessType: true },
+    select: { id: true, isFree: true, price: true, isPublished: true, instructorId: true, accessType: true, status: true },
   });
   if (!course) throw new AppError('Course not found', 404);
+  // Khoá "Sắp ra mắt": chỉ admin / giảng viên của khoá được vào nội dung (để soạn). Người khác — kể cả Pro, kể cả khoá
+  // FREE — nhận 409 COURSE_COMING_SOON. Đặt TRƯỚC nhánh khoá FREE bên dưới, vì nhánh đó trả "được đọc" ngay.
+  if (laSapRaMat(course)) {
+    const laNguoiSoan = Boolean(userId) && (course.instructorId === userId || await laAdminNguoiDung(userId!));
+    if (!laNguoiSoan) chanSapRaMat(course);
+  }
   if (course.isPublished !== true) {
     // Only admins or the instructor can see draft content. Public
     // endpoints should never expose unpublished material.
@@ -830,7 +845,8 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const { page = 1, size = 12, keyword, category, level, academy } = req.query;
     const skip = (Number(page) - 1) * Number(size);
 
-    const where: Record<string, unknown> = { isPublished: true };
+    // Khoá "Sắp ra mắt" không bao giờ lẫn vào danh sách như khoá học được (app iOS/desktop đọc đường này).
+    const where: Record<string, unknown> = { isPublished: true, status: { not: SAP_RA_MAT } };
     if (keyword) {
       const kw = String(keyword).trim();
       // Bỏ dấu cả hai phía (14/10/2026): "lap trinh" khớp "Lập trình". So khớp bằng translate() của Postgres — không cần
@@ -978,6 +994,7 @@ const CHON_MON_CHUONG_TRINH = {
   totalLessons: true, totalDurationSeconds: true,
   avgRating: true, totalReviews: true,
   loTrinhKy: true, loTrinhThuTu: true,
+  status: true,
   createdAt: true,
   category: { select: { name: true, slug: true } },
   _count: { select: { enrollments: { where: CHI_GHI_DANH_THAT } } },
@@ -991,6 +1008,7 @@ type HangMonChuongTrinh = {
   totalLessons: number; totalDurationSeconds: number;
   avgRating: unknown; totalReviews: number;
   loTrinhKy: number | null; loTrinhThuTu: number | null;
+  status?: string;
   createdAt: Date;
   category: { name: string; slug: string } | null;
   _count: { enrollments: number };
@@ -1031,6 +1049,7 @@ export function dongGoiMonChuongTrinh(
     loTrinhThuTu: c.loTrinhThuTu,
     isEnrolled: Boolean(ghiDanh),
     progress: tienDo,
+    sapRaMat: laSapRaMat(c),
   };
 }
 
@@ -1040,19 +1059,38 @@ export function dongGoiMonChuongTrinh(
  * Hợp đồng (web + app iOS):
  *   { nam: [{ so, ten, tenEn, moTa, moTaEn, ky: [{ so, nam, ten, tenEn, moTa, moTaEn, mon: [Mon] }] }],
  *     chuaXep: [Mon],                 // khoá xuất bản chưa gán kỳ — mục "Khoá mới", KHÔNG BAO GIỜ giấu
- *     tong: { khoa, bai, gio } }      // đếm trên mọi khoá trả về (đã xếp + chưa xếp)
+ *     sapRaMat: [{ ma, ten, tenEn, mon: [Mon + soChuongDuKien, soBaiDuKien] }],  // môn tự chọn status=COMING_SOON
+ *     tong: { khoa, bai, gio, sapRaMat } }  // khoa/bai/gio: chỉ khoá học được (đã xếp + chưa xếp)
  *
  * Hai truy vấn, không N+1: một lấy mọi khoá, một lấy tiến độ của người đang xem (nếu đăng nhập).
  * ⚠️ Đặt TRƯỚC `/:slug` — không thì "chuong-trinh" bị đọc thành slug khoá.
  */
 router.get('/chuong-trinh', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const ds = await prisma.course.findMany({
-      // Cùng điều kiện với danh sách chung `GET /courses`: xuất bản + KHÔNG thuộc học kỳ Academy.
-      where: { isPublished: true, semesterId: null },
+    const tatCa = await prisma.course.findMany({
+      // Cùng điều kiện với danh sách chung `GET /courses` (xuất bản + KHÔNG thuộc học kỳ Academy), cộng khoá
+      // "Sắp ra mắt" (lưu isPublished=false — xem services/khoaSapRaMat.ts) để hiện ở nhóm `sapRaMat`.
+      where: { semesterId: null, OR: [{ isPublished: true }, { status: SAP_RA_MAT }] },
       orderBy: { createdAt: 'desc' },
       select: CHON_MON_CHUONG_TRINH,
     });
+    const ds = tatCa.filter((c) => !laSapRaMat(c));
+    const sapRa = tatCa.filter((c) => laSapRaMat(c));
+
+    // Khoá sắp ra mắt: đếm KHUNG (chương + bài dự kiến, kể cả bài chưa xuất bản) — một truy vấn cho cả nhóm.
+    const khung = new Map<number, { soChuong: number; soBai: number }>();
+    if (sapRa.length) {
+      const chuong = await prisma.courseSection.findMany({
+        where: { courseId: { in: sapRa.map((c) => c.id) } },
+        select: { courseId: true, _count: { select: { lessons: true } } },
+      });
+      for (const ch of chuong) {
+        const k = khung.get(ch.courseId) ?? { soChuong: 0, soBai: 0 };
+        k.soChuong++;
+        k.soBai += ch._count.lessons;
+        khung.set(ch.courseId, k);
+      }
+    }
 
     const ghiDanh = new Map<number, { soBaiXong: number }>();
     if (req.userId && ds.length > 0) {
@@ -1065,6 +1103,11 @@ router.get('/chuong-trinh', optionalAuth, async (req, res: Response<ApiResponse>
 
     const mon = ds.map((c) => dongGoiMonChuongTrinh(c, ghiDanh.get(c.id)));
     const { nam, chuaXep } = xepChuongTrinh(mon);
+    const sapRaMat = nhomSapRaMat(sapRa.map((c) => ({
+      ...dongGoiMonChuongTrinh(c),
+      soChuongDuKien: khung.get(c.id)?.soChuong ?? 0,
+      soBaiDuKien: khung.get(c.id)?.soBai ?? 0,
+    })));
     const tongGiay = mon.reduce((s, m) => s + m.totalDurationSeconds, 0);
 
     // Có người đăng nhập ⇒ câu trả lời mang tiến độ RIÊNG của họ ⇒ không cho bộ đệm chung giữ.
@@ -1076,7 +1119,9 @@ router.get('/chuong-trinh', optionalAuth, async (req, res: Response<ApiResponse>
       data: {
         nam,
         chuaXep,
+        sapRaMat,
         tong: {
+          sapRaMat: sapRa.length,
           khoa: mon.length,
           bai: mon.reduce((s, m) => s + m.totalLessons, 0),
           gio: Math.round(tongGiay / 3600),
@@ -2057,6 +2102,49 @@ router.delete('/reviews/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (r
   } catch (error) { next(error); }
 });
 
+/**
+ * Bản giới thiệu của khoá "Sắp ra mắt": giữ phần mô tả của `serializeCourse`, thay `sections` bằng MỤC LỤC (chỉ tên),
+ * ép tắt mọi cờ cho phép học/mua. Tách ra để test được.
+ */
+export function khungSapRaMat<T extends Record<string, unknown>>(
+  khoa: T,
+  courseId: number,
+  chuong: Array<{
+    id: number; title: string; description: string | null; sortOrder: number;
+    lessons: Array<{ id: number; title: string; sortOrder: number; lessonType: string }>;
+  }>,
+) {
+  return {
+    ...khoa,
+    comingSoon: true,
+    isEnrolled: false,
+    hasPaidAccess: false,
+    isAdmin: false,
+    enrollmentProgress: 0,
+    enrollmentSource: undefined,
+    enrollmentExpiresAt: undefined,
+    previewVideoUrl: null,
+    soChuongDuKien: chuong.length,
+    soBaiDuKien: chuong.reduce((t, c) => t + c.lessons.length, 0),
+    sections: chuong.map((c) => ({
+      id: c.id,
+      courseId,
+      title: c.title,
+      description: c.description,
+      sortOrder: c.sortOrder,
+      isLocked: true,
+      lessonCount: c.lessons.length,
+      totalDurationSeconds: 0,
+      lessons: c.lessons.map((l) => ({
+        id: l.id, sectionId: c.id, title: l.title, slug: null, description: null,
+        lessonType: l.lessonType, videoDurationSeconds: 0, thumbnailUrl: null,
+        isFreePreview: false, isPublished: false, sortOrder: l.sortOrder,
+        documents: [], assignments: [],
+      })),
+    })),
+  };
+}
+
 router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const course = await prisma.course.findUnique({
@@ -2089,6 +2177,21 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
       course.id,
       req.userId ? { userId: req.userId, includeDraftLessons: isAdminViewer } : undefined,
     );
+
+    // Khoá "Sắp ra mắt": người thường chỉ thấy KHUNG — tên chương/bài, không nội dung, mọi cờ truy cập tắt.
+    // Admin / giảng viên của khoá vẫn thấy bản đầy đủ để soạn.
+    if (laSapRaMat(course) && !isAdminViewer && course.instructorId !== req.userId) {
+      const chuong = await prisma.courseSection.findMany({
+        where: { courseId: course.id },
+        orderBy: { sortOrder: 'asc' },
+        select: {
+          id: true, title: true, description: true, sortOrder: true,
+          lessons: { orderBy: { sortOrder: 'asc' }, select: { id: true, title: true, sortOrder: true, lessonType: true } },
+        },
+      });
+      res.json({ success: true, data: khungSapRaMat(serializedCourse, course.id, chuong) });
+      return;
+    }
 
     /*
      * ?gon=1 — TRANG GIỚI THIỆU khoá học, không phải trang học.
@@ -2293,6 +2396,7 @@ router.post('/:id/enroll', authenticate, async (req, res: Response<ApiResponse>,
     const courseId = parseInt(req.params.id);
     const course = await prisma.course.findUnique({ where: { id: courseId } });
     if (!course) throw new AppError('Course not found', 404);
+    chanSapRaMat(course); // khoá "Sắp ra mắt" chưa mở ghi danh
 
     // Only courses with accessType='FREE' (or legacy isFree=true with price=0)
     // can be enrolled via this endpoint. Paid/code courses must go through

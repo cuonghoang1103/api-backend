@@ -7,8 +7,8 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { KY_HOC, NAM_HOC, SO_KY, kyHopLe, xepChuongTrinh } from './chuongTrinhKhoaHoc.js';
-import { docLoTrinh, dongGoiMonChuongTrinh } from '../routes/course.routes.js';
+import { KY_HOC, NAM_HOC, NHOM_TU_CHON, SO_KY, kyHopLe, nhomSapRaMat, xepChuongTrinh } from './chuongTrinhKhoaHoc.js';
+import { docLoTrinh, dongGoiMonChuongTrinh, khungSapRaMat } from '../routes/course.routes.js';
 
 const goc = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const khung = JSON.parse(readFileSync(path.join(goc, 'scripts/chuong-trinh-15-ky.json'), 'utf8')) as Array<{
@@ -95,4 +95,30 @@ test('docLoTrinh (admin): chỉ trả trường có gửi; rỗng ⇒ null; sai 
   assert.throws(() => docLoTrinh({ loTrinhKy: 16 }), /1–15/);
   assert.throws(() => docLoTrinh({ loTrinhKy: 'abc' }), /1–15/);
   assert.throws(() => docLoTrinh({ loTrinhThuTu: 0 }), /1–99/);
+});
+
+test('nhomSapRaMat: theo thứ tự nhóm + slug đã khai; slug lạ ⇒ "Môn khác"; nhóm rỗng bị bỏ', () => {
+  const m = (slug: string) => ({ slug, title: slug });
+  const ra = nhomSapRaMat([m('tech-lead'), m('zzz-moi'), m('android-kotlin-compose'), m('ios-swift-swiftui')]);
+  assert.deepEqual(ra.map((n) => n.ma), ['mobile', 'nghe-nghiep', 'khac']);
+  assert.deepEqual(ra[0]!.mon.map((x) => x.slug), ['ios-swift-swiftui', 'android-kotlin-compose']);
+  assert.deepEqual(ra[2]!.mon.map((x) => x.slug), ['zzz-moi']);
+  const tatCaSlug = NHOM_TU_CHON.flatMap((n) => n.slugs);
+  assert.equal(new Set(tatCaSlug).size, tatCaSlug.length, 'một khoá chỉ thuộc một nhóm');
+  assert.equal(tatCaSlug.length, 12);
+});
+
+test('khungSapRaMat: ép tắt mọi cờ học/mua, chỉ còn tên chương/bài', () => {
+  const k = khungSapRaMat(
+    { id: 9, title: 'X', isEnrolled: true, hasPaidAccess: true, isAdmin: true, sections: [{ content: 'BI-MAT' }] },
+    9,
+    [{ id: 1, title: 'Mục 0', description: null, sortOrder: 0, lessons: [{ id: 5, title: 'Bắt đầu', sortOrder: 0, lessonType: 'VIDEO' }] }],
+  );
+  assert.equal(k.comingSoon, true);
+  assert.equal(k.isEnrolled, false);
+  assert.equal(k.hasPaidAccess, false);
+  assert.equal(k.isAdmin, false);
+  assert.equal(k.soBaiDuKien, 1);
+  assert.ok(!JSON.stringify(k).includes('BI-MAT'));
+  assert.equal(k.sections[0]!.lessons[0]!.isFreePreview, false);
 });

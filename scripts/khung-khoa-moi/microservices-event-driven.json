@@ -1,0 +1,158 @@
+{
+  "slug": "microservices-event-driven",
+  "ma": "ms",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started|||Mục 0 — Khởi động", "bai": [
+      "Start here (1/2) — What microservices and events are, their origins, and why they matter|||Bắt đầu tại đây (1/2) — Microservices và hướng sự kiện là gì, ra đời thế nào, vì sao quan trọng với bạn",
+      "Start here (2/2) — When it goes wrong: real outages, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi làm sai: những sự cố thật, và cách học để không bỏ cuộc",
+      "0.1 — The course map: from one monolith to an event-driven system, chapter by chapter|||0.1 — Bản đồ khoá học: từ một monolith tới một hệ thống hướng sự kiện, từng chương một",
+      "0.2 — Setting up the lab: Docker, Node.js and Java toolchains, and a local kind cluster|||0.2 — Dựng phòng lab: Docker, bộ công cụ Node.js và Java, và một cụm kind chạy trên máy",
+      "0.3 — A tour of the sample shop monolith you will split during the course|||0.3 — Dạo một vòng monolith cửa hàng mẫu mà bạn sẽ tách dần trong suốt khoá",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định hướng"
+    ]},
+    { "tieuDe": "Chapter 1 — Monoliths vs microservices: the real trade-offs|||Chương 1 — Monolith hay microservices: những đánh đổi thật", "bai": [
+      "1.1 — What a network boundary really costs: latency, partial failure and operational load|||1.1 — Một ranh giới mạng thật sự tốn gì: độ trễ, lỗi cục bộ và gánh nặng vận hành",
+      "1.2 — The eight fallacies of distributed computing, each with a real incident|||1.2 — Tám ngộ nhận của tính toán phân tán, mỗi ngộ nhận kèm một sự cố thật",
+      "1.3 — Modular monolith first: when you should NOT split|||1.3 — Modular monolith trước đã: khi nào KHÔNG nên tách",
+      "1.4 — Conway's law, team topologies and why architecture follows the org chart|||1.4 — Định luật Conway, team topologies và vì sao kiến trúc đi theo sơ đồ tổ chức",
+      "1.5 — Signals it is time to split: deploy contention, scaling hotspots, unclear ownership|||1.5 — Dấu hiệu đã đến lúc tách: tranh nhau deploy, điểm nóng khi scale, quyền sở hữu mù mờ",
+      "1.6 — Case studies: Amazon, Segment's return to a monolith, Prime Video's cost rewrite|||1.6 — Tình huống thật: Amazon, Segment quay về monolith, Prime Video viết lại vì chi phí",
+      "1.7 — Quiz: monolith or microservices|||1.7 — Kiểm tra: monolith hay microservices"
+    ]},
+    { "tieuDe": "Chapter 2 — Decomposition: finding service boundaries|||Chương 2 — Phân rã: tìm ranh giới cho service", "bai": [
+      "2.1 — Bounded contexts as the starting point for service boundaries|||2.1 — Bounded context làm điểm xuất phát cho ranh giới service",
+      "2.2 — Decompose by business capability vs by subdomain, with worked examples|||2.2 — Phân rã theo năng lực nghiệp vụ hay theo subdomain, kèm ví dụ giải chi tiết",
+      "2.3 — Measuring coupling: change frequency, shared tables and chatty calls|||2.3 — Đo độ kết dính: tần suất thay đổi cùng nhau, bảng dùng chung và các lời gọi lắt nhắt",
+      "2.4 — The strangler fig pattern: routing traffic away from the monolith step by step|||2.4 — Mẫu strangler fig: chuyển dần lưu lượng ra khỏi monolith từng bước",
+      "2.5 — Branch by abstraction and parallel run: switching implementations safely|||2.5 — Branch by abstraction và parallel run: đổi cách cài đặt một cách an toàn",
+      "2.6 — Lab: extract the Catalog service from the shop monolith|||2.6 — Lab: tách service Catalog ra khỏi monolith cửa hàng",
+      "2.7 — Quiz: decomposition|||2.7 — Kiểm tra: phân rã service"
+    ]},
+    { "tieuDe": "Chapter 3 — Synchronous communication: REST, gRPC and API versioning|||Chương 3 — Giao tiếp đồng bộ: REST, gRPC và versioning API", "bai": [
+      "3.1 — Designing service-to-service REST APIs: resources, error formats and idempotency keys|||3.1 — Thiết kế REST API giữa các service: resource, định dạng lỗi và idempotency key",
+      "3.2 — gRPC and Protocol Buffers: contracts, streaming and deadlines|||3.2 — gRPC và Protocol Buffers: hợp đồng, streaming và deadline",
+      "3.3 — REST vs gRPC vs GraphQL: choosing per use case, not per fashion|||3.3 — REST, gRPC hay GraphQL: chọn theo từng tình huống, không theo mốt",
+      "3.4 — API versioning strategies: URL, header, additive change and deprecation policy|||3.4 — Chiến lược versioning API: qua URL, header, thay đổi chỉ-thêm và chính sách khai tử",
+      "3.5 — Backward and forward compatibility rules for Protobuf and JSON schemas|||3.5 — Quy tắc tương thích ngược và tương thích xuôi cho schema Protobuf và JSON",
+      "3.6 — Lab: a gRPC Inventory service behind a versioned REST façade|||3.6 — Lab: service Inventory chạy gRPC phía sau một lớp REST có versioning",
+      "3.7 — Quiz: synchronous APIs|||3.7 — Kiểm tra: API đồng bộ"
+    ]},
+    { "tieuDe": "Chapter 4 — API gateway and Backend-for-Frontend|||Chương 4 — API gateway và Backend-for-Frontend", "bai": [
+      "4.1 — What an API gateway does: routing, authentication, aggregation and rate limiting|||4.1 — API gateway làm gì: định tuyến, xác thực, gộp dữ liệu và giới hạn tần suất",
+      "4.2 — Gateway options compared: NGINX, Kong, Envoy and cloud-managed gateways|||4.2 — So sánh các lựa chọn gateway: NGINX, Kong, Envoy và gateway do cloud quản lý",
+      "4.3 — The BFF pattern: one backend per frontend for web and mobile|||4.3 — Mẫu BFF: mỗi frontend một backend riêng cho web và mobile",
+      "4.4 — Identity at the edge: JWT validation, token exchange and propagating the user downstream|||4.4 — Danh tính ở biên: kiểm JWT, token exchange và chuyển thông tin người dùng xuống các service",
+      "4.5 — Avoiding the gateway monolith: what must never live in the gateway|||4.5 — Tránh biến gateway thành monolith mới: những thứ không bao giờ được đặt vào gateway",
+      "4.6 — Lab: Kong gateway plus a web BFF that aggregates three services|||4.6 — Lab: Kong gateway cùng một BFF cho web gộp dữ liệu từ ba service",
+      "4.7 — Quiz: gateway and BFF|||4.7 — Kiểm tra: gateway và BFF"
+    ]},
+    { "tieuDe": "Chapter 5 — Data ownership: database-per-service|||Chương 5 — Quyền sở hữu dữ liệu: mỗi service một database", "bai": [
+      "5.1 — Why a shared database quietly destroys service autonomy|||5.1 — Vì sao database dùng chung âm thầm phá hỏng tính tự chủ của service",
+      "5.2 — Database-per-service options: separate schema, separate instance, polyglot persistence|||5.2 — Các cách làm database-per-service: tách schema, tách instance, polyglot persistence",
+      "5.3 — Querying across services: API composition, replicated data and read models|||5.3 — Truy vấn xuyên service: API composition, sao chép dữ liệu và read model",
+      "5.4 — Splitting a shared database without downtime: moving tables one at a time|||5.4 — Tách database dùng chung mà không dừng hệ thống: chuyển từng bảng một",
+      "5.5 — Reference data and the who-owns-the-customer problem|||5.5 — Dữ liệu tham chiếu và bài toán ai sở hữu khách hàng",
+      "5.6 — Quiz: data ownership|||5.6 — Kiểm tra: quyền sở hữu dữ liệu"
+    ]},
+    { "tieuDe": "Chapter 6 — Event-driven fundamentals|||Chương 6 — Nền tảng của kiến trúc hướng sự kiện", "bai": [
+      "6.1 — Commands, events and queries: three kinds of message with different intent|||6.1 — Command, event và query: ba loại thông điệp với ba ý định khác nhau",
+      "6.2 — Event notification vs event-carried state transfer vs event sourcing|||6.2 — Event notification, event-carried state transfer và event sourcing khác nhau thế nào",
+      "6.3 — Designing event schemas: envelopes, IDs, timestamps and versions|||6.3 — Thiết kế schema cho event: envelope, ID, mốc thời gian và phiên bản",
+      "6.4 — Choreography vs orchestration: who decides what happens next|||6.4 — Choreography hay orchestration: ai quyết định bước tiếp theo",
+      "6.5 — Schema registry with Avro, Protobuf and JSON Schema|||6.5 — Schema registry với Avro, Protobuf và JSON Schema",
+      "6.6 — Eventual consistency: designing UX and explaining it to product owners|||6.6 — Eventual consistency: thiết kế trải nghiệm người dùng và giải thích cho product owner",
+      "6.7 — Quiz: event-driven fundamentals|||6.7 — Kiểm tra: nền tảng hướng sự kiện"
+    ]},
+    { "tieuDe": "Chapter 7 — Apache Kafka in depth|||Chương 7 — Apache Kafka chuyên sâu", "bai": [
+      "7.1 — Kafka architecture: brokers, topics, partitions, replication and KRaft|||7.1 — Kiến trúc Kafka: broker, topic, partition, replication và KRaft",
+      "7.2 — Producers: message keys, partitioning, acks and the idempotent producer|||7.2 — Producer: message key, cách chia partition, acks và idempotent producer",
+      "7.3 — Consumer groups, offsets, commits and rebalancing|||7.3 — Consumer group, offset, commit và rebalancing",
+      "7.4 — Ordering guarantees: per-partition order and choosing the right key|||7.4 — Đảm bảo thứ tự: thứ tự trong từng partition và chọn key cho đúng",
+      "7.5 — Delivery semantics: at-most-once, at-least-once and exactly-once transactions|||7.5 — Ngữ nghĩa giao nhận: at-most-once, at-least-once và transaction exactly-once",
+      "7.6 — Retention, log compaction and replaying history|||7.6 — Retention, log compaction và phát lại lịch sử",
+      "7.7 — Lab: an order-events pipeline with Kafka, from producer to three consumers|||7.7 — Lab: đường ống sự kiện đơn hàng với Kafka, từ producer tới ba consumer",
+      "7.8 — Quiz: Kafka|||7.8 — Kiểm tra: Kafka"
+    ]},
+    { "tieuDe": "Chapter 8 — RabbitMQ and reliable consumers|||Chương 8 — RabbitMQ và consumer đáng tin cậy", "bai": [
+      "8.1 — The RabbitMQ model: exchanges, queues, bindings and routing keys|||8.1 — Mô hình RabbitMQ: exchange, queue, binding và routing key",
+      "8.2 — Acknowledgements, prefetch and publisher confirms|||8.2 — Acknowledgement, prefetch và publisher confirm",
+      "8.3 — Dead-letter queues, retries with backoff and poison messages|||8.3 — Dead-letter queue, retry có backoff và poison message",
+      "8.4 — Idempotent consumers: dedup tables, natural idempotency and the inbox pattern|||8.4 — Consumer idempotent: bảng chống trùng, idempotent tự nhiên và mẫu inbox",
+      "8.5 — Kafka vs RabbitMQ vs SQS and Pub/Sub: choosing a broker for the job|||8.5 — Kafka, RabbitMQ hay SQS và Pub/Sub: chọn broker đúng việc",
+      "8.6 — Lab: a notification service with retry queues and a DLQ dashboard|||8.6 — Lab: service gửi thông báo với hàng đợi retry và bảng theo dõi DLQ",
+      "8.7 — Quiz: RabbitMQ and reliable consumers|||8.7 — Kiểm tra: RabbitMQ và consumer đáng tin cậy"
+    ]},
+    { "tieuDe": "Chapter 9 — Distributed transactions: saga and transactional outbox|||Chương 9 — Giao dịch phân tán: saga và transactional outbox", "bai": [
+      "9.1 — Why two-phase commit does not fit microservices|||9.1 — Vì sao two-phase commit không hợp với microservices",
+      "9.2 — The saga pattern: local transactions and compensating actions|||9.2 — Mẫu saga: giao dịch cục bộ và hành động bù trừ",
+      "9.3 — Orchestrated sagas with a state machine, hand-rolled and with Temporal|||9.3 — Saga kiểu orchestration bằng máy trạng thái, tự viết và dùng Temporal",
+      "9.4 — Choreographed sagas: event chains and how to keep them debuggable|||9.4 — Saga kiểu choreography: chuỗi event và cách giữ cho nó còn debug được",
+      "9.5 — The dual-write problem and the transactional outbox pattern|||9.5 — Bài toán dual-write và mẫu transactional outbox",
+      "9.6 — Change data capture with Debezium as an outbox relay|||9.6 — Change data capture bằng Debezium để chuyển tiếp outbox",
+      "9.7 — Lab: a checkout saga across Order, Payment and Inventory with an outbox|||9.7 — Lab: saga thanh toán qua Order, Payment và Inventory có outbox",
+      "9.8 — Quiz: saga and outbox|||9.8 — Kiểm tra: saga và outbox"
+    ]},
+    { "tieuDe": "Chapter 10 — CQRS and event sourcing|||Chương 10 — CQRS và event sourcing", "bai": [
+      "10.1 — CQRS: separating the write model from read models|||10.1 — CQRS: tách write model khỏi các read model",
+      "10.2 — Building projections and keeping read models in sync|||10.2 — Dựng projection và giữ read model luôn đồng bộ",
+      "10.3 — Event sourcing: storing state as an append-only sequence of events|||10.3 — Event sourcing: lưu trạng thái thành chuỗi event chỉ-ghi-thêm",
+      "10.4 — Snapshots, upcasting and evolving event schemas over years|||10.4 — Snapshot, upcasting và tiến hoá schema event qua nhiều năm",
+      "10.5 — When event sourcing hurts: personal-data deletion, reporting and team complexity|||10.5 — Khi event sourcing gây đau: xoá dữ liệu cá nhân, báo cáo và độ phức tạp cho đội",
+      "10.6 — Lab: an event-sourced Wallet with an order-history read model|||10.6 — Lab: Wallet dùng event sourcing kèm read model lịch sử đơn hàng",
+      "10.7 — Quiz: CQRS and event sourcing|||10.7 — Kiểm tra: CQRS và event sourcing"
+    ]},
+    { "tieuDe": "Chapter 11 — Resilience patterns|||Chương 11 — Các mẫu chống chịu lỗi", "bai": [
+      "11.1 — Timeouts everywhere, and propagating deadlines across calls|||11.1 — Timeout ở mọi nơi, và truyền deadline qua các lời gọi",
+      "11.2 — Retries with exponential backoff and jitter, and how retry storms start|||11.2 — Retry với exponential backoff và jitter, và retry storm bắt đầu thế nào",
+      "11.3 — The circuit breaker: states, thresholds and half-open probing|||11.3 — Circuit breaker: các trạng thái, ngưỡng và thăm dò half-open",
+      "11.4 — Bulkheads and load shedding: stopping one slow dependency from sinking everything|||11.4 — Bulkhead và load shedding: không để một phụ thuộc chậm kéo chìm cả hệ thống",
+      "11.5 — Rate limiting: token bucket, sliding window and distributed limits with Redis|||11.5 — Rate limiting: token bucket, sliding window và giới hạn phân tán bằng Redis",
+      "11.6 — Graceful degradation and fallbacks users can live with|||11.6 — Suy giảm có kiểm soát và các phương án dự phòng người dùng chấp nhận được",
+      "11.7 — Chaos experiments: injecting latency and failures on purpose|||11.7 — Thí nghiệm chaos: cố ý bơm độ trễ và lỗi để kiểm chứng",
+      "11.8 — Quiz: resilience patterns|||11.8 — Kiểm tra: các mẫu chống chịu lỗi"
+    ]},
+    { "tieuDe": "Chapter 12 — Observability and distributed tracing with OpenTelemetry|||Chương 12 — Quan sát hệ thống và distributed tracing với OpenTelemetry", "bai": [
+      "12.1 — Logs, metrics and traces: what each one answers|||12.1 — Log, metric và trace: mỗi thứ trả lời câu hỏi gì",
+      "12.2 — OpenTelemetry: SDKs, auto-instrumentation and the Collector|||12.2 — OpenTelemetry: SDK, auto-instrumentation và Collector",
+      "12.3 — Context propagation across HTTP, gRPC and Kafka with W3C traceparent|||12.3 — Truyền ngữ cảnh qua HTTP, gRPC và Kafka bằng W3C traceparent",
+      "12.4 — Reading traces in Jaeger and Tempo to find where the latency went|||12.4 — Đọc trace trong Jaeger và Tempo để tìm độ trễ nằm ở đâu",
+      "12.5 — Structured logs, correlation IDs, RED metrics and SLOs per service|||12.5 — Log có cấu trúc, correlation ID, metric RED và SLO cho từng service",
+      "12.6 — Lab: trace one checkout end to end through gateway, services and Kafka|||12.6 — Lab: lần theo một lượt thanh toán từ đầu tới cuối qua gateway, các service và Kafka",
+      "12.7 — Quiz: observability|||12.7 — Kiểm tra: quan sát hệ thống"
+    ]},
+    { "tieuDe": "Chapter 13 — Testing microservices and contract testing|||Chương 13 — Kiểm thử microservices và contract testing", "bai": [
+      "13.1 — The test pyramid for microservices, and why end-to-end suites become flaky|||13.1 — Kim tự tháp kiểm thử cho microservices, và vì sao bộ test end-to-end hay chập chờn",
+      "13.2 — Consumer-driven contracts: letting consumers define what they rely on|||13.2 — Consumer-driven contract: để bên dùng định nghĩa những gì họ dựa vào",
+      "13.3 — Pact in practice: consumer tests and provider verification|||13.3 — Pact thực chiến: test phía consumer và xác minh phía provider",
+      "13.4 — Pact Broker and can-i-deploy as a release gate in CI|||13.4 — Pact Broker và can-i-deploy làm cổng chặn phát hành trong CI",
+      "13.5 — Contract testing for asynchronous messages and events|||13.5 — Contract testing cho thông điệp và event bất đồng bộ",
+      "13.6 — Component tests with Testcontainers: real Postgres and Kafka in tests|||13.6 — Component test với Testcontainers: Postgres và Kafka thật trong test",
+      "13.7 — Quiz: testing microservices|||13.7 — Kiểm tra: kiểm thử microservices"
+    ]},
+    { "tieuDe": "Chapter 14 — Kubernetes, service discovery and service mesh|||Chương 14 — Kubernetes, service discovery và service mesh", "bai": [
+      "14.1 — Packaging services for Kubernetes: Deployments, Services, ConfigMaps and Secrets|||14.1 — Đóng gói service cho Kubernetes: Deployment, Service, ConfigMap và Secret",
+      "14.2 — Service discovery: client-side vs server-side, and DNS inside the cluster|||14.2 — Service discovery: phía client hay phía server, và DNS bên trong cụm",
+      "14.3 — Probes, resource limits and horizontal autoscaling that actually behaves|||14.3 — Probe, giới hạn tài nguyên và autoscaling ngang chạy đúng như mong đợi",
+      "14.4 — Environments with Helm or Kustomize, deployed by GitOps with Argo CD|||14.4 — Quản lý môi trường bằng Helm hoặc Kustomize, deploy theo GitOps với Argo CD",
+      "14.5 — Rolling, blue-green and canary releases alongside database migrations|||14.5 — Rolling, blue-green và canary release song song với migration database",
+      "14.6 — Service mesh: Istio and Linkerd sidecars, ambient mode, mTLS and traffic splitting|||14.6 — Service mesh: sidecar của Istio và Linkerd, ambient mode, mTLS và chia lưu lượng",
+      "14.7 — Do you need a mesh, and should Kafka run in the cluster (Strimzi) or be managed|||14.7 — Có cần mesh không, và Kafka nên chạy trong cụm (Strimzi) hay dùng dịch vụ có quản lý",
+      "14.8 — Quiz: Kubernetes and service mesh|||14.8 — Kiểm tra: Kubernetes và service mesh"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: an event-driven shop on Kubernetes|||Chương 15 — Dự án cuối khoá: cửa hàng hướng sự kiện chạy trên Kubernetes", "bai": [
+      "15.1 — Milestone 1: context map, service boundaries and architecture decision records|||15.1 — Mốc 1: context map, ranh giới service và các bản ghi quyết định kiến trúc (ADR)",
+      "15.2 — Milestone 2: gateway, BFF and the first gRPC and REST services|||15.2 — Mốc 2: gateway, BFF và các service gRPC, REST đầu tiên",
+      "15.3 — Milestone 3: checkout saga with outbox and Kafka events|||15.3 — Mốc 3: saga thanh toán với outbox và event Kafka",
+      "15.4 — Milestone 4: CQRS read model for order history and search|||15.4 — Mốc 4: read model CQRS cho lịch sử đơn hàng và tìm kiếm",
+      "15.5 — Milestone 5: resilience, tracing and Pact contract tests wired into CI|||15.5 — Mốc 5: chống chịu lỗi, tracing và contract test Pact gắn vào CI",
+      "15.6 — Milestone 6: deploy to Kubernetes, load test and run an incident drill|||15.6 — Mốc 6: deploy lên Kubernetes, chạy load test và diễn tập sự cố",
+      "15.7 — Quiz: capstone checkpoint — defend your architecture decisions|||15.7 — Kiểm tra: chốt dự án — bảo vệ các quyết định kiến trúc của bạn"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: the whole course in 25 design decisions|||16.1 — Ôn tập: cả khoá học trong 25 quyết định thiết kế",
+      "16.2 — Mock exam: architecture scenarios under time pressure|||16.2 — Thi thử: các tình huống kiến trúc trong thời gian giới hạn",
+      "16.3 — Final exam|||16.3 — Bài thi cuối khoá",
+      "16.4 — Retrospective and what to learn next: DDD, platform engineering and SRE|||16.4 — Nhìn lại và học gì tiếp theo: DDD, platform engineering và SRE"
+    ]}
+  ]
+}

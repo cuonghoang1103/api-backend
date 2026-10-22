@@ -1,0 +1,136 @@
+{
+  "slug": "tech-lead",
+  "ma": "tl",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started: from strong engineer to tech lead|||Mục 0 — Khởi động: từ kỹ sư giỏi tới tech lead", "bai": [
+      "Start here (1/2) — What a tech lead is, where the role came from, and why it matters to you|||Bắt đầu tại đây (1/2) — Tech lead là gì, vai trò này ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — When leadership goes wrong: real team failures, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi dẫn dắt sai: thất bại thật của nhóm, và cách học để không bỏ cuộc",
+      "0.1 — Self-assessment: which leadership skills you already have and which you are missing|||0.1 — Tự đánh giá: kỹ năng dẫn dắt nào bạn đã có và kỹ năng nào còn thiếu",
+      "0.2 — Meet the course team: the product, people and problems used in every chapter's exercises|||0.2 — Làm quen nhóm của khoá học: sản phẩm, con người và vấn đề dùng trong bài tập mọi chương",
+      "0.3 — Quiz: getting oriented|||0.3 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — The role: tech lead, engineering manager, architect, staff engineer|||Chương 1 — Vai trò: tech lead, engineering manager, architect, staff engineer", "bai": [
+      "1.1 — Tech lead vs engineering manager vs architect: who owns people, system and direction|||1.1 — Tech lead, engineering manager và architect: ai lo con người, ai lo hệ thống, ai lo định hướng",
+      "1.2 — Staff-plus archetypes and the career ladder: lead without becoming a manager|||1.2 — Các kiểu vai trò staff-plus và thang nghề nghiệp: dẫn dắt mà không cần trở thành quản lý",
+      "1.3 — How a tech lead's time really splits: coding, reviewing, unblocking and communicating|||1.3 — Thời gian của tech lead thật sự chia ra sao: viết code, review, gỡ vướng và giao tiếp",
+      "1.4 — Your first 90 days as a new tech lead: listen, map the system, earn trust, then change things|||1.4 — 90 ngày đầu làm tech lead: lắng nghe, nắm hệ thống, gây dựng lòng tin, rồi mới thay đổi",
+      "1.5 — Managing up: working with your manager and product manager as a leadership trio|||1.5 — Làm việc với cấp trên: phối hợp với quản lý và product manager như một bộ ba dẫn dắt",
+      "1.6 — Quiz: the tech lead role|||1.6 — Kiểm tra: vai trò tech lead"
+    ]},
+    { "tieuDe": "Chapter 2 — Technical vision, strategy and roadmaps|||Chương 2 — Tầm nhìn kỹ thuật, chiến lược và lộ trình", "bai": [
+      "2.1 — Vision vs strategy vs plan: what each answers and who reads it|||2.1 — Tầm nhìn, chiến lược và kế hoạch: mỗi thứ trả lời câu hỏi gì và ai đọc",
+      "2.2 — Writing a technical strategy: diagnosis, guiding policies and coherent actions|||2.2 — Viết một chiến lược kỹ thuật: chẩn đoán, nguyên tắc chỉ đạo và hành động nhất quán",
+      "2.3 — Building a now / next / later roadmap that survives contact with reality|||2.3 — Dựng lộ trình now / next / later mà vẫn đứng vững khi gặp thực tế",
+      "2.4 — Aligning the technical roadmap with product goals and business constraints|||2.4 — Khớp lộ trình kỹ thuật với mục tiêu sản phẩm và ràng buộc kinh doanh",
+      "2.5 — Prioritization frameworks and the art of saying no|||2.5 — Các khung ưu tiên và nghệ thuật nói không",
+      "2.6 — Quiz: vision and roadmaps|||2.6 — Kiểm tra: tầm nhìn và lộ trình"
+    ]},
+    { "tieuDe": "Chapter 3 — Design reviews|||Chương 3 — Review thiết kế", "bai": [
+      "3.1 — When a change needs a design review, and when it is just ceremony|||3.1 — Khi nào một thay đổi cần review thiết kế, và khi nào chỉ là thủ tục",
+      "3.2 — A reviewer's checklist: failure modes, scale, security, data, cost and operability|||3.2 — Checklist cho người review: kiểu hỏng, quy mô, bảo mật, dữ liệu, chi phí và khả năng vận hành",
+      "3.3 — Reading architecture diagrams with the C4 model and asking the right questions|||3.3 — Đọc sơ đồ kiến trúc theo mô hình C4 và đặt đúng câu hỏi",
+      "3.4 — Running the review meeting: pre-reading, timeboxing and keeping the loudest voice from winning|||3.4 — Điều phối buổi review: đọc trước, giới hạn thời gian và không để người nói to nhất thắng",
+      "3.5 — Closing the loop: recording decisions, follow-ups and revisiting assumptions|||3.5 — Khép vòng: ghi lại quyết định, việc cần làm tiếp và xem lại các giả định",
+      "3.6 — Quiz: design reviews|||3.6 — Kiểm tra: review thiết kế"
+    ]},
+    { "tieuDe": "Chapter 4 — Writing and running an RFC process|||Chương 4 — Viết và vận hành quy trình RFC", "bai": [
+      "4.1 — Why written decision-making scales better than meetings|||4.1 — Vì sao ra quyết định bằng văn bản mở rộng tốt hơn họp hành",
+      "4.2 — Designing an RFC process: templates, lifecycle states, reviewers and deadlines|||4.2 — Thiết kế quy trình RFC: mẫu, các trạng thái vòng đời, người review và hạn chót",
+      "4.3 — Writing an RFC that gets approved: framing the problem, alternatives and the ask|||4.3 — Viết một RFC được duyệt: đặt vấn đề, các phương án và điều bạn cần quyết",
+      "4.4 — Reaching decisions: consensus vs consent, the decider role and disagree-and-commit|||4.4 — Đi tới quyết định: đồng thuận và chấp thuận, vai trò người quyết và disagree-and-commit",
+      "4.5 — RFCs and ADRs together: a searchable history of why the system looks the way it does|||4.5 — RFC và ADR cùng nhau: lịch sử tra cứu được về vì sao hệ thống trông như hiện tại",
+      "4.6 — Quiz: the RFC process|||4.6 — Kiểm tra: quy trình RFC"
+    ]},
+    { "tieuDe": "Chapter 5 — Building a code review culture|||Chương 5 — Xây dựng văn hoá code review", "bai": [
+      "5.1 — What code review is for: correctness, knowledge sharing and consistency, not gatekeeping|||5.1 — Code review để làm gì: đúng đắn, chia sẻ hiểu biết và nhất quán, không phải để gác cổng",
+      "5.2 — Writing team review guidelines and a review turnaround expectation|||5.2 — Viết hướng dẫn review cho nhóm và cam kết thời gian phản hồi review",
+      "5.3 — Small pull requests and stacked changes: making reviews fast and safe|||5.3 — Pull request nhỏ và thay đổi xếp chồng: làm review nhanh và an toàn",
+      "5.4 — Tone in review comments: labels, questions over commands and praising good work|||5.4 — Giọng điệu trong nhận xét review: gắn nhãn, hỏi thay vì ra lệnh và khen việc làm tốt",
+      "5.5 — Automating what humans should not argue about: formatters, linters and CI gates|||5.5 — Tự động hoá những thứ con người không nên tranh cãi: formatter, linter và cổng CI",
+      "5.6 — Reviewing AI-generated code: new risks and new review habits|||5.6 — Review code do AI sinh ra: rủi ro mới và thói quen review mới",
+      "5.7 — Quiz: code review culture|||5.7 — Kiểm tra: văn hoá code review"
+    ]},
+    { "tieuDe": "Chapter 6 — Estimation and planning|||Chương 6 — Ước lượng và lập kế hoạch", "bai": [
+      "6.1 — Why estimates fail: unknowns, optimism bias and the planning fallacy|||6.1 — Vì sao ước lượng sai: điều chưa biết, thiên kiến lạc quan và ngụy biện lập kế hoạch",
+      "6.2 — Estimation techniques: T-shirt sizes, story points, ranges and reference-class forecasting|||6.2 — Các kỹ thuật ước lượng: cỡ áo, story point, khoảng ước lượng và dự báo theo lớp tham chiếu",
+      "6.3 — Breaking a project into milestones that each deliver something demonstrable|||6.3 — Chia dự án thành các cột mốc, mỗi cột mốc đều có thứ để demo",
+      "6.4 — Identifying risks early: spikes, prototypes and buffers|||6.4 — Nhận diện rủi ro sớm: spike, prototype và vùng đệm",
+      "6.5 — Communicating dates and uncertainty to stakeholders without overpromising|||6.5 — Truyền đạt ngày hoàn thành và mức không chắc chắn cho các bên liên quan mà không hứa quá",
+      "6.6 — Tracking progress and re-planning when the plan meets reality|||6.6 — Theo dõi tiến độ và lập lại kế hoạch khi kế hoạch gặp thực tế",
+      "6.7 — Quiz: estimation and planning|||6.7 — Kiểm tra: ước lượng và lập kế hoạch"
+    ]},
+    { "tieuDe": "Chapter 7 — Managing technical debt|||Chương 7 — Quản lý nợ kỹ thuật", "bai": [
+      "7.1 — What technical debt really is: the debt quadrant and the difference from plain bad code|||7.1 — Nợ kỹ thuật thật ra là gì: góc phần tư nợ và khác biệt với code kém đơn thuần",
+      "7.2 — Making debt visible: a debt register, hotspots from change frequency and incident links|||7.2 — Làm nợ hiện ra: sổ nợ, điểm nóng theo tần suất thay đổi và liên kết với sự cố",
+      "7.3 — Making the business case: translating debt into risk, speed and cost|||7.3 — Thuyết phục bằng lý lẽ kinh doanh: chuyển nợ kỹ thuật thành rủi ro, tốc độ và chi phí",
+      "7.4 — Paying it down: a capacity budget, the boy-scout rule and dedicated projects|||7.4 — Trả nợ: dành sẵn một phần năng lực, quy tắc hướng đạo sinh và dự án riêng",
+      "7.5 — Large migrations and deprecations: strangler fig, feature flags and finishing what you start|||7.5 — Migration lớn và ngừng hỗ trợ: strangler fig, feature flag và làm cho xong việc đã bắt đầu",
+      "7.6 — Quiz: technical debt|||7.6 — Kiểm tra: nợ kỹ thuật"
+    ]},
+    { "tieuDe": "Chapter 8 — Mentoring and delegation|||Chương 8 — Kèm cặp và giao việc", "bai": [
+      "8.1 — Mentoring, coaching and sponsoring: three different ways to grow someone|||8.1 — Mentoring, coaching và sponsoring: ba cách khác nhau để giúp một người phát triển",
+      "8.2 — Delegation levels: from do exactly this to you own the outcome|||8.2 — Các mức giao việc: từ làm đúng thế này tới bạn chịu trách nhiệm kết quả",
+      "8.3 — Letting go of the code: why the lead should not take the hardest ticket|||8.3 — Buông bớt code: vì sao người dẫn dắt không nên giành ticket khó nhất",
+      "8.4 — Pairing, stretch assignments and growth plans for juniors and seniors|||8.4 — Pair programming, việc thử thách và kế hoạch phát triển cho junior lẫn senior",
+      "8.5 — Onboarding new engineers so they ship in their first week|||8.5 — Onboard kỹ sư mới để họ đưa được code lên ngay tuần đầu",
+      "8.6 — Quiz: mentoring and delegation|||8.6 — Kiểm tra: kèm cặp và giao việc"
+    ]},
+    { "tieuDe": "Chapter 9 — Hiring and interviewing|||Chương 9 — Tuyển dụng và phỏng vấn", "bai": [
+      "9.1 — Defining the role: a job description and a scorecard of must-haves|||9.1 — Định nghĩa vị trí: mô tả công việc và bảng tiêu chí bắt buộc",
+      "9.2 — Designing the interview loop: what each round tests and why|||9.2 — Thiết kế vòng phỏng vấn: mỗi vòng kiểm tra điều gì và vì sao",
+      "9.3 — Structured interviews and rubrics: making decisions comparable and fair|||9.3 — Phỏng vấn có cấu trúc và thang chấm: để quyết định so sánh được và công bằng",
+      "9.4 — Running technical interviews in the age of AI assistants|||9.4 — Phỏng vấn kỹ thuật trong thời có trợ lý AI",
+      "9.5 — Bias, the debrief meeting and making a hire / no-hire call|||9.5 — Thiên kiến, buổi họp tổng hợp và chốt quyết định tuyển hay không tuyển",
+      "9.6 — Quiz: hiring|||9.6 — Kiểm tra: tuyển dụng"
+    ]},
+    { "tieuDe": "Chapter 10 — Running incidents|||Chương 10 — Điều hành sự cố", "bai": [
+      "10.1 — Severity levels and when to declare an incident|||10.1 — Mức độ nghiêm trọng và khi nào phải tuyên bố có sự cố",
+      "10.2 — Incident roles: incident commander, operations lead, communications lead and scribe|||10.2 — Vai trò khi có sự cố: incident commander, người xử lý kỹ thuật, người lo truyền thông, thư ký",
+      "10.3 — Running the incident call: mitigate first, diagnose later|||10.3 — Điều phối cuộc gọi sự cố: giảm thiệt hại trước, chẩn đoán sau",
+      "10.4 — Communicating with stakeholders and customers during an outage|||10.4 — Giao tiếp với các bên liên quan và khách hàng trong lúc hệ thống sập",
+      "10.5 — Facilitating a blameless postmortem and making sure action items get done|||10.5 — Điều phối postmortem không đổ lỗi và bảo đảm các đầu việc khắc phục được làm xong",
+      "10.6 — Sustainable on-call: rotations, alert hygiene and preventing burnout|||10.6 — Trực on-call bền vững: luân phiên, dọn cảnh báo thừa và phòng kiệt sức",
+      "10.7 — Quiz: running incidents|||10.7 — Kiểm tra: điều hành sự cố"
+    ]},
+    { "tieuDe": "Chapter 11 — Cross-team communication and stakeholders|||Chương 11 — Giao tiếp liên nhóm và các bên liên quan", "bai": [
+      "11.1 — Stakeholder mapping: who is affected, who decides, who must be informed|||11.1 — Lập bản đồ các bên liên quan: ai bị ảnh hưởng, ai quyết định, ai cần được báo",
+      "11.2 — Writing for executives: one page, the decision needed and the cost of waiting|||11.2 — Viết cho cấp lãnh đạo: một trang, quyết định cần đưa ra và cái giá của việc chờ đợi",
+      "11.3 — Influence without authority: building coalitions and trading favors honestly|||11.3 — Gây ảnh hưởng khi không có quyền: xây liên minh và trao đổi hỗ trợ một cách sòng phẳng",
+      "11.4 — Managing dependencies on other teams: contracts, timelines and escalation paths|||11.4 — Quản lý phụ thuộc vào nhóm khác: thoả thuận, mốc thời gian và đường báo lên cấp trên",
+      "11.5 — Status reports and demos that build trust rather than noise|||11.5 — Báo cáo tình hình và demo tạo dựng lòng tin thay vì thêm nhiễu",
+      "11.6 — Quiz: stakeholders|||11.6 — Kiểm tra: các bên liên quan"
+    ]},
+    { "tieuDe": "Chapter 12 — 1:1s, feedback and conflict|||Chương 12 — Họp 1:1, góp ý và xử lý mâu thuẫn", "bai": [
+      "12.1 — Running useful 1:1s: their agenda, not yours|||12.1 — Họp 1:1 có ích: chương trình của họ, không phải của bạn",
+      "12.2 — Giving feedback with situation-behavior-impact, and making praise specific|||12.2 — Góp ý theo tình huống - hành vi - tác động, và khen cho cụ thể",
+      "12.3 — Receiving feedback as a leader without getting defensive|||12.3 — Nhận góp ý khi là người dẫn dắt mà không phòng thủ",
+      "12.4 — Resolving technical disagreements: data, prototypes and agreeing on criteria first|||12.4 — Giải quyết bất đồng kỹ thuật: dữ liệu, prototype và thống nhất tiêu chí trước",
+      "12.5 — Difficult conversations and underperformance: when and how to involve the manager|||12.5 — Những cuộc trò chuyện khó và hiệu suất kém: khi nào và cách nào để đưa quản lý vào cuộc",
+      "12.6 — Psychological safety: making it safe to say I do not know and I made a mistake|||12.6 — An toàn tâm lý: để mọi người dám nói tôi không biết và tôi đã làm sai",
+      "12.7 — Quiz: 1:1s, feedback and conflict|||12.7 — Kiểm tra: 1:1, góp ý và mâu thuẫn"
+    ]},
+    { "tieuDe": "Chapter 13 — Measuring team health: DORA, SPACE and developer experience|||Chương 13 — Đo sức khoẻ của nhóm: DORA, SPACE và trải nghiệm lập trình viên", "bai": [
+      "13.1 — The DORA metrics: deployment frequency, lead time, change failure rate and recovery time|||13.1 — Các chỉ số DORA: tần suất deploy, lead time, tỷ lệ thay đổi gây lỗi và thời gian khôi phục",
+      "13.2 — The SPACE framework: satisfaction, performance, activity, communication and efficiency|||13.2 — Khung SPACE: mức hài lòng, hiệu quả, hoạt động, giao tiếp và hiệu suất làm việc",
+      "13.3 — Developer experience surveys and running retrospectives that lead to change|||13.3 — Khảo sát trải nghiệm lập trình viên và tổ chức retrospective dẫn tới thay đổi thật",
+      "13.4 — Goodhart's law: how metrics get gamed and how to use them without hurting people|||13.4 — Định luật Goodhart: chỉ số bị lách thế nào và cách dùng chúng mà không làm tổn thương con người",
+      "13.5 — Building a simple team health dashboard and reviewing it each month|||13.5 — Dựng một bảng theo dõi sức khoẻ nhóm đơn giản và xem lại mỗi tháng",
+      "13.6 — Quiz: measuring team health|||13.6 — Kiểm tra: đo sức khoẻ của nhóm"
+    ]},
+    { "tieuDe": "Chapter 14 — Capstone: lead a team through one quarter|||Chương 14 — Dự án cuối khoá: dẫn dắt một nhóm qua một quý", "bai": [
+      "14.1 — Milestone 1: diagnose the course team and write a one-page technical strategy|||14.1 — Cột mốc 1: chẩn đoán nhóm của khoá học và viết một chiến lược kỹ thuật dài một trang",
+      "14.2 — Milestone 2: build a quarterly roadmap with estimates, risks and a tech-debt budget|||14.2 — Cột mốc 2: dựng lộ trình theo quý với ước lượng, rủi ro và ngân sách trả nợ kỹ thuật",
+      "14.3 — Milestone 3: write an RFC, run its design review and record the decision as an ADR|||14.3 — Cột mốc 3: viết một RFC, điều phối buổi review thiết kế và ghi quyết định thành ADR",
+      "14.4 — Milestone 4: handle a simulated incident and facilitate its postmortem|||14.4 — Cột mốc 4: xử lý một sự cố giả lập và điều phối postmortem của nó",
+      "14.5 — Milestone 5: role-play a hard 1:1, a delegation plan and a stakeholder update|||14.5 — Cột mốc 5: nhập vai một buổi 1:1 khó, một kế hoạch giao việc và một bản cập nhật cho các bên liên quan",
+      "14.6 — Milestone 6: end-of-quarter review with DORA metrics and a team retrospective|||14.6 — Cột mốc 6: tổng kết cuối quý với chỉ số DORA và retrospective của nhóm",
+      "14.7 — Quiz: capstone checkpoint|||14.7 — Kiểm tra: chốt chặn dự án"
+    ]},
+    { "tieuDe": "Chapter 15 — Final exam|||Chương 15 — Thi cuối khoá", "bai": [
+      "15.1 — Review: the whole course on one page, from role to team health|||15.1 — Ôn tập: cả khoá trên một trang, từ vai trò tới sức khoẻ nhóm",
+      "15.2 — Mock exam: 20 leadership situations from real teams|||15.2 — Thi thử: 20 tình huống dẫn dắt từ các nhóm thật",
+      "15.3 — Final exam|||15.3 — Bài thi cuối khoá",
+      "15.4 — Retrospective and what to learn next: staff engineering, engineering management and architecture|||15.4 — Nhìn lại và học gì tiếp: staff engineering, quản lý kỹ thuật và kiến trúc phần mềm"
+    ]}
+  ]
+}

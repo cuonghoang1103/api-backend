@@ -852,13 +852,16 @@ export default function AdminCoursesPage() {
                       className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 cursor-pointer"
                     >
                       <option value="DRAFT">Bản nháp</option>
+                      <option value="COMING_SOON">Sắp ra mắt (chỉ hiện khung, chưa học/mua)</option>
                       <option value="PUBLISHED">Đã đăng</option>
                     </select>
                     <p className="text-[11px] mt-1">
                       <span className="text-text-muted">
                         {courseForm.status === 'DRAFT'
                           ? 'Lưu nháp — chỉ admin thấy, không hiện trên Academy.'
-                          : 'Xuất bản — hiện trên trang Academy, học viên có thể đăng ký.'}
+                          : courseForm.status === 'COMING_SOON'
+                            ? 'Sắp ra mắt — /courses hiện ảnh, mô tả và mục lục ở "Môn tự chọn"; chưa ghi danh/mua/mở bài được.'
+                            : 'Xuất bản — hiện trên trang Academy, học viên có thể đăng ký.'}
                       </span>
                     </p>
                   </div>

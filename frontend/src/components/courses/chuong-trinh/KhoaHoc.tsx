@@ -14,7 +14,9 @@ function AnhBia({ m, ten, className }: { m: MonChuongTrinh; ten: string; classNa
   if (!m.thumbnailUrl || hong) {
     return (
       <div className={`flex items-center justify-center bg-[var(--p-thumb)] text-[var(--p-paper)] ${className ?? ''}`} aria-hidden>
-        <span className="font-editorial text-lg">{(m.courseCode || ten).slice(0, 2)}</span>
+        <span className="line-clamp-2 px-2 text-center font-editorial text-[13px] leading-tight sm:text-sm">
+          {m.courseCode || ten.split(/[:—(]/)[0]!.trim()}
+        </span>
       </div>
     );
   }
@@ -32,13 +34,15 @@ function AnhBia({ m, ten, className }: { m: MonChuongTrinh; ten: string; classNa
 }
 
 function MetaKhoa({ m, c, hienKy }: { m: MonChuongTrinh; c: BoChu; hienKy?: boolean }) {
-  const phan = [
-    hienKy && m.loTrinhKy ? c.kyNgan(m.loTrinhKy) : null,
-    c.capDo[m.level] ?? m.level,
-    m.totalLessons ? c.bai(m.totalLessons) : null,
-    c.gio(m.totalDurationSeconds) || null,
-    m.categoryName,
-  ].filter(Boolean) as string[];
+  const phan = (m.sapRaMat
+    ? [c.capDo[m.level] ?? m.level, m.soBaiDuKien ? c.khung(m.soChuongDuKien ?? 0, m.soBaiDuKien) : null, m.categoryName]
+    : [
+        hienKy && m.loTrinhKy ? c.kyNgan(m.loTrinhKy) : null,
+        c.capDo[m.level] ?? m.level,
+        m.totalLessons ? c.bai(m.totalLessons) : null,
+        c.gio(m.totalDurationSeconds) || null,
+        m.categoryName,
+      ]).filter(Boolean) as string[];
   return (
     <p className={`${s.so} flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-[var(--p-ink-3)]`}>
       {phan.map((x, i) => (
@@ -48,6 +52,15 @@ function MetaKhoa({ m, c, hienKy }: { m: MonChuongTrinh; c: BoChu; hienKy?: bool
         </span>
       ))}
     </p>
+  );
+}
+
+/** Nhãn "Sắp ra mắt" — chữ + viền mảnh màu nhấn, không nền rực. */
+export function NhanSapRaMat({ c }: { c: BoChu }) {
+  return (
+    <span className="inline-block whitespace-nowrap border border-[var(--p-accent)] px-1.5 py-0.5 text-[11px] font-medium leading-none text-[var(--p-accent)]">
+      {c.sapRaMat}
+    </span>
   );
 }
 
@@ -98,6 +111,9 @@ export function HangKhoa({ m, nn, c, soThuTu, hienKy }: {
           <div className="mt-1.5">
             <MetaKhoa m={m} c={c} hienKy={hienKy} />
           </div>
+          {m.sapRaMat && (
+            <div className="mt-2 sm:hidden"><NhanSapRaMat c={c} /></div>
+          )}
           {m.progress != null && (
             <div className="mt-2.5 max-w-[12rem] sm:hidden">
               <TienDo p={m.progress} c={c} />
@@ -105,7 +121,9 @@ export function HangKhoa({ m, nn, c, soThuTu, hienKy }: {
           )}
         </div>
         <div className="hidden items-center justify-end gap-3 self-center sm:flex">
-          {m.progress != null ? (
+          {m.sapRaMat ? (
+            <NhanSapRaMat c={c} />
+          ) : m.progress != null ? (
             <TienDo p={m.progress} c={c} />
           ) : (
             <ArrowRight aria-hidden className={`${s.muiTen} h-4 w-4 text-[var(--p-ink-3)]`} />
@@ -129,8 +147,8 @@ export function TheKhoa({ m, nn, c }: { m: MonChuongTrinh; nn: NgonNgu; c: BoChu
         <div className="overflow-hidden border border-[var(--p-rule)]">
           <AnhBia m={m} ten={ten} className={`${s.anhThe} aspect-video w-full`} />
         </div>
-        <p className={`${s.so} mt-4 text-xs text-[var(--p-ink-3)]`}>
-          {m.loTrinhKy ? c.hocKy(m.loTrinhKy) : c.khoaMoi}
+        <p className={`${s.so} mt-4 text-xs ${m.sapRaMat ? 'font-medium text-[var(--p-accent)]' : 'text-[var(--p-ink-3)]'}`}>
+          {m.sapRaMat ? c.sapRaMat : m.loTrinhKy ? c.hocKy(m.loTrinhKy) : c.khoaMoi}
           {m.categoryName ? ` · ${m.categoryName}` : ''}
         </p>
         <h3 className={`${s.tieuDe} mt-1.5 font-editorial text-xl leading-tight text-[var(--p-ink)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4`}>

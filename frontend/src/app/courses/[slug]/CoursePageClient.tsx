@@ -523,6 +523,10 @@ export default function CourseDetailPage() {
   // accessType is authoritative. CTA priority: hasPaidAccess -> CODE box -> FREE enroll -> PAID buy.
   // For CODE courses, hasPaidAccess=true only when enrollment.source='CODE'.
   const isPaidCourse = accessType === 'PAID';
+  // Khoá "Sắp ra mắt" (status COMING_SOON): máy chủ chỉ trả khung mục lục, mọi cửa ghi danh/mua đóng (409). Trang này
+  // hiện mục lục + nhãn, và thay khối đăng ký bằng một thông báo — không có nút nào bấm vào để lỗi.
+  const sapRaMat = Boolean((course as { comingSoon?: boolean }).comingSoon);
+  const khungSRM = course as { soChuongDuKien?: number; soBaiDuKien?: number };
   const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = tachGachDauDong(course.whatYouLearn);
   const requirementsList = tachCauDai(tachGachDauDong(course.requirements));
@@ -596,6 +600,11 @@ export default function CourseDetailPage() {
             {/* Left: Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2 mb-4">
+                {sapRaMat && (
+                  <span className="px-3 py-1 rounded-full text-sm font-semibold bg-amber-500/15 text-amber-800 [.theme-dark_&]:text-amber-300">
+                    {locale === 'en' ? 'Coming soon' : 'Sắp ra mắt'}
+                  </span>
+                )}
                 {course.categoryName && (
                   <span className="px-3 py-1 bg-neon-indigo/20 text-indigo-700 [.theme-dark_&]:text-neon-indigo text-sm rounded-full font-medium">
                     {course.categoryName}
@@ -658,6 +667,16 @@ export default function CourseDetailPage() {
               </div>
 
               {/* Stats */}
+              {sapRaMat ? (
+              <div className="flex flex-wrap items-center gap-6 text-text-muted text-sm">
+                <span className="flex items-center gap-1.5">
+                  <BookOpen className="w-4 h-4" />
+                  {locale === 'en'
+                    ? `${khungSRM.soChuongDuKien ?? 0} parts · ${khungSRM.soBaiDuKien ?? 0} planned lessons`
+                    : `${khungSRM.soChuongDuKien ?? 0} phần · ${khungSRM.soBaiDuKien ?? 0} bài dự kiến`}
+                </span>
+              </div>
+              ) : (
               <div className="flex flex-wrap items-center gap-6 text-text-muted text-sm">
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
@@ -684,6 +703,7 @@ export default function CourseDetailPage() {
                   </span>
                 )}
               </div>
+              )}
             </div>
 
             {/* Right: Enrollment card */}
@@ -693,8 +713,8 @@ export default function CourseDetailPage() {
                   <div className="aspect-video relative">
                     <SafeImage
                       src={course.thumbnailUrl}
-                      alt={course.title}
-                      label={course.title}
+                      alt={pickLang(course.title, locale)}
+                      label={pickLang(course.title, locale)}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -725,6 +745,20 @@ export default function CourseDetailPage() {
                   </div>
                   )}
 
+                  {sapRaMat ? (
+                    <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm">
+                      <p className="font-semibold text-text-primary">{locale === 'en' ? 'Coming soon' : 'Sắp ra mắt'}</p>
+                      <p className="mt-1.5 leading-relaxed text-text-secondary">
+                        {locale === 'en'
+                          ? `The syllabus is ready: ${khungSRM.soChuongDuKien ?? 0} parts, ${khungSRM.soBaiDuKien ?? 0} lessons. Lessons open one by one as they are finished.`
+                          : `Khung chương trình đã sẵn: ${khungSRM.soChuongDuKien ?? 0} phần, ${khungSRM.soBaiDuKien ?? 0} bài. Bài học sẽ mở dần khi soạn xong.`}
+                      </p>
+                      <button type="button" disabled className="mt-3 w-full cursor-not-allowed rounded-lg border border-[var(--border-color)] px-4 py-2.5 text-sm font-semibold text-text-muted">
+                        {locale === 'en' ? 'Enrolment not open yet' : 'Chưa mở đăng ký'}
+                      </button>
+                    </div>
+                  ) : (
+                  <>
                   <OldCourseAccessOptions
                     course={course}
                     isAuthenticated={!!isAuthenticated}
@@ -752,6 +786,8 @@ export default function CourseDetailPage() {
                           ? 'Ma kich hoat: 4-10 ky tu (chu hoa, so)'
                           : 'Truy cap mien phi'}
                   </p>
+                  </>
+                  )}
                 </div>
               </div>
             </div>
@@ -831,15 +867,17 @@ export default function CourseDetailPage() {
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm text-text-primary truncate">{pickLang(lesson.title, locale)}</p>
                                 <div className="flex items-center gap-3 mt-0.5">
+                                  {!sapRaMat && (
                                   <span className="text-text-muted text-xs">
                                     {formatDuration(lesson.videoDurationSeconds)}
                                   </span>
+                                  )}
                                   {isFree && !course.isEnrolled && (
                                     <span className="text-xs text-green-700 [.theme-dark_&]:text-green-400 font-medium">Preview</span>
                                   )}
                                 </div>
                               </div>
-                              {lesson.lessonType === 'VIDEO' && (
+                              {lesson.lessonType === 'VIDEO' && !sapRaMat && (
                                 <span className="text-text-muted text-xs shrink-0">
                                   Video
                                 </span>
@@ -852,7 +890,7 @@ export default function CourseDetailPage() {
                   </div>
                 ))}
               </div>
-              {!isAuthenticated && (
+              {!isAuthenticated && !sapRaMat && (
                 <div className="mt-4 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 p-4 flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex items-center gap-3">
                     <Lock className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet shrink-0" />

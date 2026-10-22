@@ -1,0 +1,154 @@
+{
+  "slug": "domain-driven-design",
+  "ma": "ddd",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started|||Mục 0 — Khởi động", "bai": [
+      "Start here (1/2) — What DDD is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — DDD là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Life without it: real disasters, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi không có nó: những sự cố thật, và cách học để không bỏ cuộc",
+      "0.1 — The course map: strategic design first, tactical design second|||0.1 — Bản đồ khoá học: thiết kế chiến lược trước, thiết kế chiến thuật sau",
+      "0.2 — The running example: a cinema ticketing business and its domain experts|||0.2 — Ví dụ xuyên suốt: một doanh nghiệp bán vé rạp chiếu phim và các chuyên gia nghiệp vụ của nó",
+      "0.3 — Setting up: TypeScript and Java starter projects, plus a whiteboard for event storming|||0.3 — Chuẩn bị: dự án khởi đầu TypeScript và Java, cùng một bảng trắng cho event storming",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định hướng"
+    ]},
+    { "tieuDe": "Chapter 1 — Why DDD: the problem space, domains and subdomains|||Chương 1 — Vì sao cần DDD: không gian bài toán, domain và subdomain", "bai": [
+      "1.1 — Essential vs accidental complexity: where software really gets hard|||1.1 — Độ phức tạp cốt lõi và độ phức tạp phát sinh: phần mềm thật sự khó ở đâu",
+      "1.2 — Model-driven design: the model is the heart of the code|||1.2 — Thiết kế hướng mô hình: mô hình là trái tim của code",
+      "1.3 — When DDD is not worth it: CRUD apps and simple workflows|||1.3 — Khi nào DDD không đáng: ứng dụng CRUD và quy trình đơn giản",
+      "1.4 — Domains and subdomains: mapping a business into areas|||1.4 — Domain và subdomain: chia một doanh nghiệp thành các vùng",
+      "1.5 — Core, supporting and generic subdomains, and where to invest your best people|||1.5 — Subdomain cốt lõi, hỗ trợ và phổ thông, và nên đặt người giỏi nhất ở đâu",
+      "1.6 — Buy, build or outsource: decisions driven by subdomain type|||1.6 — Mua, tự làm hay thuê ngoài: quyết định dựa trên loại subdomain",
+      "1.7 — Distilling the core domain: the domain vision statement|||1.7 — Chưng cất core domain: bản tuyên bố tầm nhìn domain",
+      "1.8 — Quiz: the problem space|||1.8 — Kiểm tra: không gian bài toán"
+    ]},
+    { "tieuDe": "Chapter 2 — Ubiquitous language|||Chương 2 — Ngôn ngữ chung (ubiquitous language)", "bai": [
+      "2.1 — Talking with domain experts: interviews, scenarios and concrete examples|||2.1 — Trò chuyện với chuyên gia nghiệp vụ: phỏng vấn, kịch bản và ví dụ cụ thể",
+      "2.2 — Building a living glossary and keeping it in sync with the code|||2.2 — Xây một bảng thuật ngữ sống và giữ nó khớp với code",
+      "2.3 — One word, many meanings: spotting ambiguity and polysemy|||2.3 — Một từ, nhiều nghĩa: phát hiện sự mơ hồ và từ đa nghĩa",
+      "2.4 — The language in code: class names, method names and tests that read like the business|||2.4 — Ngôn ngữ trong code: tên class, tên hàm và test đọc như lời nghiệp vụ",
+      "2.5 — Working across languages: Vietnamese business terms and English code|||2.5 — Làm việc giữa hai ngôn ngữ: thuật ngữ nghiệp vụ tiếng Việt và code tiếng Anh",
+      "2.6 — Lab: rename an anaemic codebase into the ubiquitous language|||2.6 — Lab: đổi tên một codebase thiếu máu theo đúng ngôn ngữ chung",
+      "2.7 — Quiz: ubiquitous language|||2.7 — Kiểm tra: ngôn ngữ chung"
+    ]},
+    { "tieuDe": "Chapter 3 — Bounded contexts|||Chương 3 — Bounded context", "bai": [
+      "3.1 — What a bounded context is: one model, one language, explicit edges|||3.1 — Bounded context là gì: một mô hình, một ngôn ngữ, ranh giới rõ ràng",
+      "3.2 — Why one model for everything fails: the many meanings of Customer|||3.2 — Vì sao một mô hình cho mọi thứ thất bại: những nghĩa khác nhau của Customer",
+      "3.3 — Finding boundaries through language, teams and business processes|||3.3 — Tìm ranh giới qua ngôn ngữ, đội ngũ và quy trình nghiệp vụ",
+      "3.4 — Subdomains vs bounded contexts vs microservices: clearing up the confusion|||3.4 — Subdomain, bounded context và microservice: gỡ rối sự nhầm lẫn",
+      "3.5 — Sizing a bounded context: too big, too small, just right|||3.5 — Kích cỡ bounded context: quá to, quá nhỏ, vừa vặn",
+      "3.6 — Quiz: bounded contexts|||3.6 — Kiểm tra: bounded context"
+    ]},
+    { "tieuDe": "Chapter 4 — Context mapping|||Chương 4 — Context mapping", "bai": [
+      "4.1 — Upstream and downstream: who depends on whose model|||4.1 — Upstream và downstream: ai phụ thuộc vào mô hình của ai",
+      "4.2 — Cooperation patterns: partnership and shared kernel|||4.2 — Các mẫu hợp tác: partnership và shared kernel",
+      "4.3 — Customer-supplier and conformist relationships|||4.3 — Quan hệ customer-supplier và conformist",
+      "4.4 — Protective patterns: anti-corruption layer, open host service and published language|||4.4 — Các mẫu phòng thủ: anti-corruption layer, open host service và published language",
+      "4.5 — Separate ways and the big ball of mud|||4.5 — Separate ways và big ball of mud",
+      "4.6 — Lab: drawing the context map of the cinema business|||4.6 — Lab: vẽ context map cho doanh nghiệp rạp chiếu phim",
+      "4.7 — Quiz: context mapping|||4.7 — Kiểm tra: context mapping"
+    ]},
+    { "tieuDe": "Chapter 5 — Event storming|||Chương 5 — Event storming", "bai": [
+      "5.1 — The idea behind event storming: domain events on a timeline|||5.1 — Ý tưởng đằng sau event storming: các domain event trên một dòng thời gian",
+      "5.2 — Big-picture event storming: chaotic exploration to pivotal events|||5.2 — Event storming toàn cảnh: từ khám phá hỗn loạn tới các sự kiện bản lề",
+      "5.3 — Process-level event storming: commands, policies, read models and actors|||5.3 — Event storming mức quy trình: command, policy, read model và actor",
+      "5.4 — Design-level event storming: from sticky notes to aggregates|||5.4 — Event storming mức thiết kế: từ giấy nhớ tới aggregate",
+      "5.5 — Facilitating a session, in person and remotely, without losing the room|||5.5 — Điều phối một buổi, trực tiếp và từ xa, mà không để mất người tham gia",
+      "5.6 — Lab: event storming the ticket booking and refund flow|||5.6 — Lab: event storming luồng đặt vé và hoàn tiền",
+      "5.7 — Quiz: event storming|||5.7 — Kiểm tra: event storming"
+    ]},
+    { "tieuDe": "Chapter 6 — Entities and value objects|||Chương 6 — Entity và value object", "bai": [
+      "6.1 — Entities: identity that persists while attributes change|||6.1 — Entity: danh tính tồn tại xuyên suốt khi thuộc tính thay đổi",
+      "6.2 — Generating identities: database IDs, UUIDs, ULIDs and natural keys|||6.2 — Sinh danh tính: ID của database, UUID, ULID và khoá tự nhiên",
+      "6.3 — Value objects: immutability, equality by value and self-validation|||6.3 — Value object: bất biến, so sánh theo giá trị và tự kiểm tra hợp lệ",
+      "6.4 — Curing primitive obsession: Money, Email, SeatNumber and DateRange|||6.4 — Chữa bệnh lạm dụng kiểu nguyên thuỷ: Money, Email, SeatNumber và DateRange",
+      "6.5 — Persisting value objects with JPA embeddables and Prisma|||6.5 — Lưu value object bằng JPA embeddable và Prisma",
+      "6.6 — Anaemic vs rich domain models: moving behaviour into the model|||6.6 — Mô hình thiếu máu và mô hình giàu hành vi: đưa hành vi vào trong mô hình",
+      "6.7 — Quiz: entities and value objects|||6.7 — Kiểm tra: entity và value object"
+    ]},
+    { "tieuDe": "Chapter 7 — Aggregates, invariants and consistency boundaries|||Chương 7 — Aggregate, bất biến và ranh giới nhất quán", "bai": [
+      "7.1 — Aggregates and aggregate roots: guarding invariants|||7.1 — Aggregate và aggregate root: canh giữ các bất biến",
+      "7.2 — Finding true invariants versus rules that can be eventually consistent|||7.2 — Tìm bất biến thật và những quy tắc có thể nhất quán sau",
+      "7.3 — Vaughn Vernon's rules: small aggregates and references by ID|||7.3 — Các quy tắc của Vaughn Vernon: aggregate nhỏ và tham chiếu bằng ID",
+      "7.4 — One aggregate per transaction, and eventual consistency between aggregates|||7.4 — Mỗi transaction một aggregate, và nhất quán sau giữa các aggregate",
+      "7.5 — Concurrency: optimistic locking and version numbers|||7.5 — Xử lý đồng thời: optimistic locking và số phiên bản",
+      "7.6 — Case study: redesigning an oversized Screening aggregate that kept deadlocking|||7.6 — Tình huống: thiết kế lại aggregate Screening quá to liên tục bị deadlock",
+      "7.7 — Lab: implementing the Booking aggregate with tests for every invariant|||7.7 — Lab: cài đặt aggregate Booking kèm test cho từng bất biến",
+      "7.8 — Quiz: aggregates and consistency|||7.8 — Kiểm tra: aggregate và tính nhất quán"
+    ]},
+    { "tieuDe": "Chapter 8 — Domain events, repositories, domain services and factories|||Chương 8 — Domain event, repository, domain service và factory", "bai": [
+      "8.1 — Domain events: naming in the past tense and choosing their payload|||8.1 — Domain event: đặt tên ở thì quá khứ và chọn nội dung mang theo",
+      "8.2 — Recording, dispatching and handling domain events in process|||8.2 — Ghi nhận, phát và xử lý domain event trong cùng tiến trình",
+      "8.3 — Repositories: collection-like interfaces for aggregates only|||8.3 — Repository: interface giống tập hợp, chỉ dành cho aggregate",
+      "8.4 — Domain services: behaviour that belongs to no single entity|||8.4 — Domain service: hành vi không thuộc về riêng entity nào",
+      "8.5 — Factories: creating and reconstituting complex aggregates|||8.5 — Factory: tạo mới và dựng lại các aggregate phức tạp",
+      "8.6 — Specifications: reusable business rules for checks and queries|||8.6 — Specification: quy tắc nghiệp vụ dùng lại được cho kiểm tra và truy vấn",
+      "8.7 — Quiz: tactical building blocks|||8.7 — Kiểm tra: các khối xây dựng chiến thuật"
+    ]},
+    { "tieuDe": "Chapter 9 — Application layer and hexagonal architecture|||Chương 9 — Tầng ứng dụng và kiến trúc lục giác (hexagonal)", "bai": [
+      "9.1 — Application services and use cases: orchestrating without business logic|||9.1 — Application service và use case: điều phối mà không chứa logic nghiệp vụ",
+      "9.2 — Ports and adapters: keeping the domain free of frameworks|||9.2 — Port và adapter: giữ domain không dính framework",
+      "9.3 — Hexagonal vs onion vs clean architecture: same idea, different drawings|||9.3 — Hexagonal, onion hay clean architecture: cùng một ý tưởng, khác cách vẽ",
+      "9.4 — Transactions, unit of work and where to commit|||9.4 — Transaction, unit of work và nên commit ở đâu",
+      "9.5 — DTOs, mapping and keeping the domain model out of your API responses|||9.5 — DTO, ánh xạ dữ liệu và giữ mô hình domain khỏi response của API",
+      "9.6 — Testing each layer: domain unit tests, use-case tests and adapter tests|||9.6 — Kiểm thử từng tầng: unit test cho domain, test use case và test adapter",
+      "9.7 — Quiz: application layer and hexagonal architecture|||9.7 — Kiểm tra: tầng ứng dụng và kiến trúc lục giác"
+    ]},
+    { "tieuDe": "Chapter 10 — Modelling with types|||Chương 10 — Mô hình hoá bằng hệ thống kiểu", "bai": [
+      "10.1 — Make illegal states unrepresentable|||10.1 — Làm cho trạng thái không hợp lệ không thể biểu diễn được",
+      "10.2 — Discriminated unions in TypeScript and sealed interfaces with records in Java|||10.2 — Discriminated union trong TypeScript, sealed interface và record trong Java",
+      "10.3 — Branded types and smart constructors for validated values|||10.3 — Branded type và smart constructor cho giá trị đã được kiểm tra",
+      "10.4 — Encoding workflows as state transitions: Draft, Reserved, Paid, Refunded|||10.4 — Mã hoá quy trình thành chuyển trạng thái: Draft, Reserved, Paid, Refunded",
+      "10.5 — Functional domain modelling: pure core, effects at the edges|||10.5 — Mô hình hoá domain kiểu hàm: lõi thuần, tác dụng phụ ở rìa",
+      "10.6 — Quiz: modelling with types|||10.6 — Kiểm tra: mô hình hoá bằng kiểu"
+    ]},
+    { "tieuDe": "Chapter 11 — Integrating bounded contexts|||Chương 11 — Tích hợp các bounded context", "bai": [
+      "11.1 — Domain events vs integration events: what may leave the context|||11.1 — Domain event và integration event: thứ gì được phép rời khỏi context",
+      "11.2 — Building an anti-corruption layer around a legacy payment system|||11.2 — Dựng anti-corruption layer bao quanh một hệ thống thanh toán cũ",
+      "11.3 — Open host service and published language with versioned schemas|||11.3 — Open host service và published language với schema có phiên bản",
+      "11.4 — Synchronous vs asynchronous integration, and the transactional outbox|||11.4 — Tích hợp đồng bộ hay bất đồng bộ, và transactional outbox",
+      "11.5 — Long-running processes across contexts: process managers and sagas|||11.5 — Quy trình chạy dài xuyên context: process manager và saga",
+      "11.6 — Lab: Booking, Payment and Loyalty contexts talking through events|||11.6 — Lab: các context Booking, Payment và Loyalty trao đổi qua event",
+      "11.7 — Quiz: integrating contexts|||11.7 — Kiểm tra: tích hợp các context"
+    ]},
+    { "tieuDe": "Chapter 12 — DDD with event sourcing and CQRS|||Chương 12 — DDD với event sourcing và CQRS", "bai": [
+      "12.1 — Event-sourced aggregates: rebuilding state by applying events|||12.1 — Aggregate dùng event sourcing: dựng lại trạng thái bằng cách áp dụng event",
+      "12.2 — Commands, decisions and events: the decide/evolve pattern|||12.2 — Command, quyết định và event: mẫu decide/evolve",
+      "12.3 — CQRS read models and projections for the booking screens|||12.3 — Read model CQRS và projection cho các màn hình đặt vé",
+      "12.4 — Testing event-sourced aggregates with given-when-then|||12.4 — Kiểm thử aggregate event sourcing theo given-when-then",
+      "12.5 — Versioning events and the cost of getting the model wrong|||12.5 — Đánh phiên bản event và cái giá của việc mô hình sai",
+      "12.6 — When to choose event sourcing, and when plain state storage is better|||12.6 — Khi nào chọn event sourcing, và khi nào lưu trạng thái thông thường tốt hơn",
+      "12.7 — Quiz: event sourcing and CQRS|||12.7 — Kiểm tra: event sourcing và CQRS"
+    ]},
+    { "tieuDe": "Chapter 13 — DDD in a modular monolith vs microservices|||Chương 13 — DDD trong modular monolith và trong microservices", "bai": [
+      "13.1 — Bounded contexts as modules: enforcing boundaries inside one deployable|||13.1 — Bounded context thành module: giữ ranh giới bên trong một khối deploy",
+      "13.2 — Enforcing module rules with ArchUnit, dependency-cruiser and Spring Modulith|||13.2 — Ép quy tắc module bằng ArchUnit, dependency-cruiser và Spring Modulith",
+      "13.3 — Data per module: schemas, no cross-module joins, and in-process events|||13.3 — Dữ liệu theo module: tách schema, không join chéo module, và event trong tiến trình",
+      "13.4 — When a module should become a microservice: the criteria|||13.4 — Khi nào một module nên thành microservice: các tiêu chí",
+      "13.5 — Extracting a context into a service without breaking its consumers|||13.5 — Tách một context thành service mà không làm hỏng bên đang dùng nó",
+      "13.6 — Team ownership, Conway's law and context boundaries|||13.6 — Quyền sở hữu theo đội, định luật Conway và ranh giới context",
+      "13.7 — Quiz: modular monolith vs microservices|||13.7 — Kiểm tra: modular monolith và microservices"
+    ]},
+    { "tieuDe": "Chapter 14 — Refactoring towards a deeper model|||Chương 14 — Refactor hướng tới một mô hình sâu hơn", "bai": [
+      "14.1 — Breakthroughs: when a new concept suddenly simplifies the model|||14.1 — Bước đột phá: khi một khái niệm mới bỗng làm mô hình đơn giản hẳn",
+      "14.2 — Making implicit concepts explicit: hidden rules, policies and constraints|||14.2 — Làm rõ các khái niệm ngầm: quy tắc ẩn, chính sách và ràng buộc",
+      "14.3 — Supple design: intention-revealing interfaces and side-effect-free functions|||14.3 — Thiết kế mềm dẻo: interface nói rõ ý định và hàm không tác dụng phụ",
+      "14.4 — Refactoring a transaction-script codebase into a domain model step by step|||14.4 — Refactor từng bước một codebase kiểu transaction script thành mô hình domain",
+      "14.5 — Splitting and merging bounded contexts as the business changes|||14.5 — Tách và gộp bounded context khi nghiệp vụ thay đổi",
+      "14.6 — Quiz: deeper models|||14.6 — Kiểm tra: mô hình sâu hơn"
+    ]},
+    { "tieuDe": "Chapter 15 — Capstone: a cinema ticketing platform designed with DDD|||Chương 15 — Dự án cuối khoá: nền tảng bán vé rạp chiếu phim thiết kế theo DDD", "bai": [
+      "15.1 — Milestone 1: big-picture event storming and the subdomain map|||15.1 — Mốc 1: event storming toàn cảnh và bản đồ subdomain",
+      "15.2 — Milestone 2: context map and ubiquitous language glossary per context|||15.2 — Mốc 2: context map và bảng thuật ngữ chung cho từng context",
+      "15.3 — Milestone 3: the Booking context with aggregates, value objects and tests|||15.3 — Mốc 3: context Booking với aggregate, value object và test",
+      "15.4 — Milestone 4: hexagonal application layer and persistence adapters|||15.4 — Mốc 4: tầng ứng dụng kiểu hexagonal và adapter lưu trữ",
+      "15.5 — Milestone 5: Payment integration through an anti-corruption layer and outbox events|||15.5 — Mốc 5: tích hợp Payment qua anti-corruption layer và event outbox",
+      "15.6 — Milestone 6: architecture decision records and a design defence presentation|||15.6 — Mốc 6: các bản ghi quyết định kiến trúc và buổi bảo vệ thiết kế",
+      "15.7 — Quiz: capstone checkpoint — justify your boundaries and aggregates|||15.7 — Kiểm tra: chốt dự án — giải thích ranh giới và aggregate bạn đã chọn"
+    ]},
+    { "tieuDe": "Chapter 16 — Final exam|||Chương 16 — Thi cuối khoá", "bai": [
+      "16.1 — Review: strategic and tactical DDD on one page|||16.1 — Ôn tập: DDD chiến lược và chiến thuật trên một trang",
+      "16.2 — Mock exam: modelling scenarios and context-mapping cases|||16.2 — Thi thử: các tình huống mô hình hoá và bài context mapping",
+      "16.3 — Final exam|||16.3 — Bài thi cuối khoá",
+      "16.4 — Retrospective and next steps: Team Topologies, event-driven architecture, the DDD community|||16.4 — Nhìn lại và học gì tiếp: Team Topologies, kiến trúc hướng sự kiện và cộng đồng DDD"
+    ]}
+  ]
+}

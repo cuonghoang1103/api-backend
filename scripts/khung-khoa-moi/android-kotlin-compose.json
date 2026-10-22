@@ -1,0 +1,144 @@
+{
+  "slug": "android-kotlin-compose",
+  "ma": "adr",
+  "chuong": [
+    { "tieuDe": "Section 0 — Getting started: Android Studio and a first app|||Mục 0 — Khởi động: Android Studio và ứng dụng đầu tiên", "bai": [
+      "Start here (1/2) — What Android development is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — Lập trình Android là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+      "Start here (2/2) — Done wrong: real Google Play disasters, and how to learn without giving up|||Bắt đầu tại đây (2/2) — Khi làm sai: những sự cố thật trên Google Play, và cách học để không bỏ cuộc",
+      "0.1 — Installing Android Studio, the SDK Manager and creating emulators that do not crawl|||0.1 — Cài Android Studio, SDK Manager và tạo emulator chạy không ì ạch",
+      "0.2 — Your first five minutes: run a Compose app on the emulator and on your phone over USB or Wi-Fi|||0.2 — Năm phút đầu tiên: chạy app Compose trên emulator và trên điện thoại qua USB hoặc Wi-Fi",
+      "0.3 — Anatomy of a project: Gradle Kotlin DSL, the version catalog, the manifest and minSdk/targetSdk|||0.3 — Giải phẫu một project: Gradle Kotlin DSL, version catalog, manifest và minSdk/targetSdk",
+      "0.4 — Quiz: getting oriented|||0.4 — Kiểm tra: định vị lại"
+    ]},
+    { "tieuDe": "Chapter 1 — Kotlin from zero|||Chương 1 — Kotlin từ con số 0", "bai": [
+      "1.1 — val, var and types: type inference, String templates and basic operators|||1.1 — val, var và kiểu: suy luận kiểu, String template và các toán tử cơ bản",
+      "1.2 — Null safety: nullable types, ?. , ?: and why !! is a crash waiting to happen|||1.2 — Null safety: kiểu nullable, ?. , ?: và vì sao !! là một lần crash đang chờ",
+      "1.3 — Control flow as expressions: if, when, ranges and loops|||1.3 — Điều khiển luồng dạng biểu thức: if, when, range và vòng lặp",
+      "1.4 — Functions, default and named arguments, lambdas and higher-order functions|||1.4 — Hàm, tham số mặc định và đặt tên, lambda và hàm bậc cao",
+      "1.5 — Collections: List, Map, Set, mutable vs read-only, map/filter/groupBy|||1.5 — Collection: List, Map, Set, có thể sửa và chỉ đọc, map/filter/groupBy",
+      "1.6 — Classes, data classes, sealed interfaces and enums for modeling UI state|||1.6 — Class, data class, sealed interface và enum để mô hình hoá trạng thái UI",
+      "1.7 — Extension functions, scope functions (let, apply, also, run) and generics|||1.7 — Extension function, scope function (let, apply, also, run) và generic",
+      "1.8 — Quiz: the Kotlin language|||1.8 — Kiểm tra: ngôn ngữ Kotlin"
+    ]},
+    { "tieuDe": "Chapter 2 — Jetpack Compose: building screens|||Chương 2 — Jetpack Compose: dựng màn hình", "bai": [
+      "2.1 — Composable functions and @Preview: describing UI instead of mutating it|||2.1 — Hàm composable và @Preview: mô tả giao diện thay vì sửa nó từng chút",
+      "2.2 — Row, Column, Box and Modifier: padding, size, weight and why modifier order matters|||2.2 — Row, Column, Box và Modifier: padding, size, weight và vì sao thứ tự modifier quan trọng",
+      "2.3 — LazyColumn, LazyVerticalGrid and keys: rendering long lists efficiently|||2.3 — LazyColumn, LazyVerticalGrid và key: hiển thị danh sách dài hiệu quả",
+      "2.4 — Material 3: theming, dynamic color, typography and Dark theme|||2.4 — Material 3: theme, dynamic color, typography và giao diện tối",
+      "2.5 — Scaffold, top app bars, FABs, snackbars and edge-to-edge insets|||2.5 — Scaffold, top app bar, FAB, snackbar và tràn viền (edge-to-edge) với insets",
+      "2.6 — Images and icons: painterResource, Material Symbols and loading network images with Coil|||2.6 — Hình ảnh và icon: painterResource, Material Symbols và tải ảnh từ mạng bằng Coil",
+      "2.7 — Quiz: Compose layout|||2.7 — Kiểm tra: bố cục Compose"
+    ]},
+    { "tieuDe": "Chapter 3 — State in Compose and app architecture|||Chương 3 — State trong Compose và kiến trúc ứng dụng", "bai": [
+      "3.1 — State and recomposition: remember, mutableStateOf and rememberSaveable|||3.1 — State và recomposition: remember, mutableStateOf và rememberSaveable",
+      "3.2 — State hoisting and unidirectional data flow: stateless vs stateful composables|||3.2 — State hoisting và luồng dữ liệu một chiều: composable không giữ state và có giữ state",
+      "3.3 — ViewModel and StateFlow: surviving rotation, collected with collectAsStateWithLifecycle|||3.3 — ViewModel và StateFlow: sống sót khi xoay màn hình, thu bằng collectAsStateWithLifecycle",
+      "3.4 — Side effects: LaunchedEffect, DisposableEffect and rememberCoroutineScope|||3.4 — Side effect: LaunchedEffect, DisposableEffect và rememberCoroutineScope",
+      "3.5 — Forms and input: TextField, validation, keyboard options and focus|||3.5 — Form và dữ liệu nhập: TextField, kiểm tra hợp lệ, tuỳ chọn bàn phím và focus",
+      "3.6 — The recommended architecture: UI, domain and data layers, and dependency injection with Hilt|||3.6 — Kiến trúc được khuyến nghị: tầng UI, domain và data, và dependency injection với Hilt",
+      "3.7 — Quiz: state and architecture|||3.7 — Kiểm tra: state và kiến trúc"
+    ]},
+    { "tieuDe": "Chapter 4 — Navigation|||Chương 4 — Điều hướng", "bai": [
+      "4.1 — Navigation in Compose: NavHost, type-safe routes with Kotlin serialization and the back stack|||4.1 — Điều hướng trong Compose: NavHost, route an toàn kiểu với Kotlin serialization và back stack",
+      "4.2 — Passing arguments, returning results and sharing a ViewModel between screens|||4.2 — Truyền tham số, trả kết quả về và dùng chung ViewModel giữa các màn hình",
+      "4.3 — Bottom navigation, nested graphs and keeping each tab's state|||4.3 — Bottom navigation, graph lồng nhau và giữ state riêng cho từng tab",
+      "4.4 — Deep links and verified Android App Links|||4.4 — Deep link và Android App Links đã xác minh",
+      "4.5 — Predictive back and where Navigation 3 fits in|||4.5 — Predictive back và Navigation 3 nằm ở đâu trong bức tranh",
+      "4.6 — Quiz: navigation|||4.6 — Kiểm tra: điều hướng"
+    ]},
+    { "tieuDe": "Chapter 5 — Coroutines and Flow|||Chương 5 — Coroutine và Flow", "bai": [
+      "5.1 — suspend functions and why the main thread must never block|||5.1 — Hàm suspend và vì sao main thread không bao giờ được bị chặn",
+      "5.2 — Structured concurrency: viewModelScope, launch, async and Dispatchers|||5.2 — Structured concurrency: viewModelScope, launch, async và Dispatchers",
+      "5.3 — Cancellation and exceptions: SupervisorJob, CoroutineExceptionHandler and timeouts|||5.3 — Huỷ và ngoại lệ: SupervisorJob, CoroutineExceptionHandler và timeout",
+      "5.4 — Flow basics: cold streams, map, filter, combine, debounce and flatMapLatest|||5.4 — Flow cơ bản: luồng lạnh, map, filter, combine, debounce và flatMapLatest",
+      "5.5 — StateFlow vs SharedFlow, stateIn and one-off UI events|||5.5 — StateFlow và SharedFlow, stateIn và sự kiện UI chỉ xảy ra một lần",
+      "5.6 — Quiz: coroutines and Flow|||5.6 — Kiểm tra: coroutine và Flow"
+    ]},
+    { "tieuDe": "Chapter 6 — Networking with Retrofit and Ktor|||Chương 6 — Gọi mạng với Retrofit và Ktor", "bai": [
+      "6.1 — Calling a REST API with Retrofit and kotlinx.serialization|||6.1 — Gọi REST API bằng Retrofit và kotlinx.serialization",
+      "6.2 — OkHttp interceptors: auth headers, logging and refreshing an expired token|||6.2 — OkHttp interceptor: header xác thực, ghi log và làm mới token hết hạn",
+      "6.3 — The Ktor client as an alternative, and when to choose it|||6.3 — Ktor client như một lựa chọn khác, và khi nào nên chọn nó",
+      "6.4 — Modeling errors: Result, sealed error types, and mapping them to loading/empty/error UI|||6.4 — Mô hình hoá lỗi: Result, kiểu lỗi sealed, và ánh xạ sang UI đang tải/rỗng/lỗi",
+      "6.5 — The repository pattern: one source of truth between network and cache|||6.5 — Repository pattern: một nguồn sự thật giữa mạng và cache",
+      "6.6 — Uploading files, network security config and why cleartext HTTP is blocked|||6.6 — Upload tệp, network security config và vì sao HTTP không mã hoá bị chặn",
+      "6.7 — Quiz: networking|||6.7 — Kiểm tra: gọi mạng"
+    ]},
+    { "tieuDe": "Chapter 7 — Local data: Room, DataStore and offline-first|||Chương 7 — Dữ liệu cục bộ: Room, DataStore và offline-first", "bai": [
+      "7.1 — Room basics: entities, DAOs and the database class|||7.1 — Room cơ bản: entity, DAO và lớp database",
+      "7.2 — Reactive queries: returning Flow from Room and showing live data in Compose|||7.2 — Truy vấn phản ứng: Room trả về Flow và hiển thị dữ liệu trực tiếp trong Compose",
+      "7.3 — Relations and schema migrations without losing user data|||7.3 — Quan hệ và migration schema mà không làm mất dữ liệu người dùng",
+      "7.4 — Preferences DataStore for settings, and what replaced SharedPreferences|||7.4 — Preferences DataStore cho cài đặt, và thứ đã thay SharedPreferences",
+      "7.5 — Offline-first sync with WorkManager: queued writes, retries and conflicts|||7.5 — Đồng bộ offline-first với WorkManager: ghi xếp hàng, thử lại và xung đột",
+      "7.6 — Quiz: local data|||7.6 — Kiểm tra: dữ liệu cục bộ"
+    ]},
+    { "tieuDe": "Chapter 8 — Authentication with Credential Manager|||Chương 8 — Xác thực với Credential Manager", "bai": [
+      "8.1 — How mobile login works: ID tokens, access and refresh tokens, and sessions on your backend|||8.1 — Đăng nhập trên mobile hoạt động thế nào: ID token, access và refresh token, và phiên ở backend",
+      "8.2 — Credential Manager: one API for passwords, passkeys and Sign in with Google|||8.2 — Credential Manager: một API cho mật khẩu, passkey và Sign in with Google",
+      "8.3 — Sign in with Google end to end: Google ID token, server verification and SHA-1 fingerprints|||8.3 — Sign in with Google từ đầu tới cuối: Google ID token, xác minh ở server và vân tay SHA-1",
+      "8.4 — Passkeys: creating and signing in, and the Digital Asset Links file|||8.4 — Passkey: tạo và đăng nhập, và tệp Digital Asset Links",
+      "8.5 — Storing tokens safely with the Android Keystore, and BiometricPrompt|||8.5 — Lưu token an toàn với Android Keystore, và BiometricPrompt",
+      "8.6 — Logout and account deletion: in the app and through a web link, as Google Play requires|||8.6 — Đăng xuất và xoá tài khoản: trong app và qua một đường link web, đúng như Google Play yêu cầu",
+      "8.7 — Quiz: authentication|||8.7 — Kiểm tra: xác thực"
+    ]},
+    { "tieuDe": "Chapter 9 — Push notifications, background work and device features|||Chương 9 — Thông báo đẩy, chạy nền và tính năng thiết bị", "bai": [
+      "9.1 — Firebase Cloud Messaging: setup, device tokens and token refresh|||9.1 — Firebase Cloud Messaging: cài đặt, device token và làm mới token",
+      "9.2 — The POST_NOTIFICATIONS runtime permission and notification channels|||9.2 — Quyền POST_NOTIFICATIONS lúc chạy và notification channel",
+      "9.3 — Sending from your backend with the FCM HTTP v1 API: notification vs data messages|||9.3 — Gửi từ backend bằng FCM HTTP v1 API: notification message và data message",
+      "9.4 — Background work done right: WorkManager, foreground service types and battery limits|||9.4 — Chạy nền cho đúng: WorkManager, loại foreground service và giới hạn pin",
+      "9.5 — Photos and camera: the Photo Picker without storage permissions, and CameraX|||9.5 — Ảnh và camera: Photo Picker không cần quyền bộ nhớ, và CameraX",
+      "9.6 — Home screen widgets with Jetpack Glance, and sharing via Intents|||9.6 — Widget màn hình chính với Jetpack Glance, và chia sẻ qua Intent",
+      "9.7 — Quiz: push, background and device features|||9.7 — Kiểm tra: thông báo đẩy, chạy nền và tính năng thiết bị"
+    ]},
+    { "tieuDe": "Chapter 10 — Tablets, foldables and large screens|||Chương 10 — Máy tính bảng, máy gập và màn hình lớn", "bai": [
+      "10.1 — Why large screens matter on Google Play, and what the large-screen quality guidelines ask|||10.1 — Vì sao màn hình lớn quan trọng trên Google Play, và hướng dẫn chất lượng màn hình lớn đòi gì",
+      "10.2 — Window size classes: one codebase that adapts from phone to tablet|||10.2 — Window size class: một codebase tự thích ứng từ điện thoại tới máy tính bảng",
+      "10.3 — Canonical layouts with Material 3 adaptive: list-detail and supporting pane|||10.3 — Bố cục chuẩn với Material 3 adaptive: list-detail và supporting pane",
+      "10.4 — Foldables: postures, hinges and Jetpack WindowManager|||10.4 — Máy gập: tư thế gập, bản lề và Jetpack WindowManager",
+      "10.5 — Multi-window, resizing, orientation and not losing state on configuration changes|||10.5 — Đa cửa sổ, đổi kích thước, xoay màn hình và không mất state khi cấu hình thay đổi",
+      "10.6 — Keyboard, mouse and stylus input on tablets and ChromeOS|||10.6 — Bàn phím, chuột và bút cảm ứng trên máy tính bảng và ChromeOS",
+      "10.7 — Quiz: large screens|||10.7 — Kiểm tra: màn hình lớn"
+    ]},
+    { "tieuDe": "Chapter 11 — Testing, debugging and performance|||Chương 11 — Kiểm thử, gỡ lỗi và hiệu năng", "bai": [
+      "11.1 — Unit tests with JUnit, fakes vs mocks, and testing Flows with Turbine|||11.1 — Unit test với JUnit, fake và mock, và kiểm thử Flow bằng Turbine",
+      "11.2 — Compose UI tests: semantics, finders, assertions and screenshot tests|||11.2 — Compose UI test: semantics, finder, assertion và screenshot test",
+      "11.3 — Debugging: Logcat, breakpoints, Layout Inspector and recomposition counts|||11.3 — Gỡ lỗi: Logcat, breakpoint, Layout Inspector và đếm số lần recomposition",
+      "11.4 — Performance: Android Studio Profiler, R8, Baseline Profiles and startup time|||11.4 — Hiệu năng: Android Studio Profiler, R8, Baseline Profile và thời gian khởi động",
+      "11.5 — Crashes and ANRs in production: Crashlytics and Android vitals in Play Console|||11.5 — Crash và ANR trên production: Crashlytics và Android vitals trong Play Console",
+      "11.6 — Quiz: testing and performance|||11.6 — Kiểm tra: kiểm thử và hiệu năng"
+    ]},
+    { "tieuDe": "Chapter 12 — Signing, release builds and Google Play Console|||Chương 12 — Ký app, bản release và Google Play Console", "bai": [
+      "12.1 — Creating a Play Console developer account: personal vs organization, and identity verification|||12.1 — Tạo tài khoản nhà phát triển Play Console: cá nhân hay tổ chức, và xác minh danh tính",
+      "12.2 — Signing explained: upload key vs app signing key, and Play App Signing|||12.2 — Giải thích việc ký app: upload key và app signing key, và Play App Signing",
+      "12.3 — Building a release App Bundle: versionCode, R8 shrinking and keeping secrets out of the build|||12.3 — Dựng App Bundle bản release: versionCode, thu gọn bằng R8 và giữ bí mật ngoài bản build",
+      "12.4 — Testing tracks: internal, closed and open testing, and staged rollouts|||12.4 — Các kênh kiểm thử: internal, closed và open testing, và phát hành theo tỷ lệ",
+      "12.5 — Store listing: title, descriptions, icon, feature graphic, phone and tablet screenshots|||12.5 — Trang cửa hàng: tiêu đề, mô tả, icon, feature graphic, ảnh chụp điện thoại và máy tính bảng",
+      "12.6 — Automating releases with the Play Developer API or fastlane|||12.6 — Tự động hoá phát hành với Play Developer API hoặc fastlane",
+      "12.7 — Quiz: signing and Play Console|||12.7 — Kiểm tra: ký app và Play Console"
+    ]},
+    { "tieuDe": "Chapter 13 — Google Play policies, production access and appeals|||Chương 13 — Chính sách Google Play, quyền phát hành production và kháng nghị", "bai": [
+      "13.1 — The Data safety form: declaring collection, sharing and security that match your code and SDKs|||13.1 — Biểu mẫu Data safety: khai thu thập, chia sẻ và bảo mật khớp với code và các SDK bạn dùng",
+      "13.2 — The target API level requirement: why old targetSdk blocks updates, and how to migrate each year|||13.2 — Yêu cầu target API level: vì sao targetSdk cũ chặn bản cập nhật, và cách nâng mỗi năm",
+      "13.3 — New personal accounts: a continuous closed test with enough testers before production|||13.3 — Tài khoản cá nhân mới: closed test liên tục, đủ người thử, rồi mới xin production",
+      "13.4 — App content: privacy policy, content rating, audience, ads and app access for reviewers|||13.4 — Nội dung app: chính sách quyền riêng tư, phân loại, đối tượng, quảng cáo, truy cập cho reviewer",
+      "13.5 — Sensitive permissions and the policy declarations they trigger|||13.5 — Quyền nhạy cảm và những tờ khai chính sách mà chúng kéo theo",
+      "13.6 — Common rejections: broken features, no review login, Data safety gaps, misleading metadata|||13.6 — Lỗi hay bị từ chối: tính năng hỏng, thiếu tài khoản review, Data safety lệch, metadata sai",
+      "13.7 — The Policy status page: fixing, resubmitting, appealing, and avoiding account suspension|||13.7 — Trang Policy status: sửa, nộp lại, kháng nghị, và tránh bị đình chỉ tài khoản",
+      "13.8 — Quiz: Google Play policies|||13.8 — Kiểm tra: chính sách Google Play"
+    ]},
+    { "tieuDe": "Chapter 14 — Capstone: ship one app to Google Play|||Chương 14 — Dự án cuối khoá: đưa một app lên Google Play", "bai": [
+      "14.1 — Milestone 1: scope, adaptive wireframes for phone and tablet, and the data model|||14.1 — Cột mốc 1: chốt phạm vi, wireframe thích ứng cho điện thoại và máy tính bảng, và mô hình dữ liệu",
+      "14.2 — Milestone 2: core screens, navigation, Room and the repository layer|||14.2 — Cột mốc 2: các màn hình chính, điều hướng, Room và tầng repository",
+      "14.3 — Milestone 3: backend, Credential Manager login, FCM push and account deletion|||14.3 — Cột mốc 3: backend, đăng nhập bằng Credential Manager, thông báo FCM và xoá tài khoản",
+      "14.4 — Milestone 4: large-screen layouts, tests, Baseline Profile and a signed release bundle|||14.4 — Cột mốc 4: bố cục màn hình lớn, kiểm thử, Baseline Profile và bản bundle release đã ký",
+      "14.5 — Milestone 5: closed testing with real testers, collecting feedback and fixing issues|||14.5 — Cột mốc 5: closed testing với người thử thật, thu phản hồi và sửa lỗi",
+      "14.6 — Milestone 6: Data safety, store listing, production access and a staged rollout|||14.6 — Cột mốc 6: Data safety, trang cửa hàng, quyền production và phát hành theo tỷ lệ",
+      "14.7 — Quiz: capstone checkpoint before production|||14.7 — Kiểm tra: chốt chặn dự án trước khi lên production"
+    ]},
+    { "tieuDe": "Chapter 15 — Final exam|||Chương 15 — Thi cuối khoá", "bai": [
+      "15.1 — Review: the whole course on one page, from Kotlin to Google Play|||15.1 — Ôn tập: cả khoá trên một trang, từ Kotlin tới Google Play",
+      "15.2 — Mock exam: 20 situations from real projects and real policy rejections|||15.2 — Thi thử: 20 tình huống từ dự án thật và những lần vi phạm chính sách thật",
+      "15.3 — Final exam|||15.3 — Bài thi cuối khoá",
+      "15.4 — Retrospective and what to learn next: Kotlin Multiplatform, Wear OS and Android XR|||15.4 — Nhìn lại và học gì tiếp: Kotlin Multiplatform, Wear OS và Android XR"
+    ]}
+  ]
+}

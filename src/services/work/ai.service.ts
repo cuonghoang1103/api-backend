@@ -185,6 +185,25 @@ export function parseJson<T>(text: string, schema: z.ZodType<T>): T {
 
 const LANG_RULE = 'Reply in the same language the user writes in (Vietnamese or English). Keep issue titles in that language too.';
 
+/**
+ * Ngôn ngữ của CÂU HỎI (22/10/2026): đoán bằng mã thay vì để model tự đoán — người duyệt App Store hỏi tiếng Anh vẫn
+ * nhận câu trả lời tiếng Việt vì khuôn mẫu trả lời ghi tiêu đề song ngữ ("Các bước / Steps") và luật cũ "không rõ thì
+ * theo ngôn ngữ dữ liệu dự án". Có chữ cái tiếng Việt có dấu ⇒ 'vi'; có chữ Latin (≥ 2 từ) mà không có dấu ⇒ 'en';
+ * còn lại (chỉ mã thẻ, emoji…) ⇒ null (để model theo luật chung).
+ */
+export function ngonNguCauHoi(text: string): 'vi' | 'en' | null {
+  const t = (text || '').normalize('NFC');
+  if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(t)) return 'vi';
+  const tu = (t.replace(/[A-Z]{2,10}-\d+/g, ' ').match(/[A-Za-z]{2,}/g) ?? []).map((w) => w.toLowerCase());
+  // Tiếng Việt gõ KHÔNG dấu ("hom nay toi lam gi") rất hay gặp ở sinh viên ⇒ đếm từ chức năng hai bên.
+  const vi = tu.filter((w) => TU_VIET_KHONG_DAU.has(w)).length;
+  const en = tu.filter((w) => TU_ANH.has(w)).length;
+  if (vi >= 2 && vi > en) return 'vi';
+  return tu.length >= 2 ? 'en' : null;
+}
+const TU_VIET_KHONG_DAU = new Set(('toi minh ban nay hom lam gi cua khong ko dc duoc viec nao the can cho nhe oi sao la va voi nhu nhung dang da se roi chua hay giup xem doc giai thich cach buoc phai nen di ve dau sau truoc hien tai con lai bao nhieu may khi nhieu it moi cu ai').split(' '));
+const TU_ANH = new Set(('the what how is are should i my me to do work on today which next show explain step steps read first done when who why can you please this that it for of in and or with about need have has'.split(' ')));
+
 // ─── Ngữ cảnh dự án cho model ────────────────────────────────────
 
 const clip = (s: string | null | undefined, n: number) => (s ? (s.length > n ? `${s.slice(0, n)}…` : s) : '');
@@ -575,7 +594,7 @@ export async function chat(
   // 22/10/2026: ảnh ⇒ model nhìn (khối ảnh); tệp ⇒ chữ rút ở backend. Đọc hỏng ⇒ một dòng lỗi, câu hỏi vẫn chạy.
   const tep = attachments.length ? await docTepChoModel(projectId, attachments).catch(soft('tệp đính kèm', { images: [] as ClaudeImageBlock[], text: '' })) : { images: [] as ClaudeImageBlock[], text: '' };
   if (attachments.length) hooks?.onProgress?.({ phase: 'reading', round: 0, prefetched: true, items: attachments.map((f) => f.name).slice(0, 12) });
-  const system = `${mentorSystem(me.username, dayInZone(new Date()), links)}
+  const system = `${mentorSystem(me.username, dayInZone(new Date()), links, ngonNguCauHoi(input.message))}
 ${ACTIONS_DOC}${docsBlock}${cmdBlock}
 ${LINK_VA_SO_DO_DOC}
 ${learnOnly ? '' : await xoaDoc()}
@@ -634,18 +653,27 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]} — or, to read first, {"
  * offline: trợ lý phải ĐỌC đủ trước khi nói, liệt kê đủ việc kèm link bấm được, chỉ cách làm từng bước, tách rõ dữ
  * liệu CT Work (trích key/trang) với kiến thức chung, và nói thẳng "không có trong CT Work" thay vì bịa.
  */
-function mentorSystem(username: string, today: string, links: WorkLinks): string {
+function mentorSystem(username: string, today: string, links: WorkLinks, lang: 'vi' | 'en' | null = null): string {
+  const vi = lang === 'vi';
+  const H = vi
+    ? { read: 'Đọc trước', steps: 'Các bước', done: 'Xong khi', ask: 'Hỏi ai', rest: 'Còn lại', gk: '(kiến thức chung)' }
+    : { read: 'Read first', steps: 'Steps', done: 'Done when', ask: 'Ask', rest: 'Also open', gk: '(general knowledge)' };
+  const langLine = lang === 'en'
+    ? 'LANGUAGE: the user wrote in ENGLISH — write the WHOLE reply in English (headings, bullets, dates, status words), even when the project data is in Vietnamese; keep issue keys/titles exactly as they are.'
+    : lang === 'vi'
+      ? 'LANGUAGE: the user wrote in VIETNAMESE — write the WHOLE reply in Vietnamese; keep issue keys/titles and technical terms as they are.'
+      : `${LANG_RULE} If the language is unclear, use the language the project data is written in.`;
   return `You are the CT Work assistant of this project team — their best mentor: a senior software engineer, Scrum master, business analyst and QA lead who has read EVERYTHING in this project. Members (often FPT University students) ask you when the team lead is offline, so you must know the project better than anyone and teach.
-${LANG_RULE} If the language is unclear, use the language the project data is written in.
+${langLine}
 The user is @${username}. Today is ${today}.
 HOW TO ANSWER
 1. Read before answering. Facts about this project come ONLY from the CT Work data in this prompt or from reads. For a question about an issue, the user's tasks, "what should I do" or "what should I read": make sure you have read the issue IN FULL (read_issue) and what it points to — Docs pages (read_page), attached files (read_attachment), resources. "Already read for you" may contain them already: never read those again. Ask for everything you still need in ONE round.
-2. Asked about their own work ("what should I do / work on next"): pick the 3 most urgent open issues assigned to them (see "Open issues assigned to"; overdue first, then due soonest, then In Progress) and explain only those. Then a short "Còn lại / Also open" list of at most 8 more, ONE line each: [KEY — title](link) · status · due. If even more remain, say how many and point to My Work — never dump the whole list. Never present someone else's issue as theirs.
-3. For each issue you explain give, briefly: **Đọc trước / Read first** (at most 3 links: Docs pages, resources, files the issue mentions), **Các bước / Steps** (at most 4 short numbered steps for this project's stack), **Xong khi / Done when** (one line from its acceptance criteria / checklist / Definition of Done), **Hỏi ai / Ask** (only when something is really unclear). Skip a part when it does not apply. Go deeper only when the user asks about ONE specific issue or asks for detail.
-4. Teach with general knowledge (programming, databases, security, testing, Scrum, FPT course conventions such as SRS/SDS/Report 5.1) to explain what the issue requires — but keep it apart from project facts: cite CT Work facts with their source (issue key, "Docs #3", file name, comment by @user) and mark general advice as general knowledge ("(kiến thức chung)" in Vietnamese).
+2. Asked about their own work ("what should I do / work on next"): pick the 3 most urgent open issues assigned to them (see "Open issues assigned to"; overdue first, then due soonest, then In Progress) and explain only those. Then a short "${H.rest}" list of at most 8 more, ONE line each: [KEY — title](link) · status · due. If even more remain, say how many and point to My Work — never dump the whole list. Never present someone else's issue as theirs.
+3. For each issue you explain give, briefly: **${H.read}** (at most 3 links: Docs pages, resources, files the issue mentions), **${H.steps}** (at most 4 short numbered steps for this project's stack), **${H.done}** (one line from its acceptance criteria / checklist / Definition of Done), **${H.ask}** (only when something is really unclear). Skip a part when it does not apply. Go deeper only when the user asks about ONE specific issue or asks for detail.
+4. Teach with general knowledge (programming, databases, security, testing, Scrum, FPT course conventions such as SRS/SDS/Report 5.1) to explain what the issue requires — but keep it apart from project facts: cite CT Work facts with their source (issue key, "Docs #3", file name, comment by @user) and mark general advice as general knowledge ("${H.gk}").
 5. Never invent issues, pages, files, links, dates, people or requirements. If something is not in CT Work, say plainly that it is not there and suggest asking the team lead (@username from the data).
 6. Links: follow LINKS below (write issue keys like ${links.key}-12 and [[doc:3]] tokens — the server builds the real links; in-app paths that appear in the data, e.g. ${links.issue(12)}, are also fine). Copy external URLs exactly as they appear in the data. Never make up a URL or a path.
-7. Format — it is read on a PHONE as often as on a laptop: Markdown, the direct answer first in 1–2 sentences, then short ### headings and bullet lists. Keep the whole reply under about 300 words unless the user asks for detail ("chi tiết", "full", "explain more"). NO Markdown tables (they are cut off on phones) — use bullets. Short sentences, one idea per bullet. Dates as day/month (e.g. 18/10, "quá hạn 2 ngày" / "2 days overdue"), never ISO yyyy-mm-dd; write "chưa có hạn" / "no due date" instead of "—". Bold only deadlines and the single next action. No preamble, no filler. End with one short line offering to go deeper on a specific issue.`;
+7. Format — it is read on a PHONE as often as on a laptop: Markdown, the direct answer first in 1–2 sentences, then short ### headings and bullet lists. Keep the whole reply under about 300 words unless the user asks for detail ("chi tiết", "full", "explain more"). NO Markdown tables (they are cut off on phones) — use bullets. Short sentences, one idea per bullet. Dates as day/month (e.g. 18/10, "${vi ? 'quá hạn 2 ngày' : '2 days overdue'}"), never ISO yyyy-mm-dd; write "${vi ? 'chưa có hạn' : 'no due date'}" instead of "—". Bold only deadlines and the single next action. No preamble, no filler. End with one short line offering to go deeper on a specific issue.`;
 }
 
 /**

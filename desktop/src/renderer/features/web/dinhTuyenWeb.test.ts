@@ -314,7 +314,8 @@ describe('khopTuyenWeb', () => {
     // 18/10/2026: +1 CT Work trang Code (/work/:ws/:key/code — hoạt động Git, nhánh, PR, mã nguồn).
     // 19/10/2026: +1 CT Work đợt 8B (/work/:ws/ai-usage — AI trong không gian).
     // 20/10/2026: +1 Create with CuongMini (/work/:ws/setup — dựng dự án/không gian từ đề bài).
-    expect(thay.size).toBe(182);
+    // 21/10/2026: +2 Bảng tin nhóm (/work/:ws/feed, /work/:ws/:key/feed).
+    expect(thay.size).toBe(184);
   });
 });
 

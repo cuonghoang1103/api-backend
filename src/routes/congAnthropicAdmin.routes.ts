@@ -341,7 +341,9 @@ router.put('/default-gioi-han', boc(async (req, res) => {
 router.get('/ctwork-ai', boc(async (_req, res) => {
   const { docGioiHanTaiTro } = await import('../services/work/aiTaiTro.js');
   const { chuoiCongHienTai } = await import('../services/work/aiCong.js');
-  res.json({ success: true, data: { gioiHan: await docGioiHanTaiTro(), chuoi: { work_assistant: chuoiCongHienTai('work_assistant'), work_spec_review: chuoiCongHienTai('work_spec_review'), work_digest: chuoiCongHienTai('work_digest') } } });
+  // 22/10/2026: số lần model trả markup gọi tool dạng chữ (DSML…) theo cổng+model, từ khi tiến trình chạy.
+  const { thongKeMarkupTool } = await import('../services/work/aiMarkupTool.js');
+  res.json({ success: true, data: { gioiHan: await docGioiHanTaiTro(), chuoi: { work_assistant: chuoiCongHienTai('work_assistant'), work_spec_review: chuoiCongHienTai('work_spec_review'), work_digest: chuoiCongHienTai('work_digest') }, markupTool: thongKeMarkupTool() } });
 }));
 router.put('/ctwork-ai-gioi-han', boc(async (req, res) => {
   const { datGioiHanTaiTro } = await import('../services/work/aiTaiTro.js');

@@ -290,6 +290,22 @@ describe('CT Work — trợ lý dự án bản stream (SSE)', { skip: !RUN }, ()
     }
   });
 
+  it('LỖI PROD 22/10: model VIẾT lời gọi tool thành DSML (thay vì tool gốc) ⇒ đọc thật NT-1, không một mẩu DSML nào ra luồng', async () => {
+    calls = 0;
+    prompts.length = 0;
+    const dsml = '<｜DSML｜function_calls>\n<｜DSML｜invoke name="read_command">\n<｜DSML｜parameter name="name" string="true">read_issue</｜DSML｜parameter>\n<｜DSML｜parameter name="args" string="false">{"issue":1}</｜DSML｜parameter>\n</｜DSML｜invoke>\n</｜DSML｜function_calls>';
+    script = [dsml, 'Đã đọc NT-1: **trang đăng nhập** — làm form trước, rồi test biên.'];
+    const r = await stream(dev, { message: 'Hôm nay tôi nên tập trung vào việc gì?' });
+    const last = r.events.at(-1)!;
+    assert.equal(last.event, 'done', JSON.stringify(last));
+    assert.match(last.data.reply, /^Đã đọc \[NT-1\]\([^)]+\): \*\*trang đăng nhập\*\* — làm form trước, rồi test biên\.$/); // link sâu do mã dựng
+    assert.ok(!r.events.some((e) => e.event === 'delta' && /DSML|invoke|parameter/.test(e.data.text)), 'không lộ DSML');
+    assert.ok(!r.events.some((e) => e.event === 'reset'));
+    const doc = r.events.find((e) => e.event === 'progress' && e.data.phase === 'reading' && !e.data.prefetched);
+    assert.deepEqual(doc?.data.items, ['NT-1']);
+    assert.ok(prompts[1]?.includes('MAGIC-READ-42'), 'khối DSML đã thành lượt đọc thật');
+  });
+
   it('/ai/chat thường vẫn y nguyên (JSON, cùng hình dạng)', async () => {
     script = ['{"reply":"Bản thường","actions":[]}'];
     const r = await call(dev, 'POST', `/projects/${pid}/ai/chat`, { message: 'Hỏi thường' });

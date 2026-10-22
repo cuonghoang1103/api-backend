@@ -29,6 +29,7 @@
 
 import type { LLMMessage, LLMTool, LLMToolCall } from '../interview/llm/index.js';
 import { ReplyStreamer } from './aiReplyStream.js';
+import { TIEN_TO_MARKUP, viTriMarkupTool } from './aiMarkupTool.js';
 
 export const MO_DE_XUAT = '<ctw-actions>';
 export const DONG_DE_XUAT = '</ctw-actions>';
@@ -47,6 +48,7 @@ export function khuonTraLoi(o: { reads: boolean; actions: boolean; docs?: boolea
     '- Write your answer for the user directly as Markdown text. Do NOT wrap it in JSON and do NOT put the whole answer in a code fence.',
   ];
   if (o.reads) dong.push(`- Need more project data first? Call the read tools (${o.docs ? 'read_command / read_page / search_pages' : 'read_command'}) BEFORE writing any answer text — several calls in one turn are fine. You get the results, then you answer. Do not write "let me check" text in that turn.`);
+  dong.push('- Tool calls go ONLY through the tool interface. Never write a tool call as text (no XML, DSML, <invoke>, <tool_call> or JSON function calls) — the user would see it.');
   if (o.actions) {
     dong.push(`- Proposed actions (only when there are any): AFTER the whole answer add ONE block and nothing after it:
 ${MO_DE_XUAT}
@@ -113,6 +115,8 @@ export interface TraLoiDaDoc {
   cheDo: 'text' | 'json';
   /** Khối đề xuất: không có · đọc trọn · cứu được một phần (cụt) · hỏng hẳn. */
   deXuat: 'none' | 'ok' | 'partial' | 'bad';
+  /** 22/10/2026: chữ có khối "gọi tool bằng chữ" (đã bị cắt khỏi `reply`) — xem aiMarkupTool.ts. */
+  markupTool?: boolean;
 }
 
 /** `reply` lệch kiểu (null, mảng chuỗi, object) ⇒ chuỗi — không bao giờ để `${out.reply}` thành "undefined"/"[object Object]". */
@@ -249,13 +253,24 @@ function boRaoDangDo(s: string): string {
  */
 export function phanHien(raw: string, xong: boolean): string {
   let s = raw.replace(/^\s+/, '');
+  // 22/10/2026: khối "gọi tool bằng chữ" (DSML của DeepSeek, <tool_call>, <invoke…>…) KHÔNG BAO GIỜ là câu trả lời.
+  const iMk = viTriMarkupTool(s, xong);
+  if (iMk >= 0) s = s.slice(0, iMk);
+  // Câu mở đầu bằng `[{` có thể là mảng JSON gọi tool (khuôn OpenAI/Mistral viết thành chữ) ⇒ chờ tới khi xong mới biết.
+  if (!xong && /^\[\s*(\{|$)/.test(s)) return '';
   const thap = s.toLowerCase();
   const iMo = thap.indexOf(MO_DE_XUAT);
   if (iMo >= 0) s = s.slice(0, iMo);
   else if (!xong) {
-    for (let k = Math.min(MO_DE_XUAT.length - 1, s.length); k >= 1; k--) {
-      if (thap.endsWith(MO_DE_XUAT.slice(0, k))) { s = s.slice(0, s.length - k); break; }
+    // Giữ nửa thẻ ở cuối mẩu: `<ctw-ac`, `<｜DS`, `<inv`, `[TOOL_`… — chưa biết là chữ hay khối máy.
+    let giu = 0;
+    for (const the of [MO_DE_XUAT, ...TIEN_TO_MARKUP]) {
+      const t = the.toLowerCase();
+      for (let k = Math.min(t.length - 1, s.length); k > giu; k--) {
+        if (thap.endsWith(t.slice(0, k))) { giu = k; break; }
+      }
     }
+    if (giu) s = s.slice(0, s.length - giu);
   }
   const p = viTriPhongBiSau(s);
   if (p >= 0) s = s.slice(0, p);
@@ -274,7 +289,11 @@ export function phanHien(raw: string, xong: boolean): string {
 
 /** Đọc trọn một lượt trả lời (khuôn mới, khuôn JSON cũ, hay lẫn cả hai). Không bao giờ ném. */
 export function docTraLoi(raw: string): TraLoiDaDoc {
-  const text = raw ?? '';
+  const r = docTraLoiTho(raw ?? '');
+  return viTriMarkupTool(raw ?? '') >= 0 ? { ...r, markupTool: true } : r;
+}
+
+function docTraLoiTho(text: string): TraLoiDaDoc {
   if (moDauJson(text)) {
     const pb = docPhongBi(text);
     // Không trim: bản nháp ReplyStreamer phát đúng từng ký tự của chuỗi `reply` — câu chuẩn phải nối tiếp được nó.
@@ -372,6 +391,8 @@ export class TraLoiStreamer {
   get tho(): string { return this.raw + (this.noiTiep?.buf ?? ''); }
   get daPhatRa(): string { return this.daPhat; }
   get doanHienTai(): string { return this.doanTho; }
+  /** Chữ có khối "gọi tool bằng chữ" (aiMarkupTool.ts). */
+  get coMarkup(): boolean { return viTriMarkupTool(this.tho) >= 0; }
   /** Đã vào khối đề xuất (chữ trả lời coi như xong). */
   get trongDeXuat(): boolean { return this.raw.toLowerCase().includes(MO_DE_XUAT); }
 
@@ -409,6 +430,11 @@ export class TraLoiStreamer {
     this.raw = this.raw.slice(0, this.moc);
     this.lamLaiJson();
     this.capNhat(false);
+  }
+
+  /** Bắt đầu lại một lượt mới trên streamer này với ngưỡng giữ đầu `n` (sau `boHet`). */
+  giuLai(n: number): void {
+    this.giuDau = n;
   }
 
   /** Bỏ trắng cả lượt (lượt hoá ra là lượt xin đọc) — báo client xoá nháp nếu đã phát. */

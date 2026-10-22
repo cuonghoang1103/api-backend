@@ -59,6 +59,11 @@ export interface GoiAiCtWorkOpts {
   noiTiep?: () => LLMMessage[] | null;
   /** Hết giờ CHỜ (không có mẩu nào) theo từng bậc — rambo treo thì chuyển sớm thay vì chờ 90 s. */
   timeoutTheoCong?: Partial<Record<CongCtWork, number>>;
+  /**
+   * 22/10/2026: bỏ qua các bậc này ở lượt này (bậc đó vừa trả markup gọi tool dạng chữ — aiMarkupTool.ts). modelapi là
+   * lùi cuối nên KHÔNG BAO GIỜ bị bỏ (có trong danh sách cũng vẫn gọi).
+   */
+  boQuaCong?: CongCtWork[];
 }
 
 export interface KetQuaAiCtWork {
@@ -241,7 +246,7 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
 
   // 1. Rambo
   const ep = pt.rambo();
-  if (ep && !pt.ramboDangNghi()) {
+  if (ep && !pt.ramboDangNghi() && !o.boQuaCong?.includes('rambo')) {
     const model = modelRamboCho(o.purpose, o.nang);
     try {
       return await pt.goiRambo(opts, ep, model);
@@ -255,7 +260,7 @@ export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
   huy();
 
   // 2. Cổng Anthropic chính hãng
-  if (await pt.chinhHangSanSang(o.userId).catch(() => false)) {
+  if (!o.boQuaCong?.includes('chinh_hang') && await pt.chinhHangSanSang(o.userId).catch(() => false)) {
     const model = modelChinhHangCho(o.purpose);
     try {
       return await pt.goiChinhHang(opts, model);

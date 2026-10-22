@@ -111,6 +111,23 @@ iOS báo, hỏi lại đôi khi được vì lần sau model lại viết JSON. 
   lại tới khi rõ) ⇒ `done.reply` thường chỉ khác nháp ở link sâu do mã dựng (`lienKetHoa`) hoặc dòng "N suggested
   change(s) were dropped".
 
+## Model viết "gọi tool" thành chữ (22/10/2026, lỗi prod 05:24)
+
+Rambo trả "claude-sonnet-5" mà (ít nhất đôi lúc) là model DeepSeek: vòng 0–2 gọi tool gốc bình thường, vòng 3 (đã gỡ
+tool) VIẾT lời gọi tool thành chữ theo khuôn DSML (`<｜DSML｜invoke name="read_command">…`) ⇒ iPad hiện nguyên khối.
+`src/services/work/aiMarkupTool.ts` nhận diện mọi khuôn hay gặp (DSML thanh `|`/`｜`, token DeepSeek V3
+`<｜tool▁calls▁begin｜>`, Hermes/Qwen `<tool_call>`, XML `<function_calls>`/`<invoke name=…>`, Mistral `[TOOL_CALLS]`,
+cả câu là `{"name":…,"arguments":…}`):
+- **Không bao giờ ra client**: `phanHien` cắt từ chỗ khối bắt đầu, giữ nửa thẻ ở cuối mẩu (`<｜DS`, `<inv`, `[TOOL_`…),
+  câu mở đầu `[{` chờ tới cuối. MỌI lượt giữ ~120 ký tự đầu (lượt có tool: ~320) rồi mới phát (~0,6 s).
+- Lượt CÓ tool ⇒ đọc khối thành tool call thật rồi đọc như thường.
+- Lượt không có tool (hoặc không đọc được) ⇒ bỏ trắng lượt (không `reset` vì chưa phát gì), làm lại ở CỔNG SAU (rambo →
+  chính hãng → modelapi; modelapi là cuối thì làm lại chính nó) với lời dặn "read tools are NOT available now… plain
+  Markdown"; tối đa 2 lần, vẫn markup ⇒ `error` `WORK_AI_BAD_OUTPUT`.
+- Có ≥ ngưỡng giữ đầu chữ thật đứng TRƯỚC khối ⇒ đó là câu trả lời, khối bị cắt.
+- Log WARN `[work] ai: model trả markup gọi tool dạng chữ` {cong, model, huong, lanCuaCongNay, mau}; bảng đếm theo
+  cổng+model ở `GET /api/v1/admin/cong-anthropic/ctwork-ai` › `markupTool`.
+
 ## Độ dài — không còn trần nhân tạo (22/10/2026)
 
 - Bỏ luật "dưới ~300 từ": model trả lời **dài đúng bằng câu hỏi cần** (hỏi nhanh ⇒ ngắn; "hiểu rõ 100%", giải thích

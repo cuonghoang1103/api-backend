@@ -3189,14 +3189,19 @@ model ThreadReport {
   resolvedAt DateTime? @map("resolved_at")
   resolvedBy Int?      @map("resolved_by")
   resolution String?   @db.VarChar(500)
+  // Tin nhắn CỤ THỂ bị báo cáo (22/10/2026, App Store 1.2). Null = báo cáo cả hội thoại (app cũ).
+  // Có giá trị ⇒ tin đó bị ẩn với chính người báo cáo (listMessages) và hiện nguyên văn cho admin.
+  messageId  Int?      @map("message_id")
 
   reporter User          @relation("ThreadReportsFiled", fields: [reporterId], references: [id], onDelete: Cascade)
   thread   MessageThread @relation("ThreadReportsTarget", fields: [threadId], references: [id], onDelete: Cascade)
   resolver User?         @relation("ThreadReportsResolved", fields: [resolvedBy], references: [id], onDelete: SetNull)
+  message  Message?      @relation("ThreadReportMessage", fields: [messageId], references: [id], onDelete: SetNull)
 
   @@index([reporterId], name: "idx_report_reporter")
   @@index([threadId], name: "idx_report_thread")
   @@index([resolvedAt], name: "idx_report_resolved")
+  @@index([messageId], name: "idx_report_message")
   @@map("thread_reports")
 }
 
@@ -3233,6 +3238,7 @@ model Message {
   reactions     MessageReaction[]
   // Phase 6 — shared social post preview in chat
   postShare     MessagePostShare?
+  reports       ThreadReport[]      @relation("ThreadReportMessage")
 
   @@index([threadId, createdAt], name: "idx_msg_thread_time")
   @@index([senderId], name: "idx_msg_sender")

@@ -523,14 +523,18 @@ router.post('/threads/:id/restore', async (req: Request, res: Response, next: Ne
 });
 
 // ─── POST /api/v1/messages/threads/:id/report ──────────
-// Report a thread to moderators. Body: { reason, category? }.
+// Report a thread (or one message in it) to moderators. Body: { reason, category?, messageId? }.
+// Alerts the site admin (BAO_CAO inbox + Telegram); a reported message is hidden for the reporter.
 router.post('/threads/:id/report', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
     const reason = String(req.body?.reason ?? '').trim();
     const category = req.body?.category ?? null;
-    const result = await messagingSafetyService.reportThread(req.userId!, id, reason, category);
+    // Tuỳ chọn: báo cáo MỘT tin cụ thể ⇒ tin đó ẩn với người báo cáo ngay.
+    const rawMsg = req.body?.messageId;
+    const messageId = rawMsg === undefined || rawMsg === null || rawMsg === '' ? null : Number(rawMsg);
+    const result = await messagingSafetyService.reportThread(req.userId!, id, reason, category, messageId);
     res.json({ success: true, data: result });
   } catch (error) {
     next(error);

@@ -28,6 +28,7 @@ import { logger } from '../utils/logger.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter, type MessageEventPayload } from '../socket/messaging.socket.js';
 import { messagingSafetyService } from './messaging-safety.service.js';
+import { chanNoiDungXau } from './locNoiDung.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
 import { loadPresenceViewer, presenceFor, type PresenceViewer } from './presencePrivacy.js';
@@ -553,10 +554,14 @@ export class MessagesService {
     this.assertParticipant(thread, viewerId);
 
     const limit = Math.min(opts.limit ?? 50, 100);
+    // Tin người xem đã báo cáo (App Store 1.2) ẩn với chính họ.
+    const hidden = await messagingSafetyService.hiddenMessageIdsFor(viewerId, threadId);
     const messages = await prisma.message.findMany({
       where: {
         threadId,
-        ...(opts.cursor ? { id: { lt: opts.cursor } } : {}),
+        ...(opts.cursor || hidden.length
+          ? { id: { ...(opts.cursor ? { lt: opts.cursor } : {}), ...(hidden.length ? { notIn: hidden } : {}) } }
+          : {}),
       },
       orderBy: { id: 'desc' },
       take: limit,
@@ -674,6 +679,8 @@ export class MessagesService {
         'MESSAGE_TOO_LONG',
       );
     }
+    // App Store 1.2: tin nhắn riêng đi qua bộ lọc từ nặng (422 CONTENT_BLOCKED) — cả hội thoại hỗ trợ với admin.
+    chanNoiDungXau({ content });
 
     // Validate attachment ownership — the sender must have
     // uploaded the file. This prevents someone from attaching
@@ -959,6 +966,18 @@ export class MessagesService {
     return count;
   }
 
+  /**
+   * Gỡ một tin do quản trị site quyết định từ hàng chờ báo cáo (kiemDuyetAdmin.service). Quyền admin đã kiểm ở tuyến
+   * /admin; cùng hiệu ứng như admin xoá tin trong Messenger: ẩn với cả hai bên, phát sự kiện, gỡ tệp đính kèm.
+   */
+  async adminRemoveMessage(messageId: number) {
+    const msg = await prisma.message.findUnique({ where: { id: messageId }, include: { thread: true } });
+    if (!msg || msg.deletedAt || msg.recalledAt) return;
+    await prisma.message.update({ where: { id: messageId }, data: { deletedAt: new Date() } });
+    this.emitMessageUpdated(msg.thread, messageId, { deleted: true });
+    await this.purgeMessageAttachments(messageId);
+  }
+
   async softDeleteMessage(messageId: number, requesterId: number, mfaClaims?: MfaClaims) {
     const msg = await prisma.message.findUnique({
       where: { id: messageId },
@@ -1153,6 +1172,7 @@ export class MessagesService {
       throw new AppError('Không thể đặt biệt danh cho chính mình', 400, 'SELF_NICKNAME');
     }
     const trimmed = (alias ?? '').trim().slice(0, 100);
+    chanNoiDungXau({ alias: trimmed });
     const updated = await prisma.threadNickname.upsert({
       where: {
         uk_nickname_per_user: { threadId, ownerId, targetId },

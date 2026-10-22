@@ -26,6 +26,7 @@ import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
 import { foldVi } from './fold.js';
 import { logger } from '../../utils/logger.js';
+import { chanNoiDungXau } from '../locNoiDung.js';
 // CTW đợt 5b K-1: luồng trả lời + tệp/voice note trong bình luận.
 import { threadRootOf } from './commentThreads.js';
 import { assertCommentFileRoom, attachDrafts, COMMENT_FILE_SELECT, commentFilesFor, queueTranscriptions, refreshCommentText } from './commentFiles.service.js';
@@ -673,6 +674,7 @@ export async function addComment(
   const vis = commentVisibilityFor(access, issue.clientVisible, via === 'AI' ? 'INTERNAL' : visibility);
   const attachmentIds = opts.attachmentIds ?? [];
   const bodyText = commentBody(bodyJson, attachmentIds.length > 0);
+  chanNoiDungXau({ body: bodyText }); // App Store 1.2 — từ nặng ⇒ 422 CONTENT_BLOCKED
   let parentId: number | null = null;
   let replyTo: number | null = null;
   if (opts.parentId) {
@@ -716,8 +718,10 @@ export async function editComment(userId: number, projectId: number, number: num
   if (c.authorId !== userId || !canModifyComment(access.role, userId, c.authorId)) {
     throw new ForbiddenError('You can only edit your own comments');
   }
+  const bodyText = commentBody(bodyJson, c._count.attachments > 0);
+  chanNoiDungXau({ body: bodyText });
   const updated = await prisma.workComment.update({
-    where: { id: commentId }, data: { bodyJson, bodyText: commentBody(bodyJson, c._count.attachments > 0), editedAt: new Date() }, select: COMMENT_SELECT,
+    where: { id: commentId }, data: { bodyJson, bodyText, editedAt: new Date() }, select: COMMENT_SELECT,
   });
   // K-1: giữ phiên âm voice note + tên tệp trong chữ tìm kiếm sau khi sửa.
   if (c._count.attachments) await refreshCommentText(commentId);
@@ -1035,6 +1039,15 @@ export async function reportComment(
     detail: { reason: input.reason, details: input.details?.slice(0, 1000) ?? null, authorId: c.authorId, excerpt: c.bodyText.slice(0, 300) },
   });
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { workspace: { select: { slug: true } } } });
+  // Hàng chờ BAO_CAO của quản trị site (App Store 1.2) — trước 22/10 báo cáo bình luận thẻ chỉ tới ADMIN dự án.
+  const { baoAdmin } = await import('../thongBaoAdmin.service.js');
+  await baoAdmin({
+    loai: 'BAO_CAO', mucDo: 'can_xu_ly',
+    tieuDe: `Báo cáo nội dung CT Work: issue_comment · ${access.key}-${number}`.slice(0, 200),
+    noiDung: [`Lý do: ${input.reason}`, input.details && `Chi tiết: ${input.details.slice(0, 1000)}`, `Tác giả: user #${c.authorId}`, `Nội dung: ${c.bodyText.slice(0, 600)}`].filter(Boolean).join('\n'),
+    duongDan: `/work/${project.workspace.slug}/${access.key}/issue/${number}?comment=${commentId}`,
+    userId, entityId: commentId, khoaChongTrung: `ctw-report:issue_comment:${commentId}:${userId}`,
+  });
   const { projectMembers } = await import('./projects.service.js');
   const { notifyWork } = await import('./notify.js');
   const admins = (await projectMembers(projectId)).filter((m) => m.role === 'ADMIN' && m.id !== userId);

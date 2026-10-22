@@ -3377,6 +3377,15 @@ export interface MessagingThreadPreference {
 export interface MessagingThreadReport {
   id: number;
   reason: string;
+  /** Tin CỤ THỂ bị báo cáo (22/10/2026). Null = báo cáo cả hội thoại. */
+  reportedMessage?: {
+    id: number;
+    content: string;
+    senderId: number;
+    mediaUrl: string | null;
+    createdAt: string;
+    recalledAt: string | null;
+  } | null;
   category: 'spam' | 'harassment' | 'hate' | 'impersonation' | 'other' | null;
   createdAt: string;
   resolvedAt: string | null;
@@ -3440,6 +3449,12 @@ export const adminReportsApi = {
       `/admin/reports/${reportId}/resolve`,
       resolution ? { resolution } : {},
     ),
+  /** Khoá tài khoản người bị báo cáo (App Store 1.2 — /admin/moderation). */
+  lockReported: (reportId: number) =>
+    api.post<ApiResponse<{ id: number; username: string; locked: true }>>(`/admin/moderation/dm-reports/${reportId}/lock-reported`),
+  /** Gỡ đúng tin bị báo cáo (chỉ báo cáo có messageId). */
+  removeMessage: (reportId: number) =>
+    api.post<ApiResponse<{ removed: boolean }>>(`/admin/moderation/dm-reports/${reportId}/remove-message`),
 };
 
 export interface MessagingThread {

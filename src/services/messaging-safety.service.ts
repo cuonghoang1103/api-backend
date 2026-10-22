@@ -18,6 +18,7 @@
 
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 
 const ALLOWED_BLOCK_REASONS = new Set([
   'spam',
@@ -133,7 +134,14 @@ export class MessagingSafetyService {
 
   // ─── Thread reports ──────────────────────────────────
 
-  async reportThread(reporterId: number, threadId: number, reason: string, category?: string | null) {
+  /**
+   * Báo cáo một hội thoại — hoặc MỘT tin nhắn cụ thể trong đó (`messageId`, 22/10/2026).
+   * - Ghi `thread_reports` (hàng chờ /admin/reports) VÀ báo admin như mọi báo cáo khác (`baoAdmin` BAO_CAO:
+   *   hộp thư /admin + chuông socket + Telegram) — trước bản này báo cáo tin nhắn riêng nằm im, không ai được báo.
+   * - Có `messageId` ⇒ tin đó ẨN với chính người báo cáo ngay (listMessages lọc), người kia vẫn thấy cho tới khi
+   *   admin xử lý. Không báo cáo được tin của chính mình.
+   */
+  async reportThread(reporterId: number, threadId: number, reason: string, category?: string | null, messageId?: number | null) {
     if (!reason || !reason.trim()) {
       throw new AppError('Lý do báo cáo là bắt buộc', 400, 'EMPTY_REASON');
     }
@@ -156,15 +164,84 @@ export class MessagingSafetyService {
       throw new AppError('Bạn không tham gia cuộc trò chuyện này', 403, 'NOT_PARTICIPANT');
     }
 
+    let msg: { id: number; senderId: number; content: string; mediaUrl: string | null; createdAt: Date } | null = null;
+    if (messageId != null) {
+      if (!Number.isInteger(messageId) || messageId <= 0) throw new AppError('Invalid message ID', 400, 'INVALID_ID');
+      msg = await prisma.message.findFirst({
+        where: { id: messageId, threadId },
+        select: { id: true, senderId: true, content: true, mediaUrl: true, createdAt: true },
+      });
+      if (!msg) throw new AppError('Tin nhắn không tồn tại', 404, 'MESSAGE_NOT_FOUND');
+      if (msg.senderId === reporterId) {
+        throw new AppError('Không thể báo cáo tin nhắn của chính mình', 400, 'REPORT_SELF');
+      }
+    }
+
     const created = await prisma.threadReport.create({
       data: {
         reporterId,
         threadId,
         reason: trimmed,
         category: cleanCategory,
+        messageId: msg?.id ?? null,
       },
     });
-    return { id: created.id, createdAt: created.createdAt };
+
+    await this.alertAdmin(created.id, reporterId, thread, trimmed, cleanCategory, msg);
+    return { id: created.id, createdAt: created.createdAt, hiddenMessageId: msg?.id ?? null };
+  }
+
+  /** BAO_CAO cho admin site (hộp thư + Telegram), cùng đường với báo cáo Bảng tin / CT Work. Không bao giờ ném lỗi. */
+  private async alertAdmin(
+    reportId: number,
+    reporterId: number,
+    thread: { id: number; type: string; userId: number | null; adminUserId: number | null; userAId: number | null; userBId: number | null },
+    reason: string,
+    category: string | null,
+    msg: { id: number; senderId: number; content: string; mediaUrl: string | null } | null,
+  ) {
+    try {
+      const peers = [...new Set([thread.userId, thread.adminUserId, thread.userAId, thread.userBId])]
+        .filter((x): x is number => typeof x === 'number' && x !== reporterId);
+      const users = await prisma.user.findMany({ where: { id: { in: [reporterId, ...peers] } }, select: { id: true, username: true } });
+      const ten = (id: number) => `@${users.find((u) => u.id === id)?.username ?? '?'} (#${id})`;
+      // Nguyên văn cho admin: tin bị báo cáo, không có thì 3 tin gần nhất của người bị báo cáo trong hội thoại.
+      const mau = msg
+        ? [msg]
+        : await prisma.message.findMany({
+            where: { threadId: thread.id, senderId: { in: peers }, recalledAt: null },
+            orderBy: { id: 'desc' }, take: 3,
+            select: { id: true, senderId: true, content: true, mediaUrl: true },
+          });
+      const dong = mau.map((m) => `#${m.id} ${ten(m.senderId)}: ${(m.content || m.mediaUrl || '[tệp]').slice(0, 300)}`);
+      const { baoAdmin } = await import('./thongBaoAdmin.service.js');
+      await baoAdmin({
+        loai: 'BAO_CAO',
+        mucDo: 'can_xu_ly',
+        tieuDe: `Báo cáo tin nhắn riêng: ${msg ? `tin #${msg.id}` : `hội thoại #${thread.id}`} (${category ?? 'other'})`,
+        noiDung: [
+          `Lý do: ${reason}`,
+          `Người báo cáo: ${ten(reporterId)}`,
+          peers.length ? `Bị báo cáo: ${peers.map(ten).join(', ')}` : null,
+          dong.length ? `${msg ? 'Tin bị báo cáo' : 'Tin gần nhất'}:\n${dong.join('\n')}` : null,
+        ].filter(Boolean).join('\n'),
+        duongDan: '/admin/reports',
+        userId: reporterId,
+        entityId: reportId,
+        khoaChongTrung: `dm-report:${reportId}`,
+      });
+    } catch (err) {
+      logger.warn('[messaging-safety] báo admin về báo cáo tin nhắn lỗi', { reportId, error: (err as Error).message });
+    }
+  }
+
+  /** Id các tin trong hội thoại mà người xem đã báo cáo ⇒ ẩn với họ. */
+  async hiddenMessageIdsFor(viewerId: number, threadId: number): Promise<number[]> {
+    const rows = await prisma.threadReport.findMany({
+      where: { threadId, reporterId: viewerId, messageId: { not: null } },
+      select: { messageId: true },
+    });
+    return rows.map((r) => r.messageId!).filter(Boolean);
   }
 
   /**
@@ -201,6 +278,7 @@ export class MessagingSafetyService {
           },
         },
         resolver: { select: { id: true, username: true, displayName: true } },
+        message: { select: { id: true, content: true, senderId: true, mediaUrl: true, createdAt: true, recalledAt: true } },
       },
     });
     const nextCursor = rows.length > take ? rows[take].id : null;
@@ -213,6 +291,7 @@ export class MessagingSafetyService {
       resolution: r.resolution,
       reporter: r.reporter,
       resolver: r.resolver,
+      reportedMessage: r.message ?? null,
       thread: r.thread
         ? {
             id: r.thread.id,

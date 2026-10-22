@@ -57,6 +57,8 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
           mucDo: r.mucDo,
           daDoc: r.daDoc,
           daXuLy: r.daXuLy,
+          // Báo cáo có mục tiêu máy đọc được ⇒ hiện nút "Gỡ nội dung" / "Khoá người viết" (/admin/moderation).
+          kiemDuyet: r.loai === 'BAO_CAO' && /^(ctw-report:[a-z_]+:\d+:\d+|dm-report:\d+)$/.test(r.khoaChongTrung ?? ''),
           createdAt: r.createdAt.toISOString(),
           nguoi: r.userId ? (theoId.get(r.userId) ?? { id: r.userId, username: null, fullName: null }) : null,
         })),

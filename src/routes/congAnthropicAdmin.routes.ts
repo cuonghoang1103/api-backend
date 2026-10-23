@@ -24,6 +24,7 @@ import { datCongTacRambo, trangThaiRambo } from '../services/llm/congTacRambo.js
 import { GiaHanLoi, datMaGiaHan, dsYeuCauAdmin, duyetYeuCau, trangThaiMa } from '../services/agent/maGiaHanTien.js';
 import { priceOf, ramboSonic, thuRambo } from '../services/llm/gateway.js';
 import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
+import { CAU_HOI_SAN, traLoiThongKe } from '../services/agent/anthropicChinhHang/aiThongKe.js';
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
 import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
 import { prisma } from '../config/database.js';
@@ -222,6 +223,23 @@ router.delete('/tran/nguoi/:id', boc(async (req, res) => {
   const userId = idTu(req);
   await xoaTranRieng(userId);
   res.json({ success: true, data: await hanMucNguoiAdmin(userId) });
+}));
+
+// ─── AI thống kê chi tiêu (Sonnet 5.5 qua cổng chính hãng) ───────────────
+
+router.get('/ai-thong-ke/cau-hoi', boc(async (_req, res) => {
+  res.json({ success: true, data: CAU_HOI_SAN.map((c) => ({ id: c.id, nhan: c.nhan })) });
+}));
+
+/** Body: { id: <mã câu hỏi có sẵn> } hoặc { cauHoi: '<chữ tự gõ, ≤300>' }. Model chỉ ĐỀ XUẤT trần; áp dụng bằng PUT /tran/nguoi/:id. */
+router.post('/ai-thong-ke', boc(async (req, res) => {
+  const b = (req.body ?? {}) as { id?: unknown; cauHoi?: unknown };
+  const id = typeof b.id === 'string' ? b.id : undefined;
+  if (id && !CAU_HOI_SAN.some((c) => c.id === id)) throw new BadRequestError('Câu hỏi không có trong danh sách');
+  const cauHoi = typeof b.cauHoi === 'string' ? b.cauHoi : undefined;
+  if (!id && !cauHoi?.trim()) throw new BadRequestError('Thiếu câu hỏi');
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.json({ success: true, data: await traLoiThongKe(adminId(req)!, { id, cauHoi }) });
 }));
 
 // ─── Server tool của Anthropic (web_search / code_execution) — mặc định TẮT ───

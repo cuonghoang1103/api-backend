@@ -12,6 +12,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import CuongMiniNgonNguAdmin from './CuongMiniNgonNguAdmin';
+import AiThongKeAnthropic from './AiThongKeAnthropic';
 import TaiTroAdminCongTac from '@/components/cuongmini/TaiTroAdminCongTac';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import {
@@ -131,6 +132,7 @@ export default function CongAnthropicAdmin() {
         </div>
       </div>
 
+      <AiThongKeAnthropic />
       <KhoKey keys={tq.keys} onDoi={(keys) => setTq({ ...tq, keys })} onNap={nap} />
       {tq.bangModel && <BangModelCm models={tq.bangModel} tran={tq.tranModel ?? {}} onXong={(tranModel) => setTq({ ...tq, tranModel })} />}
       <MatKhau loai="chung" daBat={tq.daBatMatKhau} onXong={nap} />

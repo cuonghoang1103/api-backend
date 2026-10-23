@@ -171,4 +171,59 @@ export const VIDEO_NEO: VideoNeoMap = {
       { id: "jp-b7-noi", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-10-noi-vi-tri-dang-lam-nho-va-cau-thi-90417811.mp4", tieuDe: "Luyện nói: vị trí, đang làm gì, nhờ vả và câu hỏi thi Bài 7", thoiLuongGiay: 644 },
     ],
   },
+  "slot-10-on-kanji5-l6-1": {
+    "dau-bai": [
+      { id: "jp-s67-s10", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/01-slot-10-on-han-tu-5-roi-ban-di-choi-23779dd5.mp4", tieuDe: "Slot 10: chữ Hán Bài 5 và rủ bạn đi chơi", thoiLuongGiay: 646 },
+    ],
+  },
+  "slot-11-test1-l6-1-tiep": {
+    "dau-bai": [
+      { id: "jp-s67-s11", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/02-slot-11-su-kien-de-ga-arimasu-va-dem-ve-ac16fc3c.mp4", tieuDe: "Slot 11: sự kiện, phân biệt ni và de, đếm vé", thoiLuongGiay: 456 },
+    ],
+  },
+  "slot-12-l6-2-docchi": {
+    "dau-bai": [
+      { id: "jp-s67-s12", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/03-slot-12-so-sanh-nhat-hon-hoi-chon-a41102a2.mp4", tieuDe: "Slot 12: so sánh nhất, hơn, chọn một trong hai", thoiLuongGiay: 425 },
+    ],
+  },
+  "slot-13-l6-3-yakusoku": {
+    "dau-bai": [
+      { id: "jp-s67-s13", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/04-slot-13-hen-ngay-gio-mou-mada-yo-ne-b327cc96.mp4", tieuDe: "Slot 13: hẹn ngày giờ với mou, mada, yo, ne", thoiLuongGiay: 469 },
+    ],
+  },
+  "slot-15-on-kanji6-l7-1": {
+    "dau-bai": [
+      { id: "jp-s67-s15", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/05-slot-15-vi-tri-arimasu-imasu-va-hoi-duong-ea701aa2.mp4", tieuDe: "Slot 15: vị trí, arimasu và imasu, hỏi đường", thoiLuongGiay: 494 },
+    ],
+  },
+  "slot-16-l7-2-chuan-bi-tiec": {
+    "dau-bai": [
+      { id: "jp-s67-s16", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/06-slot-16-nhom-dong-tu-the-te-kudasai-de-0deb5bb2.mp4", tieuDe: "Slot 16: nhóm động từ, thể te, te kudasai và trợ từ de", thoiLuongGiay: 498 },
+    ],
+  },
+  "slide-tong-hop-b6": {
+    "dau-bai": [
+      { id: "jp-s67-on6", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/09-on-thi-bai-6-13-diem-chu-han-trac-nghiem-1aead5e3.mp4", tieuDe: "Ôn kiểm tra Bài 6: 13 điểm, chữ Hán, trắc nghiệm", thoiLuongGiay: 447 },
+    ],
+  },
+  "slot-14-kanji6-on-l6-chua-b6": {
+    "#Phần 2": [
+      { id: "jp-s67-on6", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/09-on-thi-bai-6-13-diem-chu-han-trac-nghiem-1aead5e3.mp4", tieuDe: "Ôn kiểm tra Bài 6: 13 điểm, chữ Hán, trắc nghiệm", thoiLuongGiay: 447 },
+    ],
+  },
+  "slide-tong-hop-b7": {
+    "dau-bai": [
+      { id: "jp-s67-on7", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/10-on-thi-bai-7-the-te-11-diem-chu-han-b4df6b40.mp4", tieuDe: "Ôn kiểm tra Bài 7: thể te, 11 điểm, chữ Hán", thoiLuongGiay: 503 },
+    ],
+  },
+  "chia-the-te-bt-bai-7": {
+    "dau-bai": [
+      { id: "jp-s67-on7", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/10-on-thi-bai-7-the-te-11-diem-chu-han-b4df6b40.mp4", tieuDe: "Ôn kiểm tra Bài 7: thể te, 11 điểm, chữ Hán", thoiLuongGiay: 503 },
+    ],
+  },
+  "slot-19-on-kanji7-on-l7-chua-bt7": {
+    "#Phần 2": [
+      { id: "jp-s67-on7", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09b-slide-lop-b6-7/10-on-thi-bai-7-the-te-11-diem-chu-han-b4df6b40.mp4", tieuDe: "Ôn kiểm tra Bài 7: thể te, 11 điểm, chữ Hán", thoiLuongGiay: 503 },
+    ],
+  },
 };

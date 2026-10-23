@@ -42,7 +42,7 @@ function loadOpened(): { id: number; title: string }[] {
 }
 
 type Item =
-  | { type: 'note'; key: string; id: number; title: string; crumb: string; snippet?: string; matchIn?: 'title' | 'content'; time?: string }
+  | { type: 'note'; key: string; id: number; title: string; crumb: string; snippet?: string; matchIn?: 'title' | 'content' | 'ink'; time?: string }
   | { type: 'subject'; key: string; id: number; name: string; emoji: string; count: number }
   | { type: 'chapter'; key: string; id: number; subjectId: number; title: string; crumb: string }
   | { type: 'command'; key: string; label: string; icon: ReactNode; hint?: string; run: () => void };
@@ -271,7 +271,12 @@ export default function NotesCommandPalette({
                           </span>
                           {it.crumb && <span className="block truncate text-[11.5px] text-slate-500">{it.crumb}</span>}
                           {it.snippet && text && (
-                            <span className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-slate-600 dark:text-slate-400"><Highlight text={it.snippet} q={text} /></span>
+                            <span className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-slate-600 dark:text-slate-400">
+                              {it.matchIn === 'ink' && (
+                                <span className="mr-1.5 inline-flex items-center rounded bg-amber-100 px-1 py-px align-[1px] text-[10px] font-semibold text-amber-800 dark:bg-amber-400/15 dark:text-amber-200">✍️ chữ viết tay</span>
+                              )}
+                              <Highlight text={it.snippet} q={text} />
+                            </span>
                           )}
                         </>
                       )}

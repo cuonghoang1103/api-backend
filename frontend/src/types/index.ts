@@ -1450,6 +1450,10 @@ export interface NoteFull {
   inkVersion?: number;
   inkUpdatedAt?: string | null;
   inkPreviewUrl?: string | null;
+  /** Chữ iPad đọc được trên trang (Vision) — chỉ để tìm kiếm. */
+  inkText?: string | null;
+  /** Token link chỉ-xem (`/vo/xem/<token>`), `null` = chưa chia sẻ. */
+  inkShareToken?: string | null;
 }
 
 export type NoteVersionOrigin = 'INITIAL' | 'AUTO_SAVE' | 'MANUAL' | 'BEFORE_RESTORE' | 'RESTORE';

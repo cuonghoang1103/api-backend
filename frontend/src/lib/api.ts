@@ -493,7 +493,7 @@ export interface NotePaletteNoteHit {
   id: number; title: string;
   subjectId: number; subjectName: string; subjectEmoji: string | null;
   chapterId: number | null; chapterTitle: string | null;
-  snippet: string; matchIn: 'title' | 'content'; updatedAt: string;
+  snippet: string; matchIn: 'title' | 'content' | 'ink'; updatedAt: string;
 }
 export interface NotePaletteResult {
   notes: NotePaletteNoteHit[];
@@ -517,6 +517,33 @@ export interface CtworkIssuePick extends CtworkIssueChip {
   project: { key: string; name: string };
   workspace: { slug: string; name: string };
 }
+
+/** Một thẻ ôn rút từ trang Vở (`/vo/on-the/*`, 23/10/2026). */
+export interface VoTheOn {
+  id: number; clientId: string | null; truoc: string; sau: string; loai: 'THE' | 'CAU_HOI';
+  dueAt: string | null; intervalDays: number; repetitions: number; lapses: number;
+  lanOn: number; lanCuoi: string | null;
+}
+export interface VoTheCuaTrang { noteId: number; yChinh: Array<{ id: number; noiDung: string }>; the: VoTheOn[] }
+export interface VoXemCongKhai { tieuDe: string; monTen: string; cuonTen: string | null; capNhatLuc: string; coAnh: boolean }
+
+/** Vở viết tay (iPad) xem trên web: thẻ ôn, link chỉ-xem, PDF cả cuốn. */
+export const voApi = {
+  theCuaTrang: (noteId: number) =>
+    api.get<{ data: VoTheCuaTrang }>('/vo/on-the/trang', { params: { noteId } }),
+  chamThe: (id: number, muc: 'lai' | 'kho' | 'tot' | 'de') =>
+    api.post<{ data: VoTheOn }>(`/vo/on-the/${id}/cham`, { muc }),
+  taoLink: (noteId: number) =>
+    api.post<{ data: { token: string; duongDan: string } }>(`/vo/trang/${noteId}/chia-se`),
+  thuHoiLink: (noteId: number) =>
+    api.delete<{ data: { ok: true } }>(`/vo/trang/${noteId}/chia-se`),
+  pdfCuon: (chapterId: number) =>
+    api.get<Blob>(`/vo/cuon/${chapterId}/pdf`, { responseType: 'blob', timeout: 180000 }),
+  /** Công khai — không cần đăng nhập. */
+  xemCongKhai: (token: string) =>
+    api.get<{ data: VoXemCongKhai }>(`/vo-xem/${encodeURIComponent(token)}`),
+  anhCongKhaiUrl: (token: string) => `/api/v1/vo-xem/${encodeURIComponent(token)}/anh`,
+};
 
 export const notesApi = {
   // Tree (sidebar) + recent rail

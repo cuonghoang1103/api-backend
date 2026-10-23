@@ -18,6 +18,7 @@ import {
   SettingsPage, SettingsCard, SettingsRow, Toggle, SyncBadge,
 } from '@/components/settings/primitives';
 import { cn } from '@/lib/utils';
+import CaiDatChuDeMua from '@/components/chuDeMua/CaiDatChuDeMua';
 
 function OptionCard({
   active,
@@ -113,6 +114,8 @@ export default function AppearanceSettingsPage() {
           />
         </div>
       </SettingsCard>
+
+      <CaiDatChuDeMua />
 
       <SettingsCard
         title="Ngôn ngữ"

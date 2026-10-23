@@ -7,6 +7,7 @@ import { Sparkles, ChevronRight, Zap, Clock, Bot, Download, Upload, RefreshCw, T
 import { toast } from 'sonner';
 
 import AvatarCard from './AvatarCard';
+import LoiChaoMua from '@/components/chuDeMua/LoiChaoMua';
 import Timeline from './Timeline';
 import LichHoc from './LichHoc';
 import TaskList from './TaskList';
@@ -436,6 +437,8 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
+          {/* Chủ đề mùa: lời chào / đếm ngược Noel–Tết (Mặc định ⇒ không vẽ gì) */}
+          <LoiChaoMua nenToi className="mb-3" />
           <AvatarCard level={level} exp={exp} username={user?.username} isAuthenticated={isAuthenticated} />
         </motion.div>
 

@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import '@/app/globals.css'
+// Chủ đề 4 mùa (lựa chọn thêm) — chỉ có luật khi <html data-mua=…>; không chọn gì thì không khớp luật nào.
+import '@/app/chu-de-mua.css'
 import type { Metadata, Viewport } from 'next'
 // Self-hosted fonts via @fontsource (npm) instead of next/font/google.
 // The Google-Fonts build-time fetch (fonts.gstatic.com) was flaky from
@@ -58,6 +60,8 @@ import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { THEME_BOOT_SCRIPT } from '@/context/themeLogic'
+import { CHU_DE_MUA_BOOT_SCRIPT } from '@/lib/chuDeMua/logic'
+import ChuDeMuaHost from '@/components/chuDeMua/ChuDeMuaHost'
 
 // Font families are self-hosted via the @fontsource CSS imports above
 // and exposed as --font-inter / --font-poppins / --font-jetbrains-mono
@@ -379,7 +383,8 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              THEME_BOOT_SCRIPT,
+              // + chủ đề mùa (24/10/2026): gắn data-mua trước lần vẽ đầu — Mặc định thì không đụng gì.
+              THEME_BOOT_SCRIPT + CHU_DE_MUA_BOOT_SCRIPT,
           }}
         />
         {/* Site-wide JSON-LD. The next/script wrapper defers it
@@ -432,6 +437,7 @@ export default function RootLayout({
               <PostCommentModal />
               <AnnouncementBotPopup />
               <MfaStepUpDialog />
+              <ChuDeMuaHost />
             </ClientOnly>
           </LocaleWrapper>
         </ThemeProvider>

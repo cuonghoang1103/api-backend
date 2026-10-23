@@ -1,0 +1,318 @@
+/* ════════════════════════════════════════════════════════════════════════════════════════════
+   CHỦ ĐỀ 4 MÙA (24/10/2026) — lựa chọn THÊM, chép từ app iOS (ChuDeMua.swift, nhánh ios-gop 459b974).
+
+   KHÔNG có `data-mua` trên <html> (= "Mặc định", và là mặc định của mọi người chưa chọn) ⇒ KHÔNG một luật nào trong
+   tệp này khớp ⇒ web y nguyên như trước. Thuộc tính do script chống nháy (lib/chuDeMua/logic.ts) gắn trước lần vẽ
+   đầu, ChuDeMuaHost giữ nó đúng khi điều hướng.
+
+   · `html[data-mua=X]`            — bảng SÁNG của mùa X (đè :root / html.light).
+   · `html.theme-dark[data-mua=X]` — bảng TỐI (đè html.theme-dark). Class tối vẫn là `theme-dark`, KHÔNG BAO GIỜ `.dark`.
+   · `.landing-root` (trang chủ) tự khai biến riêng ⇒ khai lại cho nó cùng chỗ.
+   · Đảo tối (`.bg-darkbg/.bg-darkcard/.bg-darksurface/.dark-surface`) luôn mang bảng TỐI của mùa.
+   · `data-mua-yen` (màn tập trung) ⇒ chỉ giữ màu: không nền loang, nền trang không trong suốt, không canvas.
+   · Notes không bao giờ có `data-mua` (MAN_TAT) — nó có 3 theme riêng.
+
+   Tương phản (WCAG 2.1, đo bằng logic.test.ts): chữ 3 bậc + accent-làm-chữ ≥ 4,5:1 trên bg-primary/card/surface;
+   chữ trắng trên accent ≥ 4,5 (sáng) / 3 (tối, chữ nút đậm). Đổi màu ở đây thì chạy lại test.
+   ════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Xuân — đỏ Tết, vàng mai, hồng đào trên nền kem ấm ── */
+html[data-mua="xuan"],
+html[data-mua="xuan"] .landing-root,
+.xem-mua[data-xem="xuan"] {
+  color-scheme: light;
+  --bg-primary: #fdf1ea;
+  --bg-card: #fffcfa;
+  --bg-surface: #f8e2d8;
+  --bg-surface-hover: rgba(122, 42, 26, 0.05);
+  --bg-surface-active: rgba(122, 42, 26, 0.09);
+  --bg-overlay: rgba(255, 252, 250, 0.98);
+  --bg-glass: rgba(255, 252, 250, 0.95);
+  --border-color: #e8d8d4;
+  --border-light: rgba(122, 42, 26, 0.12);
+  --border-light-hover: rgba(122, 42, 26, 0.18);
+  --text-primary: #2a1512;
+  --text-secondary: #5c3d36;
+  --text-muted: #75544b;
+  --accent-color: #c0262d;
+  --accent-hover: #9e1c22;
+  --mua-tren: #ffe0d6;
+  --mua-duoi: #fff0d2;
+  --mua-quang: rgba(255, 201, 138, 0.55);
+  --landing-atmosphere-core: #c0262d;
+  --landing-rule-soft: #f3e9e6;
+}
+html.theme-dark[data-mua="xuan"],
+html.theme-dark[data-mua="xuan"] .landing-root,
+html.theme-dark .xem-mua[data-xem="xuan"],
+html[data-mua="xuan"] :is(.dark-surface, .bg-darkbg, .bg-darkcard, .bg-darksurface) {
+  color-scheme: dark;
+  --bg-primary: #170b0a;
+  --bg-card: #2a1614;
+  --bg-surface: #2c1715;
+  --bg-surface-hover: rgba(255, 216, 200, 0.08);
+  --bg-surface-active: rgba(255, 216, 200, 0.12);
+  --bg-overlay: rgba(42, 22, 20, 0.98);
+  --bg-glass: rgba(42, 22, 20, 0.95);
+  --border-color: #4c3531;
+  --border-light: rgba(255, 216, 200, 0.11);
+  --border-light-hover: rgba(255, 216, 200, 0.17);
+  --text-primary: #fff4ef;
+  --text-secondary: #d9b9af;
+  --text-muted: #b69389;
+  --accent-color: #ef5350;
+  --accent-hover: #ff7b73;
+  --mua-tren: #3a1210;
+  --mua-duoi: #241307;
+  --mua-quang: rgba(255, 112, 67, 0.3);
+  --landing-atmosphere-core: #ef5350;
+  --landing-rule-soft: #3f2926;
+  color: var(--text-primary);
+}
+html[data-mua="xuan"] .bg-darkbg { background-color: #170b0a; }
+html[data-mua="xuan"] .bg-darkcard { background-color: #2a1614; }
+html[data-mua="xuan"] .bg-darksurface { background-color: #2c1715; }
+
+/* ── Hạ — xanh biển, ngọc lam, vàng cát ── */
+html[data-mua="ha"],
+html[data-mua="ha"] .landing-root,
+.xem-mua[data-xem="ha"] {
+  color-scheme: light;
+  --bg-primary: #eef6fa;
+  --bg-card: #ffffff;
+  --bg-surface: #ddedf5;
+  --bg-surface-hover: rgba(11, 58, 85, 0.05);
+  --bg-surface-active: rgba(11, 58, 85, 0.09);
+  --bg-overlay: rgba(255, 255, 255, 0.98);
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border-color: #d6dee2;
+  --border-light: rgba(11, 58, 85, 0.12);
+  --border-light-hover: rgba(11, 58, 85, 0.18);
+  --text-primary: #0d1f2b;
+  --text-secondary: #384f5e;
+  --text-muted: #4d6575;
+  --accent-color: #0a6a9e;
+  --accent-hover: #075580;
+  --mua-tren: #cfeafb;
+  --mua-duoi: #fbefd6;
+  --mua-quang: rgba(255, 224, 138, 0.7);
+  --landing-atmosphere-core: #0a6a9e;
+  --landing-rule-soft: #e9edf0;
+}
+html.theme-dark[data-mua="ha"],
+html.theme-dark[data-mua="ha"] .landing-root,
+html.theme-dark .xem-mua[data-xem="ha"],
+html[data-mua="ha"] :is(.dark-surface, .bg-darkbg, .bg-darkcard, .bg-darksurface) {
+  color-scheme: dark;
+  --bg-primary: #051320;
+  --bg-card: #0e2233;
+  --bg-surface: #0f2537;
+  --bg-surface-hover: rgba(191, 230, 255, 0.08);
+  --bg-surface-active: rgba(191, 230, 255, 0.12);
+  --bg-overlay: rgba(14, 34, 51, 0.98);
+  --bg-glass: rgba(14, 34, 51, 0.95);
+  --border-color: #2a4154;
+  --border-light: rgba(191, 230, 255, 0.11);
+  --border-light-hover: rgba(191, 230, 255, 0.17);
+  --text-primary: #f0f8ff;
+  --text-secondary: #a9c3d3;
+  --text-muted: #8ba7b9;
+  --accent-color: #3393d0;
+  --accent-hover: #5db2e6;
+  --mua-tren: #0b3350;
+  --mua-duoi: #14232a;
+  --mua-quang: rgba(255, 201, 74, 0.35);
+  --landing-atmosphere-core: #3393d0;
+  --landing-rule-soft: #203647;
+  color: var(--text-primary);
+}
+html[data-mua="ha"] .bg-darkbg { background-color: #051320; }
+html[data-mua="ha"] .bg-darkcard { background-color: #0e2233; }
+html[data-mua="ha"] .bg-darksurface { background-color: #0f2537; }
+
+/* ── Thu — cam lá phong, hồng anh đào, vàng trăng trên nền giấy ấm ── */
+html[data-mua="thu"],
+html[data-mua="thu"] .landing-root,
+.xem-mua[data-xem="thu"] {
+  color-scheme: light;
+  --bg-primary: #faf1e7;
+  --bg-card: #fffcf8;
+  --bg-surface: #f3e6d8;
+  --bg-surface-hover: rgba(107, 58, 26, 0.05);
+  --bg-surface-active: rgba(107, 58, 26, 0.09);
+  --bg-overlay: rgba(255, 252, 248, 0.98);
+  --bg-glass: rgba(255, 252, 248, 0.95);
+  --border-color: #e6dbd2;
+  --border-light: rgba(107, 58, 26, 0.12);
+  --border-light-hover: rgba(107, 58, 26, 0.18);
+  --text-primary: #2a1c13;
+  --text-secondary: #584334;
+  --text-muted: #6e5848;
+  --accent-color: #b0441a;
+  --accent-hover: #8f3410;
+  --mua-tren: #fbddc4;
+  --mua-duoi: #f8e1e6;
+  --mua-quang: rgba(255, 226, 168, 0.65);
+  --landing-atmosphere-core: #b0441a;
+  --landing-rule-soft: #f2ebe4;
+}
+html.theme-dark[data-mua="thu"],
+html.theme-dark[data-mua="thu"] .landing-root,
+html.theme-dark .xem-mua[data-xem="thu"],
+html[data-mua="thu"] :is(.dark-surface, .bg-darkbg, .bg-darkcard, .bg-darksurface) {
+  color-scheme: dark;
+  --bg-primary: #160e09;
+  --bg-card: #271b13;
+  --bg-surface: #2a1d15;
+  --bg-surface-hover: rgba(255, 224, 194, 0.08);
+  --bg-surface-active: rgba(255, 224, 194, 0.12);
+  --bg-overlay: rgba(39, 27, 19, 0.98);
+  --bg-glass: rgba(39, 27, 19, 0.95);
+  --border-color: #4a3b2f;
+  --border-light: rgba(255, 224, 194, 0.11);
+  --border-light-hover: rgba(255, 224, 194, 0.17);
+  --text-primary: #fff5ec;
+  --text-secondary: #d8bfab;
+  --text-muted: #b59c88;
+  --accent-color: #dd6f35;
+  --accent-hover: #f0915c;
+  --mua-tren: #351a0c;
+  --mua-duoi: #23110f;
+  --mua-quang: rgba(255, 231, 176, 0.3);
+  --landing-atmosphere-core: #dd6f35;
+  --landing-rule-soft: #3d2f25;
+  color: var(--text-primary);
+}
+html[data-mua="thu"] .bg-darkbg { background-color: #160e09; }
+html[data-mua="thu"] .bg-darkcard { background-color: #271b13; }
+html[data-mua="thu"] .bg-darksurface { background-color: #2a1d15; }
+
+/* ── Đông — xanh băng, trắng tuyết, đỏ Noel, xanh lá thông ── */
+html[data-mua="dong"],
+html[data-mua="dong"] .landing-root,
+.xem-mua[data-xem="dong"] {
+  color-scheme: light;
+  --bg-primary: #eef4fa;
+  --bg-card: #ffffff;
+  --bg-surface: #dfe9f4;
+  --bg-surface-hover: rgba(18, 50, 87, 0.05);
+  --bg-surface-active: rgba(18, 50, 87, 0.09);
+  --bg-overlay: rgba(255, 255, 255, 0.98);
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border-color: #d7dce2;
+  --border-light: rgba(18, 50, 87, 0.12);
+  --border-light-hover: rgba(18, 50, 87, 0.18);
+  --text-primary: #0e1a29;
+  --text-secondary: #3a4a5f;
+  --text-muted: #4f6075;
+  --accent-color: #1e5aa8;
+  --accent-hover: #17488a;
+  --mua-tren: #d6e6f7;
+  --mua-duoi: #f6f9fc;
+  --mua-quang: rgba(207, 228, 255, 0.6);
+  --landing-atmosphere-core: #1e5aa8;
+  --landing-rule-soft: #eaedf0;
+}
+html.theme-dark[data-mua="dong"],
+html.theme-dark[data-mua="dong"] .landing-root,
+html.theme-dark .xem-mua[data-xem="dong"],
+html[data-mua="dong"] :is(.dark-surface, .bg-darkbg, .bg-darkcard, .bg-darksurface) {
+  color-scheme: dark;
+  --bg-primary: #07101c;
+  --bg-card: #101d2f;
+  --bg-surface: #122034;
+  --bg-surface-hover: rgba(207, 227, 255, 0.08);
+  --bg-surface-active: rgba(207, 227, 255, 0.12);
+  --bg-overlay: rgba(16, 29, 47, 0.98);
+  --bg-glass: rgba(16, 29, 47, 0.95);
+  --border-color: #2f3d50;
+  --border-light: rgba(207, 227, 255, 0.11);
+  --border-light-hover: rgba(207, 227, 255, 0.17);
+  --text-primary: #f2f7ff;
+  --text-secondary: #afc0d6;
+  --text-muted: #8fa3bc;
+  --accent-color: #4d8fe3;
+  --accent-hover: #7baef0;
+  --mua-tren: #0f2445;
+  --mua-duoi: #0d1a2b;
+  --mua-quang: rgba(156, 199, 255, 0.22);
+  --landing-atmosphere-core: #4d8fe3;
+  --landing-rule-soft: #233144;
+  color: var(--text-primary);
+}
+html[data-mua="dong"] .bg-darkbg { background-color: #07101c; }
+html[data-mua="dong"] .bg-darkcard { background-color: #101d2f; }
+html[data-mua="dong"] .bg-darksurface { background-color: #122034; }
+
+/* `color` của html/body đã tính ở :root trước khi luật trên tới — gán lại để chữ không có lớp màu riêng ăn theo mùa. */
+html[data-mua] body { color: var(--text-primary); background: var(--bg-primary); }
+
+/* ── Nền loang tĩnh (giống NenLoang bên iOS): dải màu trên→dưới + quầng sáng góc trên phải ──
+   Lớp cố định NẰM SAU mọi nội dung (z-index âm trong ngữ cảnh gốc, không nhận chuột). */
+html[data-mua]:not([data-mua-yen]) body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(420px circle at 92% 2%, var(--mua-quang), transparent 70%),
+    linear-gradient(180deg, var(--mua-tren) 0%, transparent 42%, transparent 70%, var(--mua-duoi) 100%);
+}
+
+/* Gốc trang (min-h-screen + nền trang) trong suốt để nền loang + hạt lộ ra ở lề và khe giữa các thẻ. Thẻ, form,
+   bảng vẫn giữ nền riêng nên chữ luôn nằm trên nền đặc. Ở chế độ SÁNG, gốc `bg-darkbg` là đảo tối (chữ sáng) ⇒
+   GIỮ nền đặc, không thì chữ sáng nằm trên nền loang sáng. */
+html[data-mua]:not([data-mua-yen]) .app-main .min-h-screen.bg-\[var\(--bg-primary\)\],
+html.theme-dark[data-mua]:not([data-mua-yen]) .app-main .min-h-screen.bg-darkbg {
+  background-color: transparent;
+}
+
+/* Gốc trang tô nền bằng style nội tuyến (vd. /settings) — nội tuyến thắng stylesheet nên cần !important. */
+html[data-mua]:not([data-mua-yen]) .app-main .min-h-screen[style*="var(--bg-primary)"] {
+  background-color: transparent !important;
+}
+
+/* /courses (chuongTrinh.module.css) tự khai bảng --p-* riêng ⇒ trỏ chúng về token mùa. */
+html[data-mua] .app-main [class*="chuongTrinh_goc"] {
+  --p-paper: var(--bg-primary);
+  --p-paper-2: var(--bg-surface);
+  --p-card: var(--bg-card);
+  --p-ink: var(--text-primary);
+  --p-ink-2: var(--text-secondary);
+  --p-ink-3: var(--text-muted);
+  --p-rule: var(--border-color);
+  --p-rule-strong: var(--text-primary);
+  --p-accent: var(--accent-color);
+  --p-accent-soft: color-mix(in srgb, var(--accent-color) 9%, transparent);
+  --p-accent-ink: #ffffff;
+  --p-focus: var(--accent-color);
+}
+html.theme-dark[data-mua] .app-main [class*="chuongTrinh_goc"] {
+  --p-accent-ink: var(--bg-primary);
+}
+html[data-mua]:not([data-mua-yen]) .app-main [class*="chuongTrinh_goc"].min-h-screen {
+  background-color: transparent;
+}
+
+/* Canvas hạt + trang trí góc (components/chuDeMua/NenMuaCanvas.tsx). */
+.nen-mua-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  contain: strict;
+}
+
+/* Thẻ xem trước ở Cài đặt → Giao diện: mỗi thẻ mang bảng của CHÍNH nó (data-xem), kể cả "Mặc định" (giá trị gốc
+   của globals.css — để thẻ Mặc định vẫn đúng khi trang đang mang màu mùa khác). */
+.xem-mua[data-xem="macDinh"] {
+  --bg-primary: #f0f2f5; --bg-card: #ffffff; --border-color: #dddfe2;
+  --text-primary: #050505; --text-secondary: #65676b; --accent-color: #1877f2;
+}
+html.theme-dark .xem-mua[data-xem="macDinh"] {
+  --bg-primary: #18191a; --bg-card: #242526; --border-color: #3e4042;
+  --text-primary: #e4e6eb; --text-secondary: #b0b3b8; --accent-color: #4599ff;
+}

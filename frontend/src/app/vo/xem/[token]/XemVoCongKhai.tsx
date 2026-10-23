@@ -43,7 +43,7 @@ export default function XemVoCongKhai({ token }: { token: string }) {
   const anh = voApi.anhCongKhaiUrl(token);
 
   return (
-    <main className="min-h-screen bg-[#f4f1ea] px-4 pb-16 pt-6 text-slate-800 sm:px-6" style={{ colorScheme: 'light' }}>
+    <main className="min-h-screen bg-[#f4f1ea] px-4 pb-28 pt-24 text-slate-800 sm:px-6 sm:pt-28" style={{ colorScheme: 'light' }}>
       <div className="mx-auto w-full max-w-[820px]">
         <div className="mb-4 flex flex-wrap items-center gap-2 text-[12.5px]">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 font-semibold text-amber-800">

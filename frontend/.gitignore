@@ -13,3 +13,6 @@ node_modules
 scripts/i18n-staging/*.en.json
 scripts/i18n-staging/*.vi.json
 scripts/i18n-staging/_manifest.json
+
+# JSON khoá kiểu sách cho app iOS native — SINH lúc `next build` (scripts/sach-hoc-xuat.mts), không commit.
+/public/sach-hoc/

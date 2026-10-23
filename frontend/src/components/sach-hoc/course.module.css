@@ -1929,3 +1929,19 @@
 .hlVach i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8b5cf6, #ec4899); }
 .hlVach i[data-xong] { background: linear-gradient(90deg, #22c55e, #4ade80); }
 .hlBuoi small { min-width: 34px; text-align: right; font-size: 11.5px; color: var(--lh-ink-3); font-variant-numeric: tabular-nums; }
+
+/* Nhóm mục lục (course.nhomMuc) — gập các nhóm phụ để bài không "dài như núi". */
+.tocNhom { margin: 6px 0 10px; }
+.tocNhomHead {
+  display: flex; width: 100%; align-items: baseline; justify-content: space-between; gap: 8px;
+  padding: 6px 10px; border-radius: 8px; text-align: left; font-size: 13px; font-weight: 700; color: var(--lh-ink);
+  background: var(--lh-surface-2);
+}
+.tocNhomHead:hover { background: var(--lh-accent-soft); }
+.tocNhomTen { min-width: 0; }
+.tocNhomBatDau { padding: 3px 10px 0; font-size: 11px; font-weight: 700; color: var(--lh-accent); }
+.tocNhomMota { margin: 4px 10px 6px; font-size: 12px; line-height: 1.45; color: var(--lh-ink-3); }
+.tqNhom { margin: 8px 0; border: 1px solid var(--lh-line); border-radius: 10px; padding: 8px 12px; }
+.tqNhomHead { cursor: pointer; font-size: 14px; color: var(--lh-ink); }
+.tqNhomHead em { font-style: normal; color: var(--lh-accent); font-weight: 600; }
+.tqNhomHead small { color: var(--lh-ink-3); }

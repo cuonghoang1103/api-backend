@@ -13,6 +13,8 @@ import { dayMeta, isReady, type CourseManifest, type DayMeta, type VocabMeta } f
 
 export { isReady };
 
+export type NhomMuc = { key: string; ten: string; mota: string; lessons: Lesson[]; batDau?: boolean };
+
 export type CourseDef = {
   /** Khoá lưu tiến độ trên máy chủ (`/ielts/tien-do` stage) — đổi là mất tiến độ cũ. */
   stage: string;
@@ -50,6 +52,11 @@ export type CourseDef = {
    * hiện NGAY DƯỚI mục đó, kèm danh sách "🎬 Video của bài" ở đầu bài. Xem `VideoNeoMap`.
    */
   videoNeo?: VideoNeoMap;
+  /**
+   * Sắp các bài của MỘT buổi thành nhóm có thứ tự học (nhóm đầu = "học trước", mở sẵn; còn lại gập).
+   * Trả null = buổi ít bài, hiện phẳng như cũ. Không đổi nội dung bài, chỉ đổi cách xếp mục lục.
+   */
+  nhomMuc?: (lessons: Lesson[]) => NhomMuc[] | null;
   /** Trang riêng đi kèm khoá (vd. Phòng thi thử) — hiện ngay dưới "Kế hoạch & tiến độ". */
   links?: { href: string; label: string }[];
   /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */

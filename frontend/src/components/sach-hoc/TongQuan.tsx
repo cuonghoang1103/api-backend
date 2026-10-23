@@ -32,7 +32,9 @@ export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay
   const sum = course.summary(day);
   const date = plan ? schedule(plan, DAYS.length)[day.n - 1] : null;
   const lessons = day.n === 1 ? [INTRO, ...day.lessons] : day.lessons;
-  const firstTodo = lessons.find((l) => isReady(l) && !done.includes(l.id));
+  const nhom = day.n === 1 ? null : course.nhomMuc?.(day.lessons) ?? null;
+  // "Học tiếp" đi theo thứ tự nhóm (cốt lõi trước), không theo thứ tự ghép tệp.
+  const firstTodo = (nhom ? nhom.flatMap((n) => n.lessons) : lessons).find((l) => isReady(l) && !done.includes(l.id));
 
   return (
     <>
@@ -73,8 +75,8 @@ export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay
 
           <section className={s.gbox}>
             <div className={s.gboxTitle}>1. Các bài trong buổi</div>
-            <div className={s.checklist}>
-              {lessons.map((l) => {
+            {(() => {
+              const hang = (l: Lesson) => {
                 const isDone = done.includes(l.id);
                 return (
                   <button key={l.id} type="button" className={s.checkRow} onClick={() => onOpen(l)} disabled={!isReady(l)}>
@@ -85,8 +87,19 @@ export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay
                     </span>
                   </button>
                 );
-              })}
-            </div>
+              };
+              if (!nhom) return <div className={s.checklist}>{lessons.map(hang)}</div>;
+              return nhom.map((n) => (
+                <details key={n.key} open={!!n.batDau} className={s.tqNhom}>
+                  <summary className={s.tqNhomHead}>
+                    <b>{n.ten}</b>{n.batDau ? <em> — ★ bắt đầu ở đây</em> : null}
+                    <small> · {n.lessons.filter((l) => done.includes(l.id)).length}/{n.lessons.length} mục</small>
+                  </summary>
+                  <p className={s.tocNhomMota}>{n.mota}</p>
+                  <div className={s.checklist}>{n.lessons.map(hang)}</div>
+                </details>
+              ));
+            })()}
           </section>
 
           {sum.grammar.length > 0 && (

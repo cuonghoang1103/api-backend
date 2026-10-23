@@ -68,6 +68,8 @@ export default function CoursePage({ course, lessonExtra }: {
   const viewKey = view.t === 'lesson' ? `l:${view.id}` : view.t === 'day' ? `d:${view.n}` : 'plan';
   useEffect(() => { stopAudio(); }, [viewKey]);
   const [tocOpen, setTocOpen] = useState(false);
+  // Nhóm mục lục đang MỞ theo người dùng: khoá `${buổi}:${nhóm}` → true/false (không có = theo mặc định).
+  const [nhomMo, setNhomMo] = useState<Record<string, boolean>>({});
   const [sheetOpen, setSheetOpen] = useState(false);
   /**
    * Ẩn cột gia sư trên máy tính (≥1280px) — bài giảng giãn rộng. Nhớ trên máy.
@@ -349,7 +351,26 @@ export default function CoursePage({ course, lessonExtra }: {
                     <span>{course.dayName(d.n)}{isDone ? ' ✓' : ''}{!isDone && ready ? <small className={s.tocDem}> {d.lessons.filter((l) => tien.done.includes(l.id)).length}/{d.lessons.filter(isReady).length}</small> : null}</span>
                     <span className={s.soon}>{ready ? 'tổng quan →' : 'sắp có'}</span>
                   </button>
-                  {d.lessons.map((l) => tocItem(l))}
+                  {(() => {
+                    const ng = course.nhomMuc?.(d.lessons);
+                    if (!ng) return d.lessons.map((l) => tocItem(l));
+                    return ng.map((n) => {
+                      const k = `${d.n}:${n.key}`;
+                      const chuaXong = n.lessons.filter((l) => isReady(l) && !tien.done.includes(l.id)).length;
+                      const mo = nhomMo[k] ?? (!!n.batDau || (!!lesson && n.lessons.some((l) => l.id === lesson.id)));
+                      return (
+                        <div key={k} className={s.tocNhom}>
+                          <button type="button" className={s.tocNhomHead} aria-expanded={mo} onClick={() => setNhomMo({ ...nhomMo, [k]: !mo })}>
+                            <span className={s.tocNhomTen}>{n.ten}</span>
+                            <small className={s.tocDem}>{n.lessons.length - chuaXong}/{n.lessons.length} {mo ? '▾' : '▸'}</small>
+                          </button>
+                          {n.batDau && <div className={s.tocNhomBatDau}>★ Bắt đầu ở đây</div>}
+                          {mo && <p className={s.tocNhomMota}>{n.mota}</p>}
+                          {mo && n.lessons.map((l) => tocItem(l))}
+                        </div>
+                      );
+                    });
+                  })()}
                 </div>
               );
             })}

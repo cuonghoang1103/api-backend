@@ -39,14 +39,21 @@ export function Kj({ text }: { text: string }) {
   return <>{text.split(KJ_RUN).map((p, i) => (i % 2 ? <span key={i} data-kj={p}>{p}</span> : p ? <Fragment key={i}>{p}</Fragment> : null))}</>;
 }
 
-/** **đậm** và ~~gạch (câu sai)~~ — đủ cho nội dung soạn tay, không cần markdown đầy đủ. */
+/**
+ * **đậm**, *nghiêng*, ~~gạch (câu sai)~~ — đủ cho nội dung soạn tay, không cần markdown đầy đủ.
+ * *nghiêng* (romaji *shuumatsu*, câu ví dụ IELTS) có từ đầu trong dữ liệu (~630 cặp) nhưng trước
+ * 23/10 không được dựng ⇒ hiện nguyên dấu sao. Cặp nghiêng được chứa **đậm** bên trong; dấu * dính
+ * chữ hai bên (5*3, péngyou*) không phải nghiêng. App iOS khớp cùng luật: ChuSachHoc.swift.
+ */
+const INLINE_RE = /(\*\*[^*]+\*\*|(?<![*\w])\*(?=[^\s*])(?:[^*\n]|\*\*[^*\n]+\*\*)+?(?<=\S)\*(?![*\w])|~~[^~]+~~|==[^=]+==|\{[^|}]+\|[^}]+\})/g;
 export function Inline({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|~~[^~]+~~|==[^=]+==|\{[^|}]+\|[^}]+\})/g);
+  const parts = text.split(INLINE_RE);
   return (
     <>
       {parts.map((p, i) =>
         // Đệ quy: **đậm** hay ==dạ quang== có thể chứa {漢字|かな} bên trong.
         p.startsWith('**') ? <b key={i}><Inline text={p.slice(2, -2)} /></b>
+          : p.length > 2 && p.startsWith('*') && p.endsWith('*') ? <em key={i}><Inline text={p.slice(1, -1)} /></em>
           : p.startsWith('~~') ? <s key={i}><Inline text={p.slice(2, -2)} /></s>
             : p.startsWith('==') ? <mark key={i} className={s.hl}><Inline text={p.slice(2, -2)} /></mark>
               // {漢字|かな}: chữ Hán có furigana (ẩn/hiện theo nút của trang).

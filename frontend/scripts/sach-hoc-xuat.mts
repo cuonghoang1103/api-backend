@@ -103,10 +103,27 @@ const KINDS = ['intro', 'grammar', 'vocab', 'listening', 'reading', 'writing', '
 
 /** Bỏ cờ `ready` (chỉ có nghĩa ở mục lục) khỏi bài đầy đủ. */
 const baiDu = (l: Lesson) => ({ id: l.id, kind: l.kind, title: l.title, goal: l.goal, minutes: l.minutes, blocks: l.blocks ?? [] });
+type KhoiViet = { t: 'write'; id: string; title?: string; chars?: string[] };
+/**
+ * Khối tập viết của bài — app iOS dựng mục "✍ Luyện viết" ở mục lục (mở thẳng khối viết, khỏi lục
+ * cuối bài dài) mà không phải tải hết ~7,7 MB nội dung. `so` = số mục khác nhau, `mau` = vài chữ đầu.
+ */
+const vietCua = (l: Lesson) => {
+  const ds = (l.blocks ?? []).filter((b): b is KhoiViet =>
+    !!b && typeof b === 'object' && (b as { t?: unknown }).t === 'write' && typeof (b as { id?: unknown }).id === 'string');
+  if (!ds.length) return {};
+  return {
+    viet: ds.map((b) => {
+      const c = [...new Set(b.chars ?? [])];
+      return { id: b.id, title: b.title ?? '', so: c.length, mau: c.slice(0, 8) };
+    }),
+  };
+};
 const baiMeta = (l: Lesson, nhom?: (l: Lesson) => string | undefined) => ({
   id: l.id, kind: l.kind, title: l.title, goal: l.goal, minutes: l.minutes,
   ready: l.ready ?? !!l.blocks?.length,
   ...(nhom?.(l) ? { nhom: nhom(l) } : {}),
+  ...vietCua(l),
 });
 
 type Tep = { tep: string; hash: string; kb: number };

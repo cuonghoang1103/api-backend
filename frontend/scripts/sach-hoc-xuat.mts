@@ -21,6 +21,12 @@
  *   chu-han.json     (khoá có `kanji()`) dữ liệu thẻ chữ Hán
  *   chia.json        (khoá tiếng Nhật) bảng chia mọi động từ/tính từ trong sách —
  *                    tính bằng chính `conjugate`/`conjugateAdj` của web
+ *   tu-vung.json     từ vựng CẢ khoá (khối `vocabAll`) — lấy từ `course.summary(d).vocab`
+ *                    như TraTuVung.tsx, bỏ trùng như web
+ *   on-the.json      (Dekiru) bộ thẻ "Ôn tập bằng thẻ" (khối `onthe`): thẻ + câu trắc nghiệm,
+ *                    đáp án chấp nhận (ansJp/ansVi) TÍNH SẴN bằng hàm của web (onThe.ts)
+ *   net.json         (khoá tiếng Nhật) thứ tự nét KanjiVG của MỌI chữ xuất hiện trong khoá —
+ *                    tập con của public/kanjivg/strokes.json (khối `write`, thẻ chữ Hán)
  *
  * `phienBan` và `hash` từng tệp = sha256 NỘI DUNG (không gồm giờ sinh) ⇒ app chỉ
  * tải lại tệp đã đổi; nội dung không đổi thì phiên bản không đổi dù build lại.
@@ -34,7 +40,7 @@
  * — image frontend không có tsx. `npx tsx scripts/sach-hoc-xuat.mts` cũng chạy.
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -115,8 +121,11 @@ async function xuatKhoa(spec: Spec): Promise<string> {
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
 
+  // Mọi ký tự đã ghi ra — để cắt tập con thứ tự nét (net.json) đúng những chữ khoá dùng.
+  const kyTu = new Set<string>();
   const ghi = (ten: string, obj: unknown): Tep => {
     const s = JSON.stringify(obj);
+    for (const ch of s) kyTu.add(ch);
     writeFileSync(join(dir, ten), s);
     return { tep: ten, hash: bam(s), kb: Math.round(s.length / 102.4) / 10 };
   };
@@ -164,6 +173,28 @@ async function xuatKhoa(spec: Spec): Promise<string> {
   const them: Record<string, Tep> = {};
   if (c.kanji) them.chuHan = ghi('chu-han.json', await c.kanji());
   if (c.lang === 'ja' && spec.khoa === 'dekiru') them.chia = ghi('chia.json', await bangChia());
+
+  // Từ vựng cả khoá (khối vocabAll) — đúng như TraTuVung.tsx: theo thứ tự buổi, bỏ trùng theo `w` thường.
+  const daCo = new Set<string>();
+  const tuVung: { w: string; pos: string; ipa: string; vi: string; n: number }[] = [];
+  for (const d of c.days as Day[]) {
+    for (const v of (c.summary(d) as { vocab: { w: string; pos: string; ipa: string; vi: string }[] }).vocab) {
+      const k = v.w.toLowerCase();
+      if (daCo.has(k)) continue;
+      daCo.add(k);
+      tuVung.push({ w: v.w, pos: v.pos ?? '', ipa: v.ipa ?? '', vi: v.vi ?? '', n: d.n });
+    }
+  }
+  if (tuVung.length) them.tuVung = ghi('tu-vung.json', { schema: SCHEMA, khoa: spec.khoa, tu: tuVung });
+  if (spec.khoa === 'dekiru') them.onThe = ghi('on-the.json', await boThe());
+
+  // Thứ tự nét (KanjiVG) — ghi SAU CÙNG để gom đủ chữ của mọi tệp trên.
+  if (c.lang === 'ja') {
+    const tat = JSON.parse(readFileSync(join(ROOT, 'public/kanjivg/strokes.json'), 'utf8')) as Record<string, string[]>;
+    const net: Record<string, string[]> = {};
+    for (const ch of [...kyTu].sort()) if (tat[ch]) net[ch] = tat[ch];
+    them.net = ghi('net.json', net);
+  }
 
   const index = {
     schema: SCHEMA,
@@ -213,6 +244,39 @@ async function bangChia() {
     hangTinhTu: [['Hiện tại', 'hien'], ['Phủ định', 'phu'], ['Quá khứ', 'qua'], ['Quá khứ phủ định', 'quaPhu'], ['Bổ nghĩa N', 'bn'], ['Nối câu (て)', 'te'], ['Trở nên', 'naru'], ['Thường · hiện tại', 'ffHien'], ['Thường · phủ định', 'ffPhu'], ['Thường · quá khứ', 'ffQua'], ['Thường · quá khứ phủ định', 'ffQuaPhu'], ['Nếu… thì', 'tara'], ['Dù… cũng', 'temo']],
     tenNhom: { 1: 'Nhóm I', 2: 'Nhóm II', 3: 'Nhóm III' },
   };
+}
+
+/**
+ * Bộ thẻ của "Ôn tập bằng thẻ" (Dekiru) — dữ liệu sinh `dekiru/bai/onTheData.ts`, thẻ dựng
+ * như `buildCards()` của nhat/OnTapThe.tsx (tệp .tsx — Node không nạp được — nên dựng lại ở
+ * đây; ⚠️ sửa luật dựng thẻ ở đó thì sửa cả chỗ này). Đáp án chấp nhận tính SẴN bằng chính
+ * `jpVariants`/`viAnswers`/`foldJp`/`foldVi` của web (onThe.ts) ⇒ app chỉ việc fold câu gõ rồi so.
+ */
+async function boThe() {
+  const d = await load(join(LANG, 'dekiru/bai/onTheData.ts'));
+  const ch = await load(join(ROOT, 'src/components/sach-hoc/nhat/chia.ts'));
+  const ot = await load(join(ROOT, 'src/components/sach-hoc/nhat/onThe.ts'));
+  const cleanKana = (w: string) => ch.reading(w.replace(/［[^］]*］/g, '').replace(/\s*\d+\s*$/, '')).replace(/[（）()]/g, '').replace(/～/g, '').trim();
+  const the: Record<string, unknown>[] = [];
+  for (const [n, g, w, pos, ipa, vi] of d.TU as [number, number, string, string, string, string][]) {
+    the.push({ id: `t:${n}:${ch.bare(w)}`, loai: 'tu', n, nhom: d.NHOM[n]?.[g] ?? '', jp: w, kana: cleanKana(w), ro: ipa, vi, meta: pos, ansJp: ot.jpVariants(w, ipa), ansVi: ot.viAnswers(vi) });
+  }
+  for (const [c0, n, hv, nghia, on, kun, slide] of d.HAN as [string, number, string, string, string, string, 0 | 1][]) {
+    const kunList = kun.split('、').filter(Boolean);
+    const onList = on.split('・').filter(Boolean);
+    const docChinh = (kunList[0] ?? '').replace(/・/g, '') || ot.toHira(onList[0] ?? '');
+    the.push({
+      id: `h:${c0}`, loai: 'han', n, nhom: slide ? 'Chữ Hán của lớp (đúng slide)' : 'Chữ Hán của lớp', jp: c0, kana: docChinh,
+      ro: ch.toRomaji(docChinh), vi: `${hv} — ${nghia}`, meta: `On: ${on || '—'} · Kun: ${kun || '—'}`,
+      ansJp: [...new Set([c0, ...kunList.map((k: string) => k.replace(/・/g, '')), ...kunList.map((k: string) => k.split('・')[0]), ...onList.map(ot.toHira)].map(ot.foldJp).filter(Boolean))],
+      ansVi: [ot.foldVi(hv), ...ot.viAnswers(nghia)],
+    });
+  }
+  (d.NP as [number, string, string, string, string, string, string][]).forEach(([n, p, f, vi, en, ro, exVi], i) => {
+    the.push({ id: `g:${n}:${i}`, loai: 'np', n, nhom: p, jp: f, kana: '', ro: '', vi, meta: p, ...(en ? { ex: { en, ro, vi: exVi } } : {}), ansJp: [], ansVi: ot.viAnswers(vi) });
+  });
+  const cau = (d.CAU as [number, string, 'np' | 'han', string, string[], number, string, string][]).map(([n, id, loai, q, opts, correct, why, title]) => ({ id: `q:${id}`, loai, n, q, opts, correct, why, title }));
+  return { schema: SCHEMA, the, cau };
 }
 
 const args = process.argv.slice(2);

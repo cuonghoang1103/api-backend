@@ -57,13 +57,26 @@ const SPECS: Spec[] = [
       };
       // Bài "Chữ Hán của lớp" chèn sau bN-kanji — cùng hàm với bộ nạp.
       const { chenHanLop } = await load(join(dir, 'hanLop.ts'));
+      const s45 = (await load(join(dir, 'slideB45.ts'))).SLIDE_B45 as Lesson[];
+      const s67 = (await load(join(dir, 'slideB67.ts'))).SLIDE_B67 as Lesson[];
+      const l45 = await load(join(dir, 'luyenThemB45.ts'));
+      const l67 = await load(join(dir, 'luyenThemB67.ts'));
+      const slotB4 = /^slot-0[1-4]-/;
+      const slotB6 = /^(slot-1[0-4]-|slide-tong-hop-b6$)/;
+      const slideVaLuyen = (n: number): Lesson[] =>
+        n === 4 ? [...s45.filter((l) => slotB4.test(l.id)), ...l45.LUYEN_THEM_B4]
+        : n === 5 ? [...s45.filter((l) => !slotB4.test(l.id)), ...l45.LUYEN_THEM_B5]
+        : n === 6 ? [...s67.filter((l) => slotB6.test(l.id)), ...l67.LUYEN_THEM_B6]
+        : [...s67.filter((l) => !slotB6.test(l.id)), ...l67.LUYEN_THEM_B7];
       const out: Record<number, Lesson[]> = {};
       for (const n of numbered(dir, 'bai')) {
         const m = await load(join(dir, `bai${n}.ts`));
         const bai: Lesson[] = m[`BAI_${n}`];
         if (!Array.isArray(bai)) throw new Error(`bai${n}.ts không export BAI_${n}`);
         const extra: Lesson | undefined = m[`SACH_${n}`] ?? sach[n];
-        out[n] = chenHanLop(n, extra ? [...bai, extra] : bai);
+        // Bài 4–7: thêm "Theo slide lớp" + "Luyện thêm" — cùng luật chia với loadGoc (bai/index.ts).
+        const them: Lesson[] = n >= 4 && n <= 7 ? slideVaLuyen(n) : [];
+        out[n] = chenHanLop(n, extra ? [...bai, ...them, extra] : [...bai, ...them]);
       }
       return out;
     },

@@ -14,7 +14,7 @@
  */
 import crypto from 'node:crypto';
 import { prisma } from '../config/database.js';
-import { buildPublicUrl } from '../config/r2.js';
+import { urlDocVo } from './voInk.service.js';
 import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 import { checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
 import { visionComplete, type VisionImage } from './docTools/vision.js';
@@ -419,13 +419,16 @@ export async function theHomNay(userId: number, q: { gioiHan?: unknown; den?: un
       where: { userId, kind: { in: ['THE', 'CAU_HOI'] }, lastReviewedAt: { gte: tuNgay }, note: trangSong },
     }),
   ]);
+  const anh = new Map<string, string | null>();
+  await Promise.all([...new Set(rows.map((r) => r.note.inkPreviewKey).filter((k): k is string => !!k))]
+    .map(async (k) => { anh.set(k, await urlDocVo(k)); }));
   return {
     the: rows.map((r) => ({
       ...theRa(r),
       trang: {
         id: r.note.id, clientId: r.note.clientId, tieuDe: r.note.title,
         monTen: r.note.subject?.name ?? '', cuonTen: r.note.chapter?.title ?? null,
-        previewUrl: r.note.inkPreviewKey ? buildPublicUrl(r.note.inkPreviewKey) : null,
+        previewUrl: r.note.inkPreviewKey ? anh.get(r.note.inkPreviewKey) ?? null : null,
       },
     })),
     conLai, tong, daOnHomNay,

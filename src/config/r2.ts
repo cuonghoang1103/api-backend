@@ -309,6 +309,24 @@ export async function getSignedDownloadUrl(
 }
 
 /**
+ * URL GET CÓ CHỮ KÝ cho nội dung RIÊNG TƯ của người dùng (Vở: nét, ảnh xem
+ * trước, nền — 23/10/2026), thay cho `buildPublicUrl` (CDN công khai).
+ *
+ * Ký theo CỬA SỔ thời gian cố định (`signingDate` làm tròn xuống mốc 30 phút,
+ * sống 90 phút ⇒ mọi URL trả ra còn hạn ÍT NHẤT 60 phút): trong cùng một cửa
+ * sổ, cùng một khoá ra CÙNG một URL ⇒ trình duyệt/app cache được ảnh thay vì
+ * tải lại mỗi lần mở trang (URL ký mới mỗi lượt là mỗi lượt một tệp "mới").
+ * Ký là phép tính cục bộ, không gọi mạng.
+ */
+export async function getSignedReadUrl(key: string, now: Date = new Date()): Promise<string> {
+  const CUA_SO_MS = 30 * 60_000;
+  const signingDate = new Date(Math.floor(now.getTime() / CUA_SO_MS) * CUA_SO_MS);
+  const client = getR2Client();
+  const cmd = new GetObjectCommand({ Bucket: config.r2.bucketName, Key: key });
+  return sandboxReachable(key, await getSignedUrl(client, cmd, { expiresIn: 90 * 60, signingDate }));
+}
+
+/**
  * Sandbox (đợt 6): ký URL vẫn chạy thật (thuần cục bộ, không gọi mạng) — chỉ đổi gốc `https://r2-sandbox.invalid/<bucket>/`
  * sang tuyến `/__r2-sandbox/` của backend local để trình duyệt mở/PUT được. Ngoài sandbox ⇒ giữ nguyên.
  */

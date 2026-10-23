@@ -18,7 +18,7 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { Prisma } from '@prisma/client';
-import { buildPublicUrl } from '../config/r2.js';
+import { urlDocVo } from './voInk.service.js';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
@@ -417,10 +417,11 @@ export async function getNote(userId: number, id: number) {
     },
   });
   if (!note) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-  // Trang Vở viết tay (iPad): ảnh xem trước nằm trên R2 qua CDN công khai —
-  // cùng đường `/vo` trả cho app (`buildPublicUrl`). Trả URL dựng sẵn để web
-  // không phải tự ghép gốc CDN từ khoá.
-  return { ...note, inkPreviewUrl: note.inkPreviewKey ? buildPublicUrl(note.inkPreviewKey) : null };
+  // Trang Vở viết tay (iPad): ảnh xem trước nằm trên R2 — cùng đường `/vo` trả
+  // cho app (`urlDocVo`). Trả URL dựng sẵn để web không tự ghép từ khoá.
+  // ⚠️ Từ 23/10/2026 là URL KÝ SẴN (hết hạn ≥ 60 phút), không phải CDN công
+  // khai — web xin lại note khi ảnh lỗi (`VoVietTayPreview`).
+  return { ...note, inkPreviewUrl: await urlDocVo(note.inkPreviewKey) };
 }
 
 /**

@@ -10,12 +10,14 @@
  * thế một trang 2MB không ăn RAM của API và không đụng trần 100MB của
  * proxy Cloudflare.
  */
+import { randomBytes } from 'node:crypto';
 import { prisma } from '../config/database.js';
 import {
   getSignedUploadUrl,
+  getSignedReadUrl,
   headObject,
   deleteObjects,
-  buildPublicUrl,
+  listObjects,
 } from '../config/r2.js';
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -183,6 +185,29 @@ function mauSangHex(mau: unknown): string | null {
 }
 
 /**
+ * URL ĐỌC của một tệp Vở (nét / ảnh xem trước / nền) — URL KÝ SẴN, hết hạn
+ * (≥ 60 phút, xem `getSignedReadUrl`), KHÔNG phải URL CDN công khai.
+ *
+ * ⚠️ Trước 23/10/2026 mọi tệp Vở trả bằng `buildPublicUrl`: ai biết khoá
+ * (`notes/u<id>/ink/<trang>/v<n>.png` — đoán được) là xem được vở người khác.
+ * Trường trả về GIỮ TÊN CŨ (`inkUrl`, `previewUrl`, `nenUrl`) để app cũ không
+ * vỡ: app tải tệp NGAY trong lượt đồng bộ, không giữ URL lâu.
+ */
+export async function urlDocVo(key: string | null | undefined): Promise<string | null> {
+  return key ? getSignedReadUrl(key) : null;
+}
+
+/** Thư mục R2 chứa mọi phiên bản nét của một trang. */
+function thuMucNet(userId: number, noteId: number): string {
+  return `notes/u${userId}/ink/${noteId}/`;
+}
+
+/** Chuỗi ngẫu nhiên gắn vào khoá nét mới — khoá KHÔNG đoán được từ id. */
+function hauToNgauNhien(): string {
+  return randomBytes(12).toString('hex');
+}
+
+/**
  * Khoá R2 của một trang. MANG SỐ PHIÊN BẢN trong tên.
  *
  * ⚠️ Không ghi đè cùng một khoá: ảnh xem trước đi qua CDN, mà ghi đè thì
@@ -190,8 +215,10 @@ function mauSangHex(mau: unknown): string | null {
  * bẫy `proxy_hide_header Cache-Control` đã dạy một lần. Tên có phiên bản
  * thì mỗi lần lưu là một URL mới, không đường nào trả về bản cũ.
  */
-function khoaNet(userId: number, noteId: number, phienBan: number, duoi: 'drawing' | 'png'): string {
-  return `notes/u${userId}/ink/${noteId}/v${phienBan}.${duoi}`;
+function khoaNet(userId: number, noteId: number, phienBan: number, duoi: 'drawing' | 'png', ngauNhien?: string): string {
+  // Từ 23/10/2026 khoá mới mang thêm chuỗi ngẫu nhiên (`v7-<24 hex>.png`); khoá
+  // cũ không có đuôi đó vẫn đọc/dọn được (`ngauNhien` bỏ trống).
+  return `${thuMucNet(userId, noteId)}v${phienBan}${ngauNhien ? `-${ngauNhien}` : ''}.${duoi}`;
 }
 
 /** Khoá nền đánh theo NỘI DUNG, không theo trang.
@@ -318,7 +345,7 @@ export async function dongBoCay(
         const trangClient = uuidSach(trang.clientId, 'clientId của trang');
         const hangDaXoa = daXoaTheoClient.get(trangClient);
         if (hangDaXoa) {
-          trangsRa.push(trangRa(hangDaXoa, trangClient, trang.phienBanNet, true));
+          trangsRa.push(await trangRa(hangDaXoa, trangClient, trang.phienBanNet, true));
           continue;
         }
         const giay = typeof trang.giay === 'string' && GIAY_HOP_LE.has(trang.giay) ? trang.giay : null;
@@ -365,7 +392,7 @@ export async function dongBoCay(
           select: CHON_TRANG,
         });
 
-        trangsRa.push(trangRa(trangRow, trangClient, trang.phienBanNet, false));
+        trangsRa.push(await trangRa(trangRow, trangClient, trang.phienBanNet, false));
       }
 
       cuonsRa.push({ clientId: cuonClient, id: cuonRow.id, trangs: trangsRa });
@@ -390,19 +417,20 @@ type TrangDaXoaRow = {
   bgKey: string | null; bgKind: string | null; bgPage: number;
 };
 
-function trangRa(r: TrangDaXoaRow, clientId: string, phienBanNet: unknown, daXoa: boolean): TrangRa {
+async function trangRa(r: TrangDaXoaRow, clientId: string, phienBanNet: unknown, daXoa: boolean): Promise<TrangRa> {
+  const [inkUrl, previewUrl, nenUrl] = await Promise.all([urlDocVo(r.inkKey), urlDocVo(r.inkPreviewKey), urlDocVo(r.bgKey)]);
   return {
     clientId,
     id: r.id,
     inkVersion: r.inkVersion,
     inkStrokeCount: r.inkStrokeCount,
-    inkUrl: r.inkKey ? buildPublicUrl(r.inkKey) : null,
-    previewUrl: r.inkPreviewKey ? buildPublicUrl(r.inkPreviewKey) : null,
+    inkUrl,
+    previewUrl,
     inkUpdatedAt: r.inkUpdatedAt?.toISOString() ?? null,
     // Trang đã xoá: KHÔNG báo xung đột — báo xung đột là mời máy (bản cũ)
     // tải bản máy chủ về đè/hợp nhất một trang người dùng đã bỏ.
     xungDot: daXoa ? false : (Number(phienBanNet) || 0) < r.inkVersion,
-    nenUrl: r.bgKey ? buildPublicUrl(r.bgKey) : null,
+    nenUrl,
     nenLoai: r.bgKind,
     nenTrang: r.bgPage,
     daXoa,
@@ -507,8 +535,10 @@ export async function xinDuongDayNet(
   if (!trang) throw new AppError('Không tìm thấy trang', 404, 'NOTE_NOT_FOUND');
 
   const phienBanMoi = trang.inkVersion + 1;
-  const inkKey = khoaNet(userId, noteId, phienBanMoi, 'drawing');
-  const previewKey = coAnhXemTruoc ? khoaNet(userId, noteId, phienBanMoi, 'png') : null;
+  // Một chuỗi ngẫu nhiên cho cả cặp nét + ảnh của lượt đẩy này.
+  const ngauNhien = hauToNgauNhien();
+  const inkKey = khoaNet(userId, noteId, phienBanMoi, 'drawing', ngauNhien);
+  const previewKey = coAnhXemTruoc ? khoaNet(userId, noteId, phienBanMoi, 'png', ngauNhien) : null;
 
   // ⚠️ `contentType` được KÝ (xem `getSignedUploadUrl`), nên app PHẢI gửi
   // đúng chuỗi này ở header `Content-Type` — lệch một ký tự là R2 trả 403.
@@ -564,7 +594,7 @@ export async function xacNhanNet(
       {
         inkVersion: trang.inkVersion,
         inkStrokeCount: trang.inkStrokeCount,
-        inkUrl: trang.inkKey ? buildPublicUrl(trang.inkKey) : null,
+        inkUrl: await urlDocVo(trang.inkKey),
       },
     );
   }
@@ -602,21 +632,30 @@ export async function xacNhanNet(
 
   // Dọn bản CŨ HƠN MỘT BẬC. Giữ lại đúng bản liền trước làm lưới an toàn:
   // nếu lượt đẩy này hoá ra hỏng, bản trước vẫn còn để cứu.
+  //
+  // Khoá có chuỗi ngẫu nhiên (23/10/2026) thì KHÔNG tính lại được khoá bản cũ
+  // từ số phiên bản ⇒ liệt kê thư mục của trang, xoá mọi thứ KHÔNG phải bản
+  // mới + bản liền trước (cả khoá kiểu cũ `v<n>.drawing` còn sót).
   if (trang.inkVersion >= 1) {
-    const cu = trang.inkVersion - 1;
-    if (cu >= 1) {
-      void deleteObjects([
-        khoaNet(userId, noteId, cu, 'drawing'),
-        khoaNet(userId, noteId, cu, 'png'),
-      ]).catch((e) => logger.warn(`[vo] dọn bản cũ v${cu} của trang ${noteId} hỏng: ${String(e)}`));
-    }
+    const giu = new Set([inkKey, previewKey, trang.inkKey, trang.inkPreviewKey, capNhat.inkPreviewKey]
+      .filter((k): k is string => !!k));
+    void donBanCuCuaTrang(userId, noteId, giu)
+      .catch((e) => logger.warn(`[vo] dọn bản cũ của trang ${noteId} hỏng: ${String(e)}`));
   }
 
   return {
     inkVersion: capNhat.inkVersion,
-    inkUrl: buildPublicUrl(capNhat.inkKey!),
-    previewUrl: capNhat.inkPreviewKey ? buildPublicUrl(capNhat.inkPreviewKey) : null,
+    inkUrl: (await urlDocVo(capNhat.inkKey))!,
+    previewUrl: await urlDocVo(capNhat.inkPreviewKey),
   };
+}
+
+/** Xoá mọi tệp nét của một trang, TRỪ các khoá trong `giu`. Trả các khoá đã xoá. */
+export async function donBanCuCuaTrang(userId: number, noteId: number, giu: Set<string>): Promise<string[]> {
+  const ds = await listObjects(thuMucNet(userId, noteId));
+  const xoa = ds.map((o) => o.key).filter((k) => !giu.has(k));
+  if (xoa.length) await deleteObjects(xoa);
+  return xoa;
 }
 
 // ─── 3b. Dọn tệp R2 của những trang sắp bị xoá hẳn ───────────────────────
@@ -658,6 +697,15 @@ export async function khoaCanDonChoTrang(
       khoa.add(khoaNet(t.userId, t.id, cu, 'png'));
     }
     if (t.bgKey) nenUngVien.add(t.bgKey);
+  }
+
+  // Khoá nét có chuỗi ngẫu nhiên (23/10/2026) ⇒ bản liền trước không tính ra
+  // được từ số phiên bản: liệt kê thư mục của từng trang, gom hết. Năm trang
+  // một lượt để một mẻ purge lớn không bắn hàng trăm lệnh liệt kê cùng lúc.
+  for (let i = 0; i < trangs.length; i += 5) {
+    const lo = trangs.slice(i, i + 5);
+    const ds = await Promise.all(lo.map((t) => listObjects(thuMucNet(t.userId, t.id)).catch(() => [])));
+    for (const d of ds) for (const o of d) khoa.add(o.key);
   }
 
   if (nenUngVien.size > 0) {
@@ -716,6 +764,13 @@ export async function layCayVo(userId: number) {
     if (ds) ds.push(t); else theoChuong.set(t.chapterId, [t]);
   }
 
+  // Ký URL đọc cho mọi trang TRƯỚC (cục bộ, không gọi mạng) rồi dựng cây.
+  const urlTheoTrang = new Map<number, { inkUrl: string | null; previewUrl: string | null; nenUrl: string | null }>();
+  await Promise.all(trangs.map(async (t) => {
+    const [inkUrl, previewUrl, nenUrl] = await Promise.all([urlDocVo(t.inkKey), urlDocVo(t.inkPreviewKey), urlDocVo(t.bgKey)]);
+    urlTheoTrang.set(t.id, { inkUrl, previewUrl, nenUrl });
+  }));
+
   return {
     mons: mons.map((m) => ({
       clientId: m.clientId!,
@@ -747,10 +802,10 @@ export async function layCayVo(userId: number) {
           khoGiayRieng: t.inkPageSize,
           inkVersion: t.inkVersion,
           inkStrokeCount: t.inkStrokeCount,
-          inkUrl: t.inkKey ? buildPublicUrl(t.inkKey) : null,
-          previewUrl: t.inkPreviewKey ? buildPublicUrl(t.inkPreviewKey) : null,
+          inkUrl: urlTheoTrang.get(t.id)?.inkUrl ?? null,
+          previewUrl: urlTheoTrang.get(t.id)?.previewUrl ?? null,
           inkUpdatedAt: t.inkUpdatedAt?.toISOString() ?? null,
-          nenUrl: t.bgKey ? buildPublicUrl(t.bgKey) : null,
+          nenUrl: urlTheoTrang.get(t.id)?.nenUrl ?? null,
           nenLoai: t.bgKind,
           nenTrang: t.bgPage,
         })),
@@ -837,4 +892,63 @@ export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daX
   return { daXoa: r.count };
 }
 
-export const _chiDeKiemThu = { trangRa, khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong, khoSach, noiDaiSach };
+// ─── 6. Chuyển tệp nét CŨ (khoá đoán được) sang khoá riêng tư ────────────
+
+/** Khoá nét kiểu cũ — `…/ink/<trang>/v<n>.drawing|png`, KHÔNG có chuỗi ngẫu nhiên. */
+export function laKhoaNetCu(key: string | null | undefined): boolean {
+  return !!key && /\/ink\/\d+\/v\d+\.(drawing|png)$/.test(key);
+}
+
+/**
+ * Chép tệp nét + ảnh xem trước của MỘT trang từ khoá cũ (đoán được) sang khoá
+ * mới có chuỗi ngẫu nhiên, đổi con trỏ, rồi xoá tệp cũ. Dùng bởi
+ * `scripts/vo-chuyen-khoa-rieng.mts` (mặc định CHẠY THỬ).
+ *
+ * ⚠️ Đổi con trỏ có điều kiện `inkKey = khoá cũ`: máy vừa đẩy bản mới chen vào
+ * thì lượt này THÔI (xoá bản chép, không đụng con trỏ) — bản mới đã mang khoá
+ * ngẫu nhiên rồi. `inkVersion` KHÔNG đổi: nội dung y hệt, máy không phải tải lại.
+ */
+export async function chuyenKhoaRieng(t: {
+  id: number; userId: number; inkKey: string | null; inkPreviewKey: string | null; inkVersion: number;
+}, ghi: boolean): Promise<{ trangThai: 'boQua' | 'chayThu' | 'daChuyen' | 'chenNgang' | 'thieuTep'; xoa: string[] }> {
+  const can = laKhoaNetCu(t.inkKey) || laKhoaNetCu(t.inkPreviewKey);
+  if (!can) return { trangThai: 'boQua', xoa: [] };
+  if (!ghi) return { trangThai: 'chayThu', xoa: [] };
+  const { getObjectBytes, putObject } = await import('../config/r2.js');
+  const ngauNhien = hauToNgauNhien();
+  const moi: { inkKey?: string; inkPreviewKey?: string } = {};
+  const daChep: string[] = [];
+  for (const [cot, duoi, kieu] of [['inkKey', 'drawing', 'application/octet-stream'], ['inkPreviewKey', 'png', 'image/png']] as const) {
+    const cu = t[cot];
+    if (!laKhoaNetCu(cu)) continue;
+    const b = await getObjectBytes(cu!, TRAN_NET_BYTE + 1024);
+    if (!b) {
+      if (cot === 'inkKey') { if (daChep.length) await deleteObjects(daChep); return { trangThai: 'thieuTep', xoa: [] }; }
+      continue;   // thiếu ảnh xem trước: vẫn chuyển nét
+    }
+    const k = khoaNet(t.userId, t.id, t.inkVersion, duoi, ngauNhien);
+    await putObject(k, b, kieu, 'private, max-age=31536000, immutable');
+    daChep.push(k);
+    moi[cot] = k;
+  }
+  if (!daChep.length) return { trangThai: 'thieuTep', xoa: [] };
+  const r = await prisma.$executeRaw`
+    UPDATE "notes" SET
+      "ink_key" = COALESCE(${moi.inkKey ?? null}, "ink_key"),
+      "ink_preview_key" = COALESCE(${moi.inkPreviewKey ?? null}, "ink_preview_key")
+    WHERE "id" = ${t.id} AND "ink_key" IS NOT DISTINCT FROM ${t.inkKey}
+      AND "ink_preview_key" IS NOT DISTINCT FROM ${t.inkPreviewKey}`;
+  if (r === 0) {
+    await deleteObjects(daChep);
+    return { trangThai: 'chenNgang', xoa: [] };
+  }
+  // Xoá MỌI khoá kiểu cũ còn trong thư mục trang (bản hiện tại vừa chép + bản
+  // liền trước làm lưới an toàn cũ) — chúng nằm trên CDN công khai theo khoá
+  // đoán được, giữ lại là giữ lỗ hổng.
+  const ds = await listObjects(thuMucNet(t.userId, t.id));
+  const xoa = ds.map((o) => o.key).filter((k) => laKhoaNetCu(k));
+  if (xoa.length) await deleteObjects(xoa);
+  return { trangThai: 'daChuyen', xoa };
+}
+
+export const _chiDeKiemThu = { trangRa, khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong, khoSach, noiDaiSach, thuMucNet, laKhoaNetCu };

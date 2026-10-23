@@ -28,9 +28,9 @@ const SLOT_B6 = /^(slot-1[0-4]-|slide-tong-hop-b6$)/;
 function loadGoc(n: number): Promise<Lesson[]> | null {
   switch (n) {
     case 0: return import('./bai0').then((m) => m.BAI_0);
-    case 1: return Promise.all([import('./bai1'), import('./sach')]).then(([m, s]) => [...m.BAI_1, s.SACH[1]]);
-    case 2: return Promise.all([import('./bai2'), import('./sach')]).then(([m, s]) => [...m.BAI_2, s.SACH[2]]);
-    case 3: return Promise.all([import('./bai3'), import('./sach')]).then(([m, s]) => [...m.BAI_3, s.SACH[3]]);
+    case 1: return Promise.all([import('./bai1'), import('./sach'), import('./jp113B12')]).then(([m, s, j]) => [...m.BAI_1, ...j.JP113_B1, ...j.LT_B1, s.SACH[1]]);
+    case 2: return Promise.all([import('./bai2'), import('./sach'), import('./jp113B12')]).then(([m, s, j]) => [...m.BAI_2, ...j.JP113_B2, ...j.LT_B2, s.SACH[2]]);
+    case 3: return Promise.all([import('./bai3'), import('./sach'), import('./jp113B3')]).then(([m, s, j]) => [...m.BAI_3, ...j.JP113_B3, ...j.LT_B3, s.SACH[3]]);
     case 4: return Promise.all([import('./bai4'), import('./sach2'), import('./slideB45'), import('./luyenThemB45')]).then(([m, s, c, lt]) => [...m.BAI_4, ...c.SLIDE_B45.filter((l) => SLOT_B4.test(l.id)), ...lt.LUYEN_THEM_B4, s.SACH_2[4]]);
     case 5: return Promise.all([import('./bai5'), import('./sach2'), import('./slideB45'), import('./luyenThemB45')]).then(([m, s, c, lt]) => [...m.BAI_5, ...c.SLIDE_B45.filter((l) => !SLOT_B4.test(l.id)), ...lt.LUYEN_THEM_B5, s.SACH_2[5]]);
     case 6: return Promise.all([import('./bai6'), import('./sach2'), import('./slideB67'), import('./luyenThemB67')]).then(([m, s, c, lt]) => [...m.BAI_6, ...c.SLIDE_B67.filter((l) => SLOT_B6.test(l.id)), ...lt.LUYEN_THEM_B6, s.SACH_2[6]]);

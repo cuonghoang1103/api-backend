@@ -63,8 +63,13 @@ const SPECS: Spec[] = [
       const l67 = await load(join(dir, 'luyenThemB67.ts'));
       const slotB4 = /^slot-0[1-4]-/;
       const slotB6 = /^(slot-1[0-4]-|slide-tong-hop-b6$)/;
+      const j3 = await load(join(dir, 'jp113B3.ts'));
+      const j12 = await load(join(dir, 'jp113B12.ts'));
       const slideVaLuyen = (n: number): Lesson[] =>
-        n === 4 ? [...s45.filter((l) => slotB4.test(l.id)), ...l45.LUYEN_THEM_B4]
+        n === 1 ? [...j12.JP113_B1, ...j12.LT_B1]
+        : n === 2 ? [...j12.JP113_B2, ...j12.LT_B2]
+        : n === 3 ? [...j3.JP113_B3, ...j3.LT_B3]
+        : n === 4 ? [...s45.filter((l) => slotB4.test(l.id)), ...l45.LUYEN_THEM_B4]
         : n === 5 ? [...s45.filter((l) => !slotB4.test(l.id)), ...l45.LUYEN_THEM_B5]
         : n === 6 ? [...s67.filter((l) => slotB6.test(l.id)), ...l67.LUYEN_THEM_B6]
         : [...s67.filter((l) => !slotB6.test(l.id)), ...l67.LUYEN_THEM_B7];
@@ -75,7 +80,7 @@ const SPECS: Spec[] = [
         if (!Array.isArray(bai)) throw new Error(`bai${n}.ts không export BAI_${n}`);
         const extra: Lesson | undefined = m[`SACH_${n}`] ?? sach[n];
         // Bài 4–7: thêm "Theo slide lớp" + "Luyện thêm" — cùng luật chia với loadGoc (bai/index.ts).
-        const them: Lesson[] = n >= 4 && n <= 7 ? slideVaLuyen(n) : [];
+        const them: Lesson[] = n >= 1 && n <= 7 ? slideVaLuyen(n) : [];
         out[n] = chenHanLop(n, extra ? [...bai, ...them, extra] : [...bai, ...them]);
       }
       return out;

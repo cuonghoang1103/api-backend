@@ -14,6 +14,7 @@ import { loadBai } from './bai';
 import { MANIFEST } from './bai/manifest';
 import { DE_LUYEN_67 } from './bai/deLuyen67';
 import { ON_CUOI_KY } from './bai/onCuoiKy';
+import { ON_113 } from './bai/jp113B3';
 import { VIDEO_NEO } from './videos';
 
 export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
@@ -124,7 +125,7 @@ export const DEKIRU = defineCourse({
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',
   intro: INTRO,
-  extras: [CHIA, ON_THE, DE_LUYEN_67, ...ON_CUOI_KY],
+  extras: [CHIA, ON_THE, DE_LUYEN_67, ...ON_113, ...ON_CUOI_KY],
   // 🎬 Video giảng mp4 gắn theo mục (ポイント, tiêu đề…) — videos.ts, sinh bởi xuat/gan-sach.mts của dự án video.
   videoNeo: VIDEO_NEO,
   days: DAYS,

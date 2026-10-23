@@ -31,10 +31,10 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 1: return Promise.all([import('./bai1'), import('./sach')]).then(([m, s]) => [...m.BAI_1, s.SACH[1]]);
     case 2: return Promise.all([import('./bai2'), import('./sach')]).then(([m, s]) => [...m.BAI_2, s.SACH[2]]);
     case 3: return Promise.all([import('./bai3'), import('./sach')]).then(([m, s]) => [...m.BAI_3, s.SACH[3]]);
-    case 4: return Promise.all([import('./bai4'), import('./sach2'), import('./slideB45')]).then(([m, s, c]) => [...m.BAI_4, ...c.SLIDE_B45.filter((l) => SLOT_B4.test(l.id)), s.SACH_2[4]]);
-    case 5: return Promise.all([import('./bai5'), import('./sach2'), import('./slideB45')]).then(([m, s, c]) => [...m.BAI_5, ...c.SLIDE_B45.filter((l) => !SLOT_B4.test(l.id)), s.SACH_2[5]]);
-    case 6: return Promise.all([import('./bai6'), import('./sach2'), import('./slideB67')]).then(([m, s, c]) => [...m.BAI_6, ...c.SLIDE_B67.filter((l) => SLOT_B6.test(l.id)), s.SACH_2[6]]);
-    case 7: return Promise.all([import('./bai7'), import('./slideB67')]).then(([m, c]) => [...m.BAI_7, ...c.SLIDE_B67.filter((l) => !SLOT_B6.test(l.id)), m.SACH_7]);
+    case 4: return Promise.all([import('./bai4'), import('./sach2'), import('./slideB45'), import('./luyenThemB45')]).then(([m, s, c, lt]) => [...m.BAI_4, ...c.SLIDE_B45.filter((l) => SLOT_B4.test(l.id)), ...lt.LUYEN_THEM_B4, s.SACH_2[4]]);
+    case 5: return Promise.all([import('./bai5'), import('./sach2'), import('./slideB45'), import('./luyenThemB45')]).then(([m, s, c, lt]) => [...m.BAI_5, ...c.SLIDE_B45.filter((l) => !SLOT_B4.test(l.id)), ...lt.LUYEN_THEM_B5, s.SACH_2[5]]);
+    case 6: return Promise.all([import('./bai6'), import('./sach2'), import('./slideB67'), import('./luyenThemB67')]).then(([m, s, c, lt]) => [...m.BAI_6, ...c.SLIDE_B67.filter((l) => SLOT_B6.test(l.id)), ...lt.LUYEN_THEM_B6, s.SACH_2[6]]);
+    case 7: return Promise.all([import('./bai7'), import('./slideB67'), import('./luyenThemB67')]).then(([m, c, lt]) => [...m.BAI_7, ...c.SLIDE_B67.filter((l) => !SLOT_B6.test(l.id)), ...lt.LUYEN_THEM_B7, m.SACH_7]);
     case 8: return import('./bai8').then((m) => [...m.BAI_8, m.SACH_8]);
     case 9: return import('./bai9').then((m) => [...m.BAI_9, m.SACH_9]);
     case 10: return import('./bai10').then((m) => [...m.BAI_10, m.SACH_10]);

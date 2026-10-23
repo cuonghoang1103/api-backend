@@ -21,16 +21,20 @@ export function loadBai(n: number): Promise<Lesson[]> | null {
   return p && Promise.all([p, import('./hanLop')]).then(([ls, h]) => h.chenHanLop(n, ls));
 }
 
+/** Bài "Theo slide lớp" (slideB45/slideB67) chia về đúng bài theo id: Slot 1–4 = Bài 4; Slot 10–14 + tổng hợp B6 = Bài 6. */
+const SLOT_B4 = /^slot-0[1-4]-/;
+const SLOT_B6 = /^(slot-1[0-4]-|slide-tong-hop-b6$)/;
+
 function loadGoc(n: number): Promise<Lesson[]> | null {
   switch (n) {
     case 0: return import('./bai0').then((m) => m.BAI_0);
     case 1: return Promise.all([import('./bai1'), import('./sach')]).then(([m, s]) => [...m.BAI_1, s.SACH[1]]);
     case 2: return Promise.all([import('./bai2'), import('./sach')]).then(([m, s]) => [...m.BAI_2, s.SACH[2]]);
     case 3: return Promise.all([import('./bai3'), import('./sach')]).then(([m, s]) => [...m.BAI_3, s.SACH[3]]);
-    case 4: return Promise.all([import('./bai4'), import('./sach2')]).then(([m, s]) => [...m.BAI_4, s.SACH_2[4]]);
-    case 5: return Promise.all([import('./bai5'), import('./sach2')]).then(([m, s]) => [...m.BAI_5, s.SACH_2[5]]);
-    case 6: return Promise.all([import('./bai6'), import('./sach2')]).then(([m, s]) => [...m.BAI_6, s.SACH_2[6]]);
-    case 7: return import('./bai7').then((m) => [...m.BAI_7, m.SACH_7]);
+    case 4: return Promise.all([import('./bai4'), import('./sach2'), import('./slideB45')]).then(([m, s, c]) => [...m.BAI_4, ...c.SLIDE_B45.filter((l) => SLOT_B4.test(l.id)), s.SACH_2[4]]);
+    case 5: return Promise.all([import('./bai5'), import('./sach2'), import('./slideB45')]).then(([m, s, c]) => [...m.BAI_5, ...c.SLIDE_B45.filter((l) => !SLOT_B4.test(l.id)), s.SACH_2[5]]);
+    case 6: return Promise.all([import('./bai6'), import('./sach2'), import('./slideB67')]).then(([m, s, c]) => [...m.BAI_6, ...c.SLIDE_B67.filter((l) => SLOT_B6.test(l.id)), s.SACH_2[6]]);
+    case 7: return Promise.all([import('./bai7'), import('./slideB67')]).then(([m, c]) => [...m.BAI_7, ...c.SLIDE_B67.filter((l) => !SLOT_B6.test(l.id)), m.SACH_7]);
     case 8: return import('./bai8').then((m) => [...m.BAI_8, m.SACH_8]);
     case 9: return import('./bai9').then((m) => [...m.BAI_9, m.SACH_9]);
     case 10: return import('./bai10').then((m) => [...m.BAI_10, m.SACH_10]);

@@ -18,7 +18,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import {
   dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo,
-  xinDuongNen,
+  xinDuongNen, khoiPhucTrangVo,
 } from '../services/voInk.service.js';
 import { veBangNet, batDauVe, xemViecVe } from '../services/voVe.service.js';
 import { vietLaiTrang, batDauVietLai, xemViecVietLai } from '../services/voVietLai.service.js';
@@ -92,6 +92,17 @@ router.post('/trang/:id/xac-nhan', async (req, res: Response<ApiResponse>, next)
 router.post('/trang/xoa', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await xoaTrangVo(req.userId!, req.body?.clientIds) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * Khôi phục trang đã xoá mềm (`{ clientIds }`) — trang mà `/vo/sync` báo
+ * `daXoa: true`. Trả `{ daKhoiPhuc, trangs: [{ clientId, id, trangThai, thieuCuon }] }`;
+ * app gọi `/vo/sync` ngay sau đó để dựng lại cuốn/môn nếu cần rồi đẩy nét.
+ */
+router.post('/trang/khoi-phuc', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await khoiPhucTrangVo(req.userId!, req.body?.clientIds) });
   } catch (e) { next(e); }
 });
 

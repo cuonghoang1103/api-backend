@@ -3,6 +3,7 @@
 import { RotateCcw, Trash2, Clock3 } from 'lucide-react';
 import type { NoteFull } from '@/types';
 import SharedNoteViewer from '@/components/notes/SharedNoteViewer';
+import VoVietTayPreview, { laTrangVietTay } from '@/components/notes/VoVietTayPreview';
 
 interface Props {
   note: NoteFull;
@@ -54,6 +55,8 @@ export default function DeletedNoteView({ note, restoring, deleting, onRestore, 
           </div>
         </div>
       </section>
+
+      {laTrangVietTay(note) && <VoVietTayPreview note={note} />}
 
       <div className="pointer-events-none opacity-75" aria-label="Bản xem trước chỉ đọc">
         <SharedNoteViewer

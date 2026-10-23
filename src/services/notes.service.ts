@@ -18,6 +18,7 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { Prisma } from '@prisma/client';
+import { buildPublicUrl } from '../config/r2.js';
 
 // ─── Helpers ─────────────────────────────────────────────────
 
@@ -75,7 +76,7 @@ export async function getTree(userId: number) {
             // the "Archive" filter pill to see them.
             where: { isArchived: false, deletedAt: null, isDatabasePage: false },
             orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
-            select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
+            select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true, inkVersion: true },
           },
         },
       },
@@ -83,7 +84,7 @@ export async function getTree(userId: number) {
       notes: {
         where: { chapterId: null, isArchived: false, deletedAt: null, isDatabasePage: false },
         orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
-        select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
+        select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true, inkVersion: true },
       },
     },
   });
@@ -145,7 +146,7 @@ export async function listFilteredNotes(userId: number, filter: NoteFilter) {
     select: {
       id: true, title: true, subjectId: true, chapterId: true,
       isPinned: true, isFavorite: true, isArchived: true, needsReview: true,
-      deletedAt: true, updatedAt: true,
+      deletedAt: true, updatedAt: true, inkVersion: true,
     },
   });
 }
@@ -408,7 +409,10 @@ export async function getNote(userId: number, id: number) {
     },
   });
   if (!note) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-  return note;
+  // Trang Vở viết tay (iPad): ảnh xem trước nằm trên R2 qua CDN công khai —
+  // cùng đường `/vo` trả cho app (`buildPublicUrl`). Trả URL dựng sẵn để web
+  // không phải tự ghép gốc CDN từ khoá.
+  return { ...note, inkPreviewUrl: note.inkPreviewKey ? buildPublicUrl(note.inkPreviewKey) : null };
 }
 
 /**

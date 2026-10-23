@@ -367,7 +367,7 @@ export default function NotesSidebar({
             noteId={n.id}
             label={n.title || UNTITLED}
             q={treeQ}
-            icon={<span className="text-[12.5px] leading-none opacity-90">📄</span>}
+            icon={<span className="text-[12.5px] leading-none opacity-90" title={(n.inkVersion ?? 0) > 0 ? 'Trang viết tay (iPad)' : undefined}>{(n.inkVersion ?? 0) > 0 ? '✍️' : '📄'}</span>}
             active={selectedNoteId === n.id}
             pinned={n.isPinned}
             menuOpen={menu?.key === key}
@@ -378,7 +378,7 @@ export default function NotesSidebar({
             onRename={(v) => { setRenaming(null); if (v !== n.title) cb.onRenameNote(n.id, v); }}
             onCancelRename={() => setRenaming(null)}
             onMenu={(el) => showMenu(key, el, noteMenu(n, subjectId, chapterId))}
-            onDragLabel={() => setDragging({ label: n.title || UNTITLED, icon: '📄' })}
+            onDragLabel={() => setDragging({ label: n.title || UNTITLED, icon: (n.inkVersion ?? 0) > 0 ? '✍️' : '📄' })}
           />
         )}
       </SortableRow>
@@ -794,7 +794,7 @@ export default function NotesSidebar({
                     selectedNoteId === n.id ? 'bg-teal-500/[0.12] text-teal-800 dark:text-teal-200' : 'text-slate-700 hover:bg-black/[0.04] dark:text-slate-300 dark:hover:bg-white/[0.05]'
                   }`}
                 >
-                  {filter === 'trash' ? <Trash2 className="h-3.5 w-3.5 shrink-0 text-rose-400" /> : <FileText className="h-3.5 w-3.5 shrink-0 opacity-60" />}
+                  {filter === 'trash' ? <Trash2 className="h-3.5 w-3.5 shrink-0 text-rose-400" /> : (n.inkVersion ?? 0) > 0 ? <span className="w-3.5 shrink-0 text-center text-[12px] leading-none" title="Trang viết tay (iPad)">✍️</span> : <FileText className="h-3.5 w-3.5 shrink-0 opacity-60" />}
                   <span className="min-w-0 flex-1 truncate">{n.title || UNTITLED}</span>
                   {filter === 'trash' && n.deletedAt && <span className="shrink-0 text-[10.5px] text-slate-400">{trashDaysRemaining(n.deletedAt)} ngày</span>}
                   {n.isFavorite && filter !== 'favorites' && <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}

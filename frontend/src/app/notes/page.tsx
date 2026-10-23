@@ -29,6 +29,7 @@ import NotesSearch from '@/components/notes/NotesSearch';
 import NotesShareManagerModal from '@/components/notes/NotesShareManagerModal';
 import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
 import DeletedNoteView from '@/components/notes/DeletedNoteView';
+import VoVietTayPreview, { laTrangVietTay } from '@/components/notes/VoVietTayPreview';
 import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
 import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
@@ -1321,6 +1322,7 @@ function NotesPageInner() {
                   />
                 </div>
               )}
+              {laTrangVietTay(selected) && <VoVietTayPreview key={`vo-${selected.id}`} note={selected} />}
               <NoteRealtimeEditor
                 key={selected.id}
                 note={selected}

@@ -1338,6 +1338,8 @@ export interface NoteSummary {
   needsReview: boolean;
   deletedAt?: string | null;
   updatedAt: string;
+  /** > 0 ⇒ trang Vở viết tay (iPad) đã có nét trên máy chủ. Backend cũ không gửi. */
+  inkVersion?: number;
 }
 
 export interface NoteChapterTree {
@@ -1444,6 +1446,10 @@ export interface NoteFull {
   attachments: NoteAttachment[];
   links: NoteLink[];
   vocabEntries: NoteVocabEntry[];
+  /** Trang Vở viết tay (iPad). `inkPreviewUrl` do máy chủ dựng sẵn (CDN). */
+  inkVersion?: number;
+  inkUpdatedAt?: string | null;
+  inkPreviewUrl?: string | null;
 }
 
 export type NoteVersionOrigin = 'INITIAL' | 'AUTO_SAVE' | 'MANUAL' | 'BEFORE_RESTORE' | 'RESTORE';

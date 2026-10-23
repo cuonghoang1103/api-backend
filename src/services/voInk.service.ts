@@ -127,6 +127,12 @@ export interface TrangRa {
   nenUrl: string | null;
   nenLoai: string | null;
   nenTrang: number;
+  /** `true` = trang này đã bị XOÁ MỀM trên máy chủ (thùng rác web, hoặc máy
+   *  khác xoá). Máy chủ KHÔNG ghi gì vào hàng đó trong lượt đồng bộ này; máy
+   *  phải ngừng đẩy nét cho trang và hỏi người dùng: khôi phục
+   *  (`POST /vo/trang/khoi-phuc`) hay xoá bản trên máy. Luôn có mặt (kể cả
+   *  `false`) để máy phân biệt máy chủ mới với máy chủ cũ không biết cờ này. */
+  daXoa: boolean;
 }
 
 // ─── Tiện ích ────────────────────────────────────────────────────────────
@@ -286,8 +292,33 @@ export async function dongBoCay(
       });
 
       const trangsRa: TrangRa[] = [];
+      // Trang ĐÃ XOÁ MỀM (thùng rác) có cùng clientId. Một truy vấn cho cả
+      // cuốn thay vì một truy vấn mỗi trang.
+      //
+      // ⚠️ Trước 23/10/2026 upsert bên dưới cứ thế UPDATE hàng đã xoá (đổi
+      // tên/thứ tự/cuốn) rồi trả id của nó về máy; bước đẩy nét
+      // (`xinDuongDayNet`, lọc `deletedAt: null`) lại trả 404 ⇒ app ném lỗi,
+      // cả lượt đồng bộ dừng, huy hiệu đỏ mãi (đo thật: trang 11760, iPad).
+      // Nay: KHÔNG chạm hàng đó, trả nguyên trạng + `daXoa: true`.
+      const clientCuaCuon = (cuon.trangs ?? [])
+        .map((t) => (typeof t?.clientId === 'string' ? t.clientId.trim() : ''))
+        .filter((v) => UUID_RE.test(v));
+      const daXoaTheoClient = new Map<string, TrangDaXoaRow>();
+      if (clientCuaCuon.length > 0) {
+        const ds = await prisma.note.findMany({
+          where: { userId, clientId: { in: clientCuaCuon }, deletedAt: { not: null } },
+          select: CHON_TRANG,
+        });
+        for (const r of ds) if (r.clientId) daXoaTheoClient.set(r.clientId, r);
+      }
+
       for (const trang of cuon.trangs ?? []) {
         const trangClient = uuidSach(trang.clientId, 'clientId của trang');
+        const hangDaXoa = daXoaTheoClient.get(trangClient);
+        if (hangDaXoa) {
+          trangsRa.push(trangRa(hangDaXoa, trangClient, trang.phienBanNet, true));
+          continue;
+        }
         const giay = typeof trang.giay === 'string' && GIAY_HOP_LE.has(trang.giay) ? trang.giay : null;
         const huong = typeof trang.huong === 'string' && HUONG_HOP_LE.has(trang.huong) ? trang.huong : null;
         const nhanChuong = chuoiTuyChon(trang.tenChuong);
@@ -329,26 +360,10 @@ export async function dongBoCay(
             // nói về THỨ TỰ và TÊN; nét vẽ đi đường riêng qua `xacNhanNet`.
             // Gộp hai việc là một lượt đồng bộ tên trang sẽ xoá mất nét.
           },
-          select: {
-            id: true, clientId: true, inkKey: true, inkPreviewKey: true,
-            inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
-            bgKey: true, bgKind: true, bgPage: true,
-          },
+          select: CHON_TRANG,
         });
 
-        trangsRa.push({
-          clientId: trangClient,
-          id: trangRow.id,
-          inkVersion: trangRow.inkVersion,
-          inkStrokeCount: trangRow.inkStrokeCount,
-          inkUrl: trangRow.inkKey ? buildPublicUrl(trangRow.inkKey) : null,
-          previewUrl: trangRow.inkPreviewKey ? buildPublicUrl(trangRow.inkPreviewKey) : null,
-          inkUpdatedAt: trangRow.inkUpdatedAt?.toISOString() ?? null,
-          xungDot: (trang.phienBanNet ?? 0) < trangRow.inkVersion,
-          nenUrl: trangRow.bgKey ? buildPublicUrl(trangRow.bgKey) : null,
-          nenLoai: trangRow.bgKind,
-          nenTrang: trangRow.bgPage,
-        });
+        trangsRa.push(trangRa(trangRow, trangClient, trang.phienBanNet, false));
       }
 
       cuonsRa.push({ clientId: cuonClient, id: cuonRow.id, trangs: trangsRa });
@@ -358,6 +373,38 @@ export async function dongBoCay(
   }
 
   return { mons: ketQua };
+}
+
+/** Cột một trang cần để dựng `TrangRa` — dùng chung cho upsert và hàng đã xoá. */
+const CHON_TRANG = {
+  id: true, clientId: true, inkKey: true, inkPreviewKey: true,
+  inkVersion: true, inkStrokeCount: true, inkUpdatedAt: true,
+  bgKey: true, bgKind: true, bgPage: true,
+} as const;
+
+type TrangDaXoaRow = {
+  id: number; clientId: string | null; inkKey: string | null; inkPreviewKey: string | null;
+  inkVersion: number; inkStrokeCount: number; inkUpdatedAt: Date | null;
+  bgKey: string | null; bgKind: string | null; bgPage: number;
+};
+
+function trangRa(r: TrangDaXoaRow, clientId: string, phienBanNet: unknown, daXoa: boolean): TrangRa {
+  return {
+    clientId,
+    id: r.id,
+    inkVersion: r.inkVersion,
+    inkStrokeCount: r.inkStrokeCount,
+    inkUrl: r.inkKey ? buildPublicUrl(r.inkKey) : null,
+    previewUrl: r.inkPreviewKey ? buildPublicUrl(r.inkPreviewKey) : null,
+    inkUpdatedAt: r.inkUpdatedAt?.toISOString() ?? null,
+    // Trang đã xoá: KHÔNG báo xung đột — báo xung đột là mời máy (bản cũ)
+    // tải bản máy chủ về đè/hợp nhất một trang người dùng đã bỏ.
+    xungDot: daXoa ? false : (Number(phienBanNet) || 0) < r.inkVersion,
+    nenUrl: r.bgKey ? buildPublicUrl(r.bgKey) : null,
+    nenLoai: r.bgKind,
+    nenTrang: r.bgPage,
+    daXoa,
+  };
 }
 
 /**
@@ -724,6 +771,53 @@ export async function xoaTrangVo(userId: number, clientIds: string[]): Promise<{
   return { daXoa: r.count };
 }
 
+/**
+ * Khôi phục trang vở đã xoá mềm — app gọi khi người dùng bấm "Khôi phục lên
+ * máy chủ" cho trang máy chủ báo `daXoa` (xoá ở máy khác / thùng rác web).
+ *
+ * Chỉ đụng hàng của CHÍNH người gọi (lọc `userId`), chỉ bỏ `deletedAt` —
+ * không đụng nét/tên/thứ tự: lượt đồng bộ ngay sau đó mang bản của máy lên.
+ *
+ * Cuốn/môn KHÔNG có xoá mềm (xoá là xoá hẳn hàng), nên "cha đã xoá" chỉ có
+ * hai dạng, và cả hai được báo rõ trong từng mục:
+ *   - môn đã xoá ⇒ trang bị xoá theo (cascade) ⇒ `trangThai: 'khongCo'`;
+ *   - cuốn đã xoá ⇒ trang còn nhưng `chapterId` NULL ⇒ `thieuCuon: true`.
+ * Cả hai tự lành ở `POST /vo/sync` kế tiếp: cuốn/môn được dựng lại theo
+ * clientId, trang được tạo lại / gắn lại vào cuốn. App gọi sync ngay sau
+ * lệnh này, nên không cần dựng cha ở đây (dựng ở đây cũng không biết tên).
+ */
+export async function khoiPhucTrangVo(userId: number, clientIds: unknown): Promise<{
+  daKhoiPhuc: number;
+  trangs: Array<{ clientId: string; id: number | null; trangThai: 'khoiPhuc' | 'conSong' | 'khongCo'; thieuCuon: boolean }>;
+}> {
+  if (!Array.isArray(clientIds) || clientIds.length === 0) return { daKhoiPhuc: 0, trangs: [] };
+  if (clientIds.length > 500) throw new AppError('Quá 500 trang trong một lượt', 400, 'TOO_MANY');
+  const ids = [...new Set(clientIds.map((v) => uuidSach(v, 'clientId')))];
+
+  const truoc = await prisma.note.findMany({
+    where: { userId, clientId: { in: ids } },
+    select: { id: true, clientId: true, deletedAt: true, chapterId: true },
+  });
+  const r = await prisma.note.updateMany({
+    where: { userId, clientId: { in: ids }, deletedAt: { not: null } },
+    data: { deletedAt: null },
+  });
+  const theoClient = new Map(truoc.map((t) => [t.clientId!, t]));
+  return {
+    daKhoiPhuc: r.count,
+    trangs: ids.map((c) => {
+      const t = theoClient.get(c);
+      if (!t) return { clientId: c, id: null, trangThai: 'khongCo' as const, thieuCuon: false };
+      return {
+        clientId: c,
+        id: t.id,
+        trangThai: t.deletedAt ? 'khoiPhuc' as const : 'conSong' as const,
+        thieuCuon: t.chapterId == null,
+      };
+    }),
+  };
+}
+
 export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daXoa: number }> {
   const id = uuidSach(clientId, 'clientId');
   const cuon = await prisma.noteChapter.findFirst({
@@ -741,4 +835,4 @@ export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daX
   return { daXoa: r.count };
 }
 
-export const _chiDeKiemThu = { khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong, khoSach, noiDaiSach };
+export const _chiDeKiemThu = { trangRa, khoaNet, khoaCuaNguoiNay, mauSangHex, tenVaChuong, khoSach, noiDaiSach };

@@ -16,13 +16,54 @@ import { veMua } from './veMua';
 
 const KHUNG_MS = 1000 / 30;
 
-function doChrome() {
+/** Phần tử position:fixed chứa `el` (hoặc chính nó); null nếu không có. */
+function goiCoDinh(el: Element | null): HTMLElement | null {
+  for (let n = el as HTMLElement | null; n && n !== document.body && n !== document.documentElement; n = n.parentElement) {
+    if (getComputedStyle(n).position === 'fixed') return n;
+  }
+  return null;
+}
+
+/**
+ * Đo "khung" của trang từ DOM thật, không đoán số:
+ *  · dinh — mép dưới thanh điều hướng trên;
+ *  · day — chiều cao các thanh CỐ ĐỊNH rộng ở đáy (thanh tab di động, trình nhạc kéo ngang…);
+ *  · tranhPhai / tranhTrai — mép trên của NÚT NỔI ở góc dưới phải / trái (robot CuongMini, "Ask CuongMini",
+ *    bong bóng chat…), tìm bằng elementsFromPoint trên một lưới điểm ở hai góc dưới. Canvas có
+ *    pointer-events:none nên không tự bắt chính nó. Lớp phủ toàn màn (splash, modal) bị bỏ qua.
+ */
+function doChrome(w: number, h: number) {
   const nav = document.querySelector('.app-top-nav') as HTMLElement | null;
   const r = nav?.getBoundingClientRect();
-  // Thanh điều hướng có thể ẩn (trang trần) ⇒ 0; không tìm thấy ⇒ 64px như --app-nav-h.
   const dinh = r ? Math.max(0, Math.min(r.bottom, 120)) : 64;
-  const day = window.matchMedia('(max-width: 639.98px)').matches ? 58 : 0;
-  return { dinh, day };
+  let thanhDay = h;
+  let tranhPhai = Infinity;
+  let tranhTrai = Infinity;
+  const daXet = new Set<HTMLElement>();
+  const vung = Math.min(260, w * 0.45);
+  const quet = (x0: number, x1: number) => {
+    for (let yi = 0; yi < 7; yi++) {
+      const y = h * 0.5 + ((h * 0.5) * (yi + 0.5)) / 7;
+      for (let xi = 0; xi < 5; xi++) {
+        const x = x0 + ((x1 - x0) * (xi + 0.5)) / 5;
+        for (const el of document.elementsFromPoint(x, y)) {
+          const f = goiCoDinh(el);
+          if (!f || daXet.has(f)) continue;
+          daXet.add(f);
+          const b = f.getBoundingClientRect();
+          if (b.height > h * 0.5 || b.width < 8 || b.height < 8) continue; // lớp phủ toàn màn / rác
+          if (b.top < h * 0.35) continue;
+          if (b.width > w * 0.6) { thanhDay = Math.min(thanhDay, b.top); continue; }
+          // Thuộc góc nào thì góc đó tránh (phần tử ở giữa đáy thì cả hai).
+          if (b.right > w - vung) tranhPhai = Math.min(tranhPhai, b.top);
+          if (b.left < vung) tranhTrai = Math.min(tranhTrai, b.top);
+        }
+      }
+    }
+  };
+  quet(w - vung, w);
+  quet(0, vung);
+  return { dinh, day: Math.max(0, h - thanhDay), tranhPhai, tranhTrai };
 }
 
 export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolean; chay: boolean }) {
@@ -34,7 +75,8 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
     const ctx = cv.getContext('2d');
     if (!ctx) return;
 
-    let w = 0, h = 0, dpr = 1, chrome = { dinh: 64, day: 0 };
+    let w = 0, h = 0, dpr = 1;
+    let chrome = { dinh: 64, day: 0, tranhPhai: Infinity, tranhTrai: Infinity };
     let raf = 0, truoc = 0;
     const goc = performance.now();
 
@@ -44,12 +86,12 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
       h = window.innerHeight;
       cv.width = Math.round(w * dpr);
       cv.height = Math.round(h * dpr);
-      chrome = doChrome();
+      chrome = doChrome(w, h);
     };
     const ve = (t: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      veMua(ctx, { w, h, t, mua, kieu: 'trang', toi, chay, dinh: chrome.dinh, day: chrome.day });
+      veMua(ctx, { w, h, t, mua, kieu: 'trang', toi, chay, ...chrome });
     };
     const vongLap = (bayGio: number) => {
       raf = requestAnimationFrame(vongLap);
@@ -77,11 +119,22 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
       if (document.visibilityState === 'hidden') { cancelAnimationFrame(raf); raf = 0; }
       else batDau();
     };
+    // Nút nổi xuất hiện / đổi chỗ sau khi trang hydrate (robot, trình nhạc mở…) ⇒ đo lại mỗi 1,5 s (≈70 lần
+    // elementsFromPoint — rẻ); khác thì vẽ lại (cần cho chế độ đứng yên, vốn chỉ vẽ một khung).
+    const doLai = setInterval(() => {
+      if (document.visibilityState === 'hidden') return;
+      const m = doChrome(w, h);
+      if (m.dinh !== chrome.dinh || m.day !== chrome.day || m.tranhPhai !== chrome.tranhPhai || m.tranhTrai !== chrome.tranhTrai) {
+        chrome = m;
+        if (!chay) ve(1234.5);
+      }
+    }, 1500);
     window.addEventListener('resize', onResize);
     document.addEventListener('visibilitychange', onVis);
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(henCo);
+      clearInterval(doLai);
       window.removeEventListener('resize', onResize);
       document.removeEventListener('visibilitychange', onVis);
     };

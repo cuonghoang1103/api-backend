@@ -26,6 +26,10 @@ export interface TuyChonVe {
   day: number;
   /** số hạt cơ sở cho màn cỡ điện thoại */
   hatCoSo?: number;
+  /** Mép TRÊN (px) của nút nổi ở góc dưới phải / trái (robot CuongMini, "Ask CuongMini", trình nhạc…) — đo từ DOM
+   *  ở NenMuaCanvas. Trang trí góc dưới đứng LÊN TRÊN mép này thay vì nằm sau nút. */
+  tranhPhai?: number;
+  tranhTrai?: number;
 }
 
 // ── Hình đơn vị (hộp [-0,5…0,5]) ────────────────────────────────────────────────────────────────
@@ -245,7 +249,10 @@ export function veMua(c: Ctx, o: TuyChonVe) {
   // Lề hai bên cột nội dung (~1200px giữa). Trang trí phía TRÊN chỉ vẽ trong lề này (thanh điều hướng desktop trong
   // suốt, hàng tiêu đề/breadcrumb nằm ngay dưới) — màn hẹp không có lề ⇒ chỉ còn trang trí đáy + hạt.
   const le = kieu === 'xemThu' ? w : Math.max(0, (w - 1200) / 2);
-  const S = { c, w, h, t, mua, kieu, toi, chay, k, dinh, day, ds, nho, le };
+  // Đáy riêng cho từng góc: nâng lên trên nút nổi nếu có (chừa 8px).
+  const dayPhai = kieu === 'xemThu' ? day : Math.min(day, (o.tranhPhai ?? Infinity) - 8);
+  const dayTrai = kieu === 'xemThu' ? day : Math.min(day, (o.tranhTrai ?? Infinity) - 8);
+  const S = { c, w, h, t, mua, kieu, toi, chay, k, dinh, day, ds, nho, le, dayPhai, dayTrai };
 
   veSauHat(S);
   veHat(S, o.hatCoSo ?? (nho ? 12 : 18));
@@ -259,6 +266,7 @@ export function veMua(c: Ctx, o: TuyChonVe) {
 type S = {
   c: Ctx; w: number; h: number; t: number; mua: Mua; kieu: KieuNen; toi: boolean; chay: boolean;
   k: number; dinh: number; day: number; ds: string[]; nho: boolean; le: number;
+  dayPhai: number; dayTrai: number;
 };
 
 function veHat(s: S, coSo: number) {
@@ -498,7 +506,7 @@ function veTuyetDong(s: S) {
 // ── Trang trí 4 góc ────────────────────────────────────────────────────────────────────────────
 
 function veGoc(s0: S) {
-  const { c, w, h, t, kieu, dinh, day } = s0;
+  const { c, w, h, t, kieu, dinh } = s0;
   const xTrai = 4;
   const xPhai = w - 4;
   // Góc TRÊN: chỉ khi có lề đủ rộng, thu nhỏ cho vừa lề, treo ngay dưới thanh điều hướng.
@@ -508,7 +516,10 @@ function veGoc(s0: S) {
   const dinhGoc = kieu === 'xemThu' ? dinh : dinh + 6;
   const s = s0;
   const k = s0.k;
-  void h;
+  // Góc dưới: nếu nút nổi đẩy trang trí lên quá cao (quá nửa màn) thì bỏ hẳn góc đó — không để nó lơ lửng giữa nội dung.
+  const dP = s0.dayPhai, dT = s0.dayTrai;
+  const phai = kieu === 'xemThu' || dP >= h * 0.5;
+  const trai = kieu === 'xemThu' || dT >= h * 0.5;
   switch (s.mua) {
     case 'xuan':
       if (tren) {
@@ -516,26 +527,28 @@ function veGoc(s0: S) {
         denLong(st, xPhai - 70 * kt, dinhGoc - 4, 30 * kt, 0);
         denLong(st, xPhai - 30 * kt, dinhGoc - 4, 52 * kt, 1.7);
       }
-      baoLiXi(s, xTrai + 30 * k, day - 30 * k);
-      canhHoaGoc(s, xPhai + 8 * k, day + 4 * k, true, '#F7C531', '#C77800', true);
+      if (trai) baoLiXi(s, xTrai + 30 * k, dT - 30 * k);
+      if (phai) canhHoaGoc(s, xPhai + 8 * k, dP + (dP < s0.day ? -2 : 4) * k, true, '#F7C531', '#C77800', true);
       break;
     case 'ha':
       if (tren) matTroi(st, kieu === 'xemThu' ? xPhai - 56 * kt : w - s0.le / 2, dinhGoc + 40 * kt);
-      oBaiBien(s, xTrai + 44 * k, day - 4 * k);
-      bongBien(s, xPhai - 46 * k, (kieu === 'xemThu' ? h : day) - 30 * k);
+      if (trai) oBaiBien(s, xTrai + 44 * k, dT - 4 * k);
+      if (phai) bongBien(s, xPhai - 46 * k, (kieu === 'xemThu' ? h : dP) - 30 * k);
       break;
     case 'thu':
       if (tren) {
         canhHoaGoc(st, xTrai - 8 * kt, dinhGoc - (kieu === 'xemThu' ? 44 * kt : 10 * kt), false, '#F8BBD0', '#D81B60');
         denOngSao(st, xPhai - (kieu === 'xemThu' ? 96 : 40) * kt, dinhGoc - 4, 34 * kt);
       }
-      dongLa(s, xTrai + 40 * k, day - 8 * k);
-      canhPhong(s, xPhai - 20 * k, day);
+      if (trai) dongLa(s, xTrai + 40 * k, dT - 8 * k);
+      if (phai) canhPhong(s, xPhai - 20 * k, dP);
       break;
     case 'dong':
-      cayThong(s, xTrai + 46 * k, day - 2 * k);
-      nguoiTuyet(s, xPhai - 96 * k, day - 4 * k);
-      chimCanhCut(s, xPhai - 40 * k, day - 2 * k);
+      if (trai) cayThong(s, xTrai + 46 * k, dT - 2 * k);
+      if (phai) {
+        nguoiTuyet(s, xPhai - 96 * k, dP - 4 * k);
+        chimCanhCut(s, xPhai - 40 * k, dP - 2 * k);
+      }
       if (kieu === 'trang' && tren) net(c, bongTuyet, '#7FA8D8', w - s0.le / 2, dinhGoc + 90 * kt, 30 * kt, t * 0.15, 2, 0.5);
       break;
   }

@@ -241,7 +241,7 @@ export default function SachGoc() {
           <Link href={veBai} className={cs.iconBtn} aria-label="Về bài học"><ArrowLeft size={18} /></Link>
           <div className={st.tieuDe}>
             <span>📷 Sách gốc</span>
-            <small>{tenPhan(ml, p ?? 15)} · <Link href="/language/ja/dekiru/sach-goc/nghe">🎧 Bản chép nghe</Link></small>
+            <small>{tenPhan(ml, p ?? 15)} · <Link href="/language/ja/dekiru/sach-goc/tai-lieu">🖼️ Slide & tài liệu</Link> · <Link href="/language/ja/dekiru/sach-goc/nghe">🎧 Nghe</Link></small>
           </div>
           <div className={st.lat}>
             <button type="button" className={cs.iconBtn} onClick={truoc} disabled={!p || p <= 1} aria-label="Trang trước"><ChevronLeft size={20} /></button>

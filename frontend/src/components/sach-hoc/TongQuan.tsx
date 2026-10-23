@@ -73,6 +73,41 @@ export function TongQuanBuoi({ course, day, done, scores, plan, onOpen, onAskDay
             </div>
           )}
 
+          {(() => {
+            const lt = course.videoLoTrinh?.(day.lessons, day.n) ?? [];
+            if (!lt.length) return null;
+            const tongGiay = lt.reduce((a, g) => a + g.videos.reduce((b, v) => b + (v.giay ?? 0), 0), 0);
+            const tongSo = lt.reduce((a, g) => a + g.videos.length, 0);
+            let so = 0;
+            return (
+              <section className={s.gbox}>
+                <div className={s.gboxTitle}>🎬 Học bằng video — xem theo thứ tự {tongSo} video{tongGiay ? ` (~${Math.round(tongGiay / 60)} phút)` : ''}</div>
+                <p className={s.quizSub} style={{ marginBottom: 8 }}>Xem lần lượt từ ① xuống; bấm một video để mở đúng bài chứa nó.</p>
+                {lt.map((g) => (
+                  <div key={g.ten} style={{ marginBottom: 10 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{g.ten}</div>
+                    <div className={s.quizSub} style={{ marginBottom: 4 }}>{g.mota}</div>
+                    <div className={s.checklist}>
+                      {g.videos.map((v) => {
+                        so++;
+                        const l = lessons.find((x) => x.id === v.lessonId) ?? course.extras?.find((x) => x.id === v.lessonId);
+                        return (
+                          <button key={v.id} type="button" className={s.checkRow} onClick={() => l && onOpen(l)} disabled={!l}>
+                            <span className={s.tocDot} style={{ fontSize: 10, fontWeight: 700, display: 'grid', placeItems: 'center' }}>{so}</span>
+                            <span className="min-w-0 flex-1 text-left">
+                              <span className={s.tocKind}>{v.giay ? `${Math.round(v.giay / 60)} phút` : 'video'}</span>
+                              {v.tieuDe}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            );
+          })()}
+
           <section className={s.gbox}>
             <div className={s.gboxTitle}>1. Các bài trong buổi</div>
             {(() => {

@@ -10,10 +10,25 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Inline } from '@/components/sach-hoc/Blocks';
 import cs from '@/components/sach-hoc/course.module.css';
-import { layNghe, useQuyenSachRieng, type TrackNghe } from './useSachRieng';
+import { layNghe, layTaiLieu, taiAmThanh, useQuyenSachRieng, type TrackNghe } from './useSachRieng';
 
 const NHAN_TIN_CAY = { cao: 'Chắc', vua: 'Khá chắc', thap: 'Cần nghe lại' } as const;
 const MAU_TIN_CAY = { cao: '#16a34a', vua: '#d97706', thap: '#dc2626' } as const;
+
+/** Phát âm thanh track CD: chỉ tải khi bấm (66 track, không nạp trước). Cần quyền như trang này. */
+function NutNghe({ track }: { track: number }) {
+  const [src, setSrc] = useState<string | null>(null);
+  const [dang, setDang] = useState(false);
+  const [loi, setLoi] = useState(false);
+  useEffect(() => () => { if (src) URL.revokeObjectURL(src); }, [src]);
+  if (src) return <audio controls autoPlay src={src} style={{ height: 32, maxWidth: '100%' }} />;
+  return (
+    <button type="button" className={cs.btn} disabled={dang} style={{ padding: '2px 10px', fontSize: 13 }}
+      onClick={async () => { setDang(true); setLoi(false); try { setSrc(await taiAmThanh(track)); } catch { setLoi(true); } finally { setDang(false); } }}>
+      {dang ? 'Đang tải…' : loi ? 'Lỗi — thử lại' : '▶ Nghe'}
+    </button>
+  );
+}
 
 export default function NgheRieng() {
   const co = useQuyenSachRieng();
@@ -23,10 +38,12 @@ export default function NgheRieng() {
   const [hienRo, setHienRo] = useState(true);
   const [hienVi, setHienVi] = useState(true);
   const [tim, setTim] = useState('');
+  const [coAm, setCoAm] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (!co) return;
     layNghe().then(setDs).catch(() => setLoi(true));
+    layTaiLieu().then((d) => setCoAm(new Set(d.track))).catch(() => {});
   }, [co]);
 
   const hien = useMemo(() => {
@@ -53,7 +70,7 @@ export default function NgheRieng() {
         <h1 style={{ fontSize: 20, fontWeight: 700, margin: 0 }}>🎧 Bản chép file nghe (riêng)</h1>
       </div>
       <p style={{ fontSize: 14, opacity: 0.8, margin: '0 0 12px' }}>
-        Chép tự động từ file nghe rồi hiệu chỉnh bằng bài đã học; <b>không phải bản gốc của sách</b>. Chỗ gắn nhãn
+        Chép tự động từ file nghe rồi hiệu chỉnh bằng bài đã học; <b>không phải bản gốc của sách</b>. Bấm ▶ Nghe để nghe track và đối chiếu. Chỗ gắn nhãn
         “Cần nghe lại” hoặc “⚠” thì nghe lại track để chắc chắn. Chỉ mình bạn xem được trang này.
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12, alignItems: 'center' }}>
@@ -80,6 +97,7 @@ export default function NgheRieng() {
               <span style={{ flex: 1 }}>{t.ten}</span>
               <span style={{ fontSize: 12, fontWeight: 600, color: MAU_TIN_CAY[t.tinCay] }}>{NHAN_TIN_CAY[t.tinCay]}</span>
             </header>
+            {coAm.has(t.track) && <div style={{ marginBottom: 8 }}><NutNghe track={t.track} /></div>}
             {t.loi.length === 0 && <p style={{ opacity: 0.7, margin: 0 }}>Track không có lời đọc nhận dạng được.</p>}
             <div style={{ display: 'grid', gap: 8 }}>
               {t.loi.map((l, k) => (

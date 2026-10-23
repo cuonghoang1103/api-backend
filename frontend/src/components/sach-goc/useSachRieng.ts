@@ -201,3 +201,44 @@ export type TrackNghe = {
 export function layNghe(): Promise<TrackNghe[]> {
   return api.get('/sach-rieng/dekiru/nghe').then((r) => r.data.data as TrackNghe[]);
 }
+
+/* ── 🖼️ Tài liệu gốc JPD123 + âm thanh track CD (23/10/2026) — cùng cổng quyền với Sách gốc ───────────────── */
+export type TaiLieuGoc = { id: string; nhom: string; ten: string; soTrang: number; bai?: number; lienKet: string[] };
+export type DanhMucTaiLieu = { taiLieu: TaiLieuGoc[]; lienNgoai: Array<{ ten: string; url: string }>; track: number[] };
+
+export const NHOM_TAI_LIEU: Array<{ id: string; ten: string; mota: string }> = [
+  { id: 'slide-lop', ten: 'Slide của cô (Slot 1–20, 30)', mota: 'Đúng slide cô dạy trên lớp, theo thứ tự buổi.' },
+  { id: 'tong-hop', ten: 'Slide tổng hợp từ vựng & ngữ pháp', mota: 'Bộ slide ôn nhanh từng bài (4–7).' },
+  { id: 'bai-tap', ten: 'Bài tập của cô', mota: 'BT từ vựng, ngữ pháp, chia thể て (đề gốc để tự làm).' },
+  { id: 'on-thi', ten: 'Đề ôn giữa kỳ & cuối kỳ', mota: 'Đề ôn của cô: giữa kỳ, Kanji, ngữ pháp, chữ Hán cuối kỳ.' },
+  { id: 'thi-noi', ten: 'Thi nói', mota: 'Hướng dẫn thi nói + bài mẫu.' },
+  { id: 'doc-them', ten: 'Bài đọc thêm (Irodori)', mota: 'Đọc thêm khi muốn luyện đọc.' },
+  { id: 'tu-moi', ten: 'Danh sách từ mới', mota: 'Toàn bộ từ mới Dekiru Nihongo.' },
+];
+
+let taiLieuDem: Promise<DanhMucTaiLieu> | null = null;
+export function layTaiLieu(): Promise<DanhMucTaiLieu> {
+  taiLieuDem ??= api.get('/sach-rieng/dekiru/tai-lieu').then((r) => r.data.data as DanhMucTaiLieu).catch((e) => { taiLieuDem = null; throw e; });
+  return taiLieuDem;
+}
+export const urlTaiLieu = (id: string, p: number) => `/api/v1/sach-rieng/dekiru/tai-lieu/${encodeURIComponent(id)}/${p}`;
+export const urlAmNghe = (track: number) => `/api/v1/sach-rieng/dekiru/nghe/am/${track}`;
+
+/** `src` cho một ảnh riêng tư bất kỳ (web = URL thẳng; app = blob qua axios). Chỉ nạp khi `bat` = true. */
+export function useAnhDuong(duong: string, bat = true): string {
+  const [src, setSrc] = useState<string>('');
+  useEffect(() => {
+    if (!bat) return;
+    if (!laApp()) { setSrc(duong); return; }
+    let huy = false;
+    taiAnhApp(duong).then((u) => { if (!huy) setSrc(u); }).catch(() => { if (!huy) setSrc('loi'); });
+    return () => { huy = true; };
+  }, [duong, bat]);
+  return src;
+}
+
+/** Tải âm thanh thành blob URL (cần cookie đăng nhập; chạy được cả trong app). */
+export async function taiAmThanh(track: number): Promise<string> {
+  const r = await api.get(urlAmNghe(track).replace(/^\/api\/v1/, ''), { responseType: 'blob' });
+  return URL.createObjectURL(r.data as Blob);
+}

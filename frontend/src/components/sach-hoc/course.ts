@@ -57,6 +57,11 @@ export type CourseDef = {
    * Trả null = buổi ít bài, hiện phẳng như cũ. Không đổi nội dung bài, chỉ đổi cách xếp mục lục.
    */
   nhomMuc?: (lessons: Lesson[]) => NhomMuc[] | null;
+  /**
+   * Video của buổi n xếp theo THỨ TỰ HỌC (nhóm → đánh số 1…N, không lặp) — hiện đầu trang tổng quan buổi.
+   * Rỗng = không có video ⇒ không hiện khối. Bấm một video mở bài chứa nó (video đã gắn đúng mục trong bài).
+   */
+  videoLoTrinh?: (lessons: Lesson[], dayN: number) => Array<{ ten: string; mota: string; videos: Array<{ id: string; tieuDe: string; giay?: number; lessonId: string }> }>;
   /** Trang riêng đi kèm khoá (vd. Phòng thi thử) — hiện ngay dưới "Kế hoạch & tiến độ". */
   links?: { href: string; label: string }[];
   /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */

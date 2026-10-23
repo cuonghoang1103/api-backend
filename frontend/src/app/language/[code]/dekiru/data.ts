@@ -17,6 +17,7 @@ import { ON_CUOI_KY } from './bai/onCuoiKy';
 import { ON_113 } from './bai/jp113B3';
 import { VIDEO_NEO } from './videos';
 import { nhomMucDekiru } from './nhom';
+import { videoLoTrinh } from './videoLoTrinh';
 
 export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
 
@@ -131,6 +132,7 @@ export const DEKIRU = defineCourse({
   videoNeo: VIDEO_NEO,
   // Mục lục mỗi bài gom 5 nhóm (học trước → luyện thêm → ôn thi → tra sách) — nhom.ts.
   nhomMuc: nhomMucDekiru,
+  videoLoTrinh,
   days: DAYS,
   // Chữ Hán: chữ của lớp (soạn tay) + chỉ mục từ đi chung (sinh lúc build) — tải chậm, 3 chunk.
   kanji: () =>

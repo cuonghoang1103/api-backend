@@ -34,6 +34,10 @@ export const khoaR2 = {
   huongDan: `${TIEN_TO}huong-dan.bin`,
   /** Bản chép riêng các track nghe CD (một tệp JSON gộp, mã hoá). */
   nghe: `${TIEN_TO}nghe.bin`,
+  /** Tài liệu gốc JPD123 (slide cô, bài tập, đề ôn, Irodori…): ảnh từng trang + danh mục + âm thanh track CD. */
+  taiLieu: (id: string, p: number) => `${TIEN_TO}tai-lieu/${id}/p-${String(p).padStart(3, '0')}.bin`,
+  taiLieuDanhMuc: `${TIEN_TO}tai-lieu.bin`,
+  amNghe: (track: number) => `${TIEN_TO}nghe-am/t${track}.bin`,
 };
 
 /* ── Quyền ──────────────────────────────────────────────────────────── */
@@ -152,6 +156,42 @@ export async function bangChepNghe(): Promise<TrackNghe[]> {
   const ds = b ? (JSON.parse(b.toString('utf8')) as TrackNghe[]).sort((x, y) => x.track - y.track) : [];
   ngheDem = { luc: Date.now(), ds };
   return ds;
+}
+
+export type TaiLieuGoc = {
+  id: string; nhom: string; ten: string; soTrang: number; bai?: number;
+  /** Tiền tố id bài học trên web mà tài liệu này đi cùng (để nút "Slide gốc" trong bài tìm đúng). */
+  lienKet: string[];
+};
+export type DanhMucTaiLieu = { taiLieu: TaiLieuGoc[]; lienNgoai: Array<{ ten: string; url: string }>; track: number[] };
+
+let taiLieuDem: { luc: number; dm: DanhMucTaiLieu } | null = null;
+
+export async function danhMucTaiLieu(): Promise<DanhMucTaiLieu> {
+  if (taiLieuDem && Date.now() - taiLieuDem.luc < 10 * 60_000) return taiLieuDem.dm;
+  const b = await docR2(khoaR2.taiLieuDanhMuc);
+  dem.delete(khoaR2.taiLieuDanhMuc);
+  const dm: DanhMucTaiLieu = b ? (JSON.parse(b.toString('utf8')) as DanhMucTaiLieu) : { taiLieu: [], lienNgoai: [], track: [] };
+  taiLieuDem = { luc: Date.now(), dm };
+  return dm;
+}
+
+/** Ảnh một trang tài liệu. `id` PHẢI có trong danh mục (không ghép thẳng vào khoá R2). */
+export async function anhTaiLieu(id: string, p: number): Promise<Buffer> {
+  const d = (await danhMucTaiLieu()).taiLieu.find((x) => x.id === id);
+  if (!d) throw new NotFoundError('Không có tài liệu này');
+  if (!Number.isInteger(p) || p < 1 || p > d.soTrang) throw new BadRequestError(`Trang phải từ 1 đến ${d.soTrang}`);
+  const b = await docR2(khoaR2.taiLieu(id, p));
+  if (!b) throw new NotFoundError(`Chưa có ảnh trang ${p}`);
+  return b;
+}
+
+/** Âm thanh một track CD (m4a). Chỉ track có trong danh mục. */
+export async function amThanhNghe(track: number): Promise<Buffer> {
+  if (!(await danhMucTaiLieu()).track.includes(track)) throw new NotFoundError('Không có track này');
+  const b = await docR2(khoaR2.amNghe(track));
+  if (!b) throw new NotFoundError('Chưa có âm thanh track này');
+  return b;
 }
 
 /** Mục lục: bài → khoảng trang + mục của từng trang (không kèm nội dung hướng dẫn). */

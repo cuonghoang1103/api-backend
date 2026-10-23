@@ -11,7 +11,7 @@ import { authenticate } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import {
-  CAC_Y_TRANG, anhTrang, bangChepNghe, chanNeuKhongCoQuyen, coQuyen, daBat, hoiTrang, huongDanTrang, kiemTrang, mucLuc,
+  CAC_Y_TRANG, amThanhNghe, anhTaiLieu, anhTrang, bangChepNghe, danhMucTaiLieu, chanNeuKhongCoQuyen, coQuyen, daBat, hoiTrang, huongDanTrang, kiemTrang, mucLuc,
 } from '../services/sachRieng/sachRieng.service.js';
 
 const router = Router();
@@ -62,6 +62,48 @@ router.get('/dekiru/nghe', async (_req, res: Response<ApiResponse>, next) => {
     res.setHeader('Cache-Control', 'private, no-store');
     res.setHeader('X-Robots-Tag', 'noindex');
     ok(res, await bangChepNghe());
+  } catch (e) { next(e); }
+});
+
+/** Danh mục tài liệu gốc JPD123 (slide cô, bài tập, đề ôn, Irodori, từ mới) + track nghe có âm thanh. */
+router.get('/dekiru/tai-lieu', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'private, no-store');
+    ok(res, await danhMucTaiLieu());
+  } catch (e) { next(e); }
+});
+
+router.get('/dekiru/tai-lieu/:id/:p', async (req: Request, res: Response, next) => {
+  try {
+    const anh = await anhTaiLieu(String(req.params.id), Number(req.params.p));
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Cache-Control', 'private, max-age=86400');
+    res.setHeader('X-Robots-Tag', 'noindex, noimageindex');
+    res.send(anh);
+  } catch (e) { next(e); }
+});
+
+/** Âm thanh track CD (m4a), có Range để tua. */
+router.get('/dekiru/nghe/am/:track', async (req: Request, res: Response, next) => {
+  try {
+    const b = await amThanhNghe(Number(req.params.track));
+    res.setHeader('Content-Type', 'audio/mp4');
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Cache-Control', 'private, max-age=86400');
+    res.setHeader('X-Robots-Tag', 'noindex');
+    const m = /^bytes=(\d*)-(\d*)$/.exec(String(req.headers.range ?? ''));
+    if (m && (m[1] || m[2])) {
+      const dau = m[1] ? Number(m[1]) : Math.max(0, b.length - Number(m[2]));
+      const cuoi = m[1] && m[2] ? Math.min(Number(m[2]), b.length - 1) : b.length - 1;
+      if (dau > cuoi || dau >= b.length) { res.status(416).setHeader('Content-Range', `bytes */${b.length}`); res.end(); return; }
+      res.status(206);
+      res.setHeader('Content-Range', `bytes ${dau}-${cuoi}/${b.length}`);
+      res.setHeader('Content-Length', String(cuoi - dau + 1));
+      res.end(b.subarray(dau, cuoi + 1));
+      return;
+    }
+    res.setHeader('Content-Length', String(b.length));
+    res.end(b);
   } catch (e) { next(e); }
 });
 

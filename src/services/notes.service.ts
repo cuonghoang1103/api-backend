@@ -381,6 +381,13 @@ export async function duplicateNote(userId: number, id: number) {
             reviewCount: item.reviewCount,
             knownStreak: item.knownStreak,
             lastReviewedAt: item.lastReviewedAt,
+            // Bản sao giữ loại thẻ + lịch ôn, KHÔNG giữ clientId (UNIQUE theo người).
+            kind: item.kind,
+            dueAt: item.dueAt,
+            easeFactor: item.easeFactor,
+            intervalDays: item.intervalDays,
+            repetitions: item.repetitions,
+            lapses: item.lapses,
           })),
         })
         : Promise.resolve(),
@@ -405,7 +412,8 @@ export async function getNote(userId: number, id: number) {
     include: {
       attachments: { orderBy: { sortOrder: 'asc' } },
       links: { orderBy: { sortOrder: 'asc' } },
-      vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      // Bảng từ vựng của trình soạn chỉ hiện dòng VOCAB (thẻ Vở có màn riêng).
+      vocabEntries: { where: { kind: 'VOCAB' }, orderBy: { sortOrder: 'asc' } },
     },
   });
   if (!note) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
@@ -991,7 +999,9 @@ async function assertNoteOwnership(userId: number, noteId: number): Promise<void
 export async function listVocab(userId: number, noteId: number) {
  await assertNoteOwnership(userId, noteId);
  return prisma.noteVocabEntry.findMany({
- where: { userId, noteId },
+ // Chỉ dòng bảng từ vựng/Sổ lệnh — thẻ ôn rút từ trang Vở (kind THE/CAU_HOI/
+ // Y_CHINH, 23/10/2026) có màn riêng và đi bộ flashcard.
+ where: { userId, noteId, kind: 'VOCAB' },
  orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
  });
 }
@@ -1096,17 +1106,19 @@ export async function searchNotes(
   if (!opts.includeArchived) and.push({ isArchived: false });
   if (opts.subjectId) and.push({ subjectId: Number(opts.subjectId) });
   if (opts.tag) and.push({ tags: { has: String(opts.tag).toLowerCase() } });
-  if (q) and.push({ OR: [{ title: { contains: q, mode: 'insensitive' } }, { contentHtml: { contains: q, mode: 'insensitive' } }] });
+  // `inkText`: chữ viết tay Vision đọc trên iPad (trang Vở) — tìm được cả chữ viết tay.
+  if (q) and.push({ OR: [{ title: { contains: q, mode: 'insensitive' } }, { contentHtml: { contains: q, mode: 'insensitive' } }, { inkText: { contains: q, mode: 'insensitive' } }] });
 
   const notes = await prisma.note.findMany({
     where: { AND: and },
     orderBy: { updatedAt: 'desc' },
     take: 50,
-    select: { id: true, title: true, subjectId: true, chapterId: true, tags: true, updatedAt: true, contentHtml: true },
+    select: { id: true, title: true, subjectId: true, chapterId: true, tags: true, updatedAt: true, contentHtml: true, inkText: true },
   });
 
   return notes.map((n) => {
-    const text = htmlToText(n.contentHtml);
+    const html = htmlToText(n.contentHtml);
+    const text = q && n.inkText && !html.toLowerCase().includes(q.toLowerCase()) ? n.inkText : (html || n.inkText || '');
     return {
       id: n.id, title: n.title, subjectId: n.subjectId, chapterId: n.chapterId,
       tags: n.tags, updatedAt: n.updatedAt,
@@ -1166,7 +1178,7 @@ export interface PaletteNoteHit {
   id: number; title: string;
   subjectId: number; subjectName: string; subjectEmoji: string | null;
   chapterId: number | null; chapterTitle: string | null;
-  snippet: string; matchIn: 'title' | 'content'; updatedAt: Date;
+  snippet: string; matchIn: 'title' | 'content' | 'ink'; updatedAt: Date;
 }
 
 export async function searchPalette(userId: number, rawQ: unknown) {
@@ -1237,6 +1249,16 @@ export async function searchPalette(userId: number, rawQ: unknown) {
     select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, contentHtml: true },
   });
 
+  // (3) Chữ viết tay trang Vở (23/10/2026) — `inkText` do iPad đọc bằng Vision.
+  const seen2 = new Set([...seen, ...contentRows.map((n) => n.id)]);
+  const conCho = PALETTE_NOTE_LIMIT - titleHits.length - contentRows.length;
+  const inkRows = conCho <= 0 ? [] : await prisma.note.findMany({
+    where: { AND: [baseWhere, { inkText: { contains: q, mode: 'insensitive' } }, { id: { notIn: [...seen2] } }] },
+    orderBy: { updatedAt: 'desc' },
+    take: conCho,
+    select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, inkText: true },
+  });
+
   // Đoạn trích cho các trang khớp TÊN: cần thân bài, đọc riêng đúng các id đó.
   const titleIds = titleHits.map((x) => x.n.id);
   const bodies = titleIds.length === 0 ? [] : await prisma.note.findMany({
@@ -1248,16 +1270,16 @@ export async function searchPalette(userId: number, rawQ: unknown) {
   const toHit = (
     n: { id: number; title: string; subjectId: number; chapterId: number | null; updatedAt: Date },
     html: string | null,
-    matchIn: 'title' | 'content',
+    matchIn: 'title' | 'content' | 'ink',
   ): PaletteNoteHit => {
     const s = subjectById.get(n.subjectId);
     const c = n.chapterId ? chapterById.get(n.chapterId) : undefined;
-    const text = htmlToText(html);
+    const text = matchIn === 'ink' ? (html ?? '') : htmlToText(html);
     return {
       id: n.id, title: n.title,
       subjectId: n.subjectId, subjectName: s?.name ?? '', subjectEmoji: s?.emoji ?? null,
       chapterId: n.chapterId, chapterTitle: c?.title ?? null,
-      snippet: matchIn === 'content' ? snippetFolded(text, q) : snippetFolded(text, q).slice(0, 160),
+      snippet: matchIn === 'title' ? snippetFolded(text, q).slice(0, 160) : snippetFolded(text, q),
       matchIn, updatedAt: n.updatedAt,
     };
   };
@@ -1265,6 +1287,7 @@ export async function searchPalette(userId: number, rawQ: unknown) {
   const notes = [
     ...titleHits.map(({ n }) => toHit(n, bodyById.get(n.id) ?? null, 'title')),
     ...contentRows.map((n) => toHit(n, n.contentHtml, 'content')),
+    ...inkRows.map((n) => toHit(n, n.inkText, 'ink')),
   ];
 
   return { notes, subjects: subjectHits, chapters: chapterHits };
@@ -1294,7 +1317,8 @@ export async function listTags(userId: number): Promise<string[]> {
 export async function listFlashcards(userId: number, noteId: number) {
   await assertNoteOwnership(userId, noteId);
   const rows = await prisma.noteVocabEntry.findMany({
-    where: { userId, noteId },
+    // Thẻ Vở (THE/CAU_HOI) ôn chung bộ này; ý chính (Y_CHINH) không phải thẻ.
+    where: { userId, noteId, kind: { not: 'Y_CHINH' } },
     orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
     select: {
       id: true, term: true, reading: true, meaning: true, example: true,

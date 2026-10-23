@@ -158,6 +158,8 @@ const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.j
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
 // Vở viết tay (iPad · PencilKit) — đồng bộ cây + nét vẽ lên R2
 const voRoutes = (await import(path.join(__dirname, 'routes', 'vo.routes.js'))).default;
+// Link CHỈ-XEM một trang Vở — công khai, không cần đăng nhập
+const voXemRoutes = (await import(path.join(__dirname, 'routes', 'voXem.routes.js'))).default;
 const notesDatabaseRoutes = (await import(path.join(__dirname, 'routes', 'notesDatabase.routes.js'))).default;
 const noteSyncedBlockRoutes = (await import(path.join(__dirname, 'routes', 'noteSyncedBlock.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
@@ -641,6 +643,7 @@ app.use('/api/v1/hub', hubPublicRouter);
 // Notes — personal study notebooks (per-user, authenticated).
 app.use('/api/v1/notes', notesRoutes);
 app.use('/api/v1/vo', voRoutes);
+app.use('/api/v1/vo-xem', voXemRoutes);
 // Notes Share — share subjects with other users
 app.use('/api/v1/notes-shares', notesShareRoutes);
 app.use('/api/v1/notes-databases', notesDatabaseRoutes);

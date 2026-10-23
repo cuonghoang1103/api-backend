@@ -199,6 +199,24 @@ export async function getObjectText(key: string, maxBytes = 512 * 1024): Promise
 }
 
 /**
+ * Đọc một object dạng NHỊ PHÂN (ảnh xem trước Vở cho link chỉ-xem / PDF cả cuốn).
+ * `null` khi thiếu, lỗi hoặc lớn hơn `maxBytes` — người gọi coi như "không có ảnh".
+ */
+export async function getObjectBytes(key: string, maxBytes = 4 * 1024 * 1024): Promise<Buffer | null> {
+  if (!config.r2.enabled) return null;
+  const client = getR2Client();
+  try {
+    const res = await client.send(new GetObjectCommand({ Bucket: config.r2.bucketName, Key: key }));
+    if (typeof res.ContentLength === 'number' && res.ContentLength > maxBytes) return null;
+    const bytes = await res.Body?.transformToByteArray();
+    if (!bytes || bytes.byteLength > maxBytes) return null;
+    return Buffer.from(bytes);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Delete a single object. We don't throw on `NoSuchKey` — the
  * desired end state ("object doesn't exist") is already met, and
  * a missing file shouldn't break the parent operation (e.g. a

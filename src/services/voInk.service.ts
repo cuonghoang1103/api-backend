@@ -38,6 +38,8 @@ const GIAY_HOP_LE = new Set([
   'trang', 'keNgang', 'oLy', 'cham', 'cornell', 'genkou', 'nhacLy',
   // 28/09/2026: giấy tập viết tiếng Anh 4 dòng + lưới viết code tay.
   'bonDong', 'luoiCode',
+  // 23/10/2026: mẫu trang theo kiểu ghi — từ vựng 3 cột, sơ đồ tư duy, bảng so sánh.
+  'tuVung3Cot', 'soDoTuDuy', 'bangSoSanh',
 ]);
 const HUONG_HOP_LE = new Set(['doc', 'ngang']);
 /** Khổ giấy (28/09/2026). Giá trị lạ ⇒ NULL (= A4), không ném lỗi: máy mới

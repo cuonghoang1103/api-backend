@@ -4983,6 +4983,15 @@ model Note {
   inkExtraHeight Int     @default(0) @map("ink_extra_height")
   inkPageSize    String? @map("ink_page_size") @db.VarChar(16)
 
+  // Chữ viết tay máy đọc được (Vision trên iPad, 23/10/2026) — CHỈ để tìm
+  // kiếm trên web. Nét vẫn là nguồn sự thật; cột này có thể cũ/sai vài chữ.
+  inkText       String?   @map("ink_text") @db.Text
+  inkTextAt     DateTime? @map("ink_text_at")
+  // Link CHỈ-XEM một trang Vở (`/vo/xem/<token>`). NULL = chưa chia sẻ / đã
+  // thu hồi. Ảnh đi qua backend (`/vo-xem/:token/anh`) nên thu hồi có tác dụng.
+  inkShareToken String?   @unique(map: "uk_notes_ink_share_token") @map("ink_share_token") @db.VarChar(48)
+  inkShareAt    DateTime? @map("ink_share_at")
+
   // UUID do MÁY sinh ra, là khoá chống trùng khi đồng bộ. Không có nó thì
   // một lượt đẩy bị mạng cắt giữa chừng rồi thử lại sẽ tạo ra trang thứ
   // hai y hệt, và người dùng thấy vở tự nhân đôi.
@@ -5390,9 +5399,23 @@ model NoteVocabEntry {
   knownStreak    Int       @default(0) @map("known_streak")
   lastReviewedAt DateTime? @map("last_reviewed_at")
 
+  // ── 23/10/2026: thẻ ôn rút từ trang Vở viết tay (AI) + lịch SM-2 ──
+  // 'VOCAB' = dòng bảng từ vựng/Sổ lệnh như cũ · 'THE' = thẻ mặt trước/sau ·
+  // 'CAU_HOI' = câu hỏi tự kiểm · 'Y_CHINH' = ý chính của trang (không ôn).
+  kind         String    @default("VOCAB") @db.VarChar(16)
+  /// UUID do app sinh — lưu lại thẻ là idempotent.
+  clientId     String?   @map("client_id") @db.VarChar(64)
+  dueAt        DateTime? @map("due_at")
+  easeFactor   Float     @default(2.5) @map("ease_factor")
+  intervalDays Int       @default(0) @map("interval_days")
+  repetitions  Int       @default(0)
+  lapses       Int       @default(0)
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, clientId], name: "uk_note_vocab_client", map: "uk_note_vocab_client")
+  @@index([userId, dueAt], name: "idx_note_vocab_due")
   @@index([userId, noteId, sortOrder], name: "idx_note_vocab_note")
   @@index([userId, noteId, isKnown], name: "idx_note_vocab_known")
   @@map("note_vocab_entries")

@@ -343,7 +343,7 @@ export async function taoTheTuSoLenh(userId: number, noteIdRaw: unknown) {
       throw new AppError('Trang này chưa có bảng Sổ lệnh (cột "Lệnh" và "Nghĩa") hoặc bảng chưa có dòng nào có nghĩa', 400, 'NO_COMMAND_TABLE');
     }
     const cu = await prisma.noteVocabEntry.findMany({
-      where: { userId, noteId },
+      where: { userId, noteId, kind: 'VOCAB' },
       select: { id: true, term: true, meaning: true, example: true, reading: true, sortOrder: true },
     });
     const theoLenh = new Map(cu.filter((c) => c.meaning).map((c) => [c.meaning!.trim(), c]));

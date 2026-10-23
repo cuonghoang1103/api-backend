@@ -25,6 +25,10 @@ import { vietLaiTrang, batDauVietLai, xemViecVietLai } from '../services/voVietL
 import { traChuHan } from '../services/voHan.service.js';
 import { batDauSoDo, xemViecSoDo } from '../services/voSoDo.service.js';
 import { batDauMach, xemViecMach } from '../services/voMach.service.js';
+import {
+  batDauRutThe, xemViecRutThe, luuTheOn, theCuaTrang, suaTheOn, xoaTheOn, chamTheOn, theHomNay,
+} from '../services/voOnThe.service.js';
+import { luuChuNhanDang, taoLinkChiXem, thuHoiLinkChiXem, pdfCuonVo } from '../services/voChiaSe.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -203,6 +207,94 @@ router.get('/viet-lai/viec/:id', (req, res: Response<ApiResponse>, next) => {
 router.post('/viet-lai', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await vietLaiTrang(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+// ─── Chữ nhận dạng (23/10/2026) ─────────────────────────────────────────
+
+/** `{ trangs: [{ clientId, chu }] }` — chữ Vision đọc trên iPad ⇒ tìm kiếm trên web. */
+router.post('/chu', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await luuChuNhanDang(req.userId!, req.body?.trangs) });
+  } catch (e) { next(e); }
+});
+
+// ─── 🃏 Thẻ ôn từ trang (23/10/2026) ────────────────────────────────────
+
+/** AI rút ý chính + câu hỏi tự kiểm + thẻ, CHẠY NỀN: `{ anh?, goiY?, tieuDe?, mon?, giay? }` → `{ viec }`. */
+router.post('/on-the/rut/viec', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: batDauRutThe(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+router.get('/on-the/rut/viec/:id', (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: xemViecRutThe(req.userId!, String(req.params.id)) });
+  } catch (e) { next(e); }
+});
+
+/** Lưu thẻ người dùng đã duyệt: `{ trangClientId, yChinh?, the: [{ clientId?, truoc, sau, loai }] }`. */
+router.post('/on-the', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await luuTheOn(req.userId!, req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+/** Thẻ đến hạn: `?gioiHan=60&den=<ISO>&tuNgay=<ISO>`. */
+router.get('/on-the/hom-nay', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await theHomNay(req.userId!, req.query) });
+  } catch (e) { next(e); }
+});
+
+/** Ý chính + thẻ của MỘT trang: `?clientId=` (app) hoặc `?noteId=` (web). */
+router.get('/on-the/trang', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await theCuaTrang(req.userId!, req.query) });
+  } catch (e) { next(e); }
+});
+
+router.post('/on-the/:id/cham', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await chamTheOn(req.userId!, soNguyen(req.params.id, 'Mã thẻ'), req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+router.patch('/on-the/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await suaTheOn(req.userId!, soNguyen(req.params.id, 'Mã thẻ'), req.body ?? {}) });
+  } catch (e) { next(e); }
+});
+
+router.delete('/on-the/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await xoaTheOn(req.userId!, soNguyen(req.params.id, 'Mã thẻ')) });
+  } catch (e) { next(e); }
+});
+
+// ─── Link chỉ-xem + PDF cả cuốn (23/10/2026) ────────────────────────────
+
+router.post('/trang/:id/chia-se', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await taoLinkChiXem(req.userId!, soNguyen(req.params.id, 'Mã trang')) });
+  } catch (e) { next(e); }
+});
+
+router.delete('/trang/:id/chia-se', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await thuHoiLinkChiXem(req.userId!, soNguyen(req.params.id, 'Mã trang')) });
+  } catch (e) { next(e); }
+});
+
+/** PDF cả cuốn, ghép ảnh xem trước các trang (tối đa 300 trang). */
+router.get('/cuon/:id/pdf', async (req, res, next) => {
+  try {
+    const { pdf, tenTep } = await pdfCuonVo(req.userId!, soNguyen(req.params.id, 'Mã cuốn'));
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${tenTep}"`);
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.send(pdf);
   } catch (e) { next(e); }
 });
 

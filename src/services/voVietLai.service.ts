@@ -53,6 +53,9 @@ const GIAY: Record<string, string> = {
   trang: 'giấy trắng trơn', keNgang: 'giấy kẻ ngang', oLy: 'giấy ô ly', cham: 'giấy chấm',
   cornell: 'giấy Cornell (cột từ khoá bên trái, tóm tắt ở đáy)', genkou: 'giấy ô vuông 原稿用紙',
   nhacLy: 'giấy khuông nhạc', bonDong: 'giấy 4 dòng tập viết tiếng Anh', luoiCode: 'lưới viết code',
+  tuVung3Cot: 'mẫu từ vựng 3 cột (từ · nghĩa · ví dụ) — mỗi hàng thường là một dòng bảng',
+  soDoTuDuy: 'mẫu sơ đồ tư duy (nút trung tâm, các nhánh toả ra)',
+  bangSoSanh: 'mẫu bảng so sánh (cột tiêu chí + các cột đối tượng so sánh)',
 };
 
 export const SYSTEM_VIET_LAI = [

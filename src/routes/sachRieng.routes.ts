@@ -11,7 +11,7 @@ import { authenticate } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import {
-  CAC_Y_TRANG, anhTrang, chanNeuKhongCoQuyen, coQuyen, daBat, hoiTrang, huongDanTrang, kiemTrang, mucLuc,
+  CAC_Y_TRANG, anhTrang, bangChepNghe, chanNeuKhongCoQuyen, coQuyen, daBat, hoiTrang, huongDanTrang, kiemTrang, mucLuc,
 } from '../services/sachRieng/sachRieng.service.js';
 
 const router = Router();
@@ -53,6 +53,15 @@ router.get('/dekiru/huong-dan/:p', async (req: Request, res: Response<ApiRespons
   try {
     res.setHeader('Cache-Control', 'private, no-store');
     ok(res, await huongDanTrang(kiemTrang(req.params.p)));
+  } catch (e) { next(e); }
+});
+
+/** Bản chép riêng các track nghe CD (chữ, không có âm thanh). */
+router.get('/dekiru/nghe', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('X-Robots-Tag', 'noindex');
+    ok(res, await bangChepNghe());
   } catch (e) { next(e); }
 });
 

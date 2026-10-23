@@ -32,6 +32,8 @@ export const khoaR2 = {
   trang: (p: number) => `${TIEN_TO}trang/p-${String(p).padStart(3, '0')}.bin`,
   nho: (p: number) => `${TIEN_TO}nho/p-${String(p).padStart(3, '0')}.bin`,
   huongDan: `${TIEN_TO}huong-dan.bin`,
+  /** Bản chép riêng các track nghe CD (một tệp JSON gộp, mã hoá). */
+  nghe: `${TIEN_TO}nghe.bin`,
 };
 
 /* ── Quyền ──────────────────────────────────────────────────────────── */
@@ -127,6 +129,29 @@ async function tatCaHuongDan(): Promise<Map<number, HuongDanTrang>> {
 
 export async function huongDanTrang(p: number): Promise<HuongDanTrang | null> {
   return (await tatCaHuongDan()).get(p) ?? null;
+}
+
+/** Một track nghe đã chép + dịch (do scripts/sach-rieng/dekiru-nghe-tai-len.mts tải lên). */
+export type TrackNghe = {
+  track: number;
+  lesson: number;
+  ten: string;
+  tinCay: 'cao' | 'vua' | 'thap';
+  loi: { ai?: string; ja: string; ro?: string; vi: string }[];
+  ghiChu?: string[];
+  nghiNgo?: string[];
+};
+
+let ngheDem: { luc: number; ds: TrackNghe[] } | null = null;
+
+/** Mọi track nghe, xếp theo số track. Chưa tải lên ⇒ mảng rỗng. */
+export async function bangChepNghe(): Promise<TrackNghe[]> {
+  if (ngheDem && Date.now() - ngheDem.luc < 10 * 60_000) return ngheDem.ds;
+  const b = await docR2(khoaR2.nghe);
+  dem.delete(khoaR2.nghe);
+  const ds = b ? (JSON.parse(b.toString('utf8')) as TrackNghe[]).sort((x, y) => x.track - y.track) : [];
+  ngheDem = { luc: Date.now(), ds };
+  return ds;
 }
 
 /** Mục lục: bài → khoảng trang + mục của từng trang (không kèm nội dung hướng dẫn). */

@@ -186,3 +186,18 @@ export function nhanMuc(m: MucTrang): string {
   if (m.loai === 'khac' && m.ten) return m.ten.replace(/\{([^|}]+)\|[^}]+\}/g, '$1').slice(0, 14);
   return TEN_MUC[m.loai]?.ja ?? m.loai;
 }
+
+/** 🎧 Một track nghe CD đã chép + dịch (bản chép riêng, chỉ tài khoản được phép). */
+export type TrackNghe = {
+  track: number;
+  lesson: number;
+  ten: string;
+  tinCay: 'cao' | 'vua' | 'thap';
+  loi: { ai?: string; ja: string; ro?: string; vi: string }[];
+  ghiChu?: string[];
+  nghiNgo?: string[];
+};
+
+export function layNghe(): Promise<TrackNghe[]> {
+  return api.get('/sach-rieng/dekiru/nghe').then((r) => r.data.data as TrackNghe[]);
+}

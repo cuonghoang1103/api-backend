@@ -59,11 +59,11 @@ export default {
     "swt301-ch4-slides-2023": { yt: "1aw6uXX4Y-o", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.2.3 Decision Table Testing", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-07-bo-sung-slide-2023-09a069bf.mp4' }, defaultVideoTrack: 'VI'},
     "swt301-ch5-slides-2023": { yt: "L1l1S4_ptWc", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.3.2 Branch Testing and Branch Coverage", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-03-bo-sung-2023-mcdc-lcsaj-a99d6f34.mp4' }, defaultVideoTrack: 'VI'},
     "swt301-choosing-test-techniques": { yt: "z-3aSVfoyBY", credit: "Modern Software Engineering — Testing Strategy for DevOps: What to Test and When", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/08-ky-thuat-dua-kinh-nghiem/08-02-chon-ky-thuat-tron-47693d83.mp4' }, defaultVideoTrack: 'VI'},
-    "swt301-lab2-guide-process": { yt: "h-4i5N89TUI", credit: "Modern Software Engineering — Unit Testing Is The BARE MINIMUM" },
-    "swt301-lab2-guide-appendix": { yt: "m1NQNaxbEVo", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.3.1 Statement Testing and Statement Coverage" },
-    "swt301-lab2-whitebox": { yt: "QDFI19lj4OM", credit: "IntelliJ IDEA, a JetBrains IDE — Unit Testing and Coverage in IntelliJ IDEA" },
-    "swt301-lab2-blackbox": { yt: "flpmSXVTqBI", credit: "freeCodeCamp.org — Java Testing - JUnit 5 Crash Course" },
-    "swt301-lab2-unit-test-points": { yt: "xaQC9EWDb8w", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.4.3 Checklist Based Testing" },
+    "swt301-lab2-guide-process": { yt: "h-4i5N89TUI", credit: "Modern Software Engineering — Unit Testing Is The BARE MINIMUM", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-02-huong-dan-unit-test-tron-fdfa126f.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-lab2-guide-appendix": { yt: "m1NQNaxbEVo", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.3.1 Statement Testing and Statement Coverage", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-04-phu-luc-tron-dc9f14aa.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-lab2-whitebox": { yt: "QDFI19lj4OM", credit: "IntelliJ IDEA, a JetBrains IDE — Unit Testing and Coverage in IntelliJ IDEA", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-06-lab2-white-box-c4d2606e.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-lab2-blackbox": { yt: "flpmSXVTqBI", credit: "freeCodeCamp.org — Java Testing - JUnit 5 Crash Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-07-lab2-black-box-tron-8e58b396.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-lab2-unit-test-points": { yt: "xaQC9EWDb8w", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.4.3 Checklist Based Testing", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-09-unit-test-points-5a865713.mp4' }, defaultVideoTrack: 'VI'},
     /* ── Lab 2 · LabFlow (L2.10–L2.15, video giọng chủ kênh ~/Videos/CuongThai-KhoaHoc/swt301-lab2/01-lab2-unit-test-labflow/*).
        CHƯA tải lên R2: sau `tsx xuat/len-r2.mts …` lấy r2Url trong từng thong-tin.json, bỏ // ở 6 dòng dưới và dán URL.
        (gan-web.mts không dùng được cho loạt này: nó đọc content/course-videos/<khoá>.mjs = swt301-lab2.mjs — không có — và
@@ -102,5 +102,9 @@ export default {
     'swt301-lab25-phan-tich-defect': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-04-phan-tich-defect-784e7b1f.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-lab25-viet-bao-cao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-05-viet-bao-cao-277fd3ca.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-lab25-slide-bai-mau': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-06-slide-bai-mau-tron-dafb311f.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-lab2-overview': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-01-tong-quan-lab-2-68c166b8.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab2-guide-pcl-rules': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-03-pcl-ma-tran-tron-e23c07b0.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab2-how-to-write-pcl': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-05-cach-viet-pcl-tron-64fe9ef8.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab2-template-worked': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-08-template-unit-test-case-tron-ce323336.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

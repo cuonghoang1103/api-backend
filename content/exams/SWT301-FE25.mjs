@@ -11,7 +11,7 @@ export default {
       "description": "Real SWT301 Final Exam paper, Spring 2026 (60 MCQ, ISTQB Foundation style: testing principles, test levels/types, static testing & reviews, test techniques, test management, tools) — every answer re-solved and explained bilingually; most questions recur from older SWT301 papers.|||Đề thi cuối kỳ SWT301 thật, kỳ Spring 2026 (60 câu, kiểu ISTQB Foundation: nguyên tắc kiểm thử, mức/loại test, kiểm thử tĩnh & review, kỹ thuật thiết kế test, quản lý test, công cụ) — mọi đáp án được tự giải lại và giải thích song ngữ; phần lớn câu đã xuất hiện trong các đề SWT301 cũ.",
       "durationMinutes": 60,
       "totalPoints": 10,
-      "passMark": 4,
+      "passMark": 5,
       "source": "REAL",
       "shuffleQuestions": false,
       "shuffleOptions": false,

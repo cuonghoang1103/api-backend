@@ -212,7 +212,7 @@ const L0 = {
 </tbody>
 </table>
 <ul>
-<li><strong>No Spring 2026 paper yet</strong> — the folder <code>03.PE/SP26</code> is <strong>empty</strong>.</li>
+<li><strong>Newest papers (2026) — practise these last, against the clock</strong> — the school folder <code>03.PE/SP26</code> is still empty, but two 2026 papers (answer template <code>SWT301_SU26_Template.xlsx</code>) are now in the Exam room: <strong>SWT301-PE23</strong> "Practical Exam Đề 23 (SU26 - Paper 1)" — calcFee review · checkWithdrawal unit tests · Interbank Transfer black-box (the source did not contain a legible copy of the Q1/Q2 code, so those two listings are practice code written by this site from the specification and labelled as such); <strong>SWT301-PE24</strong> "Practical Exam Đề 24 (SU26 - Paper 2)" — CartCalculator review · calcBaggageFee unit tests · Ticket Refund black-box. What changed: Q1 asks for <strong>at least 8 issues</strong> with line, severity and fix; Q2 asks for the minimum unit tests for statement + decision <strong>+ MC/DC</strong> of the compound condition (graded as 3 points ÷ minimum number of tests, −0.1 per extra test); Q3 is graded in three blocks — validation (1.0), business logic with a reduced <strong>decision table</strong> (2.0), boundary values (1.0).</li>
 <li><strong>What the ids are</strong> — the deck files of the site's <strong>Exam room</strong>.</li>
 <li><strong>How to find a paper</strong> — Exam-room pages live at <code>/exam/&lt;number&gt;</code>, and that number is a database id assigned when the exams are loaded, so there is no fixed link. Open <strong>/exam</strong>, filter by SWT301 and pick the paper by its title.</li>
 <li><strong>Timing</strong> — the Exam room gives every PE 90 minutes and grades your written answers with an AI rubric. When you practise, set your own timer to the real value (85 or 80 minutes for the newer papers).</li>
@@ -229,7 +229,7 @@ const L0 = {
 </tbody>
 </table>
 <ul>
-<li><strong>Chưa có đề Spring 2026</strong> — thư mục <code>03.PE/SP26</code> <strong>trống</strong>.</li>
+<li><strong>Đề mới nhất (2026) — để luyện cuối cùng, có bấm giờ</strong> — thư mục <code>03.PE/SP26</code> của trường vẫn trống, nhưng hai đề 2026 (template trả lời <code>SWT301_SU26_Template.xlsx</code>) đã có trong Phòng thi: <strong>SWT301-PE23</strong> "Đề thi thực hành số 23 (SU26 - Paper 1)" — review calcFee · unit test checkWithdrawal · black-box Interbank Transfer (bản nguồn không có mã Q1/Q2 đọc được, nên hai đoạn mã đó là mã luyện tập do website viết theo đặc tả và có ghi rõ); <strong>SWT301-PE24</strong> "Đề thi thực hành số 24 (SU26 - Paper 2)" — review CartCalculator · unit test calcBaggageFee · black-box Ticket Refund. Điểm khác: Q1 đòi <strong>ít nhất 8 lỗi</strong> kèm dòng, mức độ và cách sửa; Q2 đòi số test tối thiểu cho statement + decision <strong>+ MC/DC</strong> của điều kiện ghép (chấm 3 điểm ÷ số test tối thiểu, thừa mỗi test −0.1); Q3 chấm ba khối — validation (1.0), nghiệp vụ có <strong>bảng quyết định</strong> rút gọn (2.0), giá trị biên (1.0).</li>
 <li><strong>Các mã là gì</strong> — là file đề của <strong>Phòng thi</strong> trên web.</li>
 <li><strong>Cách tìm đề</strong> — trang phòng thi có địa chỉ <code>/exam/&lt;số&gt;</code>, mà số đó là id trong cơ sở dữ liệu được gán lúc nạp đề, nên không có link cố định. Vào <strong>/exam</strong>, lọc môn SWT301 rồi chọn đề theo tên.</li>
 <li><strong>Thời gian</strong> — Phòng thi cho mọi đề PE 90 phút và chấm câu trả lời viết bằng rubric AI. Khi luyện, hãy tự bấm giờ đúng như đề thật (85 hoặc 80 phút với các đề mới).</li>

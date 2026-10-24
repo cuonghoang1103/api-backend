@@ -229,7 +229,8 @@ function ThanhViec({ note }: { note: NoteFull }) {
   const chep = async () => {
     if (!duongDan) return;
     try { await navigator.clipboard.writeText(duongDan); setDaChep(true); setTimeout(() => setDaChep(false), 1800); }
-    catch { window.prompt('Sao chép link:', duongDan); }
+    // Không dùng window.prompt: app desktop (Electron) ném "prompt() is not supported" — xem desktop khongDungPrompt.test.ts.
+    catch { setLoi('Không chép tự động được — bôi đen đường link ở trên rồi bấm Ctrl/⌘ + C.'); }
   };
 
   const thuHoi = async () => {

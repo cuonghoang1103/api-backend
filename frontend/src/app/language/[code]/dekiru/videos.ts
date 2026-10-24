@@ -17,37 +17,97 @@ import type { VideoNeoMap } from '@/components/sach-hoc/types';
 export const VIDEO_NEO: VideoNeoMap = {
   "s113-b1-01-chao-hoi-ten": {
     "dau-bai": [
-      { id: "jp-s113-b1-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-ca77aa92.mp4", tieuDe: "Tự giới thiệu: chào lần đầu, nói tên, hỏi tên", thoiLuongGiay: 561 },
+      { id: "jp-s113-b1-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-9bb5aac4.mp4", tieuDe: "Tự giới thiệu: chào lần đầu, nói tên, hỏi tên", thoiLuongGiay: 561 },
+    ],
+  },
+  "s113-b1-02-nuoc-nguoi": {
+    "dau-bai": [
+      { id: "jp-s113-b1-02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-02-ten-nuoc-nguoi-nuoc-nao-khong-phai-6d511c3e.mp4", tieuDe: "Tên nước, người nước nào và cách trả lời không phải", thoiLuongGiay: 537 },
+    ],
+  },
+  "s113-b1-03-truong-nghe": {
+    "dau-bai": [
+      { id: "jp-s113-b1-03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-03-truong-hoc-nghe-nghiep-no-d21d4d9e.mp4", tieuDe: "Trường học, nghề nghiệp và trợ từ no: sinh viên của trường nào", thoiLuongGiay: 518 },
     ],
   },
   "s113-b1-04-tuoi-ngay-sinh": {
     "dau-bai": [
-      { id: "jp-s113-b1-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-04-tuoi-thang-ngay-sinh-nhat-3c1fc85a.mp4", tieuDe: "Tuổi, tháng, ngày và hỏi sinh nhật", thoiLuongGiay: 584 },
+      { id: "jp-s113-b1-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-04-tuoi-thang-ngay-sinh-nhat-caf3d97b.mp4", tieuDe: "Tuổi, tháng, ngày và hỏi sinh nhật", thoiLuongGiay: 620 },
+    ],
+  },
+  "s113-b1-05-so-thich": {
+    "dau-bai": [
+      { id: "jp-s113-b1-05", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-05-so-thich-to-mo-giong-nhau-1925ebe6.mp4", tieuDe: "Sở thích, trợ từ to (và) và mo (cũng)", thoiLuongGiay: 458 },
     ],
   },
   "s113-b1-06-tong-hop-noi-han": {
     "dau-bai": [
-      { id: "jp-s113-b1-06", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-06-tu-gioi-thieu-day-du-khuon-thi-noi-4deddcbb.mp4", tieuDe: "Tự giới thiệu đầy đủ bảy câu và khuôn đề thi nói Bài 1", thoiLuongGiay: 596 },
+      { id: "jp-s113-b1-06", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-06-tu-gioi-thieu-day-du-khuon-thi-noi-3054d574.mp4", tieuDe: "Tự giới thiệu đầy đủ bảy câu và khuôn đề thi nói Bài 1", thoiLuongGiay: 596 },
+    ],
+  },
+  "s113-b2-01-noi-chon-toa-nha": {
+    "dau-bai": [
+      { id: "jp-s113-b2-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4", tieuDe: "Hỏi chỗ trong toà nhà: ở đâu, tầng mấy", thoiLuongGiay: 507 },
+    ],
+  },
+  "s113-b2-02-do-vat-gan-xa": {
+    "dau-bai": [
+      { id: "jp-s113-b2-02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-02-do-vat-gan-xa-kore-sore-are-14a6f348.mp4", tieuDe: "Chỉ đồ vật: cái này, cái đó, cái kia", thoiLuongGiay: 472 },
     ],
   },
   "s113-b2-03-so-va-gia-tien": {
     "dau-bai": [
-      { id: "jp-s113-b2-03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-9805c20e.mp4", tieuDe: "Số và giá tiền: đọc hàng chục, trăm, nghìn, vạn và hỏi bao nhiêu tiền", thoiLuongGiay: 597 },
+      { id: "jp-s113-b2-03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4", tieuDe: "Số và giá tiền: đọc hàng chục, trăm, nghìn, vạn và hỏi bao nhiêu tiền", thoiLuongGiay: 597 },
+    ],
+  },
+  "s113-b2-04-sieu-thi-mua-do": {
+    "dau-bai": [
+      { id: "jp-s113-b2-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-04-sieu-thi-wo-kudasai-dem-tsu-fbc85980.mp4", tieuDe: "Mua đồ ở siêu thị: cho tôi ~ và cách đếm tsu", thoiLuongGiay: 464 },
+    ],
+  },
+  "s113-b2-05-nha-hang-goi-mon": {
+    "dau-bai": [
+      { id: "jp-s113-b2-05", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4", tieuDe: "Nhà hàng: gọi món, hỏi món gì và của nước nào", thoiLuongGiay: 498 },
+    ],
+  },
+  "s113-b2-06-cua-ai-tieng-gi-tong-hop": {
+    "dau-bai": [
+      { id: "jp-s113-b2-06", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-06-cua-ai-tieng-gi-tong-hop-bai-2-d458598d.mp4", tieuDe: "Của ai, tiếng gì và tổng hợp Bài 2 cùng khuôn đề thi nói", thoiLuongGiay: 549 },
     ],
   },
   "s113-b3-01-doc-gio-hoi-gio-mo-cua": {
     "dau-bai": [
-      { id: "jp-s113-b3-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-3f4377d5.mp4", tieuDe: "Đọc giờ, phút và hỏi giờ mở cửa", thoiLuongGiay: 584 },
+      { id: "jp-s113-b3-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-ff768edb.mp4", tieuDe: "Đọc giờ, phút và hỏi giờ mở cửa", thoiLuongGiay: 587 },
     ],
   },
   "s113-b3-02-thu-thang-ngay-lich-nam": {
     "dau-bai": [
-      { id: "jp-s113-b3-02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-3885285c.mp4", tieuDe: "Thứ, tháng, ngày: đọc ngày đặc biệt và hỏi bao giờ", thoiLuongGiay: 655 },
+      { id: "jp-s113-b3-02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-642c87c7.mp4", tieuDe: "Thứ, tháng, ngày: đọc ngày đặc biệt và hỏi bao giờ", thoiLuongGiay: 656 },
+    ],
+  },
+  "s113-b3-03-dong-tu-masu-he-wo": {
+    "dau-bai": [
+      { id: "jp-s113-b3-03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4", tieuDe: "Động từ đuôi masu, phủ định masen và hai trợ từ e (đi đâu), o (làm gì)", thoiLuongGiay: 624 },
     ],
   },
   "s113-b3-04-ni-gio-de-noi-ke-mot-ngay": {
     "dau-bai": [
-      { id: "jp-s113-b3-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-9e4eff61.mp4", tieuDe: "Trợ từ ni (mốc giờ) và de (nơi làm việc): kể một ngày của mình", thoiLuongGiay: 542 },
+      { id: "jp-s113-b3-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-e9d43a33.mp4", tieuDe: "Trợ từ ni (mốc giờ) và de (nơi làm việc): kể một ngày của mình", thoiLuongGiay: 543 },
+    ],
+  },
+  "s113-b3-05-ya-nado-nanimo-dokoemo": {
+    "dau-bai": [
+      { id: "jp-s113-b3-05", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4", tieuDe: "Liệt kê vài thứ với ya, nado và nói không gì cả, không đâu cả", thoiLuongGiay: 626 },
+    ],
+  },
+  "s113-b3-06-chu-han-gio-thu-buoi": {
+    "dau-bai": [
+      { id: "jp-s113-b3-06", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-06-chu-han-gio-thu-buoi-5756ffaf.mp4", tieuDe: "Chữ Hán Bài 3: giờ, thứ, buổi trong ngày (11 chữ)", thoiLuongGiay: 780 },
+    ],
+  },
+  "s113-b3-07-on-bai-3-thi-noi-lesson-3": {
+    "dau-bai": [
+      { id: "jp-s113-b3-07", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4", tieuDe: "Ôn Bài 3 và luyện thi nói JPD113: khuôn đề, cách chấm, 10 dạng câu hỏi", thoiLuongGiay: 534 },
     ],
   },
   "b4-hoi-thoai": {
@@ -211,9 +271,30 @@ export const VIDEO_NEO: VideoNeoMap = {
       { id: "jp-s45-s02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/02-slot-02-tinh-tu-i-na-va-9-chu-han-04179880.mp4", tieuDe: "Slot 2: tính từ đuôi i, đuôi na và 9 chữ Hán Bài 4", thoiLuongGiay: 856 },
     ],
   },
+  "slot-04-l4-3-tiep-on-tap-b4": {
+    "dau-bai": [
+      { id: "jp-s45-s04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/04-slot-04-tong-on-bai-4-thoi-tiet-do-an-0dc4112f.mp4", tieuDe: "Slot 4: tổng ôn Bài 4 — thời tiết, vị giác, món ăn", thoiLuongGiay: 583 },
+    ],
+  },
+  "slot-09-kanji-5-on-tap-l5-chua-b5": {
+    "dau-bai": [
+      { id: "jp-s45-s09", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/05-slot-09-on-chu-han-5-va-tong-on-bai-5-6f5bf0ed.mp4", tieuDe: "Slot 9: ôn chữ Hán Bài 5 và tổng ôn ngữ pháp Bài 5", thoiLuongGiay: 460 },
+    ],
+  },
+  "bt-b45-tu-vung-ngu-phap-dap-an": {
+    "#A. BT từ vựng Bài 4": [
+      { id: "jp-s45-bt1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/06-chua-bt-tu-vung-ngu-phap-bai-4-d099b938.mp4", tieuDe: "Chữa bài tập của cô: từ vựng và ngữ pháp Bài 4", thoiLuongGiay: 664 },
+    ],
+    "#C. BT từ vựng Bài 5": [
+      { id: "jp-s45-bt2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/07-chua-bt-tu-vung-ngu-phap-bai-5-69344994.mp4", tieuDe: "Chữa bài tập của cô: từ vựng và ngữ pháp Bài 5", thoiLuongGiay: 664 },
+    ],
+  },
   "on-giua-ky-b4-5-dap-an": {
     "#PHẦN TRẮC NGHIỆM — I. Chữ Hán": [
       { id: "jp-s45-gk1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/08-on-giua-ky-trac-nghiem-chu-han-ngu-phap-b2965546.mp4", tieuDe: "Ôn giữa kỳ B4–5: phần trắc nghiệm chữ Hán và ngữ pháp", thoiLuongGiay: 714 },
+    ],
+    "#PHẦN VIẾT — I. Điền trợ từ": [
+      { id: "jp-s45-gk2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/09-on-giua-ky-phan-viet-va-kanji-mid-e8bd7776.mp4", tieuDe: "Ôn giữa kỳ B4–5: phần viết và đọc Kanji Mid", thoiLuongGiay: 577 },
     ],
   },
   "slot-10-on-kanji5-l6-1": {
@@ -301,6 +382,22 @@ export const VIDEO_NEO: VideoNeoMap = {
       { id: "jp-ck-01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-01-de-cuoi-ky-co-gi-diem-va-chien-luoc-6685bd86.mp4", tieuDe: "Đề cuối kỳ có gì? Bản đồ bài thi viết, thi nói và chiến lược từng phần", thoiLuongGiay: 567 },
     ],
   },
+  "cuoi-ky-ngu-phap": {
+    "#E.": [
+      { id: "jp-ck-02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-02-tro-tu-nhin-dong-tu-chon-nhan-67d41466.mp4", tieuDe: "Trợ từ: nhìn động từ cuối câu để chọn nhãn dán đúng", thoiLuongGiay: 459 },
+    ],
+    "#F.": [
+      { id: "jp-ck-03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-03-tu-de-hoi-nhin-cau-tra-loi-209e61bc.mp4", tieuDe: "Từ để hỏi: nhìn câu trả lời để đoán câu hỏi", thoiLuongGiay: 415 },
+    ],
+    "#A2.": [
+      { id: "jp-ck-10", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-10-bang-chia-tinh-tu-va-qua-khu-0f7bd171.mp4", tieuDe: "Bảng chia tính từ và quá khứ: mô phỏng máy chia bốn dạng", thoiLuongGiay: 386 },
+    ],
+  },
+  "cuoi-ky-chia-dong-tu": {
+    "dau-bai": [
+      { id: "jp-ck-04", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-04-chia-dong-tu-ba-buoc-4f2ebbc2.mp4", tieuDe: "Chia động từ: ba bước — nhận nhóm, đổi đuôi, kiểm bằng bài hát", thoiLuongGiay: 405 },
+    ],
+  },
   "cuoi-ky-chu-han": {
     "dau-bai": [
       { id: "jp-ck-05", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-05-chu-han-bai-4-7-va-chu-nhieu-54753290.mp4", tieuDe: "Chữ Hán Bài 4–7: học theo từ và phân biệt chữ na ná", thoiLuongGiay: 464 },
@@ -320,6 +417,11 @@ export const VIDEO_NEO: VideoNeoMap = {
   "cuoi-ky-de-luyen": {
     "dau-bai": [
       { id: "jp-ck-09", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-09-chua-de-luyen-chon-chia-doc-hieu-dich-84484a5b.mp4", tieuDe: "Chữa đề luyện cuối kỳ: chọn đáp án, chia từ, đọc hiểu, dịch", thoiLuongGiay: 425 },
+    ],
+  },
+  "cuoi-ky-nghe": {
+    "dau-bai": [
+      { id: "jp-ck-11", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/11-on-cuoi-ky-jpd123/11-11-luyen-nghe-4-bay-kinh-dien-4a6d3a35.mp4", tieuDe: "Luyện nghe: cách nghe, số giờ hay nghe sai và bốn bẫy kinh điển", thoiLuongGiay: 348 },
     ],
   },
 };

@@ -22,37 +22,37 @@ export default {
     'jpd113-n-truong-am-tro-tu': { }, // dự kiến: jp-h-6
     'jpd113-katakana': { }, // dự kiến: ghép jp-k-1…k-4 (-tron)
     'jpd113-chao-hoi-so': { }, // dự kiến: jp-0-2
-    'jpd113-so-dem-day-du': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-9805c20e.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p2
-    'jpd113-tien-gia-ca': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-9805c20e.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p2
-    'jpd113-ngay-gio-tuoi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-3f4377d5.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-gio
-    'jpd113-youbi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-3885285c.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-gio
-    'jpd113-dem-tang': { }, // dự kiến: jp-b2-p1
+    'jpd113-so-dem-day-du': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p2
+    'jpd113-tien-gia-ca': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p2
+    'jpd113-ngay-gio-tuoi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-ff768edb.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-gio
+    'jpd113-youbi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-642c87c7.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-gio
+    'jpd113-dem-tang': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p1
     'jpd113-nguphap-chuong3': { },
-    'jpd113-bai-1-ngu-phap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-ca77aa92.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-p1 (+ jp-b1-p2)
-    'jpd113-mo-ka': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-06-tu-gioi-thieu-day-du-khuon-thi-noi-4deddcbb.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-p2
-    'jpd113-quoc-tich-nghe-nghiep': { }, // dự kiến: jp-b1-0
-    'jpd113-tu-trong-ngon-ngu-khac': { }, // dự kiến: jp-b2-p3
+    'jpd113-bai-1-ngu-phap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-9bb5aac4.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-p1 (+ jp-b1-p2)
+    'jpd113-mo-ka': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-05-so-thich-to-mo-giong-nhau-1925ebe6.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-p2
+    'jpd113-quoc-tich-nghe-nghiep': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-02-ten-nuoc-nguoi-nuoc-nao-khong-phai-6d511c3e.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-0
+    'jpd113-tu-trong-ngon-ngu-khac': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-06-cua-ai-tieng-gi-tong-hop-bai-2-d458598d.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p3
     'jpd113-nguphap-chuong4': { },
-    'jpd113-bai-2-3-ngu-phap': { }, // dự kiến: jp-b2-p1
-    'jpd113-kono-sono-ano': { }, // dự kiến: jp-b2-p1
-    'jpd113-tu-de-hoi': { }, // dự kiến: jp-b2-p3
-    'jpd113-tro-tu-wo-ni-de-e': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-9e4eff61.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-p1
-    'jpd113-kochira-dokono-nanno': { }, // dự kiến: jp-b2-p1
-    'jpd113-to-ya-nado': { }, // dự kiến: jp-b3-p2
+    'jpd113-bai-2-3-ngu-phap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p1
+    'jpd113-kono-sono-ano': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-02-do-vat-gan-xa-kore-sore-are-14a6f348.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p1
+    'jpd113-tu-de-hoi': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p3
+    'jpd113-tro-tu-wo-ni-de-e': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-e9d43a33.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-p1
+    'jpd113-kochira-dokono-nanno': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-p1
+    'jpd113-to-ya-nado': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-p2
     'jpd113-nguphap-chuong5': { },
-    'jpd113-masu-form': { }, // dự kiến: jp-b3-chia
-    'jpd113-dong-tu-thuong-gap': { }, // dự kiến: jp-b3-tv2
-    'jpd113-idou-full': { }, // dự kiến: jp-b3-p1 · jp-b3-p2
+    'jpd113-masu-form': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-chia
+    'jpd113-dong-tu-thuong-gap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-tv2
+    'jpd113-idou-full': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b3-p1 · jp-b3-p2
     'jpd113-kara-made': { }, // dự kiến: jp-b3-p2
     'jpd113-nguphap-chuong6': { },
     'jpd113-kanji': { }, // dự kiến: jp-b1-kj
-    'jpd113-kanji-so-thoi-gian': { }, // dự kiến: jp-b2-kj
+    'jpd113-kanji-so-thoi-gian': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-06-chu-han-gio-thu-buoi-5756ffaf.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b2-kj
     'jpd113-kanji-nguoi-truong-hoc': { }, // dự kiến: jp-b3-kj
     'jpd113-nang-cao': { },
-    'jpd113-speaking-cau-truc': { }, // dự kiến: jp-0-2
+    'jpd113-speaking-cau-truc': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-0-2
     'jpd113-speaking-doc-1-7': { },
     'jpd113-speaking-doc-8-13': { },
-    'jpd113-speaking-cau-hoi-khong-tranh': { }, // dự kiến: jp-b1-noi
+    'jpd113-speaking-cau-hoi-khong-tranh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b1-noi
     'jpd113-speaking-cau-hoi-co-tranh': { },
     'jpd113-speaking-lo-trinh-meo': { },
   },

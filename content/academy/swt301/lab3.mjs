@@ -798,6 +798,118 @@ const L3 = {
   ].join('\n'),
 };
 
+/* ═══════════════════════ Lesson 3.4 — Lab 3 trên LabFlow Demo (thêm 24/10/2026) ═══════════════════════ */
+// Nguồn: CT Work swt301/LAB3 (8 sheet 5.2, Docs 1–5), mẫu 7692_APHL_ISP490_G1_Report5.2 (đọc bằng openpyxl),
+// LabFlow Demo nhánh main — 10/16 case Authentication chạy thử 24/10/2026 (profile h2) khớp Expected.
+const LFD_MODULES = [
+  ['TV1', 'Authentication', 'AT', 'register → verify → login → JWT on protected APIs → refresh rotation → logout; change / forgot / reset password; temporary lock|||đăng ký → xác minh → đăng nhập → JWT gọi API bảo vệ → refresh xoay vòng → đăng xuất; đổi / quên / đặt lại mật khẩu; khoá tạm', '16 (written)|||16 (đã viết)'],
+  ['TV2', 'Authorization + Settings', 'AZ, ST', 'role × endpoint matrix: 401 without token, 403 wrong role; Settings numbers change other modules|||ma trận vai × endpoint: 401 khi thiếu token, 403 khi sai vai; số trong Settings đổi hành vi module khác', '12 + 6'],
+  ['TV3', 'UserManagement + BuildingLab', 'UM, BL', 'admin creates / locks users → login, refresh; manager creates labs (BR-06), version, close lab|||admin tạo / khoá user → đăng nhập, refresh; quản lý tạo lab (BR-06), version, đóng lab', '10 + 8'],
+  ['TV4', 'Equipment + OperatingCalendar', 'EQ, OC', 'status changes and bulk all-or-nothing → equipment availability; hours and blackouts → availability and booking|||đổi trạng thái và đổi hàng loạt → thiết bị trống; giờ mở cửa và blackout → phòng trống và đặt phòng', '10 + 8'],
+  ['TV5', 'AvailabilityReservation', 'RS', 'search → book with Idempotency-Key → overlap 409 → concurrent booking on PostgreSQL|||tìm phòng → đặt với Idempotency-Key → trùng 409 → đặt đồng thời trên PostgreSQL', '14'],
+];
+const lfdTable = (lang) => {
+  const pick = (s) => (s.includes('|||') ? s.split('|||')[lang === 'en' ? 0 : 1] : s);
+  const head = lang === 'en'
+    ? '<tr><th>Member</th><th>Module sheet(s)</th><th>Prefix</th><th>Flows to test</th><th>Cases</th></tr>'
+    : '<tr><th>Thành viên</th><th>Sheet module</th><th>Tiền tố</th><th>Luồng cần test</th><th>Số case</th></tr>';
+  return `<div class="table-wrap"><table><thead>${head}</thead><tbody>${LFD_MODULES.map((m) => `<tr><td>${m[0]}</td><td><strong>${m[1]}</strong></td><td><code>${m[2]}</code></td><td>${pick(m[3])}</td><td>${pick(m[4])}</td></tr>`).join('')}</tbody></table></div>`;
+};
+const APHL_VS = (lang) => {
+  const en = lang === 'en';
+  const rows = en
+    ? [
+      ['Modules', '8', '8 sheets created'],
+      ['Test cases', '155 (4–48 per sheet)', '16 — Authentication only; 7 modules empty'],
+      ['Rounds executed', '4, with Failed and Pending in Rounds 1–3', '0'],
+      ['Test date / Tester', 'filled (one person ran all 620 results)', 'empty'],
+      ['Evidence', '1 of 155 cells', 'empty'],
+      ['Record of change', '16 rows: A per module, M per update', '3 rows'],
+      ['Test environment', 'template placeholder left', 'fully described'],
+      ['Case-ID prefixes', 'PM used twice (Profile, Project), CM twice (Class, Contest)', 'unique per module'],
+    ]
+    : [
+      ['Số module', '8', 'đã dựng 8 sheet'],
+      ['Số test case', '155 (4–48 mỗi sheet)', '16 — chỉ Authentication; 7 module còn trống'],
+      ['Round đã chạy', '4, có Failed và Pending ở Round 1–3', '0'],
+      ['Test date / Tester', 'đủ (một người chạy hết 620 kết quả)', 'trống'],
+      ['Evidence', '1/155 ô', 'trống'],
+      ['Record of change', '16 dòng: A mỗi module, M mỗi đợt sửa', '3 dòng'],
+      ['Mô tả môi trường test', 'để nguyên chữ mẫu', 'điền đầy đủ'],
+      ['Tiền tố mã case', 'PM dùng hai lần (Profile, Project), CM hai lần (Class, Contest)', 'mỗi module một tiền tố'],
+    ];
+  const head = en ? '<tr><th>Point</th><th>APHL 5.2 sample</th><th>Our Lab 3 on 24/10</th></tr>' : '<tr><th>Điểm</th><th>Mẫu APHL 5.2</th><th>Lab 3 của nhóm ngày 24/10</th></tr>';
+  return `<div class="table-wrap"><table><thead>${head}</thead><tbody>${rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div>`;
+};
+
+const L34 = {
+  title: 'Lab 3.4 — Lab 3 on LabFlow Demo: 8 modules of Report 5.2, the Authentication example, what is missing|||Lab 3.4 — Lab 3 trên LabFlow Demo: 8 module Report 5.2, ví dụ Authentication và phần còn thiếu',
+  slug: 'swt301-lab3-labflow-report52',
+  type: 'DOCUMENT',
+  description: 'Phần làm thật của Lab 3 trên LabFlow Demo (nối tiếp Lab 2): 8 module integration và cách chia 5 thành viên, cách chạy (Swagger/Postman, MockMvc, Testcontainers), ví dụ Authentication 16 case đã chạy thử, đối chiếu với mẫu 5.2 của nhóm APHL (155 case, 4 round) và danh sách việc còn thiếu trước khi nộp.',
+  content: [
+    bi(`<span class="eyebrow">Lab 3 · Lesson 3.4 · LabFlow Demo · CT Work swt301/LAB3 · APHL Report 5.2 sample</span>
+<h2>Lab 3 for real: Report 5.2 on LabFlow Demo</h2>
+<p class="lead">Lessons 3.1–3.3 explain the template on a generic example. This lesson is the team's actual Lab 3: the same LabFlow Demo project as Lab 2, eight integration modules, one shared Report 5.2 on CT Work — and an honest status check against the 5.2 sample the lecturer circulated.</p>
+<h3>1 · Eight modules, five members</h3>
+${lfdTable('en')}
+<p>Every case is one flow through at least two components — the API, Spring Security (JWT and <code>@PreAuthorize</code>), the service, the repository, the database — never a unit test in disguise. The detailed flows with endpoints and error codes are on the CT Work page "Module / integration flows &amp; assignment".</p>
+<h3>2 · How the cases are run</h3>
+<ul>
+<li><strong>By hand</strong>: the app with profile h2, Swagger UI or Postman / <code>http/labflow-demo.http</code>.</li>
+<li><strong>Automated</strong>: <code>&lt;Module&gt;IT.java</code> with <code>@SpringBootTest</code> + MockMvc, run by <code>mvnw verify</code>; the class must not be <code>@Transactional</code> (otherwise revokes and rollbacks are invisible and cases pass falsely).</li>
+<li><strong>PostgreSQL-only behaviour</strong> (the no-overlap constraint, concurrent booking): Testcontainers, <code>ConcurrentBookingIT</code> on branch <code>lab3-integration-test</code>.</li>
+</ul>
+<h3>3 · The worked example: Authentication (16 cases)</h3>
+<p>Groups: register → verify e-mail (AT1–AT5), login (AT6–AT9), access token on protected APIs (AT10–AT12), refresh &amp; logout (AT13–AT14), change / reset password (AT15–AT16). On 24/10/2026 ten of them (AT1, 3, 5, 7, 8, 10, 11, 13, 15, 16) were run on a fresh LabFlow Demo: every status code, <code>error.code</code> and message matched what the sheet says. The rounds are still empty — the owner runs them and adds the screenshots.</p>
+<h3>4 · Status against the APHL 5.2 sample</h3>
+${APHL_VS('en')}
+<p>The sample has the same formula bugs as the ABClinic 5.3 sample (lesson L4.2): Round 2 N/A counts the Round 1 column, a Round 2 Pending range typed as <code>$J11:$GJ98</code>, "intergration". Copy its shape, not its formulas.</p>
+<h3>5 · What is left before submitting</h3>
+<ol>
+<li>Assign TV2–TV5 and move the overdue due dates to the new deadline.</li>
+<li>TV1 runs Round 1 of AT1–AT16 (AT12 waits 16 minutes for the token to expire — run it last).</li>
+<li>TV2–TV5 write at least 6 cases per module (team ≥ 70) and run Round 1.</li>
+<li>One Record-of-change row "A – Add integration test for &lt;module&gt;" per finished module.</li>
+<li>Round 2 for failures, real testers, Evidence names; Reviewer/Approver on the Cover; export, click every link, recompute one sheet.</li>
+</ol>
+${inner51('swt301-lab4-de-bai', '➡️', 'Next: Lab 4 — system test (Report 5.3)', 'The same project, one end-to-end workflow per member', 'OPEN →')}`,
+    `<span class="eyebrow">Lab 3 · Bài 3.4 · LabFlow Demo · CT Work swt301/LAB3 · mẫu Report 5.2 nhóm APHL</span>
+<h2>Lab 3 làm thật: Report 5.2 trên LabFlow Demo</h2>
+<p class="lead">Bài 3.1–3.3 giải thích template trên một ví dụ chung. Bài này là Lab 3 thật của nhóm: cùng dự án LabFlow Demo như Lab 2, tám module integration, một Report 5.2 chung trên CT Work — và một lần kiểm tra trung thực so với tệp mẫu 5.2 cô đã gửi.</p>
+<h3>1 · Tám module, năm thành viên</h3>
+${lfdTable('vi')}
+<p>Mỗi case là một luồng đi qua ít nhất hai thành phần — API, Spring Security (JWT và <code>@PreAuthorize</code>), service, repository, CSDL — không phải unit test đội lốt. Luồng chi tiết kèm endpoint và mã lỗi nằm ở trang CT Work "📌 Danh sách module / luồng tích hợp &amp; phân công 5 người".</p>
+<h3>2 · Chạy case bằng gì</h3>
+<ul>
+<li><strong>Chạy tay</strong>: app profile h2, Swagger UI hoặc Postman / <code>http/labflow-demo.http</code>.</li>
+<li><strong>Tự động</strong>: lớp <code>&lt;Module&gt;IT.java</code> với <code>@SpringBootTest</code> + MockMvc, chạy bằng <code>mvnw verify</code>; lớp test KHÔNG được đặt <code>@Transactional</code> (nếu có, việc thu hồi token và rollback bị che, case qua giả).</li>
+<li><strong>Hành vi chỉ có trên PostgreSQL</strong> (ràng buộc chống trùng giờ, đặt đồng thời): Testcontainers, lớp <code>ConcurrentBookingIT</code> trên nhánh <code>lab3-integration-test</code>.</li>
+</ul>
+<h3>3 · Ví dụ có lời giải: Authentication (16 case)</h3>
+<p>Các nhóm: đăng ký → xác minh email (AT1–AT5), đăng nhập (AT6–AT9), access token gọi API bảo vệ (AT10–AT12), refresh &amp; đăng xuất (AT13–AT14), đổi / đặt lại mật khẩu (AT15–AT16). Ngày 24/10/2026 đã chạy thử mười case (AT1, 3, 5, 7, 8, 10, 11, 13, 15, 16) trên LabFlow Demo vừa khởi động: mọi mã HTTP, <code>error.code</code> và câu thông báo khớp đúng như sheet ghi. Các cột Round vẫn trống — chủ module tự chạy và gắn ảnh.</p>
+<h3>4 · Hiện trạng so với mẫu APHL 5.2</h3>
+${APHL_VS('vi')}
+<p>Tệp mẫu này dính đúng các lỗi công thức của mẫu ABClinic 5.3 (bài L4.2): ô N/A Round 2 đếm cột Round 1, vùng Pending Round 2 gõ nhầm <code>$J11:$GJ98</code>, chữ "intergration". Học khuôn của nó, đừng chép công thức.</p>
+<h3>5 · Việc còn lại trước khi nộp</h3>
+<ol>
+<li>Gán người cho TV2–TV5 và dời các hạn đã quá sang hạn mới.</li>
+<li>TV1 chạy Round 1 cho AT1–AT16 (AT12 phải đợi 16 phút cho token hết hạn — chạy cuối).</li>
+<li>TV2–TV5 viết ít nhất 6 case mỗi module (cả nhóm ≥ 70) rồi chạy Round 1.</li>
+<li>Xong module nào thì thêm một dòng Record of change "A – Add integration test for &lt;module&gt;".</li>
+<li>Round 2 cho case lỗi, đúng người chạy, có tên ảnh Evidence; Reviewer/Approver trên Cover; xuất Excel, bấm mọi link, tính tay lại một sheet.</li>
+</ol>
+${inner51('swt301-lab4-de-bai', '➡️', 'Tiếp theo: Lab 4 — system test (Report 5.3)', 'Cùng dự án, mỗi người một luồng nghiệp vụ đầu-cuối', 'MỞ →')}`),
+  ].join('\n'),
+};
+function inner51(slug, ico, title, sub, cta) {
+  return `<a class="link-card exphub" href="/courses/software-testing/learn?lessonSlug=${slug}">
+  <span class="lc-ico">${ico}</span>
+  <span class="lc-body"><span class="lc-title">${title}</span><span class="lc-sub">${sub}</span></span>
+  <span class="lc-cta">${cta}</span>
+</a>`;
+}
+
 /* ──────────────────────────────── Quiz ──────────────────────────────── */
 const q = (question, options, correctIndex, explanation) => ({ question, options, correctIndex, points: 1, ...(explanation ? { explanation } : {}) });
 const QUIZL3 = {
@@ -825,5 +937,5 @@ const QUIZL3 = {
 export default {
   title: 'Lab 3 — Integration & system test reports|||Lab 3 — Báo cáo integration test & system test',
   description: 'Lab 3: bộ template Report5 (Unit / Integration / System) giải thích từng sheet, từng cột, từng công thức và 4 lỗi công thức có sẵn; ví dụ điền trọn sheet Login + Change password có số liệu tính thật; phân tích file mẫu SEP490 và checklist nộp bài.',
-  lessons: [L1, L2, L3, QUIZL3],
+  lessons: [L1, L2, L3, L34, QUIZL3],
 };

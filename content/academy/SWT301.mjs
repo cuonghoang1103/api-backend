@@ -18,6 +18,7 @@ import ch8 from './swt301/ch8.mjs';
 import pe from './swt301/pe.mjs';
 import lab1 from './swt301/lab1.mjs';
 import lab3 from './swt301/lab3.mjs';
+import lab4 from './swt301/lab4.mjs';
 import lab2 from './swt301/lab2.mjs';
 import labProject from './swt301/lab-project.mjs';
 import sec0 from './swt301/sec0.mjs';
@@ -71,6 +72,8 @@ export default {
     /* ══════════ ch8 — swt301/ch8.mjs ══════════ */
     ch8,
     lab3,
+    /* ══════════ LAB 4 (bài lab cuối, cô giao 24/10/2026) — swt301/lab4.mjs (Report 5.3 System Test trên LabFlow Demo) ══════════ */
+    lab4,
     /* ══════════ ch9 — swt301/ch9.mjs ══════════ */
     ch9,
     /* ══════════ PROGRESS TEST 3 — swt301/pt.mjs ══════════ */

@@ -337,7 +337,7 @@ ORDER BY TABLE_NAME, ORDINAL_POSITION;</code></pre>
 <tr><td>Sailors</td><td>age</td><td>real</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_reserves_sailors". The conflict occurred in database "DBI202", table "dbo.Sailors", column 'sid'.</b><br>
 The statement has been terminated.</div>
 <p>The first result lists the database schema as SQL Server stores it (the system view <code>INFORMATION_SCHEMA.COLUMNS</code> holds one row per column of every table). The last INSERT is explained on slide 9.</p>
@@ -388,7 +388,7 @@ ORDER BY TABLE_NAME, ORDINAL_POSITION;</code></pre>
 <tr><td>Sailors</td><td>age</td><td>real</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_reserves_sailors". The conflict occurred in database "DBI202", table "dbo.Sailors", column 'sid'.</b><br>
 The statement has been terminated.</div>
 <p>Kết quả đầu tiên liệt kê lược đồ CSDL đúng như SQL Server lưu (khung nhìn hệ thống <code>INFORMATION_SCHEMA.COLUMNS</code> có một dòng cho mỗi cột của mọi bảng). Câu INSERT cuối được giải thích ở slide 9.</p>

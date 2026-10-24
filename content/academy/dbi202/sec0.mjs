@@ -28,11 +28,11 @@ const L_dbi1_1 = {
     walk('dbi1', [
       [1, 'Course: Introduction to Database System (DBI202)',
         `<p class="y-chinh">🎯 DBI202 — Introduction to Database Systems: how to design, build and query a relational database, practised on Microsoft SQL Server.</p>
-<p>The course code reads <strong>DB</strong> (database) <strong>I</strong> (introduction) 202. It has 3 credits and 60 sessions. Almost every later course that stores data — PRJ301 (Java web), SWP391 (project), SWD392 — assumes you can design tables and write SQL fluently, so treat it as a foundation, not a box to tick.</p>
+<p>The course code reads <strong>DB</strong> (database) <strong>I</strong> (introduction) 202. It has 3 credits: 60 class sessions (45 contact hours) inside about 150 study hours, most of them self-study. Almost every later course that stores data — PRJ301 (Java web), SWP391 (project), SWD392 — assumes you can design tables and write SQL fluently, so treat it as a foundation, not a box to tick.</p>
 <p><strong>Never heard these words?</strong> A <em>database</em> is an organised store of related data kept for a long time — every student's marks at FPTU, every account of a bank. A <em>DBMS</em> (database management system) is the software that keeps it safe and answers questions about it — here Microsoft SQL Server. <em>SQL</em> is the language you use to talk to it: <code>SELECT FullName FROM Student WHERE Class = 'SE1901'</code> means "give me the names of the students of class SE1901".</p>
 <p class="meo">🧠 <strong>Remember:</strong> 60% of the grade (assignment 20% + labs 10% + PE 30%) is writing SQL on a computer — practise with your hands from week 1.</p>`,
         `<p class="y-chinh">🎯 DBI202 — Nhập môn các hệ cơ sở dữ liệu: cách thiết kế, dựng và truy vấn một cơ sở dữ liệu (CSDL) quan hệ, thực hành trên Microsoft SQL Server.</p>
-<p>Mã môn đọc là <strong>DB</strong> (database — cơ sở dữ liệu) <strong>I</strong> (introduction — nhập môn) 202. Môn có 3 tín chỉ, 60 buổi. Hầu hết các môn sau có lưu dữ liệu — PRJ301 (web Java), SWP391 (đồ án), SWD392 — đều coi như bạn đã thiết kế bảng và viết SQL thành thạo, nên hãy coi đây là môn nền, không phải môn "qua cho xong".</p>
+<p>Mã môn đọc là <strong>DB</strong> (database — cơ sở dữ liệu) <strong>I</strong> (introduction — nhập môn) 202. Môn có 3 tín chỉ: 60 buổi trên lớp (45 giờ) trong tổng khoảng 150 giờ học, phần lớn là tự học. Hầu hết các môn sau có lưu dữ liệu — PRJ301 (web Java), SWP391 (đồ án), SWD392 — đều coi như bạn đã thiết kế bảng và viết SQL thành thạo, nên hãy coi đây là môn nền, không phải môn "qua cho xong".</p>
 <p><strong>Chưa từng nghe các từ này?</strong> <em>Cơ sở dữ liệu (database — CSDL)</em> là một kho dữ liệu có liên quan với nhau, được sắp xếp và giữ lâu dài — điểm của mọi sinh viên FPTU, mọi tài khoản của một ngân hàng. <em>Hệ quản trị CSDL (DBMS — database management system)</em> là phần mềm giữ kho đó an toàn và trả lời các câu hỏi về nó — ở môn này là Microsoft SQL Server. <em>SQL</em> là ngôn ngữ để nói chuyện với nó: <code>SELECT FullName FROM Student WHERE Class = 'SE1901'</code> nghĩa là "cho tôi tên các sinh viên lớp SE1901".</p>
 <p class="meo">🧠 <strong>Mẹo nhớ:</strong> 60% điểm (assignment 20% + lab 10% + PE 30%) là ngồi máy viết SQL — tập bằng tay ngay từ tuần 1.</p>`],
       [2, 'Course objectives',
@@ -229,7 +229,7 @@ const L_x_bat_dau_tai_day = {
 <tr><td>1970</td><td>Edgar F. Codd (IBM researcher) publishes "A Relational Model of Data for Large Shared Data Banks" — the paper that invents the relational model (tables, keys) this entire course is built on</td></tr>
 <tr><td>Mid-1970s</td><td>IBM builds System R to test Codd's ideas; a query language called SEQUEL is designed for it — later renamed SQL for trademark reasons</td></tr>
 <tr><td>1979</td><td>Oracle (then Relational Software Inc.) ships the first commercially available SQL database</td></tr>
-<tr><td>1989</td><td>The Postgres project starts at UC Berkeley (Michael Stonebraker's team) — the ancestor of today's PostgreSQL; it later adds SQL support and is renamed PostgreSQL in 1996</td></tr>
+<tr><td>1986</td><td>The Postgres project starts at UC Berkeley (Michael Stonebraker's team; first version 1989) — the ancestor of today's PostgreSQL; it later adds SQL support and is renamed PostgreSQL in 1996</td></tr>
 <tr><td>1989</td><td>Sybase, Microsoft and Ashton-Tate release the first version of what becomes Microsoft SQL Server</td></tr>
 <tr><td>1995</td><td>MySQL 1.0 is released — built for speed and simplicity, and becomes the default choice for early web apps (WordPress, early Facebook)</td></tr>
 <tr><td>2000s–now</td><td>NoSQL databases (MongoDB, Redis…) appear for special cases the relational model handles less well (huge unstructured data, extreme write speed) — but the relational model, and SQL, are still the default choice for most business systems, including the one you will build for your capstone</td></tr>
@@ -243,7 +243,7 @@ const L_x_bat_dau_tai_day = {
 <tr><td>1970</td><td>Edgar F. Codd (nhà nghiên cứu của IBM) công bố bài báo "A Relational Model of Data for Large Shared Data Banks" — bài báo phát minh ra mô hình quan hệ (bảng, khoá) mà cả môn học này xây trên đó</td></tr>
 <tr><td>Giữa thập niên 1970</td><td>IBM dựng System R để thử ý tưởng của Codd; một ngôn ngữ truy vấn tên SEQUEL được thiết kế cho nó — sau đổi tên thành SQL vì lý do thương hiệu</td></tr>
 <tr><td>1979</td><td>Oracle (khi đó tên Relational Software Inc.) tung ra CSDL SQL thương mại đầu tiên</td></tr>
-<tr><td>1989</td><td>Dự án Postgres bắt đầu ở UC Berkeley (nhóm của Michael Stonebraker) — tổ tiên của PostgreSQL hôm nay; sau này nó thêm hỗ trợ SQL và đổi tên thành PostgreSQL năm 1996</td></tr>
+<tr><td>1986</td><td>Dự án Postgres bắt đầu ở UC Berkeley (nhóm của Michael Stonebraker; bản đầu ra năm 1989) — tổ tiên của PostgreSQL hôm nay; sau này nó thêm hỗ trợ SQL và đổi tên thành PostgreSQL năm 1996</td></tr>
 <tr><td>1989</td><td>Sybase, Microsoft và Ashton-Tate phát hành phiên bản đầu tiên của thứ sau này thành Microsoft SQL Server</td></tr>
 <tr><td>1995</td><td>MySQL 1.0 ra mắt — xây cho tốc độ và đơn giản, trở thành lựa chọn mặc định cho web thời kỳ đầu (WordPress, Facebook thuở sơ khai)</td></tr>
 <tr><td>2000s–nay</td><td>Các CSDL NoSQL (MongoDB, Redis…) xuất hiện cho những việc mô hình quan hệ làm kém hơn (dữ liệu phi cấu trúc khổng lồ, tốc độ ghi cực nhanh) — nhưng mô hình quan hệ và SQL vẫn là lựa chọn mặc định cho phần lớn hệ thống nghiệp vụ, kể cả hệ thống bạn sẽ xây cho đồ án tốt nghiệp</td></tr>
@@ -1378,13 +1378,29 @@ SELECT masv, diemtb FROM sinhvien ORDER BY masv;</code></pre>
 <div class="out"><b>Msg 207, Level 16, State 1<br>
 Invalid column name 'Nguyễn Văn Cường'.</b></div>
 <p>SQL Server parsed <code>"Nguyễn Văn Cường"</code> as an attempted <em>column name</em>, not text — there is no column with that name, hence "Invalid column name".</p>
-<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = 'Nguyễn Văn Cường';  -- single quotes: this is text</code></pre>
+<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = N'Nguyễn Văn Cường';  -- single quotes (+ N for Vietnamese): this is text</code></pre>
+<table>
+<thead><tr><th>hoTen</th><th>diemTB</th></tr></thead>
+<tbody>
+<tr><td>Nguyễn Văn Cường</td><td>8.50</td></tr>
+</tbody>
+</table>
+<p>Notice the <strong>N</strong> in front of the quote — the N'' trap from step 3 again, now inside a <code>WHERE</code>. Drop it and the query still runs, but finds nothing:</p>
+<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = 'Nguyễn Văn Cường';  -- no N: the literal loses its diacritics BEFORE the comparison
+SELECT 'Nguyễn Văn Cường' AS khong_N, N'Nguyễn Văn Cường' AS co_N;  -- what the comparison actually saw</code></pre>
 <table>
 <thead><tr><th>hoTen</th><th>diemTB</th></tr></thead>
 <tbody>
 <tr><td>(0 rows)</td><td></td></tr>
 </tbody>
 </table>
+<table>
+<thead><tr><th>khong_N</th><th>co_N</th></tr></thead>
+<tbody>
+<tr><td>Nguy?n Van Cu?ng</td><td>Nguyễn Văn Cường</td></tr>
+</tbody>
+</table>
+<p>0 rows, and no error. Without N, SQL Server first converts the literal to the database's old 8-bit code page, so the comparison really looks for "Nguy?n Van Cu?ng" (second result) — a name nobody has. Rule: every Vietnamese literal gets N, in <code>INSERT</code> and in <code>WHERE</code> alike.</p>
 <div class="callout">🐘 <strong>On PostgreSQL</strong> — same rule, and PostgreSQL is stricter about it than SQL Server in general: double quotes <em>always</em> mean an identifier, with no fallback interpretation, ever.
 <pre><code class="language-sql">SELECT hoten, diemtb FROM sinhvien WHERE hoten = "Nguyễn Văn Cường";  -- PostgreSQL: double quotes ALWAYS mean an identifier</code></pre>
 <div class="out"><b>ERROR:  column "Nguyễn Văn Cường" does not exist</b></div>
@@ -1403,13 +1419,29 @@ Invalid column name 'Nguyễn Văn Cường'.</b></div>
 <div class="out"><b>Msg 207, Level 16, State 1<br>
 Invalid column name 'Nguyễn Văn Cường'.</b></div>
 <p>SQL Server hiểu <code>"Nguyễn Văn Cường"</code> là một <em>tên cột</em> đang thử dùng, không phải chuỗi — không có cột nào tên vậy, nên báo "Invalid column name".</p>
-<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = 'Nguyễn Văn Cường';  -- nháy đơn: đây mới là chuỗi</code></pre>
+<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = N'Nguyễn Văn Cường';  -- nháy đơn (kèm N cho tiếng Việt): đây mới là chuỗi</code></pre>
+<table>
+<thead><tr><th>hoTen</th><th>diemTB</th></tr></thead>
+<tbody>
+<tr><td>Nguyễn Văn Cường</td><td>8.50</td></tr>
+</tbody>
+</table>
+<p>Để ý chữ <strong>N</strong> trước dấu nháy — lại là bẫy N'' ở bước 3, lần này nằm trong <code>WHERE</code>. Bỏ nó đi thì câu lệnh vẫn chạy, nhưng không tìm thấy gì:</p>
+<pre><code class="language-sql">SELECT hoTen, diemTB FROM SinhVien WHERE hoTen = 'Nguyễn Văn Cường';  -- thiếu N: hằng chuỗi mất dấu TRƯỚC khi so
+SELECT 'Nguyễn Văn Cường' AS khong_N, N'Nguyễn Văn Cường' AS co_N;  -- thứ mà phép so thật sự nhận được</code></pre>
 <table>
 <thead><tr><th>hoTen</th><th>diemTB</th></tr></thead>
 <tbody>
 <tr><td>(0 dòng)</td><td></td></tr>
 </tbody>
 </table>
+<table>
+<thead><tr><th>khong_N</th><th>co_N</th></tr></thead>
+<tbody>
+<tr><td>Nguy?n Van Cu?ng</td><td>Nguyễn Văn Cường</td></tr>
+</tbody>
+</table>
+<p>0 dòng, và không báo lỗi. Thiếu N, SQL Server đổi hằng chuỗi sang bảng mã 8-bit cũ của cơ sở dữ liệu trước, nên phép so thật ra đi tìm "Nguy?n Van Cu?ng" (kết quả thứ hai) — một cái tên không ai có. Luật: mọi hằng chuỗi tiếng Việt đều kèm N, trong <code>INSERT</code> cũng như trong <code>WHERE</code>.</p>
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong> — cùng luật, và PostgreSQL nói chung nghiêm hơn SQL Server ở điểm này: nháy kép <em>luôn luôn</em> nghĩa là tên định danh, không có cách hiểu dự phòng nào khác, không bao giờ.
 <pre><code class="language-sql">SELECT hoten, diemtb FROM sinhvien WHERE hoten = "Nguyễn Văn Cường";  -- PostgreSQL: nháy kép LUÔN LUÔN là tên định danh</code></pre>
 <div class="out"><b>ERROR:  column "Nguyễn Văn Cường" does not exist</b></div>

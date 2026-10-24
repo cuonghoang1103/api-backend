@@ -403,7 +403,7 @@ GO
 -- TRUNCATE is refused on a table that a foreign key points to
 TRUNCATE TABLE tblDepartment;
 GO</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_employee_department". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'depNum'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 4712, Level 16, State 1<br>
@@ -507,7 +507,7 @@ GO
 -- TRUNCATE bị từ chối trên bảng có khoá ngoại trỏ vào
 TRUNCATE TABLE tblDepartment;
 GO</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_employee_department". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'depNum'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 4712, Level 16, State 1<br>

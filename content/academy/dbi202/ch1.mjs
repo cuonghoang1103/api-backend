@@ -641,7 +641,7 @@ const L_on_ch1 = {
 <pre><code class="language-sql">INSERT INTO Mark VALUES ('SE190002', 'DBI202', 85);      -- typo: 85 instead of 8.5</code></pre>
 <pre><code class="language-sql">INSERT INTO Mark VALUES ('SE190001', 'DBI202', 9.0);     -- the same student and course again</code></pre>
 <div class="out">(1 row affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__Mark__score__283243A9". The conflict occurred in database "DBI202", table "dbo.Mark", column 'score'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -679,7 +679,7 @@ The statement has been terminated.</div>
 <pre><code class="language-sql">INSERT INTO Mark VALUES ('SE190002', 'DBI202', 85);      -- gõ nhầm 85 thay vì 8.5</code></pre>
 <pre><code class="language-sql">INSERT INTO Mark VALUES ('SE190001', 'DBI202', 9.0);     -- lại cùng sinh viên, cùng môn</code></pre>
 <div class="out">(1 row affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__Mark__score__283243A9". The conflict occurred in database "DBI202", table "dbo.Mark", column 'score'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -871,7 +871,7 @@ UPDATE 1</div>
 <tr><td>5</td><td>15</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__Course__credits__7772503F". The conflict occurred in database "DBI202", table "dbo.Course", column 'credits'.</b><br>
 The statement has been terminated.</div>
 <div class="pitfall">Students often answer "a data model is a table". A table is only the structure part of one model; the definition must mention structure, operations and constraints.</div>`,
@@ -900,7 +900,7 @@ The statement has been terminated.</div>
 <tr><td>5</td><td>15</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__Course__credits__7772503F". The conflict occurred in database "DBI202", table "dbo.Course", column 'credits'.</b><br>
 The statement has been terminated.</div>
 <div class="pitfall">Nhiều bạn trả lời "mô hình dữ liệu là một cái bảng". Bảng chỉ là phần cấu trúc của một mô hình; định nghĩa phải nêu đủ cấu trúc, thao tác và ràng buộc.</div>`),

@@ -11635,7 +11635,7 @@ GO
 EXEC chuyen_tien 1, 99, 50;
 GO
 SELECT id, so_du FROM tk ORDER BY id;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -11645,7 +11645,7 @@ The statement has been terminated.</div>
 <tr><td>2</td><td>100</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b></div>
 <table>
 <thead><tr><th>trancount</th><th>id</th><th>so_du</th></tr></thead>
@@ -11654,7 +11654,7 @@ The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The
 <tr><td>0</td><td>2</td><td>100</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b></div>
 <table>
 <thead><tr><th>id</th><th>so_du</th></tr></thead>
@@ -11730,7 +11730,7 @@ GO
 EXEC chuyen_tien 1, 99, 50;
 GO
 SELECT id, so_du FROM tk ORDER BY id;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -11740,7 +11740,7 @@ The statement has been terminated.</div>
 <tr><td>2</td><td>100</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b></div>
 <table>
 <thead><tr><th>trancount</th><th>id</th><th>so_du</th></tr></thead>
@@ -11749,7 +11749,7 @@ The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The
 <tr><td>0</td><td>2</td><td>100</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ls_den". The conflict occurred in database "DBI202", table "dbo.tk", column 'id'.</b></div>
 <table>
 <thead><tr><th>id</th><th>so_du</th></tr></thead>
@@ -12567,7 +12567,7 @@ GO
 EXEC chuyen_tien 1, 99, 10;         -- no such account
 GO
 SELECT id, so_du FROM tk ORDER BY id;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_tk_khong_am". The conflict occurred in database "DBI202", table "dbo.tk", column 'so_du'.</b><br>
 <b>Msg 50001, Level 16, State 1<br>
 Tài khoản không tồn tại</b></div>
@@ -12640,7 +12640,7 @@ GO
 EXEC chuyen_tien 1, 99, 10;         -- không có tài khoản
 GO
 SELECT id, so_du FROM tk ORDER BY id;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_tk_khong_am". The conflict occurred in database "DBI202", table "dbo.tk", column 'so_du'.</b><br>
 <b>Msg 50001, Level 16, State 1<br>
 Tài khoản không tồn tại</b></div>
@@ -18348,7 +18348,7 @@ GO
 SELECT so_dien_thoai, ho_ten FROM dbo.khach_hang;   -- unchanged</code></pre>
 <div class="out">(1 row affected)<br>
 (2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the REFERENCE constraint "fk_lich_hen_khach_hang". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'so_dien_thoai'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -18382,7 +18382,7 @@ GO
 SELECT so_dien_thoai, ho_ten FROM dbo.khach_hang;   -- vẫn như cũ</code></pre>
 <div class="out">(1 row affected)<br>
 (2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the REFERENCE constraint "fk_lich_hen_khach_hang". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'so_dien_thoai'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -18832,10 +18832,10 @@ INSERT INTO dbo.don_b VALUES (1, -5);</code></pre>
 <tr><td>pk_don_b</td><td>PRIMARY_KEY_CONSTRAINT</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__don_a__tong_tien__3E379993". The conflict occurred in database "DBI202", table "dbo.don_a", column 'tong_tien'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_don_b_tong_tien_khong_am". The conflict occurred in database "DBI202", table "dbo.don_b", column 'tong_tien'.</b><br>
 The statement has been terminated.</div>
 <p>The unnamed CHECK is called something like <code>CK__don_a__tong_tien__3E379993</code> (the hex tail is random on every database — the course runner replaces it with a stable value); the named one tells the reader exactly which rule was broken.</p>
@@ -18882,10 +18882,10 @@ INSERT INTO dbo.don_b VALUES (1, -5);</code></pre>
 <tr><td>pk_don_b</td><td>PRIMARY_KEY_CONSTRAINT</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__don_a__tong_tien__3E379993". The conflict occurred in database "DBI202", table "dbo.don_a", column 'tong_tien'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_don_b_tong_tien_khong_am". The conflict occurred in database "DBI202", table "dbo.don_b", column 'tong_tien'.</b><br>
 The statement has been terminated.</div>
 <p>CHECK không đặt tên sẽ có tên kiểu <code>CK__don_a__tong_tien__3E379993</code> (đuôi hex ngẫu nhiên ở mỗi CSDL — bộ chạy của khoá thay bằng giá trị cố định); CHECK có tên nói ngay cho người đọc luật nào bị vi phạm.</p>
@@ -19816,10 +19816,10 @@ INSERT INTO dbo.binh_luan2 (bai_viet_id, san_pham_id) VALUES (1, 1);   -- two pa
 <tr><td>3</td><td>san_phm</td><td>1</td><td>MỒ CÔI</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_binh_luan2_san_pham". The conflict occurred in database "DBI202", table "dbo.san_pham", column 'id'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_binh_luan2_dung_mot_cha". The conflict occurred in database "DBI202", table "dbo.binh_luan2".</b><br>
 The statement has been terminated.</div>
 <ul>
@@ -19876,10 +19876,10 @@ INSERT INTO dbo.binh_luan2 (bai_viet_id, san_pham_id) VALUES (1, 1);   -- hai ch
 <tr><td>3</td><td>san_phm</td><td>1</td><td>MỒ CÔI</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_binh_luan2_san_pham". The conflict occurred in database "DBI202", table "dbo.san_pham", column 'id'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_binh_luan2_dung_mot_cha". The conflict occurred in database "DBI202", table "dbo.binh_luan2".</b><br>
 The statement has been terminated.</div>
 <ul>
@@ -20273,10 +20273,10 @@ INSERT INTO dbo.lich_hen (nhan_vien_id, bat_dau, ket_thuc)
 VALUES (1, '2024-10-01 09:30 +07:00', '2024-10-01 10:30 +07:00');       -- overlaps
 GO
 SELECT COUNT(*) AS so_lich_hen FROM dbo.lich_hen;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_lich_hen_khoang_gio". The conflict occurred in database "DBI202", table "dbo.lich_hen".</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_lich_hen_trang_thai". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'trang_thai'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 50001, Level 16, State 1<br>
@@ -20337,10 +20337,10 @@ INSERT INTO dbo.lich_hen (nhan_vien_id, bat_dau, ket_thuc)
 VALUES (1, '2024-10-01 09:30 +07:00', '2024-10-01 10:30 +07:00');       -- trùng giờ
 GO
 SELECT COUNT(*) AS so_lich_hen FROM dbo.lich_hen;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_lich_hen_khoang_gio". The conflict occurred in database "DBI202", table "dbo.lich_hen".</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_lich_hen_trang_thai". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'trang_thai'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 50001, Level 16, State 1<br>
@@ -20413,7 +20413,7 @@ DELETE FROM dbo.khach_hang WHERE id = 1;              -- NO ACTION: refused, cus
 <tr><td>101</td><td>1</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_lich_hen_khach_hang". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'khach_hang_id'.</b><br>
 The statement has been terminated.</div>
 <ul>
@@ -20428,7 +20428,7 @@ CREATE TABLE dbo.tin_nhan (
   nguoi_gui  INT NOT NULL CONSTRAINT fk_tin_nhan_gui  REFERENCES dbo.nguoi_dung(id) ON DELETE CASCADE,
   nguoi_nhan INT NOT NULL CONSTRAINT fk_tin_nhan_nhan REFERENCES dbo.nguoi_dung(id) ON DELETE CASCADE
 );</code></pre>
-<div class="out"><b>Msg 1785, Level 16, State 0<br>
+<div class="out"><b>Msg 1785, Level 16, State 1<br>
 Introducing FOREIGN KEY constraint 'fk_tin_nhan_nhan' on table 'tin_nhan' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.</b><br>
 <b>Msg 1750, Level 16, State 1<br>
 Could not create constraint or index. See previous errors.</b></div>
@@ -20531,7 +20531,7 @@ DELETE FROM dbo.khach_hang WHERE id = 1;              -- NO ACTION: bị chặn 
 <tr><td>101</td><td>1</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_lich_hen_khach_hang". The conflict occurred in database "DBI202", table "dbo.lich_hen", column 'khach_hang_id'.</b><br>
 The statement has been terminated.</div>
 <ul>
@@ -20546,7 +20546,7 @@ CREATE TABLE dbo.tin_nhan (
   nguoi_gui  INT NOT NULL CONSTRAINT fk_tin_nhan_gui  REFERENCES dbo.nguoi_dung(id) ON DELETE CASCADE,
   nguoi_nhan INT NOT NULL CONSTRAINT fk_tin_nhan_nhan REFERENCES dbo.nguoi_dung(id) ON DELETE CASCADE
 );</code></pre>
-<div class="out"><b>Msg 1785, Level 16, State 0<br>
+<div class="out"><b>Msg 1785, Level 16, State 1<br>
 Introducing FOREIGN KEY constraint 'fk_tin_nhan_nhan' on table 'tin_nhan' may cause cycles or multiple cascade paths. Specify ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.</b><br>
 <b>Msg 1750, Level 16, State 1<br>
 Could not create constraint or index. See previous errors.</b></div>
@@ -21586,7 +21586,7 @@ FROM dbo.dang_ky d JOIN dbo.hoc_vien h ON h.id = d.hoc_vien_id JOIN dbo.khoa_hoc
 <div class="out"><b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'pk_dang_ky'. Cannot insert duplicate key in object 'dbo.dang_ky'. The duplicate key value is (1, 1).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_dang_ky_diem". The conflict occurred in database "DBI202", table "dbo.dang_ky", column 'diem'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -21685,7 +21685,7 @@ FROM dbo.dang_ky d JOIN dbo.hoc_vien h ON h.id = d.hoc_vien_id JOIN dbo.khoa_hoc
 <div class="out"><b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'pk_dang_ky'. Cannot insert duplicate key in object 'dbo.dang_ky'. The duplicate key value is (1, 1).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_dang_ky_diem". The conflict occurred in database "DBI202", table "dbo.dang_ky", column 'diem'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -22131,7 +22131,7 @@ DELETE FROM dbo.nguoi_dung WHERE id = 1;    -- an author with posts: refused</co
 <tr><td>102</td><td>11</td><td><em>NULL</em></td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_bai_viet_tac_gia". The conflict occurred in database "DBI202", table "dbo.bai_viet", column 'tac_gia_id'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -22222,7 +22222,7 @@ DELETE FROM dbo.nguoi_dung WHERE id = 1;    -- tác giả còn bài: bị chặn
 <tr><td>102</td><td>11</td><td><em>NULL</em></td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_bai_viet_tac_gia". The conflict occurred in database "DBI202", table "dbo.bai_viet", column 'tac_gia_id'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -26729,7 +26729,7 @@ ORDER BY g.hang, g.so;</code></pre>
 (2 rows affected)<br>
 <b>Msg 2601, Level 14, State 1<br>
 Cannot insert duplicate key row in object 'dbo.Ve' with unique index 'ux_ve_suat_ghe'. The duplicate key value is (1, 2).</b><br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ve_ghe". The conflict occurred in database "DBI202", table "dbo.Ghe".</b><br>
 The statement has been terminated.<br>
 The statement has been terminated.<br>
@@ -26864,7 +26864,7 @@ ORDER BY g.hang, g.so;</code></pre>
 (2 rows affected)<br>
 <b>Msg 2601, Level 14, State 1<br>
 Cannot insert duplicate key row in object 'dbo.Ve' with unique index 'ux_ve_suat_ghe'. The duplicate key value is (1, 2).</b><br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_ve_ghe". The conflict occurred in database "DBI202", table "dbo.Ghe".</b><br>
 The statement has been terminated.<br>
 The statement has been terminated.<br>
@@ -32078,7 +32078,7 @@ BEGIN CATCH
 END CATCH;
 SELECT so, so_du AS sau_lan_dung FROM TaiKhoan ORDER BY so;</code></pre>
 <div class="out">(2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_taikhoan_so_du". The conflict occurred in database "DBI202", table "dbo.TaiKhoan", column 'so_du'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -32161,7 +32161,7 @@ BEGIN CATCH
 END CATCH;
 SELECT so, so_du AS sau_lan_dung FROM TaiKhoan ORDER BY so;</code></pre>
 <div class="out">(2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_taikhoan_so_du". The conflict occurred in database "DBI202", table "dbo.TaiKhoan", column 'so_du'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>

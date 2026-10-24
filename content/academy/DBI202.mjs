@@ -709,14 +709,15 @@ SET NULL → <b>thất bại ở đây</b>, vì Enrol.sid là một phần khoá
 <p>Shared attributes live once, in Person; each subclass table holds only its own. Reading a full student needs a join.</p>
 
 <h3>Strategy 2 — one table per concrete class (the "OO" way)</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- everything repeated</span>
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>);      <span class="tok-comment">-- name, dob repeated in both tables</span>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</code></pre>
 <p>No joins, but the common attributes are duplicated in the schema, and a query over "all people" needs a UNION. A person who is both a student and a lecturer is stored twice.</p>
 
 <h3>Strategy 3 — one wide table (the "NULL" way)</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, kind <span class="tok-type">CHAR</span>(1) <span class="tok-keyword">NOT NULL</span>,
+    gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>, salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50),
     <span class="tok-keyword">CONSTRAINT</span> ck_kind <span class="tok-keyword">CHECK</span> (
-        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</code></pre>
+        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span> <span class="tok-keyword">AND</span> dept <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span> <span class="tok-keyword">AND</span> year <span class="tok-keyword">IS NULL</span>)));</code></pre>
 <p>One table, no joins, but every row carries the columns of every subclass, mostly null — and only a CHECK constraint stops nonsense combinations.</p>
 
 <h3>Which one — the comparison you must be able to argue</h3>
@@ -754,14 +755,15 @@ Subclasses queried separately and almost never together → strategy 2.</div>
 <p>Thuộc tính chung nằm đúng một chỗ, trong Person; mỗi bảng lớp con chỉ giữ phần riêng. Đọc đầy đủ một sinh viên thì phải nối bảng.</p>
 
 <h3>Chiến lược 2 — mỗi lớp cụ thể một bảng (kiểu "hướng đối tượng")</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid, name, dob, gpa, year);      <span class="tok-comment">-- lặp lại mọi thứ</span>
-<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid, name, dob, salary, dept);</code></pre>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Student (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>);      <span class="tok-comment">-- name, dob lặp lại ở cả hai bảng</span>
+<span class="tok-keyword">CREATE TABLE</span> Lecturer(pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50));</code></pre>
 <p>Không phải nối bảng, nhưng thuộc tính chung bị nhân bản trong lược đồ, và truy vấn "tất cả mọi người" phải dùng UNION. Người vừa là sinh viên vừa là giảng viên bị lưu hai lần.</p>
 
 <h3>Chiến lược 3 — một bảng rộng (kiểu "nhiều NULL")</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid, name, dob, kind <span class="tok-type">CHAR</span>(1), gpa, year, salary, dept,
+<pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> Person (pid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100), dob <span class="tok-type">DATE</span>, kind <span class="tok-type">CHAR</span>(1) <span class="tok-keyword">NOT NULL</span>,
+    gpa <span class="tok-type">DECIMAL</span>(3,2), year <span class="tok-type">INT</span>, salary <span class="tok-type">MONEY</span>, dept <span class="tok-type">NVARCHAR</span>(50),
     <span class="tok-keyword">CONSTRAINT</span> ck_kind <span class="tok-keyword">CHECK</span> (
-        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span>)));</code></pre>
+        (kind = <span class="tok-string">'S'</span> <span class="tok-keyword">AND</span> salary <span class="tok-keyword">IS NULL</span> <span class="tok-keyword">AND</span> dept <span class="tok-keyword">IS NULL</span>) <span class="tok-keyword">OR</span> (kind = <span class="tok-string">'L'</span> <span class="tok-keyword">AND</span> gpa <span class="tok-keyword">IS NULL</span> <span class="tok-keyword">AND</span> year <span class="tok-keyword">IS NULL</span>)));</code></pre>
 <p>Một bảng, không phải nối, nhưng mỗi dòng mang theo cột của mọi lớp con, đa phần là null — và chỉ có ràng buộc CHECK ngăn được các tổ hợp vô nghĩa.</p>
 
 <h3>Chọn cái nào — bảng so sánh bạn phải biện luận được</h3>
@@ -1343,7 +1345,7 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 <tr><td><span class="badge">NVARCHAR(n)</span></td><td>2 bytes per character</td><td><b>any text that may contain Vietnamese</b></td></tr>
 <tr><td><span class="badge">VARCHAR(MAX)</span></td><td>up to 2 GB, stored off-row</td><td>long content only — it cannot be indexed normally</td></tr>
 </tbody></table>
-<div class="out"><b>Why this matters here.</b> In SQL Server, <span class="badge">VARCHAR</span> uses the database code page; store "Nguyễn Thị Hoà" in one and you get "Nguyên Thi Hoa" — silently, with no error. Always use <span class="badge">NVARCHAR</span> for names, addresses and descriptions, and write literals with the N prefix: <span class="badge">N'Hà Nội'</span> — without the N the literal is converted <em>before</em> it reaches the column and the accents are already gone.</div>
+<div class="out"><b>Why this matters here.</b> In SQL Server, <span class="badge">VARCHAR</span> uses the database code page; store "Nguyễn Thị Hoà" in one and you get "Nguy?n Th? Hoà" — every letter missing from that code page becomes "?", silently, with no error. Always use <span class="badge">NVARCHAR</span> for names, addresses and descriptions, and write literals with the N prefix: <span class="badge">N'Hà Nội'</span> — without the N the literal is converted <em>before</em> it reaches the column and the accents are already gone.</div>
 
 <h3>Numbers — never store money in a float</h3>
 <div class="out"><b>The demonstration:</b> <span class="badge">SELECT CAST(0.1 AS FLOAT) + CAST(0.2 AS FLOAT)</span> gives 0.30000000000000004. Binary floating point cannot represent 0.1 exactly, so sums of prices drift and two systems disagree by cents.<br>
@@ -1386,7 +1388,7 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <tr><td><span class="badge">NVARCHAR(n)</span></td><td>2 byte mỗi ký tự</td><td><b>mọi văn bản có thể chứa tiếng Việt</b></td></tr>
 <tr><td><span class="badge">VARCHAR(MAX)</span></td><td>tới 2 GB, lưu ngoài dòng</td><td>chỉ cho nội dung dài — không đánh chỉ mục bình thường được</td></tr>
 </tbody></table>
-<div class="out"><b>Vì sao điều này quan trọng với chúng ta.</b> Trong SQL Server, <span class="badge">VARCHAR</span> dùng bảng mã của cơ sở dữ liệu; lưu "Nguyễn Thị Hoà" vào đó thì nhận lại "Nguyên Thi Hoa" — âm thầm, không báo lỗi. Luôn dùng <span class="badge">NVARCHAR</span> cho tên, địa chỉ, mô tả, và viết hằng chuỗi có tiền tố N: <span class="badge">N'Hà Nội'</span> — thiếu chữ N thì hằng đã bị chuyển đổi <em>trước khi</em> chạm tới cột và dấu đã mất từ trước.</div>
+<div class="out"><b>Vì sao điều này quan trọng với chúng ta.</b> Trong SQL Server, <span class="badge">VARCHAR</span> dùng bảng mã của cơ sở dữ liệu; lưu "Nguyễn Thị Hoà" vào đó thì nhận lại "Nguy?n Th? Hoà" — chữ nào không có trong bảng mã đó thành dấu "?", âm thầm, không báo lỗi. Luôn dùng <span class="badge">NVARCHAR</span> cho tên, địa chỉ, mô tả, và viết hằng chuỗi có tiền tố N: <span class="badge">N'Hà Nội'</span> — thiếu chữ N thì hằng đã bị chuyển đổi <em>trước khi</em> chạm tới cột và dấu đã mất từ trước.</div>
 
 <h3>Số — đừng bao giờ lưu tiền bằng số thực dấu phẩy động</h3>
 <div class="out"><b>Minh chứng:</b> <span class="badge">SELECT CAST(0.1 AS FLOAT) + CAST(0.2 AS FLOAT)</span> cho 0.30000000000000004. Số thực nhị phân không biểu diễn chính xác được 0,1, nên tổng các mức giá trôi dần và hai hệ thống lệch nhau vài xu.<br>
@@ -2701,7 +2703,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <span class="tok-comment">-- 3. Question 1: ...</span></code></pre>
 <p>Keep every answer under a numbered comment. A marker reading 200 lines needs to find question 5 in two seconds.</p>
 
-<div class="pitfall"><b>Three things that lose marks after the SQL is already correct:</b> (1) missing <span class="badge">N</span> before Vietnamese literals, so the marker's data shows "Nguyên Thi Hoa"; (2) forgetting <span class="badge">GO</span> between batches, so <span class="badge">CREATE PROCEDURE</span> fails with "must be the first statement in a batch"; (3) creating objects in the wrong database because you skipped <span class="badge">USE</span>.</div>
+<div class="pitfall"><b>Three things that lose marks after the SQL is already correct:</b> (1) missing <span class="badge">N</span> before Vietnamese literals, so the marker's data shows "Nguy?n Th? Hoà"; (2) forgetting <span class="badge">GO</span> between batches, so <span class="badge">CREATE PROCEDURE</span> fails with "must be the first statement in a batch"; (3) creating objects in the wrong database because you skipped <span class="badge">USE</span>.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write the script so it can be run twice.</b> Start each object with <span class="badge">IF OBJECT_ID('dbo.Employee','U') IS NOT NULL DROP TABLE dbo.Employee;</span> (children first). You can then re-run the whole file after every edit instead of hunting for the last statement you changed — and the marker can too. Idempotent scripts are also exactly what migration tools require in production. <em>Beyond syllabus because nobody teaches it, yet it is the difference between a calm 85 minutes and a panicked one.</em></div>
 </div>
@@ -2750,7 +2752,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <span class="tok-comment">-- 3. Câu 1: ...</span></code></pre>
 <p>Đặt mỗi câu trả lời dưới một dòng chú thích có đánh số. Người chấm đọc 200 dòng cần tìm ra câu 5 trong hai giây.</p>
 
-<div class="pitfall"><b>Ba thứ làm mất điểm dù SQL đã đúng:</b> (1) thiếu chữ <span class="badge">N</span> trước hằng chuỗi tiếng Việt, nên dữ liệu của người chấm hiện ra "Nguyên Thi Hoa"; (2) quên <span class="badge">GO</span> giữa các batch, khiến <span class="badge">CREATE PROCEDURE</span> báo "must be the first statement in a batch"; (3) tạo đối tượng nhầm cơ sở dữ liệu vì bỏ qua <span class="badge">USE</span>.</div>
+<div class="pitfall"><b>Ba thứ làm mất điểm dù SQL đã đúng:</b> (1) thiếu chữ <span class="badge">N</span> trước hằng chuỗi tiếng Việt, nên dữ liệu của người chấm hiện ra "Nguy?n Th? Hoà"; (2) quên <span class="badge">GO</span> giữa các batch, khiến <span class="badge">CREATE PROCEDURE</span> báo "must be the first statement in a batch"; (3) tạo đối tượng nhầm cơ sở dữ liệu vì bỏ qua <span class="badge">USE</span>.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hãy viết script sao cho chạy lại lần hai vẫn được.</b> Mở đầu mỗi đối tượng bằng <span class="badge">IF OBJECT_ID('dbo.Employee','U') IS NOT NULL DROP TABLE dbo.Employee;</span> (bảng con trước). Nhờ đó bạn chạy lại cả tệp sau mỗi lần sửa thay vì mò xem câu lệnh cuối mình vừa đổi là câu nào — và người chấm cũng vậy. Script chạy lại được cũng đúng là thứ mà công cụ di trú đòi hỏi trên môi trường thật. <em>Ngoài giáo trình vì không ai dạy điều này, nhưng nó là ranh giới giữa 85 phút bình tĩnh và 85 phút hoảng loạn.</em></div>
 </div>

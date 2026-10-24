@@ -195,10 +195,10 @@ The statement has been terminated.<br>
 <b>Msg 515, Level 16, State 2<br>
 Cannot insert the value NULL into column 'empName', table 'DBI202.dbo.tblEmployee'; column does not allow nulls. INSERT fails.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_employee_sex". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'empSex'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_employee_department". The conflict occurred in database "DBI202", table "dbo.tblDepartment", column 'depNum'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -256,10 +256,10 @@ The statement has been terminated.<br>
 <b>Msg 515, Level 16, State 2<br>
 Cannot insert the value NULL into column 'empName', table 'DBI202.dbo.tblEmployee'; column does not allow nulls. INSERT fails.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_employee_sex". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'empSex'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_employee_department". The conflict occurred in database "DBI202", table "dbo.tblDepartment", column 'depNum'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -1645,7 +1645,7 @@ SELECT * FROM tblEmployee;
 GO</code></pre>
 <div class="out">Changed database context to 'EmpManagement'.<br>
 (1 row affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__tblEmployee__DOB__69EE134A". The conflict occurred in database "EmpManagement", table "dbo.tblEmployee", column 'DOB'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -1731,7 +1731,7 @@ SELECT * FROM tblEmployee;
 GO</code></pre>
 <div class="out">Changed database context to 'EmpManagement'.<br>
 (1 row affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "CK__tblEmployee__DOB__69EE134A". The conflict occurred in database "EmpManagement", table "dbo.tblEmployee", column 'DOB'.</b><br>
 The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
@@ -1987,7 +1987,7 @@ SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_NAME IN ('tblEmployee', 'tblProject')
 ORDER BY TABLE_NAME, CONSTRAINT_NAME;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The ALTER TABLE statement conflicted with the CHECK constraint "ck_employee_min_salary". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'empSalary'.</b></div>
 <table>
 <thead><tr><th>CONSTRAINT_NAME</th><th>CONSTRAINT_TYPE</th></tr></thead>
@@ -2042,7 +2042,7 @@ SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_NAME IN ('tblEmployee', 'tblProject')
 ORDER BY TABLE_NAME, CONSTRAINT_NAME;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The ALTER TABLE statement conflicted with the CHECK constraint "ck_employee_min_salary". The conflict occurred in database "DBI202", table "dbo.tblEmployee", column 'empSalary'.</b></div>
 <table>
 <thead><tr><th>CONSTRAINT_NAME</th><th>CONSTRAINT_TYPE</th></tr></thead>
@@ -2663,13 +2663,13 @@ The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
 Violation of UNIQUE KEY constraint 'uq_customer_email'. Cannot insert duplicate key in object 'dbo.Customer'. The duplicate key value is (trang@gmail.com).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_product_price". The conflict occurred in database "DBI202", table "dbo.Product", column 'price'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_orders_customer". The conflict occurred in database "DBI202", table "dbo.Customer", column 'customerID'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_orders_status". The conflict occurred in database "DBI202", table "dbo.Orders", column 'status'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -2679,7 +2679,7 @@ The statement has been terminated.<br>
 <tr><td>3</td><td>KH001</td><td>NEW</td><td>hôm nay</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_orders_customer". The conflict occurred in database "DBI202", table "dbo.Orders", column 'customerID'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -2727,13 +2727,13 @@ The statement has been terminated.<br>
 <b>Msg 2627, Level 14, State 1<br>
 Violation of UNIQUE KEY constraint 'uq_customer_email'. Cannot insert duplicate key in object 'dbo.Customer'. The duplicate key value is (trang@gmail.com).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_product_price". The conflict occurred in database "DBI202", table "dbo.Product", column 'price'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "fk_orders_customer". The conflict occurred in database "DBI202", table "dbo.Customer", column 'customerID'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_orders_status". The conflict occurred in database "DBI202", table "dbo.Orders", column 'status'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -2743,7 +2743,7 @@ The statement has been terminated.<br>
 <tr><td>3</td><td>KH001</td><td>NEW</td><td>hôm nay</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_orders_customer". The conflict occurred in database "DBI202", table "dbo.Orders", column 'customerID'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -2783,7 +2783,7 @@ SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE FROM INFORMATION_SCHEMA.TABLE_CONSTRAINT
 WHERE TABLE_NAME = 'Customer' ORDER BY CONSTRAINT_NAME;
 SELECT customerID, email, phone FROM Customer ORDER BY customerID;</code></pre>
 <div class="out">(3 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The ALTER TABLE statement conflicted with the CHECK constraint "ck_customer_email". The conflict occurred in database "DBI202", table "dbo.Customer", column 'email'.</b></div>
 <table>
 <thead><tr><th>customerID</th><th>email</th></tr></thead>
@@ -2840,7 +2840,7 @@ SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE FROM INFORMATION_SCHEMA.TABLE_CONSTRAINT
 WHERE TABLE_NAME = 'Customer' ORDER BY CONSTRAINT_NAME;
 SELECT customerID, email, phone FROM Customer ORDER BY customerID;</code></pre>
 <div class="out">(3 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The ALTER TABLE statement conflicted with the CHECK constraint "ck_customer_email". The conflict occurred in database "DBI202", table "dbo.Customer", column 'email'.</b></div>
 <table>
 <thead><tr><th>customerID</th><th>email</th></tr></thead>
@@ -2896,13 +2896,13 @@ GO
 INSERT INTO tblDepartment (depNum, depName) VALUES (6, N'Phòng Kế Toán');
 SELECT depNum, depName, CASE WHEN mgrAssDate = CAST(GETDATE() AS DATE) THEN 'hôm nay' END AS mgrAssDate
 FROM tblDepartment WHERE depNum = 6;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_workson_max". The conflict occurred in database "DBI202", table "dbo.tblWorksOn", column 'workHours'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_employee_not_self". The conflict occurred in database "DBI202", table "dbo.tblEmployee".</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_dependent_rel". The conflict occurred in database "DBI202", table "dbo.tblDependent", column 'depRelationship'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -2955,13 +2955,13 @@ GO
 INSERT INTO tblDepartment (depNum, depName) VALUES (6, N'Phòng Kế Toán');
 SELECT depNum, depName, CASE WHEN mgrAssDate = CAST(GETDATE() AS DATE) THEN 'hôm nay' END AS mgrAssDate
 FROM tblDepartment WHERE depNum = 6;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_workson_max". The conflict occurred in database "DBI202", table "dbo.tblWorksOn", column 'workHours'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The UPDATE statement conflicted with the CHECK constraint "ck_employee_not_self". The conflict occurred in database "DBI202", table "dbo.tblEmployee".</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_dependent_rel". The conflict occurred in database "DBI202", table "dbo.tblDependent", column 'depRelationship'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -3293,10 +3293,10 @@ SELECT clubID, eventNo, title FROM Event;</code></pre>
 (1 row affected)<br>
 (1 row affected)<br>
 (2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_student_id". The conflict occurred in database "DBI202", table "dbo.Student", column 'studentID'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_membership_role". The conflict occurred in database "DBI202", table "dbo.Membership", column 'role'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>
@@ -3379,10 +3379,10 @@ SELECT clubID, eventNo, title FROM Event;</code></pre>
 (1 row affected)<br>
 (1 row affected)<br>
 (2 rows affected)<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_student_id". The conflict occurred in database "DBI202", table "dbo.Student", column 'studentID'.</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the CHECK constraint "ck_membership_role". The conflict occurred in database "DBI202", table "dbo.Membership", column 'role'.</b><br>
 The statement has been terminated.<br>
 (1 row affected)</div>

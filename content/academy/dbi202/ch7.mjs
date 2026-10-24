@@ -6569,7 +6569,7 @@ GO
 UPDATE tblEmployee SET empSalary = empSalary + 2000 WHERE depNum = 4;   -- 1 salary change
 UPDATE tblEmployee SET empAddress = N'Huế' WHERE empSSN = 30121050030;  -- no salary change: nothing logged
 SELECT logID, action, empSSN, empName, oldSalary, newSalary, changedBy FROM tblEmployeeLog ORDER BY logID;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_department_manager". The conflict occurred in database "DBI202", table "dbo.tblDepartment", column 'mgrSSN'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -6669,7 +6669,7 @@ GO
 UPDATE tblEmployee SET empSalary = empSalary + 2000 WHERE depNum = 4;   -- 1 lần đổi lương
 UPDATE tblEmployee SET empAddress = N'Huế' WHERE empSSN = 30121050030;  -- lương không đổi: không ghi
 SELECT logID, action, empSSN, empName, oldSalary, newSalary, changedBy FROM tblEmployeeLog ORDER BY logID;</code></pre>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The DELETE statement conflicted with the REFERENCE constraint "fk_department_manager". The conflict occurred in database "DBI202", table "dbo.tblDepartment", column 'mgrSSN'.</b><br>
 The statement has been terminated.</div>
 <table>

@@ -553,7 +553,7 @@ CREATE TABLE Contracts (                    -- weak: its key is borrowed from 3 
 <tr><td>Mark Hamill</td><td>Fox</td><td>Star Wars</td><td>1977</td><td>120000.00</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "FK__Contracts__0FB73529". The conflict occurred in database "DBI202", table "dbo.Movies".</b><br>
 The statement has been terminated.</div>
 <p>The last INSERT fails on purpose: (Star Wars, 1978) is not a movie, so referential integrity through Movie-of refuses the contract.</p>
@@ -585,7 +585,7 @@ CREATE TABLE Contracts (                    -- yếu: khoá mượn từ 3 tập
 <tr><td>Mark Hamill</td><td>Fox</td><td>Star Wars</td><td>1977</td><td>120000.00</td></tr>
 </tbody>
 </table>
-<div class="out"><b>Msg 547, Level 16, State 0<br>
+<div class="out"><b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "FK__Contracts__0FB73529". The conflict occurred in database "DBI202", table "dbo.Movies".</b><br>
 The statement has been terminated.</div>
 <p>Câu INSERT cuối cố ý lỗi: (Star Wars, 1978) không phải phim nào cả, nên toàn vẹn tham chiếu qua Movie-of từ chối hợp đồng đó.</p>
@@ -3074,7 +3074,25 @@ CREATE TABLE Loan (                                                -- M-N Member
 </tbody>
 </table>
 <p>6 tables, matching the schema above; Loan carries 2 foreign keys (the composite one to Copy, plus memberID), exactly what the self-check query reports.</p>
-<div class="pitfall">A very common near-miss: making Loan's key just (isbn, copyNo) because "one copy, one loan" feels natural. Re-read the paragraph: "the same copy can be borrowed again later" — without loanDate in the key, the second loan record would silently overwrite the first one's row (same primary key), destroying loan history. Exactly the same shape of mistake lesson 3.5's exercise 1 flagged for Enroll.</div>`,
+<div class="pitfall">A very common near-miss: making Loan's key just (isbn, copyNo) because "one copy, one loan" feels natural. Re-read the paragraph: "the same copy can be borrowed again later" — without loanDate in the key, the second loan of the same copy has the same primary key as the first, and SQL Server refuses it:
+<pre><code class="language-sql">CREATE TABLE Loan2 (                 -- the near-miss key: (isbn, copyNo) only
+  isbn VARCHAR(13), copyNo INT, memberID INT, loanDate DATE, dueDate DATE,
+  PRIMARY KEY (isbn, copyNo)
+);
+INSERT INTO Loan2 VALUES ('9780131873254', 1, 7, '2026-09-01', '2026-09-15');   -- first loan of copy 1
+INSERT INTO Loan2 VALUES ('9780131873254', 1, 9, '2026-10-02', '2026-10-16');   -- same copy, borrowed again later
+SELECT isbn, copyNo, memberID, loanDate FROM Loan2;</code></pre>
+<div class="out">(1 row affected)<br>
+<b>Msg 2627, Level 14, State 1<br>
+Violation of PRIMARY KEY constraint 'PK__Loan2__849D48956A27968F'. Cannot insert duplicate key in object 'dbo.Loan2'. The duplicate key value is (9780131873254, 1).</b><br>
+The statement has been terminated.</div>
+<table>
+<thead><tr><th>isbn</th><th>copyNo</th><th>memberID</th><th>loanDate</th></tr></thead>
+<tbody>
+<tr><td>9780131873254</td><td>1</td><td>7</td><td>2026-09-01</td></tr>
+</tbody>
+</table>
+The second borrower cannot be recorded at all (Msg 2627). The only way to get them in would be to UPDATE the first row — overwriting it and destroying loan history. Exactly the same shape of mistake lesson 3.5's exercise 1 flagged for Enroll.</div>`,
     `<h3>Đề 1 — Thư viện: thực thể yếu và M-N có thuộc tính, làm lại nhưng lớn hơn (~10 phút, khởi động)</h3>
 <p>Một thư viện lưu <strong>sách</strong> (ISBN, tên sách, năm xuất bản) và <strong>tác giả</strong> của chúng (một sách có thể nhiều tác giả, một tác giả viết nhiều sách). Thư viện có các <strong>bản sao</strong> vật lý của từng sách, đánh số chỉ trong phạm vi sách đó (bản 1, 2, 3… của sách NÀY — một sách khác cũng có bản số 1). Mỗi <strong>thành viên</strong> có thể <strong>mượn</strong> một bản sao cụ thể, có ngày mượn, hạn trả và, khi đã trả, ngày trả; đúng bản sao đó sau này có thể được người khác mượn lại.</p>
 <table>
@@ -3149,7 +3167,25 @@ CREATE TABLE Loan (                                                -- M-N Member
 </tbody>
 </table>
 <p>6 bảng, đúng như lược đồ trên; Loan mang 2 khoá ngoại (một cái ghép tới Copy, cộng memberID), đúng như câu tự kiểm báo.</p>
-<div class="pitfall">Một lỗi rất hay gặp: đặt khoá của Loan chỉ là (isbn, copyNo) vì cảm giác "một bản sao, một lần mượn" nghe tự nhiên. Đọc lại đề: "đúng bản sao đó sau này có thể được người khác mượn lại" — không có loanDate trong khoá, lần mượn thứ hai sẽ âm thầm ghi đè lên dòng của lần đầu (cùng khoá chính), xoá mất lịch sử mượn. Đúng hình dạng lỗi bài 1 của bài 3.5 từng cảnh báo cho Enroll.</div>`),
+<div class="pitfall">Một lỗi rất hay gặp: đặt khoá của Loan chỉ là (isbn, copyNo) vì cảm giác "một bản sao, một lần mượn" nghe tự nhiên. Đọc lại đề: "đúng bản sao đó sau này có thể được người khác mượn lại" — không có loanDate trong khoá, lần mượn thứ hai của cùng bản sao trùng khoá chính với lần đầu, và SQL Server từ chối:
+<pre><code class="language-sql">CREATE TABLE Loan2 (                 -- khoá "gần đúng": chỉ (isbn, copyNo)
+  isbn VARCHAR(13), copyNo INT, memberID INT, loanDate DATE, dueDate DATE,
+  PRIMARY KEY (isbn, copyNo)
+);
+INSERT INTO Loan2 VALUES ('9780131873254', 1, 7, '2026-09-01', '2026-09-15');   -- lần mượn đầu của bản 1
+INSERT INTO Loan2 VALUES ('9780131873254', 1, 9, '2026-10-02', '2026-10-16');   -- cùng bản đó, người khác mượn lại sau
+SELECT isbn, copyNo, memberID, loanDate FROM Loan2;</code></pre>
+<div class="out">(1 row affected)<br>
+<b>Msg 2627, Level 14, State 1<br>
+Violation of PRIMARY KEY constraint 'PK__Loan2__849D48956A27968F'. Cannot insert duplicate key in object 'dbo.Loan2'. The duplicate key value is (9780131873254, 1).</b><br>
+The statement has been terminated.</div>
+<table>
+<thead><tr><th>isbn</th><th>copyNo</th><th>memberID</th><th>loanDate</th></tr></thead>
+<tbody>
+<tr><td>9780131873254</td><td>1</td><td>7</td><td>2026-09-01</td></tr>
+</tbody>
+</table>
+Người mượn thứ hai không ghi vào được (Msg 2627). Cách duy nhất để ghi là UPDATE dòng đầu — tức ghi đè lên nó, xoá mất lịch sử mượn. Đúng hình dạng lỗi bài 1 của bài 3.5 từng cảnh báo cho Enroll.</div>`),
     bi(`<h3>Case 2 — Online store: a recursive relationship on the SAME entity set (~15 min)</h3>
 <p>A shop organises its <strong>products</strong> into <strong>categories</strong> (Phones, Laptops…). A category can itself sit inside a broader category — "Phones" and "Laptops" both sit inside "Electronics" — and that broader category can sit inside an even broader one; a top-level category has no parent. A <strong>customer</strong> places <strong>orders</strong>, each with one or more products, a quantity, and the unit price <em>at the time of the order</em> (a later price change must not change old orders).</p>
 <table>
@@ -3287,20 +3323,20 @@ CREATE TABLE OrderItem (                                           -- M-N Order-
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong> — khoá ngoại tự trỏ viết y hệt; khác biệt thường gặp duy nhất ở đây là cột tự tăng (<code>GENERATED ... AS IDENTITY</code> thay vì <code>IDENTITY</code>). <a href="/courses/postgresql/learn?lessonSlug=postgresql-3-2-khoa-ngoai">Học tiếp PostgreSQL — khoá ngoại</a>.</div>
 <div class="pitfall">Đừng vẽ ba hộp riêng "Điện tử", "Điện thoại", "Laptop" như ba tập thực thể KHÁC nhau — chúng là ba DÒNG của cùng một tập thực thể Category. Liên kết đệ quy là trường hợp bị bỏ sót nhiều nhất ở câu 1 đề PE vì sinh viên mặc định mọi mũi tên phải nối hai hộp trông khác nhau.</div>`),
     bi(`<h3>Case 3 — Hotel chain: an M-N attribute list and a weak entity chained onto an M-N (~15 min)</h3>
-<p>A hotel <strong>chain</strong> owns several <strong>hotels</strong>, each in one city. Each hotel has <strong>rooms</strong> — here room numbers are unique within the whole hotel (unlike case 1's per-book numbering, a hotel's room numbers do not repeat inside that hotel, so Room does not need to be weak this time) — with a type and a price. Hotels advertise <strong>amenities</strong> (wifi, pool…) from a shared list; several hotels can share the same amenity. A <strong>guest books</strong> a room for a date range, and each booking is settled by one or more <strong>payments</strong> (a deposit, then a balance) — a payment only ever exists attached to exactly one booking, and is numbered only within that booking.</p>
+<p>A hotel <strong>chain</strong> owns several <strong>hotels</strong>, each in one city. Each hotel has <strong>rooms</strong> — room numbers only mean something inside one hotel (room 101 exists in every hotel of the chain, just like case 1's per-book copy numbers) — with a type and a price. Hotels advertise <strong>amenities</strong> (wifi, pool…) from a shared list; several hotels can share the same amenity. A <strong>guest books</strong> a room for a date range, and each booking is settled by one or more <strong>payments</strong> (a deposit, then a balance) — a payment only ever exists attached to exactly one booking, and is numbered only within that booking.</p>
 <table>
 <thead><tr><th>Element</th><th>Decision</th><th>Why</th></tr></thead>
 <tbody>
 <tr><td>Hotel — Amenity</td><td>M-N, own table HotelAmenity</td><td>"several hotels can share the same amenity" both ways</td></tr>
-<tr><td>Room</td><td>NOT weak this time — PK is just (hotelID, roomNo) as a composite natural key, but conceptually independent per hotel</td><td>contrast with case 1: whether an entity is "weak" is a business-rule decision the paragraph makes, not a fixed fact about "rooms" in general</td></tr>
+<tr><td>Room</td><td>weak entity of Hotel, partial key roomNo — PK (hotelID, roomNo)</td><td>"room 101 exists in every hotel": roomNo alone identifies nothing without its owner hotel — the same shape as case 1's Copy. Whether an entity is weak is a decision the paragraph makes: had it said room numbers are unique across the whole chain, Room would be a strong entity with PK roomNo</td></tr>
 <tr><td>Booking</td><td>M-N Guest–Room with checkIn/checkOut, PLUS a same-row date rule</td><td>checkOut must be after checkIn — a same-row, cross-column business rule</td></tr>
 <tr><td>Payment</td><td>weak entity of BOOKING (not of Hotel or Guest), partial key paymentNo</td><td>"only ever exists attached to exactly one booking… numbered only within that booking" — the owner of a weak entity does not have to be a "simple" entity, it can be an M-N relationship's own table</td></tr>
 </tbody>
 </table>
 <pre><code class="language-plaintext">[HotelChain] chainID*, name ══ 1 ══&lt;&lt;owns&gt;&gt;══ N ══ [Hotel] hotelID*, city
 [Hotel] ── N ──&lt;offers&gt;── M ── [Amenity] amenityID*, name
-[Hotel] ══ 1 ══&lt;&lt;has&gt;&gt;══ N ══ [Room] hotelID+roomNo*, roomType, price
-[Room] ── N ──&lt;books (checkIn, checkOut)&gt;── M ── [Guest] guestID*, fullName
+[Hotel] ══ 1 ══&lt;&lt;has&gt;&gt;══ N ══ [[Room]] roomNo (partial), roomType, price
+[[Room]] ── N ──&lt;books (checkIn, checkOut)&gt;── M ── [Guest] guestID*, fullName
    creates Booking, and:
 [Booking] ══ 1 ══&lt;&lt;settled by&gt;&gt;══ N ══ [[Payment]] paymentNo (partial), amount, paidAt</code></pre>
 <p>HotelChain(<u>chainID</u>, name) · Hotel(<u>hotelID</u>, chainID → HotelChain, city) · Room(<u>hotelID</u>, <u>roomNo</u>, roomType, price) · Amenity(<u>amenityID</u>, name) · HotelAmenity(<u>hotelID</u>, <u>amenityID</u>) · Guest(<u>guestID</u>, fullName) · Booking(<u>bookingID</u>, hotelID+roomNo → Room, guestID → Guest, checkIn, checkOut) · Payment(<u>bookingID</u>, <u>paymentNo</u>, amount, paidAt)</p>
@@ -3385,26 +3421,26 @@ CREATE TABLE Booking2 (
   FOREIGN KEY (hotelID, roomNo) REFERENCES Room2(hotelID, roomNo),   -- points at non-key columns
   CHECK (checkOut &gt; checkIn)
 );</code></pre>
-<div class="out"><b>Msg 1776, Level 16, State 0<br>
+<div class="out"><b>Msg 1776, Level 16, State 1<br>
 There are no primary or candidate keys in the referenced table 'Room2' that match the referencing column list in the foreign key 'FK__Booking2__F8574319'.</b><br>
 <b>Msg 1750, Level 16, State 1<br>
 Could not create constraint or index. See previous errors.</b></div>
 Fix: point the foreign key at <code>roomID</code>, or declare <code>UNIQUE (hotelID, roomNo)</code> on <code>Room2</code> (in this case study the pair IS the primary key, which is why the schema above works).</div>`,
     `<h3>Đề 3 — Chuỗi khách sạn: danh sách thuộc tính M-N và một thực thể yếu gắn lên trên một M-N (~15 phút)</h3>
-<p>Một <strong>chuỗi</strong> khách sạn sở hữu nhiều <strong>khách sạn</strong>, mỗi cái ở một thành phố. Mỗi khách sạn có các <strong>phòng</strong> — lần này số phòng là duy nhất trong TOÀN khách sạn (khác cách đánh số theo từng sách ở đề 1, số phòng của một khách sạn không lặp lại trong khách sạn đó, nên Room lần này không cần là thực thể yếu) — có loại phòng và giá. Khách sạn quảng cáo các <strong>tiện ích</strong> (wifi, hồ bơi…) từ một danh sách dùng chung; nhiều khách sạn có thể cùng có một tiện ích. Một <strong>khách</strong> <strong>đặt</strong> một phòng cho một khoảng ngày, và mỗi lượt đặt được thanh toán bằng một hoặc nhiều <strong>lần thanh toán</strong> (đặt cọc, rồi thanh toán phần còn lại) — một lần thanh toán chỉ tồn tại gắn với đúng một lượt đặt, và chỉ đánh số trong phạm vi lượt đặt đó.</p>
+<p>Một <strong>chuỗi</strong> khách sạn sở hữu nhiều <strong>khách sạn</strong>, mỗi cái ở một thành phố. Mỗi khách sạn có các <strong>phòng</strong> — số phòng chỉ có nghĩa trong phạm vi một khách sạn (khách sạn nào trong chuỗi cũng có phòng 101, giống hệt cách đánh số bản sao theo từng sách ở đề 1) — có loại phòng và giá. Khách sạn quảng cáo các <strong>tiện ích</strong> (wifi, hồ bơi…) từ một danh sách dùng chung; nhiều khách sạn có thể cùng có một tiện ích. Một <strong>khách</strong> <strong>đặt</strong> một phòng cho một khoảng ngày, và mỗi lượt đặt được thanh toán bằng một hoặc nhiều <strong>lần thanh toán</strong> (đặt cọc, rồi thanh toán phần còn lại) — một lần thanh toán chỉ tồn tại gắn với đúng một lượt đặt, và chỉ đánh số trong phạm vi lượt đặt đó.</p>
 <table>
 <thead><tr><th>Thành phần</th><th>Quyết định</th><th>Vì sao</th></tr></thead>
 <tbody>
 <tr><td>Hotel — Amenity</td><td>M-N, bảng riêng HotelAmenity</td><td>"nhiều khách sạn có thể cùng có một tiện ích" cả hai chiều</td></tr>
-<tr><td>Room</td><td>lần này KHÔNG yếu — khoá chính chỉ là (hotelID, roomNo) như một khoá tự nhiên ghép, nhưng về khái niệm độc lập theo từng khách sạn</td><td>so sánh với đề 1: một thực thể có "yếu" hay không là quyết định luật nghiệp vụ mà đoạn đề đưa ra, không phải sự thật cố định về "phòng" nói chung</td></tr>
+<tr><td>Room</td><td>thực thể yếu của Hotel, khoá bộ phận roomNo — khoá chính (hotelID, roomNo)</td><td>"khách sạn nào cũng có phòng 101": chỉ roomNo thì không xác định được gì nếu thiếu khách sạn chủ — cùng hình dạng với Copy ở đề 1. Yếu hay không là quyết định của đoạn đề: nếu đề nói số phòng duy nhất trong TOÀN chuỗi thì Room là thực thể mạnh, khoá chính roomNo</td></tr>
 <tr><td>Booking</td><td>M-N Guest–Room có checkIn/checkOut, CỘNG một luật cùng dòng</td><td>checkOut phải sau checkIn — luật nghiệp vụ cùng dòng, so sánh giữa các cột</td></tr>
 <tr><td>Payment</td><td>thực thể yếu của BOOKING (không phải của Hotel hay Guest), khoá bộ phận paymentNo</td><td>"chỉ tồn tại gắn với đúng một lượt đặt… chỉ đánh số trong phạm vi lượt đặt đó" — chủ của một thực thể yếu không nhất thiết phải là một thực thể "đơn giản", nó có thể là bảng riêng của một liên kết M-N</td></tr>
 </tbody>
 </table>
 <pre><code class="language-plaintext">[HotelChain] chainID*, name ══ 1 ══&lt;&lt;owns&gt;&gt;══ N ══ [Hotel] hotelID*, city
 [Hotel] ── N ──&lt;offers&gt;── M ── [Amenity] amenityID*, name
-[Hotel] ══ 1 ══&lt;&lt;has&gt;&gt;══ N ══ [Room] hotelID+roomNo*, roomType, price
-[Room] ── N ──&lt;books (checkIn, checkOut)&gt;── M ── [Guest] guestID*, fullName
+[Hotel] ══ 1 ══&lt;&lt;has&gt;&gt;══ N ══ [[Room]] roomNo (bộ phận), roomType, price
+[[Room]] ── N ──&lt;books (checkIn, checkOut)&gt;── M ── [Guest] guestID*, fullName
    tạo ra Booking, rồi:
 [Booking] ══ 1 ══&lt;&lt;settled by&gt;&gt;══ N ══ [[Payment]] paymentNo (bộ phận), amount, paidAt</code></pre>
 <p>HotelChain(<u>chainID</u>, name) · Hotel(<u>hotelID</u>, chainID → HotelChain, city) · Room(<u>hotelID</u>, <u>roomNo</u>, roomType, price) · Amenity(<u>amenityID</u>, name) · HotelAmenity(<u>hotelID</u>, <u>amenityID</u>) · Guest(<u>guestID</u>, fullName) · Booking(<u>bookingID</u>, hotelID+roomNo → Room, guestID → Guest, checkIn, checkOut) · Payment(<u>bookingID</u>, <u>paymentNo</u>, amount, paidAt)</p>
@@ -3489,7 +3525,7 @@ CREATE TABLE Booking2 (
   FOREIGN KEY (hotelID, roomNo) REFERENCES Room2(hotelID, roomNo),   -- trỏ vào cột không phải khoá
   CHECK (checkOut &gt; checkIn)
 );</code></pre>
-<div class="out"><b>Msg 1776, Level 16, State 0<br>
+<div class="out"><b>Msg 1776, Level 16, State 1<br>
 There are no primary or candidate keys in the referenced table 'Room2' that match the referencing column list in the foreign key 'FK__Booking2__F8574319'.</b><br>
 <b>Msg 1750, Level 16, State 1<br>
 Could not create constraint or index. See previous errors.</b></div>
@@ -3674,11 +3710,10 @@ CREATE TABLE Enrollment (                                           -- M-N Stude
 
 [Doctor] ── ┐
 [Patient]── ├──&lt;Appointment (apptTime)&gt;   (ternary: 3 entity sets meet at once)
-[Room]  ── ┘
-   │ 1
-&lt;prescribes&gt;
-   │ N
-[Medicine] ── M ──&lt;Prescription (dosage)&gt;── N ── Appointment</code></pre>
+[Room]  ── ┘          │ N
+               &lt;prescribes (dosage)&gt;      → table Prescription
+                      │ M
+               [Medicine] medicineID*, name</code></pre>
 <p>Department(<u>deptID</u>, name) · Staff(<u>staffID</u>, fullName, deptID → Department, supervisorID → Staff) · Doctor(<u>staffID</u> → Staff, specialty) · Nurse(<u>staffID</u> → Staff, shift) · Patient(<u>patientID</u>, fullName) · Room(<u>roomNo</u>, deptID → Department) · Appointment(<u>apptID</u>, staffID → Doctor, patientID → Patient, roomNo → Room, apptTime) · Medicine(<u>medicineID</u>, name) · Prescription(<u>apptID</u>, <u>medicineID</u>, dosage)</p>
 <pre><code class="language-sql">CREATE TABLE Department (
   deptID       INT IDENTITY PRIMARY KEY,
@@ -3767,11 +3802,10 @@ CREATE TABLE Prescription (                                          -- M-N Appo
 
 [Doctor] ── ┐
 [Patient]── ├──&lt;Appointment (apptTime)&gt;   (ba ngôi: 3 tập thực thể gặp nhau cùng lúc)
-[Room]  ── ┘
-   │ 1
-&lt;prescribes&gt;
-   │ N
-[Medicine] ── M ──&lt;Prescription (dosage)&gt;── N ── Appointment</code></pre>
+[Room]  ── ┘          │ N
+               &lt;prescribes (dosage)&gt;      → bảng Prescription
+                      │ M
+               [Medicine] medicineID*, name</code></pre>
 <p>Department(<u>deptID</u>, name) · Staff(<u>staffID</u>, fullName, deptID → Department, supervisorID → Staff) · Doctor(<u>staffID</u> → Staff, specialty) · Nurse(<u>staffID</u> → Staff, shift) · Patient(<u>patientID</u>, fullName) · Room(<u>roomNo</u>, deptID → Department) · Appointment(<u>apptID</u>, staffID → Doctor, patientID → Patient, roomNo → Room, apptTime) · Medicine(<u>medicineID</u>, name) · Prescription(<u>apptID</u>, <u>medicineID</u>, dosage)</p>
 <pre><code class="language-sql">CREATE TABLE Department (
   deptID       INT IDENTITY PRIMARY KEY,
@@ -4345,7 +4379,7 @@ CREATE TABLE [Like] (                                                -- M-N User
 CREATE TABLE Employee (                                            -- superclass
   employeeID   CHAR(6)      PRIMARY KEY,
   fullName     NVARCHAR(50) NOT NULL,
-  managerID    CHAR(6) NULL REFERENCES Employee(employeeID)         -- recursive self-FK #1: org chart
+  managerID    CHAR(6) NULL REFERENCES Employee(employeeID)         -- recursive self-FK #2: org chart
 );
 CREATE TABLE FullTimeStaff (                                       -- subclass
   employeeID   CHAR(6) PRIMARY KEY REFERENCES Employee(employeeID),
@@ -4359,7 +4393,7 @@ CREATE TABLE Task (
   taskID       INT IDENTITY PRIMARY KEY,
   projectID    INT NOT NULL REFERENCES Project(projectID),
   title        NVARCHAR(80) NOT NULL,
-  parentTaskID INT NULL REFERENCES Task(taskID)                     -- recursive self-FK #2: subtasks
+  parentTaskID INT NULL REFERENCES Task(taskID)                     -- recursive self-FK #1: subtasks
 );
 CREATE TABLE Assignment (                                          -- M-N Employee-Task, with attributes
   employeeID   CHAR(6) REFERENCES Employee(employeeID),
@@ -4416,7 +4450,7 @@ CREATE TABLE Assignment (                                          -- M-N Employ
 CREATE TABLE Employee (                                            -- lớp cha
   employeeID   CHAR(6)      PRIMARY KEY,
   fullName     NVARCHAR(50) NOT NULL,
-  managerID    CHAR(6) NULL REFERENCES Employee(employeeID)         -- khoá ngoại đệ quy #1: sơ đồ tổ chức
+  managerID    CHAR(6) NULL REFERENCES Employee(employeeID)         -- khoá ngoại đệ quy #2: sơ đồ tổ chức
 );
 CREATE TABLE FullTimeStaff (                                       -- lớp con
   employeeID   CHAR(6) PRIMARY KEY REFERENCES Employee(employeeID),
@@ -4430,7 +4464,7 @@ CREATE TABLE Task (
   taskID       INT IDENTITY PRIMARY KEY,
   projectID    INT NOT NULL REFERENCES Project(projectID),
   title        NVARCHAR(80) NOT NULL,
-  parentTaskID INT NULL REFERENCES Task(taskID)                     -- khoá ngoại đệ quy #2: công việc con
+  parentTaskID INT NULL REFERENCES Task(taskID)                     -- khoá ngoại đệ quy #1: công việc con
 );
 CREATE TABLE Assignment (                                          -- M-N Employee-Task, có thuộc tính
   employeeID   CHAR(6) REFERENCES Employee(employeeID),
@@ -4495,6 +4529,7 @@ CREATE TABLE Employee (
   branchID     INT NOT NULL REFERENCES Branch(branchID)
 );
 ALTER TABLE Branch ADD managerID CHAR(6) NULL REFERENCES Employee(employeeID);  -- 1-1: a branch has one manager
+CREATE UNIQUE INDEX uq_branch_manager ON Branch(managerID) WHERE managerID IS NOT NULL;  -- ...and an employee manages at most ONE branch
 CREATE TABLE Customer (
   customerID   INT IDENTITY PRIMARY KEY,
   fullName     NVARCHAR(50) NOT NULL
@@ -4550,6 +4585,24 @@ CREATE TABLE [Transaction] (                                       -- weak entit
 </tbody>
 </table>
 <p>8 tables — every construct from this whole workshop appears at least once: weak entity (Transaction), subclass (Savings/CheckingAccount), M-N (AccountHolder), and a two-roles-to-one-entity-set relationship (Transaction → Account twice). This is deliberately shaped like PE question 1: read once for entities, once for cardinalities, once for anything that looks like a repeat of an earlier idea.</p>
+<div class="pitfall"><strong>The "1" on the manager side needs its own constraint.</strong> A foreign key alone lets the same employee manage two branches — "at most one branch" is only enforced by making <code>managerID</code> unique. But a plain <code>UNIQUE</code> fails here: in SQL Server a UNIQUE constraint allows only ONE NULL, and several branches may have no manager yet. The schema therefore uses a <em>filtered</em> unique index (<code>WHERE managerID IS NOT NULL</code>):
+<pre><code class="language-sql">CREATE TABLE Branch2 (branchID INT PRIMARY KEY, city NVARCHAR(40), managerID CHAR(6) NULL);
+INSERT INTO Branch2 VALUES (1, N'Hà Nội', 'NV0001'), (2, N'Đà Nẵng', NULL), (3, N'Cần Thơ', NULL);
+ALTER TABLE Branch2 ADD CONSTRAINT uq_b2_manager UNIQUE (managerID);   -- plain UNIQUE: SQL Server allows only ONE NULL
+GO
+CREATE UNIQUE INDEX uq_b2_manager_loc ON Branch2(managerID) WHERE managerID IS NOT NULL;   -- filtered: NULLs ignored
+GO
+UPDATE Branch2 SET managerID = 'NV0001' WHERE branchID = 2;   -- same manager for a second branch</code></pre>
+<div class="out">(3 rows affected)<br>
+<b>Msg 1505, Level 16, State 1<br>
+The CREATE UNIQUE INDEX statement terminated because a duplicate key was found for the object name 'dbo.Branch2' and the index name 'uq_b2_manager'. The duplicate key value is (&lt;NULL&gt;).</b><br>
+<b>Msg 1750, Level 16, State 1<br>
+Could not create constraint or index. See previous errors.</b><br>
+The statement has been terminated.<br>
+<b>Msg 2601, Level 14, State 1<br>
+Cannot insert duplicate key row in object 'dbo.Branch2' with unique index 'uq_b2_manager_loc'. The duplicate key value is (NV0001).</b><br>
+The statement has been terminated.</div>
+The plain UNIQUE cannot even be created (two NULLs already exist — Msg 1505); the filtered index is created, and then refuses a second branch for NV0001 (Msg 2601). 🐘 PostgreSQL's plain <code>UNIQUE</code> already allows many NULLs, so there it is enough.</div>
 <div class="pitfall">Two traps stacked in one case, on purpose: (1) <code>Branch.managerID</code> referencing <code>Employee</code>, which itself references <code>Branch.branchID</code> — a real circular dependency between two tables. The fix used here is the same one lesson 3.5 and this schema's SQL both rely on: create <code>Branch</code> first WITHOUT the <code>managerID</code> column, create <code>Employee</code> (which can reference <code>Branch</code> immediately), THEN <code>ALTER TABLE Branch ADD managerID ...</code> and <code>UPDATE</code> it — never try to write both tables' CREATE statements with the circular reference inline, SQL Server will refuse it. (2) <code>relatedAccountNo</code> is not a recursive relationship on Account (Account never points at itself directly) — it is Transaction, a THIRD table, holding two separate foreign keys to Account. Calling this "Account is recursive" is a common but incorrect answer in oral exams.</div>`,
     `<h3>Đề 10 — Ngân hàng: một đề PE mini đầy đủ, gộp mọi ý từ đề 1–9 (~30 phút)</h3>
 <p>Một <strong>chi nhánh</strong> có các <strong>nhân viên</strong>; đúng một nhân viên của chi nhánh là <strong>trưởng chi nhánh</strong> (và một nhân viên quản lý tối đa một chi nhánh). <strong>Khách hàng</strong> giữ các <strong>tài khoản</strong> tại một chi nhánh; một tài khoản có thể được đồng sở hữu bởi nhiều khách hàng, và một khách hàng có thể giữ nhiều tài khoản. Mọi tài khoản hoặc là <strong>tài khoản tiết kiệm</strong> (có lãi suất) hoặc là <strong>tài khoản thanh toán</strong> (có hạn mức thấu chi). Mọi lần gửi, rút hay chuyển khoản trên một tài khoản được ghi lại thành một <strong>giao dịch</strong> đánh số, riêng trong lịch sử của tài khoản đó; một giao dịch <strong>chuyển khoản</strong> còn ghi thêm tài khoản KHÁC nhận tiền.</p>
@@ -4586,6 +4639,7 @@ CREATE TABLE Employee (
   branchID     INT NOT NULL REFERENCES Branch(branchID)
 );
 ALTER TABLE Branch ADD managerID CHAR(6) NULL REFERENCES Employee(employeeID);  -- 1-1: một chi nhánh có một trưởng chi nhánh
+CREATE UNIQUE INDEX uq_branch_manager ON Branch(managerID) WHERE managerID IS NOT NULL;  -- ...và một nhân viên làm trưởng tối đa MỘT chi nhánh
 CREATE TABLE Customer (
   customerID   INT IDENTITY PRIMARY KEY,
   fullName     NVARCHAR(50) NOT NULL
@@ -4641,6 +4695,24 @@ CREATE TABLE [Transaction] (                                       -- thực th�
 </tbody>
 </table>
 <p>8 bảng — mọi cấu trúc của cả xưởng này xuất hiện ít nhất một lần: thực thể yếu (Transaction), lớp con (Savings/CheckingAccount), M-N (AccountHolder), và một liên kết hai-vai-trò-tới-một-tập-thực-thể (Transaction → Account hai lần). Đề này cố tình có hình dạng câu 1 đề PE: đọc một lượt tìm thực thể, một lượt tìm bản số, một lượt tìm chỗ nào trông giống một ý đã gặp trước đó.</p>
+<div class="pitfall"><strong>Đầu "1" phía trưởng chi nhánh cần ràng buộc riêng.</strong> Chỉ có khoá ngoại thì một nhân viên vẫn làm trưởng được hai chi nhánh — "tối đa một chi nhánh" chỉ được giữ khi <code>managerID</code> là duy nhất. Nhưng <code>UNIQUE</code> thường không dùng được ở đây: trên SQL Server ràng buộc UNIQUE chỉ cho MỘT giá trị NULL, mà nhiều chi nhánh có thể chưa có trưởng. Vì thế lược đồ dùng chỉ mục duy nhất <em>có lọc</em> (<code>WHERE managerID IS NOT NULL</code>):
+<pre><code class="language-sql">CREATE TABLE Branch2 (branchID INT PRIMARY KEY, city NVARCHAR(40), managerID CHAR(6) NULL);
+INSERT INTO Branch2 VALUES (1, N'Hà Nội', 'NV0001'), (2, N'Đà Nẵng', NULL), (3, N'Cần Thơ', NULL);
+ALTER TABLE Branch2 ADD CONSTRAINT uq_b2_manager UNIQUE (managerID);   -- UNIQUE thường: SQL Server chỉ cho MỘT giá trị NULL
+GO
+CREATE UNIQUE INDEX uq_b2_manager_loc ON Branch2(managerID) WHERE managerID IS NOT NULL;   -- có lọc: bỏ qua NULL
+GO
+UPDATE Branch2 SET managerID = 'NV0001' WHERE branchID = 2;   -- cùng một người làm trưởng chi nhánh thứ hai</code></pre>
+<div class="out">(3 rows affected)<br>
+<b>Msg 1505, Level 16, State 1<br>
+The CREATE UNIQUE INDEX statement terminated because a duplicate key was found for the object name 'dbo.Branch2' and the index name 'uq_b2_manager'. The duplicate key value is (&lt;NULL&gt;).</b><br>
+<b>Msg 1750, Level 16, State 1<br>
+Could not create constraint or index. See previous errors.</b><br>
+The statement has been terminated.<br>
+<b>Msg 2601, Level 14, State 1<br>
+Cannot insert duplicate key row in object 'dbo.Branch2' with unique index 'uq_b2_manager_loc'. The duplicate key value is (NV0001).</b><br>
+The statement has been terminated.</div>
+UNIQUE thường không tạo nổi (đã có hai NULL — Msg 1505); chỉ mục có lọc thì tạo được, rồi chặn chi nhánh thứ hai của NV0001 (Msg 2601). 🐘 Trên PostgreSQL, <code>UNIQUE</code> thường vốn cho nhiều NULL, nên ở đó dùng nó là đủ.</div>
 <div class="pitfall">Hai bẫy chồng lên nhau trong đúng một đề, cố ý: (1) <code>Branch.managerID</code> trỏ tới <code>Employee</code>, mà bản thân <code>Employee</code> lại trỏ tới <code>Branch.branchID</code> — một phụ thuộc vòng thật sự giữa hai bảng. Cách sửa dùng ở đây giống hệt cách bài 3.5 và chính SQL của lược đồ này dùng: tạo <code>Branch</code> trước, KHÔNG có cột <code>managerID</code>, tạo <code>Employee</code> (trỏ được ngay tới <code>Branch</code>), RỒI <code>ALTER TABLE Branch ADD managerID ...</code> và <code>UPDATE</code> nó — đừng cố viết cả hai câu CREATE của hai bảng với tham chiếu vòng ngay trong đó, SQL Server sẽ từ chối. (2) <code>relatedAccountNo</code> không phải một liên kết đệ quy trên Account (Account không bao giờ tự trỏ trực tiếp) — đó là Transaction, một bảng THỨ BA, mang hai khoá ngoại riêng tới Account. Trả lời "Account đệ quy" là một câu trả lời sai hay gặp trong vấn đáp.</div>`),
     bi(`<h2>10 ERD mistakes that lose marks — check your diagram against every line</h2>
 <table>

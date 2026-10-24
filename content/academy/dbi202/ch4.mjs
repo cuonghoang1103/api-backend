@@ -1606,7 +1606,7 @@ SELECT StudentID, COUNT(*) AS soMon FROM Results GROUP BY StudentID;</code></pre
 <b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'PK__Student__54B88B4E9D509648'. Cannot insert duplicate key in object 'dbo.Student'. The duplicate key value is (19594332X).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "FK__Results__Subject__959A1FEE". The conflict occurred in database "DBI202", table "dbo.Subjects", column 'Subject'.</b><br>
 The statement has been terminated.</div>
 <table>
@@ -1647,7 +1647,7 @@ SELECT StudentID, COUNT(*) AS soMon FROM Results GROUP BY StudentID;</code></pre
 <b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'PK__Student__54B88B4E9D509648'. Cannot insert duplicate key in object 'dbo.Student'. The duplicate key value is (19594332X).</b><br>
 The statement has been terminated.<br>
-<b>Msg 547, Level 16, State 0<br>
+<b>Msg 547, Level 16, State 1<br>
 The INSERT statement conflicted with the FOREIGN KEY constraint "FK__Results__Subject__959A1FEE". The conflict occurred in database "DBI202", table "dbo.Subjects", column 'Subject'.</b><br>
 The statement has been terminated.</div>
 <table>

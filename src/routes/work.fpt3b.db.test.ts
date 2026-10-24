@@ -2,7 +2,8 @@
  * CT Work đợt 3B — báo cáo Excel nộp trường qua HTTP thật trên Postgres cục bộ:
  *   WORK_DB_TEST=1 npx tsx --test src/routes/work.fpt3b.db.test.ts
  *
- *   1. A14 System Test 5.3: workflow + case 3 vòng (vòng 4 ⇒ 400), tách khỏi 5.2, xuất ⇒ nhập sang dự án khác (tự nhận "system").
+ *   1. A14 System Test 5.3: workflow + case tới 4 vòng (24/10/2026; vòng 5 ⇒ 400), tách khỏi 5.2, xuất ⇒ nhập sang dự án khác
+ *      (tự nhận "system"), Evidence ở cột riêng giữ nguyên qua xuất/nhập.
  *   2. A3 WBS: cây 1.0/1.1/1.1.1, thuộc tính WBS ⇒ độ phức tạp ⇒ man-day, bảng quy đổi (chỉ ADMIN, kiểm tăng dần), xuất sheet WBS.
  *   3. A23 Project Tracking: SEP490 (Scope/WBS/Q&A/TimeLogs/Defects/Issues lấy từ giai đoạn/worklog/Bug/RAID), Template1, Template4.
  *   4. A21 Weekly Report: tạo kỳ tự điền từ dữ liệu tuần, trùng tuần 409, khoá lạc quan 409, làm mới giữ điểm, xuất "Week n".
@@ -20,7 +21,7 @@ import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
-import { readXlsx } from '../services/work/xlsxStyled.js';
+import { readXlsx, readXlsxImages } from '../services/work/xlsxStyled.js';
 
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `f3b${Date.now().toString(36)}`;
@@ -109,13 +110,13 @@ describe('CT Work — đợt 3B: báo cáo Excel theo mẫu FPT (HTTP + DB thậ
   });
 
   // ─── A14 ───────────────────────────────────────────────────────
-  it('System 5.3: workflow riêng với 5.2, đúng 3 vòng', async () => {
+  it('System 5.3: workflow riêng với 5.2, tới 4 vòng', async () => {
     const s = await call(staff, 'POST', `/projects/${pid}/fpt-tests/system`, { name: 'Login', description: 'Login workflow', preCondition: 'Accounts seeded' });
     assert.equal(s.status, 201, JSON.stringify(s.raw));
     sysId = s.data.id;
     assert.equal(s.data.kind, 'SYS');
     intId = (await call(staff, 'POST', `/projects/${pid}/fpt-tests/integration`, { name: 'Authentication' })).data.id;
-    const rounds = [{ status: 'Failed', date: '2026-11-10', tester: 'Son' }, { status: 'Passed', date: '2026-11-12', tester: 'Son' }, { status: 'Passed', date: '2026-11-18', tester: 'Tam' }];
+    const rounds = [{ status: 'Failed', date: '2026-11-10', tester: 'Son' }, { status: 'Passed', date: '2026-11-12', tester: 'Son' }, { status: 'Passed', date: '2026-11-18', tester: 'Tam' }, { status: 'Passed', date: '2026-11-25', tester: 'Tam' }];
     const save = await call(staff, 'PUT', `/projects/${pid}/fpt-tests/system/${sysId}/cases`, {
       version: s.data.updatedAt,
       cases: [
@@ -125,8 +126,9 @@ describe('CT Work — đợt 3B: báo cáo Excel theo mẫu FPT (HTTP + DB thậ
     });
     assert.equal(save.status, 200, JSON.stringify(save.raw));
     assert.equal(save.data.stats.passed, 1);
-    const four = await call(staff, 'PUT', `/projects/${pid}/fpt-tests/system/${sysId}/cases`, { cases: [{ description: 'x', rounds: [...rounds, rounds[0]] }] });
-    assert.equal(four.status, 400, '5.3 chỉ có Round 1–3');
+    assert.equal(save.data.cases[0].rounds.length, 4, '5.3 ghi được Round 4');
+    const five = await call(staff, 'PUT', `/projects/${pid}/fpt-tests/system/${sysId}/cases`, { cases: [{ description: 'x', rounds: [...rounds, rounds[0]] }] });
+    assert.equal(five.status, 400, '5.3 chỉ có Round 1–4');
     const sys = await call(viewer, 'GET', `/projects/${pid}/fpt-tests/system`);
     assert.deepEqual(sys.data.modules.map((m: any) => m.name), ['Login']);
     const it = await call(viewer, 'GET', `/projects/${pid}/fpt-tests/integration`);
@@ -152,13 +154,51 @@ describe('CT Work — đợt 3B: báo cáo Excel theo mẫu FPT (HTTP + DB thậ
     const mods = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system`);
     assert.equal(mods.data.modules.length, 1);
     const m = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system/${mods.data.modules[0].id}`);
-    assert.equal(m.data.cases[0].rounds.length, 3);
+    assert.equal(m.data.cases[0].rounds.length, 4);
+    assert.equal(m.data.cases[0].rounds[3].tester, 'Tam');
     assert.equal(m.data.cases[0].evidence, 'https://img/1.png');
+    assert.equal(m.data.cases[0].note, null, 'Evidence ở cột riêng, không lẫn vào Note');
+    assert.equal(m.data.cases[1].actual, 'No error');
     assert.equal((await call(owner, 'GET', `/projects/${pid2}/fpt-tests/integration`)).data.modules.length, 0);
     assert.equal((await call(owner, 'GET', `/projects/${pid2}/fpt-tests/doc`)).data.meta.sysNotes, 'Regression in round 3');
   });
 
   // ─── A3 ────────────────────────────────────────────────────────
+  it('Ảnh Evidence 5.3: tải lên ⇒ token, xem (quyền xem dự án), xuất nhúng ảnh, nhập lại giữ ảnh', async () => {
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==', 'base64');
+    assert.equal((await upload(viewer, `/projects/${pid}/fpt-tests/evidence`, png)).status, 403, 'VIEWER không tải lên');
+    assert.equal((await upload(staff, `/projects/${pid}/fpt-tests/evidence`, Buffer.from('not an image'))).status, 400);
+    const up = await upload(staff, `/projects/${pid}/fpt-tests/evidence`, png);
+    assert.equal(up.status, 201, JSON.stringify(up.raw));
+    assert.match(up.data.token, /^\[img:[a-f0-9]{32}\.png\]$/);
+    const got = await download(viewer, `/projects/${pid}/fpt-tests/evidence/${up.data.file}`);
+    assert.equal(got.status, 200);
+    assert.equal(got.type, 'image/png');
+    assert.ok(got.buf.equals(png));
+    assert.equal((await download(outsider, `/projects/${pid}/fpt-tests/evidence/${up.data.file}`)).status, 404);
+    assert.equal((await download(viewer, `/projects/${pid}/fpt-tests/evidence/..%2F..%2Fsecret.png`)).status, 404);
+    // Gắn vào case đầu của workflow Login rồi xuất: ảnh nằm trong ô Evidence (F) của đúng hàng case.
+    const m = await call(staff, 'GET', `/projects/${pid}/fpt-tests/system/${sysId}`);
+    const cases = m.data.cases.map(({ id: _i, ...c }: any) => c);
+    cases[0].evidence = `${cases[0].evidence}\n${up.data.token}`;
+    assert.equal((await call(staff, 'PUT', `/projects/${pid}/fpt-tests/system/${sysId}/cases`, { version: m.data.updatedAt, cases })).status, 200);
+    const x = await download(viewer, `/projects/${pid}/fpt-tests/export?report=system`);
+    const imgs = readXlsxImages(x.buf).images;
+    assert.equal(imgs.length, 1);
+    assert.deepEqual([imgs[0].sheet, imgs[0].col], ['Login', 6]);
+    const sh = readXlsx(x.buf).find((s) => s.name === 'Login')!;
+    assert.equal(sh.text(imgs[0].row, 6), 'https://img/1.png', 'ô chữ giữ link, token thành ảnh');
+    // Nhập tệp đó vào dự án khác ⇒ ảnh lưu lại kho của dự án đích, case có token.
+    const imp = await upload(owner, `/projects/${pid2}/fpt-tests/import?report=system`, x.buf);
+    assert.equal(imp.status, 200, JSON.stringify(imp.raw));
+    assert.equal(imp.data.evidenceImages, 1);
+    const mods = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system`);
+    const last = mods.data.modules[mods.data.modules.length - 1];
+    const mm = await call(owner, 'GET', `/projects/${pid2}/fpt-tests/system/${last.id}`);
+    assert.equal(mm.data.cases[0].evidence, `https://img/1.png\n${up.data.token}`);
+    assert.equal((await download(owner, `/projects/${pid2}/fpt-tests/evidence/${up.data.file}`)).status, 200);
+  });
+
   it('WBS: cây đánh số + thuộc tính ⇒ độ phức tạp ⇒ man-day', async () => {
     epicNum = await issue('Shopping', 'EPIC');
     storyNum = await issue('Cart screen', 'STORY', { parentNumber: epicNum });

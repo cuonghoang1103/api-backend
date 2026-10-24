@@ -9,12 +9,14 @@
  *   Integration: GET/POST /projects/:pid/fpt-tests/integration · GET/PATCH/DELETE …/integration/:mid
  *                PUT …/integration/:mid/cases
  *   System 5.3:  GET/POST /projects/:pid/fpt-tests/system · GET/PATCH/DELETE …/system/:mid · PUT …/system/:mid/cases
- *                (đợt 3B — cùng bảng work_it_modules, kind SYS, đúng 3 vòng Round 1–3)
+ *                (đợt 3B — cùng bảng work_it_modules, kind SYS; Round 1–4 từ 24/10/2026, trước là 1–3)
  *   Excel:       GET  /projects/:pid/fpt-tests/export?report=unit|integration|system[&module=]
  *                POST /projects/:pid/fpt-tests/import?report=auto|unit|integration|system&mode=append|replace&dryRun=1
  *                     thân = tệp .xlsx nhị phân (application/octet-stream) — tránh bẫy axios đổi FormData thành JSON.
  *                     22/10/2026: mode=replace — ADMIN phải gửi &confirm=<số mục sẽ xoá>; thành viên / token ⇒ 202 + yêu cầu chờ
  *                     trưởng nhóm duyệt. Mọi DELETE ⇒ thùng rác (200 + trashId) hoặc 202 + queued.
+ *   Evidence:    GET  /projects/:pid/fpt-tests/evidence/:file — ảnh chụp Evidence (5.2/5.3) đã nhập/tải lên (quyền xem dự án)
+ *                POST /projects/:pid/fpt-tests/evidence — thân = ảnh PNG/JPEG/GIF ≤ 8 MB ⇒ { file, token: "[img:…]" } (24/10/2026)
  *
  * Quyền kiểm TRONG service (fptTests.service) — route chỉ kiểm đầu vào.
  */
@@ -117,6 +119,23 @@ router.post(`${B}/import`, rawXlsx, asyncHandler(async (req, res) => {
   if (!buf || !buf.length) throw new BadRequestError('Send the .xlsx file as the request body (application/octet-stream)', 'WORK_IMPORT_NO_FILE');
   const out = await fpt.importReport(callerId(req), P(req, 'pid'), buf, { report: q.report, mode: q.mode, dryRun: q.dryRun === '1' || q.dryRun === 'true', confirm: q.confirm });
   ok(res, out, out.queued ? 202 : 200);
+}));
+
+// ─── Ảnh Evidence (24/10/2026) ────────────────────────────────────
+router.get(`${B}/evidence/:file`, asyncHandler(async (req, res) => {
+  const out = await fpt.readEvidenceImage(callerId(req), P(req, 'pid'), String(req.params.file ?? ''));
+  res.setHeader('Content-Type', out.contentType);
+  // Tên tệp = băm nội dung ⇒ bất biến; riêng tư (sau đăng nhập).
+  res.setHeader('Cache-Control', 'private, max-age=86400, immutable');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Content-Security-Policy', "default-src 'none'");
+  res.send(out.data);
+}));
+const rawImage = express.raw({ type: () => true, limit: fpt.MAX_EVIDENCE_IMAGE_BYTES + 1024 });
+router.post(`${B}/evidence`, rawImage, asyncHandler(async (req, res) => {
+  const buf = Buffer.isBuffer(req.body) ? req.body : null;
+  if (!buf || !buf.length) throw new BadRequestError('Send the image as the request body (application/octet-stream)', 'WORK_IMPORT_NO_FILE');
+  ok(res, await fpt.uploadEvidenceImage(callerId(req), P(req, 'pid'), buf), 201);
 }));
 
 export default router;

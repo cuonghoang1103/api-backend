@@ -30,6 +30,10 @@ export interface XStyle {
   numFmt?: string;
 }
 export type XFormula = { f: string; v?: string | number | boolean | null };
+export type ImageExt = 'png' | 'jpeg' | 'gif';
+/** Ảnh nhúng sheet: neo ô (1-based) + lệch trong ô (EMU) + kích thước (EMU; 1 px = 9525 EMU). */
+export interface XImage { row: number; col: number; data: Buffer; ext: ImageExt; cx: number; cy: number; offX?: number; offY?: number }
+export const EMU_PER_PX = 9525;
 export type XValue = string | number | boolean | Date | XFormula | null | undefined;
 interface XCell { v: XValue; s?: XStyle }
 
@@ -40,6 +44,8 @@ export class XSheet {
   readonly rowHeights = new Map<number, number>();
   readonly links: Array<{ ref: string; location: string; display?: string }> = [];
   readonly validations: Array<{ sqref: string; list: string[] }> = [];
+  /** Ảnh nhúng (24/10/2026 — ảnh Evidence của 5.2/5.3): neo góc trên-trái vào ô (row, col), kích thước EMU. */
+  readonly images: XImage[] = [];
   freeze?: { col: number; row: number };
   showGrid = true;
   tabColor?: string;
@@ -71,6 +77,7 @@ export class XSheet {
     this.links.push({ ref: cellRef(row, col), location: `${quoteSheet(sheet)}!A1`, display });
     return this;
   }
+  image(img: XImage): this { this.images.push(img); return this; }
   listValidation(sqref: string, list: string[]): this {
     if (sqref) this.validations.push({ sqref, list });
     return this;
@@ -236,16 +243,64 @@ function sheetXml(sh: XSheet, styles: StyleTable): string {
     : '';
   const pr = sh.tabColor ? `<sheetPr><tabColor rgb="${argb(sh.tabColor)}"/></sheetPr>` : '';
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${pr}<dimension ref="A1:${cellRef(maxRow, maxCol)}"/><sheetViews><sheetView workbookViewId="0"${sh.showGrid ? '' : ' showGridLines="0"'}>${pane}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="13.2"/>${cols ? `<cols>${cols}</cols>` : ''}<sheetData>${rows}</sheetData>${merges}${dv}${links}<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/></worksheet>`;
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${pr}<dimension ref="A1:${cellRef(maxRow, maxCol)}"/><sheetViews><sheetView workbookViewId="0"${sh.showGrid ? '' : ' showGridLines="0"'}>${pane}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="13.2"/>${cols ? `<cols>${cols}</cols>` : ''}<sheetData>${rows}</sheetData>${merges}${dv}${links}<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>${sh.images.length ? '<drawing r:id="rIdDr1"/>' : ''}</worksheet>`;
+}
+
+const IMG_MIME: Record<ImageExt, string> = { png: 'image/png', jpeg: 'image/jpeg', gif: 'image/gif' };
+
+/** Phần drawing của một sheet có ảnh: mỗi ảnh một oneCellAnchor (ảnh không co giãn theo ô — như mẫu trường). */
+function drawingXml(images: XImage[]): string {
+  const anchors = images.map((im, i) => `<xdr:oneCellAnchor><xdr:from><xdr:col>${im.col - 1}</xdr:col><xdr:colOff>${Math.round(im.offX ?? 0)}</xdr:colOff><xdr:row>${im.row - 1}</xdr:row><xdr:rowOff>${Math.round(im.offY ?? 0)}</xdr:rowOff></xdr:from><xdr:ext cx="${Math.round(im.cx)}" cy="${Math.round(im.cy)}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${i + 2}" name="Evidence ${i + 1}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rIdImg${i + 1}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`).join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${anchors}</xdr:wsDr>`;
+}
+
+/** Kích thước điểm ảnh PNG / JPEG / GIF (đọc đầu tệp); không nhận ra ⇒ null. */
+export function imageSize(b: Buffer): { w: number; h: number; ext: ImageExt } | null {
+  if (b.length > 24 && b.readUInt32BE(0) === 0x89504e47) return { w: b.readUInt32BE(16), h: b.readUInt32BE(20), ext: 'png' };
+  if (b.length > 10 && b.toString('latin1', 0, 3) === 'GIF') return { w: b.readUInt16LE(6), h: b.readUInt16LE(8), ext: 'gif' };
+  if (b.length > 4 && b[0] === 0xff && b[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m === 0xd8 || m === 0x01 || (m >= 0xd0 && m <= 0xd7)) { i += 2; continue; }
+      const len = b.readUInt16BE(i + 2);
+      if ((m >= 0xc0 && m <= 0xcf) && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { w: b.readUInt16BE(i + 7), h: b.readUInt16BE(i + 5), ext: 'jpeg' };
+      i += 2 + len;
+    }
+  }
+  return null;
 }
 
 export function writeXlsx(sheets: XSheet[], meta: { title?: string; creator?: string } = {}): Buffer {
   const styles = new StyleTable();
   const built = sheets.map((s) => sheetXml(s, styles));
   const zip = new AdmZip();
+  // Ảnh: drawingN.xml cho sheet thứ N có ảnh, media đánh số chung toàn tệp.
+  const drawingOverrides: string[] = [];
+  const usedExt = new Set<ImageExt>();
+  let mediaNo = 0, drawingNo = 0;
+  sheets.forEach((sh, i) => {
+    if (!sh.images.length) return;
+    drawingNo++;
+    zip.addFile(`xl/worksheets/_rels/sheet${i + 1}.xml.rels`, Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdDr1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing${drawingNo}.xml"/></Relationships>`));
+    const rels = sh.images.map((im, k) => {
+      mediaNo++;
+      usedExt.add(im.ext);
+      zip.addFile(`xl/media/image${mediaNo}.${im.ext}`, im.data);
+      return `<Relationship Id="rIdImg${k + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image${mediaNo}.${im.ext}"/>`;
+    }).join('');
+    zip.addFile(`xl/drawings/_rels/drawing${drawingNo}.xml.rels`, Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels}</Relationships>`));
+    zip.addFile(`xl/drawings/drawing${drawingNo}.xml`, Buffer.from(drawingXml(sh.images)));
+    drawingOverrides.push(`<Override PartName="/xl/drawings/drawing${drawingNo}.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>`);
+  });
+  const mediaDefaults = [...usedExt].map((e) => `<Default Extension="${e}" ContentType="${IMG_MIME[e]}"/>`).join('');
   const now = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
   zip.addFile('[Content_Types].xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${built.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`));
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${mediaDefaults}<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${built.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}${drawingOverrides.join('')}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`));
   zip.addFile('_rels/.rels', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`));
   zip.addFile('docProps/core.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -399,4 +454,83 @@ export function readXlsx(buf: Buffer): RSheet[] {
     });
   }
   return out;
+}
+
+// ─── Đọc ảnh nhúng (Evidence 5.2/5.3) ────────────────────────────
+
+export interface RImage { sheet: string; row: number; col: number; data: Buffer; ext: ImageExt }
+
+/**
+ * Ảnh chụp nhúng trong từng sheet (24/10/2026): mẫu 5.2/5.3 của nhóm dán ảnh Evidence thẳng vào cột Evidence —
+ * bộ đọc chữ bỏ qua `xl/media/*` nên trước đây nhập xong là MẤT hết ảnh. Trả ô neo (1-based) của góc trên-trái ảnh.
+ * Chỉ PNG/JPEG/GIF; trần từng ảnh `maxEach`, trần tổng `maxTotal` (giải nén có chặn — zip bomb), quá trần ⇒ bỏ ảnh đó.
+ */
+export function readXlsxImages(buf: Buffer, opts: { maxEach?: number; maxTotal?: number; maxCount?: number } = {}): { images: RImage[]; skipped: number } {
+  const maxEach = opts.maxEach ?? 8 * 1024 * 1024, maxTotal = opts.maxTotal ?? 80 * 1024 * 1024, maxCount = opts.maxCount ?? 600;
+  let zip: AdmZip;
+  try { zip = new AdmZip(buf); } catch { return { images: [], skipped: 0 }; }
+  const read = zipXmlReader(zip);
+  const resolve = (base: string, target: string) => {
+    if (target.startsWith('/')) return target.slice(1);
+    const parts = base.split('/').slice(0, -1);
+    for (const seg of target.split('/')) { if (seg === '..') parts.pop(); else if (seg && seg !== '.') parts.push(seg); }
+    return parts.join('/');
+  };
+  const relsOf = (part: string) => {
+    const dir = part.split('/').slice(0, -1).join('/');
+    const file = part.split('/').pop();
+    const xml = read(`${dir}/_rels/${file}.rels`) ?? '';
+    const m = new Map<string, { type: string; target: string }>();
+    for (const r of xml.matchAll(/<Relationship\b[^>]*>/g)) {
+      const id = attr(r[0], 'Id'), t = attr(r[0], 'Target'), ty = attr(r[0], 'Type') ?? '';
+      if (id && t && attr(r[0], 'TargetMode') !== 'External') m.set(id, { type: ty, target: resolve(part, t) });
+    }
+    return m;
+  };
+  const wb = read('xl/workbook.xml');
+  if (!wb) return { images: [], skipped: 0 };
+  const wbRels = relsOf('xl/workbook.xml');
+  const images: RImage[] = [];
+  let total = 0, skipped = 0;
+  const cache = new Map<string, Buffer | null>();
+  const media = (path: string): Buffer | null => {
+    if (cache.has(path)) return cache.get(path)!;
+    const e = zip.getEntry(path);
+    let out: Buffer | null = null;
+    if (e && !e.isDirectory && e.header.size <= maxEach && total + e.header.size <= maxTotal) {
+      try {
+        out = e.header.method === 0 ? e.getCompressedData() : e.header.method === 8 ? zlib.inflateRawSync(e.getCompressedData(), { maxOutputLength: maxEach }) : null;
+      } catch { out = null; }
+      if (out) total += out.length;
+    }
+    cache.set(path, out);
+    return out;
+  };
+  for (const m of wb.matchAll(/<sheet\b[^>]*\/?>/g)) {
+    const name = attr(m[0], 'name') ?? '';
+    const rid = attr(m[0], 'r:id');
+    const sheetPart = rid ? wbRels.get(rid)?.target : undefined;
+    if (!sheetPart) continue;
+    for (const [, rel] of relsOf(sheetPart)) {
+      if (!/\/drawing$/.test(rel.type)) continue;
+      const dxml = read(rel.target);
+      if (!dxml) continue;
+      const drels = relsOf(rel.target);
+      for (const a of dxml.matchAll(/<xdr:(?:oneCellAnchor|twoCellAnchor|absoluteAnchor)\b[\s\S]*?<\/xdr:(?:oneCellAnchor|twoCellAnchor|absoluteAnchor)>/g)) {
+        const from = /<xdr:from>([\s\S]*?)<\/xdr:from>/.exec(a[0])?.[1];
+        const embed = /<a:blip\b[^>]*r:embed="([^"]+)"/.exec(a[0])?.[1];
+        if (!from || !embed) continue;
+        const col = Number(/<xdr:col>(\d+)<\/xdr:col>/.exec(from)?.[1] ?? NaN);
+        const row = Number(/<xdr:row>(\d+)<\/xdr:row>/.exec(from)?.[1] ?? NaN);
+        const target = drels.get(embed)?.target;
+        if (!Number.isFinite(col) || !Number.isFinite(row) || !target) continue;
+        if (images.length >= maxCount) { skipped++; continue; }
+        const data = media(target);
+        const kind = data ? imageSize(data) : null;
+        if (!data || !kind) { skipped++; continue; }
+        images.push({ sheet: name, row: row + 1, col: col + 1, data, ext: kind.ext });
+      }
+    }
+  }
+  return { images, skipped };
 }

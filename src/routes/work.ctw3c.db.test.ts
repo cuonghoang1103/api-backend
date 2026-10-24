@@ -214,7 +214,7 @@ describe('CT Work đợt 3C — registry lệnh, Ask AI, agent BUILTIN (HTTP + D
     assert.deepEqual(apply.json.added, ['UTCID04', 'UTCID05']);
   });
 
-  it('R3 5.3: tạo workflow → thêm case (bước) → ghi vòng 2 (thêm vòng) → vượt 3 vòng ⇒ lỗi', async () => {
+  it('R3 5.3: tạo workflow → thêm case (bước) → ghi vòng 2 (thêm vòng) → vòng 4 được (24/10/2026), vượt 4 vòng ⇒ lỗi', async () => {
     const c = await tool(ext.token, 'fpt_it_create_module', { project: 'FP', kind: 'system', name: 'Checkout flow', idPrefix: 'CK' });
     assert.equal(c.isError, false, c.text);
     const add = await tool(ext.token, 'fpt_it_add_cases', { project: 'FP', kind: 'system', module: 'Checkout flow', cases: [{ description: 'Pay by card', procedure: '1. Add item\n2. Pay', expected: 'Order paid' }, { description: 'Card declined', expected: 'Error shown' }] });
@@ -226,7 +226,10 @@ describe('CT Work đợt 3C — registry lệnh, Ask AI, agent BUILTIN (HTTP + D
     assert.equal(cs.rounds[0].status, null);
     assert.equal(cs.rounds[1].status, 'Failed');
     assert.equal(cs.actual, 'No error');
-    const over = await tool(ext.token, 'fpt_it_record_round', { project: 'FP', kind: 'system', module: 'Checkout flow', results: [{ case: 1, round: 4, status: 'Passed' }] });
+    const r4 = await tool(ext.token, 'fpt_it_record_round', { project: 'FP', kind: 'system', module: 'Checkout flow', results: [{ case: 1, round: 4, status: 'Passed' }] });
+    assert.equal(r4.isError, false, '5.3 có Round 4 (mẫu ABClinic)');
+    assert.equal(r4.json.sheet.cases[0].rounds.length, 4);
+    const over = await tool(ext.token, 'fpt_it_record_round', { project: 'FP', kind: 'system', module: 'Checkout flow', results: [{ case: 1, round: 5, status: 'Passed' }] });
     assert.equal(over.isError, true);
     const wrongKind = await tool(ext.token, 'fpt_it_get', { project: 'FP', kind: 'integration', module: c.json.created.id });
     assert.equal(wrongKind.isError, true, 'module 5.3 không đọc được dưới tên 5.2');

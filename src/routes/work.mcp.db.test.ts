@@ -667,4 +667,33 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     // REST read-only token vẫn bị chặn POST như trước khi tách lõi xác thực.
     assert.equal((await call(readOnly, 'POST', `/projects/${pid}/issues/${mainIssue.number}/comments`, { bodyJson: { type: 'doc', content: [] } })).status, 403);
   });
+  it('create_project (token người): mô-đun mặc định như web theo mẫu (SWT301 ⇒ SCHOOL ⇒ Resources), modules bật thêm, agent bị từ chối', async () => {
+    const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: wsId }, select: { slug: true } });
+    const t = await call(owner, 'POST', '/me/api-tokens', { name: 'proj', scopes: ['read', 'write'] });
+    const person = { token: t.data.token as string };
+    const a = await tool(person, 'create_project', { workspace: ws.slug, key: 'LAB4', name: 'SWT301 Lab 4', template: 'SWT301' });
+    assert.equal(a.isError, false, a.text);
+    assert.equal(a.json.kind, 'SCHOOL');
+    assert.deepEqual(a.json.modules, ['resources'], 'giống hộp thoại web: SCHOOL bật Resources (trước 24/10 tắt hết)');
+    const modsOf = async (key: string) => {
+      const p = await prisma.workProject.findFirstOrThrow({ where: { workspaceId: wsId, key }, select: { kind: true, settings: true } });
+      return { kind: p.kind, modules: (p.settings as any).modules as Record<string, boolean> };
+    };
+    const lab4 = await modsOf('LAB4');
+    assert.equal(lab4.kind, 'SCHOOL');
+    assert.equal(lab4.modules.resources, true);
+    assert.equal(lab4.modules.docs, false);
+    const b = await tool(person, 'create_project', { workspace: ws.slug, key: 'LAB5', name: 'SWT301 Lab 5', template: 'SWT301', modules: { docs: true, meetings: true, reports: true } });
+    assert.equal(b.isError, false, b.text);
+    assert.deepEqual([...b.json.modules].sort(), ['docs', 'meetings', 'reports', 'resources']);
+    const lab5 = await modsOf('LAB5');
+    assert.deepEqual([lab5.modules.docs, lab5.modules.meetings, lab5.modules.reports, lab5.modules.resources, lab5.modules.finance], [true, true, true, true, false]);
+    const c = await tool(person, 'create_project', { workspace: ws.slug, key: 'CL1', name: 'Client job', template: 'FREELANCE' });
+    assert.equal(c.json.kind, 'CLIENT');
+    assert.ok(c.json.modules.includes('clientPortal') && c.json.modules.includes('finance'), 'FREELANCE ⇒ CLIENT ⇒ mô-đun studio như web');
+    const d = await tool(person, 'create_project', { workspace: ws.slug, key: 'CAP1', name: 'Capstone', template: 'CAPSTONE' });
+    assert.ok(['stages', 'docs', 'meetings', 'resources'].every((m) => d.json.modules.includes(m)), d.text);
+    const byAgent = await tool(agent, 'create_project', { workspace: ws.slug, key: 'NOPE', name: 'x', template: 'BLANK' });
+    assert.equal(byAgent.isError, true);
+  });
 });

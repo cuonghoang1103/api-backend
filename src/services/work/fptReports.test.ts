@@ -3,7 +3,8 @@
  *   npx tsx --test src/services/work/fptReports.test.ts
  *
  *   1. Bảng quy đổi độ phức tạp (A3): phân loại theo field/transaction, man-day, cây WBS 1.0/1.1/1.1.1, tổng không đếm trùng.
- *   2. System Test 5.3 (A14): xuất ⇒ đọc lại đúng sheet/cột/3 vòng; vòng tròn xuất ⇒ nhập; nhận diện loại tệp.
+ *   2. System Test 5.3 (A14): xuất ⇒ đọc lại đúng sheet/cột/4 vòng + cột Evidence (mẫu ABClinic 24/10/2026), công thức
+ *      thống kê đúng từng vòng; vòng tròn xuất ⇒ nhập; tệp bố cục CŨ (Workflow, 3 vòng, Evidence trong Note) vẫn nhập; nhận diện loại tệp.
  *   3. Project Tracking SEP490 / Template1 / Template4 (A23), Weekly (A21), AI Usage (A29): tên sheet + tiêu đề cột như mẫu.
  *   4. Có tệp mẫu thật của trường trên máy ⇒ so TÊN SHEET + TIÊU ĐỀ CỘT với tệp mẫu (không có thì bỏ qua).
  */
@@ -19,9 +20,10 @@ import {
   type T1Row, type WbsSourceIssue, type WeeklyData,
 } from './fptReports.js';
 import {
-  buildSystemSheets, detectReport, packSysNote, parseIntegrationWorkbook, unpackSysNote, type DocMeta, type ItModuleData,
+  appendEvidenceImages, assignImagesToCases, buildSystemSheets, detectReport, evidenceImageFiles, packSysNote, parseIntegrationWorkbook, stripEvidenceImages,
+  unpackSysNote, type DocMeta, type ItModuleData,
 } from './fptTests.js';
-import { readXlsx, writeXlsx, type RSheet } from './xlsxStyled.js';
+import { cellRef, imageSize, readXlsx, readXlsxImages, writeXlsx, XSheet, type RSheet } from './xlsxStyled.js';
 
 const rowOf = (sh: RSheet, r: number, from = 1, to = 15) => Array.from({ length: to - from + 1 }, (_, i) => sh.text(r, from + i));
 
@@ -124,57 +126,143 @@ const login: ItModuleData = {
 };
 const pay: ItModuleData = { ...login, name: 'Pay Invoice', idPrefix: 'PI', cases: [{ ...login.cases[2], section: null, rounds: [{ status: 'N/A', date: null, tester: null }] }] };
 
-describe('A14 — System Test 5.3', () => {
-  const sheets = readXlsx(writeXlsx(buildSystemSheets({ meta, changes: [], workflows: [login, pay] })));
+describe('A14 — System Test 5.3 (bố cục mẫu ABClinic: 4 vòng + Evidence)', () => {
+  const four = { ...login, cases: [{ ...login.cases[0], rounds: [...login.cases[0].rounds, { status: 'Passed' as const, date: '2026-11-25', tester: 'Tam' }] }, ...login.cases.slice(1)] };
+  const built = buildSystemSheets({ meta, changes: [], workflows: [four, pay] });
+  const sheets = readXlsx(writeXlsx(built));
   const by = (n: string) => sheets.find((s) => s.name === n)!;
-  it('sheet: Cover · Test Cases · Test Statistics · 1 sheet/workflow', () => {
+  /** Công thức đã ghi của một ô (đọc thẳng từ XSheet trước khi đóng gói). */
+  const fx = (n: string, r: number, c: number) => (built.find((s) => s.name === n)!.cells.get(cellRef(r, c))?.v as { f?: string } | undefined)?.f;
+  it('sheet: Cover · Test Cases · Test Statistics · 1 sheet/feature; mã tài liệu Cover = Test Statistics', () => {
     assert.deepEqual(sheets.map((s) => s.name), ['Cover', 'Test Cases', 'Test Statistics', 'Login', 'Pay Invoice']);
-    assert.equal(by('Cover').text(2, 2), 'SYSTEM TEST REPORT DOCUMENT');
+    assert.equal(by('Cover').text(2, 2), 'TEST REPORT DOCUMENT');
     assert.equal(by('Cover').text(6, 2), 'OBS_TestReport5.3_v1.0');
+    assert.equal(by('Test Statistics').text(5, 3), 'OBS_TestReport5.3_v1.0', 'Statistics khớp Cover (bản cũ ghi _Test Report_)');
     assert.equal(detectReport(sheets), 'system');
   });
-  it('Test Cases + Test Statistics đúng nhãn/cột của mẫu', () => {
+  it('Test Cases + Test Statistics đúng nhãn/cột của mẫu (bảng ở hàng 9)', () => {
     const tc = by('Test Cases');
     assert.equal(tc.text(1, 4), 'TEST CASE LIST');
     assert.deepEqual(rowOf(tc, 8, 2, 6), ['No', 'Function Name', 'Sheet Name', 'Description', 'Pre-Condition']);
     const ts = by('Test Statistics');
-    assert.equal(ts.text(1, 2), 'TEST STATISTICS');
-    assert.deepEqual(rowOf(ts, 10, 2, 8), ['No', 'Module code', 'Passed', 'Failed', 'Pending', 'N/A', 'Number of  test cases']);
-    // Login vòng cuối = 3: 1 Passed; 2 ca chưa chạy vòng 3 ⇒ Pending.
-    assert.deepEqual([ts.get(11, 4), ts.get(11, 5), ts.get(11, 6), ts.get(11, 7), ts.get(11, 8)], [1, 0, 2, 0, 3]);
-    assert.equal(ts.text(13, 3), 'Sub total');
+    assert.equal(ts.text(1, 2), 'SYSTEM TEST REPORT');
+    assert.deepEqual(rowOf(ts, 9, 2, 8), ['No', 'Module code', 'Passed', 'Failed', 'Pending', 'N/A', 'Number of  test cases']);
+    // Login vòng cuối = 4: 1 Passed; 2 ca chưa chạy vòng 4 ⇒ Pending. Công thức trỏ hàng Round 4 (B9…).
+    assert.deepEqual([ts.get(10, 4), ts.get(10, 5), ts.get(10, 6), ts.get(10, 7), ts.get(10, 8)], [1, 0, 2, 0, 3]);
+    assert.equal(fx('Test Statistics', 10, 4), "'Login'!B9");
+    assert.equal(ts.text(12, 3), 'Sub total');
+    assert.equal(fx('Test Statistics', 12, 4), 'SUM(D10:D11)', 'Sub total cộng đúng dải dữ liệu');
+    assert.equal(fx('Test Statistics', 5, 3), fx('Cover', 6, 2)?.replace(/^B5/, 'C4'), 'cùng công thức mã tài liệu');
+    assert.equal(ts.get(12, 8), 4);
   });
-  it('sheet workflow: Workflow/Test requirement/Number of TCs, Round 1–3, bảng ở hàng 10', () => {
+  it('sheet feature: nhãn Feature, Round 1–4 ở hàng 6–9, bảng ở hàng 11 có cột Evidence riêng, công thức đúng cột từng vòng', () => {
     const s = by('Login');
-    assert.deepEqual([s.text(2, 1), s.text(3, 1), s.text(4, 1), s.text(5, 1)], ['Workflow', 'Test requirement', 'Number of TCs', 'Testing Round']);
-    assert.deepEqual([s.text(6, 1), s.text(7, 1), s.text(8, 1)], ['Round 1', 'Round 2', 'Round 3']);
-    assert.equal(s.text(9, 1), '', 'không có Round 4');
-    assert.deepEqual(rowOf(s, 10, 1, 15), ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions', 'Round 1', 'Test date', 'Tester', 'Round 2', 'Test date', 'Tester', 'Round 3', 'Test date', 'Tester', 'Note']);
-    assert.equal(s.text(11, 1), 'Scenario A');
-    assert.equal(s.text(12, 1), '<LG1>');
+    assert.deepEqual([s.text(2, 1), s.text(3, 1), s.text(4, 1), s.text(5, 1)], ['Feature', 'Test requirement', 'Number of TCs', 'Testing Round']);
+    assert.deepEqual([6, 7, 8, 9].map((r) => s.text(r, 1)), ['Round 1', 'Round 2', 'Round 3', 'Round 4']);
+    assert.deepEqual(rowOf(s, 11, 1, 20).map((x) => x.trim()), ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions', 'Evidence', '',
+      'Round 1', 'Test date', 'Tester', 'Round 2', 'Test date', 'Tester', 'Round 3', 'Test date', 'Tester', 'Round 4', 'Test date', 'Tester', 'Note']);
+    assert.ok(s.merges.includes('F11:G11'), 'Evidence gộp F:G như mẫu');
+    assert.equal(s.text(12, 1), 'Scenario A');
+    assert.equal(s.text(13, 1), '<LG1>');
+    assert.equal(s.text(13, 6), 'https://img/1.png', 'Evidence ở cột riêng');
+    assert.equal(s.text(13, 20), '', 'Note không còn gói Evidence');
+    assert.deepEqual([s.text(13, 17), s.text(13, 18), s.text(13, 19)], ['Passed', '2026-11-25', 'Tam'], 'Round 4 ở Q/R/S');
     assert.deepEqual([s.get(6, 2), s.get(6, 3)], [0, 2], 'Round 1: 0 Passed, 2 Failed');
-    assert.equal(s.text(2, 18), 'Passed', 'danh sách thả xuống ở R2:R5 như mẫu');
+    assert.deepEqual([s.get(9, 2), s.get(9, 3)], [1, 0], 'Round 4: 1 Passed');
+    // Mẫu của cô: N/A của Round 2/3 trỏ cột Round 1, phạm vi lệch dòng — ở đây mọi ô một vòng cùng cột, cùng dải.
+    const cols = ['H', 'K', 'N', 'Q'];
+    for (let rd = 0; rd < 4; rd++) for (let i = 0; i < 4; i++) {
+      assert.equal(fx('Login', 6 + rd, 2 + i), `COUNTIF($${cols[rd]}$12:$${cols[rd]}$1000,${'BCDE'[i]}$5)`, `Round ${rd + 1} cột ${'BCDE'[i]}`);
+    }
+    assert.equal(fx('Login', 4, 2), 'COUNTIF(A12:A1000,"*<LG*")');
+    assert.equal(s.text(2, 23), 'Passed', 'danh sách thả xuống ở W2:W5 như mẫu');
   });
-  it('vòng tròn xuất ⇒ nhập giữ case, 3 vòng, Evidence/Actual gói trong Note', () => {
+  it('vòng tròn xuất ⇒ nhập giữ case, 4 vòng, Evidence/Actual/Note tách đúng', () => {
     const parsed = parseIntegrationWorkbook(sheets, { system: true });
+    assert.deepEqual(parsed.warnings, []);
     assert.equal(parsed.modules.length, 2);
     const l = parsed.modules[0];
     assert.equal(l.name, 'Login');
     assert.equal(l.idPrefix, 'LG');
-    assert.equal(l.cases.length, 3);
-    assert.equal(l.cases[0].rounds.length, 3);
-    assert.equal(l.cases[0].rounds[2].tester, 'Tam');
-    assert.equal(l.cases[0].evidence, 'https://img/1.png');
-    assert.equal(l.cases[1].actual, 'No error');
-    assert.equal(l.cases[1].note, 'Bug OBS-9');
-    assert.equal(l.cases[1].testData, 'phone=');
-    assert.equal(l.cases[2].section, 'Scenario B');
+    assert.deepEqual(l.cases, four.cases);
+    assert.equal(l.cases[0].rounds.length, 4);
     assert.equal(parsed.cover.issueDate, '2026-11-20');
     assert.equal(parsed.notes, 'Round 3 = regression');
   });
-  it('gói/tách Note của 5.3', () => {
+  it('tệp 5.3 bố cục CŨ (Workflow, hàng 10, 3 vòng, Evidence gói trong Note) vẫn nhập được', () => {
+    const old = new XSheet('Login');
+    old.set(2, 1, 'Workflow').set(2, 2, 'Login').set(3, 1, 'Test requirement').set(3, 2, 'UI');
+    ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions', 'Round 1', 'Test date', 'Tester', 'Round 2', 'Test date', 'Tester', 'Round 3', 'Test date', 'Tester', 'Note']
+      .forEach((t, i) => old.set(10, i + 1, t));
+    old.set(11, 1, 'Scenario A');
+    old.set(12, 1, '<LG1>').set(12, 2, 'Show login page').set(12, 4, 'Form shown').set(12, 6, 'Failed').set(12, 9, 'Passed').set(12, 12, 'Passed').set(12, 14, 'Tam')
+      .set(12, 15, packSysNote('No error', 'https://img/1.png', 'Bug 9'));
+    const cover = new XSheet('Cover');
+    cover.set(2, 2, 'SYSTEM TEST REPORT DOCUMENT');
+    const legacy = readXlsx(writeXlsx([cover, old]));
+    assert.equal(detectReport(legacy), 'system');
+    const p = parseIntegrationWorkbook(legacy, { system: true });
+    const c = p.modules[0].cases[0];
+    assert.equal(p.modules[0].name, 'Login');
+    assert.deepEqual(c.rounds.map((r) => r.status), ['Failed', 'Passed', 'Passed']);
+    assert.equal(c.rounds[2].tester, 'Tam');
+    assert.deepEqual([c.evidence, c.actual, c.note, c.section], ['https://img/1.png', 'No error', 'Bug 9', 'Scenario A']);
+  });
+  it('nhận diện 5.3 theo mẫu ABClinic (Cover chỉ ghi "TEST REPORT DOCUMENT", nhãn Feature)', () => {
+    const sh = new XSheet('Authentication');
+    sh.set(2, 1, 'Feature').set(2, 2, 'Authentication').set(11, 1, 'Test Case ID').set(11, 2, 'Test Case Description');
+    const cover = new XSheet('Cover');
+    cover.set(2, 2, 'TEST REPORT DOCUMENT').set(6, 1, 'Document Code').set(6, 2, 'ISSVSG_TestReport5.3_v1.0');
+    assert.equal(detectReport(readXlsx(writeXlsx([cover, sh]))), 'system');
+    const ts = new XSheet('Test Statistics');
+    ts.set(1, 2, 'SYSTEM TEST REPORT');
+    assert.equal(detectReport(readXlsx(writeXlsx([new XSheet('Cover'), ts, sh]))), 'system');
+    assert.equal(detectReport(readXlsx(writeXlsx([new XSheet('Cover'), sh]))), 'integration', 'không dấu hiệu 5.3 ⇒ 5.2');
+  });
+  it('gói/tách Note của 5.3 (bố cục cũ)', () => {
     assert.deepEqual(unpackSysNote(packSysNote('500 page', 'http://x', 'see bug')), { actual: '500 page', note: 'see bug', evidence: 'http://x' });
     assert.deepEqual(unpackSysNote('evidence: in the middle of a sentence'), { actual: null, note: 'evidence: in the middle of a sentence', evidence: null });
+  });
+});
+
+describe('Ảnh Evidence 5.2/5.3 (nhập không còn mất ảnh chụp, xuất nhúng lại)', () => {
+  // PNG 1×1 (đỏ) — đủ để kiểm IHDR + đóng gói.
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==', 'base64');
+  it('token [img:…]: thêm không trùng, tách tệp, gỡ khỏi chữ', () => {
+    const t = appendEvidenceImages('https://drive/x', ['a'.repeat(32) + '.png', 'a'.repeat(32) + '.png', 'b'.repeat(32) + '.jpeg']);
+    assert.equal(t, `https://drive/x\n[img:${'a'.repeat(32)}.png]\n[img:${'b'.repeat(32)}.jpeg]`);
+    assert.deepEqual(evidenceImageFiles(t), ['a'.repeat(32) + '.png', 'b'.repeat(32) + '.jpeg']);
+    assert.equal(stripEvidenceImages(t), 'https://drive/x');
+    assert.deepEqual(imageSize(png), { w: 1, h: 1, ext: 'png' });
+  });
+  it('gắn ảnh vào case theo hàng neo (ảnh cao tràn xuống vẫn thuộc case trên; ảnh trên case đầu bị bỏ)', () => {
+    assert.deepEqual(assignImagesToCases([13, 14, 20], [{ row: 13, col: 6 }, { row: 16, col: 7 }, { row: 22, col: 6 }, { row: 5, col: 6 }]), [0, 1, 2, -1]);
+  });
+  it('xuất ⇒ ảnh nhúng ở ô Evidence của đúng case ⇒ nhập lại đọc ra đúng case', () => {
+    const wf: ItModuleData = { ...login, cases: login.cases.map((c, i) => (i === 1 ? { ...c, evidence: `see bug\n[img:${'c'.repeat(32)}.png]`, evidenceImages: [{ data: png, ext: 'png' as const, w: 1, h: 1 }] } : c)) };
+    const buf = writeXlsx(buildSystemSheets({ meta, changes: [], workflows: [wf] }));
+    const { images, skipped } = readXlsxImages(buf);
+    assert.equal(skipped, 0);
+    assert.equal(images.length, 1);
+    assert.deepEqual([images[0].sheet, images[0].row, images[0].col, images[0].ext], ['Login', 14, 6, 'png']);
+    assert.ok(images[0].data.equals(png));
+    const sheets = readXlsx(buf);
+    assert.equal(sheets.find((x) => x.name === 'Login')!.text(14, 6), 'see bug', 'ô chữ không còn token');
+    const p = parseIntegrationWorkbook(sheets, { system: true });
+    const m = p.modules[0];
+    assert.deepEqual(assignImagesToCases(m.caseRows!, images), [1]);
+  });
+  it('mẫu ABClinic thật: ảnh Evidence đọc được và gắn vào case', (t) => {
+    const dl = path.join(os.homedir(), 'Downloads');
+    const f = fs.existsSync(dl) ? fs.readdirSync(dl).find((x) => /^ABClinic.*Report5\.3.*\.xlsx$/i.test(x)) : undefined;
+    if (!f) return t.skip('không có tệp mẫu');
+    const buf = fs.readFileSync(path.join(dl, f));
+    const { images } = readXlsxImages(buf);
+    assert.ok(images.length >= 100, `đọc được ${images.length} ảnh`);
+    const p = parseIntegrationWorkbook(readXlsx(buf), { system: true });
+    let attached = 0;
+    for (const m of p.modules) attached += assignImagesToCases(m.caseRows!, images.filter((x) => x.sheet === m.sheetName)).filter((i) => i >= 0).length;
+    assert.ok(attached >= images.length * 0.95, `${attached}/${images.length} ảnh gắn được vào case`);
   });
 });
 
@@ -295,18 +383,41 @@ const tpl = (...p: string[]) => { const f = path.join(DOCS, ...p); return fs.exi
 const heads = (sh: RSheet, r: number, n: number) => rowOf(sh, r, 1, n).map((x) => x.replace(/\s+/g, ' ').trim());
 
 describe('So với tệp mẫu thật (bỏ qua nếu không có)', () => {
-  it('Report5.3_System Test.xlsx: tiêu đề sheet workflow + Test Statistics trùng', (t) => {
+  it('Report5.3_System Test.xlsx (mẫu CŨ 3 vòng): vẫn nhập được + nhận đúng loại', (t) => {
     const real = tpl('Report Đồ án', 'Report5.3_System Test.xlsx');
     if (!real) return t.skip('không có tệp mẫu');
     const mine = readXlsx(writeXlsx(buildSystemSheets({ meta, changes: [], workflows: [login] })));
     assert.deepEqual(mine.slice(0, 3).map((s) => s.name), real.slice(0, 3).map((s) => s.name));
-    const rw = real.find((s) => s.name === 'Login')!;
-    assert.deepEqual(heads(mine[3], 10, 15), heads(rw, 10, 15));
-    assert.deepEqual([1, 2, 3, 4, 5, 6, 7, 8].map((r) => mine[3].text(r, 1)), [1, 2, 3, 4, 5, 6, 7, 8].map((r) => rw.text(r, 1)));
-    assert.deepEqual(heads(mine[2], 10, 8), heads(real.find((s) => s.name === 'Test Statistics')!, 10, 8));
     assert.deepEqual(heads(mine[1], 8, 6), heads(real.find((s) => s.name === 'Test Cases')!, 8, 6));
-    assert.equal(parseIntegrationWorkbook(real, { system: true }).modules.length >= 5, true, 'nhập được tệp mẫu của nhóm');
+    const p = parseIntegrationWorkbook(real, { system: true });
+    assert.equal(p.modules.length >= 5, true, 'nhập được tệp mẫu của nhóm');
+    assert.ok(p.modules.some((m) => m.cases.some((c) => c.rounds.length === 3)), 'đọc đủ 3 vòng của bố cục cũ');
     assert.equal(detectReport(real), 'system');
+  });
+  it('ABClinic Report5.3 (mẫu cô gửi 24/10, 4 vòng + Evidence): tiêu đề cột + nhãn trùng, nhập đủ case', (t) => {
+    const dl = path.join(os.homedir(), 'Downloads');
+    const f = fs.existsSync(dl) ? fs.readdirSync(dl).find((x) => /^ABClinic.*Report5\.3.*\.xlsx$/i.test(x)) : undefined;
+    if (!f) return t.skip('không có tệp mẫu');
+    const real = readXlsx(fs.readFileSync(path.join(dl, f)));
+    const mine = readXlsx(writeXlsx(buildSystemSheets({ meta, changes: [], workflows: [login] })));
+    assert.deepEqual(mine.slice(0, 3).map((s) => s.name), real.slice(0, 3).map((s) => s.name));
+    const rw = real.find((s) => s.name === 'Authentication')!;
+    assert.deepEqual(heads(mine[3], 11, 20), heads(rw, 11, 20), 'hàng tiêu đề bảng case');
+    assert.deepEqual([1, 2, 3, 4, 5, 6, 7, 8, 9].map((r) => mine[3].text(r, 1)), [1, 2, 3, 4, 5, 6, 7, 8, 9].map((r) => rw.text(r, 1)), 'nhãn cột A');
+    const rts = real.find((s) => s.name === 'Test Statistics')!;
+    assert.deepEqual(heads(mine[2], 9, 8), heads(rts, 9, 8));
+    assert.equal(mine[2].text(1, 2), rts.text(1, 2));
+    assert.equal(mine[0].text(2, 2), real[0].text(2, 2));
+    assert.deepEqual(heads(mine[1], 8, 6), heads(real.find((s) => s.name === 'Test Cases')!, 8, 6));
+    assert.equal(detectReport(real), 'system');
+    const p = parseIntegrationWorkbook(real, { system: true });
+    assert.equal(p.modules.length, 6);
+    // Số case = ô "Number of TCs" (giá trị tính sẵn) của từng sheet.
+    for (const m of p.modules) {
+      const sh = real.find((s) => s.name === m.sheetName)!;
+      assert.equal(m.cases.length, Number(sh.get(4, 2)), m.name);
+    }
+    assert.ok(p.modules.every((m) => m.cases.every((c) => c.rounds.length === 4)), 'đủ 4 vòng');
   });
   it('Report2_Project Tracking.xlsx: 6 sheet + tiêu đề cột trùng', (t) => {
     const real = tpl('Report Đồ án', 'Report2_Project Tracking.xlsx');

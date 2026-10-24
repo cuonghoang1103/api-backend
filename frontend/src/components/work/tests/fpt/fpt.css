@@ -57,3 +57,67 @@
 .fpt-status-Failed { background: color-mix(in srgb, var(--w-red) 14%, transparent); color: var(--w-red); }
 .fpt-status-Pending { background: var(--w-sunken); color: var(--w-text-2); }
 .fpt-status-NA { background: color-mix(in srgb, var(--w-yellow) 16%, transparent); color: var(--w-yellow); }
+
+/* ─── Xem rõ bảng 5.1/5.2/5.3 (24/10/2026) ─────────────────────────
+   Cột kéo rộng được, cột ID dính trái, đầu bảng dính trên, chế độ gọn, khung chi tiết bên phải.
+   Chỉ dùng biến theme của CT Work (--w-*) ⇒ đúng cả sáng lẫn tối. */
+.fpt-resizer { position: absolute; top: 0; right: -3px; bottom: 0; width: 7px; z-index: 5; cursor: col-resize; touch-action: none; }
+.fpt-resizer::after { content: ''; position: absolute; top: 20%; bottom: 20%; left: 3px; width: 1px; background: rgba(255,255,255,.35); }
+.fpt-resizer:hover::after, .fpt-resizer:focus-visible::after { top: 0; bottom: 0; width: 3px; left: 2px; background: var(--w-accent); }
+.fpt-resizer:focus-visible { outline: none; }
+.fpt-matrix .fpt-resizer::after { background: var(--w-border-strong, var(--w-border)); }
+
+.fpt-it th { white-space: nowrap; overflow: visible; }
+.fpt-it th.fpt-it-stick { left: 0; z-index: 4; }
+.fpt-it td.fpt-it-stick { position: sticky; left: 0; z-index: 1; box-shadow: 1px 0 0 var(--w-border); }
+.fpt-it-id { display: flex; width: 100%; min-height: 34px; align-items: flex-start; justify-content: space-between; gap: 4px; padding: 8px 6px 6px 8px;
+  font-family: var(--w-font-mono); font-size: 12px; color: var(--w-text-2); text-align: left; }
+.fpt-it-id svg { flex-shrink: 0; margin-top: 1px; opacity: .45; }
+.fpt-it-id:hover { color: var(--w-accent-text, var(--w-accent)); }
+.fpt-it-id:hover svg, .fpt-it-id:focus-visible svg { opacity: 1; }
+.fpt-it-id:focus-visible { outline: 2px solid var(--w-accent); outline-offset: -2px; }
+.fpt-it tr.is-active td { background: color-mix(in srgb, var(--w-accent) 8%, var(--w-panel)); }
+.fpt-it tr.is-active td.fpt-it-stick { box-shadow: inset 3px 0 0 var(--w-accent), 1px 0 0 var(--w-border); }
+.fpt-it-sec-inner { position: sticky; left: 0; width: max-content; max-width: 100%; }
+/* Chữ gợi ý (ví dụ "email: a@b.co") chỉ hiện khi đang gõ — tránh ô trống trông như đã có dữ liệu. */
+.fpt-it textarea.fpt-cellarea:not(:focus):not(.is-invalid)::placeholder { color: transparent; }
+/* Chế độ gọn: mỗi ô tối đa ~4 dòng; bấm vào ô (hoặc mở khung chi tiết) để xem trọn. */
+.fpt-it.is-compact textarea.fpt-cellarea:not(:focus) { max-height: 6.2em; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
+
+.fpt-rchip { display: inline-flex; align-items: center; height: 18px; padding: 0 5px; border-radius: 4px; font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+.fpt-rchip-Passed { background: color-mix(in srgb, var(--w-green) 16%, transparent); color: var(--w-green-text, var(--w-green)); }
+.fpt-rchip-Failed { background: color-mix(in srgb, var(--w-red) 14%, transparent); color: var(--w-red-text, var(--w-red)); }
+.fpt-rchip-Pending { background: var(--w-sunken); color: var(--w-text-2); }
+.fpt-rchip-NA { background: color-mix(in srgb, var(--w-yellow) 16%, transparent); color: var(--w-yellow-text, var(--w-yellow)); }
+.fpt-rchip-empty { border: 1px dashed var(--w-border); color: var(--w-text-3); }
+
+.fpt-ev { display: flex; flex-direction: column; gap: 4px; padding: 0 8px 7px; }
+.fpt-ev-link { display: inline-flex; max-width: 100%; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 4px; font-size: 11.5px;
+  color: var(--w-accent-text, var(--w-accent)); background: var(--w-accent-soft); }
+.fpt-ev-link:hover { text-decoration: underline; }
+.fpt-ev-thumb { position: relative; display: inline-flex; }
+.fpt-ev-thumb > button:first-child { display: block; overflow: hidden; border-radius: 5px; border: 1px solid var(--w-border); background: var(--w-sunken); }
+.fpt-ev-thumb img { display: block; height: 96px; width: auto; max-width: 220px; object-fit: cover; }
+.fpt-ev.is-compact .fpt-ev-thumb img { height: 44px; max-width: 72px; }
+.fpt-ev-thumb > button:first-child:hover { border-color: var(--w-accent); }
+.fpt-ev-thumb > button:first-child:focus-visible { outline: 2px solid var(--w-accent); outline-offset: 1px; }
+.fpt-ev-del { position: absolute; top: -6px; right: -6px; display: inline-flex; height: 18px; width: 18px; align-items: center; justify-content: center;
+  border-radius: 999px; background: var(--w-panel); border: 1px solid var(--w-border); color: var(--w-text-2); }
+.fpt-ev-del:hover { color: var(--w-red); border-color: var(--w-red); }
+.fpt-ev-more { align-self: center; font-size: 11.5px; color: var(--w-text-3); }
+
+/* Khung chi tiết bên phải — không che nền, bảng phía sau vẫn cuộn/bấm được. */
+.fpt-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 65; display: flex; flex-direction: column; max-width: 100%;
+  background: var(--w-panel); border-left: 1px solid var(--w-border); box-shadow: var(--w-shadow-pop, -8px 0 24px rgba(0,0,0,.18)); }
+.fpt-detail-field { display: flex; flex-direction: column; gap: 4px; }
+.fpt-detail-field > span { font-size: 12px; font-weight: 600; color: var(--w-text-2); }
+textarea.fpt-grow { min-height: 38px; resize: none; overflow: hidden; padding: 7px 9px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
+
+/* 5.1: giá trị dài xuống dòng thay vì bị cắt trong ô một dòng. */
+.fpt-row-text { display: block; min-width: 0; min-height: 26px; resize: none; overflow: hidden; border-radius: 4px; border: 1px solid transparent; background: transparent;
+  padding: 4px 6px; font-size: 12.5px; line-height: 1.4; color: var(--w-text); outline: none; white-space: pre-wrap; overflow-wrap: anywhere; }
+.fpt-row-text:hover:not([readonly]) { border-color: var(--w-border); }
+.fpt-row-text:focus { border-color: var(--w-accent); background: var(--w-panel); }
+.fpt-matrix .fpt-col-on { background: color-mix(in srgb, var(--w-accent) 7%, var(--w-panel)) !important; }
+.fpt-matrix thead th.fpt-col-on { box-shadow: inset 0 -3px 0 var(--w-accent); }

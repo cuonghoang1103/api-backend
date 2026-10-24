@@ -511,7 +511,7 @@ const changeDelete = defineTool({
 
 // ─── 5.2 Integration / 5.3 System ─────────────────────────────────
 
-const kindArg = z.enum(['integration', 'system']).describe('integration = Report 5.2 (4 rounds) · system = Report 5.3 (3 rounds)');
+const kindArg = z.enum(['integration', 'system']).describe('integration = Report 5.2 · system = Report 5.3 (both have 4 rounds)');
 const KIND = { integration: 'INT', system: 'SYS' } as const;
 const moduleArg = z.union([z.number().int().positive(), z.string().min(1).max(120)]).describe('Module/workflow id from fpt_it_list, or its name');
 
@@ -617,7 +617,7 @@ const itAddCases = defineTool({
 
 const itRound = defineTool({
   name: 'fpt_it_record_round', title: 'Record a test round result', group: 'tests',
-  description: 'Records the result of test cases in a round (Passed / Failed / Pending / N/A) with date, tester and actual result. Recording round N adds the round if it is not there yet (5.2 has up to 4 rounds, 5.3 has 3).',
+  description: 'Records the result of test cases in a round (Passed / Failed / Pending / N/A) with date, tester and actual result. Recording round N adds the round if it is not there yet (5.2 and 5.3 have up to 4 rounds).',
   write: true,
   input: z.object({
     project: projectArg, kind: kindArg, module: moduleArg,
@@ -698,7 +698,7 @@ const itUpdateCases = defineTool({
       section: z.string().max(200).nullable().optional(), description: z.string().min(1).max(4000).optional(),
       procedure: z.string().max(8000).nullable().optional(), testData: z.string().max(8000).nullable().optional(),
       expected: z.string().max(8000).nullable().optional(), actual: z.string().max(8000).nullable().optional(),
-      preConditions: z.string().max(4000).nullable().optional(), evidence: z.string().max(2000).nullable().optional(), note: z.string().max(4000).nullable().optional(),
+      preConditions: z.string().max(4000).nullable().optional(), evidence: z.string().max(8000).nullable().optional(), note: z.string().max(4000).nullable().optional(),
       clearRound: z.number().int().min(1).max(MAX_ROUNDS).optional(),
     })).min(1).max(100),
   }),

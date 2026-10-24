@@ -84,7 +84,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
       }
     >
       <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-        {wt('fpt.useTemplate')} ({report === 'unit' ? 'Guideline / Cover / Functions / Statistics + one sheet per function' : report === 'system' ? 'Cover / Test Cases / Test Statistics + one sheet per workflow, Round 1–3' : 'Cover / Test Cases / Test Statistics + one sheet per module'}).
+        {wt('fpt.useTemplate')} ({report === 'unit' ? 'Guideline / Cover / Functions / Statistics + one sheet per function' : report === 'system' ? 'Cover / Test Cases / Test Statistics + one sheet per feature/workflow, Round 1–4 + Evidence' : 'Cover / Test Cases / Test Statistics + one sheet per module'}).
         {wt('fpt.matchedByName')}
       </p>
       <input ref={input} type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="hidden"
@@ -106,6 +106,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
             <span><b>{preview.cases}</b> test case</span>
             <span><b>{preview.changes}</b> {wt('fpt.changeRecords')}</span>
           </div>
+          {!!preview.evidenceImages && <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('fpt.evidenceImported', { n: preview.evidenceImages })}</p>}
           <div className="max-h-[200px] overflow-y-auto rounded-[6px] border border-[var(--w-border)]">
             {preview.preview.map((p, i) => (
               <div key={i} className="flex justify-between border-b border-[var(--w-border)] px-3 py-1 last:border-0">

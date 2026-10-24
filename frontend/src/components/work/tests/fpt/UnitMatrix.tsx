@@ -6,18 +6,22 @@
  * Bấm ô ⇒ đặt/bỏ dấu "O". Hàng cuối: loại N/A/B, Passed/Failed, ngày chạy, Defect ID.
  *
  * Lưu tự động (trễ 700ms) bằng PUT thay trọn + `version` — người khác vừa lưu ⇒ 409, hiện nút tải lại.
+ *
+ * 24/10/2026 (xem rõ): giá trị/ghi chú dài XUỐNG DÒNG (trước bị cắt trong ô một dòng), cột nhãn kéo rộng như cũ,
+ * bấm UTCID ⇒ "Xem chi tiết" mở khung bên phải liệt kê trọn điều kiện / kết quả mong đợi của case (← → sang case khác),
+ * cột của case đang xem được tô sáng.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, ArrowRight, Copy, Plus, Sparkles, Trash2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Copy, PanelRightOpen, Plus, Sparkles, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError, workErrorStatus } from '@/lib/work-api';
 import { Popover } from '../../ui';
 import { fptApi, fptKeys, TYPE_LABEL, utcId, type CaseResult, type CaseType, type UnitFunction, type UnitSection } from './fptApi';
 import { undoToast } from '../../settings/binApi';
-import { SaveState, shortDate, todayIso } from './shared';
+import { DetailDrawer, SaveState, shortDate, todayIso } from './shared';
 import AiSuggestDialog from './AiSuggestDialog';
 import { wt } from '@/components/work/i18n';
 
@@ -231,6 +235,10 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
   const [menu, setMenu] = useState<string | null>(null);
   const openMenu = (key: string, el: HTMLElement) => { anchor.current = el; setMenu(key); };
   const menuCase = draft.cases.find((c) => c.key === menu);
+  // Khung chi tiết của một test case (UTCID) — xem trọn điều kiện / kết quả mong đợi đã đánh dấu.
+  const [detail, setDetail] = useState<string | null>(null);
+  const detailIdx = detail ? draft.cases.findIndex((c) => c.key === detail) : -1;
+  const detailCase = detailIdx >= 0 ? draft.cases[detailIdx] : null;
 
   // Cột nhãn (Group/Value) KÉO RỘNG ĐƯỢC để đọc rõ chữ dài — lưu theo máy (localStorage).
   const LABEL_MIN = 240, LABEL_MAX = 960;
@@ -283,6 +291,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
             cases={draft.cases}
             marks={draft.marks}
             canEdit={canEdit}
+            activeCase={detail}
             onRename={(to) => renameGroup(section, g.name, to)}
             onAddValue={() => addValue(section, g.name)}
             onDeleteGroup={() => deleteGroup(section, g.name)}
@@ -310,6 +319,11 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
               <Sparkles size={13} /> {wt('fpt.aiSuggest')}
             </button>
           )}
+          {draft.cases.length > 0 && (
+            <button type="button" className="w-btn w-btn-sm" onClick={() => setDetail(detail ?? draft.cases[0].key)} title={wt('fpt.caseDetailsTitle')}>
+              <PanelRightOpen size={13} /> {wt('fpt.caseDetails')}
+            </button>
+          )}
           {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => addCase()}><Plus size={13} /> Test case</button>}
         </span>
       </div>
@@ -335,7 +349,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
                 />
               </th>
               {draft.cases.map((c, i) => (
-                <th key={c.key} scope="col" className="fpt-utc">
+                <th key={c.key} scope="col" className={cn('fpt-utc', detail === c.key && 'fpt-col-on')}>
                   <button type="button" className="fpt-utc-btn" onClick={(e) => openMenu(c.key, e.currentTarget)} title={`${utcId(i)} — ${TYPE_LABEL[c.type]}${c.note ? `\n${c.note}` : ''}`}>
                     <span className="fpt-vertical">{utcId(i)}</span>
                   </button>
@@ -416,6 +430,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
             c={menuCase}
             canEdit={canEdit}
             onChange={(p) => setCase(menuCase.key, p)}
+            onDetails={() => { setDetail(menuCase.key); setMenu(null); }}
             onDuplicate={() => { addCase(menuCase.key); setMenu(null); }}
             onDelete={() => { deleteCase(menuCase.key); setMenu(null); }}
             onMove={(dir) => moveCase(menuCase.key, dir)}
@@ -423,13 +438,36 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
         )}
       </Popover>
 
+      <DetailDrawer
+        open={!!detailCase}
+        onClose={() => setDetail(null)}
+        title={detailCase ? `${utcId(detailIdx)} · ${TYPE_LABEL[detailCase.type]}` : ''}
+        subtitle={`${fn.moduleName} › ${fn.methodName}`}
+        onPrev={detailIdx > 0 ? () => setDetail(draft.cases[detailIdx - 1].key) : null}
+        onNext={detailIdx >= 0 && detailIdx < draft.cases.length - 1 ? () => setDetail(draft.cases[detailIdx + 1].key) : null}
+        width={520}
+      >
+        {detailCase && (
+          <UnitCaseDetail
+            rows={draft.rows}
+            marks={draft.marks}
+            c={detailCase}
+            fn={fn}
+            canEdit={canEdit}
+            onChange={(p) => setCase(detailCase.key, p)}
+            onToggle={(rk) => toggle(rk, detailCase.key)}
+          />
+        )}
+      </DetailDrawer>
+
       <AiSuggestDialog open={aiOpen} onClose={() => setAiOpen(false)} pid={pid} fnId={fn.id} onApply={(s) => { applyAi(s); setAiOpen(false); }} />
     </div>
   );
 }
 
-function GroupRows({ section, group, cases, marks, canEdit, onRename, onAddValue, onDeleteGroup, onRow, onDeleteRow, onToggle }: {
+function GroupRows({ section, group, cases, marks, canEdit, activeCase, onRename, onAddValue, onDeleteGroup, onRow, onDeleteRow, onToggle }: {
   section: UnitSection;
+  activeCase?: string | null;
   group: { name: string; rows: DRow[] };
   cases: DCase[];
   marks: Set<string>;
@@ -470,21 +508,22 @@ function GroupRows({ section, group, cases, marks, canEdit, onRename, onAddValue
       {group.rows.map((r) => (
         <tr key={r.key} className="fpt-row">
           <th className="fpt-sticky" scope="row">
-            <div className="flex items-center gap-1 pl-3">
-              <input className="fpt-input w-[34%] border-dashed text-[12px] text-[var(--w-text-2)] hover:border-[var(--w-border)]" placeholder="" title={wt('fpt.noteTitle')} value={r.label} readOnly={!canEdit} maxLength={200}
-                aria-label={wt('fpt.noteAria')} onChange={(e) => onRow(r.key, { label: e.target.value })} />
-              <input className="fpt-input min-w-0 flex-1 text-right font-mono text-[12px]" placeholder={section === 'COND' ? 'value' : 'expected'} value={r.value} readOnly={!canEdit}
-                aria-label={wt('fpt.value')} onChange={(e) => onRow(r.key, { value: e.target.value })} />
-              {canEdit && <button type="button" className="fpt-icon fpt-row-del" onClick={() => onDeleteRow(r.key)} aria-label={wt('fpt.deleteRow')}><X size={12} /></button>}
+            <div className="flex items-start gap-1 py-0.5 pl-3">
+              <RowText className="shrink-0 text-[12px] text-[var(--w-text-2)]" style={{ width: '34%' }} title={wt('fpt.noteTitle')} value={r.label} readOnly={!canEdit} maxLength={200}
+                ariaLabel={wt('fpt.noteAria')} onChange={(v) => onRow(r.key, { label: v })} />
+              <RowText className="min-w-0 flex-1 font-mono text-[12px]" placeholder={section === 'COND' ? 'value' : 'expected'} value={r.value} readOnly={!canEdit}
+                ariaLabel={wt('fpt.value')} onChange={(v) => onRow(r.key, { value: v })} />
+              {canEdit && <button type="button" className="fpt-icon fpt-row-del mt-0.5" onClick={() => onDeleteRow(r.key)} aria-label={wt('fpt.deleteRow')}><X size={12} /></button>}
             </div>
           </th>
           {cases.map((c, i) => {
             const on = marks.has(mk(r.key, c.key));
             return (
-              <td key={c.key} className="fpt-cell">
+              <td key={c.key} className={cn('fpt-cell', activeCase === c.key && 'fpt-col-on')}>
                 <button
                   type="button"
                   disabled={!canEdit}
+                  title={`${utcId(i)} · ${group.name}${r.label ? ` (${r.label})` : ''} = ${r.value || '∅'}`}
                   aria-pressed={on}
                   aria-label={`${utcId(i)} ${group.name} ${r.value || r.label || ''}`}
                   className={cn('fpt-mark', on && 'is-on')}
@@ -522,14 +561,15 @@ function ConfirmGroupAdder({ existing, onAdd }: { existing: string[]; onAdd: (na
   );
 }
 
-function CaseMenu({ index, total, c, canEdit, onChange, onDuplicate, onDelete, onMove }: {
+function CaseMenu({ index, total, c, canEdit, onChange, onDuplicate, onDelete, onMove, onDetails }: {
   index: number; total: number; c: DCase; canEdit: boolean;
-  onChange: (p: Partial<DCase>) => void; onDuplicate: () => void; onDelete: () => void; onMove: (d: -1 | 1) => void;
+  onChange: (p: Partial<DCase>) => void; onDuplicate: () => void; onDelete: () => void; onMove: (d: -1 | 1) => void; onDetails: () => void;
 }) {
   return (
     <div className="space-y-2.5 p-3 text-[13px]">
       <div className="flex items-center justify-between">
         <b>{utcId(index)}</b>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto mr-1" onClick={onDetails}><PanelRightOpen size={13} /> {wt('fpt.viewDetails')}</button>
         {canEdit && (
           <span className="flex gap-1">
             <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={index === 0} onClick={() => onMove(-1)} aria-label={wt('fpt.moveLeft')}><ArrowLeft size={13} /></button>
@@ -578,6 +618,132 @@ function CaseMenu({ index, total, c, canEdit, onChange, onDuplicate, onDelete, o
           <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={onDelete}><Trash2 size={12} /> {wt('common.delete')}</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Ô chữ của một dòng ma trận: tự giãn theo nội dung (giá trị dài xuống dòng), giữ NGUYÊN khoảng trắng của giá trị biên. */
+function RowText({ value, onChange, readOnly, className, placeholder, ariaLabel, title, maxLength, style }: {
+  value: string; onChange: (v: string) => void; readOnly: boolean; className?: string; placeholder?: string; ariaLabel: string; title?: string; maxLength?: number;
+  style?: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = '0px';
+    el.style.height = `${Math.max(26, el.scrollHeight + 2)}px`;
+  });
+  return (
+    <textarea ref={ref} rows={1} style={style} className={cn('fpt-row-text', className)} value={value} readOnly={readOnly} placeholder={readOnly ? '' : placeholder}
+      aria-label={ariaLabel} title={title ?? (value.length > 40 ? value : undefined)} maxLength={maxLength}
+      // Enter không xuống dòng (giá trị ma trận là một dòng, như ô Excel) — Shift+Enter vẫn được.
+      onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); (e.target as HTMLTextAreaElement).blur(); } }}
+      onChange={(e) => onChange(e.target.value)} />
+  );
+}
+
+/** Khung chi tiết một UTCID: kiểu/kết quả/ngày/defect + trọn danh sách điều kiện và kết quả mong đợi đã đánh "O". */
+function UnitCaseDetail({ rows, marks, c, fn, canEdit, onChange, onToggle }: {
+  rows: DRow[]; marks: Set<string>; c: DCase; fn: UnitFunction; canEdit: boolean;
+  onChange: (p: Partial<DCase>) => void; onToggle: (rowKey: string) => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const section = (sec: UnitSection) => {
+    const groups = groupsOf(rows, sec);
+    const title = sec === 'COND' ? 'Condition' : 'Confirmation';
+    return (
+      <section>
+        <h3 className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-[var(--w-text-3)]">{title}</h3>
+        {groups.length === 0 && <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('fpt.noRowsYet', { what: title })}</p>}
+        <ul className="space-y-2">
+          {groups.map((g) => {
+            const on = g.rows.filter((r) => marks.has(mk(r.key, c.key)));
+            const list = showAll ? g.rows : on;
+            if (!list.length && !showAll) return null;
+            return (
+              <li key={g.name}>
+                <div className="text-[12.5px] font-semibold">{g.name}</div>
+                <ul className="mt-0.5 space-y-0.5">
+                  {list.map((r) => {
+                    const marked = marks.has(mk(r.key, c.key));
+                    return (
+                      <li key={r.key} className="flex items-start gap-2">
+                        <button type="button" disabled={!canEdit} onClick={() => onToggle(r.key)} aria-pressed={marked}
+                          className={cn('mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-[4px] border text-[11px] font-bold',
+                            marked ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text,var(--w-accent))]' : 'border-[var(--w-border)] text-transparent')}
+                          aria-label={`${g.name} ${r.value || r.label || ''}`}>O</button>
+                        <span className="min-w-0 flex-1 whitespace-pre-wrap break-words font-mono text-[12.5px]">
+                          {r.value === '' ? <i className="font-sans text-[var(--w-text-3)]">{wt('fpt.emptyValue')}</i> : r.value}
+                          {r.label && <span className="ml-2 font-sans text-[12px] text-[var(--w-text-3)]">— {r.label}</span>}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    );
+  };
+  return (
+    <div className="space-y-4">
+      {(fn.description || fn.preCondition) && (
+        <div className="rounded-[6px] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">
+          {fn.description && <p className="whitespace-pre-wrap">{fn.description}</p>}
+          {fn.preCondition && <p className="mt-1 whitespace-pre-wrap"><b>Pre-condition:</b> {fn.preCondition}</p>}
+        </div>
+      )}
+      <CaseFields c={c} canEdit={canEdit} onChange={onChange} />
+      <label className="flex items-center gap-2 text-[12px] text-[var(--w-text-2)]">
+        <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> {wt('fpt.showUnmarked')}
+      </label>
+      {section('COND')}
+      {section('CONFIRM')}
+    </div>
+  );
+}
+
+function CaseFields({ c, canEdit, onChange }: { c: DCase; canEdit: boolean; onChange: (p: Partial<DCase>) => void }) {
+  return (
+    <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-[13px]">
+      <div>
+        <div className="w-label !mb-1">{wt('common.type')} (Type)</div>
+        <div className="flex gap-1" role="radiogroup" aria-label={wt('common.type')}>
+          {(['N', 'A', 'B'] as CaseType[]).map((t) => (
+            <button key={t} type="button" role="radio" aria-checked={c.type === t} disabled={!canEdit} onClick={() => onChange({ type: t })}
+              className={cn('flex-1 rounded-[5px] border px-1 py-1 text-[12px]', c.type === t ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] font-semibold' : 'border-[var(--w-border)]')}>
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="w-label !mb-1">{wt('fpt.result')}</div>
+        <div className="flex gap-1" role="radiogroup" aria-label={wt('fpt.result')}>
+          {([null, 'P', 'F'] as Array<CaseResult | null>).map((r) => (
+            <button key={String(r)} type="button" role="radio" aria-checked={c.result === r} disabled={!canEdit}
+              onClick={() => onChange({ result: r, executedAt: r && !c.executedAt ? todayIso() : c.executedAt })}
+              className={cn('flex-1 rounded-[5px] border px-1 py-1 text-[12px]', c.result === r ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] font-semibold' : 'border-[var(--w-border)]')}>
+              {r === null ? '–' : r === 'P' ? 'Passed' : 'Failed'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <label className="block">
+        <span className="w-label !mb-1">{wt('fpt.executedDate')}</span>
+        <input type="date" className="w-input h-[30px]" value={c.executedAt ?? ''} disabled={!canEdit} onChange={(e) => onChange({ executedAt: e.target.value || null })} />
+      </label>
+      <label className="block">
+        <span className="w-label !mb-1">Defect ID</span>
+        <input className="w-input h-[30px]" value={c.defectId} disabled={!canEdit} maxLength={60} onChange={(e) => onChange({ defectId: e.target.value })} />
+      </label>
+      <label className="col-span-2 block">
+        <span className="w-label !mb-1">{wt('fpt.note')}</span>
+        <input className="w-input h-[30px]" value={c.note} disabled={!canEdit} maxLength={2000} placeholder={wt('fpt.notePh')} onChange={(e) => onChange({ note: e.target.value })} />
+      </label>
     </div>
   );
 }

@@ -6,7 +6,8 @@
  *   • Xuất Excel ĐÚNG CẤU TRÚC mẫu trường:
  *       Report 5.1 Unit Test   = Guideline · Cover · Functions · Statistics · 1 sheet/hàm (ma trận UTCID).
  *       Report 5.2 Integration = Cover · Test Cases · Test Statistics · 1 sheet/module.
- *       Report 5.3 System Test = Cover · Test Cases · Test Statistics · 1 sheet/WORKFLOW, Round 1–3 (đợt 3B, 09/10/2026).
+ *       Report 5.3 System Test = Cover · Test Cases · Test Statistics · 1 sheet/feature (đợt 3B, 09/10/2026) — từ 24/10/2026
+ *         theo mẫu cô gửi (ABClinic_ISP490_Report5.3): Round 1–4 + cột Evidence riêng, bố cục sheet như 5.2.
  *     Vị trí ô, tiêu đề cột, gộp ô, màu (xanh navy 000080 / 333399 / xanh ô liu 76923C), công thức
  *     COUNTIF/SUM như mẫu (sửa luôn lỗi dải SUM lệch của bản mẫu) + giá trị tính sẵn.
  *   • Nhập lại từ đúng mẫu đó (tệp nhóm đang làm bằng Excel/Google Sheets) — đọc theo NHÃN chứ không cứng toạ độ,
@@ -15,7 +16,7 @@
  * Bản quyền: chỉ tái tạo CẤU TRÚC mẫu; chữ hướng dẫn trong sheet Guideline là lời của CT Work.
  */
 
-import { cellRef, colName, excelSerial, fromExcelSerial, quoteSheet, safeSheetName, XSheet, type RSheet, type XStyle } from './xlsxStyled.js';
+import { cellRef, colName, EMU_PER_PX, excelSerial, fromExcelSerial, quoteSheet, safeSheetName, XSheet, type ImageExt, type RImage, type RSheet, type XStyle } from './xlsxStyled.js';
 
 // ─── Kiểu dữ liệu ────────────────────────────────────────────────
 
@@ -28,8 +29,11 @@ export type CaseResult = (typeof CASE_RESULTS)[number];
 export const IT_STATUSES = ['Passed', 'Failed', 'Pending', 'N/A'] as const;
 export type ItStatus = (typeof IT_STATUSES)[number];
 export const MAX_ROUNDS = 4;
-/** Report 5.3 System Test: mẫu có đúng 3 vòng (Round 1–3). */
-export const SYS_ROUNDS = 3;
+/**
+ * Report 5.3 System Test: Round 1–4 (24/10/2026 — mẫu ABClinic cô gửi có 4 vòng; trước đó 3 vòng theo mẫu cũ).
+ * Dữ liệu cũ 3 vòng vẫn hợp lệ (vòng 4 trống); tệp 5.3 cũ 3 vòng vẫn nhập được (đọc theo nhãn).
+ */
+export const SYS_ROUNDS = 4;
 export const CHANGE_ACTIONS = ['A', 'D', 'M'] as const;
 
 export interface DocMeta {
@@ -86,7 +90,10 @@ export interface ItCaseData {
   evidence: string | null;
   note: string | null;
   rounds: ItRound[];
+  /** Chỉ lúc XUẤT: ảnh Evidence đã tải về để nhúng vào ô (token [img:…] trong `evidence` bị gỡ khỏi chữ). */
+  evidenceImages?: EvidenceImage[];
 }
+export interface EvidenceImage { data: Buffer; ext: ImageExt; w: number; h: number }
 export interface ItModuleData {
   name: string;
   sheetName: string | null;
@@ -95,6 +102,42 @@ export interface ItModuleData {
   preCondition: string | null;
   testRequirement: string | null;
   cases: ItCaseData[];
+  /** Chỉ lúc NHẬP: hàng Excel của từng case (cùng thứ tự `cases`) — để gắn ảnh Evidence nhúng vào đúng case. */
+  caseRows?: number[];
+}
+
+// ─── Ảnh Evidence (24/10/2026) ───────────────────────────────────
+// Ảnh chụp dán trong cột Evidence của tệp nhập được lưu vào kho tệp; ô evidence giữ token `[img:<sha>.<ext>]`
+// (đọc được, sửa được, xuất lại thì nhúng ảnh về đúng ô).
+export const EVIDENCE_IMG_RE = /\[img:([a-f0-9]{16,64}\.(?:png|jpeg|gif))\]/g;
+export function evidenceImageFiles(text: string | null | undefined): string[] {
+  return [...(text ?? '').matchAll(EVIDENCE_IMG_RE)].map((m) => m[1]);
+}
+export function stripEvidenceImages(text: string | null | undefined): string {
+  return (text ?? '').replace(EVIDENCE_IMG_RE, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+/** Thêm token ảnh vào cuối chữ evidence (mỗi ảnh một dòng, không trùng). */
+export function appendEvidenceImages(text: string | null | undefined, files: string[]): string | null {
+  const have = new Set(evidenceImageFiles(text));
+  const add = files.filter((f) => !have.has(f) && have.add(f));
+  const base = (text ?? '').trim();
+  const out = [base, ...add.map((f) => `[img:${f}]`)].filter(Boolean).join('\n');
+  return out || null;
+}
+
+/**
+ * Gắn ảnh nhúng của một sheet vào case: ảnh neo ở hàng R thuộc case có hàng bắt đầu lớn nhất ≤ R
+ * (ảnh cao tràn xuống hàng dưới vẫn neo ở hàng trên cùng). Ảnh nằm trên case đầu ⇒ bỏ (ảnh trang trí đầu sheet).
+ */
+export function assignImagesToCases(caseRows: number[], images: Array<Pick<RImage, 'row' | 'col'>>, minCol = 1): number[] {
+  const out: number[] = [];
+  for (const im of images) {
+    if (im.col < minCol) { out.push(-1); continue; }
+    let idx = -1;
+    for (let i = 0; i < caseRows.length; i++) if (caseRows[i] <= im.row) idx = i; else break;
+    out.push(idx);
+  }
+  return out;
 }
 
 // ─── Thống kê ────────────────────────────────────────────────────
@@ -583,10 +626,21 @@ export function unpackNote(text: string): { actual: string | null; note: string 
   return cut < 0 ? { actual: rest.trim() || null, note: null } : { actual: rest.slice(0, cut).trim() || null, note: rest.slice(cut).trim() || null };
 }
 
-function itModuleSheet(name: string, m: ItModuleData): XSheet {
+/** Độ rộng cột sheet module 5.2 (theo mẫu APHL) — A…T. */
+const IT_WIDTHS = [17, 34.4, 31.8, 28.3, 26.8, 24, 24, 9.3, 10.7, 9, 9.3, 10.7, 9, 9.3, 10.7, 9, 9.3, 10.7, 9, 40.3];
+
+/**
+ * Sheet một module (5.2) / một feature (5.3) — cùng bố cục mẫu: nhãn Feature/Test requirement/Number of TCs ở A2–A4,
+ * bảng đếm Round 1–4 ở hàng 6–9, bảng case từ hàng 11 (Evidence gộp F:G, Round k ở cột H+3(k-1), Note ở T),
+ * danh sách thả xuống ở W2:W5.
+ *
+ * Công thức đếm viết ĐÚNG (mẫu 5.3 của cô có lỗi: ô N/A của Round 2/3 trỏ cột Round 1; phạm vi COUNTIF lệch dòng
+ * giữa các vòng/ô) — mọi ô của một vòng dùng cùng cột của vòng đó, cùng phạm vi $X$12:$X$1000.
+ */
+function itModuleSheet(name: string, m: ItModuleData, opts: { widths?: number[] } = {}): XSheet {
   const sh = new XSheet(name);
   sh.showGrid = false;
-  [17, 34.4, 31.8, 28.3, 26.8, 24, 24, 9.3, 10.7, 9, 9.3, 10.7, 9, 9.3, 10.7, 9, 9.3, 10.7, 9, 40.3].forEach((w, i) => sh.width(i + 1, w));
+  (opts.widths ?? IT_WIDTHS).forEach((w, i) => sh.width(i + 1, w));
   const lab = { ...S.label, align: { h: 'center' as const, v: 'top' as const, wrap: true } };
   sh.set(2, 1, 'Feature', lab);
   sh.set(2, 2, m.name, S.value).merge(2, 2, 2, 5, S.value);
@@ -595,8 +649,11 @@ function itModuleSheet(name: string, m: ItModuleData): XSheet {
   sh.height(3, 64.5);
   const st = itStats(m.cases);
   const prefix = m.idPrefix.replace(/"/g, '');
+  const h = 11;
+  const firstCaseRow = h + 1;
+  const LAST = 1000;
   sh.set(4, 1, 'Number of TCs', lab);
-  sh.set(4, 2, { f: `COUNTIF(A12:A1000,"*<${prefix}*")`, v: m.cases.length }, S.value).merge(4, 2, 4, 5, S.value);
+  sh.set(4, 2, { f: `COUNTIF(A${firstCaseRow}:A${LAST},"*<${prefix}*")`, v: m.cases.length }, S.value).merge(4, 2, 4, 5, S.value);
   sh.set(5, 1, 'Testing Round', lab);
   IT_STATUSES.forEach((s, i) => sh.set(5, 2 + i, s, { ...lab, align: { h: 'center', v: 'top' } }));
   for (let rd = 0; rd < MAX_ROUNDS; rd++) {
@@ -604,12 +661,11 @@ function itModuleSheet(name: string, m: ItModuleData): XSheet {
     sh.set(6 + rd, 1, `Round ${rd + 1}`, lab);
     const counts = st.rounds[rd];
     [counts.passed, counts.failed, counts.pending, counts.na].forEach((v, i) =>
-      sh.set(6 + rd, 2 + i, { f: `COUNTIF($${col}12:$${col}1000,${colName(2 + i)}$5)`, v }, { ...S.value, align: { h: 'center', v: 'top' } }));
+      sh.set(6 + rd, 2 + i, { f: `COUNTIF($${col}$${firstCaseRow}:$${col}$${LAST},${colName(2 + i)}$5)`, v }, { ...S.value, align: { h: 'center', v: 'top' } }));
   }
   // Danh sách giá trị cho ô thả xuống — mẫu đặt ở cột W.
   IT_STATUSES.forEach((s, i) => sh.set(2 + i, 23, s, { font: { name: 'Tahoma', sz: 10 } }));
 
-  const h = 11;
   const heads = ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions ', 'Evidence'];
   heads.forEach((t, i) => sh.set(h, i + 1, t, S.oliveHead));
   sh.merge(h, 6, h, 7, S.oliveHead);
@@ -621,11 +677,10 @@ function itModuleSheet(name: string, m: ItModuleData): XSheet {
   sh.set(h, 20, 'Note', S.oliveHead);
   sh.height(h, 25.5);
 
-  let r = h + 1;
+  let r = firstCaseRow;
   let section: string | null | undefined;
   let n = 0;
   const statusRanges: string[] = [];
-  const firstCaseRow = r;
   for (const c of m.cases) {
     if ((c.section ?? null) !== (section ?? null) && c.section) {
       sh.set(r, 1, c.section, { font: { name: 'Tahoma', sz: 10, b: true }, fill: AQUA, border: 'thin', align: { v: 'center' } });
@@ -640,7 +695,9 @@ function itModuleSheet(name: string, m: ItModuleData): XSheet {
     sh.set(r, 3, packProcedure(c.procedure, c.testData), wrap);
     sh.set(r, 4, c.expected ?? '', wrap);
     sh.set(r, 5, c.preConditions ?? '', wrap);
-    sh.set(r, 6, c.evidence ?? '', wrap).merge(r, 6, r, 7, wrap);
+    const imgs = c.evidenceImages ?? [];
+    sh.set(r, 6, imgs.length ? stripEvidenceImages(c.evidence) : (c.evidence ?? ''), wrap).merge(r, 6, r, 7, wrap);
+    if (imgs.length) placeEvidenceImages(sh, r, imgs, ((opts.widths ?? IT_WIDTHS)[5] + (opts.widths ?? IT_WIDTHS)[6]) * 7);
     for (let rd = 0; rd < MAX_ROUNDS; rd++) {
       const x = c.rounds[rd];
       sh.set(r, 8 + rd * 3, x?.status ?? null, wrap);
@@ -655,6 +712,22 @@ function itModuleSheet(name: string, m: ItModuleData): XSheet {
   sh.listValidation(statusRanges.join(' '), [...IT_STATUSES]);
   sh.freeze = { col: 2, row: h + 1 };
   return sh;
+}
+
+/** Ảnh Evidence trong ô F:G của hàng `r`: xếp ngang, cao tối đa 200 px, cùng vừa bề ngang ô; hàng cao theo ảnh. */
+function placeEvidenceImages(sh: XSheet, r: number, imgs: EvidenceImage[], cellPx: number) {
+  const PAD = 4, MAX_H = 200;
+  const hText = 18; // chừa một dòng chữ (link/ghi chú) phía trên ảnh
+  let sizes = imgs.map((im) => { const k = Math.min(1, MAX_H / Math.max(1, im.h)); return { w: im.w * k, h: im.h * k }; });
+  const totalW = sizes.reduce((a, x) => a + x.w, 0) + PAD * (imgs.length + 1);
+  if (totalW > cellPx) { const k = (cellPx - PAD * (imgs.length + 1)) / Math.max(1, totalW - PAD * (imgs.length + 1)); sizes = sizes.map((x) => ({ w: x.w * k, h: x.h * k })); }
+  let x = PAD;
+  imgs.forEach((im, i) => {
+    sh.image({ row: r, col: 6, data: im.data, ext: im.ext, offX: x * EMU_PER_PX, offY: (hText + PAD) * EMU_PER_PX, cx: sizes[i].w * EMU_PER_PX, cy: sizes[i].h * EMU_PER_PX });
+    x += sizes[i].w + PAD;
+  });
+  const hPx = Math.max(...sizes.map((z) => z.h)) + hText + PAD * 2;
+  sh.height(r, Math.max(sh.rowHeights.get(r) ?? 0, Math.round(hPx * 0.75)));
 }
 
 export interface IntegrationExportInput { meta: DocMeta; changes: ChangeData[]; modules: ItModuleData[] }
@@ -744,15 +817,16 @@ export function buildIntegrationSheets(input: IntegrationExportInput): XSheet[] 
   return [cover, tc, ts, ...modules.map((m, i) => itModuleSheet(names[i], m))];
 }
 
-// ─── Report 5.3 — System Test (đợt 3B) ───────────────────────────
+// ─── Report 5.3 — System Test (đợt 3B; bố cục mới 24/10/2026) ────
 //
-// Khác 5.2 ở đúng những chỗ mẫu khác (đọc từ Report5.3_System Test.xlsx):
-//   • sheet theo WORKFLOW (nhãn "Workflow" thay "Feature"), đúng 3 vòng Round 1–3;
-//   • bảng case bắt đầu ở hàng 10 (không có cột Evidence) — Evidence/Actual gói vào ô Note;
-//   • Test Statistics tiêu đề "TEST STATISTICS", bảng ở hàng 10; danh sách thả xuống đặt ở cột R.
+// Theo mẫu cô gửi (ABClinic_ISP490_Report5.3_System Test.xlsx, 4 vòng):
+//   • Cover tiêu đề "TEST REPORT DOCUMENT", Document Code = <CODE>_TestReport5.3_v<ver>;
+//   • Test Cases như 5.2; Test Statistics tiêu đề "SYSTEM TEST REPORT", bảng ở hàng 9, mã tài liệu KHỚP Cover;
+//   • mỗi feature một sheet, bố cục y hệt 5.2: nhãn "Feature", Round 1–4, cột Evidence riêng (gộp F:G), Note ở T.
+// Bố cục cũ (đến 23/10: nhãn "Workflow", 3 vòng, Evidence gói trong Note) vẫn NHẬP được — bộ đọc theo nhãn.
 
 const EVIDENCE_MARK = 'Evidence:';
-/** Ô Note của 5.3 gói Actual + Evidence + ghi chú (mẫu không có cột riêng) — nhập lại tách ra được. */
+/** Bố cục 5.3 CŨ gói Actual + Evidence + ghi chú vào ô Note — giữ để đọc tệp cũ (và để test vòng tròn). */
 export function packSysNote(actual: string | null, evidence: string | null, note: string | null): string {
   const base = packNote(actual, note);
   const e = (evidence ?? '').trim();
@@ -767,88 +841,23 @@ export function unpackSysNote(text: string): { actual: string | null; evidence: 
   return { ...unpackNote(t.slice(0, i)), evidence };
 }
 
-function sysWorkflowSheet(name: string, m: ItModuleData): XSheet {
-  const sh = new XSheet(name);
-  sh.showGrid = false;
-  [17, 34.5, 34.1, 34.6, 28.4, 9.4, 10.6, 7, 9.4, 10.6, 7, 9.4, 10.6, 7, 28.6, 10.1, 8.1, 7.6].forEach((w, i) => sh.width(i + 1, w));
-  const lab = { ...S.label, align: { h: 'left' as const, v: 'top' as const, wrap: true } };
-  const prefix = m.idPrefix.replace(/"/g, '');
-  const st = itStats(m.cases);
-  sh.set(2, 1, 'Workflow', lab);
-  sh.set(2, 2, m.name, S.value).merge(2, 2, 2, 5, S.value);
-  sh.set(3, 1, 'Test requirement', lab);
-  sh.set(3, 2, m.testRequirement ?? m.description ?? '', S.value).merge(3, 2, 3, 5, S.value);
-  sh.height(3, 48);
-  sh.set(4, 1, 'Number of TCs', lab);
-  sh.set(4, 2, { f: `COUNTIF(A11:A1000,"*<${prefix}*")`, v: m.cases.length }, S.value).merge(4, 2, 4, 5, S.value);
-  sh.set(5, 1, 'Testing Round', lab);
-  IT_STATUSES.forEach((s, i) => sh.set(5, 2 + i, s, { ...lab, align: { h: 'center', v: 'top' } }));
-  for (let rd = 0; rd < SYS_ROUNDS; rd++) {
-    const col = colName(6 + rd * 3);
-    sh.set(6 + rd, 1, `Round ${rd + 1}`, lab);
-    const c = st.rounds[rd];
-    [c.passed, c.failed, c.pending, c.na].forEach((v, i) =>
-      sh.set(6 + rd, 2 + i, { f: `COUNTIF($${col}$11:$${col}$1000,${colName(2 + i)}$5)`, v }, { ...S.value, align: { h: 'center', v: 'top' } }));
-  }
-  // Danh sách giá trị cho ô thả xuống — mẫu đặt ở R2:R5.
-  IT_STATUSES.forEach((s, i) => sh.set(2 + i, 18, s, S.value));
-
-  const h = 10;
-  ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions'].forEach((t, i) => sh.set(h, i + 1, t, S.oliveHead));
-  for (let rd = 0; rd < SYS_ROUNDS; rd++) {
-    sh.set(h, 6 + rd * 3, `Round ${rd + 1}`, S.oliveHead);
-    sh.set(h, 7 + rd * 3, 'Test date', S.oliveHead);
-    sh.set(h, 8 + rd * 3, 'Tester', S.oliveHead);
-  }
-  sh.set(h, 15, 'Note', S.oliveHead);
-  sh.height(h, 25.5);
-
-  let r = h + 1;
-  let section: string | null | undefined;
-  let n = 0;
-  const first = r;
-  for (const c of m.cases) {
-    if ((c.section ?? null) !== (section ?? null) && c.section) {
-      sh.set(r, 1, c.section, { font: { name: 'Tahoma', sz: 10, b: true }, fill: AQUA, border: 'thin', align: { v: 'center' } });
-      for (let col = 2; col <= 15; col++) sh.style(r, col, { fill: AQUA, border: 'thin' });
-      r++;
-    }
-    section = c.section;
-    n++;
-    const wrap = { ...S.cell, font: { name: 'Tahoma', sz: 10 } };
-    sh.set(r, 1, `<${prefix}${n}>`, wrap);
-    sh.set(r, 2, c.description, wrap);
-    sh.set(r, 3, packProcedure(c.procedure, c.testData), wrap);
-    sh.set(r, 4, c.expected ?? '', wrap);
-    sh.set(r, 5, c.preConditions ?? '', wrap);
-    for (let rd = 0; rd < SYS_ROUNDS; rd++) {
-      const x = c.rounds[rd];
-      sh.set(r, 6 + rd * 3, x?.status ?? null, wrap);
-      sh.set(r, 7 + rd * 3, dateVal(x?.date), S.cellDate);
-      sh.set(r, 8 + rd * 3, x?.tester ?? null, wrap);
-    }
-    sh.set(r, 15, packSysNote(c.actual, c.evidence, c.note), wrap);
-    r++;
-  }
-  const last = Math.max(r - 1, first) + 50;
-  sh.listValidation([0, 1, 2].map((rd) => `${colName(6 + rd * 3)}${first}:${colName(6 + rd * 3)}${last}`).join(' '), [...IT_STATUSES]);
-  sh.freeze = { col: 2, row: h + 1 };
-  return sh;
-}
+/** Độ rộng cột sheet feature 5.3 — gần mẫu ABClinic (Evidence F:G rộng để chứa ảnh chụp), A…T. */
+const SYS_WIDTHS = [17, 30, 30, 28, 24, 30, 30, 10.5, 10.6, 9, 10.5, 10.6, 9, 10.5, 10.6, 9, 10.5, 10.6, 9, 35.4];
 
 export interface SystemExportInput { meta: DocMeta; changes: ChangeData[]; workflows: ItModuleData[] }
 
 export function buildSystemSheets(input: SystemExportInput): XSheet[] {
-  const { meta, workflows } = input;
+  const { meta } = input;
+  const workflows = input.workflows.map((m) => ({ ...m, cases: m.cases.map((c) => ({ ...c, rounds: c.rounds.slice(0, SYS_ROUNDS) })) }));
   const taken = new Set(['cover', 'test cases', 'test statistics']);
-  const names = workflows.map((m) => safeSheetName(m.sheetName || m.name, taken, 'Workflow'));
-  const cover = coverSheet('SYSTEM TEST REPORT DOCUMENT', meta, meta.sysIssueDate ?? null, 'TestReport5.3', input.changes, 'Create system test document');
-  // Mẫu 5.3 hẹp cột C/D hơn 5.1/5.2.
-  [28.1, 10, 18.2, 8, 38, 48.1].forEach((w, i) => cover.width(i + 1, w));
+  const names = workflows.map((m) => safeSheetName(m.sheetName || m.name, taken, 'Feature'));
+  const DOC = 'TestReport5.3';
+  const cover = coverSheet('TEST REPORT DOCUMENT', meta, meta.sysIssueDate ?? null, DOC, input.changes, 'Create system test document');
+  [24.6, 10, 18.2, 12.9, 38, 44].forEach((w, i) => cover.width(i + 1, w));
 
   const tc = new XSheet('Test Cases');
   tc.showGrid = false;
-  [1.4, 6.4, 26.5, 20.1, 56, 52.6].forEach((w, i) => tc.width(i + 1, w));
+  [1.4, 10.9, 22, 23.2, 60, 40].forEach((w, i) => tc.width(i + 1, w));
   tc.set(1, 4, 'TEST CASE LIST', S.title);
   tc.height(1, 30);
   const head = (r: number, l: string, v: unknown) => {
@@ -872,7 +881,7 @@ export function buildSystemSheets(input: SystemExportInput): XSheet[] {
   const ts = new XSheet('Test Statistics');
   ts.showGrid = false;
   ts.width(1, 4.5).width(2, 18.4).width(3, 26.4).width(4, 11.6).width(5, 11).width(6, 11).width(7, 9).width(8, 35.5);
-  ts.set(1, 2, 'TEST STATISTICS', { ...S.title, fill: WHITE, align: { h: 'center' } }).merge(1, 2, 1, 8);
+  ts.set(1, 2, 'SYSTEM TEST REPORT', { ...S.title, fill: WHITE, align: { h: 'center' } }).merge(1, 2, 1, 8);
   ts.height(1, 30);
   const sRow = (r: number, l1: string, v1: unknown, l2: string, v2: unknown, date = false) => {
     ts.set(r, 2, l1, S.label);
@@ -880,17 +889,20 @@ export function buildSystemSheets(input: SystemExportInput): XSheet[] {
     ts.set(r, 5, l2, S.label).merge(r, 5, r, 7, S.label);
     ts.set(r, 8, v2 as never, date ? S.valueDate : S.value);
   };
+  const ver = meta.version.replace(/"/g, '');
   sRow(3, 'Project Name', { f: 'Cover!B4', v: meta.projectName }, 'Creator', meta.creator ?? '');
   sRow(4, 'Project Code', { f: 'Cover!B5', v: meta.projectCode }, 'Reviewer/Approver', meta.reviewer ?? '');
-  sRow(5, 'Document Code', { f: `C4&"_"&"Test Report"&"_"&"v${meta.version.replace(/"/g, '')}"`, v: `${meta.projectCode}_Test Report_v${meta.version}` }, 'Issue Date', dateVal(meta.sysIssueDate), true);
+  // Cùng công thức với Cover!B6 ⇒ hai chỗ luôn ra một mã.
+  sRow(5, 'Document Code', { f: `C4&"_"&"${DOC}"&"_"&"v${ver}"`, v: `${meta.projectCode}_${DOC}_v${meta.version}` }, 'Issue Date', dateVal(meta.sysIssueDate), true);
   ts.set(6, 2, 'Notes', S.label);
   ts.set(6, 3, meta.sysNotes ?? '', S.value).merge(6, 3, 6, 8, S.value);
   ts.height(6, 30);
-  ['No', 'Module code', 'Passed', 'Failed', 'Pending', 'N/A', 'Number of  test cases'].forEach((t, i) => ts.set(10, i + 2, t, S.navyHead));
+  const H = 9;
+  ['No', 'Module code', 'Passed', 'Failed', 'Pending', 'N/A', 'Number of  test cases'].forEach((t, i) => ts.set(H, i + 2, t, S.navyHead));
   const tot = { passed: 0, failed: 0, pending: 0, na: 0, total: 0 };
   workflows.forEach((m, i) => {
-    const r = 11 + i;
-    const st = itStats(m.cases.map((c) => ({ rounds: c.rounds.slice(0, SYS_ROUNDS) })));
+    const r = H + 1 + i;
+    const st = itStats(m.cases);
     // Như 5.2: số của vòng chạy cuối; ca chưa có kết quả ở vòng đó tính là Pending cho khớp tổng.
     const round = Math.max(Math.min(st.lastRound, SYS_ROUNDS), 1);
     const roundRow = 5 + round;
@@ -907,10 +919,11 @@ export function buildSystemSheets(input: SystemExportInput): XSheet[] {
     ts.set(r, 8, { f: `${q}!B4`, v: st.total }, S.cellCenter);
     tot.passed += counts.passed; tot.failed += counts.failed; tot.pending += counts.pending + extra; tot.na += counts.na; tot.total += st.total;
   });
-  const sub = 11 + workflows.length;
-  const last = Math.max(sub - 1, 11);
+  // Sub total cộng ĐÚNG dải dữ liệu (mẫu cộng từ hàng 8 — lấn vào hàng tiêu đề).
+  const sub = H + 1 + workflows.length;
+  const last = Math.max(sub - 1, H + 1);
   ts.set(sub, 3, 'Sub total', S.subtotal);
-  [tot.passed, tot.failed, tot.pending, tot.na, tot.total].forEach((v, j) => ts.set(sub, 4 + j, { f: `SUM(${colName(4 + j)}11:${colName(4 + j)}${last})`, v }, S.subtotal));
+  [tot.passed, tot.failed, tot.pending, tot.na, tot.total].forEach((v, j) => ts.set(sub, 4 + j, { f: `SUM(${colName(4 + j)}${H + 1}:${colName(4 + j)}${last})`, v }, S.subtotal));
   const cov = itCoverage(tot);
   const pRow = (r: number, l: string, f: string, v: number) => {
     ts.set(r, 3, l, S.pctLabel);
@@ -921,7 +934,7 @@ export function buildSystemSheets(input: SystemExportInput): XSheet[] {
   pRow(sub + 2, 'Test coverage', `IF(${base}=0,0,(D${sub}+E${sub})*100/${base})`, cov.coverage);
   pRow(sub + 3, 'Test successful coverage', `IF(${base}=0,0,D${sub}*100/${base})`, cov.successCoverage);
 
-  return [cover, tc, ts, ...workflows.map((m, i) => sysWorkflowSheet(names[i], m))];
+  return [cover, tc, ts, ...workflows.map((m, i) => itModuleSheet(names[i], m, { widths: SYS_WIDTHS }))];
 }
 
 // ─── Nhập (đọc theo NHÃN) ────────────────────────────────────────
@@ -1242,8 +1255,9 @@ function parseItModuleSheet(sh: RSheet, warnings: string[]): ItModuleData | null
       const pm = /<\s*([A-Za-z]+)/.exec(idRaw);
       if (pm) m.idPrefix = pm[1].toUpperCase().slice(0, 10);
     }
+    (m.caseRows ??= []).push(r);
     const { procedure, testData } = unpackProcedure(proc);
-    // 5.3 không có cột Evidence ⇒ gói trong Note; 5.2 có cột riêng (ưu tiên cột).
+    // 5.2 và 5.3 (mẫu mới) có cột Evidence riêng (ưu tiên cột); 5.3 bố cục cũ gói Evidence trong Note.
     const { actual, note, evidence: evNote } = unpackSysNote(txt(r, col.note));
     m.cases.push({
       section,
@@ -1339,13 +1353,28 @@ export function parseIntegrationWorkbook(sheets: RSheet[], opts: { system?: bool
   return out;
 }
 
-/** Đoán loại tệp: 5.1 có UTCID; 5.3 có nhãn "Workflow" (hoặc Cover "SYSTEM TEST…"); 5.2 có "Test Case ID". */
+/**
+ * Đoán loại tệp: 5.1 có UTCID; còn lại có "Test Case ID" ⇒ 5.3 nếu có MỘT dấu hiệu system test:
+ * nhãn "Workflow" (bố cục 5.3 cũ), Cover "SYSTEM TEST…" (bản CT Work cũ), Test Statistics "SYSTEM TEST REPORT"
+ * hoặc mã tài liệu chứa "TestReport5.3" (mẫu ABClinic của cô — Cover chỉ ghi "TEST REPORT DOCUMENT"); không thì 5.2.
+ */
 export function detectReport(sheets: RSheet[]): 'unit' | 'integration' | 'system' | null {
   if (sheets.some((s) => find(s, /^utcid\s*\d+/, 40, 80))) return 'unit';
   const hasCases = sheets.some((s) => find(s, /^test case id$/, 40));
   if (!hasCases) return null;
   const cover = sheetByName(sheets, 'Cover');
-  if (sheets.some((s) => find(s, /^test case id$/, 40) && find(s, /^workflow$/, 10)) || (cover && find(cover, /^system test/, 5))) return 'system';
+  const stat = sheetByName(sheets, 'Test Statistics');
+  const docCode53 = (sh: RSheet | undefined) => {
+    if (!sh) return false;
+    const at = find(sh, /^document code$/, 12);
+    if (!at) return false;
+    for (let c = at.col + 1; c <= at.col + 6; c++) if (/testreport\s*5\.3/i.test(sh.text(at.row, c))) return true;
+    return false;
+  };
+  if (sheets.some((s) => find(s, /^test case id$/, 40) && find(s, /^workflow$/, 10))
+    || (cover && find(cover, /^system test/, 5))
+    || (stat && find(stat, /^system test report$/, 5))
+    || docCode53(cover) || docCode53(stat)) return 'system';
   return 'integration';
 }
 

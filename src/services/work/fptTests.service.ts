@@ -6,8 +6,8 @@
  *     loại N/A/B, P/F, ngày chạy, Defect ID; LOC ⇒ KLOC ⇒ chỉ tiêu 100 TC/KLOC (cảnh báo khi thiếu).
  *   • Integration test (Report 5.2): mỗi MODULE một bảng case (mô tả, thủ tục, dữ liệu, mong đợi,
  *     thực tế, tối đa 4 vòng chạy Passed/Failed/Pending/N/A + ngày + người kiểm).
- *   • System test (Report 5.3, đợt 3B 09/10/2026): mỗi WORKFLOW một bảng case như integration nhưng đúng 3 vòng
- *     Round 1–3 — lưu chung bảng work_it_modules với `kind = 'SYS'` (5.2 là 'INT').
+ *   • System test (Report 5.3, đợt 3B 09/10/2026): mỗi WORKFLOW/feature một bảng case như integration — Round 1–4 +
+ *     Evidence từ 24/10/2026 (mẫu ABClinic cô gửi; trước 3 vòng) — lưu chung bảng work_it_modules với `kind = 'SYS'` (5.2 là 'INT').
  *   • Cover + Record of change dùng chung cho cả ba báo cáo (report UNIT | INT | SYS).
  *   • Xuất/nhập Excel đúng mẫu (fptTests.ts), AI gợi ý điều kiện biên cho một hàm (có trần).
  *
@@ -26,13 +26,15 @@ import { kiemHanMucAi } from './aiTaiTro.js';
 import { emitWorkEvent } from './events.js';
 import {
   buildIntegrationSheets, buildSystemSheets, buildUnitSheets, SYS_ROUNDS, CASE_RESULTS, CASE_TYPES, defaultIdPrefix, defaultSheetName, detectReport, IT_STATUSES,
-  itStats, MAX_ROUNDS, parseIntegrationWorkbook, parseUnitWorkbook, requiredCases, unitStats, unitSummary, itCoverage,
+  itStats, MAX_ROUNDS, parseIntegrationWorkbook, appendEvidenceImages, assignImagesToCases, evidenceImageFiles, parseUnitWorkbook, requiredCases, unitStats, unitSummary, itCoverage,
   type ChangeData, type DocMeta, type ItCaseData, type ItModuleData, type ItRound, type UnitFunctionData,
 } from './fptTests.js';
 import { gateDelete, isUnapprovedMachineCall, type QueuedRequest } from './deleteRequests.service.js';
 import { can, loadProjectAccess, requireProject } from './permissions.js';
 import { putInTrash, trashGraph } from './trashBin.service.js';
-import { readXlsx, writeXlsx } from './xlsxStyled.js';
+import { imageSize, readXlsx, readXlsxImages, writeXlsx } from './xlsxStyled.js';
+import { getObjectBytes, objectExists, putObject } from '../../config/r2.js';
+import crypto from 'node:crypto';
 import { mbText, WORK_LIMITS } from './limits.js';
 
 export const MAX_FUNCTIONS = 500;
@@ -657,7 +659,7 @@ export const itCasesInput = z.object({
     section: z.string().trim().max(200).nullable().optional(),
     description: z.string().trim().min(1, 'Every test case needs a description').max(4000),
     procedure: txt(8000), testData: txt(8000), expected: txt(8000), actual: txt(8000),
-    preConditions: txt(4000), evidence: txt(2000), note: txt(4000),
+    preConditions: txt(4000), evidence: txt(8000), note: txt(4000),
     rounds: z.array(roundSchema).max(MAX_ROUNDS).optional(),
   })).max(MAX_IT_CASES),
 });
@@ -787,13 +789,111 @@ export async function exportReport(userId: number, projectId: number, report: 'u
     return { file: `${fileSafe(meta.projectCode)}_Report5.1_Unit_Test_Report.xlsx`, buffer: writeXlsx(sheets, { title: `${meta.projectCode} — Unit Test Report` }), count: functions.length };
   }
   if (report === 'system') {
-    const workflows = (await loadItModules(projectId, 'SYS')).map((m) => ({ ...m, cases: m.cases.map((c) => ({ ...c, rounds: c.rounds.slice(0, SYS_ROUNDS) })) }));
+    const workflows = await withEvidenceImages(projectId, (await loadItModules(projectId, 'SYS')).map((m) => ({ ...m, cases: m.cases.map((c) => ({ ...c, rounds: c.rounds.slice(0, SYS_ROUNDS) })) })));
     const sheets = buildSystemSheets({ meta, changes: await exportChanges(projectId, 'SYS'), workflows });
     return { file: `${fileSafe(meta.projectCode)}_Report5.3_System_Test_Report.xlsx`, buffer: writeXlsx(sheets, { title: `${meta.projectCode} — System Test Report` }), count: workflows.length };
   }
-  const modules = await loadItModules(projectId);
+  const modules = await withEvidenceImages(projectId, await loadItModules(projectId));
   const sheets = buildIntegrationSheets({ meta, changes: await exportChanges(projectId, 'INT'), modules });
   return { file: `${fileSafe(meta.projectCode)}_Report5.2_Integration_Test_Report.xlsx`, buffer: writeXlsx(sheets, { title: `${meta.projectCode} — Integration Test Report` }), count: modules.length };
+}
+
+// ─── Ảnh Evidence (24/10/2026) ───────────────────────────────────
+// Mẫu 5.2/5.3 của nhóm dán ẢNH CHỤP vào cột Evidence (ABClinic 125 ảnh, APHL 165 ảnh). Trước đây nhập là mất hết.
+// Nay: nhập ⇒ ảnh vào kho tệp `work/fpt-evidence/<dự án>/<sha>.<ext>` (riêng tư), ô evidence giữ token `[img:<tệp>]`;
+// xem trên web qua GET …/fpt-tests/evidence/<tệp> (quyền xem dự án); xuất ⇒ nhúng ảnh lại vào ô Evidence.
+
+const EVIDENCE_MIME = { png: 'image/png', jpeg: 'image/jpeg', gif: 'image/gif' } as const;
+export const EVIDENCE_FILE_RE = /^[a-f0-9]{16,64}\.(png|jpeg|gif)$/;
+export const MAX_EVIDENCE_IMAGE_BYTES = 8 * 1024 * 1024;
+const evidenceKey = (projectId: number, file: string) => `work/fpt-evidence/${projectId}/${file}`;
+
+type EvidencePic = { mod: ItModuleData; caseIdx: number; data: Buffer; ext: keyof typeof EVIDENCE_MIME };
+
+function evidenceImagesOf(buf: Buffer, mods: ItModuleData[], warnings: string[]): EvidencePic[] {
+  const { images, skipped } = readXlsxImages(buf, { maxEach: MAX_EVIDENCE_IMAGE_BYTES });
+  const out: EvidencePic[] = [];
+  let loose = 0;
+  for (const m of mods) {
+    const list = images.filter((x) => x.sheet === m.sheetName);
+    if (!list.length) continue;
+    // Ảnh ở cột A (mã case) trở đi đều tính; ảnh nằm trên case đầu (logo, hướng dẫn) ⇒ bỏ.
+    const idx = assignImagesToCases(m.caseRows ?? [], list);
+    list.forEach((im, i) => {
+      if (idx[i] >= 0 && idx[i] < m.cases.length) out.push({ mod: m, caseIdx: idx[i], data: im.data, ext: im.ext });
+      else loose++;
+    });
+  }
+  if (skipped) warnings.push(`${skipped} embedded image(s) were skipped (not PNG/JPEG/GIF, or larger than ${mbText(MAX_EVIDENCE_IMAGE_BYTES)})`);
+  if (loose) warnings.push(`${loose} embedded image(s) are not next to any test case — not imported`);
+  return out;
+}
+
+async function putEvidence(projectId: number, data: Buffer, ext: keyof typeof EVIDENCE_MIME): Promise<string> {
+  const file = `${crypto.createHash('sha256').update(data).digest('hex').slice(0, 32)}.${ext}`;
+  const key = evidenceKey(projectId, file);
+  if (!(await objectExists(key).catch(() => false))) await putObject(key, data, EVIDENCE_MIME[ext], 'private, max-age=0, no-store');
+  return file;
+}
+
+/** Lưu ảnh (4 luồng song song) rồi gắn token vào evidence của case; trả số ảnh đã lưu. */
+async function storeEvidencePics(projectId: number, pics: EvidencePic[]): Promise<number> {
+  const files: Array<string | null> = new Array(pics.length).fill(null);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(4, pics.length) }, async () => {
+    while (next < pics.length) {
+      const i = next++;
+      try { files[i] = await putEvidence(projectId, pics[i].data, pics[i].ext); } catch { files[i] = null; }
+    }
+  }));
+  pics.forEach((p, i) => {
+    const f = files[i];
+    if (!f) return;
+    const c = p.mod.cases[p.caseIdx];
+    c.evidence = appendEvidenceImages(c.evidence, [f]);
+  });
+  return files.filter(Boolean).length;
+}
+
+/** Xuất: tải ảnh của token [img:…] để nhúng lại vào ô Evidence (trần tổng 60 MB; ảnh thiếu ⇒ ghi chú chữ). */
+async function withEvidenceImages(projectId: number, mods: ItModuleData[]): Promise<ItModuleData[]> {
+  let budget = 60 * 1024 * 1024;
+  for (const m of mods) {
+    for (const c of m.cases) {
+      const files = evidenceImageFiles(c.evidence);
+      if (!files.length) continue;
+      const imgs: NonNullable<ItCaseData['evidenceImages']> = [];
+      for (const f of files) {
+        const data = budget > 0 ? await getObjectBytes(evidenceKey(projectId, f), MAX_EVIDENCE_IMAGE_BYTES) : null;
+        const kind = data ? imageSize(data) : null;
+        if (data && kind) { imgs.push({ data, ext: kind.ext, w: kind.w, h: kind.h }); budget -= data.length; }
+        else c.evidence = (c.evidence ?? '').replace(`[img:${f}]`, '(image not available)');
+      }
+      if (imgs.length) c.evidenceImages = imgs;
+    }
+  }
+  return mods;
+}
+
+/** Ảnh Evidence để hiện trên web (quyền xem dự án). */
+export async function readEvidenceImage(userId: number, projectId: number, file: string) {
+  await requireProject(userId, projectId, 'project.view');
+  const m = EVIDENCE_FILE_RE.exec(file);
+  if (!m) throw new NotFoundError('Evidence image not found');
+  const data = await getObjectBytes(evidenceKey(projectId, file), MAX_EVIDENCE_IMAGE_BYTES);
+  if (!data) throw new NotFoundError('Evidence image not found');
+  return { data, contentType: EVIDENCE_MIME[m[1] as keyof typeof EVIDENCE_MIME] };
+}
+
+/** Tải một ảnh Evidence lên (dán/chọn tệp ở khung chi tiết case) ⇒ token để chèn vào ô evidence. */
+export async function uploadEvidenceImage(userId: number, projectId: number, buf: Buffer) {
+  await requireProject(userId, projectId, 'issue.edit');
+  if (!buf.length) throw new BadRequestError('Empty file', 'VALIDATION_ERROR');
+  if (buf.length > MAX_EVIDENCE_IMAGE_BYTES) throw new BadRequestError(`The image is larger than ${mbText(MAX_EVIDENCE_IMAGE_BYTES)}`, 'WORK_FILE_TOO_LARGE');
+  const kind = imageSize(buf);
+  if (!kind) throw new BadRequestError('Only PNG, JPEG or GIF screenshots can be used as evidence', 'WORK_BAD_FILE_TYPE');
+  const file = await putEvidence(projectId, buf, kind.ext);
+  return { file, token: `[img:${file}]` };
 }
 
 // ─── Nhập Excel ──────────────────────────────────────────────────
@@ -816,6 +916,8 @@ export interface ImportResult {
   queued?: QueuedRequest;
   /** Thay thế đã chạy: mục thùng rác giữ toàn bộ dữ liệu cũ. */
   trashId?: number;
+  /** 5.2/5.3: số ảnh chụp Evidence nhúng trong tệp đã gắn được vào case (24/10/2026 — trước đây bị bỏ mất). */
+  evidenceImages?: number;
 }
 
 /** Số thứ "Thay thế" sẽ xoá + người gọi có được thay ngay không. */
@@ -922,9 +1024,12 @@ export async function importReport(
   for (const m of mods) if (m.cases.length > MAX_IT_CASES) { parsed.warnings.push(`${m.name}: only the first ${MAX_IT_CASES} test cases kept`); m.cases = m.cases.slice(0, MAX_IT_CASES); }
   const maxR = roundsMax(kind);
   for (const m of mods) for (const c of m.cases) if (c.rounds.length > maxR) c.rounds = c.rounds.slice(0, maxR);
+  // Ảnh Evidence dán trong sheet (24/10/2026): gắn vào đúng case theo hàng neo; lưu kho tệp khi nhập thật.
+  const pics = evidenceImagesOf(buf, mods, parsed.warnings);
   const result: ImportResult = {
     report, dryRun, mode, modules: mods.length, cases: mods.reduce((s, m) => s + m.cases.length, 0), changes: parsed.cover.changes.length,
     warnings: parsed.warnings.slice(0, 50), preview: mods.map((m) => ({ name: m.name, cases: m.cases.length })),
+    ...(pics.length ? { evidenceImages: pics.length } : {}),
   };
   if (dryRun) {
     const imp = await replaceImpact(userId, projectId, report);
@@ -935,6 +1040,11 @@ export async function importReport(
   if (mode === 'replace') {
     const g = await gateReplace(userId, projectId, report, buf, opts.confirm);
     if (g.queued) return { ...result, replaceDeletes: { items: g.imp.items, changes: g.imp.changes }, replaceNeedsApproval: true, queued: g.queued };
+  }
+  if (pics.length) {
+    const saved = await storeEvidencePics(projectId, pics);
+    if (saved < pics.length) result.warnings.push(`${pics.length - saved} evidence image(s) could not be saved — the cases were imported without them`);
+    result.evidenceImages = saved;
   }
   let trashId: number | undefined;
   await prisma.$transaction(async (tx) => {

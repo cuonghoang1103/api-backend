@@ -13,7 +13,8 @@ import { prisma } from '../../config/database.js';
 import { putObject } from '../../config/r2.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import * as agents from '../../services/work/agents.service.js';
-import { PROJECT_TEMPLATES, PROJECT_TYPES } from '../../services/work/constants.js';
+import { PROJECT_KINDS, PROJECT_TEMPLATES, PROJECT_TYPES, STUDIO_MODULES } from '../../services/work/constants.js';
+import { kindFromTemplate } from '../../services/work/studio.js';
 import { createProject, upsertLabel } from '../../services/work/projects.service.js';
 import { agentBus, listInbox } from '../../services/work/agentEvents.js';
 import * as approvals from '../../services/work/approvals.service.js';
@@ -552,10 +553,13 @@ const waitEvents = defineTool({
 // CTW: tạo project mới qua MCP. NGƯỜI dùng (token cá nhân) mới được; agent bị chặn tay ở đây vì
 // workspace.createProject cho cả MEMBER (agent là MEMBER ⇒ sẽ lọt nếu không chặn). Template SWR302/
 // SWT301/CAPSTONE tự seed khung đồ án (tuần, epic theo deliverable, trang mẫu) — xem projects.service.
+// 24/10/2026: trước đây KHÔNG truyền `kind` ⇒ createProject coi là "client cũ" ⇒ MỌI mô-đun tắt (cả Resources) —
+// dự án swt301/LAB4 tạo qua CuongMini không có Docs/Resources/Reports/Meetings. Nay: kind mặc định suy từ mẫu như
+// hộp thoại web (SWT301/SWR302/SWP391/CAPSTONE ⇒ SCHOOL…) ⇒ cùng mô-đun mặc định; `modules` bật/tắt thêm lúc tạo.
 const createProjectTool = defineTool({
   name: 'create_project',
   title: 'Create project',
-  description: 'Creates a new project in one of your workspaces (by slug). PEOPLE only — agent tokens are refused. Template: "SWR302" auto-seeds the Requirements assignment (weeks 2→9, one epic per deliverable, the SWR302 package page and 5 Wiegers template pages); "SWT301" the testing lab; "CAPSTONE" a graduation project; "BLANK" stays empty. key = 2–10 letters/digits starting with a letter (e.g. "TP2"). Returns the project key and its web URL.',
+  description: 'Creates a new project in one of your workspaces (by slug). PEOPLE only — agent tokens are refused. Template: "SWR302" auto-seeds the Requirements assignment (weeks 2→9, one epic per deliverable, the SWR302 package page and 5 Wiegers template pages); "SWT301" the testing lab; "CAPSTONE" a graduation project; "BLANK" stays empty. key = 2–10 letters/digits starting with a letter (e.g. "TP2"). kind defaults from the template (as on the web) and sets the default modules; modules turns extra ones on/off (e.g. {"docs":true,"meetings":true,"reports":true}). Returns the project key, its modules and web URL.',
   write: true,
   group: 'planning',
   input: z.object({
@@ -564,6 +568,9 @@ const createProjectTool = defineTool({
     name: z.string().min(1).max(120),
     type: z.enum(PROJECT_TYPES).default('SCRUM'),
     template: z.enum(PROJECT_TEMPLATES).default('BLANK'),
+    kind: z.enum(PROJECT_KINDS).optional().describe('PERSONAL | SCHOOL | SOFTWARE | CLIENT — omit to infer it from the template'),
+    modules: z.object(Object.fromEntries(STUDIO_MODULES.map((m) => [m, z.boolean().optional()])) as Record<(typeof STUDIO_MODULES)[number], z.ZodOptional<z.ZodBoolean>>)
+      .partial().optional().describe(`Turn modules on/off at creation: ${STUDIO_MODULES.join(', ')}`),
     description: z.string().max(5000).optional(),
   }),
   run: async (ctx, a) => {
@@ -575,8 +582,10 @@ const createProjectTool = defineTool({
     if (!ws) throw new NotFoundError(`Workspace "${a.workspace}" not found, or you are not a member of it.`);
     const p = await createProject(ctx.userId, ws.id, {
       key: a.key, name: a.name, type: a.type, template: a.template, description: a.description ?? null,
+      kind: a.kind ?? kindFromTemplate(a.template), modules: a.modules ?? {},
     });
-    return { projectKey: p.key, name: p.name, workspace: ws.slug, template: a.template, url: `/work/${ws.slug}/${p.key}` };
+    const on = Object.entries(p.modules).filter(([, v]) => v).map(([k]) => k);
+    return { projectKey: p.key, name: p.name, workspace: ws.slug, template: a.template, kind: p.kind, modules: on, url: `/work/${ws.slug}/${p.key}` };
   },
 });
 

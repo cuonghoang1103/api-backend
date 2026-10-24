@@ -1,6 +1,6 @@
 /**
  * CT Work — client cho tài liệu kiểm thử chuẩn FPT (Report 5.1 Unit + 5.2 Integration), đợt 1b 08/10/2026;
- * đợt 3B (09/10/2026): Report 5.3 System Test — cùng kiểu module/case với 5.2, đường `/system`, đúng 3 vòng.
+ * đợt 3B (09/10/2026): Report 5.3 System Test — cùng kiểu module/case với 5.2, đường `/system`; Round 1–4 từ 24/10/2026.
  * Backend: src/routes/work.fpt.routes.ts + src/services/work/fptTests.service.ts — đổi kiểu bên này thì đổi bên kia.
  * Tách riêng khỏi lib/work-api.ts để không giẫm tệp đang có nhiều phiên cùng sửa.
  */
@@ -19,8 +19,8 @@ export type UnitSection = 'COND' | 'CONFIRM';
 export type ItStatus = 'Passed' | 'Failed' | 'Pending' | 'N/A';
 export const IT_STATUSES: ItStatus[] = ['Passed', 'Failed', 'Pending', 'N/A'];
 export const MAX_ROUNDS = 4;
-/** Report 5.3 System Test: Round 1–3. */
-export const SYS_ROUNDS = 3;
+/** Report 5.3 System Test: Round 1–4 (24/10/2026 — mẫu ABClinic cô gửi; trước 1–3). */
+export const SYS_ROUNDS = 4;
 /** INT = 5.2 (module) · SYS = 5.3 (workflow). */
 export type ItKind = 'INT' | 'SYS';
 export type ReportKind = 'unit' | 'integration' | 'system';
@@ -85,6 +85,8 @@ export interface ImportResult {
   /** 22/10/2026: "Thay thế" xoá bao nhiêu thứ đang có; người gọi có phải gửi trưởng nhóm duyệt không. */
   replaceDeletes?: { items: number; changes: number }; replaceNeedsApproval?: boolean;
   queued?: QueuedRequest; trashId?: number;
+  /** 5.2/5.3: số ảnh chụp Evidence nhúng trong tệp đã gắn vào case (24/10/2026). */
+  evidenceImages?: number;
 }
 
 export const fptKeys = {
@@ -133,7 +135,30 @@ export const fptApi = {
     d<ImportResult>(api.post(`${B(pid)}/import?${new URLSearchParams({ report: opts.report, mode: opts.mode, dryRun: opts.dryRun ? '1' : '0', ...(opts.confirm ? { confirm: opts.confirm } : {}) })}`, file, {
       headers: { 'Content-Type': 'application/octet-stream' }, timeout: uploadTimeoutMs(file.byteLength), transformRequest: [(x) => x],
     })),
+  /** Ảnh Evidence (PNG/JPEG/GIF ≤ 8 MB) ⇒ token `[img:…]` chèn vào ô evidence. Gửi nhị phân như importXlsx. */
+  uploadEvidence: async (pid: number, file: Blob) => {
+    const buf = await file.arrayBuffer();
+    return d<{ file: string; token: string }>(api.post(`${B(pid)}/evidence`, buf, {
+      headers: { 'Content-Type': 'application/octet-stream' }, timeout: uploadTimeoutMs(buf.byteLength), transformRequest: [(x) => x],
+    }));
+  },
 };
+
+/** URL ảnh Evidence (qua proxy /api/v1 — cookie đăng nhập đi kèm). */
+export const evidenceUrl = (pid: number, file: string) => `/api/v1${B(pid)}/evidence/${encodeURIComponent(file)}`;
+const EV_RE = /\[img:([a-f0-9]{16,64}\.(?:png|jpeg|gif))\]/g;
+const EV_LINE_RE = /\n?\[img:[a-f0-9]{16,64}\.(?:png|jpeg|gif)\]/g;
+/** Tách ô evidence thành chữ thường + danh sách ảnh (token `[img:…]` mỗi cái một dòng — máy chủ đặt khi nhập Excel / tải ảnh). */
+export function splitEvidence(text: string | null | undefined): { plain: string; files: string[] } {
+  const t = text ?? '';
+  const files = [...t.matchAll(EV_RE)].map((m) => m[1]);
+  // KHÔNG cắt khoảng trắng của chữ người dùng (đang gõ dở "abc " phải giữ được dấu cách).
+  return { plain: files.length ? t.replace(EV_LINE_RE, '').replace(/^\n/, '') : t, files };
+}
+export function joinEvidence(plain: string, files: string[]): string {
+  const uniq = [...new Set(files)].map((f) => `[img:${f}]`);
+  return [plain, ...uniq].filter((x, i) => i > 0 || x !== '').join('\n');
+}
 
 export function saveBlob(blob: Blob, fileName: string) {
   const url = URL.createObjectURL(blob);

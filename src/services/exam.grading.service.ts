@@ -1,8 +1,9 @@
 /**
  * Exam Room — PE (Practical Exam) grading.
  *
- * Three graders, all going through the shared interactive LLM gateway
- * (feature 'interview' basket, so a rate-limit here can't starve batch jobs):
+ * Three graders, all going through ONE door — `exam/aiChamCong.ts › goiChamThi`
+ * (24/10/2026: always graded by Claude — rambo Opus 5 → official Anthropic
+ * Sonnet 5.5 → modelapi gpt-6-sol, auto-switching within the same call):
  *   • gradeCode    — student uploads a .zip of source files → AI grades against
  *                    the author's reference solution + expected output + rubric.
  *   • gradeWrite   — English essay graded by rubric.
@@ -14,7 +15,8 @@
  * hang) when AI is off, and returns a normalized 0..points score.
  */
 import AdmZip from 'adm-zip';
-import { llmComplete, isAiAvailable, aiOffReason, extractJson, checkTokenQuota } from './interview/llm/index.js';
+import { isAiAvailable, aiOffReason, extractJson, checkTokenQuota } from './interview/llm/index.js';
+import { goiChamThi } from './exam/aiChamCong.js';
 import { transcribeWithGroq } from './interview/voice/stt.js';
 import { AppError } from '../middleware/errorHandler.js';
 
@@ -88,16 +90,16 @@ function normalizeGrade(raw: RawGrade, points: number): Omit<PeGradeResult, 'tra
 }
 
 async function callGrader(userId: number, system: string, user: string): Promise<RawGrade> {
-  const first = await llmComplete({
-    step: 'interview', purpose: 'exam_grade', feature: 'exam', system,
+  const first = await goiChamThi({
+    system,
     messages: [{ role: 'user', content: user }],
     maxTokens: 2200, userId, maxRetries: 1, timeoutMs: 45_000,
   });
   try {
     return extractJson<RawGrade>(first.text);
   } catch {
-    const retry = await llmComplete({
-      step: 'interview', purpose: 'exam_grade', feature: 'exam', system,
+    const retry = await goiChamThi({
+      system,
       messages: [
         { role: 'user', content: user },
         { role: 'assistant', content: first.text },
@@ -110,22 +112,18 @@ async function callGrader(userId: number, system: string, user: string): Promise
 }
 
 // Diagram (Context/Use-Case/ERD) grading needs a model that actually SEES the
-// image — per the site's own vision measurements (`VISION_PURPOSES` /
-// `visionModel()` in the gateway), most models in the group silently guess
-// instead. Passing `purpose: 'chat_vision'` to `llmComplete` (rather than
-// calling the chat module's raw HTTP helper directly) keeps this call inside
-// the SAME budget/quota/cost-log gate every other exam grade goes through —
-// a raw fetch here would silently skip `checkBudget()` and the per-call
-// `InterviewLLMCallLog` entry, both real chốt chặn chi phí for this project.
-// `chat_vision` is hard-excluded from ever routing to the local machine (see
-// `VISION_PURPOSES` in `llm/gateway.ts`) since Qwen there is text-only and
-// would hallucinate the diagram instead of erroring.
+// image. Every bậc of `goiChamThi` does: Claude on rambo and on the official
+// Anthropic gateway natively, and the last fallback is forced to `gpt-6-sol`
+// (the only modelapi GPT measured to really see images) whenever the turn
+// carries an image. The door still goes through the same budget / quota /
+// cost-log gates (`checkBudget()` + `InterviewLLMCallLog`), and never routes
+// to the home machine (text-only Qwen would hallucinate the diagram).
 async function callGraderVision(
   userId: number, system: string, userText: string, image: { data: string; mediaType: string },
 ): Promise<RawGrade> {
   const imageBlock = { type: 'image' as const, source: { type: 'base64' as const, media_type: image.mediaType, data: image.data } };
-  const first = await llmComplete({
-    step: 'interview', purpose: 'chat_vision', feature: 'exam', system,
+  const first = await goiChamThi({
+    system,
     // images before text — Anthropic's (and this gateway's) recommended order
     messages: [{ role: 'user', content: [imageBlock, { type: 'text', text: userText }] }],
     maxTokens: 2200, userId, maxRetries: 1, timeoutMs: 60_000,
@@ -133,8 +131,8 @@ async function callGraderVision(
   try {
     return extractJson<RawGrade>(first.text);
   } catch {
-    const retry = await llmComplete({
-      step: 'interview', purpose: 'chat_vision', feature: 'exam', system,
+    const retry = await goiChamThi({
+      system,
       messages: [
         { role: 'user', content: [imageBlock, { type: 'text', text: userText }] },
         { role: 'assistant', content: first.text },
@@ -293,7 +291,7 @@ export async function generateSpeakingQuestions(userId: number, prompt: string, 
     'You generate speaking-exam questions for an English oral test. Given a topic/problem, produce natural, escalating questions (warm-up → opinion → deeper follow-up) a student answers aloud in English. ' +
     'Return ONLY a JSON array of objects: [{"text": "English question|||Câu hỏi tiếng Việt"}]. Each "text" MUST be bilingual "English|||Tiếng Việt".';
   const user = `TOPIC / PROBLEM:\n${prompt}\n\nGenerate exactly ${count} questions.`;
-  const res = await llmComplete({ step: 'interview', purpose: 'exam_grade', feature: 'exam', system, messages: [{ role: 'user', content: user }], maxTokens: 900, userId, maxRetries: 1, timeoutMs: 30_000 });
+  const res = await goiChamThi({ system, messages: [{ role: 'user', content: user }], maxTokens: 900, userId, maxRetries: 1, timeoutMs: 30_000 });
   try {
     const arr = extractJson<Array<{ text?: string }>>(res.text);
     return (Array.isArray(arr) ? arr : []).slice(0, count).map((q) => ({ text: String(q.text ?? '') })).filter((q) => q.text);

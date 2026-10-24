@@ -95,8 +95,9 @@ export function dauNgayVn(luc = new Date()): Date {
 export async function daDungNguoi(userId: number, hang: HangChinhHang, tu: Date): Promise<number> {
   const s = await prisma.anthropicUsage.aggregate({
     /* Đợt 8A: lượt do ADMIN WEB tài trợ (`viec = agent_taitro`) không ăn trần chính hãng riêng của người dùng.
-       20/10/2026: "Create with CuongMini" (`work_setup`) có hạn mức RIÊNG (taoCuongMini/goiModel.ts) — không ăn trần AI Code. */
-    where: { userId, hang, createdAt: { gte: tu }, viec: { notIn: ['agent_taitro', 'work_setup', 'work_ai', 'admin_thong_ke'] } },
+       20/10/2026: "Create with CuongMini" (`work_setup`) có hạn mức RIÊNG (taoCuongMini/goiModel.ts) — không ăn trần AI Code.
+       24/10/2026: chấm bài phòng thi (`exam_grade`) có trần RIÊNG (exam/aiChamCong.ts) — không ăn trần AI Code. */
+    where: { userId, hang, createdAt: { gte: tu }, viec: { notIn: ['agent_taitro', 'work_setup', 'work_ai', 'admin_thong_ke', 'exam_grade'] } },
     _sum: { costUsd: true },
   });
   return s._sum.costUsd ?? 0;

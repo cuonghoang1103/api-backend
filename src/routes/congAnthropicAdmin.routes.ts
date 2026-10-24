@@ -361,7 +361,9 @@ router.get('/ctwork-ai', boc(async (_req, res) => {
   const { chuoiCongHienTai } = await import('../services/work/aiCong.js');
   // 22/10/2026: số lần model trả markup gọi tool dạng chữ (DSML…) theo cổng+model, từ khi tiến trình chạy.
   const { thongKeMarkupTool } = await import('../services/work/aiMarkupTool.js');
-  res.json({ success: true, data: { gioiHan: await docGioiHanTaiTro(), chuoi: { work_assistant: chuoiCongHienTai('work_assistant'), work_spec_review: chuoiCongHienTai('work_spec_review'), work_digest: chuoiCongHienTai('work_digest') }, markupTool: thongKeMarkupTool() } });
+  // 24/10/2026: thêm dòng chấm bài phòng thi (rambo Opus 5 → chính hãng Sonnet 5.5 → modelapi) — cùng bảng chuỗi theo việc.
+  const { chuoiChamThiHienTai } = await import('../services/exam/aiChamCong.js');
+  res.json({ success: true, data: { gioiHan: await docGioiHanTaiTro(), chuoi: { work_assistant: chuoiCongHienTai('work_assistant'), work_spec_review: chuoiCongHienTai('work_spec_review'), work_digest: chuoiCongHienTai('work_digest'), exam_grade: chuoiChamThiHienTai() }, markupTool: thongKeMarkupTool() } });
 }));
 router.put('/ctwork-ai-gioi-han', boc(async (req, res) => {
   const { datGioiHanTaiTro } = await import('../services/work/aiTaiTro.js');

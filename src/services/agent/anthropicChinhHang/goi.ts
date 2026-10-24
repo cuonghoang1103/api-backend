@@ -52,7 +52,8 @@ export interface NguCanhGoi {
   /** `language_tutor` (19/10/2026): Trò chuyện cùng CuongMini trong khoá ngoại ngữ — trần $/người/ngày riêng (`ielts/troChuyen`). */
   /** `admin_thong_ke` (23/10/2026): AI thống kê chi tiêu ở trang admin — Sonnet 5.5, chỉ admin gọi, sổ riêng (không ăn trần người dùng). */
   /** `work_ai` (22/10/2026): trợ lý CT Work lùi sang cổng này khi rambo hỏng — trần $/ngày riêng (`services/work/aiCong.ts`). */
-  viec: 'agent_code' | 'agent_taitro' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor' | 'work_setup' | 'work_ai' | 'admin_thong_ke';
+  /** `exam_grade` (24/10/2026): chấm bài phòng thi lùi sang cổng này khi rambo hỏng — trần $/ngày riêng (`services/exam/aiChamCong.ts`). */
+  viec: 'agent_code' | 'agent_taitro' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor' | 'work_setup' | 'work_ai' | 'admin_thong_ke' | 'exam_grade';
   hang: HangChinhHang;
   model: string;
 }

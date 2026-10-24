@@ -480,6 +480,10 @@ phát hành bắt buộc phải public.
 >   CÂU HỎI = request, không đếm vòng đọc) + trần tiền/ngày của web. Không tài trợ ⇒ trần cũ, lỗi 429 `WORK_AI_TOKEN_CAP` tiếng Việt chỉ cách.
 > - Ảnh/tệp trong ô hỏi: `POST /projects/:pid/ai/files` (`aiTep.ts`); link sâu do MÃ dựng (`aiLienKet.ts`), model viết `KEY-12` / `[[doc:3]]`.
 >   Test: `npx tsx --test src/services/work/aiCong.test.ts src/services/work/aiCuongMini22.test.ts` + `WORK_DB_TEST=1 … src/routes/work.aiTaiTro.db.test.ts`.
+>
+> **⭐ 24/10/2026 — chấm bài PHÒNG THI luôn bằng Claude** (`src/services/exam/aiChamCong.ts › goiChamThi`, mọi lời gọi của `exam.grading.service.ts`):
+> rambo `claude-opus-5` (cờ riêng `EXAM_RAMBO`, mặc định bật) → chính hãng `claude-sonnet-5-5` (`EXAM_MODEL_CHINH_HANG`; trần `EXAM_CHINH_HANG_USD_NGAY` 15 /
+> `…_NGUOI_NGAY` 1,5, sổ `anthropic_usage.viec = exam_grade`) → modelapi `gpt-6-sol`; ảnh sơ đồ đi đủ 3 bậc. Log `[exam-cham]`; bảng admin có dòng `exam_grade`. Test: `npx tsx --test src/services/exam/aiChamCong.test.ts`.
 
 > **⭐⭐⭐ 22/10/2026 — CuongMini trong CT Work (`src/services/work/aiCong.ts`, thắng mọi dòng cũ về chuỗi CT Work):**
 > rambo `claude-fable-5` → chính hãng `claude-sonnet-5-5` → chính hãng `claude-haiku-5-5` (Sonnet hỏng/chạm trần) →

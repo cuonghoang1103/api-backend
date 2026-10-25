@@ -4,7 +4,7 @@
 # Run manually or via cron
 # ============================================================
 
-set -e
+set -eo pipefail   # 26/10/2026: thiếu pipefail ⇒ pg_dump hỏng vẫn ra tệp .gz rỗng và "thành công" (xem backup-cron.sh)
 
 BACKUP_DIR="/opt/cuonghoangdev/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
@@ -23,6 +23,12 @@ fi
 # Perform backup
 echo "[$(date)] Starting database backup..."
 docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db | gzip > "${BACKUP_FILE}"
+
+# Nghiệm thu (26/10/2026): gzip hợp lệ + ≥ 10 MB + có dòng "dump complete" — không qua thì xoá tệp, KHÔNG dọn bản cũ
+if ! gzip -t "${BACKUP_FILE}" 2>/dev/null || [ "$(stat -c %s "${BACKUP_FILE}")" -lt 10485760 ] \
+   || ! zcat "${BACKUP_FILE}" | tail -n 5 | grep -q "PostgreSQL database dump complete"; then
+    echo "[$(date)] ERROR: backup ${BACKUP_FILE} không qua nghiệm thu — đã xoá, bản cũ giữ nguyên"; rm -f "${BACKUP_FILE}"; exit 1
+fi
 
 # Check if backup file is valid
 if [ -f "${BACKUP_FILE}" ] && [ -s "${BACKUP_FILE}" ]; then

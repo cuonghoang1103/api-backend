@@ -125,6 +125,12 @@ export default {
     'swt301-fe1-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/05-fe1-sp26-re-tron-c85205a7.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-fe2-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe2-sp26-fe-tron-fe97634a.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-pe23-su26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-06-de-su26-pe23-0-tron-0696c3f5.mp4' }, defaultVideoTrack: 'VI'},
-    'swt301-fe25-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe25-sp26-tron-0b0596b6.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-fe25-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe25-sp26-tron-0b0596b6.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-lab3-labflow-report52': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-06-lab3-labflow-report52-a6b47684.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab4-de-bai': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-01-de-bai-lab4-tron-63aacfbe.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab4-doc-mau-abclinic': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-03-doc-mau-abclinic-tron-f2fbf570.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab4-viet-test-case': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-05-viet-case-studentbooking-tron-bbf88eb1.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab4-round-evidence-thong-ke': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-07-round-evidence-thong-ke-1eab9d76.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-lab4-chia-viec-ct-work': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-08-chia-viec-ct-work-9e68e7cc.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

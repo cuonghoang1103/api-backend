@@ -14,6 +14,7 @@
  *     { t: 'A query without an index', body: run(`SELECT …;`, `…psql output…`) },
  *   ]);
  *
+ * Slide ít chữ ⇒ { to: true } (chữ 28px) và/hoặc { giua: true } (căn giữa dọc) — KHÔNG để nửa dưới trống (phiên điều phối 25/10).
  * Vùng thân (.nd) ≈ 1112 × 520 px. Chữ thân 24px; khối mã 17px (sm 15px). Một slide ≤ ~14 dòng mã.
  * Chữ SVG: rộng ≈ 0,602 × font-size mỗi ký tự (đơn cách) — đặt nhãn bằng công thức, không bằng mắt.
  * MỞ ẢNH RA NHÌN sau khi render (bộ đo chỉ đo chiều cao).
@@ -32,6 +33,7 @@ export const CSS = `<style>
 .pg .nd{flex:1;padding:22px 84px 10px;font-size:24px;line-height:1.42;display:flex;flex-direction:column;
   justify-content:flex-start;gap:12px;overflow:hidden}
 .pg .nd.giua{justify-content:center}
+.pg .nd.to{font-size:28px;line-height:1.45;gap:16px}.pg .nd.to li{margin-bottom:4px}.pg .nd.to .o{font-size:24px}.pg .nd.to .card p{font-size:22px}.pg .nd.to .card .h{font-size:24px}.pg .nd.to .steps>div{font-size:26px}
 .pg .nd ul,.pg .nd ol{padding-left:30px;display:flex;flex-direction:column;gap:7px;margin:0}
 .pg .nd li::marker{color:#e08a1e;font-weight:700}
 .pg .nd b,.pg .nd strong{color:#262626}
@@ -217,14 +219,14 @@ export function hai_phien(rows, opts = {}) {
 }
 
 /** Một slide. */
-export function pg({ t, body = '', topic, bai = '', page, cover = false, sub = '', nhan = '', giua = false }) {
+export function pg({ t, body = '', topic, bai = '', page, cover = false, sub = '', nhan = '', giua = false, to = false }) {
   if (cover) {
     return `${CSS}<div class="pg bia">${LOGO}<div class="khoi">${nhan ? `<span class="nhan">${nhan}</span>` : ''}` +
       `<h1>${t}</h1><div class="gach"></div>${sub ? `<div class="phu">${sub}</div>` : ''}</div><div class="voi">🐘</div>` +
       `<div class="dai">PostgreSQL — from zero to production · cuongthai.com</div></div>`;
   }
   return `${CSS}<div class="pg">${LOGO}${bai ? `<span class="bai">${bai}</span>` : ''}<h2>${t}</h2><hr>` +
-    `<div class="nd${giua ? ' giua' : ''}">${body}</div><div class="chan"><span class="tr">cuongthai.com/courses/postgresql</span>${topic}<span class="so">${page}</span></div></div>`;
+    `<div class="nd${giua ? ' giua' : ''}${to ? ' to' : ''}">${body}</div><div class="chan"><span class="tr">cuongthai.com/courses/postgresql</span>${topic}<span class="so">${page}</span></div></div>`;
 }
 
 /**

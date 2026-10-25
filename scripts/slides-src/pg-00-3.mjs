@@ -2,7 +2,7 @@
  * pg-00-3 — PostgreSQL · Section 0 · Lesson 0.3 "Installing PostgreSQL & meeting psql" (slide EN, kiểu FU, 25/10/2026).
  * Nguồn: content/courses/postgresql/s00-intro.mjs › postgresql-0-3-cai-dat. Mọi output = chạy thật (PostgreSQL 17.11 trong container pgcourse17;
  * phần Docker/lỗi kết nối chạy thật trên máy này) — lưu ở video-bai-giang/src/khung/pg/that/pg-00-3{,b,c}.{sql,out.txt}.
- * Khác bài web: bài web dùng postgres:15 + cổng 5433; slide dùng postgres:17 + cổng 5444 (cổng 5433 trên máy đo đã bận — đó chính là lỗi
+ * Slide + bài web cùng dùng postgres:17 + cổng 5444 (cổng 5433 trên máy đo đã bận — đó chính là lỗi
  * "port is already allocated" ở slide 10).
  */
 import { lamDeck, sql, sh, psql, run, two, box, cards as cards0, steps, kw, flow, tbl, vsd, c } from './_pg-chung.mjs';

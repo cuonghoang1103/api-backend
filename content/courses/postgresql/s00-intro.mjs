@@ -2,7 +2,7 @@
  * PostgreSQL — Mục 0: Giới thiệu khoá học & Hướng dẫn học.
  * Song ngữ EN/VI qua .ml-en / .ml-vi (số lượng phải bằng nhau, mỗi bài 1–1).
  * LUẬT SOẠN:
- *  - Mọi output psql/SQL phải CHẠY THẬT (PostgreSQL 15.4, localhost:5433, db pgcourse)
+ *  - Mọi output psql/SQL phải CHẠY THẬT (PostgreSQL 17, Docker postgres:17, localhost:5444, db pgcourse)
  *    rồi chép đúng, kể cả khoảng trắng canh cột.
  *  - KHÔNG backtick trần trong content (dùng &#96;); mọi `${` trong code mẫu → \${;
  *    mọi < > trong code → &lt; &gt;; & trong code → &amp;.
@@ -92,7 +92,7 @@ ${G001}
 <h3>Who this is for</h3>
 <p>You need <strong>no prior database experience</strong>. If you can use a terminal and you've written a little code in any language, you're ready. Chapter 1 starts from the very beginning. If you've done the Node.js course (Chapter 7 was Prisma/PostgreSQL), this course is the deep dive into the database itself that Chapter 7 only sampled.</p>
 <div class="callout ok">Time budget: roughly <strong>2–3 hours per chapter</strong> if you type every query and run it yourself. 16 chapters ≈ 40–50 hours to genuinely absorb. The goal is not to finish — it's to reach the point where you can look at a slow query, read its plan, and know exactly what to fix.</div>
-<div class="note-ct">This site (cuongthai.com) runs on PostgreSQL 15.4 in production: roughly 248 tables, 95 migrations, a 6,980-line schema, storing every user, post, message, course and note you see. When a chapter says "here's how it's done in production", it means <em>here</em> — including the real connection-pool math (12 clients × pool 10 = 120 &gt; the 100-connection limit) that Chapter 14 dissects.</div>
+<div class="note-ct">This site (cuongthai.com) runs on PostgreSQL 16 in production: roughly 248 tables, 95 migrations, a 6,980-line schema, storing every user, post, message, course and note you see. When a chapter says "here's how it's done in production", it means <em>here</em> — including the real connection-pool math (12 clients × pool 10 = 120 &gt; the 100-connection limit) that Chapter 14 dissects.</div>
 <div class="pitfall"><p><strong>Trap — treating the database as a detail you can swap later.</strong> "We will start with SQLite and move to Postgres when we grow" sounds prudent and is usually the most expensive decision in the project. Chapter 18 of the Node.js course makes the point in one line: <em>data outlives code</em>. You can replace every service, every framework and every language while the schema stays; you cannot replace the schema while the data stays. Migrating a live database is a one-way door with downtime, dual writes and a backfill — measured in weeks. Choosing PostgreSQL on day one costs nothing extra, because the free tier of every host offers it and the SQL you write is more portable, not less.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -170,7 +170,7 @@ ${G001}
 <h3>Khoá này dành cho ai</h3>
 <p>Bạn <strong>không cần</strong> kinh nghiệm cơ sở dữ liệu nào trước. Nếu bạn dùng được terminal và đã viết chút code bằng bất kỳ ngôn ngữ nào, bạn đã sẵn sàng. Chương 1 bắt đầu từ đầu. Nếu bạn đã học khoá Node.js (Chương 7 là Prisma/PostgreSQL), khoá này là phần đào sâu vào chính cơ sở dữ liệu mà Chương 7 mới chỉ nếm thử.</p>
 <div class="callout ok">Ngân sách thời gian: khoảng <strong>2–3 giờ mỗi chương</strong> nếu bạn gõ và tự chạy mọi truy vấn. 16 chương ≈ 40–50 giờ để thấm thật sự. Mục tiêu không phải "học cho xong" — mà là tới được điểm bạn nhìn một truy vấn chậm, đọc kế hoạch của nó, và biết chính xác cần sửa gì.</div>
-<div class="note-ct">Trang này (cuongthai.com) chạy trên PostgreSQL 15.4 ở production: khoảng 248 bảng, 95 migration, lược đồ 6.980 dòng, lưu mọi user, bài đăng, tin nhắn, khoá học và ghi chú bạn thấy. Khi một chương nói "đây là cách làm trong production", nghĩa là <em>ở đây</em> — kể cả bài toán connection-pool thật (12 client × pool 10 = 120 &gt; giới hạn 100 kết nối) mà Chương 14 mổ xẻ.</div>
+<div class="note-ct">Trang này (cuongthai.com) chạy trên PostgreSQL 16 ở production: khoảng 248 bảng, 95 migration, lược đồ 6.980 dòng, lưu mọi user, bài đăng, tin nhắn, khoá học và ghi chú bạn thấy. Khi một chương nói "đây là cách làm trong production", nghĩa là <em>ở đây</em> — kể cả bài toán connection-pool thật (12 client × pool 10 = 120 &gt; giới hạn 100 kết nối) mà Chương 14 mổ xẻ.</div>
 <div class="pitfall"><p><strong>Bẫy — coi cơ sở dữ liệu là một chi tiết có thể thay sau.</strong> "Cứ bắt đầu bằng SQLite rồi lớn lên thì chuyển sang Postgres" nghe thận trọng và thường là quyết định ĐẮT NHẤT của cả dự án. Chương 18 khoá Node.js nói gọn trong một dòng: <em>dữ liệu sống lâu hơn mã</em>. Bạn thay được mọi service, mọi framework và mọi ngôn ngữ trong khi lược đồ vẫn ở đó; bạn KHÔNG thay được lược đồ trong khi dữ liệu vẫn ở đó. Di chuyển một cơ sở dữ liệu đang sống là một cánh cửa MỘT CHIỀU kèm downtime, ghi kép và một đợt nạp lại — đo bằng TUẦN. Chọn PostgreSQL ngay ngày đầu không tốn thêm gì, vì gói miễn phí của mọi nhà cung cấp đều có nó và SQL bạn viết còn khả chuyển HƠN, chứ không kém.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -268,7 +268,7 @@ ${G002}
 </div>
 
 <h3>What "real output" means in this course</h3>
-<p>Throughout the course you'll see boxes like this — they are the <em>actual</em> result of running the query on a real PostgreSQL 15.4 server, copied verbatim:</p>
+<p>Throughout the course you'll see boxes like this — they are the <em>actual</em> result of running the query on a real PostgreSQL server, copied verbatim (PostgreSQL 17; a few later chapters were first run on 15.4 — the results are the same, only version numbers and timings differ):</p>
 <div class="out">
  tong | co_body
 ------+---------
@@ -312,7 +312,7 @@ ${G002}
 </div>
 
 <h3>"Output thật" trong khoá này nghĩa là gì</h3>
-<p>Suốt khoá bạn sẽ thấy những khối như thế này — chúng là kết quả <em>thật</em> của việc chạy truy vấn trên một máy chủ PostgreSQL 15.4 thật, chép nguyên văn:</p>
+<p>Suốt khoá bạn sẽ thấy những khối như thế này — chúng là kết quả <em>thật</em> của việc chạy truy vấn trên một máy chủ PostgreSQL thật, chép nguyên văn (PostgreSQL 17; vài chương sau được chạy lần đầu trên 15.4 — kết quả như nhau, chỉ khác số phiên bản và thời gian đo):</p>
 <div class="out">
  tong | co_body
 ------+---------
@@ -345,33 +345,33 @@ ${G003}
 <p class="lead">There are two ways to get a PostgreSQL server: install it natively, or run it in Docker. Docker is the fastest way to a clean, disposable database and it's what this course uses for its examples — but native installs are what you'll often meet in the wild, so we cover both. Then we connect with <code>psql</code>, the command-line client, and run real SQL.</p>
 
 <h3>Option A — Docker (recommended for this course)</h3>
-<p>If you have Docker, one command gives you a fully working PostgreSQL 15 server. It listens on port 5432 inside the container; we map it to a host port so <code>psql</code> can reach it:</p>
-<pre><code class="language-bash"><span class="tok-comment"># Start a throwaway PostgreSQL 15 server</span>
-docker run -d --name pg15 \\
+<p>If you have Docker, one command gives you a fully working PostgreSQL 17 server. It listens on port 5432 inside the container; we map it to a host port so <code>psql</code> can reach it:</p>
+<pre><code class="language-bash"><span class="tok-comment"># Start a throwaway PostgreSQL 17 server</span>
+docker run -d --name pg17 \\
   -e POSTGRES_PASSWORD=123456 \\
-  -p 5433:5432 \\
-  postgres:15
+  -p 5444:5432 \\
+  postgres:17
 
 <span class="tok-comment"># Check it's up</span>
 docker ps</code></pre>
-<p>The <code>-e POSTGRES_PASSWORD=123456</code> sets the password for the default <code>postgres</code> superuser. <code>-p 5433:5432</code> means "connect to port 5433 on my machine to reach port 5432 in the container". The data lives inside the container — good enough for learning; Chapter 15 covers keeping it safe with volumes and backups.</p>
+<p>The <code>-e POSTGRES_PASSWORD=123456</code> sets the password for the default <code>postgres</code> superuser. <code>-p 5444:5432</code> means "connect to port 5444 on my machine to reach port 5432 in the container". The data lives inside the container — good enough for learning; Chapter 15 covers keeping it safe with volumes and backups.</p>
 
 <h3>Option B — Native install</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">macOS</span><span class="v"><code>brew install postgresql@15</code> then <code>brew services start postgresql@15</code>. Or use the Postgres.app one-click app.</span></div>
+  <div class="kv"><span class="k">macOS</span><span class="v"><code>brew install postgresql@17</code> then <code>brew services start postgresql@17</code>. Or use the Postgres.app one-click app.</span></div>
   <div class="kv"><span class="k">Ubuntu/Debian</span><span class="v"><code>sudo apt install postgresql</code> — it starts automatically and listens on port 5432.</span></div>
   <div class="kv"><span class="k">Windows</span><span class="v">The EnterpriseDB installer from postgresql.org, which bundles the server + psql + pgAdmin.</span></div>
 </div>
 
 <h3>Connecting with psql</h3>
 <p><code>psql</code> is the official terminal client — a REPL where you type SQL and meta-commands. Connect to the Docker server above like this (it will prompt for the password, <code>123456</code>):</p>
-<pre><code class="language-bash">psql -h localhost -p 5433 -U postgres</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 5444 -U postgres</code></pre>
 <p>Once connected, <code>\\conninfo</code> confirms exactly where you are — a good habit before running anything destructive:</p>
-<div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5433".</div>
+<div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5444".</div>
 <p>And <code>SELECT version();</code> shows the exact server build. This is the real output from the server this course runs on:</p>
 <div class="out">                                                          version
----------------------------------------------------------------------------------------------------------------------------
- PostgreSQL 15.4 (Debian 15.4-2.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+----------------------------------------------------------------------------------------------------------------------------
+ PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 (1 row)</div>
 
 <h3>Server, database, table — the three levels</h3>
@@ -438,7 +438,7 @@ Indexes:
 <div class="pitfall">
 <p><strong>Common first-timer confusion:</strong> "I typed a query and nothing happened." In psql, a statement doesn't run until you end it with a semicolon <code>;</code> and press Enter. If your prompt changed from <code>pgcourse=#</code> to <code>pgcourse-#</code>, psql is still waiting for you to finish the statement — type the <code>;</code>. Also, GUI tools like <strong>pgAdmin</strong>, <strong>DBeaver</strong>, or <strong>TablePlus</strong> are lovely, but learn <code>psql</code> first: it's on every server, needs no setup, and is what you'll fall back to when something is on fire at 2am.</p>
 </div>
-<div class="note-ct">This course's examples run on a Postgres reachable at <code>localhost:5433</code> (a Docker container), and the "100 Ngày Database" series on this site uses the very same setup. If you match it — Docker, port 5433, password 123456 — every query in this course will produce the exact output shown.</div>
+<div class="note-ct">This course's examples run on a Postgres reachable at <code>localhost:5444</code> (a Docker container), and the "100 Ngày Database" series on this site uses the very same setup. If you match it — Docker <code>postgres:17</code>, port 5444, password 123456 — every query in this course will produce the exact output shown.</div>
 <h3>Three ways to get a PostgreSQL to practise on</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">Docker</span><span class="lz-lnote">One command, no system packages, and <code>docker rm</code> undoes everything. Best for a course: you can break it freely and start again in seconds.</span></div>
@@ -458,33 +458,33 @@ Indexes:
 <p class="lead">Có hai cách để có một máy chủ PostgreSQL: cài bản gốc, hoặc chạy trong Docker. Docker là cách nhanh nhất để có một cơ sở dữ liệu sạch, dùng xong bỏ, và là cách khoá này dùng cho các ví dụ — nhưng bản cài gốc là thứ bạn thường gặp ngoài đời, nên ta nói cả hai. Sau đó ta kết nối bằng <code>psql</code>, client dòng lệnh, và chạy SQL thật.</p>
 
 <h3>Cách A — Docker (khuyên dùng cho khoá này)</h3>
-<p>Nếu bạn có Docker, một lệnh cho bạn một máy chủ PostgreSQL 15 chạy đầy đủ. Nó lắng nghe cổng 5432 bên trong container; ta ánh xạ ra một cổng của máy để <code>psql</code> với tới:</p>
-<pre><code class="language-bash"><span class="tok-comment"># Khởi động một máy chủ PostgreSQL 15 dùng xong bỏ</span>
-docker run -d --name pg15 \\
+<p>Nếu bạn có Docker, một lệnh cho bạn một máy chủ PostgreSQL 17 chạy đầy đủ. Nó lắng nghe cổng 5432 bên trong container; ta ánh xạ ra một cổng của máy để <code>psql</code> với tới:</p>
+<pre><code class="language-bash"><span class="tok-comment"># Khởi động một máy chủ PostgreSQL 17 dùng xong bỏ</span>
+docker run -d --name pg17 \\
   -e POSTGRES_PASSWORD=123456 \\
-  -p 5433:5432 \\
-  postgres:15
+  -p 5444:5432 \\
+  postgres:17
 
 <span class="tok-comment"># Kiểm tra nó đang chạy</span>
 docker ps</code></pre>
-<p><code>-e POSTGRES_PASSWORD=123456</code> đặt mật khẩu cho superuser mặc định tên <code>postgres</code>. <code>-p 5433:5432</code> nghĩa là "kết nối tới cổng 5433 trên máy tôi để với tới cổng 5432 trong container". Dữ liệu nằm bên trong container — đủ cho việc học; Chương 15 sẽ nói cách giữ nó an toàn bằng volume và sao lưu.</p>
+<p><code>-e POSTGRES_PASSWORD=123456</code> đặt mật khẩu cho superuser mặc định tên <code>postgres</code>. <code>-p 5444:5432</code> nghĩa là "kết nối tới cổng 5444 trên máy tôi để với tới cổng 5432 trong container". Dữ liệu nằm bên trong container — đủ cho việc học; Chương 15 sẽ nói cách giữ nó an toàn bằng volume và sao lưu.</p>
 
 <h3>Cách B — Cài bản gốc</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">macOS</span><span class="v"><code>brew install postgresql@15</code> rồi <code>brew services start postgresql@15</code>. Hoặc dùng app Postgres.app bấm-một-nút.</span></div>
+  <div class="kv"><span class="k">macOS</span><span class="v"><code>brew install postgresql@17</code> rồi <code>brew services start postgresql@17</code>. Hoặc dùng app Postgres.app bấm-một-nút.</span></div>
   <div class="kv"><span class="k">Ubuntu/Debian</span><span class="v"><code>sudo apt install postgresql</code> — nó tự khởi động và lắng nghe cổng 5432.</span></div>
   <div class="kv"><span class="k">Windows</span><span class="v">Bộ cài EnterpriseDB từ postgresql.org, gói sẵn máy chủ + psql + pgAdmin.</span></div>
 </div>
 
 <h3>Kết nối bằng psql</h3>
 <p><code>psql</code> là client terminal chính thức — một REPL nơi bạn gõ SQL và các lệnh meta. Kết nối tới máy chủ Docker phía trên như sau (nó sẽ hỏi mật khẩu, <code>123456</code>):</p>
-<pre><code class="language-bash">psql -h localhost -p 5433 -U postgres</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 5444 -U postgres</code></pre>
 <p>Khi đã kết nối, <code>\\conninfo</code> xác nhận chính xác bạn đang ở đâu — một thói quen tốt trước khi chạy bất cứ thứ gì có thể phá dữ liệu:</p>
-<div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5433".</div>
+<div class="out">You are connected to database "pgcourse" as user "postgres" on host "localhost" (address "::1") at port "5444".</div>
 <p>Và <code>SELECT version();</code> hiện đúng bản build của máy chủ. Đây là output thật từ chính máy chủ khoá này chạy trên đó:</p>
 <div class="out">                                                          version
----------------------------------------------------------------------------------------------------------------------------
- PostgreSQL 15.4 (Debian 15.4-2.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+----------------------------------------------------------------------------------------------------------------------------
+ PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
 (1 row)</div>
 
 <h3>Máy chủ, cơ sở dữ liệu, bảng — ba cấp</h3>
@@ -551,7 +551,7 @@ Indexes:
 <div class="pitfall">
 <p><strong>Nhầm lẫn thường gặp của người mới:</strong> "Tôi gõ truy vấn mà không thấy gì xảy ra." Trong psql, một câu lệnh chưa chạy cho tới khi bạn kết thúc nó bằng dấu chấm phẩy <code>;</code> rồi nhấn Enter. Nếu dấu nhắc của bạn đổi từ <code>pgcourse=#</code> thành <code>pgcourse-#</code>, psql vẫn đang chờ bạn kết thúc câu lệnh — hãy gõ dấu <code>;</code>. Ngoài ra, các công cụ đồ hoạ như <strong>pgAdmin</strong>, <strong>DBeaver</strong>, hay <strong>TablePlus</strong> rất dễ chịu, nhưng hãy học <code>psql</code> trước: nó có trên mọi máy chủ, không cần cài đặt gì, và là thứ bạn quay về khi có sự cố lúc 2 giờ sáng.</p>
 </div>
-<div class="note-ct">Ví dụ của khoá này chạy trên một Postgres với tới được ở <code>localhost:5433</code> (một container Docker), và loạt "100 Ngày Database" trên trang này dùng đúng cùng thiết lập đó. Nếu bạn làm khớp — Docker, cổng 5433, mật khẩu 123456 — mọi truy vấn trong khoá sẽ cho đúng output như hiển thị.</div>
+<div class="note-ct">Ví dụ của khoá này chạy trên một Postgres với tới được ở <code>localhost:5444</code> (một container Docker), và loạt "100 Ngày Database" trên trang này dùng đúng cùng thiết lập đó. Nếu bạn làm khớp — Docker <code>postgres:17</code>, cổng 5444, mật khẩu 123456 — mọi truy vấn trong khoá sẽ cho đúng output như hiển thị.</div>
 <h3>Ba cách có một PostgreSQL để tập</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">Docker</span><span class="lz-lnote">Một câu lệnh, không cài gói hệ thống, và <code>docker rm</code> hoàn tác mọi thứ. Hợp nhất cho một khoá học: bạn phá thoải mái rồi dựng lại trong vài giây.</span></div>

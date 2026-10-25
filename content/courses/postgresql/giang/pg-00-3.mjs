@@ -1,10 +1,10 @@
-/** Giảng theo slide — bài 0.3 (deck pg-00-3, 23 slide). Slide dùng postgres:17 + cổng 5444; bài đọc bên dưới viết với postgres:15 + cổng 5433 — cùng một cách làm. */
+/** Giảng theo slide — bài 0.3 (deck pg-00-3, 23 slide). Slide + bài đọc cùng dùng postgres:17 + cổng 5444. */
 import { walkPg } from '../_slides.mjs';
 
 export default walkPg('pg-00-3', 'Installing PostgreSQL & meeting psql', 'Cài đặt PostgreSQL & làm quen psql', [
   [1, 'Installing PostgreSQL & meeting psql',
-    `<p>Opening slide. In this lesson you start a real PostgreSQL server in one command, connect to it with psql and send your first SQL.</p><p>Note: the slides use <code>postgres:17</code> and host port <code>5444</code> (this course runs PostgreSQL 17; port 5433 was busy on the author’s machine — which makes a good error example). The written lesson below uses <code>postgres:15</code> and port 5433; the steps are identical, only the numbers differ.</p>`,
-    `<p>Slide mở đầu. Trong bài này bạn dựng một máy chủ PostgreSQL thật chỉ bằng một lệnh, kết nối bằng psql và gửi câu SQL đầu tiên.</p><p>Lưu ý: slide dùng <code>postgres:17</code> và cổng máy <code>5444</code> (khoá chạy PostgreSQL 17; cổng 5433 đang bận trên máy tác giả — thành ra có luôn ví dụ lỗi). Bài đọc bên dưới dùng <code>postgres:15</code> và cổng 5433; các bước giống hệt, chỉ khác con số.</p>`],
+    `<p>Opening slide. In this lesson you start a real PostgreSQL server in one command, connect to it with psql and send your first SQL.</p><p>The whole course uses <code>postgres:17</code> mapped to host port <code>5444</code> — the slides and the written lesson below match exactly.</p>`,
+    `<p>Slide mở đầu. Trong bài này bạn dựng một máy chủ PostgreSQL thật chỉ bằng một lệnh, kết nối bằng psql và gửi câu SQL đầu tiên.</p><p>Cả khoá dùng <code>postgres:17</code> ánh xạ ra cổng máy <code>5444</code> — slide và bài đọc bên dưới khớp nhau hoàn toàn.</p>`],
   [2, 'What you will get from this lesson',
     `<p>Five things: the three ways to get a server (and why Docker), one command that starts PostgreSQL 17 and keeps its data safe, connecting with flags or a connection string, reading the three most common errors, and the structure server → database → schema → table with the psql meta-commands.</p>`,
     `<p>Năm điều: ba cách có một máy chủ (và vì sao chọn Docker), một lệnh dựng PostgreSQL 17 và giữ dữ liệu an toàn, kết nối bằng cờ hoặc chuỗi kết nối, đọc ba lỗi hay gặp nhất, và cấu trúc máy chủ → cơ sở dữ liệu → schema → bảng cùng các lệnh meta của psql.</p>`],

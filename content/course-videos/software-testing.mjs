@@ -118,5 +118,11 @@ export default {
     'swt301-pe-sp25': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-04-de-sp25-tron-c31729d7.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-01-thi-pe-c1fb22cf.mp4' }, defaultVideoTrack: 'VI'},
     'swt301-final-exam-fe-guide': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-02-thi-fe-073949c6.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-pe24-su26-0-doc-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-0-b61c6f07.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-pe24-su26-1-review-cartcalculator': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-1-6cadf598.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-pe24-su26-2-mcdc-calcbaggagefee': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-2-7a499b07.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-pe24-su26-3-ticket-refund-black-box': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-3-bc94f038.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-fe1-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/05-fe1-sp26-re-tron-c85205a7.mp4' }, defaultVideoTrack: 'VI'},
+    'swt301-fe2-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe2-sp26-fe-tron-fe97634a.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -16,6 +16,7 @@ import ch9 from './swt301/ch9.mjs';
 import ch4 from './swt301/ch4.mjs';
 import ch8 from './swt301/ch8.mjs';
 import pe from './swt301/pe.mjs';
+import chuaDeFe from './swt301/chuaDeFe.mjs';
 import lab1 from './swt301/lab1.mjs';
 import lab3 from './swt301/lab3.mjs';
 import lab4 from './swt301/lab4.mjs';
@@ -81,6 +82,8 @@ export default {
     /* ══════════ DỰ ÁN LUYỆN TẬP (swt301/practice.mjs) + THI CUỐI KỲ (swt301/pt.mjs) ══════════ */
     practice,
     pe,
+    /* ══════════ CHỮA TRỌN ĐỀ FE (video, tách riêng khỏi PE) — swt301/chuaDeFe.mjs ══════════ */
+    chuaDeFe,
     finalExam,
   ],
 };

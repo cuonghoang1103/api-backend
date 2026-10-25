@@ -9,9 +9,9 @@
 const KHOA = '/courses/front-end-web-development-with-react/learn?lessonSlug=';
 
 // một bài video = một đề FE
-const fe = ({ so, ky, kyEn, dai, nhieuDA, nhieuDAEn, daGap, daGapEn, moc, chuong, chuongEn, onLai, meo, meoEn }) => ({
+const fe = ({ slug, so, ky, kyEn, dai, nhieuDA, nhieuDAEn, daGap, daGapEn, moc, chuong, chuongEn, onLai, meo, meoEn }) => ({
   title: `FE review · Exam ${so} (${kyEn}) — full walkthrough, 50 questions|||Ôn thi FE · Chữa trọn đề FE${so} (${ky}) · 50 câu`,
-  slug: `fer202-fe${so}-chua-tron-de`,
+  slug: slug || `fer202-fe${so}-chua-tron-de`,
   type: 'VIDEO',
   description: `Chữa trọn đề FE số ${so} kỳ ${ky}: 50 câu trắc nghiệm đúng thứ tự phòng thi, mỗi câu có ảnh đề gốc, dịch, từ vựng, vì sao từng đáp án sai/đúng và nhãn chương. Video ${dai}.`,
   content: `
@@ -190,5 +190,29 @@ export default [
     onLai: [L.a3, L.c12, L.c9, L.c11, L.c8, L.a1, L.c10, L.c6],
     meo: 'Sau năm đề FE1, FE2, FE8, FE6, FE7 bạn đã đi qua phần lớn dạng câu của đề trắc nghiệm FER202 — phần còn lại là làm lại cho nhớ chắc.',
     meoEn: 'After FE1, FE2, FE8, FE6 and FE7 you have seen most question types of the FER202 multiple-choice exam — what is left is redoing them until they stick.',
+  }),
+  fe({
+    slug: 'fer202-fe11-su26-chua-tron-de', so: 11, ky: 'SU26', kyEn: 'SU26', dai: '40 phút',
+    nhieuDA: 'Bốn câu chọn nhiều đáp án (câu có chữ "Choose 2" hoặc "Select all that apply", ví dụ câu 49) — thiếu một đáp án là mất cả câu.',
+    nhieuDAEn: 'Four multiple-answer questions ("Choose 2" or "Select all that apply", e.g. question 49) — missing one option loses the whole question.',
+    daGap: '13/50 câu đã gặp ở các đề trước (7 câu ở FE2, 2 ở FE1, 2 ở FE6, 2 ở FE7) — viền xám trong video, chữa ngắn; 37 câu còn lại chữa đầy đủ. Đề nhiều câu định nghĩa ngắn, bẫy hay gặp là câu hỏi ngược có chữ NOT.',
+    daGapEn: '13 of the 50 questions appeared in earlier papers (7 in FE2, 2 each in FE1, FE6, FE7) — shown with a grey border and kept short; the other 37 get the full treatment. Many short definition questions; the usual trap is the reversed NOT question.',
+    moc: [
+      ['0:00', 'Part 1 — questions 1–13 (exam structure, time plan)', 'Phần 1 — câu 1–13 (cấu trúc đề, chia giờ)'],
+      ['11:19', 'Part 2 — questions 14–26', 'Phần 2 — câu 14–26'],
+      ['20:56', 'Part 3 — questions 27–38', 'Phần 3 — câu 27–38'],
+      ['30:30', 'Part 4 — questions 39–50 + chapter statistics', 'Phần 4 — câu 39–50 + thống kê chương'],
+    ],
+    chuong: [
+      'Chương 4 — Bootstrap: 7 câu (nhiều nhất) · Chương 2 — Promise, async/await: 6 câu · Chương 8 — Hooks và Chương 12 — Redux: mỗi chương 5 câu',
+      'Lỗ hổng nên ôn: Redux & Redux Toolkit (5 câu, Ch12: useSelector đọc, useDispatch gửi, reducer, configureStore) · Promise, async/await (6 câu, Ch2) · Hooks (5 câu, Ch8: useReducer, custom hook, useContext, memo) · lazy & Suspense (4 câu, Ch10) · props & Context (4 câu, Ch7)',
+    ],
+    chuongEn: [
+      'Chapter 4 — Bootstrap: 7 questions (most) · Chapter 2 — Promises, async/await: 6 · Chapter 8 — Hooks and Chapter 12 — Redux: 5 each',
+      'Weak spots worth reviewing: Redux & Redux Toolkit (5, Ch12: useSelector reads, useDispatch sends, reducers, configureStore) · Promises, async/await (6, Ch2) · Hooks (5, Ch8: useReducer, custom hooks, useContext, memo) · lazy & Suspense (4, Ch10) · props & Context (4, Ch7)',
+    ],
+    onLai: [L.c12, L.c12b, L.c8, L.c10, L.c7],
+    meo: 'Đề này ra nhiều câu định nghĩa ngắn: đọc kỹ chữ NOT và "Select all", đếm đủ số đáp án đề đòi trước khi sang câu khác.',
+    meoEn: 'This paper has many short definition questions: read NOT and "Select all" carefully and count that you picked as many options as asked before moving on.',
   }),
 ];

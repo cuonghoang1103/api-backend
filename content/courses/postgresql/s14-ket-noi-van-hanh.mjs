@@ -1,14 +1,20 @@
 /**
  * PostgreSQL — Chương 14: Kết nối, pool & vận hành (Giai đoạn 4 — Trên production).
- * Giá kết nối đo thật bằng driver pg: 4,403 ms/truy vấn khi mở mới vs 0,186 ms khi tái
- * dùng (23,7×), pool max 10 → 0,205 ms · cạn kết nối THẬT ở đúng 100:
+ * Giá kết nối đo thật bằng driver pg: 6,765 ms/truy vấn khi mở mới vs 0,425 ms khi tái
+ * dùng (15,9×), pool max 10 → 0,442 ms · cạn kết nối THẬT ở đúng 100 (role thường: 97):
  * "sorry, too many clients already" · bài toán 12 client × pool 10 = 120 > 100 của
  * chính cuongthai.com (nêu ở s00-intro) · autovacuum ngưỡng 50 + 0,2×n ·
- * pg_stat_statements: truy vấn 2 lượt ăn 51,1 ms nhiều hơn truy vấn 5 lượt ăn 12,7 ms.
- * Output CHẠY THẬT trên PostgreSQL 16.13.
+ * pg_stat_statements: truy vấn 2 lượt ăn 103,3 ms; câu rẻ gọi 20.005 lượt ăn 1.048,5 ms.
+ * Output CHẠY THẬT trên PostgreSQL 17.11 (agent c14 chạy lại 26/10/2026; trước đó 16.13).
+ * Slide + giảng: giang/pg-14-1…4.mjs (deck pg-14-1…4).
  * LUẬT: < > trong code/out → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  * Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G141 from './giang/pg-14-1.mjs';
+import G142 from './giang/pg-14-2.mjs';
+import G143 from './giang/pg-14-3.mjs';
+import G144 from './giang/pg-14-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,8 +27,8 @@ export default {
       slug: 'postgresql-14-1-gia-ket-noi',
       type: 'LESSON',
       isFreePreview: true,
-      description: 'PostgreSQL cấp cho mỗi kết nối một TIẾN TRÌNH của hệ điều hành, chứ không phải một luồng. Đo thật bằng driver pg: mở kết nối mới cho từng truy vấn đắt gấp 23,7 lần tái dùng, và máy chủ từ chối ở đúng kết nối thứ 100 bằng một thông báo bạn sẽ nhận ra.',
-      content: `
+      description: 'PostgreSQL cấp cho mỗi kết nối một TIẾN TRÌNH của hệ điều hành, chứ không phải một luồng. Đo thật bằng driver pg: mở kết nối mới cho từng truy vấn đắt gấp 15,9 lần tái dùng, và máy chủ từ chối ở đúng kết nối thứ 100 (role thường: 97) bằng một thông báo bạn sẽ nhận ra.',
+      content: `${G141}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.1 · Phase 4 — In production</span>
 <h2>One connection is one process</h2>
@@ -38,25 +44,34 @@ export default {
 }
 <span class="tok-comment">// B. MỘT kết nối, tái dùng</span>
 <span class="tok-comment">// C. pool (max 10)</span></code></pre>
-<div class="out">kết nối MỚI mỗi truy vấn :   220.14 ms cho 50 → 4.403 ms/truy vấn
-MỘT kết nối tái dùng     :     9.29 ms cho 50 → 0.186 ms/truy vấn
-pool (max 10)            :    10.27 ms cho 50 → 0.205 ms/truy vấn
+<div class="out">A. new connection per query :   338.25 ms for 50 → 6.765 ms/query
+B. one connection, reused   :    21.27 ms for 50 → 0.425 ms/query
+C. pool (max 10)            :    22.09 ms for 50 → 0.442 ms/query
 
-→ mở kết nối mới đắt gấp 23.7 lần so với tái dùng</div>
-<p>Read the middle number: the query itself takes <strong>0.186 ms</strong>. Opening a connection to run it takes <strong>4.4 ms</strong> — so 96% of the time was setup, on a server on the same machine with no network in between. Across a real network, TLS handshake included, the gap is wider.</p>
-<p>Line C is the important one. A pool costs 0.205 ms — essentially the same as a hand-managed single connection — while still letting many requests run at once. <strong>That is the whole argument for pooling, in one measurement.</strong></p>
+→ opening a new connection costs 15.9× a reused one</div>
+<p>Read the middle number: the query itself takes <strong>0.425 ms</strong>. Opening a connection to run it takes <strong>6.8 ms</strong> — so about 94% of the time was setup, on a server on the same machine (PostgreSQL 17.11 in Docker, node-postgres 8.13.1) with no real network in between. Across a real network, TLS handshake included, the gap is wider.</p>
+<p>Line C is the important one. A pool costs 0.442 ms — essentially the same as a hand-managed single connection — while still letting many requests run at once. <strong>That is the whole argument for pooling, in one measurement.</strong></p>
 
 <h3>The wall: max_connections</h3>
 <p>The server will not fork processes forever. Ask it where the limit is:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SHOW</span> max_connections;
 <span class="tok-keyword">SHOW</span> superuser_reserved_connections;</code></pre>
-<div class="out"> max_connections | superuser_reserved_connections
------------------+--------------------------------
- 100             | 3</div>
+<div class="out"> max_connections 
+-----------------
+ 100
+(1 row)
+
+ superuser_reserved_connections 
+--------------------------------
+ 3
+(1 row)</div>
 <p>100 is the default, and it is what cuongthai.com runs in production. Now open connections in a loop until it refuses:</p>
-<div class="out">mở được 100 kết nối trước khi hỏng
-LỖI: sorry, too many clients already</div>
-<p><code>sorry, too many clients already</code> is one of the most recognisable failures in production PostgreSQL, and it does not degrade gracefully — every new request fails instantly, including the one you would use to investigate. That is what <code>superuser_reserved_connections</code> protects: three slots kept back so an administrator can still get in and see what happened. (The loop above reached 100 because it connected <em>as</em> a superuser and so could use the reserve; an application role stops at 97.)</p>
+<div class="out">[postgres] opened 100 connections before failing
+ERROR 53300: sorry, too many clients already
+
+[app] opened 97 connections before failing
+ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSER attribute</div>
+<p><code>sorry, too many clients already</code> is one of the most recognisable failures in production PostgreSQL, and it does not degrade gracefully — every new request fails instantly, including the one you would use to investigate. That is what <code>superuser_reserved_connections</code> protects: three slots kept back so an administrator can still get in and see what happened. (The first loop reached 100 because it connected <em>as</em> a superuser and so could use the reserve; the same loop as an ordinary role <code>app</code> stopped at 97 with a different message — both are SQLSTATE 53300.)</p>
 
 <h3>The arithmetic that causes it</h3>
 <p>The limit is not usually reached by one greedy client. It is reached by multiplication:</p>
@@ -73,13 +88,13 @@ LỖI: sorry, too many clients already</div>
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="out"> dang_dung | toi_da
 -----------+--------
-         6 |    100
+        11 |    100
 (1 row)</div>
-<p>Run that against production and group it by <code>usename</code> and <code>application_name</code> to find out who is actually holding the connections. Very often the answer is a service nobody remembered was connected.</p>
+<p>Careful: unfiltered, <code>pg_stat_activity</code> also lists PostgreSQL's own helper processes — the 11 above were 6 client connections plus 5 helpers; add <code>WHERE backend_type = 'client backend'</code>. Run that against production and group it by <code>usename</code> and <code>application_name</code> to find out who is actually holding the connections. Very often the answer is a service nobody remembered was connected.</p>
 <div class="pitfall"><p><strong>Trap — "fixing" connection exhaustion by raising <code>max_connections</code>.</strong> It looks like the obvious remedy and it is usually the wrong one. Every connection slot costs memory whether used or not, and each <em>active</em> backend can allocate <code>work_mem</code> — potentially several times over for a query with multiple sorts or hashes. Raising the limit to 500 on a 6 GB VPS converts a clean "too many clients" error into the operating-system OOM killer terminating the postmaster, which is a far worse outage: the first failure refuses new work while protecting what is running, the second takes the database down entirely. Beyond roughly a few hundred backends, PostgreSQL also spends a growing share of its time on cross-process bookkeeping, so throughput <em>falls</em> as you add connections. The real fixes are the next lesson's: pool properly, size the pools to what the server can serve, and put PgBouncer in front when process count is genuinely large.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: measure the 23.7× yourself, then hit the wall on purpose</span><span class="lc-sub">The Code Lab track ships the Node.js script that produced both outputs.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: measure the 15.9× yourself, then hit the wall on purpose</span><span class="lc-sub">The Code Lab track ships the Node.js script that produced both outputs.</span></span>
 </a>
 </div>
 
@@ -98,25 +113,34 @@ LỖI: sorry, too many clients already</div>
 }
 <span class="tok-comment">// B. MỘT kết nối, tái dùng</span>
 <span class="tok-comment">// C. pool (max 10)</span></code></pre>
-<div class="out">kết nối MỚI mỗi truy vấn :   220.14 ms cho 50 → 4.403 ms/truy vấn
-MỘT kết nối tái dùng     :     9.29 ms cho 50 → 0.186 ms/truy vấn
-pool (max 10)            :    10.27 ms cho 50 → 0.205 ms/truy vấn
+<div class="out">A. new connection per query :   338.25 ms for 50 → 6.765 ms/query
+B. one connection, reused   :    21.27 ms for 50 → 0.425 ms/query
+C. pool (max 10)            :    22.09 ms for 50 → 0.442 ms/query
 
-→ mở kết nối mới đắt gấp 23.7 lần so với tái dùng</div>
-<p>Đọc con số ở giữa: bản thân truy vấn tốn <strong>0,186 ms</strong>. Mở một kết nối để chạy nó tốn <strong>4,4 ms</strong> — tức 96% thời gian là khâu chuẩn bị, trên một máy chủ nằm CÙNG máy, không có mạng ở giữa. Qua mạng thật, kèm bắt tay TLS, khoảng cách còn rộng hơn.</p>
-<p>Dòng C mới là dòng quan trọng. Một pool tốn 0,205 ms — gần như đúng bằng một kết nối đơn tự quản — mà vẫn cho phép nhiều request chạy cùng lúc. <strong>Đó là toàn bộ lý lẽ cho việc dùng pool, gói trong một phép đo.</strong></p>
+→ opening a new connection costs 15.9× a reused one</div>
+<p>Đọc con số ở giữa: bản thân truy vấn tốn <strong>0,425 ms</strong>. Mở một kết nối để chạy nó tốn <strong>6,8 ms</strong> — tức khoảng 94% thời gian là khâu chuẩn bị, trên một máy chủ nằm CÙNG máy (PostgreSQL 17.11 trong Docker, node-postgres 8.13.1), không có mạng thật ở giữa. Qua mạng thật, kèm bắt tay TLS, khoảng cách còn rộng hơn.</p>
+<p>Dòng C mới là dòng quan trọng. Một pool tốn 0,442 ms — gần như đúng bằng một kết nối đơn tự quản — mà vẫn cho phép nhiều request chạy cùng lúc. <strong>Đó là toàn bộ lý lẽ cho việc dùng pool, gói trong một phép đo.</strong></p>
 
 <h3>Bức tường: max_connections</h3>
 <p>Máy chủ sẽ không fork tiến trình mãi mãi. Hỏi nó xem giới hạn nằm ở đâu:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SHOW</span> max_connections;
 <span class="tok-keyword">SHOW</span> superuser_reserved_connections;</code></pre>
-<div class="out"> max_connections | superuser_reserved_connections
------------------+--------------------------------
- 100             | 3</div>
+<div class="out"> max_connections 
+-----------------
+ 100
+(1 row)
+
+ superuser_reserved_connections 
+--------------------------------
+ 3
+(1 row)</div>
 <p>100 là mặc định, và đó cũng là con số cuongthai.com đang chạy trên production. Giờ mở kết nối trong một vòng lặp cho tới khi nó từ chối:</p>
-<div class="out">mở được 100 kết nối trước khi hỏng
-LỖI: sorry, too many clients already</div>
-<p><code>sorry, too many clients already</code> là một trong những kiểu hỏng dễ nhận ra nhất của PostgreSQL trên production, và nó KHÔNG suy giảm mềm — mọi request mới đều hỏng ngay lập tức, kể cả cái mà bạn định dùng để đi điều tra. Đó chính là thứ mà <code>superuser_reserved_connections</code> bảo vệ: ba suất được giữ lại để một quản trị viên vẫn vào được và xem chuyện gì đã xảy ra. (Vòng lặp ở trên chạm được 100 vì nó kết nối VỚI TƯ CÁCH superuser nên dùng được cả phần dự trữ; một role ứng dụng sẽ dừng ở 97.)</p>
+<div class="out">[postgres] opened 100 connections before failing
+ERROR 53300: sorry, too many clients already
+
+[app] opened 97 connections before failing
+ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSER attribute</div>
+<p><code>sorry, too many clients already</code> là một trong những kiểu hỏng dễ nhận ra nhất của PostgreSQL trên production, và nó KHÔNG suy giảm mềm — mọi request mới đều hỏng ngay lập tức, kể cả cái mà bạn định dùng để đi điều tra. Đó chính là thứ mà <code>superuser_reserved_connections</code> bảo vệ: ba suất được giữ lại để một quản trị viên vẫn vào được và xem chuyện gì đã xảy ra. (Vòng lặp đầu chạm được 100 vì nó kết nối VỚI TƯ CÁCH superuser nên dùng được cả phần dự trữ; cùng vòng lặp đó bằng role thường <code>app</code> dừng ở 97 với một thông báo khác — cả hai đều là mã 53300.)</p>
 
 <h3>Phép tính gây ra nó</h3>
 <p>Giới hạn thường không bị chạm bởi MỘT client tham lam. Nó bị chạm bởi PHÉP NHÂN:</p>
@@ -133,13 +157,13 @@ LỖI: sorry, too many clients already</div>
 <span class="tok-keyword">FROM</span> pg_stat_activity;</code></pre>
 <div class="out"> dang_dung | toi_da
 -----------+--------
-         6 |    100
+        11 |    100
 (1 row)</div>
-<p>Chạy câu đó trên production rồi gom nhóm theo <code>usename</code> và <code>application_name</code> để tìm xem AI đang thật sự giữ các kết nối. Rất thường xuyên câu trả lời là một service mà không ai nhớ là nó còn đang cắm vào.</p>
+<p>Cẩn thận: không lọc thì <code>pg_stat_activity</code> liệt kê cả các tiến trình trợ thủ của PostgreSQL — con số 11 ở trên là 6 kết nối client cộng 5 tiến trình trợ thủ; thêm <code>WHERE backend_type = 'client backend'</code>. Chạy câu đó trên production rồi gom nhóm theo <code>usename</code> và <code>application_name</code> để tìm xem AI đang thật sự giữ các kết nối. Rất thường xuyên câu trả lời là một service mà không ai nhớ là nó còn đang cắm vào.</p>
 <div class="pitfall"><p><strong>Bẫy — "sửa" việc cạn kết nối bằng cách TĂNG <code>max_connections</code>.</strong> Nó trông như phương thuốc hiển nhiên và thường là phương thuốc SAI. Mỗi suất kết nối tốn bộ nhớ dù có dùng hay không, và mỗi backend ĐANG HOẠT ĐỘNG có thể cấp phát <code>work_mem</code> — có khi vài lần cho một truy vấn có nhiều phép sắp hoặc băm. Nâng giới hạn lên 500 trên một VPS 6 GB là biến một lỗi "too many clients" sạch sẽ thành việc OOM killer của hệ điều hành giết postmaster, và đó là sự cố TỆ HƠN NHIỀU: lỗi thứ nhất từ chối việc mới trong khi vẫn bảo vệ những gì đang chạy, lỗi thứ hai hạ gục cả cơ sở dữ liệu. Vượt quá khoảng vài trăm backend, PostgreSQL còn tiêu ngày càng nhiều thời gian cho việc sổ sách giữa các tiến trình, nên thông lượng GIẢM khi bạn thêm kết nối. Cách sửa thật nằm ở bài sau: dùng pool cho đúng, chỉnh cỡ pool theo đúng cái máy chủ phục vụ nổi, và đặt PgBouncer phía trước khi số tiến trình thật sự lớn.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: tự đo con số 23,7 lần, rồi cố tình đâm vào tường</span><span class="lc-sub">Nhánh Code Lab kèm sẵn script Node.js đã sinh ra cả hai output.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: tự đo con số 15,9 lần, rồi cố tình đâm vào tường</span><span class="lc-sub">Nhánh Code Lab kèm sẵn script Node.js đã sinh ra cả hai output.</span></span>
 </a>
 </div>
 `,
@@ -151,7 +175,7 @@ LỖI: sorry, too many clients already</div>
       slug: 'postgresql-14-2-pool-pgbouncer',
       type: 'LESSON',
       description: 'Cách chỉnh cỡ pool cho đúng (công thức, và vì sao pool LỚN thường làm mọi thứ CHẬM đi), khi nào app pool là đủ và khi nào cần PgBouncer, ba chế độ của PgBouncer, và đúng những tính năng bị hỏng ở chế độ transaction.',
-      content: `
+      content: `${G142}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.2 · Phase 4 — In production</span>
 <h2>Two layers, two different jobs</h2>
@@ -181,7 +205,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <h3>What transaction mode breaks</h3>
 <p>Because consecutive transactions from one client can land on different backends, anything that lives in <em>session</em> state stops being reliable:</p>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Prepared statements</span><span class="lz-lnote">Prepared on one backend, invisible on the next. This is the source of Prisma's <code>prepared statement "s0" already exists</code> errors behind PgBouncer — the fix is <code>pgbouncer=true</code> in the connection URL, which disables the prepared-statement cache.</span></div>
+<div class="lz-layer"><span class="lz-lname">Prepared statements</span><span class="lz-lnote">Prepared on one backend, invisible on the next. This is the source of Prisma's <code>prepared statement "s0" does not exist</code> (or <code>… already exists</code>) errors behind PgBouncer — measured: 181 of 200 queries failed with error 26000 through PgBouncer 1.23.1 in transaction mode, 0 with <code>pgbouncer=true</code> — the fix is <code>pgbouncer=true</code> in the connection URL, which disables the prepared-statement cache.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>SET</code> / session variables</span><span class="lz-lnote"><code>SET search_path</code>, <code>SET TIME ZONE</code>, <code>SET ROLE</code> apply to whichever backend happened to serve that transaction. Use the <code>SET LOCAL</code> form inside an explicit transaction instead.</span></div>
 <div class="lz-layer"><span class="lz-lname">Advisory locks &amp; temp tables</span><span class="lz-lnote">Session-scoped advisory locks and <code>CREATE TEMP TABLE</code> both bind to a backend you no longer control. Use transaction-scoped advisory locks (<code>pg_advisory_xact_lock</code>) or drop the pattern.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>LISTEN</code>/<code>NOTIFY</code></span><span class="lz-lnote">Does not work at all in transaction mode — <code>LISTEN</code> is inherently session-scoped. Notification consumers need a direct connection that bypasses PgBouncer.</span></div>
@@ -229,7 +253,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <h3>Chế độ transaction làm hỏng những gì</h3>
 <p>Vì các giao dịch liên tiếp từ MỘT client có thể rơi vào những backend KHÁC NHAU, mọi thứ sống trong trạng thái <em>PHIÊN</em> đều thôi đáng tin:</p>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Prepared statement</span><span class="lz-lnote">Chuẩn bị ở backend này, vô hình ở backend sau. Đây là nguồn gốc của lỗi <code>prepared statement "s0" already exists</code> của Prisma khi đứng sau PgBouncer — cách sửa là <code>pgbouncer=true</code> trong URL kết nối, nó tắt bộ đệm prepared statement.</span></div>
+<div class="lz-layer"><span class="lz-lname">Prepared statement</span><span class="lz-lnote">Chuẩn bị ở backend này, vô hình ở backend sau. Đây là nguồn gốc của lỗi <code>prepared statement "s0" does not exist</code> (hoặc <code>… already exists</code>) của Prisma khi đứng sau PgBouncer — đo thật: 181/200 truy vấn lỗi 26000 qua PgBouncer 1.23.1 ở transaction mode, 0 lỗi khi có <code>pgbouncer=true</code> — cách sửa là <code>pgbouncer=true</code> trong URL kết nối, nó tắt bộ đệm prepared statement.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>SET</code> / biến phiên</span><span class="lz-lnote"><code>SET search_path</code>, <code>SET TIME ZONE</code>, <code>SET ROLE</code> áp lên đúng cái backend TÌNH CỜ phục vụ giao dịch đó. Hãy dùng dạng <code>SET LOCAL</code> bên trong một giao dịch tường minh thay thế.</span></div>
 <div class="lz-layer"><span class="lz-lname">Advisory lock &amp; bảng tạm</span><span class="lz-lnote">Advisory lock phạm vi phiên và <code>CREATE TEMP TABLE</code> đều buộc vào một backend mà bạn không còn kiểm soát. Hãy dùng advisory lock phạm vi giao dịch (<code>pg_advisory_xact_lock</code>) hoặc bỏ hẳn mẫu đó.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>LISTEN</code>/<code>NOTIFY</code></span><span class="lz-lnote">HOÀN TOÀN không chạy ở chế độ transaction — <code>LISTEN</code> vốn dĩ thuộc phạm vi phiên. Bên tiêu thụ thông báo cần một kết nối TRỰC TIẾP đi vòng qua PgBouncer.</span></div>
@@ -256,7 +280,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
       slug: 'postgresql-14-3-vacuum-bloat',
       type: 'LESSON',
       description: 'Cái giá của MVCC từ Chương 11, giờ là việc phải VẬN HÀNH. Ngưỡng autovacuum tính ra được (50 + 0,2×n) và vì sao nó quá thưa với bảng lớn, autovacuum chạy thật đo được, truy vấn tìm bảng phình, và mối nguy transaction ID wraparound.',
-      content: `
+      content: `${G143}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.3 · Phase 4 — In production</span>
 <h2>The maintenance MVCC makes necessary</h2>
@@ -266,15 +290,23 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <p>Autovacuum is a background process that vacuums tables when they have accumulated enough dead rows. "Enough" is computed, and you can read the inputs:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
 <span class="tok-keyword">WHERE</span> name <span class="tok-keyword">LIKE</span> <span class="tok-string">'autovacuum%'</span> <span class="tok-keyword">ORDER BY</span> name;</code></pre>
-<div class="out">              name               | setting | unit
----------------------------------+---------+------
- autovacuum                      | on      |
- autovacuum_analyze_scale_factor | 0.1     |
- autovacuum_analyze_threshold    | 50      |
- autovacuum_naptime              | 60      | s
- autovacuum_vacuum_scale_factor  | 0.2     |
- autovacuum_vacuum_threshold     | 50      |
-(6 rows)</div>
+<div class="out">                 name                  |  setting  | unit 
+---------------------------------------+-----------+------
+ autovacuum                            | on        | 
+ autovacuum_analyze_scale_factor       | 0.1       | 
+ autovacuum_analyze_threshold          | 50        | 
+ autovacuum_freeze_max_age             | 200000000 | 
+ autovacuum_max_workers                | 3         | 
+ autovacuum_multixact_freeze_max_age   | 400000000 | 
+ autovacuum_naptime                    | 60        | s
+ autovacuum_vacuum_cost_delay          | 2         | ms
+ autovacuum_vacuum_cost_limit          | -1        | 
+ autovacuum_vacuum_insert_scale_factor | 0.2       | 
+ autovacuum_vacuum_insert_threshold    | 1000      | 
+ autovacuum_vacuum_scale_factor        | 0.2       | 
+ autovacuum_vacuum_threshold           | 50        | 
+ autovacuum_work_mem                   | -1        | kB
+(14 rows)</div>
 <p>The rule is:</p>
 <div class="out">ngưỡng = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × số_dòng
        = 50 + 0.2 × số_dòng</div>
@@ -286,13 +318,21 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <p>Give a small table an aggressive threshold, make 1,000 rows dead, and wait:</p>
 <pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
 <span class="tok-keyword">UPDATE</span> av_demo <span class="tok-keyword">SET</span> v = v || <span class="tok-string">'!'</span>;   <span class="tok-comment">-- 1000 dòng chết</span></code></pre>
-<div class="out">[15s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
-[30s] autovacuum_count=1 · n_dead_tup=0    · last_autovacuum=2026-08-26 10:46:33+00
+<div class="out">[0s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[5s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[11s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[16s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[21s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[26s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[34s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[39s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[45s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[50s] autovacuum_count=1 · n_dead_tup=0 · last_autovacuum=01:15:43
 
- n_live_tup | n_dead_tup | autovacuum_count |        last_autovacuum
+ n_live_tup | n_dead_tup | autovacuum_count |        last_autovacuum        
 ------------+------------+------------------+-------------------------------
-       1000 |          0 |                1 | 2026-08-26 10:46:33.600584+00</div>
-<p>Nothing at 15 seconds, done by 30. Autovacuum wakes every <code>autovacuum_naptime</code> (60 s) and checks; it is not instant and it is not meant to be. Note the per-table <code>ALTER TABLE … SET</code> — <strong>tuning autovacuum per table is the right move</strong>, far better than changing the global default and affecting tables that were fine.</p>
+       1000 |          0 |                1 | 2026-10-26 01:15:43.772259+07</div>
+<p>Nothing for 45 seconds, done at about 50 (PostgreSQL 17.11, polled every 5 s). Autovacuum wakes every <code>autovacuum_naptime</code> (60 s) and checks; it is not instant and it is not meant to be. Note the per-table <code>ALTER TABLE … SET</code> — <strong>tuning autovacuum per table is the right move</strong>, far better than changing the global default and affecting tables that were fine.</p>
 <div class="callout ok">For a large, write-heavy table, a scale factor of 0.01 with a threshold of 1,000 means "vacuum after about 1% churn" instead of 20%. More frequent, much smaller passes. Set it on the two or three tables that actually churn, and leave the rest at the defaults.</div>
 
 <h3>Finding what is bloated</h3>
@@ -301,14 +341,16 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
        <span class="tok-keyword">CASE WHEN</span> n_live_tup &gt; 0
             <span class="tok-keyword">THEN</span> round(100.0 * n_dead_tup / n_live_tup, 1)
             <span class="tok-keyword">ELSE</span> 0 <span class="tok-keyword">END</span> <span class="tok-keyword">AS</span> phan_tram_chet,
-       pg_size_pretty(pg_relation_size(relid)) <span class="tok-keyword">AS</span> kich_thuoc
+       pg_size_pretty(pg_relation_size(relid)) <span class="tok-keyword">AS</span> kich_thuoc,
+       last_autovacuum
 <span class="tok-keyword">FROM</span> pg_stat_user_tables
-<span class="tok-keyword">WHERE</span> n_dead_tup &gt; 0
+<span class="tok-keyword">WHERE</span> schemaname = <span class="tok-string">'ch14'</span> <span class="tok-keyword">AND</span> n_dead_tup &gt; 0
 <span class="tok-keyword">ORDER BY</span> n_dead_tup <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
-<div class="out"> relname | n_live_tup | n_dead_tup | phan_tram_chet | kich_thuoc
----------+------------+------------+----------------+------------
- av_demo |       1000 |       1000 |          100.0 | 88 kB
-(1 row)</div>
+<div class="out"> relname  | n_live_tup | n_dead_tup | phan_tram_chet | kich_thuoc |        last_autovacuum        
+----------+------------+------------+----------------+------------+-------------------------------
+ don_hang |     200000 |      50000 |           25.0 | 14 MB      | 
+ av_demo  |       1000 |        300 |           30.0 | 104 kB     | 2026-10-26 01:15:43.772259+07
+(2 rows)</div>
 <p>Sustained high <code>phan_tram_chet</code> on a table means autovacuum is not keeping up with it — either the threshold is too high for its churn rate, or something is preventing cleanup entirely.</p>
 
 <h3>VACUUM vs VACUUM FULL, again</h3>
@@ -319,10 +361,10 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <div class="lz-layer"><span class="lz-lname"><code>ANALYZE</code></span><span class="lz-lnote">A different job that autovacuum also does: refreshing the planner statistics from Chapter 10. Bad plans right after a bulk load are usually missing <code>ANALYZE</code>, not missing indexes.</span></div>
 </div>
 
-<div class="pitfall"><p><strong>Trap — transaction ID wraparound, the failure that stops writes entirely.</strong> Row visibility uses a 32-bit transaction counter, so it wraps. <code>VACUUM</code> has a second job besides cleaning dead rows: <em>freezing</em> old rows so they stay visible after the counter wraps. If vacuuming is blocked long enough, PostgreSQL starts warning, then refuses all new transactions with <em>database is not accepting commands to avoid wraparound data loss</em> — a full write outage requiring single-user-mode recovery. Three things block vacuum and all were met earlier in this course: a long-running transaction or an <code>idle in transaction</code> session pinning an old snapshot (11.1), an abandoned replication slot holding WAL (Chapter 15), and a prepared transaction nobody committed. Monitor it with one query — <code>SELECT datname, age(datfrozenxid) FROM pg_database ORDER BY 2 DESC;</code> — and treat a rising number as urgent, not interesting. Default <code>autovacuum_freeze_max_age</code> is 200 million; the hard stop is around 2 billion.</p></div>
+<div class="pitfall"><p><strong>Trap — transaction ID wraparound, the failure that stops writes entirely.</strong> Row visibility uses a 32-bit transaction counter, so it wraps. <code>VACUUM</code> has a second job besides cleaning dead rows: <em>freezing</em> old rows so they stay visible after the counter wraps. If vacuuming is blocked long enough, PostgreSQL starts warning, then refuses all new transactions with <em>database is not accepting commands to avoid wraparound data loss</em> — a full write outage (reads still work). Recovery in PostgreSQL 17: end whatever holds the horizon, then run <code>VACUUM</code> in each affected database in normal multi-user mode — since PostgreSQL 16 the documentation no longer recommends single-user mode; lesson 14.3's slides reproduce the whole thing for real. Three things block vacuum and all were met earlier in this course: a long-running transaction or an <code>idle in transaction</code> session pinning an old snapshot (11.1), an abandoned replication slot holding WAL (Chapter 15), and a prepared transaction nobody committed. Monitor it with one query — <code>SELECT datname, age(datfrozenxid) FROM pg_database ORDER BY 2 DESC;</code> — and treat a rising number as urgent, not interesting. Default <code>autovacuum_freeze_max_age</code> is 200 million; the hard stop comes 3 million transactions before the 2.1-billion wraparound point (warnings start about 40 million earlier).</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: tune a table's autovacuum and watch it fire within 30 seconds</span><span class="lc-sub">The Code Lab track reproduces the threshold arithmetic and the bloat query.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: tune a table's autovacuum and watch it fire within a minute</span><span class="lc-sub">The Code Lab track reproduces the threshold arithmetic and the bloat query.</span></span>
 </a>
 </div>
 
@@ -335,15 +377,23 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <p>Autovacuum là một tiến trình nền, nó vacuum các bảng khi chúng đã tích đủ dòng chết. "Đủ" là một con số ĐƯỢC TÍNH, và bạn đọc được các đầu vào:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name, setting, unit <span class="tok-keyword">FROM</span> pg_settings
 <span class="tok-keyword">WHERE</span> name <span class="tok-keyword">LIKE</span> <span class="tok-string">'autovacuum%'</span> <span class="tok-keyword">ORDER BY</span> name;</code></pre>
-<div class="out">              name               | setting | unit
----------------------------------+---------+------
- autovacuum                      | on      |
- autovacuum_analyze_scale_factor | 0.1     |
- autovacuum_analyze_threshold    | 50      |
- autovacuum_naptime              | 60      | s
- autovacuum_vacuum_scale_factor  | 0.2     |
- autovacuum_vacuum_threshold     | 50      |
-(6 rows)</div>
+<div class="out">                 name                  |  setting  | unit 
+---------------------------------------+-----------+------
+ autovacuum                            | on        | 
+ autovacuum_analyze_scale_factor       | 0.1       | 
+ autovacuum_analyze_threshold          | 50        | 
+ autovacuum_freeze_max_age             | 200000000 | 
+ autovacuum_max_workers                | 3         | 
+ autovacuum_multixact_freeze_max_age   | 400000000 | 
+ autovacuum_naptime                    | 60        | s
+ autovacuum_vacuum_cost_delay          | 2         | ms
+ autovacuum_vacuum_cost_limit          | -1        | 
+ autovacuum_vacuum_insert_scale_factor | 0.2       | 
+ autovacuum_vacuum_insert_threshold    | 1000      | 
+ autovacuum_vacuum_scale_factor        | 0.2       | 
+ autovacuum_vacuum_threshold           | 50        | 
+ autovacuum_work_mem                   | -1        | kB
+(14 rows)</div>
 <p>Quy tắc là:</p>
 <div class="out">ngưỡng = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × số_dòng
        = 50 + 0,2 × số_dòng</div>
@@ -355,13 +405,21 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <p>Cho một bảng nhỏ một ngưỡng gắt, làm 1.000 dòng chết đi, rồi chờ:</p>
 <pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> av_demo <span class="tok-keyword">SET</span> (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);
 <span class="tok-keyword">UPDATE</span> av_demo <span class="tok-keyword">SET</span> v = v || <span class="tok-string">'!'</span>;   <span class="tok-comment">-- 1000 dòng chết</span></code></pre>
-<div class="out">[15s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
-[30s] autovacuum_count=1 · n_dead_tup=0    · last_autovacuum=2026-08-26 10:46:33+00
+<div class="out">[0s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[5s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[11s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[16s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[21s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[26s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[34s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[39s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[45s] autovacuum_count=0 · n_dead_tup=1000 · last_autovacuum=chưa
+[50s] autovacuum_count=1 · n_dead_tup=0 · last_autovacuum=01:15:43
 
- n_live_tup | n_dead_tup | autovacuum_count |        last_autovacuum
+ n_live_tup | n_dead_tup | autovacuum_count |        last_autovacuum        
 ------------+------------+------------------+-------------------------------
-       1000 |          0 |                1 | 2026-08-26 10:46:33.600584+00</div>
-<p>Ở giây thứ 15 chưa có gì, tới giây 30 đã xong. Autovacuum thức dậy mỗi <code>autovacuum_naptime</code> (60 giây) rồi kiểm tra; nó không tức thì và cũng không cần phải tức thì. Để ý cái <code>ALTER TABLE … SET</code> theo TỪNG BẢNG — <strong>chỉnh autovacuum theo từng bảng mới là nước đi đúng</strong>, tốt hơn nhiều so với đổi mặc định toàn cục rồi ảnh hưởng tới những bảng vốn đang ổn.</p>
+       1000 |          0 |                1 | 2026-10-26 01:15:43.772259+07</div>
+<p>Suốt 45 giây chưa có gì, tới khoảng giây 50 thì xong (PostgreSQL 17.11, hỏi mỗi 5 giây). Autovacuum thức dậy mỗi <code>autovacuum_naptime</code> (60 giây) rồi kiểm tra; nó không tức thì và cũng không cần phải tức thì. Để ý cái <code>ALTER TABLE … SET</code> theo TỪNG BẢNG — <strong>chỉnh autovacuum theo từng bảng mới là nước đi đúng</strong>, tốt hơn nhiều so với đổi mặc định toàn cục rồi ảnh hưởng tới những bảng vốn đang ổn.</p>
 <div class="callout ok">Với một bảng lớn nặng ghi, scale factor 0,01 kèm ngưỡng 1.000 nghĩa là "vacuum sau khoảng 1% biến động" thay vì 20%. Dọn thường xuyên hơn, mỗi lượt nhỏ hơn NHIỀU. Hãy đặt nó cho hai hoặc ba bảng THẬT SỰ biến động, và để yên phần còn lại ở mặc định.</div>
 
 <h3>Tìm xem cái nào đang phình</h3>
@@ -370,14 +428,16 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
        <span class="tok-keyword">CASE WHEN</span> n_live_tup &gt; 0
             <span class="tok-keyword">THEN</span> round(100.0 * n_dead_tup / n_live_tup, 1)
             <span class="tok-keyword">ELSE</span> 0 <span class="tok-keyword">END</span> <span class="tok-keyword">AS</span> phan_tram_chet,
-       pg_size_pretty(pg_relation_size(relid)) <span class="tok-keyword">AS</span> kich_thuoc
+       pg_size_pretty(pg_relation_size(relid)) <span class="tok-keyword">AS</span> kich_thuoc,
+       last_autovacuum
 <span class="tok-keyword">FROM</span> pg_stat_user_tables
-<span class="tok-keyword">WHERE</span> n_dead_tup &gt; 0
+<span class="tok-keyword">WHERE</span> schemaname = <span class="tok-string">'ch14'</span> <span class="tok-keyword">AND</span> n_dead_tup &gt; 0
 <span class="tok-keyword">ORDER BY</span> n_dead_tup <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
-<div class="out"> relname | n_live_tup | n_dead_tup | phan_tram_chet | kich_thuoc
----------+------------+------------+----------------+------------
- av_demo |       1000 |       1000 |          100.0 | 88 kB
-(1 row)</div>
+<div class="out"> relname  | n_live_tup | n_dead_tup | phan_tram_chet | kich_thuoc |        last_autovacuum        
+----------+------------+------------+----------------+------------+-------------------------------
+ don_hang |     200000 |      50000 |           25.0 | 14 MB      | 
+ av_demo  |       1000 |        300 |           30.0 | 104 kB     | 2026-10-26 01:15:43.772259+07
+(2 rows)</div>
 <p><code>phan_tram_chet</code> cao KÉO DÀI trên một bảng nghĩa là autovacuum đang theo không kịp nó — hoặc ngưỡng quá cao so với nhịp biến động, hoặc có thứ gì đó đang chặn hẳn việc dọn dẹp.</p>
 
 <h3>VACUUM và VACUUM FULL, một lần nữa</h3>
@@ -388,10 +448,10 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
 <div class="lz-layer"><span class="lz-lname"><code>ANALYZE</code></span><span class="lz-lnote">Một việc KHÁC mà autovacuum cũng làm: làm mới thống kê cho bộ lập kế hoạch ở Chương 10. Plan tồi ngay sau một đợt nạp dữ liệu lớn thường là do THIẾU <code>ANALYZE</code>, chứ không phải thiếu chỉ mục.</span></div>
 </div>
 
-<div class="pitfall"><p><strong>Bẫy — transaction ID wraparound, kiểu hỏng CHẶN ĐỨNG mọi lệnh ghi.</strong> Khả năng nhìn thấy của một dòng dùng một bộ đếm giao dịch 32 bit, nên nó QUAY VÒNG. <code>VACUUM</code> có một việc thứ hai ngoài dọn dòng chết: <em>ĐÓNG BĂNG</em> các dòng cũ để chúng vẫn nhìn thấy được sau khi bộ đếm quay vòng. Nếu việc vacuum bị chặn đủ lâu, PostgreSQL bắt đầu cảnh báo, rồi TỪ CHỐI mọi giao dịch mới với dòng <em>database is not accepting commands to avoid wraparound data loss</em> — một sự cố mất ghi toàn phần, phải cứu bằng chế độ một-người-dùng. Ba thứ chặn vacuum, và cả ba đều đã gặp trong khoá này: một giao dịch chạy dài hoặc một phiên <code>idle in transaction</code> đang ghim ảnh chụp cũ (11.1), một replication slot bị bỏ rơi đang giữ WAL (Chương 15), và một prepared transaction không ai commit. Hãy giám sát bằng một truy vấn — <code>SELECT datname, age(datfrozenxid) FROM pg_database ORDER BY 2 DESC;</code> — và coi con số đang tăng là chuyện KHẨN CẤP, chứ không phải chuyện thú vị. Mặc định <code>autovacuum_freeze_max_age</code> là 200 triệu; điểm dừng cứng ở khoảng 2 tỉ.</p></div>
+<div class="pitfall"><p><strong>Bẫy — transaction ID wraparound, kiểu hỏng CHẶN ĐỨNG mọi lệnh ghi.</strong> Khả năng nhìn thấy của một dòng dùng một bộ đếm giao dịch 32 bit, nên nó QUAY VÒNG. <code>VACUUM</code> có một việc thứ hai ngoài dọn dòng chết: <em>ĐÓNG BĂNG</em> các dòng cũ để chúng vẫn nhìn thấy được sau khi bộ đếm quay vòng. Nếu việc vacuum bị chặn đủ lâu, PostgreSQL bắt đầu cảnh báo, rồi TỪ CHỐI mọi giao dịch mới với dòng <em>database is not accepting commands to avoid wraparound data loss</em> — một sự cố mất ghi toàn phần (đọc vẫn được). Cách cứu ở PostgreSQL 17: kết thúc thứ đang ghim đường chân trời, rồi chạy <code>VACUUM</code> trong từng database bị ảnh hưởng ở chế độ nhiều người dùng bình thường — từ PostgreSQL 16 tài liệu không còn khuyên dùng chế độ một-người-dùng; phần slide của bài 14.3 tái hiện thật toàn bộ chuyện này. Ba thứ chặn vacuum, và cả ba đều đã gặp trong khoá này: một giao dịch chạy dài hoặc một phiên <code>idle in transaction</code> đang ghim ảnh chụp cũ (11.1), một replication slot bị bỏ rơi đang giữ WAL (Chương 15), và một prepared transaction không ai commit. Hãy giám sát bằng một truy vấn — <code>SELECT datname, age(datfrozenxid) FROM pg_database ORDER BY 2 DESC;</code> — và coi con số đang tăng là chuyện KHẨN CẤP, chứ không phải chuyện thú vị. Mặc định <code>autovacuum_freeze_max_age</code> là 200 triệu; điểm dừng cứng đến khi còn 3 triệu giao dịch trước mốc wraparound 2,1 tỉ (cảnh báo bắt đầu sớm hơn khoảng 40 triệu).</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: chỉnh autovacuum cho một bảng và nhìn nó chạy trong vòng 30 giây</span><span class="lc-sub">Nhánh Code Lab tái hiện phép tính ngưỡng và truy vấn tìm bloat.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: chỉnh autovacuum cho một bảng và nhìn nó chạy trong vòng một phút</span><span class="lc-sub">Nhánh Code Lab tái hiện phép tính ngưỡng và truy vấn tìm bloat.</span></span>
 </a>
 </div>
 `,
@@ -402,23 +462,30 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
       title: '14.4 — Monitoring: answering "why is it slow?"|||14.4 — Giám sát: trả lời câu "sao nó chậm thế?"',
       slug: 'postgresql-14-4-giam-sat',
       type: 'LESSON',
-      description: 'Ba khung nhìn trả lời được câu hỏi đó: pg_stat_activity cho "ngay lúc này", pg_stat_statements cho "theo thời gian" — đo thật một truy vấn chạy 2 lượt ăn 51,1 ms nhiều hơn cả truy vấn chạy 5 lượt ăn 12,7 ms — và pg_stat_user_indexes cho các chỉ mục không ai dùng.',
-      content: `
+      description: 'Ba khung nhìn trả lời được câu hỏi đó: pg_stat_activity cho "ngay lúc này", pg_stat_statements cho "theo thời gian" — đo thật: một truy vấn rẻ 0,05 ms gọi 20.005 lượt ăn 1.048,5 ms, gấp mười truy vấn LIKE chậm — và pg_stat_user_indexes cho các chỉ mục không ai dùng.',
+      content: `${G144}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.4 · Phase 4 — In production</span>
 <h2>Three views, and what each one answers</h2>
 <p class="lead">"The site is slow" is not a diagnosis. PostgreSQL ships with enough introspection to turn it into one, and the whole skill is knowing which view answers which question. There are three you will use constantly.</p>
 
 <h3>pg_stat_activity — what is happening right now</h3>
-<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
-       now()-xact_start <span class="tok-keyword">AS</span> tuoi_giao_dich, left(query,40) <span class="tok-keyword">AS</span> truy_van
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, application_name <span class="tok-keyword">AS</span> app, state,
+       wait_event_type <span class="tok-keyword">AS</span> loai_cho, wait_event <span class="tok-keyword">AS</span> cho,
+       round(extract(epoch <span class="tok-keyword">FROM</span> now() - query_start)::numeric, 1) <span class="tok-keyword">AS</span> giay,
+       left(query, 30) <span class="tok-keyword">AS</span> query
 <span class="tok-keyword">FROM</span> pg_stat_activity
-<span class="tok-keyword">WHERE</span> backend_type=<span class="tok-string">'client backend'</span>;</code></pre>
-<div class="out"> pid  | state  | wait_event_type | wait_event |                 truy_van
-------+--------+-----------------+------------+------------------------------------------
- 5372 | active |                 |            | SELECT pid, state, wait_event_type, wait
-(1 row)</div>
-<p>The <code>state</code> column is the one to read first:</p>
+<span class="tok-keyword">WHERE</span> backend_type = <span class="tok-string">'client backend'</span> <span class="tok-keyword">AND</span> pid &lt;&gt; pg_backend_pid()
+<span class="tok-keyword">ORDER BY</span> giay <span class="tok-keyword">DESC</span>;</code></pre>
+<div class="out"> pid |   app    |             state             | loai_cho |      cho      | giay |             query              
+-----+----------+-------------------------------+----------+---------------+------+--------------------------------
+ 232 | bao-cao  | active                        | Timeout  | PgSleep       |  6.3 | SELECT pg_sleep(90) AS bao_cao
+ 240 | web-quen | idle in transaction           | Client   | ClientRead    |  6.2 | UPDATE hang SET n = n + 1 WHER
+ 250 | loi      | idle in transaction (aborted) | Client   | ClientRead    |  5.2 | SELECT 1/0;
+ 260 | pool     | idle                          | Client   | ClientRead    |  5.1 | SELECT 1;
+ 270 | web-2    | active                        | Lock     | transactionid |  4.1 | UPDATE hang SET n = n + 1 WHER
+(5 rows)</div>
+<p>Five real sessions on a scratch PostgreSQL 17.11 server: a report sleeping, a web request that opened a transaction and went quiet, one whose transaction failed, an idle pool connection, and a web request waiting for a row lock (<code>Lock</code> / <code>transactionid</code>) held by the quiet one — <code>pg_blocking_pids(270)</code> returns <code>{240}</code>. The <code>state</code> column is the one to read first:</p>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname"><code>active</code></span><span class="lz-lnote">Running a query right now. If several are active and slow, look at <code>wait_event</code> — a row of <code>Lock</code> waits means contention (Chapter 11), <code>IO</code> means disk.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>idle</code></span><span class="lz-lnote">Connected, doing nothing, holding no transaction. Harmless — this is what a healthy pool looks like at rest.</span></div>
@@ -442,11 +509,17 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <span class="tok-keyword">ORDER BY</span> total_exec_time <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
 <div class="out"> calls | tong_ms | tb_ms | rows |                  truy_van
 -------+---------+-------+------+--------------------------------------------
-     2 |    51.1 | 25.54 |    2 | SELECT count(*) FROM big WHERE val LIKE $1
-     1 |    15.6 | 15.63 |    1 | SELECT sum(id) FROM big
-     5 |    12.7 |  2.55 |    5 | SELECT count(*) FROM big WHERE bucket = $1
+     2 |   103.3 | 51.65 |    2 | SELECT count(*) FROM big WHERE val LIKE $1
+     1 |    34.5 | 34.48 |    1 | SELECT sum(id) FROM big
+     5 |     0.5 |  0.10 |    5 | SELECT count(*) FROM big WHERE bucket = $1
 (3 rows)</div>
-<p>Read the first and third rows together. The <code>LIKE</code> query ran <strong>twice</strong> and consumed <strong>51.1 ms</strong>; the indexed query ran <strong>five times</strong> and consumed <strong>12.7 ms</strong>. Sort by <code>calls</code> and you would optimise the wrong one.</p>
+<p>(PostgreSQL 17.11; the real query also had <code>WHERE query LIKE '%FROM big%'</code> to hide its own bookkeeping.) The <code>LIKE</code> query ran <strong>twice</strong> and consumed <strong>103.3 ms</strong>; the indexed query ran <strong>five times</strong> and consumed <strong>0.5 ms</strong>. Now let the cheap one run the way a busy page would — pgbench, 20,000 times — and ask again:</p>
+<div class="out"> calls | tong_ms | tb_ms | rows  |                  truy_van
+-------+---------+-------+-------+--------------------------------------------
+ 20005 |  1048.5 |  0.05 | 20005 | SELECT count(*) FROM big WHERE bucket = $1
+     2 |   103.3 | 51.65 |     2 | SELECT count(*) FROM big WHERE val LIKE $1
+     1 |    34.5 | 34.48 |     1 | SELECT sum(id) FROM big</div>
+<p>The 0.05 ms query now costs ten times the slow-looking one. Sort by <code>calls</code> or by <code>mean_exec_time</code> alone and you would optimise the wrong one.</p>
 <div class="callout ok"><strong>Always order by <code>total_exec_time</code>.</strong> It is the only column that captures real impact — a 2 ms query called 100,000 times matters more than a 3-second report run nightly, and neither <code>calls</code> nor <code>mean_exec_time</code> alone will tell you that. Notice too that literals are replaced with <code>$1</code>: the same query with different values is grouped into one row, which is what makes the totals meaningful.</div>
 
 <h3>pg_stat_user_indexes — indexes nobody uses</h3>
@@ -469,7 +542,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <div class="pitfall"><p><strong>Trap — installing pg_stat_statements during the incident.</strong> It needs <code>shared_preload_libraries</code>, which needs a <strong>restart</strong> — so the moment you most want the data is the moment you cannot get it without making the outage worse, and even after the restart the view starts empty, having recorded nothing about what just happened. Enable it on day one, when a restart costs nothing. The same logic applies to <code>log_min_duration_statement</code> (log every query slower than, say, 500 ms) and <code>log_lock_waits</code>: both are cheap, both are set-and-forget, and both answer questions that are unanswerable afterwards. Observability you switch on during the fire only tells you about the next fire.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: run a mixed workload, then find the expensive query by total time</span><span class="lc-sub">The Code Lab track reproduces the 51.1 ms vs 12.7 ms result.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: run a mixed workload, then find the expensive query by total time</span><span class="lc-sub">The Code Lab track reproduces the 103.3 ms vs 1,048.5 ms result.</span></span>
 </a>
 </div>
 
@@ -479,15 +552,22 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <p class="lead">"Trang web chậm" không phải một CHẨN ĐOÁN. PostgreSQL có sẵn đủ công cụ tự soi để biến nó thành chẩn đoán, và toàn bộ kỹ năng nằm ở chỗ biết khung nhìn nào trả lời câu hỏi nào. Có ba cái bạn sẽ dùng liên tục.</p>
 
 <h3>pg_stat_activity — chuyện gì đang xảy ra NGAY LÚC NÀY</h3>
-<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, state, wait_event_type, wait_event,
-       now()-xact_start <span class="tok-keyword">AS</span> tuoi_giao_dich, left(query,40) <span class="tok-keyword">AS</span> truy_van
+<pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, application_name <span class="tok-keyword">AS</span> app, state,
+       wait_event_type <span class="tok-keyword">AS</span> loai_cho, wait_event <span class="tok-keyword">AS</span> cho,
+       round(extract(epoch <span class="tok-keyword">FROM</span> now() - query_start)::numeric, 1) <span class="tok-keyword">AS</span> giay,
+       left(query, 30) <span class="tok-keyword">AS</span> query
 <span class="tok-keyword">FROM</span> pg_stat_activity
-<span class="tok-keyword">WHERE</span> backend_type=<span class="tok-string">'client backend'</span>;</code></pre>
-<div class="out"> pid  | state  | wait_event_type | wait_event |                 truy_van
-------+--------+-----------------+------------+------------------------------------------
- 5372 | active |                 |            | SELECT pid, state, wait_event_type, wait
-(1 row)</div>
-<p>Cột <code>state</code> là cột phải đọc trước tiên:</p>
+<span class="tok-keyword">WHERE</span> backend_type = <span class="tok-string">'client backend'</span> <span class="tok-keyword">AND</span> pid &lt;&gt; pg_backend_pid()
+<span class="tok-keyword">ORDER BY</span> giay <span class="tok-keyword">DESC</span>;</code></pre>
+<div class="out"> pid |   app    |             state             | loai_cho |      cho      | giay |             query              
+-----+----------+-------------------------------+----------+---------------+------+--------------------------------
+ 232 | bao-cao  | active                        | Timeout  | PgSleep       |  6.3 | SELECT pg_sleep(90) AS bao_cao
+ 240 | web-quen | idle in transaction           | Client   | ClientRead    |  6.2 | UPDATE hang SET n = n + 1 WHER
+ 250 | loi      | idle in transaction (aborted) | Client   | ClientRead    |  5.2 | SELECT 1/0;
+ 260 | pool     | idle                          | Client   | ClientRead    |  5.1 | SELECT 1;
+ 270 | web-2    | active                        | Lock     | transactionid |  4.1 | UPDATE hang SET n = n + 1 WHER
+(5 rows)</div>
+<p>Năm phiên thật trên một máy nháp PostgreSQL 17.11: một báo cáo đang ngủ, một request web mở giao dịch rồi im lặng, một phiên có giao dịch đã lỗi, một kết nối pool đang rảnh, và một request web đang chờ khoá dòng (<code>Lock</code> / <code>transactionid</code>) do phiên im lặng kia giữ — <code>pg_blocking_pids(270)</code> trả về <code>{240}</code>. Cột <code>state</code> là cột phải đọc trước tiên:</p>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname"><code>active</code></span><span class="lz-lnote">Đang chạy một truy vấn ngay lúc này. Nếu nhiều cái cùng active và cùng chậm, hãy nhìn <code>wait_event</code> — một dãy chờ <code>Lock</code> nghĩa là tranh chấp (Chương 11), <code>IO</code> nghĩa là đĩa.</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>idle</code></span><span class="lz-lnote">Đang kết nối, không làm gì, không giữ giao dịch nào. Vô hại — một pool khoẻ mạnh lúc rảnh trông đúng như vậy.</span></div>
@@ -511,11 +591,17 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <span class="tok-keyword">ORDER BY</span> total_exec_time <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
 <div class="out"> calls | tong_ms | tb_ms | rows |                  truy_van
 -------+---------+-------+------+--------------------------------------------
-     2 |    51.1 | 25.54 |    2 | SELECT count(*) FROM big WHERE val LIKE $1
-     1 |    15.6 | 15.63 |    1 | SELECT sum(id) FROM big
-     5 |    12.7 |  2.55 |    5 | SELECT count(*) FROM big WHERE bucket = $1
+     2 |   103.3 | 51.65 |    2 | SELECT count(*) FROM big WHERE val LIKE $1
+     1 |    34.5 | 34.48 |    1 | SELECT sum(id) FROM big
+     5 |     0.5 |  0.10 |    5 | SELECT count(*) FROM big WHERE bucket = $1
 (3 rows)</div>
-<p>Hãy đọc dòng thứ nhất và dòng thứ ba CÙNG NHAU. Truy vấn <code>LIKE</code> chạy <strong>HAI</strong> lượt và ngốn <strong>51,1 ms</strong>; truy vấn có chỉ mục chạy <strong>NĂM</strong> lượt và ngốn <strong>12,7 ms</strong>. Sắp theo <code>calls</code> thì bạn sẽ đi tối ưu nhầm cái.</p>
+<p>(PostgreSQL 17.11; câu thật có thêm <code>WHERE query LIKE '%FROM big%'</code> để giấu phần sổ sách của chính nó.) Truy vấn <code>LIKE</code> chạy <strong>HAI</strong> lượt và ngốn <strong>103,3 ms</strong>; truy vấn có chỉ mục chạy <strong>NĂM</strong> lượt và ngốn <strong>0,5 ms</strong>. Giờ cho câu rẻ chạy đúng như một trang web đông khách — pgbench, 20.000 lượt — rồi hỏi lại:</p>
+<div class="out"> calls | tong_ms | tb_ms | rows  |                  truy_van
+-------+---------+-------+-------+--------------------------------------------
+ 20005 |  1048.5 |  0.05 | 20005 | SELECT count(*) FROM big WHERE bucket = $1
+     2 |   103.3 | 51.65 |     2 | SELECT count(*) FROM big WHERE val LIKE $1
+     1 |    34.5 | 34.48 |     1 | SELECT sum(id) FROM big</div>
+<p>Câu 0,05 ms giờ tốn gấp mười câu trông có vẻ chậm. Chỉ sắp theo <code>calls</code> hay theo <code>mean_exec_time</code> thì bạn sẽ đi tối ưu nhầm cái.</p>
 <div class="callout ok"><strong>LUÔN sắp theo <code>total_exec_time</code>.</strong> Đó là cột DUY NHẤT nắm được tác động thật — một truy vấn 2 ms gọi 100.000 lần quan trọng hơn một báo cáo 3 giây chạy mỗi đêm, và cả <code>calls</code> lẫn <code>mean_exec_time</code> đứng một mình đều không nói cho bạn biết điều đó. Cũng để ý các hằng số đã bị thay bằng <code>$1</code>: cùng một truy vấn với giá trị khác nhau được gom vào MỘT dòng, và chính điều đó làm các con số tổng có ý nghĩa.</div>
 
 <h3>pg_stat_user_indexes — những chỉ mục KHÔNG AI dùng</h3>
@@ -538,7 +624,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
 <div class="pitfall"><p><strong>Bẫy — cài pg_stat_statements NGAY TRONG lúc đang có sự cố.</strong> Nó cần <code>shared_preload_libraries</code>, mà cái đó cần <strong>KHỞI ĐỘNG LẠI</strong> — nên đúng cái lúc bạn thèm dữ liệu nhất lại là lúc bạn không lấy được nó mà không làm sự cố tệ thêm, và ngay cả sau khi khởi động lại thì khung nhìn cũng bắt đầu từ RỖNG, chẳng ghi lại gì về chuyện vừa xảy ra. Hãy bật nó từ NGÀY ĐẦU, khi một lần khởi động lại chẳng tốn gì. Cùng logic đó áp cho <code>log_min_duration_statement</code> (ghi log mọi truy vấn chậm hơn, ví dụ, 500 ms) và <code>log_lock_waits</code>: cả hai đều rẻ, cả hai đều bật-rồi-quên, và cả hai đều trả lời những câu hỏi mà sau đó thì không thể trả lời được nữa. Thứ quan trắc bạn bật lên GIỮA đám cháy chỉ kể cho bạn nghe về đám cháy LẦN SAU.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: chạy một khối việc hỗn hợp, rồi tìm ra truy vấn đắt theo TỔNG thời gian</span><span class="lc-sub">Nhánh Code Lab tái hiện kết quả 51,1 ms so với 12,7 ms.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: chạy một khối việc hỗn hợp, rồi tìm ra truy vấn đắt theo TỔNG thời gian</span><span class="lc-sub">Nhánh Code Lab tái hiện kết quả 103,3 ms so với 1.048,5 ms.</span></span>
 </a>
 </div>
 `,
@@ -580,10 +666,10 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
             points: 1,
           },
           {
-            question: 'Measured: a query takes 0.186 ms reused, but 4.403 ms when a new connection is opened for it. What does that mean in practice?|||Đo được: một truy vấn tốn 0,186 ms khi tái dùng kết nối, nhưng 4,403 ms khi mở kết nối mới cho nó. Trong thực tế điều đó nghĩa là gì?',
+            question: 'Measured: a query takes 0.425 ms reused, but 6.765 ms when a new connection is opened for it. What does that mean in practice?|||Đo được: một truy vấn tốn 0,425 ms khi tái dùng kết nối, nhưng 6,765 ms khi mở kết nối mới cho nó. Trong thực tế điều đó nghĩa là gì?',
             options: [
               'The query is badly written|||Truy vấn viết tệ',
-              'About 96% of the time was connection setup, not work — so pooling (measured at 0.205 ms) is essentially free reuse|||Khoảng 96% thời gian là khâu thiết lập kết nối chứ không phải làm việc — nên dùng pool (đo được 0,205 ms) gần như là tái dùng miễn phí',
+              'About 94% of the time was connection setup, not work — so pooling (measured at 0.442 ms) is essentially free reuse|||Khoảng 94% thời gian là khâu thiết lập kết nối chứ không phải làm việc — nên dùng pool (đo được 0,442 ms) gần như là tái dùng miễn phí',
               'The server is misconfigured|||Máy chủ cấu hình sai',
               'New connections are always faster after warmup|||Kết nối mới luôn nhanh hơn sau khi khởi động',
             ],
@@ -646,7 +732,7 @@ shared_preload_libraries = <span class="tok-string">'pg_stat_statements'</span>
             points: 1,
           },
           {
-            question: 'In pg_stat_statements a query with 2 calls shows 51.1 ms total; another with 5 calls shows 12.7 ms total. Which do you optimise, and which column should you sort by?|||Trong pg_stat_statements, một truy vấn 2 lượt gọi hiện 51,1 ms tổng; cái khác 5 lượt gọi hiện 12,7 ms tổng. Bạn tối ưu cái nào, và nên sắp theo cột nào?',
+            question: 'In pg_stat_statements a query with 2 calls shows 103.3 ms total; another with 5 calls shows 0.5 ms total. Which do you optimise, and which column should you sort by?|||Trong pg_stat_statements, một truy vấn 2 lượt gọi hiện 103,3 ms tổng; cái khác 5 lượt gọi hiện 0,5 ms tổng. Bạn tối ưu cái nào, và nên sắp theo cột nào?',
             options: [
               'The 5-call one; sort by calls|||Cái 5 lượt; sắp theo calls',
               'The 2-call one; sort by total_exec_time — it is the only column that captures real impact|||Cái 2 lượt; sắp theo total_exec_time — đó là cột duy nhất nắm được tác động thật',

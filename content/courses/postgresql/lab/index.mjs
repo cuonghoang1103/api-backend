@@ -6,5 +6,6 @@
 import lab1 from './lab-1.mjs';
 import lab2 from './lab-2.mjs';
 import lab3 from './lab-3.mjs';
+import lab4 from './lab-4.mjs';
 
-export const LAB_SAU = { 3: [lab1], 4: [lab2], 6: [lab3] };
+export const LAB_SAU = { 3: [lab1], 4: [lab2], 6: [lab3], 8: [lab4] };

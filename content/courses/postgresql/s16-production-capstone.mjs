@@ -1,19 +1,25 @@
 /**
  * PostgreSQL — Chương 16: Production & capstone (Giai đoạn 4 — Trên production).
  * Prisma ↔ SQL: model → bảng, @relation → khoá ngoại, migrate deploy vs migrate dev ·
- * lược đồ THẬT của cuongthai.com đo tại chỗ 26/08/2026: 8.164 dòng, 277 model, 56 enum,
- * 117 migration, 446 @@index, 441 @relation, model User có 47 @relation/172 trường ·
+ * lược đồ THẬT của cuongthai.com đo lại 26/10/2026 (agent c16): 17.382 dòng, 602 model, 57 enum,
+ * 236 migration, 807 @@index, 1.075 @relation, 241 khoá ngoại trỏ vào users, User 287 trường ·
+ * (bản 26/08: 8.164 dòng, 277 model, 117 migration — giữ trong thân bài làm mốc lớn dần) ·
  * bug P3006 KIỂM CHỨNG tận file: migration 20260706130000 dòng 48-49 đặt TRÙNG TÊN
  * một UNIQUE constraint và một INDEX ⇒ không replay được trên shadow DB ·
  * checklist production · capstone chẩn đoán.
  * LUẬT: < > trong code/out → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  * Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G161 from './giang/pg-16-1.mjs';
+import G162 from './giang/pg-16-2.mjs';
+import G163 from './giang/pg-16-3.mjs';
+import G164 from './giang/pg-16-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
   title: 'Chapter 16 — PostgreSQL in production & capstone|||Chương 16 — PostgreSQL trên production & capstone',
-  description: 'Ghép mọi thứ lại. Prisma ánh xạ sang đúng những khái niệm bạn vừa học ra sao, một lược đồ production thật 277 model trông thế nào và đọc nó kiểu gì, một checklist trước khi đưa cơ sở dữ liệu ra đời thật, và một bài capstone chẩn đoán dùng tới cả mười lăm chương trước.',
+  description: 'Ghép mọi thứ lại. Prisma ánh xạ sang đúng những khái niệm bạn vừa học ra sao, một lược đồ production thật 602 model trông thế nào và đọc nó kiểu gì, một checklist trước khi đưa cơ sở dữ liệu ra đời thật, và một bài capstone chẩn đoán dùng tới cả mười lăm chương trước.',
   lessons: [
     /* ─────────────────────────── 16.1 ─────────────────────────── */
     {
@@ -22,7 +28,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Mỗi khái niệm Prisma tương ứng với cái gì trong SQL bạn đã học, khác biệt sống còn giữa migrate dev và migrate deploy, shadow database là gì — và một bug shadow DB có thật trong chính kho mã này, kiểm chứng tới từng dòng.',
-      content: `
+      content: `${G161}
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.1 · Phase 4 — In production</span>
 <h2>The ORM is not a different database</h2>
@@ -49,17 +55,17 @@ export default {
 <pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
 <span class="tok-keyword">CREATE INDEX</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">ON</span> <span class="tok-string">"post_music"</span>(<span class="tok-string">"post_id"</span>);</code></pre>
 <p>A <code>UNIQUE</code> constraint creates an index behind it, using the constraint's name. The next line then tries to create a <em>second</em> index with the <strong>same name</strong>. On a fresh shadow database that is a name collision and the replay fails with <code>P3006</code>.</p>
-<p>Why did it ever work? Because on the real database the two statements ran at a moment when that sequence happened to be accepted, and the migration is now <em>recorded as applied</em> — so <code>migrate deploy</code> never runs it again and production is unaffected. Only the shadow database, which always starts from zero, hits it.</p>
+<p>Why is production unaffected? Not because the sequence was ever valid — on PostgreSQL these two lines fail <em>every</em> time (error <code>42P07</code>; replayed for real on PostgreSQL 16.15). Production has the migration <em>recorded as applied</em> in <code>_prisma_migrations</code>, however it got there, so <code>migrate deploy</code> never runs it again. The shadow database, which always starts from zero, hits it — and so does <em>any</em> empty database: replaying all 236 migrations of this site into an empty PostgreSQL 16 with <code>migrate deploy</code> applied 25, stopped at #26 with <code>P3018</code>, and never reached the other 210. The history cannot build a new database; a new server, CI or disaster recovery has to start from a dump (Chapter 15).</p>
 <div class="callout warn">The fix is <strong>not</strong> to edit that file. It is already applied on production, and rewriting an applied migration means the recorded checksum no longer matches what is in the history — the exact drift that Chapter 15's recovery story depends on not having. The working practice in this repository is to hand-write new migration SQL under <code>prisma/migrations/&lt;timestamp&gt;_&lt;name&gt;/migration.sql</code> and apply it with <code>prisma migrate deploy</code>, which needs no shadow database. Verify there is no drift afterwards with <code>prisma migrate diff</code> — empty output means the schema and the database agree.</div>
 
 <h3>When a migration fails on deploy</h3>
 <p>Prisma marks it failed and refuses to continue, which is correct: a half-applied schema change must not be papered over. The temptation is <code>prisma migrate resolve --applied</code> to make the error go away. Do not — it tells Prisma the migration succeeded, and if it only partly ran, the schema and the history now disagree in a way nothing will detect until a later migration fails for reasons that make no sense.</p>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read the actual error</span><span class="lz-d">Which statement failed, and did the ones before it commit? A migration wrapped in one transaction rolled back cleanly (11.1); one with multiple statements outside a transaction may not have.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read the actual error</span><span class="lz-d">Which statement failed, and did the ones before it commit? A migration wrapped in one transaction rolled back cleanly (11.1); one with multiple statements outside a transaction may not have. Measured with Prisma 5.22 on PostgreSQL: it sends the whole <code>migration.sql</code> as one script, which PostgreSQL runs as one implicit transaction — after the failure at #26 the table <code>songs</code>, created earlier in the same file, did not exist. Files that open their own <code>BEGIN</code>/<code>COMMIT</code> (Prisma's enum changes do) split that transaction, so check them statement by statement.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Inspect the real schema</span><span class="lz-d"><code>\\d table_name</code> in psql. Does the column exist? The index? Compare against what the migration intended.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Then decide, deliberately</span><span class="lz-d">Only once you know what state the database is actually in. <code>prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code> prints the difference as SQL.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Then decide, deliberately</span><span class="lz-d">Only once you know what state the database is actually in. <code>prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script</code> prints the difference as SQL — no shadow database needed. (There is no <code>--to-database-url</code> in Prisma 5.22: the flags are <code>--from-url</code>/<code>--to-url</code>. The <code>--from-migrations</code> variant needs a shadow database, which P3006 breaks in this repository.)</span></div>
 </div>
-<div class="pitfall"><p><strong>Trap — a migration that is instant on your laptop and an outage on production.</strong> <code>ALTER TABLE … ADD COLUMN … NOT NULL DEFAULT 'x'</code> is fast on a thousand rows and, on older PostgreSQL, rewrote the entire table under an <code>ACCESS EXCLUSIVE</code> lock on a million. Modern versions optimise the constant-default case, but the general shape of the risk stands: <code>ALTER TABLE</code> takes a lock that blocks <em>everything</em>, and if it queues behind one long-running query, every request arriving after it queues too — so a migration that takes 200 ms of work can still cause minutes of downtime while it waits. Set a short <code>lock_timeout</code> before DDL so the migration fails fast instead of blocking the site, add indexes with <code>CREATE INDEX CONCURRENTLY</code> (which Prisma will not generate for you — hand-write it), and test the migration against a copy with production-sized data, never against your empty dev database.</p></div>
+<div class="pitfall"><p><strong>Trap — a migration that is instant on your laptop and an outage on production.</strong> <code>ALTER TABLE … ADD COLUMN … NOT NULL DEFAULT 'x'</code> is fast on a thousand rows and, on older PostgreSQL, rewrote the entire table under an <code>ACCESS EXCLUSIVE</code> lock on a million. Modern versions optimise the constant-default case, but the general shape of the risk stands: <code>ALTER TABLE</code> takes a lock that blocks <em>everything</em>, and if it queues behind one long-running query, every request arriving after it queues too — so a migration that takes 200 ms of work can still cause minutes of downtime while it waits. Measured on PostgreSQL 17.11: with one transaction left open for 8 s, an <code>ALTER TABLE … ADD COLUMN</code> waited 7.0 s and a one-row <code>SELECT</code> arriving after it waited 6.0 s; with <code>SET lock_timeout = '2s'</code> the ALTER failed after 2.0 s (<code>canceling statement due to lock timeout</code>) and the same <code>SELECT</code> waited 0.97 s. On 1,000,000 rows a constant default took 0.566 ms, while <code>DEFAULT gen_random_uuid()</code> rewrote the table in 1.2 s. Set a short <code>lock_timeout</code> before DDL so the migration fails fast instead of blocking the site, add indexes with <code>CREATE INDEX CONCURRENTLY</code> (which Prisma will not generate for you — hand-write it), and test the migration against a copy with production-sized data, never against your empty dev database.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: read a generated migration and predict the lock it takes</span><span class="lc-sub">The Code Lab track walks the Prisma ↔ SQL mapping with real files.</span></span>
@@ -92,17 +98,17 @@ export default {
 <pre><code class="language-sql"><span class="tok-keyword">ALTER TABLE</span> <span class="tok-string">"post_music"</span> <span class="tok-keyword">ADD CONSTRAINT</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">UNIQUE</span> (<span class="tok-string">"post_id"</span>);
 <span class="tok-keyword">CREATE INDEX</span> <span class="tok-string">"post_music_post_id_key"</span> <span class="tok-keyword">ON</span> <span class="tok-string">"post_music"</span>(<span class="tok-string">"post_id"</span>);</code></pre>
 <p>Một ràng buộc <code>UNIQUE</code> tự tạo một chỉ mục phía sau nó, LẤY ĐÚNG TÊN của ràng buộc. Dòng kế tiếp sau đó lại cố tạo một chỉ mục <em>THỨ HAI</em> với <strong>CÙNG CÁI TÊN</strong>. Trên một shadow database sạch, đó là một vụ đụng tên và lượt phát lại hỏng với mã <code>P3006</code>.</p>
-<p>Vậy vì sao nó từng chạy được? Vì trên cơ sở dữ liệu thật, hai câu lệnh đó chạy vào một thời điểm mà trình tự ấy tình cờ được chấp nhận, và giờ migration đã được <em>GHI NHẬN LÀ ĐÃ ÁP</em> — nên <code>migrate deploy</code> không bao giờ chạy lại nó và production không hề bị ảnh hưởng. Chỉ có shadow database, thứ luôn bắt đầu từ số không, mới đâm vào nó.</p>
+<p>Vậy vì sao production không hề hấn gì? KHÔNG phải vì trình tự ấy từng hợp lệ — trên PostgreSQL hai dòng này hỏng ở <em>MỌI</em> lần chạy (lỗi <code>42P07</code>; đã phát lại thật trên PostgreSQL 16.15). Production có migration này <em>ĐƯỢC GHI NHẬN LÀ ĐÃ ÁP</em> trong <code>_prisma_migrations</code>, bằng con đường nào đi nữa, nên <code>migrate deploy</code> không bao giờ chạy lại nó. Shadow database, thứ luôn bắt đầu từ số không, đâm vào nó — và MỌI database rỗng cũng vậy: phát lại cả 236 migration của trang này vào một PostgreSQL 16 rỗng bằng <code>migrate deploy</code> thì áp được 25, dừng ở #26 với <code>P3018</code>, và 210 cái còn lại không bao giờ tới lượt. Lịch sử migration không dựng nổi một database mới; máy chủ mới, CI hay khôi phục thảm hoạ phải bắt đầu từ bản dump (Chương 15).</p>
 <div class="callout warn">Cách sửa <strong>KHÔNG</strong> phải là sửa cái file đó. Nó đã được áp trên production rồi, và viết lại một migration đã áp nghĩa là mã băm đã ghi không còn khớp với thứ nằm trong lịch sử — đúng cái kiểu trôi dạt mà câu chuyện khôi phục ở Chương 15 dựa trên việc KHÔNG có. Cách làm việc trong kho mã này là VIẾT TAY SQL cho migration mới ở <code>prisma/migrations/&lt;timestamp&gt;_&lt;name&gt;/migration.sql</code> rồi áp bằng <code>prisma migrate deploy</code>, thứ không cần shadow database. Sau đó kiểm rằng không có trôi dạt bằng <code>prisma migrate diff</code> — output rỗng nghĩa là lược đồ và cơ sở dữ liệu đang khớp nhau.</div>
 
 <h3>Khi một migration hỏng lúc deploy</h3>
 <p>Prisma đánh dấu nó là thất bại và từ chối đi tiếp, và như thế là ĐÚNG: một thay đổi lược đồ áp được một nửa thì không được phép lấp liếm. Cám dỗ ở đây là <code>prisma migrate resolve --applied</code> để làm cái lỗi biến mất. ĐỪNG — nó nói với Prisma rằng migration đã thành công, và nếu nó chỉ chạy được một phần thì lược đồ và lịch sử giờ mâu thuẫn với nhau theo một kiểu mà chẳng có gì phát hiện ra, cho tới khi một migration về sau hỏng vì những lý do vô nghĩa.</p>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc lỗi THẬT</span><span class="lz-d">Câu lệnh nào hỏng, và những câu trước nó đã commit chưa? Một migration bọc trong MỘT giao dịch thì đã lùi lại sạch sẽ (11.1); một cái có nhiều câu lệnh nằm ngoài giao dịch thì có thể không.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc lỗi THẬT</span><span class="lz-d">Câu lệnh nào hỏng, và những câu trước nó đã commit chưa? Một migration bọc trong MỘT giao dịch thì đã lùi lại sạch sẽ (11.1); một cái có nhiều câu lệnh nằm ngoài giao dịch thì có thể không. Đo thật với Prisma 5.22 trên PostgreSQL: nó gửi cả <code>migration.sql</code> thành một script, PostgreSQL chạy script đó trong MỘT giao dịch ngầm — sau khi hỏng ở #26, bảng <code>songs</code> mà chính file đó tạo ở phía trên không hề tồn tại. File nào tự mở <code>BEGIN</code>/<code>COMMIT</code> riêng (migration đổi enum của Prisma có làm vậy) sẽ chia giao dịch ấy ra, nên phải kiểm từng câu.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Soi lược đồ thật</span><span class="lz-d"><code>\\d ten_bang</code> trong psql. Cột đó có tồn tại không? Chỉ mục thì sao? Đối chiếu với thứ mà migration ĐỊNH làm.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">RỒI mới quyết định, một cách có chủ đích</span><span class="lz-d">Chỉ sau khi bạn biết cơ sở dữ liệu ĐANG THẬT SỰ ở trạng thái nào. <code>prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code> in ra phần chênh lệch dưới dạng SQL.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">RỒI mới quyết định, một cách có chủ đích</span><span class="lz-d">Chỉ sau khi bạn biết cơ sở dữ liệu ĐANG THẬT SỰ ở trạng thái nào. <code>prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script</code> in ra phần chênh lệch dưới dạng SQL — không cần shadow database. (Prisma 5.22 KHÔNG có cờ <code>--to-database-url</code>: cờ đúng là <code>--from-url</code>/<code>--to-url</code>. Kiểu <code>--from-migrations</code> cần shadow database, thứ mà P3006 đã làm hỏng trong kho mã này.)</span></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — một migration tức thì trên laptop của bạn và là một sự cố trên production.</strong> Câu <code>ALTER TABLE … ADD COLUMN … NOT NULL DEFAULT 'x'</code> chạy nhanh với một nghìn dòng và, ở các bản PostgreSQL cũ, VIẾT LẠI CẢ BẢNG dưới khoá <code>ACCESS EXCLUSIVE</code> khi có một triệu dòng. Các bản hiện đại đã tối ưu trường hợp default hằng số, nhưng HÌNH DẠNG chung của rủi ro vẫn nguyên: <code>ALTER TABLE</code> lấy một cái khoá chặn <em>MỌI THỨ</em>, và nếu nó xếp hàng sau một truy vấn chạy dài thì mọi request tới sau nó CŨNG xếp hàng — nên một migration chỉ tốn 200 ms công việc vẫn có thể gây ra nhiều PHÚT chết trang trong lúc nó chờ. Hãy đặt một <code>lock_timeout</code> ngắn trước khi chạy DDL để migration hỏng NHANH thay vì làm nghẽn trang, hãy tạo chỉ mục bằng <code>CREATE INDEX CONCURRENTLY</code> (thứ mà Prisma sẽ không sinh giùm bạn — phải viết tay), và hãy thử migration trên một bản sao có dữ liệu CỠ PRODUCTION, đừng bao giờ thử trên cơ sở dữ liệu dev rỗng của bạn.</p></div>
+<div class="pitfall"><p><strong>Bẫy — một migration tức thì trên laptop của bạn và là một sự cố trên production.</strong> Câu <code>ALTER TABLE … ADD COLUMN … NOT NULL DEFAULT 'x'</code> chạy nhanh với một nghìn dòng và, ở các bản PostgreSQL cũ, VIẾT LẠI CẢ BẢNG dưới khoá <code>ACCESS EXCLUSIVE</code> khi có một triệu dòng. Các bản hiện đại đã tối ưu trường hợp default hằng số, nhưng HÌNH DẠNG chung của rủi ro vẫn nguyên: <code>ALTER TABLE</code> lấy một cái khoá chặn <em>MỌI THỨ</em>, và nếu nó xếp hàng sau một truy vấn chạy dài thì mọi request tới sau nó CŨNG xếp hàng — nên một migration chỉ tốn 200 ms công việc vẫn có thể gây ra nhiều PHÚT chết trang trong lúc nó chờ. Đo thật trên PostgreSQL 17.11: một giao dịch bị bỏ ngỏ 8 giây làm <code>ALTER TABLE … ADD COLUMN</code> chờ 7,0 giây, và một câu <code>SELECT</code> một dòng tới sau nó chờ 6,0 giây; có <code>SET lock_timeout = '2s'</code> thì ALTER hỏng sau 2,0 giây (<code>canceling statement due to lock timeout</code>) và cũng câu <code>SELECT</code> đó chỉ chờ 0,97 giây. Trên 1.000.000 dòng, default hằng số mất 0,566 ms, còn <code>DEFAULT gen_random_uuid()</code> viết lại cả bảng trong 1,2 giây. Hãy đặt một <code>lock_timeout</code> ngắn trước khi chạy DDL để migration hỏng NHANH thay vì làm nghẽn trang, hãy tạo chỉ mục bằng <code>CREATE INDEX CONCURRENTLY</code> (thứ mà Prisma sẽ không sinh giùm bạn — phải viết tay), và hãy thử migration trên một bản sao có dữ liệu CỠ PRODUCTION, đừng bao giờ thử trên cơ sở dữ liệu dev rỗng của bạn.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: đọc một migration được sinh ra và đoán trước cái khoá nó sẽ lấy</span><span class="lc-sub">Nhánh Code Lab đi qua bản đồ ánh xạ Prisma ↔ SQL bằng file thật.</span></span>
@@ -116,39 +122,42 @@ export default {
       title: '16.2 — Reading a real production schema|||16.2 — Đọc một lược đồ production thật',
       slug: 'postgresql-16-2-luoc-do-that',
       type: 'LESSON',
-      description: 'Lược đồ đang chạy cuongthai.com, đo tại chỗ: 8.164 dòng, 277 model, 56 enum, 117 migration, 446 chỉ mục, 441 quan hệ — và model User một mình có 47 quan hệ với 172 trường. Cách tiếp cận một lược đồ lớn mà không bị nó nuốt chửng.',
-      content: `
+      description: 'Lược đồ đang chạy cuongthai.com, đo tại chỗ 26/10/2026: 17.382 dòng, 602 model, 57 enum, 236 migration, 807 @@index, 1.075 @relation — 241 khoá ngoại trỏ vào users, model User có 287 trường. Cách tiếp cận một lược đồ lớn mà không bị nó nuốt chửng.',
+      content: `${G162}
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.2 · Phase 4 — In production</span>
 <h2>What fifteen chapters looks like at scale</h2>
 <p class="lead">Every example so far has had three tables and five rows, because that is how you learn a concept. Real schemas are not like that, and the jump is disorienting the first time. This lesson measures the actual schema behind this site so the scale stops being abstract.</p>
 
-<h3>The numbers, counted today</h3>
-<div class="out">dòng schema.prisma : 8164
-số model           : 277
-số enum            : 56
-số migration       : 117
-số @@index         : 446
-số @@unique        : 86
-số @relation       : 441</div>
-<p>277 tables storing every user, post, message, note, course and lesson on the site — including the one you are reading. 117 migrations is 117 deliberate changes, each one recorded, ordered and replayable.</p>
-<div class="callout ok">Chapter 0 of this course quotes <strong>248 tables, 95 migrations, 6,980 lines</strong>. Those numbers were true when that chapter was written; the counts above were taken today. <strong>29 new tables and 22 new migrations in the interval</strong> — which is the most useful thing on this page. A schema is not a thing you design once. It is a thing that grows for as long as the product does, which is exactly why migrations, and not <code>db push</code>, are the mechanism.</div>
+<h3>The numbers, counted today (26 October 2026)</h3>
+<div class="out">dòng schema.prisma : 17382
+số model           : 602
+số enum            : 57
+số migration       : 236
+số @@index         : 807
+số @@unique        : 229
+số @relation       : 1075</div>
+<p>602 models storing every user, post, message, note, course and lesson on the site — including the one you are reading. Built into PostgreSQL 16 they become 603 tables (PostGIS adds <code>spatial_ref_sys</code>), 1,751 indexes, 873 foreign keys and 57 enum types. 236 migrations is 236 deliberate changes, each one recorded and ordered.</p>
+<div class="callout ok">Chapter 0 of this course quotes <strong>248 tables, 95 migrations, 6,980 lines</strong>. Those numbers were true when that chapter was written; the counts above were taken today. The first version of this lesson (26 August) counted 277 models, 117 migrations, 8,164 lines; git history of <code>schema.prisma</code> shows 122 models on 1 July, 248 on 1 August, 278 on 1 September, 365 on 1 October and 602 today. <strong>354 new models and 141 new migrations since Chapter 0's count</strong> — which is the most useful thing on this page. A schema is not a thing you design once. It is a thing that grows for as long as the product does, which is exactly why migrations, and not <code>db push</code>, are the mechanism.</div>
 
 <h3>The gravitational centre</h3>
-<p>Count the relations per model and one stands out enormously:</p>
-<div class="out">  User                       47 @relation · 172 trường
-  Note                        8 @relation ·  35 trường
-  SocialComment               6 @relation ·  22 trường
-  NoteDatabaseRow             6 @relation ·  15 trường
-  MessageThread               5 @relation ·  18 trường</div>
-<p><code>User</code> has <strong>47 relations</strong> — nearly six times the next model — and 172 fields. That is not a mistake, and it is not unusual. In almost any application with accounts, the user table is where everything eventually points: posts, comments, messages, notes, courses, sessions, uploads, settings. It is the schema's centre of gravity, and it tells you something practical: <strong>almost every interesting query in this system joins to <code>User</code></strong>, so its primary key is the hottest index in the database, and any migration that locks it (16.1) blocks nearly everything.</p>
+<p>Count, in the catalog of the built database, how many foreign keys point at each table (<code>SELECT confrelid::regclass, count(*) FROM pg_constraint WHERE contype = 'f' GROUP BY 1 ORDER BY 2 DESC</code>) and one stands out enormously:</p>
+<div class="out">   bang_dich   | so_khoa_ngoai_tro_toi
+---------------+-----------------------
+ users         |                   241
+ work_projects |                   115
+ work_issues   |                    38
+ languages     |                    15
+ work_spaces   |                    15
+ work_classes  |                    13</div>
+<p><strong>241 foreign keys point at <code>users</code></strong> — more than twice the next table — and the <code>User</code> model has 287 fields, 241 of them relations. That is not a mistake, and it is not unusual. In almost any application with accounts, the user table is where everything eventually points: posts, comments, messages, notes, courses, sessions, uploads, settings. It is the schema's centre of gravity, and it tells you something practical: <strong>almost every interesting query in this system joins to <code>User</code></strong>, so its primary key is the hottest index in the database, and any migration that locks it (16.1) blocks nearly everything.</p>
 
 <h3>How to approach a schema you did not write</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Do not read it top to bottom</span><span class="lz-d">8,164 lines in file order teaches you nothing. Start from a feature you can see in the product and find its table.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Do not read it top to bottom</span><span class="lz-d">17,382 lines in file order teaches you nothing. Start from a feature you can see in the product and find its table.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Follow the foreign keys outward</span><span class="lz-d">From one table, read only its relations. Two hops covers a feature; you almost never need more. This is the same skill as reading a query plan inside-out (Chapter 10).</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Let the indexes tell you the access patterns</span><span class="lz-d">446 <code>@@index</code> declarations are 446 statements about how this data is <em>read</em>. An index on <code>[userId, createdAt]</code> says "list a user's things, newest first" — the query is visible in the index even before you find the code.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Read migrations for the history</span><span class="lz-d">The schema shows the present; the 117 migrations show how it got here and, in their names, why. When a column looks strange, the migration that added it usually explains it.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Let the indexes tell you the access patterns</span><span class="lz-d">807 <code>@@index</code> declarations are 807 statements about how this data is <em>read</em>. An index on <code>[userId, createdAt]</code> says "list a user's things, newest first" — the query is visible in the index even before you find the code.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Read migrations for the history</span><span class="lz-d">The schema shows the present; the 236 migrations show how it got here and, in their names, why. When a column looks strange, the migration that added it usually explains it.</span></div>
 </div>
 
 <h3>Useful queries against a live database</h3>
@@ -159,9 +168,9 @@ số @relation       : 441</div>
 <span class="tok-comment">-- bảng nào bị đọc nhiều nhất, và bằng chỉ mục hay quét tuần tự</span>
 <span class="tok-keyword">SELECT</span> relname, seq_scan, idx_scan, n_live_tup
 <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">ORDER BY</span> seq_scan <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 10;</code></pre>
-<p>The second one is the highest-value query in this lesson. A table with a large <code>n_live_tup</code>, a high <code>seq_scan</code> and a low <code>idx_scan</code> is being read by scanning it end to end — a missing index (Chapter 9), findable without reading a single line of application code.</p>
-<div class="callout warn"><code>pg_total_relation_size</code> includes indexes and TOAST; <code>pg_relation_size</code> is the table alone. With 446 indexes in this schema the difference is not small, and "the table is huge" sometimes turns out to mean "the indexes on it are huge" — a different problem with a different fix.</div>
-<div class="pitfall"><p><strong>Trap — reading a schema and assuming the data matches it.</strong> The schema describes what the code <em>can</em> create from now on. The data was created by every version of the code that ever ran, plus migrations, plus manual fixes, plus imports — and it remembers all of them. A column marked <code>NOT NULL</code> today may sit above rows that predate the constraint being enforced the way you assume; two tables that "cannot" hold the same slug may hold it, because a merge copied rows into a new table without removing the old ones. This is not theoretical: on this very site, a reasoning-from-the-code conclusion that two URL spaces could not collide was <strong>wrong</strong>, and one <code>curl</code> against production would have shown both returning 200. <strong>Code tells you what is possible; only the data tells you what is true.</strong> When the question is about state, query the state.</p></div>
+<p>The second one is the highest-value query in this lesson. A table with a large <code>n_live_tup</code>, a high <code>seq_scan</code> and a low <code>idx_scan</code> is being read by scanning it end to end — a missing index (Chapter 9), findable without reading a single line of application code. Measured on a copy of this schema with fake data (50,000 songs, 200 views of “songs I uploaded”): <code>songs</code> showed <code>seq_scan</code> 201, 10,050,000 tuples read, <code>idx_scan</code> 0; the plan read 711 pages per request, and after <code>CREATE INDEX CONCURRENTLY … (uploaded_by_id, created_at DESC)</code> it read 22. Not every missing index shows up as <code>seq_scan</code>, though: a lookup on <code>notes.subject_id</code> used an index that starts with <code>user_id</code> and read all 240 of its pages for 100 rows — <code>EXPLAIN (ANALYZE, BUFFERS)</code> shows it.</p>
+<div class="callout warn"><code>pg_total_relation_size</code> includes indexes and TOAST; <code>pg_relation_size</code> is the table alone. With 807 <code>@@index</code> declarations (1,751 indexes in the built database) the difference is not small — on the replica with fake data, <code>notes</code> was 41 MB in total but 24 MB of table — and "the table is huge" sometimes turns out to mean "the indexes on it are huge" — a different problem with a different fix.</div>
+<div class="pitfall"><p><strong>Trap — reading a schema and assuming the data matches it.</strong> The schema describes what the code <em>can</em> create from now on. The data was created by every version of the code that ever ran, plus migrations, plus manual fixes, plus imports — and it remembers all of them. A column marked <code>NOT NULL</code> today may sit above rows that predate the constraint being enforced the way you assume; two tables that "cannot" hold the same slug may hold it, because a merge copied rows into a new table without removing the old ones. This is not theoretical: on this very site, a reasoning-from-the-code conclusion that two URL spaces could not collide was <strong>wrong</strong>, and one <code>curl</code> against production would have shown both returning 200. <strong>Code tells you what is possible; only the data tells you what is true.</strong> When the question is about state, query the state. A second example sits in this repository today: <code>schema.prisma</code> names the <code>Song</code> columns <code>audioUrl</code>, <code>coverImage</code>, <code>isActive</code> with no <code>@map</code>, while the migration that created <code>songs</code> wrote <code>"audio_url"</code>, <code>"cover_image"</code>, <code>"is_active"</code>. Two files, two answers — which one production has is a question for <code>\\d songs</code> on the real database, not for reading.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: find the missing index in a schema you have never seen</span><span class="lc-sub">The Code Lab track uses the seq_scan query on a realistic schema.</span></span>
@@ -173,32 +182,35 @@ số @relation       : 441</div>
 <h2>Mười lăm chương trông ra sao khi ở quy mô thật</h2>
 <p class="lead">Mọi ví dụ tới giờ đều có ba cái bảng và năm cái dòng, vì đó là cách người ta học một khái niệm. Lược đồ thật thì không như vậy, và cú nhảy ấy gây choáng váng ở lần đầu. Bài này ĐO lược đồ thật đang đứng sau trang này, để cái quy mô đó thôi trừu tượng.</p>
 
-<h3>Các con số, đếm hôm nay</h3>
-<div class="out">dòng schema.prisma : 8164
-số model           : 277
-số enum            : 56
-số migration       : 117
-số @@index         : 446
-số @@unique        : 86
-số @relation       : 441</div>
-<p>277 cái bảng lưu mọi user, bài đăng, tin nhắn, ghi chú, khoá học và bài học trên trang — kể cả cái bài bạn đang đọc. 117 migration là 117 thay đổi CÓ CHỦ ĐÍCH, mỗi cái đều được ghi lại, có thứ tự, và phát lại được.</p>
-<div class="callout ok">Chương 0 của chính khoá này ghi <strong>248 bảng, 95 migration, 6.980 dòng</strong>. Những con số đó ĐÚNG vào lúc chương ấy được viết; các con số ở trên được đếm HÔM NAY. <strong>29 bảng mới và 22 migration mới trong khoảng thời gian đó</strong> — và đây mới là điều hữu ích nhất trên trang này. Lược đồ KHÔNG phải thứ bạn thiết kế một lần. Nó là thứ LỚN LÊN chừng nào sản phẩm còn lớn, và đó chính xác là lý do cơ chế phải là migration chứ không phải <code>db push</code>.</div>
+<h3>Các con số, đếm hôm nay (26/10/2026)</h3>
+<div class="out">dòng schema.prisma : 17382
+số model           : 602
+số enum            : 57
+số migration       : 236
+số @@index         : 807
+số @@unique        : 229
+số @relation       : 1075</div>
+<p>602 model lưu mọi user, bài đăng, tin nhắn, ghi chú, khoá học và bài học trên trang — kể cả cái bài bạn đang đọc. Dựng vào PostgreSQL 16, chúng thành 603 bảng (PostGIS thêm <code>spatial_ref_sys</code>), 1.751 chỉ mục, 873 khoá ngoại và 57 kiểu enum. 236 migration là 236 thay đổi CÓ CHỦ ĐÍCH, mỗi cái đều được ghi lại và có thứ tự.</p>
+<div class="callout ok">Chương 0 của chính khoá này ghi <strong>248 bảng, 95 migration, 6.980 dòng</strong>. Những con số đó ĐÚNG vào lúc chương ấy được viết; các con số ở trên được đếm HÔM NAY. Bản đầu của bài này (26/08) đếm được 277 model, 117 migration, 8.164 dòng; lịch sử git của <code>schema.prisma</code> cho thấy 122 model ngày 1/7, 248 ngày 1/8, 278 ngày 1/9, 365 ngày 1/10 và 602 hôm nay. <strong>354 model mới và 141 migration mới kể từ lúc Chương 0 đếm</strong> — và đây mới là điều hữu ích nhất trên trang này. Lược đồ KHÔNG phải thứ bạn thiết kế một lần. Nó là thứ LỚN LÊN chừng nào sản phẩm còn lớn, và đó chính xác là lý do cơ chế phải là migration chứ không phải <code>db push</code>.</div>
 
 <h3>Tâm trọng lực</h3>
-<p>Đếm số quan hệ của từng model thì có một cái nổi bật đến mức áp đảo:</p>
-<div class="out">  User                       47 @relation · 172 trường
-  Note                        8 @relation ·  35 trường
-  SocialComment               6 @relation ·  22 trường
-  NoteDatabaseRow             6 @relation ·  15 trường
-  MessageThread               5 @relation ·  18 trường</div>
-<p><code>User</code> có <strong>47 quan hệ</strong> — gần gấp SÁU lần model đứng kế — và 172 trường. Đó không phải sai sót, và cũng chẳng có gì bất thường. Ở gần như mọi ứng dụng có tài khoản, bảng user là nơi rốt cuộc mọi thứ đều trỏ về: bài đăng, bình luận, tin nhắn, ghi chú, khoá học, phiên đăng nhập, tệp tải lên, thiết lập. Nó là tâm trọng lực của lược đồ, và nó nói cho bạn một điều rất thực dụng: <strong>gần như MỌI truy vấn đáng chú ý trong hệ thống này đều join tới <code>User</code></strong>, nên khoá chính của nó là chỉ mục NÓNG NHẤT trong cả cơ sở dữ liệu, và bất kỳ migration nào khoá nó lại (16.1) đều chặn gần như mọi thứ.</p>
+<p>Đếm trong catalog của database đã dựng xem mỗi bảng có bao nhiêu khoá ngoại trỏ tới (<code>SELECT confrelid::regclass, count(*) FROM pg_constraint WHERE contype = 'f' GROUP BY 1 ORDER BY 2 DESC</code>) thì có một cái nổi bật đến mức áp đảo:</p>
+<div class="out">   bang_dich   | so_khoa_ngoai_tro_toi
+---------------+-----------------------
+ users         |                   241
+ work_projects |                   115
+ work_issues   |                    38
+ languages     |                    15
+ work_spaces   |                    15
+ work_classes  |                    13</div>
+<p><strong>241 khoá ngoại trỏ vào <code>users</code></strong> — hơn gấp đôi bảng đứng kế — và model <code>User</code> có 287 trường, trong đó 241 trường là quan hệ. Đó không phải sai sót, và cũng chẳng có gì bất thường. Ở gần như mọi ứng dụng có tài khoản, bảng user là nơi rốt cuộc mọi thứ đều trỏ về: bài đăng, bình luận, tin nhắn, ghi chú, khoá học, phiên đăng nhập, tệp tải lên, thiết lập. Nó là tâm trọng lực của lược đồ, và nó nói cho bạn một điều rất thực dụng: <strong>gần như MỌI truy vấn đáng chú ý trong hệ thống này đều join tới <code>User</code></strong>, nên khoá chính của nó là chỉ mục NÓNG NHẤT trong cả cơ sở dữ liệu, và bất kỳ migration nào khoá nó lại (16.1) đều chặn gần như mọi thứ.</p>
 
 <h3>Tiếp cận một lược đồ mà bạn không viết ra thì làm thế nào</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">ĐỪNG đọc từ trên xuống dưới</span><span class="lz-d">8.164 dòng theo thứ tự file chẳng dạy bạn điều gì. Hãy bắt đầu từ một TÍNH NĂNG bạn nhìn thấy trong sản phẩm rồi đi tìm cái bảng của nó.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">ĐỪNG đọc từ trên xuống dưới</span><span class="lz-d">17.382 dòng theo thứ tự file chẳng dạy bạn điều gì. Hãy bắt đầu từ một TÍNH NĂNG bạn nhìn thấy trong sản phẩm rồi đi tìm cái bảng của nó.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Đi theo khoá ngoại RA NGOÀI</span><span class="lz-d">Từ một cái bảng, chỉ đọc các quan hệ của nó. Hai bước nhảy là đủ phủ một tính năng; bạn gần như không bao giờ cần hơn. Đây cũng chính là kỹ năng đọc một plan truy vấn từ trong ra (Chương 10).</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Để các chỉ mục kể cho bạn nghe về cách dữ liệu bị ĐỌC</span><span class="lz-d">446 khai báo <code>@@index</code> là 446 lời phát biểu về cách dữ liệu này được <em>ĐỌC</em>. Một chỉ mục trên <code>[userId, createdAt]</code> nói rằng "liệt kê các thứ của một user, mới nhất trước" — truy vấn ấy hiện ra ngay trong chỉ mục, trước cả khi bạn tìm thấy đoạn mã.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đọc migration để biết LỊCH SỬ</span><span class="lz-d">Lược đồ cho thấy HIỆN TẠI; 117 migration cho thấy nó đã tới đây bằng cách nào và, qua tên của chúng, VÌ SAO. Khi một cái cột trông kỳ lạ, cái migration đã thêm nó vào thường giải thích được.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Để các chỉ mục kể cho bạn nghe về cách dữ liệu bị ĐỌC</span><span class="lz-d">807 khai báo <code>@@index</code> là 807 lời phát biểu về cách dữ liệu này được <em>ĐỌC</em>. Một chỉ mục trên <code>[userId, createdAt]</code> nói rằng "liệt kê các thứ của một user, mới nhất trước" — truy vấn ấy hiện ra ngay trong chỉ mục, trước cả khi bạn tìm thấy đoạn mã.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đọc migration để biết LỊCH SỬ</span><span class="lz-d">Lược đồ cho thấy HIỆN TẠI; 236 migration cho thấy nó đã tới đây bằng cách nào và, qua tên của chúng, VÌ SAO. Khi một cái cột trông kỳ lạ, cái migration đã thêm nó vào thường giải thích được.</span></div>
 </div>
 
 <h3>Vài truy vấn hữu ích chạy trên cơ sở dữ liệu đang sống</h3>
@@ -209,9 +221,9 @@ số @relation       : 441</div>
 <span class="tok-comment">-- bảng nào bị đọc nhiều nhất, và bằng chỉ mục hay quét tuần tự</span>
 <span class="tok-keyword">SELECT</span> relname, seq_scan, idx_scan, n_live_tup
 <span class="tok-keyword">FROM</span> pg_stat_user_tables <span class="tok-keyword">ORDER BY</span> seq_scan <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 10;</code></pre>
-<p>Câu thứ hai là truy vấn ĐÁNG GIÁ NHẤT trong bài này. Một cái bảng có <code>n_live_tup</code> lớn, <code>seq_scan</code> cao và <code>idx_scan</code> thấp nghĩa là nó đang bị đọc bằng cách quét từ đầu tới cuối — một chỉ mục còn THIẾU (Chương 9), tìm ra được mà không cần đọc một dòng mã ứng dụng nào.</p>
-<div class="callout warn"><code>pg_total_relation_size</code> bao gồm cả chỉ mục và TOAST; <code>pg_relation_size</code> chỉ tính riêng bảng. Với 446 chỉ mục trong lược đồ này thì khác biệt không hề nhỏ, và "cái bảng này khổng lồ" đôi khi hoá ra lại nghĩa là "các chỉ mục trên nó khổng lồ" — một vấn đề KHÁC với một cách sửa KHÁC.</div>
-<div class="pitfall"><p><strong>Bẫy — đọc lược đồ rồi cho rằng DỮ LIỆU khớp với nó.</strong> Lược đồ mô tả những gì mã <em>CÓ THỂ</em> tạo ra KỂ TỪ BÂY GIỜ. Còn dữ liệu thì được tạo ra bởi MỌI phiên bản mã từng chạy, cộng với migration, cộng với các lần sửa tay, cộng với các đợt nhập liệu — và nó NHỚ hết. Một cột hôm nay mang <code>NOT NULL</code> có thể đang nằm trên những dòng có từ trước khi ràng buộc ấy được thực thi theo cách bạn tưởng; hai cái bảng "KHÔNG THỂ" chứa cùng một slug thì lại có thể đang chứa, vì một cuộc gộp đã chép các dòng sang bảng mới mà không xoá bảng cũ đi. Điều này không hề lý thuyết: trên chính trang này, một kết luận suy-từ-mã rằng hai không gian URL không thể trùng nhau đã <strong>SAI</strong>, và chỉ một lệnh <code>curl</code> vào production là đã cho thấy cả hai đều trả 200. <strong>Mã nói cho bạn điều gì là KHẢ DĨ; chỉ có dữ liệu mới nói điều gì là THẬT.</strong> Khi câu hỏi là về trạng thái, hãy đi hỏi trạng thái.</p></div>
+<p>Câu thứ hai là truy vấn ĐÁNG GIÁ NHẤT trong bài này. Một cái bảng có <code>n_live_tup</code> lớn, <code>seq_scan</code> cao và <code>idx_scan</code> thấp nghĩa là nó đang bị đọc bằng cách quét từ đầu tới cuối — một chỉ mục còn THIẾU (Chương 9), tìm ra được mà không cần đọc một dòng mã ứng dụng nào. Đo trên một bản sao của lược đồ này với dữ liệu giả (50.000 bài hát, 200 lượt xem trang “bài hát tôi tải lên”): <code>songs</code> có <code>seq_scan</code> 201, đọc 10.050.000 dòng, <code>idx_scan</code> 0; mỗi request đọc 711 trang, và sau <code>CREATE INDEX CONCURRENTLY … (uploaded_by_id, created_at DESC)</code> chỉ còn 22. Nhưng không phải chỉ mục thiếu nào cũng lộ ra ở <code>seq_scan</code>: tra <code>notes.subject_id</code> dùng một chỉ mục bắt đầu bằng <code>user_id</code> và đọc cả 240 trang của nó cho 100 dòng — <code>EXPLAIN (ANALYZE, BUFFERS)</code> cho thấy điều đó.</p>
+<div class="callout warn"><code>pg_total_relation_size</code> bao gồm cả chỉ mục và TOAST; <code>pg_relation_size</code> chỉ tính riêng bảng. Với 807 khai báo <code>@@index</code> (1.751 chỉ mục trong database đã dựng) thì khác biệt không hề nhỏ — trên bản sao có dữ liệu giả, <code>notes</code> tổng cộng 41 MB nhưng riêng bảng chỉ 24 MB — và "cái bảng này khổng lồ" đôi khi hoá ra lại nghĩa là "các chỉ mục trên nó khổng lồ" — một vấn đề KHÁC với một cách sửa KHÁC.</div>
+<div class="pitfall"><p><strong>Bẫy — đọc lược đồ rồi cho rằng DỮ LIỆU khớp với nó.</strong> Lược đồ mô tả những gì mã <em>CÓ THỂ</em> tạo ra KỂ TỪ BÂY GIỜ. Còn dữ liệu thì được tạo ra bởi MỌI phiên bản mã từng chạy, cộng với migration, cộng với các lần sửa tay, cộng với các đợt nhập liệu — và nó NHỚ hết. Một cột hôm nay mang <code>NOT NULL</code> có thể đang nằm trên những dòng có từ trước khi ràng buộc ấy được thực thi theo cách bạn tưởng; hai cái bảng "KHÔNG THỂ" chứa cùng một slug thì lại có thể đang chứa, vì một cuộc gộp đã chép các dòng sang bảng mới mà không xoá bảng cũ đi. Điều này không hề lý thuyết: trên chính trang này, một kết luận suy-từ-mã rằng hai không gian URL không thể trùng nhau đã <strong>SAI</strong>, và chỉ một lệnh <code>curl</code> vào production là đã cho thấy cả hai đều trả 200. <strong>Mã nói cho bạn điều gì là KHẢ DĨ; chỉ có dữ liệu mới nói điều gì là THẬT.</strong> Khi câu hỏi là về trạng thái, hãy đi hỏi trạng thái. Một ví dụ thứ hai nằm ngay trong kho mã hôm nay: <code>schema.prisma</code> đặt tên các cột của <code>Song</code> là <code>audioUrl</code>, <code>coverImage</code>, <code>isActive</code> mà không có <code>@map</code>, trong khi migration tạo bảng <code>songs</code> lại viết <code>"audio_url"</code>, <code>"cover_image"</code>, <code>"is_active"</code>. Hai file, hai câu trả lời — production thật sự có cột nào là câu hỏi dành cho <code>\\d songs</code> trên database thật, không phải cho việc đọc.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tìm chỉ mục còn thiếu trong một lược đồ bạn chưa từng thấy</span><span class="lc-sub">Nhánh Code Lab dùng truy vấn seq_scan trên một lược đồ sát thực tế.</span></span>
@@ -226,7 +238,7 @@ số @relation       : 441</div>
       slug: 'postgresql-16-3-checklist',
       type: 'LESSON',
       description: 'Danh sách rút ra từ mười lăm chương trước: sao lưu đã khôi phục thử chưa, pool đã tính chưa, quan trắc đã bật TRƯỚC khi cần chưa, autovacuum đã chỉnh theo bảng nóng chưa, và những cái khoá nào có thể làm chết trang lúc migration.',
-      content: `
+      content: `${G163}
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.3 · Phase 4 — In production</span>
 <h2>What to check before real users arrive</h2>
@@ -279,6 +291,38 @@ số @relation       : 441</div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Multi-row locks acquired in a consistent order</span><span class="lz-d">The whole fix for deadlocks (11.4).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">If <code>SERIALIZABLE</code> is used anywhere, a retry loop catches <code>40001</code></span><span class="lz-d">Without it you have made the system fail under load, not made it correct (11.3).</span></div>
 </div>
+<h3>7 · Timeouts and least privilege on the application role</h3>
+<pre><code class="language-sql">ALTER ROLE ctshop_app SET statement_timeout = '5s';
+ALTER ROLE ctshop_app SET idle_in_transaction_session_timeout = '30s';
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ctshop_app;</code></pre>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Timeouts are set on the role the app logs in with</span><span class="lz-d">Measured on PostgreSQL 17.11: <code>SET statement_timeout = '1s'; SELECT pg_sleep(2);</code> → <code>ERROR: canceling statement due to statement timeout</code>; a session that ran <code>BEGIN</code> and then sat idle past <code>idle_in_transaction_session_timeout</code> got <code>FATAL: terminating connection due to idle-in-transaction timeout</code>. On the production image both default to 0 (off).</span></div>
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">The app role is not the owner of the schema</span><span class="lz-d">Logged in as <code>ctshop_app</code>: SELECT and INSERT work, while <code>DROP TABLE orders</code> → <code>must be owner of table orders</code>, <code>TRUNCATE customer</code> → <code>permission denied</code>. Migrations run as a separate owner role.</span></div>
+</div>
+
+<h3>8 · The host: disk and shared memory</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Free disk on the data volume is alarmed well before it runs out</span><span class="lz-d">On this site, Docker build cache grew to 7.6 GB on the same disk as PostgreSQL and a deploy died with <code>no space left on device</code> (18 Aug 2026); builds moved off the server and a weekly cleanup job now guards that disk.</span></div>
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">The container has enough <code>/dev/shm</code></span><span class="lz-d">With Docker's default 64 MB, a parallel <code>CREATE INDEX … USING hnsw</code> failed with <code>could not resize shared memory segment … No space left on device</code> (16.2). Set <code>shm_size</code> for the database container.</span></div>
+</div>
+
+<h3>The whole list as one script</h3>
+<p>Every item above is a query. Put them in one file and run it on a schedule. Run against a database built from this site's real schema on the production PostgreSQL 16 image, with its default configuration:</p>
+<div class="out">                  muc                   |   gia_tri    | dat
+----------------------------------------+--------------+-----
+ 1 kết nối đang dùng / max              | 1 / 100      | ✓
+ 2 giao dịch già nhất                   | không có     | ✓
+ 3 idle_in_transaction_session_timeout  | 0            | ✗
+ 4 statement_timeout (máy chủ / role)   | 0 / chưa đặt | ✗
+ 5 pg_stat_statements đã nạp            | (trống)      | ✗
+ 6 log_min_duration_statement (ms)      | -1           | ✗
+ 7 log_lock_waits                       | off          | ✗
+ 8 khoá ngoại không có chỉ mục          | 187          | ✗
+ 9 bảng có &gt; 20% dòng chết              | 0            | ✓
+ 10 replication slot bỏ rơi             | 0            | ✓
+ 11 age(datfrozenxid) lớn nhất          | 4618         | ✓
+ 12 chỉ mục INVALID (CONCURRENTLY hỏng) | 0            | ✓</div>
+<p>Four settings, one role setting and a restart turned items 3–7 green. Item 8 stays red on purpose: each foreign key needs a decision based on how its parent rows are deleted and how big the table is, not a blind loop of <code>CREATE INDEX</code>. The <code>docker-compose.yml</code> of this repository sets ten <code>-c</code> tuning flags for the database container; <code>shared_preload_libraries</code>, <code>log_min_duration_statement</code> and <code>log_lock_waits</code> are not among them, which is worth checking on the real server with <code>SHOW</code>.</p>
 <div class="callout ok">If you do only four of these, do these four: <strong>rehearse a restore, count your connections, enable <code>pg_stat_statements</code>, and remove every read-modify-write.</strong> They cover the four failures that most reliably take a small production database down, and none of them takes more than an afternoon.</div>
 <div class="pitfall"><p><strong>Trap — treating this as a launch checklist rather than a recurring one.</strong> Every item here decays. The pool arithmetic was correct until someone added a worker; the backup worked until a credential rotated; autovacuum kept up until the table grew ten times; the restore rehearsal passed in March and the schema gained an extension in June. A checklist run once tells you about the system as it was on the day you ran it, and the most dangerous state is the one where everything was verified long enough ago that everyone remembers it being verified. Put the whole list on a calendar — quarterly is enough for most of it, and the restore rehearsal deserves to be automated so it is not a thing anyone has to remember.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
@@ -339,6 +383,38 @@ số @relation       : 441</div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Khoá nhiều dòng thì lấy theo một THỨ TỰ nhất quán</span><span class="lz-d">Đó là toàn bộ cách sửa deadlock (11.4).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Nếu có dùng <code>SERIALIZABLE</code> ở đâu đó, phải có vòng thử lại bắt <code>40001</code></span><span class="lz-d">Không có nó thì bạn đã làm hệ thống HỎNG khi tải cao, chứ không làm nó đúng (11.3).</span></div>
 </div>
+<h3>7 · Timeout và quyền tối thiểu trên role của ứng dụng</h3>
+<pre><code class="language-sql">ALTER ROLE ctshop_app SET statement_timeout = '5s';
+ALTER ROLE ctshop_app SET idle_in_transaction_session_timeout = '30s';
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ctshop_app;</code></pre>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Timeout được đặt trên role mà ứng dụng đăng nhập</span><span class="lz-d">Đo trên PostgreSQL 17.11: <code>SET statement_timeout = '1s'; SELECT pg_sleep(2);</code> → <code>ERROR: canceling statement due to statement timeout</code>; một phiên chạy <code>BEGIN</code> rồi ngồi im quá <code>idle_in_transaction_session_timeout</code> thì nhận <code>FATAL: terminating connection due to idle-in-transaction timeout</code>. Trên ảnh production cả hai mặc định là 0 (tắt).</span></div>
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Role của ứng dụng KHÔNG sở hữu lược đồ</span><span class="lz-d">Đăng nhập bằng <code>ctshop_app</code>: SELECT và INSERT chạy được, còn <code>DROP TABLE orders</code> → <code>must be owner of table orders</code>, <code>TRUNCATE customer</code> → <code>permission denied</code>. Migration chạy bằng một role chủ sở hữu riêng.</span></div>
+</div>
+
+<h3>8 · Máy chủ: đĩa và bộ nhớ chung</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Dung lượng trống của ổ dữ liệu có cảnh báo từ sớm</span><span class="lz-d">Trên chính trang này, cache build của Docker phình tới 7,6 GB trên đúng cái đĩa chứa PostgreSQL và một lần deploy chết với <code>no space left on device</code> (18/08/2026); việc build đã dời khỏi máy chủ và một job dọn dẹp hằng tuần giờ canh cái đĩa đó.</span></div>
+<div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Container có đủ <code>/dev/shm</code></span><span class="lz-d">Với 64 MB mặc định của Docker, một lệnh <code>CREATE INDEX … USING hnsw</code> chạy song song đã hỏng với <code>could not resize shared memory segment … No space left on device</code> (16.2). Hãy đặt <code>shm_size</code> cho container database.</span></div>
+</div>
+
+<h3>Cả danh sách thành một script</h3>
+<p>Mọi mục ở trên đều là một truy vấn. Gom chúng vào một file và chạy theo lịch. Chạy trên một database dựng từ lược đồ thật của trang này, bằng ảnh PostgreSQL 16 của production với cấu hình mặc định:</p>
+<div class="out">                  muc                   |   gia_tri    | dat
+----------------------------------------+--------------+-----
+ 1 kết nối đang dùng / max              | 1 / 100      | ✓
+ 2 giao dịch già nhất                   | không có     | ✓
+ 3 idle_in_transaction_session_timeout  | 0            | ✗
+ 4 statement_timeout (máy chủ / role)   | 0 / chưa đặt | ✗
+ 5 pg_stat_statements đã nạp            | (trống)      | ✗
+ 6 log_min_duration_statement (ms)      | -1           | ✗
+ 7 log_lock_waits                       | off          | ✗
+ 8 khoá ngoại không có chỉ mục          | 187          | ✗
+ 9 bảng có &gt; 20% dòng chết              | 0            | ✓
+ 10 replication slot bỏ rơi             | 0            | ✓
+ 11 age(datfrozenxid) lớn nhất          | 4618         | ✓
+ 12 chỉ mục INVALID (CONCURRENTLY hỏng) | 0            | ✓</div>
+<p>Bốn thiết lập, một thiết lập cho role và một lần khởi động lại đã biến mục 3–7 thành xanh. Mục 8 cố ý để đỏ: mỗi khoá ngoại cần một quyết định dựa trên cách dòng cha bị xoá và cỡ của bảng, không phải một vòng lặp <code>CREATE INDEX</code> mù quáng. File <code>docker-compose.yml</code> của kho mã này đặt mười cờ <code>-c</code> tinh chỉnh cho container database; <code>shared_preload_libraries</code>, <code>log_min_duration_statement</code> và <code>log_lock_waits</code> không nằm trong số đó — đáng kiểm lại trên máy chủ thật bằng <code>SHOW</code>.</p>
 <div class="callout ok">Nếu chỉ làm được bốn mục, hãy làm bốn mục này: <strong>diễn tập một lượt khôi phục, đếm số kết nối, bật <code>pg_stat_statements</code>, và gỡ sạch mọi chỗ đọc-sửa-ghi.</strong> Chúng phủ đúng bốn kiểu hỏng thường xuyên hạ gục một cơ sở dữ liệu production nhỏ nhất, và không cái nào tốn quá một buổi chiều.</div>
 <div class="pitfall"><p><strong>Bẫy — coi đây là checklist RA MẮT thay vì checklist ĐỊNH KỲ.</strong> Mọi mục ở đây đều PHÂN RÃ theo thời gian. Phép tính pool vốn đúng, cho tới khi có người thêm một worker; bản sao lưu vốn chạy, cho tới khi một cái khoá được xoay vòng; autovacuum vốn theo kịp, cho tới khi cái bảng lớn lên mười lần; lượt diễn tập khôi phục vốn đạt hồi tháng Ba, rồi tháng Sáu lược đồ nhận thêm một extension. Một checklist chạy MỘT LẦN chỉ kể cho bạn về hệ thống của đúng cái ngày bạn chạy nó, và trạng thái nguy hiểm nhất là trạng thái mà mọi thứ đã được kiểm chứng đủ lâu để ai cũng NHỚ RẰNG nó từng được kiểm chứng. Hãy đặt cả danh sách này lên lịch — hằng quý là đủ cho phần lớn các mục, và riêng lượt diễn tập khôi phục thì xứng đáng được TỰ ĐỘNG HOÁ để nó không còn là thứ ai đó phải nhớ.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
@@ -355,7 +431,7 @@ số @relation       : 441</div>
       slug: 'postgresql-16-4-capstone',
       type: 'LESSON',
       description: 'Bốn tình huống, mỗi cái là một sự cố production có thật với triệu chứng gây hiểu lầm. Với mỗi cái: bạn chạy truy vấn nào trước, bạn suy ra gì, và bạn sửa thế nào — dùng tới cả mười lăm chương trước.',
-      content: `
+      content: `${G164}
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.4 · Phase 4 — In production</span>
 <h2>Four pagers, four investigations</h2>
@@ -373,8 +449,8 @@ số @relation       : 441</div>
 <p><strong>First query.</strong> Not <code>EXPLAIN</code>. Run this:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">WHERE</span> xact_start <span class="tok-keyword">IS NOT NULL</span> <span class="tok-keyword">ORDER BY</span> tuoi <span class="tok-keyword">DESC</span>;</code></pre>
-<p><strong>What you are looking for.</strong> A session in <code>idle in transaction</code> hours old. It pins a snapshot, so <code>VACUUM</code> cannot remove any row version newer than it — <em>anywhere in the database</em> (11.1, 14.3). The hot table accumulates dead tuples, every scan reads more pages, and queries degrade gradually with no change to the code. Confirm with the dead-tuple ratio from 14.3.</p>
-<p><strong>Fix.</strong> <code>pg_cancel_backend(pid)</code>, then <code>VACUUM</code> the affected table. Then set <code>idle_in_transaction_session_timeout</code> so it cannot recur, and find the application path that opens a transaction and forgets it.</p>
+<p><strong>What you are looking for.</strong> A session in <code>idle in transaction</code> hours old. It pins a snapshot, so <code>VACUUM</code> cannot remove any row version newer than it — <em>anywhere in the database</em> (11.1, 14.3). The hot table accumulates dead tuples, every scan reads more pages, and queries degrade gradually with no change to the code. Confirm with the dead-tuple ratio from 14.3. Reproduced on a copy of this site's schema (PostgreSQL 16.15): with one session idle in a transaction, <code>VACUUM (VERBOSE)</code> reported <code>40000 are dead but not yet removable</code> with a removable cutoff equal to that session's <code>backend_xmin</code>; after <code>pg_terminate_backend</code>, the same VACUUM reported <code>40000 removed</code>.</p>
+<p><strong>Fix.</strong> <code>pg_terminate_backend(pid)</code> — not <code>pg_cancel_backend</code>, which cancels a <em>running query</em> and does nothing to a session that is idle in a transaction (measured: it returned <code>t</code> and the session stayed <code>idle in transaction</code>) — then <code>VACUUM</code> the affected table. Then set <code>idle_in_transaction_session_timeout</code> so it cannot recur, and find the application path that opens a transaction and forgets it.</p>
 <div class="callout warn">The misleading part is that the slow table is often <em>not</em> the one the stuck transaction touched. That is why "which query is slow" is the wrong first question here — the cause is global, the symptom is local.</div>
 
 <h3>Case 2 — "Users say their balance is wrong, but no errors anywhere"</h3>
@@ -403,6 +479,14 @@ số @relation       : 441</div>
 <p><strong>Fix.</strong> Route reads that follow a write within the same user action to the primary. Reserve replicas for genuinely independent reads — reports, dashboards, <code>pg_dump</code>.</p>
 
 <div class="callout ok"><strong>The pattern across all four.</strong> Each symptom pointed somewhere other than its cause: a slow table caused by an idle session, wrong data with no errors, failing deploys caused by an unrelated new container, a bug that is actually correct configuration. In each case the first useful action was <em>a query against the database's own statistics</em> — not a guess, not a code review, not a restart. That habit is the real output of this course.</div>
+<h3>After the cases: the brief for Lab 9</h3>
+<p>Lab 9 wires a Node.js + Prisma application to the CT Shop database and asks you to apply the whole course to it. A first look, run for real on a copy of CT Shop: <code>npx prisma db pull</code> introspected 8 models (and warned that Prisma Client cannot see the CHECK constraints — the database stays the guard); a <code>findMany</code> on <code>orders</code> by <code>customer_id</code> used the index from the 16.3 exercise; and a monthly revenue report had to be written as SQL through <code>$queryRaw</code>, because Prisma has no <code>date_trunc</code>.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Schema &amp; migrations</span><span class="lz-d">db pull, then every change as a migration file applied with <code>migrate deploy</code> by an owner role; <code>migrate diff</code> ends empty.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Connections</span><span class="lz-d">A pool size you can justify: processes × pool &lt; <code>max_connections</code> with headroom.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Checkout</span><span class="lz-d">Order, items and stock in one transaction, no read-modify-write, correct under two concurrent buyers.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Report &amp; operations</span><span class="lz-d">The revenue report with an index and <code>EXPLAIN (ANALYZE, BUFFERS)</code> before/after; app role vs owner role, timeouts on the role, the checklist script run and explained, and a restore drill.</span></div>
+</div>
 <div class="pitfall"><p><strong>Trap — the restart that destroys the evidence.</strong> Under pressure, restarting the database "to clear something up" is enormously tempting, and it often does restore service — which is precisely the problem. It kills the stuck transaction in case 1, drops the leaked connections in case 3, and takes the contents of <code>pg_stat_activity</code> with it. The symptom disappears, the cause survives untouched, and it returns next week with no evidence left about the first occurrence. Before restarting anything, spend sixty seconds capturing state: <code>pg_stat_activity</code>, the top of <code>pg_stat_statements</code>, connection counts by application. Paste it somewhere. Then restart if you must. An outage you can explain afterwards is worth far more than one you merely survived.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -427,8 +511,8 @@ số @relation       : 441</div>
 <p><strong>Truy vấn đầu tiên.</strong> KHÔNG phải <code>EXPLAIN</code>. Hãy chạy cái này:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> pid, now()-xact_start <span class="tok-keyword">AS</span> tuoi, state, left(query,60)
 <span class="tok-keyword">FROM</span> pg_stat_activity <span class="tok-keyword">WHERE</span> xact_start <span class="tok-keyword">IS NOT NULL</span> <span class="tok-keyword">ORDER BY</span> tuoi <span class="tok-keyword">DESC</span>;</code></pre>
-<p><strong>Bạn đang tìm gì.</strong> Một phiên ở trạng thái <code>idle in transaction</code> già hàng tiếng. Nó ghim một ảnh chụp, nên <code>VACUUM</code> không gỡ nổi bất kỳ phiên bản dòng nào mới hơn nó — <em>ở BẤT KỲ ĐÂU trong cơ sở dữ liệu</em> (11.1, 14.3). Cái bảng nóng tích dead tuple, mỗi lượt quét đọc nhiều trang hơn, và truy vấn suy giảm DẦN DẦN mà mã không hề đổi. Xác nhận bằng tỉ lệ dead tuple ở 14.3.</p>
-<p><strong>Cách sửa.</strong> <code>pg_cancel_backend(pid)</code>, rồi <code>VACUUM</code> cái bảng bị ảnh hưởng. Sau đó đặt <code>idle_in_transaction_session_timeout</code> để nó không tái diễn, và đi tìm cái nhánh mã mở một giao dịch rồi quên nó.</p>
+<p><strong>Bạn đang tìm gì.</strong> Một phiên ở trạng thái <code>idle in transaction</code> già hàng tiếng. Nó ghim một ảnh chụp, nên <code>VACUUM</code> không gỡ nổi bất kỳ phiên bản dòng nào mới hơn nó — <em>ở BẤT KỲ ĐÂU trong cơ sở dữ liệu</em> (11.1, 14.3). Cái bảng nóng tích dead tuple, mỗi lượt quét đọc nhiều trang hơn, và truy vấn suy giảm DẦN DẦN mà mã không hề đổi. Xác nhận bằng tỉ lệ dead tuple ở 14.3. Tái hiện trên một bản sao lược đồ của trang này (PostgreSQL 16.15): có một phiên ngồi im trong giao dịch, <code>VACUUM (VERBOSE)</code> báo <code>40000 are dead but not yet removable</code> với mốc removable cutoff đúng bằng <code>backend_xmin</code> của phiên đó; sau <code>pg_terminate_backend</code>, cùng lệnh VACUUM báo <code>40000 removed</code>.</p>
+<p><strong>Cách sửa.</strong> <code>pg_terminate_backend(pid)</code> — KHÔNG phải <code>pg_cancel_backend</code>, thứ chỉ huỷ một <em>câu đang chạy</em> và không làm gì được một phiên đang ngồi im trong giao dịch (đo thật: nó trả về <code>t</code> mà phiên vẫn <code>idle in transaction</code>) — rồi <code>VACUUM</code> cái bảng bị ảnh hưởng. Sau đó đặt <code>idle_in_transaction_session_timeout</code> để nó không tái diễn, và đi tìm cái nhánh mã mở một giao dịch rồi quên nó.</p>
 <div class="callout warn">Phần gây hiểu lầm là: cái bảng chậm thường KHÔNG phải cái bảng mà giao dịch bị kẹt đã chạm vào. Đó là lý do "truy vấn nào chậm" là câu hỏi đầu tiên SAI ở đây — nguyên nhân thì TOÀN CỤC, triệu chứng thì CỤC BỘ.</div>
 
 <h3>Ca 2 — "Người dùng báo số dư sai, mà không có lỗi ở đâu cả"</h3>
@@ -457,6 +541,14 @@ số @relation       : 441</div>
 <p><strong>Cách sửa.</strong> Định tuyến những lệnh đọc đi SAU một lệnh ghi trong CÙNG một hành động của người dùng về primary. Để dành bản sao cho những lệnh đọc thật sự độc lập — báo cáo, bảng điều khiển, <code>pg_dump</code>.</p>
 
 <div class="callout ok"><strong>Cái mẫu chung của cả bốn ca.</strong> Mỗi triệu chứng đều chỉ về một chỗ KHÁC với nguyên nhân của nó: một cái bảng chậm do một phiên đang NGỒI KHÔNG, dữ liệu sai mà không lỗi, deploy hỏng do một container mới chẳng liên quan, và một "con bug" hoá ra là cấu hình đúng. Ở mỗi ca, hành động hữu ích đầu tiên đều là <em>một truy vấn vào chính thống kê của cơ sở dữ liệu</em> — không phải một phỏng đoán, không phải một buổi review mã, không phải một cú khởi động lại. Cái THÓI QUEN đó mới là sản phẩm thật sự của khoá học này.</div>
+<h3>Sau bốn ca: đề bài cho Lab 9</h3>
+<p>Lab 9 nối một ứng dụng Node.js + Prisma vào database CT Shop và yêu cầu bạn áp cả khoá vào nó. Xem trước, chạy thật trên một bản sao CT Shop: <code>npx prisma db pull</code> đọc ra 8 model (và cảnh báo rằng Prisma Client không thấy được các ràng buộc CHECK — database vẫn là người gác cổng); một lệnh <code>findMany</code> trên <code>orders</code> theo <code>customer_id</code> dùng đúng chỉ mục bạn tạo ở bài tập 16.3; còn báo cáo doanh thu theo tháng phải viết bằng SQL qua <code>$queryRaw</code>, vì Prisma không có <code>date_trunc</code>.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Lược đồ &amp; migration</span><span class="lz-d">db pull, rồi mọi thay đổi là một file migration áp bằng <code>migrate deploy</code> với role chủ sở hữu; <code>migrate diff</code> cuối cùng rỗng.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Kết nối</span><span class="lz-d">Một cỡ pool bạn giải thích được: số tiến trình × pool &lt; <code>max_connections</code> và còn dư.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thanh toán</span><span class="lz-d">Đơn, dòng đơn và tồn kho trong MỘT giao dịch, không đọc-sửa-ghi, đúng khi hai người mua cùng lúc.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Báo cáo &amp; vận hành</span><span class="lz-d">Báo cáo doanh thu có chỉ mục và <code>EXPLAIN (ANALYZE, BUFFERS)</code> trước/sau; role ứng dụng tách khỏi role chủ sở hữu, timeout trên role, chạy và giải thích script checklist, và một lần diễn tập khôi phục.</span></div>
+</div>
 <div class="pitfall"><p><strong>Bẫy — cú khởi động lại XOÁ SẠCH bằng chứng.</strong> Dưới áp lực, việc khởi động lại cơ sở dữ liệu "cho nó thông thoáng" là cám dỗ khổng lồ, và nó THƯỜNG khôi phục được dịch vụ — mà đó chính là vấn đề. Nó giết cái giao dịch bị kẹt ở ca 1, thả các kết nối bị rò ở ca 3, và mang theo luôn toàn bộ nội dung của <code>pg_stat_activity</code>. Triệu chứng biến mất, nguyên nhân sống sót nguyên vẹn, và nó quay lại vào tuần sau mà không còn bằng chứng nào về lần đầu tiên. Trước khi khởi động lại bất cứ thứ gì, hãy bỏ ra SÁU MƯƠI GIÂY chụp lại trạng thái: <code>pg_stat_activity</code>, phần đầu của <code>pg_stat_statements</code>, số kết nối theo từng ứng dụng. Dán nó vào đâu đó. RỒI hãy khởi động lại nếu buộc phải. Một sự cố mà sau đó bạn GIẢI THÍCH được thì đáng giá hơn nhiều một sự cố mà bạn chỉ đơn thuần sống sót qua.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -524,7 +616,7 @@ số @relation       : 441</div>
             points: 1,
           },
           {
-            question: 'In this site\'s real schema the User model has 47 relations and 172 fields. What is the practical consequence?|||Trong lược đồ thật của trang này, model User có 47 quan hệ và 172 trường. Hệ quả thực dụng là gì?',
+            question: 'In this site\'s real schema 241 foreign keys point at users and the User model has 287 fields. What is the practical consequence?|||Trong lược đồ thật của trang này, 241 khoá ngoại trỏ vào users và model User có 287 trường. Hệ quả thực dụng là gì?',
             options: [
               'It is a design error to fix|||Đó là lỗi thiết kế cần sửa',
               'It is the schema\'s centre of gravity — almost every query joins to it, its primary key is the hottest index, and any migration that locks it blocks nearly everything|||Nó là TÂM TRỌNG LỰC của lược đồ — gần như mọi truy vấn đều join tới nó, khoá chính của nó là chỉ mục nóng nhất, và mọi migration khoá nó lại đều chặn gần như mọi thứ',

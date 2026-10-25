@@ -18,7 +18,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/PG';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'pg-05-1': 'v2' }. */
-const VER = { 'pg-00-2': 'v2', 'pg-02-1': 'v2', 'pg-00-3': 'v2', 'pg-00-4': 'v2', 'pg-01-3': 'v2', 'pg-04-1': 'v2', 'pg-04-2': 'v2', 'pg-04-3': 'v2', 'pg-04-4': 'v2', 'pg-lab-4': 'v2' };
+const VER = { 'pg-00-2': 'v2', 'pg-02-1': 'v2', 'pg-00-3': 'v2', 'pg-00-4': 'v2', 'pg-01-3': 'v2', 'pg-04-1': 'v2', 'pg-04-2': 'v2', 'pg-04-3': 'v2', 'pg-04-4': 'v2', 'pg-lab-4': 'v2', 'pg-16-3': 'v2' };
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

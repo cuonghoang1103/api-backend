@@ -2,6 +2,7 @@
  * SWT301 · Practical Exam — PE23 (SU26 Paper 1), solved in ONE long video (luật chủ kênh 25/10/2026, LUAT-VIDEO-CHUA-DE B.0:
  * mỗi đề PE = một video dài; 4 phần swt-pe23-0..3 ghép bằng xuat/ghep-phan.mts ⇒ thư mục `-tron`, có mốc từng phần).
  * Exam room: content/exams/SWT301-PE23.mjs ("SWT301 — Practical Exam Đề 23 (SU26 - Paper 1)"), 85 minutes on paper (the room gives 90).
+ * Video: ~/Videos/CuongThai-KhoaHoc/software-testing/15-thi-thuc-hanh-pe/15-06-de-su26-pe23-0-tron (38:19, mốc = mo-ta-chuong.txt).
  * Slug = slugWeb of all four parts in ~/Documents/video-bai-giang/src/bai/swt-pe23-{0..3}/kichban.ts; video attached via
  * content/course-videos/software-testing.mjs (track VI/R2) after render + ghep-phan + len-r2.
  * ⚠️ The only copy of this paper (FUOverflow "Đề 1-SP26") has NO legible code for Q1/Q2 — the listings are PRACTICE code written
@@ -23,10 +24,10 @@ const LINK = (slug, t) => `<a href="/courses/software-testing/learn?lessonSlug=$
 
 /* Mốc từng phần trong video ghép (mo-ta-chuong.txt của bản -tron). */
 const MOC = [
-  ['0:00', 'Part 0 — reading the paper, template, rubric, timing', 'Phần 0 — đọc đề, template, rubric, chia giờ'],
-  ['10:33', 'Part 1 — Q1 review calcFee: 11 issues, compiled and run', 'Phần 1 — câu 1 review calcFee: 11 lỗi, biên dịch và chạy thật'],
-  ['19:56', 'Part 2 — Q2 checkWithdrawal: 7 minimum tests + MC/DC, real JaCoCo', 'Phần 2 — câu 2 checkWithdrawal: 7 test tối thiểu + MC/DC, JaCoCo thật'],
-  ['28:47', 'Part 3 — Q3 Interbank Transfer: validation, decision table, BVA', 'Phần 3 — câu 3 Interbank Transfer: hợp lệ, bảng quyết định, giá trị biên'],
+  ['0:00', 'Part 1 — reading the paper, template, rubric, timing', 'Phần 1 — đọc đề, template, rubric, chia giờ'],
+  ['10:33', 'Part 2 — Q1 review calcFee: 11 issues, compiled and run', 'Phần 2 — câu 1 review calcFee: 11 lỗi, biên dịch và chạy thật'],
+  ['19:56', 'Part 3 — Q2 checkWithdrawal: 7 minimum tests + MC/DC, real JaCoCo', 'Phần 3 — câu 2 checkWithdrawal: 7 test tối thiểu + MC/DC, JaCoCo thật'],
+  ['28:47', 'Part 4 — Q3 Interbank Transfer: validation, decision table, BVA', 'Phần 4 — câu 3 Interbank Transfer: hợp lệ, bảng quyết định, giá trị biên'],
 ];
 
 const Q1_GOC = [
@@ -170,14 +171,14 @@ const PE23 = {
 <h3>Các mốc trong video</h3>
 <ul>${MOC.map(([t, , v]) => `<li><b>${t}</b> — ${v}</li>`).join('')}</ul>
 <div class="callout">⚠️ <strong>Về mã ở câu 1 và câu 2.</strong> Bản đề duy nhất có trong tay (bản FUOverflow chép lại, "Đề 1-SP26") không có ảnh code đọc được — chỉ ghi ảnh "quá mờ, không chép được từng dòng". Hai đoạn mã dưới đây là <strong>mã luyện tập do website viết theo đúng đặc tả</strong>. Manh mối thật duy nhất được giữ: dòng mẫu xanh của template ở Q1 ("int fare declared — wrong type · Line 3 · Change to double fare = 0;") và ghi chú Q2 ("Tối thiểu 7 TCs"). Đi thi, bạn review đúng đoạn mã được phát.</div>`),
-    bi(`<h3>Part 0 — reading the paper</h3>
+    bi(`<h3>Part 1 — reading the paper</h3>
 <ul>
 <li>Everything goes into <code>SWT301_SU26_Template.xlsx</code>, in English, matching this paper; unrelated keywords ⇒ 0 for that answer, no template ⇒ 0 for the exam. The blue sample text in the template happens to describe <em>this</em> paper — use the idea, but rewrite it in black.</li>
 <li><strong>Trap words:</strong> "greater than 0" (0 is rejected) · "less than 500 / 500 or more" (500 belongs to the 0.1% band) · 0.2% = 0.002 · "before 06:00" (hour &lt; 6, so night = 22–23 and 0–5) · "in order" (only the first error is shown).</li>
 <li>Q1 asks for a <strong>severity</strong>, but the Q1 sheet has no Severity column ⇒ write <code>[type · severity]</code> at the start of Description.</li>
 <li>Time plan: 0–5 read + template · 5–25 Q1 · 25–50 Q2 · 50–80 Q3 · 80–85 check.</li>
 </ul>`,
-    `<h3>Phần 0 — đọc đề</h3>
+    `<h3>Phần 1 — đọc đề</h3>
 <ul>
 <li>Mọi câu trả lời viết vào <code>SWT301_SU26_Template.xlsx</code>, bằng tiếng Anh, bám đúng đề; từ khoá lạc đề ⇒ câu đó 0 điểm, không dùng template ⇒ cả bài 0. Chữ mẫu xanh trong template lại nói đúng về <em>đề này</em> — được dùng ý, nhưng viết lại bằng chữ đen.</li>
 <li><strong>Chữ bẫy:</strong> "greater than 0" (0 bị từ chối) · "less than 500 / 500 or more" (đúng 500 thuộc mức 0,1%) · 0,2% = 0.002 · "before 06:00" (hour &lt; 6, đêm = 22–23 và 0–5) · "in order" (chỉ hiện lỗi đầu tiên).</li>
@@ -185,7 +186,7 @@ const PE23 = {
 <li>Chia giờ: 0–5 đọc đề + template · 5–25 câu 1 · 25–50 câu 2 · 50–80 câu 3 · 80–85 soát.</li>
 </ul>`),
     anh('q1', 1080, 'Question 1', 'câu 1'),
-    bi('<h3>Part 1 — Q1: review calcFee (practice listing, 25 lines)</h3>', '<h3>Phần 1 — câu 1: review calcFee (mã luyện tập, 25 dòng)</h3>'),
+    bi('<h3>Part 2 — Q1: review calcFee (practice listing, 25 lines)</h3>', '<h3>Phần 2 — câu 1: review calcFee (mã luyện tập, 25 dòng)</h3>'),
     numbered(Q1_GOC),
     bi(`<p><strong>Real runs (JDK 21).</strong> <code>javac</code> first reports only <em>"TransferFeeCalculator.java:17: error: ';' expected"</em> — javac stops at the syntax error. Add the <code>;</code> and it reports lines 11 and 13: <em>"incompatible types: possible lossy conversion from double to int"</em> — the cause is <code>int fare</code> on line 3. After both fixes: <code>main</code> prints <code>0.5</code> (spec 1.0 — <code>isVip = true</code> is an assignment, always true) · 500 ⇒ <code>5.0</code> (spec 0.5: <code>&lt;= 500</code> + rate 0.02) · 400 ⇒ <code>4.0</code> (spec 0.8) · 0 ⇒ <code>0.0</code> (should be rejected) · −100 ⇒ prints "Invalid amount" and returns <code>-1.0</code> · type null ⇒ <code>NullPointerException</code> · "ONLINE" ⇒ <code>0.0</code>. A runtime <code>new String("INTERNAL")</code> also gives 0.0 — only by luck, because the "no type matched" path returns 0 too.</p>`,
       `<p><strong>Chạy thật (JDK 21).</strong> Lần đầu <code>javac</code> chỉ báo <em>"TransferFeeCalculator.java:17: error: ';' expected"</em> — javac dừng ở lỗi cú pháp. Thêm <code>;</code> thì báo tiếp dòng 11 và 13: <em>"incompatible types: possible lossy conversion from double to int"</em> — nguyên nhân là <code>int fare</code> ở dòng 3. Sửa xong hai lỗi: <code>main</code> in <code>0.5</code> (đặc tả 1.0 — <code>isVip = true</code> là phép gán, luôn đúng) · 500 ⇒ <code>5.0</code> (đặc tả 0.5: <code>&lt;= 500</code> + tỉ lệ 0.02) · 400 ⇒ <code>4.0</code> (đặc tả 0.8) · 0 ⇒ <code>0.0</code> (lẽ ra bị từ chối) · −100 ⇒ in "Invalid amount" rồi trả <code>-1.0</code> · type null ⇒ <code>NullPointerException</code> · "ONLINE" ⇒ <code>0.0</code>. Chuỗi tạo lúc chạy <code>new String("INTERNAL")</code> cũng ra 0.0 — chỉ là may, vì nhánh "không khớp loại nào" cũng trả 0.</p>`),
@@ -194,7 +195,7 @@ const PE23 = {
       '<p>Bản sửa, có chạy kiểm (<code>javac -Xlint:all</code>: 0 cảnh báo) — 400 ⇒ 0.8 · 500 ⇒ 0.5 · 1000 ⇒ 1.0 · VIP ⇒ 0.5 · INTERNAL ⇒ 0.0 · amount 0 / type null / "ONLINE" ⇒ <code>IllegalArgumentException</code>:</p>'),
     code(Q1_SUA),
     anh('q2', 440, 'Question 2', 'câu 2'),
-    bi('<h3>Part 2 — Q2: checkWithdrawal (practice listing, 19 lines)</h3>', '<h3>Phần 2 — câu 2: checkWithdrawal (mã luyện tập, 19 dòng)</h3>'),
+    bi('<h3>Part 3 — Q2: checkWithdrawal (practice listing, 19 lines)</h3>', '<h3>Phần 3 — câu 2: checkWithdrawal (mã luyện tập, 19 dòng)</h3>'),
     numbered(Q2_GOC),
     bi(`<p><strong>Three compound conditions:</strong> line 2 <code>A || B</code> (amount ≤ 0, not a multiple of 50,000) · line 8 <code>C || D</code> (hour ≥ 22, hour &lt; 6) · line 9 <code>E &amp;&amp; F</code> (foreign, night). Statement + decision alone needs 6 tests; MC/DC needs <strong>7</strong> — both minimums confirmed by an exhaustive search over all inputs. 3 Abnormal (amount 0, amount 70,000, inactive card) + 4 Normal (one per remaining result). 3 ÷ 7 ≈ 0.43 point per test; an extra test −0.1.</p>
 <p><strong>MC/DC independence pairs:</strong> A: 01↔03 · B: 02↔03 · C: 04↔05 · D: 06↔07 · E: 04↔06 (in 06, F is not evaluated — short-circuit) · F: 04↔05.</p>`,
@@ -204,9 +205,9 @@ const PE23 = {
     bi(`<p><strong>Real run</strong> (Maven, JUnit 5.12.2, JaCoCo 0.8.13, JDK 21): <code>Tests run: 7, Failures: 0</code> · JaCoCo <code>checkWithdrawal</code>: instructions 42/42, branches <strong>18/18</strong>, lines 12/12 (lines 2 and 8: 4/4 branches each). A 6-test set that reaches statement + decision coverage also passes, but JaCoCo shows <strong>16/18</strong> branches: on line 2 the "not a multiple" condition never became true, on line 8 <code>hour &gt;= 22</code> never did — exactly what MC/DC adds. All 7 tests pass because the practice code follows the spec (no defect).</p>`,
       `<p><strong>Chạy thật</strong> (Maven, JUnit 5.12.2, JaCoCo 0.8.13, JDK 21): <code>Tests run: 7, Failures: 0</code> · JaCoCo <code>checkWithdrawal</code>: lệnh 42/42, nhánh <strong>18/18</strong>, dòng 12/12 (dòng 2 và 8 mỗi dòng 4/4 nhánh). Bộ 6 test chỉ đạt statement + decision cũng xanh, nhưng JaCoCo báo <strong>16/18</strong> nhánh: dòng 2 vế "không chia hết" chưa từng đúng, dòng 8 <code>hour &gt;= 22</code> chưa từng đúng — đúng phần MC/DC đòi thêm. Cả 7 test Passed vì mã luyện tập viết đúng đặc tả (không có defect).</p>`),
     anh('q3', 1734, 'Question 3', 'câu 3'),
-    bi(`<h3>Part 3 — Q3: Interbank Transfer (black-box)</h3>
+    bi(`<h3>Part 4 — Q3: Interbank Transfer (black-box)</h3>
 <p><strong>Assumptions</strong> (the paper invites them): (1) step 1 says "&lt; 0" but the field rule and the message say "&gt; 0" ⇒ 0 is also rejected; (2) validation stops at the first failing step; (3) the tier limit (step 5) applies to Internal transfers too; (4) fees are shown with thousand separators. Every expected output below comes from a reference implementation of the spec, which reproduces all 5 rows of the paper's example table. Pre-condition of every case: <em>${P}</em>; procedure: enter the four fields, then click Transfer.</p>`,
-      `<h3>Phần 3 — câu 3: Interbank Transfer (hộp đen)</h3>
+      `<h3>Phần 4 — câu 3: Interbank Transfer (hộp đen)</h3>
 <p><strong>Giả định</strong> (đề mời ghi): (1) bước 1 ghi "&lt; 0" nhưng luật của ô và câu báo nói "&gt; 0" ⇒ 0 cũng bị từ chối; (2) kiểm tuần tự, dừng ở bước sai đầu tiên; (3) hạn mức (bước 5) áp cả cho chuyển Internal; (4) phí in có dấu phẩy ngăn hàng nghìn. Mọi kết quả mong đợi dưới đây chạy qua một cài đặt tham chiếu theo đặc tả, tái tạo đủ 5 dòng bảng ví dụ của đề. Pre-condition mọi ca: <em>${P}</em>; procedure: nhập bốn ô rồi bấm Transfer.</p>`),
     sheet('A — Validation (1.0) · Phần A — kiểm tra hợp lệ', tbl(['ID', 'Description', 'Procedure', 'Expected Output'], Q3_A.map(([id, d, a, t, c, o, e]) => [id, d, proc(a, t, c, o), e]))),
     bi(`<p><strong>B — reduced decision table (2.0).</strong> Conditions: tier · amount ≤ tier limit · type · 0.05% × amount ≥ 2,000. Rules: R1 Standard over limit ⇒ "Transaction limit exceeded." · R2 VIP over limit ⇒ same · R3 within limit + Internal ⇒ fee 0 (any tier) · R4 VIP + Interbank ⇒ fee 0 · R5 Standard + Interbank + 0.05% ≥ 2,000 ⇒ fee 0.05% · R6 Standard + Interbank + 0.05% &lt; 2,000 ⇒ fee 2,000. B01–B05 are the paper's example rows; B06–B08 are where the marks are.</p>`,

@@ -3,11 +3,16 @@
  * json vs jsonb (đo thật: jsonb chuẩn hoá {"b":1,"a":2,"a":3} → {"a": 3, "b": 1}) ·
  * -> vs ->> vs #>> · @> containment · GIN mặc định vs jsonb_path_ops (2904 kB vs 2008 kB) ·
  * GIN trên 200k dòng: 56,8 ms → 1,2 ms (45×) · tsvector/tsquery, gốc từ, trọng số A/B,
- * ts_rank, cột GENERATED · FTS index 39,5 ms → 0,080 ms · pg_trgm cho lỗi chính tả.
- * Output CHẠY THẬT trên PostgreSQL 16.13.
+ * ts_rank, cột GENERATED · FTS index 15,1 ms → 0,057 ms (PG17) · pg_trgm cho lỗi chính tả.
+ * Output CHẠY THẬT trên PostgreSQL 17.11 (26/10/2026 — chạy lại toàn bộ trên PG17, agent c13; slide pg-13-1…4 ở đầu mỗi bài).
  * LUẬT: < > trong code/out → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  * Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G131 from './giang/pg-13-1.mjs';
+import G132 from './giang/pg-13-2.mjs';
+import G133 from './giang/pg-13-3.mjs';
+import G134 from './giang/pg-13-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,7 +26,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'json và jsonb khác nhau ở đâu (thấy được bằng mắt), ba toán tử truy cập -> ->> #>>, và câu hỏi quan trọng nhất của cả chương: khi nào một trường nên là JSONB và khi nào nó phải là một cột thật.',
-      content: `
+      content: `${G131}
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.1 · Phase 4 — In production</span>
 <h2>Schema-less data, without leaving the database</h2>
@@ -34,7 +39,9 @@ export default {
 );
 <span class="tok-keyword">INSERT INTO</span> product (name, props) <span class="tok-keyword">VALUES</span>
  (<span class="tok-string">'Laptop Pro 14'</span>, <span class="tok-string">'{"brand":"Acme","price":1299,"tags":["laptop","pro"],"specs":{"ram":16,"cpu":"M3"}}'</span>),
+ (<span class="tok-string">'Laptop Air 13'</span>, <span class="tok-string">'{"brand":"Acme","price":999,"tags":["laptop","light"],"specs":{"ram":8,"cpu":"M2"}}'</span>),
  (<span class="tok-string">'Phone X'</span>,       <span class="tok-string">'{"brand":"Zeta","price":799,"tags":["phone"],"specs":{"ram":8,"storage":256}}'</span>),
+ (<span class="tok-string">'Tablet Mini'</span>,   <span class="tok-string">'{"brand":"Zeta","price":449,"tags":["tablet","light"],"specs":{"ram":4}}'</span>),
  (<span class="tok-string">'Keyboard K1'</span>,   <span class="tok-string">'{"brand":"Acme","price":89,"tags":["accessory"]}'</span>);</code></pre>
 
 <h3>json vs jsonb — always pick jsonb</h3>
@@ -62,7 +69,7 @@ export default {
  Laptop Air 13 | "Acme"  | Acme        | string
  Phone X       | "Zeta"  | Zeta        | string
 (3 rows)</div>
-<p>Look at the quotes. <code>-&gt;</code> returns <strong>jsonb</strong> — the string <code>"Acme"</code> as a JSON value, quotes included. <code>-&gt;&gt;</code> returns <strong>text</strong> — the bare characters. That single character is the source of most JSONB confusion: comparing <code>props-&gt;'brand' = 'Acme'</code> fails, because you are comparing a JSON string to a text literal.</p>
+<p>Look at the quotes. <code>-&gt;</code> returns <strong>jsonb</strong> — the string <code>"Acme"</code> as a JSON value, quotes included. <code>-&gt;&gt;</code> returns <strong>text</strong> — the bare characters. That single character is the source of most JSONB confusion: comparing <code>props-&gt;'brand' = 'Acme'</code> does not even return false — it raises <code>ERROR: invalid input syntax for type json</code>, because PostgreSQL tries to read the text literal <code>Acme</code> as a JSON value.</p>
 <p>For nested paths, chain the arrows or use <code>#&gt;&gt;</code> with a path array:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'specs'</span>-&gt;&gt;<span class="tok-string">'ram'</span>   <span class="tok-keyword">AS</span> ram,
@@ -105,7 +112,9 @@ export default {
 );
 <span class="tok-keyword">INSERT INTO</span> product (name, props) <span class="tok-keyword">VALUES</span>
  (<span class="tok-string">'Laptop Pro 14'</span>, <span class="tok-string">'{"brand":"Acme","price":1299,"tags":["laptop","pro"],"specs":{"ram":16,"cpu":"M3"}}'</span>),
+ (<span class="tok-string">'Laptop Air 13'</span>, <span class="tok-string">'{"brand":"Acme","price":999,"tags":["laptop","light"],"specs":{"ram":8,"cpu":"M2"}}'</span>),
  (<span class="tok-string">'Phone X'</span>,       <span class="tok-string">'{"brand":"Zeta","price":799,"tags":["phone"],"specs":{"ram":8,"storage":256}}'</span>),
+ (<span class="tok-string">'Tablet Mini'</span>,   <span class="tok-string">'{"brand":"Zeta","price":449,"tags":["tablet","light"],"specs":{"ram":4}}'</span>),
  (<span class="tok-string">'Keyboard K1'</span>,   <span class="tok-string">'{"brand":"Acme","price":89,"tags":["accessory"]}'</span>);</code></pre>
 
 <h3>json và jsonb — luôn chọn jsonb</h3>
@@ -133,7 +142,7 @@ export default {
  Laptop Air 13 | "Acme"  | Acme        | string
  Phone X       | "Zeta"  | Zeta        | string
 (3 rows)</div>
-<p>Nhìn cái dấu nháy. <code>-&gt;</code> trả về <strong>jsonb</strong> — chuỗi <code>"Acme"</code> ở dạng một giá trị JSON, KÈM dấu nháy. <code>-&gt;&gt;</code> trả về <strong>text</strong> — các ký tự trần. Đúng một ký tự đó là nguồn gốc của phần lớn sự bối rối với JSONB: so sánh <code>props-&gt;'brand' = 'Acme'</code> sẽ THẤT BẠI, vì bạn đang so một chuỗi JSON với một hằng text.</p>
+<p>Nhìn cái dấu nháy. <code>-&gt;</code> trả về <strong>jsonb</strong> — chuỗi <code>"Acme"</code> ở dạng một giá trị JSON, KÈM dấu nháy. <code>-&gt;&gt;</code> trả về <strong>text</strong> — các ký tự trần. Đúng một ký tự đó là nguồn gốc của phần lớn sự bối rối với JSONB: so sánh <code>props-&gt;'brand' = 'Acme'</code> thậm chí không ra false — nó BÁO LỖI <code>ERROR: invalid input syntax for type json</code>, vì PostgreSQL cố đọc hằng text <code>Acme</code> như một giá trị JSON.</p>
 <p>Với đường dẫn lồng nhau, hãy nối các mũi tên hoặc dùng <code>#&gt;&gt;</code> với một mảng đường dẫn:</p>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> name,
        props-&gt;<span class="tok-string">'specs'</span>-&gt;&gt;<span class="tok-string">'ram'</span>   <span class="tok-keyword">AS</span> ram,
@@ -171,8 +180,8 @@ export default {
       title: '13.2 — Querying JSONB and indexing it with GIN|||13.2 — Truy vấn JSONB và đánh chỉ mục bằng GIN',
       slug: 'postgresql-13-2-gin-jsonb',
       type: 'LESSON',
-      description: 'Toán tử containment @> và toán tử tồn-tại ?, rồi chỉ mục GIN đo thật trên 200.000 dòng: 56,8 ms xuống 1,2 ms. Kèm điều ít ai nói — GIN chỉ đáng khi truy vấn CHỌN LỌC, và cùng phép đo đó chỉ tiết kiệm được 42% khi điều kiện khớp 25% số dòng.',
-      content: `
+      description: 'Toán tử containment @> và toán tử tồn-tại ?, rồi chỉ mục GIN đo thật trên 200.000 dòng (PostgreSQL 17): 18,8 ms xuống 0,94 ms. Kèm điều ít ai nói — GIN chỉ đáng khi truy vấn CHỌN LỌC, và cùng phép đo đó chỉ nhanh hơn chừng 8% khi điều kiện khớp 25% số dòng.',
+      content: `${G132}
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.2 · Phase 4 — In production</span>
 <h2>Searching inside the document</h2>
@@ -206,22 +215,34 @@ export default {
  Tablet Mini
 (4 rows)</div>
 <p>Four products carry a <code>specs</code> object; only one of them records <code>storage</code>. There is also <code>?|</code> (any of these keys) and <code>?&amp;</code> (all of these keys).</p>
-<div class="callout warn">In most client libraries <code>?</code> is the placeholder character for bind parameters, so <code>props ? 'specs'</code> gets mangled before it reaches PostgreSQL. Use the function form <code>jsonb_exists(props, 'specs')</code>, or the driver's escape (<code>??</code> in node-postgres and Prisma raw queries).</div>
+<div class="callout warn">In most client libraries <code>?</code> is the placeholder character for bind parameters, so <code>props ? 'specs'</code> gets mangled before it reaches PostgreSQL. Use the function form <code>jsonb_exists(props, 'specs')</code>, or the driver's escape (<code>??</code> in JDBC / pgjdbc). node-postgres and Prisma use <code>$1</code>-style placeholders, so there <code>?</code> passes through untouched.</div>
 
 <h3>GIN: the index that makes this fast</h3>
-<p>Everything so far scanned five rows. Real tables do not. Measured on a <code>ev</code> table with <strong>200,000 rows</strong> (26 MB), searching for one specific price:</p>
+<p>Everything so far scanned five rows. Real tables do not. Measured on a <code>ev</code> table with <strong>200,000 rows</strong> (39 MB), searching for one specific price:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
-<div class="out">-- KHÔNG có chỉ mục
- Execution Time: 56.789 ms</div>
+<div class="out">                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7522.05..7522.06 rows=1 width=8) (actual time=18.801..18.802 rows=1 loops=1)
+   -&gt;  Seq Scan on ev  (cost=0.00..7522.00 rows=20 width=0) (actual time=0.156..18.785 rows=100 loops=1)
+         Filter: (props @&gt; '{"price": 1234}'::jsonb)
+         Rows Removed by Filter: 199900
+ Planning Time: 0.044 ms
+ Execution Time: 18.817 ms
+(6 rows)</div>
 <p>Now add a GIN index — the index type built for "many keys per row", which is exactly what a document is:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
-<div class="out"> Aggregate  (cost=97.21..97.22 rows=1 width=8) (actual time=1.242..1.244 rows=1 loops=1)
-   -&gt;  Bitmap Heap Scan on ev  (cost=21.59..97.16 rows=20 width=0) (actual time=0.812..1.229 rows=100 loops=1)
+<div class="out">                                                          QUERY PLAN                                                           
+-------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106.68..106.69 rows=1 width=8) (actual time=0.919..0.920 rows=1 loops=1)
+   -&gt;  Bitmap Heap Scan on ev  (cost=30.16..106.63 rows=20 width=0) (actual time=0.779..0.914 rows=100 loops=1)
          Recheck Cond: (props @&gt; '{"price": 1234}'::jsonb)
          Heap Blocks: exact=100
-         -&gt;  Bitmap Index Scan on ev_props_gin  (cost=0.00..21.59 rows=20 width=0) (actual time=0.786..0.786 rows=100 loops=1)
-               Index Cond: (props @&gt; '{"price": 1234}'::jsonb)</div>
-<p><strong>56.789 ms → 1.242 ms, about 45×.</strong> Note the shape: a <em>Bitmap</em> Index Scan feeding a Bitmap Heap Scan with a <code>Recheck Cond</code>. GIN stores which rows contain each key/value but not enough to answer alone, so Postgres collects candidate rows and rechecks them — the reason GIN plans always look like this.</p>
+         -&gt;  Bitmap Index Scan on ev_props_gin  (cost=0.00..30.16 rows=20 width=0) (actual time=0.765..0.765 rows=100 loops=1)
+               Index Cond: (props @&gt; '{"price": 1234}'::jsonb)
+ Planning Time: 0.139 ms
+ Execution Time: 0.938 ms
+(8 rows)</div>
+<p><strong>18.817 ms → 0.938 ms, about 20×.</strong> Note the shape: a <em>Bitmap</em> Index Scan feeding a Bitmap Heap Scan with a <code>Recheck Cond</code>. GIN stores which rows contain each key/value but not enough to answer alone, so Postgres collects candidate rows and rechecks them — the reason GIN plans always look like this.</p>
 
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bitmap Index Scan</span><span class="lz-d">GIN looks up each key/value in the search document and returns a <em>bitmap</em> of candidate rows. Fast, but it does not carry the row contents.</span></div>
@@ -232,23 +253,27 @@ export default {
 </div>
 <h3>The part usually left out: selectivity decides everything</h3>
 <p>Run the same experiment with a predicate that matches a quarter of the table instead of 0.05% of it:</p>
-<div class="out">-- props @&gt; '{"brand":"Nova","region":"east"}'   → khớp 50.000/200.000 dòng
-KHÔNG index:  54.114 ms
-CÓ GIN index: 31.463 ms</div>
-<p>The same index, on the same table, now buys 42% instead of 45×. When a query returns a large fraction of the rows, the database must visit those rows regardless, and the index only saves the filtering. <strong>An index is a tool for finding a few rows among many</strong> — Chapter 9's lesson, and it applies to GIN exactly as it applies to B-tree.</p>
+<div class="out">-- props @&gt; '{"brand":"Nova","region":"east"}'   → matches 50,000 of 200,000 rows
+-- without the index (Seq Scan):
+ Execution Time: 26.826 ms
+-- with ev_props_gin (Bitmap Index Scan → Bitmap Heap Scan, Heap Blocks: exact=5022):
+ Execution Time: 24.708 ms</div>
+<p>The same index, on the same table, now buys about 8% instead of 20×. When a query returns a large fraction of the rows, the database must visit those rows regardless, and the index only saves the filtering. <strong>An index is a tool for finding a few rows among many</strong> — Chapter 9's lesson, and it applies to GIN exactly as it applies to B-tree.</p>
 
 <h3>Two GIN flavours</h3>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
 <span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props jsonb_path_ops);   <span class="tok-comment">-- gọn hơn</span></code></pre>
-<div class="out"> indexrelname      | pg_size_pretty
--------------------+----------------
- ev_props_gin      | 2904 kB
- ev_props_gin_path | 2008 kB</div>
-<p><code>jsonb_path_ops</code> indexes hashed <em>paths</em> rather than every key and value separately: <strong>31% smaller</strong> here, and faster for <code>@&gt;</code>. The trade is that it supports <em>only</em> <code>@&gt;</code> — the existence operators <code>?</code>, <code>?|</code>, <code>?&amp;</code> will not use it. Choose the default if you need existence checks; choose <code>jsonb_path_ops</code> if containment is all you do.</p>
+<div class="out">   indexrelname    | kich_thuoc |  bytes   
+-------------------+------------+----------
+ ev_pkey           | 4408 kB    |  4513792
+ ev_props_gin      | 19 MB      | 19628032
+ ev_props_gin_path | 14 MB      | 14548992
+(3 rows)</div>
+<p><code>jsonb_path_ops</code> indexes hashed <em>paths</em> rather than every key and value separately: <strong>26% smaller</strong> here (14 MB vs 19 MB on a 39 MB table), and faster for <code>@&gt;</code> (0.167 ms vs 0.938 ms on the same query). The trade is that it supports <em>only</em> <code>@&gt;</code> plus the jsonpath operators <code>@?</code> and <code>@@</code> — the existence operators <code>?</code>, <code>?|</code>, <code>?&amp;</code> will not use it. Choose the default if you need existence checks; choose <code>jsonb_path_ops</code> if containment is all you do.</p>
 <div class="pitfall"><p><strong>Trap — assuming a GIN index covers every JSONB query.</strong> It indexes <em>containment and existence</em>, not comparison. <code>WHERE (props-&gt;&gt;'price')::numeric &lt; 500</code> cannot use the GIN index at all — it is an expression over an extracted value, so PostgreSQL falls back to a sequential scan, and the index you created sits there costing you write time for nothing. Range queries on a JSON field need either an expression index on exactly that expression (<code>CREATE INDEX ON ev (((props-&gt;&gt;'price')::numeric))</code>) or, better, the column the previous lesson told you to promote. Check with <code>EXPLAIN</code> — an unused index is invisible until you look.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: build the 200k table and watch 56 ms become 1 ms</span><span class="lc-sub">The Code Lab track also reproduces the selective-vs-broad comparison.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: build the 200k table and watch 19 ms become 1 ms</span><span class="lc-sub">The Code Lab track also reproduces the selective-vs-broad comparison.</span></span>
 </a>
 </div>
 
@@ -285,22 +310,34 @@ CÓ GIN index: 31.463 ms</div>
  Tablet Mini
 (4 rows)</div>
 <p>Bốn sản phẩm mang một đối tượng <code>specs</code>; chỉ MỘT trong số đó ghi <code>storage</code>. Còn có <code>?|</code> (có BẤT KỲ khoá nào trong số này) và <code>?&amp;</code> (có TẤT CẢ các khoá này).</p>
-<div class="callout warn">Ở phần lớn thư viện client, <code>?</code> là ký tự placeholder cho tham số, nên <code>props ? 'specs'</code> bị băm nát TRƯỚC khi tới được PostgreSQL. Hãy dùng dạng hàm <code>jsonb_exists(props, 'specs')</code>, hoặc cách escape của driver (<code>??</code> trong node-postgres và truy vấn thô của Prisma).</div>
+<div class="callout warn">Ở phần lớn thư viện client, <code>?</code> là ký tự placeholder cho tham số, nên <code>props ? 'specs'</code> bị băm nát TRƯỚC khi tới được PostgreSQL. Hãy dùng dạng hàm <code>jsonb_exists(props, 'specs')</code>, hoặc cách escape của driver (<code>??</code> trong JDBC / pgjdbc). node-postgres và Prisma dùng placeholder kiểu <code>$1</code>, nên ở đó <code>?</code> đi qua nguyên vẹn.</div>
 
 <h3>GIN: chỉ mục làm cho việc này nhanh</h3>
-<p>Mọi thứ tới giờ đều quét năm dòng. Bảng thật thì không như vậy. Đo trên một bảng <code>ev</code> có <strong>200.000 dòng</strong> (26 MB), tìm một mức giá cụ thể:</p>
+<p>Mọi thứ tới giờ đều quét năm dòng. Bảng thật thì không như vậy. Đo trên một bảng <code>ev</code> có <strong>200.000 dòng</strong> (39 MB), tìm một mức giá cụ thể:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> ev <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"price":1234}'</span>;</code></pre>
-<div class="out">-- KHÔNG có chỉ mục
- Execution Time: 56.789 ms</div>
+<div class="out">                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7522.05..7522.06 rows=1 width=8) (actual time=18.801..18.802 rows=1 loops=1)
+   -&gt;  Seq Scan on ev  (cost=0.00..7522.00 rows=20 width=0) (actual time=0.156..18.785 rows=100 loops=1)
+         Filter: (props @&gt; '{"price": 1234}'::jsonb)
+         Rows Removed by Filter: 199900
+ Planning Time: 0.044 ms
+ Execution Time: 18.817 ms
+(6 rows)</div>
 <p>Giờ thêm một chỉ mục GIN — loại chỉ mục sinh ra cho "nhiều khoá trên mỗi dòng", mà một tài liệu thì đúng là như thế:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> ev_props_gin <span class="tok-keyword">ON</span> ev <span class="tok-keyword">USING GIN</span> (props);</code></pre>
-<div class="out"> Aggregate  (cost=97.21..97.22 rows=1 width=8) (actual time=1.242..1.244 rows=1 loops=1)
-   -&gt;  Bitmap Heap Scan on ev  (cost=21.59..97.16 rows=20 width=0) (actual time=0.812..1.229 rows=100 loops=1)
+<div class="out">                                                          QUERY PLAN                                                           
+-------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106.68..106.69 rows=1 width=8) (actual time=0.919..0.920 rows=1 loops=1)
+   -&gt;  Bitmap Heap Scan on ev  (cost=30.16..106.63 rows=20 width=0) (actual time=0.779..0.914 rows=100 loops=1)
          Recheck Cond: (props @&gt; '{"price": 1234}'::jsonb)
          Heap Blocks: exact=100
-         -&gt;  Bitmap Index Scan on ev_props_gin  (cost=0.00..21.59 rows=20 width=0) (actual time=0.786..0.786 rows=100 loops=1)
-               Index Cond: (props @&gt; '{"price": 1234}'::jsonb)</div>
-<p><strong>56,789 ms → 1,242 ms, khoảng 45 lần.</strong> Để ý hình dạng: một <em>Bitmap</em> Index Scan nuôi một Bitmap Heap Scan có <code>Recheck Cond</code>. GIN lưu thông tin dòng nào chứa khoá/giá trị nào nhưng không đủ để tự trả lời, nên Postgres gom các dòng ứng viên rồi KIỂM LẠI — đó là lý do plan của GIN luôn trông như vậy.</p>
+         -&gt;  Bitmap Index Scan on ev_props_gin  (cost=0.00..30.16 rows=20 width=0) (actual time=0.765..0.765 rows=100 loops=1)
+               Index Cond: (props @&gt; '{"price": 1234}'::jsonb)
+ Planning Time: 0.139 ms
+ Execution Time: 0.938 ms
+(8 rows)</div>
+<p><strong>18,817 ms → 0,938 ms, khoảng 20 lần.</strong> Để ý hình dạng: một <em>Bitmap</em> Index Scan nuôi một Bitmap Heap Scan có <code>Recheck Cond</code>. GIN lưu thông tin dòng nào chứa khoá/giá trị nào nhưng không đủ để tự trả lời, nên Postgres gom các dòng ứng viên rồi KIỂM LẠI — đó là lý do plan của GIN luôn trông như vậy.</p>
 
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bitmap Index Scan</span><span class="lz-d">GIN tra từng cặp khoá/giá trị trong tài liệu tìm kiếm rồi trả về một <em>bitmap</em> các dòng ứng viên. Nhanh, nhưng nó KHÔNG mang theo nội dung dòng.</span></div>
@@ -312,22 +349,26 @@ CÓ GIN index: 31.463 ms</div>
 <h3>Phần thường bị bỏ qua: độ chọn lọc quyết định tất cả</h3>
 <p>Chạy đúng thí nghiệm đó với một điều kiện khớp MỘT PHẦN TƯ bảng thay vì 0,05% của nó:</p>
 <div class="out">-- props @&gt; '{"brand":"Nova","region":"east"}'   → khớp 50.000/200.000 dòng
-KHÔNG index:  54,114 ms
-CÓ GIN index: 31,463 ms</div>
-<p>Cùng chỉ mục đó, trên cùng bảng đó, giờ chỉ mua được 42% thay vì 45 lần. Khi một truy vấn trả về một phần LỚN số dòng, cơ sở dữ liệu dù sao cũng phải ghé thăm những dòng ấy, và chỉ mục chỉ tiết kiệm được khâu lọc. <strong>Chỉ mục là công cụ để tìm MỘT ÍT dòng giữa RẤT NHIỀU dòng</strong> — bài học của Chương 9, và nó đúng với GIN y như với B-tree.</p>
+-- không có chỉ mục (Seq Scan):
+ Execution Time: 26.826 ms
+-- có ev_props_gin (Bitmap Index Scan → Bitmap Heap Scan, Heap Blocks: exact=5022):
+ Execution Time: 24.708 ms</div>
+<p>Cùng chỉ mục đó, trên cùng bảng đó, giờ chỉ mua được chừng 8% thay vì 20 lần. Khi một truy vấn trả về một phần LỚN số dòng, cơ sở dữ liệu dù sao cũng phải ghé thăm những dòng ấy, và chỉ mục chỉ tiết kiệm được khâu lọc. <strong>Chỉ mục là công cụ để tìm MỘT ÍT dòng giữa RẤT NHIỀU dòng</strong> — bài học của Chương 9, và nó đúng với GIN y như với B-tree.</p>
 
 <h3>Hai hương vị GIN</h3>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props);                  <span class="tok-comment">-- mặc định</span>
 <span class="tok-keyword">CREATE INDEX</span> … <span class="tok-keyword">USING GIN</span> (props jsonb_path_ops);   <span class="tok-comment">-- gọn hơn</span></code></pre>
-<div class="out"> indexrelname      | pg_size_pretty
--------------------+----------------
- ev_props_gin      | 2904 kB
- ev_props_gin_path | 2008 kB</div>
-<p><code>jsonb_path_ops</code> đánh chỉ mục các <em>ĐƯỜNG DẪN</em> đã băm thay vì từng khoá và từng giá trị riêng lẻ: <strong>nhỏ hơn 31%</strong> ở đây, và nhanh hơn cho <code>@&gt;</code>. Cái giá là nó CHỈ hỗ trợ <code>@&gt;</code> — các toán tử tồn tại <code>?</code>, <code>?|</code>, <code>?&amp;</code> sẽ KHÔNG dùng được nó. Chọn bản mặc định nếu bạn cần kiểm tra tồn tại; chọn <code>jsonb_path_ops</code> nếu containment là tất cả những gì bạn làm.</p>
+<div class="out">   indexrelname    | kich_thuoc |  bytes   
+-------------------+------------+----------
+ ev_pkey           | 4408 kB    |  4513792
+ ev_props_gin      | 19 MB      | 19628032
+ ev_props_gin_path | 14 MB      | 14548992
+(3 rows)</div>
+<p><code>jsonb_path_ops</code> đánh chỉ mục các <em>ĐƯỜNG DẪN</em> đã băm thay vì từng khoá và từng giá trị riêng lẻ: <strong>nhỏ hơn 26%</strong> ở đây (14 MB so với 19 MB, trên bảng 39 MB), và nhanh hơn cho <code>@&gt;</code> (0,167 ms so với 0,938 ms cùng câu truy vấn). Cái giá là nó CHỈ hỗ trợ <code>@&gt;</code> cùng hai toán tử jsonpath <code>@?</code> và <code>@@</code> — các toán tử tồn tại <code>?</code>, <code>?|</code>, <code>?&amp;</code> sẽ KHÔNG dùng được nó. Chọn bản mặc định nếu bạn cần kiểm tra tồn tại; chọn <code>jsonb_path_ops</code> nếu containment là tất cả những gì bạn làm.</p>
 <div class="pitfall"><p><strong>Bẫy — tưởng một chỉ mục GIN bao phủ MỌI truy vấn JSONB.</strong> Nó đánh chỉ mục cho <em>containment và tồn tại</em>, KHÔNG phải cho so sánh. <code>WHERE (props-&gt;&gt;'price')::numeric &lt; 500</code> hoàn toàn KHÔNG dùng được chỉ mục GIN — đó là một biểu thức trên một giá trị đã rút ra, nên PostgreSQL rơi về quét tuần tự, và cái chỉ mục bạn vừa tạo nằm đó bắt bạn trả phí ghi mà chẳng đổi lại gì. Truy vấn theo khoảng trên một trường JSON cần hoặc một chỉ mục biểu thức trên ĐÚNG cái biểu thức đó (<code>CREATE INDEX ON ev (((props-&gt;&gt;'price')::numeric))</code>) hoặc, tốt hơn, chính cái cột mà bài trước đã bảo bạn nâng lên. Hãy kiểm bằng <code>EXPLAIN</code> — một chỉ mục không được dùng thì vô hình cho tới khi bạn nhìn vào.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: dựng bảng 200k và xem 56 ms thành 1 ms</span><span class="lc-sub">Nhánh Code Lab cũng tái hiện phép so sánh chọn-lọc và rộng.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: dựng bảng 200k và xem 19 ms thành 1 ms</span><span class="lc-sub">Nhánh Code Lab cũng tái hiện phép so sánh chọn-lọc và rộng.</span></span>
 </a>
 </div>
 `,
@@ -338,8 +379,8 @@ CÓ GIN index: 31,463 ms</div>
       title: '13.3 — Full-text search: tsvector, tsquery and ranking|||13.3 — Full-text search: tsvector, tsquery và xếp hạng',
       slug: 'postgresql-13-3-full-text-search',
       type: 'LESSON',
-      description: 'Vì sao LIKE không phải là tìm kiếm. Gốc từ (jumping/jumped/jumps → jump), loại bỏ từ dừng, tsvector và tsquery, cột GENERATED có trọng số A/B, xếp hạng bằng ts_rank, và chỉ mục GIN đưa 39,5 ms xuống 0,080 ms.',
-      content: `
+      description: 'Vì sao LIKE không phải là tìm kiếm. Gốc từ (jumping/jumped/jumps → jump), loại bỏ từ dừng, tsvector và tsquery, cột GENERATED có trọng số A/B, xếp hạng bằng ts_rank, và chỉ mục GIN đưa 15,1 ms xuống 0,057 ms (đo trên PostgreSQL 17).',
+      content: `${G133}
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.3 · Phase 4 — In production</span>
 <h2>A search engine you already have</h2>
@@ -384,11 +425,19 @@ CÓ GIN index: 31,463 ms</div>
     setweight(to_tsvector(<span class="tok-string">'english'</span>, body),  <span class="tok-string">'B'</span>)
   ) <span class="tok-keyword">STORED</span>
 );</code></pre>
-<div class="out"> id |           title            | tsv
-----+----------------------------+------------------------------------------------------------------
-  1 | PostgreSQL indexing basics | 'b':6B 'b-tree':5B 'basic':3A 'cost':13B 'fast':11B
-                                 | 'index':2A,8B,12B 'lookup':10B 'make':9B 'postgresql':1A …</div>
-<p>Read the letters: <code>'basic':3A</code> came from the title, <code>'cost':13B</code> from the body, and <code>'index':2A,8B,12B</code> appears in both. Because the column is <code>GENERATED … STORED</code>, PostgreSQL maintains it on every insert and update — there is nothing for the application to remember, and no trigger to write (this is the modern replacement for the trigger-based approach you will find in older tutorials).</p>
+<p>Three sample rows (the 200,000-row measurement below adds generated ones):</p>
+<pre><code class="language-sql"><span class="tok-keyword">INSERT INTO</span> article (title, body) <span class="tok-keyword">VALUES</span>
+ (<span class="tok-string">'PostgreSQL indexing basics'</span>, <span class="tok-string">'A B-tree index makes lookups fast. Every index has a cost on writes.'</span>),
+ (<span class="tok-string">'Scaling a database'</span>, <span class="tok-string">'Replicas spread the reads; partitioning splits big tables.'</span>),
+ (<span class="tok-string">'Fast queries with indexes'</span>, <span class="tok-string">'Read the plan with EXPLAIN before adding an index.'</span>);
+<span class="tok-keyword">SELECT</span> id, title, tsv <span class="tok-keyword">FROM</span> article <span class="tok-keyword">ORDER BY</span> id;</code></pre>
+<div class="out"> id |           title            |                                                                      tsv                                                                       
+----+----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------
+  1 | PostgreSQL indexing basics | 'b':6B 'b-tree':5B 'basic':3A 'cost':16B 'everi':12B 'fast':11B 'index':2A,8B,13B 'lookup':10B 'make':9B 'postgresql':1A 'tree':7B 'write':18B
+  2 | Scaling a database         | 'big':10B 'databas':3A 'partit':8B 'read':7B 'replica':4B 'scale':1A 'split':9B 'spread':5B 'tabl':11B
+  3 | Fast queries with indexes  | 'ad':11B 'explain':9B 'fast':1A 'index':4A,13B 'plan':7B 'queri':2A 'read':5B
+(3 rows)</div>
+<p>Read the letters: <code>'basic':3A</code> came from the title, <code>'cost':16B</code> from the body, and <code>'index':2A,8B,13B</code> appears in both. Because the column is <code>GENERATED … STORED</code>, PostgreSQL maintains it on every insert and update — there is nothing for the application to remember, and no trigger to write (this is the modern replacement for the trigger-based approach you will find in older tutorials).</p>
 
 <h3>Ranking</h3>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
@@ -403,16 +452,33 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>The index, and what it is worth</h3>
 <p>On the same table grown to <strong>200,000 articles</strong>:</p>
-<div class="out">-- KHÔNG index
- Execution Time: 39.506 ms
+<div class="out">-- EXPLAIN ANALYZE SELECT id, title FROM article WHERE tsv @@ to_tsquery('english', 'wraparound');
+-- without an index:
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Seq Scan on article  (cost=0.00..7564.04 rows=893 width=15) (actual time=1.493..15.094 rows=10 loops=1)
+   Filter: (tsv @@ '''wraparound'''::tsquery)
+   Rows Removed by Filter: 199993
+ Planning Time: 0.055 ms
+ Execution Time: 15.104 ms
+(5 rows)
 
--- CREATE INDEX article_tsv_gin ON article USING GIN (tsv);
- Execution Time: 0.080 ms</div>
-<p>Roughly <strong>490×</strong>. A GIN index over a <code>tsvector</code> is what turns full-text search from a table scan into an instant lookup, and it is the single step people most often forget — the feature works without it, just slowly enough that it only becomes a problem in production.</p>
-<div class="pitfall"><p><strong>Trap — the text search configuration is not optional, and there is no English-like default for Vietnamese.</strong> Calling <code>to_tsvector(body)</code> without naming a configuration uses <code>default_text_search_config</code>, a server setting — so the same query can stem differently on your laptop and on the VPS, and a <code>GENERATED</code> column built on the one-argument form is rejected outright because it is not immutable. Always pass the configuration explicitly. For Vietnamese there is a second, sharper issue: the built-in configurations do not stem it, and <code>'simple'</code> merely lowercases and splits on whitespace — which is actually a reasonable choice, because Vietnamese words are already separated and mostly uninflected, but it means no stemming and no stop-word removal. Test with real Vietnamese content before promising diacritic-insensitive search; <code>unaccent</code> plus <code>'simple'</code> is the usual working combination, and lesson 13.4's trigram search often does better on short strings like names.</p></div>
+-- CREATE INDEX article_tsv_gin ON article USING GIN (tsv);   -- same query:
+                                                         QUERY PLAN                                                         
+----------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on article  (cost=21.78..2325.22 rows=893 width=15) (actual time=0.016..0.047 rows=10 loops=1)
+   Recheck Cond: (tsv @@ '''wraparound'''::tsquery)
+   Heap Blocks: exact=10
+   -&gt;  Bitmap Index Scan on article_tsv_gin  (cost=0.00..21.56 rows=893 width=0) (actual time=0.010..0.010 rows=10 loops=1)
+         Index Cond: (tsv @@ '''wraparound'''::tsquery)
+ Planning Time: 0.132 ms
+ Execution Time: 0.057 ms
+(7 rows)</div>
+<p>15.104 ms → 0.057 ms, roughly <strong>265×</strong>. A GIN index over a <code>tsvector</code> is what turns full-text search from a table scan into an instant lookup, and it is the single step people most often forget — the feature works without it, just slowly enough that it only becomes a problem in production.</p>
+<div class="pitfall"><p><strong>Trap — the text search configuration is not optional, and there is no English-like default for Vietnamese.</strong> Calling <code>to_tsvector(body)</code> without naming a configuration uses <code>default_text_search_config</code>, a server setting — so the same query can stem differently on your laptop and on the VPS, and a <code>GENERATED</code> column built on the one-argument form is rejected outright because it is not immutable. Always pass the configuration explicitly. For Vietnamese there is a second, sharper issue: the built-in configurations do not stem it, and <code>'simple'</code> merely lowercases and splits on whitespace — which is actually a reasonable choice, because Vietnamese syllables are already separated by spaces and never inflect — but a word like “học sinh” is two syllables, so there is no word segmentation, no stemming and no stop-word removal. Test with real Vietnamese content before promising diacritic-insensitive search; <code>unaccent</code> plus <code>'simple'</code> is the usual working combination, and lesson 13.4's trigram search often does better on short strings like names.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: build the weighted tsvector column and rank real results</span><span class="lc-sub">The Code Lab track reproduces the 39.5 ms → 0.080 ms measurement.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: build the weighted tsvector column and rank real results</span><span class="lc-sub">The Code Lab track reproduces the Seq Scan vs GIN measurement.</span></span>
 </a>
 </div>
 
@@ -460,11 +526,19 @@ CÓ GIN index: 31,463 ms</div>
     setweight(to_tsvector(<span class="tok-string">'english'</span>, body),  <span class="tok-string">'B'</span>)
   ) <span class="tok-keyword">STORED</span>
 );</code></pre>
-<div class="out"> id |           title            | tsv
-----+----------------------------+------------------------------------------------------------------
-  1 | PostgreSQL indexing basics | 'b':6B 'b-tree':5B 'basic':3A 'cost':13B 'fast':11B
-                                 | 'index':2A,8B,12B 'lookup':10B 'make':9B 'postgresql':1A …</div>
-<p>Đọc các chữ cái: <code>'basic':3A</code> đến từ tiêu đề, <code>'cost':13B</code> từ phần thân, và <code>'index':2A,8B,12B</code> xuất hiện ở CẢ HAI. Vì cột là <code>GENERATED … STORED</code>, PostgreSQL tự bảo trì nó ở mọi lần chèn và cập nhật — ứng dụng không có gì phải nhớ, và không phải viết trigger nào (đây là bản thay thế hiện đại cho cách dùng trigger mà bạn sẽ thấy trong các hướng dẫn cũ).</p>
+<p>Ba dòng mẫu (phép đo 200.000 dòng ở dưới thêm các dòng sinh tự động):</p>
+<pre><code class="language-sql"><span class="tok-keyword">INSERT INTO</span> article (title, body) <span class="tok-keyword">VALUES</span>
+ (<span class="tok-string">'PostgreSQL indexing basics'</span>, <span class="tok-string">'A B-tree index makes lookups fast. Every index has a cost on writes.'</span>),
+ (<span class="tok-string">'Scaling a database'</span>, <span class="tok-string">'Replicas spread the reads; partitioning splits big tables.'</span>),
+ (<span class="tok-string">'Fast queries with indexes'</span>, <span class="tok-string">'Read the plan with EXPLAIN before adding an index.'</span>);
+<span class="tok-keyword">SELECT</span> id, title, tsv <span class="tok-keyword">FROM</span> article <span class="tok-keyword">ORDER BY</span> id;</code></pre>
+<div class="out"> id |           title            |                                                                      tsv                                                                       
+----+----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------
+  1 | PostgreSQL indexing basics | 'b':6B 'b-tree':5B 'basic':3A 'cost':16B 'everi':12B 'fast':11B 'index':2A,8B,13B 'lookup':10B 'make':9B 'postgresql':1A 'tree':7B 'write':18B
+  2 | Scaling a database         | 'big':10B 'databas':3A 'partit':8B 'read':7B 'replica':4B 'scale':1A 'split':9B 'spread':5B 'tabl':11B
+  3 | Fast queries with indexes  | 'ad':11B 'explain':9B 'fast':1A 'index':4A,13B 'plan':7B 'queri':2A 'read':5B
+(3 rows)</div>
+<p>Đọc các chữ cái: <code>'basic':3A</code> đến từ tiêu đề, <code>'cost':16B</code> từ phần thân, và <code>'index':2A,8B,13B</code> xuất hiện ở CẢ HAI. Vì cột là <code>GENERATED … STORED</code>, PostgreSQL tự bảo trì nó ở mọi lần chèn và cập nhật — ứng dụng không có gì phải nhớ, và không phải viết trigger nào (đây là bản thay thế hiện đại cho cách dùng trigger mà bạn sẽ thấy trong các hướng dẫn cũ).</p>
 
 <h3>Xếp hạng</h3>
 <pre><code class="language-sql"><span class="tok-keyword">SELECT</span> id, title, round(ts_rank(tsv, to_tsquery(<span class="tok-string">'english'</span>,<span class="tok-string">'index'</span>))::numeric,4) <span class="tok-keyword">AS</span> hang
@@ -479,16 +553,33 @@ CÓ GIN index: 31,463 ms</div>
 
 <h3>Chỉ mục, và nó đáng giá bao nhiêu</h3>
 <p>Trên cùng bảng đó khi nuôi lên <strong>200.000 bài</strong>:</p>
-<div class="out">-- KHÔNG index
- Execution Time: 39,506 ms
+<div class="out">-- EXPLAIN ANALYZE SELECT id, title FROM article WHERE tsv @@ to_tsquery('english', 'wraparound');
+-- chưa có chỉ mục:
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Seq Scan on article  (cost=0.00..7564.04 rows=893 width=15) (actual time=1.493..15.094 rows=10 loops=1)
+   Filter: (tsv @@ '''wraparound'''::tsquery)
+   Rows Removed by Filter: 199993
+ Planning Time: 0.055 ms
+ Execution Time: 15.104 ms
+(5 rows)
 
--- CREATE INDEX article_tsv_gin ON article USING GIN (tsv);
- Execution Time: 0,080 ms</div>
-<p>Khoảng <strong>490 lần</strong>. Một chỉ mục GIN trên một <code>tsvector</code> chính là thứ biến full-text search từ một lượt quét bảng thành một cú tra tức thì, và nó là bước mà người ta hay quên nhất — tính năng vẫn CHẠY khi không có nó, chỉ là chậm vừa đủ để chỉ thành vấn đề khi đã lên production.</p>
-<div class="pitfall"><p><strong>Bẫy — cấu hình tìm kiếm văn bản KHÔNG phải tuỳ chọn, và KHÔNG có bản mặc định kiểu-tiếng-Anh nào cho tiếng Việt.</strong> Gọi <code>to_tsvector(body)</code> mà không nêu tên cấu hình sẽ dùng <code>default_text_search_config</code>, một thiết lập của MÁY CHỦ — nên cùng một truy vấn có thể đưa về gốc khác nhau trên laptop của bạn và trên VPS, và một cột <code>GENERATED</code> dựng trên dạng một-tham-số sẽ bị TỪ CHỐI thẳng vì nó không bất biến. Hãy LUÔN truyền cấu hình một cách tường minh. Với tiếng Việt còn một vấn đề thứ hai, sắc hơn: các cấu hình có sẵn KHÔNG đưa tiếng Việt về gốc, và <code>'simple'</code> chỉ hạ chữ thường rồi tách theo khoảng trắng — thực ra đó là lựa chọn hợp lý, vì từ tiếng Việt vốn đã tách rời và hầu như không biến hình, nhưng nó nghĩa là KHÔNG có gốc từ và KHÔNG có loại bỏ từ dừng. Hãy thử với nội dung tiếng Việt THẬT trước khi hứa hẹn tìm kiếm không phân biệt dấu; <code>unaccent</code> kết hợp <code>'simple'</code> là bộ đôi thường dùng được, và tìm bằng trigram ở bài 13.4 thường cho kết quả tốt hơn với các chuỗi ngắn như tên người.</p></div>
+-- CREATE INDEX article_tsv_gin ON article USING GIN (tsv);   -- cùng câu truy vấn:
+                                                         QUERY PLAN                                                         
+----------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on article  (cost=21.78..2325.22 rows=893 width=15) (actual time=0.016..0.047 rows=10 loops=1)
+   Recheck Cond: (tsv @@ '''wraparound'''::tsquery)
+   Heap Blocks: exact=10
+   -&gt;  Bitmap Index Scan on article_tsv_gin  (cost=0.00..21.56 rows=893 width=0) (actual time=0.010..0.010 rows=10 loops=1)
+         Index Cond: (tsv @@ '''wraparound'''::tsquery)
+ Planning Time: 0.132 ms
+ Execution Time: 0.057 ms
+(7 rows)</div>
+<p>15,104 ms → 0,057 ms, khoảng <strong>265 lần</strong>. Một chỉ mục GIN trên một <code>tsvector</code> chính là thứ biến full-text search từ một lượt quét bảng thành một cú tra tức thì, và nó là bước mà người ta hay quên nhất — tính năng vẫn CHẠY khi không có nó, chỉ là chậm vừa đủ để chỉ thành vấn đề khi đã lên production.</p>
+<div class="pitfall"><p><strong>Bẫy — cấu hình tìm kiếm văn bản KHÔNG phải tuỳ chọn, và KHÔNG có bản mặc định kiểu-tiếng-Anh nào cho tiếng Việt.</strong> Gọi <code>to_tsvector(body)</code> mà không nêu tên cấu hình sẽ dùng <code>default_text_search_config</code>, một thiết lập của MÁY CHỦ — nên cùng một truy vấn có thể đưa về gốc khác nhau trên laptop của bạn và trên VPS, và một cột <code>GENERATED</code> dựng trên dạng một-tham-số sẽ bị TỪ CHỐI thẳng vì nó không bất biến. Hãy LUÔN truyền cấu hình một cách tường minh. Với tiếng Việt còn một vấn đề thứ hai, sắc hơn: các cấu hình có sẵn KHÔNG đưa tiếng Việt về gốc, và <code>'simple'</code> chỉ hạ chữ thường rồi tách theo khoảng trắng — thực ra đó là lựa chọn hợp lý, vì các âm tiết tiếng Việt vốn đã cách nhau bằng dấu cách và không bao giờ biến hình — nhưng một từ như “học sinh” gồm hai âm tiết, nên KHÔNG có tách từ, KHÔNG có gốc từ và KHÔNG có loại bỏ từ dừng. Hãy thử với nội dung tiếng Việt THẬT trước khi hứa hẹn tìm kiếm không phân biệt dấu; <code>unaccent</code> kết hợp <code>'simple'</code> là bộ đôi thường dùng được, và tìm bằng trigram ở bài 13.4 thường cho kết quả tốt hơn với các chuỗi ngắn như tên người.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: dựng cột tsvector có trọng số và xếp hạng kết quả thật</span><span class="lc-sub">Nhánh Code Lab tái hiện phép đo 39,5 ms → 0,080 ms.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: dựng cột tsvector có trọng số và xếp hạng kết quả thật</span><span class="lc-sub">Nhánh Code Lab tái hiện phép đo Seq Scan so với GIN.</span></span>
 </a>
 </div>
 `,
@@ -499,8 +590,8 @@ CÓ GIN index: 31,463 ms</div>
       title: '13.4 — Trigram search: typos, partial names and ILIKE that flies|||13.4 — Tìm bằng trigram: lỗi chính tả, tên gõ dở, và ILIKE bay được',
       slug: 'postgresql-13-4-trigram',
       type: 'LESSON',
-      description: 'pg_trgm cắt chuỗi thành cụm ba ký tự để đo độ giống nhau. "PostgresSQL" gõ sai vẫn đạt 0,769 điểm giống, và một chỉ mục GIN trigram khiến ILIKE có % ở đầu — thứ B-tree hoàn toàn bó tay — chạy từ 46,2 ms xuống 0,210 ms.',
-      content: `
+      description: 'pg_trgm cắt chuỗi thành cụm ba ký tự để đo độ giống nhau. "PostgresSQL" gõ sai vẫn đạt 0,769 điểm giống, và một chỉ mục GIN trigram khiến ILIKE có % ở đầu — thứ B-tree hoàn toàn bó tay — chạy từ 77,1 ms xuống 0,075 ms (đo trên PostgreSQL 17).',
+      content: `${G134}
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.4 · Phase 4 — In production</span>
 <h2>When the user cannot spell it</h2>
@@ -534,13 +625,29 @@ CÓ GIN index: 31,463 ms</div>
 <h3>The other half: making ILIKE '%…%' fast</h3>
 <p>A B-tree index is useless for a leading wildcard — it can find prefixes, and <code>'%12345%'</code> has no prefix. So this is a sequential scan every time, forever. Measured on 200,000 rows:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
-<div class="out">-- KHÔNG index
- Execution Time: 46.240 ms</div>
+<div class="out">                                                 QUERY PLAN                                                  
+-------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7564.09..7564.10 rows=1 width=8) (actual time=77.102..77.103 rows=1 loops=1)
+   -&gt;  Seq Scan on article  (cost=0.00..7564.04 rows=20 width=0) (actual time=4.481..77.092 rows=12 loops=1)
+         Filter: (title ~~* '%12345%'::text)
+         Rows Removed by Filter: 199991
+ Planning Time: 0.086 ms
+ Execution Time: 77.121 ms
+(6 rows)</div>
 <p>A trigram GIN index changes that, because <code>%12345%</code> still contains trigrams the index knows about:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
-<div class="out">-- CÓ index
- Execution Time: 0.210 ms</div>
-<p><strong>46.240 ms → 0.210 ms, about 220×</strong> — on the one query shape everyone is told is unindexable. If your admin panel has a "search by name" box that does <code>ILIKE '%…%'</code>, this index is very likely the highest-value five minutes available to you.</p>
+<div class="out">                                                             QUERY PLAN                                                             
+------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106.81..106.82 rows=1 width=8) (actual time=0.060..0.060 rows=1 loops=1)
+   -&gt;  Bitmap Heap Scan on article  (cost=30.28..106.76 rows=20 width=0) (actual time=0.048..0.057 rows=12 loops=1)
+         Recheck Cond: (title ~~* '%12345%'::text)
+         Heap Blocks: exact=3
+         -&gt;  Bitmap Index Scan on article_title_trgm  (cost=0.00..30.27 rows=20 width=0) (actual time=0.041..0.041 rows=12 loops=1)
+               Index Cond: (title ~~* '%12345%'::text)
+ Planning Time: 0.161 ms
+ Execution Time: 0.075 ms
+(8 rows)</div>
+<p><strong>77.121 ms → 0.075 ms, about 1,000×</strong> — on the one query shape everyone is told is unindexable. If your admin panel has a "search by name" box that does <code>ILIKE '%…%'</code>, this index is very likely the highest-value five minutes available to you.</p>
 
 <h3>Choosing between the three</h3>
 <div class="lz-stack">
@@ -549,10 +656,10 @@ CÓ GIN index: 31,463 ms</div>
 <div class="lz-layer"><span class="lz-lname">Plain B-tree + prefix LIKE</span><span class="lz-lnote">You genuinely only need <code>LIKE 'abc%'</code>. Cheapest of the three, and a B-tree with <code>text_pattern_ops</code> handles it. Do not reach for anything cleverer than the problem.</span></div>
 </div>
 <div class="callout ok">The two are not exclusive. A common production pattern is full-text search for the main query and trigram as the fallback that runs only when FTS returns nothing — which is exactly the moment the user has misspelled something.</div>
-<div class="pitfall"><p><strong>Trap — a trigram index on a big text column.</strong> Trigram indexes are built from every three-character window in the value, so their size and build cost scale with the <em>length</em> of the text, not just the row count. On short columns — names, slugs, codes — that is cheap and the payoff above is real. On article bodies it can produce an index larger than the table, slow every write, and still lose to a proper <code>tsvector</code> index for word searching. Match the tool to the column: <code>gin_trgm_ops</code> for short strings, <code>tsvector</code> + GIN for long prose. And note that <code>similarity()</code> only uses the index when written as <code>a % b</code> or with <code>&lt;-&gt;</code> ordering — an explicit <code>similarity(a,b) &gt; 0.3</code> in <code>WHERE</code> is a sequential scan, so check the plan rather than assuming.</p></div>
+<div class="pitfall"><p><strong>Trap — a trigram index on a big text column.</strong> Trigram indexes are built from every three-character window in the value, so their size and build cost scale with the <em>length</em> of the text, not just the row count. On short columns — names, slugs, codes — that is cheap and the payoff above is real. On article bodies it grows to roughly the size of the table itself — measured on 20,000 documents of ~2,000 characters: a 9.9 MB trigram index on a 10 MB table, five times the 1.9 MB <code>tsvector</code> index — slows every write, and still loses to that <code>tsvector</code> index for word searching. Match the tool to the column: <code>gin_trgm_ops</code> for short strings, <code>tsvector</code> + GIN for long prose. And note that <code>similarity()</code> only uses the index when written as <code>a % b</code> or with <code>&lt;-&gt;</code> ordering — an explicit <code>similarity(a,b) &gt; 0.3</code> in <code>WHERE</code> is a sequential scan, so check the plan rather than assuming.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: misspell a search on purpose, then index ILIKE into 0.2 ms</span><span class="lc-sub">The Code Lab track reproduces the similarity scores and both timings.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: misspell a search on purpose, then index ILIKE into 0.1 ms</span><span class="lc-sub">The Code Lab track reproduces the similarity scores and both timings.</span></span>
 </a>
 </div>
 
@@ -589,13 +696,29 @@ CÓ GIN index: 31,463 ms</div>
 <h3>Nửa còn lại: làm cho ILIKE '%…%' nhanh</h3>
 <p>Chỉ mục B-tree VÔ DỤNG với ký tự đại diện ở đầu — nó tìm được tiền tố, mà <code>'%12345%'</code> thì không có tiền tố. Nên đây là quét tuần tự, mọi lần, mãi mãi. Đo trên 200.000 dòng:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> article <span class="tok-keyword">WHERE</span> title <span class="tok-keyword">ILIKE</span> <span class="tok-string">'%12345%'</span>;</code></pre>
-<div class="out">-- KHÔNG index
- Execution Time: 46,240 ms</div>
+<div class="out">                                                 QUERY PLAN                                                  
+-------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=7564.09..7564.10 rows=1 width=8) (actual time=77.102..77.103 rows=1 loops=1)
+   -&gt;  Seq Scan on article  (cost=0.00..7564.04 rows=20 width=0) (actual time=4.481..77.092 rows=12 loops=1)
+         Filter: (title ~~* '%12345%'::text)
+         Rows Removed by Filter: 199991
+ Planning Time: 0.086 ms
+ Execution Time: 77.121 ms
+(6 rows)</div>
 <p>Một chỉ mục GIN trigram đổi được điều đó, vì <code>%12345%</code> vẫn CHỨA những trigram mà chỉ mục biết:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> article_title_trgm <span class="tok-keyword">ON</span> article <span class="tok-keyword">USING GIN</span> (title gin_trgm_ops);</code></pre>
-<div class="out">-- CÓ index
- Execution Time: 0,210 ms</div>
-<p><strong>46,240 ms → 0,210 ms, khoảng 220 lần</strong> — trên đúng cái dạng truy vấn mà ai cũng được dạy rằng không đánh chỉ mục được. Nếu trang quản trị của bạn có một ô "tìm theo tên" chạy <code>ILIKE '%…%'</code>, thì chỉ mục này rất có thể là năm phút đáng giá nhất bạn có thể bỏ ra.</p>
+<div class="out">                                                             QUERY PLAN                                                             
+------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106.81..106.82 rows=1 width=8) (actual time=0.060..0.060 rows=1 loops=1)
+   -&gt;  Bitmap Heap Scan on article  (cost=30.28..106.76 rows=20 width=0) (actual time=0.048..0.057 rows=12 loops=1)
+         Recheck Cond: (title ~~* '%12345%'::text)
+         Heap Blocks: exact=3
+         -&gt;  Bitmap Index Scan on article_title_trgm  (cost=0.00..30.27 rows=20 width=0) (actual time=0.041..0.041 rows=12 loops=1)
+               Index Cond: (title ~~* '%12345%'::text)
+ Planning Time: 0.161 ms
+ Execution Time: 0.075 ms
+(8 rows)</div>
+<p><strong>77,121 ms → 0,075 ms, khoảng 1.000 lần</strong> — trên đúng cái dạng truy vấn mà ai cũng được dạy rằng không đánh chỉ mục được. Nếu trang quản trị của bạn có một ô "tìm theo tên" chạy <code>ILIKE '%…%'</code>, thì chỉ mục này rất có thể là năm phút đáng giá nhất bạn có thể bỏ ra.</p>
 
 <h3>Chọn giữa ba cách</h3>
 <div class="lz-stack">
@@ -604,10 +727,10 @@ CÓ GIN index: 31,463 ms</div>
 <div class="lz-layer"><span class="lz-lname">B-tree thường + LIKE tiền tố</span><span class="lz-lnote">Bạn THẬT SỰ chỉ cần <code>LIKE 'abc%'</code>. Rẻ nhất trong ba, và một B-tree với <code>text_pattern_ops</code> lo được. Đừng với tay sang thứ cao siêu hơn bài toán.</span></div>
 </div>
 <div class="callout ok">Hai cách này KHÔNG loại trừ nhau. Một mẫu production quen thuộc là dùng full-text search cho truy vấn chính và trigram làm ĐƯỜNG LÙI chỉ chạy khi FTS trả về rỗng — mà đó chính xác là lúc người dùng vừa gõ sai một thứ gì đó.</div>
-<div class="pitfall"><p><strong>Bẫy — một chỉ mục trigram trên một cột văn bản LỚN.</strong> Chỉ mục trigram được dựng từ MỌI cửa sổ ba ký tự trong giá trị, nên kích thước và chi phí dựng của nó tỉ lệ với ĐỘ DÀI văn bản, chứ không chỉ với số dòng. Trên cột ngắn — tên, slug, mã — thì rẻ và phần thưởng ở trên là có thật. Trên thân bài viết thì nó có thể sinh ra một chỉ mục TO HƠN CẢ BẢNG, làm chậm mọi lệnh ghi, mà vẫn thua một chỉ mục <code>tsvector</code> đàng hoàng khi tìm theo từ. Hãy khớp công cụ với cột: <code>gin_trgm_ops</code> cho chuỗi ngắn, <code>tsvector</code> + GIN cho văn xuôi dài. Và để ý rằng <code>similarity()</code> CHỈ dùng được chỉ mục khi viết dạng <code>a % b</code> hoặc với sắp xếp <code>&lt;-&gt;</code> — một câu <code>similarity(a,b) &gt; 0.3</code> tường minh trong <code>WHERE</code> là quét tuần tự, nên hãy kiểm plan thay vì phỏng đoán.</p></div>
+<div class="pitfall"><p><strong>Bẫy — một chỉ mục trigram trên một cột văn bản LỚN.</strong> Chỉ mục trigram được dựng từ MỌI cửa sổ ba ký tự trong giá trị, nên kích thước và chi phí dựng của nó tỉ lệ với ĐỘ DÀI văn bản, chứ không chỉ với số dòng. Trên cột ngắn — tên, slug, mã — thì rẻ và phần thưởng ở trên là có thật. Trên thân bài viết thì nó phình xấp xỉ BẰNG CẢ BẢNG — đo thật trên 20.000 bài dài ~2.000 ký tự: chỉ mục trigram 9,9 MB trên bảng 10 MB, gấp năm lần chỉ mục <code>tsvector</code> 1,9 MB — làm chậm mọi lệnh ghi, mà vẫn thua chỉ mục <code>tsvector</code> đó khi tìm theo từ. Hãy khớp công cụ với cột: <code>gin_trgm_ops</code> cho chuỗi ngắn, <code>tsvector</code> + GIN cho văn xuôi dài. Và để ý rằng <code>similarity()</code> CHỈ dùng được chỉ mục khi viết dạng <code>a % b</code> hoặc với sắp xếp <code>&lt;-&gt;</code> — một câu <code>similarity(a,b) &gt; 0.3</code> tường minh trong <code>WHERE</code> là quét tuần tự, nên hãy kiểm plan thay vì phỏng đoán.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: cố tình gõ sai một truy vấn, rồi đánh chỉ mục cho ILIKE xuống 0,2 ms</span><span class="lc-sub">Nhánh Code Lab tái hiện các điểm similarity và cả hai phép đo thời gian.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: cố tình gõ sai một truy vấn, rồi đánh chỉ mục cho ILIKE xuống 0,1 ms</span><span class="lc-sub">Nhánh Code Lab tái hiện các điểm similarity và cả hai phép đo thời gian.</span></span>
 </a>
 </div>
 `,

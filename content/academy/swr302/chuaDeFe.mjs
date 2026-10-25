@@ -10,7 +10,8 @@
 
 const LINK = (slug) => `/courses/software-requirements/learn?lessonSlug=${slug}`;
 
-const fe = ({ so, ky, dai, moc, chuong, chuongEn, luuY, luuYEn, onLai, meo, meoEn }) => ({
+/** moc rỗng ⇒ video chưa ghép xong ⇒ CHƯA đưa bài lên web (trả null, lọc ở `lessons`). */
+const fe = ({ so, ky, dai, moc, chuong, chuongEn, luuY, luuYEn, onLai, meo, meoEn }) => (!moc?.length ? null : {
   title: `FE review · Exam ${so} (${ky}) — full walkthrough, 60 questions|||Chữa trọn đề FE${so} (${ky}) · 60 câu`,
   slug: `swr302-fe${so}-sp26-chua-tron-de`,
   type: 'VIDEO',
@@ -90,7 +91,59 @@ const lessons = [
     meo: 'Đề hay hỏi đúng các danh sách của sách (loại business rule, đặc tính yêu cầu tốt, loại prototype, kỹ thuật ưu tiên) — thuộc các danh sách này là chắc điểm.',
     meoEn: 'The paper keeps asking for the book’s lists (business rule types, characteristics of good requirements, prototype types, prioritization techniques) — knowing these lists is sure marks.',
   }),
-];
+
+  /* FE1 + FE2 (SP26): video đang chờ giọng/render. Ghép xong (xuat/ghep-phan.mts 4 phần swr-fe{1,2}-1..4 trong 29-chua-tron-de-fe)
+     ⇒ điền `dai` + `moc` từ mo-ta-chuong.txt của bản -tron (giờ bắt đầu từng phần), len-r2, gan-web — bài tự hiện. Thống kê chương
+     = CHUONG_CAU_FE1/FE2 trong ~/Documents/video-bai-giang/src/bai/swr-fe27-1/du-lieu.ts (đếm 25/10). */
+  fe({
+    so: 1, ky: 'SP26 RE', dai: '', moc: [],
+    chuong: [
+      'Ch4 Phân tích & mô hình hoá 11 · Ch5 Đặc tả SRS & chất lượng 8 · Ch8 Prototyping 5 · Ch1 4 · nhóm BA / Vision & Scope / Tiếng nói người dùng 9 · Ch2 3 · Ch3 Khai thác 3 · Ch10 Ưu tiên 3 · Ch6 Thẩm định 2 · Business rules 2 · Ch7 1 · Ch9 Agile 1 · các chương sách 18–32 (tái dùng, ngoài phát triển, nâng cấp, COTS, outsource, công cụ, cải tiến, rủi ro) 8',
+      'Chương 4 và Chương 5 chiếm 19/60 câu ⇒ ôn hai chương này trước.',
+    ],
+    chuongEn: [
+      'Ch4 Analysis & modeling 11 · Ch5 SRS & quality 8 · Ch8 Prototyping 5 · Ch1 4 · BA / Vision & Scope / Voice of the user 9 · Ch2 3 · Ch3 Elicitation 3 · Ch10 Prioritization 3 · Ch6 Validation 2 · Business rules 2 · Ch7 1 · Ch9 Agile 1 · book chapters 18–32 (reuse, beyond RD, enhancement, COTS, outsourcing, tools, improvement, risk) 8',
+      'Chapters 4 and 5 make up 19 of the 60 questions — review them first.',
+    ],
+    luuY: [
+      'Câu 16: ảnh đề gốc bị mất hình sơ đồ «extend» — video vẽ lại hình để bạn đọc được câu hỏi.',
+      'Câu hỏi "đâu KHÔNG phải loại business rule" lặp lại ở cả ba đề kỳ này, mỗi đề một tên bịa — ở đề này là <i>workflows</i>. Năm loại thật: facts, constraints, action enablers, inferences, computations.',
+      'Có câu về dự án outsource (Ch.23 sách) — chương này không có bài riêng trên web, video giảng đủ trong câu.',
+    ],
+    luuYEn: [
+      'Q16: the original image lost its «extend» diagram — the video redraws it so the question can be read.',
+      '"Which is NOT a type of business rule" appears in all three papers of this term, each with a different made-up option — here it is <i>workflows</i>. The five real types: facts, constraints, action enablers, inferences, computations.',
+      'One question is on outsourced projects (book Ch.23), which has no separate lesson on this site — the video covers it fully in that question.',
+    ],
+    onLai: [L.uc, L.dfd, L.usage, L.srs, L.srsLabel, L.br, L.ba, L.vision, L.insp, L.cc, L.proto, L.prio],
+    meo: 'Đề hay hỏi đúng các danh sách của sách (loại business rule, đặc tính yêu cầu tốt, loại prototype, kỹ thuật ưu tiên) — thuộc các danh sách này là chắc điểm.',
+    meoEn: 'The paper keeps asking for the book’s lists (business rule types, characteristics of good requirements, prototype types, prioritization techniques) — knowing these lists is sure marks.',
+  }),
+  fe({
+    so: 2, ky: 'SP26 FE', dai: '', moc: [],
+    chuong: [
+      'Ch4 Phân tích & mô hình hoá 11 · Ch5 Đặc tả SRS & chất lượng 8 · Ch2 4 · Ch7 Quản lý yêu cầu 4 · nhóm BA / Vision & Scope / Tiếng nói người dùng 8 · Ch1 3 · Ch3 Khai thác 3 · Ch6 Thẩm định 3 · Ch8 Prototyping 3 · Ch10 Ưu tiên 3 · Business rules 2 · Ch9 Agile 1 · các chương sách 18–32 (tái dùng, ngoài phát triển, COTS, outsource, rủi ro) 7',
+      'Chương 4 và Chương 5 chiếm 19/60 câu ⇒ ôn hai chương này trước.',
+    ],
+    chuongEn: [
+      'Ch4 Analysis & modeling 11 · Ch5 SRS & quality 8 · Ch2 4 · Ch7 Requirements management 4 · BA / Vision & Scope / Voice of the user 8 · Ch1 3 · Ch3 Elicitation 3 · Ch6 Validation 3 · Ch8 Prototyping 3 · Ch10 Prioritization 3 · Business rules 2 · Ch9 Agile 1 · book chapters 18–32 (reuse, beyond RD, COTS, outsourcing, risk) 7',
+      'Chapters 4 and 5 make up 19 of the 60 questions — review them first.',
+    ],
+    luuY: [
+      'Câu 25 "đâu KHÔNG phải loại business rule": tên bịa ở đề này là <i>operational rules</i> (FE27 dùng process flows, FE1 dùng workflows). Năm loại thật: facts, constraints, action enablers, inferences, computations.',
+      'Câu 26: <i>exceptions</i> là điều kiện có thể làm use case thất bại; <i>alternative flows</i> vẫn tới đích thành công — hai khái niệm hay bị nhầm.',
+      'Có câu về dự án outsource (Ch.23 sách) — chương này không có bài riêng trên web, video giảng đủ trong câu.',
+    ],
+    luuYEn: [
+      'Q25 "which is NOT a type of business rule": the made-up option here is <i>operational rules</i> (FE27 used process flows, FE1 workflows). The five real types: facts, constraints, action enablers, inferences, computations.',
+      'Q26: <i>exceptions</i> are conditions that can make a use case fail; <i>alternative flows</i> still reach a successful end — an easy pair to confuse.',
+      'One question is on outsourced projects (book Ch.23), which has no separate lesson on this site — the video covers it fully in that question.',
+    ],
+    onLai: [L.uc, L.dfd, L.usage, L.srs, L.srsLabel, L.br, L.ba, L.vision, L.insp, L.cc, L.proto, L.prio],
+    meo: 'Đề hay hỏi đúng các danh sách của sách (loại business rule, đặc tính yêu cầu tốt, loại prototype, kỹ thuật ưu tiên) — thuộc các danh sách này là chắc điểm.',
+    meoEn: 'The paper keeps asking for the book’s lists (business rule types, characteristics of good requirements, prototype types, prioritization techniques) — knowing these lists is sure marks.',
+  }),
+].filter(Boolean);
 
 export default {
   title: '🎬 FE review — real final exams, fully solved on video|||🎬 Chữa trọn đề FE — đề trắc nghiệm thật, chữa từng câu bằng video',

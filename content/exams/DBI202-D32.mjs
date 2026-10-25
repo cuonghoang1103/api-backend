@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In query compiler, which unit transforms the initial query plan into the best available sequence of operations on the actual data?</p></div><div class=\"ml-vi\"><p>Trong bộ biên dịch truy vấn (query compiler), đơn vị nào biến đổi kế hoạch truy vấn ban đầu thành chuỗi thao tác tốt nhất hiện có trên dữ liệu thật?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D32/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D32-v2/q1.png",
           "options": [
             {
               "text": "A query parser|||Bộ phân tích cú pháp truy vấn (query parser)"

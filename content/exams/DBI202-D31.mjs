@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In the context of a DBMS, what is meant by &quot;data integrity&quot;?</p></div><div class=\"ml-vi\"><p>Trong ngữ cảnh của một DBMS, &quot;tính toàn vẹn dữ liệu&quot; (data integrity) nghĩa là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D31/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D31-v2/q1.png",
           "options": [
             {
               "text": "The ability to perform multiple queries simultaneously|||Khả năng thực hiện nhiều truy vấn đồng thời"

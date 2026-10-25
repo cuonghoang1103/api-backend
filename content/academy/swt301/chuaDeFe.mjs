@@ -120,8 +120,8 @@ const lessons = [
     meoEn: 'For questions with several statements (i, ii, iii…), judge each statement first, then match the options.',
   }),
   fe({
-    so: 25, ky: 'SP26', dai: '1 giờ 8 phút', // mốc + độ dài ƯỚC theo thoigian.json (25/10) — chỉnh theo mo-ta-chuong.txt khi ghép bản -tron
-    moc: [['0:00', 1, 15], ['16:58', 16, 30], ['33:41', 31, 45], ['51:06', 46, 60]],
+    so: 25, ky: 'SP26', dai: '1 giờ 8 phút',
+    moc: [['0:00', 1, 15], ['16:58', 16, 30], ['33:42', 31, 45], ['51:07', 46, 60]],
     chuong: [
       'Ch3 Kiểm thử tĩnh 13 · Ch7 Quản lý test 12 · Ch1 Nền tảng kiểm thử 10 · Ch8 Công cụ & tự động hoá 10 · Ch2 Kiểm thử xuyên suốt SDLC 9 · Ch4 Black-box 4 · Ch5 White-box 1 · Ch6 Dựa kinh nghiệm 1 · Ch9 Agile 0',
       'Chương 3 và Chương 7 chiếm 25/60 câu. Chỉ một câu tính (câu 32 — phân vùng tương đương).',
@@ -132,13 +132,13 @@ const lessons = [
     ],
     luuY: [
       'Có <b>một câu chọn hai đáp án</b> (câu 21: B + C) và năm câu có năm đáp án (A–E) — thấy chữ "TWO" thì tick đủ hai ô.',
-      'Cả 60 đáp án đã tự giải lại theo ISTQB và đều khớp Phòng thi. Ba câu mà <b>đề cũ chấm lệch</b>, hãy học theo đề này: câu 3 chọn "the objective of the test" (FE7 chấm C) · câu 7 chọn C (FE11 chấm A, FE7/FE20 chấm D) · câu 39 chọn bỏ bớt yêu cầu chưa làm (FE9/FE23 chấm "làm thêm giờ" — sai, ngày giao và chất lượng đã khoá thì chỉ còn cắt phạm vi).',
+      'Cả 60 đáp án đã tự giải lại theo ISTQB và đều khớp Phòng thi. Ba câu mà <b>đề cũ từng chấm lệch</b> (video có nhắc; từ 25/10 Phòng thi đã sửa các đề cũ cho thống nhất với đề này): câu 3 chọn "the objective of the test" (FE7 từng chấm C) · câu 7 chọn C — đề viết mơ hồ, FE11 từng chấm A, FE7/FE20 từng chấm D · câu 39 chọn bỏ bớt yêu cầu chưa làm (FE9/FE23 từng chấm "làm thêm giờ" — sai, ngày giao và chất lượng đã khoá thì chỉ còn cắt phạm vi).',
       'Đề hỏi một ý hai lần: câu 10 ↔ 45 (driver gọi, stub bị gọi), câu 51 ↔ 52 (hồi quy ⇒ ghi–phát lại), câu 29 ↔ 54 ↔ 57 (phân tích tĩnh), câu 19 ↔ 25 (inspection). Chữ bẫy: NOT, EXCEPT, least likely, MOST.',
       'Lỗ hổng nên ôn theo thứ tự: loại review, vai trò và các bước (Ch3) · quản lý test: kế hoạch, giám sát/kiểm soát, quản lý cấu hình, báo cáo sự cố (Ch7) · công cụ tĩnh/động, ghi–phát lại, chọn công cụ (Ch8) · cấp test và loại test: driver/stub, system, acceptance, confirmation (Ch2).',
     ],
     luuYEn: [
       'There is <b>one "choose TWO" question</b> (Q21: B + C) and five questions with five options (A–E) — when you see "TWO", tick both boxes.',
-      'All 60 answers were re-solved against ISTQB and match the Exam room. Three questions that <b>older papers grade differently</b> — learn this paper\'s answer: Q3 = "the objective of the test" (FE7 keys C) · Q7 = C (FE11 keys A, FE7/FE20 key D) · Q39 = drop some not-yet-implemented requirements (FE9/FE23 key "overtime" — wrong: with the date and quality fixed, scope is the only lever).',
+      'All 60 answers were re-solved against ISTQB and match the Exam room. Three questions that <b>older papers used to grade differently</b> (mentioned in the video; since 25/10 the Exam room has corrected those papers to match this one): Q3 = "the objective of the test" (FE7 used to key C) · Q7 = C — ambiguous wording, FE11 used to key A, FE7/FE20 D · Q39 = drop some not-yet-implemented requirements (FE9/FE23 used to key "overtime" — wrong: with the date and quality fixed, scope is the only lever).',
       'The paper asks some ideas twice: Q10 ↔ Q45 (driver calls, stub is called), Q51 ↔ Q52 (regression ⇒ capture/replay), Q29 ↔ Q54 ↔ Q57 (static analysis), Q19 ↔ Q25 (inspection). Trap words: NOT, EXCEPT, least likely, MOST.',
       'Weak spots in order: review types, roles and steps (Ch3) · test management: planning, monitoring/control, configuration management, incident reports (Ch7) · static/dynamic tools, capture/replay, tool selection (Ch8) · test levels and types: driver/stub, system, acceptance, confirmation (Ch2).',
     ],

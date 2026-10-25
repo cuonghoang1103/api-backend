@@ -377,7 +377,38 @@ XACT_STATE(): 1</div>
 </tbody>
 </table>
 Part A: <code>SAVE TRANSACTION diem_luu</code> marks a point; <code>ROLLBACK TRANSACTION diem_luu</code> undoes only the wrong <code>+9999</code> step, keeping the <code>-500</code> step and the outer transaction still open (<code>@@TRANCOUNT</code> stays 1). Part B: inside <code>CATCH</code>, <code>XACT_STATE()</code> measured <strong>1</strong> here (not -1) — a <code>CHECK</code> violation leaves the transaction still committable in principle, but the safe habit taught by Microsoft is always the same: if <code>XACT_STATE() &lt;&gt; 0</code>, <code>ROLLBACK</code>.</div>
-<p class="meo">🧠 <code>@@TRANCOUNT</code> counts how many <code>BEGIN TRANSACTION</code> are currently open (nesting level) — a plain <code>ROLLBACK TRANSACTION</code> (no name) always undoes back to the outermost <code>BEGIN</code>, whatever the count.</p>`,
+<p class="meo">🧠 <code>@@TRANCOUNT</code> counts how many <code>BEGIN TRANSACTION</code> are currently open (nesting level) — a plain <code>ROLLBACK TRANSACTION</code> (no name) always undoes back to the outermost <code>BEGIN</code>, whatever the count.</p>
+<div class="callout">⚠ <strong>No transaction = autocommit, in T-SQL too.</strong> Outside <code>BEGIN TRAN</code> every statement commits on its own; an error in a later statement (even a batch-aborting one like Msg 245) does NOT undo an earlier one. Checked for real:
+<pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (
+  soTK INT NOT NULL CONSTRAINT pk_taikhoan PRIMARY KEY,
+  soDu DECIMAL(10,0) NOT NULL CONSTRAINT ck_taikhoan_du CHECK (soDu &gt;= 0)
+);
+INSERT INTO dbo.TaiKhoan(soTK, soDu) VALUES (3209, 1000), (3208, 500);
+GO
+SELECT @@TRANCOUNT AS truocKhiChay;
+GO
+UPDATE dbo.TaiKhoan SET soDu = soDu - 500 WHERE soTK = 3209;
+UPDATE dbo.TaiKhoan SET soDu = soDu + CAST('5OO' AS INT) WHERE soTK = 3208;
+SELECT N'dòng này có chạy không?' AS x;
+GO
+SELECT @@TRANCOUNT AS sauKhiLoi, (SELECT soDu FROM dbo.TaiKhoan WHERE soTK = 3209) AS soDu3209;</code></pre>
+<div class="out">(2 rows affected)</div>
+<table>
+<thead><tr><th>truocKhiChay</th></tr></thead>
+<tbody>
+<tr><td>0</td></tr>
+</tbody>
+</table>
+<div class="out">(1 row affected)<br>
+<b>Msg 245, Level 16, State 1<br>
+Conversion failed when converting the varchar value '5OO' to data type int.</b></div>
+<table>
+<thead><tr><th>sauKhiLoi</th><th>soDu3209</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>500</td></tr>
+</tbody>
+</table>
+<code>@@TRANCOUNT</code> is 0 and account 3209 has lost 500 although the batch was aborted — all-or-nothing needs an explicit <code>BEGIN TRANSACTION</code>.</div>`,
         `<p class="y-chinh">🎯 Giao dịch bắt đầu bằng START TRANSACTION và kết thúc bằng COMMIT (thành công) hoặc ROLLBACK (huỷ, lùi lại mọi thứ).</p>
 <p>Giáo trình (Ullman &amp; Widom) viết từ khoá ANSI-SQL <code>START TRANSACTION</code>. <strong>T-SQL thật KHÔNG chấp nhận cách viết đó</strong> — đã kiểm thật:</p>
 <pre><code class="language-sql">-- Slide 12 says "Transaction begins by SQL command START TRANSACTION" — that is ANSI-SQL wording (the textbook).
@@ -531,7 +562,7 @@ XACT_STATE(): 1</div>
 </table>
 Phần A: <code>SAVE TRANSACTION diem_luu</code> đánh dấu một điểm; <code>ROLLBACK TRANSACTION diem_luu</code> chỉ huỷ bước <code>+9999</code> sai, giữ nguyên bước <code>-500</code> và giao dịch ngoài vẫn mở (<code>@@TRANCOUNT</code> vẫn là 1). Phần B: trong <code>CATCH</code>, <code>XACT_STATE()</code> đo được <strong>1</strong> ở đây (không phải -1) — vi phạm <code>CHECK</code> vẫn để giao dịch commit được về nguyên tắc, nhưng thói quen an toàn Microsoft dạy luôn giống nhau: nếu <code>XACT_STATE() &lt;&gt; 0</code> thì <code>ROLLBACK</code>.</div>
 <p class="meo">🧠 <code>@@TRANCOUNT</code> đếm số <code>BEGIN TRANSACTION</code> đang mở (mức lồng) — một <code>ROLLBACK TRANSACTION</code> trơn (không tên) luôn lùi về tận <code>BEGIN</code> ngoài cùng, bất kể mức lồng.</p>
-<div class="callout">🐘 <strong>Trên PostgreSQL</strong> từ khoá là <code>BEGIN</code> (không phải <code>BEGIN TRANSACTION</code>), và khi <strong>không</strong> có <code>BEGIN</code> nào cả thì mỗi câu tự commit ngay (autocommit) — khác T-SQL, nơi cả một script ngoài giao dịch vẫn có thể lùi lại bằng cơ chế batch:
+<div class="callout">🐘 <strong>Trên PostgreSQL</strong> từ khoá là <code>BEGIN</code> (không phải <code>BEGIN TRANSACTION</code>), và khi <strong>không</strong> có <code>BEGIN</code> nào cả thì mỗi câu tự commit ngay (autocommit):
 <pre><code class="language-sql">-- PostgreSQL: BEGIN (not BEGIN TRANSACTION) / COMMIT / ROLLBACK — and autocommit when there is no BEGIN at all
 BEGIN;
 CREATE TABLE taikhoan (
@@ -576,6 +607,37 @@ UPDATE 1</div>
 <tr><td>3209</td><td>1000</td></tr>
 </tbody>
 </table>
+T-SQL <strong>cũng vậy</strong> — ngoài <code>BEGIN TRAN</code>, mỗi câu tự chốt riêng; một lỗi ở câu sau (kể cả lỗi huỷ cả lô như Msg 245) KHÔNG lùi được câu trước. Đã kiểm thật:
+<pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (
+  soTK INT NOT NULL CONSTRAINT pk_taikhoan PRIMARY KEY,
+  soDu DECIMAL(10,0) NOT NULL CONSTRAINT ck_taikhoan_du CHECK (soDu &gt;= 0)
+);
+INSERT INTO dbo.TaiKhoan(soTK, soDu) VALUES (3209, 1000), (3208, 500);
+GO
+SELECT @@TRANCOUNT AS truocKhiChay;
+GO
+UPDATE dbo.TaiKhoan SET soDu = soDu - 500 WHERE soTK = 3209;
+UPDATE dbo.TaiKhoan SET soDu = soDu + CAST('5OO' AS INT) WHERE soTK = 3208;
+SELECT N'dòng này có chạy không?' AS x;
+GO
+SELECT @@TRANCOUNT AS sauKhiLoi, (SELECT soDu FROM dbo.TaiKhoan WHERE soTK = 3209) AS soDu3209;</code></pre>
+<div class="out">(2 rows affected)</div>
+<table>
+<thead><tr><th>truocKhiChay</th></tr></thead>
+<tbody>
+<tr><td>0</td></tr>
+</tbody>
+</table>
+<div class="out">(1 row affected)<br>
+<b>Msg 245, Level 16, State 1<br>
+Conversion failed when converting the varchar value '5OO' to data type int.</b></div>
+<table>
+<thead><tr><th>sauKhiLoi</th><th>soDu3209</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>500</td></tr>
+</tbody>
+</table>
+<code>@@TRANCOUNT</code> = 0 và tài khoản 3209 đã mất 500 dù lô bị huỷ — muốn "được ăn cả, ngã về không" thì phải có <code>BEGIN TRANSACTION</code> (slide 12).
 Bài liên quan: <a href="/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich">PostgreSQL 11.1 — giao dịch</a>.</div>`],
       [13, 'Atomicity Consistency Isolation Durability',
         `<p class="y-chinh">🎯 The four letters of ACID: Atomicity, Consistency, Isolation, Durability.</p>
@@ -915,6 +977,20 @@ DBCC USEROPTIONS;</code></pre>
 </tbody>
 </table>
 <div class="out">DBCC execution completed. If DBCC printed error messages, contact your system administrator.</div>
+<div class="pitfall">The slide spells it <code>READ UNCOMMITED</code> (one T). Copied as is, SQL Server refuses it — checked for real:
+<pre><code class="language-sql">SET TRANSACTION ISOLATION LEVEL READ UNCOMMITED;
+GO
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+SELECT N'đúng chính tả: hai chữ T' AS ketQua;</code></pre>
+<div class="out"><b>Msg 102, Level 15, State 1<br>
+Incorrect syntax near 'UNCOMMITED'.</b></div>
+<table>
+<thead><tr><th>ketQua</th></tr></thead>
+<tbody>
+<tr><td>đúng chính tả: hai chữ T</td></tr>
+</tbody>
+</table>
+The keyword is UNCOMMI<b>TT</b>ED, two T.</div>
 <p><code>DBCC USEROPTIONS</code> reads back the session's current isolation level after each <code>SET</code>, confirming it really took effect — this is a genuinely useful debugging command, not just a teaching trick.</p>
 <div class="callout">🐘 <strong>On PostgreSQL</strong> the keyword and level names are the same, but the <em>meaning</em> differs: PostgreSQL uses MVCC (multiversion concurrency control — every reader sees a private, consistent snapshot instead of being blocked), so it has <strong>no real READ UNCOMMITTED</strong> — asking for it silently behaves like READ COMMITTED, because dirty reads are structurally impossible under MVCC. The default is also READ COMMITTED:
 <pre><code class="language-sql">-- PostgreSQL: the same four names exist, but the default and the mechanism differ from SQL Server
@@ -1046,6 +1122,20 @@ DBCC USEROPTIONS;</code></pre>
 </tbody>
 </table>
 <div class="out">DBCC execution completed. If DBCC printed error messages, contact your system administrator.</div>
+<div class="pitfall">Slide gõ <code>READ UNCOMMITED</code> (thiếu một chữ T). Chép nguyên vào là SQL Server từ chối — đã kiểm thật:
+<pre><code class="language-sql">SET TRANSACTION ISOLATION LEVEL READ UNCOMMITED;
+GO
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+SELECT N'đúng chính tả: hai chữ T' AS ketQua;</code></pre>
+<div class="out"><b>Msg 102, Level 15, State 1<br>
+Incorrect syntax near 'UNCOMMITED'.</b></div>
+<table>
+<thead><tr><th>ketQua</th></tr></thead>
+<tbody>
+<tr><td>đúng chính tả: hai chữ T</td></tr>
+</tbody>
+</table>
+Từ khoá đúng là UNCOMMI<b>TT</b>ED, hai chữ T.</div>
 <p><code>DBCC USEROPTIONS</code> đọc lại mức cô lập hiện tại của phiên sau mỗi <code>SET</code>, xác nhận nó thật sự có hiệu lực — đây là lệnh gỡ lỗi thật sự hữu ích, không chỉ là mẹo dạy học.</p>
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong> tên từ khoá và tên mức giống hệt, nhưng <em>ý nghĩa</em> khác: PostgreSQL dùng MVCC (kiểm soát đồng thời đa phiên bản — multiversion concurrency control; mỗi người đọc thấy một ảnh chụp riêng, nhất quán thay vì bị chặn), nên <strong>không có READ UNCOMMITTED thật</strong> — yêu cầu nó thì lặng lẽ hành xử như READ COMMITTED, vì đọc bẩn về cấu trúc là không thể xảy ra dưới MVCC. Mặc định cũng là READ COMMITTED:
 <pre><code class="language-sql">-- PostgreSQL: the same four names exist, but the default and the mechanism differ from SQL Server
@@ -1214,7 +1304,7 @@ SET STATISTICS PROFILE OFF;</code></pre>
 </tbody>
 </table>
 <p>Read the <code>StmtText</code> column of each plan (<code>SET STATISTICS PROFILE ON</code> prints the plan as text — SSMS's graphical plan shows the same tree as icons). Before the index: <strong>Clustered Index Scan</strong> on <code>pk_student</code> — the engine reads all 30,000 rows in primary-key order, checking each one's <code>name</code>. After <code>CREATE NONCLUSTERED INDEX idx_student_name ON dbo.Student(name)</code>: <strong>Index Seek</strong> — it jumps straight to the matching leaf. Same 1-row answer, radically different amount of work.</p>
-<div class="pitfall"><code>DROP INDEX</code> in T-SQL needs the table name: <code>DROP INDEX idx_student_name ON dbo.Student;</code> (the slide's bare <code>DROP INDEX index_name</code> is the ANSI-SQL form again — real T-SQL requires <code>ON tablename</code>).</div>`,
+<div class="pitfall"><code>DROP INDEX</code> in T-SQL needs the table name: <code>DROP INDEX idx_student_name ON dbo.Student;</code> (the slide's bare <code>DROP INDEX index_name</code> is PostgreSQL/Oracle syntax — standard SQL does not define indexes at all; real T-SQL requires <code>ON tablename</code>, otherwise Msg 159).</div>`,
         `<p class="y-chinh">🎯 Cú pháp thật: CREATE CLUSTERED INDEX, CREATE NONCLUSTERED INDEX, DROP INDEX — slide ghi "//demo required" (cần demo), nên đây là một demo thật đầy đủ.</p>
 <pre><code class="language-plaintext">CREATE CLUSTERED INDEX tên_chỉ_mục ON dbo.TênBảng(Cột1, Cột2...)
 CREATE NONCLUSTERED INDEX tên_chỉ_mục ON dbo.TênBảng(Cột1, Cột2...)
@@ -1273,7 +1363,7 @@ SET STATISTICS PROFILE OFF;</code></pre>
 </tbody>
 </table>
 <p>Đọc cột <code>StmtText</code> của mỗi kế hoạch (<code>SET STATISTICS PROFILE ON</code> in kế hoạch dạng chữ — kế hoạch đồ hoạ của SSMS vẽ đúng cây này bằng biểu tượng). Trước khi có chỉ mục: <strong>Clustered Index Scan</strong> trên <code>pk_student</code> — engine đọc cả 30.000 dòng theo thứ tự khoá chính, kiểm <code>name</code> từng dòng. Sau <code>CREATE NONCLUSTERED INDEX idx_student_name ON dbo.Student(name)</code>: <strong>Index Seek</strong> — nó nhảy thẳng tới trang lá khớp. Cùng một kết quả 1 dòng, khối lượng công việc khác nhau hoàn toàn.</p>
-<div class="pitfall"><code>DROP INDEX</code> trong T-SQL cần tên bảng: <code>DROP INDEX idx_student_name ON dbo.Student;</code> (<code>DROP INDEX tên_chỉ_mục</code> trơn của slide lại là dạng ANSI-SQL — T-SQL thật cần <code>ON tênbảng</code>).</div>
+<div class="pitfall"><code>DROP INDEX</code> trong T-SQL cần tên bảng: <code>DROP INDEX idx_student_name ON dbo.Student;</code> (<code>DROP INDEX tên_chỉ_mục</code> trơn của slide là cú pháp của PostgreSQL/Oracle — chuẩn SQL không định nghĩa chỉ mục; T-SQL thật cần <code>ON tênbảng</code>, thiếu là Msg 159).</div>
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong> không có từ khoá CLUSTERED/NONCLUSTERED: mọi bảng mặc định là một "heap" (đống, không sắp xếp), và <code>CLUSTER</code> chỉ sắp xếp lại VẬT LÝ MỘT LẦN (không tự duy trì thứ tự sau đó, khác clustered index của SQL Server). <code>EXPLAIN ANALYZE</code> thay cho <code>SET STATISTICS PROFILE</code>:
 <pre><code class="language-sql">-- PostgreSQL: no CLUSTERED/NONCLUSTERED keyword — every table is a heap unless you CLUSTER it once (a one-time
 -- physical reorder, not maintained after). EXPLAIN ANALYZE replaces SET STATISTICS PROFILE.
@@ -1309,7 +1399,7 @@ Trước chỉ mục: <code>Seq Scan</code> (quét tuần tự). Sau <code>CREAT
       [25, 'Index design guidelines',
         `<p class="y-chinh">🎯 Choosing indexes is a real design decision: it depends on table size, data distribution and, most of all, the query/update load — plus column type, number of indexes, storage, and query design.</p>
 <ul>
-<li><strong>Table size: large enough.</strong> A tiny table is faster to just scan than to seek through an index (the engine may even ignore a small table's index — you will see exactly this in the practice exercises).</li>
+<li><strong>Table size: large enough.</strong> A tiny table is faster to just scan than to seek through an index (on a table of a few rows, seeking through an index reads as many pages as scanning the whole table — the index buys nothing, yet every write still has to maintain it).</li>
 <li><strong>Column types</strong>: small, fixed-size columns (<code>INT</code>, <code>BIGINT</code>) make the smallest, fastest indexes. An identity (auto-increment) or a static (rarely-changed) column is naturally unique/NOT NULL — a good clustered-index candidate.</li>
 <li><strong>Number of indexes</strong>: every index speeds up reads but slows down every <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> (it must be maintained too) and uses disk — don't over-index.</li>
 <li><strong>Query design</strong>: an index only helps a query written in a way the engine can use — see the two demos below.</li>
@@ -1478,7 +1568,7 @@ SET STATISTICS PROFILE OFF;</code></pre>
 <p class="pitfall">This is one of the most common real-world performance bugs: wrapping an indexed column in a function (<code>UPPER()</code>, <code>YEAR()</code>, <code>CONVERT()</code>…) silently throws the index away. Fix by comparing the RAW column (<code>name = 'MARY' COLLATE …</code> or storing a normalised copy) instead of transforming the column in <code>WHERE</code>.</p>`,
         `<p class="y-chinh">🎯 Chọn chỉ mục là một quyết định thiết kế thật: phụ thuộc kích thước bảng, phân bố dữ liệu và, quan trọng nhất, khối lượng truy vấn/cập nhật — cộng thêm kiểu cột, số lượng chỉ mục, nơi lưu trữ, và cách thiết kế truy vấn.</p>
 <ul>
-<li><strong>Kích thước bảng: đủ lớn.</strong> Một bảng nhỏ xíu quét thẳng còn nhanh hơn tìm qua chỉ mục (engine có thể lờ luôn chỉ mục của bảng nhỏ — bạn sẽ thấy đúng việc này ở bài thực hành).</li>
+<li><strong>Kích thước bảng: đủ lớn.</strong> Một bảng nhỏ xíu quét thẳng còn nhanh hơn tìm qua chỉ mục (với bảng vài dòng, tìm qua chỉ mục cũng đọc ngần ấy trang như quét cả bảng — chỉ mục không đem lại lợi gì mà mỗi lần ghi vẫn phải cập nhật nó).</li>
 <li><strong>Kiểu cột</strong>: cột nhỏ, kích thước cố định (<code>INT</code>, <code>BIGINT</code>) cho chỉ mục nhỏ nhất, nhanh nhất. Cột tự tăng (identity) hay tĩnh (ít đổi) tự nhiên là duy nhất/NOT NULL — ứng viên tốt cho clustered index.</li>
 <li><strong>Số lượng chỉ mục</strong>: mỗi chỉ mục tăng tốc đọc nhưng làm chậm mọi <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> (nó cũng phải được duy trì) và tốn đĩa — đừng lạm dụng.</li>
 <li><strong>Thiết kế truy vấn</strong>: chỉ mục chỉ giúp được truy vấn viết theo cách engine dùng được nó — xem hai demo dưới.</li>
@@ -2534,6 +2624,18 @@ SELECT * FROM Employee_Dep1v2 WHERE empSSN = 100001;</code></pre>
 <tr><td>(0 rows)</td><td></td><td></td><td></td></tr>
 </tbody>
 </table>
+<div class="pitfall">The slide's own code reads <code>INSERT INT Employee_Dep1v2 …</code> (the O is missing). Copied as is it fails with Msg 102 — checked for real:
+<pre><code class="language-sql">CREATE VIEW Employee_Dep1v2 AS
+SELECT te.empSSN, te.empName, te.empSalary, te.empSex
+FROM tblEmployee te WHERE te.depNum = 1;
+GO
+INSERT INT Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M');   -- y như slide 39
+GO
+INSERT INTO Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M');</code></pre>
+<div class="out"><b>Msg 102, Level 15, State 1<br>
+Incorrect syntax near 'Employee_Dep1v2'.</b><br>
+(1 row affected)</div>
+</div>
 <p><code>INSERT INTO Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M')</code> supplies only the view's four columns. SQL Server fills the missing <code>depNum</code> with its default — here, <code>NULL</code> (no <code>DEFAULT</code> was declared on that column). The base-table query proves the row exists with <code>depNum = NULL</code>. But <code>Employee_Dep1v2</code>'s own definition is <code>WHERE depNum = 1</code> — and <code>NULL = 1</code> is <code>UNKNOWN</code>, not <code>TRUE</code> — so the view's own <code>WHERE</code> filters the row right back out. You inserted "through the window" and the row fell out the other side.</p>
 <p class="pitfall">This is the "unexpected result" the slide title warns about — and a direct consequence of Chapter 5's three-valued logic (<code>WHERE</code> keeps only <code>TRUE</code> rows), now showing up through a view instead of a plain query.</p>`,
         `<p class="y-chinh">🎯 Chèn QUA VIEW — depNum không phải cột của view, nên bị bỏ khỏi câu INSERT và lặng lẽ thành NULL, không phải 1. Dòng mới sau đó biến mất khỏi chính view bạn vừa chèn qua.</p>
@@ -2562,6 +2664,18 @@ SELECT * FROM Employee_Dep1v2 WHERE empSSN = 100001;</code></pre>
 <tr><td>(0 dòng)</td><td></td><td></td><td></td></tr>
 </tbody>
 </table>
+<div class="pitfall">Code trên slide viết <code>INSERT INT Employee_Dep1v2 …</code> (thiếu chữ O). Chép nguyên là lỗi Msg 102 — đã kiểm thật:
+<pre><code class="language-sql">CREATE VIEW Employee_Dep1v2 AS
+SELECT te.empSSN, te.empName, te.empSalary, te.empSex
+FROM tblEmployee te WHERE te.depNum = 1;
+GO
+INSERT INT Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M');   -- y như slide 39
+GO
+INSERT INTO Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M');</code></pre>
+<div class="out"><b>Msg 102, Level 15, State 1<br>
+Incorrect syntax near 'Employee_Dep1v2'.</b><br>
+(1 row affected)</div>
+</div>
 <p><code>INSERT INTO Employee_Dep1v2 VALUES (100001, N'Lê Văn Bảy', 100000, 'M')</code> chỉ đưa bốn cột của view. SQL Server điền <code>depNum</code> còn thiếu bằng giá trị mặc định — ở đây là <code>NULL</code> (cột đó chưa khai báo <code>DEFAULT</code>). Truy vấn bảng gốc chứng minh dòng đó tồn tại với <code>depNum = NULL</code>. Nhưng chính định nghĩa của <code>Employee_Dep1v2</code> là <code>WHERE depNum = 1</code> — mà <code>NULL = 1</code> là <code>UNKNOWN</code>, không phải <code>TRUE</code> — nên WHERE của chính view lọc luôn dòng đó ra ngoài. Bạn chèn "qua cửa sổ" và dòng rơi ra phía bên kia.</p>
 <p class="pitfall">Đây chính là "kết quả bất ngờ" tiêu đề slide cảnh báo — và là hệ quả trực tiếp của lô-gic ba trị ở Chương 5 (<code>WHERE</code> chỉ giữ dòng <code>TRUE</code>), giờ xuất hiện qua một view thay vì một truy vấn trơn.</p>`],
       [40, 'Update on view raises error on table',

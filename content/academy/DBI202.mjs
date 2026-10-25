@@ -2663,20 +2663,37 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
           title: '9.1 — The 85-minute Practical Exam: an SQL playbook|||9.1 — Thi thực hành 85 phút: cẩm nang SQL',
           slug: 'dbi202-on-pe',
           type: 'VIDEO',
-          description: 'Cấu trúc điểm DBI202, phân bổ thời gian, thứ tự làm bài, và 10 mẫu truy vấn bao phủ hầu hết đề.',
+          description: 'Đề PE thật (SP26): Q1 ERD → CREATE TABLE, Q2–Q7 truy vấn, Q8 thủ tục OUTPUT, Q9 trigger, Q10 sửa dữ liệu; luật nộp bài (mỗi câu 1 tệp, cấm GO/USE/lệnh thử — vi phạm là 0), chia 85 phút, 10 khuôn truy vấn.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Exam prep · Lesson 9.1</span>
-<h2>What the PE actually asks — and the order to do it in</h2>
-<p class="lead">DBI202 is graded Assignment 20% + Lab 10% (5 labs) + <b>Practical Exam 30%</b> + Progress Tests 10% + Final Exam 30% (FE must reach 4/10). The PE gives you 85 minutes and a schema, and asks for DDL, queries and usually one procedure or trigger.</p>
+<h2>What the PE actually asks — and the rules that turn a correct answer into a zero</h2>
+<p class="lead">DBI202 is graded Assignment 20% + Lab 10% (5 labs) + <b>Practical Exam 30%</b> + Progress Tests 10% + Final Exam 30% (FE must reach 4/10). The PE lasts 85 minutes. You receive <b>paper.pdf</b> and <b>DBscript.sql</b>; you hand in <b>one file per question</b>, Q1.sql … Q10.sql. Checked against the real SP26 papers in the Exam Room (DBI202-PE1 … PE3).</p>
 
-<h3>Time budget</h3>
+<h3>How a real paper is built (SP26)</h3>
+<table><thead><tr><th>Question</th><th>Marks</th><th>What it asks</th></tr></thead><tbody>
+<tr><td>Q1</td><td>1.5</td><td>Turn the ERD on the paper into <span class="badge">CREATE TABLE</span> statements — exact table/column names and data types, primary keys, foreign keys, M–N relationships as their own table, multivalued attributes as their own table.</td></tr>
+<tr><td>Q2</td><td>0.5</td><td>An easy query (filter one table). From Q2 on you work on the database built by <span class="badge">DBscript.sql</span>.</td></tr>
+<tr><td>Q3–Q7</td><td>1 each</td><td>Queries: joins, "more than X", per-group maximum, ordering, "every…" (division). Each one shows the expected result as a picture — same columns, same order, same rows.</td></tr>
+<tr><td>Q8</td><td>1</td><td>A stored procedure with an <span class="badge">OUTPUT</span> parameter (or a table-valued function). The paper prints the test call, e.g. <span class="badge">declare @x int exec pr… 'UK', @x output select @x</span>.</td></tr>
+<tr><td>Q9</td><td>1</td><td>A trigger (typically "after insert, display the inserted rows", or an INSTEAD OF trigger).</td></tr>
+<tr><td>Q10</td><td>1</td><td>A data change — <span class="badge">DELETE</span> / <span class="badge">UPDATE</span> / <span class="badge">INSERT … SELECT</span> based on a join.</td></tr>
+</tbody></table>
+
+<div class="pitfall"><b>The hand-in rules (printed on the paper — break any one and the mark is 0):</b><br>
+• Folder <span class="badge">RollNo_Name_DBI202_PaperNo</span>, no sub-folder; files <span class="badge">Q1.sql</span> … <span class="badge">Q10.sql</span>.<br>
+• <b>No command containing the database name</b>: no <span class="badge">CREATE DATABASE</span>, <span class="badge">ALTER DATABASE</span>, <span class="badge">USE [db]</span>.<br>
+• <b>No <span class="badge">GO</span>.</b><br>
+• Each file holds <b>only</b> the statement that answers the question — for a procedure or trigger, only its <span class="badge">CREATE</span>; <b>test commands are forbidden</b> (no <span class="badge">EXEC</span>, no test <span class="badge">INSERT</span> left in Q8/Q9).<br>
+• Only SQL Server, SSMS and offline documents.</div>
+
+<h3>Time budget for 85 minutes</h3>
 <table><thead><tr><th>Minutes</th><th>Task</th><th>Note</th></tr></thead><tbody>
-<tr><td>0–5</td><td>Read every question; note the marks</td><td>Queries carry more marks per minute than DDL. Do not start at question 1 by reflex.</td></tr>
-<tr><td>5–20</td><td>Write the CREATE TABLE script and insert the sample data</td><td>Everything else depends on it. Parents before children.</td></tr>
-<tr><td>20–60</td><td>The queries, easiest first</td><td>Run each one immediately; a query that returns rows is a query that scores.</td></tr>
-<tr><td>60–80</td><td>Procedure / trigger / view</td><td>These are worth the most but cost the most — attempt them only with a working script.</td></tr>
-<tr><td>80–85</td><td>Re-run the whole script top to bottom on a clean database</td><td>Markers run your file as a whole. A script that fails at line 3 scores almost nothing.</td></tr>
+<tr><td>0–5</td><td>Run DBscript.sql; read every question and its expected-result picture</td><td>Note the columns and the ORDER BY each picture implies.</td></tr>
+<tr><td>5–20</td><td>Q1: ERD → CREATE TABLE, tested in a scratch database of your own</td><td>Parents before children. Copy only the CREATE TABLE statements into Q1.sql.</td></tr>
+<tr><td>20–55</td><td>Q2–Q7, easiest first</td><td>Compare your output with the picture row by row before moving on.</td></tr>
+<tr><td>55–78</td><td>Q8–Q10</td><td>Test in a separate window inside <span class="badge">BEGIN TRAN … ROLLBACK</span> so the DBscript data stays intact; save only the answer statement.</td></tr>
+<tr><td>78–85</td><td>Open every Q file and check the rules</td><td>No GO, no database name, no test lines, each file runs on its own.</td></tr>
 </tbody></table>
 
 <h3>The ten query patterns that cover most papers</h3>
@@ -2685,47 +2702,57 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <b>3. Aggregate per group:</b> <span class="badge">GROUP BY did HAVING COUNT(*) &gt; 3</span> — WHERE filters rows, HAVING filters groups.<br>
 <b>4. Top N:</b> <span class="badge">SELECT TOP 3 … ORDER BY gpa DESC</span> (never <span class="badge">LIMIT</span> in SQL Server).<br>
 <b>5. "Has none":</b> LEFT JOIN + <span class="badge">WHERE child.key IS NULL</span> (lesson 6.2).<br>
-<b>6. "Above the average":</b> <span class="badge">WHERE salary &gt; (SELECT AVG(salary) FROM Employee)</span>.<br>
-<b>7. Per-group maximum:</b> join the table to <span class="badge">(SELECT did, MAX(salary) m FROM Employee GROUP BY did)</span>.<br>
-<b>8. "Has all":</b> the double <span class="badge">NOT EXISTS</span>, or COUNT DISTINCT = total (lesson 6.4).<br>
+<b>6. "More than X":</b> compare with a subquery, e.g. <span class="badge">HAVING COUNT(*) &gt; (SELECT COUNT(*) … WHERE JobID = 'IT_PROG')</span>.<br>
+<b>7. Per-group maximum:</b> join the table to <span class="badge">(SELECT did, MAX(salary) m FROM Employee GROUP BY did)</span> — ties are kept.<br>
+<b>8. "Has all / every":</b> the double <span class="badge">NOT EXISTS</span>, or COUNT DISTINCT = total (lesson 6.4).<br>
 <b>9. Date range:</b> <span class="badge">WHERE d &gt;= '2026-01-01' AND d &lt; '2027-01-01'</span> — never <span class="badge">YEAR(d) = 2026</span>.<br>
-<b>10. Update from another table:</b> <span class="badge">UPDATE e SET … FROM Employee e JOIN … WHERE …</span> (lesson 6.5).</div>
+<b>10. Change data from a join:</b> <span class="badge">DELETE e FROM Employees e JOIN Departments d ON … WHERE d.DepartmentName = 'IT'</span> (lesson 6.5).</div>
 
-<h3>A script skeleton that always works</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
-<span class="tok-keyword">GO</span>
-<span class="tok-keyword">USE</span> PE_Test;
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 1. tables: parents first</span>
-<span class="tok-keyword">CREATE TABLE</span> Department (did <span class="tok-type">INT PRIMARY KEY</span>, dname <span class="tok-type">NVARCHAR</span>(50) <span class="tok-keyword">NOT NULL</span>);
-<span class="tok-keyword">CREATE TABLE</span> Employee (
-    eid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>,
-    salary <span class="tok-type">DECIMAL</span>(18,2) <span class="tok-keyword">CHECK</span> (salary &gt; 0),
-    did <span class="tok-type">INT REFERENCES</span> Department(did));
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 2. sample data</span>
-<span class="tok-keyword">INSERT INTO</span> Department <span class="tok-keyword">VALUES</span> (10, N<span class="tok-string">'Sales'</span>), (20, N<span class="tok-string">'IT'</span>);
-<span class="tok-keyword">INSERT INTO</span> Employee <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, 1000, 10), (2, N<span class="tok-string">'Bình'</span>, 2000, 20);
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 3. Question 1: ...</span></code></pre>
-<p>Keep every answer under a numbered comment. A marker reading 200 lines needs to find question 5 in two seconds.</p>
+<h3>What a correct answer file looks like</h3>
+<pre><code class="language-sql"><span class="tok-comment">-- Q8.sql : only the CREATE statement, no GO, no test call</span>
+<span class="tok-keyword">CREATE PROCEDURE</span> prNumberOfDepartments
+    @countryID <span class="tok-type">VARCHAR</span>(10), @numberOfDepartments <span class="tok-type">INT</span> <span class="tok-keyword">OUTPUT</span>
+<span class="tok-keyword">AS</span>
+<span class="tok-keyword">BEGIN</span>
+    <span class="tok-keyword">SELECT</span> @numberOfDepartments = <span class="tok-function">COUNT</span>(*)
+    <span class="tok-keyword">FROM</span> Departments d <span class="tok-keyword">JOIN</span> Locations l <span class="tok-keyword">ON</span> d.LocationID = l.LocationID
+    <span class="tok-keyword">WHERE</span> l.CountryID = @countryID
+<span class="tok-keyword">END</span></code></pre>
+<p>The test call printed on the paper (<span class="badge">declare @x int exec … @x output select @x</span>) is what <b>you</b> run in another window — it must not be in Q8.sql.</p>
 
-<div class="pitfall"><b>Three things that lose marks after the SQL is already correct:</b> (1) missing <span class="badge">N</span> before Vietnamese literals, so the marker's data shows "Nguy?n Th? Hoà"; (2) forgetting <span class="badge">GO</span> between batches, so <span class="badge">CREATE PROCEDURE</span> fails with "must be the first statement in a batch"; (3) creating objects in the wrong database because you skipped <span class="badge">USE</span>.</div>
+<div class="pitfall"><b>Things that lose marks after the SQL is already correct:</b> (1) a <span class="badge">USE</span>, <span class="badge">GO</span> or test line left in the file — the whole answer scores 0; (2) different column names or column order from the expected-result picture; (3) a missing <span class="badge">ORDER BY</span> when the picture is sorted; (4) a missing <span class="badge">N</span> before Vietnamese literals, so the data shows "Nguy?n Th? Hoà"; (5) Q1 names or data types changed from the ERD.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write the script so it can be run twice.</b> Start each object with <span class="badge">IF OBJECT_ID('dbo.Employee','U') IS NOT NULL DROP TABLE dbo.Employee;</span> (children first). You can then re-run the whole file after every edit instead of hunting for the last statement you changed — and the marker can too. Idempotent scripts are also exactly what migration tools require in production. <em>Beyond syllabus because nobody teaches it, yet it is the difference between a calm 85 minutes and a panicked one.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Test like a professional: never on the real data.</b> Wrap every trial of Q8–Q10 in <span class="badge">BEGIN TRAN … ROLLBACK</span> (lesson 8.3); if you did break the data, simply re-run DBscript.sql. Keeping "the answer" and "the test harness" in separate files is exactly how migration scripts and unit tests are organised in real projects — the PE rules are forcing a good habit on you. <em>Beyond syllabus because the course teaches the SQL, not the workflow around it.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Ôn thi · Bài 9.1</span>
-<h2>PE thật sự hỏi gì — và nên làm theo thứ tự nào</h2>
-<p class="lead">DBI202 chấm theo Assignment 20% + Lab 10% (5 bài) + <b>Thi thực hành 30%</b> + Progress Test 10% + Thi cuối kỳ 30% (FE phải đạt 4/10). PE cho bạn 85 phút cùng một lược đồ, và yêu cầu DDL, các truy vấn, và thường là một thủ tục hoặc trigger.</p>
+<h2>PE thật sự hỏi gì — và những luật biến câu trả lời đúng thành 0 điểm</h2>
+<p class="lead">DBI202 chấm theo Assignment 20% + Lab 10% (5 bài) + <b>Thi thực hành 30%</b> + Progress Test 10% + Thi cuối kỳ 30% (FE phải đạt 4/10). PE kéo dài 85 phút. Bạn nhận <b>paper.pdf</b> và <b>DBscript.sql</b>; bạn nộp <b>mỗi câu một tệp</b>, Q1.sql … Q10.sql. Đã đối chiếu với các đề SP26 thật trong Phòng thi (DBI202-PE1 … PE3).</p>
 
-<h3>Phân bổ thời gian</h3>
+<h3>Một đề thật được dựng thế nào (SP26)</h3>
+<table><thead><tr><th>Câu</th><th>Điểm</th><th>Đề hỏi gì</th></tr></thead><tbody>
+<tr><td>Q1</td><td>1.5</td><td>Chuyển ERD trên đề thành các lệnh <span class="badge">CREATE TABLE</span> — giữ đúng tên bảng/cột và kiểu dữ liệu, khoá chính, khoá ngoại, liên kết nhiều–nhiều thành bảng riêng, thuộc tính đa trị thành bảng riêng.</td></tr>
+<tr><td>Q2</td><td>0.5</td><td>Một truy vấn dễ (lọc một bảng). Từ Q2 trở đi làm trên database do <span class="badge">DBscript.sql</span> dựng.</td></tr>
+<tr><td>Q3–Q7</td><td>1 mỗi câu</td><td>Truy vấn: nối bảng, "nhiều hơn X", lớn nhất theo nhóm, sắp xếp, "mọi…" (phép chia). Câu nào cũng có ảnh kết quả mong đợi — cùng cột, cùng thứ tự, cùng các dòng.</td></tr>
+<tr><td>Q8</td><td>1</td><td>Thủ tục có tham số <span class="badge">OUTPUT</span> (hoặc hàm trả bảng). Đề in sẵn lệnh gọi thử, vd <span class="badge">declare @x int exec pr… 'UK', @x output select @x</span>.</td></tr>
+<tr><td>Q9</td><td>1</td><td>Một trigger (thường là "sau khi chèn thì hiện các dòng vừa chèn", hoặc trigger INSTEAD OF).</td></tr>
+<tr><td>Q10</td><td>1</td><td>Một lệnh sửa dữ liệu — <span class="badge">DELETE</span> / <span class="badge">UPDATE</span> / <span class="badge">INSERT … SELECT</span> dựa trên phép nối.</td></tr>
+</tbody></table>
+
+<div class="pitfall"><b>Luật nộp bài (in ngay trên đề — vi phạm một điều là 0 điểm):</b><br>
+• Thư mục <span class="badge">RollNo_Name_DBI202_PaperNo</span>, không có thư mục con; các tệp <span class="badge">Q1.sql</span> … <span class="badge">Q10.sql</span>.<br>
+• <b>Không lệnh nào chứa tên database</b>: không <span class="badge">CREATE DATABASE</span>, <span class="badge">ALTER DATABASE</span>, <span class="badge">USE [db]</span>.<br>
+• <b>Không dùng <span class="badge">GO</span>.</b><br>
+• Mỗi tệp <b>chỉ</b> chứa lệnh trả lời câu hỏi — thủ tục hay trigger thì chỉ có lệnh <span class="badge">CREATE</span> của nó; <b>cấm lệnh chạy thử</b> (không để <span class="badge">EXEC</span> hay <span class="badge">INSERT</span> thử trong Q8/Q9).<br>
+• Chỉ dùng SQL Server, SSMS và tài liệu offline.</div>
+
+<h3>Phân bổ 85 phút</h3>
 <table><thead><tr><th>Phút</th><th>Việc</th><th>Ghi chú</th></tr></thead><tbody>
-<tr><td>0–5</td><td>Đọc hết mọi câu; ghi lại điểm từng câu</td><td>Truy vấn ăn nhiều điểm trên mỗi phút hơn DDL. Đừng theo phản xạ mà bắt đầu từ câu 1.</td></tr>
-<tr><td>5–20</td><td>Viết script CREATE TABLE và chèn dữ liệu mẫu</td><td>Mọi thứ khác phụ thuộc vào nó. Bảng cha trước, bảng con sau.</td></tr>
-<tr><td>20–60</td><td>Các truy vấn, dễ trước</td><td>Chạy thử ngay từng câu; truy vấn trả ra dòng là truy vấn ăn điểm.</td></tr>
-<tr><td>60–80</td><td>Thủ tục / trigger / view</td><td>Điểm cao nhất nhưng cũng tốn nhất — chỉ làm khi script đã chạy được.</td></tr>
-<tr><td>80–85</td><td>Chạy lại toàn bộ script từ đầu tới cuối trên một cơ sở dữ liệu sạch</td><td>Người chấm chạy cả tệp của bạn. Script chết ở dòng 3 thì gần như không được điểm nào.</td></tr>
+<tr><td>0–5</td><td>Chạy DBscript.sql; đọc hết mọi câu và ảnh kết quả mong đợi</td><td>Ghi lại các cột và thứ tự sắp xếp mà từng ảnh ngầm yêu cầu.</td></tr>
+<tr><td>5–20</td><td>Q1: ERD → CREATE TABLE, chạy thử trong một database nháp của riêng bạn</td><td>Bảng cha trước, bảng con sau. Chỉ chép các lệnh CREATE TABLE vào Q1.sql.</td></tr>
+<tr><td>20–55</td><td>Q2–Q7, dễ trước</td><td>So output của bạn với ảnh từng dòng rồi mới sang câu khác.</td></tr>
+<tr><td>55–78</td><td>Q8–Q10</td><td>Chạy thử ở một cửa sổ riêng, bọc trong <span class="badge">BEGIN TRAN … ROLLBACK</span> để dữ liệu DBscript còn nguyên; chỉ lưu lệnh trả lời.</td></tr>
+<tr><td>78–85</td><td>Mở lại từng tệp Q và soát luật</td><td>Không GO, không tên database, không dòng chạy thử, mỗi tệp chạy độc lập được.</td></tr>
 </tbody></table>
 
 <h3>Mười khuôn truy vấn phủ hầu hết đề thi</h3>
@@ -2734,34 +2761,27 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <b>3. Tổng hợp theo nhóm:</b> <span class="badge">GROUP BY did HAVING COUNT(*) &gt; 3</span> — WHERE lọc dòng, HAVING lọc nhóm.<br>
 <b>4. Top N:</b> <span class="badge">SELECT TOP 3 … ORDER BY gpa DESC</span> (đừng bao giờ dùng <span class="badge">LIMIT</span> trong SQL Server).<br>
 <b>5. "Không có cái nào":</b> LEFT JOIN + <span class="badge">WHERE khoá_con IS NULL</span> (bài 6.2).<br>
-<b>6. "Trên mức trung bình":</b> <span class="badge">WHERE salary &gt; (SELECT AVG(salary) FROM Employee)</span>.<br>
-<b>7. Cực đại theo từng nhóm:</b> nối bảng với <span class="badge">(SELECT did, MAX(salary) m FROM Employee GROUP BY did)</span>.<br>
-<b>8. "Có tất cả":</b> hai lớp <span class="badge">NOT EXISTS</span>, hoặc COUNT DISTINCT = tổng số (bài 6.4).<br>
+<b>6. "Nhiều hơn X":</b> so với một truy vấn con, vd <span class="badge">HAVING COUNT(*) &gt; (SELECT COUNT(*) … WHERE JobID = 'IT_PROG')</span>.<br>
+<b>7. Lớn nhất theo từng nhóm:</b> nối bảng với <span class="badge">(SELECT did, MAX(salary) m FROM Employee GROUP BY did)</span> — giữ được các dòng đồng hạng.<br>
+<b>8. "Có tất cả / mọi":</b> hai lớp <span class="badge">NOT EXISTS</span>, hoặc COUNT DISTINCT = tổng số (bài 6.4).<br>
 <b>9. Khoảng ngày:</b> <span class="badge">WHERE d &gt;= '2026-01-01' AND d &lt; '2027-01-01'</span> — đừng viết <span class="badge">YEAR(d) = 2026</span>.<br>
-<b>10. Cập nhật lấy dữ liệu từ bảng khác:</b> <span class="badge">UPDATE e SET … FROM Employee e JOIN … WHERE …</span> (bài 6.5).</div>
+<b>10. Sửa dữ liệu theo phép nối:</b> <span class="badge">DELETE e FROM Employees e JOIN Departments d ON … WHERE d.DepartmentName = 'IT'</span> (bài 6.5).</div>
 
-<h3>Bộ khung script luôn chạy được</h3>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE DATABASE</span> PE_Test;
-<span class="tok-keyword">GO</span>
-<span class="tok-keyword">USE</span> PE_Test;
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 1. bảng: cha trước</span>
-<span class="tok-keyword">CREATE TABLE</span> Department (did <span class="tok-type">INT PRIMARY KEY</span>, dname <span class="tok-type">NVARCHAR</span>(50) <span class="tok-keyword">NOT NULL</span>);
-<span class="tok-keyword">CREATE TABLE</span> Employee (
-    eid <span class="tok-type">INT PRIMARY KEY</span>, name <span class="tok-type">NVARCHAR</span>(100) <span class="tok-keyword">NOT NULL</span>,
-    salary <span class="tok-type">DECIMAL</span>(18,2) <span class="tok-keyword">CHECK</span> (salary &gt; 0),
-    did <span class="tok-type">INT REFERENCES</span> Department(did));
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 2. dữ liệu mẫu</span>
-<span class="tok-keyword">INSERT INTO</span> Department <span class="tok-keyword">VALUES</span> (10, N<span class="tok-string">'Sales'</span>), (20, N<span class="tok-string">'IT'</span>);
-<span class="tok-keyword">INSERT INTO</span> Employee <span class="tok-keyword">VALUES</span> (1, N<span class="tok-string">'An'</span>, 1000, 10), (2, N<span class="tok-string">'Bình'</span>, 2000, 20);
-<span class="tok-keyword">GO</span>
-<span class="tok-comment">-- 3. Câu 1: ...</span></code></pre>
-<p>Đặt mỗi câu trả lời dưới một dòng chú thích có đánh số. Người chấm đọc 200 dòng cần tìm ra câu 5 trong hai giây.</p>
+<h3>Một tệp trả lời đúng trông thế nào</h3>
+<pre><code class="language-sql"><span class="tok-comment">-- Q8.sql : chỉ có lệnh CREATE, không GO, không lệnh gọi thử</span>
+<span class="tok-keyword">CREATE PROCEDURE</span> prNumberOfDepartments
+    @countryID <span class="tok-type">VARCHAR</span>(10), @numberOfDepartments <span class="tok-type">INT</span> <span class="tok-keyword">OUTPUT</span>
+<span class="tok-keyword">AS</span>
+<span class="tok-keyword">BEGIN</span>
+    <span class="tok-keyword">SELECT</span> @numberOfDepartments = <span class="tok-function">COUNT</span>(*)
+    <span class="tok-keyword">FROM</span> Departments d <span class="tok-keyword">JOIN</span> Locations l <span class="tok-keyword">ON</span> d.LocationID = l.LocationID
+    <span class="tok-keyword">WHERE</span> l.CountryID = @countryID
+<span class="tok-keyword">END</span></code></pre>
+<p>Lệnh gọi thử in trên đề (<span class="badge">declare @x int exec … @x output select @x</span>) là thứ <b>bạn</b> chạy ở cửa sổ khác — nó không được nằm trong Q8.sql.</p>
 
-<div class="pitfall"><b>Ba thứ làm mất điểm dù SQL đã đúng:</b> (1) thiếu chữ <span class="badge">N</span> trước hằng chuỗi tiếng Việt, nên dữ liệu của người chấm hiện ra "Nguy?n Th? Hoà"; (2) quên <span class="badge">GO</span> giữa các batch, khiến <span class="badge">CREATE PROCEDURE</span> báo "must be the first statement in a batch"; (3) tạo đối tượng nhầm cơ sở dữ liệu vì bỏ qua <span class="badge">USE</span>.</div>
+<div class="pitfall"><b>Những thứ làm mất điểm dù SQL đã đúng:</b> (1) để sót <span class="badge">USE</span>, <span class="badge">GO</span> hay một dòng chạy thử trong tệp — cả câu thành 0 điểm; (2) tên cột hoặc thứ tự cột khác ảnh kết quả mong đợi; (3) thiếu <span class="badge">ORDER BY</span> khi ảnh đã được sắp xếp; (4) thiếu chữ <span class="badge">N</span> trước hằng chuỗi tiếng Việt, dữ liệu hiện ra "Nguy?n Th? Hoà"; (5) ở Q1 đổi tên hay kiểu dữ liệu so với ERD.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hãy viết script sao cho chạy lại lần hai vẫn được.</b> Mở đầu mỗi đối tượng bằng <span class="badge">IF OBJECT_ID('dbo.Employee','U') IS NOT NULL DROP TABLE dbo.Employee;</span> (bảng con trước). Nhờ đó bạn chạy lại cả tệp sau mỗi lần sửa thay vì mò xem câu lệnh cuối mình vừa đổi là câu nào — và người chấm cũng vậy. Script chạy lại được cũng đúng là thứ mà công cụ di trú đòi hỏi trên môi trường thật. <em>Ngoài giáo trình vì không ai dạy điều này, nhưng nó là ranh giới giữa 85 phút bình tĩnh và 85 phút hoảng loạn.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chạy thử kiểu dân chuyên nghiệp: không bao giờ trên dữ liệu thật.</b> Bọc mọi lần thử Q8–Q10 trong <span class="badge">BEGIN TRAN … ROLLBACK</span> (bài 8.3); lỡ làm hỏng dữ liệu thì chạy lại DBscript.sql. Tách riêng "câu trả lời" và "phần chạy thử" vào các tệp khác nhau chính là cách các script di trú và unit test được tổ chức trong dự án thật — luật PE đang ép bạn vào một thói quen tốt. <em>Ngoài giáo trình vì môn học dạy SQL, chứ không dạy quy trình làm việc quanh nó.</em></div>
 </div>
 `,
         },

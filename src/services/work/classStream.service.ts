@@ -335,7 +335,7 @@ export async function listStream(userId: number, classId: number, opts: { limit?
     ids.length ? prisma.workClassComment.groupBy({ by: ['postId'], where: { postId: { in: ids }, ...commentWhere(ctx) }, _count: { _all: true } }) : [],
     ids.length ? prisma.$queryRaw<Array<{ id: number }>>`
       SELECT id FROM (
-        SELECT id, ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY created_at DESC) AS rn
+        SELECT id, ROW_NUMBER() OVER (PARTITION BY post_id ORDER BY created_at DESC, id DESC) AS rn
         FROM work_class_comments
         WHERE post_id IN (${Prisma.join(ids)}) AND deleted_at IS NULL ${ctx.manage ? Prisma.empty : Prisma.sql`AND hidden_at IS NULL`}
       ) t WHERE rn <= 3` : [],

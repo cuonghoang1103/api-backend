@@ -7,6 +7,11 @@
  * LUẬT: < > trong code → &lt; &gt; (so sánh, <>); & → &amp;;
  * backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G041 from './giang/pg-04-1.mjs';
+import G042 from './giang/pg-04-2.mjs';
+import G043 from './giang/pg-04-3.mjs';
+import G044 from './giang/pg-04-4.mjs';
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -20,7 +25,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Chèn nhiều dòng trong một câu lệnh, lấy lại giá trị vừa sinh bằng RETURNING, để DEFAULT tự điền, và UPSERT với ON CONFLICT.',
-      content: `
+      content: `${NHAN_LUOT}${G041}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>Getting data in — more than one row at a time</h2>
@@ -196,7 +201,7 @@ SELECT * FROM tag_stat;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Chọn cột và cột tính, lọc với các toán tử, IN, BETWEEN, LIKE/ILIKE, IS NULL — và cạm bẫy NULL trong so sánh.',
-      content: `
+      content: `${NHAN_LUOT}${G042}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
 <h2>Asking the database a question</h2>
@@ -388,7 +393,7 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
       type: 'LESSON',
       isFreePreview: true,
       description: 'Sắp xếp theo nhiều khoá (và NULLS LAST), phân trang với LIMIT/OFFSET, loại trùng với DISTINCT và DISTINCT ON.',
-      content: `
+      content: `${NHAN_LUOT}${G043}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.3</span>
 <h2>Ordering, paging, and removing duplicates</h2>
@@ -568,7 +573,7 @@ FROM note ORDER BY author, created_at DESC;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Sửa và xoá dòng với WHERE và RETURNING, và vì sao một câu lệnh thiếu WHERE là tai hoạ — chốt an toàn bằng BEGIN/ROLLBACK.',
-      content: `
+      content: `${NHAN_LUOT}${G044}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.4</span>
 <h2>Changing and removing rows — with the safety on</h2>

@@ -56,6 +56,7 @@ export const CSS = `<style>
 .pg .nd .card{text-align:left;border:1.5px solid #e3c9ae;border-radius:10px;padding:12px 14px;background:#fffaf5}
 .pg .nd .card .h{font-weight:800;color:#b85a2b;font-size:21px;margin-bottom:5px}
 .pg .nd .card p{font-size:19px;line-height:1.38;margin:0}
+.pg .nd .card b,.pg .nd .card strong{display:inline;font-size:inherit;color:#262626;margin:0}
 .pg .nd .steps{display:flex;flex-direction:column;gap:9px}
 .pg .nd .steps>div{display:flex;gap:12px;align-items:flex-start;font-size:22px}
 .pg .nd .steps .n{flex:0 0 32px;height:32px;border-radius:50%;background:#e08a1e;color:#fff;font-weight:800;font-size:18px;

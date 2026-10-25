@@ -18,6 +18,18 @@
  * Vùng thân (.nd) ≈ 1112 × 520 px. Chữ thân 24px; khối mã 17px (sm 15px). Một slide ≤ ~14 dòng mã.
  * Chữ SVG: rộng ≈ 0,602 × font-size mỗi ký tự (đơn cách) — đặt nhãn bằng công thức, không bằng mắt.
  * MỞ ẢNH RA NHÌN sau khi render (bộ đo chỉ đo chiều cao).
+ *
+ * ══ KHUÔN CHUẨN cho MỌI môn/khoá chưa có slide (chủ kênh chốt 25/10/2026: "quá oke") ══
+ * Môn mới (vd CSD201): `cp _pg-chung.mjs _csd-chung.mjs` (hoặc import thẳng tệp này) rồi:
+ *   1. lamDeck({ khoa: 'Data Structures', duong: 'academy/csd201', bieuTuong: '🌳', khau: 'from zero to the final exam',
+ *               chuong: 'Chapter 3 — Linked lists', bai: '3.1' }, items) — dải chân "<khoa> · <chuong>", góc trái chân
+ *      "cuongthai.com/<duong>", bìa có biểu tượng + "<khoa> — <khau> · cuongthai.com".
+ *   2. Mã không phải SQL: sql(src, { lang: 'java' }) (mọi ngôn ngữ highlight.js); terminal: sh(text); kết quả: psql(text, { title: 'output' }).
+ *   3. GIỮ dáng mặc định: logo 3 vạch + "CuongThai.com" góc trái trên (KHÔNG logo/tên FPT), tiêu đề xám #404040 căn giữa + gạch mảnh,
+ *      dải chân cam–nâu (chủ đề + số trang), nền trắng, chữ thân 24px. Sửa khuôn chỉ được THÊM tuỳ chọn, không đổi mặc định.
+ *   4. Đổi màu nhấn môn khác: chỉ đổi #336791 (xanh PG) nếu thật cần — logo/dải chân giữ nguyên.
+ *   5. Class tự thêm phải có tiền tố riêng (bộ render gốc có sẵn .bar .card .box .two .note .xanh .lam… — trùng tên là vỡ slide).
+ *   6. Quy trình đi kèm (render → ghép 4 ảnh soát → upload R2 → giảng EN/VI → video): ~/Documents/video-bai-giang/_PROMPT-AGENT-PG.md.
  */
 import hljs from 'highlight.js';
 
@@ -220,25 +232,29 @@ export function hai_phien(rows, opts = {}) {
 }
 
 /** Một slide. */
-export function pg({ t, body = '', topic, bai = '', page, cover = false, sub = '', nhan = '', giua = false, to = false }) {
+export function pg({ t, body = '', topic, bai = '', page, cover = false, sub = '', nhan = '', giua = false, to = false,
+  khoa = 'PostgreSQL', duong = 'courses/postgresql', bieuTuong = '🐘', khau = 'from zero to production' }) {
   if (cover) {
     return `${CSS}<div class="pg bia">${LOGO}<div class="khoi">${nhan ? `<span class="nhan">${nhan}</span>` : ''}` +
-      `<h1>${t}</h1><div class="gach"></div>${sub ? `<div class="phu">${sub}</div>` : ''}</div><div class="voi">🐘</div>` +
-      `<div class="dai">PostgreSQL — from zero to production · cuongthai.com</div></div>`;
+      `<h1>${t}</h1><div class="gach"></div>${sub ? `<div class="phu">${sub}</div>` : ''}</div><div class="voi">${bieuTuong}</div>` +
+      `<div class="dai">${khoa} — ${khau} · cuongthai.com</div></div>`;
   }
   return `${CSS}<div class="pg">${LOGO}${bai ? `<span class="bai">${bai}</span>` : ''}<h2>${t}</h2><hr>` +
-    `<div class="nd${giua ? ' giua' : ''}${to ? ' to' : ''}">${body}</div><div class="chan"><span class="tr">cuongthai.com/courses/postgresql</span>${topic}<span class="so">${page}</span></div></div>`;
+    `<div class="nd${giua ? ' giua' : ''}${to ? ' to' : ''}">${body}</div><div class="chan"><span class="tr">cuongthai.com/${duong}</span>${topic}<span class="so">${page}</span></div></div>`;
 }
 
 /**
  * Dựng mảng slides cho `_render-slides.mjs`, tự đánh số trang.
  * meta: { chuong: 'Chapter 9 — Indexes', bai: '9.1' }  (chuong in ở dải chân, bai ở góc phải trên + nhãn bìa)
+ * Tuỳ chọn cho MÔN KHÁC (mặc định = PostgreSQL, deck pg-* không đổi gì):
+ *   khoa: 'Data Structures' · duong: 'academy/csd201' · bieuTuong: '🌳' · khau: 'from zero to the final exam'
  */
 export function lamDeck(meta, items) {
-  const topic = `PostgreSQL · ${meta.chuong}`;
+  const { khoa = 'PostgreSQL', duong, bieuTuong, khau } = meta;
+  const topic = `${khoa} · ${meta.chuong}`;
   const baiNhan = meta.bai ? `Lesson ${meta.bai}` : '';
   return items.map((it, i) => ({
     t: '', kind: undefined,
-    body: pg({ ...it, topic, bai: baiNhan, page: i + 1, nhan: it.nhan ?? `${meta.chuong}${meta.bai ? ` · Lesson ${meta.bai}` : ''}` }),
+    body: pg({ khoa, ...(duong && { duong }), ...(bieuTuong && { bieuTuong }), ...(khau && { khau }), ...it, topic, bai: baiNhan, page: i + 1, nhan: it.nhan ?? `${meta.chuong}${meta.bai ? ` · Lesson ${meta.bai}` : ''}` }),
   }));
 }

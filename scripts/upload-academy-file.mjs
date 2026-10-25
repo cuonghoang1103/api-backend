@@ -34,6 +34,8 @@ const TYPES = {
   '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   '.pdf': 'application/pdf',
   '.zip': 'application/zip',
+  '.sql': 'text/plain; charset=utf-8',
+  '.csv': 'text/csv; charset=utf-8',
 };
 const type = TYPES[path.extname(FILE).toLowerCase()];
 if (!type) { console.error(`✗ chưa hỗ trợ đuôi ${path.extname(FILE)} — thêm vào TYPES`); process.exit(1); }

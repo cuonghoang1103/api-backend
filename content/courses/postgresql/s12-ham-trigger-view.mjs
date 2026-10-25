@@ -3,11 +3,16 @@
  * Hàm SQL vs PL/pgSQL, volatility (đo thật: VOLATILE gọi 5 lần, IMMUTABLE gọi 1) ·
  * trigger updated_at + trigger kiểm toán + bẫy BEFORE trả NULL nuốt câu lệnh ·
  * view (ghi được / không ghi được, WITH CHECK OPTION) ·
- * materialized view: 4416 vs 2416 khi chưa REFRESH, CONCURRENTLY cần unique index.
- * Output CHẠY THẬT trên PostgreSQL 16.13. Dữ liệu tất định: views = (id*37) % 101.
+ * materialized view: 3433 vs 1433 khi chưa REFRESH, CONCURRENTLY cần unique index.
+ * Output CHẠY THẬT trên PostgreSQL 17.11 (đã chạy lại, 26/10/2026; bản 15.4/16.13 cũ đã thay nguyên khối ở những chỗ khác kết quả). Dữ liệu tất định: views = (id*37) % 101.
  * LUẬT: < > trong code/out → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  * Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G121 from './giang/pg-12-1.mjs';
+import G122 from './giang/pg-12-2.mjs';
+import G123 from './giang/pg-12-3.mjs';
+import G124 from './giang/pg-12-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,7 +26,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Viết hàm bằng SQL thuần và bằng PL/pgSQL (biến, IF, RETURN), rồi tới thứ hầu hết người dùng bỏ qua: VOLATILE / STABLE / IMMUTABLE quyết định Postgres gọi hàm bao nhiêu lần — đo thật 5 lần so với 1 lần trên cùng một truy vấn.',
-      content: `
+      content: `${G121}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.1 · Phase 3 — Performance &amp; internals</span>
 <h2>Logic that lives next to the data</h2>
@@ -45,7 +50,7 @@ export default {
  user3@example.com |         25
 (3 rows)</div>
 <p>The <code>$$</code> pair is <strong>dollar quoting</strong>. The body is a string, and it is full of single quotes, so dollar quoting saves you from escaping every one of them. You can use a tag — <code>$body$ … $body$</code> — when you need to nest.</p>
-<div class="callout ok">A SQL function whose body is one <code>SELECT</code> can be <em>inlined</em> by the planner — expanded into the calling query rather than called. That means it can use indexes and be optimised as part of the larger plan. A PL/pgSQL function is a black box the planner cannot see inside. <strong>Prefer <code>LANGUAGE sql</code> whenever the body is one statement.</strong></div>
+<div class="callout ok">A SQL function whose body is <strong>one plain expression</strong> (<code>SELECT round(price * (100 - pct) / 100.0, 0)</code>) — or a set-returning one used in <code>FROM</code> — is <em>inlined</em> by the planner: pasted into the calling query rather than called, so it is optimised as part of the larger plan (<code>EXPLAIN VERBOSE</code> shows the expression, no function name). A scalar SQL function whose body reads a table, like <code>note_count</code> above, is <strong>not</strong> pasted in: <code>EXPLAIN</code> keeps <code>Filter: (note_count(u.id) &gt; 24)</code> — one call per row. A PL/pgSQL function is never inlined: a black box the planner cannot see inside. <strong>Prefer <code>LANGUAGE sql</code> whenever the body is one statement</strong> — but do not expect miracles from a SQL function that queries a table.</div>
 
 <h3>PL/pgSQL: when you need variables and branching</h3>
 <p>PL/pgSQL adds real procedural constructs — declarations, <code>IF</code>, loops, exception handling:</p>
@@ -85,7 +90,10 @@ $$;
 số lần in "goi VOLATILE":   5
 
 -- SELECT … FROM (SELECT * FROM notes LIMIT 5) t WHERE id &gt; dem_goi_immutable(0);
-số lần in "goi IMMUTABLE":  1</div>
+số lần in "goi IMMUTABLE":  1
+
+-- bản STABLE (dem_goi_stable) trên PostgreSQL 17.11:
+số lần in "goi STABLE":     6   -- 1 lần lúc planner ước lượng + 5 lần, mỗi dòng một lần</div>
 <p>Five calls versus one, on identical work. Because <code>IMMUTABLE</code> promises the same input always gives the same output, the planner evaluated it <strong>once</strong> and folded the result into a constant. <code>VOLATILE</code> promises nothing, so it must be called per row.</p>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t"><code>IMMUTABLE</code></span><span class="lz-d">Same arguments ⇒ same result, forever. No database access at all. Can be constant-folded, and is the <strong>only</strong> level usable in an expression index (Chapter 9). Example: <code>lower(text)</code>, pure arithmetic.</span></div>
@@ -122,7 +130,7 @@ số lần in "goi IMMUTABLE":  1</div>
  user3@example.com |         25
 (3 rows)</div>
 <p>Cặp <code>$$</code> là <strong>dollar quoting</strong>. Thân hàm là một chuỗi, và nó đầy dấu nháy đơn, nên dollar quoting cứu bạn khỏi việc escape từng cái một. Bạn có thể đặt nhãn — <code>$body$ … $body$</code> — khi cần lồng nhau.</p>
-<div class="callout ok">Một hàm SQL mà thân là một câu <code>SELECT</code> có thể được bộ lập kế hoạch <em>NỘI TUYẾN (inline)</em> — bung thẳng vào truy vấn gọi nó thay vì gọi ra ngoài. Nghĩa là nó DÙNG ĐƯỢC chỉ mục và được tối ưu như một phần của plan lớn. Một hàm PL/pgSQL thì là hộp đen mà bộ lập kế hoạch không nhìn vào trong được. <strong>Ưu tiên <code>LANGUAGE sql</code> mỗi khi thân hàm chỉ có một câu lệnh.</strong></div>
+<div class="callout ok">Một hàm SQL mà thân là <strong>một biểu thức thuần</strong> (<code>SELECT round(price * (100 - pct) / 100.0, 0)</code>) — hoặc hàm trả về tập dòng dùng trong <code>FROM</code> — được bộ lập kế hoạch <em>NỘI TUYẾN (inline)</em>: dán thẳng vào truy vấn gọi nó thay vì gọi ra ngoài, nên được tối ưu như một phần của plan lớn (<code>EXPLAIN VERBOSE</code> hiện biểu thức, không có tên hàm). Hàm SQL vô hướng mà thân đọc một bảng, như <code>note_count</code> ở trên, thì <strong>không</strong> được dán vào: <code>EXPLAIN</code> vẫn giữ <code>Filter: (note_count(u.id) &gt; 24)</code> — gọi một lần cho mỗi dòng. Hàm PL/pgSQL thì không bao giờ được nội tuyến: hộp đen mà bộ lập kế hoạch không nhìn vào trong được. <strong>Ưu tiên <code>LANGUAGE sql</code> mỗi khi thân hàm chỉ có một câu lệnh</strong> — nhưng đừng mong phép màu từ hàm SQL có truy vấn bảng.</div>
 
 <h3>PL/pgSQL: khi bạn cần biến và rẽ nhánh</h3>
 <p>PL/pgSQL thêm các cấu trúc thủ tục thật — khai báo, <code>IF</code>, vòng lặp, bắt ngoại lệ:</p>
@@ -162,7 +170,10 @@ $$;
 số lần in "goi VOLATILE":   5
 
 -- SELECT … FROM (SELECT * FROM notes LIMIT 5) t WHERE id &gt; dem_goi_immutable(0);
-số lần in "goi IMMUTABLE":  1</div>
+số lần in "goi IMMUTABLE":  1
+
+-- bản STABLE (dem_goi_stable) trên PostgreSQL 17.11:
+số lần in "goi STABLE":     6   -- 1 lần lúc planner ước lượng + 5 lần, mỗi dòng một lần</div>
 <p>Năm lần gọi so với MỘT, trên cùng một khối lượng việc. Vì <code>IMMUTABLE</code> hứa rằng cùng đầu vào thì luôn cho cùng đầu ra, bộ lập kế hoạch đã tính nó <strong>một lần</strong> rồi gấp kết quả thành hằng số. <code>VOLATILE</code> không hứa gì cả, nên nó phải được gọi cho từng dòng.</p>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t"><code>IMMUTABLE</code></span><span class="lz-d">Cùng tham số ⇒ cùng kết quả, mãi mãi. KHÔNG truy cập cơ sở dữ liệu chút nào. Gấp được thành hằng số, và là mức <strong>DUY NHẤT</strong> dùng được trong chỉ mục biểu thức (Chương 9). Ví dụ: <code>lower(text)</code>, phép tính thuần.</span></div>
@@ -184,7 +195,7 @@ số lần in "goi IMMUTABLE":  1</div>
       slug: 'postgresql-12-2-trigger',
       type: 'LESSON',
       description: 'Hai trigger đáng dùng nhất trong thực tế: updated_at tự cập nhật và một nhật ký kiểm toán ghi lại đúng những gì thật sự đổi. Kèm bẫy kinh điển: một BEFORE trigger trả về NULL nuốt gọn câu lệnh mà không báo lỗi.',
-      content: `
+      content: `${G122}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.2 · Phase 3 — Performance &amp; internals</span>
 <h2>Code that runs whether the application remembers it or not</h2>
@@ -218,7 +229,7 @@ $$;
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Statement arrives</span><span class="lz-d">An <code>UPDATE</code> is issued. Any <code>BEFORE … FOR EACH STATEMENT</code> trigger fires once, before any row is touched.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>BEFORE … FOR EACH ROW</code></span><span class="lz-d">Fires per row, and can <strong>modify</strong> it by assigning to <code>NEW</code>. Returning <code>NULL</code> here silently skips the row entirely.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The row is written</span><span class="lz-d">Constraints and checks are applied to the row as the <code>BEFORE</code> trigger left it — not as the client sent it.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Fires per row once the write has happened. Cannot change the row; this is where side effects belong — audit rows, notifications, counters.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Fires per row once the write has happened — in fact queued and run at the <strong>end of the statement</strong>: with a 2-row UPDATE the order is BEFORE STATEMENT, BEFORE ROW ×2, AFTER ROW ×2, AFTER STATEMENT (verified on PostgreSQL 17.11). Cannot change the row; this is where side effects belong — audit rows, notifications, counters.</span></div>
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">All inside one transaction</span><span class="lz-d">If any trigger raises, the original statement fails and everything rolls back together. A slow trigger makes every write on that table slow.</span></div>
 </div>
 <h3>An audit log that records only real changes</h3>
@@ -299,7 +310,7 @@ $$;
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Câu lệnh tới</span><span class="lz-d">Một lệnh <code>UPDATE</code> được phát ra. Mọi trigger <code>BEFORE … FOR EACH STATEMENT</code> chạy MỘT lần, trước khi chạm vào dòng nào.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>BEFORE … FOR EACH ROW</code></span><span class="lz-d">Chạy cho từng dòng, và <strong>SỬA</strong> được dòng đó bằng cách gán vào <code>NEW</code>. Trả về <code>NULL</code> ở đây là âm thầm bỏ qua HẲN cái dòng.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Dòng được ghi</span><span class="lz-d">Ràng buộc và kiểm tra áp lên dòng ở trạng thái mà trigger <code>BEFORE</code> để lại — chứ không phải trạng thái client gửi lên.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Chạy cho từng dòng SAU khi đã ghi xong. Không đổi được dòng nữa; đây là chỗ dành cho hiệu ứng phụ — dòng kiểm toán, thông báo, bộ đếm.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Chạy cho từng dòng SAU khi đã ghi xong — thật ra được xếp hàng và chạy ở <strong>CUỐI câu lệnh</strong>: với UPDATE hai dòng, thứ tự là BEFORE STATEMENT, BEFORE ROW ×2, AFTER ROW ×2, AFTER STATEMENT (đã kiểm trên PostgreSQL 17.11). Không đổi được dòng nữa; đây là chỗ dành cho hiệu ứng phụ — dòng kiểm toán, thông báo, bộ đếm.</span></div>
 <div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Tất cả nằm trong MỘT giao dịch</span><span class="lz-d">Nếu bất kỳ trigger nào ném lỗi thì câu lệnh gốc hỏng và mọi thứ cùng lùi lại. Một trigger chậm làm MỌI lệnh ghi trên bảng đó chậm.</span></div>
 </div>
 <h3>Một nhật ký kiểm toán chỉ ghi những thay đổi THẬT</h3>
@@ -355,7 +366,7 @@ $$;
       slug: 'postgresql-12-3-view',
       type: 'LESSON',
       description: 'View lưu định nghĩa truy vấn chứ không lưu dữ liệu, nên nó luôn tươi. Cái nào ghi được và cái nào không (kèm thông báo lỗi thật), WITH CHECK OPTION để chặn dòng thoát ra khỏi phạm vi view, và dùng view làm ranh giới phân quyền.',
-      content: `
+      content: `${G123}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.3 · Phase 3 — Performance &amp; internals</span>
 <h2>Naming a query so you only write it once</h2>
@@ -371,13 +382,13 @@ $$;
 <div class="out"> user_id |       email        | so_note | tong_views
 ---------+--------------------+---------+------------
       11 | user11@example.com |      25 |       1475
+       1 | user1@example.com  |      25 |       1433
       20 | user20@example.com |      25 |       1417
-       1 | user1@example.com  |      24 |       1416
 (3 rows)</div>
-<p>Insert one more note for user 1 and read the view again — no refresh, no invalidation, nothing to remember:</p>
+<p>Insert one more note for user 1 (<code>INSERT INTO notes (user_id, title, body, views) VALUES (1, 'Note moi', 'x', 2000)</code>) and read the view again — no refresh, no invalidation, nothing to remember:</p>
 <div class="out"> user_id |       email       | so_note | tong_views
 ---------+-------------------+---------+------------
-       1 | user1@example.com |      25 |       2416
+       1 | user1@example.com |      26 |       3433
 (1 row)</div>
 <p>That is the whole appeal. A join and aggregation you would otherwise paste into six places lives in one definition, and correcting it corrects all six.</p>
 
@@ -439,13 +450,13 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 <div class="out"> user_id |       email        | so_note | tong_views
 ---------+--------------------+---------+------------
       11 | user11@example.com |      25 |       1475
+       1 | user1@example.com  |      25 |       1433
       20 | user20@example.com |      25 |       1417
-       1 | user1@example.com  |      24 |       1416
 (3 rows)</div>
-<p>Chèn thêm một note nữa cho user 1 rồi đọc lại view — không refresh, không vô hiệu hoá, không phải nhớ gì cả:</p>
+<p>Chèn thêm một note nữa cho user 1 (<code>INSERT INTO notes (user_id, title, body, views) VALUES (1, 'Note moi', 'x', 2000)</code>) rồi đọc lại view — không refresh, không vô hiệu hoá, không phải nhớ gì cả:</p>
 <div class="out"> user_id |       email       | so_note | tong_views
 ---------+-------------------+---------+------------
-       1 | user1@example.com |      25 |       2416
+       1 | user1@example.com |      26 |       3433
 (1 row)</div>
 <p>Đó là toàn bộ sức hấp dẫn. Một phép join và tổng hợp mà lẽ ra bạn phải dán vào sáu chỗ giờ sống trong MỘT định nghĩa, và sửa nó là sửa cả sáu.</p>
 
@@ -499,8 +510,8 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
       title: '12.4 — Materialized views: trading freshness for speed|||12.4 — Materialized view: đánh đổi độ tươi lấy tốc độ',
       slug: 'postgresql-12-4-materialized-view',
       type: 'LESSON',
-      description: 'Materialized view LƯU kết quả trên đĩa, nên nó nhanh và nó CŨ. Đo thật hai bên lệch nhau 4416 vs 2416 cho tới khi REFRESH, vì sao REFRESH CONCURRENTLY bắt buộc phải có unique index, và cách quyết định giữa view, matview và một bảng tổng hợp do trigger nuôi.',
-      content: `
+      description: 'Materialized view LƯU kết quả trên đĩa, nên nó nhanh và nó CŨ. Đo thật hai bên lệch nhau 3433 vs 1433 cho tới khi REFRESH, vì sao REFRESH CONCURRENTLY bắt buộc phải có unique index, và cách quyết định giữa view, matview và một bảng tổng hợp do trigger nuôi.',
+      content: `${G124}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.4 · Phase 3 — Performance &amp; internals</span>
 <h2>A view that keeps its answers</h2>
@@ -520,21 +531,25 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'matview'</span>,     tong_views <span class="tok-keyword">FROM</span> note_summary_mv <span class="tok-keyword">WHERE</span> user_id=1;</code></pre>
 <div class="out">  loai   | tong_views
 ---------+------------
- view    |       4416
- matview |       2416
+ view    |       3433
+ matview |       1433
 (2 rows)</div>
 <p>The view is current; the materialized view is showing an answer from before the insert. That is not a bug — it is the entire trade. <code>REFRESH</code> makes them agree again:</p>
 <pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
 <div class="out"> tong_views
 ------------
-       4416
+       3433
 (1 row)</div>
 
 <h3>What you buy with that staleness</h3>
 <p>Timing the same <code>count(*)</code> against each, on this deliberately small dataset:</p>
-<div class="out">SELECT count(*) FROM note_summary;      Time: 1.856 ms
-SELECT count(*) FROM note_summary_mv;   Time: 0.318 ms</div>
-<p>About 5.8× on 20 users and 500 notes — where the join is trivial. The reason to reach for this feature is that the gap grows with the work being avoided: the same aggregation over millions of rows can be seconds versus a fraction of a millisecond. Measure your own case with <code>EXPLAIN ANALYZE</code>; do not adopt a materialized view on the assumption that it must be faster.</p>
+<div class="out">EXPLAIN ANALYZE SELECT count(*) FROM note_summary;      Execution Time: 0.133 ms
+EXPLAIN ANALYZE SELECT count(*) FROM note_summary_mv;   Execution Time: 0.058 ms
+
+-- the same idea on 1,000,000 events (one row per event, grouped by day):
+view   (WHERE ngay = …)    Execution Time: 49.685 ms
+matview (WHERE ngay = …)   Execution Time: 0.023 ms</div>
+<p>About 2.3× on 20 users and 500 notes — where the join is trivial; on a million events the same idea is 49.7 ms versus 0.023 ms. The reason to reach for this feature is that the gap grows with the work being avoided: the same aggregation over millions of rows can be seconds versus a fraction of a millisecond. Measure your own case with <code>EXPLAIN ANALYZE</code>; do not adopt a materialized view on the assumption that it must be faster.</p>
 
 <h3>REFRESH locks — unless you give it a unique index</h3>
 <p>A plain <code>REFRESH</code> takes an <code>ACCESS EXCLUSIVE</code> lock: readers block for the whole rebuild. <code>CONCURRENTLY</code> avoids that, but it has a prerequisite:</p>
@@ -557,7 +572,7 @@ REFRESH MATERIALIZED VIEW</div>
 <div class="pitfall"><p><strong>Trap — creating a materialized view and never scheduling the refresh.</strong> It has no expiry, no background job and no warning. It will serve the numbers from the afternoon you created it, for months, and every one of those queries will be fast and wrong. If you create one, create its refresh in the same change — a cron entry, a scheduled job, or a <code>pg_cron</code> task — and make the refresh time visible to whoever reads the dashboard, so a stale number looks stale instead of looking like a business trend. The second half of the trap: an ordinary <code>REFRESH</code> on a large view locks readers out for its entire duration, so the refresh you schedule at peak hour to "keep it fresh" is an outage on a timer. Add the unique index and use <code>CONCURRENTLY</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Practice: make a matview go stale, then refresh it concurrently</span><span class="lc-sub">The Code Lab track reproduces the 4416-vs-2416 divergence and the CONCURRENTLY error.</span></span>
+  <span class="lc-body"><span class="lc-title">Practice: make a matview go stale, then refresh it concurrently</span><span class="lc-sub">The Code Lab track reproduces the stale-vs-fresh divergence and the CONCURRENTLY error.</span></span>
 </a>
 </div>
 
@@ -580,21 +595,25 @@ REFRESH MATERIALIZED VIEW</div>
 <span class="tok-keyword">SELECT</span> <span class="tok-string">'matview'</span>,     tong_views <span class="tok-keyword">FROM</span> note_summary_mv <span class="tok-keyword">WHERE</span> user_id=1;</code></pre>
 <div class="out">  loai   | tong_views
 ---------+------------
- view    |       4416
- matview |       2416
+ view    |       3433
+ matview |       1433
 (2 rows)</div>
 <p>View thì hiện hành; materialized view thì đang hiện câu trả lời của lúc TRƯỚC khi chèn. Đó không phải bug — đó là toàn bộ cuộc đánh đổi. <code>REFRESH</code> làm chúng khớp lại:</p>
 <pre><code class="language-sql"><span class="tok-keyword">REFRESH MATERIALIZED VIEW</span> note_summary_mv;</code></pre>
 <div class="out"> tong_views
 ------------
-       4416
+       3433
 (1 row)</div>
 
 <h3>Bạn mua được gì bằng sự cũ kỹ đó</h3>
 <p>Bấm giờ cùng một câu <code>count(*)</code> trên mỗi bên, trên bộ dữ liệu CỐ TÌNH để nhỏ này:</p>
-<div class="out">SELECT count(*) FROM note_summary;      Time: 1.856 ms
-SELECT count(*) FROM note_summary_mv;   Time: 0.318 ms</div>
-<p>Khoảng 5,8 lần với 20 user và 500 note — chỗ mà phép join gần như chẳng đáng gì. Lý do để với tay sang tính năng này là khoảng cách đó LỚN DẦN theo khối lượng việc được né: cùng phép tổng hợp ấy trên hàng triệu dòng có thể là vài GIÂY so với một phần nghìn giây. Hãy tự đo trường hợp của bạn bằng <code>EXPLAIN ANALYZE</code>; đừng nhận nuôi một materialized view chỉ vì cho rằng nó chắc chắn nhanh hơn.</p>
+<div class="out">EXPLAIN ANALYZE SELECT count(*) FROM note_summary;      Execution Time: 0.133 ms
+EXPLAIN ANALYZE SELECT count(*) FROM note_summary_mv;   Execution Time: 0.058 ms
+
+-- the same idea on 1,000,000 events (one row per event, grouped by day):
+view   (WHERE ngay = …)    Execution Time: 49.685 ms
+matview (WHERE ngay = …)   Execution Time: 0.023 ms</div>
+<p>Khoảng 2,3 lần với 20 user và 500 note — chỗ mà phép join gần như chẳng đáng gì; trên một triệu sự kiện, cùng ý tưởng đó là 49,7 ms so với 0,023 ms. Lý do để với tay sang tính năng này là khoảng cách đó LỚN DẦN theo khối lượng việc được né: cùng phép tổng hợp ấy trên hàng triệu dòng có thể là vài GIÂY so với một phần nghìn giây. Hãy tự đo trường hợp của bạn bằng <code>EXPLAIN ANALYZE</code>; đừng nhận nuôi một materialized view chỉ vì cho rằng nó chắc chắn nhanh hơn.</p>
 
 <h3>REFRESH có khoá — trừ khi bạn cho nó một unique index</h3>
 <p>Một lệnh <code>REFRESH</code> thường lấy khoá <code>ACCESS EXCLUSIVE</code>: người đọc bị chặn suốt cả lượt dựng lại. <code>CONCURRENTLY</code> tránh được điều đó, nhưng nó có một điều kiện tiên quyết:</p>
@@ -617,7 +636,7 @@ REFRESH MATERIALIZED VIEW</div>
 <div class="pitfall"><p><strong>Bẫy — tạo một materialized view rồi KHÔNG BAO GIỜ lên lịch làm mới nó.</strong> Nó không có hạn dùng, không có tiến trình nền, không có cảnh báo. Nó sẽ phục vụ những con số của cái buổi chiều bạn tạo ra nó, suốt nhiều THÁNG, và mọi truy vấn ấy đều nhanh và SAI. Nếu bạn tạo một cái, hãy tạo luôn lệnh làm mới trong CÙNG một thay đổi — một mục cron, một job có lịch, hoặc một tác vụ <code>pg_cron</code> — và cho hiện thời điểm làm mới tới người đọc bảng điều khiển, để một con số cũ TRÔNG NHƯ đồ cũ thay vì trông như một xu hướng kinh doanh. Nửa sau của cái bẫy: một lệnh <code>REFRESH</code> thường trên một view lớn chặn người đọc suốt toàn bộ thời gian nó chạy, nên cái lệnh làm mới bạn hẹn giờ vào giờ cao điểm để "giữ cho nó tươi" chính là một sự cố có hẹn giờ. Hãy thêm unique index và dùng <code>CONCURRENTLY</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
-  <span class="lc-body"><span class="lc-title">Thực hành: làm một matview cũ đi, rồi refresh nó theo kiểu concurrently</span><span class="lc-sub">Nhánh Code Lab tái hiện độ lệch 4416-so-với-2416 và lỗi CONCURRENTLY.</span></span>
+  <span class="lc-body"><span class="lc-title">Thực hành: làm một matview cũ đi, rồi refresh nó theo kiểu concurrently</span><span class="lc-sub">Nhánh Code Lab tái hiện độ lệch cũ-so-với-tươi và lỗi CONCURRENTLY.</span></span>
 </a>
 </div>
 `,

@@ -15,6 +15,7 @@
  */
 import { DECKS, img, bi, books, registerDeck } from './_slides.mjs';
 import PE24 from './pe24.mjs';
+import PE23 from './pe23.mjs';
 
 registerDeck('pe1', { code: 'PE paper 1', en: 'SWT301_SU24_PE1 — Fibonacci · income tax · BMI', vi: 'Đề SWT301_SU24_PE1 — Fibonacci · thuế TNCN · BMI', total: 4, w: 1280, h: 1650 });
 registerDeck('pe2', { code: 'PE paper 2', en: 'SWT301 FALL24 final PE — FileProcessor · OrderCalculator · shopping use case', vi: 'Đề PE cuối kỳ FALL24 — FileProcessor · OrderCalculator · use case mua hàng', total: 6, w: 1280, h: 1650 });
@@ -211,6 +212,7 @@ const L0 = {
 <tr><td>PE-3</td><td>PE2.jpg — FALL24 final PE</td><td>fileProcessor defect report (3)</td><td>OrderCalculator JUnit, EP/BVA + branches (5)</td><td>Online shopping use case (2)</td><td><strong>SWT301-PE11</strong> "Practical Exam Đề 11 (FA 2024 - PE1)"</td></tr>
 <tr><td>PE-4</td><td>PE4/SP25.jpg — SPRING25 final PE</td><td>Test strategy (3)</td><td>TravelBooking review (3)</td><td>calculateRewardPoints (2) · system test cases (2)</td><td><strong>SWT301-PE7</strong> "Practical Exam Đề 7 (PE - SP 2025)"</td></tr>
 <tr><td>PE-5.0 – 5.3 🎬</td><td>SU26 Paper 2 (Exam room, template SWT301_SU26_Template.xlsx)</td><td>CartCalculator review, ≥ 8 issues (3)</td><td>calcBaggageFee minimum tests + MC/DC (3)</td><td>Ticket Refund black-box: validation · decision table · BVA (4)</td><td><strong>SWT301-PE24</strong> "Practical Exam Đề 24 (SU26 - Paper 2)" — the newest paper, solved in a 4-part video series</td></tr>
+<tr><td>PE-6 🎬</td><td>SU26 Paper 1 (Exam room, same template)</td><td>calcFee review, ≥ 8 issues + severity (3)</td><td>checkWithdrawal minimum tests + MC/DC (3)</td><td>Interbank Transfer black-box: validation · decision table · BVA (4)</td><td><strong>SWT301-PE23</strong> "Practical Exam Đề 23 (SU26 - Paper 1)" — solved in ONE long video with chapters (Q1/Q2 code is practice code written from the spec)</td></tr>
 </tbody>
 </table>
 <ul>
@@ -229,6 +231,7 @@ const L0 = {
 <tr><td>PE-3</td><td>PE2.jpg — đề PE cuối kỳ FALL24</td><td>Báo cáo defect fileProcessor (3)</td><td>JUnit cho OrderCalculator, EP/BVA + nhánh (5)</td><td>Use case mua hàng online (2)</td><td><strong>SWT301-PE11</strong> "Đề thi thực hành số 11 (FA 2024 - PE1)"</td></tr>
 <tr><td>PE-4</td><td>PE4/SP25.jpg — đề PE cuối kỳ SPRING25</td><td>Chiến lược kiểm thử (3)</td><td>Review TravelBooking (3)</td><td>calculateRewardPoints (2) · test case hệ thống (2)</td><td><strong>SWT301-PE7</strong> "Đề thi thực hành số 7 (PE - SP 2025)"</td></tr>
 <tr><td>PE-5.0 – 5.3 🎬</td><td>SU26 Paper 2 (Phòng thi, template SWT301_SU26_Template.xlsx)</td><td>Review CartCalculator, ≥ 8 lỗi (3)</td><td>Test tối thiểu + MC/DC cho calcBaggageFee (3)</td><td>Ticket Refund hộp đen: hợp lệ · bảng quyết định · BVA (4)</td><td><strong>SWT301-PE24</strong> "Đề thi thực hành số 24 (SU26 - Paper 2)" — đề mới nhất, chữa trọn trong loạt video 4 tập</td></tr>
+<tr><td>PE-6 🎬</td><td>SU26 Paper 1 (Phòng thi, cùng template)</td><td>Review calcFee, ≥ 8 lỗi + mức độ (3)</td><td>Test tối thiểu + MC/DC cho checkWithdrawal (3)</td><td>Interbank Transfer hộp đen: hợp lệ · bảng quyết định · BVA (4)</td><td><strong>SWT301-PE23</strong> "Đề thi thực hành số 23 (SU26 - Paper 1)" — chữa trọn trong MỘT video dài có mốc (mã câu 1/2 là mã luyện tập viết theo đặc tả)</td></tr>
 </tbody>
 </table>
 <ul>
@@ -2864,5 +2867,5 @@ const QUIZ_PE = {
 export default {
   title: 'Practical Exam (PE) — past papers & worked solutions|||Thi thực hành (PE) — đề cũ & lời giải chi tiết',
   description: 'Bốn đề PE thật trong 01.Materials/03.PE (FA23, SU24 PE1, FALL24, SPRING25) giải trọn trên đúng template: review code có số dòng, unit test tối thiểu với CFG/V(G) và JUnit đã chạy, bảng EP/BVA 3.1–3.3 kèm kiểm độ phủ tag; đề mới nhất SU26 Paper 2 (PE24) chữa trọn trong 4 bài video (review ≥ 8 lỗi, MC/DC, bảng quyết định rút gọn); cộng bài hướng dẫn cách thi và 12 câu luyện.',
-  lessons: [L0, L1, L2, L3, L4, ...PE24, QUIZ_PE],
+  lessons: [L0, L1, L2, L3, L4, ...PE24, PE23, QUIZ_PE],
 };

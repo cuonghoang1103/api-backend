@@ -39,7 +39,7 @@ export default {
 
     /* ── Chương 5 — SQL DDL ── */
     "dbi202-sql-ddl": { yt: "Jtai4ogSsB4", credit: "Neso Academy — DDL Commands - CREATE" },
-    "dbi202-rang-buoc-sql": { yt: "-8bYtApJNos", credit: "Neso Academy — Constraints in SQL" },
+    "dbi202-rang-buoc-sql": { yt: "-8bYtApJNos", credit: "Neso Academy — Constraints in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-05-rang-buoc-va-alter-tren-bang-co-du-lieu-58edafb6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Truy vấn SQL ── */
     "dbi202-select-join": { yt: "nWyyDHhTxYU", credit: "Socratica — Learn SQL with Socratica  |¦|  SQL Tutorial  |¦|  SQL for Beginners" },
@@ -80,9 +80,9 @@ export default {
     "dbi202-slide-dbi4-3": { yt: "aAx_JoEDXQA", credit: "Studytonight with Abhishek — Third Normal Form (3NF) | Database Normalization | DBMS", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-03-slide-chapter-3-dua-ve-2nf-3nf-tron-2d3cc33b.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-slide-dbi4-4": { yt: "mfVCesoMaGA", credit: "Stanford Dbclass — 07-03-bcnf.mp4", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-04-slide-chapter-3-3nf-bcnf-phan-ra-tron-a18abdfc.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-on-ch4": { yt: "-DsnJygWgi4", credit: "Jenny's Lectures CS IT — Lec 21: What is Canonical Cover in DBMS | Minimal cover Irreducible with example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-09-thuc-hanh-chuan-hoa-tron-c93650d6.mp4' }, defaultVideoTrack: 'VI'},
-    "dbi202-slide-dbi7-1": { yt: "1ZeiJ1D6NGU", credit: "Neso Academy — LIKE in SQL" },
-    "dbi202-slide-dbi7-2": { yt: "JLeaM8pK8dE", credit: "kudvenkat — Creating and working with tables - Part 3" },
-    "dbi202-on-ch5": { yt: "9Zj5ODhv0b0", credit: "kudvenkat — Adding a check constraint - Part 6" },
+    "dbi202-slide-dbi7-1": { yt: "1ZeiJ1D6NGU", credit: "Neso Academy — LIKE in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-01-slide-chapter-6-rang-buoc-so-sanh-chuoi-tron-355a2325.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-slide-dbi7-2": { yt: "JLeaM8pK8dE", credit: "kudvenkat — Creating and working with tables - Part 3", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-on-ch5": { yt: "9Zj5ODhv0b0", credit: "kudvenkat — Adding a check constraint - Part 6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-06-thuc-hanh-ddl-kieu-pe-tron-f74ee7e4.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-slide-dbi7-3": { yt: "R9pXnHIFj_8", credit: "kudvenkat — Select statement in sql server - Part 10" },
     "dbi202-slide-dbi7-4": { yt: "qnYSN_7qwgg", credit: "kudvenkat — Self join in sql server - Part 14" },
     "dbi202-slide-dbi7-5": { yt: "Ra3ISwvcFlM", credit: "kudvenkat — Correlated subquery in sql   Part 60" },
@@ -119,9 +119,10 @@ export default {
     "dbi202-slide-cs8-1": { yt: "AK7_m-aThfw", credit: "techTFQ — Top 25 SQL Interview Questions and Answers(The BEST SQL Interview Questions)" },
     "dbi202-slide-cs8-2": { yt: "ZML_EJrBhnY", credit: "techTFQ — Top 10 SQL Interview Queries | Popular SQL Queries for SQL Interview" },
     "dbi202-cs8-on": { yt: "h48xzQR3wNQ", credit: "techTFQ — How to remove Duplicate Data in SQL | SQL Query to remove duplicate" },
-    'dbi202-er-nang-cao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-08-thuc-the-yeu-ba-ngoi-da-tri-c8c6c138.mp4' }, defaultVideoTrack: 'VI' },
-    'dbi202-er-to-relation': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-10-erd-sang-luoc-do-bay-quy-tac-2507ca86.mp4' }, defaultVideoTrack: 'VI' },
-    'dbi202-bao-dong-tim-khoa': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-06-armstrong-bao-dong-tim-khoa-4e7fbc01.mp4' }, defaultVideoTrack: 'VI' },
-    'dbi202-phan-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-07-phan-ra-khong-mat-mat-bao-toan-phu-thuoc-e7907352.mp4' }, defaultVideoTrack: 'VI' },
+    'dbi202-er-nang-cao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-08-thuc-the-yeu-ba-ngoi-da-tri-c8c6c138.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-er-to-relation': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-10-erd-sang-luoc-do-bay-quy-tac-2507ca86.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-bao-dong-tim-khoa': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-06-armstrong-bao-dong-tim-khoa-4e7fbc01.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-phan-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-07-phan-ra-khong-mat-mat-bao-toan-phu-thuoc-e7907352.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-kieu-du-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-04-kieu-du-lieu-chon-sai-tra-gia-81548a52.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

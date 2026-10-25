@@ -41,6 +41,7 @@ import packageTp1Section from './swr302/package-tp1.mjs';
 import packageTp2Section from './swr302/package-tp2.mjs';
 import { WALKS as PACKAGE_WALKS } from './swr302/package-slides.mjs';
 import pe25Section from './swr302/pe25.mjs';
+import chuaDeFeSection from './swr302/chuaDeFe.mjs';
 
 /**
  * package-tp1/tp2.mjs are GENERATED from Markdown by scratchpad/tp{1,2}.py, so the
@@ -1960,5 +1961,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
     ch32Section,
     /* ══════════ LUYỆN THI PE (video) — ĐỂ CUỐI: exam_chapter_map lưu sortOrder section, chèn giữa làm lệch chương câu FE ══════════ */
     pe25Section,
+    /* ══════════ CHỮA TRỌN ĐỀ FE (video, tách riêng khỏi PE) — swr302/chuaDeFe.mjs ══════════ */
+    chuaDeFeSection,
   ],
 };

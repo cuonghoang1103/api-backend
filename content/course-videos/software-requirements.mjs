@@ -117,7 +117,8 @@ export default {
     "swr302-32r-2-ch32-requirements-risks": { yt: "-6KHhwEMtqs", credit: "Modern Software Engineering — 10 Signs Your Software Project Is Heading For FAILURE" },
     'swr302-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/00-gioi-thieu-mon-hoc/00-02-dieu-kien-qua-mon-cau-truc-diem-26a68795.mp4' }, defaultVideoTrack: 'VI'},
     'swr302-pe25-su26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/27-luyen-thi-thuc-hanh-pe/27-25-0-pe25-mo-dau-tron-1c1259dd.mp4' }, defaultVideoTrack: 'VI'},
-    'swr302-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/00-gioi-thieu-mon-hoc/00-03-chuan-dau-ra-clo-lo-trinh-9efaddcb.mp4' }, defaultVideoTrack: 'VI' },
-    'swr302-tai-lieu-cong-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/00-gioi-thieu-mon-hoc/00-04-tai-lieu-cong-cu-nop-bai-5fb90d57.mp4' }, defaultVideoTrack: 'VI' },
+    'swr302-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/00-gioi-thieu-mon-hoc/00-03-chuan-dau-ra-clo-lo-trinh-9efaddcb.mp4' }, defaultVideoTrack: 'VI'},
+    'swr302-tai-lieu-cong-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/00-gioi-thieu-mon-hoc/00-04-tai-lieu-cong-cu-nop-bai-5fb90d57.mp4' }, defaultVideoTrack: 'VI'},
+    'swr302-fe27-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-01-fe27-sp26-tron-5aaf2a1c.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

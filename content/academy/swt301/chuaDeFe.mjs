@@ -2,7 +2,7 @@
  * SWT301 · Chữa trọn đề FE (trắc nghiệm) — mục VIDEO riêng, tách khỏi mục PE (luật chủ kênh 25/10/2026:
  * ~/Documents/video-bai-giang/LUAT-VIDEO-CHUA-DE.md). Mỗi đề = MỘT bài VIDEO dài: 4 phần ~15 câu (swt-feK-1..4) ghép bằng
  * xuat/ghep-phan.mts ⇒ thư mục `-tron`, có mốc "Phần k — câu a–b".
- * Đề: content/exams/SWT301-FE1.mjs (FE1-SP26-RE) · SWT301-FE2.mjs (FE2-SP26-FE) — 60 câu · 60 phút · thang 10 · đạt ≥ 5.
+ * Đề: content/exams/SWT301-FE1.mjs (FE1-SP26-RE) · SWT301-FE2.mjs (FE2-SP26-FE) · SWT301-FE25.mjs (FE25-SP26) — 60 câu · 60 phút · thang 10 · đạt ≥ 5.
  * Video gắn qua content/course-videos/software-testing.mjs (track VI/R2, slug `swt301-feK-sp26-chua-tron-de`).
  * Mốc thời gian = mo-ta-chuong.txt của bản ghép; thống kê chương = cảnh "thống kê" cuối phần 4 mỗi đề.
  */
@@ -60,6 +60,9 @@ const L = {
   c74: ['swt301-configuration-management', 'SWT301 7.4 — Configuration management|||SWT301 7.4 — Quản lý cấu hình'],
   c82: ['swt301-tools-by-activity', 'SWT301 8.2 — Tool support for each test activity|||SWT301 8.2 — Công cụ cho từng hoạt động test'],
   c83: ['swt301-tools-benefits-risks', 'SWT301 8.3 — Benefits & risks of automation, capture/replay|||SWT301 8.3 — Lợi ích & rủi ro tự động hoá, ghi–phát lại'],
+  c22: ['swt301-test-levels', 'SWT301 2.2 — Test levels: component & integration, stubs & drivers|||SWT301 2.2 — Cấp test: component & integration, stub & driver'],
+  c23: ['swt301-system-acceptance', 'SWT301 2.3 — System & acceptance testing|||SWT301 2.3 — System & acceptance testing'],
+  c76: ['swt301-bug-lifecycle', 'SWT301 7.6 — Defect management: reports & the lifecycle|||SWT301 7.6 — Quản lý defect: báo cáo & vòng đời'],
   c84: ['swt301-tools-selection-pilot', 'SWT301 8.4 — Tool selection & the pilot project|||SWT301 8.4 — Chọn công cụ & dự án thí điểm'],
 };
 
@@ -116,10 +119,37 @@ const lessons = [
     meo: 'Câu nhiều ý (i, ii, iii…) thì xét đúng/sai từng ý trước, rồi mới so với các đáp án.',
     meoEn: 'For questions with several statements (i, ii, iii…), judge each statement first, then match the options.',
   }),
+  fe({
+    so: 25, ky: 'SP26', dai: '1 giờ 8 phút', // mốc + độ dài ƯỚC theo thoigian.json (25/10) — chỉnh theo mo-ta-chuong.txt khi ghép bản -tron
+    moc: [['0:00', 1, 15], ['16:58', 16, 30], ['33:41', 31, 45], ['51:06', 46, 60]],
+    chuong: [
+      'Ch3 Kiểm thử tĩnh 13 · Ch7 Quản lý test 12 · Ch1 Nền tảng kiểm thử 10 · Ch8 Công cụ & tự động hoá 10 · Ch2 Kiểm thử xuyên suốt SDLC 9 · Ch4 Black-box 4 · Ch5 White-box 1 · Ch6 Dựa kinh nghiệm 1 · Ch9 Agile 0',
+      'Chương 3 và Chương 7 chiếm 25/60 câu. Chỉ một câu tính (câu 32 — phân vùng tương đương).',
+    ],
+    chuongEn: [
+      'Ch3 Static testing 13 · Ch7 Test management 12 · Ch1 Fundamentals 10 · Ch8 Tools & automation 10 · Ch2 Testing throughout the SDLC 9 · Ch4 Black-box 4 · Ch5 White-box 1 · Ch6 Experience-based 1 · Ch9 Agile 0',
+      'Chapters 3 and 7 make up 25 of the 60 questions. Only one calculation question (Q32 — equivalence partitioning).',
+    ],
+    luuY: [
+      'Có <b>một câu chọn hai đáp án</b> (câu 21: B + C) và năm câu có năm đáp án (A–E) — thấy chữ "TWO" thì tick đủ hai ô.',
+      'Cả 60 đáp án đã tự giải lại theo ISTQB và đều khớp Phòng thi. Ba câu mà <b>đề cũ chấm lệch</b>, hãy học theo đề này: câu 3 chọn "the objective of the test" (FE7 chấm C) · câu 7 chọn C (FE11 chấm A, FE7/FE20 chấm D) · câu 39 chọn bỏ bớt yêu cầu chưa làm (FE9/FE23 chấm "làm thêm giờ" — sai, ngày giao và chất lượng đã khoá thì chỉ còn cắt phạm vi).',
+      'Đề hỏi một ý hai lần: câu 10 ↔ 45 (driver gọi, stub bị gọi), câu 51 ↔ 52 (hồi quy ⇒ ghi–phát lại), câu 29 ↔ 54 ↔ 57 (phân tích tĩnh), câu 19 ↔ 25 (inspection). Chữ bẫy: NOT, EXCEPT, least likely, MOST.',
+      'Lỗ hổng nên ôn theo thứ tự: loại review, vai trò và các bước (Ch3) · quản lý test: kế hoạch, giám sát/kiểm soát, quản lý cấu hình, báo cáo sự cố (Ch7) · công cụ tĩnh/động, ghi–phát lại, chọn công cụ (Ch8) · cấp test và loại test: driver/stub, system, acceptance, confirmation (Ch2).',
+    ],
+    luuYEn: [
+      'There is <b>one "choose TWO" question</b> (Q21: B + C) and five questions with five options (A–E) — when you see "TWO", tick both boxes.',
+      'All 60 answers were re-solved against ISTQB and match the Exam room. Three questions that <b>older papers grade differently</b> — learn this paper\'s answer: Q3 = "the objective of the test" (FE7 keys C) · Q7 = C (FE11 keys A, FE7/FE20 key D) · Q39 = drop some not-yet-implemented requirements (FE9/FE23 key "overtime" — wrong: with the date and quality fixed, scope is the only lever).',
+      'The paper asks some ideas twice: Q10 ↔ Q45 (driver calls, stub is called), Q51 ↔ Q52 (regression ⇒ capture/replay), Q29 ↔ Q54 ↔ Q57 (static analysis), Q19 ↔ Q25 (inspection). Trap words: NOT, EXCEPT, least likely, MOST.',
+      'Weak spots in order: review types, roles and steps (Ch3) · test management: planning, monitoring/control, configuration management, incident reports (Ch7) · static/dynamic tools, capture/replay, tool selection (Ch8) · test levels and types: driver/stub, system, acceptance, confirmation (Ch2).',
+    ],
+    onLai: [L.c33, L.c32, L.c34, L.c72, L.c73, L.c74, L.c76, L.c82, L.c83, L.c84, L.c22, L.c23, L.c42],
+    meo: 'Nhiều câu của đề này lặp ở hàng chục đề khác (câu 49 gặp 12 đề; câu 50, 53, 55 gặp 11 đề) — nắm chắc chúng là ăn điểm ở hầu hết các đề.',
+    meoEn: 'Many questions here recur across a dozen other papers (Q49 appears in 12; Q50, Q53, Q55 in 11) — master them and you score on almost every paper.',
+  }),
 ];
 
 export default {
   title: '🎬 FE review — real final exams, fully solved on video|||🎬 Chữa trọn đề FE — đề trắc nghiệm thật, chữa từng câu bằng video',
-  description: 'Mục video tự thêm, tách riêng khỏi mục PE: mỗi đề FE thật (60 câu, 60 phút) là một video dài chữa đủ 60 câu đúng thứ tự Phòng thi — ảnh đề gốc, dịch, từ vựng, từng đáp án, nhãn chương, mốc "Phần k — câu a–b" và thống kê chương. Đề mới nhất trước: FE1 (SP26 RE), FE2 (SP26 FE).',
+  description: 'Mục video tự thêm, tách riêng khỏi mục PE: mỗi đề FE thật (60 câu, 60 phút) là một video dài chữa đủ 60 câu đúng thứ tự Phòng thi — ảnh đề gốc, dịch, từ vựng, từng đáp án, nhãn chương, mốc "Phần k — câu a–b" và thống kê chương. Đề mới nhất trước: FE1 (SP26 RE), FE2 (SP26 FE), FE25 (SP26).',
   lessons,
 };

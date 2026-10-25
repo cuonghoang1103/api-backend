@@ -39,9 +39,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Testing stops when the defined exit/completion criteria are met, not by any single one of these; hence &#39;None of the others&#39;.</p></div><div class=\"ml-vi\"><p>Kiểm thử dừng khi đạt tiêu chí kết thúc/hoàn thành đã định, không phải chỉ dựa vào một điều đơn lẻ nào; vì vậy chọn &#39;Không phương án nào&#39;.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Course slides list practical stop criteria: all planned test cases executed (with a pass percentage) and the bug-detection rate falling below a level — option C. Time expiry alone is called a poor criterion (Myers), and &#39;75% of a pre-defined number of errors&#39; is not a standard rule. ⚠ The wording is ambiguous: &#39;None of the others&#39; can be argued because no single criterion is enough on its own (real exit criteria combine coverage, defects and risk), and older answer keys differed (A, C, D). C is the most defensible and is now used consistently for this question across all SWT301 papers in the Exam room.</p></div><div class=\"ml-vi\"><p>Slide môn nêu tiêu chí dừng thực tế: chạy hết các test case đã lên kế hoạch (đạt tỉ lệ pass) và tốc độ phát hiện lỗi giảm dưới ngưỡng — đúng phương án C. Chỉ dựa vào hết giờ bị coi là tiêu chí kém (Myers), còn &#39;75% số lỗi định trước&#39; không phải quy tắc chuẩn. ⚠ Đề viết mơ hồ: có thể cãi &#39;None of the others&#39; vì không tiêu chí đơn lẻ nào là đủ (tiêu chí dừng thật kết hợp độ phủ, lỗi và rủi ro), và các đáp án cũ từng chấm khác nhau (A, C, D). C là đáp án vững nhất và nay được dùng thống nhất cho câu này ở mọi đề SWT301 trong Phòng thi.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -63,9 +63,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The technique should be chosen based on how appropriate it is for the application/system under test (risk, type of system, objectives).</p></div><div class=\"ml-vi\"><p>Chọn kỹ thuật dựa trên mức độ phù hợp của nó với ứng dụng/hệ thống được kiểm thử (rủi ro, loại hệ thống, mục tiêu).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is a classic ISTQB question whose key is &#39;the objective of the test&#39;: the technique is chosen to achieve what the test is trying to achieve. Whether a technique is &#39;appropriate for the application&#39; is itself judged against the test objective; familiarity and tool support are secondary. (The same question in SWT301 Đề 25 câu 3 is keyed B.)</p></div><div class=\"ml-vi\"><p>Đây là câu ISTQB kinh điển, đáp án là &#39;mục tiêu của việc kiểm thử&#39;: chọn kỹ thuật để đạt điều mà bài test cần đạt. Kỹ thuật &#39;có phù hợp với ứng dụng&#39; hay không cũng là so với mục tiêu test; mức thành thạo và công cụ hỗ trợ chỉ là yếu tố phụ. (Cùng câu này ở SWT301 Đề 25 câu 3 chấm B.)</p></div>"
         },
         {
           "kind": "MCQ",

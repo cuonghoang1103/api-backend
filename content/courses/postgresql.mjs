@@ -23,6 +23,18 @@ import s13 from './postgresql/s13-jsonb-fts.mjs';
 import s14 from './postgresql/s14-ket-noi-van-hanh.mjs';
 import s15 from './postgresql/s15-sao-luu-nhan-ban.mjs';
 import s16 from './postgresql/s16-production-capstone.mjs';
+import { LAB_SAU } from './postgresql/lab/index.mjs';
+import { SAU_CH16 } from './postgresql/them.mjs';
+
+/** Chèn lab của chương n vào sau bài học, trước quiz (*-quiz). */
+const coLab = (sec, n) => {
+  const labs = LAB_SAU[n] || [];
+  if (!labs.length) return sec;
+  const ls = [...sec.lessons];
+  const q = ls.findIndex((l) => /-quiz$/.test(l.slug));
+  ls.splice(q < 0 ? ls.length : q, 0, ...labs);
+  return { ...sec, lessons: ls };
+};
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -45,22 +57,7 @@ export default {
     documentsNote: 'Tài liệu tham chiếu chính: postgresql.org/docs (tài liệu chính thức, đầy đủ và chính xác nhất) • use-the-index-luke.com (giải thích chỉ mục và EXPLAIN cực rõ) • pgexercises.com (bài tập SQL tương tác). Phần thực hành đi kèm: track "PostgreSQL" trên Code Lab. Loạt bài "100 Ngày Database" trên trang chủ /feed bổ trợ phần lý thuyết quan hệ và chuẩn hoá.',
   },
   sections: [
-    s00,
-    s01,
-    s02,
-    s03,
-    s04,
-    s05,
-    s06,
-    s07,
-    s08,
-    s09,
-    s10,
-    s11,
-    s12,
-    s13,
-    s14,
-    s15,
-    s16,
-  ],
+    s00, s01, s02, s03, s04, s05, s06, s07, s08,
+    s09, s10, s11, s12, s13, s14, s15, s16,
+  ].map(coLab).concat(SAU_CH16),
 };

@@ -31,7 +31,8 @@ Không sửa tệp chương sNN, không sửa manifest `postgresql.mjs`.
 ## 4. Tệp tải về
 - Đặt ở `lab/sql/`: `labN-start.sql` (khởi đầu, có TODO), `labN-solution.sql` (đáp án, chú thích con số thật), thêm `labN-check.sql` / `labN-*.csv` nếu cần.
 - Upload R2 key `PG/labs/v1/<tên>` ⇒ `https://media.cuongthai.com/files/academy/PG/labs/v1/<tên>` (kiểm `curl -sI` 200).
-  `scripts/upload-academy-file.mjs` chưa nhận `.sql/.csv` ⇒ Lab 1–2 dùng bản sao trong scratchpad (cùng logic, content-type `text/plain`/`text/csv; charset=utf-8`).
+  Upload thẳng: `node --env-file=.env scripts/upload-academy-file.mjs --file content/courses/postgresql/lab/sql/<tên> --key PG/labs/v1/<tên>` — script NAY nhận `.sql`/`.csv`
+  (commit 4b1c17368; content-type `text/plain`/`text/csv; charset=utf-8`). Lab 1–2 từng dùng bản sao trong scratchpad trước khi script được sửa.
 - Sửa tệp sau khi đã upload ⇒ key **v2** (Cloudflare giữ bytes cũ) và đổi `F` trong lab-N.mjs.
 
 ## 5. Slide — `scripts/slides-src/pg-lab-N.mjs`

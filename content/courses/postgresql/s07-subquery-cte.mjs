@@ -6,6 +6,11 @@
  * LUẬT: < > trong code/out → &lt; &gt; (so sánh >, chuỗi ' > '); & → &amp;;
  * backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G071 from './giang/pg-07-1.mjs';
+import G072 from './giang/pg-07-2.mjs';
+import G073 from './giang/pg-07-3.mjs';
+import G074 from './giang/pg-07-4.mjs';
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -19,7 +24,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Subquery vô hướng (một giá trị) trong SELECT và WHERE, và subquery IN để lọc theo một tập tính động.',
-      content: `
+      content: `${NHAN_LUOT}${G071}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>A query that feeds another query</h2>
@@ -68,8 +73,8 @@ ORDER BY id;</code></pre>
 <h3>Three places a subquery can stand</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">In WHERE — a value or a set</span><span class="lz-lnote"><code>WHERE user_id IN (SELECT id FROM app_user WHERE plan = 'pro')</code>. Runs once, produces a list, filters the outer rows against it. The most common shape by far.</span></div>
-<div class="lz-layer"><span class="lz-lname">In FROM — a derived table</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Behaves exactly like a table, must have an alias, and is how you aggregate before joining (6.4).</span></div>
-<div class="lz-layer"><span class="lz-lname">In SELECT — a scalar</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Must return exactly one row and one column, or the query errors at runtime rather than at parse time.</span></div>
+<div class="lz-layer"><span class="lz-lname">In FROM — a derived table</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Behaves exactly like a table, should get an alias (required before PostgreSQL 16; optional since, but always name it), and is how you aggregate before joining (6.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">In SELECT — a scalar</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Must return exactly one column and at most one row: two columns is rejected when the query is parsed, two rows fail at runtime ("more than one row returned by a subquery used as an expression"), and zero rows quietly give NULL.</span></div>
 </div>
 <p>Only the third form runs per outer row; the first two run once. That single distinction predicts the performance of every subquery you will write, and it is what the next lesson is about.</p>
 <div class="pitfall"><p><strong>Trap — <code>NOT IN</code> against a column that can be NULL.</strong> <code>WHERE id NOT IN (SELECT user_id FROM note)</code> returns <em>zero rows</em> the moment one <code>user_id</code> is NULL, and it does so silently. The logic is airtight and deeply unhelpful: <code>id NOT IN (1, 2, NULL)</code> means "id ≠ 1 AND id ≠ 2 AND id ≠ NULL", and that last comparison is <code>UNKNOWN</code>, never true — so the whole condition can never be true. <code>NOT EXISTS</code> has no such flaw and is the safe default; if you must keep <code>NOT IN</code>, add <code>WHERE user_id IS NOT NULL</code> inside the subquery. This is one of the few SQL bugs that turns a working report into an empty one overnight, when the first NULL arrives.</p></div>
@@ -127,8 +132,8 @@ ORDER BY id;</code></pre>
 <h3>Ba chỗ một subquery được đứng</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">Trong WHERE — một giá trị hoặc một tập</span><span class="lz-lnote"><code>WHERE user_id IN (SELECT id FROM app_user WHERE plan = 'pro')</code>. Chạy MỘT lần, sinh ra một danh sách, lọc các dòng ngoài theo nó. Hình dạng phổ biến nhất, xa hơn mọi dạng khác.</span></div>
-<div class="lz-layer"><span class="lz-lname">Trong FROM — một bảng dẫn xuất</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Hành xử y hệt một cái bảng, BẮT BUỘC có alias, và đây là cách bạn tổng hợp trước khi join (6.4).</span></div>
-<div class="lz-layer"><span class="lz-lname">Trong SELECT — một giá trị vô hướng</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Phải trả về ĐÚNG một dòng một cột, không thì truy vấn lỗi lúc CHẠY chứ không phải lúc phân tích cú pháp.</span></div>
+<div class="lz-layer"><span class="lz-lname">Trong FROM — một bảng dẫn xuất</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Hành xử y hệt một cái bảng, nên đặt alias (trước PostgreSQL 16 là BẮT BUỘC, từ 16 thì không còn bắt buộc nhưng vẫn nên đặt tên), và đây là cách bạn tổng hợp trước khi join (6.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">Trong SELECT — một giá trị vô hướng</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Phải trả về ĐÚNG một cột và TỐI ĐA một dòng: hai cột bị từ chối ngay lúc phân tích cú pháp, hai dòng lỗi lúc CHẠY ("more than one row returned by a subquery used as an expression"), còn không có dòng nào thì lặng lẽ ra NULL.</span></div>
 </div>
 <p>Chỉ dạng thứ ba chạy theo TỪNG dòng ngoài; hai dạng đầu chạy một lần. Đúng một sự phân biệt ấy dự đoán được hiệu năng của mọi subquery bạn sẽ viết, và đó là nội dung của bài kế tiếp.</p>
 <div class="pitfall"><p><strong>Bẫy — <code>NOT IN</code> trên một cột có thể NULL.</strong> <code>WHERE id NOT IN (SELECT user_id FROM note)</code> trả về <em>KHÔNG DÒNG NÀO</em> ngay khoảnh khắc có một <code>user_id</code> là NULL, và nó làm thế trong im lặng. Lô-gíc thì kín kẽ mà vô cùng vô ích: <code>id NOT IN (1, 2, NULL)</code> nghĩa là "id ≠ 1 VÀ id ≠ 2 VÀ id ≠ NULL", mà phép so cuối là <code>UNKNOWN</code>, không bao giờ đúng — nên cả điều kiện không thể nào đúng. <code>NOT EXISTS</code> không có khuyết tật ấy và là mặc định an toàn; nếu buộc phải giữ <code>NOT IN</code>, thêm <code>WHERE user_id IS NOT NULL</code> vào TRONG subquery. Đây là một trong số ít bug SQL biến một báo cáo đang chạy thành báo cáo rỗng sau một đêm, đúng lúc cái NULL đầu tiên xuất hiện.</p></div>
@@ -147,7 +152,7 @@ ORDER BY id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Subquery tương quan chạy cho mỗi dòng ngoài, EXISTS/NOT EXISTS để kiểm sự tồn tại, và vì sao NOT IN im lặng trả rỗng khi gặp NULL.',
-      content: `
+      content: `${NHAN_LUOT}${G072}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2>Subqueries that see the outer row — and one that bites</h2>
@@ -291,7 +296,7 @@ ORDER BY u.id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Common Table Expression với WITH để đặt tên các bước, và mẫu tổng-hợp-trước-khi-join để sửa triệt để fan-out sum.',
-      content: `
+      content: `${NHAN_LUOT}${G073}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.3</span>
 <h2>Naming the steps: the WITH clause</h2>
@@ -457,7 +462,7 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'WITH RECURSIVE để đi qua cây phân cấp: tính cấp bậc quản lý và dựng đường dẫn đầy đủ từ đỉnh.',
-      content: `
+      content: `${NHAN_LUOT}${G074}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>Following a chain: recursive CTEs</h2>

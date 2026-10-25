@@ -11,6 +11,7 @@ import G001 from './giang/pg-00-1.mjs';
 import G002 from './giang/pg-00-2.mjs';
 import G003 from './giang/pg-00-3.mjs';
 import G004 from './giang/pg-00-4.mjs';
+import G005 from './giang/pg-00-5.mjs';
 import { img } from './_slides.mjs';
 
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
@@ -697,6 +698,796 @@ ${G004}
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Sẵn sàng chưa? Chương 1 bắt đầu vào việc thật</span><span class="lc-sub">Tiếp theo: mô hình quan hệ và ACID — vì sao thiết kế này sống dai hơn mọi trào lưu.</span></span>
+</a>
+</div>
+`,
+    },
+    /* ─────────────────────────── 0.5 (MỚI — đường tắt cho người đã biết SQL Server / MySQL) ─────────────────────────── */
+    {
+      title: '0.5 — From SQL Server / MySQL to PostgreSQL|||0.5 — Từ SQL Server / MySQL sang PostgreSQL',
+      slug: 'postgresql-0-5-tu-sql-server-mysql',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài đường tắt cho người đã học SQL Server (DBI202) hoặc MySQL: cùng một CSDL nhỏ chạy thật trên SQL Server 2022, MySQL 8.4 và PostgreSQL 17 — cái gì giữ nguyên, cái gì đổi tên (TOP, IDENTITY, NVARCHAR, ISNULL, OUTPUT, MERGE…), và những cái bẫy cùng câu chữ khác kết quả (collation, chia nguyên, chuỗi rỗng, tên có ngoặc kép).',
+      content: `
+${G005}
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.5 · The shortcut</span>
+<h2>From SQL Server / MySQL to PostgreSQL</h2>
+<p class="lead">If you learned SQL on SQL Server (DBI202, SSMS, T-SQL) or on MySQL (XAMPP, Workbench), you already know most of PostgreSQL. This lesson maps what you know onto it in one sitting: the <strong>same</strong> tiny database on three servers, the <strong>same</strong> questions, every output real. You will meet three kinds of difference — things that are the <strong>same</strong>, things that are only <strong>renamed</strong>, and <strong>traps</strong> where the same text gives a different answer without any error.</p>
+<div class="callout ok">New to SQL? Skip this lesson and start at Chapter 1 — every chapter teaches PostgreSQL from zero. Come back here the day you meet SQL Server or MySQL at work.</div>
+
+<h3>The lab: one database, three servers</h3>
+<p>Every result below was produced on 25/10/2026 by running the same scripts on <strong>SQL Server 2022</strong> (16.0.4305, Docker image <code>mcr.microsoft.com/mssql/server:2022-latest</code>, client <code>sqlcmd</code>), <strong>MySQL 8.4.13</strong> (<code>mysql:8.4</code>, client <code>mysql</code>) and <strong>PostgreSQL 17.11</strong> (the course machine from lesson 0.3: <code>postgres:17</code> on port 5444, client <code>psql</code>). You can run them yourself:</p>
+<pre><code class="language-bash"># MySQL 8.4 — port 33306 on your machine
+docker run -d --name pgcourse-mysql -p 127.0.0.1:33306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:8.4
+docker exec -it pgcourse-mysql mysql -uroot -p123456
+
+# SQL Server 2022 — on Apple Silicon add --platform linux/amd64 (runs through Rosetta)
+docker run -d --platform linux/amd64 --name pgcourse-mssql -p 127.0.0.1:14331:1433 \\
+  -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='Pg_Course123' mcr.microsoft.com/mssql/server:2022-latest
+docker exec -it pgcourse-mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Pg_Course123' -C
+
+# PostgreSQL 17 — the container from lesson 0.3
+psql -h localhost -p 5444 -U postgres</code></pre>
+<p>The database is called <code>ctmini</code>: a 5-row <code>product</code> table and a 3-row <code>customer</code> table. Here is the PostgreSQL version; the other two differ only in the types you will meet below (<code>IDENTITY</code>/<code>AUTO_INCREMENT</code>, <code>NVARCHAR</code>, <code>BIT</code>/<code>TINYINT(1)</code>, <code>DATETIME2</code>/<code>DATETIME</code>):</p>
+<pre><code class="language-sql">CREATE DATABASE ctmini;   -- then \\c ctmini
+CREATE TABLE product (
+  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  sku        text          NOT NULL UNIQUE,
+  name       text          NOT NULL,
+  price      numeric(12,2) NOT NULL,
+  stock      int           NOT NULL DEFAULT 0,
+  is_active  boolean       NOT NULL DEFAULT true,
+  created_at timestamptz   NOT NULL DEFAULT now()
+);
+INSERT INTO product (sku, name, price, stock, is_active) VALUES
+ ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),
+ ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),
+ ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),
+ ('BALO-04',  'Balo chống gù',        450000,   8, true),
+ ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);
+CREATE TABLE customer (
+  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email     text NOT NULL UNIQUE,
+  full_name text NOT NULL,
+  phone     text
+);
+INSERT INTO customer (email, full_name, phone) VALUES
+ ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),
+ ('binh@ctshop.vn','Trần Thị Bình', NULL),
+ ('chi@ctshop.vn', 'Lê Minh Chi',   '');</code></pre>
+
+<h3>Same question, same answer</h3>
+<p>“Stock value of every active product, biggest first.” The three queries differ only in how they test <code>is_active</code>:</p>
+<pre><code class="language-sql">-- SQL Server / MySQL
+SELECT sku, price * stock AS stock_value FROM product WHERE is_active = 1 ORDER BY stock_value DESC;
+-- PostgreSQL
+SELECT sku, price * stock AS stock_value FROM product WHERE is_active ORDER BY stock_value DESC;</code></pre>
+<div class="out">   sku   | stock_value
+---------+-------------
+ MAY-05  | 10350000.00
+ BALO-04 |  3600000.00
+ VO-02   |   720000.00
+ BUT-01  |   600000.00
+(4 rows)</div>
+<p>sqlcmd and mysql print the same four rows and numbers in their own table style. That is the good news: SELECT, WHERE, JOIN, GROUP BY, HAVING, ORDER BY, subqueries, CTEs, window functions, PRIMARY / FOREIGN KEY, CHECK and transactions all mean the same thing on the three servers.</p>
+
+<h3>Cheat sheet</h3>
+<table>
+<tr><th>What</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td>First N rows</td><td><code>SELECT TOP 3 …</code></td><td><code>… LIMIT 3</code></td><td><code>… LIMIT 3</code> / <code>FETCH FIRST 3 ROWS ONLY</code></td></tr>
+<tr><td>Auto number</td><td><code>INT IDENTITY(1,1)</code></td><td><code>INT AUTO_INCREMENT</code></td><td><code>int GENERATED ALWAYS AS IDENTITY</code></td></tr>
+<tr><td>Unicode text</td><td><code>NVARCHAR(n)</code> + <code>N'…'</code></td><td><code>VARCHAR(n)</code> (utf8mb4)</td><td><code>text</code></td></tr>
+<tr><td>Current time</td><td><code>GETDATE()</code>, <code>SYSDATETIME()</code></td><td><code>NOW()</code></td><td><code>now()</code></td></tr>
+<tr><td>NULL fallback</td><td><code>ISNULL(a, b)</code></td><td><code>IFNULL(a, b)</code></td><td><code>COALESCE(a, b)</code> (all three have it)</td></tr>
+<tr><td>Join strings</td><td><code>a + b</code></td><td><code>CONCAT(a, b)</code></td><td><code>a || b</code></td></tr>
+<tr><td>True / false</td><td><code>BIT</code></td><td><code>TINYINT(1)</code></td><td><code>boolean</code></td></tr>
+<tr><td>Date + time</td><td><code>DATETIME2</code> / <code>DATETIMEOFFSET</code></td><td><code>DATETIME</code> / <code>TIMESTAMP</code></td><td><code>timestamp</code> / <code>timestamptz</code></td></tr>
+<tr><td>Rows you just wrote</td><td><code>OUTPUT inserted.id</code></td><td>— (<code>LAST_INSERT_ID()</code>)</td><td><code>RETURNING id</code></td></tr>
+<tr><td>Upsert</td><td><code>MERGE</code></td><td><code>ON DUPLICATE KEY UPDATE</code></td><td><code>ON CONFLICT … DO UPDATE</code></td></tr>
+<tr><td>Server-side code</td><td>T-SQL procedure</td><td>stored procedure + <code>DELIMITER</code></td><td>PL/pgSQL function</td></tr>
+<tr><td>Namespace</td><td>database → schema <code>dbo</code></td><td>database = schema</td><td>database → schema <code>public</code></td></tr>
+<tr><td>Quoting names</td><td><code>[Order Note]</code></td><td><code>&#96;Order Note&#96;</code></td><td><code>"Order Note"</code> (and case folding)</td></tr>
+<tr><td><code>'abc' = 'ABC'</code></td><td>true (CI collation)</td><td>true (ai_ci: accents too)</td><td>false → <code>ILIKE</code> / <code>lower()</code></td></tr>
+<tr><td><code>7 / 2</code></td><td>3</td><td>3.5000</td><td>3</td></tr>
+<tr><td><code>'' = ' '</code></td><td>true (pads spaces)</td><td>false</td><td>false</td></tr>
+<tr><td>Update just one row</td><td><code>UPDATE TOP (1)</code></td><td><code>… ORDER BY … LIMIT 1</code></td><td>no LIMIT → <code>WHERE id = (subquery)</code></td></tr>
+<tr><td>Tools</td><td>SSMS, sqlcmd</td><td>Workbench, mysql</td><td>psql, pgAdmin, DBeaver</td></tr>
+</table>
+
+<h3>Renamed 1 — TOP → LIMIT</h3>
+<pre><code class="language-sql">SELECT sku, price FROM product ORDER BY price DESC LIMIT 3;
+SELECT sku, price FROM product ORDER BY price DESC OFFSET 1 FETCH FIRST 2 ROWS ONLY;
+SELECT TOP 3 sku FROM product;</code></pre>
+<div class="out">   sku   |   price
+---------+-----------
+ MAY-05  | 690000.00
+ BALO-04 | 450000.00
+ VO-02   |  18000.00
+(3 rows)
+
+   sku   |   price
+---------+-----------
+ BALO-04 | 450000.00
+ VO-02   |  18000.00
+(2 rows)
+
+ERROR:  syntax error at or near "3"
+LINE 1: SELECT TOP 3 sku FROM product;
+                   ^</div>
+<p><code>OFFSET … FETCH FIRST … ROWS ONLY</code> is the SQL standard and also works on SQL Server (<code>OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY</code>, which gave the same two rows there). <code>TOP</code> exists only in SQL Server.</p>
+
+<h3>Renamed 2 — IDENTITY → GENERATED ALWAYS AS IDENTITY</h3>
+<p>All three number new rows automatically. The difference shows when you try to write the id yourself:</p>
+<pre><code class="language-sql">INSERT INTO product (id, sku, name, price) VALUES (99, 'X-99', 'Thử', 1);</code></pre>
+<div class="out">ERROR:  cannot insert a non-DEFAULT value into column "id"
+DETAIL:  Column "id" is an identity column defined as GENERATED ALWAYS.
+HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
+<p>SQL Server refuses too (<code>Msg 544 … Cannot insert explicit value for identity column in table 'product' when IDENTITY_INSERT is set to OFF.</code>). MySQL accepts 99 without a word — and the next automatic id becomes 100. In older PostgreSQL code you will see <code>serial</code>; new tables use IDENTITY (Chapter 3.1). To get the new id back, PostgreSQL uses <code>RETURNING id</code> (below) instead of <code>SCOPE_IDENTITY()</code> / <code>LAST_INSERT_ID()</code>.</p>
+
+<h3>Renamed 3 — NVARCHAR → text</h3>
+<p>SQL Server with its default collation <code>SQL_Latin1_General_CP1_CI_AS</code> cannot store “ở” or “ẻ” in a VARCHAR column — and even an NVARCHAR column loses them if the literal has no <code>N</code> prefix:</p>
+<div class="out">a                              b                              len_b       bytes_b
+------------------------------ ------------------------------ ----------- -----------
+V? k? ngang                    V? k? ngang                             11          22
+V? k? ngang                    Vở kẻ ngang                             11          22</div>
+<p>(row 1: <code>'Vở kẻ ngang'</code> without N; row 2: <code>N'Vở kẻ ngang'</code> into VARCHAR <code>a</code> and NVARCHAR <code>b</code>.) MySQL 8 uses utf8mb4 by default and PostgreSQL databases are UTF-8, so there is nothing to remember:</p>
+<pre><code class="language-sql">SELECT 'Vở kẻ ngang'::text AS a, length('Vở kẻ ngang') AS chars, octet_length('Vở kẻ ngang') AS bytes;</code></pre>
+<div class="out">      a      | chars | bytes
+-------------+-------+-------
+ Vở kẻ ngang |    11 |    15
+(1 row)</div>
+
+<h3>Renamed 4 — GETDATE() → now(), DATETIME2 → timestamptz</h3>
+<p>We inserted <code>'2026-10-25 09:00:00 +07:00'</code> into a DATETIME2 and a DATETIMEOFFSET column on SQL Server: DATETIME2 kept <code>2026-10-25 09:00:00.0000000</code> and silently dropped the +07:00; DATETIMEOFFSET kept the offset (<code>02:00 +00:00</code> in UTC). MySQL and PostgreSQL behave the same way with their two types — a plain one and a zone-aware one:</p>
+<pre><code class="language-sql">CREATE TEMP TABLE t_ts (a timestamp, b timestamptz);
+SET TIME ZONE 'Asia/Ho_Chi_Minh';
+INSERT INTO t_ts VALUES ('2026-10-25 09:00', '2026-10-25 09:00');
+SET TIME ZONE 'UTC';
+SELECT a, b FROM t_ts;</code></pre>
+<div class="out">          a          |           b
+---------------------+------------------------
+ 2026-10-25 09:00:00 | 2026-10-25 02:00:00+00
+(1 row)</div>
+<p>MySQL printed <code>2026-10-25 09:00:00</code> for DATETIME and <code>2026-10-25 02:00:00</code> for TIMESTAMP after the same steps. The current time is <code>now()</code> in PostgreSQL; <code>SELECT GETDATE();</code> fails with <code>function getdate() does not exist</code>. Chapter 2.3 explains why <code>timestamptz</code> is the right default.</p>
+
+<h3>Renamed 5 — ISNULL / IFNULL → COALESCE, + / CONCAT → ||</h3>
+<pre><code class="language-sql">SELECT full_name, COALESCE(phone, 'n/a') FROM customer;
+SELECT ISNULL(phone, 'n/a') FROM customer;</code></pre>
+<div class="out">   full_name   |  coalesce
+---------------+------------
+ Nguyễn Văn An | 0901000001
+ Trần Thị Bình | n/a
+ Lê Minh Chi   |
+(3 rows)
+
+ERROR:  function isnull(text, unknown) does not exist</div>
+<p><code>COALESCE</code> works on all three — make it your habit. For strings, NULL behaves differently per function. With <code>phone</code> NULL:</p>
+<table>
+<tr><th>Expression</th><th>Result</th></tr>
+<tr><td>SQL Server <code>'Phone: ' + phone</code></td><td>NULL</td></tr>
+<tr><td>SQL Server <code>CONCAT('Phone: ', phone)</code></td><td><code>Phone: </code> (skips NULL)</td></tr>
+<tr><td>MySQL <code>CONCAT('Phone: ', phone)</code></td><td>NULL</td></tr>
+<tr><td>PostgreSQL <code>'Phone: ' || phone</code></td><td>NULL</td></tr>
+<tr><td>PostgreSQL <code>concat('Phone: ', phone)</code></td><td><code>Phone: </code> (skips NULL)</td></tr>
+</table>
+<div class="pitfall"><p><strong>Trap — <code>||</code> in MySQL means OR.</strong> <code>SELECT 'BUT' || '-01'</code> returned <code>1</code> on MySQL 8.4 “with 2 warnings”: both strings were turned into numbers and OR-ed. In PostgreSQL the same text joins strings.</p></div>
+
+<h3>Renamed 6 — BIT / TINYINT(1) → boolean</h3>
+<p>SQL Server's BIT and MySQL's TINYINT(1) are really numbers (in MySQL <code>TRUE + TRUE</code> is <code>2</code>). PostgreSQL has a real boolean type:</p>
+<pre><code class="language-sql">SELECT sku, is_active FROM product WHERE is_active;
+SELECT sku FROM product WHERE is_active = 1;
+SELECT sku FROM product WHERE NOT is_active;</code></pre>
+<div class="out">   sku   | is_active
+---------+-----------
+ BUT-01  | t
+ VO-02   | t
+ BALO-04 | t
+ MAY-05  | t
+(4 rows)
+
+ERROR:  operator does not exist: boolean = integer
+LINE 1: SELECT sku FROM product WHERE is_active = 1;
+                                                ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+   sku
+----------
+ THUOC-03
+(1 row)</div>
+<p>SQL Server is the mirror image: <code>WHERE is_active = 1</code> works, the bare <code>WHERE is_active</code> fails with <code>Msg 4145 … An expression of non-boolean type specified in a context where a condition is expected</code>.</p>
+
+<h3>Renamed 7 — OUTPUT → RETURNING</h3>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price) VALUES ('GOM-07', 'Gôm tẩy', 3000) RETURNING id, sku;
+UPDATE product SET price = price * 1.1 WHERE sku = 'GOM-07' RETURNING price AS new_price;</code></pre>
+<div class="out"> id |  sku
+----+--------
+  6 | GOM-07
+(1 row)
+
+INSERT 0 1
+ new_price
+-----------
+   3300.00
+(1 row)
+
+UPDATE 1</div>
+<p>On SQL Server the same is <code>OUTPUT inserted.id, inserted.sku</code> (and <code>OUTPUT deleted.price AS old_price, inserted.price AS new_price</code> for the update: 3000.00 → 3300.00). MySQL 8.4 has no RETURNING — the statement fails with error 1064, and you run a second query <code>SELECT LAST_INSERT_ID()</code>.</p>
+
+<h3>Renamed 8 — MERGE / ON DUPLICATE KEY → ON CONFLICT</h3>
+<p>Thirty more pens arrive: add them if <code>BUT-01</code> exists, otherwise insert it.</p>
+<pre><code class="language-sql">-- SQL Server
+MERGE product AS t
+USING (VALUES ('BUT-01', N'Bút bi Thiên Long', 5000, 30)) AS s(sku, name, price, stock)
+  ON t.sku = s.sku
+WHEN MATCHED THEN UPDATE SET stock = t.stock + s.stock
+WHEN NOT MATCHED THEN INSERT (sku, name, price, stock) VALUES (s.sku, s.name, s.price, s.stock);
+
+-- MySQL 8  (reports "2 rows affected" when it updates)
+INSERT INTO product (sku, name, price, stock) VALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30) AS s
+  ON DUPLICATE KEY UPDATE stock = product.stock + s.stock;
+
+-- PostgreSQL
+INSERT INTO product (sku, name, price, stock) VALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30)
+  ON CONFLICT (sku) DO UPDATE SET stock = product.stock + EXCLUDED.stock
+  RETURNING sku, stock;</code></pre>
+<div class="out">  sku   | stock
+--------+-------
+ BUT-01 |   150
+(1 row)
+
+INSERT 0 1</div>
+<p>All three end at 150. PostgreSQL names the conflict target <code>(sku)</code> — there must be a UNIQUE index or constraint on it — and calls the row you tried to insert <code>EXCLUDED</code>. PostgreSQL 15+ also has MERGE; ON CONFLICT remains the everyday upsert (Chapter 4.1).</p>
+
+<h3>Renamed 9 — T-SQL procedures → PL/pgSQL functions</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION stock_value(min_price numeric) RETURNS numeric
+LANGUAGE plpgsql AS $$
+DECLARE
+  total numeric;
+BEGIN
+  SELECT sum(price * stock) INTO total FROM product WHERE price &gt;= min_price;
+  RETURN total;
+END;
+$$;
+SELECT stock_value(10000) AS total;</code></pre>
+<div class="out">    total
+-------------
+ 14670000.00
+(1 row)</div>
+<p>The T-SQL version (<code>CREATE OR ALTER PROCEDURE stock_value @min_price DECIMAL(12,2) AS BEGIN … END</code>, called with <code>EXEC stock_value @min_price = 10000</code>) and the MySQL one (<code>DELIMITER //</code> … <code>CALL stock_value(10000)</code>) both returned 14670000.00. What changes: no <code>@</code> on variables, no DELIMITER — the body is a string between <code>$$ … $$</code> — and a function is used inside SELECT. Chapter 12 teaches PL/pgSQL.</p>
+
+<h3>Renamed 10 — dbo / database / public</h3>
+<p>SQL Server: server → database → schema (default <code>dbo</code>) → table. MySQL: a “database” and a “schema” are the same thing (<code>SELECT DATABASE(), SCHEMA()</code> both said <code>ctmini</code>). PostgreSQL: server → database → schema (default <code>public</code>) → table, and you cannot join tables across two databases in one query — use schemas inside one database instead.</p>
+<pre><code class="language-sql">SELECT current_schema();
+SHOW search_path;</code></pre>
+<div class="out"> current_schema
+----------------
+ public
+(1 row)
+
+   search_path
+-----------------
+ "$user", public
+(1 row)</div>
+
+<h3>Renamed 11 — quoting names, and case folding</h3>
+<p><code>[Order Note]</code> in SQL Server, <code>&#96;Order Note&#96;</code> in MySQL, <code>"Order Note"</code> in PostgreSQL. The real difference is case. PostgreSQL turns every unquoted name into lower case; a quoted name is kept exactly:</p>
+<pre><code class="language-sql">CREATE TABLE "Customer" (id int);
+SELECT * FROM Customer;          -- reads the table customer, not "Customer"
+SELECT * FROM "Order note";      -- the table is "Order Note"</code></pre>
+<div class="out"> id |     email      |   full_name   |   phone
+----+----------------+---------------+------------
+  1 | an@ctshop.vn   | Nguyễn Văn An | 0901000001
+  2 | binh@ctshop.vn | Trần Thị Bình |
+  3 | chi@ctshop.vn  | Lê Minh Chi   |
+(3 rows)
+
+ERROR:  relation "Order note" does not exist</div>
+<p>SQL Server with a CI collation does not care (<code>SELECT * FROM PRODUCT WHERE SKU = 'BUT-01'</code> worked). MySQL on Linux treats <strong>table</strong> names as case-sensitive (<code>ERROR 1146 … Table 'ctmini.PRODUCT' doesn't exist</code>) but not column names. The PostgreSQL rule that saves you: <strong>lower_snake_case, never quotes</strong>.</p>
+
+<h3>Trap 1 — comparing text (collation)</h3>
+<table>
+<tr><th>Query on product.name</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>= 'BÚT BI THIÊN LONG'</code></td><td>1 row</td><td>1 row</td><td>0 rows</td></tr>
+<tr><td><code>LIKE 'balo%'</code></td><td>1 row</td><td>1 row</td><td>0 rows</td></tr>
+<tr><td><code>= 'But bi Thien Long'</code> (no accents)</td><td>0 rows</td><td>1 row</td><td>0 rows</td></tr>
+</table>
+<p>SQL Server's default collation is <strong>C</strong>ase-<strong>I</strong>nsensitive and <strong>A</strong>ccent-<strong>S</strong>ensitive. MySQL 8's <code>utf8mb4_0900_ai_ci</code> is accent-insensitive <em>and</em> case-insensitive. PostgreSQL compares exactly. Two fixes:</p>
+<pre><code class="language-sql">SELECT sku, name FROM product WHERE name ILIKE 'balo%';
+SELECT sku, name FROM product WHERE lower(name) = lower('BÚT BI THIÊN LONG');</code></pre>
+<div class="out">   sku   |     name
+---------+---------------
+ BALO-04 | Balo chống gù
+(1 row)
+
+  sku   |       name
+--------+-------------------
+ BUT-01 | Bút bi Thiên Long
+(1 row)</div>
+<p>Accent-insensitive search (“but bi” finding “Bút bi”) needs the <code>unaccent</code> extension and trigram indexes — Chapter 13.</p>
+
+<h3>Trap 2 — dividing integers</h3>
+<table>
+<tr><th>Expression</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>7 / 2</code></td><td>3</td><td>3.5000</td><td>3</td></tr>
+<tr><td><code>SUM(stock) / COUNT(*)</code></td><td>36</td><td>36.6000</td><td>36</td></tr>
+<tr><td><code>AVG(stock)</code> (int column)</td><td>36</td><td>36.6000</td><td>36.6000000000000000</td></tr>
+</table>
+<p>A MySQL report that showed 36.6 silently shows 36 after you move it. No error — just a wrong number. In PostgreSQL say what you mean: <code>avg(stock)</code>, <code>sum(stock)::numeric / count(*)</code>, or <code>round(avg(stock), 1)</code> → 36.6. (Note that SQL Server truncates even <code>AVG</code> of an int column.)</p>
+
+<h3>Trap 3 — empty string, spaces and NULL</h3>
+<table>
+<tr><th>Real result on ctmini</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>'' = ' '</code></td><td>equal</td><td>different</td><td>different</td></tr>
+<tr><td><code>'abc' = 'abc   '</code></td><td>equal</td><td>different</td><td>different</td></tr>
+<tr><td>length of <code>'abc   '</code></td><td><code>LEN</code> = 3</td><td><code>CHAR_LENGTH</code> = 6</td><td><code>length</code> = 6</td></tr>
+<tr><td><code>COUNT(*)</code> · <code>COUNT(phone)</code> · <code>COUNT(NULLIF(phone, ''))</code></td><td>3 · 2 · 1</td><td>3 · 2 · 1</td><td>3 · 2 · 1</td></tr>
+</table>
+<p>On all three an empty string is a real value, not NULL (Oracle is the odd one out) — so <code>COUNT(phone)</code> counts Chi's empty phone, and <code>NULLIF(phone, '')</code> turns '' into NULL when you mean “no phone”. What bites when moving from SQL Server: it pads strings with spaces before comparing, so trailing spaces never mattered there. In PostgreSQL they do — trim input (<code>trim()</code>) or forbid it with a CHECK.</p>
+
+<h3>Trap 4 — UPDATE with a row limit</h3>
+<pre><code class="language-sql">UPDATE product SET stock = stock - 1 WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1;   -- MySQL style
+UPDATE product SET stock = stock - 1
+WHERE id = (SELECT id FROM product WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1)
+RETURNING sku, stock;</code></pre>
+<div class="out">ERROR:  syntax error at or near "ORDER"
+LINE 1: ...ATE product SET stock = stock - 1 WHERE stock &gt; 0 ORDER BY p...
+                                                             ^
+  sku   | stock
+--------+-------
+ MAY-05 |    14
+(1 row)
+
+UPDATE 1</div>
+<p>MySQL accepts the first form. SQL Server's <code>UPDATE TOP (1) product SET stock = stock - 1 WHERE stock &gt; 0</code> runs but cannot take an ORDER BY — it changed <code>BUT-01</code> (stock 120 → 119), not the most expensive product. PostgreSQL makes you choose the row explicitly in a subquery.</p>
+
+<h3>Tools</h3>
+<table>
+<tr><th>Task</th><th>SQL Server (sqlcmd / SSMS)</th><th>MySQL (mysql / Workbench)</th><th>PostgreSQL (psql)</th></tr>
+<tr><td>List databases</td><td><code>SELECT name FROM sys.databases</code></td><td><code>SHOW DATABASES;</code></td><td><code>\\l</code></td></tr>
+<tr><td>Switch database</td><td><code>USE ctmini;</code></td><td><code>USE ctmini;</code></td><td><code>\\c ctmini</code></td></tr>
+<tr><td>List tables</td><td><code>SELECT * FROM INFORMATION_SCHEMA.TABLES</code></td><td><code>SHOW TABLES;</code></td><td><code>\\dt</code></td></tr>
+<tr><td>Describe a table</td><td><code>EXEC sp_help 'product'</code></td><td><code>DESCRIBE product;</code></td><td><code>\\d product</code></td></tr>
+<tr><td>Run what you typed</td><td><code>GO</code></td><td><code>;</code></td><td><code>;</code></td></tr>
+</table>
+<p>GUIs: SSMS, MySQL Workbench, and for PostgreSQL pgAdmin (official) or DBeaver Community (free, opens all three side by side). This course stays in psql because it shows exactly what the server says.</p>
+
+<h3>In a real project: Prisma hides some of it, not all</h3>
+<p>cuongthai.com runs PostgreSQL through Prisma. Prisma translates the syntax for you — <code>mode: 'insensitive'</code>, which appears in 195 places in this site's backend, is sent to PostgreSQL as a real <code>ILIKE</code> (query log of <code>prisma.user.findFirst({ where: { email: { equals: raw, mode: 'insensitive' } } })</code>):</p>
+<div class="out">SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email" ILIKE $1 LIMIT $2 OFFSET $3</div>
+<p>But an ORM cannot change the database's rules: <code>DateTime</code> becomes <code>timestamp(3)</code> <em>without</em> time zone (the DATETIME2 problem again), <code>@default(autoincrement())</code> becomes <code>SERIAL</code>, integer division is still integer division. You still need this lesson.</p>
+
+<h3>Exercise</h3>
+<ol>
+<li>Translate the T-SQL <code>SELECT TOP 2 sku, name + ' (' + CAST(stock AS VARCHAR(10)) + ')' AS label FROM product WHERE is_active = 1 ORDER BY stock DESC;</code></li>
+<li>Translate <code>SELECT full_name, ISNULL(NULLIF(phone, ''), 'no phone') FROM customer;</code></li>
+<li>The MySQL query <code>SELECT sku, name FROM product WHERE name LIKE 'balo%';</code> returns one row. Make PostgreSQL return it too.</li>
+<li>A MySQL report showed <code>SUM(stock) / COUNT(*)</code> = 36.6. Make PostgreSQL show 36.6.</li>
+</ol>
+<details><summary>Answers (real output)</summary>
+<pre><code class="language-sql">SELECT sku, name || ' (' || stock || ')' AS label FROM product WHERE is_active ORDER BY stock DESC LIMIT 2;
+SELECT full_name, COALESCE(NULLIF(phone, ''), 'no phone') AS phone FROM customer;
+SELECT sku, name FROM product WHERE name ILIKE 'balo%';
+SELECT sum(stock) / count(*) AS wrong, round(avg(stock), 1) AS right_avg FROM product;</code></pre>
+<div class="out">  sku   |           label
+--------+----------------------------
+ BUT-01 | Bút bi Thiên Long (120)
+ VO-02  | Vở kẻ ngang 200 trang (40)
+(2 rows)
+
+   full_name   |   phone
+---------------+------------
+ Nguyễn Văn An | 0901000001
+ Trần Thị Bình | no phone
+ Lê Minh Chi   | no phone
+(3 rows)
+
+   sku   |     name
+---------+---------------
+ BALO-04 | Balo chống gù
+(1 row)
+
+ wrong | right_avg
+-------+-----------
+    36 |      36.6
+(1 row)</div>
+</details>
+
+<h3>Your route from here</h3>
+<p>Skim Chapters 1–7: the lessons of Chapters 2–7 carry the tag <em>“⏩ Know SQL Server or MySQL already? You can skim”</em> — read the slides and the traps, run the examples. Then study <strong>Chapters 8–17</strong> carefully (window functions, indexes, EXPLAIN, transactions and MVCC, PL/pgSQL, JSONB, operations, replication), and do every lab and the final exam. Chapter 17 comes back to this comparison in depth — SQL Server, MySQL, PostgreSQL and MongoDB on the same data, and how to choose.</p>
+<a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Practise the PostgreSQL way</span><span class="lc-sub">Code Lab PostgreSQL — then Chapter 1: why PostgreSQL exists.</span></span>
+</a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.5 · Đường tắt</span>
+<h2>Từ SQL Server / MySQL sang PostgreSQL</h2>
+<p class="lead">Nếu bạn đã học SQL trên SQL Server (DBI202, SSMS, T-SQL) hoặc MySQL (XAMPP, Workbench), bạn đã biết phần lớn PostgreSQL rồi. Bài này ánh xạ những gì bạn biết sang PostgreSQL trong một lần ngồi: <strong>cùng</strong> một CSDL nhỏ trên ba máy chủ, <strong>cùng</strong> câu hỏi, mọi output đều thật. Bạn sẽ gặp ba loại khác biệt — thứ <strong>giữ nguyên</strong>, thứ chỉ <strong>đổi tên</strong>, và những cái <strong>bẫy</strong> nơi cùng một câu chữ cho kết quả khác mà không báo lỗi gì.</p>
+<div class="callout ok">Mới học SQL lần đầu? Bỏ qua bài này, bắt đầu từ Chương 1 — chương nào cũng dạy PostgreSQL từ số 0. Ngày nào đi làm gặp SQL Server hay MySQL thì quay lại đây.</div>
+
+<h3>Phòng thí nghiệm: một CSDL, ba máy chủ</h3>
+<p>Mọi kết quả dưới đây được tạo ngày 25/10/2026 bằng cách chạy cùng các script trên <strong>SQL Server 2022</strong> (16.0.4305, image Docker <code>mcr.microsoft.com/mssql/server:2022-latest</code>, client <code>sqlcmd</code>), <strong>MySQL 8.4.13</strong> (<code>mysql:8.4</code>, client <code>mysql</code>) và <strong>PostgreSQL 17.11</strong> (máy của khoá từ bài 0.3: <code>postgres:17</code> cổng 5444, client <code>psql</code>). Bạn tự chạy được:</p>
+<pre><code class="language-bash"># MySQL 8.4 — cổng 33306 trên máy bạn
+docker run -d --name pgcourse-mysql -p 127.0.0.1:33306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:8.4
+docker exec -it pgcourse-mysql mysql -uroot -p123456
+
+# SQL Server 2022 — máy Apple Silicon thêm --platform linux/amd64 (chạy qua Rosetta)
+docker run -d --platform linux/amd64 --name pgcourse-mssql -p 127.0.0.1:14331:1433 \\
+  -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='Pg_Course123' mcr.microsoft.com/mssql/server:2022-latest
+docker exec -it pgcourse-mssql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Pg_Course123' -C
+
+# PostgreSQL 17 — container từ bài 0.3
+psql -h localhost -p 5444 -U postgres</code></pre>
+<p>CSDL tên <code>ctmini</code>: bảng <code>product</code> 5 dòng và bảng <code>customer</code> 3 dòng. Đây là bản PostgreSQL; hai bản kia chỉ khác ở các kiểu bạn sẽ gặp ngay dưới (<code>IDENTITY</code>/<code>AUTO_INCREMENT</code>, <code>NVARCHAR</code>, <code>BIT</code>/<code>TINYINT(1)</code>, <code>DATETIME2</code>/<code>DATETIME</code>):</p>
+<pre><code class="language-sql">CREATE DATABASE ctmini;   -- rồi \\c ctmini
+CREATE TABLE product (
+  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  sku        text          NOT NULL UNIQUE,
+  name       text          NOT NULL,
+  price      numeric(12,2) NOT NULL,
+  stock      int           NOT NULL DEFAULT 0,
+  is_active  boolean       NOT NULL DEFAULT true,
+  created_at timestamptz   NOT NULL DEFAULT now()
+);
+INSERT INTO product (sku, name, price, stock, is_active) VALUES
+ ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),
+ ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),
+ ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),
+ ('BALO-04',  'Balo chống gù',        450000,   8, true),
+ ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);
+CREATE TABLE customer (
+  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email     text NOT NULL UNIQUE,
+  full_name text NOT NULL,
+  phone     text
+);
+INSERT INTO customer (email, full_name, phone) VALUES
+ ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),
+ ('binh@ctshop.vn','Trần Thị Bình', NULL),
+ ('chi@ctshop.vn', 'Lê Minh Chi',   '');</code></pre>
+
+<h3>Cùng câu hỏi, cùng đáp án</h3>
+<p>“Giá trị tồn kho của mọi sản phẩm đang bán, lớn nhất trước.” Ba câu lệnh chỉ khác ở cách kiểm <code>is_active</code>:</p>
+<pre><code class="language-sql">-- SQL Server / MySQL
+SELECT sku, price * stock AS stock_value FROM product WHERE is_active = 1 ORDER BY stock_value DESC;
+-- PostgreSQL
+SELECT sku, price * stock AS stock_value FROM product WHERE is_active ORDER BY stock_value DESC;</code></pre>
+<div class="out">   sku   | stock_value
+---------+-------------
+ MAY-05  | 10350000.00
+ BALO-04 |  3600000.00
+ VO-02   |   720000.00
+ BUT-01  |   600000.00
+(4 rows)</div>
+<p>sqlcmd và mysql in đúng bốn dòng và các con số đó theo kiểu bảng của riêng chúng. Đó là tin vui: SELECT, WHERE, JOIN, GROUP BY, HAVING, ORDER BY, truy vấn con, CTE, hàm cửa sổ, PRIMARY / FOREIGN KEY, CHECK và giao dịch mang cùng một nghĩa trên cả ba máy chủ.</p>
+
+<h3>Bảng tra nhanh</h3>
+<table>
+<tr><th>Việc</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td>N dòng đầu</td><td><code>SELECT TOP 3 …</code></td><td><code>… LIMIT 3</code></td><td><code>… LIMIT 3</code> / <code>FETCH FIRST 3 ROWS ONLY</code></td></tr>
+<tr><td>Số tự tăng</td><td><code>INT IDENTITY(1,1)</code></td><td><code>INT AUTO_INCREMENT</code></td><td><code>int GENERATED ALWAYS AS IDENTITY</code></td></tr>
+<tr><td>Chữ Unicode</td><td><code>NVARCHAR(n)</code> + <code>N'…'</code></td><td><code>VARCHAR(n)</code> (utf8mb4)</td><td><code>text</code></td></tr>
+<tr><td>Giờ hiện tại</td><td><code>GETDATE()</code>, <code>SYSDATETIME()</code></td><td><code>NOW()</code></td><td><code>now()</code></td></tr>
+<tr><td>Thay thế NULL</td><td><code>ISNULL(a, b)</code></td><td><code>IFNULL(a, b)</code></td><td><code>COALESCE(a, b)</code> (cả ba đều có)</td></tr>
+<tr><td>Nối chuỗi</td><td><code>a + b</code></td><td><code>CONCAT(a, b)</code></td><td><code>a || b</code></td></tr>
+<tr><td>Đúng / sai</td><td><code>BIT</code></td><td><code>TINYINT(1)</code></td><td><code>boolean</code></td></tr>
+<tr><td>Ngày + giờ</td><td><code>DATETIME2</code> / <code>DATETIMEOFFSET</code></td><td><code>DATETIME</code> / <code>TIMESTAMP</code></td><td><code>timestamp</code> / <code>timestamptz</code></td></tr>
+<tr><td>Dòng vừa ghi</td><td><code>OUTPUT inserted.id</code></td><td>— (<code>LAST_INSERT_ID()</code>)</td><td><code>RETURNING id</code></td></tr>
+<tr><td>Upsert</td><td><code>MERGE</code></td><td><code>ON DUPLICATE KEY UPDATE</code></td><td><code>ON CONFLICT … DO UPDATE</code></td></tr>
+<tr><td>Mã trong máy chủ</td><td>procedure T-SQL</td><td>stored procedure + <code>DELIMITER</code></td><td>hàm PL/pgSQL</td></tr>
+<tr><td>Không gian tên</td><td>database → schema <code>dbo</code></td><td>database = schema</td><td>database → schema <code>public</code></td></tr>
+<tr><td>Ngoặc cho tên</td><td><code>[Order Note]</code></td><td><code>&#96;Order Note&#96;</code></td><td><code>"Order Note"</code> (và đổi chữ thường)</td></tr>
+<tr><td><code>'abc' = 'ABC'</code></td><td>đúng (collation CI)</td><td>đúng (ai_ci: bỏ cả dấu)</td><td>sai → <code>ILIKE</code> / <code>lower()</code></td></tr>
+<tr><td><code>7 / 2</code></td><td>3</td><td>3.5000</td><td>3</td></tr>
+<tr><td><code>'' = ' '</code></td><td>đúng (đệm dấu cách)</td><td>sai</td><td>sai</td></tr>
+<tr><td>Chỉ sửa một dòng</td><td><code>UPDATE TOP (1)</code></td><td><code>… ORDER BY … LIMIT 1</code></td><td>không có LIMIT → <code>WHERE id = (truy vấn con)</code></td></tr>
+<tr><td>Công cụ</td><td>SSMS, sqlcmd</td><td>Workbench, mysql</td><td>psql, pgAdmin, DBeaver</td></tr>
+</table>
+
+<h3>Đổi tên 1 — TOP → LIMIT</h3>
+<pre><code class="language-sql">SELECT sku, price FROM product ORDER BY price DESC LIMIT 3;
+SELECT sku, price FROM product ORDER BY price DESC OFFSET 1 FETCH FIRST 2 ROWS ONLY;
+SELECT TOP 3 sku FROM product;</code></pre>
+<div class="out">   sku   |   price
+---------+-----------
+ MAY-05  | 690000.00
+ BALO-04 | 450000.00
+ VO-02   |  18000.00
+(3 rows)
+
+   sku   |   price
+---------+-----------
+ BALO-04 | 450000.00
+ VO-02   |  18000.00
+(2 rows)
+
+ERROR:  syntax error at or near "3"
+LINE 1: SELECT TOP 3 sku FROM product;
+                   ^</div>
+<p><code>OFFSET … FETCH FIRST … ROWS ONLY</code> là chuẩn SQL, chạy được cả trên SQL Server (<code>OFFSET 1 ROWS FETCH NEXT 2 ROWS ONLY</code> cũng ra đúng hai dòng đó). <code>TOP</code> chỉ có ở SQL Server.</p>
+
+<h3>Đổi tên 2 — IDENTITY → GENERATED ALWAYS AS IDENTITY</h3>
+<p>Cả ba đều tự đánh số dòng mới. Khác biệt lộ ra khi bạn tự ghi id:</p>
+<pre><code class="language-sql">INSERT INTO product (id, sku, name, price) VALUES (99, 'X-99', 'Thử', 1);</code></pre>
+<div class="out">ERROR:  cannot insert a non-DEFAULT value into column "id"
+DETAIL:  Column "id" is an identity column defined as GENERATED ALWAYS.
+HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
+<p>SQL Server cũng từ chối (<code>Msg 544 … Cannot insert explicit value for identity column in table 'product' when IDENTITY_INSERT is set to OFF.</code>). MySQL nhận 99 không một lời — và id tự động kế tiếp thành 100. Mã PostgreSQL cũ hay dùng <code>serial</code>; bảng mới dùng IDENTITY (Chương 3.1). Muốn lấy lại id mới, PostgreSQL dùng <code>RETURNING id</code> (bên dưới) thay cho <code>SCOPE_IDENTITY()</code> / <code>LAST_INSERT_ID()</code>.</p>
+
+<h3>Đổi tên 3 — NVARCHAR → text</h3>
+<p>SQL Server với collation mặc định <code>SQL_Latin1_General_CP1_CI_AS</code> không lưu được “ở”, “ẻ” trong cột VARCHAR — và ngay cả cột NVARCHAR cũng mất chúng nếu chuỗi không có tiền tố <code>N</code>:</p>
+<div class="out">a                              b                              len_b       bytes_b
+------------------------------ ------------------------------ ----------- -----------
+V? k? ngang                    V? k? ngang                             11          22
+V? k? ngang                    Vở kẻ ngang                             11          22</div>
+<p>(dòng 1: <code>'Vở kẻ ngang'</code> không có N; dòng 2: <code>N'Vở kẻ ngang'</code> vào cột VARCHAR <code>a</code> và NVARCHAR <code>b</code>.) MySQL 8 mặc định utf8mb4 còn database PostgreSQL là UTF-8, nên chẳng có gì phải nhớ:</p>
+<pre><code class="language-sql">SELECT 'Vở kẻ ngang'::text AS a, length('Vở kẻ ngang') AS chars, octet_length('Vở kẻ ngang') AS bytes;</code></pre>
+<div class="out">      a      | chars | bytes
+-------------+-------+-------
+ Vở kẻ ngang |    11 |    15
+(1 row)</div>
+
+<h3>Đổi tên 4 — GETDATE() → now(), DATETIME2 → timestamptz</h3>
+<p>Ta chèn <code>'2026-10-25 09:00:00 +07:00'</code> vào một cột DATETIME2 và một cột DATETIMEOFFSET trên SQL Server: DATETIME2 giữ <code>2026-10-25 09:00:00.0000000</code> và lặng lẽ bỏ mất +07:00; DATETIMEOFFSET giữ múi (<code>02:00 +00:00</code> theo UTC). MySQL và PostgreSQL cũng y như vậy với hai kiểu của chúng — một kiểu trơn, một kiểu biết múi giờ:</p>
+<pre><code class="language-sql">CREATE TEMP TABLE t_ts (a timestamp, b timestamptz);
+SET TIME ZONE 'Asia/Ho_Chi_Minh';
+INSERT INTO t_ts VALUES ('2026-10-25 09:00', '2026-10-25 09:00');
+SET TIME ZONE 'UTC';
+SELECT a, b FROM t_ts;</code></pre>
+<div class="out">          a          |           b
+---------------------+------------------------
+ 2026-10-25 09:00:00 | 2026-10-25 02:00:00+00
+(1 row)</div>
+<p>Sau đúng các bước đó MySQL in <code>2026-10-25 09:00:00</code> cho DATETIME và <code>2026-10-25 02:00:00</code> cho TIMESTAMP. Giờ hiện tại trong PostgreSQL là <code>now()</code>; <code>SELECT GETDATE();</code> báo <code>function getdate() does not exist</code>. Chương 2.3 giải thích vì sao <code>timestamptz</code> là lựa chọn mặc định đúng.</p>
+
+<h3>Đổi tên 5 — ISNULL / IFNULL → COALESCE, + / CONCAT → ||</h3>
+<pre><code class="language-sql">SELECT full_name, COALESCE(phone, 'n/a') FROM customer;
+SELECT ISNULL(phone, 'n/a') FROM customer;</code></pre>
+<div class="out">   full_name   |  coalesce
+---------------+------------
+ Nguyễn Văn An | 0901000001
+ Trần Thị Bình | n/a
+ Lê Minh Chi   |
+(3 rows)
+
+ERROR:  function isnull(text, unknown) does not exist</div>
+<p><code>COALESCE</code> chạy trên cả ba — hãy biến nó thành thói quen. Với chuỗi, NULL cư xử khác nhau tuỳ hàm. Khi <code>phone</code> là NULL:</p>
+<table>
+<tr><th>Biểu thức</th><th>Kết quả</th></tr>
+<tr><td>SQL Server <code>'Phone: ' + phone</code></td><td>NULL</td></tr>
+<tr><td>SQL Server <code>CONCAT('Phone: ', phone)</code></td><td><code>Phone: </code> (bỏ qua NULL)</td></tr>
+<tr><td>MySQL <code>CONCAT('Phone: ', phone)</code></td><td>NULL</td></tr>
+<tr><td>PostgreSQL <code>'Phone: ' || phone</code></td><td>NULL</td></tr>
+<tr><td>PostgreSQL <code>concat('Phone: ', phone)</code></td><td><code>Phone: </code> (bỏ qua NULL)</td></tr>
+</table>
+<div class="pitfall"><p><strong>Bẫy — <code>||</code> trong MySQL nghĩa là OR.</strong> <code>SELECT 'BUT' || '-01'</code> trả về <code>1</code> trên MySQL 8.4 “kèm 2 cảnh báo”: hai chuỗi bị đổi thành số rồi OR với nhau. Trong PostgreSQL cùng câu chữ đó là nối chuỗi.</p></div>
+
+<h3>Đổi tên 6 — BIT / TINYINT(1) → boolean</h3>
+<p>BIT của SQL Server và TINYINT(1) của MySQL thật ra là số (trong MySQL <code>TRUE + TRUE</code> bằng <code>2</code>). PostgreSQL có kiểu boolean thật:</p>
+<pre><code class="language-sql">SELECT sku, is_active FROM product WHERE is_active;
+SELECT sku FROM product WHERE is_active = 1;
+SELECT sku FROM product WHERE NOT is_active;</code></pre>
+<div class="out">   sku   | is_active
+---------+-----------
+ BUT-01  | t
+ VO-02   | t
+ BALO-04 | t
+ MAY-05  | t
+(4 rows)
+
+ERROR:  operator does not exist: boolean = integer
+LINE 1: SELECT sku FROM product WHERE is_active = 1;
+                                                ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+   sku
+----------
+ THUOC-03
+(1 row)</div>
+<p>SQL Server thì ngược lại như soi gương: <code>WHERE is_active = 1</code> chạy, còn <code>WHERE is_active</code> trần báo <code>Msg 4145 … An expression of non-boolean type specified in a context where a condition is expected</code>.</p>
+
+<h3>Đổi tên 7 — OUTPUT → RETURNING</h3>
+<pre><code class="language-sql">INSERT INTO product (sku, name, price) VALUES ('GOM-07', 'Gôm tẩy', 3000) RETURNING id, sku;
+UPDATE product SET price = price * 1.1 WHERE sku = 'GOM-07' RETURNING price AS new_price;</code></pre>
+<div class="out"> id |  sku
+----+--------
+  6 | GOM-07
+(1 row)
+
+INSERT 0 1
+ new_price
+-----------
+   3300.00
+(1 row)
+
+UPDATE 1</div>
+<p>Trên SQL Server tương đương là <code>OUTPUT inserted.id, inserted.sku</code> (và <code>OUTPUT deleted.price AS old_price, inserted.price AS new_price</code> cho lệnh cập nhật: 3000.00 → 3300.00). MySQL 8.4 không có RETURNING — câu lệnh báo lỗi 1064, và bạn chạy thêm câu <code>SELECT LAST_INSERT_ID()</code>.</p>
+
+<h3>Đổi tên 8 — MERGE / ON DUPLICATE KEY → ON CONFLICT</h3>
+<p>Về thêm 30 cây bút: nếu <code>BUT-01</code> đã có thì cộng thêm, chưa có thì chèn mới.</p>
+<pre><code class="language-sql">-- SQL Server
+MERGE product AS t
+USING (VALUES ('BUT-01', N'Bút bi Thiên Long', 5000, 30)) AS s(sku, name, price, stock)
+  ON t.sku = s.sku
+WHEN MATCHED THEN UPDATE SET stock = t.stock + s.stock
+WHEN NOT MATCHED THEN INSERT (sku, name, price, stock) VALUES (s.sku, s.name, s.price, s.stock);
+
+-- MySQL 8  (báo "2 rows affected" khi là cập nhật)
+INSERT INTO product (sku, name, price, stock) VALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30) AS s
+  ON DUPLICATE KEY UPDATE stock = product.stock + s.stock;
+
+-- PostgreSQL
+INSERT INTO product (sku, name, price, stock) VALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30)
+  ON CONFLICT (sku) DO UPDATE SET stock = product.stock + EXCLUDED.stock
+  RETURNING sku, stock;</code></pre>
+<div class="out">  sku   | stock
+--------+-------
+ BUT-01 |   150
+(1 row)
+
+INSERT 0 1</div>
+<p>Cả ba đều ra 150. PostgreSQL nêu rõ cột xung đột <code>(sku)</code> — ở đó phải có chỉ mục hoặc ràng buộc UNIQUE — và gọi dòng bạn định chèn là <code>EXCLUDED</code>. PostgreSQL 15+ cũng có MERGE; ON CONFLICT vẫn là cách upsert hằng ngày (Chương 4.1).</p>
+
+<h3>Đổi tên 9 — procedure T-SQL → hàm PL/pgSQL</h3>
+<pre><code class="language-sql">CREATE OR REPLACE FUNCTION stock_value(min_price numeric) RETURNS numeric
+LANGUAGE plpgsql AS $$
+DECLARE
+  total numeric;
+BEGIN
+  SELECT sum(price * stock) INTO total FROM product WHERE price &gt;= min_price;
+  RETURN total;
+END;
+$$;
+SELECT stock_value(10000) AS total;</code></pre>
+<div class="out">    total
+-------------
+ 14670000.00
+(1 row)</div>
+<p>Bản T-SQL (<code>CREATE OR ALTER PROCEDURE stock_value @min_price DECIMAL(12,2) AS BEGIN … END</code>, gọi bằng <code>EXEC stock_value @min_price = 10000</code>) và bản MySQL (<code>DELIMITER //</code> … <code>CALL stock_value(10000)</code>) cũng trả 14670000.00. Cái đổi: biến không có <code>@</code>, không cần DELIMITER — thân hàm là một chuỗi giữa <code>$$ … $$</code> — và hàm được dùng ngay trong SELECT. Chương 12 dạy PL/pgSQL.</p>
+
+<h3>Đổi tên 10 — dbo / database / public</h3>
+<p>SQL Server: máy chủ → database → schema (mặc định <code>dbo</code>) → bảng. MySQL: “database” và “schema” là một (<code>SELECT DATABASE(), SCHEMA()</code> đều ra <code>ctmini</code>). PostgreSQL: máy chủ → database → schema (mặc định <code>public</code>) → bảng, và một câu truy vấn không join được bảng ở hai database khác nhau — hãy dùng nhiều schema trong một database.</p>
+<pre><code class="language-sql">SELECT current_schema();
+SHOW search_path;</code></pre>
+<div class="out"> current_schema
+----------------
+ public
+(1 row)
+
+   search_path
+-----------------
+ "$user", public
+(1 row)</div>
+
+<h3>Đổi tên 11 — ngoặc cho tên, và chuyện chữ hoa thường</h3>
+<p><code>[Order Note]</code> ở SQL Server, <code>&#96;Order Note&#96;</code> ở MySQL, <code>"Order Note"</code> ở PostgreSQL. Khác biệt thật nằm ở chữ hoa thường. PostgreSQL đổi mọi tên không có ngoặc kép thành chữ thường; tên có ngoặc kép được giữ y nguyên:</p>
+<pre><code class="language-sql">CREATE TABLE "Customer" (id int);
+SELECT * FROM Customer;          -- đọc bảng customer, KHÔNG phải "Customer"
+SELECT * FROM "Order note";      -- bảng tên là "Order Note"</code></pre>
+<div class="out"> id |     email      |   full_name   |   phone
+----+----------------+---------------+------------
+  1 | an@ctshop.vn   | Nguyễn Văn An | 0901000001
+  2 | binh@ctshop.vn | Trần Thị Bình |
+  3 | chi@ctshop.vn  | Lê Minh Chi   |
+(3 rows)
+
+ERROR:  relation "Order note" does not exist</div>
+<p>SQL Server với collation CI chẳng để ý (<code>SELECT * FROM PRODUCT WHERE SKU = 'BUT-01'</code> vẫn chạy). MySQL trên Linux phân biệt hoa thường với tên <strong>bảng</strong> (<code>ERROR 1146 … Table 'ctmini.PRODUCT' doesn't exist</code>) nhưng không với tên cột. Luật của PostgreSQL cứu bạn: <strong>chữ_thường_gạch_dưới, không bao giờ dùng ngoặc kép</strong>.</p>
+
+<h3>Bẫy 1 — so sánh chữ (collation)</h3>
+<table>
+<tr><th>Truy vấn trên product.name</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>= 'BÚT BI THIÊN LONG'</code></td><td>1 dòng</td><td>1 dòng</td><td>0 dòng</td></tr>
+<tr><td><code>LIKE 'balo%'</code></td><td>1 dòng</td><td>1 dòng</td><td>0 dòng</td></tr>
+<tr><td><code>= 'But bi Thien Long'</code> (không dấu)</td><td>0 dòng</td><td>1 dòng</td><td>0 dòng</td></tr>
+</table>
+<p>Collation mặc định của SQL Server là <strong>C</strong>ase-<strong>I</strong>nsensitive, <strong>A</strong>ccent-<strong>S</strong>ensitive (không phân biệt hoa thường, có phân biệt dấu). <code>utf8mb4_0900_ai_ci</code> của MySQL 8 bỏ qua dấu <em>và</em> hoa thường. PostgreSQL so khớp chính xác. Hai cách sửa:</p>
+<pre><code class="language-sql">SELECT sku, name FROM product WHERE name ILIKE 'balo%';
+SELECT sku, name FROM product WHERE lower(name) = lower('BÚT BI THIÊN LONG');</code></pre>
+<div class="out">   sku   |     name
+---------+---------------
+ BALO-04 | Balo chống gù
+(1 row)
+
+  sku   |       name
+--------+-------------------
+ BUT-01 | Bút bi Thiên Long
+(1 row)</div>
+<p>Tìm kiếm bỏ dấu (gõ “but bi” ra “Bút bi”) cần extension <code>unaccent</code> và chỉ mục trigram — Chương 13.</p>
+
+<h3>Bẫy 2 — chia số nguyên</h3>
+<table>
+<tr><th>Biểu thức</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>7 / 2</code></td><td>3</td><td>3.5000</td><td>3</td></tr>
+<tr><td><code>SUM(stock) / COUNT(*)</code></td><td>36</td><td>36.6000</td><td>36</td></tr>
+<tr><td><code>AVG(stock)</code> (cột int)</td><td>36</td><td>36.6000</td><td>36.6000000000000000</td></tr>
+</table>
+<p>Một báo cáo MySQL từng hiện 36.6 chuyển sang sẽ lặng lẽ hiện 36. Không lỗi — chỉ là con số sai. Trong PostgreSQL hãy nói rõ ý mình: <code>avg(stock)</code>, <code>sum(stock)::numeric / count(*)</code>, hoặc <code>round(avg(stock), 1)</code> → 36.6. (Để ý SQL Server cắt cả <code>AVG</code> của cột số nguyên.)</p>
+
+<h3>Bẫy 3 — chuỗi rỗng, dấu cách và NULL</h3>
+<table>
+<tr><th>Kết quả thật trên ctmini</th><th>SQL Server</th><th>MySQL</th><th>PostgreSQL</th></tr>
+<tr><td><code>'' = ' '</code></td><td>bằng</td><td>khác</td><td>khác</td></tr>
+<tr><td><code>'abc' = 'abc   '</code></td><td>bằng</td><td>khác</td><td>khác</td></tr>
+<tr><td>độ dài <code>'abc   '</code></td><td><code>LEN</code> = 3</td><td><code>CHAR_LENGTH</code> = 6</td><td><code>length</code> = 6</td></tr>
+<tr><td><code>COUNT(*)</code> · <code>COUNT(phone)</code> · <code>COUNT(NULLIF(phone, ''))</code></td><td>3 · 2 · 1</td><td>3 · 2 · 1</td><td>3 · 2 · 1</td></tr>
+</table>
+<p>Ở cả ba, chuỗi rỗng là một giá trị thật, không phải NULL (Oracle mới là kẻ khác người) — nên <code>COUNT(phone)</code> vẫn đếm số điện thoại rỗng của Chi, và <code>NULLIF(phone, '')</code> đổi '' thành NULL khi bạn muốn hiểu là “không có số”. Chỗ cắn người khi chuyển từ SQL Server: nó đệm dấu cách trước khi so, nên dấu cách cuối chưa bao giờ quan trọng ở đó. Ở PostgreSQL thì có — hãy cắt dữ liệu vào (<code>trim()</code>) hoặc cấm bằng CHECK.</p>
+
+<h3>Bẫy 4 — UPDATE giới hạn số dòng</h3>
+<pre><code class="language-sql">UPDATE product SET stock = stock - 1 WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1;   -- kiểu MySQL
+UPDATE product SET stock = stock - 1
+WHERE id = (SELECT id FROM product WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1)
+RETURNING sku, stock;</code></pre>
+<div class="out">ERROR:  syntax error at or near "ORDER"
+LINE 1: ...ATE product SET stock = stock - 1 WHERE stock &gt; 0 ORDER BY p...
+                                                             ^
+  sku   | stock
+--------+-------
+ MAY-05 |    14
+(1 row)
+
+UPDATE 1</div>
+<p>MySQL nhận cách viết đầu. <code>UPDATE TOP (1) product SET stock = stock - 1 WHERE stock &gt; 0</code> của SQL Server chạy được nhưng không kèm được ORDER BY — nó sửa <code>BUT-01</code> (tồn 120 → 119), không phải sản phẩm đắt nhất. PostgreSQL bắt bạn chọn dòng một cách tường minh trong truy vấn con.</p>
+
+<h3>Công cụ</h3>
+<table>
+<tr><th>Việc</th><th>SQL Server (sqlcmd / SSMS)</th><th>MySQL (mysql / Workbench)</th><th>PostgreSQL (psql)</th></tr>
+<tr><td>Liệt kê database</td><td><code>SELECT name FROM sys.databases</code></td><td><code>SHOW DATABASES;</code></td><td><code>\\l</code></td></tr>
+<tr><td>Chuyển database</td><td><code>USE ctmini;</code></td><td><code>USE ctmini;</code></td><td><code>\\c ctmini</code></td></tr>
+<tr><td>Liệt kê bảng</td><td><code>SELECT * FROM INFORMATION_SCHEMA.TABLES</code></td><td><code>SHOW TABLES;</code></td><td><code>\\dt</code></td></tr>
+<tr><td>Mô tả bảng</td><td><code>EXEC sp_help 'product'</code></td><td><code>DESCRIBE product;</code></td><td><code>\\d product</code></td></tr>
+<tr><td>Chạy thứ vừa gõ</td><td><code>GO</code></td><td><code>;</code></td><td><code>;</code></td></tr>
+</table>
+<p>Giao diện đồ hoạ: SSMS, MySQL Workbench, còn PostgreSQL có pgAdmin (chính chủ) hoặc DBeaver Community (miễn phí, mở cả ba cạnh nhau). Khoá này ở lại với psql vì nó cho thấy đúng nguyên văn máy chủ nói gì.</p>
+
+<h3>Trong dự án thật: Prisma che bớt, không che hết</h3>
+<p>cuongthai.com chạy PostgreSQL qua Prisma. Prisma dịch cú pháp hộ bạn — <code>mode: 'insensitive'</code>, xuất hiện ở 195 chỗ trong backend của trang này, được gửi sang PostgreSQL thành <code>ILIKE</code> thật (nhật ký truy vấn của <code>prisma.user.findFirst({ where: { email: { equals: raw, mode: 'insensitive' } } })</code>):</p>
+<div class="out">SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email" ILIKE $1 LIMIT $2 OFFSET $3</div>
+<p>Nhưng ORM không đổi được luật của cơ sở dữ liệu: <code>DateTime</code> thành <code>timestamp(3)</code> <em>không</em> múi giờ (lại là chuyện DATETIME2), <code>@default(autoincrement())</code> thành <code>SERIAL</code>, chia nguyên vẫn là chia nguyên. Bạn vẫn cần bài này.</p>
+
+<h3>Bài tập</h3>
+<ol>
+<li>Dịch câu T-SQL <code>SELECT TOP 2 sku, name + ' (' + CAST(stock AS VARCHAR(10)) + ')' AS label FROM product WHERE is_active = 1 ORDER BY stock DESC;</code></li>
+<li>Dịch <code>SELECT full_name, ISNULL(NULLIF(phone, ''), 'no phone') FROM customer;</code></li>
+<li>Câu MySQL <code>SELECT sku, name FROM product WHERE name LIKE 'balo%';</code> trả về một dòng. Làm PostgreSQL trả về dòng đó.</li>
+<li>Một báo cáo MySQL hiện <code>SUM(stock) / COUNT(*)</code> = 36.6. Làm PostgreSQL hiện 36.6.</li>
+</ol>
+<details><summary>Đáp án (output thật)</summary>
+<pre><code class="language-sql">SELECT sku, name || ' (' || stock || ')' AS label FROM product WHERE is_active ORDER BY stock DESC LIMIT 2;
+SELECT full_name, COALESCE(NULLIF(phone, ''), 'no phone') AS phone FROM customer;
+SELECT sku, name FROM product WHERE name ILIKE 'balo%';
+SELECT sum(stock) / count(*) AS wrong, round(avg(stock), 1) AS right_avg FROM product;</code></pre>
+<div class="out">  sku   |           label
+--------+----------------------------
+ BUT-01 | Bút bi Thiên Long (120)
+ VO-02  | Vở kẻ ngang 200 trang (40)
+(2 rows)
+
+   full_name   |   phone
+---------------+------------
+ Nguyễn Văn An | 0901000001
+ Trần Thị Bình | no phone
+ Lê Minh Chi   | no phone
+(3 rows)
+
+   sku   |     name
+---------+---------------
+ BALO-04 | Balo chống gù
+(1 row)
+
+ wrong | right_avg
+-------+-----------
+    36 |      36.6
+(1 row)</div>
+</details>
+
+<h3>Lộ trình của bạn từ đây</h3>
+<p>Lướt Chương 1–7: các bài của Chương 2–7 có nhãn <em>“⏩ Đã biết SQL Server/MySQL? Có thể lướt”</em> — xem slide và phần bẫy, chạy thử ví dụ. Rồi học kỹ <strong>Chương 8–17</strong> (hàm cửa sổ, chỉ mục, EXPLAIN, giao dịch và MVCC, PL/pgSQL, JSONB, vận hành, nhân bản), làm đủ mọi lab và bài thi cuối. Chương 17 quay lại phép so sánh này thật sâu — SQL Server, MySQL, PostgreSQL và MongoDB trên cùng dữ liệu, và cách chọn.</p>
+<a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Luyện theo cách của PostgreSQL</span><span class="lc-sub">Code Lab PostgreSQL — rồi sang Chương 1: vì sao PostgreSQL tồn tại.</span></span>
 </a>
 </div>
 `,

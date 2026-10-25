@@ -2906,7 +2906,7 @@ GO
   SELECT TOP (30000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn
   FROM sys.all_columns a CROSS JOIN sys.all_columns b
 )
-INSERT INTO dbo.NhanVienDemo(id, luong) SELECT rn, 5000000 + (rn % 20000) FROM n;
+INSERT INTO dbo.NhanVienDemo(id, luong) SELECT rn, 5000000 + (rn % 20000) * 1000 FROM n;  -- lương 5.000.000 … 24.999.000
 GO
 SET STATISTICS PROFILE ON;
 SELECT id, luong FROM dbo.NhanVienDemo WHERE luong &gt; 24000000 ORDER BY luong;
@@ -2922,31 +2922,42 @@ SET STATISTICS PROFILE OFF;</code></pre>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 rows)</td><td></td></tr>
+<tr><td>19001</td><td>24001000</td></tr>
+<tr><td>19002</td><td>24002000</td></tr>
+<tr><td>19003</td><td>24003000</td></tr>
+<tr><td>19004</td><td>24004000</td></tr>
+<tr><td>19005</td><td>24005000</td></tr>
 </tbody>
 </table>
+<p><small>… 994 more rows (999 rows in total)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.12204328179359436</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Sort(ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC))</td><td>1</td><td>2</td><td>1</td><td>Sort</td><td>Sort</td><td>ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC)</td><td><em>NULL</em></td><td>1</td><td>0.011261261068284512</td><td>0.0001000199990812689</td><td>20</td><td>0.12204328179359436</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
-<tr><td>0</td><td>1</td><td>       |--Clustered Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.)))</td><td>1</td><td>3</td><td>2</td><td>Clustered Index Scan</td><td>Clustered Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.06312499940395355</td><td>0.033156998455524445</td><td>20</td><td>0.096281997859478</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.1376023143529892</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Sort(ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC))</td><td>1</td><td>2</td><td>1</td><td>Sort</td><td>Sort</td><td>ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC)</td><td><em>NULL</em></td><td>1000.6972045898438</td><td>0.011261261068284512</td><td>0.01565905287861824</td><td>20</td><td>0.1376023143529892</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>       |--Clustered Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.)))</td><td>1</td><td>3</td><td>2</td><td>Clustered Index Scan</td><td>Clustered Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1000.6972045898438</td><td>0.06312499940395355</td><td>0.033156998455524445</td><td>20</td><td>0.096281997859478</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 rows)</td><td></td></tr>
+<tr><td>19001</td><td>24001000</td></tr>
+<tr><td>19002</td><td>24002000</td></tr>
+<tr><td>19003</td><td>24003000</td></tr>
+<tr><td>19004</td><td>24004000</td></tr>
+<tr><td>19005</td><td>24005000</td></tr>
 </tbody>
 </table>
+<p><small>… 994 more rows (999 rows in total)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.0032830999698489904</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.0031250000465661287</td><td>0.00015809999604243785</td><td>20</td><td>0.0032830999698489904</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.005864248611032963</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1000.6972045898438</td><td>0.004606481641530991</td><td>0.0012577669695019722</td><td>20</td><td>0.005864248611032963</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <ul>
+<li>Both runs return the same 999 rows (salaries 24,001,000 … 24,999,000 — the table holds 5,000,000 … 24,999,000); only the plan changes.</li>
 <li>Before the index: <code>Clustered Index Scan</code> (reads every row) followed by a separate <code>Sort</code> operator to satisfy <code>ORDER BY luong</code>.</li>
 <li>After <code>CREATE NONCLUSTERED INDEX idx_nvdemo2_luong ON NhanVienDemo(luong)</code>: a plain <code>Index Seek</code> — because the index already stores rows in <code>luong</code> order, the engine gets the filter AND the sort for free, with no separate <code>Sort</code> step at all.</li>
 </ul>
@@ -2966,7 +2977,7 @@ GO
   SELECT TOP (30000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn
   FROM sys.all_columns a CROSS JOIN sys.all_columns b
 )
-INSERT INTO dbo.NhanVienDemo(id, luong) SELECT rn, 5000000 + (rn % 20000) FROM n;
+INSERT INTO dbo.NhanVienDemo(id, luong) SELECT rn, 5000000 + (rn % 20000) * 1000 FROM n;  -- lương 5.000.000 … 24.999.000
 GO
 SET STATISTICS PROFILE ON;
 SELECT id, luong FROM dbo.NhanVienDemo WHERE luong &gt; 24000000 ORDER BY luong;
@@ -2982,31 +2993,42 @@ SET STATISTICS PROFILE OFF;</code></pre>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 dòng)</td><td></td></tr>
+<tr><td>19001</td><td>24001000</td></tr>
+<tr><td>19002</td><td>24002000</td></tr>
+<tr><td>19003</td><td>24003000</td></tr>
+<tr><td>19004</td><td>24004000</td></tr>
+<tr><td>19005</td><td>24005000</td></tr>
 </tbody>
 </table>
+<p><small>… còn 994 dòng nữa (tổng 999 dòng)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.12204328179359436</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Sort(ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC))</td><td>1</td><td>2</td><td>1</td><td>Sort</td><td>Sort</td><td>ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC)</td><td><em>NULL</em></td><td>1</td><td>0.011261261068284512</td><td>0.0001000199990812689</td><td>20</td><td>0.12204328179359436</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
-<tr><td>0</td><td>1</td><td>       |--Clustered Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.)))</td><td>1</td><td>3</td><td>2</td><td>Clustered Index Scan</td><td>Clustered Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.06312499940395355</td><td>0.033156998455524445</td><td>20</td><td>0.096281997859478</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.1376023143529892</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Sort(ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC))</td><td>1</td><td>2</td><td>1</td><td>Sort</td><td>Sort</td><td>ORDER BY:([DBI202].[dbo].[NhanVienDemo].[luong] ASC)</td><td><em>NULL</em></td><td>1000.6972045898438</td><td>0.011261261068284512</td><td>0.01565905287861824</td><td>20</td><td>0.1376023143529892</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>       |--Clustered Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.)))</td><td>1</td><td>3</td><td>2</td><td>Clustered Index Scan</td><td>Clustered Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[pk_nvdemo2]), WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;(24000000.))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1000.6972045898438</td><td>0.06312499940395355</td><td>0.033156998455524445</td><td>20</td><td>0.096281997859478</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 dòng)</td><td></td></tr>
+<tr><td>19001</td><td>24001000</td></tr>
+<tr><td>19002</td><td>24002000</td></tr>
+<tr><td>19003</td><td>24003000</td></tr>
+<tr><td>19004</td><td>24004000</td></tr>
+<tr><td>19005</td><td>24005000</td></tr>
 </tbody>
 </table>
+<p><small>… còn 994 dòng nữa (tổng 999 dòng)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.0032830999698489904</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.0031250000465661287</td><td>0.00015809999604243785</td><td>20</td><td>0.0032830999698489904</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1 ORDER BY [luong] ASC</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.005864248611032963</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo2_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@1],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1000.6972045898438</td><td>0.004606481641530991</td><td>0.0012577669695019722</td><td>20</td><td>0.005864248611032963</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <ul>
+<li>Hai lần chạy trả về cùng 999 dòng (lương 24.001.000 … 24.999.000 — bảng có lương từ 5.000.000 tới 24.999.000); chỉ có kế hoạch thực thi là đổi.</li>
 <li>Trước khi có chỉ mục: <code>Clustered Index Scan</code> (đọc mọi dòng) rồi tới một toán tử <code>Sort</code> riêng để thoả <code>ORDER BY luong</code>.</li>
 <li>Sau <code>CREATE NONCLUSTERED INDEX idx_nvdemo2_luong ON NhanVienDemo(luong)</code>: chỉ còn <code>Index Seek</code> trơn — vì chỉ mục đã lưu sẵn các dòng theo thứ tự <code>luong</code>, engine được cả lọc LẪN sắp xếp miễn phí, không còn bước <code>Sort</code> riêng nào.</li>
 </ul>
@@ -3027,7 +3049,7 @@ GO
   SELECT TOP (30000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn
   FROM sys.all_columns a CROSS JOIN sys.all_columns b
 )
-INSERT INTO dbo.NhanVienDemo(id, depNum, luong) SELECT rn, 1 + (rn % 5), 5000000 + (rn % 20000) FROM n;
+INSERT INTO dbo.NhanVienDemo(id, depNum, luong) SELECT rn, 1 + (rn % 5), 5000000 + (rn % 20000) * 1000 FROM n;  -- lương 5.000.000 … 24.999.000
 GO
 CREATE NONCLUSTERED INDEX idx_nvdemo3_dep_luong ON dbo.NhanVienDemo(depNum, luong);
 GO
@@ -3044,32 +3066,42 @@ SET STATISTICS PROFILE OFF;</code></pre>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 rows)</td><td></td></tr>
+<tr><td>10002</td><td>15002000</td></tr>
+<tr><td>10007</td><td>15007000</td></tr>
+<tr><td>10012</td><td>15012000</td></tr>
+<tr><td>10017</td><td>15017000</td></tr>
+<tr><td>10022</td><td>15022000</td></tr>
 </tbody>
 </table>
+<p><small>… 1995 more rows (2000 rows in total)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [depNum]=@1 AND [luong]&gt;@2</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.0032830999698489904</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.0031250000465661287</td><td>0.00015809999604243785</td><td>20</td><td>0.0032830999698489904</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>2000</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [depNum]=@1 AND [luong]&gt;@2</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>3465.312744140625</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.013760510832071304</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>2000</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>3465.312744140625</td><td>0.009791666641831398</td><td>0.003968844190239906</td><td>20</td><td>0.013760510832071304</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <table>
 <thead><tr><th>id</th><th>depNum</th></tr></thead>
 <tbody>
-<tr><td>(0 rows)</td><td></td></tr>
+<tr><td>19005</td><td>1</td></tr>
+<tr><td>19010</td><td>1</td></tr>
+<tr><td>19015</td><td>1</td></tr>
+<tr><td>19020</td><td>1</td></tr>
+<tr><td>19025</td><td>1</td></tr>
 </tbody>
 </table>
+<p><small>… 994 more rows (999 rows in total)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[depNum] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.09924495965242386</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0)))</td><td>1</td><td>2</td><td>1</td><td>Index Scan</td><td>Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td>1</td><td>0.06608796119689941</td><td>0.033156998455524445</td><td>24</td><td>0.09924495965242386</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[depNum] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.09924495965242386</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0)))</td><td>1</td><td>2</td><td>1</td><td>Index Scan</td><td>Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td>1000.6972045898438</td><td>0.06608796119689941</td><td>0.033156998455524445</td><td>24</td><td>0.09924495965242386</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <ul>
-<li><code>WHERE depNum = 3 AND luong &gt; 15000000</code> → <code>Index Seek</code>: <code>depNum</code> is the LEADING column of the index, so the engine can binary-search straight to depNum = 3, then range-scan <code>luong</code> within that.</li>
-<li><code>WHERE luong &gt; 24000000</code> (no <code>depNum</code>) → <code>Index Scan</code>, not a seek: <code>luong</code> is the SECOND column, so the engine cannot jump into the middle of the index without knowing <code>depNum</code> first — it reads the whole (smaller) index instead of the whole table, which is still cheaper than a table scan, but far from a seek.</li>
+<li><code>WHERE depNum = 3 AND luong &gt; 15000000</code> (2,000 rows) → <code>Index Seek</code>: <code>depNum</code> is the LEADING column of the index, so the engine can binary-search straight to depNum = 3, then range-scan <code>luong</code> within that.</li>
+<li><code>WHERE luong &gt; 24000000</code> (no <code>depNum</code>, 999 rows) → <code>Index Scan</code>, not a seek: <code>luong</code> is the SECOND column, so the engine cannot jump into the middle of the index without knowing <code>depNum</code> first — it reads the whole (smaller) index instead of the whole table, which is still cheaper than a table scan, but far from a seek.</li>
 </ul>
 <div class="pitfall">A composite index <code>(A, B)</code> is like a phone book sorted by last name then first name: useful for "find everyone named Nguyễn", useless for "find everyone whose first name is Anh" — you'd have to read every page. Put the column your queries filter on MOST OFTEN first.</div>`,
     `<h3>🧪 Bài 3 — Chỉ mục ghép: thứ tự cột có quan trọng không? (~10 phút)</h3>
@@ -3088,7 +3120,7 @@ GO
   SELECT TOP (30000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn
   FROM sys.all_columns a CROSS JOIN sys.all_columns b
 )
-INSERT INTO dbo.NhanVienDemo(id, depNum, luong) SELECT rn, 1 + (rn % 5), 5000000 + (rn % 20000) FROM n;
+INSERT INTO dbo.NhanVienDemo(id, depNum, luong) SELECT rn, 1 + (rn % 5), 5000000 + (rn % 20000) * 1000 FROM n;  -- lương 5.000.000 … 24.999.000
 GO
 CREATE NONCLUSTERED INDEX idx_nvdemo3_dep_luong ON dbo.NhanVienDemo(depNum, luong);
 GO
@@ -3105,32 +3137,42 @@ SET STATISTICS PROFILE OFF;</code></pre>
 <table>
 <thead><tr><th>id</th><th>luong</th></tr></thead>
 <tbody>
-<tr><td>(0 dòng)</td><td></td></tr>
+<tr><td>10002</td><td>15002000</td></tr>
+<tr><td>10007</td><td>15007000</td></tr>
+<tr><td>10012</td><td>15012000</td></tr>
+<tr><td>10017</td><td>15017000</td></tr>
+<tr><td>10022</td><td>15022000</td></tr>
 </tbody>
 </table>
+<p><small>… còn 1995 dòng nữa (tổng 2000 dòng)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [depNum]=@1 AND [luong]&gt;@2</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.0032830999698489904</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>1</td><td>0.0031250000465661287</td><td>0.00015809999604243785</td><td>20</td><td>0.0032830999698489904</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>2000</td><td>1</td><td>SELECT [id],[luong] FROM [dbo].[NhanVienDemo] WHERE [depNum]=@1 AND [luong]&gt;@2</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>3465.312744140625</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.013760510832071304</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>2000</td><td>1</td><td>  |--Index Seek(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD)</td><td>1</td><td>2</td><td>1</td><td>Index Seek</td><td>Index Seek</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]), SEEK:([DBI202].[dbo].[NhanVienDemo].[depNum]=CONVERT_IMPLICIT(int,[@1],0) AND [DBI202].[dbo].[NhanVienDemo].[luong] &gt; CONVERT_IMPLICIT(decimal(10,0),[@2],0)) ORDERED FORWARD</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td>3465.312744140625</td><td>0.009791666641831398</td><td>0.003968844190239906</td><td>20</td><td>0.013760510832071304</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[luong]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <table>
 <thead><tr><th>id</th><th>depNum</th></tr></thead>
 <tbody>
-<tr><td>(0 dòng)</td><td></td></tr>
+<tr><td>19005</td><td>1</td></tr>
+<tr><td>19010</td><td>1</td></tr>
+<tr><td>19015</td><td>1</td></tr>
+<tr><td>19020</td><td>1</td></tr>
+<tr><td>19025</td><td>1</td></tr>
 </tbody>
 </table>
+<p><small>… còn 994 dòng nữa (tổng 999 dòng)</small></p>
 <table>
 <thead><tr><th>Rows</th><th>Executes</th><th>StmtText</th><th>StmtId</th><th>NodeId</th><th>Parent</th><th>PhysicalOp</th><th>LogicalOp</th><th>Argument</th><th>DefinedValues</th><th>EstimateRows</th><th>EstimateIO</th><th>EstimateCPU</th><th>AvgRowSize</th><th>TotalSubtreeCost</th><th>OutputList</th><th>Warnings</th><th>Type</th><th>Parallel</th><th>EstimateExecutions</th></tr></thead>
 <tbody>
-<tr><td>0</td><td>1</td><td>SELECT [id],[depNum] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.09924495965242386</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
-<tr><td>0</td><td>1</td><td>  |--Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0)))</td><td>1</td><td>2</td><td>1</td><td>Index Scan</td><td>Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td>1</td><td>0.06608796119689941</td><td>0.033156998455524445</td><td>24</td><td>0.09924495965242386</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
+<tr><td>999</td><td>1</td><td>SELECT [id],[depNum] FROM [dbo].[NhanVienDemo] WHERE [luong]&gt;@1</td><td>1</td><td>1</td><td>0</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>1000.6972045898438</td><td><em>NULL</em></td><td><em>NULL</em></td><td><em>NULL</em></td><td>0.09924495965242386</td><td><em>NULL</em></td><td><em>NULL</em></td><td>SELECT</td><td>0</td><td><em>NULL</em></td></tr>
+<tr><td>999</td><td>1</td><td>  |--Index Scan(OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0)))</td><td>1</td><td>2</td><td>1</td><td>Index Scan</td><td>Index Scan</td><td>OBJECT:([DBI202].[dbo].[NhanVienDemo].[idx_nvdemo3_dep_luong]),  WHERE:([DBI202].[dbo].[NhanVienDemo].[luong]&gt;CONVERT_IMPLICIT(decimal(10,0),[@1],0))</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td>1000.6972045898438</td><td>0.06608796119689941</td><td>0.033156998455524445</td><td>24</td><td>0.09924495965242386</td><td>[DBI202].[dbo].[NhanVienDemo].[id], [DBI202].[dbo].[NhanVienDemo].[depNum]</td><td><em>NULL</em></td><td>PLAN_ROW</td><td>0</td><td>1</td></tr>
 </tbody>
 </table>
 <ul>
-<li><code>WHERE depNum = 3 AND luong &gt; 15000000</code> → <code>Index Seek</code>: <code>depNum</code> là cột ĐẦU TIÊN của chỉ mục, nên engine tìm nhị phân thẳng tới depNum = 3, rồi quét theo khoảng <code>luong</code> trong đó.</li>
-<li><code>WHERE luong &gt; 24000000</code> (không có <code>depNum</code>) → <code>Index Scan</code>, không phải seek: <code>luong</code> là cột THỨ HAI, nên engine không thể nhảy vào giữa chỉ mục mà không biết <code>depNum</code> trước — nó đọc cả chỉ mục (nhỏ hơn bảng), vẫn rẻ hơn quét cả bảng, nhưng còn lâu mới là seek.</li>
+<li><code>WHERE depNum = 3 AND luong &gt; 15000000</code> (2.000 dòng) → <code>Index Seek</code>: <code>depNum</code> là cột ĐẦU TIÊN của chỉ mục, nên engine tìm nhị phân thẳng tới depNum = 3, rồi quét theo khoảng <code>luong</code> trong đó.</li>
+<li><code>WHERE luong &gt; 24000000</code> (không có <code>depNum</code>, 999 dòng) → <code>Index Scan</code>, không phải seek: <code>luong</code> là cột THỨ HAI, nên engine không thể nhảy vào giữa chỉ mục mà không biết <code>depNum</code> trước — nó đọc cả chỉ mục (nhỏ hơn bảng), vẫn rẻ hơn quét cả bảng, nhưng còn lâu mới là seek.</li>
 </ul>
 <div class="pitfall">Chỉ mục ghép <code>(A, B)</code> giống danh bạ điện thoại sắp theo họ rồi mới tới tên: hữu ích cho "tìm mọi người họ Nguyễn", vô dụng cho "tìm mọi người có tên là Anh" — bạn phải đọc từng trang. Đặt cột truy vấn của bạn lọc NHIỀU NHẤT lên đầu.</div>`),
     bi(`<h3>🧪 Exercise 4 — CREATE VIEW … WITH CHECK OPTION on SQL Server (~10 min)</h3>

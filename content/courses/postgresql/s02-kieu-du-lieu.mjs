@@ -5,6 +5,11 @@
  * LUẬT: < > trong code → &lt; &gt; (toán tử jsonb ->> -> @>); & → &amp;;
  * backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G021 from './giang/pg-02-1.mjs';
+import G022 from './giang/pg-02-2.mjs';
+import G023 from './giang/pg-02-3.mjs';
+import G024 from './giang/pg-02-4.mjs';
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -18,7 +23,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Họ số nguyên, identity vs serial, và vì sao tiền phải dùng numeric chứ không bao giờ dùng float.',
-      content: `
+      content: `${NHAN_LUOT}${G021}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Numbers — and the one that will cost you money if you get it wrong</h2>
@@ -150,7 +155,7 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'text vs varchar(n) vs char(n), khi nào giới hạn độ dài, char đệm khoảng trắng, và độ dài Unicode theo ký tự vs byte.',
-      content: `
+      content: `${NHAN_LUOT}${G022}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>Storing text — simpler than you think, with two traps</h2>
@@ -284,7 +289,7 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'boolean, date/time/interval, và cạm bẫy quan trọng nhất: timestamp vs timestamptz — vì sao gần như luôn dùng timestamptz.',
-      content: `
+      content: `${NHAN_LUOT}${G023}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>Time is the hardest type — get this one right</h2>
@@ -331,7 +336,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
  2026-08-10 | 01:30:00 | 26 years 7 mons 9 days
 (1 row)</div>
 <p>Recall from lesson 0.3 that <code>now()</code> returns the moment the <em>transaction</em> started, so every row inserted in one statement shares a timestamp. To get the actual wall-clock instant mid-transaction, use <code>clock_timestamp()</code> instead.</p>
-<div class="note-ct">Every <code>created_at</code> / <code>updated_at</code> on this site is <code>timestamptz</code> — that's why a note created at 9am Vietnam time shows correctly whether the viewer is in Hanoi or New York. The Node.js course logged a related gotcha: inside a Docker container the clock is UTC while the host is +07, so a value that looks "7 hours off" in a log is usually just a zone-display difference, not a bug.</div>
+<div class="note-ct">Correction (checked against <code>prisma/schema.prisma</code> and the migrations): on this site <code>created_at</code> / <code>updated_at</code> are Prisma <code>DateTime</code> fields, which PostgreSQL creates as <code>timestamp(3)</code> <b>without</b> a time zone — only one column uses <code>@db.Timestamptz(6)</code>. Values are UTC <i>by convention</i>, and the app converts them to the viewer’s zone, so a note created at 9am Vietnam time still shows correctly in Hanoi or New York. A new project should use <code>timestamptz</code> so the database itself protects you. The Node.js course logged a related gotcha: inside a Docker container the clock is UTC while the host is +07, so a value that looks "7 hours off" in a log is usually just a zone-display difference, not a bug.</div>
 <h3>The only two time types you need</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">timestamptz — an instant</span><span class="lz-d">Stored as UTC, converted on the way in and out using the session's time zone. "When did this happen" is always this type.</span></div>
@@ -392,7 +397,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
  2026-08-10 | 01:30:00 | 26 years 7 mons 9 days
 (1 row)</div>
 <p>Nhớ lại từ bài 0.3 rằng <code>now()</code> trả về khoảnh khắc <em>giao dịch</em> bắt đầu, nên mọi dòng chèn trong một câu lệnh chia sẻ cùng một mốc. Muốn lấy khoảnh khắc đồng hồ thật giữa giao dịch, dùng <code>clock_timestamp()</code> thay thế.</p>
-<div class="note-ct">Mọi <code>created_at</code> / <code>updated_at</code> trên trang này là <code>timestamptz</code> — đó là lý do một note tạo lúc 9 giờ sáng giờ Việt Nam hiện đúng dù người xem ở Hà Nội hay New York. Khoá Node.js ghi lại một cạm bẫy liên quan: bên trong container Docker đồng hồ là UTC còn host là +07, nên một giá trị trông "lệch 7 tiếng" trong log thường chỉ là khác biệt hiển-thị-múi-giờ, không phải bug.</div>
+<div class="note-ct">Đính chính (đã đối chiếu <code>prisma/schema.prisma</code> và các migration): trên trang này <code>created_at</code> / <code>updated_at</code> là trường <code>DateTime</code> của Prisma, mà PostgreSQL tạo thành <code>timestamp(3)</code> <b>không</b> múi giờ — chỉ một cột dùng <code>@db.Timestamptz(6)</code>. Giá trị là UTC <i>theo quy ước</i>, và ứng dụng đổi sang múi giờ người xem, nên một note tạo lúc 9 giờ sáng giờ Việt Nam vẫn hiện đúng ở Hà Nội hay New York. Dự án mới nên dùng <code>timestamptz</code> để chính cơ sở dữ liệu bảo vệ bạn. Khoá Node.js ghi lại một cạm bẫy liên quan: bên trong container Docker đồng hồ là UTC còn host là +07, nên một giá trị trông "lệch 7 tiếng" trong log thường chỉ là khác biệt hiển-thị-múi-giờ, không phải bug.</div>
 <h3>Hai kiểu thời gian duy nhất bạn cần</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">timestamptz — một THỜI ĐIỂM</span><span class="lz-d">Lưu dưới dạng UTC, chuyển đổi lúc vào và lúc ra theo múi giờ của phiên. "Chuyện này xảy ra lúc nào" thì luôn là kiểu này.</span></div>
@@ -416,7 +421,7 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Bốn kiểu "đặc sản" của Postgres: id ngẫu nhiên UUID, enum có thứ tự, mảng, và jsonb — khi nào dùng và cạm bẫy.',
-      content: `
+      content: `${NHAN_LUOT}${G024}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Postgres's power types — UUID, enum, array, jsonb</h2>

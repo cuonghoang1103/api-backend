@@ -3,7 +3,7 @@
  * Chỉ mục là gì + B-tree + Seq Scan vs Index Scan (đọc EXPLAIN ANALYZE) ·
  * chọn cột nào để index + chỉ mục tổ hợp & thứ tự cột + covering (INCLUDE) ·
  * khi chỉ mục KHÔNG được dùng (hàm trên cột, độ chọn lọc) + partial + chi phí ghi ·
- * các loại chỉ mục B-tree/GIN/BRIN/GiST/unique. Output CHẠY THẬT PG 15.4 (schema ch9,
+ * các loại chỉ mục B-tree/GIN/BRIN/GiST/unique. Output CHẠY THẬT PostgreSQL 17.11 (schema ch09, video-bai-giang/src/khung/pg/that/pg-09-*.out.txt;
  * bảng event 500.000 dòng, 62 MB). max_parallel_workers_per_gather=0 để plan gọn.
  * LUẬT: < > trong code/out → &lt; &gt; (kể cả mũi tên -> của EXPLAIN → -&gt;, @> → @&gt;);
  * & → &amp;; backtick → &#96;; ${ → \${. Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
@@ -45,16 +45,16 @@ export default {
 <h3>Without an index: a Sequential Scan</h3>
 <p>Find one row by email. There's no index on <code>email</code> yet, so Postgres has no choice but to read every row and check it. <code>EXPLAIN ANALYZE</code> runs the query and reports what actually happened:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..14138.00 rows=1 width=87) (actual time=17.460..34.613 rows=1 loops=1)
+<div class="out"> Seq Scan on event  (cost=0.00..14187.00 rows=1 width=87) (actual time=21.812..43.624 rows=1 loops=1)
    Filter: (email = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
- Planning Time: 0.048 ms
- Execution Time: 34.625 ms</div>
+ Planning Time: 0.139 ms
+ Execution Time: 43.636 ms</div>
 <p>Read that plan line by line — it's the skill this whole phase rests on:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Seq Scan on event</span><span class="v">The access method: a <strong>sequential scan</strong> — read the table top to bottom. This is what "slow" looks like on a big table.</span></div>
-  <div class="kv"><span class="k">cost=0.00..14138.00</span><span class="v">The planner's <em>estimated</em> effort in arbitrary units (startup..total). Used to compare plans, not a time.</span></div>
-  <div class="kv"><span class="k">actual time=17.460..34.613</span><span class="v">The <em>real</em> milliseconds this run took (first row..last row), because we used ANALYZE.</span></div>
+  <div class="kv"><span class="k">cost=0.00..14187.00</span><span class="v">The planner's <em>estimated</em> effort in arbitrary units (startup..total). Used to compare plans, not a time.</span></div>
+  <div class="kv"><span class="k">actual time=21.812..43.624</span><span class="v">The <em>real</em> milliseconds this run took (first row..last row), because we used ANALYZE.</span></div>
   <div class="kv"><span class="k">Rows Removed by Filter: 499999</span><span class="v">The tell-tale sign: Postgres inspected all 500,000 rows and threw away 499,999 to find one. Pure waste.</span></div>
 </div>
 
@@ -63,11 +63,11 @@ export default {
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- builds a sorted B-tree (19 MB)</span>
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.023..0.024 rows=1 loops=1)
+<div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.031..0.031 rows=1 loops=1)
    Index Cond: (email = 'user250000@example.com'::text)
- Planning Time: 0.597 ms
- Execution Time: 0.078 ms</div>
-<p>The plan changed completely. <strong>Index Scan</strong> replaced Seq Scan; <code>Index Cond</code> replaced <code>Filter</code> (the condition is now satisfied <em>by the index</em>, not by inspecting rows); <code>Rows Removed by Filter</code> is gone. Execution time fell from <strong>34.6 ms to 0.078 ms — about 440× faster</strong>. The estimated <code>cost</code> dropped from 14138 to 8.44, which is why the planner chose it.</p>
+ Planning Time: 0.121 ms
+ Execution Time: 0.041 ms</div>
+<p>The plan changed completely. <strong>Index Scan</strong> replaced Seq Scan; <code>Index Cond</code> replaced <code>Filter</code> (the condition is now satisfied <em>by the index</em>, not by inspecting rows); <code>Rows Removed by Filter</code> is gone. Execution time fell from <strong>43.6 ms to 0.041 ms — about 1,000× faster</strong> (on PostgreSQL 17.11; your times will differ, the ratio is the point). The estimated <code>cost</code> dropped from 14187 to 8.44, which is why the planner chose it.</p>
 
 <h3>Why it's a B-tree</h3>
 <p>Postgres's default index is a <strong>B-tree</strong> — a balanced tree of sorted keys. To find a value it walks from the root down through a few levels to a leaf, then follows a pointer to the table row. For 500,000 rows that's ~3 hops instead of 500,000 comparisons. The tree stays balanced as you insert, so lookups stay fast (logarithmic) no matter the size.</p>
@@ -103,16 +103,16 @@ export default {
 <h3>Không có chỉ mục: một Sequential Scan</h3>
 <p>Tìm một dòng theo email. Chưa có chỉ mục trên <code>email</code>, nên Postgres không còn cách nào ngoài đọc mọi dòng và kiểm tra. <code>EXPLAIN ANALYZE</code> chạy truy vấn và báo cáo điều thực sự xảy ra:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..14138.00 rows=1 width=87) (actual time=17.460..34.613 rows=1 loops=1)
+<div class="out"> Seq Scan on event  (cost=0.00..14187.00 rows=1 width=87) (actual time=21.812..43.624 rows=1 loops=1)
    Filter: (email = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
- Planning Time: 0.048 ms
- Execution Time: 34.625 ms</div>
+ Planning Time: 0.139 ms
+ Execution Time: 43.636 ms</div>
 <p>Đọc plan đó từng dòng — đây là kỹ năng mà cả giai đoạn này dựa vào:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Seq Scan on event</span><span class="v">Phương pháp truy cập: một <strong>quét tuần tự</strong> — đọc bảng từ đầu tới cuối. Đây là dáng vẻ của "chậm" trên bảng lớn.</span></div>
-  <div class="kv"><span class="k">cost=0.00..14138.00</span><span class="v">Công sức <em>ước lượng</em> của bộ lập kế hoạch theo đơn vị quy ước (khởi động..tổng). Dùng để so plan, không phải thời gian.</span></div>
-  <div class="kv"><span class="k">actual time=17.460..34.613</span><span class="v">Số mili-giây <em>thật</em> lần chạy này (dòng đầu..dòng cuối), vì ta dùng ANALYZE.</span></div>
+  <div class="kv"><span class="k">cost=0.00..14187.00</span><span class="v">Công sức <em>ước lượng</em> của bộ lập kế hoạch theo đơn vị quy ước (khởi động..tổng). Dùng để so plan, không phải thời gian.</span></div>
+  <div class="kv"><span class="k">actual time=21.812..43.624</span><span class="v">Số mili-giây <em>thật</em> lần chạy này (dòng đầu..dòng cuối), vì ta dùng ANALYZE.</span></div>
   <div class="kv"><span class="k">Rows Removed by Filter: 499999</span><span class="v">Dấu hiệu tố cáo: Postgres xét cả 500.000 dòng và vứt đi 499.999 để tìm một dòng. Lãng phí thuần tuý.</span></div>
 </div>
 
@@ -121,11 +121,11 @@ export default {
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- dựng một B-tree đã sắp (19 MB)</span>
 
 <span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> * <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> email = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.023..0.024 rows=1 loops=1)
+<div class="out"> Index Scan using idx_event_email on event  (cost=0.42..8.44 rows=1 width=87) (actual time=0.031..0.031 rows=1 loops=1)
    Index Cond: (email = 'user250000@example.com'::text)
- Planning Time: 0.597 ms
- Execution Time: 0.078 ms</div>
-<p>Plan đổi hoàn toàn. <strong>Index Scan</strong> thay cho Seq Scan; <code>Index Cond</code> thay cho <code>Filter</code> (điều kiện giờ được thoả mãn <em>bởi chỉ mục</em>, không phải bằng xét từng dòng); <code>Rows Removed by Filter</code> biến mất. Thời gian chạy rơi từ <strong>34,6 ms xuống 0,078 ms — nhanh khoảng 440×</strong>. <code>cost</code> ước lượng rớt từ 14138 xuống 8,44, đó là lý do bộ lập kế hoạch chọn nó.</p>
+ Planning Time: 0.121 ms
+ Execution Time: 0.041 ms</div>
+<p>Plan đổi hoàn toàn. <strong>Index Scan</strong> thay cho Seq Scan; <code>Index Cond</code> thay cho <code>Filter</code> (điều kiện giờ được thoả mãn <em>bởi chỉ mục</em>, không phải bằng xét từng dòng); <code>Rows Removed by Filter</code> biến mất. Thời gian chạy rơi từ <strong>43,6 ms xuống 0,041 ms — nhanh khoảng 1.000×</strong> (trên PostgreSQL 17.11; thời gian trên máy bạn sẽ khác, hãy nhìn tỉ lệ). <code>cost</code> ước lượng rớt từ 14187 xuống 8,44, đó là lý do bộ lập kế hoạch chọn nó.</p>
 
 <h3>Vì sao là B-tree</h3>
 <p>Chỉ mục mặc định của Postgres là một <strong>B-tree</strong> — một cây cân bằng của các khoá đã sắp. Để tìm một giá trị nó đi từ gốc xuống qua vài tầng tới một lá, rồi theo con trỏ tới dòng bảng. Với 500.000 dòng đó là ~3 bước nhảy thay vì 500.000 phép so sánh. Cây giữ cân bằng khi bạn chèn, nên tra cứu luôn nhanh (logarit) bất kể kích thước.</p>
@@ -160,46 +160,65 @@ export default {
 
 <h3>A composite index serves filter + sort at once</h3>
 <p>"The 5 most recent events for user 42" filters on <code>user_id</code> and sorts by <code>created_at</code>. With no helpful index, Postgres scans the table and sorts the matches:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">ORDER BY</span> created_at <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
-<div class="out"> Limit  (cost=14146.24..14146.25 rows=5 width=22) (actual time=28.015..28.017 rows=5 loops=1)
-   -&gt;  Sort  (cost=14146.24..14147.48 rows=496 width=22) (actual time=28.013..28.013 rows=5 loops=1)
+<div class="out"> Limit (actual time=21.804..21.806 rows=5 loops=1)
+   Buffers: shared hit=7885 read=59
+   -&gt;  Sort (actual time=21.803..21.803 rows=5 loops=1)
          Sort Key: created_at DESC
          Sort Method: top-N heapsort  Memory: 25kB
-         -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=496 width=22) (actual time=0.018..27.886 rows=500 loops=1)
+         Buffers: shared hit=7885 read=59
+         -&gt;  Seq Scan on event (actual time=0.070..21.650 rows=500 loops=1)
                Filter: (user_id = 42)
                Rows Removed by Filter: 499500
- Execution Time: 28.050 ms</div>
+               Buffers: shared hit=7882 read=59
+ Planning:
+   Buffers: shared hit=53
+ Planning Time: 0.123 ms
+ Execution Time: 21.846 ms</div>
 <p>Two costs: a Seq Scan (throwing away 499,500 rows), then a Sort. Now a <strong>composite index on both columns, in the order (filter, then sort)</strong>:</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
-<div class="out"> Limit  (cost=0.42..19.99 rows=5 width=22) (actual time=0.036..0.042 rows=5 loops=1)
-   -&gt;  Index Scan Backward using idx_event_user_created on event  (cost=0.42..1941.03 rows=496 width=22) (actual time=0.035..0.040 rows=5 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);
+<span class="tok-comment">-- then the same EXPLAIN (ANALYZE, BUFFERS, COSTS OFF) query</span></code></pre>
+<div class="out"> Limit (actual time=0.034..0.038 rows=5 loops=1)
+   Buffers: shared hit=8
+   -&gt;  Index Scan Backward using idx_event_user_created on event (actual time=0.033..0.037 rows=5 loops=1)
          Index Cond: (user_id = 42)
- Execution Time: 0.055 ms</div>
-<p>28 ms → 0.055 ms. The <code>Sort</code> node is <em>gone</em>: because the index is ordered by <code>(user_id, created_at)</code>, the rows for user 42 already come out in <code>created_at</code> order. Postgres reads the index <strong>backward</strong> and stops after 5. One index served both the filter and the sort.</p>
+         Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=35
+ Planning Time: 0.116 ms
+ Execution Time: 0.044 ms</div>
+<p>21.8 ms (~7,940 pages) → 0.044 ms (8 pages). The <code>Sort</code> node is <em>gone</em>: because the index is ordered by <code>(user_id, created_at)</code>, the rows for user 42 already come out in <code>created_at</code> order. Postgres reads the index <strong>backward</strong> and stops after 5. One index served both the filter and the sort.</p>
 
 <h3>Column order is everything</h3>
 <p>An index on <code>(user_id, created_at)</code> is like a phone book sorted by (last name, first name). It's great for "everyone named Nguyen", useless for "everyone whose first name is An" — the first name only helps <em>after</em> you've fixed the last name. Query the <strong>second</strong> column alone and the composite index can't seek:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at = <span class="tok-string">'2024-06-22 14:40:00+00'</span>;   <span class="tok-comment">-- leading column user_id absent</span></code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..14137.74 rows=1 width=12) (actual time=13.487..37.894 rows=1 loops=1)
-   Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
-   Rows Removed by Filter: 499999
- Execution Time: 37.939 ms</div>
-<p>Straight back to a Seq Scan — the index was no help. (On PostgreSQL 17 the planner may instead walk the <em>whole</em> composite index — an Index Scan that reads all ~1,900 of its pages, no faster; either way there is no seek. See the slides above.) <strong>Rule: put the columns you filter by <em>equality</em> first, the range/sort column last.</strong> A composite index on <code>(a, b, c)</code> can serve <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, and <code>WHERE a= AND b= AND c=</code> — always a <em>left prefix</em> — but not <code>WHERE b=</code> alone.</p>
+<div class="out"> Index Scan using idx_event_user_created on event (actual time=0.089..27.371 rows=1 loops=1)
+   Index Cond: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
+   Buffers: shared hit=7 read=1914
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.037 ms
+ Execution Time: 27.383 ms</div>
+<p>No seek: PostgreSQL 17 picked the composite index but had to walk the <em>whole</em> of it — an Index Scan that read 1,921 pages to find one row, 27 ms, no faster than reading the table (a Seq Scan, which the planner may just as well choose). Without the leading column the index was no help. <strong>Rule: put the columns you filter by <em>equality</em> first, the range/sort column last.</strong> A composite index on <code>(a, b, c)</code> can serve <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, and <code>WHERE a= AND b= AND c=</code> — always a <em>left prefix</em> — but not <code>WHERE b=</code> alone.</p>
 
 <h3>Covering index — INCLUDE, and the Index Only Scan</h3>
 <p>If an index contains <em>every column a query needs</em>, Postgres can answer from the index alone and never touch the table — an <strong>Index Only Scan</strong>. Add non-key columns with <code>INCLUDE</code>:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
 
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>) <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">GROUP BY</span> user_id;</code></pre>
-<div class="out"> GroupAggregate  (cost=0.42..24.53 rows=392 width=36) (actual time=0.129..0.129 rows=1 loops=1)
-   Group Key: user_id
-   -&gt;  Index Only Scan using idx_event_user_incl on event  (cost=0.42..17.14 rows=498 width=10) (actual time=0.035..0.090 rows=500 loops=1)
+<div class="out"> GroupAggregate  (cost=0.42..18.42 rows=1 width=36) (actual time=0.103..0.103 rows=1 loops=1)
+   Buffers: shared hit=1 read=5
+   -&gt;  Index Only Scan using idx_event_user_incl on event  (cost=0.42..17.16 rows=499 width=10) (actual time=0.026..0.068 rows=500 loops=1)
          Index Cond: (user_id = 42)
          Heap Fetches: 0
- Execution Time: 0.151 ms</div>
+         Buffers: shared hit=1 read=5
+ Planning:
+   Buffers: shared hit=17 read=1
+ Planning Time: 0.138 ms
+ Execution Time: 0.120 ms</div>
 <p><strong>Index Only Scan</strong> with <code>Heap Fetches: 0</code> — Postgres computed the sum reading only the index, never the table. Both <code>user_id</code> (the key) and <code>amount</code> (included) live in the index, so there was nothing left to fetch from the heap.</p>
 <div class="callout ok">Index the columns you <code>WHERE</code>/<code>JOIN</code>/<code>ORDER BY</code> on. For multi-column queries, prefer <strong>one composite index</strong> with equality columns first and the range/sort column last, over several single-column indexes. Reach for <code>INCLUDE</code> when a hot query reads just a couple of extra columns — you turn it into a table-free Index Only Scan.</div>
 <div class="note-ct">A feed query like "this user's posts, newest first" is exactly <code>(user_id, created_at)</code>. The site's foreign keys deserve indexes too: Postgres indexes the PK automatically but <em>not</em> the FK column on the child side — so <code>comment.note_id</code>, <code>note.user_id</code> etc. each need their own index or every join and every "delete the parent" check falls back to a Seq Scan.</div>
@@ -224,46 +243,65 @@ export default {
 
 <h3>Một chỉ mục tổ hợp phục vụ lọc + sắp cùng lúc</h3>
 <p>"5 event mới nhất của user 42" lọc theo <code>user_id</code> và sắp theo <code>created_at</code>. Không có chỉ mục hữu ích, Postgres quét bảng rồi sắp các dòng khớp:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id, created_at, amount <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">ORDER BY</span> created_at <span class="tok-keyword">DESC</span> <span class="tok-keyword">LIMIT</span> 5;</code></pre>
-<div class="out"> Limit  (cost=14146.24..14146.25 rows=5 width=22) (actual time=28.015..28.017 rows=5 loops=1)
-   -&gt;  Sort  (cost=14146.24..14147.48 rows=496 width=22) (actual time=28.013..28.013 rows=5 loops=1)
+<div class="out"> Limit (actual time=21.804..21.806 rows=5 loops=1)
+   Buffers: shared hit=7885 read=59
+   -&gt;  Sort (actual time=21.803..21.803 rows=5 loops=1)
          Sort Key: created_at DESC
          Sort Method: top-N heapsort  Memory: 25kB
-         -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=496 width=22) (actual time=0.018..27.886 rows=500 loops=1)
+         Buffers: shared hit=7885 read=59
+         -&gt;  Seq Scan on event (actual time=0.070..21.650 rows=500 loops=1)
                Filter: (user_id = 42)
                Rows Removed by Filter: 499500
- Execution Time: 28.050 ms</div>
+               Buffers: shared hit=7882 read=59
+ Planning:
+   Buffers: shared hit=53
+ Planning Time: 0.123 ms
+ Execution Time: 21.846 ms</div>
 <p>Hai chi phí: một Seq Scan (vứt đi 499.500 dòng), rồi một Sort. Giờ một <strong>chỉ mục tổ hợp trên cả hai cột, theo thứ tự (lọc, rồi sắp)</strong>:</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);</code></pre>
-<div class="out"> Limit  (cost=0.42..19.99 rows=5 width=22) (actual time=0.036..0.042 rows=5 loops=1)
-   -&gt;  Index Scan Backward using idx_event_user_created on event  (cost=0.42..1941.03 rows=496 width=22) (actual time=0.035..0.040 rows=5 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_created <span class="tok-keyword">ON</span> event(user_id, created_at);
+<span class="tok-comment">-- rồi chạy lại đúng câu EXPLAIN (ANALYZE, BUFFERS, COSTS OFF)</span></code></pre>
+<div class="out"> Limit (actual time=0.034..0.038 rows=5 loops=1)
+   Buffers: shared hit=8
+   -&gt;  Index Scan Backward using idx_event_user_created on event (actual time=0.033..0.037 rows=5 loops=1)
          Index Cond: (user_id = 42)
- Execution Time: 0.055 ms</div>
-<p>28 ms → 0,055 ms. Nút <code>Sort</code> <em>biến mất</em>: vì chỉ mục đã sắp theo <code>(user_id, created_at)</code>, các dòng của user 42 đã ra sẵn theo thứ tự <code>created_at</code>. Postgres đọc chỉ mục <strong>ngược (backward)</strong> và dừng sau 5 dòng. Một chỉ mục phục vụ cả lọc lẫn sắp.</p>
+         Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=35
+ Planning Time: 0.116 ms
+ Execution Time: 0.044 ms</div>
+<p>21,8 ms (~7.940 trang) → 0,044 ms (8 trang). Nút <code>Sort</code> <em>biến mất</em>: vì chỉ mục đã sắp theo <code>(user_id, created_at)</code>, các dòng của user 42 đã ra sẵn theo thứ tự <code>created_at</code>. Postgres đọc chỉ mục <strong>ngược (backward)</strong> và dừng sau 5 dòng. Một chỉ mục phục vụ cả lọc lẫn sắp.</p>
 
 <h3>Thứ tự cột là tất cả</h3>
 <p>Một chỉ mục trên <code>(user_id, created_at)</code> giống danh bạ sắp theo (họ, tên). Nó tuyệt cho "mọi người họ Nguyễn", vô dụng cho "mọi người tên An" — tên chỉ giúp <em>sau khi</em> bạn đã cố định họ. Hỏi cột <strong>thứ hai</strong> một mình và chỉ mục tổ hợp không thể nhảy tìm (seek):</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id, user_id <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at = <span class="tok-string">'2024-06-22 14:40:00+00'</span>;   <span class="tok-comment">-- vắng cột đầu user_id</span></code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..14137.74 rows=1 width=12) (actual time=13.487..37.894 rows=1 loops=1)
-   Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
-   Rows Removed by Filter: 499999
- Execution Time: 37.939 ms</div>
-<p>Thẳng về một Seq Scan — chỉ mục vô ích. (Trên PostgreSQL 17 bộ lập kế hoạch có thể đi <em>hết</em> chỉ mục tổ hợp — một Index Scan đọc cả ~1.900 trang chỉ mục, không nhanh hơn; dù cách nào cũng không có bước nhảy. Xem slide phía trên.) <strong>Luật: đặt các cột bạn lọc theo <em>bằng</em> trước, cột khoảng/sắp cuối.</strong> Một chỉ mục tổ hợp trên <code>(a, b, c)</code> phục vụ được <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, và <code>WHERE a= AND b= AND c=</code> — luôn là một <em>tiền tố trái</em> — nhưng không phục vụ <code>WHERE b=</code> một mình.</p>
+<div class="out"> Index Scan using idx_event_user_created on event (actual time=0.089..27.371 rows=1 loops=1)
+   Index Cond: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
+   Buffers: shared hit=7 read=1914
+ Planning:
+   Buffers: shared hit=3
+ Planning Time: 0.037 ms
+ Execution Time: 27.383 ms</div>
+<p>Không có bước nhảy: PostgreSQL 17 chọn chỉ mục tổ hợp nhưng phải đi <em>hết</em> nó — một Index Scan đọc 1.921 trang để tìm một dòng, 27 ms, không nhanh hơn đọc cả bảng (một Seq Scan, mà bộ lập kế hoạch cũng có thể chọn luôn). Thiếu cột đầu thì chỉ mục vô ích. <strong>Luật: đặt các cột bạn lọc theo <em>bằng</em> trước, cột khoảng/sắp cuối.</strong> Một chỉ mục tổ hợp trên <code>(a, b, c)</code> phục vụ được <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, và <code>WHERE a= AND b= AND c=</code> — luôn là một <em>tiền tố trái</em> — nhưng không phục vụ <code>WHERE b=</code> một mình.</p>
 
 <h3>Covering index — INCLUDE, và Index Only Scan</h3>
 <p>Nếu một chỉ mục chứa <em>mọi cột một truy vấn cần</em>, Postgres có thể trả lời từ riêng chỉ mục và không bao giờ chạm bảng — một <strong>Index Only Scan</strong>. Thêm các cột không-khoá bằng <code>INCLUDE</code>:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_user_incl <span class="tok-keyword">ON</span> event(user_id) <span class="tok-keyword">INCLUDE</span> (amount);
 
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>) <span class="tok-keyword">SELECT</span> user_id, sum(amount) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> user_id = 42 <span class="tok-keyword">GROUP BY</span> user_id;</code></pre>
-<div class="out"> GroupAggregate  (cost=0.42..24.53 rows=392 width=36) (actual time=0.129..0.129 rows=1 loops=1)
-   Group Key: user_id
-   -&gt;  Index Only Scan using idx_event_user_incl on event  (cost=0.42..17.14 rows=498 width=10) (actual time=0.035..0.090 rows=500 loops=1)
+<div class="out"> GroupAggregate  (cost=0.42..18.42 rows=1 width=36) (actual time=0.103..0.103 rows=1 loops=1)
+   Buffers: shared hit=1 read=5
+   -&gt;  Index Only Scan using idx_event_user_incl on event  (cost=0.42..17.16 rows=499 width=10) (actual time=0.026..0.068 rows=500 loops=1)
          Index Cond: (user_id = 42)
          Heap Fetches: 0
- Execution Time: 0.151 ms</div>
+         Buffers: shared hit=1 read=5
+ Planning:
+   Buffers: shared hit=17 read=1
+ Planning Time: 0.138 ms
+ Execution Time: 0.120 ms</div>
 <p><strong>Index Only Scan</strong> với <code>Heap Fetches: 0</code> — Postgres tính tổng chỉ đọc chỉ mục, không hề đọc bảng. Cả <code>user_id</code> (khoá) và <code>amount</code> (được include) đều nằm trong chỉ mục, nên không còn gì phải lấy từ heap.</p>
 <div class="callout ok">Index các cột bạn <code>WHERE</code>/<code>JOIN</code>/<code>ORDER BY</code>. Với truy vấn nhiều cột, ưu tiên <strong>một chỉ mục tổ hợp</strong> với cột bằng trước và cột khoảng/sắp cuối, hơn là nhiều chỉ mục một-cột. Dùng <code>INCLUDE</code> khi một truy vấn nóng chỉ đọc thêm vài cột — bạn biến nó thành một Index Only Scan không đụng bảng.</div>
 <div class="note-ct">Một truy vấn feed như "bài của user này, mới nhất trước" đúng là <code>(user_id, created_at)</code>. Các khoá ngoại của trang cũng đáng có chỉ mục: Postgres tự index PK nhưng <em>không</em> tự index cột FK ở phía con — nên <code>comment.note_id</code>, <code>note.user_id</code>… mỗi cái cần chỉ mục riêng, nếu không mọi join và mọi phép kiểm "xoá cha" rơi về Seq Scan.</div>
@@ -298,53 +336,75 @@ export default {
 
 <h3>A function on the column defeats a plain index</h3>
 <p>There's an index on <code>email</code>, but wrap the column in <code>lower()</code> and Postgres can't use it — the index stores <code>email</code>, not <code>lower(email)</code>:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..15388.00 rows=2500 width=8) (actual time=87.565..163.337 rows=1 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<div class="out"> Seq Scan on event (actual time=333.823..656.620 rows=1 loops=1)
    Filter: (lower(email) = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
- Execution Time: 163.373 ms</div>
-<p>163 ms — back to reading everything. The fix is an <strong>expression index</strong>: index the expression the query actually uses.</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
-<div class="out"> Bitmap Heap Scan on event  (cost=115.80..5400.73 rows=2500 width=8) (actual time=0.053..0.054 rows=1 loops=1)
+ Planning Time: 0.172 ms
+ Execution Time: 656.645 ms</div>
+<p>657 ms on a busy machine — back to reading everything. The fix is an <strong>expression index</strong>: index the expression the query actually uses.</p>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));
+<span class="tok-comment">-- then EXPLAIN ANALYZE the same query (statistics for the new expression are not collected yet)</span></code></pre>
+<div class="out"> Bitmap Heap Scan on event  (cost=71.80..5369.71 rows=2500 width=8) (actual time=0.031..0.031 rows=1 loops=1)
    Recheck Cond: (lower(email) = 'user250000@example.com'::text)
    Heap Blocks: exact=1
-   -&gt;  Bitmap Index Scan on idx_event_lower_email  (cost=0.00..115.17 rows=2500 width=0) (actual time=0.041..0.042 rows=1 loops=1)
+   -&gt;  Bitmap Index Scan on idx_event_lower_email  (cost=0.00..71.17 rows=2500 width=0) (actual time=0.024..0.024 rows=1 loops=1)
          Index Cond: (lower(email) = 'user250000@example.com'::text)
- Execution Time: 0.102 ms</div>
-<p>163 ms → 0.1 ms. Same trap bites <code>WHERE date(created_at) = ...</code>, <code>WHERE email ILIKE ...</code>, and a leading-wildcard <code>LIKE '%foo'</code> (no B-tree can seek a suffix). Match the index to the exact expression — or rewrite the query to leave the column bare.</p>
+ Planning Time: 0.167 ms
+ Execution Time: 0.049 ms</div>
+<p>657 ms → 0.05 ms. Same trap bites <code>WHERE date(created_at) = ...</code>, <code>WHERE email ILIKE ...</code>, and a leading-wildcard <code>LIKE '%foo'</code> (no B-tree can seek a suffix). Match the index to the exact expression — or rewrite the query to leave the column bare.</p>
 
 <h3>Selectivity: the planner is right to skip an index</h3>
 <p>Sometimes a Seq Scan is <em>correct</em>. Our <code>status</code> column is 66% <code>'active'</code>, 1% <code>'pending'</code>. With an index on <code>status</code>, watch the planner choose differently for each. First the common value:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330,000 rows</span></code></pre>
-<div class="out"> Aggregate  (cost=14963.84..14963.85 rows=1 width=32) (actual time=78.718..78.718 rows=1 loops=1)
-   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=330333 width=6) (actual time=0.049..51.347 rows=330000 loops=1)
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330,000 rows</span></code></pre>
+<div class="out"> Aggregate (actual time=131.406..131.407 rows=1 loops=1)
+   Buffers: shared hit=7941
+   -&gt;  Seq Scan on event (actual time=0.013..75.986 rows=330000 loops=1)
          Filter: (status = 'active'::text)
          Rows Removed by Filter: 170000
- Execution Time: 78.820 ms</div>
+         Buffers: shared hit=7941
+ Planning:
+   Buffers: shared hit=18
+ Planning Time: 0.182 ms
+ Execution Time: 131.430 ms</div>
 <p>It <em>ignored</em> the index — and rightly so. When a query returns most of the table, hopping through an index to 330,000 scattered rows is <em>slower</em> than reading the table straight through. Now the rare value:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5,000 rows</span></code></pre>
-<div class="out"> Aggregate  (cost=114.76..114.77 rows=1 width=8) (actual time=0.541..0.541 rows=1 loops=1)
-   -&gt;  Bitmap Heap Scan on event  (cost=55.80..102.97 rows=4717 width=6) (actual time=0.201..0.420 rows=5000 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5,000 rows</span></code></pre>
+<div class="out"> Aggregate (actual time=13.818..13.818 rows=1 loops=1)
+   Buffers: shared hit=5007
+   -&gt;  Bitmap Heap Scan on event (actual time=2.148..13.154 rows=5000 loops=1)
          Recheck Cond: (status = 'pending'::text)
          Heap Blocks: exact=5000
-         -&gt;  Bitmap Index Scan on idx_event_status  (cost=0.00..55.80 rows=4717 width=0) (actual time=0.480..0.480 rows=5000 loops=1)
+         Buffers: shared hit=5007
+         -&gt;  Bitmap Index Scan on idx_event_status (actual time=1.346..1.346 rows=5000 loops=1)
                Index Cond: (status = 'pending'::text)
- Execution Time: 6.810 ms</div>
-<p>Same index, opposite decision: 1% of rows is selective enough that the index wins. <strong>An index only helps when a query returns a small fraction of the table</strong> — indexing a low-cardinality flag you always filter to its common value is wasted disk.</p>
+               Buffers: shared hit=7
+ Planning Time: 0.380 ms
+ Execution Time: 13.905 ms</div>
+<p>Same index, opposite decision: 1% of rows is selective enough that the index wins — 13.9 ms instead of 131 ms. <strong>An index only helps when a query returns a small fraction of the table</strong> — indexing a low-cardinality flag you always filter to its common value is wasted disk.</p>
 
 <h3>Partial index — index only the rows you query</h3>
 <p>If you only ever query <code>status = 'pending'</code>, index <em>just those rows</em> with a <code>WHERE</code> clause on the index. It's tiny and stays out of the way of the other 99%:</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
-<div class="out">   full  index on status  | 3408 kB
-   partial idx_event_pending | 128 kB</div>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;
+<span class="tok-keyword">SELECT</span> <span class="tok-string">'idx_event_status'</span> <span class="tok-keyword">AS</span> index, pg_size_pretty(pg_relation_size(<span class="tok-string">'idx_event_status'</span>)) <span class="tok-keyword">AS</span> size
+<span class="tok-keyword">UNION ALL</span> <span class="tok-keyword">SELECT</span> <span class="tok-string">'idx_event_pending'</span>, pg_size_pretty(pg_relation_size(<span class="tok-string">'idx_event_pending'</span>));</code></pre>
+<div class="out">       index       |  size   
+-------------------+---------
+ idx_event_status  | 3408 kB
+ idx_event_pending | 128 kB
+(2 rows)</div>
 <p>128 kB versus 3.4 MB — a <strong>27× smaller</strong> index, because it holds 5,000 rows instead of 500,000. It's used for any query whose <code>WHERE</code> implies the partial condition, e.g. "oldest pending jobs". Partial indexes are the standard tool for "hot subset" columns — unprocessed rows, soft-deleted flags, active sessions.</p>
 
 <h3>The cost side: writes</h3>
-<p>Every index must be <em>updated on every INSERT, UPDATE, and DELETE</em>. Inserting 100,000 rows into a bare copy versus the fully-indexed <code>event</code> (nine indexes, built up across this chapter):</p>
-<div class="out">   into bare table (0 indexes):   116 ms
-   into event     (9 indexes):   1330 ms   -- ~11x slower</div>
-<div class="callout warn">Indexes trade write speed and disk for read speed. Nine indexes made writes ~11× slower here. The discipline: index what you actually query, drop indexes nothing uses (<code>pg_stat_user_indexes.idx_scan = 0</code> flags them), and remember every redundant index is a tax on every write forever.</div>
+<p>Every index must be <em>updated on every INSERT, UPDATE, and DELETE</em>. Inserting the same 100,000 rows into a bare copy of <code>event</code> versus a copy carrying all its indexes (eight at this point in the chapter; <code>CREATE TABLE … (LIKE event INCLUDING IDENTITY INCLUDING INDEXES)</code>):</p>
+<div class="out">-- ev0: a copy with 0 indexes
+INSERT 0 100000
+Time: 87.855 ms
+-- ev8: a copy with the same 8 indexes as event
+INSERT 0 100000
+Time: 1215.946 ms (00:01.216)
+-- ~14x slower</div>
+<div class="callout warn">Indexes trade write speed and disk for read speed. Eight indexes made writes ~14× slower here (88 ms → 1,216 ms), and 12 MB of data carried 27 MB of indexes. The discipline: index what you actually query, drop indexes nothing uses (<code>pg_stat_user_indexes.idx_scan = 0</code> flags them), and remember every redundant index is a tax on every write forever.</div>
 <div class="note-ct">The site's "unread notifications" and "pending moderation" queues are perfect partial-index targets — a <code>WHERE read = false</code> partial index stays kilobytes even as the notifications table grows to millions. And the write-cost lesson is why the feed tables aren't blanketed in indexes: each one would slow every new post and every like.</div>
 <h3>Why a perfectly good index gets ignored</h3>
 <div class="lz-stack">
@@ -367,53 +427,75 @@ export default {
 
 <h3>Một hàm trên cột vô hiệu hoá chỉ mục thường</h3>
 <p>Có một chỉ mục trên <code>email</code>, nhưng bọc cột trong <code>lower()</code> là Postgres không dùng được nó — chỉ mục lưu <code>email</code>, không phải <code>lower(email)</code>:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
-<div class="out"> Seq Scan on event  (cost=0.00..15388.00 rows=2500 width=8) (actual time=87.565..163.337 rows=1 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> lower(email) = <span class="tok-string">'user250000@example.com'</span>;</code></pre>
+<div class="out"> Seq Scan on event (actual time=333.823..656.620 rows=1 loops=1)
    Filter: (lower(email) = 'user250000@example.com'::text)
    Rows Removed by Filter: 499999
- Execution Time: 163.373 ms</div>
-<p>163 ms — lại đọc mọi thứ. Cách sửa là một <strong>expression index (chỉ mục biểu thức)</strong>: index chính biểu thức mà truy vấn dùng.</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));</code></pre>
-<div class="out"> Bitmap Heap Scan on event  (cost=115.80..5400.73 rows=2500 width=8) (actual time=0.053..0.054 rows=1 loops=1)
+ Planning Time: 0.172 ms
+ Execution Time: 656.645 ms</div>
+<p>657 ms trên một máy đang bận — lại đọc mọi thứ. Cách sửa là một <strong>expression index (chỉ mục biểu thức)</strong>: index chính biểu thức mà truy vấn dùng.</p>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_lower_email <span class="tok-keyword">ON</span> event(lower(email));
+<span class="tok-comment">-- rồi EXPLAIN ANALYZE lại đúng câu đó (biểu thức mới chưa có thống kê)</span></code></pre>
+<div class="out"> Bitmap Heap Scan on event  (cost=71.80..5369.71 rows=2500 width=8) (actual time=0.031..0.031 rows=1 loops=1)
    Recheck Cond: (lower(email) = 'user250000@example.com'::text)
    Heap Blocks: exact=1
-   -&gt;  Bitmap Index Scan on idx_event_lower_email  (cost=0.00..115.17 rows=2500 width=0) (actual time=0.041..0.042 rows=1 loops=1)
+   -&gt;  Bitmap Index Scan on idx_event_lower_email  (cost=0.00..71.17 rows=2500 width=0) (actual time=0.024..0.024 rows=1 loops=1)
          Index Cond: (lower(email) = 'user250000@example.com'::text)
- Execution Time: 0.102 ms</div>
-<p>163 ms → 0,1 ms. Cùng cái bẫy cắn <code>WHERE date(created_at) = ...</code>, <code>WHERE email ILIKE ...</code>, và <code>LIKE '%foo'</code> ký-tự-đại-diện-đầu (không B-tree nào nhảy tìm được hậu tố). Khớp chỉ mục với đúng biểu thức — hoặc viết lại truy vấn để cột trần.</p>
+ Planning Time: 0.167 ms
+ Execution Time: 0.049 ms</div>
+<p>657 ms → 0,05 ms. Cùng cái bẫy cắn <code>WHERE date(created_at) = ...</code>, <code>WHERE email ILIKE ...</code>, và <code>LIKE '%foo'</code> ký-tự-đại-diện-đầu (không B-tree nào nhảy tìm được hậu tố). Khớp chỉ mục với đúng biểu thức — hoặc viết lại truy vấn để cột trần.</p>
 
 <h3>Độ chọn lọc: bộ lập kế hoạch bỏ qua chỉ mục là đúng</h3>
 <p>Đôi khi một Seq Scan là <em>đúng</em>. Cột <code>status</code> của ta 66% là <code>'active'</code>, 1% là <code>'pending'</code>. Với một chỉ mục trên <code>status</code>, xem bộ lập kế hoạch chọn khác nhau cho mỗi giá trị. Trước hết giá trị phổ biến:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_status <span class="tok-keyword">ON</span> event(status);
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330.000 dòng</span></code></pre>
-<div class="out"> Aggregate  (cost=14963.84..14963.85 rows=1 width=32) (actual time=78.718..78.718 rows=1 loops=1)
-   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=330333 width=6) (actual time=0.049..51.347 rows=330000 loops=1)
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'active'</span>;   <span class="tok-comment">-- 330.000 dòng</span></code></pre>
+<div class="out"> Aggregate (actual time=131.406..131.407 rows=1 loops=1)
+   Buffers: shared hit=7941
+   -&gt;  Seq Scan on event (actual time=0.013..75.986 rows=330000 loops=1)
          Filter: (status = 'active'::text)
          Rows Removed by Filter: 170000
- Execution Time: 78.820 ms</div>
+         Buffers: shared hit=7941
+ Planning:
+   Buffers: shared hit=18
+ Planning Time: 0.182 ms
+ Execution Time: 131.430 ms</div>
 <p>Nó <em>bỏ qua</em> chỉ mục — và đúng đắn. Khi một truy vấn trả về phần lớn bảng, nhảy qua chỉ mục tới 330.000 dòng rải rác <em>chậm hơn</em> đọc bảng thẳng một mạch. Giờ giá trị hiếm:</p>
-<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5.000 dòng</span></code></pre>
-<div class="out"> Aggregate  (cost=114.76..114.77 rows=1 width=8) (actual time=0.541..0.541 rows=1 loops=1)
-   -&gt;  Bitmap Heap Scan on event  (cost=55.80..102.97 rows=4717 width=6) (actual time=0.201..0.420 rows=5000 loops=1)
+<pre><code class="language-sql"><span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>, <span class="tok-keyword">COSTS OFF</span>) <span class="tok-keyword">SELECT</span> avg(amount) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;   <span class="tok-comment">-- 5.000 dòng</span></code></pre>
+<div class="out"> Aggregate (actual time=13.818..13.818 rows=1 loops=1)
+   Buffers: shared hit=5007
+   -&gt;  Bitmap Heap Scan on event (actual time=2.148..13.154 rows=5000 loops=1)
          Recheck Cond: (status = 'pending'::text)
          Heap Blocks: exact=5000
-         -&gt;  Bitmap Index Scan on idx_event_status  (cost=0.00..55.80 rows=4717 width=0) (actual time=0.480..0.480 rows=5000 loops=1)
+         Buffers: shared hit=5007
+         -&gt;  Bitmap Index Scan on idx_event_status (actual time=1.346..1.346 rows=5000 loops=1)
                Index Cond: (status = 'pending'::text)
- Execution Time: 6.810 ms</div>
-<p>Cùng chỉ mục, quyết định ngược lại: 1% số dòng đủ chọn lọc để chỉ mục thắng. <strong>Một chỉ mục chỉ giúp khi truy vấn trả về một phần nhỏ của bảng</strong> — index một cờ ít giá trị mà bạn luôn lọc về giá trị phổ biến là phí đĩa.</p>
+               Buffers: shared hit=7
+ Planning Time: 0.380 ms
+ Execution Time: 13.905 ms</div>
+<p>Cùng chỉ mục, quyết định ngược lại: 1% số dòng đủ chọn lọc để chỉ mục thắng — 13,9 ms thay vì 131 ms. <strong>Một chỉ mục chỉ giúp khi truy vấn trả về một phần nhỏ của bảng</strong> — index một cờ ít giá trị mà bạn luôn lọc về giá trị phổ biến là phí đĩa.</p>
 
 <h3>Partial index — chỉ index các dòng bạn hỏi</h3>
 <p>Nếu bạn chỉ bao giờ hỏi <code>status = 'pending'</code>, hãy index <em>chỉ các dòng đó</em> bằng một mệnh đề <code>WHERE</code> trên chỉ mục. Nó tí hon và không cản đường 99% còn lại:</p>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;</code></pre>
-<div class="out">   chỉ mục đầy đủ trên status  | 3408 kB
-   partial idx_event_pending    | 128 kB</div>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_pending <span class="tok-keyword">ON</span> event(created_at) <span class="tok-keyword">WHERE</span> status = <span class="tok-string">'pending'</span>;
+<span class="tok-keyword">SELECT</span> <span class="tok-string">'idx_event_status'</span> <span class="tok-keyword">AS</span> index, pg_size_pretty(pg_relation_size(<span class="tok-string">'idx_event_status'</span>)) <span class="tok-keyword">AS</span> size
+<span class="tok-keyword">UNION ALL</span> <span class="tok-keyword">SELECT</span> <span class="tok-string">'idx_event_pending'</span>, pg_size_pretty(pg_relation_size(<span class="tok-string">'idx_event_pending'</span>));</code></pre>
+<div class="out">       index       |  size   
+-------------------+---------
+ idx_event_status  | 3408 kB
+ idx_event_pending | 128 kB
+(2 rows)</div>
 <p>128 kB so với 3,4 MB — một chỉ mục <strong>nhỏ hơn 27×</strong>, vì nó giữ 5.000 dòng thay vì 500.000. Nó được dùng cho bất kỳ truy vấn nào có <code>WHERE</code> ngụ ý điều kiện partial, ví dụ "job pending cũ nhất". Partial index là công cụ chuẩn cho các cột "tập con nóng" — dòng chưa xử lý, cờ xoá-mềm, phiên đang hoạt động.</p>
 
 <h3>Mặt chi phí: ghi</h3>
-<p>Mọi chỉ mục phải được <em>cập nhật ở mỗi INSERT, UPDATE, và DELETE</em>. Chèn 100.000 dòng vào một bản sao trơ so với bảng <code>event</code> đầy chỉ mục (chín chỉ mục, dựng dồn qua chương này):</p>
-<div class="out">   vào bảng trơ (0 chỉ mục):    116 ms
-   vào event   (9 chỉ mục):    1330 ms   -- chậm ~11 lần</div>
-<div class="callout warn">Chỉ mục đánh đổi tốc độ ghi và đĩa lấy tốc độ đọc. Chín chỉ mục làm ghi chậm ~11× ở đây. Kỷ luật: index thứ bạn thật sự hỏi, bỏ chỉ mục không ai dùng (<code>pg_stat_user_indexes.idx_scan = 0</code> tố cáo chúng), và nhớ mỗi chỉ mục thừa là một thứ thuế trên mọi lần ghi, mãi mãi.</div>
+<p>Mọi chỉ mục phải được <em>cập nhật ở mỗi INSERT, UPDATE, và DELETE</em>. Chèn cùng 100.000 dòng vào một bản sao trơ của <code>event</code> so với một bản sao mang đủ chỉ mục của nó (tám chỉ mục ở thời điểm này của chương; <code>CREATE TABLE … (LIKE event INCLUDING IDENTITY INCLUDING INDEXES)</code>):</p>
+<div class="out">-- ev0: bản sao không chỉ mục
+INSERT 0 100000
+Time: 87.855 ms
+-- ev8: bản sao có đủ 8 chỉ mục như event
+INSERT 0 100000
+Time: 1215.946 ms (00:01.216)
+-- chậm ~14 lần</div>
+<div class="callout warn">Chỉ mục đánh đổi tốc độ ghi và đĩa lấy tốc độ đọc. Tám chỉ mục làm ghi chậm ~14× ở đây (88 ms → 1.216 ms), và 12 MB dữ liệu kéo theo 27 MB chỉ mục. Kỷ luật: index thứ bạn thật sự hỏi, bỏ chỉ mục không ai dùng (<code>pg_stat_user_indexes.idx_scan = 0</code> tố cáo chúng), và nhớ mỗi chỉ mục thừa là một thứ thuế trên mọi lần ghi, mãi mãi.</div>
 <div class="note-ct">Hàng đợi "thông báo chưa đọc" và "chờ kiểm duyệt" của trang là mục tiêu partial-index hoàn hảo — một partial index <code>WHERE read = false</code> ở lại cỡ kilobyte kể cả khi bảng thông báo lớn tới hàng triệu dòng. Và bài học chi phí ghi là vì sao các bảng feed không bị phủ kín chỉ mục: mỗi cái sẽ làm chậm mọi bài mới và mọi lượt like.</div>
 <h3>Vì sao một chỉ mục hoàn toàn tốt lại bị lờ đi</h3>
 <div class="lz-stack">
@@ -447,36 +529,60 @@ export default {
 <h3>GIN — for jsonb, arrays, and full-text</h3>
 <p>A B-tree indexes a whole value; <strong>GIN</strong> (Generalized Inverted iNdex) indexes the <em>elements inside</em> a value — every key in a jsonb, every element of an array, every word (lexeme) of a document. It powers the containment operator <code>@&gt;</code>. Our <code>props</code> column holds <code>{"tags": [...]}</code>; find events tagged <code>t15</code> — first with no GIN index:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
-<div class="out">   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=24617 width=0) (actual time=0.021..97.380 rows=25000 loops=1)
+<div class="out"> Aggregate  (cost=14254.13..14254.14 rows=1 width=8) (actual time=100.839..100.840 rows=1 loops=1)
+   -&gt;  Seq Scan on event  (cost=0.00..14191.00 rows=25253 width=0) (actual time=0.011..99.797 rows=25000 loops=1)
          Filter: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          Rows Removed by Filter: 475000
- Execution Time: 98.711 ms</div>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
-<div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=294.78..8490.49 rows=24617 width=0) (actual time=4.041..17.519 rows=25000 loops=1)
+ Planning Time: 0.053 ms
+ Execution Time: 100.867 ms</div>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);
+<span class="tok-comment">-- then the same query with EXPLAIN (ANALYZE, BUFFERS)</span></code></pre>
+<div class="out"> Aggregate  (cost=8543.68..8543.69 rows=1 width=8) (actual time=15.790..15.790 rows=1 loops=1)
+   Buffers: shared hit=8072
+   -&gt;  Bitmap Heap Scan on event  (cost=223.88..8480.54 rows=25253 width=0) (actual time=4.287..14.868 rows=25000 loops=1)
          Recheck Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
-         -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..288.63 rows=24617 width=0) (actual time=3.217..3.217 rows=25000 loops=1)
+         Heap Blocks: exact=7937
+         Buffers: shared hit=8072
+         -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..217.57 rows=25253 width=0) (actual time=3.534..3.535 rows=25000 loops=1)
                Index Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
- Execution Time: 18.798 ms</div>
-<p>99 ms → 19 ms — and it scales far better as the table grows. GIN is what makes jsonb querying and full-text search practical (Chapter 13 builds on it). It's slower to build and update than B-tree, so use it where you actually query the contents.</p>
+               Buffers: shared hit=135
+ Planning:
+   Buffers: shared hit=21
+ Planning Time: 0.123 ms
+ Execution Time: 15.807 ms</div>
+<p>101 ms → 16 ms — and it scales far better as the table grows. GIN is what makes jsonb querying and full-text search practical (Chapter 13 builds on it). It's slower to build and update than B-tree, so use it where you actually query the contents.</p>
 
 <h3>BRIN — tiny index for naturally-ordered big tables</h3>
 <p><strong>BRIN</strong> (Block Range INdex) stores just the min/max value per <em>block range</em> of the table — not per row. If a column is physically sorted (append-only timestamps, sequential ids), that's enough to skip whole swaths of the table. The magic is the size. Compare a B-tree and a BRIN on <code>created_at</code>:</p>
-<div class="out">   B-tree(created_at) | 11 MB
-   BRIN(created_at)   | 24 kB</div>
-<p><strong>24 kB versus 11 MB</strong> — roughly 450× smaller, for the same 500,000 rows. A range query still flies:</p>
+<div class="out">         index          | size  | pages 
+------------------------+-------+-------
+ idx_event_created      | 11 MB |  1374
+ idx_event_created_brin | 24 kB |     3
+(2 rows)</div>
+<p><strong>24 kB versus 11 MB</strong> — roughly 460× smaller (3 pages instead of 1,374), for the same 500,000 rows. A range query still flies:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
+<span class="tok-comment">-- (run with the B-tree on created_at dropped inside BEGIN … ROLLBACK, so the planner uses the BRIN)</span>
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-03-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-03-08'</span>;</code></pre>
-<div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=14.65..8144.59 rows=10351 width=0) (actual time=0.519..2.623 rows=10081 loops=1)
-         Recheck Cond: ((created_at &gt;= '2024-03-01 ...') AND (created_at &lt;= '2024-03-08 ...'))
-         Heap Blocks: lossy=256
-         -&gt;  Bitmap Index Scan on idx_event_created_brin  (cost=0.00..12.06 rows=16129 width=0) (actual time=0.027..0.027 rows=2560 loops=1)
- Execution Time: 3.147 ms</div>
-<p>BRIN is "lossy" — it narrows to a set of blocks and rechecks (<code>Recheck Cond</code>). It only works if the column is physically ordered; on random data it degrades to a Seq Scan. Perfect for time-series and log tables that only ever append.</p>
+<div class="out"> Aggregate  (cost=8220.02..8220.03 rows=1 width=8) (actual time=1.749..1.749 rows=1 loops=1)
+   Buffers: shared hit=269
+   -&gt;  Bitmap Heap Scan on event  (cost=14.64..8194.25 rows=10310 width=0) (actual time=0.232..1.381 rows=10081 loops=1)
+         Recheck Cond: ((created_at &gt;= '2024-03-01 00:00:00+00'::timestamp with time zone) AND (created_at &lt;= '2024-03-08 00:00:00+00'::timestamp with time zone))
+         Rows Removed by Index Recheck: 6844
+         Heap Blocks: lossy=261
+         Buffers: shared hit=269
+         -&gt;  Bitmap Index Scan on idx_event_created_brin  (cost=0.00..12.06 rows=15907 width=0) (actual time=0.017..0.017 rows=2610 loops=1)
+               Index Cond: ((created_at &gt;= '2024-03-01 00:00:00+00'::timestamp with time zone) AND (created_at &lt;= '2024-03-08 00:00:00+00'::timestamp with time zone))
+               Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=4
+ Planning Time: 0.032 ms
+ Execution Time: 1.757 ms</div>
+<p>BRIN is "lossy" — it narrows to a set of blocks and rechecks (<code>Recheck Cond</code>). Here: <code>lossy=261</code> pages read and 6,844 rows removed by the recheck, 1.8 ms. It only works if the column is physically ordered; on random data it degrades to a Seq Scan. Perfect for time-series and log tables that only ever append.</p>
 
 <h3>The rest of the toolbox</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">B-tree (default)</span><span class="v">Equality, ranges, sorting, prefix LIKE. Your answer 95% of the time.</span></div>
+  <div class="kv"><span class="k">B-tree (default)</span><span class="v">Equality, ranges, sorting, prefix LIKE (with the C collation or a <code>text_pattern_ops</code> index). Your answer 95% of the time.</span></div>
   <div class="kv"><span class="k">GIN</span><span class="v">"Contains" over composite values: jsonb <code>@&gt;</code>, array overlap <code>&amp;&amp;</code>, full-text <code>@@</code>.</span></div>
   <div class="kv"><span class="k">BRIN</span><span class="v">Huge, naturally-ordered tables. Kilobytes instead of megabytes; append-only data.</span></div>
   <div class="kv"><span class="k">GiST</span><span class="v">Geometric / range / "nearest neighbour" and overlap — PostGIS, <code>tsrange</code>, exclusion constraints ("no two bookings overlap").</span></div>
@@ -492,7 +598,7 @@ export default {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">B-tree</span><span class="lz-nsub">the default, and right ~95% of the time</span></span>
-<span class="lz-nbody">Equality, ranges, sorting, <code>LIKE 'prefix%'</code>. If you are not sure, this is the answer. Every other type exists for a case B-tree handles badly.</span>
+<span class="lz-nbody">Equality, ranges, sorting, <code>LIKE 'prefix%'</code> (C collation or <code>text_pattern_ops</code>). If you are not sure, this is the answer. Every other type exists for a case B-tree handles badly.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">GIN</span><span class="lz-nsub">many values inside one row</span></span>
@@ -518,36 +624,60 @@ export default {
 <h3>GIN — cho jsonb, mảng, và full-text</h3>
 <p>Một B-tree index cả một giá trị; <strong>GIN</strong> (Generalized Inverted iNdex) index các <em>phần tử bên trong</em> một giá trị — mỗi khoá trong một jsonb, mỗi phần tử của một mảng, mỗi từ (lexeme) của một tài liệu. Nó cấp sức cho toán tử chứa <code>@&gt;</code>. Cột <code>props</code> của ta giữ <code>{"tags": [...]}</code>; tìm event gắn thẻ <code>t15</code> — trước hết không có chỉ mục GIN:</p>
 <pre><code class="language-sql"><span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event <span class="tok-keyword">WHERE</span> props @&gt; <span class="tok-string">'{"tags": ["t15"]}'</span>;</code></pre>
-<div class="out">   -&gt;  Seq Scan on event  (cost=0.00..14138.00 rows=24617 width=0) (actual time=0.021..97.380 rows=25000 loops=1)
+<div class="out"> Aggregate  (cost=14254.13..14254.14 rows=1 width=8) (actual time=100.839..100.840 rows=1 loops=1)
+   -&gt;  Seq Scan on event  (cost=0.00..14191.00 rows=25253 width=0) (actual time=0.011..99.797 rows=25000 loops=1)
          Filter: (props @&gt; '{"tags": ["t15"]}'::jsonb)
          Rows Removed by Filter: 475000
- Execution Time: 98.711 ms</div>
-<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);</code></pre>
-<div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=294.78..8490.49 rows=24617 width=0) (actual time=4.041..17.519 rows=25000 loops=1)
+ Planning Time: 0.053 ms
+ Execution Time: 100.867 ms</div>
+<pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_props <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING GIN</span> (props);
+<span class="tok-comment">-- rồi chạy lại đúng câu đó với EXPLAIN (ANALYZE, BUFFERS)</span></code></pre>
+<div class="out"> Aggregate  (cost=8543.68..8543.69 rows=1 width=8) (actual time=15.790..15.790 rows=1 loops=1)
+   Buffers: shared hit=8072
+   -&gt;  Bitmap Heap Scan on event  (cost=223.88..8480.54 rows=25253 width=0) (actual time=4.287..14.868 rows=25000 loops=1)
          Recheck Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
-         -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..288.63 rows=24617 width=0) (actual time=3.217..3.217 rows=25000 loops=1)
+         Heap Blocks: exact=7937
+         Buffers: shared hit=8072
+         -&gt;  Bitmap Index Scan on idx_event_props  (cost=0.00..217.57 rows=25253 width=0) (actual time=3.534..3.535 rows=25000 loops=1)
                Index Cond: (props @&gt; '{"tags": ["t15"]}'::jsonb)
- Execution Time: 18.798 ms</div>
-<p>99 ms → 19 ms — và co giãn tốt hơn nhiều khi bảng lớn lên. GIN là thứ làm truy vấn jsonb và full-text search khả thi (Chương 13 xây trên nó). Nó dựng và cập nhật chậm hơn B-tree, nên dùng nơi bạn thật sự hỏi nội dung.</p>
+               Buffers: shared hit=135
+ Planning:
+   Buffers: shared hit=21
+ Planning Time: 0.123 ms
+ Execution Time: 15.807 ms</div>
+<p>101 ms → 16 ms — và co giãn tốt hơn nhiều khi bảng lớn lên. GIN là thứ làm truy vấn jsonb và full-text search khả thi (Chương 13 xây trên nó). Nó dựng và cập nhật chậm hơn B-tree, nên dùng nơi bạn thật sự hỏi nội dung.</p>
 
 <h3>BRIN — chỉ mục tí hon cho bảng lớn sắp tự nhiên</h3>
 <p><strong>BRIN</strong> (Block Range INdex) chỉ lưu giá trị min/max cho mỗi <em>dải khối (block range)</em> của bảng — không phải mỗi dòng. Nếu một cột được sắp về mặt vật lý (timestamp chỉ-thêm, id tuần tự), thế là đủ để bỏ qua cả mảng lớn của bảng. Điều kỳ diệu là kích thước. So một B-tree và một BRIN trên <code>created_at</code>:</p>
-<div class="out">   B-tree(created_at) | 11 MB
-   BRIN(created_at)   | 24 kB</div>
-<p><strong>24 kB so với 11 MB</strong> — nhỏ hơn khoảng 450×, cho cùng 500.000 dòng. Một truy vấn khoảng vẫn bay:</p>
+<div class="out">         index          | size  | pages 
+------------------------+-------+-------
+ idx_event_created      | 11 MB |  1374
+ idx_event_created_brin | 24 kB |     3
+(2 rows)</div>
+<p><strong>24 kB so với 11 MB</strong> — nhỏ hơn khoảng 460× (3 trang thay vì 1.374), cho cùng 500.000 dòng. Một truy vấn khoảng vẫn bay:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE INDEX</span> idx_event_created_brin <span class="tok-keyword">ON</span> event <span class="tok-keyword">USING BRIN</span> (created_at);
-<span class="tok-keyword">EXPLAIN ANALYZE</span> <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
+<span class="tok-comment">-- (chạy khi đã tạm DROP B-tree trên created_at trong BEGIN … ROLLBACK, để bộ lập kế hoạch dùng BRIN)</span>
+<span class="tok-keyword">EXPLAIN</span> (<span class="tok-keyword">ANALYZE</span>, <span class="tok-keyword">BUFFERS</span>) <span class="tok-keyword">SELECT</span> count(*) <span class="tok-keyword">FROM</span> event
 <span class="tok-keyword">WHERE</span> created_at <span class="tok-keyword">BETWEEN</span> <span class="tok-string">'2024-03-01'</span> <span class="tok-keyword">AND</span> <span class="tok-string">'2024-03-08'</span>;</code></pre>
-<div class="out">   -&gt;  Bitmap Heap Scan on event  (cost=14.65..8144.59 rows=10351 width=0) (actual time=0.519..2.623 rows=10081 loops=1)
-         Recheck Cond: ((created_at &gt;= '2024-03-01 ...') AND (created_at &lt;= '2024-03-08 ...'))
-         Heap Blocks: lossy=256
-         -&gt;  Bitmap Index Scan on idx_event_created_brin  (cost=0.00..12.06 rows=16129 width=0) (actual time=0.027..0.027 rows=2560 loops=1)
- Execution Time: 3.147 ms</div>
-<p>BRIN là "lossy" — nó thu hẹp về một tập khối rồi kiểm lại (<code>Recheck Cond</code>). Nó chỉ chạy nếu cột được sắp về mặt vật lý; trên dữ liệu ngẫu nhiên nó thoái hoá thành Seq Scan. Hoàn hảo cho bảng chuỗi-thời-gian và log chỉ bao giờ thêm vào.</p>
+<div class="out"> Aggregate  (cost=8220.02..8220.03 rows=1 width=8) (actual time=1.749..1.749 rows=1 loops=1)
+   Buffers: shared hit=269
+   -&gt;  Bitmap Heap Scan on event  (cost=14.64..8194.25 rows=10310 width=0) (actual time=0.232..1.381 rows=10081 loops=1)
+         Recheck Cond: ((created_at &gt;= '2024-03-01 00:00:00+00'::timestamp with time zone) AND (created_at &lt;= '2024-03-08 00:00:00+00'::timestamp with time zone))
+         Rows Removed by Index Recheck: 6844
+         Heap Blocks: lossy=261
+         Buffers: shared hit=269
+         -&gt;  Bitmap Index Scan on idx_event_created_brin  (cost=0.00..12.06 rows=15907 width=0) (actual time=0.017..0.017 rows=2610 loops=1)
+               Index Cond: ((created_at &gt;= '2024-03-01 00:00:00+00'::timestamp with time zone) AND (created_at &lt;= '2024-03-08 00:00:00+00'::timestamp with time zone))
+               Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=4
+ Planning Time: 0.032 ms
+ Execution Time: 1.757 ms</div>
+<p>BRIN là "lossy" — nó thu hẹp về một tập khối rồi kiểm lại (<code>Recheck Cond</code>). Ở đây: đọc <code>lossy=261</code> trang và loại 6.844 dòng khi kiểm lại, 1,8 ms. Nó chỉ chạy nếu cột được sắp về mặt vật lý; trên dữ liệu ngẫu nhiên nó thoái hoá thành Seq Scan. Hoàn hảo cho bảng chuỗi-thời-gian và log chỉ bao giờ thêm vào.</p>
 
 <h3>Phần còn lại của hộp công cụ</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">B-tree (mặc định)</span><span class="v">Bằng, khoảng, sắp xếp, LIKE đầu chuỗi. Câu trả lời của bạn 95% thời gian.</span></div>
+  <div class="kv"><span class="k">B-tree (mặc định)</span><span class="v">Bằng, khoảng, sắp xếp, LIKE đầu chuỗi (với collation C hoặc chỉ mục <code>text_pattern_ops</code>). Câu trả lời của bạn 95% thời gian.</span></div>
   <div class="kv"><span class="k">GIN</span><span class="v">"Chứa" trên giá trị phức hợp: jsonb <code>@&gt;</code>, giao mảng <code>&amp;&amp;</code>, full-text <code>@@</code>.</span></div>
   <div class="kv"><span class="k">BRIN</span><span class="v">Bảng khổng lồ, sắp tự nhiên. Kilobyte thay vì megabyte; dữ liệu chỉ-thêm.</span></div>
   <div class="kv"><span class="k">GiST</span><span class="v">Hình học / khoảng / "hàng xóm gần nhất" và chồng lấn — PostGIS, <code>tsrange</code>, ràng buộc loại trừ ("không hai đặt chỗ nào chồng nhau").</span></div>
@@ -563,7 +693,7 @@ export default {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">B-tree</span><span class="lz-nsub">mặc định, và đúng ~95% số lần</span></span>
-<span class="lz-nbody">Bằng, khoảng, sắp xếp, <code>LIKE 'tiền tố%'</code>. Nếu chưa chắc, đây là câu trả lời. Mọi loại khác tồn tại cho những trường hợp B-tree xử lý kém.</span>
+<span class="lz-nbody">Bằng, khoảng, sắp xếp, <code>LIKE 'tiền tố%'</code> (collation C hoặc <code>text_pattern_ops</code>). Nếu chưa chắc, đây là câu trả lời. Mọi loại khác tồn tại cho những trường hợp B-tree xử lý kém.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">GIN</span><span class="lz-nsub">nhiều giá trị bên trong MỘT dòng</span></span>
@@ -622,7 +752,7 @@ export default {
             question: 'PostgreSQL\'s default index type is best for?|||Loại chỉ mục mặc định của PostgreSQL tốt nhất cho?',
             options: [
               'jsonb containment only|||Chỉ chứa jsonb',
-              'B-tree: equality, ranges, sorting, and prefix LIKE|||B-tree: bằng, khoảng, sắp xếp, và LIKE đầu chuỗi',
+              'B-tree: equality, ranges, sorting, and prefix LIKE (C collation or text_pattern_ops)|||B-tree: bằng, khoảng, sắp xếp, và LIKE đầu chuỗi (collation C hoặc text_pattern_ops)',
               'Full-text search only|||Chỉ full-text search',
               'Geometric overlap only|||Chỉ chồng lấn hình học',
             ],

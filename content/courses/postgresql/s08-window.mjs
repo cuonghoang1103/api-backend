@@ -5,6 +5,11 @@
  * ROWS BETWEEN + FIRST_VALUE + NTILE. Output chạy thật PG 15.4 (schema ch8).
  * LUẬT: < > trong code → &lt; &gt; (so sánh <=); & → &amp;; backtick → &#96;; ${ → \${.
  */
+import G081 from './giang/pg-08-1.mjs';
+import G082 from './giang/pg-08-2.mjs';
+import G083 from './giang/pg-08-3.mjs';
+import G084 from './giang/pg-08-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -18,7 +23,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'OVER() để tính một hàm tổng hợp mà vẫn giữ mọi dòng, và PARTITION BY để tính riêng theo từng nhóm.',
-      content: `
+      content: `${G081}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>The aggregate that keeps every row</h2>
@@ -142,7 +147,7 @@ FROM sale ORDER BY region, id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Ba hàm xếp hạng và cách chúng khác nhau khi có đồng hạng, cùng mẫu "top-N mỗi nhóm".',
-      content: `
+      content: `${G082}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.2</span>
 <h2>Numbering and ranking rows</h2>
@@ -278,7 +283,7 @@ SELECT region, seller, amount FROM ranked WHERE rn &lt;= 2 ORDER BY region, rn;<
       type: 'LESSON',
       isFreePreview: true,
       description: 'So sánh mỗi dòng với dòng trước/sau bằng LAG/LEAD, và tính tổng luỹ tiến bằng một cửa sổ có thứ tự.',
-      content: `
+      content: `${G083}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.3</span>
 <h2>Looking at neighbours, and accumulating over time</h2>
@@ -418,7 +423,7 @@ FROM sale ORDER BY seller, sold_on;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Điều khiển chính xác dòng nào nằm trong cửa sổ bằng ROWS BETWEEN (trung bình trượt), lấy giá trị đầu nhóm với FIRST_VALUE, và chia nhóm phần trăm với NTILE.',
-      content: `
+      content: `${G084}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.4</span>
 <h2>Fine control: frames, first values, and buckets</h2>

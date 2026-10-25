@@ -2,9 +2,15 @@
  * PostgreSQL — Chương 5: JOIN (mở Giai đoạn 2 — Truy vấn sâu).
  * INNER JOIN (ON/USING/alias) · OUTER JOIN LEFT/RIGHT/FULL + anti-join ·
  * join nhiều bảng + self-join · CROSS JOIN + bẫy (fan-out, ON vs WHERE).
- * Output chạy thật PG 15.4 (schema ch5 trong DB pgcourse).
+ * Output chạy thật PostgreSQL 17.11 (schema ch05 trong DB pgcourse + CT Shop; giang/pg-05-N.mjs kèm slide pg-05-N).
  * LUẬT: < > trong code → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G051 from './giang/pg-05-1.mjs';
+import G052 from './giang/pg-05-2.mjs';
+import G053 from './giang/pg-05-3.mjs';
+import G054 from './giang/pg-05-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -18,7 +24,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Kết hợp hai bảng theo một điều kiện khớp, alias bảng, và ON vs USING.',
-      content: `
+      content: `${NHAN_LUOT}${G051}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>The payoff of normalization: JOIN</h2>
@@ -128,7 +134,7 @@ ORDER BY n.id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'LEFT/RIGHT/FULL JOIN giữ các dòng không có cặp khớp (điền NULL), và mẫu anti-join để tìm dòng mồ côi.',
-      content: `
+      content: `${NHAN_LUOT}${G052}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>When "no match" still matters</h2>
@@ -288,7 +294,7 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Chuỗi nhiều JOIN trong một truy vấn (kể cả hai lần vào cùng một bảng bằng alias), và self-join khi một bảng tham chiếu chính nó.',
-      content: `
+      content: `${NHAN_LUOT}${G053}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.3</span>
 <h2>More than two tables — and joining a table to itself</h2>
@@ -396,7 +402,7 @@ ORDER BY e.id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'CROSS JOIN sinh mọi tổ hợp, và ba cạm bẫy: cross join vô tình, nhân dòng (fan-out) từ quan hệ một-nhiều, và ON vs WHERE trên outer join.',
-      content: `
+      content: `${NHAN_LUOT}${G054}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.4</span>
 <h2>The deliberate cross product — and three ways joins bite</h2>

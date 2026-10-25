@@ -5,6 +5,10 @@
  * Output chạy thật trên PostgreSQL 15.4, db pgcourse, localhost:5433.
  * LUẬT: < > trong code → &lt; &gt; ; & → &amp; ; backtick → &#96; ; ${ → \${.
  */
+import G011 from './giang/pg-01-1.mjs';
+import G012 from './giang/pg-01-2.mjs';
+import G013 from './giang/pg-01-3.mjs';
+import G014 from './giang/pg-01-4.mjs';
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -18,7 +22,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Bảng, dòng, cột, khoá và quan hệ — vì sao dữ liệu ở dạng bảng liên kết đánh bại file phẳng và bảng tính.',
-      content: `
+      content: `${G011}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>The relational model — data as tables that link</h2>
@@ -166,7 +170,7 @@ DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Atomicity, Consistency, Isolation, Durability — mỗi tính chất chứng minh bằng một ví dụ chạy thật, kể cả một phi vụ chuyển tiền.',
-      content: `
+      content: `${G012}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>ACID — the promises that make a database trustworthy</h2>
@@ -342,7 +346,7 @@ synchronous_commit = on</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Bức tranh toàn cảnh: khi nào chọn Postgres, khi nào SQLite, khi nào một cơ sở dữ liệu NoSQL — và vì sao "chọn Postgres" là mặc định an toàn.',
-      content: `
+      content: `${G013}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>Where PostgreSQL sits — and when to pick something else</h2>
@@ -432,7 +436,7 @@ synchronous_commit = on</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Parser → planner → executor: bốn chặng một câu SELECT đi qua, và cách EXPLAIN cho bạn nhìn thấy kế hoạch của bộ máy.',
-      content: `
+      content: `${G014}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>What actually happens when you run a query</h2>

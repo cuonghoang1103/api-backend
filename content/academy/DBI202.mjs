@@ -19,6 +19,9 @@ import ch7 from './dbi202/ch7.mjs';
 import ch8 from './dbi202/ch8.mjs';
 import cs from './dbi202/chuyen-sau.mjs';
 import fe from './dbi202/fe.mjs';
+// 🎬 Hai mục chữa đề (PE / FE) — NẰM NGOÀI bộ sinh flm-nguon/DBI202/gen, sửa tay ở ./dbi202/chuaDe*.mjs.
+import chuaDePe from './dbi202/chuaDePe.mjs';
+import chuaDeFe from './dbi202/chuaDeFe.mjs';
 
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
@@ -2885,5 +2888,8 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
         }
       ]
     },
+    /* 🎬 Chữa trọn đề — đặt CUỐI (sau "Thi cuối kỳ") để không lệch thứ tự chương; ngoài bộ sinh. */
+    chuaDePe,
+    chuaDeFe,
   ],
 };

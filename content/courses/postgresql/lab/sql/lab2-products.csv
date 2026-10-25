@@ -1,0 +1,49 @@
+sku,name,category_id,price,stock,attrs,is_active,created_at
+CT0501,Bút bi Thiên Long TL-027 (xanh),5,5000.00,198,"{""tags"": [""văn phòng""], ""brand"": ""Thiên Long"", ""color"": ""đen""}",t,2025-01-02 08:00:00+07
+CT0502,Bút bi Thiên Long TL-079 (hộp 20 cây),5,78000.00,62,"{""tags"": [""học sinh""], ""brand"": ""Thiên Long"", ""color"": ""xanh""}",t,2025-01-03 08:00:00+07
+CT0503,Bút bi Pentel BK77 0.7mm,5,12000.00,148,"{""tags"": [""sinh viên""], ""brand"": ""Pentel"", ""color"": ""đen""}",t,2025-01-04 08:00:00+07
+CT0504,Bút gel Uni-ball Signo 0.5mm,5,28000.00,200,"{""tags"": [""văn phòng""], ""brand"": ""Uni"", ""color"": ""đỏ""}",t,2025-01-05 08:00:00+07
+CT0505,Bút gel Zebra Sarasa Clip 0.5mm,5,24000.00,217,"{""tags"": [""học sinh""], ""brand"": ""Zebra"", ""color"": ""vàng""}",t,2025-01-06 08:00:00+07
+CT0506,Bút bi bấm Deli 0.7mm (hộp 12 cây),5,45000.00,88,"{""tags"": [""văn phòng""], ""brand"": ""Deli"", ""color"": ""đen""}",t,2025-01-07 08:00:00+07
+CT0601,Bút chì gỗ Thiên Long 2B GP-01,6,4000.00,66,"{""tags"": [""sinh viên""], ""brand"": ""Thiên Long"", ""color"": ""vàng""}",t,2025-01-02 08:00:00+07
+CT0602,Bút chì kim Pentel A255 0.5mm,6,32000.00,113,"{""tags"": [""sinh viên""], ""brand"": ""Pentel"", ""color"": ""đỏ""}",t,2025-01-03 08:00:00+07
+CT0603,Ruột chì kim Pentel 0.5mm 2B,6,12000.00,245,"{""tags"": [""văn phòng""], ""brand"": ""Pentel"", ""color"": ""vàng""}",t,2025-01-04 08:00:00+07
+CT0604,Tẩy Pentel Hi-Polymer,6,9000.00,121,"{""tags"": [""sinh viên""], ""brand"": ""Pentel"", ""color"": ""đỏ""}",t,2025-01-05 08:00:00+07
+CT0605,Bút chì Staedtler Noris 2B (hộp 12 cây),6,96000.00,91,"{""tags"": [""học sinh""], ""brand"": ""Staedtler"", ""color"": ""tím""}",t,2025-01-06 08:00:00+07
+CT0606,Bút chì màu Faber-Castell 24 màu,6,125000.00,128,"{""tags"": [""học sinh""], ""brand"": ""Faber-Castell"", ""color"": ""đen""}",t,2025-01-07 08:00:00+07
+CT0701,Bút dạ quang Thiên Long HL-03,7,7000.00,220,"{""tags"": [""văn phòng""], ""brand"": ""Thiên Long"", ""color"": ""vàng""}",t,2025-01-02 08:00:00+07
+CT0702,Bút dạ quang Stabilo Boss Original,7,22000.00,86,"{""tags"": [""học sinh""], ""brand"": ""Stabilo"", ""color"": ""vàng""}",t,2025-01-03 08:00:00+07
+CT0703,Bút dạ quang Stabilo Boss Pastel (bộ 6),7,129000.00,96,"{""tags"": [""văn phòng""], ""brand"": ""Stabilo"", ""color"": ""tím""}",t,2025-01-04 08:00:00+07
+CT0704,Bút dạ quang hai đầu Deli,7,9000.00,54,"{""tags"": [""học sinh""], ""brand"": ""Deli"", ""color"": ""xanh""}",t,2025-01-05 08:00:00+07
+CT0705,Bút Zebra Mildliner (bộ 5 màu),7,89000.00,112,"{""tags"": [""học sinh""], ""brand"": ""Zebra"", ""color"": ""xanh""}",t,2025-01-06 08:00:00+07
+CT0706,Bút dạ quang Pentel Illumina,7,15000.00,239,"{""tags"": [""sinh viên""], ""brand"": ""Pentel"", ""color"": ""xanh""}",t,2025-01-07 08:00:00+07
+CT0801,Vở ô ly Hồng Hà 48 trang,8,6000.00,176,"{""tags"": [""học sinh""], ""brand"": ""Hồng Hà"", ""color"": ""xanh""}",t,2025-01-02 08:00:00+07
+CT0802,Vở ô ly Hồng Hà 96 trang,8,11000.00,150,"{""tags"": [""văn phòng""], ""brand"": ""Hồng Hà"", ""color"": ""vàng""}",t,2025-01-03 08:00:00+07
+CT0803,Vở kẻ ngang Campus 80 trang,8,13000.00,144,"{""tags"": [""học sinh""], ""brand"": ""Campus"", ""color"": ""đen""}",t,2025-01-04 08:00:00+07
+CT0804,Vở kẻ ngang Campus 200 trang,8,29000.00,229,"{""tags"": [""sinh viên""], ""brand"": ""Campus"", ""color"": ""xanh""}",t,2025-01-05 08:00:00+07
+CT0805,Lốc 10 vở Hồng Hà 96 trang,8,105000.00,103,"{""tags"": [""văn phòng""], ""brand"": ""Hồng Hà"", ""color"": ""đỏ""}",t,2025-01-06 08:00:00+07
+CT0806,Vở Klong 120 trang,8,15000.00,71,"{""tags"": [""sinh viên""], ""brand"": ""Klong"", ""color"": ""đen""}",t,2025-01-07 08:00:00+07
+CT0901,Sổ lò xo Campus A5,9,32000.00,244,"{""tags"": [""sinh viên""], ""brand"": ""Campus"", ""color"": ""vàng""}",t,2025-01-02 08:00:00+07
+CT0902,Sổ tay Klong A5 bìa da,9,65000.00,116,"{""tags"": [""học sinh""], ""brand"": ""Klong"", ""color"": ""đen""}",t,2025-01-03 08:00:00+07
+CT0903,Sổ chấm bullet journal A5,9,79000.00,114,"{""tags"": [""văn phòng""], ""brand"": ""Klong"", ""color"": ""tím""}",t,2025-01-04 08:00:00+07
+CT0904,Sổ tay Deli B5 kẻ ngang,9,39000.00,177,"{""tags"": [""sinh viên""], ""brand"": ""Deli"", ""color"": ""đỏ""}",t,2025-01-05 08:00:00+07
+CT0905,Giấy note Post-it 3x3 (100 tờ),9,25000.00,102,"{""tags"": [""sinh viên""], ""brand"": ""Post-it"", ""color"": ""vàng""}",t,2025-01-06 08:00:00+07
+CT0906,Sổ tay Moleskine Classic A5,9,590000.00,179,"{""tags"": [""sinh viên""], ""brand"": ""Moleskine"", ""color"": ""xanh""}",t,2025-01-07 08:00:00+07
+CT1001,Máy tính Casio FX-580VN X,10,705000.00,247,"{""tags"": [""học sinh""], ""brand"": ""Casio"", ""color"": ""xanh""}",t,2025-01-02 08:00:00+07
+CT1002,Máy tính Casio FX-570VN Plus,10,495000.00,182,"{""tags"": [""văn phòng""], ""brand"": ""Casio"", ""color"": ""vàng""}",t,2025-01-03 08:00:00+07
+CT1003,Máy tính Vinacal 570ES Plus II,10,345000.00,165,"{""tags"": [""văn phòng""], ""brand"": ""Vinacal"", ""color"": ""vàng""}",t,2025-01-04 08:00:00+07
+CT1004,Máy tính Casio FX-880BTG,10,790000.00,79,"{""tags"": [""học sinh""], ""brand"": ""Casio"", ""color"": ""đen""}",t,2025-01-05 08:00:00+07
+CT1005,Máy tính Casio MX-12B (văn phòng),10,195000.00,110,"{""tags"": [""học sinh""], ""brand"": ""Casio"", ""color"": ""đen""}",t,2025-01-06 08:00:00+07
+CT1006,Máy tính Deli D82TL,10,285000.00,173,"{""tags"": [""sinh viên""], ""brand"": ""Deli"", ""color"": ""đỏ""}",t,2025-01-07 08:00:00+07
+CT1101,Thước kẻ nhựa Thiên Long 20cm,11,5000.00,230,"{""tags"": [""văn phòng""], ""brand"": ""Thiên Long"", ""color"": ""tím""}",t,2025-01-02 08:00:00+07
+CT1102,Thước thép Deli 30cm,11,15000.00,239,"{""tags"": [""học sinh""], ""brand"": ""Deli"", ""color"": ""vàng""}",t,2025-01-03 08:00:00+07
+CT1103,Bộ thước ê-ke đo độ Thiên Long,11,18000.00,130,"{""tags"": [""văn phòng""], ""brand"": ""Thiên Long"", ""color"": ""vàng""}",t,2025-01-04 08:00:00+07
+CT1104,Compa chì kim Thiên Long,11,29000.00,162,"{""tags"": [""sinh viên""], ""brand"": ""Thiên Long"", ""color"": ""vàng""}",t,2025-01-05 08:00:00+07
+CT1105,Compa Staedtler Noris,11,85000.00,181,"{""tags"": [""văn phòng""], ""brand"": ""Staedtler"", ""color"": ""xanh""}",t,2025-01-06 08:00:00+07
+CT1106,Bộ thước vẽ kỹ thuật Deli 4 món,11,45000.00,144,"{""tags"": [""sinh viên""], ""brand"": ""Deli"", ""color"": ""đỏ""}",t,2025-01-07 08:00:00+07
+CT1201,Giáo trình Cơ sở dữ liệu (bản in),12,89000.00,137,"{""tags"": [""học sinh""], ""brand"": ""CT Books"", ""color"": ""vàng""}",t,2025-01-02 08:00:00+07
+CT1202,Giáo trình Lập trình Java căn bản,12,95000.00,249,"{""tags"": [""sinh viên""], ""brand"": ""CT Books"", ""color"": ""xanh""}",t,2025-01-03 08:00:00+07
+CT1203,Sách Clean Code (bản tiếng Việt),12,179000.00,162,"{""tags"": [""văn phòng""], ""brand"": ""NXB Trẻ"", ""color"": ""tím""}",t,2025-01-04 08:00:00+07
+CT1204,Sổ tay SQL bỏ túi,12,59000.00,224,"{""tags"": [""văn phòng""], ""brand"": ""CT Books"", ""color"": ""đỏ""}",t,2025-01-05 08:00:00+07
+CT1205,Cấu trúc dữ liệu & giải thuật,12,125000.00,87,"{""tags"": [""sinh viên""], ""brand"": ""CT Books"", ""color"": ""xanh""}",t,2025-01-06 08:00:00+07
+CT1206,Bộ đề luyện thi PE/FE (bản in),12,49000.00,249,"{""tags"": [""văn phòng""], ""brand"": ""CT Books"", ""color"": ""vàng""}",t,2025-01-07 08:00:00+07

@@ -4,5 +4,6 @@
  * Agent lab chỉ sửa tệp này + lab/lab-N.mjs + lab/sql/*. Khuôn cho Lab 3–9: lab/README-LAB.md.
  */
 import lab1 from './lab-1.mjs';
+import lab2 from './lab-2.mjs';
 
-export const LAB_SAU = { 3: [lab1] };
+export const LAB_SAU = { 3: [lab1], 4: [lab2] };

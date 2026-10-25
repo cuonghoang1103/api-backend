@@ -721,7 +721,7 @@ ${nho(P(O.W3X, { sm: true, title: 'ORDER BY p.paid_at::date — several payments
       box('Why the default surprised you', '<code class="i">ORDER BY</code> without a frame = <b>RANGE … CURRENT ROW</b>: rows with the same value are <b>peers</b> and share one total. ROWS adds row by row — in an order nothing fixed.', 'lam'))) },
 
   { t: 'The chart: September, day by day', body: `${duong()}
-${two(P(giu(O.W3B, (l) => /09-0[1-4]|09-2[89]|09-30/.test(l)).replace(/\n( 2026-09-28)/, '\n …\n$1'), { sm: true, title: 'selected rows of 29 — no payment on 11/09' , hl: [9] }),
+${two(P(giu(O.W3B, (l) => /09-0[1-4]|09-2[89]|09-30/.test(l)).replace(/\n( 2026-09-28)/, '\n …\n$1'), { sm: true, title: 'selected rows of 29 — no payment on 11/09' , hl: [10] }),
   box('One row per day ⇒ ROWS = RANGE', 'The last point is exactly September’s revenue from Lab 3: <b>42.485.000</b>. The cleanest fix is often the right <b>grain</b>.', 'xanh'))}` },
 
   { t: 'W4 · top 3 of every shelf — and a tie', body: two(col(S('W4A', ['WINDOW w', 'category_id = 8'], { x: true, W: 64 }), p('Output (real run) shown as the table on the right: sku, units and the three numbers.', 18)),

@@ -20,7 +20,31 @@ export default {
       "questions": [
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
+          "prompt": "<div class=\"ml-en\"><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D<br/>日本に【半年】います。</p></div><div class=\"ml-vi\"><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D<br/>日本に【半年】います。</p></div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q0-hantoshi.png",
+          "options": [
+            {
+              "text": "はんとし|||はんとし"
+            },
+            {
+              "text": "はんどし|||はんどし"
+            },
+            {
+              "text": "ばんねん|||ばんねん"
+            },
+            {
+              "text": "ばんどし|||ばんどし"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><p>半年 (half a year) is read &lt;b&gt;はんとし&lt;/b&gt;: 半 = はん and 年 here takes its kun reading とし, with no voicing — so はんどし (B) is wrong. ばんねん (C) is the reading of a different word, 晩年 (one&#39;s later years), and ばんどし (D) is not a word. 日本に半年います = &#39;I have been in Japan for half a year.&#39;</p></div><div class=\"ml-vi\"><p>半年 (nửa năm) đọc là &lt;b&gt;はんとし&lt;/b&gt;: 半 = はん, còn 年 ở đây đọc âm Nhật とし và KHÔNG bị đục âm — nên はんどし (B) sai. ばんねん (C) là cách đọc của một từ khác, 晩年 (những năm cuối đời), còn ばんどし (D) không phải từ có thật. 日本に半年います = &#39;Tôi ở Nhật được nửa năm.&#39;</p></div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D<br/>【毎月】バーベキューをします。</p></div><div class=\"ml-vi\"><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D<br/>【毎月】バーベキューをします。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q1.png",
           "options": [
@@ -44,7 +68,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D<br/>大学の【休日】はいつですか。</p></div><div class=\"ml-vi\"><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D<br/>大学の【休日】はいつですか。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q2.png",
           "options": [
@@ -68,7 +92,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>The word in brackets [ ] below has which corresponding kanji? Choose the correct answer from A, B, C, D:<br/>ぎんこうは　【ごぜん】　9時からです。</p></div><div class=\"ml-vi\"><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:<br/>ぎんこうは　【ごぜん】　9時からです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q3.png",
           "options": [
@@ -92,7 +116,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>The word in brackets [ ] below has which corresponding kanji? Choose the correct answer from A, B, C, D:<br/>お【くに】は　どちらですか。</p></div><div class=\"ml-vi\"><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:<br/>お【くに】は　どちらですか。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q4.png",
           "options": [
@@ -116,7 +140,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>The word in brackets [ ] below has which corresponding kanji? Choose the correct answer from A, B, C, D:<br/>どんな　【りょうり】が　すきですか</p></div><div class=\"ml-vi\"><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:<br/>どんな　【りょうり】が　すきですか</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q5.png",
           "options": [
@@ -140,7 +164,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>今　ギターを（　　　）　います。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>今　ギターを（　　　）　います。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q6.png",
           "options": [
@@ -164,7 +188,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>先週　ともだちの　いえへ（　　　）。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>先週　ともだちの　いえへ（　　　）。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q7.png",
           "options": [
@@ -188,7 +212,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>日本の　食べ物で　すしが　（　　　　　　　）すきです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>日本の　食べ物で　すしが　（　　　　　　　）すきです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q8.png",
           "options": [
@@ -212,7 +236,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>このケーキは　あまいです。（　　　　）、おいしいです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>このケーキは　あまいです。（　　　　）、おいしいです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q9.png",
           "options": [
@@ -236,7 +260,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>今　うちの　なかに　女の人が（　　　）。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>今　うちの　なかに　女の人が（　　　）。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q10.png",
           "options": [
@@ -260,7 +284,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>A：ビールは　まだ　ありますか。<br/>B：いいえ、（　　　　　）ありません。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>A：ビールは　まだ　ありますか。<br/>B：いいえ、（　　　　　）ありません。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q11.png",
           "options": [
@@ -284,7 +308,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>A：いっしょに　バーベキューを　しませんか。<br/>B：ええ、いいですね。（　　　）。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>A：いっしょに　バーベキューを　しませんか。<br/>B：ええ、いいですね。（　　　）。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q12.png",
           "options": [
@@ -308,7 +332,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>カレーの（　　）をおしえます。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>カレーの（　　）をおしえます。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q13.png",
           "options": [
@@ -332,7 +356,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>けさ、10時に　おきましたから、（　　　）。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>けさ、10時に　おきましたから、（　　　）。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q14.png",
           "options": [
@@ -356,7 +380,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>リンさん「パクさんは　どこに　いますか。」<br/>キムさん「となりの　へやで　ワンさんと（　　　）。」</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>リンさん「パクさんは　どこに　いますか。」<br/>キムさん「となりの　へやで　ワンさんと（　　　）。」</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q15.png",
           "options": [
@@ -380,7 +404,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>A：日本で（　　　）が　いちばん　さむいですか。<br/>B：北海道(ほっかいどう)が　いちばん　さむいです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>A：日本で（　　　）が　いちばん　さむいですか。<br/>B：北海道(ほっかいどう)が　いちばん　さむいです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q16.png",
           "options": [
@@ -404,7 +428,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>A：先週の　週末(しゅうまつ)、（　　　　　）行きましたか。<br/>B：いいえ、どこも　行きませんでした。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>A：先週の　週末(しゅうまつ)、（　　　　　）行きましたか。<br/>B：いいえ、どこも　行きませんでした。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q17.png",
           "options": [
@@ -428,7 +452,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>きょうは（　　）あついです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>きょうは（　　）あついです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q18.png",
           "options": [
@@ -452,7 +476,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>私は　まいばん、ともだちに　でんわを（　　　）。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>私は　まいばん、ともだちに　でんわを（　　　）。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q19.png",
           "options": [
@@ -476,7 +500,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>スープに（　　）をいれます。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>スープに（　　）をいれます。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q20.png",
           "options": [
@@ -500,7 +524,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>（　　　）が　ありませんから、うみへ　行きません。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>（　　　）が　ありませんから、うみへ　行きません。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q21.png",
           "options": [
@@ -524,7 +548,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>あしたは　（　　）ですから、ひるまで　ねたいです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>あしたは　（　　）ですから、ひるまで　ねたいです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q22.png",
           "options": [
@@ -548,7 +572,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank<br/>毎日（　　　）を　あらいます。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống<br/>毎日（　　　）を　あらいます。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q23.png",
           "options": [
@@ -572,7 +596,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank:<br/>なに（　　）ほしくないです。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:<br/>なに（　　）ほしくないです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q24.png",
           "options": [
@@ -596,7 +620,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank:<br/>日曜日　かぞく（　　）スーパーへ　行きます。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:<br/>日曜日　かぞく（　　）スーパーへ　行きます。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q25.png",
           "options": [
@@ -620,7 +644,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate answer from A, B, C, D to fill in the blank:<br/>A：土曜日　どこ（　　）行きますか。<br/>B：はい、こうえんへ　行きます。</p></div><div class=\"ml-vi\"><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:<br/>A：土曜日　どこ（　　）行きますか。<br/>B：はい、こうえんへ　行きます。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q26.png",
           "options": [
@@ -644,7 +668,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate word to fill in ___①___<br/>日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。</p></div><div class=\"ml-vi\"><p>Hãy chọn từ thích hợp điền vào ___①___<br/>日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q27.png",
           "options": [
@@ -668,7 +692,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>Choose the appropriate word to fill in ___②___<br/>日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。</p></div><div class=\"ml-vi\"><p>Hãy chọn từ thích hợp điền vào ___②___<br/>日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q28.png",
           "options": [
@@ -692,7 +716,7 @@ export default {
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.33,
           "prompt": "<div class=\"ml-en\"><p>やまからの　けしきは　どうでしたか。<br/>(Passage: 日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。)</p></div><div class=\"ml-vi\"><p>やまからの　けしきは　どうでしたか。<br/>(Đoạn văn: 日曜日、ともだちと　ちかくの　やまに＿①＿。てんきが　よかったですから、とても　きもちが　よかったです。やまで、おべんとうを　＿②＿。やまからの　けしきが　とても　きれいでした。それから、ふるいお寺を　見に　行きました。とても　おもしろかったです。とても　たのしい１日でした。また（lại）行きたいです。)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/JPD123/D2/q29.png",
           "options": [

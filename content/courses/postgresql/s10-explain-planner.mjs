@@ -8,6 +8,11 @@
  * LUẬT: < > trong code/out → &lt; &gt; (mũi tên -> của EXPLAIN → -&gt;, so sánh >= → &gt;=);
  * & → &amp;; backtick → &#96;; ${ → \${. Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G101 from './giang/pg-10-1.mjs';
+import G102 from './giang/pg-10-2.mjs';
+import G103 from './giang/pg-10-3.mjs';
+import G104 from './giang/pg-10-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,7 +26,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Giải phẫu một plan: cost/rows/width là ước lượng, actual time/rows/loops là thật; cách đọc cây plan từ trong ra ngoài; và vì sao ước lượng khớp thực tế là dấu hiệu khoẻ mạnh.',
-      content: `
+      content: `${G101}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.1 · Phase 3 — Performance</span>
 <h2>The planner shows its work</h2>
@@ -133,7 +138,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Ba cách Postgres thực hiện một JOIN và khi nào nó chọn cách nào: Nested Loop cho ít dòng, Hash Join cho join lớn, Merge Join cho dữ liệu đã sắp.',
-      content: `
+      content: `${G102}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.2</span>
 <h2>Three ways to join two tables</h2>
@@ -269,7 +274,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'ANALYZE thu thập thống kê để bộ lập kế hoạch ước lượng số dòng; vì sao các cột tương quan làm nó ước lượng thấp; và cách CREATE STATISTICS sửa lại.',
-      content: `
+      content: `${G103}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.3</span>
 <h2>Where the row estimates come from</h2>
@@ -357,7 +362,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Đọc EXPLAIN (ANALYZE, BUFFERS) để thấy I/O thật (shared hit vs read), và một quy trình có kỷ luật: đọc plan → tìm điểm nghẽn → sửa → đo lại.',
-      content: `
+      content: `${G104}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.4</span>
 <h2>Seeing the I/O, and a workflow to act on it</h2>

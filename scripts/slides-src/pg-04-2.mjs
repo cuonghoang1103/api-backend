@@ -242,9 +242,9 @@ SELECT count(*) AS ilike_cuong FROM note WHERE author ILIKE 'cuong';`, ` exact_c
   { t: 'Real world (1): 42 customers vanish', body: `
 ${zm(run(`-- CT Shop, 300 customers
 SELECT count(*) AS phone_null FROM customer WHERE phone IS NULL;
-SELECT count(*) AS phone_not_eq FROM customer WHERE phone <> '0900007919';
+SELECT count(*) AS phone_not_eq FROM customer WHERE phone <> '0910007919';
 SELECT count(*) AS phone_not_eq_or_null FROM customer
-WHERE phone <> '0900007919' OR phone IS NULL;`, ` phone_null
+WHERE phone <> '0910007919' OR phone IS NULL;`, ` phone_null
 ------------
          42
 (1 row)
@@ -262,16 +262,15 @@ WHERE phone <> '0900007919' OR phone IS NULL;`, ` phone_null
 
   { t: 'Real world (2): search the CT Shop catalogue', body: `
 ${zm(run(`SELECT sku, name, price FROM product
-WHERE name ILIKE '%dạ quang%' AND price BETWEEN 10000 AND 100000
-ORDER BY price;`, `  sku   |         name         |  price
---------+----------------------+----------
- CT0502 | Bút dạ quang Hồng Hà | 10000.00
- CT0503 | Bút dạ quang Campus  | 29000.00
- CT0504 | Bút dạ quang Deli    | 59000.00
- CT0505 | Bút dạ quang Casio   | 88000.00
-(4 rows)`, { hl: [2], hlOut: [3, 4, 5, 6] }), 0.95)}
+WHERE name ILIKE '%bút bi%' AND price BETWEEN 10000 AND 100000
+ORDER BY price;`, `  sku   |                 name                  |  price
+--------+---------------------------------------+----------
+ CT0503 | Bút bi Pentel BK77 0.7mm              | 12000.00
+ CT0506 | Bút bi bấm Deli 0.7mm (hộp 12 cây)    | 45000.00
+ CT0502 | Bút bi Thiên Long TL-079 (hộp 20 cây) | 78000.00
+(3 rows)`, { hl: [2], hlOut: [3, 4, 5] }), 0.95)}
 ${two(`<div><div class="tcap">Prisma (cuongthai.com style)</div>` + sql(`prisma.product.findMany({ where: {
-  name:  { contains: 'dạ quang',
+  name:  { contains: 'bút bi',
            mode: 'insensitive' },
   price: { gte: 10000, lte: 100000 },
 } })`, { sm: true, lang: 'typescript' }) + `</div>`,

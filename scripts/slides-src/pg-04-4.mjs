@@ -265,12 +265,12 @@ SELECT status, count(*) FROM orders GROUP BY status ORDER BY status;`, `UPDATE 2
 
   status   | count
 -----------+-------
- cancelled |   155
- paid      |   755
- pending   |   181
- shipped   |   909
+ cancelled |   157
+ paid      |   753
+ pending   |   180
+ shipped   |   910
 (4 rows)`, { hlOut: [1, 5] }), 0.95)}
-<p style="font-size:20px;margin:0">CT Shop: <code class="i">UPDATE 2000</code> — <b>every</b> order, paid and shipped included, is now cancelled. <code class="i">ROLLBACK</code> restores the 155 / 755 / 181 / 909 split. Without BEGIN it would be a backup restore.</p>` },
+<p style="font-size:20px;margin:0">CT Shop: <code class="i">UPDATE 2000</code> — <b>every</b> order, paid and shipped included, is now cancelled. <code class="i">ROLLBACK</code> restores the 157 / 753 / 180 / 910 split. Without BEGIN it would be a backup restore.</p>` },
 
   { t: 'Your turn: cancel the old pending orders', body: `
 <p style="margin:0">Cancel the <b>pending</b> orders created <b>before 2025-10-01</b> — safely: preview the count, change inside a transaction, then undo.</p>
@@ -280,11 +280,11 @@ UPDATE orders SET status = 'cancelled'
 WHERE status = 'pending' AND created_at < '2025-10-01';
 ROLLBACK;`, ` count
 -------
-    71
+    70
 (1 row)
 
-UPDATE 71`, { hlOut: [3, 7] }), 1.2)}
-<p class="nho">Try it first. Checks: the preview count (71) must equal the <code class="i">UPDATE</code> count (71). Replace <code class="i">ROLLBACK</code> with <code class="i">COMMIT</code> only when they match.</p>` },
+UPDATE 70`, { hlOut: [3, 7] }), 1.2)}
+<p class="nho">Try it first. Checks: the preview count (70) must equal the <code class="i">UPDATE</code> count (70). Replace <code class="i">ROLLBACK</code> with <code class="i">COMMIT</code> only when they match.</p>` },
 
   { t: 'Self-check — pause the video and answer', to: true, body: `
 ${steps([

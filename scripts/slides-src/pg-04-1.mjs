@@ -239,13 +239,13 @@ ${box('Same idea as INSERT … ON CONFLICT', 'Prisma\'s <code class="i">upsert()
 <p style="margin:0;font-size:22px">A supplier sends new prices. Existing SKUs get the new price, unknown SKUs are created. We try it <b>inside a transaction</b> and <code class="i">ROLLBACK</code> so the shop data stays untouched.</p>
 ${zm(run(`BEGIN;
 INSERT INTO product (sku, name, category_id, price, stock) VALUES
-  ('CT0501', 'Bút dạ quang Thiên Long', 5, 7500, 122),
+  ('CT0501', 'Bút bi Thiên Long TL-027 (xanh)', 5, 5500, 120),
   ('CT9999', 'Bút thử nghiệm',          5, 5000,  10)
 ON CONFLICT (sku) DO UPDATE SET price = EXCLUDED.price
 RETURNING sku, price, (xmax = 0) AS inserted;
 ROLLBACK;`, ` sku   |  price  | inserted
 --------+---------+----------
- CT0501 | 7500.00 | f
+ CT0501 | 5500.00 | f
  CT9999 | 5000.00 | t
 (2 rows)`, { hl: [5], hlOut: [3, 4] }), 1.3)}` },
 

@@ -286,19 +286,19 @@ ${box('Cursor = keyset', 'Prisma\'s <code class="i">cursor</code> is keyset pagi
   { t: 'Real world (2): CT Shop', body: `
 ${zm(run(`SELECT id, name, price FROM product ORDER BY price DESC LIMIT 3;
 SELECT DISTINCT ON (category_id) category_id, name, price
-FROM product ORDER BY category_id, price DESC LIMIT 4;`, `  id |         name          |   price
-----+-----------------------+-----------
- 18 | Bút bi Stabilo        | 489000.00
- 12 | Bút chì & tẩy Stabilo | 473000.00
- 30 | Vở ô ly Stabilo       | 461000.00
+FROM product ORDER BY category_id, price DESC LIMIT 4;`, `  id |            name             |   price
+----+-----------------------------+-----------
+ 34 | Máy tính Casio FX-880BTG    | 790000.00
+ 31 | Máy tính Casio FX-580VN X   | 705000.00
+ 30 | Sổ tay Moleskine Classic A5 | 590000.00
 (3 rows)
 
- category_id |         name          |   price
--------------+-----------------------+-----------
-           5 | Bút dạ quang Stabilo  | 366000.00
-           6 | Bút chì & tẩy Stabilo | 473000.00
-           7 | Bút bi Stabilo        | 489000.00
-           8 | Sổ tay Stabilo        | 289000.00
+ category_id |                  name                   |   price
+-------------+-----------------------------------------+-----------
+           5 | Bút bi Thiên Long TL-079 (hộp 20 cây)   |  78000.00
+           6 | Bút chì màu Faber-Castell 24 màu        | 125000.00
+           7 | Bút dạ quang Stabilo Boss Pastel (bộ 6) | 129000.00
+           8 | Lốc 10 vở Hồng Hà 96 trang              | 105000.00
 (4 rows)`, { hlOut: [3, 4, 5, 11, 12, 13, 14] }), 0.92)}
 <p style="font-size:20px;margin:0">Top 3 priciest products, and the <b>priciest product in each category</b> (DISTINCT ON) — a catalogue page in two queries.</p>` },
 

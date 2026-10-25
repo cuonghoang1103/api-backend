@@ -105,7 +105,129 @@ const EX12 = {
   <span class="hljs-keyword">return</span> (<span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setShow(s =&gt; !s)}&gt;{show ? &#x27;Hide&#x27; : &#x27;Show&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>{show &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Now you see me<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}<span class="hljs-tag">&lt;/&gt;</span></span>);
 }</code></pre>
 <div class="out"><b>Result:</b> the counter increments per click, the paragraph mirrors the input as you type, and the button hides/shows the text.</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the three</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
+<h3>The other four tasks of the handout (Todo List · Color Switcher · Search Filter · Drag and Drop)</h3><p>The school handout lists seven small components; the three above are the first ones. The rest use the same four-step loop (state → JSX → event calls the setter → React re-renders). All code below was run for real.</p><h4>4) Todo List — add and delete</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function TodoList() {
+  const [text, setText] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const add = () =&gt; {
+    if (text.trim() === '') return;
+    setTodos([...todos, { id: Date.now(), title: text.trim() }]);
+    setText('');
+  };
+  const remove = (id) =&gt; setTodos(todos.filter((t) =&gt; t.id !== id));
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={text}
+        onChange={(e) =&gt; setText(e.target.value)}
+        placeholder="Việc cần làm"
+      /&gt;
+      &lt;button onClick={add}&gt;Thêm&lt;/button&gt;
+      &lt;ul&gt;
+        {todos.map((t) =&gt; (
+          &lt;li key={t.id}&gt;
+            {t.title} &lt;button onClick={() =&gt; remove(t.id)}&gt;Xoá&lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><p>Never <code>push</code> into the state array: create a new array with <code>[...todos, item]</code> / <code>filter</code> so React sees a new reference.</p><h4>5) Color Switcher</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function ColorSwitcher() {
+  const [color, setColor] = useState('red');
+  return (
+    &lt;div&gt;
+      &lt;select value={color} onChange={(e) =&gt; setColor(e.target.value)}&gt;
+        &lt;option value="red"&gt;red&lt;/option&gt;
+        &lt;option value="blue"&gt;blue&lt;/option&gt;
+        &lt;option value="green"&gt;green&lt;/option&gt;
+        &lt;option value="yellow"&gt;yellow&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;div style={{ background: color, height: 120, marginTop: 12 }}&gt;
+        Màu: {color}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><p>One state (<code>color</code>) drives both the dropdown and the background.</p><h4>6) Search Filter</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+const FRUITS = [
+  'Apple',
+  'Banana',
+  'Cherry',
+  'Mango',
+  'Orange',
+  'Grape',
+];
+
+export default function SearchFilter() {
+  const [query, setQuery] = useState('');
+  const shown = FRUITS.filter((f) =&gt;
+    f.toLowerCase().includes(query.toLowerCase()),
+  );
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={query}
+        onChange={(e) =&gt; setQuery(e.target.value)}
+        placeholder="Tìm trái cây..."
+      /&gt;
+      &lt;ul&gt;
+        {shown.map((f) =&gt; (
+          &lt;li key={f}&gt;{f}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      {shown.length === 0 &amp;&amp; &lt;p&gt;Không có kết quả&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre><p>The filtered list is <em>derived</em> from <code>query</code> while rendering — it does not need its own state.</p><h4>7) Drag and Drop List</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function DragList() {
+  const [items, setItems] = useState([
+    'Học React',
+    'Làm Exercise 12',
+    'Ôn thi PE',
+    'Ngủ sớm',
+  ]);
+  const [dragging, setDragging] = useState(null);
+
+  const handleDragStart = (index) =&gt; setDragging(index);
+
+  const handleDragOver = (e, index) =&gt; {
+    e.preventDefault();
+    if (dragging === null || dragging === index) return;
+    const next = [...items];
+    const [moved] = next.splice(dragging, 1);
+    next.splice(index, 0, moved);
+    setItems(next);
+    setDragging(index);
+  };
+
+  const handleDragEnd = () =&gt; setDragging(null);
+
+  return (
+    &lt;ul&gt;
+      {items.map((item, index) =&gt; (
+        &lt;li
+          key={item}
+          draggable
+          onDragStart={() =&gt; handleDragStart(index)}
+          onDragOver={(e) =&gt; handleDragOver(e, index)}
+          onDragEnd={handleDragEnd}
+          style={{
+            opacity: dragging === index ? 0.4 : 1,
+            cursor: 'grab',
+          }}
+        &gt;
+          {item}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre><p>Two states (<code>items</code>, <code>dragging</code>) + three events; <code>splice</code> cuts the dragged item out and inserts it at the new index (on a copy of the array).</p><div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the three</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 8 · Exercise 12 · Slot 9–10 slide 14</span>
 <h2>useState — ba component nhỏ</h2>
 <pre><code class="language-javascript"><span class="hljs-comment">// 1) Counter</span>
@@ -124,7 +246,129 @@ const EX12 = {
   <span class="hljs-keyword">return</span> (<span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setShow(s =&gt; !s)}&gt;{show ? &#x27;Ẩn&#x27; : &#x27;Hiện&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>{show &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Giờ bạn thấy tôi<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}<span class="hljs-tag">&lt;/&gt;</span></span>);
 }</code></pre>
 <div class="out"><b>Kết quả:</b> counter tăng mỗi lần bấm, đoạn văn phản chiếu input khi gõ, và nút ẩn/hiện text.</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng cả ba</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
+<h3>Bốn bài còn lại của đề trường (Todo List · Color Switcher · Search Filter · Drag and Drop)</h3><p>Đề của trường có bảy component nhỏ; ba bài ở trên là ba bài đầu. Các bài còn lại cùng một vòng bốn bước (state → JSX → sự kiện gọi hàm set → React vẽ lại). Mọi code dưới đây đã chạy thật.</p><h4>4) Todo List — thêm và xoá</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function TodoList() {
+  const [text, setText] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const add = () =&gt; {
+    if (text.trim() === '') return;
+    setTodos([...todos, { id: Date.now(), title: text.trim() }]);
+    setText('');
+  };
+  const remove = (id) =&gt; setTodos(todos.filter((t) =&gt; t.id !== id));
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={text}
+        onChange={(e) =&gt; setText(e.target.value)}
+        placeholder="Việc cần làm"
+      /&gt;
+      &lt;button onClick={add}&gt;Thêm&lt;/button&gt;
+      &lt;ul&gt;
+        {todos.map((t) =&gt; (
+          &lt;li key={t.id}&gt;
+            {t.title} &lt;button onClick={() =&gt; remove(t.id)}&gt;Xoá&lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><p>Đừng <code>push</code> vào mảng state: tạo mảng mới bằng <code>[...todos, việc]</code> / <code>filter</code> để React thấy một tham chiếu mới.</p><h4>5) Color Switcher — đổi màu nền</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function ColorSwitcher() {
+  const [color, setColor] = useState('red');
+  return (
+    &lt;div&gt;
+      &lt;select value={color} onChange={(e) =&gt; setColor(e.target.value)}&gt;
+        &lt;option value="red"&gt;red&lt;/option&gt;
+        &lt;option value="blue"&gt;blue&lt;/option&gt;
+        &lt;option value="green"&gt;green&lt;/option&gt;
+        &lt;option value="yellow"&gt;yellow&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;div style={{ background: color, height: 120, marginTop: 12 }}&gt;
+        Màu: {color}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><p>Một state (<code>color</code>) điều khiển cả danh sách thả xuống lẫn màu nền.</p><h4>6) Search Filter — lọc khi gõ</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+const FRUITS = [
+  'Apple',
+  'Banana',
+  'Cherry',
+  'Mango',
+  'Orange',
+  'Grape',
+];
+
+export default function SearchFilter() {
+  const [query, setQuery] = useState('');
+  const shown = FRUITS.filter((f) =&gt;
+    f.toLowerCase().includes(query.toLowerCase()),
+  );
+  return (
+    &lt;div&gt;
+      &lt;input
+        value={query}
+        onChange={(e) =&gt; setQuery(e.target.value)}
+        placeholder="Tìm trái cây..."
+      /&gt;
+      &lt;ul&gt;
+        {shown.map((f) =&gt; (
+          &lt;li key={f}&gt;{f}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      {shown.length === 0 &amp;&amp; &lt;p&gt;Không có kết quả&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre><p>Danh sách đã lọc được <em>tính ra</em> từ <code>query</code> ngay lúc vẽ — không cần state riêng.</p><h4>7) Drag and Drop List — kéo thả</h4><pre><code class="language-javascript">import { useState } from 'react';
+
+export default function DragList() {
+  const [items, setItems] = useState([
+    'Học React',
+    'Làm Exercise 12',
+    'Ôn thi PE',
+    'Ngủ sớm',
+  ]);
+  const [dragging, setDragging] = useState(null);
+
+  const handleDragStart = (index) =&gt; setDragging(index);
+
+  const handleDragOver = (e, index) =&gt; {
+    e.preventDefault();
+    if (dragging === null || dragging === index) return;
+    const next = [...items];
+    const [moved] = next.splice(dragging, 1);
+    next.splice(index, 0, moved);
+    setItems(next);
+    setDragging(index);
+  };
+
+  const handleDragEnd = () =&gt; setDragging(null);
+
+  return (
+    &lt;ul&gt;
+      {items.map((item, index) =&gt; (
+        &lt;li
+          key={item}
+          draggable
+          onDragStart={() =&gt; handleDragStart(index)}
+          onDragOver={(e) =&gt; handleDragOver(e, index)}
+          onDragEnd={handleDragEnd}
+          style={{
+            opacity: dragging === index ? 0.4 : 1,
+            cursor: 'grab',
+          }}
+        &gt;
+          {item}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre><p>Hai state (<code>items</code>, <code>dragging</code>) + ba sự kiện; <code>splice</code> cắt phần tử đang kéo ra và chèn vào chỉ số mới (trên bản sao của mảng).</p><div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng cả ba</span><span class="lc-sub">Counter, Echo, Toggle — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
 };
 
@@ -157,7 +401,86 @@ const EX13 = {
   <span class="hljs-keyword">if</span> (loading) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Loading…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{posts.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 }</code></pre>
-<div class="pitfall"><b>Trap:</b> put <code>userId</code> in the dependency array or the list never updates when the prop changes. The <code>active</code> flag in cleanup prevents a slow earlier response from overwriting a newer one (a race).</div>`,
+<div class="pitfall"><b>Trap:</b> put <code>userId</code> in the dependency array or the list never updates when the prop changes. The <code>active</code> flag in cleanup prevents a slow earlier response from overwriting a newer one (a race).</div><h3>The other three tasks of the handout (Countdown Timer · Window Resize · Form Validation)</h3><p>Same rule for all of them: the dependency array lists every value the effect reads, and whatever the effect starts (interval, listener) must be undone in the cleanup. All code below was run for real.</p><h4>2) Countdown Timer</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+function CountdownTimer({ initialValue }) {
+  const [timeRemaining, setTimeRemaining] = useState(initialValue);
+
+  useEffect(() =&gt; {
+    if (timeRemaining &lt;= 0) return;
+    const timerId = setInterval(() =&gt; {
+      setTimeRemaining((prev) =&gt; prev - 1);
+    }, 1000);
+    return () =&gt; clearInterval(timerId);
+  }, [timeRemaining]);
+
+  return &lt;p&gt;Time Remaining: {timeRemaining}&lt;/p&gt;;
+}
+
+export default function App() {
+  const [show, setShow] = useState(true);
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setShow(!show)}&gt;
+        {show ? 'Gỡ timer' : 'Gắn lại timer'}
+      &lt;/button&gt;
+      {show &amp;&amp; &lt;CountdownTimer initialValue={5} /&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre><p><code>if (timeRemaining &lt;= 0) return</code> stops it at 0; the cleanup clears the interval each second because <code>timeRemaining</code> is in the array.</p><h4>3) Window Resize Listener</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+export default function WindowSize() {
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() =&gt; {
+    const handleResize = () =&gt; {
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () =&gt; window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    &lt;p&gt;
+      Window size: {size.width} x {size.height}
+    &lt;/p&gt;
+  );
+}</code></pre><p>Every <code>addEventListener</code> needs a matching <code>removeEventListener</code> with the <em>same function</em>; forgetting it leaks one listener per mount (measured: 1 → 4 handlers after three remounts).</p><h4>4) Form Input Validation</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+function ValidatedInput({ validationFunction, errorMessage }) {
+  const [value, setValue] = useState('');
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() =&gt; {
+    setIsValid(validationFunction(value));
+  }, [value, validationFunction]);
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        type="text"
+        value={value}
+        onChange={(e) =&gt; setValue(e.target.value)}
+        style={{ borderColor: isValid ? '' : 'red' }}
+      /&gt;
+      {!isValid &amp;&amp; &lt;p style={{ color: 'red' }}&gt;{errorMessage}&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}
+
+const isEmail = (v) =&gt; v === '' || /^\\S+@\\S+\\.\\S+$/.test(v);
+
+export default function App() {
+  return (
+    &lt;ValidatedInput
+      validationFunction={isEmail}
+      errorMessage="Email chưa đúng định dạng"
+    /&gt;
+  );
+}</code></pre><p>Works as the handout asks (useEffect). In real projects <code>isValid</code> can simply be computed while rendering — no extra state, no extra render. Never write <code>useEffect(async () =&gt; …)</code>: put the async function inside the effect.</p>`,
     `<span class="eyebrow">Chương 8 · Exercise 13 · Slot 9–10 slide 22</span>
 <h2>useEffect — fetch bài viết theo user</h2>
 <p class="lead"><b>Mục tiêu:</b> component <code>UserPosts</code> fetch bài viết cho một <code>userId</code> khi mount và fetch lại khi <code>userId</code> đổi.</p>
@@ -181,7 +504,86 @@ const EX13 = {
   <span class="hljs-keyword">if</span> (loading) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Đang tải…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{posts.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 }</code></pre>
-<div class="pitfall"><b>Bẫy:</b> đưa <code>userId</code> vào mảng phụ thuộc, nếu không danh sách không cập nhật khi prop đổi. Cờ <code>active</code> trong cleanup ngăn một response cũ về chậm ghi đè response mới (race).</div>`,
+<div class="pitfall"><b>Bẫy:</b> đưa <code>userId</code> vào mảng phụ thuộc, nếu không danh sách không cập nhật khi prop đổi. Cờ <code>active</code> trong cleanup ngăn một response cũ về chậm ghi đè response mới (race).</div><h3>Ba bài còn lại của đề trường (Countdown Timer · Window Resize · Form Validation)</h3><p>Cùng một luật cho cả ba: mảng dependency liệt kê mọi giá trị effect đọc, và thứ gì effect bật lên (interval, listener) phải được tắt trong cleanup. Mọi code dưới đây đã chạy thật.</p><h4>2) Countdown Timer — đếm ngược</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+function CountdownTimer({ initialValue }) {
+  const [timeRemaining, setTimeRemaining] = useState(initialValue);
+
+  useEffect(() =&gt; {
+    if (timeRemaining &lt;= 0) return;
+    const timerId = setInterval(() =&gt; {
+      setTimeRemaining((prev) =&gt; prev - 1);
+    }, 1000);
+    return () =&gt; clearInterval(timerId);
+  }, [timeRemaining]);
+
+  return &lt;p&gt;Time Remaining: {timeRemaining}&lt;/p&gt;;
+}
+
+export default function App() {
+  const [show, setShow] = useState(true);
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setShow(!show)}&gt;
+        {show ? 'Gỡ timer' : 'Gắn lại timer'}
+      &lt;/button&gt;
+      {show &amp;&amp; &lt;CountdownTimer initialValue={5} /&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre><p><code>if (timeRemaining &lt;= 0) return</code> dừng ở 0; cleanup xoá interval mỗi giây vì <code>timeRemaining</code> nằm trong mảng.</p><h4>3) Window Resize Listener</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+export default function WindowSize() {
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() =&gt; {
+    const handleResize = () =&gt; {
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () =&gt; window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return (
+    &lt;p&gt;
+      Window size: {size.width} x {size.height}
+    &lt;/p&gt;
+  );
+}</code></pre><p>Mỗi <code>addEventListener</code> phải có <code>removeEventListener</code> với <em>đúng cùng một hàm</em>; quên là rò rỉ một listener mỗi lần mount (đo thật: 1 → 4 handler sau ba lần gỡ/gắn).</p><h4>4) Form Input Validation — kiểm tra ô nhập</h4><pre><code class="language-javascript">import { useState, useEffect } from 'react';
+
+function ValidatedInput({ validationFunction, errorMessage }) {
+  const [value, setValue] = useState('');
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() =&gt; {
+    setIsValid(validationFunction(value));
+  }, [value, validationFunction]);
+
+  return (
+    &lt;div&gt;
+      &lt;input
+        type="text"
+        value={value}
+        onChange={(e) =&gt; setValue(e.target.value)}
+        style={{ borderColor: isValid ? '' : 'red' }}
+      /&gt;
+      {!isValid &amp;&amp; &lt;p style={{ color: 'red' }}&gt;{errorMessage}&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}
+
+const isEmail = (v) =&gt; v === '' || /^\\S+@\\S+\\.\\S+$/.test(v);
+
+export default function App() {
+  return (
+    &lt;ValidatedInput
+      validationFunction={isEmail}
+      errorMessage="Email chưa đúng định dạng"
+    /&gt;
+  );
+}</code></pre><p>Chạy đúng như đề (useEffect). Dự án thật nên tính <code>isValid</code> ngay lúc vẽ — khỏi state phụ, khỏi vẽ lại thừa. Đừng viết <code>useEffect(async () =&gt; …)</code>: đặt hàm async bên trong effect.</p>`,
   ),
 };
 
@@ -213,7 +615,135 @@ const EX14 = {
   <span class="hljs-keyword">const</span> theme = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">ThemeContext</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">color:</span> <span class="hljs-attr">theme.foreground</span>, <span class="hljs-attr">background:</span> <span class="hljs-attr">theme.background</span> }}&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
 }</code></pre>
-<div class="out"><b>Result:</b> <code>Toolbar</code> reads the theme straight from context — no props passed through intermediate components. Toggling at the top updates every consumer.</div>`,
+<div class="out"><b>Result:</b> <code>Toolbar</code> reads the theme straight from context — no props passed through intermediate components. Toggling at the top updates every consumer.</div><h3>The full handout: ThemeProvider + useTheme, and the shopping cart</h3><p>The handout wants a ThemeProvider that owns the state and a toggle function, a <code>useTheme</code> hook, and a second exercise: a cart shared by <code>DishesList</code> and <code>Cart</code>. Both run as shown.</p><h4>1) Theme with ThemeProvider and useTheme</h4><pre><code class="language-javascript">import { createContext, useContext, useState } from 'react';
+
+const themes = {
+  light: { foreground: '#000000', background: '#eeeeee' },
+  dark: { foreground: '#ffffff', background: '#61dafb' },
+};
+
+const ThemeContext = createContext(null);
+
+function ThemeProvider({ children }) {
+  const [name, setName] = useState('light');
+  const toggle = () =&gt;
+    setName((n) =&gt; (n === 'light' ? 'dark' : 'light'));
+  return (
+    &lt;ThemeContext.Provider
+      value={{ name, theme: themes[name], toggle }}
+    &gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx)
+    throw new Error('useTheme phải dùng bên trong ThemeProvider');
+  return ctx;
+}
+
+function Theme() {
+  const { name, theme, toggle } = useTheme();
+  return (
+    &lt;div
+      style={{
+        background: theme.background,
+        color: theme.foreground,
+        padding: 16,
+      }}
+    &gt;
+      &lt;p&gt;Theme hiện tại: {name}&lt;/p&gt;
+      &lt;button
+        onClick={toggle}
+        style={{
+          background: theme.foreground,
+          color: theme.background,
+        }}
+      &gt;
+        Đổi theme
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;Theme /&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}</code></pre><p>The hook throws a clear error when used outside the provider.</p><h4>2–3) Cart with CartContext (dishes list, remove, total, clear)</h4><pre><code class="language-javascript">import { createContext, useContext, useState } from 'react';
+
+const dishes = [
+  { id: 0, name: 'Uthappizza', price: '4.99' },
+  { id: 1, name: 'Zucchipakoda', price: '1.99' },
+  { id: 2, name: 'Vadonut', price: '1.99' },
+  { id: 3, name: 'ElaiCheese Cake', price: '2.99' },
+];
+
+const CartContext = createContext(null);
+
+function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState([]);
+  const addToCart = (dish) =&gt; setCartItems((items) =&gt; [...items, dish]);
+  const removeFromCart = (index) =&gt;
+    setCartItems((items) =&gt; items.filter((_, i) =&gt; i !== index));
+  const clearCart = () =&gt; setCartItems([]);
+  const total = cartItems.reduce((sum, d) =&gt; sum + Number(d.price), 0);
+  return (
+    &lt;CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, clearCart, total }}
+    &gt;
+      {children}
+    &lt;/CartContext.Provider&gt;
+  );
+}
+
+const useCart = () =&gt; useContext(CartContext);
+
+function DishesList() {
+  const { addToCart, cartItems } = useCart();
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;Dishes ({cartItems.length} trong giỏ)&lt;/h3&gt;
+      {dishes.map((d) =&gt; (
+        &lt;p key={d.id}&gt;
+          {d.name} - \${d.price}{' '}
+          &lt;button onClick={() =&gt; addToCart(d)}&gt;Add to Cart&lt;/button&gt;
+        &lt;/p&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+function Cart() {
+  const { cartItems, removeFromCart, clearCart, total } = useCart();
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;
+        Cart: {cartItems.length} món - Tổng \${total.toFixed(2)}
+      &lt;/h3&gt;
+      {cartItems.map((d, i) =&gt; (
+        &lt;p key={i}&gt;
+          {d.name}{' '}
+          &lt;button onClick={() =&gt; removeFromCart(i)}&gt;Remove&lt;/button&gt;
+        &lt;/p&gt;
+      ))}
+      &lt;button onClick={clearCart}&gt;Clear Cart&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;CartProvider&gt;
+      &lt;DishesList /&gt;
+      &lt;Cart /&gt;
+    &lt;/CartProvider&gt;
+  );
+}</code></pre><p>The data gives <code>price</code> as a <em>string</em>: without <code>Number(...)</code> the total becomes the text "04.991.99". The total is computed while rendering, so count and value update live.</p>`,
     `<span class="eyebrow">Chương 8 · Exercise 14 · Slot 9–10 slide 37</span>
 <h2>useContext — theme sáng/tối</h2>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> themes = {
@@ -236,7 +766,135 @@ const EX14 = {
   <span class="hljs-keyword">const</span> theme = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">ThemeContext</span>);
   <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">color:</span> <span class="hljs-attr">theme.foreground</span>, <span class="hljs-attr">background:</span> <span class="hljs-attr">theme.background</span> }}&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
 }</code></pre>
-<div class="out"><b>Kết quả:</b> <code>Toolbar</code> đọc theme thẳng từ context — không props nào truyền qua các component trung gian. Toggle ở trên cập nhật mọi consumer.</div>`,
+<div class="out"><b>Kết quả:</b> <code>Toolbar</code> đọc theme thẳng từ context — không props nào truyền qua các component trung gian. Toggle ở trên cập nhật mọi consumer.</div><h3>Đủ đề trường: ThemeProvider + useTheme và giỏ hàng</h3><p>Đề cần một ThemeProvider giữ state và hàm toggle, hook <code>useTheme</code>, và bài hai: giỏ hàng dùng chung giữa <code>DishesList</code> và <code>Cart</code>. Cả hai chạy đúng như bên dưới.</p><h4>1) Theme với ThemeProvider và useTheme</h4><pre><code class="language-javascript">import { createContext, useContext, useState } from 'react';
+
+const themes = {
+  light: { foreground: '#000000', background: '#eeeeee' },
+  dark: { foreground: '#ffffff', background: '#61dafb' },
+};
+
+const ThemeContext = createContext(null);
+
+function ThemeProvider({ children }) {
+  const [name, setName] = useState('light');
+  const toggle = () =&gt;
+    setName((n) =&gt; (n === 'light' ? 'dark' : 'light'));
+  return (
+    &lt;ThemeContext.Provider
+      value={{ name, theme: themes[name], toggle }}
+    &gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx)
+    throw new Error('useTheme phải dùng bên trong ThemeProvider');
+  return ctx;
+}
+
+function Theme() {
+  const { name, theme, toggle } = useTheme();
+  return (
+    &lt;div
+      style={{
+        background: theme.background,
+        color: theme.foreground,
+        padding: 16,
+      }}
+    &gt;
+      &lt;p&gt;Theme hiện tại: {name}&lt;/p&gt;
+      &lt;button
+        onClick={toggle}
+        style={{
+          background: theme.foreground,
+          color: theme.background,
+        }}
+      &gt;
+        Đổi theme
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;Theme /&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}</code></pre><p>Hook ném lỗi rõ ràng khi dùng ngoài Provider.</p><h4>2–3) Giỏ hàng bằng CartContext (danh sách món, xoá, tổng, làm rỗng)</h4><pre><code class="language-javascript">import { createContext, useContext, useState } from 'react';
+
+const dishes = [
+  { id: 0, name: 'Uthappizza', price: '4.99' },
+  { id: 1, name: 'Zucchipakoda', price: '1.99' },
+  { id: 2, name: 'Vadonut', price: '1.99' },
+  { id: 3, name: 'ElaiCheese Cake', price: '2.99' },
+];
+
+const CartContext = createContext(null);
+
+function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState([]);
+  const addToCart = (dish) =&gt; setCartItems((items) =&gt; [...items, dish]);
+  const removeFromCart = (index) =&gt;
+    setCartItems((items) =&gt; items.filter((_, i) =&gt; i !== index));
+  const clearCart = () =&gt; setCartItems([]);
+  const total = cartItems.reduce((sum, d) =&gt; sum + Number(d.price), 0);
+  return (
+    &lt;CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, clearCart, total }}
+    &gt;
+      {children}
+    &lt;/CartContext.Provider&gt;
+  );
+}
+
+const useCart = () =&gt; useContext(CartContext);
+
+function DishesList() {
+  const { addToCart, cartItems } = useCart();
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;Dishes ({cartItems.length} trong giỏ)&lt;/h3&gt;
+      {dishes.map((d) =&gt; (
+        &lt;p key={d.id}&gt;
+          {d.name} - \${d.price}{' '}
+          &lt;button onClick={() =&gt; addToCart(d)}&gt;Add to Cart&lt;/button&gt;
+        &lt;/p&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+function Cart() {
+  const { cartItems, removeFromCart, clearCart, total } = useCart();
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;
+        Cart: {cartItems.length} món - Tổng \${total.toFixed(2)}
+      &lt;/h3&gt;
+      {cartItems.map((d, i) =&gt; (
+        &lt;p key={i}&gt;
+          {d.name}{' '}
+          &lt;button onClick={() =&gt; removeFromCart(i)}&gt;Remove&lt;/button&gt;
+        &lt;/p&gt;
+      ))}
+      &lt;button onClick={clearCart}&gt;Clear Cart&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;CartProvider&gt;
+      &lt;DishesList /&gt;
+      &lt;Cart /&gt;
+    &lt;/CartProvider&gt;
+  );
+}</code></pre><p>Dữ liệu cho <code>price</code> là <em>chuỗi</em>: không có <code>Number(...)</code> thì tổng thành chuỗi "04.991.99". Tổng tính ngay lúc vẽ nên số món và giá trị cập nhật tức thì.</p>`,
   ),
 };
 
@@ -270,7 +928,113 @@ const EX15 = {
 }</code></pre>
 <p><b>Question Bank:</b> hold <code>{ questions, current, score }</code> in one <code>initialState</code>; a reducer handles <code>ANSWER</code>, <code>NEXT</code>, <code>RESTART</code>. All quiz logic lives in the pure reducer — the component just dispatches.</p>
 <div class="callout"><span class="badge">★ Why a reducer here</span> A quiz has several related transitions on shared state (current question, score, finished). A reducer keeps them in one predictable, testable place — the same pattern you meet again as Redux in Chapter 12.</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
+<h3>Question Bank — the reducer cases the handout leaves empty</h3><p>The handout gives <code>initialState</code> and three empty cases. One filled-in version that runs: choosing an answer changes <code>selectedOption</code> and <code>score</code> together, and the guard line stops a second click from adding points again (without it, three clicks give "Score: 5 / 3").</p><h4>SELECT_OPTION · NEXT_QUESTION · RESTART_QUIZ</h4><pre><code class="language-javascript">import { useReducer } from 'react';
+
+const initialState = {
+  questions: [
+    {
+      id: 1,
+      question: 'What is the capital of Australia?',
+      options: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
+      answer: 'Canberra',
+    },
+    {
+      id: 2,
+      question: 'Which planet is known as the Red Planet?',
+      options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
+      answer: 'Mars',
+    },
+    {
+      id: 3,
+      question: 'Which language runs in every web browser?',
+      options: ['Java', 'C', 'Python', 'JavaScript'],
+      answer: 'JavaScript',
+    },
+  ],
+  currentQuestion: 0,
+  selectedOption: '',
+  score: 0,
+  showScore: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SELECT_OPTION': {
+      // đã chọn rồi thì thôi
+      if (state.selectedOption) return state;
+      const correct =
+        state.questions[state.currentQuestion].answer ===
+        action.payload;
+      return {
+        ...state,
+        selectedOption: action.payload,
+        score: correct ? state.score + 1 : state.score,
+      };
+    }
+    case 'NEXT_QUESTION': {
+      const last = state.currentQuestion === state.questions.length - 1;
+      return last
+        ? { ...state, showScore: true }
+        : {
+            ...state,
+            currentQuestion: state.currentQuestion + 1,
+            selectedOption: '',
+          };
+    }
+    case 'RESTART_QUIZ':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+export default function QuestionBank() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const q = state.questions[state.currentQuestion];
+
+  if (state.showScore) {
+    return (
+      &lt;div&gt;
+        &lt;h3&gt;
+          Điểm: {state.score} / {state.questions.length}
+        &lt;/h3&gt;
+        &lt;button onClick={() =&gt; dispatch({ type: 'RESTART_QUIZ' })}&gt;
+          Làm lại
+        &lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;
+        Câu {state.currentQuestion + 1} / {state.questions.length}
+      &lt;/p&gt;
+      &lt;h3&gt;{q.question}&lt;/h3&gt;
+      {q.options.map((opt) =&gt; (
+        &lt;div key={opt}&gt;
+          &lt;button
+            onClick={() =&gt;
+              dispatch({ type: 'SELECT_OPTION', payload: opt })
+            }
+          &gt;
+            {opt}
+          &lt;/button&gt;
+          {state.selectedOption === opt &amp;&amp;
+            (opt === q.answer ? ' ✅ đúng' : ' ❌ sai')}
+        &lt;/div&gt;
+      ))}
+      {state.selectedOption &amp;&amp; state.selectedOption !== q.answer &amp;&amp; (
+        &lt;p&gt;Đáp án đúng: {q.answer}&lt;/p&gt;
+      )}
+      {state.selectedOption &amp;&amp; (
+        &lt;button onClick={() =&gt; dispatch({ type: 'NEXT_QUESTION' })}&gt;
+          Câu tiếp
+        &lt;/button&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre><p>Always return a <em>new</em> object and keep a <code>default</code>. The counter variant that mutates state and returns it logs the new number but the screen stays at 0.</p><div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Build the reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
     `<span class="eyebrow">Chương 8 · Exercise 15 · Slot 9–10 slide 44</span>
 <h2>useReducer — counter &amp; ngân hàng câu hỏi</h2>
 <pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">counterReducer</span>(<span class="hljs-params">state, action</span>) {
@@ -295,7 +1059,113 @@ const EX15 = {
 }</code></pre>
 <p><b>Ngân hàng câu hỏi:</b> giữ <code>{ questions, current, score }</code> trong một <code>initialState</code>; một reducer xử lý <code>ANSWER</code>, <code>NEXT</code>, <code>RESTART</code>. Mọi logic quiz nằm trong reducer thuần — component chỉ dispatch.</p>
 <div class="callout"><span class="badge">★ Vì sao dùng reducer ở đây</span> Một quiz có nhiều chuyển trạng thái liên quan trên state dùng chung (câu hiện tại, điểm, kết thúc). Reducer giữ chúng ở một chỗ dễ đoán, dễ test — đúng mẫu bạn gặp lại ở Redux (Chương 12).</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
+<h3>Question Bank — các case reducer mà đề để trống</h3><p>Đề cho <code>initialState</code> và ba case để trống. Một bản điền đủ, chạy được: chọn đáp án đổi cùng lúc <code>selectedOption</code> và <code>score</code>, và dòng bảo vệ chặn lần bấm thứ hai cộng điểm nữa (bỏ dòng đó, bấm ba lần ra "Điểm: 5 / 3").</p><h4>SELECT_OPTION · NEXT_QUESTION · RESTART_QUIZ</h4><pre><code class="language-javascript">import { useReducer } from 'react';
+
+const initialState = {
+  questions: [
+    {
+      id: 1,
+      question: 'What is the capital of Australia?',
+      options: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
+      answer: 'Canberra',
+    },
+    {
+      id: 2,
+      question: 'Which planet is known as the Red Planet?',
+      options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
+      answer: 'Mars',
+    },
+    {
+      id: 3,
+      question: 'Which language runs in every web browser?',
+      options: ['Java', 'C', 'Python', 'JavaScript'],
+      answer: 'JavaScript',
+    },
+  ],
+  currentQuestion: 0,
+  selectedOption: '',
+  score: 0,
+  showScore: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SELECT_OPTION': {
+      // đã chọn rồi thì thôi
+      if (state.selectedOption) return state;
+      const correct =
+        state.questions[state.currentQuestion].answer ===
+        action.payload;
+      return {
+        ...state,
+        selectedOption: action.payload,
+        score: correct ? state.score + 1 : state.score,
+      };
+    }
+    case 'NEXT_QUESTION': {
+      const last = state.currentQuestion === state.questions.length - 1;
+      return last
+        ? { ...state, showScore: true }
+        : {
+            ...state,
+            currentQuestion: state.currentQuestion + 1,
+            selectedOption: '',
+          };
+    }
+    case 'RESTART_QUIZ':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+export default function QuestionBank() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const q = state.questions[state.currentQuestion];
+
+  if (state.showScore) {
+    return (
+      &lt;div&gt;
+        &lt;h3&gt;
+          Điểm: {state.score} / {state.questions.length}
+        &lt;/h3&gt;
+        &lt;button onClick={() =&gt; dispatch({ type: 'RESTART_QUIZ' })}&gt;
+          Làm lại
+        &lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;
+        Câu {state.currentQuestion + 1} / {state.questions.length}
+      &lt;/p&gt;
+      &lt;h3&gt;{q.question}&lt;/h3&gt;
+      {q.options.map((opt) =&gt; (
+        &lt;div key={opt}&gt;
+          &lt;button
+            onClick={() =&gt;
+              dispatch({ type: 'SELECT_OPTION', payload: opt })
+            }
+          &gt;
+            {opt}
+          &lt;/button&gt;
+          {state.selectedOption === opt &amp;&amp;
+            (opt === q.answer ? ' ✅ đúng' : ' ❌ sai')}
+        &lt;/div&gt;
+      ))}
+      {state.selectedOption &amp;&amp; state.selectedOption !== q.answer &amp;&amp; (
+        &lt;p&gt;Đáp án đúng: {q.answer}&lt;/p&gt;
+      )}
+      {state.selectedOption &amp;&amp; (
+        &lt;button onClick={() =&gt; dispatch({ type: 'NEXT_QUESTION' })}&gt;
+          Câu tiếp
+        &lt;/button&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</code></pre><p>Luôn trả về object <em>mới</em> và giữ nhánh <code>default</code>. Bản bộ đếm sửa thẳng state rồi trả về chính nó thì Console in số mới nhưng màn hình vẫn là 0.</p><div class="di-toi"><a class="link-card codelab" href="${CODELAB}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Dựng reducer</span><span class="lc-sub">Counter &amp; quiz — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
   ),
 };
 

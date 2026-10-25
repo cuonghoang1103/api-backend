@@ -6,6 +6,12 @@
  * LUẬT: < > trong code → &lt; &gt; (so sánh >= <=); & → &amp;;
  * backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G031 from './giang/pg-03-1.mjs';
+import G032 from './giang/pg-03-2.mjs';
+import G033 from './giang/pg-03-3.mjs';
+import G034 from './giang/pg-03-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -19,7 +25,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Khoá chính là gì, khoá thay thế (surrogate) vs khoá tự nhiên, và khoá chính tổ hợp cho bảng nối.',
-      content: `
+      content: `${NHAN_LUOT}${G031}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>Every row needs a name — the primary key</h2>
@@ -143,7 +149,7 @@ DETAIL:  Key (note_id, tag_slug)=(1, sql) already exists.</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Khoá ngoại chặn dòng mồ côi, và ba hành vi ON DELETE: RESTRICT (mặc định), CASCADE, SET NULL — với output thật.',
-      content: `
+      content: `${NHAN_LUOT}${G032}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
 <h2>Foreign keys — the database keeps your data honest</h2>
@@ -313,7 +319,7 @@ SELECT * FROM n_s ORDER BY id;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Bốn ràng buộc cột giữ dữ liệu đúng, cột sinh (generated) tính giá trị tự động, và unique tổ hợp có tên.',
-      content: `
+      content: `${NHAN_LUOT}${G033}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.3</span>
 <h2>Constraints — the rules that make bad data impossible</h2>
@@ -473,7 +479,7 @@ DETAIL:  Key (student_id, course_id)=(1, 10) already exists.</div>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Thay đổi bảng đang chạy an toàn với ALTER TABLE, và vì sao chuẩn hoá (mỗi sự thật một chỗ) diệt tận gốc bug dữ liệu lệch.',
-      content: `
+      content: `${NHAN_LUOT}${G034}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.4</span>
 <h2>Schemas change — do it safely, and design so you change less</h2>

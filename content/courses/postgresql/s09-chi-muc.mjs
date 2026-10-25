@@ -8,6 +8,11 @@
  * LUẬT: < > trong code/out → &lt; &gt; (kể cả mũi tên -> của EXPLAIN → -&gt;, @> → @&gt;);
  * & → &amp;; backtick → &#96;; ${ → \${. Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G091 from './giang/pg-09-1.mjs';
+import G092 from './giang/pg-09-2.mjs';
+import G093 from './giang/pg-09-3.mjs';
+import G094 from './giang/pg-09-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,7 +26,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Chỉ mục là một cấu trúc B-tree đã sắp xếp giúp Postgres nhảy thẳng tới dòng cần thay vì đọc cả bảng; cách đọc EXPLAIN ANALYZE để thấy Seq Scan biến thành Index Scan.',
-      content: `
+      content: `${G091}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.1 · Phase 3 — Performance</span>
 <h2>The book index, for your table</h2>
@@ -71,7 +76,7 @@ export default {
   <div class="lz-layer"><span class="lz-k">Internal</span><span class="lz-v">More separator pages, narrowing the range with each level. A tree this size is only 3–4 levels deep.</span></div>
   <div class="lz-layer"><span class="lz-k">Leaf</span><span class="lz-v">Sorted keys + a pointer (TID) to the actual table row. Leaves are linked, so range scans read sideways.</span></div>
 </div>
-<div class="callout ok">A B-tree is fast for <strong>equality</strong> (<code>=</code>), <strong>ranges</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, prefix <code>LIKE 'abc%'</code>, and it can also supply <strong>sorted order</strong> (<code>ORDER BY</code>) for free because its leaves are already sorted. That covers the overwhelming majority of real queries — B-tree is the right default 95% of the time.</div>
+<div class="callout ok">A B-tree is fast for <strong>equality</strong> (<code>=</code>), <strong>ranges</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, prefix <code>LIKE 'abc%'</code> (when the database collation is <code>C</code>, or the index is built with <code>text_pattern_ops</code> — on an <code>en_US.utf8</code> database a plain index is skipped for <code>LIKE</code>, see the slides above), and it can also supply <strong>sorted order</strong> (<code>ORDER BY</code>) for free because its leaves are already sorted. That covers the overwhelming majority of real queries — B-tree is the right default 95% of the time.</div>
 <div class="note-ct">Every primary key you've created since Chapter 3 already has a B-tree index behind it (that's how a PK enforces uniqueness and stays fast). Looking a user up by <code>id</code> has always been an Index Scan; this lesson just makes it visible — and shows you how to give the <em>other</em> columns you filter on the same treatment.</div>
 <div class="pitfall"><p><strong>Trap — adding an index and assuming it is being used.</strong> Creating an index always succeeds; using it is a decision the planner makes independently, and it will refuse for reasons that are usually correct. On a small table a sequential scan is genuinely faster, so the index sits unused until the table grows. A function on the column (<code>WHERE lower(email) = …</code>) makes a plain index on <code>email</code> unusable. Out-of-date statistics can make the planner think a filter matches most rows. The only way to know is to ask: run <code>EXPLAIN</code> (Chapter 10) and look for the index name in the plan. An index nobody uses is not free — it slows every <code>INSERT</code> and <code>UPDATE</code> on that table and occupies disk, so an unused index is a cost with no benefit.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
@@ -129,7 +134,7 @@ export default {
   <div class="lz-layer"><span class="lz-k">Trong (Internal)</span><span class="lz-v">Thêm trang phân tách, thu hẹp khoảng ở mỗi tầng. Cây cỡ này chỉ sâu 3–4 tầng.</span></div>
   <div class="lz-layer"><span class="lz-k">Lá (Leaf)</span><span class="lz-v">Khoá đã sắp + con trỏ (TID) tới dòng bảng thật. Các lá được nối, nên quét khoảng đọc ngang.</span></div>
 </div>
-<div class="callout ok">Một B-tree nhanh cho <strong>bằng</strong> (<code>=</code>), <strong>khoảng</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, <code>LIKE 'abc%'</code> đầu chuỗi, và nó cũng cấp <strong>thứ tự đã sắp</strong> (<code>ORDER BY</code>) miễn phí vì lá của nó đã sắp sẵn. Điều đó bao phủ áp đảo phần lớn truy vấn thật — B-tree là mặc định đúng 95% thời gian.</div>
+<div class="callout ok">Một B-tree nhanh cho <strong>bằng</strong> (<code>=</code>), <strong>khoảng</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, <code>LIKE 'abc%'</code> đầu chuỗi (khi collation của cơ sở dữ liệu là <code>C</code>, hoặc chỉ mục dựng với <code>text_pattern_ops</code> — trên cơ sở dữ liệu <code>en_US.utf8</code> chỉ mục thường bị bỏ qua với <code>LIKE</code>, xem slide phía trên), và nó cũng cấp <strong>thứ tự đã sắp</strong> (<code>ORDER BY</code>) miễn phí vì lá của nó đã sắp sẵn. Điều đó bao phủ áp đảo phần lớn truy vấn thật — B-tree là mặc định đúng 95% thời gian.</div>
 <div class="note-ct">Mọi khoá chính bạn tạo từ Chương 3 đều đã có một chỉ mục B-tree phía sau (đó là cách một PK ép tính duy nhất và giữ nhanh). Tra một user theo <code>id</code> luôn là một Index Scan; bài này chỉ làm nó hiện ra — và chỉ cho bạn cách cho các cột <em>khác</em> mà bạn lọc theo được đối xử y hệt.</div>
 <div class="pitfall"><p><strong>Bẫy — thêm một chỉ mục rồi cho rằng nó đang được dùng.</strong> Tạo chỉ mục thì luôn thành công; DÙNG nó lại là một quyết định planner tự đưa ra, và nó sẽ từ chối vì những lý do thường là đúng. Trên bảng nhỏ, quét tuần tự thật sự nhanh hơn, nên chỉ mục nằm không cho tới khi bảng lớn lên. Một hàm bọc lên cột (<code>WHERE lower(email) = …</code>) làm chỉ mục thường trên <code>email</code> thành vô dụng. Thống kê cũ có thể khiến planner tưởng bộ lọc khớp phần lớn số dòng. Cách duy nhất để biết là ĐI HỎI: chạy <code>EXPLAIN</code> (Chương 10) và tìm tên chỉ mục trong kế hoạch. Một chỉ mục không ai dùng KHÔNG miễn phí — nó làm chậm mọi lệnh <code>INSERT</code> và <code>UPDATE</code> trên bảng đó và chiếm đĩa, nên chỉ mục không dùng là một khoản chi phí không kèm lợi ích nào.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
@@ -147,7 +152,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Index các cột bạn lọc/sắp/join theo; một chỉ mục tổ hợp nhiều cột và vì sao thứ tự cột quyết định; covering index (INCLUDE) cho Index Only Scan không chạm bảng.',
-      content: `
+      content: `${G092}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.2</span>
 <h2>What to index, and multi-column indexes</h2>
@@ -181,7 +186,7 @@ export default {
    Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
    Rows Removed by Filter: 499999
  Execution Time: 37.939 ms</div>
-<p>Straight back to a Seq Scan — the index was no help. <strong>Rule: put the columns you filter by <em>equality</em> first, the range/sort column last.</strong> A composite index on <code>(a, b, c)</code> can serve <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, and <code>WHERE a= AND b= AND c=</code> — always a <em>left prefix</em> — but not <code>WHERE b=</code> alone.</p>
+<p>Straight back to a Seq Scan — the index was no help. (On PostgreSQL 17 the planner may instead walk the <em>whole</em> composite index — an Index Scan that reads all ~1,900 of its pages, no faster; either way there is no seek. See the slides above.) <strong>Rule: put the columns you filter by <em>equality</em> first, the range/sort column last.</strong> A composite index on <code>(a, b, c)</code> can serve <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, and <code>WHERE a= AND b= AND c=</code> — always a <em>left prefix</em> — but not <code>WHERE b=</code> alone.</p>
 
 <h3>Covering index — INCLUDE, and the Index Only Scan</h3>
 <p>If an index contains <em>every column a query needs</em>, Postgres can answer from the index alone and never touch the table — an <strong>Index Only Scan</strong>. Add non-key columns with <code>INCLUDE</code>:</p>
@@ -245,7 +250,7 @@ export default {
    Filter: (created_at = '2024-06-22 14:40:00+00'::timestamp with time zone)
    Rows Removed by Filter: 499999
  Execution Time: 37.939 ms</div>
-<p>Thẳng về một Seq Scan — chỉ mục vô ích. <strong>Luật: đặt các cột bạn lọc theo <em>bằng</em> trước, cột khoảng/sắp cuối.</strong> Một chỉ mục tổ hợp trên <code>(a, b, c)</code> phục vụ được <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, và <code>WHERE a= AND b= AND c=</code> — luôn là một <em>tiền tố trái</em> — nhưng không phục vụ <code>WHERE b=</code> một mình.</p>
+<p>Thẳng về một Seq Scan — chỉ mục vô ích. (Trên PostgreSQL 17 bộ lập kế hoạch có thể đi <em>hết</em> chỉ mục tổ hợp — một Index Scan đọc cả ~1.900 trang chỉ mục, không nhanh hơn; dù cách nào cũng không có bước nhảy. Xem slide phía trên.) <strong>Luật: đặt các cột bạn lọc theo <em>bằng</em> trước, cột khoảng/sắp cuối.</strong> Một chỉ mục tổ hợp trên <code>(a, b, c)</code> phục vụ được <code>WHERE a=</code>, <code>WHERE a= AND b=</code>, và <code>WHERE a= AND b= AND c=</code> — luôn là một <em>tiền tố trái</em> — nhưng không phục vụ <code>WHERE b=</code> một mình.</p>
 
 <h3>Covering index — INCLUDE, và Index Only Scan</h3>
 <p>Nếu một chỉ mục chứa <em>mọi cột một truy vấn cần</em>, Postgres có thể trả lời từ riêng chỉ mục và không bao giờ chạm bảng — một <strong>Index Only Scan</strong>. Thêm các cột không-khoá bằng <code>INCLUDE</code>:</p>
@@ -285,7 +290,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Vì sao một hàm trên cột vô hiệu hoá chỉ mục (và expression index cứu nó); vì sao bộ lập kế hoạch bỏ qua chỉ mục khi truy vấn trả về nhiều dòng (độ chọn lọc); partial index; và chi phí ghi của chỉ mục.',
-      content: `
+      content: `${G093}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.3</span>
 <h2>Why the index you built isn't being used</h2>
@@ -348,7 +353,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">Type mismatch</span><span class="lz-lnote">Comparing a <code>bigint</code> column to a text literal forces a cast on the column side, and the index goes unused. The query still works, which is what makes it hard to spot.</span></div>
 <div class="lz-layer"><span class="lz-lname">Stale statistics</span><span class="lz-lnote">After a bulk load the planner's row estimates can be wildly wrong. <code>ANALYZE</code> costs seconds and fixes plans that looked inexplicable.</span></div>
 </div>
-<div class="pitfall"><p><strong>Trap — a partial index whose <code>WHERE</code> does not match the query's.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> is only usable when the planner can prove your query asks for a subset of that condition. <code>WHERE status = 'active'</code> works. <code>WHERE status = $1</code> with a parameter does not — at plan time the value is unknown, so it cannot prove anything, and the index is skipped. This is why a partial index that works beautifully in psql does nothing from the application, where every query is parameterised. Test partial indexes through the same query path the app uses, not by hand.</p></div>
+<div class="pitfall"><p><strong>Trap — a partial index whose <code>WHERE</code> does not match the query's.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> is only usable when the planner can prove your query asks for a subset of that condition. <code>WHERE status = 'active'</code> works. <code>WHERE status = $1</code> with a parameter may not: a <em>custom</em> plan sees the value and can use the index, but a <em>generic</em> plan (which PostgreSQL may switch a prepared statement to after five executions) is made for any value, cannot prove anything, and skips the index — PostgreSQL 17 shows both in the slides above. This is why a partial index that works beautifully in psql does nothing from the application, where every query is parameterised. Test partial indexes through the same query path the app uses, not by hand.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: expression indexes, selectivity, and partial indexes</span><span class="lc-sub">The Code Lab track makes the planner flip between Seq Scan and index.</span></span>
@@ -417,7 +422,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">Lệch kiểu dữ liệu</span><span class="lz-lnote">So một cột <code>bigint</code> với một hằng chuỗi buộc phải ép kiểu Ở PHÍA CỘT, và chỉ mục thành vô dụng. Truy vấn vẫn chạy, và chính điều đó làm nó khó phát hiện.</span></div>
 <div class="lz-layer"><span class="lz-lname">Thống kê cũ</span><span class="lz-lnote">Sau một đợt nạp hàng loạt, ước lượng số dòng của planner có thể sai bét. <code>ANALYZE</code> tốn vài giây và chữa được những kế hoạch trông không giải thích nổi.</span></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — chỉ mục bộ phận có <code>WHERE</code> không khớp với <code>WHERE</code> của truy vấn.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> chỉ dùng được khi planner CHỨNG MINH ĐƯỢC truy vấn của bạn hỏi một tập con của điều kiện ấy. <code>WHERE status = 'active'</code> thì được. <code>WHERE status = $1</code> với một tham số thì KHÔNG — lúc lập kế hoạch giá trị chưa biết, nên nó không chứng minh được gì, và chỉ mục bị bỏ qua. Đây là lý do một chỉ mục bộ phận chạy đẹp trong psql lại không làm gì cả khi gọi từ ứng dụng, nơi mọi truy vấn đều tham số hoá. Hãy kiểm chỉ mục bộ phận QUA ĐÚNG đường truy vấn mà app dùng, đừng kiểm bằng tay.</p></div>
+<div class="pitfall"><p><strong>Bẫy — chỉ mục bộ phận có <code>WHERE</code> không khớp với <code>WHERE</code> của truy vấn.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> chỉ dùng được khi planner CHỨNG MINH ĐƯỢC truy vấn của bạn hỏi một tập con của điều kiện ấy. <code>WHERE status = 'active'</code> thì được. <code>WHERE status = $1</code> với một tham số thì có thể KHÔNG: kế hoạch <em>custom</em> thấy được giá trị và dùng được chỉ mục, nhưng kế hoạch <em>generic</em> (PostgreSQL có thể chuyển câu lệnh chuẩn bị sẵn sang nó sau năm lần chạy) lập cho mọi giá trị, không chứng minh được gì, và bỏ qua chỉ mục — PostgreSQL 17 cho thấy cả hai trong slide phía trên. Đây là lý do một chỉ mục bộ phận chạy đẹp trong psql lại không làm gì cả khi gọi từ ứng dụng, nơi mọi truy vấn đều tham số hoá. Hãy kiểm chỉ mục bộ phận QUA ĐÚNG đường truy vấn mà app dùng, đừng kiểm bằng tay.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: expression index, độ chọn lọc, và partial index</span><span class="lc-sub">Track Code Lab làm bộ lập kế hoạch lật giữa Seq Scan và chỉ mục.</span></span>
@@ -433,7 +438,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'Ngoài B-tree: GIN cho jsonb/mảng/full-text (@>), BRIN tí hon cho dữ liệu sắp tự nhiên, GiST cho khoảng/hình học, và chỉ mục unique thực thi ràng buộc.',
-      content: `
+      content: `${G094}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.4</span>
 <h2>Beyond B-tree — the right index for the shape of data</h2>

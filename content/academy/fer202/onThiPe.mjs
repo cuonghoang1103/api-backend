@@ -7,7 +7,9 @@
  * Đề 7 = PE7 (SU25 Block 1: rạp phim — Movie List sort/lọc · đặt vé POST + PATCH), Đề 10 = PE10 (SP25 Đề số 1: Shopping System —
  * bảng sản phẩm Rate · giỏ hàng Context · lịch sử đơn).
  * Mỗi bài là loại VIDEO; video gắn qua content/course-videos/front-end-web-development-with-react.mjs (track VI/R2).
- * Thứ tự trong mục: Đề 4 (đã có trước) rồi Đề 1 → 3 → 7 → 10 (đề mới nhất trước). Chữa đề FE ở mục riêng (onThiFe.mjs).
+ * Đề 17 = PE17-SU26PE20060701 (Sneaker Collection, mockapi) — MỘT bài/đề (luật 25/10: mỗi đề PE = một video dài ghép 6 phần fer-pe17-0…5).
+ * Đề 18 = PE18-SP26AttendancePE (Attendance System, json-server) — MỘT bài/đề, ghép 4 phần fer-pe18-0…3.
+ * Thứ tự trong mục: Đề 4 (đã có trước) rồi Đề 17 → 18 → 1 → 3 → 7 → 10 (đề mới nhất trước). Chữa đề FE ở mục riêng (onThiFe.mjs).
  */
 
 const KHOA = '/courses/front-end-web-development-with-react/learn?lessonSlug=';
@@ -121,6 +123,38 @@ export default [
   ),
 
   // ───────── Đề 1 (SP26 · Block 5 · PE) — Company Management, 3 câu 2 + 4 + 4 điểm, 90 phút ─────────
+  v(
+    'fer202-pe17-su26-chua-tron-de',
+    'PE review · Exam 17 (SU26 · 20060701) — Sneaker Collection, full walkthrough in one video|||Ôn thi PE · Đề 17 (SU26 · 20060701) — Sneaker Collection, chữa trọn đề một video',
+    'The newest FER202 practical paper (Summer 2026, paper FER202_PE_20060701, 85 minutes, 10 marks): a mockapi.io resource named after your roll number, a Sneaker Collection card grid and a Sneaker Management page with add / edit / delete and validation. One long video in six parts — every part opens on the original exam image, translated and explained, and all code is a real Vite project built and run (the API is a local mockapi stand-in, labelled on screen).',
+    'Đề thực hành FER202 mới nhất (Summer 2026, mã FER202_PE_20060701, 85 phút, 10 điểm): resource mockapi.io đặt tên theo mã số SV, trang Sneaker Collection dạng lưới thẻ và trang Sneaker Management có thêm / sửa / xoá kèm kiểm tra dữ liệu. Một video dài sáu phần — mỗi phần mở đầu bằng ảnh đề gốc, dịch và giải thích; code là dự án Vite thật đã build và chạy (API là bản giả lập mockapi cục bộ, có ghi rõ trên hình).',
+    [
+      'Part 1 — Reading the paper on the original images: the three "0 points" rules (.env, Bootstrap, unrelated code), the schema, Tasks 1–3, rubric and an 85-minute plan|||Phần 1 — Đọc đề trên ảnh gốc: ba luật "0 điểm" (.env, Bootstrap, code thừa), schema, Task 1–3, rubric và chia 85 phút',
+      'Part 2 — Task 1 (0.5): the mockapi resource and schema, the API URL in .env (VITE_API_URL), Router with the roll-number prefix and the Navbar|||Phần 2 — Task 1 (0,5đ): resource + schema trên mockapi, URL API trong .env (VITE_API_URL), Router có tiền tố mã SV và Navbar',
+      'Part 3 — Task 2 (4): card grid sorted Z→A with localeCompare, price as 189,000 VND (toLocaleString en-US), the Limited Edition badge|||Phần 3 — Task 2 (4đ): lưới thẻ sắp Z→A bằng localeCompare, giá dạng 189,000 VND (toLocaleString en-US), nhãn Limited Edition',
+      'Part 4 — Task 3 (1): management table sorted by id as NUMBERS (mockapi ids are strings: 1, 10, 2 ✗), 70×70 thumbnails, delete with confirm → notify → reload|||Phần 4 — Task 3 (1): bảng quản lý sắp id KIỂU SỐ (id mockapi là chuỗi: 1, 10, 2 ✗), ảnh 70×70, xoá có confirm → báo → tải lại',
+      'Part 5 — Task 3 (2): the Add Sneaker form — seven validation rules (brand ≥ 2 WORDS, price 1…999), switch default false, empty select, POST with Number/Boolean types|||Phần 5 — Task 3 (2): form Add Sneaker — bảy luật kiểm tra (hãng ≥ 2 TỪ, giá 1…999), switch mặc định false, select trống, POST đúng kiểu Number/Boolean',
+      'Part 6 — Task 3 (3): Edit pre-filled with useParams + useEffect, same rules, PUT; 10/10 recap and a pre-submit checklist|||Phần 6 — Task 3 (3): Edit điền sẵn bằng useParams + useEffect, cùng luật, PUT; tổng kết 10/10 và checklist trước khi nộp',
+      'Every common mistake is tried for real: missing VITE_ prefix, no Bootstrap CSS, route without the roll number, string id sort, no reload after delete, price saved as a string, edit form not pre-filled|||Mọi lỗi hay gặp đều thử thật: thiếu tiền tố VITE_, quên CSS Bootstrap, route thiếu mã SV, sắp id như chuỗi, xoá xong không tải lại, giá lưu thành chuỗi, form sửa không điền sẵn',
+    ],
+    [B91, B112, B21, EX8],
+    17,
+  ),
+  v(
+    'fer202-pe18-sp26-chua-tron-de',
+    'PE review · Exam 18 (SP26) — Attendance System, full walkthrough in one video|||Ôn thi PE · Đề 18 (SP26) — Attendance System, chữa trọn đề một video',
+    'A Spring 2026 FER202 practical paper (85 minutes, 10 marks) on json-server: a Subject List page with search and filters, and a bulk attendance page where a lecturer records PRESENT / ABSENT for a whole class under three business rules. One long video in four parts — every part opens on the original exam image, translated and explained; the code is a real Vite project run against the given database.json, placed next to each figure of the paper.',
+    'Đề thực hành FER202 kỳ Spring 2026 (85 phút, 10 điểm) chạy json-server: trang Subject List có tìm kiếm và lọc, và trang điểm danh cả lớp — giảng viên chọn PRESENT / ABSENT cho từng sinh viên theo ba luật nghiệp vụ. Một video dài bốn phần — mỗi phần mở đầu bằng ảnh đề gốc, dịch và giải thích; code là dự án Vite thật chạy với database.json của đề, đặt cạnh từng hình trong đề.',
+    [
+      'Part 1 — Reading the paper on the original images: the three "0 points" rules (json-server :9999, app at localhost:3000 via npm start, exact routes), the data (enrollments with dropped students), both questions, rubric and an 85-minute plan|||Phần 1 — Đọc đề trên ảnh gốc: ba luật "0 điểm" (json-server :9999, app ở localhost:3000 bằng npm start, đúng route), dữ liệu (enrollments có sinh viên đã rút), hai câu, rubric và chia 85 phút',
+      'Part 2 — Question 1 (5): 4-per-row grid (Col md={3}), green/grey badges, case-insensitive startsWith search on the client, status dropdown built with new Set, ?status= kept in the URL with useSearchParams, View Attendance|||Phần 2 — Câu 1 (5đ): lưới 4 thẻ/hàng (Col md={3}), badge xanh/xám, tìm startsWith không phân biệt hoa thường phía client, dropdown trạng thái bằng new Set, ?status= giữ trên URL bằng useSearchParams, nút View Attendance',
+      'Part 3 — Question 2 (1): /subjects/:subjectId/attendance?classId=, class picker, only "enrolled" students, PRESENT/ABSENT radios, today\'s date in LOCAL time (toISOString gives yesterday before 7 am in Vietnam)|||Phần 3 — Câu 2 (1): /subjects/:subjectId/attendance?classId=, chọn lớp, chỉ sinh viên "enrolled", radio PRESENT/ABSENT, ngày hôm nay theo GIỜ MÁY (toISOString ra hôm qua trước 7 giờ sáng ở Việt Nam)',
+      'Part 4 — Question 2 (2): future date, missing status (codes listed, row highlighted), duplicate date (date.slice(0, 10)), one POST per student; 10/10 recap and a pre-submit checklist|||Phần 4 — Câu 2 (2): ngày tương lai, thiếu trạng thái (liệt kê mã, tô dòng), trùng ngày (date.slice(0, 10)), mỗi sinh viên một POST; tổng kết 10/10 và checklist trước khi nộp',
+      'Mistakes tried for real: includes instead of startsWith, status kept only in useState, md={4}, dropped students shown, comparing the full ISO date (duplicates get saved)|||Lỗi thử thật: includes thay startsWith, status chỉ để trong useState, md={4}, hiện cả sinh viên đã rút, so cả chuỗi ISO (bị lưu trùng)',
+    ],
+    [B91, B112, B22, EX8],
+    18,
+  ),
   v(
     'fer202-pe1-0-mo-dau',
     'PE review · Exam 1 (SP26 B5) — reading & analysing the exam|||Ôn thi PE · Đề 1 (SP26 B5) — mở đầu: đọc & phân tích đề',

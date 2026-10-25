@@ -14,7 +14,7 @@ export default {
       "code": "PE18-SP26AttendancePE",
       "title": "FER202 — Practical Exam Đề 18 (SP26 - Attendance System)|||FER202 — Đề thi thực hành số 18 (SP26 - Attendance System)",
       "description": "React PE (WRITE): json-server Attendance System — Subject List with search/filter/query param + Bulk Attendance with business rules, AI-graded.|||Đề PE React (viết): Attendance System trên json-server — danh sách môn có tìm/lọc/tham số URL + điểm danh hàng loạt có luật nghiệp vụ, chấm AI.",
-      "durationMinutes": 90,
+      "durationMinutes": 85,
       "totalPoints": 10,
       "passMark": 5,
       "source": "FUOverflow",

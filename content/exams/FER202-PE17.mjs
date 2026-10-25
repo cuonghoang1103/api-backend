@@ -14,7 +14,7 @@ export default {
       "code": "PE17-SU26PE20060701",
       "title": "FER202 — Practical Exam Đề 17 (SU26 - PE 20060701 - Sneaker Collection)|||FER202 — Đề thi thực hành số 17 (SU26 - PE 20060701 - Sneaker Collection)",
       "description": "React PE (WRITE): mockapi.io resource + Sneaker Collection card grid + Sneaker Management CRUD with validation, AI-graded.|||Đề PE React (viết): resource mockapi.io + lưới thẻ Sneaker Collection + CRUD Sneaker Management có kiểm tra dữ liệu, chấm AI.",
-      "durationMinutes": 90,
+      "durationMinutes": 85,
       "totalPoints": 10,
       "passMark": 5,
       "source": "FUOverflow",

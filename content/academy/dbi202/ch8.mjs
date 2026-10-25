@@ -2803,6 +2803,28 @@ SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
 GO
 -- Case B: would push thuong below 0 — CHECK stops it, the whole transfer rolls back
 EXEC psm_ChuyenThuong 1, 2, 99999;
+SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
+GO
+-- Case C: destination 99 does not exist — the FIRST update (An −300) has already run when THROW 50002 fires
+EXEC psm_ChuyenThuong 1, 99, 300;
+SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
+GO
+-- Case D: the same procedure WITHOUT a transaction — An loses 300 for good
+CREATE PROCEDURE psm_ChuyenThuong_KhongGD @tuNV INT, @denNV INT, @soTien DECIMAL(10,0) AS
+BEGIN
+  BEGIN TRY
+    UPDATE dbo.NhanVienThuong SET thuong = thuong - @soTien WHERE maNV = @tuNV;
+    IF @@ROWCOUNT = 0 THROW 50001, N'Không tìm thấy nhân viên nguồn', 1;
+    UPDATE dbo.NhanVienThuong SET thuong = thuong + @soTien WHERE maNV = @denNV;
+    IF @@ROWCOUNT = 0 THROW 50002, N'Không tìm thấy nhân viên đích', 1;
+    PRINT N'Chuyển thành công';
+  END TRY
+  BEGIN CATCH
+    PRINT N'Chuyển thất bại: ' + ERROR_MESSAGE();
+  END CATCH
+END
+GO
+EXEC psm_ChuyenThuong_KhongGD 1, 99, 300;
 SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;</code></pre>
 <div class="out">(2 rows affected)<br>
 (1 row affected)<br>
@@ -2823,12 +2845,32 @@ Chuyển thành công</div>
 <tr><td>2</td><td>Bình</td><td>1000</td></tr>
 </tbody>
 </table>
+<div class="out">(1 row affected)<br>
+Chuyển thất bại: Không tìm thấy nhân viên đích</div>
+<table>
+<thead><tr><th>maNV</th><th>ten</th><th>thuong</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>An</td><td>1500</td></tr>
+<tr><td>2</td><td>Bình</td><td>1000</td></tr>
+</tbody>
+</table>
+<div class="out">(1 row affected)<br>
+Chuyển thất bại: Không tìm thấy nhân viên đích</div>
+<table>
+<thead><tr><th>maNV</th><th>ten</th><th>thuong</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>An</td><td>1200</td></tr>
+<tr><td>2</td><td>Bình</td><td>1000</td></tr>
+</tbody>
+</table>
 <ul>
 <li>Case A (500 from An to Bình) succeeds: both rows update together, "Chuyển thành công" prints.</li>
-<li>Case B (99999, far more than An has) is refused by <code>ck_nvthuong_thuong CHECK (thuong &gt;= 0)</code> on the SECOND update — but notice the FIRST update (subtracting from An) already ran inside the same transaction. Because everything sits between <code>BEGIN TRANSACTION</code> and the <code>CATCH</code> block's <code>ROLLBACK TRANSACTION</code>, that already-run first update is undone too — the final numbers are unchanged (1500/1000, from after Case A).</li>
+<li>Case B (99999, far more than An has) is refused by <code>ck_nvthuong_thuong CHECK (thuong &gt;= 0)</code> on the FIRST update — An would go negative — so nothing changed at all; the <code>CATCH</code> prints the real CHECK message and the numbers stay 1500/1000.</li>
+<li>Case C is the one that really proves the transaction: employee 99 does not exist, so the FIRST update (An −300) has already run when the second one finds 0 rows and <code>THROW 50002</code> fires. The <code>CATCH</code> block's <code>ROLLBACK TRANSACTION</code> undoes that already-run update — An is still 1500.</li>
+<li>Case D runs the same logic WITHOUT a transaction: same error message, but An is now 1200 — 300 vanished. That is the whole reason for the transaction.</li>
 <li><code>IF XACT_STATE() &lt;&gt; 0 ROLLBACK TRANSACTION</code> is the pattern Microsoft's own docs teach: never blindly <code>COMMIT</code> inside <code>CATCH</code>, and never <code>ROLLBACK</code> when there is nothing open (<code>XACT_STATE() = 0</code>, e.g. an error before any <code>BEGIN TRANSACTION</code> ran).</li>
 </ul>
-<div class="pitfall">A CHECK violation only cancels the ONE statement that broke it, not the whole batch — if this procedure had no explicit transaction, the first UPDATE (An losing 500) would have stayed committed even though the second UPDATE failed. The transaction is what makes the two updates atomic, exactly like slide 9's bank transfer.</div>`,
+<div class="pitfall">A CHECK violation only cancels the ONE statement that broke it, not the whole batch — without an explicit transaction the first UPDATE stays committed even though the second step failed — Case D shows it with real numbers. The transaction is what makes the two updates atomic, exactly like slide 9's bank transfer.</div>`,
     `<h3>🧪 Bài 1 — Giao dịch chuyển thưởng có TRY…CATCH (~15 phút)</h3>
 <p class="nhan">Đề</p>
 <p>Bảng <code>NhanVienThuong(maNV, ten, thuong)</code> lưu tiền thưởng của mỗi nhân viên, không bao giờ được âm. Viết stored procedure <code>psm_ChuyenThuong @tuNV, @denNV, @soTien</code> chuyển <code>@soTien</code> thưởng từ nhân viên này sang nhân viên kia, gói trong một giao dịch với <code>TRY…CATCH</code>: gặp lỗi bất kỳ (kể cả vi phạm <code>CHECK</code>), rollback và in ra thông báo lỗi thật thay vì làm sập nơi gọi nó. Chứng minh CẢ một lần chuyển thành công LẪN một lần chuyển thất bại (chuyển số tiền làm thưởng âm), có dữ liệu thật trước và sau mỗi lần.</p>
@@ -2865,6 +2907,28 @@ SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
 GO
 -- Trường hợp B: sẽ làm thuong âm — CHECK chặn lại, cả giao dịch bị lùi
 EXEC psm_ChuyenThuong 1, 2, 99999;
+SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
+GO
+-- Trường hợp C: không có nhân viên 99 — câu UPDATE ĐẦU (An −300) đã chạy rồi mới THROW 50002
+EXEC psm_ChuyenThuong 1, 99, 300;
+SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;
+GO
+-- Trường hợp D: cùng thủ tục nhưng KHÔNG có giao dịch — An mất 300 thật
+CREATE PROCEDURE psm_ChuyenThuong_KhongGD @tuNV INT, @denNV INT, @soTien DECIMAL(10,0) AS
+BEGIN
+  BEGIN TRY
+    UPDATE dbo.NhanVienThuong SET thuong = thuong - @soTien WHERE maNV = @tuNV;
+    IF @@ROWCOUNT = 0 THROW 50001, N'Không tìm thấy nhân viên nguồn', 1;
+    UPDATE dbo.NhanVienThuong SET thuong = thuong + @soTien WHERE maNV = @denNV;
+    IF @@ROWCOUNT = 0 THROW 50002, N'Không tìm thấy nhân viên đích', 1;
+    PRINT N'Chuyển thành công';
+  END TRY
+  BEGIN CATCH
+    PRINT N'Chuyển thất bại: ' + ERROR_MESSAGE();
+  END CATCH
+END
+GO
+EXEC psm_ChuyenThuong_KhongGD 1, 99, 300;
 SELECT * FROM dbo.NhanVienThuong ORDER BY maNV;</code></pre>
 <div class="out">(2 rows affected)<br>
 (1 row affected)<br>
@@ -2885,12 +2949,32 @@ Chuyển thành công</div>
 <tr><td>2</td><td>Bình</td><td>1000</td></tr>
 </tbody>
 </table>
+<div class="out">(1 row affected)<br>
+Chuyển thất bại: Không tìm thấy nhân viên đích</div>
+<table>
+<thead><tr><th>maNV</th><th>ten</th><th>thuong</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>An</td><td>1500</td></tr>
+<tr><td>2</td><td>Bình</td><td>1000</td></tr>
+</tbody>
+</table>
+<div class="out">(1 row affected)<br>
+Chuyển thất bại: Không tìm thấy nhân viên đích</div>
+<table>
+<thead><tr><th>maNV</th><th>ten</th><th>thuong</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>An</td><td>1200</td></tr>
+<tr><td>2</td><td>Bình</td><td>1000</td></tr>
+</tbody>
+</table>
 <ul>
 <li>Trường hợp A (chuyển 500 từ An sang Bình) thành công: cả hai dòng cùng cập nhật, "Chuyển thành công" được in.</li>
-<li>Trường hợp B (99999, nhiều hơn hẳn số An đang có) bị <code>ck_nvthuong_thuong CHECK (thuong &gt;= 0)</code> từ chối ở câu UPDATE THỨ HAI — nhưng để ý câu UPDATE ĐẦU TIÊN (trừ tiền của An) đã chạy trong cùng giao dịch rồi. Vì mọi thứ nằm giữa <code>BEGIN TRANSACTION</code> và <code>ROLLBACK TRANSACTION</code> trong khối <code>CATCH</code>, câu UPDATE đầu đã chạy đó cũng bị lùi lại — số cuối cùng không đổi (1500/1000, từ sau Trường hợp A).</li>
+<li>Trường hợp B (99999, nhiều hơn hẳn số An đang có) bị <code>ck_nvthuong_thuong CHECK (thuong &gt;= 0)</code> từ chối ngay ở câu UPDATE ĐẦU TIÊN — An sẽ bị âm — nên chưa có gì thay đổi; khối <code>CATCH</code> in đúng câu báo lỗi CHECK và số dư vẫn 1500/1000.</li>
+<li>Trường hợp C mới là phép thử chứng minh giao dịch: không có nhân viên 99, nên câu UPDATE ĐẦU (An −300) đã chạy xong rồi câu thứ hai mới thấy 0 dòng và <code>THROW 50002</code>. <code>ROLLBACK TRANSACTION</code> trong <code>CATCH</code> lùi luôn câu đã chạy đó — An vẫn 1500.</li>
+<li>Trường hợp D chạy cùng lô-gic nhưng KHÔNG có giao dịch: cùng câu báo lỗi, nhưng An giờ chỉ còn 1200 — 300 bốc hơi. Đó chính là lý do phải có giao dịch.</li>
 <li><code>IF XACT_STATE() &lt;&gt; 0 ROLLBACK TRANSACTION</code> là mẫu chính tài liệu Microsoft dạy: đừng bao giờ <code>COMMIT</code> mù quáng trong <code>CATCH</code>, và đừng <code>ROLLBACK</code> khi không có gì đang mở (<code>XACT_STATE() = 0</code>, ví dụ lỗi xảy ra trước khi <code>BEGIN TRANSACTION</code> nào chạy).</li>
 </ul>
-<div class="pitfall">Vi phạm CHECK chỉ huỷ MỘT câu lệnh gây ra nó, không huỷ cả lô — nếu procedure này không có giao dịch rõ ràng, câu UPDATE đầu (An mất 500) đã vẫn được commit dù câu UPDATE thứ hai thất bại. Giao dịch chính là thứ làm hai câu UPDATE trở nên nguyên tử, y hệt ví dụ chuyển tiền ngân hàng ở slide 9.</div>`),
+<div class="pitfall">Vi phạm CHECK chỉ huỷ MỘT câu lệnh gây ra nó, không huỷ cả lô — không có giao dịch rõ ràng thì câu UPDATE đầu vẫn được giữ dù bước thứ hai thất bại — Trường hợp D cho thấy bằng số thật. Giao dịch chính là thứ làm hai câu UPDATE trở nên nguyên tử, y hệt ví dụ chuyển tiền ngân hàng ở slide 9.</div>`),
     bi(`<h3>🧪 Exercise 2 — Choose and prove an index (~15 min)</h3>
 <p class="nhan">Task</p>
 <p>A 30,000-row table <code>NhanVienDemo(id, luong)</code> is queried as <code>SELECT id, luong FROM NhanVienDemo WHERE luong &gt; 24000000 ORDER BY luong</code>. Choose ONE index that helps both the filter AND the sort, and prove it with <code>SET STATISTICS PROFILE</code>.</p>

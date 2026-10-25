@@ -11,7 +11,7 @@
  *     StudentBooking SB1–SB16 trong bài L4.3 đã CHẠY THẬT 24/10/2026 (JDK 21.0.9, profile h2, app vừa khởi động):
  *     mọi Expected khớp, trừ SB7 bước 3 — GET /availability thiếu "to" trả HTTP 500 INTERNAL_ERROR (lỗi thật).
  *   - CT Work project swt301/LAB4 (dựng 24/10): 5 workflow 5.3, cover, record of change, 12 thẻ việc.
- *   - Mã xuất Excel 5.3 của CT Work: src/services/work/fptTests.ts › buildSystemSheets (3 round, Evidence gói vào Note).
+ *   - Mã xuất Excel 5.3 của CT Work: src/services/work/fptTests.ts › buildSystemSheets (từ 24/10: Feature, Round 1–4, cột Evidence F:G — kiểm bằng tệp xuất thật 25/10).
  * Đề Lab 4 KHÔNG có văn bản — mọi chỗ "suy ra" được đánh dấu rõ trong bài L4.1.
  */
 import { bi, books, ansEn, ansVi } from './_slides.mjs';
@@ -131,10 +131,10 @@ ${flow(step('Lab 2 · 5.1', 'Unit', 'one method, mocks, JUnit'), step('Lab 3 · 
 <h3>4 · How many cases, how many rounds</h3>
 <ul>
 <li><strong>Cases</strong> (inferred): the sample has <strong>96 cases in 6 sheets</strong> (14–19 each); the 5.2 sample of the APHL group had 155 in 8. Our target: <strong>14–18 per member, at least 75 for the team</strong>, each workflow with happy paths, error paths, boundary values and role limits.</li>
-<li><strong>Rounds</strong> (not decided): the official 5.3 template has <strong>3</strong>, the ABClinic sample <strong>4</strong>, CT Work's 5.3 sheet currently 3. Plan: Round 1 by the owner → Round 2 re-run of failures <em>by another member</em> (system testing is typically done by <strong>independent testers</strong>, SWT2 slide 77) → Round 3 full regression on the final build; a Round 4 only if the lecturer asks.</li>
+<li><strong>Rounds</strong> (not decided): the official 5.3 template has <strong>3</strong>, the ABClinic sample <strong>4</strong>, CT Work's 5.3 export <strong>4</strong> (it follows the lecturer's sample since 24/10/2026). Plan: Round 1 by the owner → Round 2 re-run of failures <em>by another member</em> (system testing is typically done by <strong>independent testers</strong>, SWT2 slide 77) → Round 3 full regression on the final build; a Round 4 only if the lecturer asks.</li>
 </ul>
 <h3>5 · Evidence</h3>
-<p>A screenshot that proves the case was really run <em>and</em> shows the result. LabFlow Demo has no web front-end yet, so the screen is <strong>Swagger UI</strong> (or Postman): method, URL, request body, HTTP status and the JSON answer must all be visible. For a multi-step case, capture the decisive step or join 2–3 shots.</p>
+<p>A screenshot that proves the case was really run <em>and</em> shows the result. LabFlow Demo has no web front-end yet, so the screen is <strong>Swagger UI</strong> for the public calls (register, verify, login) and <strong>Postman</strong> for every call that needs a token — LabFlow Demo's Swagger UI has no Authorize button: method, URL, request body, HTTP status and the JSON answer must all be visible. For a multi-step case, capture the decisive step or join 2–3 shots.</p>
 <h3>6 · Five members, five roles</h3>
 ${wfTable('en')}
 <p>Each member owns the workflow of one role, so the five sheets together cover every role of the system — exactly the way the sample split ABClinic by patient, receptionist and doctor flows.</p>
@@ -218,10 +218,10 @@ ${flow(step('Lab 2 · 5.1', 'Unit', 'một hàm, mock, JUnit'), step('Lab 3 · 5
 <h3>4 · Bao nhiêu case, mấy round</h3>
 <ul>
 <li><strong>Số case</strong> (suy ra): mẫu có <strong>96 case trong 6 sheet</strong> (14–19 mỗi sheet); mẫu 5.2 của nhóm APHL có 155 case trong 8 sheet. Nhóm mình đặt: <strong>mỗi người 14–18 case, cả nhóm ít nhất 75</strong>, workflow nào cũng có luồng đúng, luồng lỗi, giá trị biên (BVA) và giới hạn vai.</li>
-<li><strong>Số round</strong> (chưa chốt): template 5.3 chính thức có <strong>3 round</strong>, mẫu ABClinic <strong>4 round</strong>, sheet 5.3 trên CT Work hiện có 3. Kế hoạch: Round 1 chủ workflow chạy → Round 2 chạy lại case lỗi <em>do người khác chạy</em> (system test thường do <strong>tester độc lập</strong> làm, SWT2 slide 77) → Round 3 hồi quy (regression — chạy lại toàn bộ) trên bản cuối; chỉ thêm Round 4 nếu cô yêu cầu.</li>
+<li><strong>Số round</strong> (chưa chốt): template 5.3 chính thức có <strong>3 round</strong>, mẫu ABClinic <strong>4 round</strong>, CT Work xuất 5.3 có <strong>4 round</strong> (theo mẫu cô, từ 24/10/2026). Kế hoạch: Round 1 chủ workflow chạy → Round 2 chạy lại case lỗi <em>do người khác chạy</em> (system test thường do <strong>tester độc lập</strong> làm, SWT2 slide 77) → Round 3 hồi quy (regression — chạy lại toàn bộ) trên bản cuối; chỉ thêm Round 4 nếu cô yêu cầu.</li>
 </ul>
 <h3>5 · Evidence (bằng chứng)</h3>
-<p>Là ảnh chụp màn hình chứng minh case đã chạy thật <em>và</em> cho thấy kết quả. LabFlow Demo chưa có giao diện web, nên màn hình dùng để test là <strong>Swagger UI</strong> (trang thử API có sẵn của dự án) hoặc Postman: phải thấy rõ method, URL, body gửi đi, mã HTTP và JSON trả về. Case nhiều bước thì chụp bước quyết định hoặc ghép 2–3 ảnh.</p>
+<p>Là ảnh chụp màn hình chứng minh case đã chạy thật <em>và</em> cho thấy kết quả. LabFlow Demo chưa có giao diện web, nên màn hình dùng để test là <strong>Swagger UI</strong> (trang thử API có sẵn của dự án) cho các lệnh công khai (đăng ký, xác minh, đăng nhập) và <strong>Postman</strong> cho mọi lệnh cần token — Swagger UI của LabFlow Demo không có nút Authorize: phải thấy rõ method, URL, body gửi đi, mã HTTP và JSON trả về. Case nhiều bước thì chụp bước quyết định hoặc ghép 2–3 ảnh.</p>
 <h3>6 · Năm thành viên, năm vai</h3>
 ${wfTable('vi')}
 <p>Mỗi người giữ workflow của một vai, nên năm sheet cộng lại phủ đủ mọi vai của hệ thống — đúng cách tệp mẫu chia ABClinic theo luồng bệnh nhân, lễ tân, bác sĩ.</p>
@@ -286,7 +286,7 @@ ${inner('swt301-lab3-report-templates', '🧾', 'Bài 3.1 — ba template Report
 /* ═══════════════════════ L4.2 — Đọc file mẫu ABClinic ═══════════════════════ */
 const ERRS = [
   ['Cover · E11–E17', '"Create <strong>intergration</strong> test document", "Add intergration test for …"', 'Wrong level (this is the <em>system</em> test report) and misspelt — the file was copied from the group\'s 5.2 report|||Sai cấp (đây là báo cáo <em>system</em> test) và sai chính tả — tệp được chép từ báo cáo 5.2 của chính nhóm đó', '"Create system test document", "Add system test for the … workflow"|||"Create system test document", "Add system test for the … workflow"'],
-  ['Cover · B2', 'Title "TEST REPORT DOCUMENT"', 'That is the 5.2 cover; the 5.3 template says "SYSTEM TEST REPORT DOCUMENT"|||Đó là bìa của 5.2; template 5.3 ghi "SYSTEM TEST REPORT DOCUMENT"', 'Use the 5.3 title (CT Work exports it)|||Dùng tiêu đề của 5.3 (CT Work xuất đúng)'],
+  ['Cover · B2', 'Title "TEST REPORT DOCUMENT"', 'That is the 5.2 cover; the 5.3 template says "SYSTEM TEST REPORT DOCUMENT"|||Đó là bìa của 5.2; template 5.3 ghi "SYSTEM TEST REPORT DOCUMENT"', 'Use the 5.3 template title; CT Work keeps the sample\'s wording, so fix cell B2 if the lecturer follows the template|||Dùng tiêu đề của template 5.3; CT Work giữ đúng chữ của mẫu cô nên nếu cô theo template thì sửa ô B2'],
   ['Cover B4 · Test Cases D3 · Statistics C3', 'Project "Intelligent Support System for Data Warehouse Inquiry using Voice-based SQL Generation", code ISSVSG', 'Every test case is about the ABClinic clinic — the name and code belong to another project|||Mọi test case đều nói về phòng khám ABClinic — tên và mã là của dự án khác', 'One project name everywhere, read by formula from the Cover|||Một tên dự án ở mọi nơi, các sheet đọc bằng công thức từ Cover'],
   ['Cover · F11 and column Reference', '"&lt;List of documents which are refered in this version.&gt;" left in the cell; nothing below', 'Template text never replaced; no document is referenced|||Chữ mẫu chưa thay; không có tài liệu tham chiếu nào', 'SRS / README business rules, docs/api-v1.md, repo commit|||SRS / luật nghiệp vụ README, docs/api-v1.md, commit của repo'],
   ['Cover · Record of change', '7 rows, all version 1.0, last change 15/03 — but Round 4 ran 08–15/04', 'The version never moves and the round updates are not recorded|||Version không bao giờ tăng, các đợt chạy vòng không được ghi', 'Raise the version (1.0 → 1.1…) and add an M row per update|||Tăng version (1.0 → 1.1…) và thêm dòng M mỗi lần cập nhật'],
@@ -349,12 +349,12 @@ const L42 = {
 <div class="table-wrap"><table>
 <thead><tr><th>Point</th><th>Template 5.3 (05.Templates)</th><th>ABClinic sample</th><th>CT Work export 5.3</th></tr></thead>
 <tbody>
-<tr><td>Sheet label</td><td>Workflow</td><td>Feature</td><td>Workflow</td></tr>
-<tr><td>Rounds</td><td>3</td><td>4</td><td>3</td></tr>
-<tr><td>Evidence column</td><td>no</td><td>yes (F:G, all empty)</td><td>no — Evidence written into Note as "Evidence: …"</td></tr>
+<tr><td>Sheet label</td><td>Workflow</td><td>Feature</td><td>Feature (follows the sample)</td></tr>
+<tr><td>Rounds</td><td>3</td><td>4</td><td>4 (H, K, N, Q)</td></tr>
+<tr><td>Evidence column</td><td>no</td><td>yes (F:G, all empty)</td><td>yes (F:G) — image name, link or the embedded screenshot</td></tr>
 <tr><td>Statistics read</td><td>Round 1 (row 6) — a template bug</td><td>Round 4 (row 9)</td><td>the last executed round</td></tr>
-<tr><td>Number of TCs</td><td>COUNTA(A12:A1000) — counts group rows too</td><td>COUNTIF(…,"*&lt;AT*")</td><td>COUNTIF(A11:A1000,"*&lt;SB*")</td></tr>
-<tr><td>Cover title</td><td>SYSTEM TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (5.2)</td><td>SYSTEM TEST REPORT DOCUMENT</td></tr>
+<tr><td>Number of TCs</td><td>COUNTA(A12:A1000) — counts group rows too</td><td>COUNTIF(…,"*&lt;AT*")</td><td>COUNTIF(A12:A1000,"*&lt;SB*")</td></tr>
+<tr><td>Cover title</td><td>SYSTEM TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (5.2)</td><td>TEST REPORT DOCUMENT (as the sample); Statistics: SYSTEM TEST REPORT</td></tr>
 </tbody></table></div>
 <p class="meo">🧠 The sample's cover, statistics and round layout are identical to the 5.2 report of the APHL group (same reviewer, same "intergration" typo): the ABClinic group <em>converted their 5.2 file</em>. That explains most of its mistakes.</p>
 <h3>4 · The mistakes, checked formula by formula</h3>
@@ -396,12 +396,12 @@ ${ansEn('1 · K11:GL95', 'The range runs from column K to column GL and from row
 <div class="table-wrap"><table>
 <thead><tr><th>Điểm</th><th>Template 5.3 (05.Templates)</th><th>Mẫu ABClinic</th><th>CT Work xuất 5.3</th></tr></thead>
 <tbody>
-<tr><td>Nhãn sheet</td><td>Workflow</td><td>Feature</td><td>Workflow</td></tr>
-<tr><td>Số round</td><td>3</td><td>4</td><td>3</td></tr>
-<tr><td>Cột Evidence</td><td>không có</td><td>có (F:G, bỏ trống hết)</td><td>không có cột riêng — Evidence ghi vào Note dạng "Evidence: …"</td></tr>
+<tr><td>Nhãn sheet</td><td>Workflow</td><td>Feature</td><td>Feature (theo mẫu cô)</td></tr>
+<tr><td>Số round</td><td>3</td><td>4</td><td>4 (cột H, K, N, Q)</td></tr>
+<tr><td>Cột Evidence</td><td>không có</td><td>có (F:G, bỏ trống hết)</td><td>có (F:G) — tên ảnh, link hoặc chính ảnh chụp nhúng vào ô</td></tr>
 <tr><td>Thống kê đọc vòng</td><td>Round 1 (dòng 6) — lỗi của template</td><td>Round 4 (dòng 9)</td><td>vòng chạy cuối</td></tr>
-<tr><td>Number of TCs</td><td>COUNTA(A12:A1000) — đếm lây dòng tiêu đề nhóm</td><td>COUNTIF(…,"*&lt;AT*")</td><td>COUNTIF(A11:A1000,"*&lt;SB*")</td></tr>
-<tr><td>Tiêu đề Cover</td><td>SYSTEM TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (của 5.2)</td><td>SYSTEM TEST REPORT DOCUMENT</td></tr>
+<tr><td>Number of TCs</td><td>COUNTA(A12:A1000) — đếm lây dòng tiêu đề nhóm</td><td>COUNTIF(…,"*&lt;AT*")</td><td>COUNTIF(A12:A1000,"*&lt;SB*")</td></tr>
+<tr><td>Tiêu đề Cover</td><td>SYSTEM TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (của 5.2)</td><td>TEST REPORT DOCUMENT (giữ như mẫu cô); sheet Statistics ghi SYSTEM TEST REPORT</td></tr>
 </tbody></table></div>
 <p class="meo">🧠 Bìa, thống kê và bố cục round của tệp mẫu giống hệt báo cáo 5.2 của nhóm APHL (cùng người duyệt, cùng lỗi "intergration"): nhóm ABClinic đã <em>sửa tệp 5.2 của mình thành 5.3</em>. Điều đó giải thích phần lớn lỗi bên dưới.</p>
 <h3>4 · Các lỗi, kiểm từng công thức</h3>
@@ -424,12 +424,12 @@ const SB8_FULL_EN = `<div class="table-wrap"><table>
 <tr><th>Procedure</th><td>1. Signed in as st.sb01@fpt.edu.vn, call <code>POST /api/v1/reservations</code> with header <code>Idempotency-Key: st-sb08-0001</code> and body <code>{"labId":1,"startAt":"&lt;D&gt;T02:00:00Z","endAt":"&lt;D&gt;T04:00:00Z","purpose":"IoT practice for SWT301"}</code>.<br>2. Call <code>GET /api/v1/availability?from=&lt;D&gt;T02:00:00Z&amp;to=&lt;D&gt;T04:00:00Z&amp;capacity=20</code>.<br>3. Call <code>GET /api/v1/reservations/mine</code>.</td></tr>
 <tr><th>Expected Results</th><td>1. HTTP 201; data.labId = 1; data.status = "CONFIRMED"; data.replayed = false; startAt / endAt equal to the request.<br>2. HTTP 200; AL-301 is no longer listed (AL-302 and BE-201 remain).<br>3. HTTP 200; the list contains the booking of step 1 (same id, CONFIRMED, purpose "IoT practice for SWT301").</td></tr>
 <tr><th>Pre-conditions</th><td>1. &lt;SB1&gt; passed.<br>2. AL-301 (id 1, 30 seats, requiresApproval false) is ACTIVE and free on D 09:00–11:00 Vietnam time.</td></tr>
-<tr><th>Evidence</th><td><code>LAB4_SB8_R1.png</code> — Swagger UI showing the 201 answer of step 1</td></tr>
+<tr><th>Evidence</th><td><code>LAB4_SB8_R1.png</code> — Postman showing the 201 answer of step 1</td></tr>
 <tr><th>Note</th><td>30 seats is exactly the BR-06 boundary: 30 does NOT need approval, 31 would.</td></tr>
 </tbody></table></div>`;
 const SB8_FULL_VI = SB8_FULL_EN
   .replace('scenario <em>Book a lab</em>', 'scenario <em>Book a lab</em> (đặt phòng)')
-  .replace('— Swagger UI showing the 201 answer of step 1', '— ảnh Swagger UI thấy câu trả lời 201 của bước 1');
+  .replace('— Postman showing the 201 answer of step 1', '— ảnh Postman thấy câu trả lời 201 của bước 1');
 
 const L43 = {
   title: 'L4.3 — System test cases for LabFlow: the StudentBooking workflow solved (16 cases, run for real)|||L4.3 — Viết case system test cho LabFlow: lời giải workflow StudentBooking (16 case, chạy thật)',
@@ -447,8 +447,9 @@ ${flow(step('Stage 1', 'Create an account and sign in', 'SB1–SB4 · BR-01, BR-
 <li><strong>Test basis</strong> — the business rules BR-01…BR-06, <code>docs/api-v1.md</code> and the error messages of <code>ErrorCode.java</code>. Write the expected result from the rule, never from what the code happens to return.</li>
 <li><strong>Each stage = one scenario row</strong> in the sheet. Inside a stage: the happy path first, then the error paths, then the boundaries.</li>
 </ul>
-<h3>2 · The interface: Swagger UI</h3>
-<p>LabFlow Demo is a back-end: its "screen" is the REST API. Start the app (<code>./mvnw spring-boot:run -Dspring-boot.run.profiles=h2</code>), open <strong>http://localhost:8080/swagger-ui.html</strong>, call <code>POST /api/v1/auth/login</code>, click <strong>Authorize</strong> and paste <code>data.accessToken</code>; every later call carries the token. The verification link of a new account is printed in the terminal that runs the app.</p>
+<h3>2 · The interface: Swagger UI for public calls, Postman for the rest</h3>
+<p>LabFlow Demo is a back-end: its "screen" is the REST API. Start the app (<code>./mvnw spring-boot:run -Dspring-boot.run.profiles=h2</code>) and open <strong>http://localhost:8080/swagger-ui.html</strong>: register, verify e-mail and login (and ping) work there straight away because they need no token. The verification link of a new account is printed in the terminal that runs the app.</p>
+<div class="pitfall co-tieu-de"><strong>LabFlow Demo's Swagger UI has no Authorize button</strong> — the project declares no security scheme (checked on f85c919, 25/10/2026) — so every call that needs a login returns <code>401</code> from Swagger UI. Use <strong>Postman</strong> for those: tab <em>Authorization</em> → <em>Bearer Token</em> → paste <code>data.accessToken</code> from the login step (or the file <code>http/labflow-demo.http</code> with the VS Code REST Client). A step that says "click Authorize" becomes "Postman, Authorization: Bearer &lt;token&gt;".</div>
 <h3>3 · The 16 cases at a glance</h3>
 ${sbTable('en')}
 <p>D = the next Tuesday within 14 days (run on 24/10/2026 ⇒ 2026-10-27). The API speaks UTC: <code>02:00Z</code> = 09:00 in Vietnam.</p>
@@ -504,8 +505,9 @@ ${flow(step('Chặng 1', 'Tạo tài khoản & đăng nhập', 'SB1–SB4 · BR-
 <li><strong>Cơ sở test</strong> — luật nghiệp vụ BR-01…BR-06, <code>docs/api-v1.md</code> và câu thông báo trong <code>ErrorCode.java</code>. Viết kết quả mong đợi từ luật, đừng chép thứ code đang trả về.</li>
 <li><strong>Mỗi chặng = một dòng scenario</strong> trong sheet. Trong một chặng: luồng đúng trước, rồi luồng lỗi, rồi giá trị biên.</li>
 </ul>
-<h3>2 · Giao diện để test: Swagger UI</h3>
-<p>LabFlow Demo là phần back-end: "màn hình" của nó là REST API. Chạy app (<code>./mvnw spring-boot:run -Dspring-boot.run.profiles=h2</code>), mở <strong>http://localhost:8080/swagger-ui.html</strong>, gọi <code>POST /api/v1/auth/login</code>, bấm <strong>Authorize</strong> rồi dán <code>data.accessToken</code>; mọi lệnh sau tự kèm token. Link xác minh của tài khoản mới in ra cửa sổ terminal đang chạy app.</p>
+<h3>2 · Giao diện để test: Swagger UI cho lệnh công khai, Postman cho phần còn lại</h3>
+<p>LabFlow Demo là phần back-end: "màn hình" của nó là REST API. Chạy app (<code>./mvnw spring-boot:run -Dspring-boot.run.profiles=h2</code>), mở <strong>http://localhost:8080/swagger-ui.html</strong>: đăng ký, xác minh email, đăng nhập (và ping) gọi được ngay ở đây vì không cần token. Link xác minh của tài khoản mới in ra cửa sổ terminal đang chạy app.</p>
+<div class="pitfall co-tieu-de"><strong>Swagger UI của LabFlow Demo không có nút Authorize</strong> — dự án chưa khai báo security scheme (kiểm trên bản f85c919 ngày 25/10/2026) — nên mọi lệnh cần đăng nhập gọi từ Swagger UI đều trả <code>401</code>. Các lệnh đó dùng <strong>Postman</strong>: tab <em>Authorization</em> → <em>Bearer Token</em> → dán <code>data.accessToken</code> của bước đăng nhập (hoặc tệp <code>http/labflow-demo.http</code> với VS Code REST Client). Bước nào ghi "click Authorize" thì đổi thành "Postman, Authorization: Bearer &lt;token&gt;".</div>
 <h3>3 · 16 case trong một bảng</h3>
 ${sbTable('vi')}
 <p>D = thứ Ba tới, trong vòng 14 ngày (chạy ngày 24/10/2026 ⇒ 2026-10-27). API dùng giờ UTC: <code>02:00Z</code> = 9 giờ sáng giờ Việt Nam.</p>
@@ -577,7 +579,7 @@ const L44 = {
   title: 'L4.4 — Running the rounds: results, testers, Evidence screenshots, defects and the coverage statistics|||L4.4 — Chạy các round: ghi kết quả, tester, ảnh Evidence, lỗi và thống kê coverage',
   slug: 'swt301-lab4-round-evidence-thong-ke',
   type: 'DOCUMENT',
-  description: 'Cách chạy và ghi từng vòng cho Report 5.3: Passed/Failed/Pending/N/A khác nhau thế nào, ai chạy vòng nào (tester độc lập), chụp và đặt tên Evidence, mở Bug, tính coverage có lời giải (một sheet qua 3 vòng và cả nhóm), và cách thêm Round 4 + cột Evidence vào tệp Excel xuất từ CT Work nếu cô yêu cầu đúng khuôn mẫu ABClinic.',
+  description: 'Cách chạy và ghi từng vòng cho Report 5.3: Passed/Failed/Pending/N/A khác nhau thế nào, ai chạy vòng nào (tester độc lập), chụp và đặt tên Evidence, mở Bug, tính coverage có lời giải (một sheet qua 3 vòng và cả nhóm), và tệp Excel CT Work xuất đã đúng khuôn mẫu ABClinic (4 round + cột Evidence) — kiểm lại thế nào.',
   content: [
     bi(`<span class="eyebrow">Lab 4 · Lesson 4.4 · Rounds · Evidence · Test Statistics</span>
 <h2>A round is a promise: "this is what the system did on that day"</h2>
@@ -600,10 +602,10 @@ ${flow(step('Round 1', 'Owner', 'first full run on a fresh start'), step('Round 
 </ul>
 <h3>3 · Evidence that proves something</h3>
 <ul>
-<li><strong>What is in the picture</strong>: method + URL, request body/header, HTTP status, the response JSON — in Swagger UI all four fit in one screen.</li>
+<li><strong>What is in the picture</strong>: method + URL, request body/header, HTTP status, the response JSON — in Postman (or Swagger UI for public calls) all four fit in one screen.</li>
 <li><strong>Name</strong>: <code>LAB4_&lt;ID&gt;_R&lt;round&gt;.png</code>, e.g. <code>LAB4_SB7_R1.png</code>; several shots: <code>LAB4_SB7_R1_step3.png</code>.</li>
 <li><strong>Where</strong>: the group folder <code>Lab4-Evidence/&lt;Workflow&gt;/</code> or attached to the case's card; the Evidence cell holds the name or the link.</li>
-<li>Never reuse a Round 1 picture for Round 2 — the date in the corner of Swagger UI's answer header gives it away.</li>
+<li>Never reuse a Round 1 picture for Round 2 — the <code>date</code> response header (Swagger UI and Postman both show it) gives it away.</li>
 </ul>
 <h3>4 · Defects</h3>
 <p>For every Failed: a Bug card with the case ID in the title, steps to reproduce (copy the Procedure), expected, actual (the JSON), the screenshot, and the environment (commit, profile). Its key goes into Note. When the developer fixes it, the retest is the next round of the same case.</p>
@@ -618,17 +620,14 @@ ${TEAM_TOTAL}
 <li>Test successful coverage = 72 × 100 / 74 = <strong>97.30 %</strong>.</li>
 <li>The Pending case lowers coverage (it was not executed); the Failed case lowers only the successful coverage; the N/A case is removed from the denominator.</li>
 </ul>
-<h3>7 · If the lecturer wants exactly the sample's layout (4 rounds + an Evidence column)</h3>
-<p>CT Work's 5.3 export follows the official template: 3 rounds, Evidence written in the Note cell. If the lecturer asks for the ABClinic layout, edit the exported file in Excel <strong>after</strong> all results are in CT Work (Excel shifts formulas automatically when you insert columns or rows):</p>
+<h3>7 · The CT Work export already has the sample's layout (4 rounds + an Evidence column)</h3>
+<p>Since 24/10/2026 CT Work exports Report 5.3 the way the lecturer's ABClinic sample looks: label <em>Feature</em>, <strong>Round 1–4</strong> (columns H, K, N, Q, each followed by Test date and Tester), an <strong>Evidence</strong> column F:G (image name, link, or the screenshot itself embedded in the cell) and Note in column T. The counters are written correctly — every round counts its own column over the same range <code>$H$12:$H$1000</code>, <code>$K$12:$K$1000</code>… — so the formula bugs of the sample (lesson 4.2) are not copied. Test Statistics reports the last round that was run.</p>
 <ol>
-<li>In each workflow sheet, right-click column F (Round 1) → <strong>Insert</strong> → header F10 = <em>Evidence</em>; move the "Evidence: …" text of each Note into it.</li>
-<li>Right-click the Note column (now P) → insert 3 columns → headers <em>Round 4 · Test date · Tester</em>.</li>
-<li>Right-click row 9 → <strong>Insert</strong> → A9 = <em>Round 4</em>, B9 = <code>=COUNTIF($P$12:$P$1000,B$5)</code>, copy to C9:E9.</li>
-<li>Copy cell M12 (Round 3) → <strong>Paste Special → Validation</strong> onto P12:P1000, so Round 4 has the same drop-down.</li>
-<li>Test Statistics: point each workflow row to row 9 (B9, C9, D9, E9) so it reports Round 4.</li>
-<li>Check: enter one Failed in Round 4 of a copy and watch B9:E9 and the statistics change.</li>
+<li>Open a workflow sheet: rows 6–9 are Round 1–4; B4 = <code>=COUNTIF(A12:A1000,"*&lt;SB*")</code>.</li>
+<li>In a copy, enter one Failed and one N/A in Round 4 → B9:E9 and the Test Statistics row change with them.</li>
+<li>If the team runs only 3 rounds, leave Round 4 empty — nothing has to be deleted.</li>
 </ol>
-<div class="pitfall co-tieu-de"><strong>Ask first.</strong> The official template has 3 rounds and no Evidence column. Do the manual edit only if the lecturer confirms the 4-round layout (question Q2/Q3 of lesson 4.1).</div>
+<div class="pitfall co-tieu-de"><strong>Still ask.</strong> The official template has 3 rounds and no Evidence column; the sample has 4 and one. CT Work follows the sample. Confirm with the lecturer which one she grades against (question Q2/Q3 of lesson 4.1).</div>
 <h3>Practice</h3>
 <p>A sheet has 15 cases: 11 Passed, 2 Failed, 1 Pending, 1 N/A. Compute both percentages.</p>
 ${ansEn('92.86 % · 78.57 %', 'Denominator 15 − 1 = 14. Coverage = (11 + 2) × 100 / 14 = 92.86 %. Successful coverage = 11 × 100 / 14 = 78.57 %.')}`,
@@ -653,10 +652,10 @@ ${flow(step('Round 1', 'Chủ workflow', 'chạy lần đầu trên dữ liệu 
 </ul>
 <h3>3 · Evidence phải chứng minh được điều gì đó</h3>
 <ul>
-<li><strong>Trong ảnh có gì</strong>: method + URL, body/header gửi đi, mã HTTP, JSON trả về — trong Swagger UI cả bốn nằm gọn một màn hình.</li>
+<li><strong>Trong ảnh có gì</strong>: method + URL, body/header gửi đi, mã HTTP, JSON trả về — trong Postman (hoặc Swagger UI với lệnh công khai) cả bốn nằm gọn một màn hình.</li>
 <li><strong>Tên</strong>: <code>LAB4_&lt;ID&gt;_R&lt;vòng&gt;.png</code>, ví dụ <code>LAB4_SB7_R1.png</code>; nhiều ảnh: <code>LAB4_SB7_R1_step3.png</code>.</li>
 <li><strong>Để đâu</strong>: thư mục chung <code>Lab4-Evidence/&lt;Workflow&gt;/</code> hoặc đính kèm thẻ của case; ô Evidence ghi tên ảnh hoặc link.</li>
-<li>Đừng dùng lại ảnh Round 1 cho Round 2 — dòng ngày giờ trong header câu trả lời của Swagger UI sẽ tố cáo ngay.</li>
+<li>Đừng dùng lại ảnh Round 1 cho Round 2 — header <code>date</code> của câu trả lời (Swagger UI và Postman đều hiện) sẽ tố cáo ngay.</li>
 </ul>
 <h3>4 · Lỗi (defect)</h3>
 <p>Mỗi case Failed: một thẻ Bug có mã case trong tiêu đề, các bước tái hiện (chép Procedure), kết quả mong đợi, kết quả thật (JSON), ảnh, môi trường (commit, profile). Mã thẻ ghi vào Note. Khi lập trình viên sửa xong, lần chạy lại chính là vòng kế tiếp của đúng case đó.</p>
@@ -671,17 +670,14 @@ ${TEAM_TOTAL}
 <li>Test successful coverage = 72 × 100 / 74 = <strong>97,30 %</strong>.</li>
 <li>Case Pending làm giảm coverage (vì chưa chạy); case Failed chỉ làm giảm successful coverage; case N/A bị bỏ khỏi mẫu số.</li>
 </ul>
-<h3>7 · Nếu cô muốn đúng bố cục tệp mẫu (4 round + cột Evidence)</h3>
-<p>Tệp 5.3 do CT Work xuất theo template chính thức: 3 round, Evidence ghi trong ô Note. Nếu cô yêu cầu đúng khuôn ABClinic, sửa tệp đã xuất bằng Excel <strong>sau khi</strong> mọi kết quả đã nằm trên CT Work (Excel tự dời công thức khi chèn cột hoặc dòng):</p>
+<h3>7 · Tệp CT Work xuất đã đúng bố cục tệp mẫu (4 round + cột Evidence)</h3>
+<p>Từ 24/10/2026 CT Work xuất Report 5.3 theo đúng dáng tệp mẫu ABClinic của cô: nhãn <em>Feature</em>, <strong>Round 1–4</strong> (cột H, K, N, Q, mỗi cột kèm Test date và Tester), cột <strong>Evidence</strong> F:G (tên ảnh, link, hoặc chính ảnh chụp nhúng vào ô) và Note ở cột T. Các ô đếm viết đúng — vòng nào đếm cột của vòng đó trên cùng một vùng <code>$H$12:$H$1000</code>, <code>$K$12:$K$1000</code>… — nên không chép lại lỗi công thức của tệp mẫu (bài 4.2). Sheet Test Statistics báo số của vòng chạy cuối.</p>
 <ol>
-<li>Ở mỗi sheet workflow, bấm chuột phải cột F (Round 1) → <strong>Insert</strong> → ô F10 ghi <em>Evidence</em>; chuyển đoạn "Evidence: …" trong Note của từng case sang cột này.</li>
-<li>Bấm chuột phải cột Note (giờ là cột P) → chèn 3 cột → tiêu đề <em>Round 4 · Test date · Tester</em>.</li>
-<li>Bấm chuột phải dòng 9 → <strong>Insert</strong> → A9 ghi <em>Round 4</em>, B9 = <code>=COUNTIF($P$12:$P$1000,B$5)</code>, chép sang C9:E9.</li>
-<li>Copy ô M12 (Round 3) → <strong>Paste Special → Validation</strong> vào P12:P1000 để Round 4 có cùng ô chọn thả xuống.</li>
-<li>Sheet Test Statistics: cho mỗi dòng workflow trỏ tới dòng 9 (B9, C9, D9, E9) để báo Round 4.</li>
-<li>Kiểm: trong một bản sao, nhập thử một Failed ở Round 4 rồi xem B9:E9 và bảng thống kê có đổi theo không.</li>
+<li>Mở một sheet workflow: dòng 6–9 là Round 1–4; B4 = <code>=COUNTIF(A12:A1000,"*&lt;SB*")</code>.</li>
+<li>Trong một bản sao, nhập thử một Failed và một N/A ở Round 4 → B9:E9 và dòng tương ứng ở Test Statistics phải đổi theo.</li>
+<li>Nhóm chỉ chạy 3 vòng thì để trống Round 4 — không cần xoá gì.</li>
 </ol>
-<div class="pitfall co-tieu-de"><strong>Hỏi trước đã.</strong> Template chính thức có 3 round và không có cột Evidence. Chỉ sửa tay khi cô xác nhận muốn bố cục 4 round (câu Q2/Q3 ở bài 4.1).</div>
+<div class="pitfall co-tieu-de"><strong>Vẫn nên hỏi.</strong> Template chính thức có 3 round và không có cột Evidence; tệp mẫu có 4 round và có cột đó. CT Work theo tệp mẫu. Hỏi cô chấm theo bên nào (câu Q2/Q3 ở bài 4.1).</div>
 <h3>Thực hành</h3>
 <p>Một sheet có 15 case: 11 Passed, 2 Failed, 1 Pending, 1 N/A. Tính hai tỉ lệ.</p>
 ${ansVi('92,86 % · 78,57 %', 'Mẫu số 15 − 1 = 14. Coverage = (11 + 2) × 100 / 14 = 92,86 %. Successful coverage = 11 × 100 / 14 = 78,57 %.')}`),
@@ -729,20 +725,21 @@ const L45 = {
 <li>Open Test Statistics: the Sub total covers five rows; recompute one sheet by hand (lesson 4.4).</li>
 <li>Search the file for "&lt;" and "intergration": nothing should be found except the case IDs.</li>
 </ol>
-<h3>5 · Where CT Work still differs from the sample</h3>
+<h3>5 · CT Work compared with the sample (updated 24/10/2026)</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Point</th><th>Sample</th><th>CT Work 5.3 today</th><th>What to do</th></tr></thead>
 <tbody>
-<tr><td>Rounds</td><td>4</td><td>3 (like the template)</td><td>ask the lecturer; if 4 is required, edit the export (lesson 4.4 §7)</td></tr>
-<tr><td>Evidence</td><td>own column</td><td>inside Note ("Evidence: …")</td><td>same</td></tr>
-<tr><td>Sheet label</td><td>Feature</td><td>Workflow (template)</td><td>keep Workflow unless told otherwise</td></tr>
-<tr><td>Statistics document code</td><td>LFD_TestReport5.3_v1.0</td><td>LFD_Test Report_v1.0 (template text)</td><td>align it with the Cover by hand if the lecturer cares</td></tr>
+<tr><td>Rounds</td><td>4</td><td>4 (Round 1–4, like the sample)</td><td>running only 3? leave Round 4 empty</td></tr>
+<tr><td>Evidence</td><td>own column (empty)</td><td>own column F:G — name, link or embedded screenshot</td><td>fill it for every executed case</td></tr>
+<tr><td>Sheet label</td><td>Feature</td><td>Feature</td><td>—</td></tr>
+<tr><td>Statistics document code</td><td>LFD_TestReport5.3_v1.0</td><td>LFD_TestReport5.3_v1.0 (formula, matches the Cover)</td><td>—</td></tr>
+<tr><td>Cover title</td><td>TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (as the sample)</td><td>the template says SYSTEM TEST REPORT DOCUMENT — change B2 if the lecturer follows the template</td></tr>
 </tbody></table></div>
 <h3>6 · The presentation</h3>
 <ol>
 <li>Team lead: one slide "system vs integration", one slide Test Statistics with the two formulas.</li>
 <li>Each member, 1–2 slides: the journey of the workflow, one case in full with its screenshot, the three rounds, one defect.</li>
-<li>Live: Swagger UI open, the app running; each member re-runs one case when the lecturer points at it.</li>
+<li>Live: Postman (and Swagger UI) open, the app running; each member re-runs one case when the lecturer points at it.</li>
 <li>After submitting, move your card to In Review — the timestamp is your on-time proof.</li>
 </ol>
 <h3>Practice (team lead)</h3>
@@ -778,20 +775,21 @@ ${ansEn('≈ 25–35 min', 'About 16 × 2 minutes including screenshots. That is
 <li>Mở Test Statistics: Sub total cộng đủ năm dòng; tự tính tay lại một sheet (bài 4.4).</li>
 <li>Tìm trong tệp chữ "&lt;" và "intergration": ngoài mã case ra thì không được còn gì.</li>
 </ol>
-<h3>5 · CT Work còn khác tệp mẫu ở đâu</h3>
+<h3>5 · CT Work so với tệp mẫu (cập nhật 24/10/2026)</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Điểm</th><th>Tệp mẫu</th><th>CT Work 5.3 hiện tại</th><th>Làm gì</th></tr></thead>
 <tbody>
-<tr><td>Số round</td><td>4</td><td>3 (giống template)</td><td>hỏi cô; nếu bắt buộc 4 thì sửa tệp xuất (bài 4.4 mục 7)</td></tr>
-<tr><td>Evidence</td><td>cột riêng</td><td>nằm trong Note ("Evidence: …")</td><td>như trên</td></tr>
-<tr><td>Nhãn sheet</td><td>Feature</td><td>Workflow (theo template)</td><td>giữ Workflow nếu cô không nói khác</td></tr>
-<tr><td>Mã tài liệu ở Statistics</td><td>LFD_TestReport5.3_v1.0</td><td>LFD_Test Report_v1.0 (chữ của template)</td><td>sửa tay cho khớp Cover nếu cô để ý</td></tr>
+<tr><td>Số round</td><td>4</td><td>4 (Round 1–4, giống mẫu)</td><td>chỉ chạy 3 vòng thì để trống Round 4</td></tr>
+<tr><td>Evidence</td><td>cột riêng (bỏ trống)</td><td>cột riêng F:G — tên ảnh, link hoặc ảnh chụp nhúng vào ô</td><td>điền cho mọi case đã chạy</td></tr>
+<tr><td>Nhãn sheet</td><td>Feature</td><td>Feature</td><td>—</td></tr>
+<tr><td>Mã tài liệu ở Statistics</td><td>LFD_TestReport5.3_v1.0</td><td>LFD_TestReport5.3_v1.0 (công thức, khớp Cover)</td><td>—</td></tr>
+<tr><td>Tiêu đề Cover</td><td>TEST REPORT DOCUMENT</td><td>TEST REPORT DOCUMENT (giữ như mẫu)</td><td>template ghi SYSTEM TEST REPORT DOCUMENT — cô theo template thì sửa ô B2</td></tr>
 </tbody></table></div>
 <h3>6 · Thuyết trình</h3>
 <ol>
 <li>Nhóm trưởng: một slide "system vs integration", một slide Test Statistics với hai công thức.</li>
 <li>Mỗi người 1–2 slide: hành trình của workflow, một case đầy đủ kèm ảnh, ba vòng, một lỗi.</li>
-<li>Chạy trực tiếp: Swagger UI mở sẵn, app đang chạy; cô chỉ case nào thì người đó chạy lại case đó.</li>
+<li>Chạy trực tiếp: Postman (và Swagger UI) mở sẵn, app đang chạy; cô chỉ case nào thì người đó chạy lại case đó.</li>
 <li>Nộp xong thì kéo thẻ sang In Review — mốc giờ đó là bằng chứng nộp đúng hạn.</li>
 </ol>
 <h3>Thực hành (nhóm trưởng)</h3>

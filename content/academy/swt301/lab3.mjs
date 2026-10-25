@@ -856,7 +856,7 @@ ${lfdTable('en')}
 <p>Every case is one flow through at least two components — the API, Spring Security (JWT and <code>@PreAuthorize</code>), the service, the repository, the database — never a unit test in disguise. The detailed flows with endpoints and error codes are on the CT Work page "Module / integration flows &amp; assignment".</p>
 <h3>2 · How the cases are run</h3>
 <ul>
-<li><strong>By hand</strong>: the app with profile h2, Swagger UI or Postman / <code>http/labflow-demo.http</code>.</li>
+<li><strong>By hand</strong>: the app with profile h2, Swagger UI or Postman / <code>http/labflow-demo.http</code>. LabFlow Demo's Swagger UI has <strong>no Authorize button</strong> (no security scheme declared — checked 25/10/2026), so calls that need a token go through Postman (<em>Authorization → Bearer Token</em>) or the .http file.</li>
 <li><strong>Automated</strong>: <code>&lt;Module&gt;IT.java</code> with <code>@SpringBootTest</code> + MockMvc, run by <code>mvnw verify</code>; the class must not be <code>@Transactional</code> (otherwise revokes and rollbacks are invisible and cases pass falsely).</li>
 <li><strong>PostgreSQL-only behaviour</strong> (the no-overlap constraint, concurrent booking): Testcontainers, <code>ConcurrentBookingIT</code> on branch <code>lab3-integration-test</code>.</li>
 </ul>
@@ -882,7 +882,7 @@ ${lfdTable('vi')}
 <p>Mỗi case là một luồng đi qua ít nhất hai thành phần — API, Spring Security (JWT và <code>@PreAuthorize</code>), service, repository, CSDL — không phải unit test đội lốt. Luồng chi tiết kèm endpoint và mã lỗi nằm ở trang CT Work "📌 Danh sách module / luồng tích hợp &amp; phân công 5 người".</p>
 <h3>2 · Chạy case bằng gì</h3>
 <ul>
-<li><strong>Chạy tay</strong>: app profile h2, Swagger UI hoặc Postman / <code>http/labflow-demo.http</code>.</li>
+<li><strong>Chạy tay</strong>: app profile h2, Swagger UI hoặc Postman / <code>http/labflow-demo.http</code>. Swagger UI của LabFlow Demo <strong>không có nút Authorize</strong> (chưa khai báo security scheme — kiểm 25/10/2026), nên lệnh cần token đi qua Postman (<em>Authorization → Bearer Token</em>) hoặc tệp .http.</li>
 <li><strong>Tự động</strong>: lớp <code>&lt;Module&gt;IT.java</code> với <code>@SpringBootTest</code> + MockMvc, chạy bằng <code>mvnw verify</code>; lớp test KHÔNG được đặt <code>@Transactional</code> (nếu có, việc thu hồi token và rollback bị che, case qua giả).</li>
 <li><strong>Hành vi chỉ có trên PostgreSQL</strong> (ràng buộc chống trùng giờ, đặt đồng thời): Testcontainers, lớp <code>ConcurrentBookingIT</code> trên nhánh <code>lab3-integration-test</code>.</li>
 </ul>

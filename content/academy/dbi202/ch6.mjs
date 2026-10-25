@@ -167,7 +167,7 @@ Column name or number of supplied values does not match table definition.</b><br
 <b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'pk_department'. Cannot insert duplicate key in object 'dbo.tblDepartment'. The duplicate key value is (1).</b><br>
 The statement has been terminated.</div>
-<div class="pitfall">Always write the column list in the PE (<code>INSERT INTO tblDepartment(depNum, depName) …</code>): form 1 breaks as soon as the table gets one more column (Msg 213 above), and a value silently lands in the wrong column if you remember the order wrong. Vietnamese text needs <code>N'…'</code>, otherwise it is stored as "Ph?ng".</div>
+<div class="pitfall">Always write the column list in the PE (<code>INSERT INTO tblDepartment(depNum, depName) …</code>): form 1 breaks as soon as the table gets one more column (Msg 213 above), and a value silently lands in the wrong column if you remember the order wrong. Vietnamese text needs <code>N'…'</code>, otherwise every letter outside the old code page becomes "?": 'Phòng Kế Toán' is stored as "Phòng K? Toán" (checked on SQL Server 2022).</div>
 <div class="callout">🐘 <strong>On PostgreSQL</strong> (what you will type at work) INSERT is the same, without the N prefix; several rows go in one VALUES list, and <code>RETURNING</code> shows the inserted rows at once (SQL Server has a similar <code>OUTPUT</code> clause):
 <pre><code class="language-sql">INSERT INTO tblDepartment(depNum, depName)
 VALUES (6, 'Phòng Kế Toán'),                  -- no N prefix
@@ -248,7 +248,7 @@ Column name or number of supplied values does not match table definition.</b><br
 <b>Msg 2627, Level 14, State 1<br>
 Violation of PRIMARY KEY constraint 'pk_department'. Cannot insert duplicate key in object 'dbo.tblDepartment'. The duplicate key value is (1).</b><br>
 The statement has been terminated.</div>
-<div class="pitfall">Trong bài PE luôn ghi danh sách cột (<code>INSERT INTO tblDepartment(depNum, depName) …</code>): dạng 1 hỏng ngay khi bảng có thêm một cột (Msg 213 ở trên), và nhớ sai thứ tự là giá trị lặng lẽ rơi vào nhầm cột. Chữ tiếng Việt phải có <code>N'…'</code>, nếu không sẽ lưu thành "Ph?ng".</div>
+<div class="pitfall">Trong bài PE luôn ghi danh sách cột (<code>INSERT INTO tblDepartment(depNum, depName) …</code>): dạng 1 hỏng ngay khi bảng có thêm một cột (Msg 213 ở trên), và nhớ sai thứ tự là giá trị lặng lẽ rơi vào nhầm cột. Chữ tiếng Việt phải có <code>N'…'</code>, nếu không mọi chữ nằm ngoài bảng mã cũ thành "?": 'Phòng Kế Toán' bị lưu thành "Phòng K? Toán" (chạy thật trên SQL Server 2022).</div>
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong> (thứ bạn sẽ gõ khi đi làm) INSERT viết y vậy, bỏ tiền tố N; nhiều dòng nằm chung một danh sách VALUES, và <code>RETURNING</code> cho xem ngay các dòng vừa chèn (SQL Server có mệnh đề <code>OUTPUT</code> tương tự):
 <pre><code class="language-sql">INSERT INTO tblDepartment(depNum, depName)
 VALUES (6, 'Phòng Kế Toán'),                  -- không có tiền tố N

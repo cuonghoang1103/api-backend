@@ -5,6 +5,12 @@
  * (thuần fan-out, LEFT JOIN đếm 0). Output chạy thật PG 15.4 (schema ch6).
  * LUẬT: < > trong code → &lt; &gt; (>= >); & → &amp;; backtick → &#96;; ${ → \${.
  */
+import { NHAN_LUOT } from './_slides.mjs';
+import G061 from './giang/pg-06-1.mjs';
+import G062 from './giang/pg-06-2.mjs';
+import G063 from './giang/pg-06-3.mjs';
+import G064 from './giang/pg-06-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -18,7 +24,7 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'COUNT, SUM, AVG, MIN, MAX trên cả bảng, cách chúng bỏ qua NULL, và COUNT(*) vs COUNT(cột) vs COUNT(DISTINCT).',
-      content: `
+      content: `${NHAN_LUOT}${G061}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Collapsing rows into a summary</h2>
@@ -120,7 +126,7 @@ FROM note;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Tính hàm tổng hợp riêng cho từng nhóm, gom theo nhiều cột, và luật "cột không tổng hợp phải nằm trong GROUP BY".',
-      content: `
+      content: `${NHAN_LUOT}${G062}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
 <h2>One number per category, not one for everything</h2>
@@ -258,7 +264,7 @@ ORDER BY u.city, n.tag;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Lọc dòng trước khi gom (WHERE) vs lọc nhóm sau khi gom (HAVING), thứ tự thực thi các mệnh đề, và FILTER cho tổng hợp có điều kiện.',
-      content: `
+      content: `${NHAN_LUOT}${G063}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>Filtering before vs after grouping</h2>
@@ -392,7 +398,7 @@ FROM note;</code></pre>
       type: 'LESSON',
       isFreePreview: true,
       description: 'Vì sao count(*) trên một join một-nhiều đếm sai, cách sửa bằng COUNT(DISTINCT), và LEFT JOIN + count(cột) để đếm cả số 0.',
-      content: `
+      content: `${NHAN_LUOT}${G064}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.4</span>
 <h2>The join-plus-aggregate bug — and how to fix it</h2>

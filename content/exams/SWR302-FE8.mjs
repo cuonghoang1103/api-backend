@@ -1274,9 +1274,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            0
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>The elements of risk management are risk assessment and risk control (management planning, resolution, monitoring). Risk avoidance is merely one way of responding to a risk, not an element of the process.</p></div><div class=\"ml-vi\"><p>Các thành phần của quản trị rủi ro là đánh giá rủi ro và kiểm soát rủi ro (lập kế hoạch, xử lý, theo dõi). Né tránh rủi ro chỉ là MỘT cách phản ứng với rủi ro, không phải một thành phần của quy trình.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The three top-level elements of risk management (Wiegers, ch.32, Figure 32-1) are risk assessment, risk avoidance and risk control; risk management planning is a sub-activity inside risk control, not an element of its own. Same question as FE7 and FE23.</p></div><div class=\"ml-vi\"><p>Ba thành phần ở cấp cao nhất của quản lý rủi ro (Wiegers, chương 32, Hình 32-1) là đánh giá rủi ro, né tránh rủi ro và kiểm soát rủi ro; lập kế hoạch quản lý rủi ro là hoạt động con nằm trong kiểm soát rủi ro chứ không phải một thành phần riêng. Cùng câu với đề FE7 và FE23.</p></div>"
         },
         {
           "kind": "MCQ",

@@ -24,6 +24,7 @@ import ch11Extra from './fer202/ch11.mjs';
 import ch12Extra from './fer202/ch12.mjs';
 import advExtra from './fer202/chAdv.mjs';
 import onThiPe from './fer202/onThiPe.mjs';
+import onThiFe from './fer202/onThiFe.mjs';
 import chuaQuiz from './fer202/chuaQuiz.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
@@ -1867,6 +1868,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.pt1 ?? []),
       ],
     },
 
@@ -2680,6 +2682,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
             ],
           },
         },
+        ...(chuaQuiz.a1 ?? []),
       ],
     },
 
@@ -2877,6 +2880,7 @@ npx create-next-app@latest my-app
             ],
           },
         },
+        ...(chuaQuiz.a3 ?? []),
         {
           title: 'Course wrap-up & exam tips|||Tổng kết môn & mẹo thi',
           slug: 'fer202-wrap-up',
@@ -2937,8 +2941,13 @@ npx create-next-app@latest my-app
     },
     {
       title: '📝 PE review — real exams, question by question|||📝 Ôn thi PE — làm đề thật từng câu',
-      description: 'Phần TỰ THÊM: video làm trọn đề thi thực hành thật (đọc đề tiếng Anh → phân tích → setup → code từng dòng → chạy → đối chiếu rubric), mỗi kiến thức chỉ về đúng chương FER202. Bắt đầu với Đề 4 (SP26 B3).',
+      description: 'Phần TỰ THÊM: video làm trọn đề thi thực hành thật (đọc đề tiếng Anh → phân tích → setup → code từng dòng → chạy → đối chiếu rubric), mỗi kiến thức chỉ về đúng chương FER202. Gồm Đề 4 (SP26 B3), Đề 1 + Đề 3 (SP26 B5, hai paper cùng ngày thi), Đề 7 (SU25 B1) và Đề 10 (SP25 Đề số 1). Chữa đề trắc nghiệm FE ở mục riêng ngay sau.',
       lessons: onThiPe,
+    },
+    {
+      title: '📝 FE review — full real exams, all 50 questions|||📝 Ôn thi FE — chữa trọn đề trắc nghiệm thật',
+      description: 'Phần TỰ THÊM: mỗi đề FE thật = MỘT video chữa trọn 50 câu đúng thứ tự phòng thi (ảnh đề gốc → dịch → từ vựng → vì sao từng đáp án sai/đúng → nhãn chương), có mốc từng phần và thống kê chương ra nhiều. Làm lại đề trong Phòng thi → FER202.',
+      lessons: onThiFe,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

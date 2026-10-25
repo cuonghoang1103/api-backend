@@ -6,10 +6,24 @@
  * Luyện Linux/shell → CodeLab track linux-bash; cài đặt WSL/VirtualBox → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/OSG202.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại/mới nằm trong ./osg202/*.mjs
+// (SINH bởi flm-nguon/OSG202/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './osg202/sec0.mjs';
+import ch1 from './osg202/ch1.mjs';
+import ch2 from './osg202/ch2.mjs';
+import ch3 from './osg202/ch3.mjs';
+import ch4 from './osg202/ch4.mjs';
+import ch5 from './osg202/ch5.mjs';
+import ch6 from './osg202/ch6.mjs';
+import n1 from './osg202/n1.mjs';
+import ch9 from './osg202/ch9.mjs';
+
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
     courseCode: 'OSG202',
+    // Seed xếp lại thứ tự bài/section theo FILE (không xoá gì) — bài ⭐ nền + bài 📑 slide đứng đầu chương (gen OSG202).
+    syncOrder: true,
     slug: 'operating-systems',
     title: 'Operating Systems',
     level: 'BEGINNER',
@@ -27,6 +41,8 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, học ra sao, điều kiện qua môn, lộ trình và công cụ.',
       lessons: [
+        /* 🧭 Bài nền tảng bổ sung — ./osg202/sec0.mjs */
+        ...sec0.extrasStart,
         {
           title: '0.1 — About OSG202 & the course map|||0.1 — Giới thiệu OSG202 & bản đồ môn học',
           slug: 'osg202-gioi-thieu',
@@ -282,6 +298,8 @@ export default {
       title: 'Chapter 1 — Introduction|||Chương 1 — Giới thiệu',
       description: 'Hệ điều hành là gì, kernel, system call và cấu trúc OS.',
       lessons: [
+        /* 📑 Học theo từng slide (osg1 1–47) — ./osg202/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — What an OS is: kernel & system calls|||1.1 — OS là gì: kernel & system call',
           slug: 'osg202-1-1-kernel-syscall',
@@ -605,20 +623,14 @@ strace -c ls</pre>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch1.mjs */
+        ch1.practice,
         {
           title: 'Chapter 1 Quiz|||Quiz chương 1',
           slug: 'osg202-quiz-ch1',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: vai trò OS, kernel, system call, user/kernel space.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'The two roles of an OS are resource manager and…|||Hai vai trò của OS là quản lý tài nguyên và…', options: ['a web server|||một máy chủ web', 'an extended machine (hiding hardware)|||một cỗ máy mở rộng (giấu phần cứng)', 'a compiler|||một trình biên dịch', 'a database|||một cơ sở dữ liệu'], correctIndex: 1, points: 1 },
-              { question: 'The core of the OS that runs in privileged mode is the…|||Lõi của OS chạy ở chế độ đặc quyền là…', options: ['shell|||shell', 'kernel|||kernel', 'compiler|||trình biên dịch', 'application|||ứng dụng'], correctIndex: 1, points: 1 },
-              { question: 'A system call is…|||Một system call là…', options: ['a phone call|||một cuộc gọi điện', 'a controlled request from a program to the kernel|||một yêu cầu có kiểm soát từ chương trình tới kernel', 'a hardware interrupt only|||chỉ một ngắt phần cứng', 'a shell command|||một lệnh shell'], correctIndex: 1, points: 1 },
-              { question: 'Why can a user program NOT touch hardware directly?|||Vì sao một chương trình người dùng KHÔNG chạm phần cứng trực tiếp?', options: ['it is too slow|||nó quá chậm', 'for safety/protection — it must go through the kernel|||vì an toàn/bảo vệ — phải qua kernel', 'hardware does not exist|||phần cứng không tồn tại', 'it is illegal to code|||viết code là phi pháp'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch1.quizDescription,
+          quiz: ch1.quiz,
         },
       ],
     },
@@ -627,6 +639,8 @@ strace -c ls</pre>
       title: 'Chapter 2 — Processes & Threads|||Chương 2 — Tiến trình & Luồng',
       description: 'Tiến trình, trạng thái, lập lịch CPU, luồng và đồng bộ hoá.',
       lessons: [
+        /* 📑 Học theo từng slide (osg2 1–74) — ./osg202/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Processes & CPU scheduling|||2.1 — Tiến trình & lập lịch CPU',
           slug: 'osg202-2-1-tien-trinh-lap-lich',
@@ -1271,22 +1285,14 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch2.mjs */
+        ch2.practice,
         {
           title: 'Chapter 2 Quiz|||Quiz chương 2',
           slug: 'osg202-quiz-ch2',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: tiến trình, trạng thái, lập lịch, luồng, đồng bộ.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A process is…|||Một tiến trình là…', options: ['a program file on disk|||một tệp chương trình trên đĩa', 'a program in execution with its own memory & state|||một chương trình đang thực thi có bộ nhớ & trạng thái riêng', 'a CPU core|||một nhân CPU', 'a system call|||một system call'], correctIndex: 1, points: 1 },
-              { question: 'Saving one process\'s registers and loading another\'s is a…|||Lưu thanh ghi của một tiến trình và nạp của tiến trình khác là một…', options: ['system call|||system call', 'context switch|||chuyển ngữ cảnh', 'deadlock|||bế tắc', 'page fault|||lỗi trang'], correctIndex: 1, points: 1 },
-              { question: 'Which scheduling algorithm gives each process a fixed time slice and rotates?|||Thuật toán lập lịch nào cho mỗi tiến trình một lát thời gian cố định và xoay vòng?', options: ['FCFS', 'SJF', 'Round Robin', 'Priority'], correctIndex: 2, points: 1 },
-              { question: 'Threads within a process share…|||Các luồng trong một tiến trình chia sẻ…', options: ['nothing|||không gì', 'the same memory|||cùng bộ nhớ', 'separate disks|||các đĩa riêng', 'different CPUs only|||chỉ các CPU khác nhau'], correctIndex: 1, points: 1 },
-              { question: 'A mutex is used to…|||Một mutex dùng để…', options: ['speed up the CPU|||tăng tốc CPU', 'let only one thread enter a critical section at a time|||cho chỉ một luồng vào vùng tới hạn tại một thời điểm', 'allocate memory|||cấp phát bộ nhớ', 'schedule processes|||lập lịch tiến trình'], correctIndex: 1, points: 1 },
-              { question: 'A race condition happens when…|||Tranh chấp xảy ra khi…', options: ['the CPU runs too fast|||CPU chạy quá nhanh', 'multiple threads update shared data at the same time|||nhiều luồng cập nhật dữ liệu chia sẻ cùng lúc', 'a file is missing|||thiếu một tệp', 'memory is full|||bộ nhớ đầy'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch2.quizDescription,
+          quiz: ch2.quiz,
         },
       ],
     },
@@ -1295,6 +1301,8 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
       title: 'Chapter 3 — Memory Management|||Chương 3 — Quản lý bộ nhớ',
       description: 'Phân trang, bộ nhớ ảo và thay trang.',
       lessons: [
+        /* 📑 Học theo từng slide (osg3 1–56) — ./osg202/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — Paging & virtual memory|||3.1 — Phân trang & bộ nhớ ảo',
           slug: 'osg202-3-1-phan-trang',
@@ -1585,21 +1593,14 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch3.mjs */
+        ch3.practice,
         {
           title: 'Chapter 3 Quiz|||Quiz chương 3',
           slug: 'osg202-quiz-ch3',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: phân trang, bộ nhớ ảo, page fault, LRU, thrashing.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'Paging splits memory into fixed-size…|||Phân trang chia bộ nhớ thành các… cỡ cố định', options: ['files|||tệp', 'pages and frames|||trang và khung', 'processes|||tiến trình', 'sectors|||sector'], correctIndex: 1, points: 1 },
-              { question: 'Virtual memory lets a program use…|||Bộ nhớ ảo cho một chương trình dùng…', options: ['only the exact physical RAM|||chỉ đúng RAM vật lý', 'more memory than physical RAM (via disk swap)|||nhiều bộ nhớ hơn RAM vật lý (qua swap đĩa)', 'no memory|||không bộ nhớ', 'another program\'s memory|||bộ nhớ chương trình khác'], correctIndex: 1, points: 1 },
-              { question: 'A page fault occurs when…|||Lỗi trang xảy ra khi…', options: ['a file is deleted|||một tệp bị xoá', 'an accessed page is not in RAM|||một trang được truy cập không ở RAM', 'the CPU overheats|||CPU quá nóng', 'two threads clash|||hai luồng đụng nhau'], correctIndex: 1, points: 1 },
-              { question: 'The LRU replacement policy evicts the page…|||Chính sách thay trang LRU đẩy trang…', options: ['loaded first|||nạp đầu tiên', 'least recently used|||ít dùng gần đây nhất', 'largest|||lớn nhất', 'most recently used|||dùng gần đây nhất'], correctIndex: 1, points: 1 },
-              { question: 'Thrashing is when the system…|||Thrashing là khi hệ thống…', options: ['runs very fast|||chạy rất nhanh', 'spends all its time swapping pages instead of working|||dành hết thời gian swap trang thay vì làm việc', 'has too much RAM|||có quá nhiều RAM', 'has no processes|||không có tiến trình'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch3.quizDescription,
+          quiz: ch3.quiz,
         },
       ],
     },
@@ -1631,6 +1632,8 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
       title: 'Chapter 4 — File Systems|||Chương 4 — Hệ thống tệp',
       description: 'Tệp, thư mục và cách hệ thống tệp lưu dữ liệu trên đĩa.',
       lessons: [
+        /* 📑 Học theo từng slide (osg4 1–49) — ./osg202/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — Files, directories & implementation|||4.1 — Tệp, thư mục & cài đặt',
           slug: 'osg202-4-1-he-thong-tep',
@@ -1789,20 +1792,14 @@ ln -s file.txt soft.txt   <span class="tok-comment"># một tệp nhỏ mà nộ
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch4.mjs */
+        ch4.practice,
         {
           title: 'Chapter 4 Quiz|||Quiz chương 4',
           slug: 'osg202-quiz-ch4',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: tệp, thư mục, path, cấp phát khối, inode.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A directory is essentially…|||Một thư mục về cơ bản là…', options: ['a CPU register|||một thanh ghi CPU', 'a special file mapping names to files|||một tệp đặc biệt ánh xạ tên tới tệp', 'a process|||một tiến trình', 'a page table|||một bảng trang'], correctIndex: 1, points: 1 },
-              { question: 'The folder structure of a file system forms a…|||Cấu trúc thư mục của một hệ thống tệp tạo thành một…', options: ['graph with cycles|||đồ thị có chu trình', 'tree|||cây', 'queue|||hàng đợi', 'stack|||ngăn xếp'], correctIndex: 1, points: 1 },
-              { question: 'Which allocation method is used by Unix/Linux?|||Phương pháp cấp phát nào Unix/Linux dùng?', options: ['contiguous|||liên tục', 'linked|||liên kết', 'indexed (inode)|||chỉ mục (inode)', 'none|||không cái nào'], correctIndex: 2, points: 1 },
-              { question: 'A file\'s metadata (size, dates, permissions) in Linux is stored in its…|||Metadata của một tệp (kích thước, ngày, quyền) trong Linux được lưu trong…', options: ['inode', 'kernel', 'CPU', 'swap'], correctIndex: 0, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -1811,6 +1808,8 @@ ln -s file.txt soft.txt   <span class="tok-comment"># một tệp nhỏ mà nộ
       title: 'Chapter 5 — Input/Output Systems|||Chương 5 — Hệ thống Nhập/Xuất',
       description: 'Nguyên lý phần cứng & phần mềm I/O và driver thiết bị.',
       lessons: [
+        /* 📑 Học theo từng slide (osg5 1–57) — ./osg202/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — I/O hardware & software|||5.1 — Phần cứng & phần mềm I/O',
           slug: 'osg202-5-1-io',
@@ -1968,20 +1967,14 @@ LOOK và C-LOOK mới là thứ trình điều khiển thật sự cài đặt, 
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch5.mjs */
+        ch5.practice,
         {
           title: 'Chapter 5 Quiz|||Quiz chương 5',
           slug: 'osg202-quiz-ch5',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: driver, lớp I/O, đệm, kỹ thuật truyền.',
-          quiz: {
-            timeLimitSeconds: 240,
-            questions: [
-              { question: 'A device driver is…|||Một driver thiết bị là…', options: ['a person who installs devices|||người lắp thiết bị', 'OS code that knows how to talk to a specific hardware device|||code OS biết cách nói chuyện với một thiết bị phần cứng cụ thể', 'a type of file|||một loại tệp', 'a CPU core|||một nhân CPU'], correctIndex: 1, points: 1 },
-              { question: 'The device-independent I/O layer gives programs a…|||Lớp I/O độc lập thiết bị cho chương trình một…', options: ['slower interface|||giao diện chậm hơn', 'uniform, device-agnostic interface|||giao diện thống nhất, không phụ thuộc thiết bị', 'direct hardware connection|||kết nối phần cứng trực tiếp', 'graph|||một đồ thị'], correctIndex: 1, points: 1 },
-              { question: 'Buffering is used to…|||Đệm (buffering) dùng để…', options: ['delete files|||xoá tệp', 'smooth the speed mismatch between slow devices and fast CPU|||làm mượt chênh lệch tốc độ giữa thiết bị chậm và CPU nhanh', 'schedule processes|||lập lịch tiến trình', 'translate addresses|||dịch địa chỉ'], correctIndex: 1, points: 1 },
-              { question: 'For large transfers, the most efficient technique is…|||Với khối truyền lớn, kỹ thuật hiệu quả nhất là…', options: ['polling|||polling', 'DMA', 'thrashing|||thrashing', 'context switching|||chuyển ngữ cảnh'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch5.quizDescription,
+          quiz: ch5.quiz,
         },
       ],
     },
@@ -1990,6 +1983,8 @@ LOOK và C-LOOK mới là thứ trình điều khiển thật sự cài đặt, 
       title: 'Chapter 6 — Deadlock|||Chương 6 — Bế tắc (Deadlock)',
       description: 'Điều kiện gây deadlock và cách phát hiện, tránh, ngăn.',
       lessons: [
+        /* 📑 Học theo từng slide (osg6 1–31) — ./osg202/ch6.mjs */
+        ...ch6.slides,
         {
           title: '6.1 — Deadlock: conditions & handling|||6.1 — Deadlock: điều kiện & xử lý',
           slug: 'osg202-6-1-deadlock',
@@ -2114,7 +2109,7 @@ Safety: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 
 <div class="pitfall"><b>Unsafe is not the same as deadlocked.</b> An unsafe state merely means a deadlock <em>could</em> occur if every process later demanded its declared maximum. Many unsafe states never deadlock in practice. The Banker's algorithm is conservative on purpose — it refuses requests that would probably have been fine.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lock ordering is the deadlock prevention you will actually use.</b> No production codebase runs the Banker's algorithm; instead it imposes a global order on locks — "always take the account lock before the ledger lock" — which breaks the circular-wait condition by construction. Tools enforce it: Java's <span class="badge">jstack</span> prints detected deadlocks, Go's race detector and <span class="badge">-d lockorder</span> flag them, and Linux's lockdep validates every kernel lock acquisition against the observed order and panics on a violation <em>before</em> a real deadlock happens. <em>Beyond syllabus because the course teaches avoidance mathematics, while the industry solved the problem with a coding convention plus tooling.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lock ordering is the deadlock prevention you will actually use.</b> No production codebase runs the Banker's algorithm; instead it imposes a global order on locks — "always take the account lock before the ledger lock" — which breaks the circular-wait condition by construction. Tools enforce it: Java's <span class="badge">jstack</span> prints detected deadlocks, Go's runtime stops the program only when <em>every</em> goroutine is stuck ("all goroutines are asleep - deadlock!") — its race detector finds data races, not deadlocks — and Linux's lockdep validates every kernel lock acquisition against the observed order and prints a warning ("possible circular locking dependency detected") on a violation <em>before</em> a real deadlock happens. <em>Beyond syllabus because the course teaches avoidance mathematics, while the industry solved the problem with a coding convention plus tooling.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
@@ -2177,25 +2172,18 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
 
 <div class="pitfall"><b>Không an toàn không đồng nghĩa với đã khoá chết.</b> Trạng thái không an toàn chỉ nghĩa là khoá chết <em>có thể</em> xảy ra nếu về sau mọi tiến trình đều đòi đúng mức tối đa đã khai. Rất nhiều trạng thái không an toàn thực tế chẳng bao giờ khoá chết. Thuật toán Nhà băng bảo thủ một cách cố ý — nó từ chối cả những yêu cầu mà lẽ ra vẫn ổn.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy ước thứ tự khoá mới là cách phòng khoá chết bạn thật sự sẽ dùng.</b> Không mã nguồn sản xuất nào chạy thuật toán Nhà băng; thay vào đó người ta áp một thứ tự toàn cục cho các khoá — "luôn lấy khoá tài khoản trước khoá sổ cái" — và điều đó phá điều kiện chờ vòng tròn ngay từ trong thiết kế. Có công cụ áp đặt: <span class="badge">jstack</span> của Java in ra các khoá chết phát hiện được, bộ dò của Go gắn cờ chúng, còn lockdep của Linux kiểm mọi lần lấy khoá trong nhân theo thứ tự đã quan sát và panic ngay khi có vi phạm — <em>trước khi</em> khoá chết thật xảy ra. <em>Ngoài giáo trình vì môn học dạy toán học của phép phòng tránh, còn ngành công nghiệp giải bài toán này bằng một quy ước viết mã cộng công cụ.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy ước thứ tự khoá mới là cách phòng khoá chết bạn thật sự sẽ dùng.</b> Không mã nguồn sản xuất nào chạy thuật toán Nhà băng; thay vào đó người ta áp một thứ tự toàn cục cho các khoá — "luôn lấy khoá tài khoản trước khoá sổ cái" — và điều đó phá điều kiện chờ vòng tròn ngay từ trong thiết kế. Có công cụ áp đặt: <span class="badge">jstack</span> của Java in ra các khoá chết phát hiện được, runtime của Go chỉ dừng chương trình khi <em>mọi</em> goroutine đều kẹt ("all goroutines are asleep - deadlock!") — bộ dò race của Go tìm data race chứ không tìm khoá chết — còn lockdep của Linux kiểm mọi lần lấy khoá trong nhân theo thứ tự đã quan sát và in cảnh báo ("possible circular locking dependency detected") ngay khi có vi phạm — <em>trước khi</em> khoá chết thật xảy ra. <em>Ngoài giáo trình vì môn học dạy toán học của phép phòng tránh, còn ngành công nghiệp giải bài toán này bằng một quy ước viết mã cộng công cụ.</em></div>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/ch6.mjs */
+        ch6.practice,
         {
           title: 'Chapter 6 Quiz|||Quiz chương 6',
           slug: 'osg202-quiz-ch6',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: định nghĩa deadlock, 4 điều kiện, 3 chiến lược.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'A deadlock is when…|||Deadlock là khi…', options: ['the CPU is idle|||CPU rảnh', 'processes each wait for a resource held by another, forever|||các tiến trình mỗi cái chờ tài nguyên do cái khác giữ, mãi mãi', 'memory is full|||bộ nhớ đầy', 'a file is deleted|||một tệp bị xoá'], correctIndex: 1, points: 1 },
-              { question: 'How many Coffman conditions must ALL hold for deadlock?|||Bao nhiêu điều kiện Coffman phải CÙNG đúng để có deadlock?', options: ['2', '3', '4', '5'], correctIndex: 2, points: 1 },
-              { question: 'Which is one of the four deadlock conditions?|||Cái nào là một trong bốn điều kiện deadlock?', options: ['circular wait|||chờ vòng tròn', 'paging|||phân trang', 'buffering|||đệm', 'context switch|||chuyển ngữ cảnh'], correctIndex: 0, points: 1 },
-              { question: 'The Banker\'s Algorithm is a form of deadlock…|||Thuật toán Banker là một dạng… deadlock', options: ['detection|||phát hiện', 'avoidance|||tránh', 'recovery|||phục hồi', 'creation|||tạo ra'], correctIndex: 1, points: 1 },
-              { question: 'A simple rule to prevent circular wait is to…|||Một quy tắc đơn giản để ngăn chờ vòng tròn là…', options: ['use more locks|||dùng nhiều khoá hơn', 'always acquire multiple locks in the same fixed order|||luôn lấy nhiều khoá theo cùng thứ tự cố định', 'never use locks|||không bao giờ dùng khoá', 'add more RAM|||thêm RAM'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch6.quizDescription,
+          quiz: ch6.quiz,
         },
       ],
     },
@@ -2370,6 +2358,8 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
       title: 'Advanced 1 — Virtualization & the cloud (presentation topic)|||Nâng cao 1 — Ảo hoá & đám mây (chủ đề thuyết trình)',
       description: 'Tanenbaum Ch.7 — một trong ba chủ đề thuyết trình chính thức của syllabus (session 27 chọn đề, 55–59 trình bày, 20% điểm): OS mở rộng thành cloud và Docker ra sao.',
       lessons: [
+        /* 📑 Học theo từng slide (osg7 1–21) — ./osg202/n1.mjs */
+        ...n1.slides,
         {
           title: 'N1.1 — From OS concepts to the cloud|||N1.1 — Từ khái niệm OS tới đám mây',
           slug: 'osg202-n1-1-cloud-container',
@@ -2412,7 +2402,17 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./osg202/n1.mjs */
+        n1.practice,
+        /* ❓ Quiz mới — ./osg202/n1.mjs */
+        n1.quizLesson,
       ],
+    },
+    /* Section MỚI — Chương 9 — Security (osg9: 9.A 1–28, 9.B 29–54) — ./osg202/ch9.mjs */
+    {
+      title: "Chapter 9 — Security|||Chương 9 — Bảo mật",
+      description: "Tanenbaum Ch.9: miền bảo vệ, ACL và capability, mô hình bảo mật hình thức, mật mã, xác thực, tấn công khai thác lỗi (tràn bộ đệm, chuỗi định dạng, chèn lệnh), mã độc và các lớp phòng thủ của hệ điều hành — có demo C chạy thật trên Linux.",
+      lessons: ch9.lessons,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

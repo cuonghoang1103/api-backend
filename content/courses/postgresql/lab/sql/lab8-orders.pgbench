@@ -1,0 +1,12 @@
+-- CT Shop · Lab 8 — pgbench script: one customer places one order (2 rows, one transaction)
+-- Lab 8 — kịch bản pgbench: một khách đặt một đơn (2 dòng, một giao dịch)
+--   docker cp lab8-orders.pgbench pglab8-primary:/tmp/
+--   docker exec pglab8-primary pgbench -U postgres -d ctshop -n -c 8 -j 4 -T 30 -P 5 -f /tmp/lab8-orders.pgbench
+\set cid random(1, 290)
+\set pid random(1, 48)
+\set q random(1, 3)
+BEGIN;
+INSERT INTO shop.orders (customer_id, status, note) VALUES (:cid, 'pending', 'pgbench') RETURNING id AS oid \gset
+INSERT INTO shop.order_item (order_id, product_id, qty, unit_price)
+  SELECT :oid, id, :q, price FROM shop.product WHERE id = :pid;
+END;

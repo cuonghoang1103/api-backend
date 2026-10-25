@@ -8,6 +8,10 @@
  *    mọi < > trong code → &lt; &gt;; & trong code → &amp;.
  */
 import G001 from './giang/pg-00-1.mjs';
+import G002 from './giang/pg-00-2.mjs';
+import G003 from './giang/pg-00-3.mjs';
+import G004 from './giang/pg-00-4.mjs';
+import { img } from './_slides.mjs';
 
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
@@ -193,6 +197,49 @@ ${G001}
       isFreePreview: true,
       description: 'Cách học hiệu quả nhất: gõ lại mọi truy vấn, luôn đọc kế hoạch, và "chạy mới biết" thay vì đọc suông.',
       content: `
+${G002}
+<div class="ml-en">
+<h3>Two ways to study this course</h3>
+<p>The course has <strong>17 chapters</strong> (Chapter 17 compares SQL Server, MySQL, PostgreSQL and MongoDB), <strong>9 labs</strong> on one growing project called CT Shop, a quiz per chapter and a final exam (practical PE + multiple-choice FE). You can walk it in two ways — the same labs and the same exam, a different amount of slow reading.</p>
+<div class="anh-slide"><img src="${img('pg-00-2', 12)}" alt="PG 0.2 — the two study paths: full path and shortcut" loading="lazy" width="1280" height="720" /><p class="chu-thich">The two lanes: the <strong>full path</strong> visits every station in order; the <strong>shortcut</strong> leaves after lesson 0.4, goes through lesson 0.5, skims Chapters 1–7 and rejoins at Chapter 8.</p></div>
+<ul>
+<li><strong>Full path — you are new to databases.</strong> Section 0 → Chapter 17 strictly in order, type and run every query, do all 9 labs and every quiz, then the exam. About 2–3 hours per chapter (45–55 hours).</li>
+<li><strong>Shortcut — you already know SQL Server, DBI202 or MySQL.</strong> Read lesson <strong>0.5 “From SQL Server / MySQL to PostgreSQL”</strong> (the lesson right after 0.4), skim Chapters 2–7 (lessons tagged <em>“Know SQL Server? You can skim”</em>), study Chapters 8–17 carefully, and still do <strong>every lab</strong> and the exam.</li>
+</ul>
+<table>
+<tr><th>Chapters</th><th>Topic</th><th>Full path</th><th>Shortcut</th></tr>
+<tr><td>0 – 1</td><td>Intro, psql, why PostgreSQL, ACID</td><td>read all</td><td>read (short — the PostgreSQL process model is new)</td></tr>
+<tr><td>2 – 7</td><td>Types, tables, INSERT/SELECT, JOIN, GROUP BY, subqueries, CTE</td><td>read all + type every query</td><td><strong>skim</strong> — slides and traps</td></tr>
+<tr><td>8</td><td>Window functions</td><td>read all + type</td><td><strong>study</strong></td></tr>
+<tr><td>9 – 10</td><td>Indexes, EXPLAIN, the planner</td><td>read all + type</td><td><strong>study</strong></td></tr>
+<tr><td>11 – 12</td><td>MVCC, locks, functions, triggers, views</td><td>read all + type</td><td><strong>study</strong></td></tr>
+<tr><td>13 – 16</td><td>JSONB, search, pools, backup, replication, Prisma</td><td>read all + type</td><td><strong>study</strong></td></tr>
+<tr><td>17</td><td>SQL Server · MySQL · PostgreSQL · MongoDB</td><td>read all</td><td><strong>study</strong></td></tr>
+<tr><td>Labs 1 – 9</td><td>CT Shop</td><td colspan="2">everyone does all 9 labs</td></tr>
+</table>
+<div class="callout ok">General theory — ERD, normalization, primary and foreign keys — is explained here in a few minutes, just enough to build CT Shop. For the full theory, every such lesson links to the <strong>DBI202 — Introduction to Databases</strong> course (<a href="/courses/introduction-to-databases" target="_blank" rel="noopener">cuongthai.com/courses/introduction-to-databases</a>).</div>
+</div>
+<div class="ml-vi">
+<h3>Hai đường học khoá này</h3>
+<p>Khoá có <strong>17 chương</strong> (Chương 17 so sánh SQL Server, MySQL, PostgreSQL và MongoDB), <strong>9 lab</strong> trên một dự án lớn dần tên CT Shop, một quiz mỗi chương và bài thi cuối khoá (thực hành PE + trắc nghiệm FE). Bạn có thể đi hai cách — cùng các lab, cùng bài thi, chỉ khác lượng đọc chậm.</p>
+<div class="anh-slide"><img src="${img('pg-00-2', 12)}" alt="PG 0.2 — hai đường học: đường đầy đủ và đường tắt" loading="lazy" width="1280" height="720" /><p class="chu-thich">Hai làn đường: <strong>đường đầy đủ</strong> đi qua mọi trạm theo thứ tự; <strong>đường tắt</strong> rẽ ra sau bài 0.4, đi qua bài 0.5, lướt Chương 1–7 và nhập lại ở Chương 8.</p></div>
+<ul>
+<li><strong>Đường đầy đủ — bạn mới tinh về cơ sở dữ liệu.</strong> Mục 0 → Chương 17 đúng thứ tự, tự gõ và chạy mọi truy vấn, làm đủ 9 lab và mọi quiz, rồi thi cuối khoá. Khoảng 2–3 giờ mỗi chương (45–55 giờ).</li>
+<li><strong>Đường tắt — bạn đã học SQL Server, DBI202 hoặc MySQL.</strong> Đọc bài <strong>0.5 “Từ SQL Server / MySQL sang PostgreSQL”</strong> (bài ngay sau 0.4), lướt Chương 2–7 (các bài có nhãn <em>“Đã biết SQL Server? Có thể lướt”</em>), học kỹ Chương 8–17, và vẫn làm <strong>đủ mọi lab</strong> cùng bài thi.</li>
+</ul>
+<table>
+<tr><th>Chương</th><th>Nội dung</th><th>Đường đầy đủ</th><th>Đường tắt</th></tr>
+<tr><td>0 – 1</td><td>Giới thiệu, psql, vì sao PostgreSQL, ACID</td><td>đọc hết</td><td>đọc (ngắn — mô hình tiến trình của PostgreSQL là mới)</td></tr>
+<tr><td>2 – 7</td><td>Kiểu dữ liệu, bảng, INSERT/SELECT, JOIN, GROUP BY, truy vấn con, CTE</td><td>đọc hết + gõ mọi truy vấn</td><td><strong>lướt</strong> — slide và phần bẫy</td></tr>
+<tr><td>8</td><td>Hàm cửa sổ</td><td>đọc hết + gõ</td><td><strong>học kỹ</strong></td></tr>
+<tr><td>9 – 10</td><td>Chỉ mục, EXPLAIN, bộ lập kế hoạch</td><td>đọc hết + gõ</td><td><strong>học kỹ</strong></td></tr>
+<tr><td>11 – 12</td><td>MVCC, khoá, hàm, trigger, view</td><td>đọc hết + gõ</td><td><strong>học kỹ</strong></td></tr>
+<tr><td>13 – 16</td><td>JSONB, tìm kiếm, pool, sao lưu, nhân bản, Prisma</td><td>đọc hết + gõ</td><td><strong>học kỹ</strong></td></tr>
+<tr><td>17</td><td>SQL Server · MySQL · PostgreSQL · MongoDB</td><td>đọc hết</td><td><strong>học kỹ</strong></td></tr>
+<tr><td>Lab 1 – 9</td><td>CT Shop</td><td colspan="2">ai cũng làm đủ 9 lab</td></tr>
+</table>
+<div class="callout ok">Lý thuyết chung — ERD, chuẩn hoá, khoá chính và khoá ngoại — được giảng ở đây trong vài phút, vừa đủ để dựng CT Shop. Muốn học sâu hơn, mỗi bài như vậy có link sang khoá <strong>DBI202 — Nhập môn cơ sở dữ liệu</strong> (<a href="/courses/introduction-to-databases" target="_blank" rel="noopener">cuongthai.com/courses/introduction-to-databases</a>).</div>
+</div>
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>How to actually learn SQL (not just read about it)</h2>
@@ -291,6 +338,7 @@ ${G001}
       isFreePreview: true,
       description: 'Cài PostgreSQL (Docker hoặc bản gốc), kết nối bằng psql, và chạy câu lệnh SQL đầu tiên — với output THẬT.',
       content: `
+${G003}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
 <h2>Installing PostgreSQL and running your first query</h2>
@@ -527,6 +575,7 @@ Indexes:
       isFreePreview: true,
       description: 'Mô hình client-server, SQL là ngôn ngữ khai báo, và dự án "Notes" xuyên suốt khoá — cộng một cái nhìn thoáng qua sự phong phú kiểu dữ liệu của Postgres.',
       content: `
+${G004}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.4</span>
 <h2>The one mental model that makes everything click</h2>

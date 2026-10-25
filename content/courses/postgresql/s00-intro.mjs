@@ -7,6 +7,8 @@
  *  - KHÔNG backtick trần trong content (dùng &#96;); mọi `${` trong code mẫu → \${;
  *    mọi < > trong code → &lt; &gt;; & trong code → &amp;.
  */
+import G001 from './giang/pg-00-1.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -24,6 +26,7 @@ export default {
       video: { url: 'https://youtu.be/S87qY2fubHA', durationSeconds: 0 },
       description: 'PostgreSQL là gì, ai tạo ra và vì sao, nó khác MySQL/SQLite thế nào, dùng ở đâu — và bản đồ 16 chương.',
       content: `
+${G001}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>PostgreSQL — from zero to running it in production</h2>

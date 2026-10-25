@@ -4,10 +4,15 @@
  * MVCC: xmin/xmax/ctid, ảnh chụp, đọc không chặn ghi, dead tuple ·
  * ba mức cô lập Read Committed/Repeatable Read/Serializable + write skew ·
  * khoá dòng, lost update, FOR UPDATE, SKIP LOCKED, deadlock.
- * Output CHẠY THẬT trên PostgreSQL 16.13, hai phiên psql song song thật (FIFO).
+ * Output CHẠY THẬT trên PostgreSQL 16.13 (bản đầu), chạy lại trên 17.11 ngày 25/10/2026 (agent c11) — kết quả y hệt; hai phiên psql song song thật.
  * LUẬT: < > trong code/out → &lt; &gt;; & → &amp;; backtick → &#96;; ${ → \${.
  * Khối .out LUÔN đóng </div> (KHÔNG </code></pre>).
  */
+import G111 from './giang/pg-11-1.mjs';
+import G112 from './giang/pg-11-2.mjs';
+import G113 from './giang/pg-11-3.mjs';
+import G114 from './giang/pg-11-4.mjs';
+
 const REF = '?ref=%2Fcourses%2Fpostgresql%2Flearn&reflabel=PostgreSQL';
 
 export default {
@@ -21,12 +26,12 @@ export default {
       type: 'LESSON',
       isFreePreview: true,
       description: 'BEGIN/COMMIT/ROLLBACK, vì sao mọi câu lệnh trần đã là một giao dịch, trạng thái "aborted" gây bối rối nhất của Postgres, SAVEPOINT để cứu một giao dịch khỏi lỗi, và điều PostgreSQL làm được mà MySQL không: rollback cả DDL.',
-      content: `
+      content: `${G111}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1 · Phase 3 — Performance &amp; internals</span>
 <h2>The unit of "it worked"</h2>
 <p class="lead">Chapter 1 introduced ACID with a bank transfer. This chapter is where you actually learn to control it. A <strong>transaction</strong> is a group of statements that either all take effect or none do — and once you are running a real application with more than one user, almost every bug that is genuinely hard to reproduce lives in this chapter.</p>
-<p>Everything below ran on a live PostgreSQL 16.13 with the <code>accounts</code> table from Chapter 1:</p>
+<p>Everything below ran on a live PostgreSQL 17.11 with the <code>accounts</code> table from Chapter 1:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> accounts (
   id      text <span class="tok-keyword">PRIMARY KEY</span>,
   owner   text <span class="tok-keyword">NOT NULL</span>,
@@ -138,7 +143,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 <span class="eyebrow">Chương 11 · Bài 11.1 · Giai đoạn 3 — Hiệu năng &amp; bên trong</span>
 <h2>Đơn vị của "nó đã chạy xong"</h2>
 <p class="lead">Chương 1 giới thiệu ACID bằng một lệnh chuyển tiền. Chương này mới là chỗ bạn thật sự học cách điều khiển nó. Một <strong>giao dịch (transaction)</strong> là một nhóm câu lệnh mà hoặc tất cả cùng có hiệu lực, hoặc không cái nào cả — và một khi bạn chạy ứng dụng thật với nhiều hơn một người dùng, gần như mọi con bug khó tái hiện đều nằm trong chương này.</p>
-<p>Mọi thứ dưới đây chạy trên một PostgreSQL 16.13 thật, với bảng <code>accounts</code> từ Chương 1:</p>
+<p>Mọi thứ dưới đây chạy trên một PostgreSQL 17.11 thật, với bảng <code>accounts</code> từ Chương 1:</p>
 <pre><code class="language-sql"><span class="tok-keyword">CREATE TABLE</span> accounts (
   id      text <span class="tok-keyword">PRIMARY KEY</span>,
   owner   text <span class="tok-keyword">NOT NULL</span>,
@@ -254,7 +259,7 @@ LINE 1: SELECT count(*) FROM thu_ddl;
       slug: 'postgresql-11-2-mvcc',
       type: 'LESSON',
       description: 'Cơ chế trung tâm của PostgreSQL: mỗi giao dịch thấy một ảnh chụp riêng. xmin/xmax/ctid hiện ra bằng mắt, một UPDATE thật sự là chép-rồi-đánh-dấu-chết, và cái giá phải trả — dead tuple và bloat, đo thật 4,6 MB → 13 MB.',
-      content: `
+      content: `${G112}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.2 · Phase 3 — Performance &amp; internals</span>
 <h2>Everyone gets their own snapshot</h2>
@@ -441,7 +446,7 @@ B│ (1 row)</div>
       slug: 'postgresql-11-3-muc-co-lap',
       type: 'LESSON',
       description: 'Read Committed (mặc định), Repeatable Read và Serializable — mỗi mức chặn đúng bất thường nào, chứng minh bằng hai phiên chạy thật, kể cả write skew mà chỉ Serializable bắt được, và vì sao dùng Serializable thì BẮT BUỘC phải có vòng thử lại.',
-      content: `
+      content: `${G113}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.3 · Phase 3 — Performance &amp; internals</span>
 <h2>How much of the outside world may leak in?</h2>
@@ -672,7 +677,7 @@ B│ HINT:  The transaction might succeed if retried.</div>
       slug: 'postgresql-11-4-khoa-deadlock',
       type: 'LESSON',
       description: 'Người ghi CHẶN người ghi. Lost update đo thật: trừ 10 rồi trừ 20 từ 100 mà còn 80. Hai cách sửa, FOR UPDATE / NOWAIT / lock_timeout, hàng đợi việc bằng SKIP LOCKED, và một deadlock thật do Postgres tự phát hiện.',
-      content: `
+      content: `${G114}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.4 · Phase 3 — Performance &amp; internals</span>
 <h2>Where concurrency actually bites</h2>

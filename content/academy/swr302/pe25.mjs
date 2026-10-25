@@ -8,6 +8,7 @@
  * chương của mọi câu FE gắn sau đó.
  */
 import PE25 from '../../exams/SWR302-PE25.mjs';
+import { lessonPE1, lessonPE2 } from './peSp26.mjs';
 
 const DE = PE25.exams[0];
 const Q = DE.questions; // [Q1 bìa SRS, Q2 context, Q3 use case, Q4 state]
@@ -176,10 +177,10 @@ ${mocHtml(false)}
 ${PHAN.map((p) => p.vi).join('\n')}
 ${PHONG(false)}
 </div>`,
-}];
+}, lessonPE1, lessonPE2];
 
 export default {
   title: '🎬 PE practice — real papers solved on video|||🎬 Luyện thi PE — chữa đề thực hành thật bằng video',
-  description: 'Mục video tự thêm: mỗi đề PE thật là MỘT video chữa trọn có mốc — đọc đề trên ảnh gốc, trang bìa SRS, sơ đồ ngữ cảnh, use case, câu 4 (sơ đồ trạng thái ở SU26, ERD ở SP26). Đề mới nhất trước: PE25 (SU26). Lời giải và rubric khớp Phòng thi.',
+  description: 'Mục video tự thêm: mỗi đề PE thật là MỘT video chữa trọn có mốc — đọc đề trên ảnh gốc, trang bìa SRS, sơ đồ ngữ cảnh, use case, câu 4 (sơ đồ trạng thái ở SU26, ERD ở SP26). Đề mới nhất trước: PE25 (SU26), rồi PE1 + PE2 (SP26, câu 4 là ERD khái niệm). Lời giải và rubric khớp Phòng thi.',
   lessons,
 };

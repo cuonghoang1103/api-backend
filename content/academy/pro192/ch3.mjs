@@ -11,7 +11,7 @@
 
 import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
 
-registerDeck('lab3', { code: 'PRO192 Lab 3', en: 'Lab 3 — CT Library: encapsulation and data rules', vi: 'Lab 3 — CT Library: đóng gói và luật dữ liệu', total: 15, w: 1280, h: 720, ver: 'v2' });
+registerDeck('lab3', { code: 'PRO192 Lab 3', en: 'Lab 3 — CT Library: encapsulation and data rules', vi: 'Lab 3 — CT Library: đóng gói và luật dữ liệu', total: 15, w: 1280, h: 720, ver: 'v3' });
 
 /* ───────── 3.A — 📑 Slide by slide · Encapsulation (3/3): packages, access modifiers, varargs, case study (slides 26–40) ───────── */
 const L_pro8_3 = {
@@ -2138,11 +2138,11 @@ const L_lab3 = {
   content: [
     bi(`<span class="eyebrow">Chapter 3 · Lab 3 · CT Library</span>
 <h2>Lab 3 — encapsulation and data rules</h2>
-<p class="lead">Chapter 3 is about making the compiler — not good intentions — protect your data: packages, access modifiers, private fields, and classes that hide their state. Lab 3 puts that to work on CT Library: stricter rules that refuse nine kinds of bad data, delete without ever reusing an id, a report, and a code review where the LAB211 reviewer's tool finds six mistakes in a teammate's pull request.</p>
+<p class="lead">Chapter 3 is about making the compiler — not good intentions — protect your data: packages, access modifiers, private fields, and classes that hide their state. Lab 3 puts that to work on CT Library: stricter rules that refuse ten wrong values, delete without ever reusing an id, a report, and a code review where the LAB211 reviewer's tool flags six lines in a teammate's pull request.</p>
 <p>The starter is a fresh project: Lab 2 finished, the Lab 3 bodies marked <code>TODO Lab 3.x</code> — and six planted violations. Plan about <strong>3 hours</strong>.</p>`,
     `<span class="eyebrow">Chương 3 · Lab 3 · CT Library</span>
 <h2>Lab 3 — đóng gói và luật dữ liệu</h2>
-<p class="lead">Chương 3 dạy cách để trình biên dịch — chứ không phải thiện chí — bảo vệ dữ liệu: package, access modifier (bổ từ truy cập), trường private, và lớp biết giấu trạng thái của mình. Lab 3 đem điều đó vào CT Library: luật chặt hơn từ chối chín kiểu dữ liệu xấu, xoá mà không bao giờ cấp lại mã, một bản thống kê, và một lần review code nơi công cụ của thầy LAB211 tìm ra sáu lỗi trong pull request của bạn cùng nhóm.</p>
+<p class="lead">Chương 3 dạy cách để trình biên dịch — chứ không phải thiện chí — bảo vệ dữ liệu: package, access modifier (bổ từ truy cập), trường private, và lớp biết giấu trạng thái của mình. Lab 3 đem điều đó vào CT Library: luật chặt hơn từ chối mười giá trị sai, xoá mà không bao giờ cấp lại mã, một bản thống kê, và một lần review code nơi công cụ của thầy LAB211 báo sáu dòng vi phạm trong pull request của bạn cùng nhóm.</p>
 <p>Starter là một dự án sạch: Lab 2 đã xong, thân các hàm của Lab 3 đánh dấu <code>TODO Lab 3.x</code> — cùng sáu vi phạm được cài sẵn. Dành khoảng <strong>3 giờ</strong>.</p>`),
     bi(`<h2>📑 Slide by slide — PRO192 Lab 3 (15 slides)</h2>
 <p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
@@ -2156,10 +2156,10 @@ const L_lab3 = {
 <p>Có hai loại việc. Việc tính năng: luật năm, luật email, xoá, thống kê. Việc review: đọc code mình không viết, tìm chỗ phá luật của nhóm, rồi sửa. Đi làm phần mềm, ngày nào cũng có cả hai.</p>`],
       [2, 'Ticket CTL-3 — "the data is a mess"',
         `<p class="y-chinh">🎯 The ticket is driven by real bad data: a book "published" in 2999, two members with one email — plus a pull request that prints DEBUG lines.</p>
-<p>Done means: PASS 176/176, <code>lint.py</code> goes from 6 violations to 0, nine wrong values are refused each with its own sentence, deleting B003 makes the next book B006, and no year is written in the code — the rule reads the machine's clock.</p>`,
+<p>Done means: PASS 176/176, <code>lint.py</code> goes from 6 violations to 0, ten wrong values are refused each with its own sentence, deleting B003 makes the next book B006, and no year is written in the code — the rule reads the machine's clock.</p>`,
         `<p class="y-chinh">🎯 Ticket sinh ra từ dữ liệu xấu có thật: một cuốn "xuất bản" năm 2999, hai thành viên chung một email — cộng một pull request in ra các dòng DEBUG.</p>
-<p>Xong nghĩa là: PASS 176/176, <code>lint.py</code> từ 6 vi phạm về 0, chín giá trị sai bị từ chối mỗi giá trị một câu riêng, xoá B003 thì cuốn sau là B006, và không có năm nào viết cứng trong code — luật đọc đồng hồ của máy.</p>`],
-      [3, 'Nine wrong values, nine sentences — who checks what',
+<p>Xong nghĩa là: PASS 176/176, <code>lint.py</code> từ 6 vi phạm về 0, mười giá trị sai bị từ chối mỗi giá trị một câu riêng, xoá B003 thì cuốn sau là B006, và không có năm nào viết cứng trong code — luật đọc đồng hồ của máy.</p>`],
+      [3, 'Ten wrong values, ten sentences — who checks what',
         `<p class="y-chinh">🎯 The shape of one value is checked in utils; a rule that needs the data (duplicate, not found) is checked in the repository that owns the data.</p>
 <p>Validation receives only the typed text, so it can say "2999 is in the future" or "this is not an email". It cannot say "this email is already used" — that needs the member list, and utils must never import a repository. So the repository throws, the controller catches, the view prints: the same path as the duplicate ISBN of Lab 1.</p>`,
         `<p class="y-chinh">🎯 Hình dạng của một giá trị kiểm ở utils; luật cần tới dữ liệu (trùng, không có) kiểm ở repository — nơi giữ dữ liệu.</p>

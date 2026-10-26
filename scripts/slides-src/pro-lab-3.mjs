@@ -15,7 +15,7 @@ const R = (a, b) => ra('lab3/solution:run', [a, b]);
 
 export const slides = lamDeck({ chuong: 'Lab 3 · CT Library', bai: '' }, [
   /* 1 */
-  { cover: true, t: 'Lab 3 — CT Library:<br>encapsulation and data rules', sub: 'After Chapter 3 · no book from the future, one email per member, delete without reusing ids, a report — and a code review where lint.py finds six mistakes' },
+  { cover: true, t: 'Lab 3 — CT Library:<br>encapsulation and data rules', sub: 'After Chapter 3 · no book from the future, one email per member, delete without reusing ids, a report — and a code review where lint.py flags six lines' },
 
   /* 2 */
   { t: 'Ticket CTL-3 — "the data is a mess"', body: two(
@@ -24,13 +24,13 @@ export const slides = lamDeck({ chuong: 'Lab 3 · CT Library', bai: '' }, [
     col(`<div class="tcap">Done means</div>`, steps([
       `${c('check.sh')}: <b>PASS 176/176</b> lines`,
       `${c('lint.py')} on your project: from <b>6 violations</b> to <b>0</b>`,
-      '<b>9 wrong values</b> refused, each with its own sentence',
+      '<b>10 wrong values</b> refused, each with its own sentence',
       'B003 deleted ⇒ the next book is <b>B006</b>',
       `no year hard-coded: the rule reads the clock`,
     ]))), giua: true },
 
   /* 3 */
-  { t: 'Nine wrong values, nine sentences — who checks what', body: tbl(['Typed', 'Rule', 'Checked in'], [
+  { t: 'Ten wrong values, ten sentences — who checks what', body: tbl(['Typed', 'Rule', 'Checked in'], [
     [c('2999') + ' (year)', 'not after this year', 'utils · Validation.getYear'],
     [c('1449') + ' (year)', 'from 1450', 'utils · Validation.getYear'],
     [`${c('100')} · ${c('-3')} (copies)`, '0 … 99', 'utils · Validation.getCopies'],

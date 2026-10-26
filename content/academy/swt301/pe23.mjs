@@ -154,7 +154,7 @@ const Q3_C = [
 ];
 
 const PE23 = {
-  title: 'PE-6 — SU26 Paper 1 (PE23) · full walkthrough in one video: calcFee review · checkWithdrawal MC/DC · Interbank Transfer black-box|||PE-6 — Chữa trọn đề SU26 Paper 1 (PE23) trong một video: review calcFee · MC/DC checkWithdrawal · hộp đen Interbank Transfer',
+  title: 'PE-6 — SU26 Paper 1 (PE23) · full walkthrough: calcFee review · checkWithdrawal MC/DC · Interbank Transfer black-box|||PE-6 — Chữa trọn đề SU26 Paper 1 (PE23): review calcFee · MC/DC checkWithdrawal · hộp đen Interbank Transfer',
   slug: 'swt301-pe23-su26-chua-tron-de',
   type: 'VIDEO',
   description: `Chữa trọn đề PE23 (SU26 Paper 1, 85 phút, 3+3+4 điểm) trong một video dài 4 phần có mốc: ${MOC.map(([t, , v]) => `${t} ${v}`).join(' · ')}. Mã câu 1 và câu 2 là mã luyện tập viết theo đặc tả (bản đề nguồn không đọc được ảnh code); mọi kết quả chạy thật.`,

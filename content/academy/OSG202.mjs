@@ -15,12 +15,16 @@ import ch3 from './osg202/ch3.mjs';
 import ch4 from './osg202/ch4.mjs';
 import ch5 from './osg202/ch5.mjs';
 import ch6 from './osg202/ch6.mjs';
+import ch7 from './osg202/ch7.mjs';
 import n1 from './osg202/n1.mjs';
 import ch8 from './osg202/ch8.mjs';
 import ch9 from './osg202/ch9.mjs';
 import ch10 from './osg202/ch10.mjs';
 import ch11 from './osg202/ch11.mjs';
 import ch12 from './osg202/ch12.mjs';
+import pt1 from './osg202/pt1.mjs';
+import pt2 from './osg202/pt2.mjs';
+import fe from './osg202/fe.mjs';
 import cs from './osg202/chuyen-sau.mjs';
 
 export default {
@@ -1618,17 +1622,8 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
           title: 'Progress Test 1 — review|||Progress Test 1 — ôn tổng hợp',
           slug: 'osg202-progress-test-1',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 1–3.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'A program requests a kernel service through a…|||Một chương trình yêu cầu dịch vụ kernel qua một…', options: ['context switch|||chuyển ngữ cảnh', 'system call|||system call', 'page fault|||lỗi trang', 'thread|||luồng'], correctIndex: 1, points: 1 },
-              { question: 'Round Robin scheduling is known for being…|||Lập lịch Round Robin nổi tiếng vì…', options: ['unfair|||không công bằng', 'fair and responsive (time slices)|||công bằng và phản hồi nhanh (lát thời gian)', 'the slowest|||chậm nhất', 'only for batch jobs|||chỉ cho job theo lô'], correctIndex: 1, points: 1 },
-              { question: 'The critical section problem is solved with…|||Bài toán vùng tới hạn được giải bằng…', options: ['more CPUs|||nhiều CPU hơn', 'synchronization (mutex/semaphore)|||đồng bộ hoá (mutex/semaphore)', 'paging|||phân trang', 'faster disks|||đĩa nhanh hơn'], correctIndex: 1, points: 1 },
-              { question: 'The MMU translates…|||MMU dịch…', options: ['files to folders|||tệp sang thư mục', 'virtual addresses to physical addresses|||địa chỉ ảo sang địa chỉ vật lý', 'code to machine language|||code sang mã máy', 'threads to processes|||luồng sang tiến trình'], correctIndex: 1, points: 1 },
-              { question: 'Constant swapping that halts real work is called…|||Swap liên tục làm ngưng việc thật gọi là…', options: ['a race condition|||tranh chấp', 'thrashing|||thrashing', 'a context switch|||chuyển ngữ cảnh', 'a deadlock|||bế tắc'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: pt1.quizDescription,
+          quiz: pt1.quiz,
         },
       ],
     },
@@ -2201,17 +2196,8 @@ Kiểm: P1 Need (0,2,0) ≤ (2,3,0) ✓ → Work (5,3,2) · P3 (0,1,1) ≤ (5,3,
           title: 'Progress Test 2 — review|||Progress Test 2 — ôn tổng hợp',
           slug: 'osg202-progress-test-2',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 4–6.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'The file system turns raw disk blocks into…|||Hệ thống tệp biến các khối đĩa thô thành…', options: ['processes|||tiến trình', 'named files and folders|||tệp và thư mục có tên', 'CPU registers|||thanh ghi CPU', 'network packets|||gói tin mạng'], correctIndex: 1, points: 1 },
-              { question: 'Unix/Linux stores a file\'s metadata and block pointers in an…|||Unix/Linux lưu metadata và con trỏ khối của tệp trong một…', options: ['inode', 'thread|||luồng', 'page|||trang', 'buffer|||bộ đệm'], correctIndex: 0, points: 1 },
-              { question: 'The I/O layer that gives programs a uniform interface is…|||Lớp I/O cho chương trình một giao diện thống nhất là…', options: ['the device driver|||driver thiết bị', 'device-independent I/O software|||phần mềm I/O độc lập thiết bị', 'the hardware|||phần cứng', 'the scheduler|||bộ lập lịch'], correctIndex: 1, points: 1 },
-              { question: 'Deadlock requires how many conditions to hold simultaneously?|||Deadlock cần bao nhiêu điều kiện đúng đồng thời?', options: ['1', '2', '4', '10'], correctIndex: 2, points: 1 },
-              { question: 'Detecting a deadlock then killing a process is deadlock…|||Phát hiện một deadlock rồi kill một tiến trình là… deadlock', options: ['prevention|||ngăn ngừa', 'avoidance|||tránh', 'detection & recovery|||phát hiện & phục hồi', 'creation|||tạo ra'], correctIndex: 2, points: 1 },
-            ],
-          },
+          description: pt2.quizDescription,
+          quiz: pt2.quiz,
         },
       ],
     },
@@ -2340,21 +2326,14 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 </div>
 `,
         },
+        /* 🧩 Bài bổ sung — ./osg202/ch7.mjs */
+        ...ch7.extrasEnd,
         {
           title: 'Chapter 7 Quiz|||Quiz chương 7',
           slug: 'osg202-quiz-ch7',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: lệnh Linux, quyền, shell script, pipe.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Which command lists files with details?|||Lệnh nào liệt kê tệp kèm chi tiết?', options: ['pwd', 'ls -l', 'cd', 'rm'], correctIndex: 1, points: 1 },
-              { question: 'Which command shows running processes?|||Lệnh nào hiện các tiến trình đang chạy?', options: ['mkdir', 'ps aux', 'touch', 'cp'], correctIndex: 1, points: 1 },
-              { question: 'chmod is used to…|||chmod dùng để…', options: ['change file permissions|||đổi quyền tệp', 'delete files|||xoá tệp', 'list processes|||liệt kê tiến trình', 'show memory|||hiện bộ nhớ'], correctIndex: 0, points: 1 },
-              { question: 'The pipe | in the shell…|||Ống pipe | trong shell…', options: ['deletes output|||xoá đầu ra', 'feeds one command\'s output into the next|||đưa đầu ra của lệnh này vào lệnh kế', 'creates a file|||tạo một tệp', 'ends a script|||kết thúc một script'], correctIndex: 1, points: 1 },
-              { question: 'The Unix philosophy is to…|||Triết lý Unix là…', options: ['build one giant program|||xây một chương trình khổng lồ', 'make small tools that do one thing well and combine them|||làm công cụ nhỏ làm tốt một việc rồi kết hợp', 'avoid the command line|||tránh dòng lệnh', 'never automate|||không bao giờ tự động hoá'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch7.quizDescription,
+          quiz: ch7.quiz,
         },
       ],
     },
@@ -2536,7 +2515,9 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
               }
             ]
           }
-        }
+        },
+        /* 🧩 Bài bổ sung — ./osg202/fe.mjs */
+        ...fe.extrasEnd,
       ]
     },
   ],

@@ -17,22 +17,22 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Giới thiệu ── */
-    "postgresql-0-1-gioi-thieu": { yt: "n2Fluyr3lbc", credit: "Fireship — PostgreSQL in 100 Seconds" },
+    "postgresql-0-1-gioi-thieu": { yt: "n2Fluyr3lbc", credit: "Fireship — PostgreSQL in 100 Seconds", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/00-gioi-thieu-huong-dan-hoc/00-01-ve-khoa-hoc-ban-do-8058ab94.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-0-2-cach-hoc": { yt: "qw--VYLpxG4", credit: "freeCodeCamp.org — Learn PostgreSQL Tutorial - Full Course for Beginners" },
     "postgresql-0-3-cai-dat": { yt: "dVBNUow7GOE", credit: "LinkedIn Learning — SQL Tutorial - INSTALLING POSTGRES and Using PSQL" },
     "postgresql-0-4-mo-hinh": { yt: "Q56kljmIN14", credit: "Hussein Nasser — PostgreSQL Internal Architecture Explained" },
     /* ── Chương 1 — Vì sao PostgreSQL ── */
-    "postgresql-1-1-mo-hinh-quan-he": { yt: "C3icLzBtg8I", credit: "Christopher Kalodikis — Relational Database Relationships (Updated)" },
-    "postgresql-1-2-acid": { yt: "GAe5oB742dw", credit: "ByteByteGo — ACID Properties in Databases With Examples" },
+    "postgresql-1-1-mo-hinh-quan-he": { yt: "C3icLzBtg8I", credit: "Christopher Kalodikis — Relational Database Relationships (Updated)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/01-vi-sao-postgresql/01-01-mo-hinh-quan-he-tron-602acc4f.mp4' }, defaultVideoTrack: 'VI'},
+    "postgresql-1-2-acid": { yt: "GAe5oB742dw", credit: "ByteByteGo — ACID Properties in Databases With Examples", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/01-vi-sao-postgresql/01-03-acid-bon-bao-dam-tron-764aa607.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-1-3-vs-alternatives": { yt: "btjBNKP49Rk", credit: "IBM Technology — PostgreSQL vs MySQL" },
     "postgresql-1-4-dong-chay-truy-van": { yt: "-Xmrrj7U34g", credit: "Data with Baraa — SQL Order of Execution (Visually Explained) | Understanding How Queries Run" },
     /* ── Chương 2 — Kiểu dữ liệu ── */
-    "postgresql-2-1-so": { yt: "-UY-_fbEm4k", credit: "Knowledge 360 — Data Types in PostgreSQL: Numeric Data Types || PostgreSQL Full Playlist Video #43" },
-    "postgresql-2-2-text": { yt: "zRP2GFTkCYg", credit: "The Code Blooded — Character Data Type : Understanding Char, Varchar, and Text | Mastering  PostgreSQL" },
+    "postgresql-2-1-so": { yt: "-UY-_fbEm4k", credit: "Knowledge 360 — Data Types in PostgreSQL: Numeric Data Types || PostgreSQL Full Playlist Video #43", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/02-kieu-du-lieu/02-01-so-nguyen-id-tu-dong-tron-73c52651.mp4' }, defaultVideoTrack: 'VI'},
+    "postgresql-2-2-text": { yt: "zRP2GFTkCYg", credit: "The Code Blooded — Character Data Type : Understanding Char, Varchar, and Text | Mastering  PostgreSQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/02-kieu-du-lieu/02-03-chu-text-varchar-char-tron-14d8238f.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-2-3-ngay-gio": { yt: "4lJgIStK7NU", credit: "Knowledge 360 — Data Types in PostgreSQL: Date/Time/Interval Data Types || PostgreSQL Full Playlist #49" },
     "postgresql-2-4-uuid-enum-array-jsonb": { yt: "nxeUiRz4G-M", credit: "Supabase — How to store and query JSON data in Postgres" },
     /* ── Chương 3 — Bảng, ràng buộc & thiết kế lược đồ ── */
-    "postgresql-3-1-khoa-chinh": { yt: "DJ054rHGhRw", credit: "BeardedDev — SQL Tutorial - PRIMARY KEY CONSTRAINTS" },
+    "postgresql-3-1-khoa-chinh": { yt: "DJ054rHGhRw", credit: "BeardedDev — SQL Tutorial - PRIMARY KEY CONSTRAINTS", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/postgresql/03-bang-rang-buoc-luoc-do/03-01-khoa-chinh-tron-e90b1b97.mp4' }, defaultVideoTrack: 'VI'},
     "postgresql-3-2-khoa-ngoai": { yt: "kwoB-w3FtYw", credit: "Programming Is Fun — 🔑 SQL Foreign Key Explained | Beginner’s Guide with Examples" },
     "postgresql-3-3-rang-buoc-cot": { yt: "KdGUpf_OTPA", credit: "Analytics Hub — Mastering SQL Constraints: Primary Key, Unique Key, Not Null, and CHECK Explained!" },
     "postgresql-3-4-alter-chuan-hoa": { yt: "FzVCGou8SMA", credit: "DbSchema Database Designer — Learn Database Normalization Fast | 1NF, 2NF, 3NF Explained Simply (2025)" },

@@ -132,7 +132,7 @@ export const slides = lamDeck({ chuong: 'Lab 6 · CT Library', bai: '' }, [
   /* 13 */
   { t: 'TODO 6.5a — InvalidInputException keeps the cause', body:
     j(boChuThich(de(ham(`${S}/utils/Validation.java`, 'parseInteger')))) +
-    two(col(j(['public InvalidInputException(String message,', '        Throwable cause) {', '    super(message, cause);', '}'].join('\n')), P(raJava('lab6/LabNguyenNhanGoc'), { title: 'real output — LabNguyenNhanGoc', sm: true })),
+    two(col(j(['public InvalidInputException(String message,', '        Throwable cause) {', '    super(message, cause);   // Exception(String, Throwable)', '}'].join('\n')), P(raJava('lab6/LabNguyenNhanGoc'), { title: 'real output — LabNguyenNhanGoc', sm: true })),
       box('Two readers', `<p style="margin:0">${c('getMessage()')} for the user, ${c('getCause()')} for the developer. ${c('Main')} now catches exactly ${c('InvalidInputException')} — a bug elsewhere is no longer disguised as "type again".</p>`, 'ok')) },
 
   /* 14 */

@@ -2,13 +2,16 @@
  * PRO192 · Chương 7 — mảng đối tượng (pro12).
  * Bài 📑 học theo từng slide: pro12 (tmp_12.pptx, slide 1–16).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch7.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-7-danh-sach-doi-tuong.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch7).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab7', { code: 'PRO192 Lab 7', en: 'Lab 7 — CT Library: working with a list of objects', vi: 'Lab 7 — CT Library: thao tác trên danh sách đối tượng', total: 17, w: 1280, h: 720 });
 
 /* ───────── 7.A — 📑 Slide by slide · Array of Objects: the antique-shop case study, add/find/update/remove/sort (slides 1–16) ───────── */
 const L_pro12_1 = {
@@ -3246,6 +3249,1839 @@ integer average without the cast: 380</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 7 — 🏗️ CT Library: a list of objects (multi-criteria search, 4-key sort, array of objects, remove while looping) ───────── */
+const L_lab7 = {
+  title: 'Lab 7 — 🏗️ CT Library: a list of objects (multi-criteria search, 4-key sort, array of objects, remove while looping)|||Lab 7 — 🏗️ CT Library: danh sách đối tượng (tìm nhiều tiêu chí, sắp 4 khoá, mảng đối tượng, xoá khi đang duyệt)',
+  slug: 'pro192-lab-7-danh-sach-doi-tuong',
+  type: 'VIDEO',
+  description: 'Lab 7 của dự án CT Library (sau Chương 7), chuẩn review LAB211: tìm nâng cao theo ba tiêu chí cùng lúc (loại, khoảng năm, từ khoá), sắp theo bốn khoá bằng một Comparator (loại, năm mới trước, tên, mã), thống kê theo loại bằng một mảng đối tượng (mảng mới tạo chỉ gồm null — phải new từng ô), và dọn kho: xoá tại vị trí mọi tài liệu hết bản không ai mượn, duyệt ngược để không bỏ sót ô nào. Lọc theo loại bằng đa hình (getItemType) thay cho chuỗi instanceof. Kèm bốn bẫy chạy thật: for-each + remove ném ConcurrentModificationException, duyệt xuôi bỏ sót ô ngay sau ô vừa xoá, so chuỗi bằng == khiến mọi mã "không có", quên new từng ô của mảng đối tượng ra NullPointerException. Starter + đáp án tải về, bộ chấm kiểu PE 297 dòng, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 7 · Lab 7 · CT Library</span>
+<h2>Lab 7 — working with a list of objects</h2>
+<p class="lead">Chapter 7 built an antique shop on an array of objects: add, find, remove at a position by shifting the cells, list one type only, sort by price. Lab 7 does the same jobs on CT Library's shelf — and meets the two problems every real list meets: removing while you walk through it, and comparing on more than one key.</p>
+<p>The starter is a fresh project: Lab 6 finished, the new menu options (12–14) and their data classes given, five TODOs marked <code>TODO Lab 7.x</code>. Plan about <strong>2.5 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 7 · Lab 7 · CT Library</span>
+<h2>Lab 7 — thao tác trên danh sách đối tượng</h2>
+<p class="lead">Chương 7 dựng một cửa hàng đồ cổ trên một mảng đối tượng: thêm, tìm, xoá tại một vị trí bằng cách dời các ô, liệt kê một loại, sắp theo giá. Lab 7 làm đúng những việc đó trên kệ sách của CT Library — và gặp hai vấn đề mà danh sách thật nào cũng gặp: xoá ngay khi đang duyệt, và so sánh theo nhiều hơn một khoá.</p>
+<p>Starter là một dự án sạch: Lab 6 đã xong, các lựa chọn menu mới (12–14) và các lớp dữ liệu của chúng cho sẵn, năm TODO đánh dấu <code>TODO Lab 7.x</code>. Dành khoảng <strong>2,5 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 7 (17 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 7 (17 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab7', [
+      [1, 'Lab 7 — CT Library: working with a list of objects',
+        `<p class="y-chinh">🎯 Lab 7 = Chapter 7 on a real codebase: search, sort, count and remove on a list of objects.</p>
+<p>Three new options — advanced search, statistics by type, cleaning the shelf — and four traps that every Java developer has hit at least once, each run for real.</p>`,
+        `<p class="y-chinh">🎯 Lab 7 = Chương 7 trên một bộ mã thật: tìm, sắp, đếm và xoá trên một danh sách đối tượng.</p>
+<p>Ba lựa chọn mới — tìm nâng cao, thống kê theo loại, dọn kho — và bốn cái bẫy mà lập trình viên Java nào cũng từng dính ít nhất một lần, cái nào cũng chạy thật.</p>`],
+      [2, 'Ticket CTL-7 — a crowded shelf',
+        `<p class="y-chinh">🎯 Search by type + year range + keyword, sort on four keys, count by type, and remove every item with 0 copies that nobody is borrowing.</p>
+<p>Done means: PASS 297/297, <code>lint.py</code> silent, not one <code>instanceof</code> left in <code>src/</code>, and the clean-out removes exactly B002, B004 and T005 — keeping B003, which has 0 copies because someone is holding it.</p>`,
+        `<p class="y-chinh">🎯 Tìm theo loại + khoảng năm + từ khoá, sắp theo bốn khoá, đếm theo loại, và xoá mọi tài liệu còn 0 bản mà không ai đang mượn.</p>
+<p>Xong nghĩa là: PASS 297/297, <code>lint.py</code> im lặng, không còn một <code>instanceof</code> nào trong <code>src/</code>, và lần dọn kho xoá đúng B002, B004, T005 — giữ lại B003, cuốn còn 0 bản chỉ vì đang có người giữ.</p>`],
+      [3, 'A list of objects holds references, not objects',
+        `<p class="y-chinh">🎯 An <code>ArrayList&lt;LibraryItem&gt;</code> — like the <code>Item[]</code> of Chapter 7 — is a row of cells, and each cell holds an arrow to an object on the heap.</p>
+<p>That one picture explains the whole lab: removing a cell does not destroy an object, it shifts the arrows behind it; a cell that was never given an object holds <code>null</code>; and two arrows to equal-looking Strings can still point to two different objects.</p>`,
+        `<p class="y-chinh">🎯 Một <code>ArrayList&lt;LibraryItem&gt;</code> — như <code>Item[]</code> của Chương 7 — là một dãy ô, mỗi ô giữ một mũi tên trỏ tới một đối tượng trên heap.</p>
+<p>Chỉ một hình đó giải thích cả lab: xoá một ô không phá huỷ đối tượng nào, nó dời các mũi tên phía sau; một ô chưa từng được gán đối tượng thì giữ <code>null</code>; và hai mũi tên tới hai chuỗi trông giống hệt nhau vẫn có thể trỏ tới hai đối tượng khác nhau.</p>`],
+      [4, 'Inside remove(i): every later cell shifts left',
+        `<p class="y-chinh">🎯 <code>itemList.remove(i)</code> copies cell i+1 into i, i+2 into i+1, … then clears the last cell and shrinks the size — exactly the <code>removeAt</code> of Chapter 7's <code>ItemList</code>.</p>
+<p>The real run of <code>LabXoaMang</code> shows it on a <code>String[]</code>: removing cell 1 turns <code>[B001, B002, B003, B004, T005]</code> into <code>[B001, B003, B004, T005, null]</code>, size 4. Shifting in the wrong direction (from the end back) overwrites the cells you still need: <code>[B001, T005, T005, T005, T005]</code>. Removing one cell costs O(n) moves; that matters in CSD201, not here.</p>`,
+        `<p class="y-chinh">🎯 <code>itemList.remove(i)</code> chép ô i+1 vào i, i+2 vào i+1, … rồi xoá ô cuối và giảm size — đúng hàm <code>removeAt</code> của <code>ItemList</code> trong Chương 7.</p>
+<p>Lần chạy thật <code>LabXoaMang</code> làm điều đó trên một <code>String[]</code>: xoá ô 1 biến <code>[B001, B002, B003, B004, T005]</code> thành <code>[B001, B003, B004, T005, null]</code>, size 4. Dời sai chiều (từ cuối ngược về) ghi đè lên những ô còn cần: <code>[B001, T005, T005, T005, T005]</code>. Xoá một ô tốn O(n) lần chép; chuyện đó quan trọng ở CSD201, chưa phải ở đây.</p>`],
+      [5, 'TODO 7.1 — filter by type without instanceof',
+        `<p class="y-chinh">🎯 Add <code>public abstract int getItemType();</code> to <code>LibraryItem</code>, override it in the three subclasses, and the repository's chain of <code>instanceof</code> becomes one line: <code>responseDTO.setItemType(item.getItemType());</code>.</p>
+<p>The starter's chain works and prints the same output — that is the trap: a fourth type (an audiobook) would compile, run, and be filed as a DVD by the final <code>else</code>. With the abstract method, javac refuses the new class until it answers "what type am I?". Same idea as Lab 4's late fee without <code>instanceof</code>.</p>`,
+        `<p class="y-chinh">🎯 Thêm <code>public abstract int getItemType();</code> vào <code>LibraryItem</code>, ghi đè ở ba lớp con, và chuỗi <code>instanceof</code> trong repository thành một dòng: <code>responseDTO.setItemType(item.getItemType());</code>.</p>
+<p>Chuỗi của starter chạy được và in output y hệt — chính đó là bẫy: loại thứ tư (sách nói) vẫn biên dịch, vẫn chạy, và bị nhánh <code>else</code> cuối cùng xếp vào DVD. Có phương thức trừu tượng thì javac từ chối lớp mới cho tới khi nó trả lời được "tôi là loại gì?". Cùng ý với phí trễ không <code>instanceof</code> của Lab 4.</p>`],
+      [6, 'TODO 7.2 — three criteria at once',
+        `<p class="y-chinh">🎯 Keep an item only if it matches all three: the type (0 means every type), the year range [from, to], and the keyword inside the title.</p>
+<p>The empty keyword needs no special case: <code>"any title".contains("")</code> is <code>true</code>. The year range is checked at input: <code>Validation.getYearTo</code> refuses a "to" smaller than "from" (real output: "Den nam phai lon hon hoac bang Tu nam (2000), ban nhap 1999"). Real result for type 1, 2006–2019, "java": Effective Java and Java Concurrency In Practice — Head First Java (2005) is out of range.</p>`,
+        `<p class="y-chinh">🎯 Chỉ giữ tài liệu khớp cả ba: loại (0 nghĩa là mọi loại), khoảng năm [từ, đến], và từ khoá nằm trong tên.</p>
+<p>Từ khoá rỗng không cần xử lý riêng: <code>"tên nào cũng được".contains("")</code> là <code>true</code>. Khoảng năm được kiểm ngay lúc nhập: <code>Validation.getYearTo</code> từ chối "đến" nhỏ hơn "từ" (output thật: "Den nam phai lon hon hoac bang Tu nam (2000), ban nhap 1999"). Kết quả thật với loại 1, 2006–2019, "java": Effective Java và Java Concurrency In Practice — Head First Java (2005) nằm ngoài khoảng.</p>`],
+      [7, 'TODO 7.3 — one Comparator, four keys',
+        `<p class="y-chinh">🎯 Compare by type; only if equal (result 0), by year — newest first; only if equal, by title A–Z; only if equal, by id.</p>
+<p>Descending is just the arguments swapped: <code>Integer.compare(second.getYear(), first.getYear())</code>. The fourth key matters: two magazines of 2025 tie on type and year, the title decides (Java Magazine before Tech Weekly), and the id guarantees a single answer even for equal titles. In the starter only key 1 exists, so T005 stays before T007 — the grader's line 137.</p>`,
+        `<p class="y-chinh">🎯 So loại; chỉ khi bằng nhau (kết quả 0) mới so năm — mới trước; chỉ khi bằng nữa mới so tên A–Z; bằng nữa thì so mã.</p>
+<p>Giảm dần chỉ là đổi chỗ hai đối số: <code>Integer.compare(second.getYear(), first.getYear())</code>. Khoá thứ tư không thừa: hai tạp chí năm 2025 hoà cả loại lẫn năm, tên quyết định (Java Magazine trước Tech Weekly), và mã bảo đảm chỉ một thứ tự kể cả khi tên trùng. Ở starter mới có khoá 1, nên T005 vẫn đứng trước T007 — dòng 137 của bộ chấm.</p>`],
+      [8, 'The same order with Java 8: comparing().thenComparing()',
+        `<p class="y-chinh">🎯 <code>Comparator.comparingInt(Row::getType).thenComparing(…reversed()).thenComparing(…).thenComparing(Row::getId)</code> builds the same four-key order without writing <code>compare</code> by hand.</p>
+<p>It is Java 8, so it compiles in the exam room; the real run of <code>LabNhieuKhoa</code> prints the same order as the lab. The lab keeps the anonymous class because every step is visible — and because a reviewer will ask you to explain each <code>if (result == 0)</code>.</p>`,
+        `<p class="y-chinh">🎯 <code>Comparator.comparingInt(Row::getType).thenComparing(…reversed()).thenComparing(…).thenComparing(Row::getId)</code> dựng cùng thứ tự bốn khoá mà không phải tự viết <code>compare</code>.</p>
+<p>Đây là Java 8, nên biên dịch được ở phòng thi; lần chạy thật <code>LabNhieuKhoa</code> in đúng thứ tự như lab. Lab giữ lớp ẩn danh vì thấy rõ từng bước — và vì thầy sẽ bắt bạn giải thích từng dòng <code>if (result == 0)</code>.</p>`],
+      [9, 'TODO 7.4 — an array of objects starts full of null',
+        `<p class="y-chinh">🎯 <code>new TypeStatDTO[3]</code> creates three empty references, not three objects: <code>new</code> each cell first, then add every item into cell <code>getItemType() - 1</code>.</p>
+<p>A fixed array fits here — there are exactly three types, and the type number gives the index directly. Real result before the clean-out: Sach 4 titles, 3 copies, 1 on loan; Tap chi 2, 2, 0; DVD 1, 1, 0; total 7, 6, 1. The total row is the sum of the three cells, computed in the same pass.</p>`,
+        `<p class="y-chinh">🎯 <code>new TypeStatDTO[3]</code> tạo ba tham chiếu rỗng, không phải ba đối tượng: <code>new</code> từng ô trước, rồi cộng mỗi tài liệu vào ô <code>getItemType() - 1</code>.</p>
+<p>Mảng cố định hợp chỗ này — có đúng ba loại, và số của loại cho thẳng chỉ số ô. Kết quả thật trước khi dọn kho: Sach 4 đầu, 3 bản, 1 đang mượn; Tap chi 2, 2, 0; DVD 1, 1, 0; tổng 7, 6, 1. Dòng tổng là tổng của ba ô, tính trong cùng một lượt.</p>`],
+      [10, 'Trap: forget to new the cells — NullPointerException',
+        `<p class="y-chinh">🎯 Without the loop that creates each <code>TypeStatDTO</code>, option 13 dies with a <code>NullPointerException</code> on the first item (project <code>bay/mang-null</code>).</p>
+<p>On the JDK 21 used to build these pages the message is "Cannot invoke "dto.TypeStatDTO.getTitleCount()" because "&lt;local8&gt;" is null" (helpful messages arrived in Java 14); the JDK 8 of the exam room prints only <code>java.lang.NullPointerException</code> and the line number — real run of <code>LabBayMangNull</code>. Read the line, then ask "which reference on this line was never given an object?".</p>`,
+        `<p class="y-chinh">🎯 Thiếu vòng lặp tạo từng <code>TypeStatDTO</code>, lựa chọn 13 chết với <code>NullPointerException</code> ngay ở tài liệu đầu tiên (dự án <code>bay/mang-null</code>).</p>
+<p>Trên JDK 21 dùng để dựng bài này, câu báo là "Cannot invoke "dto.TypeStatDTO.getTitleCount()" because "&lt;local8&gt;" is null" (câu báo chi tiết có từ Java 14); JDK 8 của phòng thi chỉ in <code>java.lang.NullPointerException</code> cùng số dòng — lần chạy thật <code>LabBayMangNull</code>. Đọc dòng đó, rồi hỏi "tham chiếu nào trên dòng này chưa từng được gán đối tượng?".</p>`],
+      [11, 'TODO 7.5 — remove at index, walking backwards',
+        `<p class="y-chinh">🎯 <code>for (int i = itemList.size() - 1; i &gt;= 0; i--)</code>: when cell i is removed, only the cells after i move — and those have already been visited.</p>
+<p>The rule: 0 copies <em>and</em> not in the list of loaned ids (B003 has 0 copies because M001 holds it; deleting it would orphan a loan). Real output: "Da don kho: xoa 3 tai lieu het ban (B002, B004, T005)"; the second clean-out finds nothing. The repository does the removing (CRUD), the controller hands it the loaned ids from <code>LoanRepository</code>.</p>`,
+        `<p class="y-chinh">🎯 <code>for (int i = itemList.size() - 1; i &gt;= 0; i--)</code>: khi xoá ô i, chỉ các ô sau i bị dời — mà các ô đó đã duyệt xong rồi.</p>
+<p>Luật: 0 bản <em>và</em> không nằm trong danh sách mã đang mượn (B003 còn 0 bản vì M001 đang giữ; xoá nó là để lại một lượt mượn mồ côi). Output thật: "Da don kho: xoa 3 tai lieu het ban (B002, B004, T005)"; lần dọn thứ hai không còn gì. Repository làm việc xoá (CRUD), controller đưa cho nó danh sách mã đang mượn lấy từ <code>LoanRepository</code>.</p>`],
+      [12, 'Trap: for-each + remove = ConcurrentModificationException',
+        `<p class="y-chinh">🎯 Removing from the list inside a for-each crashes the program: the hidden Iterator notices the list changed behind its back (project <code>bay/xoa-foreach</code>).</p>
+<p>The real trace goes <code>ArrayList$Itr.next</code> → <code>InMemoryBookRepository.deleteOutOfStock</code> → <code>BookController.purgeOutOfStock</code> → <code>Main.runMenu</code> → <code>Main.main</code>: nobody catches it, and the whole menu dies. It is unchecked (a programming error) — the cure is not a <code>catch</code> but a correct loop: backwards by index, or <code>Iterator.remove()</code>.</p>`,
+        `<p class="y-chinh">🎯 Xoá khỏi danh sách ngay trong for-each làm chương trình sập: Iterator ẩn bên trong phát hiện danh sách bị sửa sau lưng nó (dự án <code>bay/xoa-foreach</code>).</p>
+<p>Vết thật đi <code>ArrayList$Itr.next</code> → <code>InMemoryBookRepository.deleteOutOfStock</code> → <code>BookController.purgeOutOfStock</code> → <code>Main.runMenu</code> → <code>Main.main</code>: không ai bắt, cả menu chết. Nó là unchecked (lỗi lập trình) — thuốc chữa không phải một khối <code>catch</code> mà là một vòng lặp đúng: duyệt ngược theo chỉ số, hoặc <code>Iterator.remove()</code>.</p>`],
+      [13, 'Trap: walking forwards skips the next cell',
+        `<p class="y-chinh">🎯 A forward index loop does not crash — it silently skips the cell that slides into position i after a removal (project <code>bay/xoa-xuoi</code>: T005 survives).</p>
+<p>B004 and T005 sit side by side: removing B004 at i moves T005 into i, then <code>i++</code> jumps over it. The grader catches it at line 218 ("xoa 2 … (B002, B004)") and again at line 236, where the "empty" second clean-out still finds T005. <code>LabXoaAnToan</code> runs all four loops on one list: the crash, the skip, and the two right ones.</p>`,
+        `<p class="y-chinh">🎯 Vòng lặp chỉ số đi xuôi không sập — nó lặng lẽ bỏ qua ô vừa trượt vào vị trí i sau khi xoá (dự án <code>bay/xoa-xuoi</code>: T005 sống sót).</p>
+<p>B004 và T005 nằm cạnh nhau: xoá B004 ở i thì T005 trượt vào i, rồi <code>i++</code> nhảy qua nó. Bộ chấm bắt được ở dòng 218 ("xoa 2 … (B002, B004)") và lần nữa ở dòng 236, nơi lần dọn thứ hai lẽ ra trống lại tìm thấy T005. <code>LabXoaAnToan</code> chạy cả bốn vòng lặp trên cùng một danh sách: cái sập, cái bỏ sót, và hai cái đúng.</p>`],
+      [14, 'Trap: == compares addresses, not text',
+        `<p class="y-chinh">🎯 Change one <code>equals</code> into <code>==</code> in <code>findItemById</code>, and every code typed at the keyboard becomes "Khong co tai lieu nao mang ma …" (project <code>bay/so-sanh-bang</code>).</p>
+<p>The id in the repository was built by <code>String.format</code>, the id the user typed came from <code>nextLine()</code>: two different objects with the same text, so <code>==</code> is <code>false</code>. Why do quick tests sometimes pass? Two literals <code>"B001"</code> share one object in the String pool — the real run of <code>LabBaySoSanhChuoi</code> shows <code>false</code>, <code>true</code>, <code>true</code>. Strings are compared with <code>equals</code>, always.</p>`,
+        `<p class="y-chinh">🎯 Đổi một chữ <code>equals</code> thành <code>==</code> trong <code>findItemById</code>, và mọi mã gõ từ bàn phím đều thành "Khong co tai lieu nao mang ma …" (dự án <code>bay/so-sanh-bang</code>).</p>
+<p>Mã trong kho được dựng bằng <code>String.format</code>, mã người dùng gõ đến từ <code>nextLine()</code>: hai đối tượng khác nhau mang cùng nội dung, nên <code>==</code> là <code>false</code>. Vì sao thử nhanh đôi khi vẫn qua? Hai chữ viết sẵn <code>"B001"</code> dùng chung một đối tượng trong String pool — lần chạy thật <code>LabBaySoSanhChuoi</code> in <code>false</code>, <code>true</code>, <code>true</code>. So chuỗi bằng <code>equals</code>, luôn luôn.</p>`],
+      [15, 'One request through the layers: "14 — clean the shelf"',
+        `<p class="y-chinh">🎯 Main calls the controller once; the controller asks <code>LoanRepository</code> which ids are on loan and gives them to <code>IBookRepository.deleteOutOfStock</code>; the view prints one line.</p>
+<p>The decision "who may be deleted" needs data from two repositories, so it belongs to the controller that holds both. The interface gained a method, so Lab 9's <code>FileBookRepository</code> will have to implement it too — a contract grows with the program.</p>`,
+        `<p class="y-chinh">🎯 Main gọi controller một lần; controller hỏi <code>LoanRepository</code> mã nào đang được mượn rồi đưa cho <code>IBookRepository.deleteOutOfStock</code>; view in một dòng.</p>
+<p>Quyết định "ai được xoá" cần dữ liệu của hai repository, nên nó thuộc về controller — nơi giữ cả hai. Interface có thêm một phương thức, nên <code>FileBookRepository</code> của Lab 9 cũng sẽ phải cài nó — hợp đồng lớn lên cùng chương trình.</p>`],
+      [16, 'Green: PASS 297/297 and a silent reviewer',
+        `<p class="y-chinh">🎯 Green = the grader at 297/297 and <code>lint.py</code> silent; TODO 7.1 changes no output, 7.2–7.5 each turn some lines green.</p>
+<p>A good order: 7.1 (the abstract method, then delete the chain), 7.2 (filter), 7.3 (keys 2–4), 7.4 (the array), 7.5 (the backward loop). Then search the project for <code>instanceof</code>: zero hits is part of the rubric.</p>`,
+        `<p class="y-chinh">🎯 Xanh = bộ chấm 297/297 và <code>lint.py</code> im lặng; TODO 7.1 không đổi output, mỗi TODO 7.2–7.5 làm xanh thêm vài dòng.</p>
+<p>Thứ tự nên làm: 7.1 (phương thức trừu tượng, rồi xoá chuỗi instanceof), 7.2 (lọc), 7.3 (khoá 2–4), 7.4 (mảng), 7.5 (vòng lặp ngược). Rồi tìm cả dự án chữ <code>instanceof</code>: không còn chỗ nào là một phần của rubric.</p>`],
+      [17, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 The oral question is the classic of this chapter: "how do you remove from a list while looping over it — and why not for-each?".</p>
+<p>Answer in two sentences: for-each uses an Iterator that fails fast when the list changes under it; loop backwards by index (or use <code>Iterator.remove()</code>) so that no cell moves into a position you have not visited yet.</p>`,
+        `<p class="y-chinh">🎯 Câu vấn đáp là câu kinh điển của chương: "xoá khỏi danh sách khi đang duyệt thì làm thế nào — và sao không dùng for-each?".</p>
+<p>Trả lời bằng hai câu: for-each dùng một Iterator báo lỗi ngay khi danh sách bị sửa dưới chân nó; duyệt ngược theo chỉ số (hoặc dùng <code>Iterator.remove()</code>) để không ô nào bị dời vào một vị trí bạn chưa duyệt tới.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-7 · CT Library · priority: medium.</strong> "The shelf is getting crowded. (1) Members ask for 'books from 2006 to 2019 with java in the title' — give me a search with several criteria. (2) Results sorted by type, newest first, then by title. (3) The board wants a table: how many titles, copies and loans per type. (4) Once a month we throw out the items with no copy left — but never one that somebody is still holding. And please: no more <code>instanceof</code> in the repository." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>an array of objects holds references; a new array is full of null</td><td>7.A (pro12 slides 1–9)</td></tr>
+<tr><td>display, search, remove at a position (shift the cells), list by type</td><td>7.A-2 (pro12 slides 10–14)</td></tr>
+<tr><td>sort an array of objects with a Comparator</td><td>7.A-2 (pro12 slide 14), Lab 1, Lab 5 (anonymous class)</td></tr>
+<tr><td>abstract methods and polymorphism instead of instanceof</td><td>Lab 4, Lab 5</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-7 · CT Library · ưu tiên: trung bình.</strong> "Kệ sách đông dần rồi. (1) Thành viên hỏi 'sách từ 2006 tới 2019 có chữ java trong tên' — cho tôi chức năng tìm theo nhiều tiêu chí. (2) Kết quả sắp theo loại, mới trước, rồi theo tên. (3) Ban chủ nhiệm muốn một bảng: mỗi loại bao nhiêu đầu, bao nhiêu bản, bao nhiêu đang cho mượn. (4) Mỗi tháng dọn một lần những tài liệu đã hết bản — nhưng tuyệt đối không xoá cuốn còn có người đang giữ. Và làm ơn: đừng để <code>instanceof</code> trong repository nữa." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>mảng đối tượng giữ tham chiếu; mảng mới tạo toàn null</td><td>7.A (pro12 slide 1–9)</td></tr>
+<tr><td>hiển thị, tìm, xoá tại vị trí (dời ô), liệt kê theo loại</td><td>7.A-2 (pro12 slide 10–14)</td></tr>
+<tr><td>sắp mảng đối tượng bằng Comparator</td><td>7.A-2 (pro12 slide 14), Lab 1, Lab 5 (lớp ẩn danh)</td></tr>
+<tr><td>phương thức trừu tượng và đa hình thay cho instanceof</td><td>Lab 4, Lab 5</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Type by polymorphism</strong>: <code>LibraryItem.getItemType()</code> is abstract and overridden in Book, Magazine, Dvd; the repository copies it into <code>BookResponseDTO</code> with one call; no <code>instanceof</code> in <code>src/</code>.</li>
+<li><strong>Advanced search (12)</strong>: type (0 = all), year from, year to (not smaller than "from"), optional keyword; an item is kept only if it matches all three.</li>
+<li><strong>Four-key sort</strong>: type ascending, year descending, title A–Z ignoring case, id.</li>
+<li><strong>Statistics by type (13)</strong>: an array <code>TypeStatDTO[3]</code> indexed by type − 1 — titles, copies, items on loan — plus a total row.</li>
+<li><strong>Clean the shelf (14)</strong>: remove at index, walking backwards, every item with 0 copies whose id is not on loan; report the removed ids.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 297/297 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · a search for <code>instanceof</code> in <code>src/</code> finds nothing · you can explain why the loop of TODO 7.5 runs backwards.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Loại bằng đa hình</strong>: <code>LibraryItem.getItemType()</code> là phương thức trừu tượng, ghi đè ở Book, Magazine, Dvd; repository chép nó sang <code>BookResponseDTO</code> bằng một lời gọi; không có <code>instanceof</code> trong <code>src/</code>.</li>
+<li><strong>Tìm nâng cao (12)</strong>: loại (0 = tất cả), từ năm, đến năm (không nhỏ hơn "từ"), từ khoá không bắt buộc; chỉ giữ tài liệu khớp cả ba.</li>
+<li><strong>Sắp bốn khoá</strong>: loại tăng dần, năm giảm dần, tên A–Z không phân biệt hoa thường, mã.</li>
+<li><strong>Thống kê theo loại (13)</strong>: một mảng <code>TypeStatDTO[3]</code> đánh chỉ số theo loại − 1 — số đầu, số bản, số đang mượn — cùng dòng tổng.</li>
+<li><strong>Dọn kho (14)</strong>: xoá tại vị trí, duyệt ngược, mọi tài liệu còn 0 bản mà mã không đang được mượn; báo các mã đã xoá.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 297/297 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · tìm chữ <code>instanceof</code> trong <code>src/</code> không ra chỗ nào · bạn giải thích được vì sao vòng lặp của TODO 7.5 chạy ngược.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab7-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab7-starter.zip</span><span class="lc-sub">Lab 6 solution + menu 12–14, SearchRequestDTO, TypeStatDTO, TypeStatView · TODO 7.1–7.5 · harness (297 lines) · CheckHarness</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab7-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab7-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab7/src/  (new or changed since Lab 6)
+  model/LibraryItem.java, Book, Magazine, Dvd   TODO 7.1 abstract getItemType() + 3 overrides
+  repository/InMemoryBookRepository.java        TODO 7.1 drop the instanceof chain · TODO 7.5 deleteOutOfStock
+  repository/IBookRepository.java               + deleteOutOfStock (given)
+  repository/LoanRepository.java                + findLoanedItemIdList (given)
+  service/BookService.java                      TODO 7.2 search · TODO 7.3 keys 2-4 · TODO 7.4 buildTypeReport
+  dto/SearchRequestDTO, dto/TypeStatDTO, view/TypeStatView, utils/Validation, main/Main   (given)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab7-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab7-starter.zip</span><span class="lc-sub">đáp án Lab 6 + menu 12–14, SearchRequestDTO, TypeStatDTO, TypeStatView · TODO 7.1–7.5 · harness (297 dòng) · CheckHarness</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab7-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab7-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab7/src/  (mới hoặc đổi so với Lab 6)
+  model/LibraryItem.java, Book, Magazine, Dvd   TODO 7.1 abstract getItemType() + 3 bản ghi đè
+  repository/InMemoryBookRepository.java        TODO 7.1 bỏ chuỗi instanceof · TODO 7.5 deleteOutOfStock
+  repository/IBookRepository.java               + deleteOutOfStock (cho sẵn)
+  repository/LoanRepository.java                + findLoanedItemIdList (cho sẵn)
+  service/BookService.java                      TODO 7.2 search · TODO 7.3 khoá 2-4 · TODO 7.4 buildTypeReport
+  dto/SearchRequestDTO, dto/TypeStatDTO, view/TypeStatView, utils/Validation, main/Main   (cho sẵn)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — lint the starter, run it (10 min)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab7</code></pre>
+<div class="out">✓ CTLibrary-Lab7 — sạch</div>
+<p>Clean for the reviewer's tool, wrong for the user: the statistics table is empty, the search returns all 7 items whatever you ask, T005 comes before T007, and the clean-out never removes anything.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 7 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+6 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+7 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Step 1 — TODO 7.1 the type, by polymorphism (15 min)</h4>
+<details><summary>Hint</summary><p>Same move as Lab 5's six abstract methods: declare it in the parent, javac then lists the three subclasses that must override it. When they compile, replace the eight lines of <code>instanceof</code> by one call.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// So cua loai (TYPE_BOOK, TYPE_MAGAZINE, TYPE_DVD) — loc theo loai bang DA HINH,
+// khong can hoi "ban la instanceof lop nao" (Lab 7)
+public abstract int getItemType();</code></pre>
+<pre class="trich"><code class="language-java">
+// So cua loai: TYPE_BOOK
+@Override
+public int getItemType() {
+    return Constants.TYPE_BOOK;</code></pre>
+<pre class="trich"><code class="language-java">// Chep 1 tai lieu sang 1 dong bang MOI; khong hoi "ban la lop nao": doi tuong tu tra loi
+private BookResponseDTO toResponseDTO(LibraryItem item) {
+    // Phan chung doc qua getter cua lop cha
+    BookResponseDTO responseDTO = new BookResponseDTO(item.getId(), item.getTypeName(),
+            item.getTitle(), item.getYear(), item.getCopies());
+
+    // Phan rieng: JVM chon ban ghi de theo doi tuong that (Book, Magazine hay Dvd);
+    // so cua loai cung hoi chinh doi tuong — khong mot instanceof nao
+    responseDTO.setItemType(item.getItemType());
+    responseDTO.setLoanDays(item.getLoanDays());
+    responseDTO.setLateFeePerDay(item.getLateFeePerDay());
+    responseDTO.setDetail(item.getDetail());
+    return responseDTO;
+}</code></pre>
+</details>
+
+<h4>Step 2 — TODO 7.2 three criteria (20 min)</h4>
+<details><summary>Hint</summary><p>One <code>boolean</code> for the type (0 or equal), then a single <code>if</code> with the four comparisons joined by <code>&amp;&amp;</code>, each in its own brackets (checklist 3.3). Lower-case both the title and the keyword before <code>contains</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Tim nang cao: giu tai lieu khop CA BA tieu chi (loai, khoang nam, tu khoa trong ten),
+// roi sap nhieu khoa va danh so. Loc theo loai bang so cua loai (da hinh, khong instanceof)
+public ArrayList&lt;BookResponseDTO&gt; search(ArrayList&lt;BookResponseDTO&gt; itemList,
+        SearchRequestDTO searchRequestDTO) {
+    // Ket qua; tu khoa viet thuong (rong thi contains luon dung = khong loc ten)
+    ArrayList&lt;BookResponseDTO&gt; foundList = new ArrayList&lt;&gt;();
+    String lowerKeyword = searchRequestDTO.getKeyword().toLowerCase();
+
+    // Duyet tung tai lieu, hoi tung tieu chi
+    for (BookResponseDTO item : itemList) {
+        // Tieu chi loai: 0 = moi loai, khac 0 thi phai dung so loai
+        boolean isTypeMatched = (searchRequestDTO.getItemType() == Constants.TYPE_ALL)
+                || (item.getItemType() == searchRequestDTO.getItemType());
+
+        // Khop ca ba (loai, nam trong [tu, den], ten chua tu khoa) thi giu lai
+        if ((isTypeMatched) &amp;&amp; (item.getYear() &gt;= searchRequestDTO.getYearFrom())
+                &amp;&amp; (item.getYear() &lt;= searchRequestDTO.getYearTo())
+                &amp;&amp; (item.getTitle().toLowerCase().contains(lowerKeyword))) {
+            foundList.add(item);
+        }
+    }
+
+    return sortByTypeYearTitle(foundList);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+…</div>
+
+<h4>Step 3 — TODO 7.3 keys 2 to 4 (15 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Sap NHIEU KHOA: loai (sach, tap chi, DVD) -&gt; nam MOI truoc -&gt; ten A-Z -&gt; ma; danh so tu 1
+public ArrayList&lt;BookResponseDTO&gt; sortByTypeYearTitle(ArrayList&lt;BookResponseDTO&gt; itemList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;BookResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(itemList);
+
+    // Moi khoa chi duoc hoi khi cac khoa truoc no HOA nhau (ket qua 0)
+    Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() {
+        // So loai, roi nam (giam dan), roi ten, roi ma
+        @Override
+        public int compare(BookResponseDTO first, BookResponseDTO second) {
+            // Khoa 1: so loai tang dan
+            int result = Integer.compare(first.getItemType(), second.getItemType());
+
+            // Khoa 2: hoa loai thi nam GIAM dan (dao thu tu second, first)
+            if (result == 0) {
+                result = Integer.compare(second.getYear(), first.getYear());
+            }
+
+            // Khoa 3: hoa nam thi ten A-Z khong phan biet hoa thuong
+            if (result == 0) {
+                result = first.getTitle().compareToIgnoreCase(second.getTitle());
+            }
+
+            // Khoa 4: hoa ca ten thi ma (luon khac nhau) chot thu tu
+            if (result == 0) {
+                result = first.getId().compareTo(second.getId());
+            }
+            return result;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+…</div>
+
+<h4>Step 4 — TODO 7.4 the array of objects (20 min)</h4>
+<details><summary>Hint</summary><p>Three loops: create the three cells; add each item into <code>statArray[item.getItemType() - Constants.TYPE_BOOK]</code>; copy the cells into the list while summing the total row.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Thong ke theo loai bang MANG DOI TUONG: o i giu dong cua loai i + 1. Moi o ban dau la
+// null nen phai new tung o truoc khi cong; cuoi cung them 1 dong tong
+public ArrayList&lt;TypeStatDTO&gt; buildTypeReport(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; loanedIdList) {
+    // Mang 3 tham chieu (chua co doi tuong nao), dong tong, danh sach tra ve
+    TypeStatDTO[] statArray = new TypeStatDTO[Constants.TYPE_COUNT];
+    TypeStatDTO totalRow = new TypeStatDTO();
+    ArrayList&lt;TypeStatDTO&gt; statList = new ArrayList&lt;&gt;();
+
+    // Tao doi tuong cho TUNG o (quen buoc nay: vong sau goi ham tren null -&gt; NPE)
+    for (int i = 0; i &lt; statArray.length; i++) {
+        statArray[i] = new TypeStatDTO();
+        statArray[i].setTypeName(Message.TYPE_NAME_ARRAY[i]);
+    }
+
+    // Cong tung tai lieu vao o cua loai no (o = so loai - 1)
+    for (BookResponseDTO item : itemList) {
+        // Dong thong ke cua loai nay
+        TypeStatDTO row = statArray[item.getItemType() - Constants.TYPE_BOOK];
+        row.setTitleCount(row.getTitleCount() + 1);
+        row.setTotalCopies(row.getTotalCopies() + item.getCopies());
+
+        // Dang co nguoi muon thi dem them 1
+        if (loanedIdList.contains(item.getId())) {
+            row.setOnLoanCount(row.getOnLoanCount() + 1);
+        }
+    }
+
+    // Dong tong mang nhan "Tong"
+    totalRow.setTypeName(Message.TOTAL_ROW);
+
+    // Chep tung o sang danh sach va cong don vao dong tong
+    for (TypeStatDTO row : statArray) {
+        statList.add(row);
+        totalRow.setTitleCount(totalRow.getTitleCount() + row.getTitleCount());
+        totalRow.setTotalCopies(totalRow.getTotalCopies() + row.getTotalCopies());
+        totalRow.setOnLoanCount(totalRow.getOnLoanCount() + row.getOnLoanCount());
+    }
+
+    statList.add(totalRow);
+    return statList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+…</div>
+
+<h4>Step 5 — TODO 7.5 the backward loop (20 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Don kho: xoa TAI VI TRI i moi tai lieu het ban khong ai dang muon. Duyet NGUOC tu cuoi
+// ve dau: xoa o i chi doi cac o SAU i, ma cac o do da duyet roi — khong o nao bi bo sot.
+// (for-each + remove thi nem ConcurrentModificationException; duyet xuoi thi bo sot o
+// ngay sau o vua xoa — ca hai la bay cua Lab 7)
+@Override
+public ArrayList&lt;String&gt; deleteOutOfStock(ArrayList&lt;String&gt; loanedIdList) {
+    // Ma da xoa, theo thu tu trong kho (them vao dau vi duyet nguoc)
+    ArrayList&lt;String&gt; deletedIdList = new ArrayList&lt;&gt;();
+
+    // Duyet nguoc tu o cuoi ve o 0
+    for (int i = itemList.size() - 1; i &gt;= 0; i--) {
+        // Tai lieu o vi tri i
+        LibraryItem item = itemList.get(i);
+
+        // Het ban va khong ai dang muon thi xoa tai vi tri i
+        if ((item.getCopies() == Constants.COPIES_MIN)
+                &amp;&amp; (!loanedIdList.contains(item.getId()))) {
+            deletedIdList.add(0, item.getId());
+            itemList.remove(i);
+        }
+    }
+
+    return deletedIdList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+…</div>
+
+<h4>Step 6 — grade, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 297/297 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab7-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab7-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — lint starter, chạy thử (10 phút)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab7</code></pre>
+<div class="out">✓ CTLibrary-Lab7 — sạch</div>
+<p>Sạch với công cụ của thầy, sai với người dùng: bảng thống kê trống, hỏi gì thì tìm nâng cao cũng trả đủ 7 tài liệu, T005 đứng trước T007, và dọn kho không bao giờ xoá gì.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 7 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+6 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+7 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Bước 1 — TODO 7.1 loại, bằng đa hình (15 phút)</h4>
+<details><summary>Gợi ý</summary><p>Cùng nước đi với sáu phương thức trừu tượng của Lab 5: khai ở lớp cha, javac sẽ liệt kê ba lớp con buộc phải ghi đè. Khi chúng biên dịch được, thay tám dòng <code>instanceof</code> bằng một lời gọi.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// So cua loai (TYPE_BOOK, TYPE_MAGAZINE, TYPE_DVD) — loc theo loai bang DA HINH,
+// khong can hoi "ban la instanceof lop nao" (Lab 7)
+public abstract int getItemType();</code></pre>
+<pre class="trich"><code class="language-java">
+// So cua loai: TYPE_BOOK
+@Override
+public int getItemType() {
+    return Constants.TYPE_BOOK;</code></pre>
+<pre class="trich"><code class="language-java">// Chep 1 tai lieu sang 1 dong bang MOI; khong hoi "ban la lop nao": doi tuong tu tra loi
+private BookResponseDTO toResponseDTO(LibraryItem item) {
+    // Phan chung doc qua getter cua lop cha
+    BookResponseDTO responseDTO = new BookResponseDTO(item.getId(), item.getTypeName(),
+            item.getTitle(), item.getYear(), item.getCopies());
+
+    // Phan rieng: JVM chon ban ghi de theo doi tuong that (Book, Magazine hay Dvd);
+    // so cua loai cung hoi chinh doi tuong — khong mot instanceof nao
+    responseDTO.setItemType(item.getItemType());
+    responseDTO.setLoanDays(item.getLoanDays());
+    responseDTO.setLateFeePerDay(item.getLateFeePerDay());
+    responseDTO.setDetail(item.getDetail());
+    return responseDTO;
+}</code></pre>
+</details>
+
+<h4>Bước 2 — TODO 7.2 ba tiêu chí (20 phút)</h4>
+<details><summary>Gợi ý</summary><p>Một biến <code>boolean</code> cho loại (bằng 0 hoặc trùng loại), rồi một <code>if</code> duy nhất nối bốn phép so bằng <code>&amp;&amp;</code>, mỗi phép trong ngoặc riêng (checklist 3.3). Viết thường cả tên lẫn từ khoá trước khi <code>contains</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Tim nang cao: giu tai lieu khop CA BA tieu chi (loai, khoang nam, tu khoa trong ten),
+// roi sap nhieu khoa va danh so. Loc theo loai bang so cua loai (da hinh, khong instanceof)
+public ArrayList&lt;BookResponseDTO&gt; search(ArrayList&lt;BookResponseDTO&gt; itemList,
+        SearchRequestDTO searchRequestDTO) {
+    // Ket qua; tu khoa viet thuong (rong thi contains luon dung = khong loc ten)
+    ArrayList&lt;BookResponseDTO&gt; foundList = new ArrayList&lt;&gt;();
+    String lowerKeyword = searchRequestDTO.getKeyword().toLowerCase();
+
+    // Duyet tung tai lieu, hoi tung tieu chi
+    for (BookResponseDTO item : itemList) {
+        // Tieu chi loai: 0 = moi loai, khac 0 thi phai dung so loai
+        boolean isTypeMatched = (searchRequestDTO.getItemType() == Constants.TYPE_ALL)
+                || (item.getItemType() == searchRequestDTO.getItemType());
+
+        // Khop ca ba (loai, nam trong [tu, den], ten chua tu khoa) thi giu lai
+        if ((isTypeMatched) &amp;&amp; (item.getYear() &gt;= searchRequestDTO.getYearFrom())
+                &amp;&amp; (item.getYear() &lt;= searchRequestDTO.getYearTo())
+                &amp;&amp; (item.getTitle().toLowerCase().contains(lowerKeyword))) {
+            foundList.add(item);
+        }
+    }
+
+    return sortByTypeYearTitle(foundList);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+…</div>
+
+<h4>Bước 3 — TODO 7.3 khoá 2 tới 4 (15 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Sap NHIEU KHOA: loai (sach, tap chi, DVD) -&gt; nam MOI truoc -&gt; ten A-Z -&gt; ma; danh so tu 1
+public ArrayList&lt;BookResponseDTO&gt; sortByTypeYearTitle(ArrayList&lt;BookResponseDTO&gt; itemList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;BookResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(itemList);
+
+    // Moi khoa chi duoc hoi khi cac khoa truoc no HOA nhau (ket qua 0)
+    Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() {
+        // So loai, roi nam (giam dan), roi ten, roi ma
+        @Override
+        public int compare(BookResponseDTO first, BookResponseDTO second) {
+            // Khoa 1: so loai tang dan
+            int result = Integer.compare(first.getItemType(), second.getItemType());
+
+            // Khoa 2: hoa loai thi nam GIAM dan (dao thu tu second, first)
+            if (result == 0) {
+                result = Integer.compare(second.getYear(), first.getYear());
+            }
+
+            // Khoa 3: hoa nam thi ten A-Z khong phan biet hoa thuong
+            if (result == 0) {
+                result = first.getTitle().compareToIgnoreCase(second.getTitle());
+            }
+
+            // Khoa 4: hoa ca ten thi ma (luon khac nhau) chot thu tu
+            if (result == 0) {
+                result = first.getId().compareTo(second.getId());
+            }
+            return result;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+…</div>
+
+<h4>Bước 4 — TODO 7.4 mảng đối tượng (20 phút)</h4>
+<details><summary>Gợi ý</summary><p>Ba vòng lặp: tạo ba ô; cộng mỗi tài liệu vào <code>statArray[item.getItemType() - Constants.TYPE_BOOK]</code>; chép các ô sang danh sách đồng thời cộng dòng tổng.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Thong ke theo loai bang MANG DOI TUONG: o i giu dong cua loai i + 1. Moi o ban dau la
+// null nen phai new tung o truoc khi cong; cuoi cung them 1 dong tong
+public ArrayList&lt;TypeStatDTO&gt; buildTypeReport(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; loanedIdList) {
+    // Mang 3 tham chieu (chua co doi tuong nao), dong tong, danh sach tra ve
+    TypeStatDTO[] statArray = new TypeStatDTO[Constants.TYPE_COUNT];
+    TypeStatDTO totalRow = new TypeStatDTO();
+    ArrayList&lt;TypeStatDTO&gt; statList = new ArrayList&lt;&gt;();
+
+    // Tao doi tuong cho TUNG o (quen buoc nay: vong sau goi ham tren null -&gt; NPE)
+    for (int i = 0; i &lt; statArray.length; i++) {
+        statArray[i] = new TypeStatDTO();
+        statArray[i].setTypeName(Message.TYPE_NAME_ARRAY[i]);
+    }
+
+    // Cong tung tai lieu vao o cua loai no (o = so loai - 1)
+    for (BookResponseDTO item : itemList) {
+        // Dong thong ke cua loai nay
+        TypeStatDTO row = statArray[item.getItemType() - Constants.TYPE_BOOK];
+        row.setTitleCount(row.getTitleCount() + 1);
+        row.setTotalCopies(row.getTotalCopies() + item.getCopies());
+
+        // Dang co nguoi muon thi dem them 1
+        if (loanedIdList.contains(item.getId())) {
+            row.setOnLoanCount(row.getOnLoanCount() + 1);
+        }
+    }
+
+    // Dong tong mang nhan "Tong"
+    totalRow.setTypeName(Message.TOTAL_ROW);
+
+    // Chep tung o sang danh sach va cong don vao dong tong
+    for (TypeStatDTO row : statArray) {
+        statList.add(row);
+        totalRow.setTitleCount(totalRow.getTitleCount() + row.getTitleCount());
+        totalRow.setTotalCopies(totalRow.getTotalCopies() + row.getTotalCopies());
+        totalRow.setOnLoanCount(totalRow.getOnLoanCount() + row.getOnLoanCount());
+    }
+
+    statList.add(totalRow);
+    return statList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+…</div>
+
+<h4>Bước 5 — TODO 7.5 vòng lặp ngược (20 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Don kho: xoa TAI VI TRI i moi tai lieu het ban khong ai dang muon. Duyet NGUOC tu cuoi
+// ve dau: xoa o i chi doi cac o SAU i, ma cac o do da duyet roi — khong o nao bi bo sot.
+// (for-each + remove thi nem ConcurrentModificationException; duyet xuoi thi bo sot o
+// ngay sau o vua xoa — ca hai la bay cua Lab 7)
+@Override
+public ArrayList&lt;String&gt; deleteOutOfStock(ArrayList&lt;String&gt; loanedIdList) {
+    // Ma da xoa, theo thu tu trong kho (them vao dau vi duyet nguoc)
+    ArrayList&lt;String&gt; deletedIdList = new ArrayList&lt;&gt;();
+
+    // Duyet nguoc tu o cuoi ve o 0
+    for (int i = itemList.size() - 1; i &gt;= 0; i--) {
+        // Tai lieu o vi tri i
+        LibraryItem item = itemList.get(i);
+
+        // Het ban va khong ai dang muon thi xoa tai vi tri i
+        if ((item.getCopies() == Constants.COPIES_MIN)
+                &amp;&amp; (!loanedIdList.contains(item.getId()))) {
+            deletedIdList.add(0, item.getId());
+            itemList.remove(i);
+        }
+    }
+
+    return deletedIdList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+…</div>
+
+<h4>Bước 6 — chấm, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 297/297 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab7-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab7-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8, and 297/297 on the grader.</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (297 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Da them T007 "Java Magazine". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B004 "Head First Java": 4 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua T005 "Tech Weekly": 2 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Den nam phai lon hon hoac bang Tu nam (2000), ban nhap 1999. Moi nhap lai.<br>
+Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 7 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+5 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+6 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+7 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Khong co tai lieu nao khop ca 3 tieu chi (loai, khoang nam, tu khoa). Hay noi rong 1 tieu chi.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 3. Moi nhap lai.<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+2 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+3 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 7 chi nam trong bo nho.</div>
+</details>
+<details><summary>BookController — three new methods, still only through the interface</summary>
+<pre class="trich"><code class="language-java">// Don kho: kho xoa moi tai lieu het ban khong ai dang muon, bao cac ma da xoa
+public void purgeOutOfStock() {
+    // Ma da xoa (kho tu duyet + xoa tai vi tri; ma dang muon thi giu)
+    ArrayList&lt;String&gt; deletedIdList
+            = bookRepository.deleteOutOfStock(loanRepository.findLoanedItemIdList());
+
+    // Khong xoa gi thi bao kho giu nguyen; co thi bao so luong + cac ma
+    if (deletedIdList.isEmpty()) {
+        showResult(Message.PURGE_NONE, new ArrayList&lt;BookResponseDTO&gt;());
+    } else {
+        // Noi cac ma bang ", " (String.join cua Java 8, khong dung +=)
+        showResult(String.format(Message.SUCCESS_PURGE, deletedIdList.size(),
+                String.join(Constants.ID_SEPARATOR, deletedIdList)),
+                new ArrayList&lt;BookResponseDTO&gt;());
+    }
+}</code></pre>
+</details>
+<p>What <code>remove(i)</code> does inside, on a plain array (Chapter 7), run for real:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — what ArrayList.remove(i) does inside: shift every later cell one step LEFT (Chapter 7, ItemList)
+import java.util.Arrays;
+
+public class LabXoaMang {
+    static String[] shelf = {"B001", "B002", "B003", "B004", "T005", null, null, null};
+    static int size = 5;                                                // 5 cells in use, 3 spare
+
+    static void removeAt(int index) {
+        for (int j = index; j &lt; size - 1; j++) {                        // left to right: copy the NEXT cell into this one
+            shelf[j] = shelf[j + 1];
+        }
+        shelf[size - 1] = null;                                         // clear the last used cell
+        size--;                                                         // forget this and a ghost stays
+    }
+
+    static void removeAtWrong(String[] cells, int index, int used) {
+        for (int j = used - 2; j &gt;= index; j--) {                       // WRONG direction: copies from the end backwards
+            cells[j] = cells[j + 1];
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("truoc      : " + Arrays.toString(shelf) + " size=" + size);
+        removeAt(1);                                                    // remove B002
+        System.out.println("xoa o 1    : " + Arrays.toString(shelf) + " size=" + size);
+
+        String[] copy = {"B001", "B002", "B003", "B004", "T005"};
+        removeAtWrong(copy, 1, 5);
+        System.out.println("doi sai chieu: " + Arrays.toString(copy) + "   &lt;- B003, B004 mat, T005 lap lai");
+    }
+}</code></pre>
+<div class="out">truoc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001, B002, B003, B004, T005, null, null, null] size=5<br>
+xoa o 1 &nbsp;&nbsp;&nbsp;: [B001, B003, B004, T005, null, null, null, null] size=4<br>
+doi sai chieu: [B001, T005, T005, T005, T005] &nbsp;&nbsp;&lt;- B003, B004 mat, T005 lap lai</div>
+<p>The same four-key order with Java 8's <code>comparing().thenComparing()</code>:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — the same 4-key order two ways: an anonymous Comparator (the lab) and Java 8 comparing().thenComparing()
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
+class Row {
+    private final int type;
+    private final int year;
+    private final String title;
+    private final String id;
+
+    Row(String id, int type, int year, String title) {
+        this.id = id;
+        this.type = type;
+        this.year = year;
+        this.title = title;
+    }
+
+    int getType() { return type; }
+    int getYear() { return year; }
+    String getTitle() { return title; }
+    String getId() { return id; }
+
+    @Override
+    public String toString() { return id + " " + type + " " + year + " " + title; }
+}
+
+public class LabNhieuKhoa {
+    public static void main(String[] args) {
+        ArrayList&lt;Row&gt; rows = new ArrayList&lt;&gt;(Arrays.asList(
+                new Row("D006", 3, 2010, "The Social Network"), new Row("T005", 2, 2025, "Tech Weekly"),
+                new Row("B003", 1, 2006, "Java Concurrency In Practice"), new Row("T007", 2, 2025, "Java Magazine"),
+                new Row("B001", 1, 2019, "The Pragmatic Programmer")));
+
+        Comparator&lt;Row&gt; byKeys = Comparator.comparingInt(Row::getType)           // key 1: type ascending
+                .thenComparing(Comparator.comparingInt(Row::getYear).reversed())  // key 2: year DESCENDING
+                .thenComparing(Row::getTitle, String.CASE_INSENSITIVE_ORDER)       // key 3: title A-Z
+                .thenComparing(Row::getId);                                       // key 4: id
+        Collections.sort(rows, byKeys);
+        for (Row row : rows) {
+            System.out.println(row);
+        }
+    }
+}</code></pre>
+<div class="out">B001 1 2019 The Pragmatic Programmer<br>
+B003 1 2006 Java Concurrency In Practice<br>
+T007 2 2025 Java Magazine<br>
+T005 2 2025 Tech Weekly<br>
+D006 3 2010 The Social Network</div>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt, và bộ chấm 297/297.</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (297 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Da them T007 "Java Magazine". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B004 "Head First Java": 4 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua T005 "Tech Weekly": 2 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Den nam phai lon hon hoac bang Tu nam (2000), ban nhap 1999. Moi nhap lai.<br>
+Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 7 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+5 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+6 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+7 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Khong co tai lieu nao khop ca 3 tieu chi (loai, khoang nam, tu khoa). Hay noi rong 1 tieu chi.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Tim nang cao ---<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 3. Moi nhap lai.<br>
+Loai (0 Tat ca, 1 Sach, 2 Tap chi, 3 DVD): Tu nam: Den nam: Tu khoa trong ten (Enter = bo qua): Tim thay 2 tai lieu (sap theo loai, nam moi truoc, ten):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Type &nbsp;&nbsp;&nbsp;&nbsp;Titles Copies OnLoan<br>
+Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+Tong &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+2 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Java Magazine &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 7<br>
+3 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 7 chi nam trong bo nho.</div>
+</details>
+<details><summary>BookController — ba phương thức mới, vẫn chỉ qua interface</summary>
+<pre class="trich"><code class="language-java">// Don kho: kho xoa moi tai lieu het ban khong ai dang muon, bao cac ma da xoa
+public void purgeOutOfStock() {
+    // Ma da xoa (kho tu duyet + xoa tai vi tri; ma dang muon thi giu)
+    ArrayList&lt;String&gt; deletedIdList
+            = bookRepository.deleteOutOfStock(loanRepository.findLoanedItemIdList());
+
+    // Khong xoa gi thi bao kho giu nguyen; co thi bao so luong + cac ma
+    if (deletedIdList.isEmpty()) {
+        showResult(Message.PURGE_NONE, new ArrayList&lt;BookResponseDTO&gt;());
+    } else {
+        // Noi cac ma bang ", " (String.join cua Java 8, khong dung +=)
+        showResult(String.format(Message.SUCCESS_PURGE, deletedIdList.size(),
+                String.join(Constants.ID_SEPARATOR, deletedIdList)),
+                new ArrayList&lt;BookResponseDTO&gt;());
+    }
+}</code></pre>
+</details>
+<p><code>remove(i)</code> bên trong làm gì, trên một mảng thường (Chương 7), chạy thật:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — ArrayList.remove(i) bên trong làm gì: dời mọi ô phía sau sang TRÁI một bước (Chương 7, ItemList)
+import java.util.Arrays;
+
+public class LabXoaMang {
+    static String[] shelf = {"B001", "B002", "B003", "B004", "T005", null, null, null};
+    static int size = 5;                                                // 5 ô đang dùng, 3 ô dự phòng
+
+    static void removeAt(int index) {
+        for (int j = index; j &lt; size - 1; j++) {                        // trái sang phải: chép ô SAU vào ô này
+            shelf[j] = shelf[j + 1];
+        }
+        shelf[size - 1] = null;                                         // xoá ô cuối đang dùng
+        size--;                                                         // quên dòng này là còn "bóng ma"
+    }
+
+    static void removeAtWrong(String[] cells, int index, int used) {
+        for (int j = used - 2; j &gt;= index; j--) {                       // SAI chiều: chép từ cuối ngược về
+            cells[j] = cells[j + 1];
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("truoc      : " + Arrays.toString(shelf) + " size=" + size);
+        removeAt(1);                                                    // xoá B002
+        System.out.println("xoa o 1    : " + Arrays.toString(shelf) + " size=" + size);
+
+        String[] copy = {"B001", "B002", "B003", "B004", "T005"};
+        removeAtWrong(copy, 1, 5);
+        System.out.println("doi sai chieu: " + Arrays.toString(copy) + "   &lt;- B003, B004 mat, T005 lap lai");
+    }
+}</code></pre>
+<div class="out">truoc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001, B002, B003, B004, T005, null, null, null] size=5<br>
+xoa o 1 &nbsp;&nbsp;&nbsp;: [B001, B003, B004, T005, null, null, null, null] size=4<br>
+doi sai chieu: [B001, T005, T005, T005, T005] &nbsp;&nbsp;&lt;- B003, B004 mat, T005 lap lai</div>
+<p>Cùng thứ tự bốn khoá bằng <code>comparing().thenComparing()</code> của Java 8:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — cùng thứ tự 4 khoá bằng hai cách: Comparator ẩn danh (như lab) và comparing().thenComparing() của Java 8
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
+class Row {
+    private final int type;
+    private final int year;
+    private final String title;
+    private final String id;
+
+    Row(String id, int type, int year, String title) {
+        this.id = id;
+        this.type = type;
+        this.year = year;
+        this.title = title;
+    }
+
+    int getType() { return type; }
+    int getYear() { return year; }
+    String getTitle() { return title; }
+    String getId() { return id; }
+
+    @Override
+    public String toString() { return id + " " + type + " " + year + " " + title; }
+}
+
+public class LabNhieuKhoa {
+    public static void main(String[] args) {
+        ArrayList&lt;Row&gt; rows = new ArrayList&lt;&gt;(Arrays.asList(
+                new Row("D006", 3, 2010, "The Social Network"), new Row("T005", 2, 2025, "Tech Weekly"),
+                new Row("B003", 1, 2006, "Java Concurrency In Practice"), new Row("T007", 2, 2025, "Java Magazine"),
+                new Row("B001", 1, 2019, "The Pragmatic Programmer")));
+
+        Comparator&lt;Row&gt; byKeys = Comparator.comparingInt(Row::getType)           // khoá 1: loại tăng
+                .thenComparing(Comparator.comparingInt(Row::getYear).reversed())  // khoá 2: năm GIẢM
+                .thenComparing(Row::getTitle, String.CASE_INSENSITIVE_ORDER)       // khoá 3: tên A-Z
+                .thenComparing(Row::getId);                                       // khoá 4: mã
+        Collections.sort(rows, byKeys);
+        for (Row row : rows) {
+            System.out.println(row);
+        }
+    }
+}</code></pre>
+<div class="out">B001 1 2019 The Pragmatic Programmer<br>
+B003 1 2006 Java Concurrency In Practice<br>
+T007 2 2025 Java Magazine<br>
+T005 2 2025 Tech Weekly<br>
+D006 3 2010 The Social Network</div>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — for-each + remove.</strong> <code>ConcurrentModificationException</code>, nobody catches it, the menu dies (project <code>bay/xoa-foreach</code>; JDK 21 prints <code>java.base/</code> before the JDK classes, JDK 8 does not).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Exception in thread "main" java.util.ConcurrentModificationException<br>
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1095)<br>
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:1049)<br>
+	at repository.InMemoryBookRepository.deleteOutOfStock(InMemoryBookRepository.java:152)<br>
+	at controller.BookController.purgeOutOfStock(BookController.java:236)<br>
+	at main.Main.runMenu(Main.java:144)<br>
+	at main.Main.main(Main.java:33)</div>
+<div class="pitfall"><p><strong>Trap 2 — walking forwards.</strong> No crash: T005 slides into the removed cell and is skipped (project <code>bay/xoa-xuoi</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 218:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+&nbsp;&nbsp;ban in : Da don kho: xoa 2 tai lieu het ban (B002, B004). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+Dong 236:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+&nbsp;&nbsp;ban in : Da don kho: xoa 1 tai lieu het ban (T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+FAIL: 2 dong khac (expected.txt co 297 dong, ban in 297 dong). Mo harness/actual.txt de xem du.</div>
+<p>All four loops on one list:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — four ways to remove while looping over an ArrayList: one crashes, one silently skips, two are right
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+
+public class LabXoaAnToan {
+    static ArrayList&lt;String&gt; stock() {                                  // copies left per item; "0" = out of stock
+        return new ArrayList&lt;&gt;(Arrays.asList("B001:3", "B002:0", "B003:1", "B004:0", "T005:0", "D006:1"));
+    }
+
+    static boolean isEmpty(String item) {
+        return item.endsWith(":0");
+    }
+
+    public static void main(String[] args) {
+        ArrayList&lt;String&gt; list = stock();
+        try {
+            for (String item : list) {                                  // for-each hides an Iterator
+                if (isEmpty(item)) {
+                    list.remove(item);                                  // changes the list behind the iterator's back
+                }
+            }
+        } catch (ConcurrentModificationException e) {
+            System.out.println("1 for-each + remove : " + e);
+        }
+
+        list = stock();
+        for (int i = 0; i &lt; list.size(); i++) {                         // forward: the next cell slides into i, then i++ skips it
+            if (isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        System.out.println("2 duyet xuoi        : " + list + "   &lt;- T005 bi bo sot");
+
+        list = stock();
+        for (int i = list.size() - 1; i &gt;= 0; i--) {                    // backward: only cells already visited move
+            if (isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        System.out.println("3 duyet nguoc       : " + list);
+
+        list = stock();
+        Iterator&lt;String&gt; iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (isEmpty(iterator.next())) {
+                iterator.remove();                                      // the iterator removes it, so it stays in sync
+            }
+        }
+        System.out.println("4 Iterator.remove() : " + list);
+    }
+}</code></pre>
+<div class="out">1 for-each + remove : java.util.ConcurrentModificationException<br>
+2 duyet xuoi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001:3, B003:1, T005:0, D006:1] &nbsp;&nbsp;&lt;- T005 bi bo sot<br>
+3 duyet nguoc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001:3, B003:1, D006:1]<br>
+4 Iterator.remove() : [B001:3, B003:1, D006:1]</div>
+<div class="pitfall"><p><strong>Trap 3 — == on Strings.</strong> Every id typed at the keyboard is "not found" (project <code>bay/so-sanh-bang</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 36:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B003. Hay chon 2 de xem ma roi thu lai.<br>
+Dong 54:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 0.<br>
+&nbsp;&nbsp;ban in : Ma tai lieu (vi du B001, T005, D006): So ban: Khong co tai lieu nao mang ma B002. Hay chon 2 de xem ma roi thu lai.<br>
+…</div>
+<pre><code class="language-java">// release: 8
+// Lab 7 trap — == compares two ADDRESSES; a String typed at the keyboard is a NEW object
+import java.util.Scanner;
+
+public class LabBaySoSanhChuoi {
+    public static void main(String[] args) {
+        String storedId = String.format("%s%03d", "B", 1);              // how the repository builds "B001"
+        String literal = "B001";                                        // a literal lives in the String pool
+        Scanner scanner = new Scanner(System.in);
+        String typedId = scanner.nextLine().trim().toUpperCase();       // what Main reads: "b001" -&gt; "B001"
+
+        System.out.println("typed = \\"" + typedId + "\\", stored = \\"" + storedId + "\\"");
+        System.out.println("typedId == storedId      : " + (typedId == storedId));
+        System.out.println("typedId.equals(storedId) : " + typedId.equals(storedId));
+        System.out.println("literal == \\"B001\\"        : " + (literal == "B001") + "   &lt;- dung NHO: cung 1 o trong pool");
+    }
+}</code></pre>
+<div class="out">typed = "B001", stored = "B001"<br>
+typedId == storedId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false<br>
+typedId.equals(storedId) : true<br>
+literal == "B001" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: true &nbsp;&nbsp;&lt;- dung NHO: cung 1 o trong pool</div>
+<div class="pitfall"><p><strong>Trap 4 — an array of objects without new.</strong> <code>NullPointerException</code> at the first item (project <code>bay/mang-null</code>, JDK 21), and the bare JDK 8 message of the exam room.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "dto.TypeStatDTO.getTitleCount()" because "&lt;local8&gt;" is null<br>
+	at service.BookService.buildTypeReport(BookService.java:219)<br>
+	at controller.BookController.showTypeReport(BookController.java:227)<br>
+	at main.Main.runMenu(Main.java:138)<br>
+	at main.Main.main(Main.java:33)</div>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Lab 7 trap — new TypeStat[3] makes 3 EMPTY references, not 3 objects (output of a real JDK 8: no helpful message)
+class TypeStat {
+    private int titleCount;
+
+    int getTitleCount() { return titleCount; }
+    void setTitleCount(int titleCount) { this.titleCount = titleCount; }
+}
+
+public class LabBayMangNull {
+    public static void main(String[] args) {
+        TypeStat[] statArray = new TypeStat[3];                         // [null, null, null]
+        System.out.println("statArray[0] = " + statArray[0]);
+        try {
+            statArray[0].setTitleCount(statArray[0].getTitleCount() + 1);  // calls a method on null
+        } catch (NullPointerException e) {
+            System.out.println("sap: " + e + "   &lt;- JDK 8 khong noi o nao null");
+        }
+        for (int i = 0; i &lt; statArray.length; i++) {
+            statArray[i] = new TypeStat();                              // the fix: one new per cell
+        }
+        statArray[0].setTitleCount(statArray[0].getTitleCount() + 1);
+        System.out.println("sau khi new tung o: statArray[0].getTitleCount() = " + statArray[0].getTitleCount());
+    }
+}</code></pre>
+<div class="out">statArray[0] = null<br>
+sap: java.lang.NullPointerException &nbsp;&nbsp;&lt;- JDK 8 khong noi o nao null<br>
+sau khi new tung o: statArray[0].getTitleCount() = 1</div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — for-each + remove.</strong> <code>ConcurrentModificationException</code>, không ai bắt, menu chết (dự án <code>bay/xoa-foreach</code>; JDK 21 in <code>java.base/</code> trước tên lớp của JDK, JDK 8 thì không).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Don kho ---<br>
+Exception in thread "main" java.util.ConcurrentModificationException<br>
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1095)<br>
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:1049)<br>
+	at repository.InMemoryBookRepository.deleteOutOfStock(InMemoryBookRepository.java:152)<br>
+	at controller.BookController.purgeOutOfStock(BookController.java:236)<br>
+	at main.Main.runMenu(Main.java:144)<br>
+	at main.Main.main(Main.java:33)</div>
+<div class="pitfall"><p><strong>Bẫy 2 — duyệt xuôi.</strong> Không sập: T005 trượt vào ô vừa xoá và bị bỏ qua (dự án <code>bay/xoa-xuoi</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 218:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Da don kho: xoa 3 tai lieu het ban (B002, B004, T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+&nbsp;&nbsp;ban in : Da don kho: xoa 2 tai lieu het ban (B002, B004). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+Dong 236:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Khong co tai lieu het ban nao ma khong ai muon. Kho giu nguyen.<br>
+&nbsp;&nbsp;ban in : Da don kho: xoa 1 tai lieu het ban (T005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+FAIL: 2 dong khac (expected.txt co 297 dong, ban in 297 dong). Mo harness/actual.txt de xem du.</div>
+<p>Cả bốn vòng lặp trên cùng một danh sách:</p>
+<pre><code class="language-java">// release: 8
+// Lab 7 — bốn cách xoá khi đang duyệt ArrayList: một cách sập, một cách lặng lẽ bỏ sót, hai cách đúng
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+
+public class LabXoaAnToan {
+    static ArrayList&lt;String&gt; stock() {                                  // số bản còn; "0" = hết bản
+        return new ArrayList&lt;&gt;(Arrays.asList("B001:3", "B002:0", "B003:1", "B004:0", "T005:0", "D006:1"));
+    }
+
+    static boolean isEmpty(String item) {
+        return item.endsWith(":0");
+    }
+
+    public static void main(String[] args) {
+        ArrayList&lt;String&gt; list = stock();
+        try {
+            for (String item : list) {                                  // for-each giấu một Iterator
+                if (isEmpty(item)) {
+                    list.remove(item);                                  // sửa danh sách sau lưng iterator
+                }
+            }
+        } catch (ConcurrentModificationException e) {
+            System.out.println("1 for-each + remove : " + e);
+        }
+
+        list = stock();
+        for (int i = 0; i &lt; list.size(); i++) {                         // xuôi: ô sau trượt vào i, rồi i++ nhảy qua nó
+            if (isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        System.out.println("2 duyet xuoi        : " + list + "   &lt;- T005 bi bo sot");
+
+        list = stock();
+        for (int i = list.size() - 1; i &gt;= 0; i--) {                    // ngược: chỉ các ô đã duyệt bị dời
+            if (isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        System.out.println("3 duyet nguoc       : " + list);
+
+        list = stock();
+        Iterator&lt;String&gt; iterator = list.iterator();
+        while (iterator.hasNext()) {
+            if (isEmpty(iterator.next())) {
+                iterator.remove();                                      // chính iterator xoá nên không lệch
+            }
+        }
+        System.out.println("4 Iterator.remove() : " + list);
+    }
+}</code></pre>
+<div class="out">1 for-each + remove : java.util.ConcurrentModificationException<br>
+2 duyet xuoi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001:3, B003:1, T005:0, D006:1] &nbsp;&nbsp;&lt;- T005 bi bo sot<br>
+3 duyet nguoc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001:3, B003:1, D006:1]<br>
+4 Iterator.remove() : [B001:3, B003:1, D006:1]</div>
+<div class="pitfall"><p><strong>Bẫy 3 — so chuỗi bằng ==.</strong> Mọi mã gõ từ bàn phím đều "không có" (dự án <code>bay/so-sanh-bang</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 36:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B003. Hay chon 2 de xem ma roi thu lai.<br>
+Dong 54:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 0.<br>
+&nbsp;&nbsp;ban in : Ma tai lieu (vi du B001, T005, D006): So ban: Khong co tai lieu nao mang ma B002. Hay chon 2 de xem ma roi thu lai.<br>
+…</div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 7 — == so hai ĐỊA CHỈ; chuỗi gõ từ bàn phím là một đối tượng MỚI
+import java.util.Scanner;
+
+public class LabBaySoSanhChuoi {
+    public static void main(String[] args) {
+        String storedId = String.format("%s%03d", "B", 1);              // cách kho dựng "B001"
+        String literal = "B001";                                        // chữ viết sẵn nằm trong String pool
+        Scanner scanner = new Scanner(System.in);
+        String typedId = scanner.nextLine().trim().toUpperCase();       // Main đọc: "b001" -&gt; "B001"
+
+        System.out.println("typed = \\"" + typedId + "\\", stored = \\"" + storedId + "\\"");
+        System.out.println("typedId == storedId      : " + (typedId == storedId));
+        System.out.println("typedId.equals(storedId) : " + typedId.equals(storedId));
+        System.out.println("literal == \\"B001\\"        : " + (literal == "B001") + "   &lt;- dung NHO: cung 1 o trong pool");
+    }
+}</code></pre>
+<div class="out">typed = "B001", stored = "B001"<br>
+typedId == storedId &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false<br>
+typedId.equals(storedId) : true<br>
+literal == "B001" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: true &nbsp;&nbsp;&lt;- dung NHO: cung 1 o trong pool</div>
+<div class="pitfall"><p><strong>Bẫy 4 — mảng đối tượng thiếu new.</strong> <code>NullPointerException</code> ngay ở tài liệu đầu tiên (dự án <code>bay/mang-null</code>, JDK 21), và câu báo trơn của JDK 8 ở phòng thi.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke theo loai ---<br>
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "dto.TypeStatDTO.getTitleCount()" because "&lt;local8&gt;" is null<br>
+	at service.BookService.buildTypeReport(BookService.java:219)<br>
+	at controller.BookController.showTypeReport(BookController.java:227)<br>
+	at main.Main.runMenu(Main.java:138)<br>
+	at main.Main.main(Main.java:33)</div>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Bẫy Lab 7 — new TypeStat[3] tạo 3 tham chiếu RỖNG, không phải 3 đối tượng (output JDK 8 thật: không có câu giải thích)
+class TypeStat {
+    private int titleCount;
+
+    int getTitleCount() { return titleCount; }
+    void setTitleCount(int titleCount) { this.titleCount = titleCount; }
+}
+
+public class LabBayMangNull {
+    public static void main(String[] args) {
+        TypeStat[] statArray = new TypeStat[3];                         // [null, null, null]
+        System.out.println("statArray[0] = " + statArray[0]);
+        try {
+            statArray[0].setTitleCount(statArray[0].getTitleCount() + 1);  // gọi phương thức trên null
+        } catch (NullPointerException e) {
+            System.out.println("sap: " + e + "   &lt;- JDK 8 khong noi o nao null");
+        }
+        for (int i = 0; i &lt; statArray.length; i++) {
+            statArray[i] = new TypeStat();                              // cách sửa: new từng ô
+        }
+        statArray[0].setTitleCount(statArray[0].getTitleCount() + 1);
+        System.out.println("sau khi new tung o: statArray[0].getTitleCount() = " + statArray[0].getTitleCount());
+    }
+}</code></pre>
+<div class="out">statArray[0] = null<br>
+sap: java.lang.NullPointerException &nbsp;&nbsp;&lt;- JDK 8 khong noi o nao null<br>
+sau khi new tung o: statArray[0].getTitleCount() = 1</div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td><code>getItemType()</code> abstract + 3 overrides, no <code>instanceof</code> (7.1)</td><td>2</td><td>read + a search for <code>instanceof</code></td></tr>
+<tr><td>Three-criteria search (7.2)</td><td>2</td><td>grader lines 159–160, 178</td></tr>
+<tr><td>Four-key comparator (7.3)</td><td>1</td><td>grader lines 137–138, 199–200</td></tr>
+<tr><td>Array of objects, total row (7.4)</td><td>2</td><td>grader lines 109–112, 255–258</td></tr>
+<tr><td>Backward removal, loaned items kept (7.5)</td><td>2</td><td>grader lines 218, 236</td></tr>
+<tr><td>Oral: "how do you remove while looping?"</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. Why does the clean-out loop run from the last index down to 0?</summary><p class="dap-an">✅ <code>remove(i)</code> shifts only the cells after i. Walking backwards, those cells have already been visited, so nothing is skipped. Walking forwards, the next cell slides into i and <code>i++</code> jumps over it.</p></details>
+<details><summary>2. What does new TypeStatDTO[3] contain?</summary><p class="dap-an">✅ Three references, all <code>null</code>. No <code>TypeStatDTO</code> object exists until you <code>new</code> each cell; calling a method on a cell before that throws <code>NullPointerException</code>.</p></details>
+<details><summary>3. In the comparator, how do you get "newest first"?</summary><p class="dap-an">✅ Swap the arguments for that key: <code>Integer.compare(second.getYear(), first.getYear())</code>. With Java 8's helpers: <code>Comparator.comparingInt(…getYear).reversed()</code>.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td><code>getItemType()</code> trừu tượng + 3 bản ghi đè, không <code>instanceof</code> (7.1)</td><td>2</td><td>đọc + tìm chữ <code>instanceof</code></td></tr>
+<tr><td>Tìm ba tiêu chí (7.2)</td><td>2</td><td>dòng 159–160, 178 của bộ chấm</td></tr>
+<tr><td>Bộ so sánh bốn khoá (7.3)</td><td>1</td><td>dòng 137–138, 199–200 của bộ chấm</td></tr>
+<tr><td>Mảng đối tượng, dòng tổng (7.4)</td><td>2</td><td>dòng 109–112, 255–258 của bộ chấm</td></tr>
+<tr><td>Xoá duyệt ngược, giữ tài liệu đang mượn (7.5)</td><td>2</td><td>dòng 218, 236 của bộ chấm</td></tr>
+<tr><td>Vấn đáp: "xoá khi đang duyệt thế nào?"</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. Vì sao vòng lặp dọn kho chạy từ chỉ số cuối về 0?</summary><p class="dap-an">✅ <code>remove(i)</code> chỉ dời các ô sau i. Duyệt ngược thì các ô đó đã duyệt xong, nên không bỏ sót ô nào. Duyệt xuôi thì ô kế tiếp trượt vào i và <code>i++</code> nhảy qua nó.</p></details>
+<details><summary>2. new TypeStatDTO[3] chứa gì?</summary><p class="dap-an">✅ Ba tham chiếu, đều là <code>null</code>. Chưa có đối tượng <code>TypeStatDTO</code> nào cho tới khi bạn <code>new</code> từng ô; gọi phương thức trên một ô trước lúc đó là <code>NullPointerException</code>.</p></details>
+<details><summary>3. Trong bộ so sánh, làm sao có "mới trước"?</summary><p class="dap-an">✅ Đổi chỗ hai đối số của khoá đó: <code>Integer.compare(second.getYear(), first.getYear())</code>. Với tiện ích Java 8: <code>Comparator.comparingInt(…getYear).reversed()</code>.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Add a fourth criterion "only items with copies on the shelf" (a yes/no question): which classes change, and does the comparator change?</li>
+<li>⭐ Rewrite <code>deleteOutOfStock</code> with <code>Iterator.remove()</code>, then with Java 8's <code>removeIf</code>. Which one still lets you collect the removed ids?</li>
+<li>⭐⭐ Add an <code>AudioBook</code> type with only the abstract method missing: read the javac error, then count the files you must touch to make it work everywhere (search, statistics, clean-out).</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 8 (after Chapter 8):</strong> Collections for real. Members move into a <code>HashMap</code> keyed by id, loan history into a <code>Map</code> of lists, authors into a <code>TreeSet</code>; <code>equals</code>/<code>hashCode</code> on <code>Member</code>, and a "top 5 most borrowed" report.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Thêm tiêu chí thứ tư "chỉ tài liệu còn bản trên kệ" (câu hỏi có/không): những lớp nào đổi, và bộ so sánh có đổi không?</li>
+<li>⭐ Viết lại <code>deleteOutOfStock</code> bằng <code>Iterator.remove()</code>, rồi bằng <code>removeIf</code> của Java 8. Cách nào vẫn gom được danh sách mã đã xoá?</li>
+<li>⭐⭐ Thêm loại <code>AudioBook</code> mà quên đúng phương thức trừu tượng: đọc lỗi javac, rồi đếm số tệp phải chạm để nó chạy được ở mọi nơi (tìm, thống kê, dọn kho).</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 8 (sau Chương 8):</strong> Collections thật sự. Thành viên chuyển vào một <code>HashMap</code> theo mã, lịch sử mượn thành một <code>Map</code> các danh sách, tác giả vào một <code>TreeSet</code>; <code>equals</code>/<code>hashCode</code> cho <code>Member</code>, và báo cáo "top 5 tài liệu được mượn nhiều nhất".</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch7) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -3376,6 +5212,7 @@ public class Q9 {
 export default {
   slides: [L_pro12_1],
   practice: L_on_ch7,
+  labs: [L_lab7],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 7 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ và câu "in ra gì" đã chạy thật trên JDK 8: mảng đối tượng mới tạo chứa gì, hai biến cùng một mảng, xoá trong vòng lặp tiến, removeItem của slide khi mảng đầy, sắp xếp cả mảng có ô null, bản sao nông bằng Arrays.copyOf, vòng lặp chèn tại chỉ số, giá trị -1 khi không tìm thấy, mảng kiểu cha với toString đa hình, và bẫy nextInt rồi nextLine.',
 };

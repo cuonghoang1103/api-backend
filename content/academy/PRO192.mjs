@@ -1227,6 +1227,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch6.mjs */
         ch6.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch6.mjs */
+        ...ch6.labs,
         {
           title: 'Chapter 6 Quiz|||Quiz chương 6',
           slug: 'pro192-quiz-ch6',
@@ -1319,6 +1321,8 @@ students[2] = <span class="tok-keyword">new</span> <span class="tok-function">St
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch7.mjs */
         ch7.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch7.mjs */
+        ...ch7.labs,
         {
           title: 'Chapter 7 Quiz|||Quiz chương 7',
           slug: 'pro192-quiz-ch7',

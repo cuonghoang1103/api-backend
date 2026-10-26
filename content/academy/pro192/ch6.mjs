@@ -2,13 +2,16 @@
  * PRO192 · Chương 6 — xử lý ngoại lệ (pro11).
  * Bài 📑 học theo từng slide: pro11 (tmp_11.pptx, slide 1–17).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch6.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-6-ngoai-le-muon-tra.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch6).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab6', { code: 'PRO192 Lab 6', en: 'Lab 6 — CT Library: business exceptions, borrowing and returning', vi: 'Lab 6 — CT Library: ngoại lệ nghiệp vụ, mượn và trả', total: 17, w: 1280, h: 720 });
 
 /* ───────── 6.A — 📑 Slide by slide · Exception Handling: try-catch-finally, throws, propagation (slides 1–17) ───────── */
 const L_pro11_1 = {
@@ -3810,6 +3813,1519 @@ program still running at the end</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 6 — 🏗️ CT Library: business exceptions, borrowing and returning (checked exceptions, throw/catch by layer, try-with-resources) ───────── */
+const L_lab6 = {
+  title: 'Lab 6 — 🏗️ CT Library: business exceptions, borrowing and returning (checked exceptions, throw/catch by layer, try-with-resources)|||Lab 6 — 🏗️ CT Library: ngoại lệ nghiệp vụ, mượn và trả (ngoại lệ checked, ném/bắt đúng tầng, try-with-resources)',
+  slug: 'pro192-lab-6-ngoai-le-muon-tra',
+  type: 'VIDEO',
+  description: 'Lab 6 của dự án CT Library (sau Chương 6), chuẩn review LAB211: mượn và trả sách thật (menu 10, 11) cùng mọi cách nó thất bại. Mỗi lỗi nghiệp vụ một lớp ngoại lệ checked có tên (gói exceptions: LibraryException trừu tượng và sáu lớp con — không tìm thấy, trùng khoá, hết bản, quá hạn mức 3, chưa mượn mà đòi trả), ném ở repository hoặc service, bắt ở controller, View in câu báo tiếng Việt nói rõ chỗ sai; lỗi nhập là InvalidInputException giữ nguyên nhân gốc, Main bắt và hỏi lại; Scanner mở bằng try-with-resources. Kèm năm lỗi javac thật (bắt lớp cha trước, quên khai throws, lớp con quên constructor), bẫy catch rỗng nuốt lỗi, return trong finally, đóng Scanner bọc System.in. Starter + đáp án tải về, bộ chấm kiểu PE 233 dòng, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 6 · Lab 6 · CT Library</span>
+<h2>Lab 6 — business exceptions, borrowing and returning</h2>
+<p class="lead">Chapter 6 taught you what an exception is, the difference between checked and unchecked, and the try–catch–finally machinery. Lab 6 puts it to work where it matters: CT Library starts lending for real, and lending fails in many honest ways — the item does not exist, nobody has a copy left, the member already holds three items, someone returns a book they never borrowed. Every one of those failures gets its own exception class, thrown in the layer that discovers it and caught in the layer that can do something about it.</p>
+<p>The starter is a fresh project: Lab 5 finished, the exception classes and the borrow/return menu given, five TODOs marked <code>TODO Lab 6.x</code>. Plan about <strong>2.5 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 6 · Lab 6 · CT Library</span>
+<h2>Lab 6 — ngoại lệ nghiệp vụ, mượn và trả</h2>
+<p class="lead">Chương 6 dạy bạn ngoại lệ là gì, checked khác unchecked ra sao, và bộ máy try–catch–finally. Lab 6 đem tất cả vào đúng chỗ cần: CT Library bắt đầu cho mượn thật, và việc mượn hỏng theo rất nhiều cách hoàn toàn bình thường — mã không có, hết bản trên kệ, thành viên đã giữ đủ ba tài liệu, có người trả cuốn mình chưa từng mượn. Mỗi kiểu hỏng có một lớp ngoại lệ riêng, được ném ở tầng phát hiện ra nó và được bắt ở tầng làm được gì đó với nó.</p>
+<p>Starter là một dự án sạch: Lab 5 đã xong, các lớp ngoại lệ và menu mượn/trả cho sẵn, năm TODO đánh dấu <code>TODO Lab 6.x</code>. Dành khoảng <strong>2,5 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 6 (17 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 6 (17 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab6', [
+      [1, 'Lab 6 — CT Library: business exceptions, borrowing and returning',
+        `<p class="y-chinh">🎯 Lab 6 = Chapter 6 on a real codebase: borrowing and returning, and a named exception for each way they can fail.</p>
+<p>The rule of the lab fits in one line: <em>throw where you find the problem, catch where you can answer it</em>. The menu never crashes, and no error is ever silent.</p>`,
+        `<p class="y-chinh">🎯 Lab 6 = Chương 6 trên một bộ mã thật: mượn và trả, và một ngoại lệ có tên cho mỗi cách chúng có thể hỏng.</p>
+<p>Luật của lab gói trong một câu: <em>ném ở nơi phát hiện ra vấn đề, bắt ở nơi trả lời được nó</em>. Menu không bao giờ sập, và không lỗi nào im lặng.</p>`],
+      [2, 'Ticket CTL-6 — borrowing for real, and every way it fails',
+        `<p class="y-chinh">🎯 Two new options (10 Borrow, 11 Return) and five business rules, each with a clear Vietnamese message that says what was wrong.</p>
+<p>Done means: PASS 233/233 on the grader — the harness plays eleven wrong inputs and expects eleven exact messages while the menu keeps running — <code>lint.py</code> silent, no empty <code>catch</code>, no <code>catch (Exception e)</code>, and <code>throws Exception</code> gone from the whole project.</p>`,
+        `<p class="y-chinh">🎯 Hai lựa chọn mới (10 Mượn, 11 Trả) và năm luật nghiệp vụ, mỗi luật một câu báo tiếng Việt nói rõ sai ở đâu.</p>
+<p>Xong nghĩa là: bộ chấm PASS 233/233 — harness gõ mười một dữ liệu sai và chờ đúng mười một câu báo trong khi menu vẫn chạy tiếp — <code>lint.py</code> im lặng, không khối <code>catch</code> rỗng, không <code>catch (Exception e)</code>, và chữ <code>throws Exception</code> biến mất khỏi cả dự án.</p>`],
+      [3, "What was wrong with Lab 5's exceptions",
+        `<p class="y-chinh">🎯 Lab 5 used one exception for everything: <code>throw new Exception(…)</code> in the repository, <code>throws Exception</code> on every method, <code>catch (Exception e)</code> everywhere.</p>
+<p>It worked, but it said nothing. A signature <code>findById(String id) throws Exception</code> does not tell you <em>what</em> can go wrong, and <code>catch (Exception e)</code> also swallows the bugs you want to see — a <code>NullPointerException</code> becomes a polite message. Lab 6 replaces "something failed" by names: <code>ItemNotFoundException</code>, <code>LoanLimitException</code>…</p>`,
+        `<p class="y-chinh">🎯 Lab 5 dùng một ngoại lệ cho mọi thứ: <code>throw new Exception(…)</code> trong repository, <code>throws Exception</code> trên mọi phương thức, <code>catch (Exception e)</code> ở khắp nơi.</p>
+<p>Nó chạy được, nhưng chẳng nói lên điều gì. Chữ ký <code>findById(String id) throws Exception</code> không cho biết <em>cái gì</em> có thể hỏng, và <code>catch (Exception e)</code> nuốt luôn cả những bug bạn muốn thấy — một <code>NullPointerException</code> biến thành một câu báo lịch sự. Lab 6 thay "có gì đó hỏng" bằng tên gọi: <code>ItemNotFoundException</code>, <code>LoanLimitException</code>…</p>`],
+      [4, 'The exception family of CT Library',
+        `<p class="y-chinh">🎯 <code>LibraryException</code> (abstract, extends <code>Exception</code>) is the parent of six business exceptions; <code>InvalidInputException</code> stands apart for input errors.</p>
+<p>The names follow the reviewer's checklist item 1.3 — an exception class ends with <code>Exception</code> — and the package is <code>exceptions/</code>, exactly like <code>CarException</code> in the solved LAB211 sample. The parent is <code>abstract</code> (Lab 5): nobody throws a "generic library error". One parent buys one thing: the controller can catch the whole family in one <code>catch (LibraryException e)</code>.</p>`,
+        `<p class="y-chinh">🎯 <code>LibraryException</code> (trừu tượng, extends <code>Exception</code>) là cha của sáu ngoại lệ nghiệp vụ; <code>InvalidInputException</code> đứng riêng cho lỗi nhập.</p>
+<p>Tên đặt theo mục 1.3 tờ checklist của thầy — lớp ngoại lệ kết thúc bằng <code>Exception</code> — và gói là <code>exceptions/</code>, y như <code>CarException</code> trong bài mẫu LAB211. Lớp cha là <code>abstract</code> (Lab 5): không ai ném "lỗi thư viện chung chung". Có một lớp cha thì được một thứ: controller bắt được cả họ bằng một khối <code>catch (LibraryException e)</code>.</p>`],
+      [5, 'Checked or unchecked? Ask who can fix it',
+        `<p class="y-chinh">🎯 If the user can fix it, make it <strong>checked</strong> (javac forces someone to handle it); if only a programmer can fix it, let it be <strong>unchecked</strong> and do not catch it.</p>
+<p>"B099 does not exist", "no copy left", "already three loans" are normal outcomes: checked, so the compiler will not let a caller forget them. "Item type 7" in <code>createItem</code> can only happen if the code is wrong, because <code>Validation</code> allows 1 to 3: it is an <code>IllegalArgumentException</code> (unchecked) that nobody catches — a bug should be loud. Input errors are checked too, because <code>Main</code> must ask again.</p>`,
+        `<p class="y-chinh">🎯 Người dùng sửa được thì cho nó là <strong>checked</strong> (javac buộc có người xử lý); chỉ lập trình viên sửa được thì để <strong>unchecked</strong> và đừng bắt.</p>
+<p>"B099 không có", "hết bản", "đã mượn đủ ba" là kết quả bình thường: checked, để trình biên dịch không cho nơi gọi quên chúng. "Loại tài liệu số 7" trong <code>createItem</code> chỉ xảy ra khi code sai, vì <code>Validation</code> chỉ cho 1 tới 3: đó là <code>IllegalArgumentException</code> (unchecked) không ai bắt — bug thì phải ồn ào. Lỗi nhập cũng checked, vì <code>Main</code> phải hỏi lại.</p>`],
+      [6, 'Throw where you find it, catch where you can answer it',
+        `<p class="y-chinh">🎯 Repository throws "not found / duplicate", service throws "against the rules", controller catches and hands the message to the view; utils throws input errors, <code>Main</code> catches them and asks again.</p>
+<p>Each layer does only what it can: the repository knows whether a code exists but not what to say to the user; the service knows the rules but prints nothing (no <code>System.out</code> outside view and main — <code>lint.py</code> checks); the controller is where a failure becomes a result. That is why there is no <code>try</code> in the repository or the service of the solution.</p>`,
+        `<p class="y-chinh">🎯 Repository ném "không có / trùng", service ném "trái luật", controller bắt rồi đưa câu báo cho view; utils ném lỗi nhập, <code>Main</code> bắt và hỏi lại.</p>
+<p>Mỗi tầng chỉ làm việc nó làm được: repository biết một mã có tồn tại hay không nhưng không biết nói gì với người dùng; service biết luật nhưng không in gì (không <code>System.out</code> ngoài view và main — <code>lint.py</code> kiểm); controller là nơi một thất bại trở thành một kết quả. Vì thế repository và service của đáp án không có một khối <code>try</code> nào.</p>`],
+      [7, 'One request through the layers: "10 — borrow"',
+        `<p class="y-chinh">🎯 Main checks the two codes, asks the member controller first (pre-check), then the book controller runs four steps — and the first step that throws stops the rest.</p>
+<p><code>findById</code> may throw <code>ItemNotFoundException</code>, <code>checkLoanLimit</code> a <code>LoanLimitException</code>, <code>checkAvailable</code> an <code>ItemNotAvailableException</code>; only if all pass does the repository take one copy off the shelf and record the loan. The real run of <code>LabNgoaiLeLanNguoc</code> prints the path an exception travels: <code>findById</code> → <code>borrowItem</code> → caught there, and the menu goes on.</p>`,
+        `<p class="y-chinh">🎯 Main kiểm dạng hai mã, hỏi controller thành viên trước (kiểm trước), rồi controller sách chạy bốn bước — và bước đầu tiên ném lỗi sẽ chặn mọi bước sau.</p>
+<p><code>findById</code> có thể ném <code>ItemNotFoundException</code>, <code>checkLoanLimit</code> ném <code>LoanLimitException</code>, <code>checkAvailable</code> ném <code>ItemNotAvailableException</code>; chỉ khi qua cả ba thì repository mới lấy một bản khỏi kệ và ghi lượt mượn. Lần chạy thật <code>LabNgoaiLeLanNguoc</code> in con đường một ngoại lệ đã đi: <code>findById</code> → <code>borrowItem</code> → bị bắt ở đó, và menu chạy tiếp.</p>`],
+      [8, 'TODO 6.1 — two business rules in the service',
+        `<p class="y-chinh">🎯 <code>checkLoanLimit</code> throws <code>LoanLimitException</code> when the member already has 3 loans; <code>checkAvailable</code> throws <code>ItemNotAvailableException</code> when the item has 0 copies.</p>
+<p>The starter leaves both bodies empty, and the real starter run shows what that means: M002 borrows B003 with no copy left ("Con -1 ban tren ke") and M001 ends at "dang muon 4/3". Both methods only <code>throw</code>; the message is built from <code>Message</code>, the numbers from <code>Constants</code> (<code>MAX_LOANS_PER_MEMBER</code> = 3, <code>COPIES_MIN</code> = 0).</p>`,
+        `<p class="y-chinh">🎯 <code>checkLoanLimit</code> ném <code>LoanLimitException</code> khi thành viên đã có 3 lượt mượn; <code>checkAvailable</code> ném <code>ItemNotAvailableException</code> khi tài liệu còn 0 bản.</p>
+<p>Starter để trống cả hai thân, và lần chạy thật của starter cho thấy hậu quả: M002 mượn được B003 dù hết bản ("Con -1 ban tren ke") và M001 kết thúc ở "dang muon 4/3". Hai phương thức chỉ <code>throw</code>; câu báo dựng từ <code>Message</code>, con số lấy từ <code>Constants</code> (<code>MAX_LOANS_PER_MEMBER</code> = 3, <code>COPIES_MIN</code> = 0).</p>`],
+      [9, 'TODO 6.2 and 6.3 — the repositories say "not found"',
+        `<p class="y-chinh">🎯 <code>MemberRepository.findById</code> throws <code>MemberNotFoundException</code>; <code>LoanRepository.removeLoan</code> throws <code>LoanNotFoundException</code> when that member never borrowed that item.</p>
+<p>In the starter, every member code "exists" (M009 borrows a book) and returning an item you never borrowed still adds a copy. Note the shape of <code>findById</code>: the loop returns as soon as it finds the code, so reaching the line after the loop <em>means</em> "not found" — that is where the <code>throw</code> goes.</p>`,
+        `<p class="y-chinh">🎯 <code>MemberRepository.findById</code> ném <code>MemberNotFoundException</code>; <code>LoanRepository.removeLoan</code> ném <code>LoanNotFoundException</code> khi thành viên đó chưa từng mượn tài liệu đó.</p>
+<p>Ở starter, mã thành viên nào cũng "có" (M009 mượn được sách) và trả một cuốn mình chưa mượn vẫn cộng thêm một bản. Để ý hình dạng của <code>findById</code>: vòng lặp <code>return</code> ngay khi thấy mã, nên chạy tới được dòng sau vòng lặp <em>nghĩa là</em> "không có" — <code>throw</code> nằm đúng ở đó.</p>`],
+      [10, 'TODO 6.4 — an empty catch swallows the error',
+        `<p class="y-chinh">🎯 <code>catch (LibraryException e) { }</code> compiles, never crashes — and leaves the user staring at nothing: the grader shows the missing line.</p>
+<p>The project <code>bay/nuot-loi</code> is the solution with one empty catch in <code>borrowItem</code>: the real grader stops at line 30, where "B003 … dang het ban" should be and the menu header comes instead. The fix is one line, <code>resultMessage = e.getMessage();</code>. A <code>catch</code> must do something visible: show the message, try another way, or rethrow.</p>`,
+        `<p class="y-chinh">🎯 <code>catch (LibraryException e) { }</code> biên dịch được, không bao giờ sập — và để người dùng nhìn vào khoảng trống: bộ chấm chỉ ra dòng bị mất.</p>
+<p>Dự án <code>bay/nuot-loi</code> là đáp án với đúng một khối catch rỗng trong <code>borrowItem</code>: bộ chấm thật dừng ở dòng 30, nơi lẽ ra là "B003 … dang het ban" thì lại là tiêu đề menu. Sửa đúng một dòng, <code>resultMessage = e.getMessage();</code>. Một khối <code>catch</code> phải làm điều gì đó nhìn thấy được: báo câu lỗi, thử cách khác, hoặc ném tiếp.</p>`],
+      [11, 'Trap: catch the parent first, or forget to declare',
+        `<p class="y-chinh">🎯 Two real compile errors: a <code>catch</code> of the parent before the child ("has already been caught") and a call that may throw a checked exception outside any <code>try</code> ("unreported exception … must be caught or declared to be thrown").</p>
+<p>The project <code>bay/bat-sai</code> plants both in the solution: <code>catch (LibraryException e)</code> before <code>catch (ItemNotAvailableException e)</code> — the second can never run, so javac refuses — and <code>updateCopies</code> with its <code>try</code> removed "because the code was validated". Order the catches from the most specific to the most general; a checked exception is caught or declared, never ignored.</p>`,
+        `<p class="y-chinh">🎯 Hai lỗi biên dịch thật: <code>catch</code> lớp cha đứng trước lớp con ("has already been caught") và một lời gọi có thể ném ngoại lệ checked nằm ngoài mọi <code>try</code> ("unreported exception … must be caught or declared to be thrown").</p>
+<p>Dự án <code>bay/bat-sai</code> cài cả hai vào đáp án: <code>catch (LibraryException e)</code> đứng trước <code>catch (ItemNotAvailableException e)</code> — khối sau không bao giờ chạy tới được nên javac từ chối — và <code>updateCopies</code> bị bỏ <code>try</code> "vì mã đã kiểm rồi". Xếp các catch từ cụ thể nhất tới chung nhất; ngoại lệ checked thì hoặc bắt, hoặc khai, không bao giờ lờ đi.</p>`],
+      [12, 'Trap: a child exception without a constructor',
+        `<p class="y-chinh">🎯 <code>LibraryException</code> has only a constructor that takes the message, so a subclass that declares none does not compile: Java writes a hidden <code>super()</code> that has nothing to call.</p>
+<p>Real errors of <code>bay/thieu-ctor</code>: "constructor LibraryException in class LibraryException cannot be applied to given types … required: String, found: no arguments", and the service's <code>new LoanLimitException(…)</code> fails too. Constructors are not inherited (Chapter 4): each exception class writes its own one-liner <code>super(message)</code>.</p>`,
+        `<p class="y-chinh">🎯 <code>LibraryException</code> chỉ có constructor nhận câu báo, nên lớp con không khai constructor nào sẽ không biên dịch: Java tự viết một lời gọi <code>super()</code> ngầm mà chẳng có gì để gọi.</p>
+<p>Lỗi thật của <code>bay/thieu-ctor</code>: "constructor LibraryException in class LibraryException cannot be applied to given types … required: String, found: no arguments", và lời gọi <code>new LoanLimitException(…)</code> của service cũng hỏng theo. Constructor không được kế thừa (Chương 4): mỗi lớp ngoại lệ tự viết một dòng <code>super(message)</code> của mình.</p>`],
+      [13, 'TODO 6.5a — InvalidInputException keeps the cause',
+        `<p class="y-chinh">🎯 <code>Validation</code> throws <code>InvalidInputException</code> instead of <code>Exception</code>, and when it converts a <code>NumberFormatException</code> it passes it on as the <em>cause</em>.</p>
+<p><code>super(message, cause)</code> is a constructor of <code>Exception</code> itself: the user reads <code>getMessage()</code>, the developer can still reach <code>getCause()</code> — the real run of <code>LabNguyenNhanGoc</code> prints both. <code>Main</code> now catches exactly <code>InvalidInputException</code>: a bug elsewhere is no longer disguised as "please type again".</p>`,
+        `<p class="y-chinh">🎯 <code>Validation</code> ném <code>InvalidInputException</code> thay cho <code>Exception</code>, và khi đổi một <code>NumberFormatException</code> sang lỗi nhập thì chuyển nó theo làm <em>nguyên nhân gốc</em> (cause).</p>
+<p><code>super(message, cause)</code> là constructor có sẵn của chính <code>Exception</code>: người dùng đọc <code>getMessage()</code>, lập trình viên vẫn lấy được <code>getCause()</code> — lần chạy thật <code>LabNguyenNhanGoc</code> in cả hai. <code>Main</code> giờ bắt đúng <code>InvalidInputException</code>: bug ở chỗ khác không còn bị ngụy trang thành "mời nhập lại".</p>`],
+      [14, 'TODO 6.5b — try-with-resources, once, in main',
+        `<p class="y-chinh">🎯 <code>try (Scanner scanner = new Scanner(System.in)) { runMenu(scanner); }</code>: the Scanner is closed automatically when the block ends, even if an exception escapes.</p>
+<p>Open it once and pass it down. The trap <code>LabBayDongScanner</code> opens a Scanner with try-with-resources inside a helper: the first call works, but closing that Scanner closed <code>System.in</code> itself, and the second call dies with <code>java.util.NoSuchElementException: No line found</code> (real output, same on JDK 8). That is also why Lab 1's rule "Scanner only in main" exists.</p>`,
+        `<p class="y-chinh">🎯 <code>try (Scanner scanner = new Scanner(System.in)) { runMenu(scanner); }</code>: Scanner tự đóng khi khối kết thúc, kể cả khi có ngoại lệ lọt ra.</p>
+<p>Mở một lần rồi truyền xuống. Bẫy <code>LabBayDongScanner</code> mở Scanner bằng try-with-resources bên trong một hàm phụ: lần gọi đầu chạy được, nhưng đóng Scanner đó là đóng luôn <code>System.in</code>, và lần gọi thứ hai chết với <code>java.util.NoSuchElementException: No line found</code> (output thật, JDK 8 y hệt). Đó cũng là lý do luật "Scanner chỉ ở main" từ Lab 1.</p>`],
+      [15, 'Trap: finally is for clean-up, never for return',
+        `<p class="y-chinh">🎯 A <code>return</code> inside <code>finally</code> overrides the <code>try</code>'s return <em>and</em> swallows the exception: the real run of <code>LabBayFinally</code> prints 0 twice and the bug vanishes.</p>
+<p><code>finally</code> runs on every path — normal return, exception, even after <code>return</code> in the try — which makes it the place to release things (close a file, a connection), not to decide the result. The fixed version keeps <code>finally</code> clean and the <code>IllegalStateException</code> reaches the caller.</p>`,
+        `<p class="y-chinh">🎯 <code>return</code> trong <code>finally</code> đè giá trị return của <code>try</code> <em>và</em> nuốt luôn ngoại lệ: lần chạy thật <code>LabBayFinally</code> in 0 hai lần và bug biến mất.</p>
+<p><code>finally</code> chạy trên mọi đường — return bình thường, có ngoại lệ, kể cả sau <code>return</code> trong try — nên nó là chỗ để giải phóng tài nguyên (đóng tệp, kết nối), không phải chỗ quyết định kết quả. Bản sửa giữ <code>finally</code> sạch và <code>IllegalStateException</code> tới được nơi gọi.</p>`],
+      [16, 'Green: PASS 233/233, eleven messages, a silent reviewer',
+        `<p class="y-chinh">🎯 Green = the grader at 233/233 (eleven wrong inputs, eleven exact messages, the menu still running) and <code>lint.py</code> silent.</p>
+<p>A good order: 6.1 (two rules), 6.2 and 6.3 (two "not found"), 6.4 (fill the two empty catches) — the grader turns green after these — then 6.5a and 6.5b, which are design: the output does not move, the reviewer checks them by reading. Finish with a search for <code>throws Exception</code> and <code>catch (Exception</code>: zero hits.</p>`,
+        `<p class="y-chinh">🎯 Xanh = bộ chấm 233/233 (mười một dữ liệu sai, mười một câu báo đúng, menu vẫn chạy) và <code>lint.py</code> im lặng.</p>
+<p>Thứ tự nên làm: 6.1 (hai luật), 6.2 và 6.3 (hai chỗ "không có"), 6.4 (lấp hai khối catch rỗng) — xong mấy cái này bộ chấm xanh — rồi 6.5a và 6.5b, là việc thiết kế: output không đổi, thầy kiểm bằng cách đọc. Kết thúc bằng một lần tìm <code>throws Exception</code> và <code>catch (Exception</code>: không còn chỗ nào.</p>`],
+      [17, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 Behaviour and design share the points; the oral question is "checked or unchecked — and where do you catch it?".</p>
+<p>Answer with your own classes: <code>LoanLimitException</code> is checked because the member can return a book and try again; it is thrown in <code>BookService</code> and caught in <code>BookController</code>, because the controller is the first layer that can turn it into a message.</p>`,
+        `<p class="y-chinh">🎯 Hành vi và thiết kế chia nhau số điểm; câu vấn đáp là "checked hay unchecked — và bắt ở đâu?".</p>
+<p>Trả lời bằng chính các lớp của bạn: <code>LoanLimitException</code> là checked vì thành viên trả bớt sách là mượn lại được; nó được ném trong <code>BookService</code> và bắt trong <code>BookController</code>, vì controller là tầng đầu tiên biến được nó thành một câu báo.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-6 · CT Library · priority: high.</strong> "From next week the club lends books for real. Add Borrow and Return. A member holds at most 3 items at a time; nobody borrows an item with 0 copies on the shelf; returning something you did not borrow is refused. When it fails, say exactly why — in Vietnamese, with the code that was wrong. And the menu must never crash or go quiet: I do not want to see <code>throw new Exception</code> or an empty <code>catch</code> in review again." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>what an exception is, Throwable / Error / Exception, checked vs unchecked</td><td>6.A (pro11 slides 1–9)</td></tr>
+<tr><td>try–catch–finally, catch order, throw / throws, custom exceptions</td><td>6.A-2, 6.A-3 (pro11 slides 6–13)</td></tr>
+<tr><td>try-with-resources, exceptions travelling up the stack</td><td>6.A-4 (pro11 slides 14–17)</td></tr>
+<tr><td>abstract classes, interfaces, the CT Library layers</td><td>Lab 5</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-6 · CT Library · ưu tiên: cao.</strong> "Từ tuần sau câu lạc bộ cho mượn thật. Thêm Mượn và Trả. Mỗi thành viên giữ tối đa 3 tài liệu cùng lúc; không ai mượn được tài liệu còn 0 bản trên kệ; trả thứ mình không mượn thì từ chối. Hỏng thì nói đúng lý do — bằng tiếng Việt, kèm cái mã bị sai. Và menu không bao giờ được sập hay im lặng: tôi không muốn thấy lại <code>throw new Exception</code> hay khối <code>catch</code> rỗng trong buổi review." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>ngoại lệ là gì, Throwable / Error / Exception, checked và unchecked</td><td>6.A (pro11 slide 1–9)</td></tr>
+<tr><td>try–catch–finally, thứ tự catch, throw / throws, ngoại lệ tự định nghĩa</td><td>6.A-2, 6.A-3 (pro11 slide 6–13)</td></tr>
+<tr><td>try-with-resources, ngoại lệ lan ngược trên ngăn xếp</td><td>6.A-4 (pro11 slide 14–17)</td></tr>
+<tr><td>lớp trừu tượng, interface, các tầng của CT Library</td><td>Lab 5</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Borrow (10) and Return (11)</strong>: input a member code (M + 3 digits) and an item code; a borrow takes one copy off the shelf and records the loan, a return removes the loan and puts the copy back.</li>
+<li><strong>Five business rules, five exceptions</strong>: unknown item ⇒ <code>ItemNotFoundException</code>; unknown member ⇒ <code>MemberNotFoundException</code>; 0 copies ⇒ <code>ItemNotAvailableException</code>; already 3 loans ⇒ <code>LoanLimitException</code>; returning an item not borrowed ⇒ <code>LoanNotFoundException</code>. Duplicate ISBN / email ⇒ <code>DuplicateKeyException</code>.</li>
+<li><strong>Layers</strong>: repositories and service throw, controllers catch and give the message to the view; <code>Main</code> catches only <code>InvalidInputException</code>. No <code>try</code> in a repository or the service.</li>
+<li><strong>No generic exceptions</strong>: no <code>throws Exception</code>, no <code>new Exception(…)</code>, no <code>catch (Exception e)</code>, no empty <code>catch</code>; a programming error (an unknown item type in <code>createItem</code>) is an unchecked <code>IllegalArgumentException</code>.</li>
+<li>The Scanner is opened once, with try-with-resources, in <code>main</code>; no <code>System.exit</code>.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 233/233 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · a project-wide search for <code>throws Exception</code> and <code>catch (Exception</code> finds nothing · you can say, for each exception, who throws it and who catches it.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Mượn (10) và Trả (11)</strong>: nhập mã thành viên (M + 3 chữ số) và mã tài liệu; mượn thì lấy một bản khỏi kệ và ghi lượt mượn, trả thì xoá lượt mượn và đặt bản đó lại kệ.</li>
+<li><strong>Năm luật nghiệp vụ, năm ngoại lệ</strong>: tài liệu không có ⇒ <code>ItemNotFoundException</code>; thành viên không có ⇒ <code>MemberNotFoundException</code>; còn 0 bản ⇒ <code>ItemNotAvailableException</code>; đã mượn đủ 3 ⇒ <code>LoanLimitException</code>; trả thứ chưa mượn ⇒ <code>LoanNotFoundException</code>. Trùng ISBN / email ⇒ <code>DuplicateKeyException</code>.</li>
+<li><strong>Tầng</strong>: repository và service ném, controller bắt rồi đưa câu báo cho view; <code>Main</code> chỉ bắt <code>InvalidInputException</code>. Repository và service không có <code>try</code>.</li>
+<li><strong>Không ngoại lệ chung chung</strong>: không <code>throws Exception</code>, không <code>new Exception(…)</code>, không <code>catch (Exception e)</code>, không khối <code>catch</code> rỗng; lỗi lập trình (loại tài liệu lạ trong <code>createItem</code>) là <code>IllegalArgumentException</code> unchecked.</li>
+<li>Scanner mở một lần, bằng try-with-resources, trong <code>main</code>; không <code>System.exit</code>.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 233/233 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · tìm cả dự án chữ <code>throws Exception</code> và <code>catch (Exception</code> không ra chỗ nào · với mỗi ngoại lệ, bạn nói được ai ném và ai bắt.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab6-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab6-starter.zip</span><span class="lc-sub">Lab 5 solution + exceptions package + borrow/return menu · TODO 6.1–6.5 · harness (233 lines) · CheckHarness</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab6-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab6-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab6/src/  (new or changed since Lab 5)
+  exceptions/LibraryException.java            abstract parent of the business exceptions (given)
+  exceptions/ItemNotFound… DuplicateKey… MemberNotFound… ItemNotAvailable… LoanLimit… LoanNotFound…   (given)
+  exceptions/InvalidInputException.java       input errors, keeps the cause (given)
+  model/Loan.java · dto/LoanRequestDTO.java · repository/LoanRepository.java   a loan (given)
+  service/BookService.java                    TODO 6.1 checkLoanLimit, checkAvailable
+  repository/MemberRepository.java            TODO 6.2 findById throws MemberNotFoundException
+  repository/LoanRepository.java              TODO 6.3 removeLoan throws LoanNotFoundException
+  controller/BookController.java              TODO 6.4 two empty catch blocks
+  utils/Validation.java · main/Main.java      TODO 6.5 InvalidInputException + try-with-resources</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab6-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab6-starter.zip</span><span class="lc-sub">đáp án Lab 5 + gói exceptions + menu mượn/trả · TODO 6.1–6.5 · harness (233 dòng) · CheckHarness</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab6-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab6-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab6/src/  (mới hoặc đổi so với Lab 5)
+  exceptions/LibraryException.java            lớp cha trừu tượng của các ngoại lệ nghiệp vụ (cho sẵn)
+  exceptions/ItemNotFound… DuplicateKey… MemberNotFound… ItemNotAvailable… LoanLimit… LoanNotFound…   (cho sẵn)
+  exceptions/InvalidInputException.java       lỗi nhập, giữ nguyên nhân gốc (cho sẵn)
+  model/Loan.java · dto/LoanRequestDTO.java · repository/LoanRepository.java   một lượt mượn (cho sẵn)
+  service/BookService.java                    TODO 6.1 checkLoanLimit, checkAvailable
+  repository/MemberRepository.java            TODO 6.2 findById ném MemberNotFoundException
+  repository/LoanRepository.java              TODO 6.3 removeLoan ném LoanNotFoundException
+  controller/BookController.java              TODO 6.4 hai khối catch rỗng
+  utils/Validation.java · main/Main.java      TODO 6.5 InvalidInputException + try-with-resources</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — lint the starter, run it, read what goes wrong (10 min)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab6</code></pre>
+<div class="out">✓ CTLibrary-Lab6 — sạch</div>
+<p>The starter is lint-clean — the reviewer's tool does not see logic. Run it and compare with the ticket: a borrow with no copy left, an unknown member who borrows, a fourth loan, and one wrong code that prints nothing at all.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con -1 ban tren ke. M002 dang muon 1/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M009 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M009 dang muon 1/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon D006 "The Social Network", han tra 3 ngay. Con 0 ban tren ke. M001 dang muon 4/3.<br>
+…</div>
+
+<h4>Step 1 — TODO 6.1 the two rules (20 min)</h4>
+<details><summary>Hint</summary><p>Each method is one <code>if</code> and one <code>throw</code>. The limit is reached when <code>loanCount &gt;= Constants.MAX_LOANS_PER_MEMBER</code>; an item is unavailable when <code>item.getCopies() &lt;= Constants.COPIES_MIN</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Luat 1 khi muon: thanh vien chua cham han muc MAX_LOANS_PER_MEMBER; cham roi thi nem loi
+public void checkLoanLimit(String memberId, int loanCount) throws LoanLimitException {
+    // Da muon du so toi da: noi ro dang muon bao nhieu tren toi da bao nhieu
+    if (loanCount &gt;= Constants.MAX_LOANS_PER_MEMBER) {
+        throw new LoanLimitException(String.format(Message.ERROR_LOAN_LIMIT, memberId,
+                loanCount, Constants.MAX_LOANS_PER_MEMBER));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Luat 2 khi muon: tai lieu con it nhat 1 ban tren ke; het ban thi nem loi
+public void checkAvailable(BookResponseDTO item) throws ItemNotAvailableException {
+    // Con 0 ban: noi ro tai lieu nao het
+    if (item.getCopies() &lt;= Constants.COPIES_MIN) {
+        throw new ItemNotAvailableException(String.format(Message.ERROR_ITEM_NOT_AVAILABLE,
+                item.getId(), item.getTitle()));
+    }
+}</code></pre>
+</details>
+
+<h4>Step 2 — TODO 6.2 and 6.3 the two "not found" (20 min)</h4>
+<details><summary>Hint</summary><p><code>findById</code>: loop, <code>return</code> on the match; after the loop, <code>throw</code>. <code>removeLoan</code>: <code>findLoan</code> already returns <code>null</code> when there is no such loan — throw <em>before</em> <code>remove</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Lay BAN SAO 1 thanh vien theo ma; khong co ma thi nem loi
+public MemberResponseDTO findById(String id) throws MemberNotFoundException {
+    // Duyet tung thanh vien de so ma (equals, khong bao gio ==)
+    for (Member member : memberList) {
+        // Dung ma thi tra ban sao dang dong bang
+        if (member.getId().equals(id)) {
+            return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail());
+        }
+    }
+
+    // Het danh sach ma khong thay: bao ro ma nao khong co
+    throw new MemberNotFoundException(String.format(Message.ERROR_MEMBER_NOT_FOUND, id));
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa luot muon cua dung thanh vien + tai lieu trong phieu; khong co thi nem loi
+public void removeLoan(LoanRequestDTO loanRequestDTO) throws LoanNotFoundException {
+    // Luot muon can xoa (null neu thanh vien khong muon tai lieu nay)
+    Loan loan = findLoan(loanRequestDTO);
+
+    // Khong muon ma doi tra: bao ro ai va tai lieu nao
+    if (loan == null) {
+        throw new LoanNotFoundException(String.format(Message.ERROR_LOAN_NOT_FOUND,
+                loanRequestDTO.getMemberId(), loanRequestDTO.getItemId()));
+    }
+
+    // Bo luot muon khoi danh sach
+    loanList.remove(loan);
+}</code></pre>
+</details>
+
+<h4>Step 3 — TODO 6.4 never swallow (10 min)</h4>
+<details><summary>Solution — borrowItem (returnItem has the same catch)</summary>
+<pre class="trich"><code class="language-java">// Muon 1 tai lieu (phieu dien ma thanh vien + ma tai lieu; thanh vien da kiem truoc):
+// kho tim tai lieu, Service kiem 2 luat, roi giam 1 ban va ghi luot muon
+public void borrowItem(LoanRequestDTO loanRequestDTO) {
+    // Cau ket qua se in
+    String resultMessage = "";
+
+    // Buoc nao nem loi nghiep vu thi cac buoc SAU no khong chay (khong giam ban oan)
+    try {
+        BookResponseDTO item = bookRepository.findById(loanRequestDTO.getItemId());
+        int loanCount = loanRepository.countLoansOfMember(loanRequestDTO.getMemberId());
+
+        // Hai luat cua Service: con han muc, con ban tren ke
+        bookService.checkLoanLimit(loanRequestDTO.getMemberId(), loanCount);
+        bookService.checkAvailable(item);
+
+        // Du luat: giam 1 ban tren ke roi ghi luot muon
+        bookRepository.updateCopies(toCopiesRequestDTO(item.getId(), item.getCopies() - 1));
+        loanRepository.addLoan(loanRequestDTO);
+        resultMessage = String.format(Message.SUCCESS_BORROW, loanRequestDTO.getMemberId(),
+                item.getId(), item.getTitle(), item.getLoanDays(), item.getCopies() - 1,
+                loanRequestDTO.getMemberId(), loanCount + 1, Constants.MAX_LOANS_PER_MEMBER);
+    } catch (LibraryException e) {
+        // Khong co ma, qua han muc hay het ban: loi nao cung mang san cau bao ro rang
+        resultMessage = e.getMessage();
+    }
+
+    // In ket qua 1 lan
+    showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma thanh vien phai la M + 3 chu so (vi du M001), ban nhap "X1". Moi nhap lai.<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B099. Hay chon 2 de xem ma roi thu lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+…</div>
+
+<h4>Step 4 — TODO 6.5 one exception for input, one Scanner (20 min)</h4>
+<details><summary>Hint</summary><p>In <code>Validation</code>, a Find/Replace of <code>Exception</code> by <code>InvalidInputException</code> does most of it; then add <code>, e</code> to the two <code>throw</code> lines inside <code>catch (NumberFormatException e)</code>. In <code>Main</code>, replace the 16 <code>catch (Exception e)</code> and wrap <code>runMenu(scanner)</code> in try-with-resources.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Mo ban phim bang try-with-resources roi chay menu; ra khoi khoi try la Scanner tu dong
+public static void main(String[] args) {
+    // Scanner tu dong close() khi khoi try ket thuc, ke ca khi co ngoai le lot ra
+    try (Scanner scanner = new Scanner(System.in)) {
+        runMenu(scanner);
+    }
+}</code></pre>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Loi NHAP LIEU: chu nguoi dung go sai dang hoac ngoai khoang. utils.Validation nem,
+ * Main bat roi in cau bao va hoi lai. Tach rieng khoi ho LibraryException vi cach xu ly
+ * khac han: loi nhap thi hoi lai ngay, loi nghiep vu thi bao ket qua roi ve menu.
+ * Checked (extends Exception): javac nhac Main phai bat, khong de lot ra lam sap menu.
+ *
+ * @author CuongThai Academy
+ */
+public class InvalidInputException extends Exception {
+
+    // Tao ngoai le kem cau bao loi tieng Viet
+    public InvalidInputException(String message) {
+        super(message);
+    }
+
+    // Tao ngoai le kem cau bao loi + NGUYEN NHAN goc (vd NumberFormatException):
+    // khong lam mat dau vet, e.getCause() van lay lai duoc
+    public InvalidInputException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}</code></pre>
+</details>
+
+<h4>Step 5 — grade, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 233/233 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab6-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab6-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — lint starter, chạy thử, đọc xem hỏng ở đâu (10 phút)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab6</code></pre>
+<div class="out">✓ CTLibrary-Lab6 — sạch</div>
+<p>Starter sạch lint — công cụ của thầy không nhìn thấy logic. Chạy thử rồi so với ticket: mượn được tài liệu hết bản, thành viên không tồn tại vẫn mượn được, lượt mượn thứ tư, và một mã sai mà màn hình không in gì cả.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con -1 ban tren ke. M002 dang muon 1/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M009 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M009 dang muon 1/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon D006 "The Social Network", han tra 3 ngay. Con 0 ban tren ke. M001 dang muon 4/3.<br>
+…</div>
+
+<h4>Bước 1 — TODO 6.1 hai luật (20 phút)</h4>
+<details><summary>Gợi ý</summary><p>Mỗi phương thức là một <code>if</code> và một <code>throw</code>. Chạm hạn mức khi <code>loanCount &gt;= Constants.MAX_LOANS_PER_MEMBER</code>; hết bản khi <code>item.getCopies() &lt;= Constants.COPIES_MIN</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Luat 1 khi muon: thanh vien chua cham han muc MAX_LOANS_PER_MEMBER; cham roi thi nem loi
+public void checkLoanLimit(String memberId, int loanCount) throws LoanLimitException {
+    // Da muon du so toi da: noi ro dang muon bao nhieu tren toi da bao nhieu
+    if (loanCount &gt;= Constants.MAX_LOANS_PER_MEMBER) {
+        throw new LoanLimitException(String.format(Message.ERROR_LOAN_LIMIT, memberId,
+                loanCount, Constants.MAX_LOANS_PER_MEMBER));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Luat 2 khi muon: tai lieu con it nhat 1 ban tren ke; het ban thi nem loi
+public void checkAvailable(BookResponseDTO item) throws ItemNotAvailableException {
+    // Con 0 ban: noi ro tai lieu nao het
+    if (item.getCopies() &lt;= Constants.COPIES_MIN) {
+        throw new ItemNotAvailableException(String.format(Message.ERROR_ITEM_NOT_AVAILABLE,
+                item.getId(), item.getTitle()));
+    }
+}</code></pre>
+</details>
+
+<h4>Bước 2 — TODO 6.2 và 6.3 hai chỗ "không có" (20 phút)</h4>
+<details><summary>Gợi ý</summary><p><code>findById</code>: duyệt, khớp thì <code>return</code>; sau vòng lặp thì <code>throw</code>. <code>removeLoan</code>: <code>findLoan</code> đã trả <code>null</code> khi không có lượt mượn đó — ném <em>trước</em> khi <code>remove</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Lay BAN SAO 1 thanh vien theo ma; khong co ma thi nem loi
+public MemberResponseDTO findById(String id) throws MemberNotFoundException {
+    // Duyet tung thanh vien de so ma (equals, khong bao gio ==)
+    for (Member member : memberList) {
+        // Dung ma thi tra ban sao dang dong bang
+        if (member.getId().equals(id)) {
+            return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail());
+        }
+    }
+
+    // Het danh sach ma khong thay: bao ro ma nao khong co
+    throw new MemberNotFoundException(String.format(Message.ERROR_MEMBER_NOT_FOUND, id));
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa luot muon cua dung thanh vien + tai lieu trong phieu; khong co thi nem loi
+public void removeLoan(LoanRequestDTO loanRequestDTO) throws LoanNotFoundException {
+    // Luot muon can xoa (null neu thanh vien khong muon tai lieu nay)
+    Loan loan = findLoan(loanRequestDTO);
+
+    // Khong muon ma doi tra: bao ro ai va tai lieu nao
+    if (loan == null) {
+        throw new LoanNotFoundException(String.format(Message.ERROR_LOAN_NOT_FOUND,
+                loanRequestDTO.getMemberId(), loanRequestDTO.getItemId()));
+    }
+
+    // Bo luot muon khoi danh sach
+    loanList.remove(loan);
+}</code></pre>
+</details>
+
+<h4>Bước 3 — TODO 6.4 không bao giờ nuốt lỗi (10 phút)</h4>
+<details><summary>Lời giải — borrowItem (returnItem có khối catch y vậy)</summary>
+<pre class="trich"><code class="language-java">// Muon 1 tai lieu (phieu dien ma thanh vien + ma tai lieu; thanh vien da kiem truoc):
+// kho tim tai lieu, Service kiem 2 luat, roi giam 1 ban va ghi luot muon
+public void borrowItem(LoanRequestDTO loanRequestDTO) {
+    // Cau ket qua se in
+    String resultMessage = "";
+
+    // Buoc nao nem loi nghiep vu thi cac buoc SAU no khong chay (khong giam ban oan)
+    try {
+        BookResponseDTO item = bookRepository.findById(loanRequestDTO.getItemId());
+        int loanCount = loanRepository.countLoansOfMember(loanRequestDTO.getMemberId());
+
+        // Hai luat cua Service: con han muc, con ban tren ke
+        bookService.checkLoanLimit(loanRequestDTO.getMemberId(), loanCount);
+        bookService.checkAvailable(item);
+
+        // Du luat: giam 1 ban tren ke roi ghi luot muon
+        bookRepository.updateCopies(toCopiesRequestDTO(item.getId(), item.getCopies() - 1));
+        loanRepository.addLoan(loanRequestDTO);
+        resultMessage = String.format(Message.SUCCESS_BORROW, loanRequestDTO.getMemberId(),
+                item.getId(), item.getTitle(), item.getLoanDays(), item.getCopies() - 1,
+                loanRequestDTO.getMemberId(), loanCount + 1, Constants.MAX_LOANS_PER_MEMBER);
+    } catch (LibraryException e) {
+        // Khong co ma, qua han muc hay het ban: loi nao cung mang san cau bao ro rang
+        resultMessage = e.getMessage();
+    }
+
+    // In ket qua 1 lan
+    showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma thanh vien phai la M + 3 chu so (vi du M001), ban nhap "X1". Moi nhap lai.<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B099. Hay chon 2 de xem ma roi thu lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+…</div>
+
+<h4>Bước 4 — TODO 6.5 một ngoại lệ cho lỗi nhập, một Scanner (20 phút)</h4>
+<details><summary>Gợi ý</summary><p>Trong <code>Validation</code>, một lần Find/Replace <code>Exception</code> thành <code>InvalidInputException</code> làm gần hết việc; rồi thêm <code>, e</code> vào hai dòng <code>throw</code> nằm trong <code>catch (NumberFormatException e)</code>. Trong <code>Main</code>, đổi 16 chỗ <code>catch (Exception e)</code> và bọc <code>runMenu(scanner)</code> bằng try-with-resources.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Mo ban phim bang try-with-resources roi chay menu; ra khoi khoi try la Scanner tu dong
+public static void main(String[] args) {
+    // Scanner tu dong close() khi khoi try ket thuc, ke ca khi co ngoai le lot ra
+    try (Scanner scanner = new Scanner(System.in)) {
+        runMenu(scanner);
+    }
+}</code></pre>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Loi NHAP LIEU: chu nguoi dung go sai dang hoac ngoai khoang. utils.Validation nem,
+ * Main bat roi in cau bao va hoi lai. Tach rieng khoi ho LibraryException vi cach xu ly
+ * khac han: loi nhap thi hoi lai ngay, loi nghiep vu thi bao ket qua roi ve menu.
+ * Checked (extends Exception): javac nhac Main phai bat, khong de lot ra lam sap menu.
+ *
+ * @author CuongThai Academy
+ */
+public class InvalidInputException extends Exception {
+
+    // Tao ngoai le kem cau bao loi tieng Viet
+    public InvalidInputException(String message) {
+        super(message);
+    }
+
+    // Tao ngoai le kem cau bao loi + NGUYEN NHAN goc (vd NumberFormatException):
+    // khong lam mat dau vet, e.getCause() van lay lai duoc
+    public InvalidInputException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}</code></pre>
+</details>
+
+<h4>Bước 5 — chấm, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 233/233 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab6-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab6-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8, and 233/233 on the grader.</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (233 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): B003 "Java Concurrency In Practice" dang het ban tren ke (0 ban). Hay muon tai lieu khac hoac quay lai sau.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co thanh vien nao mang ma M009. Hay chon 7 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma thanh vien phai la M + 3 chu so (vi du M001), ban nhap "X1". Moi nhap lai.<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B099. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 3/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 khong muon B001 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B003 "Java Concurrency In Practice". Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M002 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Khong co tai lieu nao mang ma B077. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Email binh.tran@ctlib.vn da thuoc ve M001 "Tran Thi Binh". Moi thanh vien dung 1 email rieng.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: Lua chon phai la 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Lua chon: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 11. Moi nhap lai.<br>
+Lua chon: Tam biet! Du lieu Lab 6 chi nam trong bo nho.</div>
+</details>
+<details><summary>LibraryException.java — the abstract parent of the family</summary>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Lop CHA cua moi loi NGHIEP VU cua CT Library (khong tim thay, het ban, qua han muc...).
+ * La ngoai le CHECKED (extends Exception): javac BUOC noi goi phai bat hoac khai throws,
+ * vi day la ket qua co the xay ra va nguoi dung sua duoc — khong phai bug.
+ * Abstract: khong ai nem "loi thu vien chung chung"; luon nem 1 lop con co ten ro rang.
+ * Controller bat ca ho bang 1 khoi catch (LibraryException e) roi dua cau bao cho View.
+ *
+ * @author CuongThai Academy
+ */
+public abstract class LibraryException extends Exception {
+
+    // Tao ngoai le kem cau bao loi tieng Viet (lop con goi qua super)
+    protected LibraryException(String message) {
+        super(message);
+    }
+}</code></pre>
+</details>
+<details><summary>LoanLimitException.java — every child is this short</summary>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Thanh vien da muon du so tai lieu toi da (MAX_LOANS_PER_MEMBER). Service nem
+ * khi kiem luat muon.
+ *
+ * @author CuongThai Academy
+ */
+public class LoanLimitException extends LibraryException {
+
+    // Tao ngoai le kem cau bao loi (da dinh dang tu Message o noi nem)
+    public LoanLimitException(String message) {
+        super(message);
+    }
+}</code></pre>
+</details>
+<details><summary>MemberController.checkMember — the pre-check Main calls before borrowing</summary>
+<pre class="trich"><code class="language-java">// Kiem TRUOC khi muon/tra: ma thanh vien trong phieu co that khong. Khong co thi View bao
+// loi va tra false de Main khong goi buoc muon/tra (cuoc goi kiem truoc duoc phep)
+public boolean checkMember(LoanRequestDTO loanRequestDTO) {
+    // Kho tim theo ma; khong co thi kho nem MemberNotFoundException
+    try {
+        memberRepository.findById(loanRequestDTO.getMemberId());
+        return true;
+    } catch (MemberNotFoundException e) {
+        // Khong co thanh vien: in cau bao cua kho, bao Main dung lai
+        showResult(e.getMessage(), new ArrayList&lt;MemberResponseDTO&gt;());
+        return false;
+    }
+}</code></pre>
+</details>
+<p>An exception travelling up the stack, run for real:</p>
+<pre><code class="language-java">// release: 8
+// Lab 6 — an exception travels UP the call stack until a catch takes it
+class ItemNotFoundException extends Exception {                        // checked: javac forces a catch or throws
+    ItemNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class InMemoryBookRepository {
+    String findById(String id) throws ItemNotFoundException {           // THROWS: does not know what to tell the user
+        if (!id.equals("B001")) {
+            throw new ItemNotFoundException("Khong co tai lieu nao mang ma " + id);
+        }
+        return "The Pragmatic Programmer";
+    }
+}
+
+class BookController {
+    private InMemoryBookRepository bookRepository = new InMemoryBookRepository();
+
+    void borrowItem(String id) {
+        try {
+            String title = bookRepository.findById(id);                 // may throw: the next line is skipped
+            System.out.println("Da muon \\"" + title + "\\"");
+        } catch (ItemNotFoundException e) {                             // CATCHES: turns it into a message
+            System.out.println("Controller bat duoc: " + e.getMessage());
+            for (StackTraceElement frame : e.getStackTrace()) {          // the path it travelled, newest first
+                System.out.println("    at " + frame);
+            }
+        }
+    }
+}
+
+public class LabNgoaiLeLanNguoc {
+    public static void main(String[] args) {
+        BookController bookController = new BookController();
+        bookController.borrowItem("B001");
+        bookController.borrowItem("B099");
+        System.out.println("Menu van chay tiep.");
+    }
+}</code></pre>
+<div class="out">Da muon "The Pragmatic Programmer"<br>
+Controller bat duoc: Khong co tai lieu nao mang ma B099<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at InMemoryBookRepository.findById(LabNgoaiLeLanNguoc.java:12)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at BookController.borrowItem(LabNgoaiLeLanNguoc.java:23)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at LabNgoaiLeLanNguoc.main(LabNgoaiLeLanNguoc.java:38)<br>
+Menu van chay tiep.</div>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt, và bộ chấm 233/233.</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (233 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): B003 "Java Concurrency In Practice" dang het ban tren ke (0 ban). Hay muon tai lieu khac hoac quay lai sau.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co thanh vien nao mang ma M009. Hay chon 7 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma thanh vien phai la M + 3 chu so (vi du M001), ban nhap "X1". Moi nhap lai.<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co tai lieu nao mang ma B099. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 3/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 khong muon B001 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B003 "Java Concurrency In Practice". Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B003 "Java Concurrency In Practice", han tra 14 ngay. Con 0 ban tren ke. M002 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Khong co tai lieu nao mang ma B077. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Email binh.tran@ctlib.vn da thuoc ve M001 "Tran Thi Binh". Moi thanh vien dung 1 email rieng.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+0. Thoat<br>
+Lua chon: Lua chon phai la 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Lua chon: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 11. Moi nhap lai.<br>
+Lua chon: Tam biet! Du lieu Lab 6 chi nam trong bo nho.</div>
+</details>
+<details><summary>LibraryException.java — lớp cha trừu tượng của cả họ</summary>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Lop CHA cua moi loi NGHIEP VU cua CT Library (khong tim thay, het ban, qua han muc...).
+ * La ngoai le CHECKED (extends Exception): javac BUOC noi goi phai bat hoac khai throws,
+ * vi day la ket qua co the xay ra va nguoi dung sua duoc — khong phai bug.
+ * Abstract: khong ai nem "loi thu vien chung chung"; luon nem 1 lop con co ten ro rang.
+ * Controller bat ca ho bang 1 khoi catch (LibraryException e) roi dua cau bao cho View.
+ *
+ * @author CuongThai Academy
+ */
+public abstract class LibraryException extends Exception {
+
+    // Tao ngoai le kem cau bao loi tieng Viet (lop con goi qua super)
+    protected LibraryException(String message) {
+        super(message);
+    }
+}</code></pre>
+</details>
+<details><summary>LoanLimitException.java — lớp con nào cũng ngắn chừng này</summary>
+<pre><code class="language-java">package exceptions;
+
+/**
+ * Thanh vien da muon du so tai lieu toi da (MAX_LOANS_PER_MEMBER). Service nem
+ * khi kiem luat muon.
+ *
+ * @author CuongThai Academy
+ */
+public class LoanLimitException extends LibraryException {
+
+    // Tao ngoai le kem cau bao loi (da dinh dang tu Message o noi nem)
+    public LoanLimitException(String message) {
+        super(message);
+    }
+}</code></pre>
+</details>
+<details><summary>MemberController.checkMember — cuộc gọi kiểm trước mà Main gọi trước khi mượn</summary>
+<pre class="trich"><code class="language-java">// Kiem TRUOC khi muon/tra: ma thanh vien trong phieu co that khong. Khong co thi View bao
+// loi va tra false de Main khong goi buoc muon/tra (cuoc goi kiem truoc duoc phep)
+public boolean checkMember(LoanRequestDTO loanRequestDTO) {
+    // Kho tim theo ma; khong co thi kho nem MemberNotFoundException
+    try {
+        memberRepository.findById(loanRequestDTO.getMemberId());
+        return true;
+    } catch (MemberNotFoundException e) {
+        // Khong co thanh vien: in cau bao cua kho, bao Main dung lai
+        showResult(e.getMessage(), new ArrayList&lt;MemberResponseDTO&gt;());
+        return false;
+    }
+}</code></pre>
+</details>
+<p>Một ngoại lệ lan ngược lên ngăn xếp, chạy thật:</p>
+<pre><code class="language-java">// release: 8
+// Lab 6 — ngoại lệ đi NGƯỢC lên ngăn xếp tới khi gặp catch
+class ItemNotFoundException extends Exception {                        // checked: javac buộc bắt hoặc khai throws
+    ItemNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class InMemoryBookRepository {
+    String findById(String id) throws ItemNotFoundException {           // NÉM: kho không biết nói gì với người dùng
+        if (!id.equals("B001")) {
+            throw new ItemNotFoundException("Khong co tai lieu nao mang ma " + id);
+        }
+        return "The Pragmatic Programmer";
+    }
+}
+
+class BookController {
+    private InMemoryBookRepository bookRepository = new InMemoryBookRepository();
+
+    void borrowItem(String id) {
+        try {
+            String title = bookRepository.findById(id);                 // có thể ném: dòng sau bị bỏ qua
+            System.out.println("Da muon \\"" + title + "\\"");
+        } catch (ItemNotFoundException e) {                             // BẮT: biến nó thành câu báo
+            System.out.println("Controller bat duoc: " + e.getMessage());
+            for (StackTraceElement frame : e.getStackTrace()) {          // đường nó đã đi, khung mới nhất trước
+                System.out.println("    at " + frame);
+            }
+        }
+    }
+}
+
+public class LabNgoaiLeLanNguoc {
+    public static void main(String[] args) {
+        BookController bookController = new BookController();
+        bookController.borrowItem("B001");
+        bookController.borrowItem("B099");
+        System.out.println("Menu van chay tiep.");
+    }
+}</code></pre>
+<div class="out">Da muon "The Pragmatic Programmer"<br>
+Controller bat duoc: Khong co tai lieu nao mang ma B099<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at InMemoryBookRepository.findById(LabNgoaiLeLanNguoc.java:12)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at BookController.borrowItem(LabNgoaiLeLanNguoc.java:23)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;at LabNgoaiLeLanNguoc.main(LabNgoaiLeLanNguoc.java:38)<br>
+Menu van chay tiep.</div>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — the empty catch.</strong> It compiles and never crashes; the grader shows the line that went missing (project <code>bay/nuot-loi</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 30:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): B003 "Java Concurrency In Practice" dang het ban tren ke (0 ban). Hay muon tai lieu khac hoac quay lai sau.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): ========== CT LIBRARY ==========<br>
+…</div>
+<div class="pitfall"><p><strong>Trap 2 — catching the parent before the child, and a checked call outside try.</strong> Three real compile errors (project <code>bay/bat-sai</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/controller/BookController.java:97: error: unreported exception ItemNotFoundException; must be caught or declared to be thrown<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BookResponseDTO before = bookRepository.findById(bookRequestDTO.getId());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/controller/BookController.java:100: error: unreported exception ItemNotFoundException; must be caught or declared to be thrown<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookRepository.updateCopies(bookRequestDTO);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/controller/BookController.java:167: error: exception ItemNotAvailableException has already been caught<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (ItemNotAvailableException e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+3 errors</div>
+<div class="pitfall"><p><strong>Trap 3 — a child exception without a constructor.</strong> Constructors are not inherited; the hidden <code>super()</code> finds nothing to call (project <code>bay/thieu-ctor</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/service/BookService.java:122: error: constructor LoanLimitException in class LoanLimitException cannot be applied to given types;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new LoanLimitException(String.format(Message.ERROR_LOAN_LIMIT, memberId,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;required: no arguments<br>
+&nbsp;&nbsp;found: &nbsp;&nbsp;&nbsp;String<br>
+&nbsp;&nbsp;reason: actual and formal argument lists differ in length<br>
+src/exceptions/LoanLimitException.java:9: error: constructor LibraryException in class LibraryException cannot be applied to given types;<br>
+public class LoanLimitException extends LibraryException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;required: String<br>
+&nbsp;&nbsp;found: &nbsp;&nbsp;&nbsp;no arguments<br>
+&nbsp;&nbsp;reason: actual and formal argument lists differ in length<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Trap 4 — return in finally.</strong> It overrides the result and swallows the exception. No compile error.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 6 trap — return inside finally SWALLOWS the exception and overrides the try's return
+public class LabBayFinally {
+    static int countLoans(String memberId) {
+        try {
+            if (memberId.isEmpty()) {
+                throw new IllegalStateException("ma thanh vien rong");  // a bug we WANT to see
+            }
+            System.out.println("  try: tra ve 3");
+            return 3;
+        } finally {
+            System.out.println("  finally: luon chay");
+            return 0;                                                   // overrides 3 AND swallows the exception
+        }
+    }
+
+    static int countLoansFixed(String memberId) {
+        try {
+            if (memberId.isEmpty()) {
+                throw new IllegalStateException("ma thanh vien rong");
+            }
+            return 3;
+        } finally {
+            System.out.println("  finally: chi don dep, khong return");  // finally = clean-up only
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("countLoans(\\"M001\\") = " + countLoans("M001"));
+        System.out.println("countLoans(\\"\\")     = " + countLoans("") + "   &lt;- loi bien mat!");
+        try {
+            System.out.println(countLoansFixed(""));
+        } catch (IllegalStateException e) {
+            System.out.println("ban sua: loi hien ra -&gt; " + e);
+        }
+    }
+}</code></pre>
+<div class="out">&nbsp;&nbsp;try: tra ve 3<br>
+&nbsp;&nbsp;finally: luon chay<br>
+countLoans("M001") = 0<br>
+&nbsp;&nbsp;finally: luon chay<br>
+countLoans("") &nbsp;&nbsp;&nbsp;&nbsp;= 0 &nbsp;&nbsp;&lt;- loi bien mat!<br>
+&nbsp;&nbsp;finally: chi don dep, khong return<br>
+ban sua: loi hien ra -&gt; java.lang.IllegalStateException: ma thanh vien rong</div>
+<div class="pitfall"><p><strong>Trap 5 — closing a Scanner on System.in.</strong> try-with-resources in a helper closes <code>System.in</code> for the whole program.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 6 trap — closing a Scanner on System.in closes System.in FOR EVERYONE
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+public class LabBayDongScanner {
+    static String askName() {
+        try (Scanner scanner = new Scanner(System.in)) {                 // closes System.in at the end of the block
+            System.out.print("Ho ten: ");
+            return scanner.nextLine();
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("lan 1 -&gt; " + askName());
+        try {
+            System.out.println("lan 2 -&gt; " + askName());                 // a NEW Scanner on a CLOSED stream
+        } catch (NoSuchElementException e) {
+            System.out.println();
+            System.out.println("lan 2 sap: " + e);
+        }
+        System.out.println("=&gt; mo Scanner 1 lan o main (try-with-resources o main), truyen xuong.");
+    }
+}</code></pre>
+<div class="out">Ho ten: lan 1 -&gt; An<br>
+Ho ten:<br>
+lan 2 sap: java.util.NoSuchElementException: No line found<br>
+=&gt; mo Scanner 1 lan o main (try-with-resources o main), truyen xuong.</div>
+<p>Keeping the cause when you translate an exception, run for real:</p>
+<pre><code class="language-java">// release: 8
+// Lab 6 — wrap a low-level exception in a business one, KEEP the cause
+class InvalidInputException extends Exception {
+    InvalidInputException(String message, Throwable cause) {
+        super(message, cause);                                         // Exception(String, Throwable) stores the cause
+    }
+}
+
+public class LabNguyenNhanGoc {
+    static int getCopies(String input) throws InvalidInputException {
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("So ban phai la 1 so nguyen, ban nhap \\"" + input + "\\"", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            getCopies("ba");
+        } catch (InvalidInputException e) {
+            System.out.println("cau bao  : " + e.getMessage());          // for the user
+            System.out.println("nguyen nhan: " + e.getCause());          // for the developer
+        }
+    }
+}</code></pre>
+<div class="out">cau bao &nbsp;: So ban phai la 1 so nguyen, ban nhap "ba"<br>
+nguyen nhan: java.lang.NumberFormatException: For input string: "ba"</div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — khối catch rỗng.</strong> Biên dịch được, không bao giờ sập; bộ chấm chỉ ra dòng bị mất (dự án <code>bay/nuot-loi</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 30:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): B003 "Java Concurrency In Practice" dang het ban tren ke (0 ban). Hay muon tai lieu khac hoac quay lai sau.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): ========== CT LIBRARY ==========<br>
+…</div>
+<div class="pitfall"><p><strong>Bẫy 2 — bắt lớp cha trước lớp con, và lời gọi checked nằm ngoài try.</strong> Ba lỗi biên dịch thật (dự án <code>bay/bat-sai</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/controller/BookController.java:97: error: unreported exception ItemNotFoundException; must be caught or declared to be thrown<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BookResponseDTO before = bookRepository.findById(bookRequestDTO.getId());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/controller/BookController.java:100: error: unreported exception ItemNotFoundException; must be caught or declared to be thrown<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookRepository.updateCopies(bookRequestDTO);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/controller/BookController.java:167: error: exception ItemNotAvailableException has already been caught<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (ItemNotAvailableException e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+3 errors</div>
+<div class="pitfall"><p><strong>Bẫy 3 — lớp ngoại lệ con không có constructor.</strong> Constructor không được kế thừa; lời gọi <code>super()</code> ngầm không tìm được gì để gọi (dự án <code>bay/thieu-ctor</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/service/BookService.java:122: error: constructor LoanLimitException in class LoanLimitException cannot be applied to given types;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new LoanLimitException(String.format(Message.ERROR_LOAN_LIMIT, memberId,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;required: no arguments<br>
+&nbsp;&nbsp;found: &nbsp;&nbsp;&nbsp;String<br>
+&nbsp;&nbsp;reason: actual and formal argument lists differ in length<br>
+src/exceptions/LoanLimitException.java:9: error: constructor LibraryException in class LibraryException cannot be applied to given types;<br>
+public class LoanLimitException extends LibraryException {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;required: String<br>
+&nbsp;&nbsp;found: &nbsp;&nbsp;&nbsp;no arguments<br>
+&nbsp;&nbsp;reason: actual and formal argument lists differ in length<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Bẫy 4 — return trong finally.</strong> Đè kết quả và nuốt ngoại lệ. Không có lỗi biên dịch nào.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 6 — return trong finally NUỐT ngoại lệ và đè giá trị return của try
+public class LabBayFinally {
+    static int countLoans(String memberId) {
+        try {
+            if (memberId.isEmpty()) {
+                throw new IllegalStateException("ma thanh vien rong");  // một bug ta MUỐN thấy
+            }
+            System.out.println("  try: tra ve 3");
+            return 3;
+        } finally {
+            System.out.println("  finally: luon chay");
+            return 0;                                                   // đè số 3 VÀ nuốt ngoại lệ
+        }
+    }
+
+    static int countLoansFixed(String memberId) {
+        try {
+            if (memberId.isEmpty()) {
+                throw new IllegalStateException("ma thanh vien rong");
+            }
+            return 3;
+        } finally {
+            System.out.println("  finally: chi don dep, khong return");  // finally chỉ để dọn dẹp
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("countLoans(\\"M001\\") = " + countLoans("M001"));
+        System.out.println("countLoans(\\"\\")     = " + countLoans("") + "   &lt;- loi bien mat!");
+        try {
+            System.out.println(countLoansFixed(""));
+        } catch (IllegalStateException e) {
+            System.out.println("ban sua: loi hien ra -&gt; " + e);
+        }
+    }
+}</code></pre>
+<div class="out">&nbsp;&nbsp;try: tra ve 3<br>
+&nbsp;&nbsp;finally: luon chay<br>
+countLoans("M001") = 0<br>
+&nbsp;&nbsp;finally: luon chay<br>
+countLoans("") &nbsp;&nbsp;&nbsp;&nbsp;= 0 &nbsp;&nbsp;&lt;- loi bien mat!<br>
+&nbsp;&nbsp;finally: chi don dep, khong return<br>
+ban sua: loi hien ra -&gt; java.lang.IllegalStateException: ma thanh vien rong</div>
+<div class="pitfall"><p><strong>Bẫy 5 — đóng Scanner bọc System.in.</strong> try-with-resources trong một hàm phụ là đóng <code>System.in</code> của cả chương trình.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 6 — đóng Scanner bọc System.in là đóng System.in của CẢ chương trình
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+public class LabBayDongScanner {
+    static String askName() {
+        try (Scanner scanner = new Scanner(System.in)) {                 // cuối khối là System.in bị đóng
+            System.out.print("Ho ten: ");
+            return scanner.nextLine();
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("lan 1 -&gt; " + askName());
+        try {
+            System.out.println("lan 2 -&gt; " + askName());                 // Scanner MỚI trên luồng ĐÃ ĐÓNG
+        } catch (NoSuchElementException e) {
+            System.out.println();
+            System.out.println("lan 2 sap: " + e);
+        }
+        System.out.println("=&gt; mo Scanner 1 lan o main (try-with-resources o main), truyen xuong.");
+    }
+}</code></pre>
+<div class="out">Ho ten: lan 1 -&gt; An<br>
+Ho ten:<br>
+lan 2 sap: java.util.NoSuchElementException: No line found<br>
+=&gt; mo Scanner 1 lan o main (try-with-resources o main), truyen xuong.</div>
+<p>Giữ nguyên nhân gốc khi đổi ngoại lệ, chạy thật:</p>
+<pre><code class="language-java">// release: 8
+// Lab 6 — bọc ngoại lệ tầng thấp thành ngoại lệ của mình, GIỮ nguyên nhân gốc
+class InvalidInputException extends Exception {
+    InvalidInputException(String message, Throwable cause) {
+        super(message, cause);                                         // Exception(String, Throwable) cất nguyên nhân
+    }
+}
+
+public class LabNguyenNhanGoc {
+    static int getCopies(String input) throws InvalidInputException {
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("So ban phai la 1 so nguyen, ban nhap \\"" + input + "\\"", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            getCopies("ba");
+        } catch (InvalidInputException e) {
+            System.out.println("cau bao  : " + e.getMessage());          // cho người dùng
+            System.out.println("nguyen nhan: " + e.getCause());          // cho lập trình viên
+        }
+    }
+}</code></pre>
+<div class="out">cau bao &nbsp;: So ban phai la 1 so nguyen, ban nhap "ba"<br>
+nguyen nhan: java.lang.NumberFormatException: For input string: "ba"</div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Two rules in the service (6.1)</td><td>2</td><td>grader lines 30, 106</td></tr>
+<tr><td>Two "not found" in the repositories (6.2, 6.3)</td><td>2</td><td>grader lines 45, 121</td></tr>
+<tr><td>No empty catch, no generic Exception anywhere (6.4)</td><td>2</td><td>grader line 61 + a search for <code>catch (Exception</code> / <code>throws Exception</code></td></tr>
+<tr><td>InvalidInputException with cause, try-with-resources (6.5)</td><td>2</td><td>read</td></tr>
+<tr><td><code>lint.py</code> ✓ sạch</td><td>1</td><td><code>lint.py</code></td></tr>
+<tr><td>Oral: "checked or unchecked, and where do you catch it?"</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. Why is LoanLimitException checked but the unknown item type in createItem an unchecked IllegalArgumentException?</summary><p class="dap-an">✅ A loan limit is a normal outcome the user can fix (return a book) — checked, so javac makes every caller handle it. An item type outside 1–3 can only come from a programming mistake, because <code>Validation</code> already allows only 1 to 3 — unchecked, not caught, so the bug shows up loudly.</p></details>
+<details><summary>2. Why do the repository and the service have no try at all?</summary><p class="dap-an">✅ They discover failures but cannot answer them: they may not print (<code>lint.py</code> forbids <code>System.out</code> outside view and main) and they do not know what the user is doing. They <code>throw</code> and declare <code>throws</code>; the controller, the first layer that can turn a failure into a result, catches.</p></details>
+<details><summary>3. What does javac say if you put catch (LibraryException e) before catch (ItemNotAvailableException e)?</summary><p class="dap-an">✅ "exception ItemNotAvailableException has already been caught": the parent catch takes every child, so the second block is unreachable. Order catches from specific to general.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td>Hai luật trong service (6.1)</td><td>2</td><td>dòng 30, 106 của bộ chấm</td></tr>
+<tr><td>Hai chỗ "không có" trong repository (6.2, 6.3)</td><td>2</td><td>dòng 45, 121 của bộ chấm</td></tr>
+<tr><td>Không catch rỗng, không Exception chung chung ở đâu cả (6.4)</td><td>2</td><td>dòng 61 của bộ chấm + tìm <code>catch (Exception</code> / <code>throws Exception</code></td></tr>
+<tr><td>InvalidInputException giữ cause, try-with-resources (6.5)</td><td>2</td><td>đọc</td></tr>
+<tr><td><code>lint.py</code> ✓ sạch</td><td>1</td><td><code>lint.py</code></td></tr>
+<tr><td>Vấn đáp: "checked hay unchecked, và bắt ở đâu?"</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. Vì sao LoanLimitException là checked còn loại tài liệu lạ trong createItem là IllegalArgumentException unchecked?</summary><p class="dap-an">✅ Chạm hạn mức là kết quả bình thường người dùng sửa được (trả bớt sách) — checked, để javac buộc mọi nơi gọi xử lý nó. Loại tài liệu ngoài 1–3 chỉ có thể đến từ lỗi lập trình, vì <code>Validation</code> đã chỉ cho 1 tới 3 — unchecked, không bắt, để bug hiện ra thật ồn ào.</p></details>
+<details><summary>2. Vì sao repository và service không có một khối try nào?</summary><p class="dap-an">✅ Chúng phát hiện ra thất bại nhưng không trả lời được: không được in (<code>lint.py</code> cấm <code>System.out</code> ngoài view và main) và không biết người dùng đang làm gì. Chúng <code>throw</code> và khai <code>throws</code>; controller — tầng đầu tiên biến được thất bại thành kết quả — mới bắt.</p></details>
+<details><summary>3. javac nói gì nếu đặt catch (LibraryException e) trước catch (ItemNotAvailableException e)?</summary><p class="dap-an">✅ "exception ItemNotAvailableException has already been caught": khối catch lớp cha nhận hết mọi lớp con, nên khối thứ hai không bao giờ tới được. Xếp catch từ cụ thể tới chung.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Deleting B001 while someone is borrowing it should be refused: add <code>ItemOnLoanException</code>. Which layer throws it, and which repository does it need to ask?</li>
+<li>⭐ Make <code>LoanLimitException</code> carry the numbers (<code>getLoanCount()</code>, <code>getMaxLoans()</code>) as private fields, and let the view build the sentence. What changes in <code>BookService</code>?</li>
+<li>⭐⭐ Staff may hold 5 items (Lab 5's borrower types): where does that rule live so that the exception stays the same?</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 7 (after Chapter 7):</strong> the shelf gets crowded. Search with several criteria at once, sort on four keys, count by type with an array of objects, and clean out the items with no copy left — removing from a list while you walk it, without a <code>ConcurrentModificationException</code> and without skipping a cell.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Xoá B001 trong khi có người đang mượn nó thì phải từ chối: thêm <code>ItemOnLoanException</code>. Tầng nào ném, và nó cần hỏi repository nào?</li>
+<li>⭐ Cho <code>LoanLimitException</code> mang theo các con số (<code>getLoanCount()</code>, <code>getMaxLoans()</code>) bằng trường private, để view tự dựng câu. <code>BookService</code> đổi gì?</li>
+<li>⭐⭐ Cán bộ được giữ 5 tài liệu (hai loại người mượn của Lab 5): luật đó nằm ở đâu để ngoại lệ vẫn giữ nguyên?</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 7 (sau Chương 7):</strong> kệ sách đông dần. Tìm theo nhiều tiêu chí cùng lúc, sắp theo bốn khoá, thống kê theo loại bằng một mảng đối tượng, và dọn những tài liệu đã hết bản — xoá khỏi danh sách ngay khi đang duyệt nó, mà không dính <code>ConcurrentModificationException</code> và không bỏ sót ô nào.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch6) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -3962,6 +5478,7 @@ const QUIZ = {
 export default {
   slides: [L_pro11_1],
   practice: L_on_ch6,
+  labs: [L_lab6],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 6 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ; câu "in ra gì" đã chạy thật và câu lỗi biên dịch đã đo bằng javac của JDK 8: ngoại lệ checked, catch khớp đầu tiên, return trước finally, thứ tự catch cha–con, throws, lan truyền qua finally, đọc stack trace, Scanner mới mỗi lần gọi với dữ liệu nạp qua pipe, ngoại lệ ném trong catch, và ngoại lệ checked tự tạo.',
 };

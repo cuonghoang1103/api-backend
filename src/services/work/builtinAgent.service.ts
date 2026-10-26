@@ -20,6 +20,7 @@
  * Chỉ Pro hoặc admin được dùng (`isProEffective`, admin ⊂ Pro) — áp cho người TẠO agent BUILTIN và người GIAO việc.
  */
 
+import { biChanCuongMini } from '../agent/cuongMiniChan.js';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
@@ -553,6 +554,8 @@ async function executeRun(runId: number): Promise<void> {
     let badJson = 0;
     let done: NonNullable<ReturnType<typeof parseAgentStep>>['done'] | null = null;
 
+    /* 27/10/2026: người khởi chạy bị chặn CuongMini trong CT Work ⇒ agent dựng sẵn không chạy thay họ. */
+    if (!llmOverride && (await biChanCuongMini(run.requestedById, 'CTWORK'))) return void (await fail('FAILED', 'the person who started me is blocked from using CuongMini in CT Work'));
     for (let step = 1; step <= budget.maxSteps; step++) {
       const st = await prisma.workAgentRun.findUnique({ where: { id: runId }, select: { status: true } });
       if (st?.status === 'CANCELLED' || abort.signal.aborted) return void (await fail('CANCELLED', 'stopped by a person'));

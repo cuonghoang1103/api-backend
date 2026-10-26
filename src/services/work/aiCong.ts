@@ -27,6 +27,7 @@
  */
 
 import { AppError } from '../../middleware/errorHandler.js';
+import { MA_LOI_CHAN, biChanCuongMini, cauBiChan } from '../agent/cuongMiniChan.js';
 import { logger } from '../../utils/logger.js';
 import { ghiSoLlm, httpStatusCua, llmComplete, type LLMMessage, type LLMTool, type LLMToolCall } from '../interview/llm/index.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
@@ -282,6 +283,8 @@ function laLoiChinhSach(e: unknown): boolean {
 
 /** Một lượt gọi model của CT Work qua chuỗi cổng. Ném lỗi của bậc CUỐI khi mọi bậc đều hỏng. */
 export async function goiAiCtWork(o: GoiAiCtWorkOpts): Promise<KetQuaAiCtWork> {
+  /* 27/10/2026: danh sách chặn CuongMini trong CT Work (admin chặn / mở khoá). Một cửa này phủ MỌI việc AI của CT Work. */
+  if (await biChanCuongMini(o.userId, 'CTWORK')) throw new AppError(cauBiChan('CTWORK'), 403, MA_LOI_CHAN);
   let daPhat = false;
   const onToken = o.onToken ? (d: string) => { daPhat = true; o.onToken!(d); } : undefined;
   const xoaNhap = () => { if (daPhat) { daPhat = false; o.onRestart?.(); } };

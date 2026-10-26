@@ -122,7 +122,7 @@ export function ManDangNhap({ rong, nhacNho, onXong, onHuy }: {
       {buoc === 'trinhDuyet' ? (
         <Box borderStyle={kieuVien()} borderColor={mauInk(THUONG_HIEU.tim)} flexDirection="column" paddingX={1} marginTop={1} width={Math.min(rong - 2, 100)}>
           <Text>{`${mau(THUONG_HIEU.timNhat)('◐')} ${moDuoc ? L('Đã mở trình duyệt — đăng nhập xong sẽ tự quay lại đây…', 'Opened your browser — you\'ll come back here once signed in…') : L('Không tự mở được trình duyệt. Mở link dưới đây bằng tay:', 'Could not open a browser. Open this link manually:')}`}</Text>
-          {url ? <Box marginTop={1}><Text>{`${mo('Link:')} ${mau('#60a5fa')(url)}`}</Text></Box> : null}
+          {url ? <Box marginTop={1}><Text>{`${mo('Link:')} ${mau('#e08a63')(url)}`}</Text></Box> : null}
           <Text>{mo(L('Esc để huỷ · tự huỷ sau 5 phút', 'Esc to cancel · times out after 5 minutes'))}</Text>
         </Box>
       ) : null}

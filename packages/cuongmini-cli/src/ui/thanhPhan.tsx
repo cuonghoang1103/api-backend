@@ -53,7 +53,8 @@ export function DongTrangThai({ S, nhip }: { S: TrangThaiChat; nhip: number }) {
   if (!S.dangChay) return null;
   const cho = S.pha === 'duyet';
   const sao = cho ? '⏸' : SAO[nhip % SAO.length]!;
-  const mauSao = [THUONG_HIEU.tim, '#9f7aea', '#7c83f7', THUONG_HIEU.xanh, '#7c83f7', '#9f7aea'][nhip % 6]!;
+  /* 27/10/2026: tông cam ấm kiểu Claude Code (thay tím–xanh) — sao nhấp nháy giữa cam đất và cam nhạt. */
+  const mauSao = [THUONG_HIEU.tim, '#e08a63', '#e39a76', THUONG_HIEU.timNhat, '#e39a76', '#e08a63'][nhip % 6]!;
   // Kiểu Claude Code: `✻ Thinking… (10m 42s · ↓ 12.3k tokens · esc to interrupt)`.
   const phan = [giay(Date.now() - (S.batDauLuot || Date.now()))];
   const token = Math.max(S.tokenRa, Math.round(S.kyTuRa / 4));
@@ -61,10 +62,27 @@ export function DongTrangThai({ S, nhip }: { S: TrangThaiChat; nhip: number }) {
   if (S.buoc?.nay && S.buoc.tran && S.buoc.tran - S.buoc.nay <= 10) phan.push(L(`bước ${S.buoc.nay}/${S.buoc.tran}`, `step ${S.buoc.nay}/${S.buoc.tran}`));
   phan.push(cho ? L('chọn bên dưới', 'choose below') : L('esc để dừng', 'esc to interrupt'));
   return (
-    <Box marginTop={1}>
-      <Text>{`${mau(mauSao)(sao)} ${mau(cho ? '#fbbf24' : THUONG_HIEU.timNhat)(`${cauTrangThai(S)}${cho ? '' : '…'}`)} ${mo(`(${phan.join(' · ')})`)}`}</Text>
+    <Box marginTop={1} flexDirection="column">
+      <Text>{`${mau(mauSao)(sao)} ${mau(cho ? '#fbbf24' : THUONG_HIEU.tim)(`${cauTrangThai(S)}${cho ? '' : '…'}`)} ${mo(`(${phan.join(' · ')})`)}`}</Text>
+      {!cho && <Text>{`  ${mo('⎿')}  ${mo(meoChoDoi(S.batDauLuot || 0))}`}</Text>}
     </Box>
   );
+}
+
+/** Mẹo dưới dòng trạng thái (kiểu Claude Code "⎿ Tip: …") — đổi theo lượt, không nhảy giữa lượt. */
+const MEO = [
+  ['Mẹo: gõ ? để xem phím tắt', 'Tip: press ? for shortcuts'],
+  ['Mẹo: @tên-file để đính kèm file vào câu hỏi', 'Tip: @file-name attaches a file to your message'],
+  ['Mẹo: !lệnh để tự chạy lệnh shell', 'Tip: !command runs a shell command yourself'],
+  ['Mẹo: # ghi chú để CuongMini nhớ quy ước của dự án', 'Tip: # note makes CuongMini remember a project rule'],
+  ['Mẹo: shift+tab đổi chế độ hỏi / tự sửa', 'Tip: shift+tab switches ask / auto-edit mode'],
+  ['Mẹo: esc esc để quay lui một lượt', 'Tip: esc esc rewinds one turn'],
+  ['Mẹo: /model để đổi giữa Pro, Pro 2, Max, Fable Max', 'Tip: /model switches between Pro, Pro 2, Max, Fable Max'],
+  ['Mẹo: gõ thêm + Enter để chèn chỉ dẫn vào lượt đang chạy', 'Tip: type + Enter to add guidance to the running turn'],
+] as const;
+export function meoChoDoi(hat: number): string {
+  const m = MEO[Math.abs(Math.floor(hat / 1000)) % MEO.length]!;
+  return L(m[0], m[1]);
 }
 
 /** 12345 ⇒ "12.3k". */
@@ -188,7 +206,8 @@ export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDo
     ? L(`CuongMini đang làm… gõ thêm + Enter để chèn vào lượt${soHangCho ? ` (${soHangCho} tin đang chờ)` : ''}`, `CuongMini is working… type + Enter to add to this turn${soHangCho ? ` (${soHangCho} queued)` : ''}`)
     : choChiDan
       ? L('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…', 'What should CuongMini do instead? Type and press Enter…')
-      : L('Hỏi hoặc giao việc…  / lệnh · @ file · ! shell · # ghi nhớ', 'Ask or give a task…  / commands · @ files · ! shell · # memory');
+      /* 27/10/2026 chủ app: bỏ dòng chú thích lệnh (/ · @ · ! · #) — ô nhập gọn như Claude Code; xem phím tắt bằng `?`. */
+      : L('Hỏi hoặc giao việc…', 'Ask or give a task…');
   /* Đợt 8A: có gợi ý bước tiếp ⇒ chữ MỜ thay chỗ câu nhắc thường, kèm "⇥ tab" (Tab điền vào ô, Enter gửi). */
   const coGoiY = !o.text && !dangChay && !choChiDan && Boolean(goiYTiep);
   const duoiTab = L('  ⇥ tab', '  ⇥ tab');
@@ -280,7 +299,7 @@ export function GoiYView({ ds, chon, rong, kieu }: { ds: MucGoiY[]; chon: number
   const dong = hien.map((m, i) => {
     const dang = dau + i === chon;
     const nhan = catVua(m.nhan, beNhan);
-    const trai = dang ? mau(THUONG_HIEU.timNhat)(dam(`› ${nhan}`)) : `  ${kieu === '@' && m.thuMuc ? mau('#93c5fd')(nhan) : nhan}`;
+    const trai = dang ? mau(THUONG_HIEU.timNhat)(dam(`› ${nhan}`)) : `  ${kieu === '@' && m.thuMuc ? mau('#f0c9a8')(nhan) : nhan}`;
     const moTa = m.mo ? mo(catVua(m.mo, Math.max(0, rong - beNhan - 6))) : '';
     return `${trai}${' '.repeat(Math.max(1, beNhan + 2 - doRong(nhan)))}${moTa}`;
   });
@@ -300,7 +319,7 @@ export function ChanTrang({ S, rong, model, muc, nhac, ctw, goiYPhim }: {
   goiYPhim?: boolean;
 }) {
   const cd = moTaCheDo(S.ws?.cheDoQuyen);
-  const trai = `${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}${S.ws?.choTrinhDuyet ? ` ${mau('#60a5fa')('🌐')}` : ''}${goiYPhim ? mo(L(' · ? phím tắt', ' · ? for shortcuts')) : ''}`;
+  const trai = `${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}${S.ws?.choTrinhDuyet ? ` ${mau('#e08a63')('🌐')}` : ''}${goiYPhim ? mo(L(' · ? phím tắt', ' · ? for shortcuts')) : ''}`;
   const giua = `${mau(THUONG_HIEU.xanhNhat)(model)}${mo(` · ${muc}`)}`;
   /* QA 5c: phần phải KHÔNG còn bỏ cả cụm khi chật — trước đây thêm "context 83%" là cả "thư mục ⎇ nhánh · context · ~$"
      biến mất ở 120 cột, đúng lúc ngữ cảnh/tiền đáng xem nhất. Nay bỏ dần theo độ ưu tiên: thư mục ⎇ nhánh → hạn mức →
@@ -376,7 +395,7 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
   let tieuDe = '';
   switch (d.loai) {
     case 'xinPhep':
-      tieuDe = `${d.taoMoi ? L('Tạo file', 'Create file') : L('Sửa file', 'Edit file')} ${mau('#7dd3fc')(d.duongDan ?? '')}`;
+      tieuDe = `${d.taoMoi ? L('Tạo file', 'Create file') : L('Sửa file', 'Edit file')} ${mau('#e9c08a')(d.duongDan ?? '')}`;
       dong.push(...veDiff(d.diff, { rong: trong, duong: d.duongDan, toiDa: Math.max(4, toiDaDong) }));
       break;
     case 'xinPhepLenh': {
@@ -384,7 +403,7 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
       // lệnh shell: đừng vẽ "Bash command $ 📨 …" (QA 18/10).
       const tin = /^📨 → (.*?): ([\s\S]*)$/u.exec(d.lenh ?? '');
       if (tin) {
-        tieuDe = `${L('Nhắn phiên khác', 'Message another session')} ${mau('#7dd3fc')(tin[1]!)}`;
+        tieuDe = `${L('Nhắn phiên khác', 'Message another session')} ${mau('#e9c08a')(tin[1]!)}`;
         dong.push(...tin[2]!.split('\n').slice(0, 12).flatMap((l) => bocVan(l, trong - 2)).map((l) => `${mo('│')} ${l}`));
       } else {
         tieuDe = L('Chạy lệnh', 'Bash command');
@@ -402,12 +421,12 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
     case 'xinPhepMcp':
       if (d.xemTruoc) {
         // Đợt 5: GHI lên CT Work — nói rõ ghi vào THẺ NÀO, VIỆC GÌ, NỘI DUNG GÌ (không đổ JSON tham số).
-        tieuDe = `${mau('#a78bfa')('CT Work')} ${mo('·')} ${d.xemTruoc.viec}${d.xemTruoc.the ? ` ${mo('→')} ${mau('#7dd3fc')(d.xemTruoc.the)}` : ''}`;
+        tieuDe = `${mau('#e39a76')('CT Work')} ${mo('·')} ${d.xemTruoc.viec}${d.xemTruoc.the ? ` ${mo('→')} ${mau('#e9c08a')(d.xemTruoc.the)}` : ''}`;
         const than = d.xemTruoc.noiDung.trim();
         if (than) dong.push(...than.split('\n').flatMap((l) => bocVan(l, trong - 2)).slice(0, Math.max(4, toiDaDong)).map((l) => `${mo('│')} ${l}`));
         dong.push(mo(L(`  tool: ${d.tool} · ghi CT Work luôn hỏi (kể cả "Bỏ qua hết") — tắt hỏi: /ctwork tu-ghi on`, `  tool: ${d.tool} · CT Work writes always ask (even in Bypass) — stop asking: /ctwork auto-write on`)));
       } else {
-        tieuDe = `${L('Gọi công cụ', 'Call tool')} ${mau('#7dd3fc')(`${d.server} · ${d.tool}`)}`;
+        tieuDe = `${L('Gọi công cụ', 'Call tool')} ${mau('#e9c08a')(`${d.server} · ${d.tool}`)}`;
         dong.push(...String(d.args ?? '').slice(0, 2000).split('\n').slice(0, Math.max(3, toiDaDong)).map((l) => mo(catVua(l, trong))));
       }
       break;
@@ -420,7 +439,7 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
       dong.push(...String(d.chiTiet ?? '').slice(0, 4000).split('\n').slice(0, Math.max(3, toiDaDong)).map((l) => catVua(l, trong)));
       break;
   }
-  if (d.phuId) tieuDe = `${mau('#a78bfa')(`🤖 ${L('Agent phụ', 'Subagent')}`)} ${mo('·')} ${tieuDe}`;
+  if (d.phuId) tieuDe = `${mau('#e39a76')(`🤖 ${L('Agent phụ', 'Subagent')}`)} ${mo('·')} ${tieuDe}`;
   const lc = luaChonDuyet(d);
   const chonDong = lc.map((l, i) => (i === chon
     ? mau(MAU_MUC[muc])(dam(`❯ ${i + 1}. ${l.nhan}`))

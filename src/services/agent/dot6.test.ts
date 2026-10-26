@@ -162,15 +162,16 @@ test('runAgentTurn: hạn mức NHÓM chỉ model free — model cần khoá b�
   // QA đợt 6: Sonic 5.5 / Heshin 5.5 (free nhưng cổng CHÍNH HÃNG) — người không gói có hạn mức chính hãng = 0 ⇒ trước đây
   // ra câu "hết hạn mức CuongMini Free" sai chỗ (hoặc gọi cổng chính hãng bằng tiền nhóm). Nay: NHOM_CHI_MODEL_FREE rõ ràng,
   // KHÔNG chạm cổng nào.
-  for (const ma of ['cm-sonic', 'cm-heshin']) {
-    const sk3: AgentEvent[] = [];
-    process.env.ANTHROPIC_CHINH_HANG_KEY = 'sk-ant-gia';
-    await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: ['fs_read'], ngayGio, model: ma, nhom } as any, (e) => sk3.push(e), new AbortController().signal).catch(() => undefined);
-    const loi = sk3.find((e) => e.type === 'error') as { code?: string; error?: string } | undefined;
-    assert.equal(loi?.code, 'NHOM_CHI_MODEL_FREE', `${ma}: ${JSON.stringify(sk3)}`);
-    assert.match(loi?.error ?? '', /Solid, Nova, Shin, Eco/);
-    assert.doesNotMatch(loi?.error ?? '', /Sonic|Heshin/);
-  }
+  /* 27/10/2026: CuongMini Pro (Haiku chính hãng) trong hạn mức nhóm ⇒ đi đích ngầm cm-solid (modelapi, tiền nhóm) — chạy được,
+     KHÔNG chạm cổng chính hãng. Pro 2 (`cm-sonic`) cần khoá ⇒ chặn như Max. */
+  const sk3: AgentEvent[] = [];
+  process.env.ANTHROPIC_CHINH_HANG_KEY = 'sk-ant-gia';
+  await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: ['fs_read'], ngayGio, model: 'cm-default', nhom } as any, (e) => sk3.push(e), new AbortController().signal);
+  assert.ok(sk3.some((e) => e.type === 'done'), `Pro trong nhóm chạy được: ${JSON.stringify(sk3)}`);
+  await assert.rejects(
+    runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: ['fs_read'], ngayGio, model: 'cm-sonic', nhom } as any, () => undefined, new AbortController().signal),
+    /cần khoá/,
+  );
 });
 
 test('LỖI ĐỢT TRƯỚC: tự chuyển từ model 1M sang GPT 400K mà hội thoại vượt cửa sổ ⇒ CẮT lượt cũ trước khi gọi (không 400)', async (t) => {
@@ -183,8 +184,8 @@ test('LỖI ĐỢT TRƯỚC: tự chuyển từ model 1M sang GPT 400K mà hội
   }
   messages.push({ role: 'user', content: 'câu cuối' });
   const sk: AgentEvent[] = [];
-  // cm-sonic = Anthropic chính hãng (1M). Máy kiểm thử không có key chính hãng ⇒ cổng "hỏng" ⇒ tự sang CuongMini Solid (400K).
-  await runAgentTurn({ userId: 1, messages, capabilities: ['fs_read'], ngayGio, model: 'cm-sonic' } as any, (e) => sk.push(e), new AbortController().signal);
+  // cm-default = CuongMini Pro, Anthropic chính hãng (1M). Máy kiểm thử không có key chính hãng ⇒ cổng "hỏng" ⇒ tự sang dự phòng ngầm (400K).
+  await runAgentTurn({ userId: 1, messages, capabilities: ['fs_read'], ngayGio, model: 'cm-default' } as any, (e) => sk.push(e), new AbortController().signal);
   const goiCong = daGui.filter((x) => /chat\/completions/.test(x.url));
   assert.ok(goiCong.length >= 1, `phải gọi cổng modelapi sau khi tự chuyển: ${JSON.stringify(sk.map((e) => e.type))}`);
   const b = goiCong.at(-1)!.body;

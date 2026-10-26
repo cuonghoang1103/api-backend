@@ -21,7 +21,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
-import { bangModel, type MucModel } from './bangModel.js';
+import { bangTatCa, type MucModel } from './bangModel.js';
 import { dauNgayVn, dauThangVn, goiCuaNguoi, type GoiTaiKhoan } from './anthropicChinhHang/hanMuc.js';
 import { tienGiaHanTheoKy } from './giaHanTienSo.js';
 
@@ -36,6 +36,8 @@ const KHOA = 'cuongmini_tran_model';
  * key_terminal ≈ một nửa Pro.
  */
 export const TRAN_MODEL_MAC_DINH: Record<string, Record<GoiCoTranModel, TranUsd>> = {
+  /* 27/10/2026: CuongMini Pro (Haiku 5.5 chính hãng, mặc định) — trần của Heshin 5.5 cũ. */
+  'cm-default': { pro: { thang: 80, ngay: 20 }, key_terminal: { thang: 4, ngay: 1 } },
   'cm-invisible': { pro: { thang: 10, ngay: 3 }, key_terminal: { thang: 5, ngay: 1.5 } },
   'cm-optimum': { pro: { thang: 20, ngay: 5 }, key_terminal: { thang: 10, ngay: 2.5 } },
   'cm-sonic': { pro: { thang: 100, ngay: 20 }, /* ×10 theo chủ app 18/10/2026 */ key_terminal: { thang: 5, ngay: 1 } },
@@ -73,7 +75,7 @@ export async function docTranModel(): Promise<Record<string, Record<GoiCoTranMod
 /** Thuần: JSON admin đã lưu ⇒ bảng đủ mọi model. */
 export function gopTran(dat: Record<string, unknown>): Record<string, Record<GoiCoTranModel, TranUsd>> {
   const ra: Record<string, Record<GoiCoTranModel, TranUsd>> = {};
-  for (const m of bangModel()) {
+  for (const m of bangTatCa()) {
     const o = (dat[m.id] && typeof dat[m.id] === 'object' ? dat[m.id] : {}) as Record<string, unknown>;
     const mac = macDinh(m.id);
     ra[m.id] = { pro: docCap(o.pro, mac.pro), key_terminal: docCap(o.key_terminal, mac.key_terminal) };

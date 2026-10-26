@@ -73,10 +73,10 @@ export function coAnh(messages: LLMMessage[]): boolean {
   return messages.some((m) => Array.isArray(m.content) && m.content.some((b) => (b as { type?: string }).type === 'image'));
 }
 
-/** Rambo cho việc chấm: cờ riêng `EXAM_RAMBO` (mặc định BẬT). Thiếu cấu hình ⇒ null. */
+/** Rambo cho việc chấm: cờ riêng `EXAM_RAMBO` — 27/10/2026 mặc định TẮT (ngừng rambo); bật lại EXAM_RAMBO=1. */
 export function examDiRambo(): LlmEndpoint | null {
   const env = process.env.EXAM_RAMBO?.trim();
-  if (env === '0' || env === 'false') return null;
+  if (env !== '1' && env !== 'true') return null;
   return congRamboCauHinh();
 }
 

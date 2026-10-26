@@ -50,7 +50,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import {
   anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laDefault, laLoiCongHong, modelapiGoiDuoc,
-  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom,
+  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom, MA_DEFAULT, MA_SOLID, mucTheoId,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
 import { type HangChinhHang } from './anthropicChinhHang/cauHinh.js';
@@ -1001,7 +1001,9 @@ export async function runAgentTurn(
      1M token ⇒ 2,4M ký tự, 400K ⇒ 960K. Đường rambo cũ giữ 600K. */
   /* 19/10/2026: MỌI mã (kể cả mã rambo cũ, CuongMini Default) đi qua bảng CuongMini — `timModel` giải Default
      (rambo sống ⇒ Classic Sonic, không ⇒ Solid) và mã cũ (bí danh ⇒ Classic). Không còn nhánh "bảng rambo cũ". */
-  const mucDuKien = timModel(input.model);
+  /* 27/10/2026: CuongMini Pro chạy cổng chính hãng; lượt HẠN MỨC NHÓM (tiền trưởng nhóm, người không gói — hạn mức chính
+     hãng = 0) đi đích ngầm `cm-solid` như thiết kế đợt 6 (nhóm chỉ trả cổng modelapi). */
+  const mucDuKien = input.nhom && timModel(input.model).id === MA_DEFAULT ? (mucTheoId(MA_SOLID) ?? timModel(input.model)) : timModel(input.model);
   let tranKyTu = tranKyTuCua(mucDuKien);
   /** Cửa sổ ngữ cảnh (token) để tính "context %" từ usage thật. */
   let cuaSoToken = mucDuKien.cuaSoToken || CUA_SO_THAN_TRONG;
@@ -1205,7 +1207,7 @@ export async function runAgentTurn(
     if (input.taiTro && !dungChoTaiTro(m)) {
       return {
         loai: 'tran', code: 'TAI_TRO_CHI_MODEL',
-        error: `Dự án ${input.taiTro.key} được admin tài trợ cho CuongMini Default, Classic, Sonic 5.5, Heshin 5.5 và Solid — chọn một model đó bằng /model. / ${input.taiTro.key} is sponsored for CuongMini Default, Classic, Sonic 5.5, Heshin 5.5 and Solid — pick one with /model.`,
+        error: `Dự án ${input.taiTro.key} được admin tài trợ cho CuongMini Pro — chọn nó bằng /model (Pro 2, Max, Fable Max cần khoá). / ${input.taiTro.key} is sponsored for CuongMini Pro — pick it with /model (Pro 2, Max and Fable Max need a key).`,
       };
     }
     if (input.nhom && !dungChoNhom(m)) {

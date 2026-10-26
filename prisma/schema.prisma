@@ -13253,6 +13253,24 @@ model AgentGiaHanTien {
 }
 
 // ============================================================
+// DANH SÁCH CHẶN CUONGMINI (27/10/2026) — admin chặn / mở khoá người dùng lạm dụng
+//   pham_vi 'AI_CODE' = app desktop AI Code + extension VS Code + CLI (chung một cửa /agent/*)
+//   pham_vi 'CTWORK'  = CuongMini trong CT Work (web + app)
+// ============================================================
+model CuongMiniChan {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  phamVi    String   @map("pham_vi") @db.VarChar(12)
+  lyDo      String?  @map("ly_do") @db.VarChar(500)
+  chanBoiId Int?     @map("chan_boi_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, phamVi], name: "uk_cuongmini_chan_user_pham_vi", map: "uk_cuongmini_chan_user_pham_vi")
+  @@index([phamVi, createdAt], name: "idx_cuongmini_chan_pham_vi")
+  @@map("cuongmini_chan")
+}
+
+// ============================================================
 // CRM NHẸ CHO STUDIO (CT Work đợt S5b, 05/10/2026) — /admin/crm
 // ============================================================
 // Pipeline B2B tối giản (kiểu Pipedrive): tổ chức · người liên hệ · deal ·

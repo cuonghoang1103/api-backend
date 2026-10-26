@@ -52,7 +52,7 @@ export const LENH_GOI_Y: LenhGach[] = [...LENH_AGENT.filter((l) => l.ten !== '/o
 
 /** Chỉ khi máy chủ CŨ chưa khai `models` — máy chủ mới gửi bảng CuongMini (18/10/2026). */
 export const MODEL_DU_PHONG: ModelMuc[] = [
-  { id: 'cm-default', ten: 'CuongMini Default', get mo() { return L('Mặc định', 'Default'); }, dungDuoc: true },
+  { id: 'cm-default', ten: 'CuongMini Pro', get mo() { return L('Mặc định', 'Default'); }, dungDuoc: true },
 ];
 export const MUC_DU_PHONG: MucNoLuc[] = [
   { id: 'thap', get ten() { return L('Thấp', 'Low'); }, get mo() { return L('hỏi nhanh', 'quick questions'); } },
@@ -613,7 +613,7 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       if (!m) { traLoi(`${L(`Không rõ model "${q}". Có:`, `Unknown model "${q}". Available:`)}\n\n${b.dsModel().map((x) => `- ${x.ten}${x.dungDuoc ? '' : L(' (chưa mở)', ' (not enabled)')}${x.canMoKhoa ? L(' · cần khoá', ' · needs a key') : ''}${x.canPro ? L(' · cần Pro', ' · needs Pro') : ''}`).join('\n')}`); return; }
       if (!m.dungDuoc) { traLoi(L(`**${m.ten}** chưa dùng được — máy chủ chưa mở nhà cung cấp này.`, `**${m.ten}** is not available — the server has not enabled this provider.`)); return; }
       if (m.canMoKhoa) { b.moKhoaModel(m.id); return; }
-      if (m.canPro) { traLoi(L(`**${m.ten}** cần gói Pro — nâng cấp tại https://cuongthai.com/pro. Tài khoản miễn phí dùng được **CuongMini Default**.`, `**${m.ten}** needs Pro — upgrade at https://cuongthai.com/pro. Free accounts can use **CuongMini Default**.`)); return; }
+      if (m.canPro) { traLoi(L(`**${m.ten}** cần gói Pro — nâng cấp tại https://cuongthai.com/pro (hoặc dùng trong dự án CT Work được tài trợ).`, `**${m.ten}** needs Pro — upgrade at https://cuongthai.com/pro (or use it inside a sponsored CT Work project).`)); return; }
       if (m.dat) { b.moMenu('model'); traLoi(L(`**${m.ten}** tốn nhiều hơn hẳn — chọn lại trong menu vừa mở để xác nhận.`, `**${m.ten}** costs much more — pick it again in the menu to confirm.`)); return; }
       await b.doiModel(m.id);
       traLoi(L(`Đã đổi model sang **${m.ten}** — ${m.mo}.`, `Model set to **${m.ten}** — ${moModel(m.mo)}.`));

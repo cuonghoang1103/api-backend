@@ -28,7 +28,8 @@ import { MA_DEFAULT } from './bangModel.js';
 const KHOA = 'cuongmini_tai_tro_admin';
 
 /** Model nhà tài trợ trả: Sonic 5.5 · Heshin 5.5 (chính hãng) · Solid + Default + nhóm Classic (rambo). */
-export const MODEL_TAI_TRO: ReadonlySet<string> = new Set([MA_DEFAULT, 'cm-sonic', 'cm-heshin', 'cm-solid', 'cm-classic-optimum', 'cm-classic-sonic', 'cm-classic-heshin']);
+/* 27/10/2026: tài trợ = CuongMini Pro (+ đích dự phòng ngầm). Pro 2 / Max / Fable Max vẫn cần khoá riêng. */
+export const MODEL_TAI_TRO: ReadonlySet<string> = new Set([MA_DEFAULT, 'cm-solid']);
 export function dungChoTaiTro(m: { id?: string }): boolean {
   return typeof m.id === 'string' && MODEL_TAI_TRO.has(m.id);
 }

@@ -180,14 +180,15 @@ test('danh sách trắng model chính hãng', () => {
   assert.equal(modelChinhHangTu('cl-free')?.model, modelFree());
   assert.equal(modelChinhHangTu('cl-free')?.hang, 'free');
   /* 18/10/2026: mã chuẩn nay là `cm-*` (bảng CuongMini); `cl-*` còn là bí danh. */
-  assert.equal(modelChinhHangTu('cl-haiku-5-5')?.id, 'cm-heshin', 'bí danh cũ');
-  assert.equal(modelChinhHangTu('cl-free')?.id, 'cm-heshin');
+  assert.equal(modelChinhHangTu('cl-haiku-5-5')?.id, 'cm-default', 'bí danh cũ (27/10: Haiku = CuongMini Pro)');
+  assert.equal(modelChinhHangTu('cl-free')?.id, 'cm-default');
   assert.equal(modelChinhHangTu('cl-opus-5-5')?.model, 'claude-opus-5-5');
   assert.equal(modelChinhHangTu('cl-opus-5-5')?.hang, 'cao');
-  assert.equal(modelChinhHangTu('cm-sonic')?.hang, 'free', 'Sonic 5.5 thuộc nhóm free (18/10/2026)');
+  assert.equal(modelChinhHangTu('cm-sonic')?.hang, 'cao', '27/10/2026: Pro 2 (Sonnet 5.5) cần khoá chung ⇒ nhóm cao');
+  assert.equal(modelChinhHangTu('cm-default')?.hang, 'free', 'CuongMini Pro (Haiku 5.5) nhóm free');
   assert.equal(modelChinhHangTu('cm-solid'), null, 'Solid ở cổng modelapi, không phải chính hãng');
   assert.equal(modelChinhHangTu('cl-khong-co'), null);
-  assert.equal(modelChinhHangTu('sonnet-5'), null);
+  assert.equal(modelChinhHangTu('sonnet-5')?.id, 'cm-default', '27/10/2026: mã rambo cũ ⇒ CuongMini Pro');
   assert.ok(laMaChinhHang('cl-sonnet-5-5'));
   assert.equal(modelTuongDuong('claude-opus-4-8'), 'claude-opus-5-5');
   assert.equal(modelTuongDuong('claude-sonnet-5'), 'claude-sonnet-5-5');

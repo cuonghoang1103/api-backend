@@ -1,40 +1,25 @@
 /**
  * ============================================================
- * BẢNG MODEL CUONGMINI — MỘT CHỖ DUY NHẤT (18/10/2026)
+ * BẢNG MODEL CUONGMINI — MỘT CHỖ DUY NHẤT (bản 27/10/2026: 4 model, xem khối "BẢNG 4 MODEL" bên dưới)
  * ============================================================
  *
- * Chủ app chốt (18/10/2026):
- *   • Cổng rambo.ai.vn bị gỡ khỏi danh sách chính (mã giữ, tắt bằng công tắc
- *     — `ramboBat()` ở `llm/gateway.ts`).
- *   • Cổng CHÍNH = modelapi ("CuongMini Core"), model mặc định = `gpt-6-sol`
- *     tên hiển thị "CuongMini Solid".
- *   • Cổng Anthropic chính hãng hiển thị là "CuongMini Code Max".
- *   • Pro dùng MIỄN PHÍ (không khoá, luôn có trần chi tiêu theo người): xem
- *     `khoa: 'free'` bên dưới.
- *   • Model còn lại dùng CHUNG một khoá (`chung`), riêng Invisible có khoá
- *     RIÊNG (`invisible`) vì quá đắt. Vé sống 48 giờ (`anthropicChinhHang/ve.ts`).
- *
- * App (desktop, CLI `/model`, extension VS Code) CHỈ hiện `ten` — không bao
- * giờ hiện `model` (tên thật) hay tên cổng thật. Thứ tự hiển thị (19/10/2026,
- * chủ app chốt): nhóm FREE lên trên, rồi nhóm cần khoá; TRONG mỗi nhóm xếp
- * `nangLuc` giảm dần (`thuTuHienThi`). Đổi thứ tự thì đổi con số, không đổi chỗ dòng.
- *
- * ⚠️ `mo`/`moEn` không được nhắc tên model thật hay tên cổng thật.
+ * App (desktop, CLI `/model`, extension VS Code) CHỈ hiện `ten` — không bao giờ hiện `model` (tên thật) hay tên cổng
+ * thật. `mo`/`moEn` không được nhắc tên model thật hay tên cổng thật.
  */
 import { congAgent, goiDuocModel, ramboDangNghi, ramboSonic } from '../llm/gateway.js';
 import { MODEL_AGENT_RIENG } from './models.js';
 
-/** Tên của model đắt nhất — chủ app viết "Invisable"; dùng chính tả đúng. Đổi ở ĐÂY là đủ. */
-export const TEN_INVISIBLE = 'CuongMini Invisible 5.1';
+/** Tên model đắt nhất (khoá riêng). Đổi ở ĐÂY là đủ. */
+export const TEN_INVISIBLE = 'CuongMini Fable Max';
 
-/** `rambo` (19/10/2026) = nhóm "CuongMini Classic" — cổng rambo.ai.vn, gói trả trọn, chỉ có khi admin BẬT. */
+/** `rambo` = cổng rambo.ai.vn — 27/10/2026 NGỪNG dùng (không còn mục nào trong bảng; mã cũ về CuongMini Pro). */
 export type CongModel = 'anthropic' | 'modelapi' | 'rambo';
-/** `free` = Pro dùng không cần khoá · `chung` = khoá chung · `invisible` = khoá riêng của Invisible. */
+/** `free` = Pro dùng không cần khoá · `chung` = khoá chung (Pro 2 + Max) · `invisible` = khoá riêng Fable Max. */
 export type LoaiKhoa = 'free' | 'chung' | 'invisible';
 
 /** Tên CỔNG hiển thị — không lộ tên nhà cung cấp. */
 export const TEN_CONG: Record<CongModel, string> = {
-  anthropic: 'CuongMini Code Max',
+  anthropic: 'CuongMini',
   modelapi: 'CuongMini Core',
   rambo: 'CuongMini Classic',
 };
@@ -49,194 +34,138 @@ export interface MucModel {
   moEn: string;
   cong: CongModel;
   khoa: LoaiKhoa;
-  /** Năng lực tương đối (cao → đứng trên). */
+  /** Năng lực tương đối (cao → mạnh hơn). */
   nangLuc: number;
   /** Cửa sổ ngữ cảnh THẬT (token). */
   cuaSoToken: number;
   /** Trần token RA thật của model. */
   maxRa: number;
   /**
-   * Model FREE tương đương ở CỔNG KIA — đích khi cổng của model này hỏng
-   * (5xx, mất kết nối, hết credit, hết giờ). Không bao giờ là model đắt hơn
-   * người dùng đã chọn khi model đó trả phí (luật "không tự nâng").
+   * Model FREE ở CỔNG KIA — đích khi cổng của model này hỏng (5xx, mất kết nối, hết credit, hết giờ).
+   * Không bao giờ là model đắt hơn người dùng đã chọn (luật "không tự nâng").
    */
   tuongDuong: string;
   /** Đọc được ảnh thật (đo). */
   nhinAnh: boolean;
   /** Model đắt bất thường ⇒ app hỏi xác nhận. */
   dat?: boolean;
+  /** Mục ẨN: không hiện trong danh sách app (chỉ làm đích dự phòng ngầm khi cổng chính hãng hỏng). */
+  an?: boolean;
+  /** Thứ tự hiển thị (nhỏ đứng trên). */
+  thuTu?: number;
 }
 
 /*
- * Cửa sổ / trần ra:
- *   • Anthropic 5.5 + Fable 5.1: đo `GET /v1/models/{id}` 17/10/2026 = 1.000.000 / 128.000
- *     (máy chủ còn đọc lại mỗi ngày — `caiDat.ts › gioiHanModel`).
- *   • GPT trên modelapi: cổng không công khai ⇒ theo hãng cho họ GPT-5/6 (400K vào / 128K ra).
- *     Sai thì cổng trả 400 rõ ràng ("context length"), không hỏng câm.
+ * Cửa sổ / trần ra: Anthropic 5.5 + Fable 5.1 đo `GET /v1/models/{id}` 17/10/2026 = 1.000.000 / 128.000.
+ * GPT trên modelapi: theo hãng (400K vào / 128K ra).
  */
 const MOT_TRIEU = 1_000_000;
 const GPT_CUA_SO = 400_000;
 const RA_128K = 128_000;
 
 /**
- * Mã model mặc định — cũng là đích của mọi mã lạ (19/10/2026): **CuongMini Default** (`cm-default`).
- * Không phải một model cố định mà là lựa chọn TỰ ĐỘNG (`giaiDefault`):
- *   • rambo BẬT và sống (cầu dao đóng) ⇒ CuongMini Classic Sonic (Sonnet mới nhất của rambo — gói trả trọn);
- *   • rambo tắt / cầu dao mở ⇒ CuongMini Solid (gpt-6-sol trên Core).
- * Đang chạy mà rambo lỗi ⇒ `turn.ts` tự chuyển cổng sang Solid (`tuongDuong`) như cơ chế 18/10.
+ * ============================================================
+ * BẢNG 4 MODEL (chủ app chốt 27/10/2026 — thay bảng 18/10 + 19/10)
+ * ============================================================
+ *   CuongMini Pro        = Haiku 5.5 (rẻ nhất cổng chính hãng) — MẶC ĐỊNH, Pro dùng không cần khoá
+ *   CuongMini Pro 2      = Sonnet 5.5 ┐ CHUNG một khoá (admin đặt trần; vé 48 giờ — admin chưa đổi khoá thì nhập lại
+ *   CuongMini Max        = Opus 5.5   ┘ khoá cũ vẫn vào, đổi rồi thì không)
+ *   CuongMini Fable Max  = Fable 5.1 — khoá RIÊNG (rất tốn token)
+ * Cổng rambo.ai.vn ngừng dùng; modelapi chỉ còn là đích dự phòng NGẦM (`cm-solid`, ẩn) khi cổng chính hãng hỏng.
+ * Tài khoản Free KHÔNG còn dùng AI Code/CLI/extension (trừ dự án CT Work được tài trợ / hạn mức nhóm).
+ *
+ * GIỮ MÃ CŨ (`cm-default`, `cm-sonic`, `cm-optimum`, `cm-invisible`): app đang cài kiểm mã bằng z.enum cố định ⇒
+ * đổi mã là phải phát hành lại cả 3 app. Giữ mã ⇒ app tự hiện đúng 4 tên mới lấy từ máy chủ.
  */
 export const MA_DEFAULT = 'cm-default';
 export const MA_MAC_DINH = MA_DEFAULT;
-/** Model chắc chắn chạy được khi không có rambo. */
+/** Đích dự phòng NGẦM (modelapi) khi cổng chính hãng hỏng. Ẩn khỏi danh sách. */
 export const MA_SOLID = 'cm-solid';
-/** Đích của CuongMini Default khi rambo sống. */
+/** Mã cũ của Classic Sonic (rambo) — nay là bí danh của Default. */
 export const MA_CLASSIC_SONIC = 'cm-classic-sonic';
-export const TEN_DEFAULT = 'CuongMini Default';
-const RAMBO_CUA_SO = 200_000;
-const RAMBO_RA = 16_000;
+export const TEN_DEFAULT = 'CuongMini Pro';
 
 const BANG: readonly MucModel[] = Object.freeze(([
   {
-    id: 'cm-invisible', model: 'claude-fable-5-1', ten: TEN_INVISIBLE,
-    mo: '⚠ Đắt nhất — chỉ cho việc cực khó. Khoá riêng.',
-    moEn: '⚠ Most expensive — only for extremely hard tasks. Separate key.',
-    cong: 'anthropic', khoa: 'invisible', nangLuc: 100, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: 'cm-solid', nhinAnh: true, dat: true,
-  },
-  {
-    id: 'cm-optimum', model: 'claude-opus-5-5', ten: 'CuongMini Optimum 5.5',
-    mo: 'Mạnh — việc khó, refactor lớn, đọc cả kiến trúc. Cần khoá.',
-    moEn: 'Strong — hard tasks, big refactors, whole-architecture reading. Needs a key.',
-    cong: 'anthropic', khoa: 'chung', nangLuc: 90, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: 'cm-solid', nhinAnh: true,
-  },
-  {
-    id: 'cm-sonic', model: 'claude-sonnet-5-5', ten: 'CuongMini Sonic 5.5',
-    mo: 'Cân bằng — nhanh, giỏi code, ngữ cảnh 1 triệu token. Pro miễn phí.',
-    moEn: 'Balanced — fast, strong at code, 1M-token context. Free on Pro.',
-    cong: 'anthropic', khoa: 'free', nangLuc: 75, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: 'cm-solid', nhinAnh: true,
-  },
-  {
-    id: 'cm-solid', model: 'gpt-6-sol', ten: 'CuongMini Solid',
-    mo: 'Mặc định — chắc tay, nhìn được ảnh. Pro miễn phí.',
-    moEn: 'Default — dependable, can see images. Free on Pro.',
-    cong: 'modelapi', khoa: 'free', nangLuc: 70, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
-    tuongDuong: 'cm-sonic', nhinAnh: true,
-  },
-  {
-    /* Đo 18/10/2026 trên vòng lặp agent (đọc 2 file + sửa 1 hàm + chạy test, 2 lượt): đúng 2/2,
-       sổ cổng ~0,015 $/việc (≈ 0,85× Solid), 13–16 s. */
-    id: 'cm-nova', model: 'gpt-6-luna', ten: 'CuongMini Nova',
-    mo: 'Ngang Solid, rẻ hơn chút — nhanh. Pro miễn phí.',
-    moEn: 'On par with Solid, slightly cheaper — fast. Free on Pro.',
-    cong: 'modelapi', khoa: 'free', nangLuc: 68, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
-    tuongDuong: 'cm-sonic', nhinAnh: true,
-  },
-  {
-    id: 'cm-shin', model: 'gpt-5.6-sol', ten: 'CuongMini Shin',
-    mo: 'Thế hệ trước — ý kiến thứ hai (tốn ~2,5× Solid). Pro miễn phí.',
-    moEn: 'Previous generation — a second opinion (~2.5× Solid cost). Free on Pro.',
-    cong: 'modelapi', khoa: 'free', nangLuc: 60, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
-    tuongDuong: 'cm-sonic', nhinAnh: true,
-  },
-  {
-    id: 'cm-heshin', model: 'claude-haiku-5-5', ten: 'CuongMini Heshin 5.5',
-    mo: 'Nhẹ, nhanh — việc vặt, hỏi nhanh, sửa một file. Pro miễn phí.',
-    moEn: 'Light and fast — small chores, quick questions, one-file edits. Free on Pro.',
+    id: MA_DEFAULT, model: 'claude-haiku-5-5', ten: TEN_DEFAULT,
+    mo: 'Mặc định — nhanh, gọn, đủ cho hầu hết việc code hằng ngày. Tài khoản Pro dùng không cần khoá.',
+    moEn: 'Default — fast and capable for everyday coding. Free on Pro, no key needed.',
     cong: 'anthropic', khoa: 'free', nangLuc: 50, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
-    tuongDuong: 'cm-solid', nhinAnh: true,
+    tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 1,
   },
   {
-    /* Đo 18/10/2026: đúng 2/2, sổ cổng ~0,005 $/việc (≈ 0,3× Solid) nhưng CHẬM: 3–5 phút cho việc nhỏ. */
-    id: 'cm-eco', model: 'gpt-5.6-luna', ten: 'CuongMini Eco',
-    mo: 'Rẻ nhất nhưng chậm (vài phút mỗi việc nhỏ) — việc không gấp. Pro miễn phí.',
-    moEn: 'Cheapest but slow (minutes per small task) — for work that can wait. Free on Pro.',
+    id: 'cm-sonic', model: 'claude-sonnet-5-5', ten: 'CuongMini Pro 2',
+    mo: 'Mạnh hơn — giỏi code, việc nhiều bước, ngữ cảnh 1 triệu token. Cần khoá (chung với Max).',
+    moEn: 'Stronger — great at code and multi-step work, 1M-token context. Needs a key (shared with Max).',
+    cong: 'anthropic', khoa: 'chung', nangLuc: 75, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
+    tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 2,
+  },
+  {
+    id: 'cm-optimum', model: 'claude-opus-5-5', ten: 'CuongMini Max',
+    mo: 'Mạnh nhất nhóm — việc khó, refactor lớn, đọc cả kiến trúc. Cần khoá (chung với Pro 2).',
+    moEn: 'Most capable of the group — hard tasks, big refactors, whole-architecture reading. Needs a key (shared with Pro 2).',
+    cong: 'anthropic', khoa: 'chung', nangLuc: 90, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
+    tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 3,
+  },
+  {
+    id: 'cm-invisible', model: 'claude-fable-5-1', ten: TEN_INVISIBLE,
+    mo: '⚠ Rất tốn token — chỉ cho việc cực khó. Khoá riêng.',
+    moEn: '⚠ Very token-hungry — only for extremely hard tasks. Separate key.',
+    cong: 'anthropic', khoa: 'invisible', nangLuc: 100, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,
+    tuongDuong: MA_SOLID, nhinAnh: true, dat: true, thuTu: 4,
+  },
+  {
+    id: MA_SOLID, model: 'gpt-6-sol', ten: 'CuongMini Pro',
+    mo: 'Dự phòng ngầm khi cổng chính bận.', moEn: 'Silent fallback when the main gateway is busy.',
     cong: 'modelapi', khoa: 'free', nangLuc: 45, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
-    tuongDuong: 'cm-heshin', nhinAnh: true,
+    tuongDuong: MA_DEFAULT, nhinAnh: true, an: true, thuTu: 99,
   },
-  /*
-   * ─── NHÓM CUONGMINI CLASSIC — cổng rambo (19/10/2026) ───
-   * Chỉ hiện khi admin BẬT rambo (`congAgent()`); tắt ⇒ mã Classic tự về Solid (`timModel`). Gói trả trọn ⇒ KHÔNG
-   * trừ trần $ (sổ vẫn ghi lượt + token, `costUsd = 0`). Cổng hỏng ⇒ tự chuyển Solid (`tuongDuong`).
-   * `model` của Classic Sonic là GETTER: Sonnet mới nhất rambo có (`ramboSonic()` — 5.5 nếu cổng mở, giờ là 5).
-   * Không ghi cửa sổ 1M: rambo chưa đo cửa sổ thật ⇒ 200K như bảng rambo cũ.
-   */
-  {
-    id: 'cm-classic-optimum', model: 'claude-opus-5', ten: 'CuongMini Classic Optimum',
-    mo: 'Mạnh nhất nhóm Classic — việc khó, refactor lớn. Gói trọn, Pro miễn phí.',
-    moEn: 'Strongest of the Classic group — hard tasks, big refactors. Flat-rate, free on Pro.',
-    cong: 'rambo', khoa: 'free', nangLuc: 88, cuaSoToken: RAMBO_CUA_SO, maxRa: RAMBO_RA,
-    tuongDuong: 'cm-solid', nhinAnh: true,
-  },
+  /* Nhóm Classic (cổng rambo) — 27/10/2026 NGỪNG dùng: ẨN hẳn (app không thấy, mã app gửi lên bị đổi về Pro ở cửa vào).
+     Giữ mục để mã đường rambo còn chạy được nội bộ (test giao thức Anthropic) và bật lại dễ nếu cần. */
   {
     id: 'cm-classic-sonic', get model() { return ramboSonic(); }, ten: 'CuongMini Classic Sonic',
-    mo: 'Cân bằng — nhanh, giỏi code, chữ chảy dần. Gói trọn, Pro miễn phí.',
-    moEn: 'Balanced — fast, strong at code, streams as it writes. Flat-rate, free on Pro.',
-    cong: 'rambo', khoa: 'free', nangLuc: 78, cuaSoToken: RAMBO_CUA_SO, maxRa: RAMBO_RA,
-    tuongDuong: 'cm-solid', nhinAnh: true,
-  },
-  {
-    id: 'cm-classic-heshin', model: 'claude-haiku-4-5', ten: 'CuongMini Classic Heshin',
-    mo: 'Nhẹ, nhanh — việc vặt, sửa một file. Gói trọn, Pro miễn phí.',
-    moEn: 'Light and fast — small chores, one-file edits. Flat-rate, free on Pro.',
-    cong: 'rambo', khoa: 'free', nangLuc: 48, cuaSoToken: RAMBO_CUA_SO, maxRa: RAMBO_RA,
-    tuongDuong: 'cm-solid', nhinAnh: true,
+    mo: 'Ngừng dùng.', moEn: 'Retired.',
+    cong: 'rambo', khoa: 'free', nangLuc: 78, cuaSoToken: 200_000, maxRa: 16_000,
+    tuongDuong: MA_SOLID, nhinAnh: true, an: true, thuTu: 98,
   },
 ] as MucModel[]).sort(thuTuHienThi));
 
-/**
- * CuongMini Default — mục HIỂN THỊ (không phải model thật; `model` rỗng). Lượt chạy dùng `giaiDefault()`.
- */
-export const MUC_DEFAULT: MucModel = Object.freeze({
-  id: MA_DEFAULT, model: '', ten: TEN_DEFAULT,
-  mo: 'Khuyên dùng — tự chọn model tốt nhất đang chạy, tự chuyển khi cổng bận. Mọi tài khoản dùng được.',
-  moEn: 'Recommended — picks the best model that is up, switches by itself when a gateway is busy. Every account can use it.',
-  cong: 'modelapi', khoa: 'free', nangLuc: 1000, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
-  tuongDuong: 'cm-solid', nhinAnh: true,
-}) as MucModel;
+/** Mục CuongMini Pro (mặc định) — giữ tên cũ `MUC_DEFAULT` cho các chỗ đang import. */
+export const MUC_DEFAULT: MucModel = BANG.find((m) => m.id === MA_DEFAULT)!;
 
-/** Rambo bật VÀ không đang nghỉ (cầu dao đóng). */
+/** Rambo bật VÀ không đang nghỉ. 27/10/2026: rambo ngừng dùng ⇒ không còn quyết định gì trong bảng này. */
 export function ramboChayDuoc(): boolean {
   return Boolean(congAgent()) && !ramboDangNghi();
 }
 
-/** CuongMini Default lúc này chạy model nào: Classic Sonic (rambo sống) hay Solid. */
-export function giaiDefault(chayDuoc: boolean = ramboChayDuoc()): MucModel {
-  return BANG.find((m) => m.id === (chayDuoc ? MA_CLASSIC_SONIC : MA_SOLID))!;
+/** CuongMini Default lúc này chạy model nào — 27/10/2026: luôn CuongMini Pro (Haiku 5.5 chính hãng). */
+export function giaiDefault(_chayDuoc?: boolean): MucModel {
+  return MUC_DEFAULT;
 }
 
-/**
- * THỨ TỰ HIỂN THỊ (19/10/2026, chủ app chốt): model FREE trước (Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco),
- * rồi model cần khoá (Invisible 5.1 · Optimum 5.5); trong mỗi nhóm năng lực cao → thấp. Trước đây chỉ theo năng lực ⇒
- * hai model cần khoá đứng đầu danh sách mà đa số người dùng không mở được.
- */
-export function thuTuHienThi(a: { khoa: string; nangLuc: number; cong?: string; id?: string }, b: { khoa: string; nangLuc: number; cong?: string; id?: string }): number {
-  /* 19/10/2026: Default → Classic (rambo) → free → cần khoá. */
-  const nhom = (m: { khoa: string; cong?: string; id?: string }) => (m.id === MA_DEFAULT ? -2 : m.cong === 'rambo' ? -1 : m.khoa === 'free' ? 0 : 1);
-  return nhom(a) - nhom(b) || b.nangLuc - a.nangLuc;
+/** Thứ tự hiển thị (27/10/2026): Pro → Pro 2 → Max → Fable Max. */
+export function thuTuHienThi(a: { thuTu?: number; nangLuc: number }, b: { thuTu?: number; nangLuc: number }): number {
+  return (a.thuTu ?? 50) - (b.thuTu ?? 50) || b.nangLuc - a.nangLuc;
 }
 
-/**
- * Bảng các cổng TRẢ THEO TOKEN (Code Max + Core), đã xếp: free trước, trong nhóm năng lực cao → thấp. KHÔNG gồm
- * nhóm Classic (rambo — gói trọn, không có trần $) và mục Default — xem `bangChoApp()`.
- */
+/** Bảng các model HIỆN cho người dùng (không gồm mục ẩn dự phòng). */
 export function bangModel(): readonly MucModel[] {
-  return BANG.filter((m) => m.cong !== 'rambo');
+  return BANG.filter((m) => !m.an);
 }
 
-/** Nhóm CuongMini Classic (rambo) — luôn trả đủ, bất kể công tắc (danh sách cho app tự lọc theo `congAgent()`). */
+/** MỌI mục kể cả ẩn (dự phòng) — cho bảng trần chi tiêu / thống kê (mục ẩn vẫn tiêu tiền thật). */
+export function bangTatCa(): readonly MucModel[] {
+  return BANG;
+}
+
+/** Nhóm Classic (rambo) — 27/10/2026 ngừng dùng: luôn rỗng (giữ hàm cho chỗ đang import). */
 export function bangClassic(): readonly MucModel[] {
   return BANG.filter((m) => m.cong === 'rambo');
 }
 
-/**
- * DANH SÁCH CHO APP, đúng thứ tự chủ app chốt (19/10/2026):
- *   rambo BẬT: Default → Classic (Optimum · Sonic · Heshin) → free (Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco) → cần khoá
- *   rambo TẮT: Default → free → cần khoá (Classic ẩn).
- */
-export function bangChoApp(ramboBatNay: boolean = Boolean(congAgent())): MucModel[] {
-  return [MUC_DEFAULT, ...(ramboBatNay ? bangClassic() : []), ...bangModel()];
+/** DANH SÁCH CHO APP (27/10/2026): đúng 4 model, rambo không bao giờ hiện. */
+export function bangChoApp(_ramboBatNay?: boolean): MucModel[] {
+  return [...bangModel()];
 }
 
 /**
@@ -244,20 +173,26 @@ export function bangChoApp(ramboBatNay: boolean = Boolean(congAgent())): MucMode
  * modelapi/rambo cũ — đều phải chạy được, không bắt người dùng cài lại app.
  */
 const BI_DANH: Record<string, string> = {
-  /* 19/10/2026: tên đầu tiên của Default trong bản nháp. */
   'cm-tu-dong': MA_DEFAULT,
-  /* Mã bảng rambo cũ (`models.ts`) ⇒ nhóm Classic. Rambo tắt ⇒ `timModel` đưa tiếp về Solid. */
-  ...Object.fromEntries(MODEL_AGENT_RIENG.map((m) => [m.id, m.classic])),
-  'cl-free': 'cm-heshin',
-  'cl-haiku-5-5': 'cm-heshin',
+  /* Mã bảng rambo cũ (`models.ts`) + nhóm Classic ⇒ CuongMini Pro (27/10/2026 ngừng rambo). */
+  ...Object.fromEntries(MODEL_AGENT_RIENG.map((m) => [m.id, MA_DEFAULT])),
+  'cm-classic-optimum': MA_DEFAULT,
+  'cm-classic-heshin': MA_DEFAULT,
+  /* Model modelapi + Heshin của bảng 18/10 ⇒ CuongMini Pro. */
+  'cm-heshin': MA_DEFAULT,
+  'cm-nova': MA_DEFAULT,
+  'cm-shin': MA_DEFAULT,
+  'cm-eco': MA_DEFAULT,
+  'cl-free': MA_DEFAULT,
+  'cl-haiku-5-5': MA_DEFAULT,
   'cl-sonnet-5-5': 'cm-sonic',
   'cl-opus-5-5': 'cm-optimum',
   'cl-fable-5-1': 'cm-invisible',
-  'gpt-sol': 'cm-solid',
-  'gpt-6-sol': 'cm-solid',
-  'gpt-5.6-sol': 'cm-shin',
-  'gpt-6-luna': 'cm-nova',
-  'gpt-5.6-luna': 'cm-eco',
+  'gpt-sol': MA_DEFAULT,
+  'gpt-6-sol': MA_DEFAULT,
+  'gpt-5.6-sol': MA_DEFAULT,
+  'gpt-6-luna': MA_DEFAULT,
+  'gpt-5.6-luna': MA_DEFAULT,
 };
 
 /*
@@ -268,9 +203,10 @@ const BI_DANH: Record<string, string> = {
  */
 export const MA_CU: Record<string, string> = {
   'cm-solid': 'gpt-sol', 'cm-sonic': 'cl-sonnet-5-5', 'cm-optimum': 'cl-opus-5-5', 'cm-invisible': 'cl-fable-5-1', 'cm-heshin': 'cl-free',
+  /* 27/10/2026: Default = Haiku 5.5 ⇒ app đời cũ nhận `cl-free` (BI_DANH đổi ngược về Default). */
   /* 19/10/2026 — mã cũ của CHÍNH các model rambo đó (app cũ nhận lại đúng model qua `BI_DANH`). Default ⇒ `sonnet-5`:
      app cũ mặc định gửi `sonnet-5` ⇒ rambo bật thì chạy rambo Sonnet thật, tắt/sập thì Solid — đúng hành vi Default. */
-  'cm-default': 'sonnet-5', 'cm-classic-sonic': 'sonnet-5', 'cm-classic-heshin': 'haiku-4-5', 'cm-classic-optimum': 'opus-5',
+  'cm-default': 'cl-free',
 };
 
 /**
@@ -289,6 +225,8 @@ export function maChoApp<T extends { id: string }>(ds: T[], ban: BanApp): T[] {
   const thay = (id: string): string | null => {
     if (!id.startsWith('cm-')) return id;
     if (ban === 'cm' && CM_DOI_1.has(id)) return id;
+    /* App "bảng cm đời 1" không có `cm-default` trong z.enum ⇒ gửi `cm-heshin` (BI_DANH đổi ngược về Default). */
+    if (ban === 'cm' && id === MA_DEFAULT) return 'cm-heshin';
     return MA_CU[id] ?? null;
   };
   const daCo = new Set<string>();
@@ -315,17 +253,18 @@ export function maMacDinhCho(ban: BanApp): string {
  * "hết hạn mức CuongMini Free" khó hiểu.
  */
 /* 19/10/2026: hạn mức nhóm dùng được thêm nhóm Classic (rambo — gói trọn) và CuongMini Default. */
+/* 27/10/2026: hạn mức nhóm chạy CuongMini Pro — lượt của nhóm đi đích ngầm `cm-solid` (modelapi, tiền trưởng nhóm). */
 export function dungChoNhom(m: { khoa?: string; cong?: string; id?: string }): boolean {
-  return m.id === MA_DEFAULT || (m.khoa === 'free' && (m.cong === 'modelapi' || m.cong === 'rambo'));
+  return m.id === MA_DEFAULT || m.id === MA_SOLID;
 }
 /** Tên các model dùng được bằng hạn mức nhóm (câu báo lỗi / giao diện). */
 export function tenModelNhom(): string {
-  return bangChoApp().filter(dungChoNhom).map((m) => m.ten.replace(/^CuongMini /, '')).join(', ');
+  return TEN_DEFAULT;
 }
 
 /** Mã có phải của bảng này (kể cả bí danh) không. */
 export function laMaCuongMini(id: unknown): id is string {
-  return typeof id === 'string' && (id === MA_DEFAULT || BANG.some((m) => m.id === id) || id in BI_DANH);
+  return typeof id === 'string' && (BANG.some((m) => m.id === id) || id in BI_DANH);
 }
 
 /** Mã (kể cả bí danh / trống) có phải CuongMini Default không — mã lạ KHÔNG tính (không mở cửa Free bằng mã rác). */
@@ -341,9 +280,18 @@ export function laDefault(id: unknown): boolean {
  */
 export function timModel(id: unknown): MucModel {
   const ma = typeof id === 'string' && id ? (BI_DANH[id] ?? id) : MA_MAC_DINH;
-  const m = ma === MA_DEFAULT ? giaiDefault() : BANG.find((x) => x.id === ma) ?? giaiDefault();
-  if (m.cong === 'rambo' && !congAgent()) return BANG.find((x) => x.id === MA_SOLID)!;
-  return m;
+  /* Mục ẨN (`cm-solid`) vẫn chạy được khi gọi NỘI BỘ (đích dự phòng, test cơ chế); yêu cầu từ APP bị đổi về Pro ở
+     cửa vào `/agent/turn` + `/agent/compact` (`chuanHoaMaTuApp`). */
+  const m = BANG.find((x) => x.id === ma) ?? MUC_DEFAULT;
+  /* Classic khi rambo tắt (mặc định từ 27/10) ⇒ Pro. */
+  return m.cong === 'rambo' && !congAgent() ? MUC_DEFAULT : m;
+}
+
+/** Mã model app gửi lên ⇒ mã được phép chọn: mục ẩn (dự phòng) và mã rác ⇒ CuongMini Pro. */
+export function chuanHoaMaTuApp(id: unknown): string {
+  const ma = typeof id === 'string' && id ? (BI_DANH[id] ?? id) : MA_DEFAULT;
+  const m = BANG.find((x) => x.id === ma);
+  return m && !m.an ? m.id : MA_DEFAULT;
 }
 
 export function mucTheoId(id: string): MucModel | undefined {
@@ -407,16 +355,15 @@ export function cauDoiCong(ten: string): { vi: string; en: string } {
  * THUẦN.
  */
 export function anTenThat(text: string, them: Record<string, string> = {}): string {
-  const tenClassic = (id: string) => BANG.find((m) => m.id === id)?.ten ?? TEN_CONG.rambo;
   const cap: Array<[string, string]> = [
     ...BANG.map((m) => [m.model, m.ten] as [string, string]),
-    /* Mọi model rambo (kể cả mã cũ không còn mục riêng) ⇒ tên Classic. */
-    ...MODEL_AGENT_RIENG.map((m) => [m.model, tenClassic(m.classic)] as [string, string]),
+    /* Mọi model rambo cũ ⇒ tên CuongMini Pro. */
+    ...MODEL_AGENT_RIENG.map((m) => [m.model, TEN_DEFAULT] as [string, string]),
     ...Object.entries(them),
   ].filter(([that]) => that).sort((a, b) => b[0].length - a[0].length);
   let ra = String(text ?? '');
   for (const [that, ten] of cap) ra = ra.split(that).join(ten);
   return ra
-    .replace(/cổng Claude chính hãng/gi, TEN_CONG.anthropic)
+    .replace(/cổng Claude chính hãng/gi, 'CuongMini')
     .replace(/api\.anthropic\.com|modelapi(\.vn)?|rambo(\.ai\.vn)?/gi, 'CuongMini');
 }

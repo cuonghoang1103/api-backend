@@ -31,10 +31,11 @@ import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agen
 import { congAgent, gatewayConfigured, kiemRamboSong, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import {
-  TEN_CONG, bangModel, docBanApp, dungChoNhom, laDefault, laMaCuongMini, maChoApp, maMacDinhCho, ramboChayDuoc, timModel,
+  TEN_CONG, bangModel, chuanHoaMaTuApp, docBanApp, dungChoNhom, laDefault, laMaCuongMini, maChoApp, maMacDinhCho, timModel,
 } from '../services/agent/bangModel.js';
-import { demHomNay, docGioiHanDefault, ipChongSpam, kiemVaGhiBuocFree, kiemVaGhiLuotDefault } from '../services/agent/defaultGioiHan.js';
+import { ipChongSpam, kiemVaGhiBuocFree, kiemVaGhiLuotDefault } from '../services/agent/defaultGioiHan.js';
 import { CAU_BAO_TRI_FREE } from '../services/agent/turn.js';
+import { MA_LOI_CHAN, biChanCuongMini, cauBiChan } from '../services/agent/cuongMiniChan.js';
 import { xemTranModel } from '../services/agent/tranModel.js';
 import {
   GiaHanLoi, giaHanChoLoi, nhapMaGiaHan, tongQuanCuaNguoi, tranChamModel, tranChamNhom, xemYeuCauCuaNguoi,
@@ -113,8 +114,19 @@ async function thuTaiTro(req: any): Promise<boolean> {
   return true;
 }
 
+/**
+ * DANH SÁCH CHẶN (27/10/2026): admin chặn người lạm dụng CuongMini ở AI Code + CLI + VS Code (chung cửa này).
+ * Bị chặn ⇒ 403 CUONGMINI_BI_CHAN, trả lời xong luôn (true).
+ */
+async function chanNeuBiChan(req: any, res: Response<ApiResponse>): Promise<boolean> {
+  if (!(await biChanCuongMini(req.userId, 'AI_CODE'))) return false;
+  res.status(403).json({ success: false, code: MA_LOI_CHAN, message: cauBiChan('AI_CODE') } as any);
+  return true;
+}
+
 async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
+    if (await chanNeuBiChan(req, res)) return;
     if (await thuTaiTro(req)) return next();
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown } };
@@ -152,35 +164,15 @@ async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFu
  *
  * Đường nhóm (đợt 6) vẫn thắng đường Free khi cuộc gắn dự án có hạn mức nhóm.
  */
-async function emailDaXacThuc(userId: number): Promise<boolean> {
-  try {
-    const u = await prisma.user.findUnique({ where: { id: userId }, select: { emailVerified: true } });
-    return Boolean(u?.emailVerified);
-  } catch {
-    return false;
-  }
-}
-
-/** Lời gọi `/turn` của tài khoản Free (mỗi BƯỚC agent là một lời gọi) — trần cao, chỉ chặn vòng lặp bất thường. */
-const freeLimiterNguoi = rateLimit({
-  windowMs: 60_000, max: 90, standardHeaders: true, legacyHeaders: false,
-  keyGenerator: (req: any): string => `free-u:${req.userId ?? 'anon'}`,
-  message: { success: false, message: 'Quá nhiều lời gọi trong một phút — đợi chút rồi tiếp tục nhé. / Too many calls in a minute — wait a moment and continue.', code: 'DEFAULT_QUA_NHANH' },
-});
-const freeLimiterIp = rateLimit({
-  windowMs: 60_000, max: 300, standardHeaders: true, legacyHeaders: false,
-  keyGenerator: (req: any): string => `free-ip:${ipChongSpam(req) ?? 'anon'}`,
-  message: { success: false, message: 'Mạng của bạn đang gửi quá nhiều lời gọi — đợi chút rồi tiếp tục nhé. / Your network is sending too many calls — wait a moment.', code: 'DEFAULT_QUA_NHANH' },
-});
-const chayLimiter = (lim: ReturnType<typeof rateLimit>, req: any, res: Response): Promise<boolean> =>
-  new Promise((ok) => { void lim(req, res, () => ok(true)); res.once('finish', () => ok(false)); });
-
 /**
  * Pro (hoặc key terminal) ⇒ qua. Nhóm ⇒ như đợt 6. Còn lại: CuongMini Default ⇒ đường FREE (`req.nguonFree`), model
  * khác ⇒ 403 PRO_REQUIRED kèm lời mời dùng Default.
  */
 async function chiProHoacNhomHoacFree(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
+    if (await chanNeuBiChan(req, res)) return;
+    /* 27/10/2026: chỉ 4 model chọn được — mục ẩn (dự phòng `cm-solid`) / mã đã bỏ ⇒ CuongMini Pro. */
+    if (req.body && typeof req.body === 'object' && 'model' in req.body) req.body.model = chuanHoaMaTuApp(req.body.model);
     if (await thuTaiTro(req)) return next();
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown }; model?: unknown };
@@ -192,30 +184,15 @@ async function chiProHoacNhomHoacFree(req: any, res: Response<ApiResponse>, next
       res.status(429).json({ success: false, message: q.cau + gh.them, code: 'NHOM_HET_TRAN', ...(gh.ui ? { data: { giaHanTien: gh.ui } } : {}) } as any);
       return;
     }
-    if (laDefault(b.model)) {
-      if (!(await emailDaXacThuc(req.userId))) {
-        res.status(403).json({
-          success: false, code: 'CAN_XAC_THUC_EMAIL',
-          message: 'Xác thực email tài khoản trước khi dùng CuongMini Default miễn phí (Cài đặt → Tài khoản, hoặc thư xác thực trong hộp thư). / Verify your account email before using CuongMini Default for free.',
-        });
-        return;
-      }
-      if (!ramboChayDuoc()) {
-        res.status(503).json({ success: false, code: 'CUONGMINI_BAO_TRI', message: CAU_BAO_TRI_FREE });
-        return;
-      }
-      if (!(await chayLimiter(freeLimiterIp, req, res))) return;
-      if (!(await chayLimiter(freeLimiterNguoi, req, res))) return;
-      req.nguonFree = true;
-      return next();
-    }
+    /* 27/10/2026: CuongMini Pro chạy cổng chính hãng (tốn tiền) ⇒ tài khoản Free KHÔNG còn đường dùng riêng (rambo ngừng).
+       Free chỉ dùng được qua dự án CT Work có hạn mức nhóm / admin tài trợ (đã xử lý ở trên). */
     res.status(403).json({
       success: false,
       message: pid && q.ma !== 'NHOM_KHONG_GAN'
         ? q.cau
-        : 'Model này cần gói Pro. Tài khoản miễn phí dùng được CuongMini Default — chọn nó bằng /model. / This model needs Pro. Free accounts can use CuongMini Default — pick it with /model.',
+        : await cauChanPro(req.userId, 'CuongMini (AI Code, CLI, VS Code) dành cho tài khoản Pro. Nâng cấp Pro để dùng, hoặc dùng trong dự án CT Work được tài trợ. / CuongMini needs a Pro account — upgrade, or use it inside a sponsored CT Work project.'),
       code: 'PRO_REQUIRED',
-      data: { nhom: q.ma, macDinhFree: true },
+      data: { nhom: q.ma },
     } as any);
   } catch (err) {
     next(err);
@@ -247,17 +224,8 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     const nhom = [...nhomRieng, ...taiTro.filter((t) => !nhomRieng.some((n) => n.projectId === t.projectId)).map((t) => ({ projectId: t.projectId, key: t.key }))];
     const ban = docBanApp(req.query.bang);
     /* 19/10/2026: tài khoản FREE dùng được CuongMini Default (rambo). App mới (`?bang=cm2`) đọc `free` để mở AI Code. */
-    const free = pro ? null : await (async () => {
-      const [daXacThuc, gh, homNay] = await Promise.all([emailDaXacThuc(req.userId), docGioiHanDefault(), demHomNay(req.userId)]);
-      return {
-        duocDung: daXacThuc,
-        canXacThucEmail: !daXacThuc,
-        dangBaoTri: !ramboChayDuoc(),
-        luotHomNay: homNay,
-        tranNgay: gh.ngayFree || null,
-        tranPhut: gh.phutNguoi || null,
-      };
-    })().catch(() => null);
+    /* 27/10/2026: hết đường Free (rambo ngừng) ⇒ luôn null — app hiện lời mời nâng cấp Pro như trước 19/10. */
+    const free = null;
     /* Bảng CuongMini (18/10/2026, `bangModel.ts`): FREE trước rồi cần khoá, trong nhóm năng lực cao → thấp (19/10), CHỈ tên
        CuongMini (không tên model thật, không tên cổng thật). App gửi `?congAnthropicVe=`
        (bó vé) để `canMoKhoa` phản ánh đúng vé đang giữ. */

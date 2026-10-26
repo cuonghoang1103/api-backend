@@ -118,9 +118,9 @@ export function veNguoi(m: Extract<MucBang, { loai: 'nguoi' }>, rong: number): s
   // Kiểu Claude Code: `> câu hỏi` trên nền nhạt — nhìn là biết đâu là câu của mình.
   const dau = mo('>');
   const gioChu = m.luc ? mo(gio(new Date(m.luc))) : '';
-  const nenTin = capMau() >= 2 ? nen('#221d33') : (s: string) => s;
+  const nenTin = capMau() >= 2 ? nen('#2b2420') : (s: string) => s;
   const rongChu = Math.max(10, rong - 4 - (gioChu ? doRong(gioChu) + 1 : 0));
-  const dong = m.text.split('\n').flatMap((d) => bocDong(d.replace(/(^|\s)(@[^\s]+)/g, (_, a: string, b: string) => `${a}${mau('#7dd3fc')(b)}`), rongChu));
+  const dong = m.text.split('\n').flatMap((d) => bocDong(d.replace(/(^|\s)(@[^\s]+)/g, (_, a: string, b: string) => `${a}${mau('#e9c08a')(b)}`), rongChu));
   const ra = dong.map((d, i) => {
     const trai = `${i === 0 ? dau : ' '} ${d}`;
     if (i === 0 && gioChu) return nenTin(`${dem(trai, rong - doRong(gioChu) - 1)}${gioChu} `);
@@ -160,7 +160,7 @@ export function veMuc(m: MucBang, rong: number, truoc?: MucBang): string[] {
     }
     case 'dinhKem':
       // Đợt 5: chip kiểu `@file` ngay dưới tin người dùng.
-      return [`  ${m.khoa.map((k) => mau('#7dd3fc')(`📎 ${k}`)).join(mo('  '))} ${mo(L('· đã đính kèm tóm tắt thẻ CT Work', '· CT Work issue summary attached'))}`];
+      return [`  ${m.khoa.map((k) => mau('#e9c08a')(`📎 ${k}`)).join(mo('  '))} ${mo(L('· đã đính kèm tóm tắt thẻ CT Work', '· CT Work issue summary attached'))}`];
     case 'ketLuot': {
       const phan = [`CuongMini · ${gio(new Date(m.luc))}`];
       if (m.thoiLuong) phan.push(giay(m.thoiLuong));
@@ -170,9 +170,7 @@ export function veMuc(m: MucBang, rong: number, truoc?: MucBang): string[] {
     case 'loi': {
       const ra = ['', ...bocDong(`${mau(DO)('✗')} ${mau(DO)(m.text)}`, rong)];
       if (m.ma === 'PRO_REQUIRED') {
-        ra.push(`  ${mo(L('Model này cần gói Pro —', 'This model needs Pro —'))} ${mau('#60a5fa')('https://cuongthai.com/pro')}`);
-        /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default. */
-        ra.push(`  ${mo(L('Tài khoản miễn phí: chọn CuongMini Default bằng /model.', 'Free account: pick CuongMini Default with /model.'))}`);
+        ra.push(`  ${mo(L('CuongMini cần gói Pro —', 'CuongMini needs Pro —'))} ${mau('#e08a63')('https://cuongthai.com/pro')}`);
       }
       return ra;
     }
@@ -266,11 +264,11 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   ra.push(dong());
   const nhan = (k: string) => mo(k.padEnd(9));
   // Đường dẫn dài: rút GIỮA (giữ tên dự án ở cuối) — cắt đuôi là mất đúng phần người dùng cần nhìn.
-  const nhanhChu = t.nhanh ? `  ${mau('#a78bfa')(`git:${t.nhanh}`)}` : '';
+  const nhanhChu = t.nhanh ? `  ${mau('#e39a76')(`git:${t.nhanh}`)}` : '';
   ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${rutGiua(t.thuMuc, trong - 10 - (t.nhanh ? doRong(t.nhanh) + 6 : 0))}${nhanhChu}`));
   if (t.model) ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${t.muc ? mo(L(` · mức ${t.muc}`, ` · effort ${t.muc}`)) : ''}`));
   if (t.cheDo) {
-    ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));
+    ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#e08a63')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));
     ra.push(...dongBoc(mo(L('Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.', 'All tools on: edit files, run commands, git, browser — every edit/command still asks.')), 10));
     ra.push(...dongBoc(mo(L('shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.', 'shift+tab to "Auto mode" or "Bypass" to skip the prompts.')), 10));
   } else {

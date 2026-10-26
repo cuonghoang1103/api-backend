@@ -1096,8 +1096,9 @@ export function congRamboCauHinh(): LlmEndpoint | null {
  * Tắt riêng cho CT Work: `CTWORK_RAMBO=0`. Thiếu cấu hình rambo ⇒ coi như tắt.
  */
 export function ctworkDiRambo(): LlmEndpoint | null {
+  /* 27/10/2026 chủ app ngừng dùng rambo ⇒ mặc định TẮT (CT Work đi thẳng Sonnet 5.5 chính hãng). Bật lại: CTWORK_RAMBO=1. */
   const env = process.env.CTWORK_RAMBO?.trim();
-  if (env === '0' || env === 'false') return null;
+  if (env !== '1' && env !== 'true') return null;
   return congRamboCauHinh();
 }
 

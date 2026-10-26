@@ -52,7 +52,7 @@ test('tuyến Anthropic: gửi đúng hình dạng, đọc đúng tool', async (
 
   const sk: AgentEvent[] = [];
   await runAgentTurn(
-    { userId: 1, messages: [{ role: 'user', content: 'Đọc src/a.ts' }], capabilities: ['fs_read'], mucNoLuc: 'vua' } as any,
+    { userId: 1, messages: [{ role: 'user', content: 'Đọc src/a.ts' }], capabilities: ['fs_read'], mucNoLuc: 'vua', model: 'cm-classic-sonic' } as any,
     (e) => sk.push(e),
     new AbortController().signal,
   );
@@ -119,7 +119,7 @@ test('tuyến Anthropic: ảnh dán đi hết đường, tới THÂN yêu cầu 
   // ĐÚNG thứ app desktop gửi lên: khối `text` + khối `image_url` data URI.
   const than64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
   await runAgentTurn(
-    { userId: 1, capabilities: [], mucNoLuc: 'vua', messages: [{
+    { userId: 1, capabilities: [], mucNoLuc: 'vua', model: 'cm-classic-sonic', messages: [{
       role: 'user',
       content: [
         { type: 'text', text: 'Ảnh này màu gì?' },

@@ -19,14 +19,14 @@ export interface TuyChonMd {
 
 const MAU = {
   h1: THUONG_HIEU.timNhat,
-  h2: '#a78bfa',
-  h3: '#93c5fd',
-  codeDong: '#7dd3fc',
-  link: '#60a5fa',
+  h2: '#e39a76',
+  h3: '#f0c9a8',
+  codeDong: '#e9c08a',
+  link: '#e08a63',
   vien: '#4b5563',
   tick: '#22c55e',
   trich: THUONG_HIEU.tim,
-  dau: '#a78bfa',
+  dau: '#e39a76',
 };
 
 const THUC_THE: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&#x27;': "'", '&nbsp;': ' ' };
@@ -97,7 +97,7 @@ function khoiCode(t: Tokens.Code, rong: number): string[] {
   const ngonNgu = (t.lang ?? '').trim().split(/\s+/)[0] ?? '';
   const vien = (s: string) => mau(MAU.vien)(s);
   const than = toMauCode(t.text.replace(/\n$/, ''), ngonNgu || null).split('\n');
-  const ra = [vien(`┌─${ngonNgu ? ` ${mau('#a78bfa')(ngonNgu)}` : ''}`)];
+  const ra = [vien(`┌─${ngonNgu ? ` ${mau('#e39a76')(ngonNgu)}` : ''}`)];
   for (const d of than) {
     /* Dòng code dài: BỌC CỨNG (dòng nối có dấu ↪ mờ) — không cắt "…". Cắt là mất chữ: lệnh trong khối code
        là thứ người dùng chép ra chạy (QA 18/10: `/mcp mo` in `open -t "…/scratchpad/qa…"` mất nửa đường dẫn). */

@@ -28,6 +28,7 @@ import { CAU_HOI_SAN, traLoiThongKe } from '../services/agent/anthropicChinhHang
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
 import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
 import { prisma } from '../config/database.js';
+import { chanNguoi, dsChan, laPhamViChan, moChanNguoi } from '../services/agent/cuongMiniChan.js';
 import { datServerTool, docServerTool, gioiHanModel } from '../services/agent/anthropicChinhHang/caiDat.js';
 import { DON_TOOL, TRAN_KY_TU_CHINH_HANG, effortTheoMuc, maxTokensAgent, nguongCompact } from '../services/agent/anthropicChinhHang/cauHinh.js';
 
@@ -375,6 +376,38 @@ router.put('/ctwork-ai-gioi-han', boc(async (req, res) => {
 /** Ai dùng CuongMini Default nhiều nhất hôm nay (phát hiện lạm dụng) + IP đông nhất. */
 router.get('/default-top', boc(async (_req, res) => {
   res.json({ success: true, data: await topDefaultHomNay(20) });
+}));
+
+/* ─── DANH SÁCH CHẶN CUONGMINI (27/10/2026) ─────────────────────────────────────────────
+   phamVi: AI_CODE (app AI Code + CLI + VS Code) · CTWORK (CuongMini trong CT Work). */
+router.get('/chan', boc(async (req, res) => {
+  const p = req.query.phamVi;
+  res.json({ success: true, data: await dsChan(laPhamViChan(p) ? p : undefined) });
+}));
+
+/** Body: { userId | q (email/username), phamVi, lyDo? } */
+router.post('/chan', boc(async (req, res) => {
+  const b = (req.body ?? {}) as { userId?: unknown; q?: unknown; phamVi?: unknown; lyDo?: unknown };
+  if (!laPhamViChan(b.phamVi)) throw new BadRequestError('phamVi phải là AI_CODE hoặc CTWORK');
+  let userId = Number(b.userId);
+  if (!Number.isInteger(userId) || userId <= 0) {
+    const q = String(b.q ?? '').trim();
+    if (!q) throw new BadRequestError('Thiếu người cần chặn (userId hoặc email/username)');
+    const u = await prisma.user.findFirst({ where: { OR: [{ email: { equals: q, mode: 'insensitive' } }, { username: { equals: q, mode: 'insensitive' } }] }, select: { id: true } });
+    if (!u) throw new BadRequestError(`Không tìm thấy người dùng "${q}"`);
+    userId = u.id;
+  }
+  if (userId === adminId(req)) throw new BadRequestError('Không tự chặn chính mình được');
+  await chanNguoi(userId, b.phamVi, typeof b.lyDo === 'string' ? b.lyDo : null, adminId(req) ?? null);
+  res.json({ success: true, data: await dsChan(b.phamVi) });
+}));
+
+router.delete('/chan/:id/:phamVi', boc(async (req, res) => {
+  const userId = idTu(req);
+  const p = req.params.phamVi;
+  if (!laPhamViChan(p)) throw new BadRequestError('phamVi phải là AI_CODE hoặc CTWORK');
+  await moChanNguoi(userId, p, adminId(req) ?? null);
+  res.json({ success: true, data: await dsChan(p) });
 }));
 
 export default router;

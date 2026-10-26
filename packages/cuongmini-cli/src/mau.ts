@@ -37,10 +37,10 @@ export function datCapMau(c: CapMau): void { cap = c; }
 // ─── Thương hiệu ─────────────────────────────────────────────────
 
 export const THUONG_HIEU = {
-  tim: '#8b5cf6',
-  xanh: '#3b82f6',
-  timNhat: '#c4b5fd',
-  xanhNhat: '#93c5fd',
+  tim: '#d97757',
+  xanh: '#e8a26a',
+  timNhat: '#eab49a',
+  xanhNhat: '#f0c9a8',
   xam: '#6b7280',
   xamNhat: '#9ca3af',
   vien: '#4b5563',

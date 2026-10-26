@@ -851,6 +851,7 @@ const EN = `
 <div class="callout ok"><p><strong>You pass when</strong> your numbers are: 21 months totalling 945.525.000 · March 2026 +34,7 % vs March 2025 · Moleskine 13 weeks, 5 of them zero · September month-to-date 42.485.000 on the 30th · top 3 = 24 / 24 / 25 rows · calculators 54,9 % of the shop · with “Bút gel” added, still 4 roots and Bút &amp; mực 54.875.000.</p></div>
 
 <h3>3 · Downloads and setup</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(false)}
 ${out(SETUP)}
 
@@ -952,6 +953,7 @@ const VI = `
 <div class="callout ok"><p><strong>Đạt khi</strong> con số của bạn là: 21 tháng tổng 945.525.000 · tháng 3/2026 +34,7 % so tháng 3/2025 · Moleskine 13 tuần, 5 tuần bằng 0 · luỹ kế tháng 9 ngày 30 là 42.485.000 · top 3 ra 24 / 24 / 25 dòng · máy tính cầm tay chiếm 54,9 % cả shop · thêm "Bút gel" mà vẫn 4 gốc và Bút &amp; mực 54.875.000.</p></div>
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(true)}
 ${out(SETUP)}
 

@@ -11,6 +11,8 @@ Quy trình từng bước theo `~/Documents/video-bai-giang/_PROMPT-AGENT-PG.md`
 - Output cho người học so: chạy tệp bằng `psql -f` qua TTY (stdout/stderr đúng thứ tự, có `psql:/tmp/<tệp>:<dòng>:` trước lỗi) —
   thêm `\pset pager off` đầu tệp. Mỗi con số trong bài phải lấy từ output thật.
 
+- Tên container: bài 0.3 dạy `pg17`, còn lệnh các lab viết `pgdemo`. Mỗi lab dùng `pgdemo` PHẢI có callout ở mục 3 (Tệp tải về): "`pgdemo` = container PostgreSQL 17 của bạn; dựng theo 0.3 thì tên `pg17` — thay tên hoặc `docker rename pg17 pgdemo`" (EN + VI). Lab 8 dùng `pglab8-*` tự dựng nên không cần.
+
 ## 2. Bài web — `lab/lab-N.mjs`
 - `export default { title: 'Lab N — CT Shop: …|||Lab N — CT Shop: …', slug: 'postgresql-lab-N-<ten-khong-dau>', type: 'LESSON', description, content }`.
 - `content = \`${G}${EN}${VI}\``: `G` = giảng slide (`giang/pg-lab-N.mjs`, `walkPg('pg-lab-N', …)`), rồi khối `ml-en` và `ml-vi` cùng bố cục:

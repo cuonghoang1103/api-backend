@@ -565,6 +565,7 @@ const EN = `
 <div class="callout ok"><p><strong>You pass when</strong> the self-check in section 6 prints: 50 products · total stock 8129 · max id 54 · 300 customers · 2000 orders · 10 pending · 327 cancelled.</p></div>
 
 <h3>3 · Downloads and setup</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(false)}
 ${out(SETUP)}
 <p>psql on your own machine? Use the local path of each CSV in <code>\\copy</code> instead of <code>/tmp/…</code>. Why the TimeZone line: the CSV times carry <code>+07</code>, the Docker image runs in UTC; with the same TimeZone as this lesson your outputs and date filters match ours exactly.</p>
@@ -655,6 +656,7 @@ const VI = `
 <div class="callout ok"><p><strong>Đạt khi</strong> phần tự kiểm ở mục 6 in ra: 50 sản phẩm · tổng tồn kho 8129 · id lớn nhất 54 · 300 khách · 2000 đơn · 10 đơn chờ · 327 đơn huỷ.</p></div>
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(true)}
 ${out(SETUP)}
 <p>Máy có cài psql? Dùng đường dẫn cục bộ của từng CSV trong <code>\\copy</code> thay cho <code>/tmp/…</code>. Vì sao có dòng TimeZone: giờ trong CSV mang <code>+07</code>, ảnh Docker chạy UTC; đặt cùng TimeZone với bài thì output và các bộ lọc ngày của bạn khớp y hệt bài.</p>

@@ -1249,7 +1249,7 @@ ${RUBRIC(false)}
 
 <h3>3 · Downloads and setup</h3>
 ${FILES(false)}
-<p>You need <strong>Node.js 22</strong> (<code>node -v</code>) and the PostgreSQL 17 container of lesson 0.3 published on port <strong>5444</strong> (password 123456). It is called <code>pgdemo</code> below; if yours is <code>pg17</code>, use that name. Every command works the same on macOS, Linux and Windows (PowerShell or Git Bash) unless a line says otherwise.</p>
+<p>You need <strong>Node.js 22</strong> (<code>node -v</code>) and the PostgreSQL 17 container of lesson 0.3 published on port <strong>5444</strong> (password 123456). It is called <code>pgdemo</code> below; if yours is <code>pg17</code>, use that name (or run <code>docker rename pg17 pgdemo</code> once). Every command works the same on macOS, Linux and Windows (PowerShell or Git Bash) unless a line says otherwise.</p>
 ${code(SETUP, 'bash')}
 <p>The start file prints its check line and the indexes you start with — only the keys and UNIQUE constraints, <em>no index on any foreign key</em>, on purpose:</p>
 ${out('categories | products | customers | orders | order_lines | payments | notes\n        12 |       48 |       300 | 302000 |      605000 |   277376 | 37500')}
@@ -1476,7 +1476,7 @@ ${RUBRIC(true)}
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
 ${FILES(true)}
-<p>Bạn cần <strong>Node.js 22</strong> (<code>node -v</code>) và container PostgreSQL 17 ở bài 0.3, mở cổng <strong>5444</strong> (mật khẩu 123456). Bên dưới gọi nó là <code>pgdemo</code>; nếu container của bạn tên <code>pg17</code> thì thay tên đó vào. Mọi lệnh chạy giống nhau trên macOS, Linux và Windows (PowerShell hoặc Git Bash), trừ dòng nào ghi khác.</p>
+<p>Bạn cần <strong>Node.js 22</strong> (<code>node -v</code>) và container PostgreSQL 17 ở bài 0.3, mở cổng <strong>5444</strong> (mật khẩu 123456). Bên dưới gọi nó là <code>pgdemo</code>; nếu container của bạn tên <code>pg17</code> thì thay tên đó vào (hoặc chạy một lần <code>docker rename pg17 pgdemo</code>). Mọi lệnh chạy giống nhau trên macOS, Linux và Windows (PowerShell hoặc Git Bash), trừ dòng nào ghi khác.</p>
 ${code(SETUP, 'bash')}
 <p>Tệp khởi đầu in dòng kiểm và các chỉ mục bạn có lúc đầu — chỉ có khoá chính và UNIQUE, <em>không khoá ngoại nào có chỉ mục</em>, cố ý:</p>
 ${out('categories | products | customers | orders | order_lines | payments | notes\n        12 |       48 |       300 | 302000 |      605000 |   277376 | 37500')}

@@ -320,8 +320,9 @@ ${ERD}
 <div class="callout ok"><p><strong>You pass when</strong> <code>lab1-check.sql</code> prints exactly <strong>27 ERROR lines</strong> (23 in part B, 4 in part C), part A and T28–T29 succeed, and both fingerprints in part D equal <code>f26adcc3…</code> and <code>0a360bff…</code>.</p></div>
 
 <h3>3 · Downloads</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES_EN}
-<p>Setup (container <code>pgdemo</code> from lesson 0.3):</p>
+<p>Setup (container <code>pgdemo</code> = <code>pg17</code> of lesson 0.3, see the note above):</p>
 ${out(SETUP)}
 <p>psql installed on your machine? <code>psql -d ctshop -f lab1-start.sql</code> works the same. Budget 60–90 minutes; open the solutions below only after your own attempt.</p>
 
@@ -431,8 +432,9 @@ ${ERD}
 <div class="callout ok"><p><strong>Đạt khi</strong> <code>lab1-check.sql</code> in ra đúng <strong>27 dòng ERROR</strong> (23 ở phần B, 4 ở phần C), phần A và T28–T29 thành công, và hai dấu vân tay ở phần D bằng <code>f26adcc3…</code> và <code>0a360bff…</code>.</p></div>
 
 <h3>3 · Tệp tải về</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES_VI}
-<p>Chuẩn bị (container <code>pgdemo</code> ở bài 0.3):</p>
+<p>Chuẩn bị (container <code>pgdemo</code> = <code>pg17</code> ở bài 0.3, xem ghi chú trên):</p>
 ${out(SETUP)}
 <p>Máy có cài psql? <code>psql -d ctshop -f lab1-start.sql</code> chạy y như vậy. Dành 60–90 phút; chỉ mở đáp án bên dưới sau khi đã tự làm.</p>
 

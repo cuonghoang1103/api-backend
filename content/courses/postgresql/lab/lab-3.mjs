@@ -614,6 +614,7 @@ const EN = `
 <div class="callout ok"><p><strong>You pass when</strong> your numbers are: 713 payments · 411.147.000 đ · the 4 roots add up to 411.147.000 · 3.528 units · 10 never ordered · 30 with no purchase in 2026 · 7 VIP · 855 orders placed · August cancel rate 12,2 %.</p></div>
 
 <h3>3 · Downloads and setup</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(false)}
 ${out(SETUP)}
 <p>The start file drops and rebuilds schema <code>shop</code>; run it once. The data is deterministic (<code>setseed</code>), so your numbers will match ours exactly — as long as the TimeZone matches too (see T1).</p>
@@ -727,6 +728,7 @@ const VI = `
 <div class="callout ok"><p><strong>Đạt khi</strong> con số của bạn là: 713 thanh toán · 411.147.000 đ · 4 danh mục gốc cộng lại đúng 411.147.000 · 3.528 món · 10 khách chưa từng đặt · 30 khách không mua trong 2026 · 7 VIP · 855 đơn được đặt · tỷ lệ huỷ tháng 8 là 12,2 %.</p></div>
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(true)}
 ${out(SETUP)}
 <p>Tệp start xoá rồi dựng lại schema <code>shop</code>; chạy một lần. Dữ liệu tất định (<code>setseed</code>), nên con số của bạn khớp y hệt bài — miễn là TimeZone cũng khớp (xem T1).</p>

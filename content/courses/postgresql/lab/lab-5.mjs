@@ -935,6 +935,7 @@ const EN = `
 ${RUBRIC(false)}
 
 <h3>3 · Downloads and setup</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(false)}
 <p>The start file rebuilds the standard shop (Part A, the same rows as Labs 3–4), then Part B adds 99.700 customers, 998.000 orders, 2.495.000 order lines and 915.490 payments — deterministic (<code>setseed</code>), so your counts must match exactly. Order dates grow with the id like in a real shop; a few customers buy far more often than the rest (customer 1: 142 orders, the average is 10); only the last two days still have <code>pending</code> orders. Run it with <code>-it</code> to watch the timings:</p>
 ${out(SETUP)}
@@ -1090,6 +1091,7 @@ const VI = `
 ${RUBRIC(true)}
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(true)}
 <p>Tệp start dựng lại shop chuẩn (phần A, đúng các dòng của Lab 3–4), rồi phần B thêm 99.700 khách, 998.000 đơn, 2.495.000 dòng đơn và 915.490 thanh toán — tất định (<code>setseed</code>), nên số đếm của bạn phải khớp đúng. Ngày đặt đơn tăng theo id như ở cửa hàng thật; vài khách mua nhiều hơn hẳn số còn lại (khách 1: 142 đơn, trung bình là 10); chỉ hai ngày cuối còn đơn <code>pending</code>. Chạy bằng <code>-it</code> để xem thời gian từng bước:</p>
 ${out(SETUP)}

@@ -1391,6 +1391,7 @@ const EN = `
 ${RUBRIC(false)}
 
 <h3>3 · Downloads and setup</h3>
+<div class="callout"><p><code>pgdemo</code> is the name of <em>your</em> PostgreSQL 17 container. If you built it in lesson 0.3 it is called <code>pg17</code>: either write <code>pg17</code> instead of <code>pgdemo</code> in every command below, or give it the alias once with <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(false)}
 <p>The start file rebuilds the standard shop — the same rows as Labs 1–4 — so whatever Lab 5 left behind (one million orders, ~500 MB) is gone:</p>
 ${out(SETUP)}
@@ -1561,6 +1562,7 @@ const VI = `
 ${RUBRIC(true)}
 
 <h3>3 · Tệp tải về và chuẩn bị</h3>
+<div class="callout"><p><code>pgdemo</code> là tên container PostgreSQL 17 của <em>bạn</em>. Nếu bạn dựng theo bài 0.3 thì nó tên <code>pg17</code>: hoặc thay <code>pgdemo</code> bằng <code>pg17</code> trong mọi lệnh bên dưới, hoặc đổi tên một lần bằng <code>docker rename pg17 pgdemo</code>.</p></div>
 ${FILES(true)}
 <p>Tệp khởi đầu dựng lại shop chuẩn — đúng các dòng của Lab 1–4 — nên mọi thứ Lab 5 để lại (một triệu đơn, ~500 MB) đều mất:</p>
 ${out(SETUP)}

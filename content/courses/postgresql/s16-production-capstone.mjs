@@ -291,6 +291,12 @@ số @relation       : 1075</div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Multi-row locks acquired in a consistent order</span><span class="lz-d">The whole fix for deadlocks (11.4).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">If <code>SERIALIZABLE</code> is used anywhere, a retry loop catches <code>40001</code></span><span class="lz-d">Without it you have made the system fail under load, not made it correct (11.3).</span></div>
 </div>
+<div class="callout warn"><p><strong>Prisma 5.22: the retry test must catch three shapes.</strong> A retry loop that only checks <code>P2034</code> misses real deadlocks. Measured in Lab 9: inside an interactive transaction using the model API, a deadlock (40P01) arrives as <code>PrismaClientUnknownRequestError</code> with <strong>no <code>code</code></strong> (<code>P2034</code> is for serialization conflicts), and a <code>lock_timeout</code> error (55P03) carries no code either. With <code>$queryRaw</code> the error is <code>P2010</code> and the SQLSTATE sits in <code>meta.code</code> (<code>40001</code> or <code>40P01</code>). Retry on all of them:</p><pre><code class="language-ts">function nenThuLai(e: unknown): boolean {
+  const x = e as { code?: string; meta?: { code?: string }; message?: string };
+  if (x.code === 'P2034') return true;                                   // model API: serialization / write conflict
+  if (x.code === 'P2010') return ['40001', '40P01'].includes(x.meta?.code ?? ''); // $queryRaw: SQLSTATE in meta.code
+  return /deadlock detected/i.test(x.message ?? '');                     // model API deadlock: UnknownRequestError, no code
+}</code></pre><p>Lab 9 measured this on real PostgreSQL 17.</p></div>
 <h3>7 · Timeouts and least privilege on the application role</h3>
 <pre><code class="language-sql">ALTER ROLE ctshop_app SET statement_timeout = '5s';
 ALTER ROLE ctshop_app SET idle_in_transaction_session_timeout = '30s';
@@ -383,6 +389,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ctshop_ap
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Khoá nhiều dòng thì lấy theo một THỨ TỰ nhất quán</span><span class="lz-d">Đó là toàn bộ cách sửa deadlock (11.4).</span></div>
 <div class="lz-step"><span class="lz-k">☐</span><span class="lz-t">Nếu có dùng <code>SERIALIZABLE</code> ở đâu đó, phải có vòng thử lại bắt <code>40001</code></span><span class="lz-d">Không có nó thì bạn đã làm hệ thống HỎNG khi tải cao, chứ không làm nó đúng (11.3).</span></div>
 </div>
+<div class="callout warn"><p><strong>Prisma 5.22: hàm kiểm tra thử lại phải bắt ba dạng lỗi.</strong> Vòng thử lại chỉ kiểm <code>P2034</code> sẽ bỏ lọt deadlock thật. Lab 9 đo thật: trong interactive transaction dùng API model, deadlock (40P01) ra <code>PrismaClientUnknownRequestError</code> <strong>KHÔNG có <code>code</code></strong> (<code>P2034</code> chỉ dành cho xung đột serialization), còn lỗi <code>lock_timeout</code> (55P03) cũng không mã. Với <code>$queryRaw</code> lỗi là <code>P2010</code> và SQLSTATE nằm ở <code>meta.code</code> (<code>40001</code> hoặc <code>40P01</code>). Hãy thử lại với cả ba:</p><pre><code class="language-ts">function nenThuLai(e: unknown): boolean {
+  const x = e as { code?: string; meta?: { code?: string }; message?: string };
+  if (x.code === 'P2034') return true;                                   // model API: serialization / write conflict
+  if (x.code === 'P2010') return ['40001', '40P01'].includes(x.meta?.code ?? ''); // $queryRaw: SQLSTATE in meta.code
+  return /deadlock detected/i.test(x.message ?? '');                     // model API deadlock: UnknownRequestError, no code
+}</code></pre><p>Lab 9 đã đo điều này trên PostgreSQL 17 thật.</p></div>
 <h3>7 · Timeout và quyền tối thiểu trên role của ứng dụng</h3>
 <pre><code class="language-sql">ALTER ROLE ctshop_app SET statement_timeout = '5s';
 ALTER ROLE ctshop_app SET idle_in_transaction_session_timeout = '30s';

@@ -21,6 +21,7 @@ import ch9 from './osg202/ch9.mjs';
 import ch10 from './osg202/ch10.mjs';
 import ch11 from './osg202/ch11.mjs';
 import ch12 from './osg202/ch12.mjs';
+import cs from './osg202/chuyen-sau.mjs';
 
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
@@ -2441,6 +2442,12 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
       title: "Chapter 12 — Operating System Design|||Chương 12 — Thiết kế hệ điều hành",
       description: "Tanenbaum Ch.12: mục tiêu và nguyên tắc thiết kế giao diện, cấu trúc hệ thống, đặt tên, ẩn phần cứng, đánh đổi không gian – thời gian, bộ đệm, quản lý dự án và xu hướng — bài học thiết kế dùng được cho mọi hệ thống phần mềm lớn.",
       lessons: ch12.lessons,
+    },
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./osg202/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — The OS in real backend work: Linux processes, threads vs event loop, epoll, containers, memory, performance|||⭐ Chuyên sâu — Hệ điều hành trong backend thật: tiến trình Linux, thread pool vs event loop, epoll, container, bộ nhớ, hiệu năng",
+      description: "Phần TỰ THÊM ngoài giáo trình (đánh dấu ⭐, slide tự dựng): nối khái niệm hệ điều hành với thứ dev backend gặp hằng ngày trên server Linux — tiến trình, tín hiệu, file descriptor, thread pool và event loop, epoll, container = namespace + cgroup, bộ nhớ và OOM killer, công cụ đo hiệu năng, cùng 40 câu phỏng vấn HĐH. Mọi thứ chạy thật trên Linux.",
+      lessons: cs.lessons,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

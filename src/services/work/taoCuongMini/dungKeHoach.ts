@@ -260,6 +260,10 @@ export function milestonesFor(input: SetupInput, u: Understanding | null, end: s
 export function meetingsFor(input: SetupInput, sprints: SprintSlot[], lang: Lang): PlanProject['meetings'] {
   if (!input.split.meetings) return [];
   const t = input.timeline;
+  /* 27/10/2026: kickoff = buổi ĐẦU TIÊN đúng thứ họp trong 7 ngày từ ngày bắt đầu. Trước đây startDate = endDate = ngày
+     bắt đầu ⇒ dự án không bắt đầu đúng thứ họp (vd bắt đầu thứ Ba, họp thứ Hai) thì không có buổi nào ⇒ áp dụng báo
+     "This repeat rule has no upcoming meetings". */
+  const themNgay = (iso: string, n: number): string => new Date(Date.parse(`${iso.slice(0, 10)}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
   const start = sprints[0]?.start ?? t.startDate;
   const end = sprints.at(-1)?.end ?? (t.endDate || null);
   if (!start) return [];
@@ -267,7 +271,7 @@ export function meetingsFor(input: SetupInput, sprints: SprintSlot[], lang: Lang
   const wd = t.meeting?.weekday ?? 1;
   const weeks = Math.max(1, t.sprintWeeks || 2);
   const out: PlanProject['meetings'] = [
-    { ref: 'mt1', title: tr(lang, 'Họp khởi động dự án', 'Project kickoff'), type: 'KICKOFF', weekday: wd, hour: h, minute: mi || 0, durationMin: 60, intervalWeeks: 1, startDate: start, endDate: start,
+    { ref: 'mt1', title: tr(lang, 'Họp khởi động dự án', 'Project kickoff'), type: 'KICKOFF', weekday: wd, hour: h, minute: mi || 0, durationMin: 60, intervalWeeks: 1, startDate: start, endDate: themNgay(start, 6),
       agenda: [tr(lang, 'Giới thiệu, vai trò', 'Introductions & roles'), tr(lang, 'Mục tiêu, phạm vi, deliverable', 'Goal, scope, deliverables'), tr(lang, 'Lịch, mốc, sprint', 'Timeline, milestones, sprints'), tr(lang, 'Cách làm việc, công cụ', 'Ways of working, tools'), tr(lang, 'Rủi ro, câu hỏi', 'Risks, Q&A')] },
     { ref: 'mt2', title: tr(lang, 'Họp nhóm hằng tuần', 'Weekly team meeting'), type: 'WEEKLY', weekday: wd, hour: h, minute: mi || 0, durationMin: t.meeting?.durationMin ?? 45, intervalWeeks: 1, startDate: start, endDate: end,
       agenda: [tr(lang, 'Mỗi người: đã làm / sẽ làm / vướng gì', 'Each member: done / next / blockers'), tr(lang, 'Xem board + burndown', 'Board & burndown'), tr(lang, 'Rủi ro mới', 'New risks'), tr(lang, 'Việc cho tuần tới', 'Actions for next week')] },

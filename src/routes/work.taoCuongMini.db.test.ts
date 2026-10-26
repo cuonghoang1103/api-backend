@@ -17,6 +17,9 @@ import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
 
+/* 27/10/2026: ngày TƯƠNG ĐỐI — ngày cố định (bắt đầu 26/10) làm test hỏng khi qua ngày đó ("no upcoming meetings"). */
+const ngayToi = (n: number): string => new Date(Date.now() + n * 86_400_000).toISOString().slice(0, 10);
+
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `tcm${Date.now().toString(36)}`;
 const userIds: number[] = [];
@@ -27,7 +30,7 @@ function fakeAnswer(system: string, user: string): string {
   if (system.includes('SUMMARY OF WHAT YOU UNDERSTOOD')) {
     return JSON.stringify({
       goal: 'Website quản lý nhà trọ cho sinh viên', scopeIn: ['Đăng tin phòng', 'Đặt lịch xem phòng'], scopeOut: ['Thanh toán online'],
-      deliverables: [{ name: 'Report 1', due: '2026-11-10', criteria: 'SRS v1' }], grading: ['Demo 40%'],
+      deliverables: [{ name: 'Report 1', due: ngayToi(16), criteria: 'SRS v1' }], grading: ['Demo 40%'],
       tech: { stack: ['Java', 'Servlet/JSP'], repoFindings: [] },
       team: [{ name: 'Lead Person', proposedRole: 'Leader', why: 'Mạnh nhất' }], timeline: ['10 tuần'], strategy: ['Theo module'],
       assumptions: ['Nhóm 3 người'], risks: ['Trễ hạn'], questions: [{ q: 'Có cần app mobile không?' }],
@@ -139,7 +142,7 @@ describe('CT Work — Create with CuongMini (DB)', { skip: !RUN }, () => {
       input: {
         overview: { name: 'Nhà trọ SV', key: 'NTS', template: 'BLANK', type: 'SCRUM', courseCode: 'PRJ301', language: 'vi' },
         team: { members: roster.data.rows, rules: ['BY_LEVEL', 'LEADER_REVIEWS'] },
-        timeline: { startDate: '2026-10-26', endDate: '2026-12-20', sprintWeeks: 2, milestones: [{ name: 'Report 1', date: '2026-11-10' }] },
+        timeline: { startDate: ngayToi(1), endDate: ngayToi(56), sprintWeeks: 2, milestones: [{ name: 'Report 1', date: ngayToi(16) }] },
         reviewFirst: true,
       },
     });

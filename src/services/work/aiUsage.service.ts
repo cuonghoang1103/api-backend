@@ -181,12 +181,19 @@ export type AiSource = 'chinh_hang' | 'modelapi' | 'rambo' | 'agent';
  * Tên thật ⇒ (nguồn, tên CuongMini). rambo: model của nhóm Classic/bảng rambo cũ VỚI chi phí 0 (gói trả trọn — cùng luật
  * `KHONG_TINH_RAMBO` của quota.ts). Model lạ ⇒ tên cổng chung "CuongMini Core" — không bao giờ lộ tên thật.
  */
+/** Tên hiển thị của model bảng 18/10 (đã bỏ 27/10) — chỉ cho báo cáo sổ cũ. */
+const TEN_MODEL_CU: Record<string, string> = {
+  'gpt-6-sol': 'CuongMini Solid', 'gpt-6-luna': 'CuongMini Nova', 'gpt-5.6-sol': 'CuongMini Shin', 'gpt-5.6-luna': 'CuongMini Eco',
+};
 export function phanLoaiModel(model: string, costUsd: number): { source: Exclude<AiSource, 'agent'>; name: string } {
   const classic = bangClassic();
   const rambo = new Set<string>([...MODEL_AGENT_RIENG.map((m) => m.model), ...classic.map((m) => m.model), 'claude-sonnet-5-5']);
   if (!(costUsd > 0) && rambo.has(model)) {
     return { source: 'rambo', name: classic.find((m) => m.model === model)?.ten ?? TEN_CONG.rambo };
   }
+  /* 27/10/2026: bảng còn 4 model — sổ CŨ vẫn có lượt Solid/Nova/Shin/Eco/Heshin ⇒ giữ tên cũ cho báo cáo lịch sử. */
+  const cu = TEN_MODEL_CU[model];
+  if (cu) return { source: /^claude-/i.test(model) ? 'chinh_hang' : 'modelapi', name: cu };
   const m = bangModel().find((x) => x.model === model);
   if (m) return { source: m.cong === 'anthropic' ? 'chinh_hang' : m.cong === 'rambo' ? 'rambo' : 'modelapi', name: m.ten };
   if (/^claude-/i.test(model) && costUsd > 0 && /-5-5|fable/i.test(model)) return { source: 'chinh_hang', name: TEN_CONG.anthropic };

@@ -2,13 +2,16 @@
  * PRO192 · Chương 4 — kế thừa & đa hình (pro9; pro10 slide 1–11).
  * Bài 📑 học theo từng slide: pro9 (tmp_09.pptx, slide 1–17); pro10 (tmp_10.pptx, slide 1–11).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch4.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-4-ke-thua-va-da-hinh.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch4).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab4', { code: 'PRO192 Lab 4', en: 'Lab 4 — CT Library: inheritance and polymorphism', vi: 'Lab 4 — CT Library: kế thừa và đa hình', total: 16, w: 1280, h: 720 });
 
 /* ───────── 4.A — 📑 Slide by slide · Inheritance: is-a vs has-a, super, constructors, hiding, instanceof, casting (slides 1–17) ───────── */
 const L_pro9_1 = {
@@ -5266,6 +5269,1596 @@ Car 51K-111.22 (150kW), battery 3%<br>
   ].join('\n'),
 };
 
+/* ───────── Lab 4 — 🏗️ CT Library: inheritance and polymorphism (LibraryItem → Book, Magazine, Dvd; @Override; late fees without instanceof) ───────── */
+const L_lab4 = {
+  title: 'Lab 4 — 🏗️ CT Library: inheritance and polymorphism (LibraryItem → Book, Magazine, Dvd; @Override; late fees without instanceof)|||Lab 4 — 🏗️ CT Library: kế thừa và đa hình (LibraryItem → Book, Magazine, Dvd; @Override; phí trễ không cần instanceof)',
+  slug: 'pro192-lab-4-ke-thua-va-da-hinh',
+  type: 'VIDEO',
+  description: 'Lab 4 của dự án CT Library (sau Chương 4), chuẩn review LAB211: câu lạc bộ cho mượn thêm tạp chí và DVD; LibraryItem thành lớp cha của Book, Magazine, Dvd với constructor protected gọi qua super(...), mỗi lớp con ghi đè sáu phương thức (loại, tiền tố mã, hạn mượn, phí trễ/ngày, chi tiết, khoá chống trùng); một danh sách ArrayList<LibraryItem> in ba loại dòng khác nhau bằng đa hình; tính phí trễ ở service bằng một công thức, không một instanceof nào. Kèm lỗi javac thật khi ghi đè hẹp quyền hay gõ sai tên, bẫy quên super(...), che giấu trường/static, chuỗi instanceof và ép kiểu sai (ClassCastException trên JDK 8 thật). Starter + đáp án tải về, bộ chấm kiểu PE 199 dòng, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 4 · Lab 4 · CT Library</span>
+<h2>Lab 4 — inheritance and polymorphism</h2>
+<p class="lead">Chapter 4 taught you to write the common part of several classes once (inheritance) and to let one line of code behave differently for each object (polymorphism). Lab 4 puts both to work: the club now lends magazines and DVDs, so <code>LibraryItem</code> becomes the parent of <code>Book</code>, <code>Magazine</code> and <code>Dvd</code>, each class answers six questions its own way, and the late fee is computed without a single <code>instanceof</code>.</p>
+<p>The starter is a fresh project: Lab 3 finished, the hierarchy in place, five bodies marked <code>TODO Lab 4.x</code>. Plan about <strong>3 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 4 · Lab 4 · CT Library</span>
+<h2>Lab 4 — kế thừa và đa hình</h2>
+<p class="lead">Chương 4 dạy bạn viết phần chung của nhiều lớp đúng một lần (kế thừa) và để một dòng code chạy khác nhau với từng đối tượng (đa hình). Lab 4 dùng cả hai: câu lạc bộ giờ cho mượn thêm tạp chí và DVD, nên <code>LibraryItem</code> thành lớp cha của <code>Book</code>, <code>Magazine</code> và <code>Dvd</code>, mỗi lớp trả lời sáu câu hỏi theo cách riêng, và phí trễ hạn được tính mà không cần một <code>instanceof</code> nào.</p>
+<p>Starter là một dự án sạch: Lab 3 đã xong, cây lớp đã dựng sẵn, năm thân hàm đánh dấu <code>TODO Lab 4.x</code>. Dành khoảng <strong>3 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 4 (16 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 4 (16 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab4', [
+      [1, 'Lab 4 — CT Library: inheritance and polymorphism',
+        `<p class="y-chinh">🎯 Lab 4 = Chapter 4 on a real codebase: one parent class holds what every item shares, three child classes answer the questions that differ.</p>
+<p>By the end, one loop over one list prints books, magazines and DVDs — each row with its own loan days, fee and detail — and the code that prints it never asks "what are you?".</p>`,
+        `<p class="y-chinh">🎯 Lab 4 = Chương 4 trên một bộ mã thật: một lớp cha giữ thứ mọi tài liệu cùng có, ba lớp con trả lời những câu hỏi khác nhau.</p>
+<p>Cuối lab, một vòng lặp trên một danh sách in ra cả sách, tạp chí và DVD — mỗi dòng có hạn mượn, mức phí và chi tiết riêng — mà đoạn code in không bao giờ hỏi "bạn là loại gì?".</p>`],
+      [2, 'Ticket CTL-4 — "we lend magazines and DVDs now"',
+        `<p class="y-chinh">🎯 The ticket adds two kinds of item with their own rules (7 days / 1,000 đ, 3 days / 5,000 đ) next to books (14 days / 2,000 đ) and a new menu item: 9 — late fee.</p>
+<p>Done means: PASS 199/199, <code>lint.py</code> still silent, <code>@Override</code> on every overriding method, and <code>grep -rn instanceof src/</code> prints nothing. The last line of the slide is the real goal: a fourth kind of item later must be <em>a new class</em>, not a new <code>if</code> somewhere.</p>`,
+        `<p class="y-chinh">🎯 Ticket thêm hai loại tài liệu có luật riêng (7 ngày / 1.000 đ, 3 ngày / 5.000 đ) bên cạnh sách (14 ngày / 2.000 đ) và một mục menu mới: 9 — tính phí trễ hạn.</p>
+<p>Xong nghĩa là: PASS 199/199, <code>lint.py</code> vẫn im lặng, <code>@Override</code> trên mọi phương thức ghi đè, và <code>grep -rn instanceof src/</code> không in gì. Dòng cuối slide mới là mục tiêu thật: sau này thêm loại thứ tư phải là <em>thêm một lớp</em>, không phải thêm một câu <code>if</code> ở đâu đó.</p>`],
+      [3, 'The class tree — one parent, three children',
+        `<p class="y-chinh">🎯 <code>LibraryItem</code> holds the common part (id, title, year, copies) and the six questions; <code>Book</code>, <code>Magazine</code> and <code>Dvd</code> each add one or two fields and answer the six questions.</p>
+<p>Each arrow is an <strong>is-a</strong>: a Magazine is a library item, so it can go wherever a <code>LibraryItem</code> is expected. The parent's full constructor is <code>protected</code> — the first real use of that modifier in CT Library: only subclasses may call it, through <code>super(...)</code>. Fields stay <code>private</code>, exactly as the reviewer demands; the children read them through the inherited getters.</p>`,
+        `<p class="y-chinh">🎯 <code>LibraryItem</code> giữ phần chung (mã, tên, năm, số bản) và sáu câu hỏi; <code>Book</code>, <code>Magazine</code>, <code>Dvd</code> mỗi lớp thêm một hai trường và trả lời sáu câu hỏi đó.</p>
+<p>Mỗi mũi tên là một quan hệ <strong>is-a</strong> (là một): tạp chí là một tài liệu, nên nó đứng được ở mọi chỗ cần <code>LibraryItem</code>. Constructor đầy đủ của lớp cha là <code>protected</code> — lần đầu modifier này có chỗ dùng thật trong CT Library: chỉ lớp con được gọi, qua <code>super(...)</code>. Trường vẫn <code>private</code> đúng như thầy yêu cầu; lớp con đọc chúng qua getter được kế thừa.</p>`],
+      [4, 'Six questions, three different answers',
+        `<p class="y-chinh">🎯 Overriding = the child gives its own body to a method it inherited, with the same name and the same parameters; the table is the whole specification of Lab 4.</p>
+<p>Every value comes from <code>Constants</code> or <code>Message</code>. Look at what the parent itself answers: "Tai lieu", "I", 0 days, 0 đ. A "generic item" makes no sense in a library — Lab 4 keeps it because Chapter 4 has no better tool yet; Lab 5 makes the class <code>abstract</code> so that nobody can create one.</p>`,
+        `<p class="y-chinh">🎯 Ghi đè (override) = lớp con viết thân riêng cho một phương thức nó được thừa kế, cùng tên, cùng tham số; bảng này là toàn bộ đặc tả của Lab 4.</p>
+<p>Mọi giá trị lấy từ <code>Constants</code> hoặc <code>Message</code>. Nhìn xem chính lớp cha trả lời gì: "Tai lieu", "I", 0 ngày, 0 đồng. Một "tài liệu chung chung" vô nghĩa trong thư viện — Lab 4 giữ nó vì Chương 4 chưa có công cụ tốt hơn; Lab 5 biến lớp này thành <code>abstract</code> để không ai tạo được.</p>`],
+      [5, 'TODO 4.1 — super(...) comes first',
+        `<p class="y-chinh">🎯 The child's constructor builds the parent part first: <code>super(id, title, year, copies)</code> on the first line, then its own fields.</p>
+<p>The trap is that forgetting it is <em>not</em> a compile error here. Our parent has an empty JavaBean constructor, so javac silently inserts <code>super()</code> — and every book loses its title and year. The real run of <code>LabBayQuenSuper</code> shows <code>title=""</code> and <code>year=0</code>; the starter does exactly that to the four sample books. (In 4.A-2 you saw the other case: a parent with no empty constructor makes javac stop.)</p>`,
+        `<p class="y-chinh">🎯 Constructor của lớp con dựng phần cha trước: <code>super(id, title, year, copies)</code> ở dòng đầu, rồi mới tới trường của chính nó.</p>
+<p>Cái bẫy là quên dòng đó ở đây <em>không</em> phải lỗi biên dịch. Lớp cha của ta có constructor rỗng kiểu JavaBean, nên javac lặng lẽ chèn <code>super()</code> — và mọi cuốn sách mất tên, mất năm. Lần chạy thật <code>LabBayQuenSuper</code> in <code>title=""</code> và <code>year=0</code>; starter làm đúng như vậy với bốn cuốn sách mẫu. (Ở 4.A-2 bạn đã gặp trường hợp kia: lớp cha không có constructor rỗng thì javac dừng luôn.)</p>`],
+      [6, 'TODO 4.2 and 4.3 — @Override six methods',
+        `<p class="y-chinh">🎯 Each override is three lines: <code>@Override</code>, the same signature as the parent (still <code>public</code>), and a body that returns this class's constant.</p>
+<p><code>getDetail</code> and <code>getUniqueKey</code> format a <code>Message</code> pattern. The magazine's key uses <code>getTitle()</code>, not <code>title</code>: the field is private to <code>LibraryItem</code>, so the child reads it through the inherited getter. <code>Dvd</code> is the same work with <code>DVD_…</code> constants and <code>minutes</code>; its key is title + year.</p>`,
+        `<p class="y-chinh">🎯 Mỗi phương thức ghi đè gồm ba phần: <code>@Override</code>, đúng chữ ký của lớp cha (vẫn <code>public</code>), và thân trả về hằng của lớp này.</p>
+<p><code>getDetail</code> và <code>getUniqueKey</code> định dạng một mẫu trong <code>Message</code>. Khoá của tạp chí dùng <code>getTitle()</code>, không phải <code>title</code>: trường đó private của <code>LibraryItem</code>, nên lớp con đọc qua getter được thừa kế. <code>Dvd</code> làm y vậy với hằng <code>DVD_…</code> và <code>minutes</code>; khoá của nó là tên + năm.</p>`],
+      [7, 'Why @Override: two mistakes javac now catches',
+        `<p class="y-chinh">🎯 With <code>@Override</code>, a misspelled name and a narrower access are compile errors instead of silent bugs.</p>
+<p>The project <code>bay/ghi-de-sai</code> plants both in the solution. Dropping <code>public</code> gives "attempting to assign weaker access privileges; was public": an override may never be less visible than the parent, because code holding a <code>LibraryItem</code> must be able to call it. Writing <code>getLoanDay()</code> gives "method does not override or implement a method from a supertype". Without the annotation, that second mistake compiles — and the parent's 0 days runs.</p>`,
+        `<p class="y-chinh">🎯 Có <code>@Override</code>, gõ sai tên hay thu hẹp quyền truy cập đều thành lỗi biên dịch thay vì lỗi âm thầm.</p>
+<p>Dự án <code>bay/ghi-de-sai</code> cài cả hai vào đáp án. Bỏ <code>public</code> ra "attempting to assign weaker access privileges; was public": bản ghi đè không bao giờ được hẹp quyền hơn lớp cha, vì code đang cầm một <code>LibraryItem</code> phải gọi được nó. Gõ <code>getLoanDay()</code> ra "method does not override or implement a method from a supertype". Không có chú thích đó, lỗi thứ hai vẫn biên dịch — và 0 ngày của lớp cha sẽ chạy.</p>`],
+      [8, 'One list, three classes — one place knows them',
+        `<p class="y-chinh">🎯 The repository keeps one <code>ArrayList&lt;LibraryItem&gt;</code>; <code>createItem</code> — given in the starter — is the only code that names the three child classes.</p>
+<p><code>return new Magazine(...)</code> from a method declared to return <code>LibraryItem</code> is <strong>upcasting</strong>: a child object stored in a parent-type variable, automatic and always safe. Creating needs to know the exact class; <em>using</em> never does. That split — one switch where objects are born, polymorphism everywhere else — is the Factory idea LAB211 reviewers like to hear about.</p>`,
+        `<p class="y-chinh">🎯 Repository giữ một <code>ArrayList&lt;LibraryItem&gt;</code>; <code>createItem</code> — cho sẵn trong starter — là đoạn code duy nhất gọi tên ba lớp con.</p>
+<p><code>return new Magazine(...)</code> từ một phương thức khai trả về <code>LibraryItem</code> là <strong>upcasting</strong> (ép lên): đối tượng lớp con nằm trong biến kiểu cha, tự động và luôn an toàn. Lúc <em>tạo</em> thì phải biết đúng lớp; lúc <em>dùng</em> thì không bao giờ cần. Cách chia đó — một switch nơi đối tượng ra đời, đa hình ở mọi chỗ khác — chính là ý Factory mà thầy LAB211 thích nghe.</p>`],
+      [9, 'TODO 4.4 — every object answers for itself',
+        `<p class="y-chinh">🎯 <code>toResponseDTO</code> copies the common part, then asks the item for its loan days, fee and detail — no <code>if</code>, no cast.</p>
+<p>In the real output of option 2, one loop prints three kinds of rows: books with 14 / 2000 and "author, ISBN", the magazine with 7 / 1000 and "Ky so 118", the DVD with 3 / 5000 and "120 phut". The starter prints <code>0</code>, <code>0</code> and <code>null</code> in those columns — nobody set them yet.</p>`,
+        `<p class="y-chinh">🎯 <code>toResponseDTO</code> chép phần chung, rồi hỏi chính tài liệu hạn mượn, phí và chi tiết của nó — không <code>if</code>, không ép kiểu.</p>
+<p>Trong output thật của lựa chọn 2, một vòng lặp in ba kiểu dòng: sách 14 / 2000 và "tác giả, ISBN", tạp chí 7 / 1000 và "Ky so 118", DVD 3 / 5000 và "120 phut". Starter in <code>0</code>, <code>0</code> và <code>null</code> ở các cột đó — chưa ai gán.</p>`],
+      [10, 'How a polymorphic call is decided — two gates',
+        `<p class="y-chinh">🎯 javac checks a call against the <em>declared</em> type; the JVM runs the body of the <em>object</em> — the two-gate model of 4.A-3 and 4.B.</p>
+<p>So <code>item.getLoanDays()</code> compiles because <code>LibraryItem</code> declares it, and at run time gives 14, 7 or 3. The flip side: <code>item.getIsbn()</code> does not compile, even when the object is a Book, because the declared type has no such method. That is why the six questions live in the parent.</p>`,
+        `<p class="y-chinh">🎯 javac kiểm lời gọi theo kiểu <em>khai báo</em>; JVM chạy thân của <em>đối tượng</em> — mô hình hai cửa ở 4.A-3 và 4.B.</p>
+<p>Vì vậy <code>item.getLoanDays()</code> biên dịch được vì <code>LibraryItem</code> có khai nó, và lúc chạy cho ra 14, 7 hoặc 3. Mặt kia: <code>item.getIsbn()</code> không biên dịch được, kể cả khi đối tượng là Book, vì kiểu khai báo không có phương thức đó. Đó là lý do sáu câu hỏi phải nằm ở lớp cha.</p>`],
+      [11, 'TODO 4.5 — the late fee: one formula for every type',
+        `<p class="y-chinh">🎯 <code>BookService.calculateLateFee</code> uses one formula — days late = days kept − loan days (never negative), fee = days late × fee per day — because the row already carries the right numbers for its type.</p>
+<p>Real output: a book kept 20 days is 6 days late, 12,000 đ; the magazine kept 10 days is 3 days late, 3,000 đ; a DVD returned on day 3 costs 0; the new DVD kept 5 days costs 10,000 đ. The service still never sees the repository: the controller hands it a copy from <code>findById</code>.</p>`,
+        `<p class="y-chinh">🎯 <code>BookService.calculateLateFee</code> dùng một công thức — ngày trễ = ngày giữ − hạn mượn (không âm), phí = ngày trễ × phí mỗi ngày — vì dòng dữ liệu đã mang đúng con số của loại nó.</p>
+<p>Output thật: một cuốn sách giữ 20 ngày là trễ 6 ngày, 12.000 đ; tạp chí giữ 10 ngày trễ 3 ngày, 3.000 đ; DVD trả đúng ngày thứ 3 thì 0 đồng; DVD mới giữ 5 ngày thì 10.000 đ. Service vẫn không bao giờ thấy repository: controller đưa cho nó bản sao từ <code>findById</code>.</p>`],
+      [12, 'Trap: computing the fee with an instanceof chain',
+        `<p class="y-chinh">🎯 An <code>if (item instanceof Book) … else if (item instanceof Dvd) …</code> chain must be edited for every new class — and when someone forgets, the new class costs 0 đ silently.</p>
+<p>In the real run, a teammate's <code>AudioBook</code> gets 0 from the instanceof version and 6,000 from the polymorphic one. That is the Open/Closed principle in one output: the polymorphic line is closed for change and open for extension — the new class brings its own fee.</p>`,
+        `<p class="y-chinh">🎯 Chuỗi <code>if (item instanceof Book) … else if (item instanceof Dvd) …</code> phải sửa mỗi lần có lớp mới — và khi ai đó quên, lớp mới lặng lẽ bị tính 0 đồng.</p>
+<p>Trong lần chạy thật, <code>AudioBook</code> của bạn cùng nhóm nhận 0 từ bản instanceof và 6.000 từ bản đa hình. Đó là nguyên lý Open/Closed trong một output: dòng đa hình đóng với sửa đổi và mở với mở rộng — lớp mới tự mang mức phí của nó.</p>`],
+      [13, 'Trap: hiding is not overriding',
+        `<p class="y-chinh">🎯 Only instance methods are overridden; a re-declared field and a static method are <em>hidden</em> and chosen by the declared type.</p>
+<p>With <code>LibraryItem item = new Dvd()</code>, the real output gives <code>item.typeName = Tai lieu</code> (the parent's field), <code>item.shelf() = ke chung</code> (the parent's static method), but <code>item.getLoanDays() = 3</code> (the Dvd override). CT Library avoids the trap by rule: fields private, no static in model — and FE questions love this exact output.</p>`,
+        `<p class="y-chinh">🎯 Chỉ phương thức thể hiện (instance method) mới được ghi đè; trường khai lại và phương thức static thì bị <em>che giấu</em> (hiding) và được chọn theo kiểu khai báo.</p>
+<p>Với <code>LibraryItem item = new Dvd()</code>, output thật cho <code>item.typeName = Tai lieu</code> (trường của cha), <code>item.shelf() = ke chung</code> (static của cha), nhưng <code>item.getLoanDays() = 3</code> (bản ghi đè của Dvd). CT Library tránh bẫy bằng luật: trường private, không static trong model — còn đề FE thì rất thích hỏi đúng output này.</p>`],
+      [14, 'Trap: the downcast that compiles and still fails',
+        `<p class="y-chinh">🎯 A downcast <code>(Book) item</code> compiles because a <code>LibraryItem</code> <em>might</em> be a Book; the JVM checks the real object and throws <code>ClassCastException</code> when it is not.</p>
+<p>On a real JDK 8 (the exam machine) the message is "Magazine cannot be cast to Book"; newer JDKs add module details. CT Library needs no cast at all: asking <code>item.getDetail()</code> works for every kind. If you ever must cast, check with <code>instanceof</code> first — but in this lab, needing a cast is a sign the method belongs in the parent.</p>`,
+        `<p class="y-chinh">🎯 Ép kiểu xuống <code>(Book) item</code> biên dịch được vì một <code>LibraryItem</code> <em>có thể</em> là Book; JVM kiểm đối tượng thật và ném <code>ClassCastException</code> khi không phải.</p>
+<p>Trên JDK 8 thật (máy phòng thi) thông báo là "Magazine cannot be cast to Book"; JDK mới hơn thêm chi tiết module. CT Library không cần ép kiểu: hỏi <code>item.getDetail()</code> là được với mọi loại. Nếu buộc phải ép, kiểm bằng <code>instanceof</code> trước — nhưng trong lab này, cần ép kiểu là dấu hiệu phương thức đó phải nằm ở lớp cha.</p>`],
+      [15, 'Green: PASS 199/199, a silent reviewer, zero instanceof',
+        `<p class="y-chinh">🎯 Three green lights: the grader (199/199), <code>lint.py</code> (✓ sạch) and a <code>grep</code> that finds no <code>instanceof</code>.</p>
+<p>Work in the order of the symptoms: 4.1 brings the titles back, 4.2 and 4.3 turn "Tai lieu" and ids I005… into "Tap chi", "DVD", T005, D006, 4.4 fills the Days / Fee / Detail columns, 4.5 makes option 9 right. Run <code>check.sh</code> after each TODO.</p>`,
+        `<p class="y-chinh">🎯 Ba đèn xanh: bộ chấm (199/199), <code>lint.py</code> (✓ sạch) và một lệnh <code>grep</code> không tìm thấy <code>instanceof</code> nào.</p>
+<p>Làm theo thứ tự triệu chứng: 4.1 trả lại tên sách, 4.2 và 4.3 đổi "Tai lieu" và mã I005… thành "Tap chi", "DVD", T005, D006, 4.4 lấp các cột Days / Fee / Detail, 4.5 làm đúng lựa chọn 9. Chạy <code>check.sh</code> sau mỗi TODO.</p>`],
+      [16, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 Points follow the TODOs, plus one oral question the LAB211 reviewer always asks: "overloading or overriding?".</p>
+<p>Overloading: same name, different parameters, in one class, decided by javac. Overriding: same signature, in a subclass, decided by the JVM. Answer the three self-check questions aloud before you open the solution.</p>`,
+        `<p class="y-chinh">🎯 Điểm đi theo các TODO, cộng một câu vấn đáp thầy LAB211 luôn hỏi: "nạp chồng hay ghi đè?".</p>
+<p>Nạp chồng (overloading): cùng tên, khác tham số, trong một lớp, javac quyết. Ghi đè (overriding): cùng chữ ký, ở lớp con, JVM quyết. Trả lời thành tiếng ba câu tự kiểm trước khi mở đáp án.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-4 · CT Library · priority: high.</strong> "From next week the club lends magazines (7 days, 1,000 đ per late day) and DVDs (3 days, 5,000 đ per late day) as well as books (14 days, 2,000 đ). Keep everything in one catalogue with ids B…, T…, D…, show the loan days and the fee in the list, and add option 9 to compute the late fee of an item. Next year we will surely add audiobooks — adding a type must not mean editing ten places." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td><code>extends</code>, is-a vs has-a, what a subclass inherits</td><td>4.A (pro9 slides 1–6)</td></tr>
+<tr><td><code>super(...)</code> and the constructor chain</td><td>4.A-2 (pro9 slides 7–10)</td></tr>
+<tr><td>overriding, hiding, <code>instanceof</code>, casting</td><td>4.A-3, 4.A-4 (pro9 slides 11–17)</td></tr>
+<tr><td>polymorphism: declared type vs object</td><td>4.B, 4.B-2 (pro10 slides 1–11)</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-4 · CT Library · ưu tiên: cao.</strong> "Từ tuần sau câu lạc bộ cho mượn cả tạp chí (7 ngày, trễ 1.000 đ/ngày) và DVD (3 ngày, trễ 5.000 đ/ngày) bên cạnh sách (14 ngày, 2.000 đ). Giữ tất cả trong một danh mục với mã B…, T…, D…, danh sách hiện hạn mượn và mức phí, và thêm lựa chọn 9 để tính phí trễ của một tài liệu. Sang năm chắc chắn sẽ có sách nói — thêm một loại không được là sửa mười chỗ." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td><code>extends</code>, is-a và has-a, lớp con được thừa kế gì</td><td>4.A (pro9 slide 1–6)</td></tr>
+<tr><td><code>super(...)</code> và chuỗi constructor</td><td>4.A-2 (pro9 slide 7–10)</td></tr>
+<tr><td>ghi đè, che giấu, <code>instanceof</code>, ép kiểu</td><td>4.A-3, 4.A-4 (pro9 slide 11–17)</td></tr>
+<tr><td>đa hình: kiểu khai báo và đối tượng</td><td>4.B, 4.B-2 (pro10 slide 1–11)</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Hierarchy</strong>: <code>model.LibraryItem</code> holds id, title, year, copies (private, getters/setters, a <code>protected</code> full constructor); <code>Book</code> (isbn, author), <code>Magazine</code> (issueNumber 1–999), <code>Dvd</code> (minutes 1–600) extend it, each with an empty public constructor (JavaBean).</li>
+<li><strong>Six overrides</strong> in every child, each with <code>@Override</code> and <code>public</code>: type name, id prefix (B/T/D), loan days (14/7/3), late fee per day (2000/1000/5000), detail, duplicate key (ISBN · title + issue · title + year).</li>
+<li><strong>One list</strong>: the repository keeps <code>ArrayList&lt;LibraryItem&gt;</code>; ids come from one counter with the item's own prefix (B001…B004, T005, D006, then T007, D008).</li>
+<li><strong>List and search</strong> show Type, Days, Fee and Detail for every row — produced without <code>if</code> on the type and without casts.</li>
+<li><strong>Option 9 — late fee</strong>: id + days kept (0–365) ⇒ two lines: the item with its loan days, days kept, days late and fee per day; then the total. Unknown id ⇒ the not-found message.</li>
+<li>The fee is computed in <code>BookService</code> with one formula; <code>grep -rn instanceof src/</code> prints nothing.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 199/199 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · no <code>instanceof</code> · you can say in one sentence why each method is in the parent.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Cây lớp</strong>: <code>model.LibraryItem</code> giữ mã, tên, năm, số bản (private, getter/setter, constructor đầy đủ <code>protected</code>); <code>Book</code> (isbn, author), <code>Magazine</code> (issueNumber 1–999), <code>Dvd</code> (minutes 1–600) kế thừa nó, mỗi lớp có constructor rỗng public (JavaBean).</li>
+<li><strong>Sáu phương thức ghi đè</strong> ở mỗi lớp con, đều có <code>@Override</code> và <code>public</code>: tên loại, tiền tố mã (B/T/D), hạn mượn (14/7/3), phí trễ mỗi ngày (2000/1000/5000), chi tiết, khoá chống trùng (ISBN · tên + kỳ số · tên + năm).</li>
+<li><strong>Một danh sách</strong>: repository giữ <code>ArrayList&lt;LibraryItem&gt;</code>; mã lấy từ một bộ đếm với tiền tố của chính tài liệu (B001…B004, T005, D006, rồi T007, D008).</li>
+<li><strong>Danh sách và tìm kiếm</strong> hiện Type, Days, Fee và Detail cho mọi dòng — tạo ra mà không có <code>if</code> theo loại, không ép kiểu.</li>
+<li><strong>Lựa chọn 9 — phí trễ</strong>: mã + số ngày đã giữ (0–365) ⇒ hai dòng: tài liệu kèm hạn mượn, số ngày giữ, số ngày trễ và phí mỗi ngày; rồi tổng phí. Mã không có ⇒ câu báo không tìm thấy.</li>
+<li>Phí tính ở <code>BookService</code> bằng một công thức; <code>grep -rn instanceof src/</code> không in gì.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 199/199 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · không có <code>instanceof</code> · bạn nói được bằng một câu vì sao mỗi phương thức nằm ở lớp cha.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab4-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab4-starter.zip</span><span class="lc-sub">Lab 3 solution + the LibraryItem tree · TODO 4.1–4.5 · harness (199 lines) · CheckHarness</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab4-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab4-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab4/src/  (new or changed since Lab 3)
+  model/LibraryItem.java           parent: common fields, protected constructor, 6 questions (given)
+  model/Book.java                  TODO 4.1 the constructor: super(...) first
+  model/Magazine.java              TODO 4.2 six @Override methods
+  model/Dvd.java                   TODO 4.3 six @Override methods
+  repository/BookRepository.java   ArrayList&lt;LibraryItem&gt;, createItem (given) · TODO 4.4 toResponseDTO
+  service/BookService.java         TODO 4.5 calculateLateFee
+  dto/LateFeeDTO.java, view/LateFeeView.java, main/Main.java (option 9)   (given)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab4-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab4-starter.zip</span><span class="lc-sub">đáp án Lab 3 + cây LibraryItem · TODO 4.1–4.5 · harness (199 dòng) · CheckHarness</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab4-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab4-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab4/src/  (mới hoặc đổi so với Lab 3)
+  model/LibraryItem.java           lớp cha: trường chung, constructor protected, 6 câu hỏi (cho sẵn)
+  model/Book.java                  TODO 4.1 constructor: super(...) trước
+  model/Magazine.java              TODO 4.2 sáu phương thức @Override
+  model/Dvd.java                   TODO 4.3 sáu phương thức @Override
+  repository/BookRepository.java   ArrayList&lt;LibraryItem&gt;, createItem (cho sẵn) · TODO 4.4 toResponseDTO
+  service/BookService.java         TODO 4.5 calculateLateFee
+  dto/LateFeeDTO.java, view/LateFeeView.java, main/Main.java (lựa chọn 9)   (cho sẵn)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — run the starter and read the symptoms (10 min)</h4>
+<p>Before touching anything, run it. Every wrong column points at one TODO:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+5 &nbsp;&nbsp;I005 &nbsp;Tai lieu 2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+6 &nbsp;&nbsp;I006 &nbsp;Tai lieu 2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+…</div>
+<p>Empty titles and year 0 ⇒ the parent part was never built (4.1). "Tai lieu" and ids I005, I006 ⇒ the parent's generic answers are running (4.2, 4.3). Days 0, Fee 0, Detail <code>null</code> ⇒ nobody copied them (4.4).</p>
+
+<h4>Step 1 — TODO 4.1 super(...) first (10 min)</h4>
+<details><summary>Hint</summary><p>The parent's fields are private: <code>Book</code> cannot write <code>this.title = title</code>. It must pass them to <code>LibraryItem(id, title, year, copies)</code> — and that call must be the <em>first</em> statement.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Constructor day du; super(...) PHAI la dong dau: dung phan cha truoc, phan con sau
+public Book(String id, String isbn, String title, String author, int year, int copies) {
+    super(id, title, year, copies);
+    this.isbn = isbn;
+    this.author = author;
+}</code></pre>
+</details>
+
+<h4>Step 2 — TODO 4.2 and 4.3 twelve overrides (40 min)</h4>
+<details><summary>Hint</summary><p>Copy the signature from <code>LibraryItem</code>, keep <code>public</code>, put <code>@Override</code> above. Values: <code>Message.TYPE_MAGAZINE</code>, <code>Constants.MAGAZINE_ID_PREFIX</code>, <code>MAGAZINE_LOAN_DAYS</code>, <code>MAGAZINE_LATE_FEE</code>, <code>String.format(Message.DETAIL_MAGAZINE, issueNumber)</code>, <code>String.format(Message.KEY_MAGAZINE, getTitle(), issueNumber)</code>.</p></details>
+<details><summary>Solution — Magazine (Dvd is the same with DVD_… and minutes)</summary>
+<pre class="trich"><code class="language-java">
+    // Loai: Tap chi
+    @Override
+    public String getTypeName() {
+        return Message.TYPE_MAGAZINE;
+    }
+
+    // Ma tap chi bat dau bang T
+    @Override
+    public String getIdPrefix() {
+        return Constants.MAGAZINE_ID_PREFIX;
+    }
+
+    // Tap chi muon 7 ngay
+    @Override
+    public int getLoanDays() {
+        return Constants.MAGAZINE_LOAN_DAYS;
+    }
+
+    // Tap chi tre 1000 dong/ngay
+    @Override
+    public int getLateFeePerDay() {
+        return Constants.MAGAZINE_LATE_FEE;
+    }
+
+    // Chi tiet: ky so
+    @Override
+    public String getDetail() {
+        return String.format(Message.DETAIL_MAGAZINE, issueNumber);
+    }
+
+    // Cung ten + cung ky so la trung; ten lay qua getter vi truong title la private cua cha
+    @Override
+    public String getUniqueKey() {
+        return String.format(Message.KEY_MAGAZINE, getTitle(), issueNumber);
+    }
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 3. Moi nhap lai.<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Ky so phai tu 1 den 999, ban nhap 0. Moi nhap lai.<br>
+Ky so: Ky so phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Ky so: Trung Tech Weekly ky 118 voi Tap chi T005 "Tech Weekly". Moi tai lieu chi them 1 lan.<br>
+…</div>
+
+<h4>Step 3 — TODO 4.4 toResponseDTO (15 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Chep 1 tai lieu sang 1 dong bang MOI; khong hoi "ban la lop nao": doi tuong tu tra loi
+private BookResponseDTO toResponseDTO(LibraryItem item) {
+    // Phan chung doc qua getter cua lop cha
+    BookResponseDTO responseDTO = new BookResponseDTO(item.getId(), item.getTypeName(),
+            item.getTitle(), item.getYear(), item.getCopies());
+
+    // Phan rieng: JVM chon ban ghi de theo doi tuong that (Book, Magazine hay Dvd)
+    responseDTO.setLoanDays(item.getLoanDays());
+    responseDTO.setLateFeePerDay(item.getLateFeePerDay());
+    responseDTO.setDetail(item.getDetail());
+    return responseDTO;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Step 4 — TODO 4.5 the late fee (20 min)</h4>
+<details><summary>Hint</summary><p><code>Math.max(0, daysKept - item.getLoanDays())</code> keeps the days late from going negative. Copy id, title, type, loan days and fee per day into the <code>LateFeeDTO</code>, then days kept, days late and the total.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Tinh phi tre: so ngay tre = so ngay giu - han muon (khong am), phi = ngay tre x phi/ngay.
+// Khong co nhanh nao theo loai: dong bang da mang han muon + phi/ngay cua dung loai do
+public LateFeeDTO calculateLateFee(BookResponseDTO item, int daysKept) {
+    // Ket qua; so ngay tre (am nghia la tra som/dung han thi tinh 0)
+    LateFeeDTO lateFee = new LateFeeDTO();
+    int daysLate = Math.max(0, daysKept - item.getLoanDays());
+
+    // Chep thong tin tai lieu de View in
+    lateFee.setId(item.getId());
+    lateFee.setTitle(item.getTitle());
+    lateFee.setTypeName(item.getTypeName());
+    lateFee.setLoanDays(item.getLoanDays());
+    lateFee.setLateFeePerDay(item.getLateFeePerDay());
+
+    // So ngay giu, so ngay tre va tong phi
+    lateFee.setDaysKept(daysKept);
+    lateFee.setDaysLate(daysLate);
+    lateFee.setTotalFee(daysLate * item.getLateFeePerDay());
+    return lateFee;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: B002 "Effective Java" (Sach): han muon 14 ngay, da giu 20 ngay, tre 6 ngay x 2000 dong/ngay.<br>
+Phi tre han: 12000 dong.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: D006 "The Social Network" (DVD): han muon 3 ngay, da giu 3 ngay, tre 0 ngay x 5000 dong/ngay.<br>
+Phi tre han: 0 dong.<br>
+…</div>
+
+<h4>Step 5 — grade, lint, grep, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 199/199 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab4-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab4-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — chạy starter và đọc triệu chứng (10 phút)</h4>
+<p>Trước khi sửa gì, chạy thử. Mỗi cột sai chỉ đúng vào một TODO:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+5 &nbsp;&nbsp;I005 &nbsp;Tai lieu 2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+6 &nbsp;&nbsp;I006 &nbsp;Tai lieu 2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;null<br>
+…</div>
+<p>Tên rỗng và năm 0 ⇒ phần cha chưa từng được dựng (4.1). "Tai lieu" và mã I005, I006 ⇒ câu trả lời chung chung của lớp cha đang chạy (4.2, 4.3). Days 0, Fee 0, Detail <code>null</code> ⇒ chưa ai chép chúng sang (4.4).</p>
+
+<h4>Bước 1 — TODO 4.1 super(...) trước (10 phút)</h4>
+<details><summary>Gợi ý</summary><p>Trường của lớp cha là private: <code>Book</code> không viết được <code>this.title = title</code>. Nó phải chuyển chúng cho <code>LibraryItem(id, title, year, copies)</code> — và lời gọi đó phải là câu lệnh <em>đầu tiên</em>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Constructor day du; super(...) PHAI la dong dau: dung phan cha truoc, phan con sau
+public Book(String id, String isbn, String title, String author, int year, int copies) {
+    super(id, title, year, copies);
+    this.isbn = isbn;
+    this.author = author;
+}</code></pre>
+</details>
+
+<h4>Bước 2 — TODO 4.2 và 4.3 mười hai phương thức ghi đè (40 phút)</h4>
+<details><summary>Gợi ý</summary><p>Chép chữ ký từ <code>LibraryItem</code>, giữ <code>public</code>, đặt <code>@Override</code> phía trên. Giá trị: <code>Message.TYPE_MAGAZINE</code>, <code>Constants.MAGAZINE_ID_PREFIX</code>, <code>MAGAZINE_LOAN_DAYS</code>, <code>MAGAZINE_LATE_FEE</code>, <code>String.format(Message.DETAIL_MAGAZINE, issueNumber)</code>, <code>String.format(Message.KEY_MAGAZINE, getTitle(), issueNumber)</code>.</p></details>
+<details><summary>Lời giải — Magazine (Dvd y vậy với DVD_… và minutes)</summary>
+<pre class="trich"><code class="language-java">
+    // Loai: Tap chi
+    @Override
+    public String getTypeName() {
+        return Message.TYPE_MAGAZINE;
+    }
+
+    // Ma tap chi bat dau bang T
+    @Override
+    public String getIdPrefix() {
+        return Constants.MAGAZINE_ID_PREFIX;
+    }
+
+    // Tap chi muon 7 ngay
+    @Override
+    public int getLoanDays() {
+        return Constants.MAGAZINE_LOAN_DAYS;
+    }
+
+    // Tap chi tre 1000 dong/ngay
+    @Override
+    public int getLateFeePerDay() {
+        return Constants.MAGAZINE_LATE_FEE;
+    }
+
+    // Chi tiet: ky so
+    @Override
+    public String getDetail() {
+        return String.format(Message.DETAIL_MAGAZINE, issueNumber);
+    }
+
+    // Cung ten + cung ky so la trung; ten lay qua getter vi truong title la private cua cha
+    @Override
+    public String getUniqueKey() {
+        return String.format(Message.KEY_MAGAZINE, getTitle(), issueNumber);
+    }
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 3. Moi nhap lai.<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Ky so phai tu 1 den 999, ban nhap 0. Moi nhap lai.<br>
+Ky so: Ky so phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Ky so: Trung Tech Weekly ky 118 voi Tap chi T005 "Tech Weekly". Moi tai lieu chi them 1 lan.<br>
+…</div>
+
+<h4>Bước 3 — TODO 4.4 toResponseDTO (15 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Chep 1 tai lieu sang 1 dong bang MOI; khong hoi "ban la lop nao": doi tuong tu tra loi
+private BookResponseDTO toResponseDTO(LibraryItem item) {
+    // Phan chung doc qua getter cua lop cha
+    BookResponseDTO responseDTO = new BookResponseDTO(item.getId(), item.getTypeName(),
+            item.getTitle(), item.getYear(), item.getCopies());
+
+    // Phan rieng: JVM chon ban ghi de theo doi tuong that (Book, Magazine hay Dvd)
+    responseDTO.setLoanDays(item.getLoanDays());
+    responseDTO.setLateFeePerDay(item.getLateFeePerDay());
+    responseDTO.setDetail(item.getDetail());
+    return responseDTO;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Bước 4 — TODO 4.5 phí trễ hạn (20 phút)</h4>
+<details><summary>Gợi ý</summary><p><code>Math.max(0, daysKept - item.getLoanDays())</code> giữ cho số ngày trễ không âm. Chép mã, tên, loại, hạn mượn và phí mỗi ngày vào <code>LateFeeDTO</code>, rồi số ngày giữ, số ngày trễ và tổng phí.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Tinh phi tre: so ngay tre = so ngay giu - han muon (khong am), phi = ngay tre x phi/ngay.
+// Khong co nhanh nao theo loai: dong bang da mang han muon + phi/ngay cua dung loai do
+public LateFeeDTO calculateLateFee(BookResponseDTO item, int daysKept) {
+    // Ket qua; so ngay tre (am nghia la tra som/dung han thi tinh 0)
+    LateFeeDTO lateFee = new LateFeeDTO();
+    int daysLate = Math.max(0, daysKept - item.getLoanDays());
+
+    // Chep thong tin tai lieu de View in
+    lateFee.setId(item.getId());
+    lateFee.setTitle(item.getTitle());
+    lateFee.setTypeName(item.getTypeName());
+    lateFee.setLoanDays(item.getLoanDays());
+    lateFee.setLateFeePerDay(item.getLateFeePerDay());
+
+    // So ngay giu, so ngay tre va tong phi
+    lateFee.setDaysKept(daysKept);
+    lateFee.setDaysLate(daysLate);
+    lateFee.setTotalFee(daysLate * item.getLateFeePerDay());
+    return lateFee;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: B002 "Effective Java" (Sach): han muon 14 ngay, da giu 20 ngay, tre 6 ngay x 2000 dong/ngay.<br>
+Phi tre han: 12000 dong.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: D006 "The Social Network" (DVD): han muon 3 ngay, da giu 3 ngay, tre 0 ngay x 5000 dong/ngay.<br>
+Phi tre han: 0 dong.<br>
+…</div>
+
+<h4>Bước 5 — chấm, lint, grep, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 199/199 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab4-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab4-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8, and 199/199 on the grader.</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (199 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 3. Moi nhap lai.<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Ky so phai tu 1 den 999, ban nhap 0. Moi nhap lai.<br>
+Ky so: Ky so phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Ky so: Trung Tech Weekly ky 118 voi Tap chi T005 "Tech Weekly". Moi tai lieu chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Da them T007 "Tech Weekly". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: So phut: So phut phai tu 1 den 600, ban nhap 0. Moi nhap lai.<br>
+So phut: So phut phai tu 1 den 600, ban nhap 700. Moi nhap lai.<br>
+So phut: Da them D008 "The Imitation Game". Thu vien co 8 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: B002 "Effective Java" (Sach): han muon 14 ngay, da giu 20 ngay, tre 6 ngay x 2000 dong/ngay.<br>
+Phi tre han: 12000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: T005 "Tech Weekly" (Tap chi): han muon 7 ngay, da giu 10 ngay, tre 3 ngay x 1000 dong/ngay.<br>
+Phi tre han: 3000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: D006 "The Social Network" (DVD): han muon 3 ngay, da giu 3 ngay, tre 0 ngay x 5000 dong/ngay.<br>
+Phi tre han: 0 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: So ngay da giu phai tu 0 den 365, ban nhap -1. Moi nhap lai.<br>
+So ngay da giu: D008 "The Imitation Game" (DVD): han muon 3 ngay, da giu 5 ngay, tre 2 ngay x 5000 dong/ngay.<br>
+Phi tre han: 10000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): Ma tai lieu phai la B, T hoac D + 3 chu so (vi du B001, T005, D006), ban nhap "x001". Moi nhap lai.<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: Khong co tai lieu nao mang ma B009. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tim tai lieu theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;D008 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2014 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Imitation Game &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;114 phut<br>
+2 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+3 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 119<br>
+6 &nbsp;&nbsp;D008 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2014 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Imitation Game &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;114 phut<br>
+7 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+8 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So tai lieu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 8<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 16<br>
+Tai lieu het ban : 0<br>
+Cu nhat &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Head First Java (2005)<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 4 chi nam trong bo nho.</div>
+</details>
+<details><summary>LibraryItem.java — the parent with its six generic answers</summary>
+<pre><code class="language-java">package model;
+
+import constants.Constants;
+import constants.Message;
+
+/**
+ * Lop CHA cua moi tai lieu trong thu vien (Lab 4): sach, tap chi, DVD.
+ * Giu phan chung (ma, ten, nam, so ban); moi lop con GHI DE (override) phan rieng:
+ * loai, tien to ma, han muon, phi tre/ngay, chi tiet, khoa chong trung.
+ * Lab 4 de lop nay la lop thuong nen phai co gia tri mac dinh "chung chung" (0 ngay, 0 dong);
+ * Lab 5 se bien no thanh abstract de javac buoc moi lop con tu khai.
+ *
+ * @author CuongThai Academy
+ */
+public class LibraryItem {
+
+    // Ma tai lieu do kho cap (B001, T005, D006...)
+    private String id;
+
+    // Ten da chuan hoa (Title Case)
+    private String title;
+
+    // Nam xuat ban / phat hanh
+    private int year;
+
+    // So ban dang co tren ke
+    private int copies;
+
+    // Constructor rong (JavaBean): goi constructor day du voi chuoi rong va so 0
+    public LibraryItem() {
+        this("", "", 0, 0);
+    }
+
+    // Constructor day du phan chung; protected: chi lop con goi qua super(...)
+    protected LibraryItem(String id, String title, int year, int copies) {
+        this.id = id;
+        this.title = title;
+        this.year = year;
+        this.copies = copies;
+    }
+
+    // Tra ve ma tai lieu
+    public String getId() {
+        return id;
+    }
+
+    // Gan ma tai lieu
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Tra ve ten
+    public String getTitle() {
+        return title;
+    }
+
+    // Gan ten
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    // Tra ve nam
+    public int getYear() {
+        return year;
+    }
+
+    // Gan nam
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    // Tra ve so ban
+    public int getCopies() {
+        return copies;
+    }
+
+    // Gan so ban
+    public void setCopies(int copies) {
+        this.copies = copies;
+    }
+
+    // Ten loai tai lieu; lop con ghi de ("Sach", "Tap chi", "DVD")
+    public String getTypeName() {
+        return Message.TYPE_ITEM;
+    }
+
+    // Chu cai dau cua ma; lop con ghi de (B, T, D)
+    public String getIdPrefix() {
+        return Constants.ITEM_ID_PREFIX;
+    }
+
+    // So ngay duoc muon; tai lieu "chung chung" khong co han that (Lab 5: abstract)
+    public int getLoanDays() {
+        return Constants.UNKNOWN_LOAN_DAYS;
+    }
+
+    // Phi tre moi ngay (dong); tai lieu "chung chung" khong co muc phi that (Lab 5: abstract)
+    public int getLateFeePerDay() {
+        return Constants.UNKNOWN_LATE_FEE;
+    }
+
+    // Thong tin rieng cua tung loai (tac gia, ky so, so phut); mac dinh rong
+    public String getDetail() {
+        return "";
+    }
+
+    // Khoa chong trung (2 tai lieu cung khoa la trung); mac dinh la ma
+    public String getUniqueKey() {
+        return id;
+    }
+}</code></pre>
+</details>
+<details><summary>createItem — the only switch on the item type (given in the starter)</summary>
+<pre class="trich"><code class="language-java">// NOI DUY NHAT biet ten cac lop con: tao doi tuong dung loai tu phieu (ma gan sau)
+private LibraryItem createItem(BookRequestDTO bookRequestDTO) throws Exception {
+    // Loai trong phieu quyet dinh lop con; bien kieu cha giu duoc ca ba (upcasting)
+    switch (bookRequestDTO.getItemType()) {
+        // 1: sach can them ISBN + tac gia
+        case Constants.TYPE_BOOK:
+            return new Book("", bookRequestDTO.getIsbn(), bookRequestDTO.getTitle(),
+                    bookRequestDTO.getAuthor(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies());
+        // 2: tap chi can them ky so
+        case Constants.TYPE_MAGAZINE:
+            return new Magazine("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies(), bookRequestDTO.getIssueNumber());
+        // 3: DVD can them so phut
+        case Constants.TYPE_DVD:
+            return new Dvd("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies(), bookRequestDTO.getMinutes());
+        // Loai khac: khong xay ra voi du lieu da kiem o utils
+        default:
+            throw new Exception(Message.ERROR_ITEM_TYPE);
+    }
+}</code></pre>
+</details>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt, và bộ chấm 199/199.</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (199 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 3. Moi nhap lai.<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Ky so phai tu 1 den 999, ban nhap 0. Moi nhap lai.<br>
+Ky so: Ky so phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Ky so: Trung Tech Weekly ky 118 voi Tap chi T005 "Tech Weekly". Moi tai lieu chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: Ky so: Da them T007 "Tech Weekly". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: So phut: So phut phai tu 1 den 600, ban nhap 0. Moi nhap lai.<br>
+So phut: So phut phai tu 1 den 600, ban nhap 700. Moi nhap lai.<br>
+So phut: Da them D008 "The Imitation Game". Thu vien co 8 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: B002 "Effective Java" (Sach): han muon 14 ngay, da giu 20 ngay, tre 6 ngay x 2000 dong/ngay.<br>
+Phi tre han: 12000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: T005 "Tech Weekly" (Tap chi): han muon 7 ngay, da giu 10 ngay, tre 3 ngay x 1000 dong/ngay.<br>
+Phi tre han: 3000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: D006 "The Social Network" (DVD): han muon 3 ngay, da giu 3 ngay, tre 0 ngay x 5000 dong/ngay.<br>
+Phi tre han: 0 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: So ngay da giu phai tu 0 den 365, ban nhap -1. Moi nhap lai.<br>
+So ngay da giu: D008 "The Imitation Game" (DVD): han muon 3 ngay, da giu 5 ngay, tre 2 ngay x 5000 dong/ngay.<br>
+Phi tre han: 10000 dong.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tinh phi tre han ---<br>
+Ma tai lieu (vi du B001, T005, D006): Ma tai lieu phai la B, T hoac D + 3 chu so (vi du B001, T005, D006), ban nhap "x001". Moi nhap lai.<br>
+Ma tai lieu (vi du B001, T005, D006): So ngay da giu: Khong co tai lieu nao mang ma B009. Hay chon 2 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Tim tai lieu theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;D008 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2014 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Imitation Game &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;114 phut<br>
+2 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+3 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;T007 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 119<br>
+6 &nbsp;&nbsp;D008 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2014 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Imitation Game &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;114 phut<br>
+7 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+8 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So tai lieu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 8<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 16<br>
+Tai lieu het ban : 0<br>
+Cu nhat &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Head First Java (2005)<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 4 chi nam trong bo nho.</div>
+</details>
+<details><summary>LibraryItem.java — lớp cha với sáu câu trả lời chung chung</summary>
+<pre><code class="language-java">package model;
+
+import constants.Constants;
+import constants.Message;
+
+/**
+ * Lop CHA cua moi tai lieu trong thu vien (Lab 4): sach, tap chi, DVD.
+ * Giu phan chung (ma, ten, nam, so ban); moi lop con GHI DE (override) phan rieng:
+ * loai, tien to ma, han muon, phi tre/ngay, chi tiet, khoa chong trung.
+ * Lab 4 de lop nay la lop thuong nen phai co gia tri mac dinh "chung chung" (0 ngay, 0 dong);
+ * Lab 5 se bien no thanh abstract de javac buoc moi lop con tu khai.
+ *
+ * @author CuongThai Academy
+ */
+public class LibraryItem {
+
+    // Ma tai lieu do kho cap (B001, T005, D006...)
+    private String id;
+
+    // Ten da chuan hoa (Title Case)
+    private String title;
+
+    // Nam xuat ban / phat hanh
+    private int year;
+
+    // So ban dang co tren ke
+    private int copies;
+
+    // Constructor rong (JavaBean): goi constructor day du voi chuoi rong va so 0
+    public LibraryItem() {
+        this("", "", 0, 0);
+    }
+
+    // Constructor day du phan chung; protected: chi lop con goi qua super(...)
+    protected LibraryItem(String id, String title, int year, int copies) {
+        this.id = id;
+        this.title = title;
+        this.year = year;
+        this.copies = copies;
+    }
+
+    // Tra ve ma tai lieu
+    public String getId() {
+        return id;
+    }
+
+    // Gan ma tai lieu
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Tra ve ten
+    public String getTitle() {
+        return title;
+    }
+
+    // Gan ten
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    // Tra ve nam
+    public int getYear() {
+        return year;
+    }
+
+    // Gan nam
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    // Tra ve so ban
+    public int getCopies() {
+        return copies;
+    }
+
+    // Gan so ban
+    public void setCopies(int copies) {
+        this.copies = copies;
+    }
+
+    // Ten loai tai lieu; lop con ghi de ("Sach", "Tap chi", "DVD")
+    public String getTypeName() {
+        return Message.TYPE_ITEM;
+    }
+
+    // Chu cai dau cua ma; lop con ghi de (B, T, D)
+    public String getIdPrefix() {
+        return Constants.ITEM_ID_PREFIX;
+    }
+
+    // So ngay duoc muon; tai lieu "chung chung" khong co han that (Lab 5: abstract)
+    public int getLoanDays() {
+        return Constants.UNKNOWN_LOAN_DAYS;
+    }
+
+    // Phi tre moi ngay (dong); tai lieu "chung chung" khong co muc phi that (Lab 5: abstract)
+    public int getLateFeePerDay() {
+        return Constants.UNKNOWN_LATE_FEE;
+    }
+
+    // Thong tin rieng cua tung loai (tac gia, ky so, so phut); mac dinh rong
+    public String getDetail() {
+        return "";
+    }
+
+    // Khoa chong trung (2 tai lieu cung khoa la trung); mac dinh la ma
+    public String getUniqueKey() {
+        return id;
+    }
+}</code></pre>
+</details>
+<details><summary>createItem — switch duy nhất theo loại tài liệu (cho sẵn trong starter)</summary>
+<pre class="trich"><code class="language-java">// NOI DUY NHAT biet ten cac lop con: tao doi tuong dung loai tu phieu (ma gan sau)
+private LibraryItem createItem(BookRequestDTO bookRequestDTO) throws Exception {
+    // Loai trong phieu quyet dinh lop con; bien kieu cha giu duoc ca ba (upcasting)
+    switch (bookRequestDTO.getItemType()) {
+        // 1: sach can them ISBN + tac gia
+        case Constants.TYPE_BOOK:
+            return new Book("", bookRequestDTO.getIsbn(), bookRequestDTO.getTitle(),
+                    bookRequestDTO.getAuthor(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies());
+        // 2: tap chi can them ky so
+        case Constants.TYPE_MAGAZINE:
+            return new Magazine("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies(), bookRequestDTO.getIssueNumber());
+        // 3: DVD can them so phut
+        case Constants.TYPE_DVD:
+            return new Dvd("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),
+                    bookRequestDTO.getCopies(), bookRequestDTO.getMinutes());
+        // Loai khac: khong xay ra voi du lieu da kiem o utils
+        default:
+            throw new Exception(Message.ERROR_ITEM_TYPE);
+    }
+}</code></pre>
+</details>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — forgetting super(...).</strong> It compiles: javac inserts <code>super()</code>, the parent part stays empty.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 4 trap — forgetting super(...) still compiles: javac inserts super() and the parent part stays empty
+class LibraryItem {
+    private String title;
+    private int year;
+
+    public LibraryItem() {                                  // the JavaBean empty constructor
+        this("", 0);
+    }
+
+    protected LibraryItem(String title, int year) {
+        this.title = title;
+        this.year = year;
+    }
+
+    public String getTitle() { return title; }
+    public int getYear() { return year; }
+}
+
+class ForgetfulBook extends LibraryItem {
+    private String isbn;
+
+    public ForgetfulBook(String title, int year, String isbn) {
+        // no super(title, year) here: javac silently calls super()
+        this.isbn = isbn;
+    }
+
+    public String getIsbn() { return isbn; }
+}
+
+class Book extends LibraryItem {
+    private String isbn;
+
+    public Book(String title, int year, String isbn) {
+        super(title, year);                                 // parent part first
+        this.isbn = isbn;
+    }
+
+    public String getIsbn() { return isbn; }
+}
+
+public class LabBayQuenSuper {
+    public static void main(String[] args) {
+        ForgetfulBook wrong = new ForgetfulBook("Effective Java", 2018, "9780134685991");
+        System.out.println("forgot super : title=\\"" + wrong.getTitle() + "\\" year=" + wrong.getYear() + " isbn=" + wrong.getIsbn());
+        Book right = new Book("Effective Java", 2018, "9780134685991");
+        System.out.println("with super   : title=\\"" + right.getTitle() + "\\" year=" + right.getYear() + " isbn=" + right.getIsbn());
+    }
+}</code></pre>
+<div class="out">forgot super : title="" year=0 isbn=9780134685991<br>
+with super &nbsp;&nbsp;: title="Effective Java" year=2018 isbn=9780134685991</div>
+<div class="pitfall"><p><strong>Trap 2 — an override without public, or with a typo.</strong> With <code>@Override</code>, both are real compile errors (the project <code>bay/ghi-de-sai</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/model/Dvd.java:52: error: method does not override or implement a method from a supertype<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@Override<br>
+&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/model/Magazine.java:52: error: getLoanDays() in Magazine cannot override getLoanDays() in LibraryItem<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int getLoanDays() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;attempting to assign weaker access privileges; was public<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Trap 3 — hiding is not overriding.</strong> A re-declared field and a static method follow the declared type.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 4 trap — HIDING is not overriding: a re-declared field and a static method are chosen by the DECLARED type
+class LibraryItem {
+    protected String typeName = "Tai lieu";                 // a field (fields are never overridden)
+
+    public static String shelf() { return "ke chung"; }     // static: belongs to the class
+
+    public int getLoanDays() { return 0; }                  // instance method: can be overridden
+}
+
+class Dvd extends LibraryItem {
+    protected String typeName = "DVD";                      // HIDES the parent field: now there are TWO fields
+
+    public static String shelf() { return "ke DVD"; }       // HIDES, does not override
+
+    @Override
+    public int getLoanDays() { return 3; }                  // OVERRIDES
+}
+
+public class LabBayCheGiau {
+    public static void main(String[] args) {
+        LibraryItem item = new Dvd();                       // declared LibraryItem, object Dvd
+        Dvd dvd = (Dvd) item;
+        System.out.println("item.typeName    = " + item.typeName + "   (field: declared type wins)");
+        System.out.println("dvd.typeName     = " + dvd.typeName);
+        System.out.println("item.shelf()     = " + item.shelf() + "   (static: declared type wins)");
+        System.out.println("item.getLoanDays = " + item.getLoanDays() + "          (override: the object wins)");
+    }
+}</code></pre>
+<div class="out">item.typeName &nbsp;&nbsp;&nbsp;= Tai lieu &nbsp;&nbsp;(field: declared type wins)<br>
+dvd.typeName &nbsp;&nbsp;&nbsp;&nbsp;= DVD<br>
+item.shelf() &nbsp;&nbsp;&nbsp;&nbsp;= ke chung &nbsp;&nbsp;(static: declared type wins)<br>
+item.getLoanDays = 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(override: the object wins)</div>
+<div class="pitfall"><p><strong>Trap 4 — the fee by an instanceof chain.</strong> A new class costs 0 silently.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 4 trap — computing the fee with an instanceof chain: a new kind of item silently costs 0
+import java.util.ArrayList;
+
+class LibraryItem {
+    public String getTypeName() { return "Tai lieu"; }
+    public int getLateFeePerDay() { return 0; }
+}
+class Book extends LibraryItem {
+    @Override public String getTypeName() { return "Sach"; }
+    @Override public int getLateFeePerDay() { return 2000; }
+}
+class Dvd extends LibraryItem {
+    @Override public String getTypeName() { return "DVD"; }
+    @Override public int getLateFeePerDay() { return 5000; }
+}
+class AudioBook extends LibraryItem {                       // added next month by a teammate
+    @Override public String getTypeName() { return "Sach noi"; }
+    @Override public int getLateFeePerDay() { return 3000; }
+}
+
+public class LabBayInstanceof {
+    // the "if by type" version: every new class must be added here by hand
+    static int feeByInstanceof(LibraryItem item, int daysLate) {
+        if (item instanceof Book) {
+            return daysLate * 2000;
+        } else if (item instanceof Dvd) {
+            return daysLate * 5000;
+        }
+        return 0;                                           // AudioBook falls here
+    }
+
+    // the polymorphic version: one line, every class answers for itself
+    static int feeByPolymorphism(LibraryItem item, int daysLate) {
+        return daysLate * item.getLateFeePerDay();
+    }
+
+    public static void main(String[] args) {
+        ArrayList&lt;LibraryItem&gt; itemList = new ArrayList&lt;LibraryItem&gt;();
+        itemList.add(new Book());
+        itemList.add(new Dvd());
+        itemList.add(new AudioBook());
+        for (LibraryItem item : itemList) {
+            System.out.println(item.getTypeName() + ", 2 days late: instanceof = " + feeByInstanceof(item, 2)
+                    + " | polymorphism = " + feeByPolymorphism(item, 2));
+        }
+    }
+}</code></pre>
+<div class="out">Sach, 2 days late: instanceof = 4000 | polymorphism = 4000<br>
+DVD, 2 days late: instanceof = 10000 | polymorphism = 10000<br>
+Sach noi, 2 days late: instanceof = 0 | polymorphism = 6000</div>
+<div class="pitfall"><p><strong>Trap 5 — a wrong downcast.</strong> It compiles; the JVM throws <code>ClassCastException</code> (real JDK 8 message).</p></div>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Lab 4 trap — a downcast is checked at RUN time: casting a Magazine to Book throws ClassCastException (JDK 8 message)
+import java.util.ArrayList;
+
+class LibraryItem {
+    public String getDetail() { return ""; }
+}
+class Book extends LibraryItem {
+    public String getIsbn() { return "9780134685991"; }
+    @Override public String getDetail() { return "ISBN " + getIsbn(); }
+}
+class Magazine extends LibraryItem {
+    @Override public String getDetail() { return "Ky so 118"; }
+}
+
+public class LabBayEpKieu {
+    public static void main(String[] args) {
+        ArrayList&lt;LibraryItem&gt; itemList = new ArrayList&lt;LibraryItem&gt;();
+        itemList.add(new Book());
+        itemList.add(new Magazine());
+        for (LibraryItem item : itemList) {
+            try {
+                Book book = (Book) item;                    // javac accepts: a LibraryItem MIGHT be a Book
+                System.out.println("cast ok   : " + book.getIsbn());
+            } catch (ClassCastException e) {
+                System.out.println("cast fails: " + e.getMessage());
+            }
+        }
+        for (LibraryItem item : itemList) {
+            System.out.println("no cast   : " + item.getDetail());   // what CT Library does
+        }
+    }
+}</code></pre>
+<div class="out">cast ok &nbsp;&nbsp;: 9780134685991<br>
+cast fails: Magazine cannot be cast to Book<br>
+no cast &nbsp;&nbsp;: ISBN 9780134685991<br>
+no cast &nbsp;&nbsp;: Ky so 118</div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — quên super(...).</strong> Vẫn biên dịch: javac chèn <code>super()</code>, phần cha để trống.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 4 — quên super(...) vẫn biên dịch: javac tự chèn super() và phần cha để trống
+class LibraryItem {
+    private String title;
+    private int year;
+
+    public LibraryItem() {                                  // constructor rỗng của JavaBean
+        this("", 0);
+    }
+
+    protected LibraryItem(String title, int year) {
+        this.title = title;
+        this.year = year;
+    }
+
+    public String getTitle() { return title; }
+    public int getYear() { return year; }
+}
+
+class ForgetfulBook extends LibraryItem {
+    private String isbn;
+
+    public ForgetfulBook(String title, int year, String isbn) {
+        // không có super(title, year): javac lặng lẽ gọi super()
+        this.isbn = isbn;
+    }
+
+    public String getIsbn() { return isbn; }
+}
+
+class Book extends LibraryItem {
+    private String isbn;
+
+    public Book(String title, int year, String isbn) {
+        super(title, year);                                 // phần cha trước
+        this.isbn = isbn;
+    }
+
+    public String getIsbn() { return isbn; }
+}
+
+public class LabBayQuenSuper {
+    public static void main(String[] args) {
+        ForgetfulBook wrong = new ForgetfulBook("Effective Java", 2018, "9780134685991");
+        System.out.println("forgot super : title=\\"" + wrong.getTitle() + "\\" year=" + wrong.getYear() + " isbn=" + wrong.getIsbn());
+        Book right = new Book("Effective Java", 2018, "9780134685991");
+        System.out.println("with super   : title=\\"" + right.getTitle() + "\\" year=" + right.getYear() + " isbn=" + right.getIsbn());
+    }
+}</code></pre>
+<div class="out">forgot super : title="" year=0 isbn=9780134685991<br>
+with super &nbsp;&nbsp;: title="Effective Java" year=2018 isbn=9780134685991</div>
+<div class="pitfall"><p><strong>Bẫy 2 — ghi đè thiếu public, hoặc gõ sai tên.</strong> Có <code>@Override</code>, cả hai là lỗi biên dịch thật (dự án <code>bay/ghi-de-sai</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/model/Dvd.java:52: error: method does not override or implement a method from a supertype<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@Override<br>
+&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/model/Magazine.java:52: error: getLoanDays() in Magazine cannot override getLoanDays() in LibraryItem<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int getLoanDays() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;attempting to assign weaker access privileges; was public<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Bẫy 3 — che giấu không phải ghi đè.</strong> Trường khai lại và phương thức static đi theo kiểu khai báo.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 4 — CHE GIẤU không phải ghi đè: trường khai lại và phương thức static được chọn theo kiểu KHAI BÁO
+class LibraryItem {
+    protected String typeName = "Tai lieu";                 // một trường (trường không bao giờ được ghi đè)
+
+    public static String shelf() { return "ke chung"; }     // static: thuộc về lớp
+
+    public int getLoanDays() { return 0; }                  // phương thức thể hiện: ghi đè được
+}
+
+class Dvd extends LibraryItem {
+    protected String typeName = "DVD";                      // CHE trường của cha: giờ có HAI trường
+
+    public static String shelf() { return "ke DVD"; }       // CHE, không ghi đè
+
+    @Override
+    public int getLoanDays() { return 3; }                  // GHI ĐÈ
+}
+
+public class LabBayCheGiau {
+    public static void main(String[] args) {
+        LibraryItem item = new Dvd();                       // khai báo LibraryItem, đối tượng Dvd
+        Dvd dvd = (Dvd) item;
+        System.out.println("item.typeName    = " + item.typeName + "   (field: declared type wins)");
+        System.out.println("dvd.typeName     = " + dvd.typeName);
+        System.out.println("item.shelf()     = " + item.shelf() + "   (static: declared type wins)");
+        System.out.println("item.getLoanDays = " + item.getLoanDays() + "          (override: the object wins)");
+    }
+}</code></pre>
+<div class="out">item.typeName &nbsp;&nbsp;&nbsp;= Tai lieu &nbsp;&nbsp;(field: declared type wins)<br>
+dvd.typeName &nbsp;&nbsp;&nbsp;&nbsp;= DVD<br>
+item.shelf() &nbsp;&nbsp;&nbsp;&nbsp;= ke chung &nbsp;&nbsp;(static: declared type wins)<br>
+item.getLoanDays = 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(override: the object wins)</div>
+<div class="pitfall"><p><strong>Bẫy 4 — tính phí bằng chuỗi instanceof.</strong> Lớp mới lặng lẽ bị tính 0 đồng.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 4 — tính phí bằng chuỗi instanceof: thêm loại mới là lặng lẽ ra 0 đồng
+import java.util.ArrayList;
+
+class LibraryItem {
+    public String getTypeName() { return "Tai lieu"; }
+    public int getLateFeePerDay() { return 0; }
+}
+class Book extends LibraryItem {
+    @Override public String getTypeName() { return "Sach"; }
+    @Override public int getLateFeePerDay() { return 2000; }
+}
+class Dvd extends LibraryItem {
+    @Override public String getTypeName() { return "DVD"; }
+    @Override public int getLateFeePerDay() { return 5000; }
+}
+class AudioBook extends LibraryItem {                       // tháng sau bạn cùng nhóm thêm vào
+    @Override public String getTypeName() { return "Sach noi"; }
+    @Override public int getLateFeePerDay() { return 3000; }
+}
+
+public class LabBayInstanceof {
+    // bản "if theo loại": lớp mới nào cũng phải tự thêm vào đây
+    static int feeByInstanceof(LibraryItem item, int daysLate) {
+        if (item instanceof Book) {
+            return daysLate * 2000;
+        } else if (item instanceof Dvd) {
+            return daysLate * 5000;
+        }
+        return 0;                                           // AudioBook rơi vào đây
+    }
+
+    // bản đa hình: một dòng, mỗi lớp tự trả lời
+    static int feeByPolymorphism(LibraryItem item, int daysLate) {
+        return daysLate * item.getLateFeePerDay();
+    }
+
+    public static void main(String[] args) {
+        ArrayList&lt;LibraryItem&gt; itemList = new ArrayList&lt;LibraryItem&gt;();
+        itemList.add(new Book());
+        itemList.add(new Dvd());
+        itemList.add(new AudioBook());
+        for (LibraryItem item : itemList) {
+            System.out.println(item.getTypeName() + ", 2 days late: instanceof = " + feeByInstanceof(item, 2)
+                    + " | polymorphism = " + feeByPolymorphism(item, 2));
+        }
+    }
+}</code></pre>
+<div class="out">Sach, 2 days late: instanceof = 4000 | polymorphism = 4000<br>
+DVD, 2 days late: instanceof = 10000 | polymorphism = 10000<br>
+Sach noi, 2 days late: instanceof = 0 | polymorphism = 6000</div>
+<div class="pitfall"><p><strong>Bẫy 5 — ép kiểu xuống sai.</strong> Biên dịch được; JVM ném <code>ClassCastException</code> (thông báo thật của JDK 8).</p></div>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Bẫy Lab 4 — ép kiểu xuống được kiểm lúc CHẠY: ép Magazine thành Book ném ClassCastException (thông báo của JDK 8)
+import java.util.ArrayList;
+
+class LibraryItem {
+    public String getDetail() { return ""; }
+}
+class Book extends LibraryItem {
+    public String getIsbn() { return "9780134685991"; }
+    @Override public String getDetail() { return "ISBN " + getIsbn(); }
+}
+class Magazine extends LibraryItem {
+    @Override public String getDetail() { return "Ky so 118"; }
+}
+
+public class LabBayEpKieu {
+    public static void main(String[] args) {
+        ArrayList&lt;LibraryItem&gt; itemList = new ArrayList&lt;LibraryItem&gt;();
+        itemList.add(new Book());
+        itemList.add(new Magazine());
+        for (LibraryItem item : itemList) {
+            try {
+                Book book = (Book) item;                    // javac cho qua: một LibraryItem CÓ THỂ là Book
+                System.out.println("cast ok   : " + book.getIsbn());
+            } catch (ClassCastException e) {
+                System.out.println("cast fails: " + e.getMessage());
+            }
+        }
+        for (LibraryItem item : itemList) {
+            System.out.println("no cast   : " + item.getDetail());   // CT Library làm vậy
+        }
+    }
+}</code></pre>
+<div class="out">cast ok &nbsp;&nbsp;: 9780134685991<br>
+cast fails: Magazine cannot be cast to Book<br>
+no cast &nbsp;&nbsp;: ISBN 9780134685991<br>
+no cast &nbsp;&nbsp;: Ky so 118</div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Book constructor with <code>super(...)</code> (4.1)</td><td>1</td><td>grader lines 14–19: titles and years back</td></tr>
+<tr><td>Magazine + Dvd: 12 overrides, <code>@Override public</code> (4.2, 4.3)</td><td>3</td><td>grader lines 17, 19, 35, 48, 63 · javac</td></tr>
+<tr><td><code>toResponseDTO</code> without if or cast (4.4)</td><td>2</td><td>grader lines 13–19, 147–150, 163–171</td></tr>
+<tr><td>Late fee in the service, one formula (4.5)</td><td>2</td><td>grader lines 76–77, 90–91, 104–105, 119–120</td></tr>
+<tr><td><code>lint.py</code> ✓ and <code>grep -rn instanceof src/</code> empty</td><td>1</td><td>two commands</td></tr>
+<tr><td>Oral: "overloading or overriding?"</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. Why does the starter compile without super(...)?</summary><p class="dap-an">✅ When a constructor does not start with <code>super(...)</code> or <code>this(...)</code>, javac inserts <code>super()</code>. <code>LibraryItem</code> has an empty public constructor (JavaBean), so the call is legal — and the parent's fields keep "" and 0.</p></details>
+<details><summary>2. LibraryItem item = new Dvd(); — which getLoanDays() runs, and what can javac refuse here?</summary><p class="dap-an">✅ The Dvd override (3 days): the JVM looks at the object. javac only allows methods <code>LibraryItem</code> declares — <code>item.getMinutes()</code> would be "cannot find symbol".</p></details>
+<details><summary>3. Where is the only switch on the item type, and why is it allowed there?</summary><p class="dap-an">✅ In <code>BookRepository.createItem</code> (and the input form in <code>Main</code>): to <em>create</em> an object you must name its class. Once created, every use goes through <code>LibraryItem</code> and polymorphism.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td>Constructor Book có <code>super(...)</code> (4.1)</td><td>1</td><td>dòng 14–19 của bộ chấm: tên và năm trở lại</td></tr>
+<tr><td>Magazine + Dvd: 12 phương thức ghi đè, <code>@Override public</code> (4.2, 4.3)</td><td>3</td><td>dòng 17, 19, 35, 48, 63 · javac</td></tr>
+<tr><td><code>toResponseDTO</code> không if, không ép kiểu (4.4)</td><td>2</td><td>dòng 13–19, 147–150, 163–171</td></tr>
+<tr><td>Phí trễ ở service, một công thức (4.5)</td><td>2</td><td>dòng 76–77, 90–91, 104–105, 119–120</td></tr>
+<tr><td><code>lint.py</code> ✓ và <code>grep -rn instanceof src/</code> rỗng</td><td>1</td><td>hai lệnh</td></tr>
+<tr><td>Vấn đáp: "nạp chồng hay ghi đè?"</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. Vì sao starter biên dịch được dù thiếu super(...)?</summary><p class="dap-an">✅ Khi constructor không mở đầu bằng <code>super(...)</code> hay <code>this(...)</code>, javac tự chèn <code>super()</code>. <code>LibraryItem</code> có constructor rỗng public (JavaBean), nên lời gọi hợp lệ — và các trường của cha giữ "" và 0.</p></details>
+<details><summary>2. LibraryItem item = new Dvd(); — getLoanDays() nào chạy, và javac có thể từ chối gì ở đây?</summary><p class="dap-an">✅ Bản ghi đè của Dvd (3 ngày): JVM nhìn đối tượng. javac chỉ cho gọi phương thức mà <code>LibraryItem</code> có khai — <code>item.getMinutes()</code> sẽ báo "cannot find symbol".</p></details>
+<details><summary>3. Switch duy nhất theo loại tài liệu nằm ở đâu, và vì sao được phép ở đó?</summary><p class="dap-an">✅ Ở <code>BookRepository.createItem</code> (và form nhập trong <code>Main</code>): muốn <em>tạo</em> đối tượng thì phải gọi tên lớp. Tạo xong, mọi chỗ dùng đều đi qua <code>LibraryItem</code> và đa hình.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Add <code>AudioBook</code> (loan 10 days, 3,000 đ, detail "n phut, narrator"): count the files you touch. The goal is: one new class, one new case in <code>createItem</code>, a few constants, one menu line.</li>
+<li>⭐ <strong>Overloading</strong> (4.B): give <code>BookService</code> a second <code>calculateLateFee</code> that takes only a <code>BookResponseDTO</code> and uses today's 0 days kept — which one does javac pick for <code>calculateLateFee(item, 5)</code>?</li>
+<li>⭐⭐ Use <code>super.getDetail()</code>: let <code>LibraryItem.getDetail()</code> return the year, and have each child append its own part to it.</li>
+<li>⭐⭐ The class names <code>BookRepository</code>, <code>BookController</code>… now hold magazines and DVDs too. Would you rename them to <code>Item…</code>? List the pros and cons (CT Library keeps "Book" = the library's catalogue, to match Lab 5's interface).</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 5 (after Chapter 5):</strong> <code>LibraryItem</code> becomes <code>abstract</code> (no more "0 days"), the repository is split into the interface <code>BookRepository</code> and its first implementation <code>InMemoryBookRepository</code> — the seam Lab 9 plugs a file into — and late fees depend on who borrows, through a <code>FeePolicy</code> interface.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Thêm <code>AudioBook</code> (sách nói: mượn 10 ngày, 3.000 đ, chi tiết "n phut, người đọc"): đếm số tệp bạn phải chạm. Mục tiêu: một lớp mới, một case mới trong <code>createItem</code>, vài hằng, một dòng menu.</li>
+<li>⭐ <strong>Nạp chồng</strong> (4.B): cho <code>BookService</code> thêm một <code>calculateLateFee</code> chỉ nhận <code>BookResponseDTO</code> và coi số ngày giữ là 0 — javac chọn bản nào cho <code>calculateLateFee(item, 5)</code>?</li>
+<li>⭐⭐ Dùng <code>super.getDetail()</code>: cho <code>LibraryItem.getDetail()</code> trả về năm, và mỗi lớp con nối phần riêng của nó vào sau.</li>
+<li>⭐⭐ Các lớp <code>BookRepository</code>, <code>BookController</code>… giờ giữ cả tạp chí và DVD. Bạn có đổi tên thành <code>Item…</code> không? Liệt kê lợi và hại (CT Library giữ "Book" = danh mục sách của thư viện, để khớp interface ở Lab 5).</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 5 (sau Chương 5):</strong> <code>LibraryItem</code> thành <code>abstract</code> (hết "0 ngày"), repository tách thành interface <code>BookRepository</code> và bản cài đầu tiên <code>InMemoryBookRepository</code> — đường nối mà Lab 9 cắm kho tệp vào — và phí trễ phụ thuộc người mượn, qua interface <code>FeePolicy</code>.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch4) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -5415,6 +7008,7 @@ public class Q10 {
 export default {
   slides: [L_pro9_1, L_pro10_1],
   practice: L_on_ch4,
+  labs: [L_lab4],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 4 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ và câu "in ra gì" đều đã chạy thật trên JDK 8: phương thức static bị che giấu, thứ tự constructor, trường không đa hình, luật super(...), vị trí dấu ngoặc khi ép kiểu, nạp chồng chọn theo kiểu tĩnh, ép xuống sai gây ClassCastException, phương thức private không ghi đè được, luật quyền truy cập khi ghi đè, và gọi phương thức ghi đè trong constructor của lớp cha.',
 };

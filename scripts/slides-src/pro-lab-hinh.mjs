@@ -155,3 +155,72 @@ export function heapBanSao(opts = {}) {
   s += t(560, h - 14, moi == null ? 'two arrows, ONE Book: change it through either one' : 'book.setCopies(7): the list sees 7 — the copy still says 2', { fs: 17, b: true, m: moi == null ? XANH : DO });
   return s + '</svg>';
 }
+
+/**
+ * Sơ đồ lớp UML (SVG) cho Lab 4+ (agent pro-lab45): lops = [{ id, ten, kieu?: 'abstract'|'interface', x, y, w,
+ * tr?: [trường…], pt?: [phương thức…], mau?, hl?: true, nho?: chữ nhỏ dưới tên }] · mui = [{ tu, den, kieu: 'ke' (extends, nét liền
+ * + tam giác rỗng) | 'cai' (implements, nét đứt + tam giác rỗng) | 'dung' (giữ/gọi, nét liền + mũi tên mở), nhan?, cam?: true (gạch đỏ ✗) }].
+ * Hộp: đầu 46 px (+20 nếu có «kieu»), mỗi dòng 25 px. Mũi tên nối tâm cạnh gần nhất.
+ */
+export function soDoLop(lops, mui = [], opts = {}) {
+  const { w = 1110, h = 470, fs = 17 } = opts;
+  const L = {};
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="Arial"><defs>` +
+    `<marker id="uke" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#fff" stroke="#444" stroke-width="1.4"/></marker>` +
+    `<marker id="udung" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#444" stroke-width="1.6"/></marker></defs>`;
+  for (const o of lops) {
+    const dong = [...(o.tr || []), ...(o.pt || [])];
+    const dau = 46 + (o.kieu ? 20 : 0) + (o.nho ? 20 : 0);
+    const cao = dau + (o.tr?.length ? 8 : 0) + dong.length * 25 + (o.pt?.length && o.tr?.length ? 8 : 0) + 10;
+    L[o.id] = { ...o, cao };
+    const m = o.mau || PG;
+    s += `<rect x="${o.x}" y="${o.y}" width="${o.w}" height="${cao}" rx="8" fill="${o.hl ? m + '22' : '#fff'}" stroke="${m}" stroke-width="${o.hl ? 4 : 2.5}"/>`;
+    let y = o.y + 22;
+    if (o.kieu) { s += `<text x="${o.x + o.w / 2}" y="${y}" text-anchor="middle" font-size="15" fill="${m}">«${o.kieu}»</text>`; y += 20; }
+    s += `<text x="${o.x + o.w / 2}" y="${y + 6}" text-anchor="middle" font-size="${fs + 4}" font-weight="700" fill="#262626" font-family="Menlo,monospace"${o.kieu === 'abstract' ? ' font-style="italic"' : ''}>${esc(o.ten)}</text>`;
+    y += 12;
+    if (o.nho) { y += 16; s += `<text x="${o.x + o.w / 2}" y="${y}" text-anchor="middle" font-size="14" fill="#666">${esc(o.nho)}</text>`; }
+    y += 10;
+    s += `<line x1="${o.x}" y1="${y}" x2="${o.x + o.w}" y2="${y}" stroke="${m}" stroke-width="1.5"/>`;
+    for (const t of o.tr || []) { y += 25; s += `<text x="${o.x + 12}" y="${y}" font-size="${fs}" fill="#333" font-family="Menlo,monospace">${esc(t)}</text>`; }
+    if (o.tr?.length && o.pt?.length) { y += 10; s += `<line x1="${o.x}" y1="${y}" x2="${o.x + o.w}" y2="${y}" stroke="${m}" stroke-width="1.2"/>`; }
+    for (const t of o.pt || []) {
+      y += 25;
+      const nghieng = /\babstract\b/.test(t) || o.kieu === 'interface';
+      s += `<text x="${o.x + 12}" y="${y}" font-size="${fs}" fill="#333" font-family="Menlo,monospace"${nghieng ? ' font-style="italic"' : ''}>${esc(t.replace(/\babstract /, ''))}</text>`;
+    }
+  }
+  for (const a of mui) {
+    const A = L[a.tu], B = L[a.den];
+    const ax = A.x + A.w / 2, ay = A.y + A.cao / 2, bx = B.x + B.w / 2, by = B.y + B.cao / 2;
+    let x1, y1, x2, y2;
+    if (Math.abs(by - ay) > Math.abs(bx - ax) * 0.45) {           // dọc
+      x1 = a.x1 ?? ax; x2 = a.x2 ?? bx;
+      if (by < ay) { y1 = A.y; y2 = B.y + B.cao; } else { y1 = A.y + A.cao; y2 = B.y; }
+    } else {                                                       // ngang
+      y1 = a.y1 ?? ay; y2 = a.y2 ?? by;
+      if (bx > ax) { x1 = A.x + A.w; x2 = B.x; } else { x1 = A.x; x2 = B.x + B.w; }
+    }
+    const net = a.kieu === 'cai' ? ' stroke-dasharray="9 6"' : '';
+    const dau = a.kieu === 'dung' ? 'udung' : 'uke';
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${a.cam ? DO : '#444'}" stroke-width="2.4"${net}${a.cam ? ' stroke-dasharray="7 6"' : ''} marker-end="url(#${dau})"/>`;
+    if (a.nhan) s += `<text x="${(x1 + x2) / 2 + (a.dx ?? 8)}" y="${(y1 + y2) / 2 + (a.dy ?? -6)}" font-size="15" fill="${a.cam ? DO : '#555'}" text-anchor="${a.neo || 'start'}">${esc(a.nhan)}</text>`;
+  }
+  return s + '</svg>';
+}
+
+/** Hai cột "javac nhìn KIỂU KHAI BÁO · JVM nhìn ĐỐI TƯỢNG" cho một lời gọi đa hình (SVG 1110 × h). */
+export function haiCua(opts = {}) {
+  const { h = 300, khai = 'LibraryItem item', goi = 'item.getLoanDays()', doiTuong = ['Book → 14', 'Magazine → 7', 'Dvd → 3'] } = opts;
+  const t = (x, y, s, o = {}) => `<text x="${x}" y="${y}" font-size="${o.fs || 20}" ${o.b ? 'font-weight="700"' : ''} fill="${o.m || '#262626'}" ${o.mono ? 'font-family="Menlo,monospace"' : ''} text-anchor="${o.a || 'start'}">${esc(s)}</text>`;
+  let s = `<svg viewBox="0 0 1110 ${h}" width="1110" height="${h}" font-family="Arial">`;
+  s += `<rect x="0" y="0" width="520" height="${h}" rx="12" fill="#eef4fa" stroke="${PG}" stroke-width="2.5"/>` + t(20, 34, '1 · javac (compile time)', { b: true, m: PG, fs: 22 }) +
+    t(20, 76, `${khai};`, { mono: true, fs: 20 }) + t(20, 112, `${goi}`, { mono: true, fs: 20 }) +
+    t(20, 160, 'looks at the DECLARED type:', { fs: 19 }) + t(20, 192, 'does LibraryItem have getLoanDays()?', { fs: 19 }) + t(20, 232, '✓ yes ⇒ compiles', { b: true, m: XANH, fs: 21 }) +
+    t(20, 266, '(no ⇒ "cannot find symbol")', { fs: 17, m: '#666' });
+  s += `<rect x="590" y="0" width="520" height="${h}" rx="12" fill="#fdf3e6" stroke="${CAM}" stroke-width="2.5"/>` + t(610, 34, '2 · JVM (run time)', { b: true, m: CAM, fs: 22 }) +
+    t(610, 76, 'looks at the OBJECT on the heap', { fs: 19 }) + t(610, 106, 'and runs ITS version:', { fs: 19 });
+  doiTuong.forEach((d, i) => { s += `<rect x="610" y="${128 + i * 52}" width="480" height="42" rx="8" fill="#fff" stroke="${CAM}" stroke-width="1.8"/>` + t(626, 156 + i * 52, d, { mono: true, fs: 19 }); });
+  s += `<line x1="524" y1="${h / 2}" x2="584" y2="${h / 2}" stroke="#444" stroke-width="3" marker-end="url(#mtl2)"/><defs><marker id="mtl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>`;
+  return s + '</svg>';
+}

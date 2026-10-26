@@ -989,6 +989,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch4.mjs */
         ch4.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch4.mjs */
+        ...ch4.labs,
         {
           title: 'Chapter 4 Quiz|||Quiz chương 4',
           slug: 'pro192-quiz-ch4',
@@ -1101,6 +1103,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch5.mjs */
         ch5.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch5.mjs */
+        ...ch5.labs,
         {
           title: 'Chapter 5 Quiz|||Quiz chương 5',
           slug: 'pro192-quiz-ch5',

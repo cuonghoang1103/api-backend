@@ -3,5 +3,6 @@
  * Agent chương mới chỉ sửa tệp này (thêm import + phần tử mảng), KHÔNG sửa postgresql.mjs.
  */
 import s17 from './s17-bon-he-csdl.mjs';
+import s18 from './s18-thi-cuoi-khoa.mjs';
 
-export const SAU_CH16 = [s17];
+export const SAU_CH16 = [s17, s18];

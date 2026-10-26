@@ -1194,7 +1194,7 @@ const Q = [
   // ── Chương 14 — Kết nối, pool & vận hành ───────────────────────────────
   mcq({
     prompt: B(
-      'Session A opened a transaction, ran one <code>SELECT</code> and then the application stopped talking (a debugger breakpoint). Meanwhile session B updates all 1,000 rows of <code>fe2.hot</code> and vacuums. Measured on PostgreSQL 17:' + code(
+      'Session A opened a <code>REPEATABLE READ</code> transaction, ran one <code>SELECT</code> and then the application stopped talking (a debugger breakpoint). Meanwhile session B updates all 1,000 rows of <code>fe2.hot</code> and vacuums. Measured on PostgreSQL 17:' + code(
         "-- pg_stat_activity: state = 'idle in transaction', backend_xmin IS NOT NULL = t\n" +
         'VACUUM (VERBOSE) fe2.hot;\n' +
         '-- tuples: 0 removed, 2000 remain, 1000 are dead but not yet removable\n' +
@@ -1202,7 +1202,7 @@ const Q = [
         'VACUUM (VERBOSE) fe2.hot;\n' +
         '-- tuples: 1000 removed, 1000 remain, 0 are dead but not yet removable',
       ),
-      'Phiên A mở một giao dịch, chạy một câu <code>SELECT</code> rồi ứng dụng ngừng nói chuyện (dừng ở breakpoint của debugger). Trong lúc đó phiên B cập nhật cả 1.000 dòng của <code>fe2.hot</code> rồi vacuum. Đo trên PostgreSQL 17:' + code(
+      'Phiên A mở một giao dịch <code>REPEATABLE READ</code>, chạy một câu <code>SELECT</code> rồi ứng dụng ngừng nói chuyện (dừng ở breakpoint của debugger). Trong lúc đó phiên B cập nhật cả 1.000 dòng của <code>fe2.hot</code> rồi vacuum. Đo trên PostgreSQL 17:' + code(
         "-- pg_stat_activity: state = 'idle in transaction', backend_xmin IS NOT NULL = t\n" +
         'VACUUM (VERBOSE) fe2.hot;\n' +
         '-- tuples: 0 removed, 2000 remain, 1000 are dead but not yet removable\n' +

@@ -2274,12 +2274,12 @@ const L_lab3 = {
 </ol>
 <div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 176/176 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · bạn giải thích được mọi <code>public</code> và mọi <code>static</code> bằng một câu · thêm một commit.</p></div>`),
     bi(`<h2>3. Files</h2>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
 <span class="lc-ico">🧰</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab3-starter.zip</span><span class="lc-sub">Lab 2 solution + Lab 3 skeleton · TODO 3.1–3.5 · 6 planted lint violations (TODO 3.6) · harness (176 lines) · CheckHarness</span></span>
 <span class="lc-cta">Download</span>
 </a>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
 <span class="lc-ico">✅</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab3-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
 <span class="lc-cta">Download</span>
@@ -2294,12 +2294,12 @@ const L_lab3 = {
   main/Main.java                   8 menu items (given)
   TODO 3.6 — six planted violations in Book, BookRepository, BookController, MemberController, Main</code></pre>`,
     `<h2>3. Tệp tải về</h2>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
 <span class="lc-ico">🧰</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab3-starter.zip</span><span class="lc-sub">đáp án Lab 2 + khung Lab 3 · TODO 3.1–3.5 · 6 vi phạm lint cài sẵn (TODO 3.6) · harness (176 dòng) · CheckHarness</span></span>
 <span class="lc-cta">Tải về</span>
 </a>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
 <span class="lc-ico">✅</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab3-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
 <span class="lc-cta">Tải về</span>

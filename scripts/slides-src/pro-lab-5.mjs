@@ -2,13 +2,13 @@
  * pro-lab-5 — PRO192 · Lab 5 · CT Library "Abstract classes and interfaces" (slide EN, khuôn _pro-chung, agent pro-lab45 26/10/2026).
  * Code + output ĐỌC THẲNG từ flm-nguon/_repo/PRO192/gen/lab/lab5 (đáp án qua lint.py LAB211 + javac --release 8 + JDK 8 thật,
  * PASS 163/163; starter = 5 TODO; bay/truu-tuong = 3 lỗi javac thật, bay/hang-interface = 1 lỗi) và gen/java/lab5/*.java (chạy thật).
- * Interface giữ tên BookRepository (khớp video pro-0-2; bộ lời giải LAB211 không dùng tiền tố I).
+ * Interface giữ tên IBookRepository (khớp video pro-0-2; bộ lời giải LAB211 không dùng tiền tố I).
  *   node scripts/_render-slides.mjs --deck scripts/slides-src/pro-lab-5.mjs --out <dir>   ⇒ <dir>/lab5/NNN.webp
  */
 import { lamDeck, sql, psql, two, box, steps, tbl, c } from './_pro-chung.mjs';
 import { ham, tep, ra, raJava, ma, col, boChuThich, soDoLop, luong, PG, NAU, XANH, CAM, TIM, XAM, DO } from './pro-lab-hinh.mjs';
 
-export const deck = { key: 'lab5', code: 'PRO192 Lab 5', title: 'Lab 5 — CT Library: abstract classes and interfaces', sub: 'abstract LibraryItem · interface BookRepository + InMemoryBookRepository · FeePolicy' };
+export const deck = { key: 'lab5', code: 'PRO192 Lab 5', title: 'Lab 5 — CT Library: abstract classes and interfaces', sub: 'abstract LibraryItem · interface IBookRepository + InMemoryBookRepository · IFeePolicy' };
 
 const S = 'lab5/solution/src';
 const j = (src, o = {}) => sql(src, { lang: 'java', sm: true, ...o });
@@ -29,7 +29,7 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
       `${c('check.sh')}: <b>PASS 163/163</b>`,
       `${c('lint.py')}: <b>✓ sạch</b> (the starter has 1 violation)`,
       `${c('new LibraryItem(…)')} anywhere ⇒ <b>javac error</b>`,
-      `the controller field is the <b>interface</b> ${c('BookRepository')}`,
+      `the controller field is the <b>interface</b> ${c('IBookRepository')}`,
       'a 3rd fee policy = <b>one new class</b>',
     ]))), giua: true },
 
@@ -54,12 +54,12 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
   { t: 'What javac now refuses — three real errors', body: psql(ra('lab5/bay/truu-tuong:javac'), { title: 'javac --release 8 — bay/truu-tuong (three mistakes planted in the solution)', sm: true }).replace('<pre>', '<pre style="white-space:pre-wrap">') +
     tbl(['Mistake', 'javac says'], [
       [`${c('Dvd')} forgot ${c('getUniqueKey()')}`, `"Dvd is not abstract and does not override abstract method …"`],
-      [`${c('InMemoryBookRepository')} forgot ${c('countItems()')}`, `"… does not override abstract method countItems() in BookRepository"`],
+      [`${c('InMemoryBookRepository')} forgot ${c('countItems()')}`, `"… does not override abstract method countItems() in IBookRepository"`],
       [`${c('default: return new LibraryItem(...)')}`, `"LibraryItem is abstract; cannot be instantiated"`],
     ]) },
 
   /* 6 */
-  { t: 'Abstract class or interface? (Chapter 5)', body: tbl(['', 'abstract class LibraryItem', 'interface BookRepository / FeePolicy'], [
+  { t: 'Abstract class or interface? (Chapter 5)', body: tbl(['', 'abstract class LibraryItem', 'interface IBookRepository / IFeePolicy'], [
     ['Is a…', 'parent of a family (<b>is-a</b>)', 'a <b>contract</b>: "can do"'],
     ['Fields', 'yes — private id, title, year, copies', 'only constants (public static final)'],
     ['Constructor', 'yes (called by super)', 'no'],
@@ -71,8 +71,8 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
   /* 7 */
   { t: 'The seam — the controller talks to a contract', body: soDoLop([
     { id: 'M', ten: 'Main', x: 0, y: 30, w: 150, mau: PG, pt: ['+ main(...)'] },
-    { id: 'C', ten: 'BookController', x: 205, y: 20, w: 400, mau: NAU, tr: ['- bookRepository: BookRepository', '- bookService: BookService'] },
-    { id: 'R', ten: 'BookRepository', kieu: 'interface', x: 690, y: 0, w: 420, mau: XANH, pt: ['addItem · updateCopies · deleteItem', 'findById · countItems · findAll · …'] },
+    { id: 'C', ten: 'BookController', x: 205, y: 20, w: 400, mau: NAU, tr: ['- bookRepository: IBookRepository', '- bookService: BookService'] },
+    { id: 'R', ten: 'IBookRepository', kieu: 'interface', x: 690, y: 0, w: 420, mau: XANH, pt: ['addItem · updateCopies · deleteItem', 'findById · countItems · findAll · …'] },
     { id: 'I', ten: 'InMemoryBookRepository', x: 560, y: 300, w: 300, mau: XANH, hl: true, nho: 'Lab 5 · ArrayList<LibraryItem>' },
     { id: 'F', ten: 'FileBookRepository', x: 875, y: 300, w: 235, mau: XAM, nho: 'Lab 9 · books.csv' },
     { id: 'S', ten: 'BookService', x: 240, y: 300, w: 300, mau: CAM, tr: ['- feePolicyList'], nho: 'no repository' },
@@ -86,24 +86,24 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
 
   /* 8 */
   { t: 'TODO 5.2 — the contract and its first implementation', body:
-    j(boChuThich(tep(`${S}/repository/BookRepository.java`, [16, 38]))) +
+    j(boChuThich(tep(`${S}/repository/IBookRepository.java`, [16, 38]))) +
     j([tep(`${S}/repository/InMemoryBookRepository.java`, [21, 21]), tep(`${S}/repository/InMemoryBookRepository.java`, [24, 24]),
       tep(`${S}/repository/InMemoryBookRepository.java`, [27, 27]), tep(`${S}/repository/InMemoryBookRepository.java`, [103, 106]),
       '    // ... 6 more @Override methods (the Lab 4 code)'].join('\n')) +
-    box('', `<p style="margin:0">Interface methods are <b>public abstract</b> without saying it. The Lab 4 class body moves over unchanged — it just signs the contract.</p>`, 'lam') },
+    box('', `<p style="margin:0">Checklist item 1.3: an interface is named <b>I…</b> (${c('IBookRepository')}, like ${c('ISortStrategy')}); implementations keep plain names. Interface methods are <b>public abstract</b> without saying it; the Lab 4 class body moves over unchanged.</p>`, 'lam') },
 
   /* 9 */
   { t: 'TODO 5.3 — one line knows where the books live', body: two(
     j(['// controller/BookController.java', de(tep(`${S}/controller/BookController.java`, [27, 27])), '', de(boChuThich(tep(`${S}/controller/BookController.java`, [42, 45]))), '    // ...'].join('\n')),
     col(psql(raJava('lab5/LabDoiKho'), { title: 'real output — LabDoiKho: same client code, two repositories' }),
       box('Lab 9 preview', `<p style="margin:0">${c('new FileBookRepository()')} in that one line ⇒ books saved to ${c('books.csv')}; ${c('addItem')}, ${c('findAll')}… calls stay word for word.</p>`, 'ok'))) +
-    box('Why it compiles', `<p style="margin:0">A class that ${c('implements BookRepository')} <b>is-a</b> ${c('BookRepository')}: the assignment is an upcast, like ${c('LibraryItem item = new Dvd()')} in Lab 4.</p>`, 'lam') },
+    box('Why it compiles', `<p style="margin:0">A class that ${c('implements IBookRepository')} <b>is-a</b> ${c('IBookRepository')}: the assignment is an upcast, like ${c('LibraryItem item = new Dvd()')} in Lab 4.</p>`, 'lam') },
 
   /* 10 */
-  { t: 'FeePolicy — the Strategy pattern in one interface', body: two(
+  { t: 'IFeePolicy — the Strategy pattern in one interface', body: two(
     soDoLop([
-      { id: 'B', ten: 'BookService', x: 0, y: 0, w: 520, mau: CAM, tr: ['- feePolicyList: ArrayList<FeePolicy>'], pt: ['+ calculateLateFee(item, dto)'] },
-      { id: 'F', ten: 'FeePolicy', kieu: 'interface', x: 70, y: 180, w: 380, mau: TIM, pt: ['getPolicyName(): String', 'calculateFee(daysLate, feePerDay)'] },
+      { id: 'B', ten: 'BookService', x: 0, y: 0, w: 520, mau: CAM, tr: ['- feePolicyList: ArrayList<IFeePolicy>'], pt: ['+ calculateLateFee(item, dto)'] },
+      { id: 'F', ten: 'IFeePolicy', kieu: 'interface', x: 70, y: 180, w: 380, mau: TIM, pt: ['getPolicyName(): String', 'calculateFee(daysLate, feePerDay)'] },
       { id: 'S', ten: 'StudentFeePolicy', x: 0, y: 380, w: 250, mau: TIM, nho: '− 50%' },
       { id: 'T', ten: 'StaffFeePolicy', x: 270, y: 380, w: 250, mau: TIM, nho: 'first 2 late days free' },
     ], [
@@ -111,7 +111,7 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
       { tu: 'S', den: 'F', kieu: 'cai', x2: 200 }, { tu: 'T', den: 'F', kieu: 'cai', x2: 320 },
     ], { w: 530, h: 470 }),
     col(j(de(boChuThich(tep(`${S}/service/BookService.java`, [24, 29])))),
-      box('Strategy (Behavioral)', `<p style="margin:0"><b>Problem:</b> one fee rule per borrower. <b>Solution:</b> each rule is a class behind ${c('FeePolicy')}. <b>Consequence:</b> a new borrower type = a new class + one line, no ${c('if')} in the formula.</p>`, 'ok'))) },
+      box('Strategy (Behavioral)', `<p style="margin:0"><b>Problem:</b> one fee rule per borrower. <b>Solution:</b> each rule is a class behind ${c('IFeePolicy')}. <b>Consequence:</b> a new borrower type = a new class + one line, no ${c('if')} in the formula.</p>`, 'ok'))) },
 
   /* 11 */
   { t: 'TODO 5.4 and 5.5 — two bodies, two rules', body:
@@ -125,15 +125,15 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
     ['Main', 'reads id, days,\nborrower type\n(utils checks)', PG],
     ['BookController', 'bookRepository\n.findById(id)\n(the interface)', NAU],
     ['InMemory…', 'finds the item,\nreturns a COPY\n(polymorphic DTO)', XANH],
-    ['BookService', 'daysLate, picks\nthe FeePolicy\nof the borrower', CAM],
-    ['FeePolicy', 'calculateFee\nStudent / Staff', TIM],
+    ['BookService', 'daysLate, picks\nthe IFeePolicy\nof the borrower', CAM],
+    ['IFeePolicy', 'calculateFee\nStudent / Staff', TIM],
     ['LateFeeView', 'display()\n2 lines', PG],
   ], { h: 240, fs: 16 }) + psql(boNhac(R(102, 103)), { title: 'real output — D007, 9 days, staff', sm: true }) +
     box('', `<p style="margin:0">Two interfaces on the path: the controller does not know <b>where</b> the item is stored, the service does not know <b>which</b> fee rule it runs.</p>`, 'lam'), giua: true },
 
   /* 13 */
   { t: 'Trap: a "field" in an interface is a constant', body: two(
-    j(['// repository/BookRepository.java (bay/hang-interface)', tep('lab5/bay/hang-interface/src/repository/BookRepository.java', [16, 19]), '    // ...', '}', '',
+    j(['// repository/IBookRepository.java (bay/hang-interface)', tep('lab5/bay/hang-interface/src/repository/IBookRepository.java', [16, 19]), '    // ...', '}', '',
       '// InMemoryBookRepository constructor', de(tep('lab5/bay/hang-interface/src/repository/InMemoryBookRepository.java', [30, 34]))].join('\n')),
     col(psql(ra('lab5/bay/hang-interface:javac'), { title: 'javac (JDK 21, --release 8) — bay/hang-interface', sm: true }).replace('<pre>', '<pre style="white-space:pre-wrap">'),
       box('', `<p style="margin:0">Every variable in an interface is <b>public static final</b>. JDK 8's javac words it ${c('cannot assign a value to final variable MAX_ITEMS')}. Numbers belong in ${c('Constants')}.</p>`, 'do2'))) },
@@ -155,7 +155,7 @@ export const slides = lamDeck({ chuong: 'Lab 5 · CT Library', bai: '' }, [
   { t: 'Rubric — 10 points, PE style', body: two(
     tbl(['Part', 'Points'], [
       [`${c('abstract')} LibraryItem, 6 abstract methods (5.1)`, '2'],
-      [`${c('implements BookRepository')} + ${c('@Override')} (5.2)`, '2'],
+      [`${c('implements IBookRepository')} + ${c('@Override')} (5.2)`, '2'],
       ['Controller field typed by the interface (5.3)', '1'],
       ['Student and staff fee rules (5.4, 5.5)', '3'],
       [`${c('lint.py')} ✓ sạch`, '1'],

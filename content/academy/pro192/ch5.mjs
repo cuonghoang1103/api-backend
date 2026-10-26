@@ -11,7 +11,7 @@
 
 import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
 
-registerDeck('lab5', { code: 'PRO192 Lab 5', en: 'Lab 5 — CT Library: abstract classes and interfaces', vi: 'Lab 5 — CT Library: lớp trừu tượng và interface', total: 16, w: 1280, h: 720 });
+registerDeck('lab5', { code: 'PRO192 Lab 5', en: 'Lab 5 — CT Library: abstract classes and interfaces', vi: 'Lab 5 — CT Library: lớp trừu tượng và interface', total: 16, w: 1280, h: 720, ver: 'v2' });
 
 /* ───────── 5.A — 📑 Slide by slide · Polymorphism (2/2): interfaces, abstract classes, anonymous classes (slides 12–27) ───────── */
 const L_pro10_2 = {
@@ -3430,12 +3430,12 @@ TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n
   ].join('\n'),
 };
 
-/* ───────── Lab 5 — 🏗️ CT Library: abstract classes and interfaces (abstract LibraryItem, BookRepository interface, FeePolicy) ───────── */
+/* ───────── Lab 5 — 🏗️ CT Library: abstract classes and interfaces (abstract LibraryItem, IBookRepository interface, IFeePolicy) ───────── */
 const L_lab5 = {
-  title: 'Lab 5 — 🏗️ CT Library: abstract classes and interfaces (abstract LibraryItem, BookRepository interface, FeePolicy)|||Lab 5 — 🏗️ CT Library: lớp trừu tượng và interface (LibraryItem abstract, interface BookRepository, FeePolicy)',
+  title: 'Lab 5 — 🏗️ CT Library: abstract classes and interfaces (abstract LibraryItem, IBookRepository interface, IFeePolicy)|||Lab 5 — 🏗️ CT Library: lớp trừu tượng và interface (LibraryItem abstract, interface IBookRepository, IFeePolicy)',
   slug: 'pro192-lab-5-truu-tuong-va-interface',
   type: 'VIDEO',
-  description: 'Lab 5 của dự án CT Library (sau Chương 5), chuẩn review LAB211: LibraryItem thành lớp trừu tượng với sáu phương thức trừu tượng (không ai tạo được "tài liệu chung chung", lớp con quên một phương thức là lỗi biên dịch); kho sách tách thành interface BookRepository và bản cài đầu tiên InMemoryBookRepository — controller chỉ biết interface, một dòng duy nhất biết nơi lưu, để Lab 9 cắm kho tệp mà Main không đổi; phí trễ theo chính sách FeePolicy (mẫu Strategy: sinh viên giảm 50%, cán bộ miễn 2 ngày đầu). Kèm bốn lỗi javac thật, bẫy hằng trong interface, lớp ẩn danh. Starter + đáp án tải về, bộ chấm kiểu PE 163 dòng, rubric 10 điểm.',
+  description: 'Lab 5 của dự án CT Library (sau Chương 5), chuẩn review LAB211: LibraryItem thành lớp trừu tượng với sáu phương thức trừu tượng (không ai tạo được "tài liệu chung chung", lớp con quên một phương thức là lỗi biên dịch); kho sách tách thành interface IBookRepository và bản cài đầu tiên InMemoryBookRepository — controller chỉ biết interface, một dòng duy nhất biết nơi lưu, để Lab 9 cắm kho tệp mà Main không đổi; phí trễ theo chính sách IFeePolicy (mẫu Strategy: sinh viên giảm 50%, cán bộ miễn 2 ngày đầu). Kèm bốn lỗi javac thật, bẫy hằng trong interface, lớp ẩn danh. Starter + đáp án tải về, bộ chấm kiểu PE 163 dòng, rubric 10 điểm.',
   content: [
     bi(`<span class="eyebrow">Chapter 5 · Lab 5 · CT Library</span>
 <h2>Lab 5 — abstract classes and interfaces</h2>
@@ -3477,28 +3477,28 @@ const L_lab5 = {
 <p>Đọc kỹ hai lỗi đầu: "is not abstract and does not override abstract method …" nêu đúng phương thức còn thiếu và nơi nó được hứa. Thông báo đó chính là hợp đồng đang làm việc — ở Lab 4 cùng những lỗi này vẫn biên dịch và chạy sai.</p>`],
       [6, 'Abstract class or interface? (Chapter 5)',
         `<p class="y-chinh">🎯 An abstract class shares code inside one family (is-a); an interface lets unrelated classes be swapped behind one name (can-do).</p>
-<p>Concretely: an abstract class can have fields, constructors and method bodies, and a class extends only one; an interface has only constants and (until Java 8's default/static) abstract methods, and a class may implement many. CT Library uses both for what each is good at: <code>LibraryItem</code> shares id/title/year/copies, <code>BookRepository</code> and <code>FeePolicy</code> are swap points.</p>`,
+<p>Concretely: an abstract class can have fields, constructors and method bodies, and a class extends only one; an interface has only constants and (until Java 8's default/static) abstract methods, and a class may implement many. CT Library uses both for what each is good at: <code>LibraryItem</code> shares id/title/year/copies, <code>IBookRepository</code> and <code>IFeePolicy</code> are swap points.</p>`,
         `<p class="y-chinh">🎯 Lớp trừu tượng chia sẻ code trong một gia đình (is-a); interface cho những lớp không liên quan thay nhau được dưới một cái tên (can-do).</p>
-<p>Cụ thể: lớp trừu tượng có trường, constructor và thân phương thức, và một lớp chỉ extends được một lớp; interface chỉ có hằng và (trước default/static của Java 8) phương thức trừu tượng, và một lớp implements được nhiều interface. CT Library dùng mỗi thứ đúng sở trường: <code>LibraryItem</code> chia sẻ mã/tên/năm/số bản, <code>BookRepository</code> và <code>FeePolicy</code> là các điểm thay thế.</p>`],
+<p>Cụ thể: lớp trừu tượng có trường, constructor và thân phương thức, và một lớp chỉ extends được một lớp; interface chỉ có hằng và (trước default/static của Java 8) phương thức trừu tượng, và một lớp implements được nhiều interface. CT Library dùng mỗi thứ đúng sở trường: <code>LibraryItem</code> chia sẻ mã/tên/năm/số bản, <code>IBookRepository</code> và <code>IFeePolicy</code> là các điểm thay thế.</p>`],
       [7, 'The seam — the controller talks to a contract',
-        `<p class="y-chinh">🎯 <code>BookController</code> holds a field of type <code>BookRepository</code> (the interface); <code>InMemoryBookRepository</code> implements it today, <code>FileBookRepository</code> will in Lab 9.</p>
+        `<p class="y-chinh">🎯 <code>BookController</code> holds a field of type <code>IBookRepository</code> (the interface); <code>InMemoryBookRepository</code> implements it today, <code>FileBookRepository</code> will in Lab 9.</p>
 <p>The reviewer's layer rules still hold: the controller keeps the repository and does the CRUD; <code>BookService</code> keeps no repository — only its fee policies. Only one line in the controller's constructor names the implementation, so swapping the storage in Lab 9 touches that line, never <code>Main</code>. Later the same seam takes a PostgreSQL implementation.</p>`,
-        `<p class="y-chinh">🎯 <code>BookController</code> giữ một trường kiểu <code>BookRepository</code> (interface); hôm nay <code>InMemoryBookRepository</code> cài nó, Lab 9 sẽ có <code>FileBookRepository</code>.</p>
+        `<p class="y-chinh">🎯 <code>BookController</code> giữ một trường kiểu <code>IBookRepository</code> (interface); hôm nay <code>InMemoryBookRepository</code> cài nó, Lab 9 sẽ có <code>FileBookRepository</code>.</p>
 <p>Luật tầng của thầy vẫn giữ: controller giữ repository và làm CRUD; <code>BookService</code> không giữ repository — chỉ giữ các chính sách phí. Chỉ một dòng trong constructor của controller gọi tên bản cài, nên đổi kho ở Lab 9 chỉ chạm dòng đó, không bao giờ chạm <code>Main</code>. Về sau chính đường nối này nhận bản cài PostgreSQL.</p>`],
       [8, 'TODO 5.2 — the contract and its first implementation',
-        `<p class="y-chinh">🎯 <code>BookRepository</code> lists seven methods (given); <code>InMemoryBookRepository implements BookRepository</code> and puts <code>@Override</code> on each.</p>
-<p>Interface methods are <code>public abstract</code> without saying it, so the implementation must keep them <code>public</code>. The class body is the Lab 4 repository, unchanged: it just signs the contract. Forget one method and javac names it (slide 5).</p>`,
-        `<p class="y-chinh">🎯 <code>BookRepository</code> liệt kê bảy phương thức (cho sẵn); <code>InMemoryBookRepository implements BookRepository</code> và đặt <code>@Override</code> trên từng cái.</p>
-<p>Phương thức của interface ngầm là <code>public abstract</code>, nên bản cài phải giữ <code>public</code>. Thân lớp là repository của Lab 4, không đổi: nó chỉ ký hợp đồng. Quên một phương thức thì javac gọi đúng tên (slide 5).</p>`],
+        `<p class="y-chinh">🎯 <code>IBookRepository</code> lists seven methods (given); <code>InMemoryBookRepository implements IBookRepository</code> and puts <code>@Override</code> on each.</p>
+<p>The name follows the reviewer's checklist (item 1.3): an interface starts with <code>I</code> — <code>IBookRepository</code>, <code>IFeePolicy</code>, like <code>ISortStrategy</code> in the solved LAB211 sample — while the classes that implement it keep plain names (<code>InMemoryBookRepository</code>). Interface methods are <code>public abstract</code> without saying it, so the implementation must keep them <code>public</code>. The class body is the Lab 4 repository, unchanged: it just signs the contract. Forget one method and javac names it (slide 5).</p>`,
+        `<p class="y-chinh">🎯 <code>IBookRepository</code> liệt kê bảy phương thức (cho sẵn); <code>InMemoryBookRepository implements IBookRepository</code> và đặt <code>@Override</code> trên từng cái.</p>
+<p>Tên đặt theo tờ checklist của thầy (mục 1.3): interface bắt đầu bằng <code>I</code> — <code>IBookRepository</code>, <code>IFeePolicy</code>, như <code>ISortStrategy</code> trong bài mẫu LAB211 — còn lớp cài đặt giữ tên trơn (<code>InMemoryBookRepository</code>). Phương thức của interface ngầm là <code>public abstract</code>, nên bản cài phải giữ <code>public</code>. Thân lớp là repository của Lab 4, không đổi: nó chỉ ký hợp đồng. Quên một phương thức thì javac gọi đúng tên (slide 5).</p>`],
       [9, 'TODO 5.3 — one line knows where the books live',
         `<p class="y-chinh">🎯 Declare the controller's field with the interface type; keep <code>new InMemoryBookRepository()</code> in the constructor — the only line that knows the storage.</p>
-<p>It compiles because a class that implements <code>BookRepository</code> is-a <code>BookRepository</code>: the assignment is an upcast, like <code>LibraryItem item = new Dvd()</code>. The real run of <code>LabDoiKho</code> shows the same client code on two repositories; in Lab 9 the second one writes <code>books.csv</code> for real.</p>`,
+<p>It compiles because a class that implements <code>IBookRepository</code> is-a <code>IBookRepository</code>: the assignment is an upcast, like <code>LibraryItem item = new Dvd()</code>. The real run of <code>LabDoiKho</code> shows the same client code on two repositories; in Lab 9 the second one writes <code>books.csv</code> for real.</p>`,
         `<p class="y-chinh">🎯 Khai trường của controller bằng kiểu interface; giữ <code>new InMemoryBookRepository()</code> trong constructor — dòng duy nhất biết nơi lưu.</p>
-<p>Biên dịch được vì một lớp cài <code>BookRepository</code> là một <code>BookRepository</code>: phép gán là ép lên, như <code>LibraryItem item = new Dvd()</code>. Lần chạy thật <code>LabDoiKho</code> cho thấy cùng một đoạn code chạy trên hai kho; ở Lab 9 kho thứ hai ghi <code>books.csv</code> thật.</p>`],
-      [10, 'FeePolicy — the Strategy pattern in one interface',
-        `<p class="y-chinh">🎯 <code>FeePolicy</code> (name + <code>calculateFee</code>) has two implementations; <code>BookService</code> keeps them in an <code>ArrayList&lt;FeePolicy&gt;</code> and picks one by the borrower type.</p>
+<p>Biên dịch được vì một lớp cài <code>IBookRepository</code> là một <code>IBookRepository</code>: phép gán là ép lên, như <code>LibraryItem item = new Dvd()</code>. Lần chạy thật <code>LabDoiKho</code> cho thấy cùng một đoạn code chạy trên hai kho; ở Lab 9 kho thứ hai ghi <code>books.csv</code> thật.</p>`],
+      [10, 'IFeePolicy — the Strategy pattern in one interface',
+        `<p class="y-chinh">🎯 <code>IFeePolicy</code> (name + <code>calculateFee</code>) has two implementations; <code>BookService</code> keeps them in an <code>ArrayList&lt;IFeePolicy&gt;</code> and picks one by the borrower type.</p>
 <p>Told with the reviewer's four elements: <strong>Name</strong> Strategy (Behavioral). <strong>Problem</strong>: one fee rule per kind of borrower, with more coming. <strong>Solution</strong>: each rule is a class behind one interface. <strong>Consequences</strong>: a new borrower type is a new class plus one line in the constructor and no <code>if</code> in the formula — at the cost of more, smaller classes.</p>`,
-        `<p class="y-chinh">🎯 <code>FeePolicy</code> (tên + <code>calculateFee</code>) có hai bản cài; <code>BookService</code> giữ chúng trong một <code>ArrayList&lt;FeePolicy&gt;</code> và chọn theo loại người mượn.</p>
+        `<p class="y-chinh">🎯 <code>IFeePolicy</code> (tên + <code>calculateFee</code>) có hai bản cài; <code>BookService</code> giữ chúng trong một <code>ArrayList&lt;IFeePolicy&gt;</code> và chọn theo loại người mượn.</p>
 <p>Kể theo bốn yếu tố thầy hay hỏi: <strong>Tên</strong> Strategy (nhóm Behavioral). <strong>Vấn đề</strong>: mỗi loại người mượn một luật phí, và sẽ còn thêm. <strong>Giải pháp</strong>: mỗi luật là một lớp sau một interface. <strong>Hệ quả</strong>: thêm loại người mượn là thêm một lớp cộng một dòng trong constructor, không thêm <code>if</code> vào công thức — đổi lại có nhiều lớp nhỏ hơn.</p>`],
       [11, 'TODO 5.4 and 5.5 — two bodies, two rules',
         `<p class="y-chinh">🎯 Student: full fee then minus 50%; staff: the first 2 late days are free, the rest at full price.</p>
@@ -3512,9 +3512,9 @@ const L_lab5 = {
 <p>Trên đường đi có hai interface, mỗi cái giấu một quyết định: controller không biết tài liệu nằm ở đâu, service không biết đang chạy luật phí nào. Đó là hình dạng của "phụ thuộc vào trừu tượng" (chữ D trong SOLID) trong một ứng dụng console.</p>`],
       [13, 'Trap: a "field" in an interface is a constant',
         `<p class="y-chinh">🎯 Every variable declared in an interface is <code>public static final</code>: assigning to it is a compile error.</p>
-<p>The project <code>bay/hang-interface</code> declares <code>int MAX_ITEMS = 500;</code> in <code>BookRepository</code> and tries <code>MAX_ITEMS = 1000;</code> in the implementation. javac 21 says "cannot assign a value to static final variable"; the JDK 8 javac of the exam room says "cannot assign a value to final variable MAX_ITEMS" (checked on a real JDK 8). An interface describes abilities, not state — numbers belong in <code>Constants</code>.</p>`,
+<p>The project <code>bay/hang-interface</code> declares <code>int MAX_ITEMS = 500;</code> in <code>IBookRepository</code> and tries <code>MAX_ITEMS = 1000;</code> in the implementation. javac 21 says "cannot assign a value to static final variable"; the JDK 8 javac of the exam room says "cannot assign a value to final variable MAX_ITEMS" (checked on a real JDK 8). An interface describes abilities, not state — numbers belong in <code>Constants</code>.</p>`,
         `<p class="y-chinh">🎯 Mọi biến khai trong interface đều là <code>public static final</code>: gán lại là lỗi biên dịch.</p>
-<p>Dự án <code>bay/hang-interface</code> khai <code>int MAX_ITEMS = 500;</code> trong <code>BookRepository</code> rồi thử <code>MAX_ITEMS = 1000;</code> ở bản cài. javac 21 báo "cannot assign a value to static final variable"; javac JDK 8 của phòng thi báo "cannot assign a value to final variable MAX_ITEMS" (đã kiểm trên JDK 8 thật). Interface mô tả khả năng, không giữ trạng thái — con số thì nằm ở <code>Constants</code>.</p>`],
+<p>Dự án <code>bay/hang-interface</code> khai <code>int MAX_ITEMS = 500;</code> trong <code>IBookRepository</code> rồi thử <code>MAX_ITEMS = 1000;</code> ở bản cài. javac 21 báo "cannot assign a value to static final variable"; javac JDK 8 của phòng thi báo "cannot assign a value to final variable MAX_ITEMS" (đã kiểm trên JDK 8 thật). Interface mô tả khả năng, không giữ trạng thái — con số thì nằm ở <code>Constants</code>.</p>`],
       [14, 'Anonymous classes — you have used one since Lab 1',
         `<p class="y-chinh">🎯 The <code>new Comparator&lt;BookResponseDTO&gt;() { … }</code> in <code>sortByTitle</code> is an anonymous class: a class with no name that implements an interface on the spot.</p>
 <p>javac still writes a real class file for it, named <code>BookService$1.class</code>; in <code>LabChinhSach</code> the third fee policy is written the same way and <code>getClass().getName()</code> prints <code>LabChinhSach$1</code>. Useful for a one-off rule; a rule you keep (Student, Staff) deserves a named class.</p>`,
@@ -3527,9 +3527,9 @@ const L_lab5 = {
 <p>Thứ tự nên làm: 5.1 (lint im lặng), 5.2 (<code>implements</code> + bảy <code>@Override</code>), 5.3 (kiểu của trường — chỉ biên dịch được khi đã xong 5.2), rồi 5.4 và 5.5 tới khi <code>check.sh</code> qua. 5.1–5.3 là việc thiết kế, thầy kiểm bằng cách đọc và bằng javac, đúng như LAB211.</p>`],
       [16, 'Rubric — 10 points, PE style',
         `<p class="y-chinh">🎯 Design carries half the points here, because the output barely moves; the oral question is the classic "abstract class or interface?".</p>
-<p>Answer in two sentences: one family sharing code ⇒ abstract class; interchangeable abilities across classes ⇒ interface. Then point at <code>LibraryItem</code> and at <code>BookRepository</code> in your own project.</p>`,
+<p>Answer in two sentences: one family sharing code ⇒ abstract class; interchangeable abilities across classes ⇒ interface. Then point at <code>LibraryItem</code> and at <code>IBookRepository</code> in your own project.</p>`,
         `<p class="y-chinh">🎯 Ở lab này thiết kế chiếm nửa số điểm, vì output gần như không đổi; câu vấn đáp là câu kinh điển "lớp trừu tượng hay interface?".</p>
-<p>Trả lời bằng hai câu: một gia đình dùng chung code ⇒ lớp trừu tượng; khả năng thay thế được giữa các lớp ⇒ interface. Rồi chỉ vào <code>LibraryItem</code> và <code>BookRepository</code> trong chính dự án của bạn.</p>`],
+<p>Trả lời bằng hai câu: một gia đình dùng chung code ⇒ lớp trừu tượng; khả năng thay thế được giữa các lớp ⇒ interface. Rồi chỉ vào <code>LibraryItem</code> và <code>IBookRepository</code> trong chính dự án của bạn.</p>`],
     ]),
     bi(`<h2>1. The ticket</h2>
 <div class="callout"><p><strong>CTL-5 · CT Library · priority: medium.</strong> "Review notes on Lab 4: (1) someone can write <code>new LibraryItem()</code> — an item with 0 loan days must not exist; (2) the controller is welded to an <code>ArrayList</code> in memory, and in a few weeks we save to files, later to PostgreSQL — I do not want to rewrite the controller each time; (3) the board decided students get 50% off late fees and staff get 2 free late days. Option 9 must ask who is borrowing." — the team lead</p></div>
@@ -3556,58 +3556,58 @@ const L_lab5 = {
     bi(`<h2>2. Requirements and acceptance criteria</h2>
 <ol>
 <li><strong>Abstract parent</strong>: <code>LibraryItem</code> is <code>abstract</code>; the six questions are abstract methods; <code>new LibraryItem(…)</code> anywhere fails to compile.</li>
-<li><strong>Repository contract</strong>: <code>repository.BookRepository</code> is an interface with seven methods; <code>InMemoryBookRepository</code> implements it with <code>@Override</code> on each.</li>
-<li><strong>The seam</strong>: <code>BookController</code>'s field has the type <code>BookRepository</code>; the only line naming <code>InMemoryBookRepository</code> is in the controller's constructor; <code>Main</code> never mentions a repository.</li>
-<li><strong>Fee policies</strong>: <code>service.FeePolicy</code> (name + <code>calculateFee</code>); student = full fee minus 50%, staff = first 2 late days free; option 9 asks "Nguoi muon (1 Sinh vien, 2 Can bo)" and prints the full fee and the fee to pay.</li>
+<li><strong>Repository contract</strong>: <code>repository.IBookRepository</code> is an interface with seven methods; <code>InMemoryBookRepository</code> implements it with <code>@Override</code> on each.</li>
+<li><strong>The seam</strong>: <code>BookController</code>'s field has the type <code>IBookRepository</code>; the only line naming <code>InMemoryBookRepository</code> is in the controller's constructor; <code>Main</code> never mentions a repository.</li>
+<li><strong>Fee policies</strong>: <code>service.IFeePolicy</code> (name + <code>calculateFee</code>); student = full fee minus 50%, staff = first 2 late days free; option 9 asks "Nguoi muon (1 Sinh vien, 2 Can bo)" and prints the full fee and the fee to pay.</li>
 <li>The service keeps no repository; numbers (50, 2, 100) live in <code>Constants</code>.</li>
 </ol>
 <div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 163/163 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · typing <code>new LibraryItem("", "", 0, 0)</code> anywhere gives "LibraryItem is abstract; cannot be instantiated" · you can explain abstract class vs interface with your own classes.</p></div>`,
     `<h2>2. Yêu cầu và tiêu chí đạt</h2>
 <ol>
 <li><strong>Lớp cha trừu tượng</strong>: <code>LibraryItem</code> là <code>abstract</code>; sáu câu hỏi là phương thức trừu tượng; <code>new LibraryItem(…)</code> ở bất kỳ đâu đều không biên dịch được.</li>
-<li><strong>Hợp đồng kho</strong>: <code>repository.BookRepository</code> là interface có bảy phương thức; <code>InMemoryBookRepository</code> cài nó, <code>@Override</code> trên từng cái.</li>
-<li><strong>Đường nối</strong>: trường của <code>BookController</code> mang kiểu <code>BookRepository</code>; dòng duy nhất gọi tên <code>InMemoryBookRepository</code> nằm trong constructor của controller; <code>Main</code> không hề nhắc tới repository.</li>
-<li><strong>Chính sách phí</strong>: <code>service.FeePolicy</code> (tên + <code>calculateFee</code>); sinh viên = phí đầy đủ giảm 50%, cán bộ = miễn 2 ngày trễ đầu; lựa chọn 9 hỏi "Nguoi muon (1 Sinh vien, 2 Can bo)" và in phí đầy đủ cùng phí phải trả.</li>
+<li><strong>Hợp đồng kho</strong>: <code>repository.IBookRepository</code> là interface có bảy phương thức; <code>InMemoryBookRepository</code> cài nó, <code>@Override</code> trên từng cái.</li>
+<li><strong>Đường nối</strong>: trường của <code>BookController</code> mang kiểu <code>IBookRepository</code>; dòng duy nhất gọi tên <code>InMemoryBookRepository</code> nằm trong constructor của controller; <code>Main</code> không hề nhắc tới repository.</li>
+<li><strong>Chính sách phí</strong>: <code>service.IFeePolicy</code> (tên + <code>calculateFee</code>); sinh viên = phí đầy đủ giảm 50%, cán bộ = miễn 2 ngày trễ đầu; lựa chọn 9 hỏi "Nguoi muon (1 Sinh vien, 2 Can bo)" và in phí đầy đủ cùng phí phải trả.</li>
 <li>Service không giữ repository; các con số (50, 2, 100) nằm ở <code>Constants</code>.</li>
 </ol>
 <div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 163/163 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · gõ <code>new LibraryItem("", "", 0, 0)</code> ở bất kỳ đâu ra "LibraryItem is abstract; cannot be instantiated" · bạn giải thích được lớp trừu tượng và interface bằng chính các lớp của mình.</p></div>`),
     bi(`<h2>3. Files</h2>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab5-starter.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab5-starter.zip" target="_blank" rel="noopener">
 <span class="lc-ico">🧰</span>
-<span class="lc-body"><span class="lc-title">CTLibrary-Lab5-starter.zip</span><span class="lc-sub">Lab 4 solution + BookRepository / FeePolicy interfaces · TODO 5.1–5.5 · harness (163 lines) · CheckHarness</span></span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab5-starter.zip</span><span class="lc-sub">Lab 4 solution + IBookRepository / IFeePolicy interfaces · TODO 5.1–5.5 · harness (163 lines) · CheckHarness</span></span>
 <span class="lc-cta">Download</span>
 </a>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab5-solution.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab5-solution.zip" target="_blank" rel="noopener">
 <span class="lc-ico">✅</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab5-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
 <span class="lc-cta">Download</span>
 </a>
 <pre><code class="language-plaintext">CTLibrary-Lab5/src/  (new or changed since Lab 4)
   model/LibraryItem.java                    TODO 5.1 make it abstract
-  repository/BookRepository.java            the interface, 7 methods (given)
+  repository/IBookRepository.java            the interface, 7 methods (given)
   repository/InMemoryBookRepository.java    the Lab 4 repository · TODO 5.2 implements + @Override
   controller/BookController.java            TODO 5.3 field typed by the interface
-  service/FeePolicy.java                    the interface (given)
+  service/IFeePolicy.java                    the interface (given)
   service/StudentFeePolicy.java             TODO 5.4 calculateFee
   service/StaffFeePolicy.java               TODO 5.5 calculateFee
   service/BookService.java, dto/LateFeeDTO, view/LateFeeView, main/Main (option 9 asks the borrower)   (given)</code></pre>`,
     `<h2>3. Tệp tải về</h2>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab5-starter.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab5-starter.zip" target="_blank" rel="noopener">
 <span class="lc-ico">🧰</span>
-<span class="lc-body"><span class="lc-title">CTLibrary-Lab5-starter.zip</span><span class="lc-sub">đáp án Lab 4 + interface BookRepository / FeePolicy · TODO 5.1–5.5 · harness (163 dòng) · CheckHarness</span></span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab5-starter.zip</span><span class="lc-sub">đáp án Lab 4 + interface IBookRepository / IFeePolicy · TODO 5.1–5.5 · harness (163 dòng) · CheckHarness</span></span>
 <span class="lc-cta">Tải về</span>
 </a>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab5-solution.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v2/CTLibrary-Lab5-solution.zip" target="_blank" rel="noopener">
 <span class="lc-ico">✅</span>
 <span class="lc-body"><span class="lc-title">CTLibrary-Lab5-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
 <span class="lc-cta">Tải về</span>
 </a>
 <pre><code class="language-plaintext">CTLibrary-Lab5/src/  (mới hoặc đổi so với Lab 4)
   model/LibraryItem.java                    TODO 5.1 biến thành abstract
-  repository/BookRepository.java            interface, 7 phương thức (cho sẵn)
+  repository/IBookRepository.java            interface, 7 phương thức (cho sẵn)
   repository/InMemoryBookRepository.java    repository của Lab 4 · TODO 5.2 implements + @Override
   controller/BookController.java            TODO 5.3 trường mang kiểu interface
-  service/FeePolicy.java                    interface (cho sẵn)
+  service/IFeePolicy.java                    interface (cho sẵn)
   service/StudentFeePolicy.java             TODO 5.4 calculateFee
   service/StaffFeePolicy.java               TODO 5.5 calculateFee
   service/BookService.java, dto/LateFeeDTO, view/LateFeeView, main/Main (lựa chọn 9 hỏi người mượn)   (cho sẵn)</code></pre>`),
@@ -3648,17 +3648,17 @@ Nguoi muon: Sinh vien (giam 50%). Phi day du 12000 dong, phai tra 0 dong.<br>
 }</code></pre>
 </details>
 
-<h4>Step 2 — TODO 5.2 implements BookRepository (15 min)</h4>
+<h4>Step 2 — TODO 5.2 implements IBookRepository (15 min)</h4>
 <details><summary>Solution — the class line (the body is the Lab 4 repository, now with @Override)</summary>
 <pre class="trich"><code class="language-java">/**
- * Ban cai dat THU NHAT cua hop dong BookRepository: giu tai lieu trong bo nho bang MOT
+ * Ban cai dat THU NHAT cua hop dong IBookRepository: giu tai lieu trong bo nho bang MOT
  * danh sach kieu cha ArrayList&amp;lt;LibraryItem&amp;gt; (sach, tap chi, DVD); cap ma va lam CRUD.
  * Tat chuong trinh la mat du lieu — Lab 9 them FileBookRepository cung cai interface nay.
  * Chi createItem biet ten cac lop con; moi cho khac goi qua bien kieu cha (da hinh).
  *
  * @author CuongThai Academy
  */
-public class InMemoryBookRepository implements BookRepository {
+public class InMemoryBookRepository implements IBookRepository {
 
     // Moi tai lieu dang co (sach, tap chi, DVD chung mot danh sach kieu cha)
     private ArrayList&lt;LibraryItem&gt; itemList;
@@ -3684,11 +3684,11 @@ import java.util.ArrayList;
  * "kho cat tai lieu o dau". Ban dau tien luu trong bo nho (InMemoryBookRepository);
  * Lab 9 them FileBookRepository (tep CSV), sau nay JdbcBookRepository (PostgreSQL) —
  * cung cai interface nay nen Main va Controller khong phai doi.
- * Ten khong co tien to I (nhu SortStrategy, Shape trong bo loi giai LAB211).
+ * Ten co tien to I: checklist thay muc 1.3 (interface I..., nhu ISortStrategy trong bai mau).
  *
  * @author CuongThai Academy
  */
-public interface BookRepository {
+public interface IBookRepository {
 
     // Them 1 tai lieu tu phieu, tra ve ma vua cap; trung khoa thi nem loi
     String addItem(BookRequestDTO bookRequestDTO) throws Exception;
@@ -3716,7 +3716,7 @@ public interface BookRepository {
 <h4>Step 3 — TODO 5.3 the field type (5 min)</h4>
 <details><summary>Solution</summary>
 <pre class="trich"><code class="language-java">// Kho tai lieu kieu INTERFACE (CRUD nam o Controller, khong o Service)
-private BookRepository bookRepository;</code></pre>
+private IBookRepository bookRepository;</code></pre>
 <pre class="trich"><code class="language-java">// Tao kho, service, cac view va nap du lieu mau (sach, tap chi, DVD)
 public BookController() {
     // Dong DUY NHAT biet kho cat o dau (bo nho); Lab 9 thay bang FileBookRepository
@@ -3802,17 +3802,17 @@ Nguoi muon: Sinh vien (giam 50%). Phi day du 12000 dong, phai tra 0 dong.<br>
 }</code></pre>
 </details>
 
-<h4>Bước 2 — TODO 5.2 implements BookRepository (15 phút)</h4>
+<h4>Bước 2 — TODO 5.2 implements IBookRepository (15 phút)</h4>
 <details><summary>Lời giải — dòng khai báo lớp (thân là repository của Lab 4, giờ có @Override)</summary>
 <pre class="trich"><code class="language-java">/**
- * Ban cai dat THU NHAT cua hop dong BookRepository: giu tai lieu trong bo nho bang MOT
+ * Ban cai dat THU NHAT cua hop dong IBookRepository: giu tai lieu trong bo nho bang MOT
  * danh sach kieu cha ArrayList&amp;lt;LibraryItem&amp;gt; (sach, tap chi, DVD); cap ma va lam CRUD.
  * Tat chuong trinh la mat du lieu — Lab 9 them FileBookRepository cung cai interface nay.
  * Chi createItem biet ten cac lop con; moi cho khac goi qua bien kieu cha (da hinh).
  *
  * @author CuongThai Academy
  */
-public class InMemoryBookRepository implements BookRepository {
+public class InMemoryBookRepository implements IBookRepository {
 
     // Moi tai lieu dang co (sach, tap chi, DVD chung mot danh sach kieu cha)
     private ArrayList&lt;LibraryItem&gt; itemList;
@@ -3838,11 +3838,11 @@ import java.util.ArrayList;
  * "kho cat tai lieu o dau". Ban dau tien luu trong bo nho (InMemoryBookRepository);
  * Lab 9 them FileBookRepository (tep CSV), sau nay JdbcBookRepository (PostgreSQL) —
  * cung cai interface nay nen Main va Controller khong phai doi.
- * Ten khong co tien to I (nhu SortStrategy, Shape trong bo loi giai LAB211).
+ * Ten co tien to I: checklist thay muc 1.3 (interface I..., nhu ISortStrategy trong bai mau).
  *
  * @author CuongThai Academy
  */
-public interface BookRepository {
+public interface IBookRepository {
 
     // Them 1 tai lieu tu phieu, tra ve ma vua cap; trung khoa thi nem loi
     String addItem(BookRequestDTO bookRequestDTO) throws Exception;
@@ -3870,7 +3870,7 @@ public interface BookRepository {
 <h4>Bước 3 — TODO 5.3 kiểu của trường (5 phút)</h4>
 <details><summary>Lời giải</summary>
 <pre class="trich"><code class="language-java">// Kho tai lieu kieu INTERFACE (CRUD nam o Controller, khong o Service)
-private BookRepository bookRepository;</code></pre>
+private IBookRepository bookRepository;</code></pre>
 <pre class="trich"><code class="language-java">// Tao kho, service, cac view va nap du lieu mau (sach, tap chi, DVD)
 public BookController() {
     // Dong DUY NHAT biet kho cat o dau (bo nho); Lab 9 thay bang FileBookRepository
@@ -4103,14 +4103,14 @@ import java.util.Comparator;
 /**
  * Nghiep vu tai lieu: sap xep, danh so, thong ke va tinh phi tre han tren cac dong bang
  * Controller dua vao. Service KHONG giu repository; no chi giu cac CHINH SACH phi
- * (danh sach kieu interface FeePolicy) — luat nghiep vu, khong phai du lieu.
+ * (danh sach kieu interface IFeePolicy) — luat nghiep vu, khong phai du lieu.
  *
  * @author CuongThai Academy
  */
 public class BookService {
 
     // Chinh sach phi theo loai nguoi muon; vi tri 0 = loai 1 (sinh vien), 1 = loai 2 (can bo)
-    private ArrayList&lt;FeePolicy&gt; feePolicyList;
+    private ArrayList&lt;IFeePolicy&gt; feePolicyList;
 
     // Tao service voi cac chinh sach phi; them loai nguoi muon = them 1 dong o day
     public BookService() {
@@ -4182,7 +4182,7 @@ public class BookService {
         // Ket qua; so ngay tre; chinh sach ung voi loai nguoi muon (loai 1 o vi tri 0)
         LateFeeDTO lateFee = new LateFeeDTO();
         int daysLate = Math.max(0, bookRequestDTO.getDaysKept() - item.getLoanDays());
-        FeePolicy feePolicy = feePolicyList.get(bookRequestDTO.getBorrowerType()
+        IFeePolicy feePolicy = feePolicyList.get(bookRequestDTO.getBorrowerType()
                 - Constants.FIRST_BORROWER_TYPE);
 
         // Chep thong tin tai lieu de View in
@@ -4202,17 +4202,17 @@ public class BookService {
     }
 }</code></pre>
 </details>
-<details><summary>FeePolicy.java — the strategy contract</summary>
+<details><summary>IFeePolicy.java — the strategy contract</summary>
 <pre><code class="language-java">package service;
 
 /**
  * HOP DONG chinh sach phi tre (interface — mau Strategy): moi loai nguoi muon mot cach tinh.
- * BookService giu cac chinh sach trong ArrayList kieu FeePolicy va goi chung mot dong;
+ * BookService giu cac chinh sach trong ArrayList kieu IFeePolicy va goi chung mot dong;
  * them loai nguoi muon moi = them 1 lop cai interface nay, khong sua cong thuc nao.
  *
  * @author CuongThai Academy
  */
-public interface FeePolicy {
+public interface IFeePolicy {
 
     // Ten chinh sach de in ra (vi du "Sinh vien - giam 50%")
     String getPolicyName();
@@ -4405,14 +4405,14 @@ import java.util.Comparator;
 /**
  * Nghiep vu tai lieu: sap xep, danh so, thong ke va tinh phi tre han tren cac dong bang
  * Controller dua vao. Service KHONG giu repository; no chi giu cac CHINH SACH phi
- * (danh sach kieu interface FeePolicy) — luat nghiep vu, khong phai du lieu.
+ * (danh sach kieu interface IFeePolicy) — luat nghiep vu, khong phai du lieu.
  *
  * @author CuongThai Academy
  */
 public class BookService {
 
     // Chinh sach phi theo loai nguoi muon; vi tri 0 = loai 1 (sinh vien), 1 = loai 2 (can bo)
-    private ArrayList&lt;FeePolicy&gt; feePolicyList;
+    private ArrayList&lt;IFeePolicy&gt; feePolicyList;
 
     // Tao service voi cac chinh sach phi; them loai nguoi muon = them 1 dong o day
     public BookService() {
@@ -4484,7 +4484,7 @@ public class BookService {
         // Ket qua; so ngay tre; chinh sach ung voi loai nguoi muon (loai 1 o vi tri 0)
         LateFeeDTO lateFee = new LateFeeDTO();
         int daysLate = Math.max(0, bookRequestDTO.getDaysKept() - item.getLoanDays());
-        FeePolicy feePolicy = feePolicyList.get(bookRequestDTO.getBorrowerType()
+        IFeePolicy feePolicy = feePolicyList.get(bookRequestDTO.getBorrowerType()
                 - Constants.FIRST_BORROWER_TYPE);
 
         // Chep thong tin tai lieu de View in
@@ -4504,17 +4504,17 @@ public class BookService {
     }
 }</code></pre>
 </details>
-<details><summary>FeePolicy.java — hợp đồng của chiến lược</summary>
+<details><summary>IFeePolicy.java — hợp đồng của chiến lược</summary>
 <pre><code class="language-java">package service;
 
 /**
  * HOP DONG chinh sach phi tre (interface — mau Strategy): moi loai nguoi muon mot cach tinh.
- * BookService giu cac chinh sach trong ArrayList kieu FeePolicy va goi chung mot dong;
+ * BookService giu cac chinh sach trong ArrayList kieu IFeePolicy va goi chung mot dong;
  * them loai nguoi muon moi = them 1 lop cai interface nay, khong sua cong thuc nao.
  *
  * @author CuongThai Academy
  */
-public interface FeePolicy {
+public interface IFeePolicy {
 
     // Ten chinh sach de in ra (vi du "Sinh vien - giam 50%")
     String getPolicyName();
@@ -4529,8 +4529,8 @@ public interface FeePolicy {
 <div class="out">src/model/Dvd.java:13: error: Dvd is not abstract and does not override abstract method getUniqueKey() in LibraryItem<br>
 public class Dvd extends LibraryItem {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
-src/repository/InMemoryBookRepository.java:21: error: InMemoryBookRepository is not abstract and does not override abstract method countItems() in BookRepository<br>
-public class InMemoryBookRepository implements BookRepository {<br>
+src/repository/InMemoryBookRepository.java:21: error: InMemoryBookRepository is not abstract and does not override abstract method countItems() in IBookRepository<br>
+public class InMemoryBookRepository implements IBookRepository {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
 src/repository/InMemoryBookRepository.java:153: error: LibraryItem is abstract; cannot be instantiated<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new LibraryItem("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),<br>
@@ -4565,13 +4565,13 @@ divide first &nbsp;: 0<br>
 // Lab 5 — the seam: the SAME client code runs on two different repositories because it only knows the interface
 import java.util.ArrayList;
 
-interface BookRepository {
+interface IBookRepository {
     void addTitle(String title);
     ArrayList&lt;String&gt; findAll();
     String getStorageName();
 }
 
-class InMemoryBookRepository implements BookRepository {
+class InMemoryBookRepository implements IBookRepository {
     private ArrayList&lt;String&gt; titleList = new ArrayList&lt;String&gt;();
     @Override public void addTitle(String title) { titleList.add(title); }
     @Override public ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(titleList); }
@@ -4579,7 +4579,7 @@ class InMemoryBookRepository implements BookRepository {
 }
 
 // a stand-in for Lab 9's FileBookRepository: it "writes" every line it stores
-class FakeFileBookRepository implements BookRepository {
+class FakeFileBookRepository implements IBookRepository {
     private ArrayList&lt;String&gt; lineList = new ArrayList&lt;String&gt;();
     @Override public void addTitle(String title) { lineList.add(title); System.out.println("  books.csv &lt;- " + title); }
     @Override public ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(lineList); }
@@ -4587,8 +4587,8 @@ class FakeFileBookRepository implements BookRepository {
 }
 
 class Library {                                             // plays the controller: knows ONLY the interface
-    private BookRepository bookRepository;
-    Library(BookRepository bookRepository) { this.bookRepository = bookRepository; }
+    private IBookRepository bookRepository;
+    Library(IBookRepository bookRepository) { this.bookRepository = bookRepository; }
     void run() {
         bookRepository.addTitle("Effective Java");
         bookRepository.addTitle("Head First Java");
@@ -4607,34 +4607,34 @@ public class LabDoiKho {
 &nbsp;&nbsp;books.csv &lt;- Head First Java<br>
 file books.csv: [Effective Java, Head First Java]</div>
 <pre><code class="language-java">// release: 8
-// Lab 5 — FeePolicy as a Strategy: one loop over ArrayList&lt;FeePolicy&gt;, plus a third policy written as an ANONYMOUS class
+// Lab 5 — IFeePolicy as a Strategy: one loop over ArrayList&lt;IFeePolicy&gt;, plus a third policy written as an ANONYMOUS class
 import java.util.ArrayList;
 
-interface FeePolicy {
+interface IFeePolicy {
     String getPolicyName();
     int calculateFee(int daysLate, int lateFeePerDay);
 }
 
-class StudentFeePolicy implements FeePolicy {
+class StudentFeePolicy implements IFeePolicy {
     @Override public String getPolicyName() { return "Sinh vien (giam 50%)"; }
     @Override public int calculateFee(int daysLate, int lateFeePerDay) { return daysLate * lateFeePerDay * 50 / 100; }
 }
 
-class StaffFeePolicy implements FeePolicy {
+class StaffFeePolicy implements IFeePolicy {
     @Override public String getPolicyName() { return "Can bo (mien 2 ngay tre dau)"; }
     @Override public int calculateFee(int daysLate, int lateFeePerDay) { return Math.max(0, daysLate - 2) * lateFeePerDay; }
 }
 
 public class LabChinhSach {
     public static void main(String[] args) {
-        ArrayList&lt;FeePolicy&gt; feePolicyList = new ArrayList&lt;FeePolicy&gt;();
+        ArrayList&lt;IFeePolicy&gt; feePolicyList = new ArrayList&lt;IFeePolicy&gt;();
         feePolicyList.add(new StudentFeePolicy());
         feePolicyList.add(new StaffFeePolicy());
-        feePolicyList.add(new FeePolicy() {                 // anonymous class: no name, implements FeePolicy right here
+        feePolicyList.add(new IFeePolicy() {                 // anonymous class: no name, implements IFeePolicy right here
             @Override public String getPolicyName() { return "Tuan le doc sach (mien phi)"; }
             @Override public int calculateFee(int daysLate, int lateFeePerDay) { return 0; }
         });
-        for (FeePolicy feePolicy : feePolicyList) {          // a book 6 days late, 2000 per day
+        for (IFeePolicy feePolicy : feePolicyList) {          // a book 6 days late, 2000 per day
             System.out.println(feePolicy.getPolicyName() + " -&gt; " + feePolicy.calculateFee(6, 2000)
                     + "   [" + feePolicy.getClass().getName() + "]");
         }
@@ -4649,8 +4649,8 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`,
 <div class="out">src/model/Dvd.java:13: error: Dvd is not abstract and does not override abstract method getUniqueKey() in LibraryItem<br>
 public class Dvd extends LibraryItem {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
-src/repository/InMemoryBookRepository.java:21: error: InMemoryBookRepository is not abstract and does not override abstract method countItems() in BookRepository<br>
-public class InMemoryBookRepository implements BookRepository {<br>
+src/repository/InMemoryBookRepository.java:21: error: InMemoryBookRepository is not abstract and does not override abstract method countItems() in IBookRepository<br>
+public class InMemoryBookRepository implements IBookRepository {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
 src/repository/InMemoryBookRepository.java:153: error: LibraryItem is abstract; cannot be instantiated<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new LibraryItem("", bookRequestDTO.getTitle(), bookRequestDTO.getYear(),<br>
@@ -4685,13 +4685,13 @@ divide first &nbsp;: 0<br>
 // Lab 5 — đường nối: CÙNG một đoạn code chạy trên hai kho khác nhau vì nó chỉ biết interface
 import java.util.ArrayList;
 
-interface BookRepository {
+interface IBookRepository {
     void addTitle(String title);
     ArrayList&lt;String&gt; findAll();
     String getStorageName();
 }
 
-class InMemoryBookRepository implements BookRepository {
+class InMemoryBookRepository implements IBookRepository {
     private ArrayList&lt;String&gt; titleList = new ArrayList&lt;String&gt;();
     @Override public void addTitle(String title) { titleList.add(title); }
     @Override public ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(titleList); }
@@ -4699,7 +4699,7 @@ class InMemoryBookRepository implements BookRepository {
 }
 
 // bản đóng thế FileBookRepository của Lab 9: "ghi" ra mỗi dòng nó lưu
-class FakeFileBookRepository implements BookRepository {
+class FakeFileBookRepository implements IBookRepository {
     private ArrayList&lt;String&gt; lineList = new ArrayList&lt;String&gt;();
     @Override public void addTitle(String title) { lineList.add(title); System.out.println("  books.csv &lt;- " + title); }
     @Override public ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(lineList); }
@@ -4707,8 +4707,8 @@ class FakeFileBookRepository implements BookRepository {
 }
 
 class Library {                                             // đóng vai controller: CHỈ biết interface
-    private BookRepository bookRepository;
-    Library(BookRepository bookRepository) { this.bookRepository = bookRepository; }
+    private IBookRepository bookRepository;
+    Library(IBookRepository bookRepository) { this.bookRepository = bookRepository; }
     void run() {
         bookRepository.addTitle("Effective Java");
         bookRepository.addTitle("Head First Java");
@@ -4727,34 +4727,34 @@ public class LabDoiKho {
 &nbsp;&nbsp;books.csv &lt;- Head First Java<br>
 file books.csv: [Effective Java, Head First Java]</div>
 <pre><code class="language-java">// release: 8
-// Lab 5 — FeePolicy kiểu Strategy: một vòng lặp trên ArrayList&lt;FeePolicy&gt;, cộng chính sách thứ ba viết bằng lớp ẨN DANH
+// Lab 5 — IFeePolicy kiểu Strategy: một vòng lặp trên ArrayList&lt;IFeePolicy&gt;, cộng chính sách thứ ba viết bằng lớp ẨN DANH
 import java.util.ArrayList;
 
-interface FeePolicy {
+interface IFeePolicy {
     String getPolicyName();
     int calculateFee(int daysLate, int lateFeePerDay);
 }
 
-class StudentFeePolicy implements FeePolicy {
+class StudentFeePolicy implements IFeePolicy {
     @Override public String getPolicyName() { return "Sinh vien (giam 50%)"; }
     @Override public int calculateFee(int daysLate, int lateFeePerDay) { return daysLate * lateFeePerDay * 50 / 100; }
 }
 
-class StaffFeePolicy implements FeePolicy {
+class StaffFeePolicy implements IFeePolicy {
     @Override public String getPolicyName() { return "Can bo (mien 2 ngay tre dau)"; }
     @Override public int calculateFee(int daysLate, int lateFeePerDay) { return Math.max(0, daysLate - 2) * lateFeePerDay; }
 }
 
 public class LabChinhSach {
     public static void main(String[] args) {
-        ArrayList&lt;FeePolicy&gt; feePolicyList = new ArrayList&lt;FeePolicy&gt;();
+        ArrayList&lt;IFeePolicy&gt; feePolicyList = new ArrayList&lt;IFeePolicy&gt;();
         feePolicyList.add(new StudentFeePolicy());
         feePolicyList.add(new StaffFeePolicy());
-        feePolicyList.add(new FeePolicy() {                 // lớp ẩn danh: không tên, cài FeePolicy ngay tại chỗ
+        feePolicyList.add(new IFeePolicy() {                 // lớp ẩn danh: không tên, cài IFeePolicy ngay tại chỗ
             @Override public String getPolicyName() { return "Tuan le doc sach (mien phi)"; }
             @Override public int calculateFee(int daysLate, int lateFeePerDay) { return 0; }
         });
-        for (FeePolicy feePolicy : feePolicyList) {          // một cuốn sách trễ 6 ngày, 2000 đồng/ngày
+        for (IFeePolicy feePolicy : feePolicyList) {          // một cuốn sách trễ 6 ngày, 2000 đồng/ngày
             System.out.println(feePolicy.getPolicyName() + " -&gt; " + feePolicy.calculateFee(6, 2000)
                     + "   [" + feePolicy.getClass().getName() + "]");
         }
@@ -4768,7 +4768,7 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`),
 <thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
 <tbody>
 <tr><td><code>abstract</code> LibraryItem, 6 abstract methods (5.1)</td><td>2</td><td>read + <code>new LibraryItem(…)</code> fails to compile</td></tr>
-<tr><td><code>implements BookRepository</code> + <code>@Override</code> (5.2)</td><td>2</td><td>read + javac</td></tr>
+<tr><td><code>implements IBookRepository</code> + <code>@Override</code> (5.2)</td><td>2</td><td>read + javac</td></tr>
 <tr><td>Controller field typed by the interface (5.3)</td><td>1</td><td>read</td></tr>
 <tr><td>Student and staff fee rules (5.4, 5.5)</td><td>3</td><td>grader lines 33, 47, 61, 76, 103</td></tr>
 <tr><td><code>lint.py</code> ✓ sạch</td><td>1</td><td><code>lint.py</code></td></tr>
@@ -4783,7 +4783,7 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`),
 <thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
 <tbody>
 <tr><td><code>abstract</code> LibraryItem, 6 phương thức trừu tượng (5.1)</td><td>2</td><td>đọc + <code>new LibraryItem(…)</code> không biên dịch được</td></tr>
-<tr><td><code>implements BookRepository</code> + <code>@Override</code> (5.2)</td><td>2</td><td>đọc + javac</td></tr>
+<tr><td><code>implements IBookRepository</code> + <code>@Override</code> (5.2)</td><td>2</td><td>đọc + javac</td></tr>
 <tr><td>Trường của controller mang kiểu interface (5.3)</td><td>1</td><td>đọc</td></tr>
 <tr><td>Luật phí sinh viên và cán bộ (5.4, 5.5)</td><td>3</td><td>dòng 33, 47, 61, 76, 103 của bộ chấm</td></tr>
 <tr><td><code>lint.py</code> ✓ sạch</td><td>1</td><td><code>lint.py</code></td></tr>
@@ -4798,7 +4798,6 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`),
 <li>⭐ Add a third policy, <code>GuestFeePolicy</code> (full fee + 1,000 đ service charge if late): count the lines you change outside the new class.</li>
 <li>⭐ Do for members what you did for books: <code>interface MemberRepository</code> + <code>InMemoryMemberRepository</code>. Which controller line changes?</li>
 <li>⭐⭐ Give <code>LibraryItem</code> a <em>concrete</em> method <code>calculateLateFee(int daysKept)</code> that calls the abstract <code>getLoanDays()</code> and <code>getLateFeePerDay()</code> — that is the Template Method pattern (5.A-2). Where would CT Library call it, given that the controller never sees a model?</li>
-<li>⭐⭐ Rename <code>BookRepository</code> to <code>IBookRepository</code> with NetBeans' Refactor › Rename: the reviewer's sheet mentions an <code>I…</code> prefix — CT Library and the solved LAB211 projects use plain names (<code>SortStrategy</code>, <code>Shape</code>); be ready to justify either.</li>
 </ul>
 <div class="callout"><p><strong>Next — Lab 6 (after Chapter 6):</strong> borrowing for real, and when it fails. Checked business exceptions such as <code>BookNotAvailableException</code> and <code>MemberLimitExceededException</code>, thrown in the repository or service, caught in the controller, and a menu that never crashes.</p></div>`,
     `<h2>8. Thử thách thêm và việc tiếp theo</h2>
@@ -4806,7 +4805,6 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`),
 <li>⭐ Thêm chính sách thứ ba <code>GuestFeePolicy</code> (khách: phí đầy đủ + 1.000 đ phí dịch vụ nếu trễ): đếm số dòng bạn phải đổi ngoài lớp mới.</li>
 <li>⭐ Làm cho thành viên điều bạn đã làm cho sách: <code>interface MemberRepository</code> + <code>InMemoryMemberRepository</code>. Dòng nào trong controller đổi?</li>
 <li>⭐⭐ Cho <code>LibraryItem</code> một phương thức <em>cụ thể</em> <code>calculateLateFee(int daysKept)</code> gọi hai phương thức trừu tượng <code>getLoanDays()</code> và <code>getLateFeePerDay()</code> — đó là mẫu Template Method (5.A-2). CT Library sẽ gọi nó ở đâu, khi controller không bao giờ thấy model?</li>
-<li>⭐⭐ Đổi tên <code>BookRepository</code> thành <code>IBookRepository</code> bằng Refactor › Rename của NetBeans: tờ checklist của thầy có nhắc tiền tố <code>I…</code> — CT Library và các bài LAB211 đã giải dùng tên trơn (<code>SortStrategy</code>, <code>Shape</code>); hãy sẵn sàng giải thích cách nào cũng được.</li>
 </ul>
 <div class="callout"><p><strong>Tiếp theo — Lab 6 (sau Chương 6):</strong> mượn sách thật, và khi nó thất bại. Ngoại lệ nghiệp vụ kiểu checked như <code>BookNotAvailableException</code>, <code>MemberLimitExceededException</code>, ném ở repository hoặc service, bắt ở controller, và một menu không bao giờ sập.</p></div>`),
   ].join('\n'),

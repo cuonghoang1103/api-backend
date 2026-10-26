@@ -11,7 +11,7 @@
 
 import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
 
-registerDeck('lab4', { code: 'PRO192 Lab 4', en: 'Lab 4 — CT Library: inheritance and polymorphism', vi: 'Lab 4 — CT Library: kế thừa và đa hình', total: 16, w: 1280, h: 720 });
+registerDeck('lab4', { code: 'PRO192 Lab 4', en: 'Lab 4 — CT Library: inheritance and polymorphism', vi: 'Lab 4 — CT Library: kế thừa và đa hình', total: 16, w: 1280, h: 720, ver: 'v2' });
 
 /* ───────── 4.A — 📑 Slide by slide · Inheritance: is-a vs has-a, super, constructors, hiding, instanceof, casting (slides 1–17) ───────── */
 const L_pro9_1 = {
@@ -6861,17 +6861,17 @@ no cast &nbsp;&nbsp;: Ky so 118</div>
 <li>⭐ Add <code>AudioBook</code> (loan 10 days, 3,000 đ, detail "n phut, narrator"): count the files you touch. The goal is: one new class, one new case in <code>createItem</code>, a few constants, one menu line.</li>
 <li>⭐ <strong>Overloading</strong> (4.B): give <code>BookService</code> a second <code>calculateLateFee</code> that takes only a <code>BookResponseDTO</code> and uses today's 0 days kept — which one does javac pick for <code>calculateLateFee(item, 5)</code>?</li>
 <li>⭐⭐ Use <code>super.getDetail()</code>: let <code>LibraryItem.getDetail()</code> return the year, and have each child append its own part to it.</li>
-<li>⭐⭐ The class names <code>BookRepository</code>, <code>BookController</code>… now hold magazines and DVDs too. Would you rename them to <code>Item…</code>? List the pros and cons (CT Library keeps "Book" = the library's catalogue, to match Lab 5's interface).</li>
+<li>⭐⭐ The class names <code>BookRepository</code>, <code>BookController</code>… now hold magazines and DVDs too. Would you rename them to <code>Item…</code>? List the pros and cons (CT Library keeps "Book" = the library's catalogue, as in Lab 5's <code>IBookRepository</code>).</li>
 </ul>
-<div class="callout"><p><strong>Next — Lab 5 (after Chapter 5):</strong> <code>LibraryItem</code> becomes <code>abstract</code> (no more "0 days"), the repository is split into the interface <code>BookRepository</code> and its first implementation <code>InMemoryBookRepository</code> — the seam Lab 9 plugs a file into — and late fees depend on who borrows, through a <code>FeePolicy</code> interface.</p></div>`,
+<div class="callout"><p><strong>Next — Lab 5 (after Chapter 5):</strong> <code>LibraryItem</code> becomes <code>abstract</code> (no more "0 days"), the repository is split into the interface <code>IBookRepository</code> and its first implementation <code>InMemoryBookRepository</code> — the seam Lab 9 plugs a file into — and late fees depend on who borrows, through an <code>IFeePolicy</code> interface.</p></div>`,
     `<h2>8. Thử thách thêm và việc tiếp theo</h2>
 <ul>
 <li>⭐ Thêm <code>AudioBook</code> (sách nói: mượn 10 ngày, 3.000 đ, chi tiết "n phut, người đọc"): đếm số tệp bạn phải chạm. Mục tiêu: một lớp mới, một case mới trong <code>createItem</code>, vài hằng, một dòng menu.</li>
 <li>⭐ <strong>Nạp chồng</strong> (4.B): cho <code>BookService</code> thêm một <code>calculateLateFee</code> chỉ nhận <code>BookResponseDTO</code> và coi số ngày giữ là 0 — javac chọn bản nào cho <code>calculateLateFee(item, 5)</code>?</li>
 <li>⭐⭐ Dùng <code>super.getDetail()</code>: cho <code>LibraryItem.getDetail()</code> trả về năm, và mỗi lớp con nối phần riêng của nó vào sau.</li>
-<li>⭐⭐ Các lớp <code>BookRepository</code>, <code>BookController</code>… giờ giữ cả tạp chí và DVD. Bạn có đổi tên thành <code>Item…</code> không? Liệt kê lợi và hại (CT Library giữ "Book" = danh mục sách của thư viện, để khớp interface ở Lab 5).</li>
+<li>⭐⭐ Các lớp <code>BookRepository</code>, <code>BookController</code>… giờ giữ cả tạp chí và DVD. Bạn có đổi tên thành <code>Item…</code> không? Liệt kê lợi và hại (CT Library giữ "Book" = danh mục sách của thư viện, như <code>IBookRepository</code> ở Lab 5).</li>
 </ul>
-<div class="callout"><p><strong>Tiếp theo — Lab 5 (sau Chương 5):</strong> <code>LibraryItem</code> thành <code>abstract</code> (hết "0 ngày"), repository tách thành interface <code>BookRepository</code> và bản cài đầu tiên <code>InMemoryBookRepository</code> — đường nối mà Lab 9 cắm kho tệp vào — và phí trễ phụ thuộc người mượn, qua interface <code>FeePolicy</code>.</p></div>`),
+<div class="callout"><p><strong>Tiếp theo — Lab 5 (sau Chương 5):</strong> <code>LibraryItem</code> thành <code>abstract</code> (hết "0 ngày"), repository tách thành interface <code>IBookRepository</code> và bản cài đầu tiên <code>InMemoryBookRepository</code> — đường nối mà Lab 9 cắm kho tệp vào — và phí trễ phụ thuộc người mượn, qua interface <code>IFeePolicy</code>.</p></div>`),
   ].join('\n'),
 };
 

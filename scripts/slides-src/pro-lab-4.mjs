@@ -131,5 +131,5 @@ export const slides = lamDeck({ chuong: 'Lab 4 · CT Library', bai: '' }, [
       ['Oral: "overloading vs overriding?"', '1'],
     ]),
     col(box('Self-check', `<p style="margin:0">1. Why does the starter compile without ${c('super(...)')}?<br>2. ${c('LibraryItem item = new Dvd();')} — which ${c('getLoanDays()')} runs?<br>3. Where is the only ${c('switch')} on the item type, and why there?</p>`, 'lam'),
-      box('Next: Lab 5', `<p style="margin:0">${c('LibraryItem')} becomes ${c('abstract')} (no more "0 days"), the repository becomes an <b>interface</b> + ${c('InMemoryBookRepository')}, and fees follow a ${c('FeePolicy')}.</p>`, 'ok'))), giua: true },
+      box('Next: Lab 5', `<p style="margin:0">${c('LibraryItem')} becomes ${c('abstract')} (no more "0 days"), the repository becomes the <b>interface</b> ${c('IBookRepository')} + ${c('InMemoryBookRepository')}, and fees follow an ${c('IFeePolicy')}.</p>`, 'ok'))), giua: true },
 ]);

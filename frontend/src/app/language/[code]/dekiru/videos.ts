@@ -266,9 +266,19 @@ export const VIDEO_NEO: VideoNeoMap = {
       { id: "jp-b7-noi", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-10-noi-vi-tri-dang-lam-nho-va-cau-thi-90417811.mp4", tieuDe: "Luyện nói: vị trí, đang làm gì, nhờ vả và câu hỏi thi Bài 7", thoiLuongGiay: 644 },
     ],
   },
+  "slot-01-l4-1-vi-tri-thoi-gian-di-duong": {
+    "dau-bai": [
+      { id: "jp-s45-s01", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/01-slot-01-que-o-dau-di-mat-bao-lau-f3206666.mp4", tieuDe: "Slot 1: quê bạn ở đâu, đi mất bao lâu", thoiLuongGiay: 753 },
+    ],
+  },
   "slot-02-l4-2-tinh-tu-kanji-4": {
     "dau-bai": [
       { id: "jp-s45-s02", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/02-slot-02-tinh-tu-i-na-va-9-chu-han-04179880.mp4", tieuDe: "Slot 2: tính từ đuôi i, đuôi na và 9 chữ Hán Bài 4", thoiLuongGiay: 856 },
+    ],
+  },
+  "slot-03-l4-2-tiep-l4-3-aru-soshite-ga-thoi-tiet": {
+    "dau-bai": [
+      { id: "jp-s45-s03", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09a-slide-lop-b4-5/03-slot-03-co-gi-o-do-va-thoi-tiet-eb12001c.mp4", tieuDe: "Slot 3: ở đó có gì, và, nhưng, thời tiết", thoiLuongGiay: 768 },
     ],
   },
   "slot-04-l4-3-tiep-on-tap-b4": {

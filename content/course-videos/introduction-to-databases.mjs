@@ -17,15 +17,15 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Giới thiệu & cài đặt ── */
-    "dbi202-gioi-thieu": { yt: "hRulZhTtUTg", credit: "IBM Technology — What is a Database?" },
-    "dbi202-cai-dat": { yt: "7GVFYt6_ZFM", credit: "kudvenkat — Install SQL Server 2019 Step by Step | Developer Edition | Free Software | Install SSMS" },
+    "dbi202-gioi-thieu": { yt: "hRulZhTtUTg", credit: "IBM Technology — What is a Database?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-cai-dat": { yt: "7GVFYt6_ZFM", credit: "kudvenkat — Install SQL Server 2019 Step by Step | Developer Edition | Free Software | Install SSMS", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — CSDL & DBMS ── */
-    "dbi202-csdl-dbms": { yt: "OMwgGL3lHlI", credit: "Neso Academy — Introduction to Database Management Systems (DBMS)" },
+    "dbi202-csdl-dbms": { yt: "OMwgGL3lHlI", credit: "Neso Academy — Introduction to Database Management Systems (DBMS)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-01-slide-chapter-1-the-gioi-csdl-tron-febe12d5.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Mô hình quan hệ & đại số quan hệ ── */
-    "dbi202-mo-hinh-quan-he": { yt: "Q45sr5p_NmQ", credit: "Neso Academy — Introduction to Relational Data Model" },
-    "dbi202-dai-so-quan-he": { yt: "8PJGw123zeE", credit: "Neso Academy — Relational Algebra Operations - Unary" },
+    "dbi202-mo-hinh-quan-he": { yt: "Q45sr5p_NmQ", credit: "Neso Academy — Introduction to Relational Data Model", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-01-slide-chapter-2-mo-hinh-quan-he-470697c2.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-dai-so-quan-he": { yt: "8PJGw123zeE", credit: "Neso Academy — Relational Algebra Operations - Unary", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-dai-so-nang-cao": { yt: "4kqoN9-rqiQ", credit: "Neso Academy — Additional Relational Algebra Operations", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-rang-buoc-quan-he": { yt: "uPOGPL2C0_8", credit: "Neso Academy — Relational Model Constraints", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-08-khoa-va-toan-ven-tham-chieu-6daece23.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -34,19 +34,19 @@ export default {
     "dbi202-er-subclass": { yt: "uujDdvDQsaE", credit: "Neso Academy — Extended ER Features", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-09-lop-con-isa-ba-cach-luu-xuong-bang-bce06571.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Chuẩn hoá ── */
-    "dbi202-chuan-hoa": { yt: "upS2HlUj1gI", credit: "CBT Nuggets — MicroNugget: How to Normalize Databases" },
+    "dbi202-chuan-hoa": { yt: "upS2HlUj1gI", credit: "CBT Nuggets — MicroNugget: How to Normalize Databases", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-01-slide-chapter-3-phu-thuoc-ham-bao-dong-tron-fa986120.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-chuan-hoa-vi-du": { yt: "siiYInWniFs", credit: "CBT Nuggets — How to Normalize a Database Table", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-08-chuan-hoa-mot-bang-don-hang-494890ec.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — SQL DDL ── */
-    "dbi202-sql-ddl": { yt: "Jtai4ogSsB4", credit: "Neso Academy — DDL Commands - CREATE" },
+    "dbi202-sql-ddl": { yt: "Jtai4ogSsB4", credit: "Neso Academy — DDL Commands - CREATE", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-rang-buoc-sql": { yt: "-8bYtApJNos", credit: "Neso Academy — Constraints in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-05-rang-buoc-va-alter-tren-bang-co-du-lieu-58edafb6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Truy vấn SQL ── */
-    "dbi202-select-join": { yt: "nWyyDHhTxYU", credit: "Socratica — Learn SQL with Socratica  |¦|  SQL Tutorial  |¦|  SQL for Beginners" },
-    "dbi202-join-day-du": { yt: "9yeOJ0ZMUYw", credit: "Socratica — SQL Joins Explained  |¦| Joins in SQL |¦| SQL Tutorial" },
-    "dbi202-group-by-subquery": { yt: "VQf0V6Wwbf4", credit: "Neso Academy — GROUP BY and HAVING Clause in SQL" },
-    "dbi202-truy-van-long": { yt: "Qb_7J_svPyY", credit: "Neso Academy — ANY and ALL Operators in SQL" },
-    "dbi202-cap-nhat-du-lieu": { yt: "w27gAgDQr_w", credit: "Neso Academy — DML Commands - INSERT and UPDATE" },
+    "dbi202-select-join": { yt: "nWyyDHhTxYU", credit: "Socratica — Learn SQL with Socratica  |¦|  SQL Tutorial  |¦|  SQL for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-join-day-du": { yt: "9yeOJ0ZMUYw", credit: "Socratica — SQL Joins Explained  |¦| Joins in SQL |¦| SQL Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-05-join-bang-hinh-f86f3e4a.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-group-by-subquery": { yt: "VQf0V6Wwbf4", credit: "Neso Academy — GROUP BY and HAVING Clause in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-06-group-by-bang-hinh-e8687e3a.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-truy-van-long": { yt: "Qb_7J_svPyY", credit: "Neso Academy — ANY and ALL Operators in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-07-truy-van-long-cd873f8b.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-cap-nhat-du-lieu": { yt: "w27gAgDQr_w", credit: "Neso Academy — DML Commands - INSERT and UPDATE", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-08-insert-update-delete-an-toan-2f0ed00a.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — View, thủ tục, trigger ── */
     "dbi202-view": { yt: "VQpmOmZO2mo", credit: "kudvenkat — Views in sql server   Part 39" },
@@ -54,8 +54,8 @@ export default {
     "dbi202-trigger-cursor": { yt: "k0S4P-a6d5w", credit: "kudvenkat — DML triggers in sql server   Part 43" },
 
     /* ── Chương 8 — Chỉ mục & giao dịch ── */
-    "dbi202-chi-muc": { yt: "i_FwqzYMUvk", credit: "kudvenkat — Indexes in sql server   Part 35" },
-    "dbi202-execution-plan": { yt: "NGslt99VOCw", credit: "kudvenkat — Clustered and nonclustered indexes in sql server   Part 36" },
+    "dbi202-chi-muc": { yt: "i_FwqzYMUvk", credit: "kudvenkat — Indexes in sql server   Part 35", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-execution-plan": { yt: "NGslt99VOCw", credit: "kudvenkat — Clustered and nonclustered indexes in sql server   Part 36", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-transaction-acid": { yt: "GAe5oB742dw", credit: "ByteByteGo — ACID Properties in Databases With Examples" },
 
     /* ── 30/09/2026 — bài 📑 theo slide, 🧪 thực hành, bài nền tảng & Xưởng ERD (flm-nguon/DBI202/video-ket-qua.tsv) ── */
@@ -83,10 +83,10 @@ export default {
     "dbi202-slide-dbi7-1": { yt: "1ZeiJ1D6NGU", credit: "Neso Academy — LIKE in SQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-01-slide-chapter-6-rang-buoc-so-sanh-chuoi-tron-355a2325.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-slide-dbi7-2": { yt: "JLeaM8pK8dE", credit: "kudvenkat — Creating and working with tables - Part 3", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-on-ch5": { yt: "9Zj5ODhv0b0", credit: "kudvenkat — Adding a check constraint - Part 6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-06-thuc-hanh-ddl-kieu-pe-tron-f74ee7e4.mp4' }, defaultVideoTrack: 'VI'},
-    "dbi202-slide-dbi7-3": { yt: "R9pXnHIFj_8", credit: "kudvenkat — Select statement in sql server - Part 10" },
-    "dbi202-slide-dbi7-4": { yt: "qnYSN_7qwgg", credit: "kudvenkat — Self join in sql server - Part 14" },
-    "dbi202-slide-dbi7-5": { yt: "Ra3ISwvcFlM", credit: "kudvenkat — Correlated subquery in sql   Part 60" },
-    "dbi202-slide-dbi7-6": { yt: "FKSSOpQe5Jc", credit: "kudvenkat — Group by in sql server - Part 11" },
+    "dbi202-slide-dbi7-3": { yt: "R9pXnHIFj_8", credit: "kudvenkat — Select statement in sql server - Part 10", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-slide-dbi7-4": { yt: "qnYSN_7qwgg", credit: "kudvenkat — Self join in sql server - Part 14", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-02-slide-chapter-6-tu-noi-tap-hop-tron-5f7d54f2.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-slide-dbi7-5": { yt: "Ra3ISwvcFlM", credit: "kudvenkat — Correlated subquery in sql   Part 60", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-03-slide-chapter-6-tuong-quan-join-tron-51571bc2.mp4' }, defaultVideoTrack: 'VI'},
+    "dbi202-slide-dbi7-6": { yt: "FKSSOpQe5Jc", credit: "kudvenkat — Group by in sql server - Part 11", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-04-slide-chapter-6-gom-nhom-having-tron-b4ee5ed4.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-on-ch6": { yt: "JtmfAGM4pfc", credit: "kudvenkat — Subqueries in sql   Part 59" },
     "dbi202-slide-dbi9-1": { yt: "VLDirfx_OQg", credit: "kudvenkat — Error handling in sql server   Part 56" },
     "dbi202-slide-dbi9-2": { yt: "OV5CquR1Svo", credit: "kudvenkat — Scalar user defined functions in sql server   Part 30" },
@@ -123,6 +123,7 @@ export default {
     'dbi202-er-to-relation': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-10-erd-sang-luoc-do-bay-quy-tac-2507ca86.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-bao-dong-tim-khoa': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-06-armstrong-bao-dong-tim-khoa-4e7fbc01.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-phan-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-07-phan-ra-khong-mat-mat-bao-toan-phu-thuoc-e7907352.mp4' }, defaultVideoTrack: 'VI'},
-    'dbi202-kieu-du-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-04-kieu-du-lieu-chon-sai-tra-gia-81548a52.mp4' }, defaultVideoTrack: 'VI' },
+    'dbi202-kieu-du-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-04-kieu-du-lieu-chon-sai-tra-gia-81548a52.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

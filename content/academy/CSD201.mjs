@@ -43,6 +43,133 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, chuẩn đầu ra, công cụ và cách học.',
       lessons: [
+        /* 🚀 Bắt đầu tại đây (1/2, 2/2) — luật mọi khoá: 2 bài này đứng ĐẦU khoá */
+        {
+          title: "0.1 — 🚀 Start here (1/2): About CSD201 & the course map|||0.1 — 🚀 Bắt đầu tại đây (1/2): Giới thiệu CSD201 & bản đồ môn học",
+          slug: 'csd201-gioi-thieu',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Vì sao cấu trúc dữ liệu quan trọng, và toàn cảnh lộ trình môn học.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.1</span>
+<h2>About CSD201 — Data Structures and Algorithms</h2>
+<p class="lead">A program is data plus the operations on it. CSD201 is where you learn to organise that data well. The same task can run in a blink or grind for minutes purely based on the <strong>structure</strong> you chose and the <strong>algorithm</strong> you ran on it. This course teaches you to choose wisely — and to prove your choice with Big-O.</p>
+<p>It is the foundation for interviews, for competitive programming, and for every performance-sensitive system you will ever write. In PRO192 you learned Java; here you use Java to build the classic structures from scratch.</p>
+<h3>Course map</h3>
+<div class="lz-map">
+  <div class="lz-stage">Foundations</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Lists &amp; Linked Lists</div><div class="lz-nsub">Array · singly · circular · doubly</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Stacks, Queues &amp; Priority Queues</div><div class="lz-nsub">LIFO · FIFO · deque · heap-backed</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Recursion</div><div class="lz-nsub">Definitions · algorithms · the call stack</div></div></div>
+  <div class="lz-stage">Hierarchies &amp; networks</div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Trees &amp; BST</div><div class="lz-nsub">Binary trees · search trees · traversals</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Graphs</div><div class="lz-nsub">Representation · BFS · DFS</div></div></div>
+  <div class="lz-stage">Algorithms on data</div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sorting</div><div class="lz-nsub">Basic → quick · merge · heap</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Hashing</div><div class="lz-nsub">Hash functions · collisions · maps</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Text Processing</div><div class="lz-nsub">Huffman · LZW · run-length</div></div></div>
+  <div class="lz-stage">Exam &amp; advanced</div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Exam preparation</div><div class="lz-nsub">PE 85' strategy · 120-question bank · cheat sheet</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Red-Black · B-tree · skip list · Union-Find</div><div class="lz-nsub">Toward algorithmic maturity</div></div></div>
+</div>
+<div class="callout ok">Data structures click when you <em>see</em> them move. This course pairs every topic with the Algorithm Visualizer and hands-on Java exercises — build each structure yourself.</div>
+<a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">Algorithm Visualizer</span><span class="lc-sub">Watch sorts, searches and structures animate step by step.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.1</span>
+<h2>Giới thiệu CSD201 — Cấu trúc dữ liệu và giải thuật</h2>
+<p class="lead">Một chương trình là dữ liệu cộng với các thao tác trên nó. CSD201 là nơi bạn học cách tổ chức dữ liệu đó cho tốt. Cùng một việc có thể chạy trong nháy mắt hay ì ạch vài phút chỉ dựa trên <strong>cấu trúc</strong> bạn chọn và <strong>thuật toán</strong> bạn chạy trên nó. Môn này dạy bạn chọn khôn ngoan — và chứng minh lựa chọn bằng Big-O.</p>
+<p>Đây là nền tảng cho phỏng vấn, cho lập trình thi đấu, và cho mọi hệ thống nhạy hiệu năng bạn sẽ viết. Ở PRO192 bạn học Java; ở đây bạn dùng Java để xây các cấu trúc kinh điển từ đầu.</p>
+<h3>Bản đồ môn học</h3>
+<div class="lz-map">
+  <div class="lz-stage">Nền tảng</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Danh sách &amp; Danh sách liên kết</div><div class="lz-nsub">Mảng · đơn · vòng · đôi</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Ngăn xếp, Hàng đợi &amp; Hàng đợi ưu tiên</div><div class="lz-nsub">LIFO · FIFO · deque · dùng heap</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Đệ quy</div><div class="lz-nsub">Định nghĩa · thuật toán · call stack</div></div></div>
+  <div class="lz-stage">Phân cấp &amp; mạng lưới</div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cây &amp; BST</div><div class="lz-nsub">Cây nhị phân · cây tìm kiếm · duyệt</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Đồ thị</div><div class="lz-nsub">Biểu diễn · BFS · DFS</div></div></div>
+  <div class="lz-stage">Thuật toán trên dữ liệu</div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sắp xếp</div><div class="lz-nsub">Cơ bản → quick · merge · heap</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Băm</div><div class="lz-nsub">Hàm băm · va chạm · map</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Xử lý văn bản</div><div class="lz-nsub">Huffman · LZW · run-length</div></div></div>
+  <div class="lz-stage">Ôn thi &amp; nâng cao</div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Ôn thi</div><div class="lz-nsub">Chiến lược PE 85' · ngân hàng 120 câu · bảng tra</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Đỏ-đen · B-tree · danh sách nhảy · Union-Find</div><div class="lz-nsub">Hướng tới độ chín về thuật toán</div></div></div>
+</div>
+<div class="callout ok">Cấu trúc dữ liệu "thấm" khi bạn <em>thấy</em> chúng chuyển động. Môn này ghép mỗi chủ đề với Algorithm Visualizer và bài tập Java thực hành — tự xây từng cấu trúc.</div>
+<a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">Algorithm Visualizer</span><span class="lc-sub">Xem sắp xếp, tìm kiếm và cấu trúc chạy từng bước.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: "0.2 — 🚀 Start here (2/2): Passing requirements & grading|||0.2 — 🚀 Bắt đầu tại đây (2/2): Điều kiện qua môn & cấu trúc điểm",
+          slug: 'csd201-dieu-kien-qua-mon',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Tổng giờ, tiên quyết, điểm sàn và các cột điểm (có thi thực hành PE).',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.2</span>
+<h2>Passing requirements &amp; grading</h2>
+<p class="lead">From the official CSD201 syllabus. There is both a theory exam and a practical exam, so you must both <em>understand</em> the structures and be able to <em>code</em> them.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class + TE + PE + self-study</small></span></div>
+  <div class="kv"><span class="k">Prerequisite</span><span class="v">Pass PRO192</span></div>
+  <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of sessions</span></div>
+</div>
+<h3>Grade structure — the four components, exactly as the syllabus lists them</h3>
+<table>
+  <thead><tr><th>Component</th><th>Type</th><th>Parts</th><th>Weight</th><th>Completion</th><th>Duration</th></tr></thead>
+  <tbody>
+    <tr><td>Progress test (PT)</td><td>quiz</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: 20&#39;&ndash;40&#39;</td></tr>
+    <tr><td>Assignment (AS)</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: at home</td></tr>
+    <tr><td>Practical Exam</td><td>practical exam</td><td>1</td><td>30%</td><td>&gt; 0</td><td><strong>85&#39;</strong></td></tr>
+    <tr><td>Final exam</td><td>final exam</td><td>1</td><td>30%</td><td><strong>&ge; 4</strong></td><td><strong>60&#39;</strong></td></tr>
+  </tbody>
+</table>
+<p>The PT and Assignment rows carry a second &ldquo;Option 2 (for the Constructivism approach)&rdquo; duration that the syllabus export truncates; your class runs one of the two &mdash; confirm which in the first slot. <strong>The syllabus publishes no question count, and no question type beyond &ldquo;quiz&rdquo; for the Progress Tests</strong>; nothing at all about the final's format.</p>
+<div class="callout warn">Three gates, not two. (1) Attend ≥ 80% of sessions to be allowed to sit the final. (2) <strong>PT, Assignment and the Practical Exam each have completion criterion &gt; 0</strong> &mdash; a zero on any of them fails the subject by itself. (3) Final exam ≥ <strong>4.0</strong> and weighted average ≥ <strong>5.0</strong>. Note the balance: <strong>the Practical Exam alone is 30%</strong>, the same as the final. Understanding a linked list on paper is not enough — you must code it in Java, in 85 minutes. Do the exercises.</div>
+<div class="note-ct">Study the theory (Big-O, definitions, traces) and practise the implementation in equal measure — the weights say 30/30, and lesson 9.1 is the PE playbook.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.2</span>
+<h2>Điều kiện qua môn &amp; cấu trúc điểm</h2>
+<p class="lead">Từ syllabus chính thức CSD201. Có cả thi lý thuyết và thi thực hành, nên bạn vừa phải <em>hiểu</em> cấu trúc vừa phải <em>code</em> được chúng.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lớp + TE + PE + tự học</small></span></div>
+  <div class="kv"><span class="k">Tiên quyết</span><span class="v">Đạt PRO192</span></div>
+  <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua khi trung bình ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% buổi</span></div>
+</div>
+<h3>Cấu trúc điểm — bốn thành phần, đúng như syllabus liệt kê</h3>
+<table>
+  <thead><tr><th>Thành phần</th><th>Loại</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng</th></tr></thead>
+  <tbody>
+    <tr><td>Progress test (PT)</td><td>quiz</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: 20&#39;&ndash;40&#39;</td></tr>
+    <tr><td>Assignment (AS)</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: làm ở nhà</td></tr>
+    <tr><td>Thi thực hành (PE)</td><td>practical exam</td><td>1</td><td>30%</td><td>&gt; 0</td><td><strong>85&#39;</strong></td></tr>
+    <tr><td>Thi cuối kỳ</td><td>final exam</td><td>1</td><td>30%</td><td><strong>&ge; 4</strong></td><td><strong>60&#39;</strong></td></tr>
+  </tbody>
+</table>
+<p>Dòng PT và Assignment còn có thời lượng &ldquo;Option 2 (cho hướng Constructivism)&rdquo; bị bản xuất syllabus cắt mất; lớp bạn chạy một trong hai — hỏi rõ ngay buổi đầu. <strong>Syllabus KHÔNG công bố số câu, và ngoài chữ &ldquo;quiz&rdquo; cho Progress Test thì không nêu dạng câu hỏi nào</strong>; về format bài thi cuối thì không nói gì cả.</p>
+<div class="callout warn">Ba cửa, không phải hai. (1) Dự ≥ 80% số buổi mới được thi cuối kỳ. (2) <strong>PT, Assignment và PE đều có điều kiện hoàn thành &gt; 0</strong> — một điểm 0 ở bất kỳ cột nào là tự nó đánh trượt môn. (3) Thi cuối ≥ <strong>4,0</strong> và trung bình có trọng số ≥ <strong>5,0</strong>. Để ý thế cân bằng: <strong>riêng PE đã 30%</strong>, bằng bài thi cuối. Hiểu danh sách liên kết trên giấy là chưa đủ — bạn phải code nó bằng Java trong 85 phút. Hãy làm bài tập.</div>
+<div class="note-ct">Học lý thuyết (Big-O, định nghĩa, trace) và luyện cài đặt ngang nhau — trọng số nói 30/30, và bài 9.1 chính là giáo án luyện PE.</div>
+</div>
+`,
+        },
         /* 📑 Học theo từng slide (csd1, csd2, csd3) — ./csd201/sec0.mjs */
         ...sec0.slides,
         {
@@ -137,132 +264,6 @@ export default {
 <h3>Cấu trúc điểm nhìn nhanh</h3>
 <p>Bốn thành phần: <strong>Progress Test 20%</strong> (PT1 phủ CLO1–4, PT2 phủ CLO5–8), <strong>Assignment 20%</strong>, <strong>Thi thực hành (PE) 30%</strong> (85&#39;), <strong>Thi cuối kỳ 30%</strong> (60&#39;, 50 câu trắc nghiệm). Luật đầy đủ và các cửa hoàn thành ở bài 0.2.</p>
 <div class="callout ok">Một cuốn sách, tám chuẩn đầu ra, hai trang trực quan hoá. Mở VisuAlgo ở tab thứ hai khi đọc — <em>thấy</em> một phép xoay hay một lần rehash hơn mọi đoạn văn mô tả nó.</div>
-</div>
-`,
-        },
-        {
-          title: '0.1 — About CSD201 & the course map|||0.1 — Giới thiệu CSD201 & bản đồ môn học',
-          slug: 'csd201-gioi-thieu',
-          type: 'VIDEO',
-          isFreePreview: true,
-          description: 'Vì sao cấu trúc dữ liệu quan trọng, và toàn cảnh lộ trình môn học.',
-          content: `
-<div class="ml-en">
-<span class="eyebrow">Section 0 · Lesson 0.1</span>
-<h2>About CSD201 — Data Structures and Algorithms</h2>
-<p class="lead">A program is data plus the operations on it. CSD201 is where you learn to organise that data well. The same task can run in a blink or grind for minutes purely based on the <strong>structure</strong> you chose and the <strong>algorithm</strong> you ran on it. This course teaches you to choose wisely — and to prove your choice with Big-O.</p>
-<p>It is the foundation for interviews, for competitive programming, and for every performance-sensitive system you will ever write. In PRO192 you learned Java; here you use Java to build the classic structures from scratch.</p>
-<h3>Course map</h3>
-<div class="lz-map">
-  <div class="lz-stage">Foundations</div>
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Lists &amp; Linked Lists</div><div class="lz-nsub">Array · singly · circular · doubly</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Stacks, Queues &amp; Priority Queues</div><div class="lz-nsub">LIFO · FIFO · deque · heap-backed</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Recursion</div><div class="lz-nsub">Definitions · algorithms · the call stack</div></div></div>
-  <div class="lz-stage">Hierarchies &amp; networks</div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Trees &amp; BST</div><div class="lz-nsub">Binary trees · search trees · traversals</div></div></div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Graphs</div><div class="lz-nsub">Representation · BFS · DFS</div></div></div>
-  <div class="lz-stage">Algorithms on data</div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sorting</div><div class="lz-nsub">Basic → quick · merge · heap</div></div></div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Hashing</div><div class="lz-nsub">Hash functions · collisions · maps</div></div></div>
-  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Text Processing</div><div class="lz-nsub">Huffman · LZW · run-length</div></div></div>
-  <div class="lz-stage">Exam &amp; advanced</div>
-  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Exam preparation</div><div class="lz-nsub">PE 85' strategy · 120-question bank · cheat sheet</div></div></div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Red-Black · B-tree · skip list · Union-Find</div><div class="lz-nsub">Toward algorithmic maturity</div></div></div>
-</div>
-<div class="callout ok">Data structures click when you <em>see</em> them move. This course pairs every topic with the Algorithm Visualizer and hands-on Java exercises — build each structure yourself.</div>
-<a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
-  <span class="lc-ico">📊</span>
-  <span class="lc-body"><span class="lc-title">Algorithm Visualizer</span><span class="lc-sub">Watch sorts, searches and structures animate step by step.</span></span>
-  <span class="lc-cta">MỞ →</span>
-</a>
-</div>
-<div class="ml-vi">
-<span class="eyebrow">Mục 0 · Bài 0.1</span>
-<h2>Giới thiệu CSD201 — Cấu trúc dữ liệu và giải thuật</h2>
-<p class="lead">Một chương trình là dữ liệu cộng với các thao tác trên nó. CSD201 là nơi bạn học cách tổ chức dữ liệu đó cho tốt. Cùng một việc có thể chạy trong nháy mắt hay ì ạch vài phút chỉ dựa trên <strong>cấu trúc</strong> bạn chọn và <strong>thuật toán</strong> bạn chạy trên nó. Môn này dạy bạn chọn khôn ngoan — và chứng minh lựa chọn bằng Big-O.</p>
-<p>Đây là nền tảng cho phỏng vấn, cho lập trình thi đấu, và cho mọi hệ thống nhạy hiệu năng bạn sẽ viết. Ở PRO192 bạn học Java; ở đây bạn dùng Java để xây các cấu trúc kinh điển từ đầu.</p>
-<h3>Bản đồ môn học</h3>
-<div class="lz-map">
-  <div class="lz-stage">Nền tảng</div>
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Danh sách &amp; Danh sách liên kết</div><div class="lz-nsub">Mảng · đơn · vòng · đôi</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Ngăn xếp, Hàng đợi &amp; Hàng đợi ưu tiên</div><div class="lz-nsub">LIFO · FIFO · deque · dùng heap</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Đệ quy</div><div class="lz-nsub">Định nghĩa · thuật toán · call stack</div></div></div>
-  <div class="lz-stage">Phân cấp &amp; mạng lưới</div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cây &amp; BST</div><div class="lz-nsub">Cây nhị phân · cây tìm kiếm · duyệt</div></div></div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Đồ thị</div><div class="lz-nsub">Biểu diễn · BFS · DFS</div></div></div>
-  <div class="lz-stage">Thuật toán trên dữ liệu</div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sắp xếp</div><div class="lz-nsub">Cơ bản → quick · merge · heap</div></div></div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Băm</div><div class="lz-nsub">Hàm băm · va chạm · map</div></div></div>
-  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Xử lý văn bản</div><div class="lz-nsub">Huffman · LZW · run-length</div></div></div>
-  <div class="lz-stage">Ôn thi &amp; nâng cao</div>
-  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Ôn thi</div><div class="lz-nsub">Chiến lược PE 85' · ngân hàng 120 câu · bảng tra</div></div></div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Đỏ-đen · B-tree · danh sách nhảy · Union-Find</div><div class="lz-nsub">Hướng tới độ chín về thuật toán</div></div></div>
-</div>
-<div class="callout ok">Cấu trúc dữ liệu "thấm" khi bạn <em>thấy</em> chúng chuyển động. Môn này ghép mỗi chủ đề với Algorithm Visualizer và bài tập Java thực hành — tự xây từng cấu trúc.</div>
-<a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
-  <span class="lc-ico">📊</span>
-  <span class="lc-body"><span class="lc-title">Algorithm Visualizer</span><span class="lc-sub">Xem sắp xếp, tìm kiếm và cấu trúc chạy từng bước.</span></span>
-  <span class="lc-cta">MỞ →</span>
-</a>
-</div>
-`,
-        },
-        {
-          title: '0.2 — Passing requirements & grading|||0.2 — Điều kiện qua môn & cấu trúc điểm',
-          slug: 'csd201-dieu-kien-qua-mon',
-          type: 'VIDEO',
-          isFreePreview: true,
-          description: 'Tổng giờ, tiên quyết, điểm sàn và các cột điểm (có thi thực hành PE).',
-          content: `
-<div class="ml-en">
-<span class="eyebrow">Section 0 · Lesson 0.2</span>
-<h2>Passing requirements &amp; grading</h2>
-<p class="lead">From the official CSD201 syllabus. There is both a theory exam and a practical exam, so you must both <em>understand</em> the structures and be able to <em>code</em> them.</p>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class + TE + PE + self-study</small></span></div>
-  <div class="kv"><span class="k">Prerequisite</span><span class="v">Pass PRO192</span></div>
-  <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
-  <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of sessions</span></div>
-</div>
-<h3>Grade structure — the four components, exactly as the syllabus lists them</h3>
-<table>
-  <thead><tr><th>Component</th><th>Type</th><th>Parts</th><th>Weight</th><th>Completion</th><th>Duration</th></tr></thead>
-  <tbody>
-    <tr><td>Progress test (PT)</td><td>quiz</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: 20&#39;&ndash;40&#39;</td></tr>
-    <tr><td>Assignment (AS)</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: at home</td></tr>
-    <tr><td>Practical Exam</td><td>practical exam</td><td>1</td><td>30%</td><td>&gt; 0</td><td><strong>85&#39;</strong></td></tr>
-    <tr><td>Final exam</td><td>final exam</td><td>1</td><td>30%</td><td><strong>&ge; 4</strong></td><td><strong>60&#39;</strong></td></tr>
-  </tbody>
-</table>
-<p>The PT and Assignment rows carry a second &ldquo;Option 2 (for the Constructivism approach)&rdquo; duration that the syllabus export truncates; your class runs one of the two &mdash; confirm which in the first slot. <strong>The syllabus publishes no question count, and no question type beyond &ldquo;quiz&rdquo; for the Progress Tests</strong>; nothing at all about the final's format.</p>
-<div class="callout warn">Three gates, not two. (1) Attend ≥ 80% of sessions to be allowed to sit the final. (2) <strong>PT, Assignment and the Practical Exam each have completion criterion &gt; 0</strong> &mdash; a zero on any of them fails the subject by itself. (3) Final exam ≥ <strong>4.0</strong> and weighted average ≥ <strong>5.0</strong>. Note the balance: <strong>the Practical Exam alone is 30%</strong>, the same as the final. Understanding a linked list on paper is not enough — you must code it in Java, in 85 minutes. Do the exercises.</div>
-<div class="note-ct">Study the theory (Big-O, definitions, traces) and practise the implementation in equal measure — the weights say 30/30, and lesson 9.1 is the PE playbook.</div>
-</div>
-<div class="ml-vi">
-<span class="eyebrow">Mục 0 · Bài 0.2</span>
-<h2>Điều kiện qua môn &amp; cấu trúc điểm</h2>
-<p class="lead">Từ syllabus chính thức CSD201. Có cả thi lý thuyết và thi thực hành, nên bạn vừa phải <em>hiểu</em> cấu trúc vừa phải <em>code</em> được chúng.</p>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lớp + TE + PE + tự học</small></span></div>
-  <div class="kv"><span class="k">Tiên quyết</span><span class="v">Đạt PRO192</span></div>
-  <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua khi trung bình ≥ 5.0</small></span></div>
-  <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% buổi</span></div>
-</div>
-<h3>Cấu trúc điểm — bốn thành phần, đúng như syllabus liệt kê</h3>
-<table>
-  <thead><tr><th>Thành phần</th><th>Loại</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng</th></tr></thead>
-  <tbody>
-    <tr><td>Progress test (PT)</td><td>quiz</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: 20&#39;&ndash;40&#39;</td></tr>
-    <tr><td>Assignment (AS)</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>Option 1: làm ở nhà</td></tr>
-    <tr><td>Thi thực hành (PE)</td><td>practical exam</td><td>1</td><td>30%</td><td>&gt; 0</td><td><strong>85&#39;</strong></td></tr>
-    <tr><td>Thi cuối kỳ</td><td>final exam</td><td>1</td><td>30%</td><td><strong>&ge; 4</strong></td><td><strong>60&#39;</strong></td></tr>
-  </tbody>
-</table>
-<p>Dòng PT và Assignment còn có thời lượng &ldquo;Option 2 (cho hướng Constructivism)&rdquo; bị bản xuất syllabus cắt mất; lớp bạn chạy một trong hai — hỏi rõ ngay buổi đầu. <strong>Syllabus KHÔNG công bố số câu, và ngoài chữ &ldquo;quiz&rdquo; cho Progress Test thì không nêu dạng câu hỏi nào</strong>; về format bài thi cuối thì không nói gì cả.</p>
-<div class="callout warn">Ba cửa, không phải hai. (1) Dự ≥ 80% số buổi mới được thi cuối kỳ. (2) <strong>PT, Assignment và PE đều có điều kiện hoàn thành &gt; 0</strong> — một điểm 0 ở bất kỳ cột nào là tự nó đánh trượt môn. (3) Thi cuối ≥ <strong>4,0</strong> và trung bình có trọng số ≥ <strong>5,0</strong>. Để ý thế cân bằng: <strong>riêng PE đã 30%</strong>, bằng bài thi cuối. Hiểu danh sách liên kết trên giấy là chưa đủ — bạn phải code nó bằng Java trong 85 phút. Hãy làm bài tập.</div>
-<div class="note-ct">Học lý thuyết (Big-O, định nghĩa, trace) và luyện cài đặt ngang nhau — trọng số nói 30/30, và bài 9.1 chính là giáo án luyện PE.</div>
 </div>
 `,
         },

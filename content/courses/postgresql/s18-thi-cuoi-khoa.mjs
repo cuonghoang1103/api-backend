@@ -12,11 +12,13 @@
  * Kiểm 26/10/2026: chạy lại mọi sampleSolution của PE1 trên 17.11 (đề ghi 16.14) và cả 10 tệp PE2 (starter + lời giải) trên CT Shop
  * nạp lab3-start.sql — KHỚP từng dòng expectedOutput.
  *
- * ⇒ Agent FE: thêm bài FE1/FE2 vào CUỐI mảng `lessons` dưới cùng (giữ thứ tự PE1, PE2, FE1, FE2).
+ * FE1/FE2 (agent chua-fe, 26/10/2026): bài VIDEO chữa trọn đề trắc nghiệm — khối "FE1 · FE2" cuối tệp; thứ tự bài PE1, PE2, FE1, FE2.
  * Không dùng template literal trong tệp này (bộ kiểm course-content-check đọc mã nguồn); mọi mã/output đi qua esc().
  */
 import * as DE_PE1 from '../../exams/POSTGRESQL-PE.mjs';
 import * as DE_PE2 from '../../exams/POSTGRESQL-PE2.mjs';
+import * as DE_FE1 from '../../exams/POSTGRESQL-FE.mjs';
+import * as DE_FE2 from '../../exams/POSTGRESQL-FE2.mjs';
 
 const L = '/courses/postgresql/learn?lessonSlug=';
 const EXAM = '/exam?course=PostgreSQL&amp;kind=PE';
@@ -457,8 +459,256 @@ const PE2 = lesson({
   ],
 });
 
-/* Thứ tự bài: PE1, PE2 — agent FE thêm FE1, FE2 vào CUỐI mảng này. */
-const lessons = [PE1, PE2];
+/* ═══════════════════════════════ FE1 · FE2 — chữa trọn đề trắc nghiệm (agent chua-fe, 26/10/2026) ═══════════════════════════════
+ * Mỗi đề MỘT bài VIDEO (pg-fe1-1…7 / pg-fe2-1…7 cùng slug), ghép bằng xuat/ghep-phan.mts. Bài = mô tả + link Phòng thi + mốc từng phần
+ * (thời điểm điền vào MOC_FE1/MOC_FE2 khi bản ghép xong) + mục lục 50 câu (chủ đề · chương · bài ôn). Lời giải đầy đủ song ngữ nằm
+ * trong Phòng thi (content/exams/POSTGRESQL-FE*.mjs). FE1 đã chạy lại mọi câu có SQL trên 17.11 (video ghi chỗ khác 16.14).
+ */
+const EXAM_FE = '/exam?course=PostgreSQL&amp;kind=FE';
+const BAI_PG = {
+  '0.3': ['postgresql-0-3-cai-dat', '0.3 — Installing PostgreSQL & meeting psql', '0.3 — Cài đặt PostgreSQL & làm quen psql'],
+  '0.4': ['postgresql-0-4-mo-hinh', '0.4 — The mental model: a server you talk to in SQL', '0.4 — Mô hình tư duy: một máy chủ bạn nói chuyện bằng SQL'],
+  '0.5': ['postgresql-0-5-tu-sql-server-mysql', '0.5 — From SQL Server / MySQL to PostgreSQL', '0.5 — Từ SQL Server / MySQL sang PostgreSQL'],
+  '1.1': ['postgresql-1-1-mo-hinh-quan-he', '1.1 — The relational model & why it won', '1.1 — Mô hình quan hệ & vì sao nó thắng'],
+  '1.2': ['postgresql-1-2-acid', '1.2 — ACID: the four guarantees, proven', '1.2 — ACID: bốn bảo đảm, được chứng minh'],
+  '1.4': ['postgresql-1-4-dong-chay-truy-van', '1.4 — How a query flows through Postgres', '1.4 — Một truy vấn chảy qua Postgres ra sao'],
+  '2.1': ['postgresql-2-1-so', '2.1 — Numbers: integers, numeric & the money trap', '2.1 — Số: số nguyên, numeric & cạm bẫy tiền bạc'],
+  '2.2': ['postgresql-2-2-text', '2.2 — Text: text, varchar & the char(n) trap', '2.2 — Chữ: text, varchar & bẫy char(n)'],
+  '2.3': ['postgresql-2-3-ngay-gio', '2.3 — Booleans, dates & times (and timezones)', '2.3 — Boolean, ngày & giờ (và múi giờ)'],
+  '3.2': ['postgresql-3-2-khoa-ngoai', '3.2 — Foreign keys & referential integrity', '3.2 — Khoá ngoại & toàn vẹn tham chiếu'],
+  '3.3': ['postgresql-3-3-rang-buoc-cot', '3.3 — Column constraints: NOT NULL, DEFAULT, UNIQUE, CHECK & generated columns', '3.3 — Ràng buộc cột: NOT NULL, DEFAULT, UNIQUE, CHECK & cột sinh'],
+  '3.4': ['postgresql-3-4-alter-chuan-hoa', '3.4 — Evolving a schema: ALTER TABLE & normalization', '3.4 — Tiến hoá lược đồ: ALTER TABLE & chuẩn hoá'],
+  '4.1': ['postgresql-4-1-insert', '4.1 — INSERT: many rows, RETURNING & UPSERT', '4.1 — INSERT: nhiều dòng, RETURNING & UPSERT'],
+  '4.2': ['postgresql-4-2-select-where', '4.2 — SELECT & WHERE: getting exactly the rows you want', '4.2 — SELECT & WHERE: lấy đúng những dòng bạn cần'],
+  '4.3': ['postgresql-4-3-order-limit-distinct', '4.3 — ORDER BY, LIMIT/OFFSET & DISTINCT', '4.3 — ORDER BY, LIMIT/OFFSET & DISTINCT'],
+  '5.1': ['postgresql-5-1-inner-join', '5.1 — INNER JOIN: putting rows back together', '5.1 — INNER JOIN: ráp các dòng lại với nhau'],
+  '5.3': ['postgresql-5-3-multi-self-join', '5.3 — Joining many tables & the self-join', '5.3 — Join nhiều bảng & self-join'],
+  '5.4': ['postgresql-5-4-cross-join-traps', '5.4 — CROSS JOIN & the join traps', '5.4 — CROSS JOIN & những cạm bẫy join'],
+  '6.1': ['postgresql-6-1-ham-tong-hop', '6.1 — Aggregate functions: many rows into one number', '6.1 — Hàm tổng hợp: nhiều dòng thành một con số'],
+  '6.2': ['postgresql-6-2-group-by', '6.2 — GROUP BY: a summary per group', '6.2 — GROUP BY: một tóm tắt cho mỗi nhóm'],
+  '6.3': ['postgresql-6-3-having-filter', '6.3 — HAVING vs WHERE, and FILTER', '6.3 — HAVING vs WHERE, và FILTER'],
+  '6.4': ['postgresql-6-4-tong-hop-tren-join', '6.4 — Aggregating over joins: taming fan-out', '6.4 — Tổng hợp trên JOIN: thuần hoá fan-out'],
+  '7.1': ['postgresql-7-1-subquery', '7.1 — Subqueries: a query inside a query', '7.1 — Truy vấn con: một truy vấn bên trong truy vấn'],
+  '7.2': ['postgresql-7-2-correlated-exists', '7.2 — Correlated subqueries, EXISTS & the NOT IN trap', '7.2 — Subquery tương quan, EXISTS & bẫy NOT IN'],
+  '7.3': ['postgresql-7-3-cte', '7.3 — CTEs (WITH): queries in readable steps', '7.3 — CTE (WITH): truy vấn theo bước dễ đọc'],
+  '7.4': ['postgresql-7-4-recursive-cte', '7.4 — Recursive CTEs: walking a hierarchy', '7.4 — CTE đệ quy: đi qua cây phân cấp'],
+  '8.1': ['postgresql-8-1-window-la-gi', '8.1 — What a window function is: aggregate without collapsing', '8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng'],
+  '8.2': ['postgresql-8-2-ranking', '8.2 — Ranking: ROW_NUMBER, RANK & DENSE_RANK', '8.2 — Xếp hạng: ROW_NUMBER, RANK & DENSE_RANK'],
+  '8.3': ['postgresql-8-3-lag-running-total', '8.3 — LAG, LEAD & running totals', '8.3 — LAG, LEAD & tổng luỹ tiến'],
+  '8.4': ['postgresql-8-4-frame-ntile', '8.4 — Window frames, FIRST_VALUE & NTILE', '8.4 — Khung cửa sổ, FIRST_VALUE & NTILE'],
+  '9.2': ['postgresql-9-2-to-hop-covering', '9.2 — Which columns, composite indexes & covering', '9.2 — Cột nào, chỉ mục tổ hợp & covering'],
+  '9.3': ['postgresql-9-3-khong-dung-selectivity-partial', '9.3 — When indexes are NOT used, selectivity & partial indexes', '9.3 — Khi chỉ mục KHÔNG được dùng, độ chọn lọc & partial index'],
+  '9.4': ['postgresql-9-4-loai-chi-muc', '9.4 — Index types: B-tree, GIN, BRIN, GiST & unique', '9.4 — Các loại chỉ mục: B-tree, GIN, BRIN, GiST & unique'],
+  '10.1': ['postgresql-10-1-doc-explain', '10.1 — Reading a plan: EXPLAIN vs EXPLAIN ANALYZE', '10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE'],
+  '10.2': ['postgresql-10-2-chien-luoc-join', '10.2 — Join strategies: Nested Loop, Hash & Merge', '10.2 — Chiến lược JOIN: Nested Loop, Hash & Merge'],
+  '10.3': ['postgresql-10-3-thong-ke-uoc-luong', '10.3 — Statistics: how the planner estimates, and when it\'s wrong', '10.3 — Thống kê: bộ lập kế hoạch ước lượng ra sao, và khi nào sai'],
+  '10.4': ['postgresql-10-4-buffers-tinh-chinh', '10.4 — BUFFERS and a tuning workflow', '10.4 — BUFFERS và quy trình tinh chỉnh'],
+  '11.1': ['postgresql-11-1-giao-dich', '11.1 — Transactions: all of it, or none of it', '11.1 — Giao dịch: được tất cả, hoặc không gì cả'],
+  '11.2': ['postgresql-11-2-mvcc', '11.2 — MVCC: why readers never block writers', '11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi'],
+  '11.3': ['postgresql-11-3-muc-co-lap', '11.3 — Isolation levels and the anomalies they stop', '11.3 — Các mức cô lập và những bất thường mỗi mức chặn được'],
+  '11.4': ['postgresql-11-4-khoa-deadlock', '11.4 — Row locks, lost updates and deadlocks', '11.4 — Khoá dòng, lost update và deadlock'],
+  '12.1': ['postgresql-12-1-ham', '12.1 — Functions: SQL, PL/pgSQL and volatility', '12.1 — Hàm: SQL, PL/pgSQL và volatility'],
+  '12.2': ['postgresql-12-2-trigger', '12.2 — Triggers: automation the application cannot forget', '12.2 — Trigger: tự động hoá mà ứng dụng KHÔNG THỂ quên'],
+  '12.3': ['postgresql-12-3-view', '12.3 — Views: a query with a name', '12.3 — View: một truy vấn có tên'],
+  '12.4': ['postgresql-12-4-materialized-view', '12.4 — Materialized views: trading freshness for speed', '12.4 — Materialized view: đánh đổi độ tươi lấy tốc độ'],
+  '13.1': ['postgresql-13-1-jsonb', '13.1 — JSONB: a document type that indexes', '13.1 — JSONB: kiểu tài liệu CÓ chỉ mục'],
+  '13.2': ['postgresql-13-2-gin-jsonb', '13.2 — Querying JSONB and indexing it with GIN', '13.2 — Truy vấn JSONB và đánh chỉ mục bằng GIN'],
+  '13.3': ['postgresql-13-3-full-text-search', '13.3 — Full-text search: tsvector, tsquery and ranking', '13.3 — Full-text search: tsvector, tsquery và xếp hạng'],
+  '13.4': ['postgresql-13-4-trigram', '13.4 — Trigram search: typos, partial names and ILIKE that flies', '13.4 — Tìm bằng trigram: lỗi chính tả, tên gõ dở, và ILIKE bay được'],
+  '14.1': ['postgresql-14-1-gia-ket-noi', '14.1 — What a connection costs', '14.1 — Một kết nối tốn những gì'],
+  '14.2': ['postgresql-14-2-pool-pgbouncer', '14.2 — Pooling: in the app, and in front of it', '14.2 — Pool: trong app, và đứng trước app'],
+  '14.3': ['postgresql-14-3-vacuum-bloat', '14.3 — VACUUM, autovacuum and bloat', '14.3 — VACUUM, autovacuum và bloat'],
+  '15.1': ['postgresql-15-1-pg-dump', '15.1 — Logical backups with pg_dump', '15.1 — Sao lưu logic bằng pg_dump'],
+  '15.3': ['postgresql-15-3-nhan-ban', '15.3 — Streaming replication, built for real', '15.3 — Nhân bản streaming, dựng thật'],
+  '15.4': ['postgresql-15-4-phan-manh', '15.4 — Partitioning: one table, many pieces', '15.4 — Phân mảnh: một bảng, nhiều mảnh'],
+  '16.1': ['postgresql-16-1-prisma-migration', '16.1 — Prisma and migrations, seen from the database', '16.1 — Prisma và migration, nhìn từ phía cơ sở dữ liệu'],
+  '16.2': ['postgresql-16-2-luoc-do-that', '16.2 — Reading a real production schema', '16.2 — Đọc một lược đồ production thật'],
+  '16.3': ['postgresql-16-3-checklist', '16.3 — The production checklist', '16.3 — Checklist trước khi ra production'],
+  '16.4': ['postgresql-16-4-capstone', '16.4 — Capstone: diagnose four real failures', '16.4 — Capstone: chẩn đoán bốn sự cố có thật'],
+  '17.2': ['postgresql-17-2-cung-truy-van-ba-he', '17.2 — The same queries on three SQL servers', '17.2 — Cùng truy vấn trên ba máy chủ SQL'],
+  '17.3': ['postgresql-17-3-mongodb-vs-jsonb', '17.3 — MongoDB documents vs PostgreSQL JSONB', '17.3 — Document MongoDB và JSONB của PostgreSQL'],
+};
+const MOC_FE1 = [
+  [null, 'Part 1 — Q1–7 · Section 0, ch 1–2: Docker volumes, declarative SQL, atomicity, EXPLAIN ANALYZE, float vs numeric, char(n)', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: volume Docker, SQL khai báo, tính nguyên tử, EXPLAIN ANALYZE, float vs numeric, char(n)'],
+  [null, 'Part 2 — Q8–14 · ch 2–4: timestamptz, foreign keys, GENERATED ALWAYS, ALTER TABLE, NULL in WHERE and ORDER BY', 'Phần 2 — câu 8–14 · Ch2–4: timestamptz, khoá ngoại, GENERATED ALWAYS, ALTER TABLE, NULL trong WHERE và ORDER BY'],
+  [null, 'Part 3 — Q15–21 · ch 5–7: LEFT JOIN filters, fan-out, aggregates and NULL, HAVING, NOT IN', 'Phần 3 — câu 15–21 · Ch5–7: lọc LEFT JOIN, fan-out, tổng hợp và NULL, HAVING, NOT IN'],
+  [null, 'Part 4 — Q22–28 · ch 7–9: CTEs, recursion with a cycle, window functions, composite and expression indexes', 'Phần 4 — câu 22–28 · Ch7–9: CTE, đệ quy gặp vòng, hàm cửa sổ, chỉ mục ghép và chỉ mục biểu thức'],
+  [null, 'Part 5 — Q29–35 · ch 9–11: partial indexes, reading plans, cold vs warm cache, lost update, write skew', 'Phần 5 — câu 29–35 · Ch9–11: chỉ mục một phần, đọc kế hoạch, bộ đệm lạnh/nóng, lost update, write skew'],
+  [null, 'Part 6 — Q36–42 · ch 12–14: volatility, triggers, materialized views, JSONB and GIN, full-text, connections', 'Phần 6 — câu 36–42 · Ch12–14: volatility, trigger, materialized view, JSONB và GIN, full-text, kết nối'],
+  [null, 'Part 7 — Q43–50 · ch 14–16: PgBouncer, autovacuum, backups, slots, partitions, Prisma, incidents + chapter map', 'Phần 7 — câu 43–50 · Ch14–16: PgBouncer, autovacuum, sao lưu, slot, phân vùng, Prisma, sự cố + thống kê chương'],
+];
+const MOC_FE2 = [
+  [null, 'Part 1 — Q1–7 · Section 0, ch 1–2: search_path, || vs concat(), quoted names, the four stages, WAL, division and round(), month arithmetic', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: search_path, || vs concat(), tên có ngoặc kép, bốn chặng, WAL, phép chia và round(), cộng tháng'],
+  [null, 'Part 2 — Q8–14 · ch 3–5: per-FK delete rules, NOT VALID, DISTINCT ON, BETWEEN, self-join, comma join, USING (id)', 'Phần 2 — câu 8–14 · Ch3–5: luật xoá theo từng FK, NOT VALID, DISTINCT ON, BETWEEN, self-join, nối bằng dấu phẩy, USING (id)'],
+  [null, 'Part 3 — Q15–21 · ch 6–8: GROUP BY the key, HAVING aliases, empty aggregates, scalar subqueries, EXISTS, recursive types, LAG', 'Phần 3 — câu 15–21 · Ch6–8: GROUP BY khoá chính, alias trong HAVING, tổng hợp tập rỗng, truy vấn con vô hướng, EXISTS, kiểu đệ quy, LAG'],
+  [null, 'Part 4 — Q22–28 · ch 8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, extended statistics, Rows Removed by Filter', 'Phần 4 — câu 22–28 · Ch8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, thống kê mở rộng, Rows Removed by Filter'],
+  [null, 'Part 5 — Q29–35 · ch 10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC and ctid, CHECK OPTION, view updatability, procedures', 'Phần 5 — câu 29–35 · Ch10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC và ctid, CHECK OPTION, view cập nhật được, procedure'],
+  [null, 'Part 6 — Q36–42 · ch 13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigrams, VACUUM blocked, wraparound, pool arithmetic, pg_dump formats', 'Phần 6 — câu 36–42 · Ch13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigram, VACUUM bị chặn, wraparound, phép nhân pool, định dạng pg_dump'],
+  [null, 'Part 7 — Q43–50 · ch 15–17: DEFAULT partitions, async replicas, lock queues, read-your-writes, pg_stat_user_tables, four databases + chapter map', 'Phần 7 — câu 43–50 · Ch15–17: phân vùng DEFAULT, bản sao async, hàng đợi khoá, đọc sau ghi, pg_stat_user_tables, bốn hệ CSDL + thống kê chương'],
+];
+/** [câu, chủ đề EN, chủ đề VI, bài 'x.y'] — thứ tự gốc của tệp đề (Phòng thi xáo câu). */
+const ROWS_FE1 = [
+  [1, 'Removing a container with no volume', 'Xoá container không có volume', '0.3'],
+  [2, 'Declarative SQL: what makes a query faster', 'SQL khai báo: muốn nhanh thì làm gì', '0.4'],
+  [3, 'What "relational" really means', 'Chữ "relational" nghĩa là gì', '1.1'],
+  [4, 'A transaction that fails half-way: atomicity', 'Giao dịch lỗi giữa chừng: tính nguyên tử', '1.2'],
+  [5, 'EXPLAIN ANALYZE on a DELETE', 'EXPLAIN ANALYZE một lệnh DELETE', '1.4'],
+  [6, 'float8: 0.1 + 0.2', 'float8 cộng 0,1 với 0,2', '2.1'],
+  [7, 'char(5) and blank padding', 'char(5) đệm khoảng trắng', '2.2'],
+  [8, 'timestamptz rendered in the session time zone', 'timestamptz in theo múi giờ phiên', '2.3'],
+  [9, 'A foreign key with no ON DELETE', 'Khoá ngoại không khai ON DELETE', '3.2'],
+  [10, 'GENERATED ALWAYS: the server owns the value', 'GENERATED ALWAYS: máy chủ làm chủ giá trị', '3.3'],
+  [11, 'Which ALTER TABLE is the outage', 'ALTER TABLE nào làm sập dịch vụ', '3.4'],
+  [12, 'NULL with <> and IS DISTINCT FROM', 'NULL với <> và IS DISTINCT FROM', '4.2'],
+  [13, 'ON CONFLICT DO NOTHING with no target', 'ON CONFLICT DO NOTHING không ghi đích', '4.1'],
+  [14, 'Where NULL sorts in ORDER BY', 'NULL đứng đâu khi ORDER BY', '4.3'],
+  [15, 'Filtering the optional side: WHERE or ON', 'Lọc phía tuỳ chọn ở WHERE hay ON', '5.4'],
+  [16, 'Fan-out: which total is inflated', 'Fan-out: tổng nào bị thổi phồng', '6.4'],
+  [17, 'Are six joins slow?', 'Sáu phép nối có chậm không', '5.3'],
+  [18, 'count(*), count(col) and avg with NULLs', 'count(*), count(cột) và avg với NULL', '6.1'],
+  [19, 'Aggregates in WHERE', 'Hàm tổng hợp trong WHERE', '6.3'],
+  [20, 'count(*) after a LEFT JOIN', 'count(*) sau LEFT JOIN', '6.4'],
+  [21, 'NOT IN meets a NULL', 'NOT IN gặp một NULL', '7.2'],
+  [22, 'Does a CTE make a query faster?', 'CTE có làm câu truy vấn nhanh hơn', '7.3'],
+  [23, 'A recursive CTE over a cycle', 'CTE đệ quy gặp vòng lặp trong dữ liệu', '7.4'],
+  [24, 'row_number, rank, dense_rank with a tie', 'row_number, rank, dense_rank khi có đồng hạng', '8.2'],
+  [25, 'Filtering a window function in WHERE', 'Lọc hàm cửa sổ trong WHERE', '8.2'],
+  [26, 'Default frame: RANGE vs ROWS', 'Khung mặc định RANGE và ROWS', '8.4'],
+  [27, 'Composite index (a, b) and the left prefix', 'Chỉ mục ghép (a, b) và tiền tố trái', '9.2'],
+  [28, 'A function around the column defeats the index', 'Hàm bọc cột làm hỏng chỉ mục', '9.3'],
+  [29, 'Partial index and parameterised queries', 'Partial index và câu lệnh có tham số', '9.3'],
+  [30, 'actual time times loops', 'actual time nhân với loops', '10.1'],
+  [31, 'Should you rewrite to avoid a Nested Loop?', 'Có nên viết lại để tránh Nested Loop', '10.2'],
+  [32, '800 ms cold, 8 ms warm', 'Lần chạy lạnh 800 ms, lần nóng 8 ms', '10.4'],
+  [33, 'COMMIT answers ROLLBACK: what the app must do', 'COMMIT trả ROLLBACK: ứng dụng phải làm gì', '11.1'],
+  [34, 'Lost update: read, then write from the app', 'Lost update: đọc rồi ghi qua ứng dụng', '11.4'],
+  [35, 'Write skew at REPEATABLE READ', 'Write skew ở REPEATABLE READ', '11.3'],
+  [36, 'Volatility: IMMUTABLE, STABLE, VOLATILE', 'Volatility: IMMUTABLE, STABLE, VOLATILE', '12.1'],
+  [37, 'A BEFORE trigger that returns NULL', 'BEFORE trigger trả NULL', '12.2'],
+  [38, 'REFRESH MATERIALIZED VIEW CONCURRENTLY', 'REFRESH MATERIALIZED VIEW CONCURRENTLY', '12.4'],
+  [39, '->> returns text', 'Toán tử ->> trả text', '13.2'],
+  [40, 'What a GIN index on jsonb can accelerate', 'GIN trên jsonb tăng tốc được gì', '13.2'],
+  [41, 'Full-text configuration: english vs simple', 'Cấu hình full-text: english vs simple', '13.3'],
+  [42, 'Raising max_connections to 500', 'Nâng max_connections lên 500', '14.1'],
+  [43, 'What PgBouncer transaction mode breaks', 'PgBouncer chế độ transaction làm hỏng gì', '14.2'],
+  [44, 'Autovacuum threshold, and does VACUUM shrink the file', 'Ngưỡng autovacuum và VACUUM có thu nhỏ tệp', '14.3'],
+  [45, 'Two years of pg_dump with no errors', 'pg_dump hai năm chưa từng lỗi', '15.1'],
+  [46, 'A forgotten replication slot', 'Replication slot bị bỏ quên', '15.3'],
+  [47, 'DELETE vs DROP PARTITION', 'DELETE hay DROP phân vùng', '15.4'],
+  [48, 'Which Prisma command belongs on production', 'Lệnh Prisma nào cho production', '16.1'],
+  [49, 'The first query when things slow down gradually', 'Câu truy vấn đầu tiên khi hệ thống chậm dần', '16.4'],
+  [50, 'Code tells you what is possible, data what is true', 'Mã nói khả năng, dữ liệu nói sự thật', '16.4'],
+];
+const ROWS_FE2 = [
+  [1, 'search_path without the shop schema', 'search_path không có schema shop', '0.4'],
+  [2, 'Concatenating NULL: || vs concat()', 'Nối chuỗi với NULL: || vs concat()', '0.5'],
+  [3, 'Quoted names keep their case', 'Tên có ngoặc kép giữ hoa thường', '0.5'],
+  [4, 'A mistyped column: which stage rejects it', 'Gõ sai tên cột: lỗi ở chặng nào', '1.4'],
+  [5, 'Power fails one second after COMMIT', 'COMMIT xong thì mất điện', '1.2'],
+  [6, 'Integer division and round() by type', 'Chia số nguyên và round theo kiểu', '2.1'],
+  [7, 'Adding a month to the 31st', 'Cộng một tháng vào ngày 31', '2.3'],
+  [8, 'Deleting an order: CASCADE on one FK, NO ACTION on another', 'Xoá đơn: CASCADE một bên, NO ACTION một bên', '3.2'],
+  [9, 'CHECK … NOT VALID over existing rows', 'CHECK ... NOT VALID trên dữ liệu cũ', '3.4'],
+  [10, 'DISTINCT ON must match the leading ORDER BY', 'DISTINCT ON phải khớp ORDER BY đầu', '4.3'],
+  [11, 'BETWEEN on timestamptz misses the last day', 'BETWEEN với timestamptz bỏ sót ngày cuối', '4.2'],
+  [12, 'Category self-join: INNER vs LEFT', 'Self-join danh mục: INNER vs LEFT', '5.3'],
+  [13, 'A comma join with no condition', 'Nối bằng dấu phẩy quên điều kiện', '5.4'],
+  [14, 'JOIN … USING (id) joins the wrong column', 'JOIN ... USING (id) nối nhầm cột', '5.1'],
+  [15, 'GROUP BY the primary key allows dependent columns', 'GROUP BY khoá chính cho phép cột phụ thuộc', '6.2'],
+  [16, 'An alias in HAVING', 'Bí danh trong HAVING', '6.3'],
+  [17, 'Aggregates over an empty set', 'Hàm tổng hợp trên tập rỗng', '6.1'],
+  [18, 'A scalar subquery returning several rows', 'Truy vấn con vô hướng trả nhiều dòng', '7.1'],
+  [19, 'Customers who bought product 34: JOIN vs EXISTS', 'Đếm khách mua sản phẩm 34: JOIN vs EXISTS', '7.2'],
+  [20, 'Recursive CTE: the anchor fixes the column type', 'CTE đệ quy: kiểu cột của vế neo', '7.4'],
+  [21, 'LAG over time, with a default', 'LAG theo thời gian và giá trị mặc định', '8.3'],
+  [22, 'ntile(4) over 10 rows', 'ntile(4) trên 10 dòng', '8.4'],
+  [23, 'count(*) OVER () with LIMIT', 'count(*) OVER () với LIMIT', '8.1'],
+  [24, 'Prefix LIKE, collation and text_pattern_ops', 'LIKE tiền tố, collation và text_pattern_ops', '9.3'],
+  [25, 'Index Only Scan and Heap Fetches', 'Index Only Scan và Heap Fetches', '9.2'],
+  [26, 'BRIN on an append-only column', 'BRIN trên cột tăng dần', '9.4'],
+  [27, 'Correlated columns and CREATE STATISTICS', 'Cột tương quan và CREATE STATISTICS', '10.3'],
+  [28, 'Rows Removed by Filter', 'Rows Removed by Filter', '10.1'],
+  [29, 'A sort spilling to disk: work_mem', 'Sort tràn đĩa: work_mem', '10.4'],
+  [30, 'A SAVEPOINT rescues the transaction', 'SAVEPOINT cứu giao dịch', '11.1'],
+  [31, 'Job queue: FOR UPDATE SKIP LOCKED', 'Hàng đợi: FOR UPDATE SKIP LOCKED', '11.4'],
+  [32, 'ctid changes on every UPDATE: MVCC', 'ctid đổi sau mỗi UPDATE: MVCC', '11.2'],
+  [33, 'A view WITH CHECK OPTION', 'View WITH CHECK OPTION', '12.3'],
+  [34, 'A view with a JOIN is not updatable', 'View có JOIN không tự cập nhật được', '12.3'],
+  [35, 'COMMIT inside a FUNCTION vs a PROCEDURE', 'COMMIT trong FUNCTION và PROCEDURE', '12.1'],
+  [36, 'Four ways to find Casio in attrs', 'Bốn cách tìm hãng Casio trong attrs', '13.1'],
+  [37, 'Passing user text to to_tsquery', 'to_tsquery nhận chữ người dùng gõ', '13.3'],
+  [38, 'Trigrams: similarity and the % operator', 'Trigram: similarity và toán tử %', '13.4'],
+  [39, 'idle in transaction blocks VACUUM', 'idle in transaction chặn VACUUM', '14.3'],
+  [40, 'Wraparound: the database stops accepting writes', 'Wraparound: database ngừng nhận lệnh ghi', '14.3'],
+  [41, 'Rolling deploys exhaust max_connections', 'Rolling deploy làm tràn max_connections', '14.2'],
+  [42, 'pg_dump plain vs custom format', 'pg_dump plain vs custom', '15.1'],
+  [43, 'A DEFAULT partition blocks a new partition', 'Phân vùng DEFAULT chặn tạo phân vùng mới', '15.4'],
+  [44, 'An async replica and commits that can be lost', 'Bản sao async và commit có thể mất', '15.3'],
+  [45, 'A migration queued behind an idle transaction', 'Migration xếp hàng sau giao dịch đứng im', '16.3'],
+  [46, 'Saved, yet the old value shows', 'Lưu xong vẫn thấy giá trị cũ', '16.4'],
+  [47, 'pg_stat_user_tables: a high seq_scan', 'pg_stat_user_tables: seq_scan cao', '16.2'],
+  [48, 'DDL inside a transaction: MySQL vs PostgreSQL', 'DDL trong giao dịch: MySQL vs PostgreSQL', '17.2'],
+  [49, 'Do readers wait for writers?', 'Người đọc có phải chờ người ghi', '17.2'],
+  [50, 'MongoDB embedded documents vs relational tables', 'MongoDB nhúng tài liệu vs bảng quan hệ', '17.3'],
+];
+const chFe = (k) => Number(k.split('.')[0]);
+const bangFe = (rows, vi) =>
+  '<table><thead><tr><th>' + (vi ? 'Câu' : 'Q') + '</th><th>' + (vi ? 'Chủ đề' : 'Topic') + '</th><th>' + (vi ? 'Chương · bài ôn' : 'Chapter · lesson to review') + '</th></tr></thead><tbody>' +
+  rows.map(([n, en, v, k]) => '<tr><td>' + n + '</td><td>' + esc(vi ? v : en) + '</td><td>' + (chFe(k) === 0 ? (vi ? 'Mục 0' : 'Sec 0') : (vi ? 'Ch.' : 'Ch ') + chFe(k)) + ' · ' + bai(BAI_PG[k][0], esc(BAI_PG[k][1]), vi ? esc(BAI_PG[k][2]) : null) + '</td></tr>').join('') +
+  '</tbody></table>';
+const theoChFe = (rows, vi) => {
+  const c = {};
+  for (const r of rows) { const k = chFe(r[3]); c[k] = (c[k] || 0) + 1; }
+  return Object.keys(c).sort((a, b) => a - b).map((k) => (Number(k) === 0 ? (vi ? 'Mục 0' : 'Section 0') : (vi ? 'Chương ' : 'Chapter ') + k) + ': ' + c[k]).join(' · ');
+};
+const lessonFe = ({ slug, D, title, desc, lead, chay, mocs, rows }) => ({
+  title: title[0] + '|||' + title[1],
+  slug,
+  type: 'VIDEO',
+  description: desc,
+  content:
+    '<div class="ml-en">' +
+    '<span class="eyebrow">Final exam · multiple choice, fully solved on video</span>' +
+    '<h2>' + title[0] + '</h2>' +
+    '<p class="lead">' + lead[0] + '</p>' +
+    '<div class="callout">Take it first, timed, in the <a href="' + EXAM_FE + '">Exam room</a> → PostgreSQL → <b>' + esc(D.default.exams[0].title.split('|||')[0]) + '</b>. Every question there has a bilingual written explanation; this lesson is the video walkthrough, one question at a time: the question, a Vietnamese translation, the key vocabulary, why each option is right or wrong, and the lesson to review.</div>' +
+    '<h3>Parts of the video</h3>' + moc(mocs, false) +
+    '<p>' + chay[0] + '</p>' +
+    '<h3>Questions at a glance</h3>' + bangFe(rows, false) +
+    '<p><b>By chapter:</b> ' + theoChFe(rows, false) + '</p>' +
+    '</div>' +
+    '<div class="ml-vi">' +
+    '<span class="eyebrow">Thi cuối khoá · trắc nghiệm, chữa trọn bằng video</span>' +
+    '<h2>' + title[1] + '</h2>' +
+    '<p class="lead">' + lead[1] + '</p>' +
+    '<div class="callout">Làm thử trước, bấm giờ, trong <a href="' + EXAM_FE + '">Phòng thi</a> → PostgreSQL → <b>' + esc(D.default.exams[0].title.split('|||')[1]) + '</b>. Mỗi câu ở đó có lời giải song ngữ bằng chữ; bài này là video chữa từng câu: đề, bản dịch tiếng Việt, từ vựng cần nhớ, vì sao từng đáp án đúng hay sai, và bài cần ôn.</div>' +
+    '<h3>Các phần của video</h3>' + moc(mocs, true) +
+    '<p>' + chay[1] + '</p>' +
+    '<h3>Mục lục từng câu</h3>' + bangFe(rows, true) +
+    '<p><b>Theo chương:</b> ' + theoChFe(rows, true) + '</p>' +
+    '</div>',
+});
+
+const FE1 = lessonFe({
+  slug: 'postgresql-fe1-chua-tron-de', D: DE_FE1,
+  title: ['Final exam FE1 — all 50 questions, solved', 'Chữa trọn đề FE1 · 50 câu trắc nghiệm'],
+  desc: 'Chữa trọn đề thi cuối khoá FE1 của khoá PostgreSQL: 50 câu trắc nghiệm, 60 phút — mỗi câu: đề tiếng Anh, dịch tiếng Việt, từ vựng, vì sao từng đáp án sai/đúng, nhãn chương; câu có SQL chạy lại thật trên PostgreSQL 17.11.',
+  lead: ['The first final exam of this course: 50 multiple-choice questions in 60 minutes, out of 10, 5 to pass, covering Section 0 and chapters 1–16 in order. Seven video parts, about seven questions each.', 'Đề thi cuối khoá thứ nhất: 50 câu trắc nghiệm trong 60 phút, thang 10, đạt từ 5, phủ Mục 0 và Chương 1–16 theo thứ tự. Video gồm bảy phần, mỗi phần khoảng bảy câu.'],
+  chay: ['The paper was written against PostgreSQL 16.14. Every question that shows SQL, an error or a plan was run again on PostgreSQL 17.11 for the video (the course container) and matches; 17.11 only prints one extra DETAIL line in Q10. Questions 15–21 give no data, so the video rebuilds a small data set that reproduces exactly the counts the paper quotes.', 'Đề được soạn trên PostgreSQL 16.14. Mọi câu có SQL, thông báo lỗi hay kế hoạch đều được chạy lại trên PostgreSQL 17.11 cho video (container của khoá) và khớp; riêng câu 10, bản 17.11 in thêm một dòng DETAIL. Câu 15–21 không cho dữ liệu, nên video dựng lại một bộ dữ liệu nhỏ cho ra đúng các con số đề nêu.'],
+  mocs: MOC_FE1, rows: ROWS_FE1,
+});
+
+const FE2 = lessonFe({
+  slug: 'postgresql-fe2-chua-tron-de', D: DE_FE2,
+  title: ['Final exam FE2 — all 50 questions, solved', 'Chữa trọn đề FE2 · 50 câu trắc nghiệm'],
+  desc: 'Chữa trọn đề thi cuối khoá FE2 của khoá PostgreSQL: 50 câu mới, 60 phút — mỗi câu: đề tiếng Anh, dịch tiếng Việt, từ vựng, vì sao từng đáp án sai/đúng, nhãn chương; output đo trên PostgreSQL 17.11 và dữ liệu CT Shop.',
+  lead: ['The second final exam: 50 new questions in 60 minutes, out of 10, 5 to pass, covering Section 0 and all seventeen chapters, including the comparison of four database systems. Seven video parts.', 'Đề thi cuối khoá thứ hai: 50 câu mới trong 60 phút, thang 10, đạt từ 5, phủ Mục 0 và cả mười bảy chương, kể cả chương so sánh bốn hệ cơ sở dữ liệu. Video gồm bảy phần.'],
+  chay: ['Every output in this paper was measured on PostgreSQL 17.11, most of it on the CT Shop data set used in the labs; the multi-session questions (job queue, idle transaction, migration lock queue) were measured with real concurrent psql sessions.', 'Mọi output của đề này đo trên PostgreSQL 17.11, phần lớn trên bộ dữ liệu CT Shop của các bài lab; các câu nhiều phiên (hàng đợi việc, giao dịch đứng im, hàng đợi khoá khi migration) đo bằng các phiên psql chạy song song thật.'],
+  mocs: MOC_FE2, rows: ROWS_FE2,
+});
+
+/* Thứ tự bài: PE1, PE2, FE1, FE2. */
+const lessons = [PE1, PE2, FE1, FE2];
 
 export default {
   title: 'Final exam — practical and multiple-choice papers, solved|||Thi cuối khoá — chữa trọn đề thực hành và trắc nghiệm',

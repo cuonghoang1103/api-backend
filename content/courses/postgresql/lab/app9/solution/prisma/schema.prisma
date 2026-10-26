@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model category {
+  id             Int        @id @default(autoincrement())
+  name           String     @unique
+  parent_id      Int?
+  category       category?  @relation("categoryTocategory", fields: [parent_id], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  other_category category[] @relation("categoryTocategory")
+  product        product[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model customer {
+  id         BigInt   @id @default(autoincrement())
+  email      String   @unique
+  full_name  String
+  phone      String?
+  city       String   @default("Hà Nội")
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  orders     orders[]
+  review     review[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model order_item {
+  order_id   BigInt
+  product_id BigInt
+  qty        Int
+  unit_price Decimal @db.Decimal(12, 2)
+  orders     orders  @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([order_id, product_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model orders {
+  id             BigInt           @id @default(autoincrement())
+  customer_id    BigInt
+  status         String           @default("pending")
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  delivery_note  String?
+  order_item     order_item[]
+  customer       customer         @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment        payment?
+  stock_movement stock_movement[]
+
+  @@index([customer_id, created_at(sort: Desc), id(sort: Desc)])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model payment {
+  id       BigInt   @id @default(autoincrement())
+  order_id BigInt   @unique
+  amount   Decimal  @db.Decimal(12, 2)
+  method   String
+  paid_at  DateTime @default(now()) @db.Timestamptz(6)
+  orders   orders   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([paid_at])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model product {
+  id             BigInt           @id @default(autoincrement())
+  sku            String           @unique
+  name           String
+  category_id    Int
+  price          Decimal          @db.Decimal(12, 2)
+  stock          Int              @default(0)
+  attrs          Json             @default("{}")
+  is_active      Boolean          @default(true)
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  order_item     order_item[]
+  category       category         @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  review         review[]
+  stock_movement stock_movement[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  id          BigInt   @id @default(autoincrement())
+  product_id  BigInt
+  customer_id BigInt
+  rating      Int      @db.SmallInt
+  body        String?
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  customer    customer @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product     product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([product_id, customer_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model stock_movement {
+  id         BigInt   @id @default(autoincrement())
+  product_id BigInt
+  change     Int
+  reason     String
+  order_id   BigInt?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  orders     orders?  @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

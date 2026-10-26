@@ -1,0 +1,11 @@
+// Lab 9 · C2 — this file is almost empty on purpose: `npx prisma db pull` writes the 8 models from CT Shop into it.
+// Lab 9 · C2 — cố tình gần như trống: `npx prisma db pull` sẽ ghi 8 model của CT Shop vào đây.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")   // the APP role (ctshop_app) — PrismaClient uses this
+  directUrl = env("DIRECT_URL")     // the OWNER role (ctshop_owner) — the Prisma CLI (db pull, migrate …) uses this
+}

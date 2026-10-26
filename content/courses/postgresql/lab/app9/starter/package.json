@@ -1,0 +1,25 @@
+{
+  "name": "ctshop-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CT Shop — API cho app di động (Lab 9, khoá PostgreSQL cuongthai.com): Node 22 + Prisma 5.22 + Express 5",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node --env-file=.env src/server.js",
+    "dev": "node --env-file=.env --watch src/server.js",
+    "db:test": "node --env-file=.env scripts/dung-db-kiem-thu.js",
+    "test": "node --env-file=.env scripts/dung-db-kiem-thu.js && node --env-file=.env --test --test-concurrency=1 --test-reporter=spec test/*.test.js",
+    "n1": "node --env-file=.env scripts/n-cong-1.js",
+    "race": "node --env-file=.env scripts/hai-nguoi-mua.js",
+    "load": "node --env-file=.env scripts/tai.js"
+  },
+  "dependencies": {
+    "@prisma/client": "5.22.0",
+    "express": "5.1.0"
+  },
+  "devDependencies": {
+    "autocannon": "8.0.0",
+    "prisma": "5.22.0"
+  }
+}

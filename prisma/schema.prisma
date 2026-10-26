@@ -8402,6 +8402,7 @@ model CodeExercise {
   @@index([difficulty], name: "idx_code_exercise_difficulty")
   @@index([language], name: "idx_code_exercise_language")
   @@index([slug], name: "idx_code_exercise_slug")
+  @@index([authorId], name: "idx_code_exercise_author")
   @@map("code_exercises")
 }
 
@@ -8917,6 +8918,7 @@ model MakerCommand {
 
   @@index([deviceId, createdAt], name: "idx_maker_command_device_time")
   @@index([status], name: "idx_maker_command_status")
+  @@index([issuedById], name: "idx_maker_command_issued_by")
   @@map("maker_commands")
 }
 
@@ -10759,6 +10761,8 @@ model WorkIssue {
   @@index([teamId], name: "idx_work_issue_team")
   @@index([stageId], name: "idx_work_issue_stage")
   @@index([projectId, clientVisible], name: "idx_work_issue_client")
+  @@index([reporterId], name: "idx_work_issue_reporter")
+  @@index([sprintId], name: "idx_work_issue_sprint_fk")
   @@map("work_issues")
 }
 

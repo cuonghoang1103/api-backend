@@ -6621,7 +6621,15 @@ public class LabBayEpKieu {
 <div class="out">cast ok &nbsp;&nbsp;: 9780134685991<br>
 cast fails: Magazine cannot be cast to Book<br>
 no cast &nbsp;&nbsp;: ISBN 9780134685991<br>
-no cast &nbsp;&nbsp;: Ky so 118</div>`,
+no cast &nbsp;&nbsp;: Ky so 118</div>
+<div class="pitfall"><p><strong>Trap 6 — calling a method only the child has, on a parent-type variable.</strong> javac checks the declared type: <code>item.getIsbn()</code> does not compile even when the object is a Book (the project <code>bay/goi-isbn</code>). That is why the six questions live in <code>LibraryItem</code>.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/repository/BookRepository.java:191: error: cannot find symbol<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;responseDTO.setDetail(item.getIsbn());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;symbol: &nbsp;&nbsp;method getIsbn()<br>
+&nbsp;&nbsp;location: variable item of type LibraryItem<br>
+1 error</div>`,
     `<h2>6. Bẫy (kèm output thật)</h2>
 <div class="pitfall"><p><strong>Bẫy 1 — quên super(...).</strong> Vẫn biên dịch: javac chèn <code>super()</code>, phần cha để trống.</p></div>
 <pre><code class="language-java">// release: 8
@@ -6809,7 +6817,15 @@ public class LabBayEpKieu {
 <div class="out">cast ok &nbsp;&nbsp;: 9780134685991<br>
 cast fails: Magazine cannot be cast to Book<br>
 no cast &nbsp;&nbsp;: ISBN 9780134685991<br>
-no cast &nbsp;&nbsp;: Ky so 118</div>`),
+no cast &nbsp;&nbsp;: Ky so 118</div>
+<div class="pitfall"><p><strong>Bẫy 6 — gọi phương thức chỉ lớp con có, trên biến kiểu cha.</strong> javac kiểm theo kiểu khai báo: <code>item.getIsbn()</code> không biên dịch được kể cả khi đối tượng là Book (dự án <code>bay/goi-isbn</code>). Chính vì thế sáu câu hỏi phải nằm ở <code>LibraryItem</code>.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/repository/BookRepository.java:191: error: cannot find symbol<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;responseDTO.setDetail(item.getIsbn());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+&nbsp;&nbsp;symbol: &nbsp;&nbsp;method getIsbn()<br>
+&nbsp;&nbsp;location: variable item of type LibraryItem<br>
+1 error</div>`),
     bi(`<h2>7. Rubric (10 points) and self-check</h2>
 <table>
 <thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>

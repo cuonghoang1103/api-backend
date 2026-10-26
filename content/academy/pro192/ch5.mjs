@@ -4542,7 +4542,23 @@ src/repository/InMemoryBookRepository.java:153: error: LibraryItem is abstract; 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX_ITEMS = 1000;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
 1 error</div>
-<div class="pitfall"><p><strong>Trap 3 — integer division before multiplication.</strong> <code>fullFee * (50 / 100)</code> is always 0: compute <code>fullFee * 50 / 100</code>.</p></div>
+<div class="pitfall"><p><strong>Trap 3 — integer division before multiplication.</strong> <code>fullFee * (50 / 100)</code> is always 0: compute <code>fullFee * 50 / 100</code>. No compile error — only the grader turns red.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 5 trap — integer division: (50 / 100) is 0, so dividing first loses everything
+public class LabBayChiaNguyen {
+    public static void main(String[] args) {
+        int fullFee = 12000;                                // 6 days late x 2000
+        int discountPercent = 50;
+        System.out.println("multiply first: " + fullFee * (100 - discountPercent) / 100);
+        System.out.println("divide first  : " + fullFee * ((100 - discountPercent) / 100));
+        System.out.println("50 / 100      = " + (50 / 100) + "   (int / int keeps only the integer part)");
+        System.out.println("50.0 / 100    = " + (50.0 / 100));
+    }
+}</code></pre>
+<div class="out">multiply first: 6000<br>
+divide first &nbsp;: 0<br>
+50 / 100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 0 &nbsp;&nbsp;(int / int keeps only the integer part)<br>
+50.0 / 100 &nbsp;&nbsp;&nbsp;= 0.5</div>
 <div class="pitfall"><p><strong>Trap 4 — typing the field with the class.</strong> <code>private InMemoryBookRepository bookRepository;</code> compiles and runs the same — but every method the controller calls is now free to be one only the in-memory class has, and Lab 9 must edit more than one line. The rubric checks the type.</p></div>
 <p>The seam and the policies, run for real:</p>
 <pre><code class="language-java">// release: 8
@@ -4646,7 +4662,23 @@ src/repository/InMemoryBookRepository.java:153: error: LibraryItem is abstract; 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX_ITEMS = 1000;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
 1 error</div>
-<div class="pitfall"><p><strong>Bẫy 3 — chia số nguyên trước khi nhân.</strong> <code>fullFee * (50 / 100)</code> luôn bằng 0: hãy tính <code>fullFee * 50 / 100</code>.</p></div>
+<div class="pitfall"><p><strong>Bẫy 3 — chia số nguyên trước khi nhân.</strong> <code>fullFee * (50 / 100)</code> luôn bằng 0: hãy tính <code>fullFee * 50 / 100</code>. Không có lỗi biên dịch nào — chỉ có bộ chấm báo đỏ.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 5 — chia số nguyên: (50 / 100) bằng 0, chia trước là mất sạch
+public class LabBayChiaNguyen {
+    public static void main(String[] args) {
+        int fullFee = 12000;                                // trễ 6 ngày x 2000
+        int discountPercent = 50;
+        System.out.println("multiply first: " + fullFee * (100 - discountPercent) / 100);
+        System.out.println("divide first  : " + fullFee * ((100 - discountPercent) / 100));
+        System.out.println("50 / 100      = " + (50 / 100) + "   (int / int keeps only the integer part)");
+        System.out.println("50.0 / 100    = " + (50.0 / 100));
+    }
+}</code></pre>
+<div class="out">multiply first: 6000<br>
+divide first &nbsp;: 0<br>
+50 / 100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 0 &nbsp;&nbsp;(int / int keeps only the integer part)<br>
+50.0 / 100 &nbsp;&nbsp;&nbsp;= 0.5</div>
 <div class="pitfall"><p><strong>Bẫy 4 — khai trường bằng lớp cụ thể.</strong> <code>private InMemoryBookRepository bookRepository;</code> vẫn biên dịch và chạy y vậy — nhưng controller giờ có thể gọi cả những phương thức chỉ bản trong bộ nhớ mới có, và Lab 9 phải sửa nhiều hơn một dòng. Rubric kiểm đúng kiểu này.</p></div>
 <p>Đường nối và các chính sách, chạy thật:</p>
 <pre><code class="language-java">// release: 8

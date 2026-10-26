@@ -2,13 +2,16 @@
  * PRO192 · Chương 3 — đóng gói: package, access modifier, case study (pro8 slide 26–40).
  * Bài 📑 học theo từng slide: pro8 (tmp_08.pptx, slide 26–40).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch3.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-3-dong-goi-va-luat-du-lieu.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch3).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab3', { code: 'PRO192 Lab 3', en: 'Lab 3 — CT Library: encapsulation and data rules', vi: 'Lab 3 — CT Library: đóng gói và luật dữ liệu', total: 15, w: 1280, h: 720, ver: 'v2' });
 
 /* ───────── 3.A — 📑 Slide by slide · Encapsulation (3/3): packages, access modifiers, varargs, case study (slides 26–40) ───────── */
 const L_pro8_3 = {
@@ -2126,6 +2129,1233 @@ Bad 0/1 [] &nbsp;&nbsp;(capacity outside 1..500 -&gt; 1)</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 3 — 🏗️ CT Library: encapsulation and data rules (access modifiers, static, delete, report, code review) ───────── */
+const L_lab3 = {
+  title: 'Lab 3 — 🏗️ CT Library: encapsulation and data rules (access modifiers, static, delete, report, code review)|||Lab 3 — 🏗️ CT Library: đóng gói và luật dữ liệu (access modifier, static, xoá, thống kê, review code)',
+  slug: 'pro192-lab-3-dong-goi-va-luat-du-lieu',
+  type: 'VIDEO',
+  description: 'Lab 3 của dự án CT Library (sau Chương 3), chuẩn review LAB211: siết luật dữ liệu (năm không ở tương lai đọc từ đồng hồ máy, email đúng dạng bằng regex và không trùng), xoá sách mà mã không bao giờ cấp lại, thống kê do service tính trên bản sao, giải thích từng access modifier, lỗi javac thật khi chạm private/package-private, bẫy bộ đếm static và getter làm rò danh sách, và review một pull request có 6 lỗi mà lint.py tìm ra. Starter + đáp án tải về, bộ chấm kiểu PE 176 dòng, đáp án qua lint.py + javac --release 8 + JDK 8 thật, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 3 · Lab 3 · CT Library</span>
+<h2>Lab 3 — encapsulation and data rules</h2>
+<p class="lead">Chapter 3 is about making the compiler — not good intentions — protect your data: packages, access modifiers, private fields, and classes that hide their state. Lab 3 puts that to work on CT Library: stricter rules that refuse nine kinds of bad data, delete without ever reusing an id, a report, and a code review where the LAB211 reviewer's tool finds six mistakes in a teammate's pull request.</p>
+<p>The starter is a fresh project: Lab 2 finished, the Lab 3 bodies marked <code>TODO Lab 3.x</code> — and six planted violations. Plan about <strong>3 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 3 · Lab 3 · CT Library</span>
+<h2>Lab 3 — đóng gói và luật dữ liệu</h2>
+<p class="lead">Chương 3 dạy cách để trình biên dịch — chứ không phải thiện chí — bảo vệ dữ liệu: package, access modifier (bổ từ truy cập), trường private, và lớp biết giấu trạng thái của mình. Lab 3 đem điều đó vào CT Library: luật chặt hơn từ chối chín kiểu dữ liệu xấu, xoá mà không bao giờ cấp lại mã, một bản thống kê, và một lần review code nơi công cụ của thầy LAB211 tìm ra sáu lỗi trong pull request của bạn cùng nhóm.</p>
+<p>Starter là một dự án sạch: Lab 2 đã xong, thân các hàm của Lab 3 đánh dấu <code>TODO Lab 3.x</code> — cùng sáu vi phạm được cài sẵn. Dành khoảng <strong>3 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 3 (15 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 3 (15 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab3', [
+      [1, 'Lab 3 — CT Library: encapsulation and data rules',
+        `<p class="y-chinh">🎯 Lab 3 = Chapter 3 on a real codebase: every field private, every public method a deliberate contract, and rules that live in exactly one place.</p>
+<p>There are two kinds of work here. Feature work: the year rule, the email rule, delete, the report. Review work: reading code you did not write, finding what breaks the team's rules, and fixing it. Both are daily work in a software job.</p>`,
+        `<p class="y-chinh">🎯 Lab 3 = Chương 3 trên một bộ mã thật: mọi trường private, mọi phương thức public là một cam kết có chủ đích, và mỗi luật nằm đúng một chỗ.</p>
+<p>Có hai loại việc. Việc tính năng: luật năm, luật email, xoá, thống kê. Việc review: đọc code mình không viết, tìm chỗ phá luật của nhóm, rồi sửa. Đi làm phần mềm, ngày nào cũng có cả hai.</p>`],
+      [2, 'Ticket CTL-3 — "the data is a mess"',
+        `<p class="y-chinh">🎯 The ticket is driven by real bad data: a book "published" in 2999, two members with one email — plus a pull request that prints DEBUG lines.</p>
+<p>Done means: PASS 176/176, <code>lint.py</code> goes from 6 violations to 0, nine wrong values are refused each with its own sentence, deleting B003 makes the next book B006, and no year is written in the code — the rule reads the machine's clock.</p>`,
+        `<p class="y-chinh">🎯 Ticket sinh ra từ dữ liệu xấu có thật: một cuốn "xuất bản" năm 2999, hai thành viên chung một email — cộng một pull request in ra các dòng DEBUG.</p>
+<p>Xong nghĩa là: PASS 176/176, <code>lint.py</code> từ 6 vi phạm về 0, chín giá trị sai bị từ chối mỗi giá trị một câu riêng, xoá B003 thì cuốn sau là B006, và không có năm nào viết cứng trong code — luật đọc đồng hồ của máy.</p>`],
+      [3, 'Nine wrong values, nine sentences — who checks what',
+        `<p class="y-chinh">🎯 The shape of one value is checked in utils; a rule that needs the data (duplicate, not found) is checked in the repository that owns the data.</p>
+<p>Validation receives only the typed text, so it can say "2999 is in the future" or "this is not an email". It cannot say "this email is already used" — that needs the member list, and utils must never import a repository. So the repository throws, the controller catches, the view prints: the same path as the duplicate ISBN of Lab 1.</p>`,
+        `<p class="y-chinh">🎯 Hình dạng của một giá trị kiểm ở utils; luật cần tới dữ liệu (trùng, không có) kiểm ở repository — nơi giữ dữ liệu.</p>
+<p>Validation chỉ nhận chữ vừa gõ, nên nó nói được "2999 ở tương lai" hay "đây không phải email". Nó không nói được "email này đã có người dùng" — việc đó cần danh sách thành viên, mà utils không bao giờ được import repository. Nên repository ném lỗi, controller bắt, view in: đúng con đường của trùng ISBN ở Lab 1.</p>`],
+      [4, 'TODO 3.1 — a year from the future',
+        `<p class="y-chinh">🎯 "Not after this year" must read the current year at run time — <code>Calendar.getInstance().get(Calendar.YEAR)</code> — never a number typed into the code.</p>
+<p>The constant <code>YEAR_MAX = 2100</code> of Lab 2 is gone. Two checks now, two messages: after the current year → "o tuong lai"; before 1450 → "phai tu 1450 tro di". Neither message prints the current year: if it did, <code>expected.txt</code> would be wrong on 1 January. Designing output that stays testable is part of the job.</p>`,
+        `<p class="y-chinh">🎯 "Không quá năm nay" phải đọc năm hiện tại lúc chạy — <code>Calendar.getInstance().get(Calendar.YEAR)</code> — không bao giờ là một con số gõ cứng vào code.</p>
+<p>Hằng <code>YEAR_MAX = 2100</code> của Lab 2 đã bị bỏ. Giờ có hai phép kiểm, hai câu báo: sau năm hiện tại → "o tuong lai"; trước 1450 → "phai tu 1450 tro di". Không câu nào in năm hiện tại: nếu in, <code>expected.txt</code> sẽ sai vào ngày 1 tháng 1. Thiết kế output để còn kiểm thử được cũng là một phần của công việc.</p>`],
+      [5, 'TODO 3.2 — an email regex you can read',
+        `<p class="y-chinh">🎯 Read the regex in four pieces: a name of letters/digits, optional <code>. _ -</code> followed by more letters/digits, one <code>@</code> and a domain label, then at least one <code>.something</code>.</p>
+<p>That shape refuses <code>an@@ctlib.vn</code> (two @), <code>.an@ctlib.vn</code> (starts with a dot) and <code>an nguyen@ctlib.vn</code> (a space), and accepts <code>Cuong.Le@CTLib.vn</code> because <code>getEmail</code> lower-cases first. Lower-casing first also matters for the next TODO: two emails that differ only in capital letters are the same mailbox.</p>`,
+        `<p class="y-chinh">🎯 Đọc regex thành bốn mảnh: phần tên gồm chữ/số, tuỳ chọn <code>. _ -</code> theo sau là chữ/số, một <code>@</code> và một nhãn tên miền, rồi ít nhất một <code>.đuôi</code>.</p>
+<p>Hình dạng đó từ chối <code>an@@ctlib.vn</code> (hai @), <code>.an@ctlib.vn</code> (mở đầu bằng dấu chấm) và <code>an nguyen@ctlib.vn</code> (có dấu cách), và nhận <code>Cuong.Le@CTLib.vn</code> vì <code>getEmail</code> đổi sang chữ thường trước. Đổi chữ thường trước cũng quan trọng cho TODO kế: hai email chỉ khác chữ hoa là cùng một hộp thư.</p>`],
+      [6, 'TODO 3.3 — one email, one member',
+        `<p class="y-chinh">🎯 <code>MemberRepository.findByEmail</code> walks the list with <code>equals</code>; <code>addMember</code> throws a message naming the member who already owns that email.</p>
+<p>The real output shows <code>AN.NGUYEN@ctlib.vn</code> refused because M002 already has <code>an.nguyen@ctlib.vn</code> — the lower-casing in Validation made the two equal. Note that <code>addMember</code> now <code>throws Exception</code>, so the controller wraps it in <code>try/catch</code> — and so does the loading of sample members.</p>`,
+        `<p class="y-chinh">🎯 <code>MemberRepository.findByEmail</code> duyệt danh sách bằng <code>equals</code>; <code>addMember</code> ném lỗi kèm câu nêu thành viên đang giữ email đó.</p>
+<p>Output thật cho thấy <code>AN.NGUYEN@ctlib.vn</code> bị từ chối vì M002 đã có <code>an.nguyen@ctlib.vn</code> — bước đổi chữ thường ở Validation làm hai chuỗi bằng nhau. Để ý <code>addMember</code> giờ <code>throws Exception</code>, nên controller bọc nó trong <code>try/catch</code> — cả chỗ nạp thành viên mẫu cũng vậy.</p>`],
+      [7, 'TODO 3.4 — delete, and never give an id out twice',
+        `<p class="y-chinh">🎯 Deleting removes the reference from the list; the counter <code>nextBookNumber</code> never goes back, so a deleted id is never given to another book.</p>
+<p>The controller keeps a copy (<code>findById</code>) before deleting, to name the book in the message. Deleting B003 twice gives "Khong co sach nao mang ma B003" the second time; the next book added gets B006, not B003. Why it matters: an old loan record or receipt that says B003 must never start pointing to a different book.</p>
+<p class="meo">🧠 After <code>bookList.remove(book)</code> nothing points to that Book any more — it becomes garbage, and the GC frees it later (2.A).</p>`,
+        `<p class="y-chinh">🎯 Xoá là bỏ tham chiếu khỏi danh sách; bộ đếm <code>nextBookNumber</code> không bao giờ lùi, nên mã đã xoá không bao giờ được cấp cho cuốn khác.</p>
+<p>Controller lấy một bản sao (<code>findById</code>) trước khi xoá, để nêu tên sách trong câu báo. Xoá B003 hai lần thì lần hai nhận "Khong co sach nao mang ma B003"; cuốn thêm tiếp theo mang mã B006, không phải B003. Vì sao quan trọng: một phiếu mượn hay biên nhận cũ ghi B003 không bao giờ được bắt đầu trỏ sang cuốn khác.</p>
+<p class="meo">🧠 Sau <code>bookList.remove(book)</code> không còn gì trỏ tới Book đó — nó thành rác, và GC dọn sau (2.A).</p>`],
+      [8, 'TODO 3.5 — the report: service works on copies',
+        `<p class="y-chinh">🎯 The report is business work, so it lives in <code>BookService.buildReport</code>, which receives the copies from <code>findAll()</code> — the service never sees the repository.</p>
+<p>One loop adds up the copies, counts the books with 0 copies and keeps the oldest book (the first one met wins a tie). The number of titles is simply the size of the list. The result travels in a new DTO, <code>LibraryReportDTO</code>, to a new view, <code>ReportView</code>, whose <code>display()</code> prints four lines.</p>`,
+        `<p class="y-chinh">🎯 Thống kê là nghiệp vụ nên nằm ở <code>BookService.buildReport</code>, nhận các bản sao từ <code>findAll()</code> — service không bao giờ thấy repository.</p>
+<p>Một vòng lặp cộng số bản, đếm sách có 0 bản và giữ cuốn cũ nhất (trùng năm thì cuốn gặp trước thắng). Số đầu sách đơn giản là độ dài danh sách. Kết quả đi trong một DTO mới, <code>LibraryReportDTO</code>, tới một view mới, <code>ReportView</code>, có <code>display()</code> in bốn dòng.</p>`],
+      [9, 'Access modifiers in CT Library — one reason each',
+        `<p class="y-chinh">🎯 Every member of every class has the narrowest access that still lets the program work — and you can say why in one sentence.</p>
+<p>Fields: always <code>private</code>. Methods another class calls: <code>public</code>, they are the contract between layers. Helpers used inside one class (<code>findBookById</code>, <code>toTitleCase</code>, <code>parseInteger</code>): <code>private</code>, so you may change them freely. Classes with only static members (<code>Validation</code>, <code>Message</code>, <code>Constants</code>, <code>Main</code>): a <code>private</code> constructor, so no object can be created. Package-private has no use in this app; <code>protected</code> arrives with inheritance in Lab 4.</p>`,
+        `<p class="y-chinh">🎯 Mọi thành viên của mọi lớp có mức truy cập hẹp nhất mà chương trình vẫn chạy — và bạn nói được lý do trong một câu.</p>
+<p>Trường: luôn <code>private</code>. Phương thức lớp khác gọi: <code>public</code>, đó là cam kết giữa các tầng. Hàm phụ chỉ dùng trong một lớp (<code>findBookById</code>, <code>toTitleCase</code>, <code>parseInteger</code>): <code>private</code>, để bạn đổi thoải mái. Lớp chỉ có thành viên static (<code>Validation</code>, <code>Message</code>, <code>Constants</code>, <code>Main</code>): constructor <code>private</code>, để không ai tạo được đối tượng. Mức package-private (không ghi gì) không có chỗ dùng trong ứng dụng này; <code>protected</code> tới cùng kế thừa ở Lab 4.</p>`],
+      [10, 'What javac says when you break the rules',
+        `<p class="y-chinh">🎯 Access rules are enforced at compile time: touching a private field or a package-private constructor from another package is a compile error, not a warning.</p>
+<p>The small project <code>bay/truy-cap</code> has a <code>Book</code> in package <code>model</code> with a private <code>title</code> and a constructor with no modifier, and a <code>Main</code> in package <code>main</code> that tries both. javac answers with two errors that say exactly why. This is what "encapsulation" buys you: the rule cannot be forgotten.</p>`,
+        `<p class="y-chinh">🎯 Luật truy cập được kiểm lúc biên dịch: chạm trường private hay constructor package-private từ package khác là lỗi biên dịch, không phải cảnh báo.</p>
+<p>Dự án nhỏ <code>bay/truy-cap</code> có lớp <code>Book</code> trong package <code>model</code> với trường <code>title</code> private và một constructor không ghi modifier, cùng lớp <code>Main</code> trong package <code>main</code> thử cả hai. javac trả lời bằng hai lỗi nói rõ lý do. Đó là thứ "đóng gói" mang lại: luật không thể bị quên.</p>`],
+      [11, 'static: where it is allowed — and the bug it hides',
+        `<p class="y-chinh">🎯 A static field belongs to the class: one copy shared by every object. A static id counter makes a brand-new, empty repository start at B004.</p>
+<p>That is why the reviewer allows <code>static</code> only in utils (functions that need no object, like <code>Validation.getYear</code>), constants, and the helper methods of <code>Main</code> (called from the static <code>main</code>). The instance counter of CT Library starts at B001 in every new repository — which is what tests, and later a second branch library, need.</p>`,
+        `<p class="y-chinh">🎯 Trường static thuộc về lớp: một bản duy nhất dùng chung cho mọi đối tượng. Bộ đếm mã static làm một repository mới tinh, rỗng, bắt đầu ở B004.</p>
+<p>Vì vậy thầy chỉ cho <code>static</code> ở utils (hàm không cần đối tượng, như <code>Validation.getYear</code>), constants, và các hàm phụ của <code>Main</code> (được gọi từ <code>main</code> static). Bộ đếm theo đối tượng của CT Library bắt đầu từ B001 ở mọi repository mới — đúng thứ mà kiểm thử, và sau này một thư viện chi nhánh thứ hai, cần.</p>`],
+      [12, 'Trap: every field private — and the list still leaks',
+        `<p class="y-chinh">🎯 <code>private</code> protects the field, not the object it points to: a getter that returns the list itself lets anyone <code>clear()</code> the library.</p>
+<p>In the real run, clearing the result of <code>findAll()</code> leaves 2 books — it was a copy — while clearing the result of <code>getTitleList()</code> leaves 0. CT Library's repositories never return their own list: <code>findAll</code> builds new DTOs every time. (Exercise 5 of 3.2 shows the same leak with arrays and dates.)</p>`,
+        `<p class="y-chinh">🎯 <code>private</code> bảo vệ cái trường, không bảo vệ đối tượng mà trường trỏ tới: một getter trả về chính danh sách cho phép bất kỳ ai <code>clear()</code> cả thư viện.</p>
+<p>Trong lần chạy thật, xoá kết quả của <code>findAll()</code> vẫn còn 2 cuốn — đó là bản sao — còn xoá kết quả của <code>getTitleList()</code> thì còn 0. Repository của CT Library không bao giờ trả danh sách của chính nó: <code>findAll</code> dựng DTO mới mỗi lần. (Bài 5 của 3.2 cho thấy cùng kiểu rò rỉ với mảng và ngày tháng.)</p>`],
+      [13, "TODO 3.6 — review your teammate's PR with lint.py",
+        `<p class="y-chinh">🎯 Six violations in five files, each one a rule from the reviewer's sheet: a model import in a controller, a DEBUG print with a hard-coded string, a hard-coded prompt, a public field, a static counter.</p>
+<p>None of them changes what the grader sees except the DEBUG line — which is exactly why a passing test is not enough. Fix them in any order and re-run <code>lint.py</code> until it prints "✓ … — sạch". In a real team this is what a code review is: someone else reading your diff against the team's rules.</p>`,
+        `<p class="y-chinh">🎯 Sáu vi phạm trong năm tệp, mỗi cái là một luật trên tờ checklist của thầy: controller import model, dòng in DEBUG kèm chuỗi viết cứng, câu nhắc viết cứng, trường public, bộ đếm static.</p>
+<p>Ngoài dòng DEBUG, không cái nào làm đổi thứ bộ chấm thấy — chính vì thế qua kiểm thử là chưa đủ. Sửa theo thứ tự nào cũng được, chạy lại <code>lint.py</code> tới khi in "✓ … — sạch". Ở nhóm thật, review code chính là vậy: người khác đọc thay đổi của bạn đối chiếu với luật chung.</p>`],
+      [14, 'Green: PASS 176/176 and a silent reviewer',
+        `<p class="y-chinh">🎯 Two green lights, both required: the grader (behaviour) and <code>lint.py</code> (the rules). LAB211 checks the second one first.</p>
+<p>A good order: fix the six lint lines first (they are quick and do not change the output), then TODO 3.1–3.5 one by one with the grader after each, then <code>lint.py</code> once more, then commit.</p>`,
+        `<p class="y-chinh">🎯 Hai đèn xanh, phải có đủ cả hai: bộ chấm (hành vi) và <code>lint.py</code> (luật). LAB211 kiểm cái thứ hai trước.</p>
+<p>Thứ tự nên làm: sửa sáu dòng lint trước (nhanh và không đổi output), rồi TODO 3.1–3.5 từng cái một, chạy bộ chấm sau mỗi cái, rồi <code>lint.py</code> lần nữa, rồi commit.</p>`],
+      [15, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 Points follow the ticket: rules, delete, report, the clean review — plus one oral question, because the LAB211 reviewer always asks "why is this private?".</p>
+<p>Answer the self-check aloud. If you can explain every modifier and every <code>static</code> in your project in one sentence each, you are ready for the LAB211 oral.</p>`,
+        `<p class="y-chinh">🎯 Điểm đi theo ticket: luật, xoá, thống kê, lần review sạch — cộng một câu vấn đáp, vì thầy LAB211 lúc nào cũng hỏi "sao cái này private?".</p>
+<p>Trả lời thành tiếng phần tự kiểm. Nếu giải thích được mọi modifier và mọi <code>static</code> trong dự án của mình, mỗi cái một câu, là bạn sẵn sàng cho phần vấn đáp LAB211.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-3 · CT Library · priority: high.</strong> "Data problems this week: a book 'published' in 2999, a copy count of 100, two members sharing one email (and one email written <code>an@@ctlib.vn</code>). Tighten the rules. We also need to <em>delete</em> a book — but an id must never be reused — and a small report (titles, copies, out-of-stock, oldest book). Finally, Binh's pull request is on top of yours: review it, our reviewer's tool must be silent before we merge." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>packages and the folder tree, <code>import</code></td><td>3.A (pro8 slides 26–28)</td></tr>
+<tr><td>access modifiers: public, protected, default, private — the 4×4 table</td><td>3.A (pro8 slides 29–32)</td></tr>
+<tr><td>designing a class that hides its state (case study)</td><td>3.A-2 (pro8 slides 34–40), 3.2 exercise 5</td></tr>
+<tr><td><code>static</code> members, <code>Calendar</code></td><td>1.D, 1.E · Java API</td></tr>
+<tr><td>regex with <code>matches</code></td><td>1.F slide 26</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-3 · CT Library · ưu tiên: cao.</strong> "Tuần này dữ liệu có vấn đề: một cuốn 'xuất bản' năm 2999, số bản 100, hai thành viên chung một email (và một email gõ <code>an@@ctlib.vn</code>). Siết luật lại. Ta cũng cần <em>xoá</em> sách — nhưng mã không bao giờ được dùng lại — và một bản thống kê nhỏ (số đầu sách, tổng số bản, đầu sách hết bản, sách cũ nhất). Cuối cùng, pull request của Bình đè lên của bạn: review nó, công cụ của thầy phải im lặng rồi mới merge." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>package và cây thư mục, <code>import</code></td><td>3.A (pro8 slide 26–28)</td></tr>
+<tr><td>access modifier: public, protected, default, private — bảng 4×4</td><td>3.A (pro8 slide 29–32)</td></tr>
+<tr><td>thiết kế lớp biết giấu trạng thái (case study)</td><td>3.A-2 (pro8 slide 34–40), 3.2 bài 5</td></tr>
+<tr><td>thành viên <code>static</code>, <code>Calendar</code></td><td>1.D, 1.E · Java API</td></tr>
+<tr><td>regex với <code>matches</code></td><td>1.F slide 26</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Year</strong>: after the current year of the machine → "o tuong lai"; before 1450 → "phai tu 1450 tro di"; no year written in the code; no message prints the current year.</li>
+<li><strong>Copies</strong> 0–99 (as Lab 2); <strong>ISBN</strong> unique (as Lab 1).</li>
+<li><strong>Email</strong>: lower-cased, then must match <code>Constants.REGEX_EMAIL</code>; an email already used by a member → refused with the owner's id and name (checked in <code>MemberRepository</code>).</li>
+<li><strong>Delete</strong> (menu 5): by id; unknown id → message; the message after deleting names the book; ids are never reused (B003 deleted ⇒ next book B006).</li>
+<li><strong>Report</strong> (menu 8): number of titles, total copies, titles with 0 copies, the oldest book and its year (empty library ⇒ a dedicated line) — computed in <code>BookService</code> from the repository's copies, printed by <code>ReportView</code>.</li>
+<li><strong>Review</strong>: <code>lint.py</code> on your project prints <code>✓ … — sạch</code> (the starter has 6 violations).</li>
+<li>Every member has the narrowest access possible; <code>static</code> only in utils, constants and <code>Main</code>'s methods.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 176/176 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · you can justify every <code>public</code> and every <code>static</code> in one sentence · one more commit.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Năm</strong>: sau năm hiện tại của máy → "o tuong lai"; trước 1450 → "phai tu 1450 tro di"; không viết năm nào trong code; không câu báo nào in năm hiện tại.</li>
+<li><strong>Số bản</strong> 0–99 (như Lab 2); <strong>ISBN</strong> không trùng (như Lab 1).</li>
+<li><strong>Email</strong>: đổi chữ thường, rồi phải khớp <code>Constants.REGEX_EMAIL</code>; email đã có thành viên dùng → từ chối, nêu mã và họ tên người đang giữ (kiểm ở <code>MemberRepository</code>).</li>
+<li><strong>Xoá</strong> (menu 5): theo mã; mã không có → thông báo; câu báo sau khi xoá nêu tên sách; mã không bao giờ cấp lại (xoá B003 ⇒ cuốn sau là B006).</li>
+<li><strong>Thống kê</strong> (menu 8): số đầu sách, tổng số bản, số đầu sách hết bản, sách cũ nhất kèm năm (thư viện rỗng ⇒ một dòng riêng) — tính ở <code>BookService</code> từ các bản sao của repository, in bằng <code>ReportView</code>.</li>
+<li><strong>Review</strong>: <code>lint.py</code> trên dự án của bạn in <code>✓ … — sạch</code> (starter có 6 vi phạm).</li>
+<li>Mọi thành viên có mức truy cập hẹp nhất có thể; <code>static</code> chỉ ở utils, constants và các hàm của <code>Main</code>.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 176/176 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · bạn giải thích được mọi <code>public</code> và mọi <code>static</code> bằng một câu · thêm một commit.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab3-starter.zip</span><span class="lc-sub">Lab 2 solution + Lab 3 skeleton · TODO 3.1–3.5 · 6 planted lint violations (TODO 3.6) · harness (176 lines) · CheckHarness</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab3-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab3/src/  (new or changed since Lab 2)
+  utils/Validation.java            TODO 3.1 getYear · TODO 3.2 getEmail
+  repository/MemberRepository.java TODO 3.3 findByEmail (+ addMember throws on a duplicate — given)
+  repository/BookRepository.java   TODO 3.4 deleteBook
+  service/BookService.java         TODO 3.5 buildReport
+  dto/LibraryReportDTO.java        (given)   view/ReportView.java   (given)
+  controller/BookController.java   deleteBook, showReport (given)
+  main/Main.java                   8 menu items (given)
+  TODO 3.6 — six planted violations in Book, BookRepository, BookController, MemberController, Main</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab3-starter.zip</span><span class="lc-sub">đáp án Lab 2 + khung Lab 3 · TODO 3.1–3.5 · 6 vi phạm lint cài sẵn (TODO 3.6) · harness (176 dòng) · CheckHarness</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab3-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab3-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab3/src/  (mới hoặc đổi so với Lab 2)
+  utils/Validation.java            TODO 3.1 getYear · TODO 3.2 getEmail
+  repository/MemberRepository.java TODO 3.3 findByEmail (+ addMember ném lỗi khi trùng — cho sẵn)
+  repository/BookRepository.java   TODO 3.4 deleteBook
+  service/BookService.java         TODO 3.5 buildReport
+  dto/LibraryReportDTO.java        (cho sẵn)   view/ReportView.java   (cho sẵn)
+  controller/BookController.java   deleteBook, showReport (cho sẵn)
+  main/Main.java                   8 mục menu (cho sẵn)
+  TODO 3.6 — sáu vi phạm cài sẵn trong Book, BookRepository, BookController, MemberController, Main</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — the review first: run lint.py on the starter (20 min)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab3</code></pre>
+<div class="out">✗ CTLibrary-Lab3 — 6 vi phạm<br>
+&nbsp;&nbsp;[LAYER] src/controller/BookController.java:8 — package 'controller' không được import 'model' (Guide.xlsx)<br>
+&nbsp;&nbsp;[PRINT] src/controller/MemberController.java:54 — không được print ngoài view và main (Guide.xlsx)<br>
+&nbsp;&nbsp;[HARDCODE] src/controller/MemberController.java:54 — chuỗi "DEBUG them: " phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/main/Main.java:163 — chuỗi "Lua chon: " phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[FIELD] src/model/Book.java:27 — trường 'copies' phải private (đóng gói)<br>
+&nbsp;&nbsp;[STATIC] src/repository/BookRepository.java:23 — package 'repository' không được dùng static (Guide.xlsx)</div>
+<p>Read each line: rule, file, line number. Fix them (the table on slide 13 has the fix for each), run <code>lint.py</code> again until it is silent, then commit: <code>git commit -m "Lab 3.6: review fixes"</code>. Only the DEBUG line changes the program's output — and it would make the grader fail at the members step.</p>
+
+<h4>Step 1 — TODO 3.1 the year from the clock (15 min)</h4>
+<details><summary>Hint</summary><p><code>int currentYear = Calendar.getInstance().get(Calendar.YEAR);</code> (import <code>java.util.Calendar</code> in utils). Check "future" before "too early", each with its own message.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Doi chu thanh nam xuat ban: tu YEAR_MIN, khong lon hon nam hien tai cua may
+public static int getYear(String input) throws Exception {
+    // Nam sau khi doi va nam hien tai (lay luc chay, khong viet cung)
+    int year = parseInteger(input, Message.FIELD_YEAR);
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+    // O tuong lai thi bao rieng (khong in nam hien tai de output on dinh)
+    if (year &gt; currentYear) {
+        throw new Exception(String.format(Message.ERROR_YEAR_FUTURE, year));
+    }
+
+    // Truoc YEAR_MIN thi bao nam nho nhat va so da nhap
+    if (year &lt; Constants.YEAR_MIN) {
+        throw new Exception(String.format(Message.ERROR_YEAR_MIN, Constants.YEAR_MIN, year));
+    }
+
+    return year;
+}</code></pre>
+</details>
+
+<h4>Step 2 — TODO 3.2 the email shape (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Kiem email co ban: co phan truoc @, co ten mien co dau cham sau @
+public static String getEmail(String input) throws Exception {
+    // Email bo dau cach 2 dau, viet thuong
+    String email = input.trim().toLowerCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!email.matches(Constants.REGEX_EMAIL)) {
+        throw new Exception(String.format(Message.ERROR_EMAIL, input.trim()));
+    }
+
+    return email;
+}</code></pre>
+</details>
+
+<h4>Step 3 — TODO 3.3 one email per member (15 min)</h4>
+<details><summary>Solution — findByEmail (addMember already calls it)</summary>
+<pre class="trich"><code class="language-java">// Tim thanh vien theo email; khong co thi tra null
+private Member findByEmail(String email) {
+    // Duyet tung thanh vien de so email
+    for (Member member : memberList) {
+        // So chuoi bang equals (email da viet thuong o utils)
+        if (member.getEmail().equals(email)) {
+            return member;
+        }
+    }
+
+    return null;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Them 1 thanh vien tu phieu nhap, tra ve ma vua cap; email da co thi nem loi
+public String addMember(MemberRequestDTO memberRequestDTO) throws Exception {
+    // Nguoi dang giu email nay (null neu chua co) va ma se cap
+    Member existingMember = findByEmail(memberRequestDTO.getEmail());
+    String newId = "";
+
+    // Trung email thi bao ro email dang thuoc ve ai
+    if (existingMember != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_EMAIL,
+                existingMember.getEmail(), existingMember.getId(), existingMember.getName()));
+    }
+
+    // Cap ma moi, tang so thu tu cho lan sau roi them thanh vien moi
+    newId = String.format(Constants.MEMBER_ID_FORMAT, nextMemberNumber);
+    nextMemberNumber++;
+    memberList.add(new Member(newId, memberRequestDTO.getName(), memberRequestDTO.getEmail()));
+    return newId;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ho ten: Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an@@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap ".an@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an nguyen@ctlib.vn". Moi nhap lai.<br>
+Email: Email an.nguyen@ctlib.vn da thuoc ve M002 "Nguyen Van An". Moi thanh vien dung 1 email rieng.<br>
+…</div>
+
+<h4>Step 4 — TODO 3.4 delete without reusing ids (15 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Xoa sach mang ma nay; khong co ma thi nem loi. nextBookNumber KHONG lui lai
+public void deleteBook(String id) throws Exception {
+    // Sach mang ma nay (null neu khong co)
+    Book book = findBookById(id);
+
+    // Khong co ma thi bao loi
+    if (book == null) {
+        throw new Exception(String.format(Message.ERROR_BOOK_NOT_FOUND, id));
+    }
+
+    // Bo tham chieu khoi danh sach; khong con ai tro toi thi doi tuong thanh rac cho GC
+    bookList.remove(book);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma sach (vi du B001): Da xoa sach B003 "Java Concurrency In Practice". Ma B003 se khong duoc cap lai cho sach khac.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da them sach B006 "Design Patterns". Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Step 5 — TODO 3.5 the report (25 min)</h4>
+<details><summary>Hint</summary><p>Start from <code>new LibraryReportDTO()</code> (all zeros, empty title). In the loop: add the copies; count <code>copies == 0</code>; replace the oldest book when the report has none yet or the book is older. After the loop, the number of titles is <code>bookList.size()</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Thong ke tu danh sach Controller dua vao: so dau sach, tong so ban, so dau sach het,
+// sach cu nhat (trung nam thi giu sach gap truoc)
+public LibraryReportDTO buildReport(ArrayList&lt;BookResponseDTO&gt; bookList) {
+    // Bao cao rong: moi so bang 0, chua co sach cu nhat
+    LibraryReportDTO report = new LibraryReportDTO();
+
+    // Cong don tung sach vao bao cao
+    for (BookResponseDTO book : bookList) {
+        report.setTotalCopies(report.getTotalCopies() + book.getCopies());
+
+        // Sach het ban thi dem them 1
+        if (book.getCopies() == 0) {
+            report.setOutOfStockTitles(report.getOutOfStockTitles() + 1);
+        }
+
+        // Sach dau tien hoac cu hon sach cu nhat dang giu thi thay
+        if ((report.getOldestTitle().isEmpty()) || (book.getYear() &lt; report.getOldestYear())) {
+            report.setOldestTitle(book.getTitle());
+            report.setOldestYear(book.getYear());
+        }
+    }
+
+    // So dau sach la so dong cua danh sach
+    report.setTotalTitles(bookList.size());
+    return report;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 5<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 14<br>
+Dau sach het ban : 1<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Design Patterns (1994)<br>
+…</div>
+
+<h4>Step 6 — grade, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 176/176 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab3-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab3-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — review trước: chạy lint.py trên starter (20 phút)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab3</code></pre>
+<div class="out">✗ CTLibrary-Lab3 — 6 vi phạm<br>
+&nbsp;&nbsp;[LAYER] src/controller/BookController.java:8 — package 'controller' không được import 'model' (Guide.xlsx)<br>
+&nbsp;&nbsp;[PRINT] src/controller/MemberController.java:54 — không được print ngoài view và main (Guide.xlsx)<br>
+&nbsp;&nbsp;[HARDCODE] src/controller/MemberController.java:54 — chuỗi "DEBUG them: " phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/main/Main.java:163 — chuỗi "Lua chon: " phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[FIELD] src/model/Book.java:27 — trường 'copies' phải private (đóng gói)<br>
+&nbsp;&nbsp;[STATIC] src/repository/BookRepository.java:23 — package 'repository' không được dùng static (Guide.xlsx)</div>
+<p>Đọc từng dòng: luật, tệp, số dòng. Sửa hết (bảng ở slide 13 có cách sửa cho từng cái), chạy lại <code>lint.py</code> tới khi im lặng, rồi commit: <code>git commit -m "Lab 3.6: review fixes"</code>. Chỉ dòng DEBUG làm đổi output của chương trình — và nó sẽ làm bộ chấm hỏng ở bước thêm thành viên.</p>
+
+<h4>Bước 1 — TODO 3.1 năm lấy từ đồng hồ (15 phút)</h4>
+<details><summary>Gợi ý</summary><p><code>int currentYear = Calendar.getInstance().get(Calendar.YEAR);</code> (import <code>java.util.Calendar</code> trong utils). Kiểm "tương lai" trước "quá sớm", mỗi cái một câu báo riêng.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Doi chu thanh nam xuat ban: tu YEAR_MIN, khong lon hon nam hien tai cua may
+public static int getYear(String input) throws Exception {
+    // Nam sau khi doi va nam hien tai (lay luc chay, khong viet cung)
+    int year = parseInteger(input, Message.FIELD_YEAR);
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+    // O tuong lai thi bao rieng (khong in nam hien tai de output on dinh)
+    if (year &gt; currentYear) {
+        throw new Exception(String.format(Message.ERROR_YEAR_FUTURE, year));
+    }
+
+    // Truoc YEAR_MIN thi bao nam nho nhat va so da nhap
+    if (year &lt; Constants.YEAR_MIN) {
+        throw new Exception(String.format(Message.ERROR_YEAR_MIN, Constants.YEAR_MIN, year));
+    }
+
+    return year;
+}</code></pre>
+</details>
+
+<h4>Bước 2 — TODO 3.2 hình dạng email (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Kiem email co ban: co phan truoc @, co ten mien co dau cham sau @
+public static String getEmail(String input) throws Exception {
+    // Email bo dau cach 2 dau, viet thuong
+    String email = input.trim().toLowerCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!email.matches(Constants.REGEX_EMAIL)) {
+        throw new Exception(String.format(Message.ERROR_EMAIL, input.trim()));
+    }
+
+    return email;
+}</code></pre>
+</details>
+
+<h4>Bước 3 — TODO 3.3 mỗi thành viên một email (15 phút)</h4>
+<details><summary>Lời giải — findByEmail (addMember đã gọi sẵn)</summary>
+<pre class="trich"><code class="language-java">// Tim thanh vien theo email; khong co thi tra null
+private Member findByEmail(String email) {
+    // Duyet tung thanh vien de so email
+    for (Member member : memberList) {
+        // So chuoi bang equals (email da viet thuong o utils)
+        if (member.getEmail().equals(email)) {
+            return member;
+        }
+    }
+
+    return null;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Them 1 thanh vien tu phieu nhap, tra ve ma vua cap; email da co thi nem loi
+public String addMember(MemberRequestDTO memberRequestDTO) throws Exception {
+    // Nguoi dang giu email nay (null neu chua co) va ma se cap
+    Member existingMember = findByEmail(memberRequestDTO.getEmail());
+    String newId = "";
+
+    // Trung email thi bao ro email dang thuoc ve ai
+    if (existingMember != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_EMAIL,
+                existingMember.getEmail(), existingMember.getId(), existingMember.getName()));
+    }
+
+    // Cap ma moi, tang so thu tu cho lan sau roi them thanh vien moi
+    newId = String.format(Constants.MEMBER_ID_FORMAT, nextMemberNumber);
+    nextMemberNumber++;
+    memberList.add(new Member(newId, memberRequestDTO.getName(), memberRequestDTO.getEmail()));
+    return newId;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ho ten: Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an@@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap ".an@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an nguyen@ctlib.vn". Moi nhap lai.<br>
+Email: Email an.nguyen@ctlib.vn da thuoc ve M002 "Nguyen Van An". Moi thanh vien dung 1 email rieng.<br>
+…</div>
+
+<h4>Bước 4 — TODO 3.4 xoá mà không dùng lại mã (15 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Xoa sach mang ma nay; khong co ma thi nem loi. nextBookNumber KHONG lui lai
+public void deleteBook(String id) throws Exception {
+    // Sach mang ma nay (null neu khong co)
+    Book book = findBookById(id);
+
+    // Khong co ma thi bao loi
+    if (book == null) {
+        throw new Exception(String.format(Message.ERROR_BOOK_NOT_FOUND, id));
+    }
+
+    // Bo tham chieu khoi danh sach; khong con ai tro toi thi doi tuong thanh rac cho GC
+    bookList.remove(book);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma sach (vi du B001): Da xoa sach B003 "Java Concurrency In Practice". Ma B003 se khong duoc cap lai cho sach khac.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da them sach B006 "Design Patterns". Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Bước 5 — TODO 3.5 thống kê (25 phút)</h4>
+<details><summary>Gợi ý</summary><p>Bắt đầu từ <code>new LibraryReportDTO()</code> (mọi số bằng 0, tên rỗng). Trong vòng lặp: cộng số bản; đếm <code>copies == 0</code>; thay sách cũ nhất khi báo cáo chưa có cuốn nào hoặc cuốn đang xét cũ hơn. Sau vòng lặp, số đầu sách là <code>bookList.size()</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Thong ke tu danh sach Controller dua vao: so dau sach, tong so ban, so dau sach het,
+// sach cu nhat (trung nam thi giu sach gap truoc)
+public LibraryReportDTO buildReport(ArrayList&lt;BookResponseDTO&gt; bookList) {
+    // Bao cao rong: moi so bang 0, chua co sach cu nhat
+    LibraryReportDTO report = new LibraryReportDTO();
+
+    // Cong don tung sach vao bao cao
+    for (BookResponseDTO book : bookList) {
+        report.setTotalCopies(report.getTotalCopies() + book.getCopies());
+
+        // Sach het ban thi dem them 1
+        if (book.getCopies() == 0) {
+            report.setOutOfStockTitles(report.getOutOfStockTitles() + 1);
+        }
+
+        // Sach dau tien hoac cu hon sach cu nhat dang giu thi thay
+        if ((report.getOldestTitle().isEmpty()) || (book.getYear() &lt; report.getOldestYear())) {
+            report.setOldestTitle(book.getTitle());
+            report.setOldestYear(book.getYear());
+        }
+    }
+
+    // So dau sach la so dong cua danh sach
+    report.setTotalTitles(bookList.size());
+    return report;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 5<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 14<br>
+Dau sach het ban : 1<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Design Patterns (1994)<br>
+…</div>
+
+<h4>Bước 6 — chấm, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 176/176 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab3-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab3-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8, and 176/176 on the grader.</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (176 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 4<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 10<br>
+Dau sach het ban : 0<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Head First Java (2005)<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: Nam xuat ban 2999 o tuong lai: khong duoc lon hon nam hien tai. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 tro di (sach in dau tien ~1450), ban nhap 1449. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap 100. Moi nhap lai.<br>
+So ban: So ban phai tu 0 den 99, ban nhap -3. Moi nhap lai.<br>
+So ban: Da them sach B005 "Refactoring". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da co sach mang ISBN 9780134685991 (B002 "Effective Java"). Moi dau sach chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 5.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Xoa sach ---<br>
+Ma sach (vi du B001): Da xoa sach B003 "Java Concurrency In Practice". Ma B003 se khong duoc cap lai cho sach khac.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Xoa sach ---<br>
+Ma sach (vi du B001): Khong co sach nao mang ma B003. Hay chon 2 de xem ma sach roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da them sach B006 "Design Patterns". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B006 &nbsp;9780201633610 &nbsp;1994 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Erich Gamma &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Design Patterns<br>
+2 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+3 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+4 &nbsp;&nbsp;B005 &nbsp;9780134757599 &nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martin Fowler &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refactoring<br>
+5 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an@@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap ".an@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an nguyen@ctlib.vn". Moi nhap lai.<br>
+Email: Email an.nguyen@ctlib.vn da thuoc ve M002 "Nguyen Van An". Moi thanh vien dung 1 email rieng.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Da them thanh vien M003 "Le Van Cuong". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Cuong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cuong.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 5<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 14<br>
+Dau sach het ban : 1<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Design Patterns (1994)<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 3 chi nam trong bo nho.</div>
+</details>
+<details><summary>ReportView.java and LibraryReportDTO — the new view and its data</summary>
+<pre><code class="language-java">package view;
+
+import constants.Message;
+import dto.LibraryReportDTO;
+
+/**
+ * Man hinh thong ke: in bao cao Controller dua vao qua setter.
+ * display() khong nhan tham so, goi 1 lan cho moi lan thong ke.
+ *
+ * @author CuongThai Academy
+ */
+public class ReportView {
+
+    // Bao cao can in
+    private LibraryReportDTO report;
+
+    // Tao View voi bao cao rong
+    public ReportView() {
+        report = new LibraryReportDTO();
+    }
+
+    // Controller dua bao cao vao View
+    public void setReport(LibraryReportDTO report) {
+        this.report = report;
+    }
+
+    // In tung dong cua bao cao
+    public void display() {
+        System.out.println(String.format(Message.REPORT_TITLES, report.getTotalTitles()));
+        System.out.println(String.format(Message.REPORT_COPIES, report.getTotalCopies()));
+        System.out.println(String.format(Message.REPORT_OUT_OF_STOCK,
+                report.getOutOfStockTitles()));
+
+        // Thu vien rong thi khong co sach cu nhat
+        if (report.getOldestTitle().isEmpty()) {
+            System.out.println(Message.REPORT_NO_BOOK);
+        } else {
+            // Co sach thi in ten + nam cua sach cu nhat
+            System.out.println(String.format(Message.REPORT_OLDEST, report.getOldestTitle(),
+                    report.getOldestYear()));
+        }
+    }
+}</code></pre>
+</details>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt, và bộ chấm 176/176.</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (176 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 4<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 10<br>
+Dau sach het ban : 0<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Head First Java (2005)<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: Nam xuat ban 2999 o tuong lai: khong duoc lon hon nam hien tai. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 tro di (sach in dau tien ~1450), ban nhap 1449. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap 100. Moi nhap lai.<br>
+So ban: So ban phai tu 0 den 99, ban nhap -3. Moi nhap lai.<br>
+So ban: Da them sach B005 "Refactoring". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da co sach mang ISBN 9780134685991 (B002 "Effective Java"). Moi dau sach chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 5.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Xoa sach ---<br>
+Ma sach (vi du B001): Da xoa sach B003 "Java Concurrency In Practice". Ma B003 se khong duoc cap lai cho sach khac.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Xoa sach ---<br>
+Ma sach (vi du B001): Khong co sach nao mang ma B003. Hay chon 2 de xem ma sach roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Nam xuat ban: So ban: Da them sach B006 "Design Patterns". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B006 &nbsp;9780201633610 &nbsp;1994 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Erich Gamma &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Design Patterns<br>
+2 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+3 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+4 &nbsp;&nbsp;B005 &nbsp;9780134757599 &nbsp;2018 &nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martin Fowler &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refactoring<br>
+5 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an@@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap ".an@ctlib.vn". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien.duoi, chi gom chu khong dau, chu so va . _ - (vi du an.nguyen@ctlib.vn), ban nhap "an nguyen@ctlib.vn". Moi nhap lai.<br>
+Email: Email an.nguyen@ctlib.vn da thuoc ve M002 "Nguyen Van An". Moi thanh vien dung 1 email rieng.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Da them thanh vien M003 "Le Van Cuong". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Cuong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cuong.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: --- Thong ke thu vien ---<br>
+So dau sach &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 5<br>
+Tong so ban &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 14<br>
+Dau sach het ban : 1<br>
+Sach cu nhat &nbsp;&nbsp;&nbsp;&nbsp;: Design Patterns (1994)<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Xoa sach<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 3 chi nam trong bo nho.</div>
+</details>
+<details><summary>ReportView.java và LibraryReportDTO — view mới và dữ liệu của nó</summary>
+<pre><code class="language-java">package view;
+
+import constants.Message;
+import dto.LibraryReportDTO;
+
+/**
+ * Man hinh thong ke: in bao cao Controller dua vao qua setter.
+ * display() khong nhan tham so, goi 1 lan cho moi lan thong ke.
+ *
+ * @author CuongThai Academy
+ */
+public class ReportView {
+
+    // Bao cao can in
+    private LibraryReportDTO report;
+
+    // Tao View voi bao cao rong
+    public ReportView() {
+        report = new LibraryReportDTO();
+    }
+
+    // Controller dua bao cao vao View
+    public void setReport(LibraryReportDTO report) {
+        this.report = report;
+    }
+
+    // In tung dong cua bao cao
+    public void display() {
+        System.out.println(String.format(Message.REPORT_TITLES, report.getTotalTitles()));
+        System.out.println(String.format(Message.REPORT_COPIES, report.getTotalCopies()));
+        System.out.println(String.format(Message.REPORT_OUT_OF_STOCK,
+                report.getOutOfStockTitles()));
+
+        // Thu vien rong thi khong co sach cu nhat
+        if (report.getOldestTitle().isEmpty()) {
+            System.out.println(Message.REPORT_NO_BOOK);
+        } else {
+            // Co sach thi in ten + nam cua sach cu nhat
+            System.out.println(String.format(Message.REPORT_OLDEST, report.getOldestTitle(),
+                    report.getOldestYear()));
+        }
+    }
+}</code></pre>
+</details>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — private and package-private from another package.</strong> Two real compile errors.</p></div>
+<pre><code class="language-java">package main;
+
+import model.Book;
+
+/**
+ * Main o package khac (main) thu cham vao Book cua package model.
+ */
+public final class Main {
+
+    // Lop chi co ham static
+    private Main() {
+    }
+
+    // Thu tao Book va sua thang truong private
+    public static void main(String[] args) {
+        Book book = new Book("Clean Code");
+        book.title = "Dirty Code";
+        System.out.println(book.getTitle());
+    }
+}</code></pre>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/main/Main.java:16: error: Book(String) is not public in Book; cannot be accessed from outside package<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Book book = new Book("Clean Code");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/main/Main.java:17: error: title has private access in Book<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;book.title = "Dirty Code";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Trap 2 — a static id counter.</strong> A brand-new repository starts at B004.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 3 trap — a static id counter is shared by EVERY repository
+import java.util.ArrayList;
+
+class StaticRepository {
+    private static int nextNumber = 1;                    // belongs to the CLASS: one copy for all objects
+    private ArrayList&lt;String&gt; idList = new ArrayList&lt;String&gt;();
+
+    String add() {
+        String id = String.format("B%03d", nextNumber);
+        nextNumber++;
+        idList.add(id);
+        return id;
+    }
+}
+
+class InstanceRepository {
+    private int nextNumber = 1;                           // belongs to EACH object (what CT Library does)
+    private ArrayList&lt;String&gt; idList = new ArrayList&lt;String&gt;();
+
+    String add() {
+        String id = String.format("B%03d", nextNumber);
+        nextNumber++;
+        idList.add(id);
+        return id;
+    }
+}
+
+public class LabBayStatic {
+    public static void main(String[] args) {
+        StaticRepository library = new StaticRepository();
+        System.out.println("static  : library gets " + library.add() + ", " + library.add() + ", " + library.add());
+        StaticRepository freshTest = new StaticRepository();   // a brand-new, EMPTY repository...
+        System.out.println("static  : fresh repository starts at " + freshTest.add());   // ...but not at B001
+
+        InstanceRepository library2 = new InstanceRepository();
+        System.out.println("instance: library gets " + library2.add() + ", " + library2.add() + ", " + library2.add());
+        InstanceRepository freshTest2 = new InstanceRepository();
+        System.out.println("instance: fresh repository starts at " + freshTest2.add());
+    }
+}</code></pre>
+<div class="out">static &nbsp;: library gets B001, B002, B003<br>
+static &nbsp;: fresh repository starts at B004<br>
+instance: library gets B001, B002, B003<br>
+instance: fresh repository starts at B001</div>
+<div class="pitfall"><p><strong>Trap 3 — a getter that returns the list itself.</strong> All fields private, and one <code>clear()</code> outside empties the library.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 3 trap — every field is private, yet a getter hands out the list itself
+import java.util.ArrayList;
+
+class LeakyRepository {
+    private ArrayList&lt;String&gt; titleList = new ArrayList&lt;String&gt;();
+
+    LeakyRepository() {
+        titleList.add("Effective Java");
+        titleList.add("Clean Code");
+    }
+
+    ArrayList&lt;String&gt; getTitleList() { return titleList; }              // the SAME list object
+    ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(titleList); }   // a copy (CT Library returns DTO copies)
+    int count() { return titleList.size(); }
+}
+
+public class LabBayRoRi {
+    public static void main(String[] args) {
+        LeakyRepository repository = new LeakyRepository();
+        repository.findAll().clear();                     // clears only the copy
+        System.out.println("after findAll().clear()     : " + repository.count() + " books");
+        repository.getTitleList().clear();                // clears the library itself!
+        System.out.println("after getTitleList().clear(): " + repository.count() + " books");
+    }
+}</code></pre>
+<div class="out">after findAll().clear() &nbsp;&nbsp;&nbsp;&nbsp;: 2 books<br>
+after getTitleList().clear(): 0 books</div>
+<div class="pitfall"><p><strong>Trap 4 — printing the current year in a message.</strong> The output changes every 1 January and <code>expected.txt</code> breaks. Keep moving values out of messages that are tested.</p></div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — private và package-private từ package khác.</strong> Hai lỗi biên dịch thật.</p></div>
+<pre><code class="language-java">package main;
+
+import model.Book;
+
+/**
+ * Main o package khac (main) thu cham vao Book cua package model.
+ */
+public final class Main {
+
+    // Lop chi co ham static
+    private Main() {
+    }
+
+    // Thu tao Book va sua thang truong private
+    public static void main(String[] args) {
+        Book book = new Book("Clean Code");
+        book.title = "Dirty Code";
+        System.out.println(book.getTitle());
+    }
+}</code></pre>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")</code></pre>
+<div class="out">src/main/Main.java:16: error: Book(String) is not public in Book; cannot be accessed from outside package<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Book book = new Book("Clean Code");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+src/main/Main.java:17: error: title has private access in Book<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;book.title = "Dirty Code";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+2 errors</div>
+<div class="pitfall"><p><strong>Bẫy 2 — bộ đếm mã static.</strong> Repository mới tinh bắt đầu ở B004.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 3 — bộ đếm mã static bị MỌI kho dùng chung
+import java.util.ArrayList;
+
+class StaticRepository {
+    private static int nextNumber = 1;                    // thuộc LỚP: một bản cho mọi đối tượng
+    private ArrayList&lt;String&gt; idList = new ArrayList&lt;String&gt;();
+
+    String add() {
+        String id = String.format("B%03d", nextNumber);
+        nextNumber++;
+        idList.add(id);
+        return id;
+    }
+}
+
+class InstanceRepository {
+    private int nextNumber = 1;                           // thuộc TỪNG đối tượng (CT Library làm vậy)
+    private ArrayList&lt;String&gt; idList = new ArrayList&lt;String&gt;();
+
+    String add() {
+        String id = String.format("B%03d", nextNumber);
+        nextNumber++;
+        idList.add(id);
+        return id;
+    }
+}
+
+public class LabBayStatic {
+    public static void main(String[] args) {
+        StaticRepository library = new StaticRepository();
+        System.out.println("static  : library gets " + library.add() + ", " + library.add() + ", " + library.add());
+        StaticRepository freshTest = new StaticRepository();   // một kho MỚI TINH, RỖNG...
+        System.out.println("static  : fresh repository starts at " + freshTest.add());   // ...mà không bắt đầu ở B001
+
+        InstanceRepository library2 = new InstanceRepository();
+        System.out.println("instance: library gets " + library2.add() + ", " + library2.add() + ", " + library2.add());
+        InstanceRepository freshTest2 = new InstanceRepository();
+        System.out.println("instance: fresh repository starts at " + freshTest2.add());
+    }
+}</code></pre>
+<div class="out">static &nbsp;: library gets B001, B002, B003<br>
+static &nbsp;: fresh repository starts at B004<br>
+instance: library gets B001, B002, B003<br>
+instance: fresh repository starts at B001</div>
+<div class="pitfall"><p><strong>Bẫy 3 — getter trả về chính danh sách.</strong> Mọi trường đều private, vậy mà một lệnh <code>clear()</code> bên ngoài xoá sạch thư viện.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 3 — mọi trường đều private, vậy mà getter đưa luôn cái danh sách ra ngoài
+import java.util.ArrayList;
+
+class LeakyRepository {
+    private ArrayList&lt;String&gt; titleList = new ArrayList&lt;String&gt;();
+
+    LeakyRepository() {
+        titleList.add("Effective Java");
+        titleList.add("Clean Code");
+    }
+
+    ArrayList&lt;String&gt; getTitleList() { return titleList; }              // CHÍNH đối tượng danh sách đó
+    ArrayList&lt;String&gt; findAll() { return new ArrayList&lt;String&gt;(titleList); }   // một bản sao (CT Library trả bản sao DTO)
+    int count() { return titleList.size(); }
+}
+
+public class LabBayRoRi {
+    public static void main(String[] args) {
+        LeakyRepository repository = new LeakyRepository();
+        repository.findAll().clear();                     // chỉ xoá bản sao
+        System.out.println("after findAll().clear()     : " + repository.count() + " books");
+        repository.getTitleList().clear();                // xoá sạch chính thư viện!
+        System.out.println("after getTitleList().clear(): " + repository.count() + " books");
+    }
+}</code></pre>
+<div class="out">after findAll().clear() &nbsp;&nbsp;&nbsp;&nbsp;: 2 books<br>
+after getTitleList().clear(): 0 books</div>
+<div class="pitfall"><p><strong>Bẫy 4 — in năm hiện tại trong câu báo.</strong> Output đổi mỗi ngày 1 tháng 1 và <code>expected.txt</code> hỏng. Giữ các giá trị thay đổi theo thời gian ra khỏi những câu được kiểm thử.</p></div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Year from the clock + 1450 rule (3.1)</td><td>1</td><td>grader lines 27–28, no year in the code</td></tr>
+<tr><td>Strict email + duplicate email in the repository (3.2, 3.3)</td><td>2</td><td>grader lines 120–123</td></tr>
+<tr><td>Delete, id never reused (3.4)</td><td>2</td><td>grader lines 67, 79, 91, 104</td></tr>
+<tr><td>Report computed by the service on copies (3.5)</td><td>2</td><td>grader lines 12–15, 162–165</td></tr>
+<tr><td>Review: <code>lint.py</code> 0 violations (3.6)</td><td>2</td><td><code>lint.py</code></td></tr>
+<tr><td>Oral: explain any modifier the reviewer points at</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. Why is getYear in utils but the duplicate-email check in the repository?</summary><p class="dap-an">✅ The year rule needs only the typed value (shape); "already used" needs the member list, which only the repository holds — and utils may not import a repository.</p></details>
+<details><summary>2. What breaks if nextBookNumber is static?</summary><p class="dap-an">✅ All repositories share one counter: a second (or a test) repository does not start at B001, and <code>lint.py</code> rejects static outside utils/constants. Real output: "fresh repository starts at B004".</p></details>
+<details><summary>3. Which getter would leak the library — and how does CT Library avoid it?</summary><p class="dap-an">✅ A <code>getBookList()</code> returning the <code>ArrayList&lt;Book&gt;</code> field itself. CT Library has no such getter: <code>findAll()</code> builds new <code>BookResponseDTO</code> copies every time, so callers can never change the stored books.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td>Năm lấy từ đồng hồ + luật 1450 (3.1)</td><td>1</td><td>dòng 27–28 của bộ chấm, không có năm trong code</td></tr>
+<tr><td>Email chặt + chặn trùng email ở repository (3.2, 3.3)</td><td>2</td><td>dòng 120–123</td></tr>
+<tr><td>Xoá, mã không cấp lại (3.4)</td><td>2</td><td>dòng 67, 79, 91, 104</td></tr>
+<tr><td>Thống kê do service tính trên bản sao (3.5)</td><td>2</td><td>dòng 12–15, 162–165</td></tr>
+<tr><td>Review: <code>lint.py</code> 0 vi phạm (3.6)</td><td>2</td><td><code>lint.py</code></td></tr>
+<tr><td>Vấn đáp: giải thích modifier bất kỳ thầy chỉ vào</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. Vì sao getYear ở utils còn chặn trùng email ở repository?</summary><p class="dap-an">✅ Luật năm chỉ cần giá trị vừa gõ (hình dạng); "đã có người dùng" cần danh sách thành viên mà chỉ repository giữ — và utils không được import repository.</p></details>
+<details><summary>2. nextBookNumber mà static thì hỏng gì?</summary><p class="dap-an">✅ Mọi repository dùng chung một bộ đếm: repository thứ hai (hay repository trong bài kiểm thử) không bắt đầu từ B001, và <code>lint.py</code> từ chối static ngoài utils/constants. Output thật: "fresh repository starts at B004".</p></details>
+<details><summary>3. Getter nào làm rò thư viện — và CT Library tránh bằng cách nào?</summary><p class="dap-an">✅ Một <code>getBookList()</code> trả về chính trường <code>ArrayList&lt;Book&gt;</code>. CT Library không có getter đó: <code>findAll()</code> dựng bản sao <code>BookResponseDTO</code> mới mỗi lần, nên nơi gọi không bao giờ sửa được sách đã lưu.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ The report: add "the author with the most titles". Which class changes, which stay the same?</li>
+<li>⭐ Use <strong>varargs</strong> (3.A-2): a private helper in <code>ReportView</code>, <code>printLines(String... lines)</code>, that prints any number of lines — is it still "display() with no parameters" from the controller's point of view?</li>
+<li>⭐⭐ Delete a member, but refuse while the member still has books on loan — sketch where that rule would live when loans arrive (Lab 6).</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 4 (after Chapter 4):</strong> the club also lends magazines and DVDs. <code>LibraryItem</code> becomes the parent of <code>Book</code>, <code>Magazine</code> and <code>DVD</code>; loan days and late fees are overridden in each class, and the fee is computed without a single <code>instanceof</code> — polymorphism doing the work. <code>protected</code> finally gets a use.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Thống kê: thêm "tác giả có nhiều đầu sách nhất". Lớp nào đổi, lớp nào giữ nguyên?</li>
+<li>⭐ Dùng <strong>varargs</strong> (3.A-2): một hàm phụ private trong <code>ReportView</code>, <code>printLines(String... lines)</code>, in bao nhiêu dòng cũng được — nhìn từ controller thì nó có còn là "display() không tham số"?</li>
+<li>⭐⭐ Xoá thành viên, nhưng từ chối nếu thành viên đó đang mượn sách — phác thảo luật đó sẽ nằm ở đâu khi có chức năng mượn (Lab 6).</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 4 (sau Chương 4):</strong> câu lạc bộ còn cho mượn tạp chí và DVD. <code>LibraryItem</code> thành lớp cha của <code>Book</code>, <code>Magazine</code> và <code>DVD</code>; số ngày mượn và phí trễ hạn được ghi đè ở từng lớp, và phí được tính mà không cần một <code>instanceof</code> nào — đa hình làm thay. <code>protected</code> cuối cùng cũng có chỗ dùng.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch3) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -2222,6 +3452,7 @@ public static void main(String[] args) {
 export default {
   slides: [L_pro8_3],
   practice: L_on_ch3,
+  labs: [L_lab3],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 3 (viết lại, có giải thích song ngữ, lấy cảm hứng từ đề FE thật): thứ tự bốn mức truy cập, protected thật sự cho phép gì, chọn các phát biểu đúng về public/default/protected/private, dòng package phải đứng đầu, chạy một lớp có package, varargs nhận gì và khai báo nào hợp lệ, protected qua tham chiếu kiểu lớp cha ở package khác, getter làm rò rỉ danh sách private, và lỗi truy cập trong demo Box/Rectangle — câu "in ra gì" đều đã chạy thật.',
 };

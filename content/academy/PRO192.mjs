@@ -562,6 +562,8 @@ export default {
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch1.mjs */
         ch1.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch1.mjs */
+        ...ch1.labs,
         {
           title: 'Chapter 1 Quiz|||Quiz chương 1',
           slug: 'pro192-quiz-ch1',
@@ -691,6 +693,8 @@ export default {
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch2.mjs */
         ch2.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch2.mjs */
+        ...ch2.labs,
         {
           title: 'Chapter 2 Quiz|||Quiz chương 2',
           slug: 'pro192-quiz-ch2',
@@ -806,6 +810,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch3.mjs */
         ch3.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch3.mjs */
+        ...ch3.labs,
         {
           title: 'Chapter 3 Quiz|||Quiz chương 3',
           slug: 'pro192-quiz-ch3',

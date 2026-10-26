@@ -2,13 +2,16 @@
  * PRO192 · Chương 1 — tư duy OO & Java cơ bản (pro1, pro3, pro4, pro5, pro6).
  * Bài 📑 học theo từng slide: pro1 (tmp_01.pptx, slide 1–16); pro3 (tmp_03.pptx, slide 1–26); pro4 (tmp_04.pptx, slide 1–27); pro5 (tmp_05.pptx, slide 1–30); pro6 (tmp_06.pptx, slide 1–18).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch1.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-1-danh-muc-sach.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch1).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab1', { code: 'PRO192 Lab 1', en: 'Lab 1 — CT Library: the first book catalogue', vi: 'Lab 1 — CT Library: danh mục sách đầu tiên', total: 17, w: 1280, h: 720, ver: 'v2' });
 
 /* ───────── 1.A — 📑 Slide by slide · Introduction: complexity, abstraction, encapsulation, hierarchy, polymorphism (slides 1–16) ───────── */
 const L_pro1_1 = {
@@ -8446,6 +8449,1197 @@ note: 4.999 prints as 5.00 but ranks "Weak" — rank on the value, not on the pr
   ].join('\n'),
 };
 
+/* ───────── Lab 1 — 🏗️ CT Library: the first book catalogue (strings, ISBN-13, Comparator — LAB211 layers) ───────── */
+const L_lab1 = {
+  title: 'Lab 1 — 🏗️ CT Library: the first book catalogue (strings, ISBN-13, Comparator — LAB211 layers)|||Lab 1 — 🏗️ CT Library: danh mục sách đầu tiên (chuỗi, ISBN-13, Comparator — đúng tầng LAB211)',
+  slug: 'pro192-lab-1-danh-muc-sach',
+  type: 'VIDEO',
+  description: 'Lab 1 của dự án CT Library (sau Chương 1), viết đúng chuẩn review LAB211 ngay từ đầu: menu console, chuẩn hoá tên sách Title Case, kiểm ISBN-13 với chữ số kiểm tra và bốn thông báo lỗi nói rõ sai ở đâu, chặn trùng ISBN, tìm theo một phần tên, sắp A–Z bằng Collections.sort + Comparator. Có starter (5 hàm TODO) và đáp án tải về, bộ chấm kiểu PE so từng dòng với expected.txt, đáp án qua lint.py + javac --release 8 + JDK 8 thật, slide giảng từng bước, bẫy == và nextInt có output thật, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 1 · Lab 1 · CT Library</span>
+<h2>Lab 1 — the first book catalogue</h2>
+<p class="lead">This is the first of nine labs of <strong>CT Library</strong>, the app of the CuongThai reading club that grows with every chapter (Mục 0, lesson 0.2). Each lab is a ticket from your team lead, comes with a <strong>starter</strong> project, a PE-style <strong>grader</strong> that compares your output line by line with <code>expected.txt</code>, and a full <strong>solution</strong>. Every lab is written exactly the way the LAB211 reviewer wants it — so doing PRO192 labs <em>is</em> training for LAB211.</p>
+<p>Plan about <strong>3 hours</strong>: 20 minutes to read the given code, 2 hours for the five TODOs, the rest to make <code>check.sh</code> print PASS and <code>lint.py</code> stay silent. Watch the slides first (below), then do the steps.</p>`,
+    `<span class="eyebrow">Chương 1 · Lab 1 · CT Library</span>
+<h2>Lab 1 — danh mục sách đầu tiên</h2>
+<p class="lead">Đây là lab đầu tiên trong chín lab của <strong>CT Library</strong> — ứng dụng của câu lạc bộ đọc sách CuongThai, lớn dần sau mỗi chương (Mục 0, bài 0.2). Mỗi lab là một ticket (phiếu việc) của trưởng nhóm, kèm một dự án <strong>starter</strong> (khung làm sẵn), một <strong>bộ chấm</strong> kiểu đề PE so output của bạn từng dòng với <code>expected.txt</code>, và một <strong>đáp án</strong> đầy đủ. Lab nào cũng viết đúng kiểu thầy review LAB211 muốn — nên làm lab PRO192 <em>chính là</em> luyện LAB211.</p>
+<p>Dành khoảng <strong>3 giờ</strong>: 20 phút đọc phần code cho sẵn, 2 giờ cho năm TODO, phần còn lại để <code>check.sh</code> in PASS và <code>lint.py</code> im lặng. Xem slide trước (ngay dưới), rồi làm theo từng bước.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 1 (17 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 1 (17 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab1', [
+      [1, 'Lab 1 — CT Library: the first book catalogue',
+        `<p class="y-chinh">🎯 Lab 1 turns Chapter 1 — strings, arrays, Scanner, sorting with a Comparator — into a small but real program: a console book catalogue that cleans what people type and refuses what is wrong.</p>
+<p>You will not write classes yet (that is Chapter 2 and Lab 2). The classes are given, already split into the nine packages the LAB211 reviewer expects. Your job is the logic inside five methods — the parts that need exactly what Chapter 1 taught: <code>trim</code>, <code>split</code>, <code>substring</code>, <code>StringBuilder</code>, <code>charAt</code>, <code>%</code>, <code>Collections.sort</code> and a <code>Comparator</code>.</p>`,
+        `<p class="y-chinh">🎯 Lab 1 biến Chương 1 — chuỗi, mảng, Scanner, sắp xếp bằng Comparator — thành một chương trình nhỏ mà thật: danh mục sách trên console, biết làm sạch chữ người dùng gõ và từ chối chữ sai.</p>
+<p>Bạn chưa phải viết lớp (đó là Chương 2 và Lab 2). Các lớp đã cho sẵn, chia đúng chín package mà thầy review LAB211 đòi. Việc của bạn là phần xử lý bên trong năm phương thức — đúng những thứ Chương 1 vừa dạy: <code>trim</code>, <code>split</code>, <code>substring</code>, <code>StringBuilder</code>, <code>charAt</code>, phép <code>%</code>, <code>Collections.sort</code> và một <code>Comparator</code> (bộ so sánh).</p>`],
+      [2, 'Ticket CTL-1 — what the club asked for',
+        `<p class="y-chinh">🎯 A ticket says WHAT is needed and HOW we will know it is done — five checks you can measure, not "make it work".</p>
+<p>The club's spreadsheet is the problem: titles typed any way, ISBNs with a digit missing, the same book twice. The five acceptance checks: the grader prints <strong>PASS 77/77</strong>; the reviewer's tool <code>lint.py</code> finds <strong>0 violations</strong>; the code compiles with <code>javac --release 8</code> (the exam room has JDK 8); every wrong input gets a message and the program never crashes; and your Git history has at least three commits. In a company every pull request is judged the same way — by checks, not by feelings.</p>`,
+        `<p class="y-chinh">🎯 Ticket nói CẦN GÌ và LÀM SAO BIẾT LÀ XONG — năm tiêu chí đo được, không phải "làm cho chạy".</p>
+<p>Vấn đề là bảng tính của câu lạc bộ: tên sách gõ đủ kiểu, ISBN thiếu chữ số, một cuốn nhập hai lần. Năm tiêu chí nghiệm thu: bộ chấm in <strong>PASS 77/77</strong>; công cụ của thầy <code>lint.py</code> báo <strong>0 vi phạm</strong>; code biên dịch được với <code>javac --release 8</code> (phòng thi dùng JDK 8); mọi chữ gõ sai đều có thông báo và chương trình không bao giờ sập; lịch sử Git có ít nhất ba commit. Ở công ty, mọi pull request đều được duyệt đúng kiểu này — bằng phép kiểm, không bằng cảm giác.</p>`],
+      [3, 'The program you will finish',
+        `<p class="y-chinh">🎯 Four menu items, four sample books, and a session that types wrong things on purpose — that session is <code>harness/input.txt</code>.</p>
+<p>The screenshot is the real beginning of the grader's run: <code>abc</code> at the menu gets "Lua chon phai la 1 so nguyen…", <code>7</code> gets "…tu 0 den 3", then <code>2</code> lists the four sample books sorted A–Z. The prompts look glued to the answers because the keyboard is a file: nothing is echoed. That is normal — the PE grader runs your program the same way.</p>`,
+        `<p class="y-chinh">🎯 Bốn mục menu, bốn sách mẫu, và một phiên cố tình gõ sai — phiên đó chính là tệp <code>harness/input.txt</code>.</p>
+<p>Ảnh là phần đầu thật của lần chạy bộ chấm: gõ <code>abc</code> ở menu nhận "Lua chon phai la 1 so nguyen…", gõ <code>7</code> nhận "…tu 0 den 3", rồi <code>2</code> liệt kê bốn sách mẫu theo A–Z. Câu nhắc trông dính vào câu trả lời vì bàn phím là một tệp: chữ gõ không được in lại. Chuyện bình thường — bộ chấm của đề PE cũng chạy chương trình của bạn đúng như vậy.</p>`],
+      [4, 'Nine packages — the LAB211 reviewer checks this first',
+        `<p class="y-chinh">🎯 Gate 1 of every LAB211 review is the package tree: <code>constants, controller, dto, main, model, repository, service, utils, view</code>. Wrong tree, no review.</p>
+<p>Read the picture from the left. <strong>Main</strong> reads the keyboard and asks <strong>utils/Validation</strong> to check each line; it packs clean values into a DTO and calls the <strong>controller</strong> once. The controller holds the <strong>repository</strong> (the only class that keeps the list of <strong>model</strong> objects) and calls it for CRUD; it hands data to the <strong>service</strong> for business work (here: sorting); it gives the result to the <strong>view</strong>, which prints. Two red lines are forbidden: the controller never imports <code>model</code>, the service never holds a repository.</p>
+<p class="meo">🧠 The same shape returns in LAB211, in PRJ301 (servlet = controller, JSP = view) and in Spring Boot (<code>@RestController</code>, <code>@Service</code>, <code>@Repository</code>). Learn it once.</p>`,
+        `<p class="y-chinh">🎯 Cửa 1 của mọi lần review LAB211 là cây package: <code>constants, controller, dto, main, model, repository, service, utils, view</code>. Sai cây thì thầy không review.</p>
+<p>Đọc hình từ trái. <strong>Main</strong> đọc bàn phím và nhờ <strong>utils/Validation</strong> kiểm từng dòng; gom giá trị sạch vào một DTO (phiếu dữ liệu) rồi gọi <strong>controller</strong> đúng một lần. Controller giữ <strong>repository</strong> (lớp duy nhất giữ danh sách các đối tượng <strong>model</strong>) và gọi nó để làm CRUD (thêm, đọc, sửa, xoá); đưa dữ liệu cho <strong>service</strong> làm nghiệp vụ (ở đây: sắp xếp); đưa kết quả cho <strong>view</strong> in ra. Hai đường đỏ bị cấm: controller không bao giờ import <code>model</code>, service không bao giờ giữ repository.</p>
+<p class="meo">🧠 Đúng hình này quay lại ở LAB211, ở PRJ301 (servlet = controller, JSP = view) và ở Spring Boot (<code>@RestController</code>, <code>@Service</code>, <code>@Repository</code>). Học một lần, dùng mãi.</p>`],
+      [5, 'The rules that get a lab rejected',
+        `<p class="y-chinh">🎯 Seven rules, each with a reason you can say aloud at the review — the reviewer asks "why?" more often than "what?".</p>
+<p>The controller holds the repository so that one place decides when data is saved; the service gets data as a parameter so it can be tested with any list. Only DTOs cross the controller, so the screen never touches the real objects. Every sentence lives in <code>Message</code> and every number in <code>Constants</code>: change a rule in one line. More than two parameters means "pack them into a DTO" (utils may take three, like <code>getChoice(input, min, max)</code>). A comment on every class, method and block is gate 3. No <code>System.exit</code>, no static variable in <code>Main</code>, and input is always read with <code>nextLine()</code>.</p>
+<div class="pitfall"><p><strong>Real case (LAB211, 26/10):</strong> a student's <code>ConvertService</code> created its own repository and saved data inside the service. The reviewer: "CRUD must not be in the service — take every repository call out of the service and into the repository package." CT Library is written that way from Lab 1.</p></div>`,
+        `<p class="y-chinh">🎯 Bảy luật, mỗi luật kèm một lý do nói thành lời được khi review — thầy hỏi "tại sao?" nhiều hơn hỏi "cái gì?".</p>
+<p>Controller giữ repository để một chỗ duy nhất quyết định khi nào lưu dữ liệu; service nhận dữ liệu qua tham số nên thử được với bất kỳ danh sách nào. Chỉ DTO đi qua controller, nên màn hình không bao giờ chạm vào đối tượng thật. Mọi câu chữ nằm ở <code>Message</code>, mọi con số ở <code>Constants</code>: đổi luật chỉ sửa một dòng. Quá hai tham số nghĩa là "gói vào một DTO" (utils được ba, như <code>getChoice(input, min, max)</code>). Comment cho mọi lớp, phương thức và khối lệnh là cửa 3. Không <code>System.exit</code>, không biến static trong <code>Main</code>, và luôn đọc bằng <code>nextLine()</code>.</p>
+<div class="pitfall"><p><strong>Chuyện thật (LAB211, 26/10):</strong> <code>ConvertService</code> của một bạn tự tạo repository và lưu dữ liệu ngay trong service. Thầy: "CRUD không được nằm trong service. Mấy cái repo gọi trong service đưa ra hết ngoài, đưa vào package repository." CT Library viết đúng như vậy ngay từ Lab 1.</p></div>`],
+      [6, 'One request through the layers: "2 — list books"',
+        `<p class="y-chinh">🎯 Follow one request and the layers stop being abstract: Main → controller → repository → service → view, each doing one job.</p>
+<p>Main reads <code>2</code> and calls <code>showAllBooks()</code>. The controller asks the repository for <code>findAll()</code> — which returns <strong>copies</strong> (<code>BookResponseDTO</code>), never the real <code>Book</code> objects — and passes that list straight to <code>bookService.sortByTitle(...)</code>. Notice that the controller never declares a <code>Book</code> variable: it does not even import <code>model</code>. Then it calls <code>showResult</code>, which sets the view's fields and calls <code>display()</code> exactly once.</p>`,
+        `<p class="y-chinh">🎯 Theo một yêu cầu đi qua là các tầng hết trừu tượng: Main → controller → repository → service → view, mỗi tầng một việc.</p>
+<p>Main đọc <code>2</code> rồi gọi <code>showAllBooks()</code>. Controller hỏi repository <code>findAll()</code> — hàm trả về <strong>bản sao</strong> (<code>BookResponseDTO</code>), không bao giờ là đối tượng <code>Book</code> thật — và đưa thẳng danh sách đó vào <code>bookService.sortByTitle(...)</code>. Để ý: controller không hề khai báo biến kiểu <code>Book</code>, nó còn không import <code>model</code>. Cuối cùng gọi <code>showResult</code>: gán các trường của view rồi gọi <code>display()</code> đúng một lần.</p>`],
+      [7, 'Your starter: all given except 5 method bodies',
+        `<p class="y-chinh">🎯 The starter compiles and runs; five method bodies are placeholders marked <code>TODO Lab 1.x</code>. Read the given classes before writing anything.</p>
+<p>TODO 1.1 is not code: make the folder a Git repository and commit after each step. 1.2 and 1.3 live in <code>Validation</code> (cleaning and checking what was typed), 1.4 and 1.5 in <code>BookRepository</code> (the list), 1.6 in <code>BookService</code> (sorting). In NetBeans, <em>Window → Action Items</em> lists every TODO with a click to jump there.</p>`,
+        `<p class="y-chinh">🎯 Starter biên dịch và chạy được; năm thân phương thức chỉ là chỗ giữ đánh dấu <code>TODO Lab 1.x</code>. Đọc các lớp cho sẵn trước khi viết gì.</p>
+<p>TODO 1.1 không phải code: biến thư mục thành kho Git và commit sau mỗi bước. 1.2 và 1.3 nằm trong <code>Validation</code> (làm sạch và kiểm chữ đã gõ), 1.4 và 1.5 trong <code>BookRepository</code> (danh sách), 1.6 trong <code>BookService</code> (sắp xếp). Trong NetBeans, <em>Window → Action Items</em> liệt kê mọi TODO, bấm là nhảy tới.</p>`],
+      [8, 'TODO 1.2 — Title Case in four moves',
+        `<p class="y-chinh">🎯 Clean a title in four moves: trim, split on one-or-more spaces, capitalise each word, join with single spaces in a <code>StringBuilder</code>.</p>
+<p>The regex <code>\\s+</code> means "one or more whitespace characters", so three spaces between two words still give two words, not empty ones. For each word, <code>substring(0, 1).toUpperCase()</code> plus <code>substring(1).toLowerCase()</code>. The checks come in order: empty after trimming → "khong duoc de trong"; longer than 60 after cleaning → a message that shows both lengths. <code>StringBuilder</code> because <code>String</code> is immutable — <code>+=</code> in a loop builds a new string every turn, and checklist item 3.8 forbids it.</p>`,
+        `<p class="y-chinh">🎯 Làm sạch tên sách trong bốn bước: trim, tách theo một-hay-nhiều dấu cách, viết hoa chữ đầu từng từ, nối lại bằng đúng một dấu cách trong <code>StringBuilder</code>.</p>
+<p>Biểu thức chính quy (regex) <code>\\s+</code> nghĩa là "một hay nhiều ký tự trắng", nên ba dấu cách giữa hai từ vẫn cho hai từ, không sinh từ rỗng. Mỗi từ: <code>substring(0, 1).toUpperCase()</code> cộng <code>substring(1).toLowerCase()</code>. Kiểm theo thứ tự: rỗng sau khi trim → "khong duoc de trong"; dài hơn 60 sau khi làm sạch → thông báo ghi cả hai độ dài. Dùng <code>StringBuilder</code> vì <code>String</code> bất biến (immutable) — <code>+=</code> trong vòng lặp tạo chuỗi mới mỗi vòng, và mục 3.8 của tờ checklist cấm.</p>`],
+      [9, 'TODO 1.3 — the ISBN-13 check digit, by hand',
+        `<p class="y-chinh">🎯 The 13th digit of an ISBN-13 is computed from the first 12: weights 1, 3, 1, 3…, sum, then <code>(10 − sum % 10) % 10</code>. Do it once by hand before coding it.</p>
+<p>For 978-0-13-235088-? the products are 9, 21, 8, 0, 1, 9, 2, 9, 5, 0, 8, 24 — sum 96, remainder 6, check digit 4. The outer <code>% 10</code> handles the case where the remainder is 0 (check digit 0, not 10). The real output shows the four messages in the order the code checks them: a wrong character with its position, the digit count, the 978/979 prefix, and the check digit — telling the user the digit it should be.</p>`,
+        `<p class="y-chinh">🎯 Chữ số thứ 13 của ISBN-13 được tính từ 12 chữ số đầu: trọng số 1, 3, 1, 3…, cộng lại, rồi <code>(10 − tổng % 10) % 10</code>. Tự tính bằng tay một lần trước khi viết code.</p>
+<p>Với 978-0-13-235088-? các tích là 9, 21, 8, 0, 1, 9, 2, 9, 5, 0, 8, 24 — tổng 96, dư 6, chữ số kiểm tra 4. Phép <code>% 10</code> bên ngoài lo trường hợp dư bằng 0 (chữ số kiểm tra là 0, không phải 10). Output thật cho thấy bốn thông báo đúng thứ tự code kiểm: ký tự sai kèm vị trí, số chữ số, tiền tố 978/979, và chữ số kiểm tra — nói luôn cho người dùng chữ số đúng phải là bao nhiêu.</p>`],
+      [10, 'TODO 1.3 — the code, one loop per job',
+        `<p class="y-chinh">🎯 Two loops, two jobs: the first collects digits and rejects bad characters; the second computes the weighted sum. Mixing them makes both harder to read and to debug.</p>
+<p><code>Constants.DIGITS.indexOf(character)</code> turns a character into its value (0–9) or −1 — no <code>Character.isDigit</code>, which would also accept Arabic-Indic digits. All declarations sit at the top of the method and are initialised (checklist 2.6, 3.7); every <code>if</code> and <code>for</code> has a comment; the numbers 13, 3, 10 come from <code>Constants</code>. The error position is <code>i + 1</code> because people count from 1.</p>`,
+        `<p class="y-chinh">🎯 Hai vòng lặp, hai việc: vòng đầu gom chữ số và từ chối ký tự lạ; vòng sau tính tổng có trọng số. Trộn hai việc vào một vòng thì cả đọc lẫn debug đều khó hơn.</p>
+<p><code>Constants.DIGITS.indexOf(character)</code> đổi một ký tự thành giá trị của nó (0–9) hoặc −1 — không dùng <code>Character.isDigit</code> vì hàm đó nhận cả chữ số Ả Rập. Mọi khai báo nằm đầu phương thức và có giá trị khởi tạo (checklist 2.6, 3.7); mọi <code>if</code>, <code>for</code> có comment; các số 13, 3, 10 lấy từ <code>Constants</code>. Vị trí lỗi là <code>i + 1</code> vì con người đếm từ 1.</p>`],
+      [11, 'TODO 1.4 — the repository refuses a duplicate ISBN',
+        `<p class="y-chinh">🎯 "Is this ISBN already taken?" can only be answered by the object that holds the list — so the duplicate check lives in <code>BookRepository.addBook</code>, not in <code>Validation</code>.</p>
+<p><code>findByIsbn</code> (given, private) walks the list comparing with <code>equals</code>. If it finds a book, <code>addBook</code> throws an <code>Exception</code> whose message names the book that owns the ISBN; the controller catches it and shows it. Nothing is added. Throwing (instead of returning <code>false</code>) lets the reason travel up with the error.</p>`,
+        `<p class="y-chinh">🎯 Câu hỏi "ISBN này đã có chưa?" chỉ đối tượng đang giữ danh sách mới trả lời được — nên phần chặn trùng nằm ở <code>BookRepository.addBook</code>, không ở <code>Validation</code>.</p>
+<p><code>findByIsbn</code> (cho sẵn, private) duyệt danh sách và so bằng <code>equals</code>. Tìm thấy thì <code>addBook</code> ném (throw) một <code>Exception</code> có thông báo nêu tên cuốn sách đang giữ ISBN đó; controller bắt lại và đưa cho view in. Không thêm gì. Ném lỗi (thay vì trả về <code>false</code>) để lý do đi lên cùng với lỗi.</p>`],
+      [12, 'TODO 1.5 — search: part of the title, any case',
+        `<p class="y-chinh">🎯 Case-insensitive search = compare lower case with lower case: <code>title.toLowerCase().contains(keyword.toLowerCase())</code>.</p>
+<p>Lower-case the keyword once before the loop, not once per book. Each hit becomes a new <code>BookResponseDTO</code> through <code>toResponseDTO</code> — the caller gets copies, never the real books. The controller then sends the hits to the same <code>sortByTitle</code> as the full list: one sorting method, two uses.</p>`,
+        `<p class="y-chinh">🎯 Tìm không phân biệt hoa thường = so chữ thường với chữ thường: <code>title.toLowerCase().contains(keyword.toLowerCase())</code>.</p>
+<p>Đổi từ khoá sang chữ thường một lần trước vòng lặp, không phải mỗi cuốn một lần. Mỗi cuốn khớp được chép thành một <code>BookResponseDTO</code> mới qua <code>toResponseDTO</code> — nơi gọi nhận bản sao, không bao giờ nhận sách thật. Sau đó controller đưa kết quả vào đúng hàm <code>sortByTitle</code> dùng cho cả danh sách: một hàm sắp xếp, hai chỗ dùng.</p>`],
+      [13, 'TODO 1.6 — a Comparator is "the rule for who goes first"',
+        `<p class="y-chinh">🎯 A <code>Comparator</code> answers one question for two items: negative ⇒ the first goes first, zero ⇒ tie, positive ⇒ the second goes first. <code>Collections.sort</code> asks it as often as it needs.</p>
+<p>Titles are compared with <code>compareToIgnoreCase</code>; on a tie the ISBN decides, so the order never depends on the order of insertion. The method sorts a <strong>copy</strong> (<code>new ArrayList&lt;&gt;(bookList)</code>) and then writes the row numbers 1, 2, 3… with <code>setNo</code> — numbering must come <em>after</em> sorting (a real bug in a LAB211 P0021 submission numbered first, then sorted, and showed "11, 10" in the wrong order).</p>`,
+        `<p class="y-chinh">🎯 <code>Comparator</code> trả lời một câu hỏi cho hai phần tử: số âm ⇒ phần tử đầu đứng trước, bằng 0 ⇒ ngang nhau, số dương ⇒ phần tử sau đứng trước. <code>Collections.sort</code> hỏi nó bao nhiêu lần tuỳ ý.</p>
+<p>Tên so bằng <code>compareToIgnoreCase</code>; trùng tên thì ISBN quyết định, để thứ tự không bao giờ phụ thuộc thứ tự thêm vào. Hàm sắp một <strong>bản sao</strong> (<code>new ArrayList&lt;&gt;(bookList)</code>) rồi mới ghi số thứ tự 1, 2, 3… bằng <code>setNo</code> — đánh số phải đi <em>sau</em> sắp xếp (một bài P0021 LAB211 thật đánh số trước rồi mới sắp, ra "11, 10" lộn thứ tự).</p>`],
+      [14, 'The harness: red before your TODOs, green after',
+        `<p class="y-chinh">🎯 <code>check.sh</code> runs your <code>Main</code> with <code>harness/input.txt</code> as the keyboard and compares every line with <code>expected.txt</code>: FAIL shows the first lines that differ, PASS means all 77 match.</p>
+<p>On the untouched starter, line 10 already differs: the rows show number 0 and the insertion order — <code>sortByTitle</code> is still a placeholder. Fix one TODO at a time and run the grader again; the number of differing lines drops. In NetBeans the grader is <code>test/harness/CheckHarness.java</code> (Test Packages): right-click, <em>Run File</em>. Your real output is written to <code>harness/actual.txt</code> so you can compare it side by side.</p>`,
+        `<p class="y-chinh">🎯 <code>check.sh</code> chạy <code>Main</code> của bạn với <code>harness/input.txt</code> làm bàn phím rồi so từng dòng với <code>expected.txt</code>: FAIL in những dòng khác đầu tiên, PASS nghĩa là khớp đủ 77 dòng.</p>
+<p>Với starter chưa sửa gì, dòng 10 đã khác: các hàng có số thứ tự 0 và giữ thứ tự thêm vào — <code>sortByTitle</code> vẫn chỉ là chỗ giữ. Sửa từng TODO một rồi chạy lại bộ chấm; số dòng khác giảm dần. Trong NetBeans bộ chấm là <code>test/harness/CheckHarness.java</code> (Test Packages): chuột phải, <em>Run File</em>. Output thật của bạn được ghi vào <code>harness/actual.txt</code> để mở cạnh nhau mà so.</p>`],
+      [15, 'Trap 1 — comparing the typed ISBN with ==',
+        `<p class="y-chinh">🎯 <code>==</code> on two Strings compares references (are they the same object?), not characters. A string read from the keyboard is a new object, so <code>==</code> says <code>false</code> even with the same digits.</p>
+<p>Two literals written in the source share one object in the <strong>string pool</strong>, which is why <code>==</code> seems to "work" in a quick test and then fails with real input. Always <code>equals</code> (or <code>equalsIgnoreCase</code>, <code>contains</code>). This is a favourite FE question and a favourite PE bug.</p>`,
+        `<p class="y-chinh">🎯 <code>==</code> giữa hai String so tham chiếu (có phải cùng một đối tượng?), không so ký tự. Chuỗi đọc từ bàn phím là một đối tượng mới, nên <code>==</code> trả <code>false</code> dù cùng chữ số.</p>
+<p>Hai hằng chuỗi viết trong mã nguồn dùng chung một đối tượng trong <strong>string pool</strong> (vùng chứa hằng chuỗi), vì vậy <code>==</code> có vẻ "chạy được" khi thử nhanh rồi hỏng với dữ liệu thật. Luôn dùng <code>equals</code> (hoặc <code>equalsIgnoreCase</code>, <code>contains</code>). Câu hỏi ruột của đề FE và lỗi ruột của bài PE.</p>`],
+      [16, 'Trap 2 — nextInt() then nextLine(): an empty title',
+        `<p class="y-chinh">🎯 <code>nextInt()</code> reads the number and leaves the Enter in the buffer; the next <code>nextLine()</code> eats that Enter and returns an empty string.</p>
+<p>In the real run the user typed <code>1</code>, <code>Clean Code</code>, <code>2</code>: the title comes back <code>[]</code> and "Clean Code" only arrives with the next call. The LAB211 rule (and the <code>lint.py</code> INPUT rule) avoids the whole problem: read every line with <code>nextLine()</code> and convert with <code>Integer.parseInt</code> inside <code>try</code> — exactly what <code>Validation.getChoice</code> does.</p>`,
+        `<p class="y-chinh">🎯 <code>nextInt()</code> đọc con số và để phím Enter lại trong bộ đệm; <code>nextLine()</code> ngay sau nuốt phím Enter đó và trả về chuỗi rỗng.</p>
+<p>Trong lần chạy thật người dùng gõ <code>1</code>, <code>Clean Code</code>, <code>2</code>: tên sách ra <code>[]</code>, còn "Clean Code" tới lượt gọi sau mới đến. Luật LAB211 (và luật INPUT của <code>lint.py</code>) tránh hẳn chuyện này: đọc mọi dòng bằng <code>nextLine()</code> rồi đổi bằng <code>Integer.parseInt</code> trong <code>try</code> — đúng như <code>Validation.getChoice</code> làm.</p>`],
+      [17, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 Ten points: two for the structure, six for the five TODOs, one for the standards — and the harness decides the functional points, line by line.</p>
+<p>Grade yourself honestly before opening the solution. Then answer the three self-check questions aloud, as you would at a LAB211 review — the answers are in the self-check section at the end of this page.</p>`,
+        `<p class="y-chinh">🎯 Mười điểm: hai cho cấu trúc, sáu cho năm TODO, một cho chuẩn code — và bộ chấm quyết định phần chức năng, từng dòng một.</p>
+<p>Tự chấm thật lòng trước khi mở đáp án. Rồi trả lời thành tiếng ba câu tự kiểm, như khi đứng trước thầy review LAB211 — đáp án ở mục Tự kiểm cuối trang.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-1 · CT Library · priority: high.</strong> "Our 300-member reading club keeps its books in a spreadsheet. Titles are typed any way (<code>"  clean    CODE "</code>), some ISBNs have a digit missing, and the same book was entered twice. Build a console catalogue: add a book (title + ISBN-13), list all books A–Z, search by part of the title. Clean every title. Refuse every wrong ISBN with a message that says exactly what is wrong. Never crash. Write it the way our LAB211 reviewer wants it." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td><code>trim</code>, <code>split("\\\\s+")</code>, <code>substring</code>, <code>toUpperCase</code>/<code>toLowerCase</code>, <code>StringBuilder</code></td><td>1.F (String, StringBuilder)</td></tr>
+<tr><td><code>charAt</code>, loops, <code>%</code>, <code>String.format</code></td><td>1.D (language basics), 1.F</td></tr>
+<tr><td><code>Scanner.nextLine</code> + <code>Integer.parseInt</code> in <code>try</code></td><td>1.D slide 23, 1.H exercise 5</td></tr>
+<tr><td><code>ArrayList</code>, <code>Collections.sort</code> + <code>Comparator</code></td><td>1.G, 1.H exercise 6</td></tr>
+<tr><td>reading a small class (fields, getters)</td><td>1.A, 1.H exercise 6</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-1 · CT Library · ưu tiên: cao.</strong> "Câu lạc bộ đọc sách 300 thành viên của chúng ta quản lý sách bằng bảng tính. Tên sách gõ đủ kiểu (<code>"  clean    CODE "</code>), vài ISBN thiếu chữ số, có cuốn bị nhập hai lần. Làm một danh mục sách trên console: thêm sách (tên + ISBN-13), liệt kê mọi sách theo A–Z, tìm theo một phần tên. Làm sạch mọi tên sách. Từ chối mọi ISBN sai bằng một thông báo nói rõ sai ở đâu. Không bao giờ sập. Viết đúng kiểu thầy review LAB211 muốn." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td><code>trim</code>, <code>split("\\\\s+")</code>, <code>substring</code>, <code>toUpperCase</code>/<code>toLowerCase</code>, <code>StringBuilder</code></td><td>1.F (String, StringBuilder)</td></tr>
+<tr><td><code>charAt</code>, vòng lặp, <code>%</code>, <code>String.format</code></td><td>1.D (cú pháp cơ bản), 1.F</td></tr>
+<tr><td><code>Scanner.nextLine</code> + <code>Integer.parseInt</code> trong <code>try</code></td><td>1.D slide 23, 1.H bài 5</td></tr>
+<tr><td><code>ArrayList</code>, <code>Collections.sort</code> + <code>Comparator</code></td><td>1.G, 1.H bài 6</td></tr>
+<tr><td>đọc một lớp nhỏ (trường, getter)</td><td>1.A, 1.H bài 6</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Menu</strong> <code>1</code> add · <code>2</code> list A–Z · <code>3</code> search · <code>0</code> exit; anything else → a message, then the menu asks again. Four sample books are loaded at start (from <code>Constants.SAMPLE_BOOK_ARRAY</code>).</li>
+<li><strong>Title</strong>: trimmed, spaces between words collapsed to one, each word capitalised ("Title Case"); empty → error; longer than 60 characters after cleaning → error showing both lengths.</li>
+<li><strong>ISBN-13</strong>: <code>-</code> and spaces may be typed and are dropped; any other non-digit → error naming the character and its position; not exactly 13 digits → error with the count; not starting with 978/979 → error; wrong check digit → error naming the correct digit. Stored as 13 digits.</li>
+<li><strong>Duplicate ISBN</strong> → the book is not added; the message names the book that already has it.</li>
+<li><strong>Search</strong> by part of the title, ignoring case; no hit → a message with the keyword.</li>
+<li><strong>Lists</strong> (all books and search hits) sorted by title A–Z ignoring case, ties by ISBN, numbered 1, 2, 3… after sorting.</li>
+<li><strong>Standards</strong>: the nine LAB211 packages; controller holds the repository; service holds no repository; controller does not import <code>model</code>; every text in <code>Message</code>, every number in <code>Constants</code>; Javadoc + a comment per block; ≤ 2 parameters (utils ≤ 3); lines ≤ 100 characters; no <code>System.exit</code>; only <code>nextLine()</code>.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means (all five):</strong> <code>check.sh</code> prints <code>PASS: 77/77 dong khop expected.txt</code> · <code>python3 lint.py CTLibrary-Lab1</code> prints <code>✓ … — sạch</code> · <code>javac --release 8</code> compiles with no error · no input in <code>harness/input.txt</code> crashes the program · <code>git log --oneline</code> shows at least 3 commits.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Menu</strong> <code>1</code> thêm · <code>2</code> liệt kê A–Z · <code>3</code> tìm · <code>0</code> thoát; gõ thứ khác → có thông báo rồi hỏi lại. Bốn sách mẫu được nạp khi mở chương trình (từ <code>Constants.SAMPLE_BOOK_ARRAY</code>).</li>
+<li><strong>Tên sách</strong>: bỏ dấu cách hai đầu, gộp dấu cách giữa các từ còn một, viết hoa chữ đầu mỗi từ ("Title Case"); rỗng → báo lỗi; dài hơn 60 ký tự sau khi làm sạch → báo lỗi ghi cả hai độ dài.</li>
+<li><strong>ISBN-13</strong>: được gõ <code>-</code> và dấu cách, chúng bị bỏ đi; ký tự nào khác chữ số → báo lỗi nêu ký tự đó và vị trí; không đúng 13 chữ số → báo lỗi kèm số chữ số; không bắt đầu bằng 978/979 → báo lỗi; sai chữ số kiểm tra → báo lỗi nêu chữ số đúng. Lưu dạng 13 chữ số.</li>
+<li><strong>Trùng ISBN</strong> → không thêm; thông báo nêu tên cuốn sách đang giữ ISBN đó.</li>
+<li><strong>Tìm</strong> theo một phần tên, không phân biệt hoa thường; không có → thông báo kèm từ khoá.</li>
+<li><strong>Danh sách</strong> (toàn bộ và kết quả tìm) sắp theo tên A–Z không phân biệt hoa thường, trùng tên thì theo ISBN, đánh số 1, 2, 3… sau khi sắp.</li>
+<li><strong>Chuẩn code</strong>: đủ chín package LAB211; controller giữ repository; service không giữ repository; controller không import <code>model</code>; mọi câu chữ ở <code>Message</code>, mọi con số ở <code>Constants</code>; Javadoc + comment mỗi khối; ≤ 2 tham số (utils ≤ 3); dòng ≤ 100 ký tự; không <code>System.exit</code>; chỉ <code>nextLine()</code>.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là (đủ cả năm):</strong> <code>check.sh</code> in <code>PASS: 77/77 dong khop expected.txt</code> · <code>python3 lint.py CTLibrary-Lab1</code> in <code>✓ … — sạch</code> · <code>javac --release 8</code> biên dịch không lỗi · không dòng gõ nào trong <code>harness/input.txt</code> làm chương trình sập · <code>git log --oneline</code> có ít nhất 3 commit.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab1-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab1-starter.zip</span><span class="lc-sub">NetBeans project (Java 8) · 5 TODO method bodies · harness/input.txt + expected.txt · CheckHarness · check.sh / check.bat</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab1-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab1-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<p>Unzip, then in NetBeans <em>File → Open Project</em> and pick the <code>CTLibrary-Lab1</code> folder. <em>Run</em> (F6) starts the menu. To grade: <em>Test Packages → harness → CheckHarness.java → right-click → Run File</em>, or from a terminal in the project folder:</p>
+<pre><code class="language-bash">cd CTLibrary-Lab1
+./check.sh                 # Windows: check.bat
+git init
+git add -A
+git commit -m "Lab 1: starter"</code></pre>
+<p>Project tree — every package the reviewer looks for:</p>
+<pre><code class="language-plaintext">CTLibrary-Lab1/
+  src/constants/   Message.java (every sentence) · Constants.java (every number, sample books)
+  src/model/       Book.java                     (given — a JavaBean)
+  src/dto/         BookRequestDTO.java · BookResponseDTO.java   (given)
+  src/repository/  BookRepository.java           TODO 1.4, 1.5
+  src/service/     BookService.java              TODO 1.6
+  src/controller/  BookController.java           (given — read it first)
+  src/view/        BookView.java                 (given)
+  src/utils/       Validation.java               TODO 1.2, 1.3
+  src/main/        Main.java                     (given — the menu)
+  harness/         input.txt · expected.txt      (the grader's keyboard and answer key)
+  test/harness/    CheckHarness.java             (the grader)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab1-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab1-starter.zip</span><span class="lc-sub">dự án NetBeans (Java 8) · 5 thân hàm TODO · harness/input.txt + expected.txt · CheckHarness · check.sh / check.bat</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab1-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab1-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<p>Giải nén, rồi trong NetBeans chọn <em>File → Open Project</em> và trỏ tới thư mục <code>CTLibrary-Lab1</code>. <em>Run</em> (F6) mở menu. Để chấm: <em>Test Packages → harness → CheckHarness.java → chuột phải → Run File</em>, hoặc mở terminal ở thư mục dự án:</p>
+<pre><code class="language-bash">cd CTLibrary-Lab1
+./check.sh                 # Windows: check.bat
+git init
+git add -A
+git commit -m "Lab 1: starter"</code></pre>
+<p>Cây dự án — đủ mọi package thầy tìm:</p>
+<pre><code class="language-plaintext">CTLibrary-Lab1/
+  src/constants/   Message.java (mọi câu chữ) · Constants.java (mọi con số, sách mẫu)
+  src/model/       Book.java                     (cho sẵn — một JavaBean)
+  src/dto/         BookRequestDTO.java · BookResponseDTO.java   (cho sẵn)
+  src/repository/  BookRepository.java           TODO 1.4, 1.5
+  src/service/     BookService.java              TODO 1.6
+  src/controller/  BookController.java           (cho sẵn — đọc đầu tiên)
+  src/view/        BookView.java                 (cho sẵn)
+  src/utils/       Validation.java               TODO 1.2, 1.3
+  src/main/        Main.java                     (cho sẵn — menu)
+  harness/         input.txt · expected.txt      (bàn phím và đáp án của bộ chấm)
+  test/harness/    CheckHarness.java             (bộ chấm)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — read before you write (20 min)</h4>
+<p>Open <code>Main</code>, then <code>BookController</code>, then <code>BookView</code>. Answer for yourself: which class owns the list? Who prints? How many times does a <code>case</code> call the controller? Then run the starter's grader once — you will see it FAIL; that is your starting point.</p>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 10:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+Dong 11:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+Dong 12:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+…</div>
+<p>Line 10 is the first table row: the starter prints number 0 and keeps the insertion order. Nothing is broken except the five TODOs.</p>
+
+<h4>Step 1 — TODO 1.1: Git (5 min)</h4>
+<p>Initialise the repository (commands above), then commit after each of the steps below — <code>git commit -m "Lab 1.2: Title Case"</code> and so on. Small commits are what teams expect, and they let you go back when a change breaks the grader.</p>
+
+<h4>Step 2 — TODO 1.2 <code>Validation.getTitle</code> (25 min)</h4>
+<p>Clean the title as in slide 8. Hints, one at a time:</p>
+<details><summary>Hint 1 — the steps</summary><p><code>trim()</code> → empty? throw <code>Message.ERROR_TITLE_EMPTY</code> → <code>split(Constants.REGEX_SPACES)</code> → for each word append a space (except before the first) and the word in Title Case → length check → <code>toString()</code>.</p></details>
+<details><summary>Hint 2 — one word</summary><p><code>word.substring(0, 1).toUpperCase()</code> then <code>word.substring(1).toLowerCase()</code>. A one-letter word still works: <code>substring(1)</code> of "a" is "".</p></details>
+<details><summary>Solution (the method in the solution project)</summary>
+<pre class="trich"><code class="language-java">// Chuan hoa ten sach: bo dau cach thua, moi tu viet hoa chu dau (Title Case)
+public static String getTitle(String input) throws Exception {
+    // Ten bo dau cach 2 dau; bo noi cac tu da chuan hoa (khong dung String +=)
+    String text = input.trim();
+    StringBuilder titleBuilder = new StringBuilder();
+
+    // Rong (hoac chi co dau cach) thi bao loi
+    if (text.isEmpty()) {
+        throw new Exception(Message.ERROR_TITLE_EMPTY);
+    }
+
+    // Tach theo 1 hay nhieu dau cach, chuan hoa tung tu
+    for (String word : text.split(Constants.REGEX_SPACES)) {
+        // Tu thu 2 tro di thi them 1 dau cach phia truoc
+        if (titleBuilder.length() &gt; 0) {
+            titleBuilder.append(Constants.SPACE);
+        }
+
+        // Chu dau viet hoa, phan con lai viet thuong
+        titleBuilder.append(word.substring(0, 1).toUpperCase());
+        titleBuilder.append(word.substring(1).toLowerCase());
+    }
+
+    // Ten da chuan hoa dai qua gioi han thi bao do dai
+    if (titleBuilder.length() &gt; Constants.TITLE_MAX_LENGTH) {
+        throw new Exception(String.format(Message.ERROR_TITLE_LENGTH, titleBuilder.length(),
+                Constants.TITLE_MAX_LENGTH));
+    }
+
+    return titleBuilder.toString();
+}</code></pre>
+</details>
+
+<h4>Step 3 — TODO 1.3 <code>Validation.getIsbn</code> (40 min)</h4>
+<p>Four checks in this order, each with its own message from <code>Message</code>: character, length, prefix, check digit (slides 9–10). Work the example 978-0-13-235088-4 on paper first.</p>
+<details><summary>Hint 1 — the first loop</summary><p>For <code>i</code> from 0: <code>char character = text.charAt(i)</code>. If <code>Constants.DIGITS.indexOf(character) &gt;= 0</code>, append it; else if it is not in <code>Constants.ISBN_SEPARATORS</code>, throw <code>String.format(Message.ERROR_ISBN_CHARACTER, character, i + 1)</code>.</p></details>
+<details><summary>Hint 2 — the sum</summary><p>For the first 12 digits: odd index (<code>i % 2 == 1</code>) ⇒ add <code>digit * Constants.ISBN_ODD_WEIGHT</code>, even index ⇒ add <code>digit</code>. Then <code>checkDigit = (10 − sum % 10) % 10</code> with the 10 from <code>Constants.ISBN_MODULO</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Kiem ISBN-13: bo dau - va dau cach, du 13 chu so, dau 978/979, dung chu so kiem tra
+public static String getIsbn(String input) throws Exception {
+    // Ban go, cac chu so gom duoc, tien to, tong co trong so, chu so kiem tra, chu so cuoi
+    String text = input.trim();
+    StringBuilder digitBuilder = new StringBuilder();
+    String prefix = "";
+    int weightedSum = 0;
+    int checkDigit = 0;
+    int lastDigit = 0;
+
+    // Duyet tung ky tu: chu so thi giu, dau - / dau cach thi bo, con lai la loi
+    for (int i = 0; i &lt; text.length(); i++) {
+        // Ky tu dang xet
+        char character = text.charAt(i);
+
+        // Chu so thi giu lai
+        if (Constants.DIGITS.indexOf(character) &gt;= 0) {
+            digitBuilder.append(character);
+        } else if (Constants.ISBN_SEPARATORS.indexOf(character) &lt; 0) {
+            // Khong phai chu so cung khong phai dau ngan cach: chi ro ky tu va vi tri
+            throw new Exception(String.format(Message.ERROR_ISBN_CHARACTER, character, i + 1));
+        }
+    }
+
+    // Thieu hoac thua chu so thi bao so chu so dang co
+    if (digitBuilder.length() != Constants.ISBN_LENGTH) {
+        throw new Exception(String.format(Message.ERROR_ISBN_LENGTH, Constants.ISBN_LENGTH,
+                digitBuilder.length()));
+    }
+
+    // Lay 3 chu so dau
+    prefix = digitBuilder.substring(0, Constants.ISBN_PREFIX_LENGTH);
+
+    // Ba chu so dau phai la 978 hoac 979
+    if ((!prefix.equals(Constants.ISBN_PREFIX_978)) &amp;&amp;
+            (!prefix.equals(Constants.ISBN_PREFIX_979))) {
+        throw new Exception(String.format(Message.ERROR_ISBN_PREFIX, prefix));
+    }
+
+    // Cong 12 chu so dau: vi tri chan nhan 1, vi tri le nhan 3
+    for (int i = 0; i &lt; (Constants.ISBN_LENGTH - 1); i++) {
+        // Gia tri cua chu so thu i
+        int digit = Constants.DIGITS.indexOf(digitBuilder.charAt(i));
+
+        // Vi tri le (1, 3, 5...) nhan 3, vi tri chan nhan 1
+        if ((i % 2) == 1) {
+            weightedSum = weightedSum + (digit * Constants.ISBN_ODD_WEIGHT);
+        } else {
+            // Vi tri chan giu nguyen
+            weightedSum = weightedSum + digit;
+        }
+    }
+
+    // Chu so kiem tra = (10 - tong % 10) % 10
+    checkDigit = (Constants.ISBN_MODULO - (weightedSum % Constants.ISBN_MODULO))
+            % Constants.ISBN_MODULO;
+
+    // Gia tri chu so cuoi (chu so thu 13)
+    lastDigit = Constants.DIGITS.indexOf(digitBuilder.charAt(Constants.ISBN_LENGTH - 1));
+
+    // Chu so cuoi khac chu so tinh ra thi bao ca hai
+    if (lastDigit != checkDigit) {
+        throw new Exception(String.format(Message.ERROR_ISBN_CHECKSUM, checkDigit, lastDigit));
+    }
+
+    return digitBuilder.toString();
+}</code></pre>
+</details>
+<p>What the grader expects when the four checks fire (real output of the solution):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: Ten sach khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Ten sach: ISBN-13: ISBN-13 phai co dung 13 chu so (khong tinh dau - va dau cach), ban nhap 12 chu so. Moi nhap lai.<br>
+ISBN-13: ISBN chi gom chu so, dau - va dau cach. Ky tu 'O' o vi tri 13 khong hop le. Moi nhap lai.<br>
+ISBN-13: ISBN-13 phai bat dau bang 978 hoac 979, ban nhap 977. Moi nhap lai.<br>
+ISBN-13: ISBN sai chu so kiem tra: chu so cuoi phai la 4, ban nhap 5. Xem lai so in tren bia sach roi nhap lai.<br>
+ISBN-13: Da them sach "Clean Code" (ISBN 9780132350884). Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Step 4 — TODO 1.4 duplicate ISBN in <code>BookRepository.addBook</code> (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Them 1 sach tu phieu nhap; ISBN da co thi nem loi (khong them)
+public void addBook(BookRequestDTO bookRequestDTO) throws Exception {
+    // Sach dang giu ISBN nay (null neu chua co)
+    Book existingBook = findByIsbn(bookRequestDTO.getIsbn());
+
+    // Trung ISBN thi bao ro sach nao dang giu ISBN do
+    if (existingBook != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_ISBN,
+                existingBook.getIsbn(), existingBook.getTitle()));
+    }
+
+    // Doi phieu nhap thanh model roi them vao cuoi danh sach
+    bookList.add(new Book(bookRequestDTO.getIsbn(), bookRequestDTO.getTitle()));
+}</code></pre>
+</details>
+
+<h4>Step 5 — TODO 1.5 <code>BookRepository.findByKeyword</code> (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Tim sach co ten chua tu khoa (khong phan biet hoa thuong)
+public ArrayList&lt;BookResponseDTO&gt; findByKeyword(String keyword) {
+    // Danh sach dong bang tim duoc; tu khoa viet thuong de so khong phan biet hoa thuong
+    ArrayList&lt;BookResponseDTO&gt; foundList = new ArrayList&lt;&gt;();
+    String lowerKeyword = keyword.toLowerCase();
+
+    // Duyet tung sach de so ten
+    for (Book book : bookList) {
+        // Ten chua tu khoa thi giu lai
+        if (book.getTitle().toLowerCase().contains(lowerKeyword)) {
+            foundList.add(toResponseDTO(book));
+        }
+    }
+
+    return foundList;
+}</code></pre>
+</details>
+
+<h4>Step 6 — TODO 1.6 <code>BookService.sortByTitle</code> (20 min)</h4>
+<details><summary>Hint — the shape</summary><p><code>Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() { @Override public int compare(BookResponseDTO first, BookResponseDTO second) { … } });</code> — an anonymous class, the same form as 1.G slide 9. Number the rows in a second loop.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Sap cac dong bang theo ten (A-Z, khong phan biet hoa thuong), trung ten thi theo ISBN;
+// xong danh so thu tu tu 1
+public ArrayList&lt;BookResponseDTO&gt; sortByTitle(ArrayList&lt;BookResponseDTO&gt; bookList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;BookResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(bookList);
+
+    // Comparator la "luat so": tra so am neu first dung truoc second
+    Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() {
+        // So ten truoc, trung ten thi so ISBN
+        @Override
+        public int compare(BookResponseDTO first, BookResponseDTO second) {
+            // Ket qua so ten (0 = trung ten)
+            int byTitle = first.getTitle().compareToIgnoreCase(second.getTitle());
+
+            // Trung ten thi ISBN quyet dinh thu tu
+            if (byTitle == 0) {
+                return first.getIsbn().compareTo(second.getIsbn());
+            }
+
+            return byTitle;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+
+<h4>Step 7 — grade, lint, commit (15 min)</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 77/77 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab1-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab1-Solution — sạch</div>
+<p>If <code>lint.py</code> complains, it names the file, the line and the rule (for example <code>[COMMENT] … 'if' thiếu comment</code>) — fix and run it again. <code>lint.py</code> comes with the LAB211 kit of this site; if you do not have it, check the rules by hand with the list in requirement 7.</p>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — đọc trước khi viết (20 phút)</h4>
+<p>Mở <code>Main</code>, rồi <code>BookController</code>, rồi <code>BookView</code>. Tự trả lời: lớp nào giữ danh sách? Ai in ra màn hình? Mỗi <code>case</code> gọi controller mấy lần? Sau đó chạy bộ chấm của starter một lần — bạn sẽ thấy FAIL; đó là điểm xuất phát.</p>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 10:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+Dong 11:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+Dong 12:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+&nbsp;&nbsp;ban in : 0 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+…</div>
+<p>Dòng 10 là hàng đầu tiên của bảng: starter in số thứ tự 0 và giữ nguyên thứ tự thêm vào. Không có gì hỏng ngoài năm TODO.</p>
+
+<h4>Bước 1 — TODO 1.1: Git (5 phút)</h4>
+<p>Khởi tạo kho (lệnh ở trên), rồi commit sau mỗi bước dưới đây — <code>git commit -m "Lab 1.2: Title Case"</code> và cứ thế. Commit nhỏ là thứ nhóm nào cũng mong, và giúp bạn quay lại khi một thay đổi làm bộ chấm đỏ.</p>
+
+<h4>Bước 2 — TODO 1.2 <code>Validation.getTitle</code> (25 phút)</h4>
+<p>Làm sạch tên sách như slide 8. Gợi ý, mở từng cái một:</p>
+<details><summary>Gợi ý 1 — các bước</summary><p><code>trim()</code> → rỗng? ném <code>Message.ERROR_TITLE_EMPTY</code> → <code>split(Constants.REGEX_SPACES)</code> → với mỗi từ: thêm một dấu cách (trừ trước từ đầu) và từ đó dạng Title Case → kiểm độ dài → <code>toString()</code>.</p></details>
+<details><summary>Gợi ý 2 — một từ</summary><p><code>word.substring(0, 1).toUpperCase()</code> rồi <code>word.substring(1).toLowerCase()</code>. Từ một chữ cái vẫn chạy: <code>substring(1)</code> của "a" là "".</p></details>
+<details><summary>Lời giải (phương thức trong dự án đáp án)</summary>
+<pre class="trich"><code class="language-java">// Chuan hoa ten sach: bo dau cach thua, moi tu viet hoa chu dau (Title Case)
+public static String getTitle(String input) throws Exception {
+    // Ten bo dau cach 2 dau; bo noi cac tu da chuan hoa (khong dung String +=)
+    String text = input.trim();
+    StringBuilder titleBuilder = new StringBuilder();
+
+    // Rong (hoac chi co dau cach) thi bao loi
+    if (text.isEmpty()) {
+        throw new Exception(Message.ERROR_TITLE_EMPTY);
+    }
+
+    // Tach theo 1 hay nhieu dau cach, chuan hoa tung tu
+    for (String word : text.split(Constants.REGEX_SPACES)) {
+        // Tu thu 2 tro di thi them 1 dau cach phia truoc
+        if (titleBuilder.length() &gt; 0) {
+            titleBuilder.append(Constants.SPACE);
+        }
+
+        // Chu dau viet hoa, phan con lai viet thuong
+        titleBuilder.append(word.substring(0, 1).toUpperCase());
+        titleBuilder.append(word.substring(1).toLowerCase());
+    }
+
+    // Ten da chuan hoa dai qua gioi han thi bao do dai
+    if (titleBuilder.length() &gt; Constants.TITLE_MAX_LENGTH) {
+        throw new Exception(String.format(Message.ERROR_TITLE_LENGTH, titleBuilder.length(),
+                Constants.TITLE_MAX_LENGTH));
+    }
+
+    return titleBuilder.toString();
+}</code></pre>
+</details>
+
+<h4>Bước 3 — TODO 1.3 <code>Validation.getIsbn</code> (40 phút)</h4>
+<p>Bốn phép kiểm theo đúng thứ tự, mỗi phép một thông báo riêng trong <code>Message</code>: ký tự, độ dài, tiền tố, chữ số kiểm tra (slide 9–10). Tính tay ví dụ 978-0-13-235088-4 ra giấy trước.</p>
+<details><summary>Gợi ý 1 — vòng lặp đầu</summary><p>Với <code>i</code> từ 0: <code>char character = text.charAt(i)</code>. Nếu <code>Constants.DIGITS.indexOf(character) &gt;= 0</code> thì nối vào; còn nếu không nằm trong <code>Constants.ISBN_SEPARATORS</code> thì ném <code>String.format(Message.ERROR_ISBN_CHARACTER, character, i + 1)</code>.</p></details>
+<details><summary>Gợi ý 2 — tổng có trọng số</summary><p>Với 12 chữ số đầu: chỉ số lẻ (<code>i % 2 == 1</code>) ⇒ cộng <code>digit * Constants.ISBN_ODD_WEIGHT</code>, chỉ số chẵn ⇒ cộng <code>digit</code>. Rồi <code>checkDigit = (10 − tổng % 10) % 10</code>, số 10 lấy từ <code>Constants.ISBN_MODULO</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Kiem ISBN-13: bo dau - va dau cach, du 13 chu so, dau 978/979, dung chu so kiem tra
+public static String getIsbn(String input) throws Exception {
+    // Ban go, cac chu so gom duoc, tien to, tong co trong so, chu so kiem tra, chu so cuoi
+    String text = input.trim();
+    StringBuilder digitBuilder = new StringBuilder();
+    String prefix = "";
+    int weightedSum = 0;
+    int checkDigit = 0;
+    int lastDigit = 0;
+
+    // Duyet tung ky tu: chu so thi giu, dau - / dau cach thi bo, con lai la loi
+    for (int i = 0; i &lt; text.length(); i++) {
+        // Ky tu dang xet
+        char character = text.charAt(i);
+
+        // Chu so thi giu lai
+        if (Constants.DIGITS.indexOf(character) &gt;= 0) {
+            digitBuilder.append(character);
+        } else if (Constants.ISBN_SEPARATORS.indexOf(character) &lt; 0) {
+            // Khong phai chu so cung khong phai dau ngan cach: chi ro ky tu va vi tri
+            throw new Exception(String.format(Message.ERROR_ISBN_CHARACTER, character, i + 1));
+        }
+    }
+
+    // Thieu hoac thua chu so thi bao so chu so dang co
+    if (digitBuilder.length() != Constants.ISBN_LENGTH) {
+        throw new Exception(String.format(Message.ERROR_ISBN_LENGTH, Constants.ISBN_LENGTH,
+                digitBuilder.length()));
+    }
+
+    // Lay 3 chu so dau
+    prefix = digitBuilder.substring(0, Constants.ISBN_PREFIX_LENGTH);
+
+    // Ba chu so dau phai la 978 hoac 979
+    if ((!prefix.equals(Constants.ISBN_PREFIX_978)) &amp;&amp;
+            (!prefix.equals(Constants.ISBN_PREFIX_979))) {
+        throw new Exception(String.format(Message.ERROR_ISBN_PREFIX, prefix));
+    }
+
+    // Cong 12 chu so dau: vi tri chan nhan 1, vi tri le nhan 3
+    for (int i = 0; i &lt; (Constants.ISBN_LENGTH - 1); i++) {
+        // Gia tri cua chu so thu i
+        int digit = Constants.DIGITS.indexOf(digitBuilder.charAt(i));
+
+        // Vi tri le (1, 3, 5...) nhan 3, vi tri chan nhan 1
+        if ((i % 2) == 1) {
+            weightedSum = weightedSum + (digit * Constants.ISBN_ODD_WEIGHT);
+        } else {
+            // Vi tri chan giu nguyen
+            weightedSum = weightedSum + digit;
+        }
+    }
+
+    // Chu so kiem tra = (10 - tong % 10) % 10
+    checkDigit = (Constants.ISBN_MODULO - (weightedSum % Constants.ISBN_MODULO))
+            % Constants.ISBN_MODULO;
+
+    // Gia tri chu so cuoi (chu so thu 13)
+    lastDigit = Constants.DIGITS.indexOf(digitBuilder.charAt(Constants.ISBN_LENGTH - 1));
+
+    // Chu so cuoi khac chu so tinh ra thi bao ca hai
+    if (lastDigit != checkDigit) {
+        throw new Exception(String.format(Message.ERROR_ISBN_CHECKSUM, checkDigit, lastDigit));
+    }
+
+    return digitBuilder.toString();
+}</code></pre>
+</details>
+<p>Bộ chấm chờ gì khi bốn phép kiểm báo lỗi (output thật của đáp án):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: Ten sach khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Ten sach: ISBN-13: ISBN-13 phai co dung 13 chu so (khong tinh dau - va dau cach), ban nhap 12 chu so. Moi nhap lai.<br>
+ISBN-13: ISBN chi gom chu so, dau - va dau cach. Ky tu 'O' o vi tri 13 khong hop le. Moi nhap lai.<br>
+ISBN-13: ISBN-13 phai bat dau bang 978 hoac 979, ban nhap 977. Moi nhap lai.<br>
+ISBN-13: ISBN sai chu so kiem tra: chu so cuoi phai la 4, ban nhap 5. Xem lai so in tren bia sach roi nhap lai.<br>
+ISBN-13: Da them sach "Clean Code" (ISBN 9780132350884). Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Bước 4 — TODO 1.4 chặn trùng ISBN trong <code>BookRepository.addBook</code> (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Them 1 sach tu phieu nhap; ISBN da co thi nem loi (khong them)
+public void addBook(BookRequestDTO bookRequestDTO) throws Exception {
+    // Sach dang giu ISBN nay (null neu chua co)
+    Book existingBook = findByIsbn(bookRequestDTO.getIsbn());
+
+    // Trung ISBN thi bao ro sach nao dang giu ISBN do
+    if (existingBook != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_ISBN,
+                existingBook.getIsbn(), existingBook.getTitle()));
+    }
+
+    // Doi phieu nhap thanh model roi them vao cuoi danh sach
+    bookList.add(new Book(bookRequestDTO.getIsbn(), bookRequestDTO.getTitle()));
+}</code></pre>
+</details>
+
+<h4>Bước 5 — TODO 1.5 <code>BookRepository.findByKeyword</code> (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Tim sach co ten chua tu khoa (khong phan biet hoa thuong)
+public ArrayList&lt;BookResponseDTO&gt; findByKeyword(String keyword) {
+    // Danh sach dong bang tim duoc; tu khoa viet thuong de so khong phan biet hoa thuong
+    ArrayList&lt;BookResponseDTO&gt; foundList = new ArrayList&lt;&gt;();
+    String lowerKeyword = keyword.toLowerCase();
+
+    // Duyet tung sach de so ten
+    for (Book book : bookList) {
+        // Ten chua tu khoa thi giu lai
+        if (book.getTitle().toLowerCase().contains(lowerKeyword)) {
+            foundList.add(toResponseDTO(book));
+        }
+    }
+
+    return foundList;
+}</code></pre>
+</details>
+
+<h4>Bước 6 — TODO 1.6 <code>BookService.sortByTitle</code> (20 phút)</h4>
+<details><summary>Gợi ý — hình dáng</summary><p><code>Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() { @Override public int compare(BookResponseDTO first, BookResponseDTO second) { … } });</code> — một lớp ẩn danh, đúng dạng 1.G slide 9. Đánh số các hàng trong một vòng lặp thứ hai.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Sap cac dong bang theo ten (A-Z, khong phan biet hoa thuong), trung ten thi theo ISBN;
+// xong danh so thu tu tu 1
+public ArrayList&lt;BookResponseDTO&gt; sortByTitle(ArrayList&lt;BookResponseDTO&gt; bookList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;BookResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(bookList);
+
+    // Comparator la "luat so": tra so am neu first dung truoc second
+    Collections.sort(sortedList, new Comparator&lt;BookResponseDTO&gt;() {
+        // So ten truoc, trung ten thi so ISBN
+        @Override
+        public int compare(BookResponseDTO first, BookResponseDTO second) {
+            // Ket qua so ten (0 = trung ten)
+            int byTitle = first.getTitle().compareToIgnoreCase(second.getTitle());
+
+            // Trung ten thi ISBN quyet dinh thu tu
+            if (byTitle == 0) {
+                return first.getIsbn().compareTo(second.getIsbn());
+            }
+
+            return byTitle;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+
+<h4>Bước 7 — chấm, lint, commit (15 phút)</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 77/77 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab1-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab1-Solution — sạch</div>
+<p>Nếu <code>lint.py</code> phàn nàn, nó nêu tệp, dòng và luật (ví dụ <code>[COMMENT] … 'if' thiếu comment</code>) — sửa rồi chạy lại. <code>lint.py</code> nằm trong bộ LAB211 của trang này; nếu chưa có, tự soát bằng danh sách ở yêu cầu 7.</p>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip above is the complete project. It passed, for real: <code>lint.py</code> (the LAB211 reviewer's rules) with 0 violations, <code>javac --release 8</code>, the same run on a real JDK 8 (Docker <code>eclipse-temurin:8-jdk</code>) printing exactly what the JDK 21 run prints, and the grader with 77/77. Here is the complete run the grader compares against:</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (77 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: Lua chon phai la 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Lua chon: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 3. Moi nhap lai.<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: Ten sach khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Ten sach: ISBN-13: ISBN-13 phai co dung 13 chu so (khong tinh dau - va dau cach), ban nhap 12 chu so. Moi nhap lai.<br>
+ISBN-13: ISBN chi gom chu so, dau - va dau cach. Ky tu 'O' o vi tri 13 khong hop le. Moi nhap lai.<br>
+ISBN-13: ISBN-13 phai bat dau bang 978 hoac 979, ban nhap 977. Moi nhap lai.<br>
+ISBN-13: ISBN sai chu so kiem tra: chu so cuoi phai la 4, ban nhap 5. Xem lai so in tren bia sach roi nhap lai.<br>
+ISBN-13: Da them sach "Clean Code" (ISBN 9780132350884). Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Da co sach mang ISBN 9780134685991 ("Effective Java"). Moi dau sach chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: Ten sach dai 77 ky tu, toi da chi 60 ky tu. Hay rut gon roi nhap lai.<br>
+Ten sach: ISBN-13: Da them sach "Refactoring" (ISBN 9780134757599). Thu vien co 6 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780132350884 &nbsp;Clean Code<br>
+2 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+4 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+5 &nbsp;&nbsp;&nbsp;9780134757599 &nbsp;Refactoring<br>
+6 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: Tu khoa khong duoc de trong. Hay nhap 1 phan cua ten sach, vi du: java.<br>
+Tu khoa: No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: Khong co sach nao co ten chua "python". Hay thu tu khoa khac.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 1 chi nam trong bo nho.</div>
+</details>
+<p>And the class that ties the layers together — read it until every line makes sense:</p>
+<details><summary>BookController.java (given in the starter)</summary>
+<pre><code class="language-java">package controller;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import java.util.ArrayList;
+import repository.BookRepository;
+import service.BookService;
+import view.BookView;
+
+/**
+ * Dieu phoi moi yeu cau ve sach: goi Repository de them/tim (CRUD), dua du lieu
+ * cho Service sap xep, roi dua ket qua cho View in. Khong import model.
+ *
+ * @author CuongThai Academy
+ */
+public class BookController {
+
+    // Kho sach (CRUD nam o Controller, khong o Service)
+    private BookRepository bookRepository;
+
+    // Nghiep vu sap xep
+    private BookService bookService;
+
+    // Man hinh in ket qua
+    private BookView bookView;
+
+    // Tao kho, service, view va nap sach mau
+    public BookController() {
+        bookRepository = new BookRepository();
+        bookService = new BookService();
+        bookView = new BookView();
+
+        // Nap sach mau; loi thi in ra (khong xay ra voi du lieu mau dung)
+        try {
+            loadSampleBooks();
+        } catch (Exception e) {
+            // Du lieu mau trung ISBN thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+
+    // Them 1 sach, bao ket qua (thanh cong hoac trung ISBN)
+    public void addBook(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Them vao kho; trung ISBN thi kho nem loi
+        try {
+            bookRepository.addBook(bookRequestDTO);
+            resultMessage = String.format(Message.SUCCESS_ADD, bookRequestDTO.getTitle(),
+                    bookRequestDTO.getIsbn(), bookRepository.countBooks());
+        } catch (Exception e) {
+            // Trung ISBN thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // In moi sach, sap theo ten
+    public void showAllBooks() {
+        // Kho tra ban sao, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; sortedList = bookService.sortByTitle(bookRepository.findAll());
+
+        // Kho rong thi chi in cau bao rong, nguoc lai chi in bang
+        if (sortedList.isEmpty()) {
+            showResult(Message.EMPTY_LIST, sortedList);
+        } else {
+            // Co sach thi in bang, khong kem cau nao
+            showResult("", sortedList);
+        }
+    }
+
+    // Tim sach co ten chua tu khoa (phieu chi dien ten), in ket qua da sap theo ten
+    public void searchBooks(BookRequestDTO bookRequestDTO) {
+        // Kho tim theo tu khoa, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; foundList
+                = bookService.sortByTitle(bookRepository.findByKeyword(bookRequestDTO.getTitle()));
+
+        // Khong tim thay thi chi in cau bao, nguoc lai chi in bang
+        if (foundList.isEmpty()) {
+            showResult(String.format(Message.NOT_FOUND, bookRequestDTO.getTitle()), foundList);
+        } else {
+            // Co ket qua thi in bang
+            showResult("", foundList);
+        }
+    }
+
+    // Dua cau thong bao + cac dong bang cho View roi goi in dung 1 lan
+    private void showResult(String message, ArrayList&lt;BookResponseDTO&gt; responseList) {
+        bookView.setMessage(message);
+        bookView.setResponseList(responseList);
+        bookView.display();
+    }
+
+    // Nap cac sach mau khai trong Constants
+    private void loadSampleBooks() throws Exception {
+        // Moi dong mau: { ten sach, ISBN }
+        for (String[] rowArray : Constants.SAMPLE_BOOK_ARRAY) {
+            bookRepository.addBook(new BookRequestDTO(rowArray[Constants.SAMPLE_ISBN_INDEX],
+                    rowArray[Constants.SAMPLE_TITLE_INDEX]));
+        }
+    }
+}</code></pre>
+</details>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án ở trên là trọn dự án. Nó đã qua thật: <code>lint.py</code> (luật review của thầy LAB211) 0 vi phạm, <code>javac --release 8</code>, cùng lần chạy trên JDK 8 thật (Docker <code>eclipse-temurin:8-jdk</code>) in ra đúng y như JDK 21, và bộ chấm 77/77. Đây là trọn lần chạy mà bộ chấm dùng để so:</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (77 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: Lua chon phai la 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Lua chon: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 0 den 3. Moi nhap lai.<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: Ten sach khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Ten sach: ISBN-13: ISBN-13 phai co dung 13 chu so (khong tinh dau - va dau cach), ban nhap 12 chu so. Moi nhap lai.<br>
+ISBN-13: ISBN chi gom chu so, dau - va dau cach. Ky tu 'O' o vi tri 13 khong hop le. Moi nhap lai.<br>
+ISBN-13: ISBN-13 phai bat dau bang 978 hoac 979, ban nhap 977. Moi nhap lai.<br>
+ISBN-13: ISBN sai chu so kiem tra: chu so cuoi phai la 4, ban nhap 5. Xem lai so in tren bia sach roi nhap lai.<br>
+ISBN-13: Da them sach "Clean Code" (ISBN 9780132350884). Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Da co sach mang ISBN 9780134685991 ("Effective Java"). Moi dau sach chi them 1 lan.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: Ten sach dai 77 ky tu, toi da chi 60 ky tu. Hay rut gon roi nhap lai.<br>
+Ten sach: ISBN-13: Da them sach "Refactoring" (ISBN 9780134757599). Thu vien co 6 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780132350884 &nbsp;Clean Code<br>
+2 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+4 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+5 &nbsp;&nbsp;&nbsp;9780134757599 &nbsp;Refactoring<br>
+6 &nbsp;&nbsp;&nbsp;9780135957059 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: Tu khoa khong duoc de trong. Hay nhap 1 phan cua ten sach, vi du: java.<br>
+Tu khoa: No &nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;&nbsp;9780134685991 &nbsp;Effective Java<br>
+2 &nbsp;&nbsp;&nbsp;9780596009205 &nbsp;Head First Java<br>
+3 &nbsp;&nbsp;&nbsp;9780321349606 &nbsp;Java Concurrency In Practice<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: Khong co sach nao co ten chua "python". Hay thu tu khoa khac.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 1 chi nam trong bo nho.</div>
+</details>
+<p>Và lớp nối các tầng lại với nhau — đọc tới khi hiểu từng dòng:</p>
+<details><summary>BookController.java (cho sẵn trong starter)</summary>
+<pre><code class="language-java">package controller;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import java.util.ArrayList;
+import repository.BookRepository;
+import service.BookService;
+import view.BookView;
+
+/**
+ * Dieu phoi moi yeu cau ve sach: goi Repository de them/tim (CRUD), dua du lieu
+ * cho Service sap xep, roi dua ket qua cho View in. Khong import model.
+ *
+ * @author CuongThai Academy
+ */
+public class BookController {
+
+    // Kho sach (CRUD nam o Controller, khong o Service)
+    private BookRepository bookRepository;
+
+    // Nghiep vu sap xep
+    private BookService bookService;
+
+    // Man hinh in ket qua
+    private BookView bookView;
+
+    // Tao kho, service, view va nap sach mau
+    public BookController() {
+        bookRepository = new BookRepository();
+        bookService = new BookService();
+        bookView = new BookView();
+
+        // Nap sach mau; loi thi in ra (khong xay ra voi du lieu mau dung)
+        try {
+            loadSampleBooks();
+        } catch (Exception e) {
+            // Du lieu mau trung ISBN thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+
+    // Them 1 sach, bao ket qua (thanh cong hoac trung ISBN)
+    public void addBook(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Them vao kho; trung ISBN thi kho nem loi
+        try {
+            bookRepository.addBook(bookRequestDTO);
+            resultMessage = String.format(Message.SUCCESS_ADD, bookRequestDTO.getTitle(),
+                    bookRequestDTO.getIsbn(), bookRepository.countBooks());
+        } catch (Exception e) {
+            // Trung ISBN thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // In moi sach, sap theo ten
+    public void showAllBooks() {
+        // Kho tra ban sao, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; sortedList = bookService.sortByTitle(bookRepository.findAll());
+
+        // Kho rong thi chi in cau bao rong, nguoc lai chi in bang
+        if (sortedList.isEmpty()) {
+            showResult(Message.EMPTY_LIST, sortedList);
+        } else {
+            // Co sach thi in bang, khong kem cau nao
+            showResult("", sortedList);
+        }
+    }
+
+    // Tim sach co ten chua tu khoa (phieu chi dien ten), in ket qua da sap theo ten
+    public void searchBooks(BookRequestDTO bookRequestDTO) {
+        // Kho tim theo tu khoa, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; foundList
+                = bookService.sortByTitle(bookRepository.findByKeyword(bookRequestDTO.getTitle()));
+
+        // Khong tim thay thi chi in cau bao, nguoc lai chi in bang
+        if (foundList.isEmpty()) {
+            showResult(String.format(Message.NOT_FOUND, bookRequestDTO.getTitle()), foundList);
+        } else {
+            // Co ket qua thi in bang
+            showResult("", foundList);
+        }
+    }
+
+    // Dua cau thong bao + cac dong bang cho View roi goi in dung 1 lan
+    private void showResult(String message, ArrayList&lt;BookResponseDTO&gt; responseList) {
+        bookView.setMessage(message);
+        bookView.setResponseList(responseList);
+        bookView.display();
+    }
+
+    // Nap cac sach mau khai trong Constants
+    private void loadSampleBooks() throws Exception {
+        // Moi dong mau: { ten sach, ISBN }
+        for (String[] rowArray : Constants.SAMPLE_BOOK_ARRAY) {
+            bookRepository.addBook(new BookRequestDTO(rowArray[Constants.SAMPLE_ISBN_INDEX],
+                    rowArray[Constants.SAMPLE_TITLE_INDEX]));
+        }
+    }
+}</code></pre>
+</details>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — <code>==</code> on Strings.</strong> The typed ISBN is a new String object; <code>==</code> compares references.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 1 trap — comparing the typed ISBN with ==
+import java.util.Scanner;
+
+public class LabBaySoChuoi {
+    public static void main(String[] args) {
+        String stored = "9780134685991";                  // literal: lives in the string pool
+        Scanner scanner = new Scanner(System.in);
+        String typed = scanner.nextLine().trim();         // a NEW String object built at run time
+        System.out.println("typed      = " + typed);
+        System.out.println("== says    : " + (typed == stored));       // compares two REFERENCES
+        System.out.println("equals says: " + typed.equals(stored));    // compares the CHARACTERS
+        String sameLiteral = "9780134685991";
+        System.out.println("two literals with == : " + (sameLiteral == stored));   // true only because of the pool
+    }
+}</code></pre>
+<div class="out">typed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9780134685991<br>
+== says &nbsp;&nbsp;&nbsp;: false<br>
+equals says: true<br>
+two literals with == : true</div>
+<div class="pitfall"><p><strong>Trap 2 — <code>nextInt()</code> then <code>nextLine()</code>.</strong> The Enter left behind becomes an empty title (input typed: 1, Clean Code, 2).</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 1 trap — nextInt() then nextLine(): the title comes back empty
+import java.util.Scanner;
+
+public class LabBayNextInt {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Choice: ");
+        int choice = scanner.nextInt();                   // reads "1" but leaves the Enter in the buffer
+        System.out.print("Title: ");
+        String title = scanner.nextLine();                // eats that leftover Enter at once
+        System.out.println();
+        System.out.println("choice = " + choice + ", title = [" + title + "]");
+        String next = scanner.nextLine();                 // the real title only arrives now
+        System.out.println("the next nextLine() = [" + next + "]");
+        int fixed = Integer.parseInt(scanner.nextLine().trim());   // the LAB211 way: always nextLine() then parse
+        System.out.println("nextLine() + parseInt = " + fixed);
+    }
+}</code></pre>
+<div class="out">Choice: Title:<br>
+choice = 1, title = []<br>
+the next nextLine() = [Clean Code]<br>
+nextLine() + parseInt = 2</div>
+<div class="pitfall"><p><strong>Trap 3 — numbering before sorting.</strong> If <code>setNo</code> runs before <code>Collections.sort</code>, the numbers travel with the rows and come out 3, 1, 4, 2. Number in a second loop, after sorting.</p></div>
+<div class="pitfall"><p><strong>Trap 4 — the duplicate check in the wrong layer.</strong> Putting it in <code>Validation</code> would need the list inside utils — a LAYER violation, and <code>lint.py</code> stops at it ("package 'utils' không được import 'repository'").</p></div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — <code>==</code> với String.</strong> ISBN vừa gõ là một đối tượng String mới; <code>==</code> so tham chiếu.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 1 — so ISBN vừa gõ bằng ==
+import java.util.Scanner;
+
+public class LabBaySoChuoi {
+    public static void main(String[] args) {
+        String stored = "9780134685991";                  // hằng chuỗi: nằm trong string pool
+        Scanner scanner = new Scanner(System.in);
+        String typed = scanner.nextLine().trim();         // một đối tượng String MỚI tạo lúc chạy
+        System.out.println("typed      = " + typed);
+        System.out.println("== says    : " + (typed == stored));       // so hai THAM CHIẾU
+        System.out.println("equals says: " + typed.equals(stored));    // so từng KÝ TỰ
+        String sameLiteral = "9780134685991";
+        System.out.println("two literals with == : " + (sameLiteral == stored));   // true chỉ vì pool
+    }
+}</code></pre>
+<div class="out">typed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9780134685991<br>
+== says &nbsp;&nbsp;&nbsp;: false<br>
+equals says: true<br>
+two literals with == : true</div>
+<div class="pitfall"><p><strong>Bẫy 2 — <code>nextInt()</code> rồi <code>nextLine()</code>.</strong> Phím Enter còn sót biến thành tên sách rỗng (dữ liệu gõ: 1, Clean Code, 2).</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 1 — nextInt() rồi nextLine(): tên sách rỗng
+import java.util.Scanner;
+
+public class LabBayNextInt {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Choice: ");
+        int choice = scanner.nextInt();                   // đọc "1" nhưng để lại phím Enter trong bộ đệm
+        System.out.print("Title: ");
+        String title = scanner.nextLine();                // nuốt ngay phím Enter còn sót
+        System.out.println();
+        System.out.println("choice = " + choice + ", title = [" + title + "]");
+        String next = scanner.nextLine();                 // tên sách thật giờ mới tới
+        System.out.println("the next nextLine() = [" + next + "]");
+        int fixed = Integer.parseInt(scanner.nextLine().trim());   // cách LAB211: luôn nextLine() rồi parse
+        System.out.println("nextLine() + parseInt = " + fixed);
+    }
+}</code></pre>
+<div class="out">Choice: Title:<br>
+choice = 1, title = []<br>
+the next nextLine() = [Clean Code]<br>
+nextLine() + parseInt = 2</div>
+<div class="pitfall"><p><strong>Bẫy 3 — đánh số trước khi sắp.</strong> Nếu <code>setNo</code> chạy trước <code>Collections.sort</code>, số thứ tự đi theo hàng và ra 3, 1, 4, 2. Đánh số ở vòng lặp thứ hai, sau khi sắp.</p></div>
+<div class="pitfall"><p><strong>Bẫy 4 — chặn trùng sai tầng.</strong> Đặt nó vào <code>Validation</code> thì utils phải giữ danh sách — vi phạm tầng, và <code>lint.py</code> chặn ngay ("package 'utils' không được import 'repository'").</p></div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>LAB211 structure: 9 packages, controller holds the repository, service has none, no <code>model</code> import in the controller</td><td>2</td><td>open the tree + <code>lint.py</code> LAYER rules</td></tr>
+<tr><td>Title Case, empty, length (1.2)</td><td>2</td><td>grader lines 20, 25, 39</td></tr>
+<tr><td>ISBN-13: 4 checks, 4 precise messages (1.3)</td><td>2</td><td>grader lines 21–24</td></tr>
+<tr><td>Duplicate ISBN refused (1.4)</td><td>1</td><td>grader line 32</td></tr>
+<tr><td>Search, any case (1.5)</td><td>1</td><td>grader lines 60–64, 71</td></tr>
+<tr><td>Sort A–Z + numbering after sorting (1.6)</td><td>1</td><td>grader lines 9–13, 47–53</td></tr>
+<tr><td>Standards: <code>lint.py</code> 0, comments, ≤ 100 characters, ≥ 3 commits</td><td>1</td><td><code>lint.py</code>, <code>git log</code></td></tr>
+</tbody>
+</table>
+<p><strong>Self-check — answer aloud, then open:</strong></p>
+<details><summary>1. Why is the duplicate check in the repository and not in Validation?</summary><p class="dap-an">✅ Validation only sees the typed text; the repository owns the list, so only it can know the ISBN is taken — and by which book. Utils may not import a repository (layer rule).</p></details>
+<details><summary>2. What does compare return for "Clean Code" vs "clean code"?</summary><p class="dap-an">✅ <code>compareToIgnoreCase</code> gives 0 (a tie), so the comparator moves on to the ISBN — the order is still fully decided.</p></details>
+<details><summary>3. The club wants titles up to 80 characters. Which file changes?</summary><p class="dap-an">✅ Only <code>constants/Constants.java</code>: <code>TITLE_MAX_LENGTH = 80</code>. <code>Validation</code> and the message already use the constant — that is the point of "no hard-coding".</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td>Cấu trúc LAB211: 9 package, controller giữ repository, service không có, controller không import <code>model</code></td><td>2</td><td>mở cây dự án + luật LAYER của <code>lint.py</code></td></tr>
+<tr><td>Title Case, rỗng, độ dài (1.2)</td><td>2</td><td>dòng 20, 25, 39 của bộ chấm</td></tr>
+<tr><td>ISBN-13: 4 phép kiểm, 4 thông báo rõ ràng (1.3)</td><td>2</td><td>dòng 21–24</td></tr>
+<tr><td>Chặn trùng ISBN (1.4)</td><td>1</td><td>dòng 32</td></tr>
+<tr><td>Tìm không phân biệt hoa thường (1.5)</td><td>1</td><td>dòng 60–64, 71</td></tr>
+<tr><td>Sắp A–Z + đánh số sau khi sắp (1.6)</td><td>1</td><td>dòng 9–13, 47–53</td></tr>
+<tr><td>Chuẩn code: <code>lint.py</code> 0, comment, ≤ 100 ký tự, ≥ 3 commit</td><td>1</td><td><code>lint.py</code>, <code>git log</code></td></tr>
+</tbody>
+</table>
+<p><strong>Tự kiểm — trả lời thành tiếng rồi mới mở:</strong></p>
+<details><summary>1. Vì sao chặn trùng nằm ở repository mà không ở Validation?</summary><p class="dap-an">✅ Validation chỉ thấy chữ vừa gõ; repository giữ danh sách nên chỉ nó biết ISBN đã có — và thuộc cuốn nào. Utils không được import repository (luật tầng).</p></details>
+<details><summary>2. compare trả gì khi so "Clean Code" với "clean code"?</summary><p class="dap-an">✅ <code>compareToIgnoreCase</code> trả 0 (ngang nhau), nên comparator chuyển sang so ISBN — thứ tự vẫn được quyết định trọn vẹn.</p></details>
+<details><summary>3. Câu lạc bộ muốn tên sách dài tới 80 ký tự. Sửa tệp nào?</summary><p class="dap-an">✅ Chỉ <code>constants/Constants.java</code>: <code>TITLE_MAX_LENGTH = 80</code>. <code>Validation</code> và câu thông báo đều đã dùng hằng — đó chính là ý nghĩa của "không hardcode".</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Accept the old 10-digit ISBN too: convert it to ISBN-13 ("978" + first 9 digits + new check digit). Which methods change, which stay?</li>
+<li>⭐ Add menu item 4: list only the books whose title starts with a given letter — in which layer does "starts with" go?</li>
+<li>⭐⭐ Show ISBNs with hyphens in the table (978-0-13-235088-4) without changing what is stored. Hint: a formatting job belongs to the DTO's <code>toString</code> or the view, not to the repository.</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 2 (after Chapter 2):</strong> you write the classes yourself. <code>Book</code> gets an id (B001…), an author, a year and a number of copies; <code>Member</code> joins; constructors, <code>this</code>, and the question that decides Chapter 2: when you change something, do you change the object — or only a copy of it?</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Nhận cả ISBN 10 chữ số kiểu cũ: đổi sang ISBN-13 ("978" + 9 chữ số đầu + chữ số kiểm tra mới). Phương thức nào phải sửa, phương thức nào giữ nguyên?</li>
+<li>⭐ Thêm mục menu 4: liệt kê các sách có tên bắt đầu bằng một chữ cái cho trước — phần "bắt đầu bằng" đặt ở tầng nào?</li>
+<li>⭐⭐ Hiện ISBN có gạch nối trong bảng (978-0-13-235088-4) mà không đổi dữ liệu đã lưu. Gợi ý: việc định dạng thuộc về <code>toString</code> của DTO hoặc view, không thuộc repository.</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 2 (sau Chương 2):</strong> bạn tự viết lớp. <code>Book</code> có mã (B001…), tác giả, năm xuất bản và số bản; thêm <code>Member</code>; constructor, <code>this</code>, và câu hỏi quyết định Chương 2: khi sửa một thứ, bạn đang sửa đối tượng — hay chỉ sửa bản sao của nó?</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch1) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -8549,6 +9743,7 @@ System.out.println(s);`,
 export default {
   slides: [L_pro1_1, L_pro3_1, L_pro3_2, L_pro4_1, L_pro5_1, L_pro5_2, L_pro6_1],
   practice: L_on_ch1,
+  labs: [L_lab1],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 1 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ và đáp án kiểm bằng Java chạy thật: ép Integer sang String, == với literal và new String, bộ đệm Integer 127/128, ép (byte) 200, tổng với toán tử ba ngôi, 1 + 2 + "3" + 4 + 5, dịch bit >> và >>>, binarySearch với khoá không có, String bất biến, và mảng new int[100].',
 };

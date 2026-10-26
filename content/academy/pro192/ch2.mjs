@@ -2,13 +2,16 @@
  * PRO192 · Chương 2 — bộ nhớ, lớp & đối tượng (pro7; pro8 slide 1–25).
  * Bài 📑 học theo từng slide: pro7 (tmp_07.pptx, slide 1–9); pro8 (tmp_08.pptx, slide 1–25).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch2.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-2-sach-va-thanh-vien.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch2).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab2', { code: 'PRO192 Lab 2', en: 'Lab 2 — CT Library: real Book and Member classes', vi: 'Lab 2 — CT Library: lớp Book và Member thật', total: 15, w: 1280, h: 720, ver: 'v2' });
 
 /* ───────── 2.A — 📑 Slide by slide · Memory Management in Java: stack, heap, references, garbage collection (slides 1–9) ───────── */
 const L_pro7_1 = {
@@ -4162,6 +4165,1363 @@ choice: bye</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 2 — 🏗️ CT Library: real Book and Member classes (constructors, this, ids, reference vs copy) ───────── */
+const L_lab2 = {
+  title: 'Lab 2 — 🏗️ CT Library: real Book and Member classes (constructors, this, ids, reference vs copy)|||Lab 2 — 🏗️ CT Library: lớp Book và Member thật (constructor, this, mã tự cấp, tham chiếu hay bản sao)',
+  slug: 'pro192-lab-2-sach-va-thanh-vien',
+  type: 'VIDEO',
+  description: 'Lab 2 của dự án CT Library (sau Chương 2), chuẩn review LAB211: tự viết lớp Book (mã, ISBN, tên, tác giả, năm, số bản) và Member theo kiểu JavaBean với constructor và this(...), kho tự cấp mã B001/M001 bằng trường của đối tượng (không static), cập nhật số bản qua tham chiếu và bẫy sửa nhầm bản sao, thêm và liệt kê thành viên, năm phép kiểm mới có thông báo tiếng Việt rõ ràng. Starter 7 nhóm TODO, đáp án tải về, bộ chấm kiểu PE 113 dòng, đáp án qua lint.py + javac --release 8 + JDK 8 thật, sơ đồ stack/heap, bẫy b2 = b1 và quên this có output thật, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 2 · Lab 2 · CT Library</span>
+<h2>Lab 2 — real Book and Member classes</h2>
+<p class="lead">In Lab 1 the classes were given and you wrote logic. Now the classes are yours: <code>Book</code> grows to six fields, <code>Member</code> arrives, the repository hands out ids, and one menu item — "update copies" — tests the single most important idea of Chapter 2: a variable holds a <strong>reference</strong>, and changing an object through a reference is seen by everyone who points to it, while changing a <strong>copy</strong> is seen by no one.</p>
+<p>The starter is the Lab 1 solution plus the new skeleton: everything from Lab 1 works, every new method body is a <code>TODO Lab 2.x</code>. Plan about <strong>3–4 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 2 · Lab 2 · CT Library</span>
+<h2>Lab 2 — lớp Book và Member thật</h2>
+<p class="lead">Ở Lab 1 lớp được cho sẵn, bạn viết phần xử lý. Giờ lớp là của bạn: <code>Book</code> lớn lên thành sáu trường, <code>Member</code> xuất hiện, kho (repository) tự cấp mã, và một mục menu — "cập nhật số bản" — kiểm đúng ý quan trọng nhất của Chương 2: biến giữ một <strong>tham chiếu</strong> (reference — "mũi tên" trỏ tới đối tượng); sửa đối tượng qua tham chiếu thì mọi biến trỏ tới nó đều thấy, còn sửa một <strong>bản sao</strong> thì chẳng ai thấy.</p>
+<p>Starter là đáp án Lab 1 cộng bộ khung mới: mọi thứ của Lab 1 chạy được, mọi thân hàm mới là <code>TODO Lab 2.x</code>. Dành khoảng <strong>3–4 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 2 (15 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 2 (15 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab2', [
+      [1, 'Lab 2 — CT Library: real Book and Member classes',
+        `<p class="y-chinh">🎯 Lab 2 practises Chapter 2 on a real program: classes, constructors and <code>this</code>, objects on the heap, references on the stack — and the question "did I change the object or a copy?".</p>
+<p>Everything you add follows the same nine packages as Lab 1. The new parts: two model classes (<code>Book</code>, <code>Member</code>), a second controller/repository/service/view family for members, ids assigned by the repositories, and five new validations.</p>`,
+        `<p class="y-chinh">🎯 Lab 2 luyện Chương 2 trên một chương trình thật: lớp, constructor và <code>this</code>, đối tượng trên heap, tham chiếu trên stack — và câu hỏi "mình sửa đối tượng hay sửa bản sao?".</p>
+<p>Mọi thứ thêm vào đều theo đúng chín package của Lab 1. Phần mới: hai lớp model (<code>Book</code>, <code>Member</code>), một bộ controller/repository/service/view thứ hai cho thành viên, mã do repository cấp, và năm phép kiểm mới.</p>`],
+      [2, 'Ticket CTL-2 — the librarian wants more than a title',
+        `<p class="y-chinh">🎯 The ticket adds data (author, year, copies, members) and one behaviour that only works if you understand references: the updated count must appear in the list.</p>
+<p>Done means: the grader prints PASS 113/113, <code>lint.py</code> is silent, <code>javac --release 8</code> compiles, <code>Book</code> and <code>Member</code> are JavaBeans you wrote yourself, ids come only from the repository, and "update copies" changes the book that lives in the list.</p>`,
+        `<p class="y-chinh">🎯 Ticket thêm dữ liệu (tác giả, năm, số bản, thành viên) và một hành vi chỉ đúng khi bạn hiểu tham chiếu: số bản vừa sửa phải hiện ra trong danh sách.</p>
+<p>Xong nghĩa là: bộ chấm in PASS 113/113, <code>lint.py</code> im lặng, <code>javac --release 8</code> biên dịch được, <code>Book</code> và <code>Member</code> là JavaBean do chính bạn viết, mã chỉ do repository cấp, và "cập nhật số bản" sửa đúng cuốn sách đang nằm trong danh sách.</p>`],
+      [3, 'Six menu items now — and ids in the table',
+        `<p class="y-chinh">🎯 Two new families of features: books get id, author, year and copies; members are added and listed — with the same layers as books.</p>
+<p>Look at the table: <code>Id</code> is B001–B004 for the sample books, assigned in the order they were added, while the rows are sorted by title — so B002 comes first. The member side is a copy of the book side: <code>MemberController</code> → <code>MemberRepository</code> / <code>MemberService</code> / <code>MemberView</code>. Names are cleaned exactly like titles, by the same private helper.</p>`,
+        `<p class="y-chinh">🎯 Hai nhóm chức năng mới: sách có mã, tác giả, năm và số bản; thành viên được thêm và liệt kê — đi đúng các tầng như sách.</p>
+<p>Nhìn bảng: cột <code>Id</code> là B001–B004 cho bốn sách mẫu, cấp theo thứ tự thêm vào, còn các hàng được sắp theo tên — nên B002 đứng đầu. Phía thành viên là bản sao của phía sách: <code>MemberController</code> → <code>MemberRepository</code> / <code>MemberService</code> / <code>MemberView</code>. Họ tên được làm sạch đúng như tên sách, bằng cùng một hàm phụ private.</p>`],
+      [4, 'A model is a JavaBean (reviewer rule V10)',
+        `<p class="y-chinh">🎯 A model class is a JavaBean: private fields, a public constructor with no parameters, a getter and a setter for each field — plus, if useful, a constructor with every field.</p>
+<p>The empty constructor does not repeat the assignments: <code>this("", "", "", "", 0, 0)</code> calls the full constructor, so the fields are set in exactly one place. Inside the full constructor <code>this.title = title</code> is needed because the parameter has the same name as the field and hides it: <code>this.title</code> is the field of the object being built, <code>title</code> alone is the parameter. Constructors are exempt from the "at most two parameters" rule — the reviewer's own sample <code>Doctor(code, name, specialization, availability)</code> has four.</p>`,
+        `<p class="y-chinh">🎯 Lớp model là một JavaBean: trường private, một constructor public không tham số, mỗi trường một getter và một setter — cộng thêm, nếu cần, một constructor đủ mọi trường.</p>
+<p>Constructor rỗng không chép lại các lệnh gán: <code>this("", "", "", "", 0, 0)</code> gọi constructor đầy đủ, nên trường chỉ được gán ở đúng một chỗ. Trong constructor đầy đủ phải viết <code>this.title = title</code> vì tham số trùng tên với trường và che mất nó: <code>this.title</code> là trường của đối tượng đang dựng, <code>title</code> đứng một mình là tham số. Constructor được miễn luật "tối đa hai tham số" — chính mẫu của thầy <code>Doctor(code, name, specialization, availability)</code> có bốn.</p>`],
+      [5, 'Ids come from the repository, not from static',
+        `<p class="y-chinh">🎯 The repository assigns ids with a counter that is a field of the repository object: <code>String.format("B%03d", nextBookNumber)</code>, then <code>nextBookNumber++</code>.</p>
+<p><code>%03d</code> pads with zeros to three digits: 5 → <code>005</code>, so the fifth book is <code>B005</code>. The counter starts at <code>Constants.FIRST_ID_NUMBER</code> in the constructor. It is <em>not</em> <code>static</code>: the reviewer rejects static outside utils and constants, and Lab 3 shows the bug a static counter causes. The user never types an id when adding — only when choosing a book to update.</p>`,
+        `<p class="y-chinh">🎯 Repository cấp mã bằng một bộ đếm là trường của chính đối tượng repository: <code>String.format("B%03d", nextBookNumber)</code>, rồi <code>nextBookNumber++</code>.</p>
+<p><code>%03d</code> chèn số 0 cho đủ ba chữ số: 5 → <code>005</code>, nên cuốn thứ năm là <code>B005</code>. Bộ đếm bắt đầu bằng <code>Constants.FIRST_ID_NUMBER</code> trong constructor. Nó <em>không</em> phải <code>static</code>: thầy từ chối static ngoài utils và constants, và Lab 3 sẽ cho thấy lỗi mà bộ đếm static gây ra. Người dùng không bao giờ gõ mã khi thêm — chỉ gõ khi chọn sách để cập nhật.</p>`],
+      [6, 'One question for the whole chapter: object or copy?',
+        `<p class="y-chinh">🎯 Two arrows, one object: the local variable <code>book</code> and the list slot <code>bookList[1]</code> point to the same <code>Book</code>; the DTO <code>before</code> is a separate object — a copy.</p>
+<p>Objects live on the heap; variables (on the stack, inside each method's frame) hold arrows. <code>findBookById</code> returns the arrow that is already in the list, so <code>book</code> points to the real book. <code>findById</code> builds a <strong>new</strong> <code>BookResponseDTO</code> and copies the fields into it — a separate object that only looks the same. Everything in this lab follows from this picture.</p>`,
+        `<p class="y-chinh">🎯 Hai mũi tên, một đối tượng: biến cục bộ <code>book</code> và ô danh sách <code>bookList[1]</code> cùng trỏ tới một <code>Book</code>; DTO <code>before</code> là một đối tượng khác — một bản sao.</p>
+<p>Đối tượng nằm trên heap; biến (trên stack, trong khung của từng phương thức) giữ mũi tên. <code>findBookById</code> trả về đúng mũi tên đang có trong danh sách, nên <code>book</code> trỏ vào cuốn sách thật. <code>findById</code> dựng một <code>BookResponseDTO</code> <strong>mới</strong> rồi chép các trường sang — một đối tượng riêng chỉ trông giống thôi. Cả lab này đều suy ra từ bức hình đó.</p>`],
+      [7, '"4 — update copies" through the reference',
+        `<p class="y-chinh">🎯 <code>BookRepository.updateCopies</code> finds the real <code>Book</code> and calls <code>setCopies</code> on it — the list sees the change because it holds an arrow to that same object.</p>
+<p>The controller first takes a copy, <code>before</code>, to remember the old count for the message, then asks the repository to update. If the id does not exist, both <code>findById</code> and <code>updateCopies</code> throw an exception with the Vietnamese message, the controller catches it and the view prints it — one call to <code>display()</code> either way.</p>`,
+        `<p class="y-chinh">🎯 <code>BookRepository.updateCopies</code> tìm đúng <code>Book</code> thật rồi gọi <code>setCopies</code> trên nó — danh sách thấy thay đổi vì nó giữ mũi tên tới chính đối tượng đó.</p>
+<p>Controller lấy trước một bản sao <code>before</code> để nhớ số cũ cho câu thông báo, rồi mới nhờ repository sửa. Nếu mã không tồn tại, cả <code>findById</code> lẫn <code>updateCopies</code> đều ném ngoại lệ kèm câu tiếng Việt, controller bắt lại và view in ra — trường hợp nào cũng gọi <code>display()</code> đúng một lần.</p>`],
+      [8, 'After setCopies(7): the list sees it, the copy does not',
+        `<p class="y-chinh">🎯 After <code>book.setCopies(7)</code> the real book says 7 — the next listing shows 7 — while <code>before</code> still says 2, which is exactly why the message can print "2 -> 7".</p>
+<p>When <code>updateCopies</code> returns, its frame disappears and the variable <code>book</code> with it; the Book object stays alive because the list still points to it. The copy <code>before</code> becomes garbage when the controller's method ends — nothing points to it any more (Chapter 2, 2.A).</p>`,
+        `<p class="y-chinh">🎯 Sau <code>book.setCopies(7)</code> cuốn sách thật mang số 7 — lần liệt kê sau hiện 7 — còn <code>before</code> vẫn mang số 2, và nhờ thế câu thông báo in được "2 -> 7".</p>
+<p>Khi <code>updateCopies</code> kết thúc, khung của nó biến mất cùng biến <code>book</code>; đối tượng Book vẫn sống vì danh sách còn trỏ tới. Bản sao <code>before</code> thành rác khi phương thức của controller kết thúc — không còn gì trỏ tới nó (Chương 2, bài 2.A).</p>`],
+      [9, 'Trap: change a copy and nothing happens',
+        `<p class="y-chinh">🎯 Calling <code>setCopies</code> on the DTO returned by <code>findById</code> changes a throw-away copy: the program happily prints "2 -> 7" and the list still shows 2.</p>
+<p>This is the line your starter's TODO 2.4 begins with, on purpose. Run the starter once you have finished 2.1–2.3, choose 4 then 2, and see it for yourself before fixing it. It is a classic bug in real projects too: an update that "succeeds" without saving anything.</p>`,
+        `<p class="y-chinh">🎯 Gọi <code>setCopies</code> trên DTO mà <code>findById</code> trả về là sửa một bản sao dùng một lần rồi bỏ: chương trình vẫn vui vẻ in "2 -> 7" mà danh sách vẫn ghi 2.</p>
+<p>TODO 2.4 trong starter cố ý bắt đầu bằng chính dòng này. Làm xong 2.1–2.3, chạy starter, chọn 4 rồi 2, tự thấy tận mắt rồi mới sửa. Ở dự án thật đây cũng là lỗi kinh điển: một lần cập nhật "thành công" mà chẳng lưu gì.</p>`],
+      [10, 'Trap: Book b2 = b1 does not copy the book',
+        `<p class="y-chinh">🎯 Assignment between object variables copies the arrow, not the object: after <code>b2 = b1</code> there is still one Book, and <code>b1 == b2</code> is true.</p>
+<p>A real copy needs <code>new</code>: <code>b3 = new Book(b1.getTitle(), b1.getCopies())</code> is a second object, and changing it leaves <code>b1</code> alone (<code>b1 == b3</code> is false). <code>toResponseDTO</code> does exactly this for every row the view prints, which is why the screen can never damage the library's data.</p>`,
+        `<p class="y-chinh">🎯 Phép gán giữa hai biến đối tượng chép mũi tên, không chép đối tượng: sau <code>b2 = b1</code> vẫn chỉ có một Book, và <code>b1 == b2</code> là true.</p>
+<p>Muốn bản sao thật phải có <code>new</code>: <code>b3 = new Book(b1.getTitle(), b1.getCopies())</code> là đối tượng thứ hai, sửa nó không đụng tới <code>b1</code> (<code>b1 == b3</code> là false). <code>toResponseDTO</code> làm đúng việc này cho mọi hàng view in ra, nên màn hình không bao giờ làm hỏng dữ liệu của thư viện.</p>`],
+      [11, 'Your starter: Lab 1 done, Lab 2 bodies are TODO',
+        `<p class="y-chinh">🎯 Seven TODO groups: constructors (2.1, 2.2), ids (2.3, 2.5), update through the reference (2.4), sorting members (2.6), five validations (2.7).</p>
+<p>The first grader run fails at line 1 with a <code>NullPointerException</code> message: the constructors are empty, so every field of the sample books is <code>null</code> and <code>getIsbn().equals(...)</code> explodes. That is your first clue: do 2.1 first. Each TODO comment says which constant and which message to use.</p>`,
+        `<p class="y-chinh">🎯 Bảy nhóm TODO: constructor (2.1, 2.2), cấp mã (2.3, 2.5), sửa qua tham chiếu (2.4), sắp thành viên (2.6), năm phép kiểm (2.7).</p>
+<p>Lần chạy bộ chấm đầu tiên hỏng ngay dòng 1 với thông báo <code>NullPointerException</code>: constructor đang rỗng, nên mọi trường của sách mẫu là <code>null</code> và <code>getIsbn().equals(...)</code> nổ. Manh mối đầu tiên của bạn: làm 2.1 trước. Mỗi comment TODO đều ghi dùng hằng nào, câu thông báo nào.</p>`],
+      [12, 'Every wrong input gets its own sentence',
+        `<p class="y-chinh">🎯 Each field has its own rule and its own message that names the field and repeats what was typed — the LAB211 reviewer tests every message.</p>
+<p>Year 1450–2100 and copies 0–99 share one message format through the private helper <code>parseInteger(input, fieldName)</code> and the range check; author and member name share <code>getPersonName(input, fieldName)</code>. Helpers with a <code>fieldName</code> parameter keep the messages consistent and the code short — and they are <code>private</code>, because no other class needs them.</p>`,
+        `<p class="y-chinh">🎯 Mỗi ô nhập có luật riêng và câu báo riêng, nêu tên ô và nhắc lại chữ vừa gõ — thầy LAB211 thử từng câu một.</p>
+<p>Năm 1450–2100 và số bản 0–99 dùng chung một khuôn câu qua hàm phụ private <code>parseInteger(input, fieldName)</code> và phép kiểm khoảng; tác giả và họ tên thành viên dùng chung <code>getPersonName(input, fieldName)</code>. Hàm phụ có tham số <code>fieldName</code> giữ câu báo đồng nhất và code ngắn — và chúng <code>private</code>, vì không lớp nào khác cần tới.</p>`],
+      [13, 'One flow, five layers: "5 — add a member"',
+        `<p class="y-chinh">🎯 Adding a member walks the same path as adding a book: Main validates and builds a DTO, the controller asks the repository to store it (and get an id), the view prints one sentence.</p>
+<p><code>MemberController.addMember</code> is three lines of work: call <code>memberRepository.addMember(dto)</code> — which returns the new id — format the success message with the id, name and count, and hand it to the view. No service is needed for adding: services appear when there is real business work, like sorting.</p>`,
+        `<p class="y-chinh">🎯 Thêm thành viên đi đúng con đường của thêm sách: Main kiểm và gom DTO, controller nhờ repository lưu (và cấp mã), view in đúng một câu.</p>
+<p><code>MemberController.addMember</code> chỉ có ba việc: gọi <code>memberRepository.addMember(dto)</code> — hàm trả về mã mới — ghép câu thành công với mã, họ tên và số thành viên, rồi đưa cho view. Thêm thì không cần service: service xuất hiện khi có nghiệp vụ thật, như sắp xếp.</p>`],
+      [14, 'Green: PASS 113/113',
+        `<p class="y-chinh">🎯 113 lines match: every validation, both id sequences, the update through the reference, both sorted lists.</p>
+<p>Then do what a reviewer will ask: draw the stack and the heap right after <code>book.setCopies(7)</code> on paper, without looking, and compare with slide 8. Run <code>lint.py</code>, commit, and you are ready for Lab 3.</p>`,
+        `<p class="y-chinh">🎯 Khớp đủ 113 dòng: mọi phép kiểm, cả hai dãy mã, lần sửa qua tham chiếu, cả hai danh sách đã sắp.</p>
+<p>Rồi làm điều thầy sẽ hỏi: vẽ ra giấy stack và heap ngay sau <code>book.setCopies(7)</code>, không nhìn, rồi so với slide 8. Chạy <code>lint.py</code>, commit, là sẵn sàng cho Lab 3.</p>`],
+      [15, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 Two points each for the JavaBeans, the ids and the update through the reference — the three ideas of Chapter 2; the rest for members, validations and standards.</p>
+<p>The self-check questions are the kind of thing a reviewer asks while pointing at your code. Answer them aloud before opening the answers at the end of the page.</p>`,
+        `<p class="y-chinh">🎯 Mỗi phần hai điểm cho JavaBean, cấp mã và sửa qua tham chiếu — ba ý của Chương 2; phần còn lại cho thành viên, phép kiểm và chuẩn code.</p>
+<p>Các câu tự kiểm đúng kiểu thầy vừa chỉ vào code vừa hỏi. Trả lời thành tiếng trước khi mở đáp án cuối trang.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-2 · CT Library · priority: high.</strong> "A title and an ISBN are not enough. For each book we need the author, the year it was published and how many copies the club owns. Members must be registered too (name, email). Nobody should type ids: the program gives B001, B002… to books and M001… to members. When a copy is lost, the librarian updates the count — and the list must show the new number." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>classes, objects, <code>new</code>, fields, methods</td><td>2.B (pro8 slides 1–8)</td></tr>
+<tr><td>constructors: default, with parameters, the compiler's default constructor</td><td>2.B–2.C (pro8 slides 9–10, 17–25)</td></tr>
+<tr><td><code>this</code> and <code>this(...)</code>, getters and setters</td><td>2.B (pro8 slides 11–15)</td></tr>
+<tr><td>pass by value: a reference is copied, the object is shared</td><td>2.C (pro8 slide 16)</td></tr>
+<tr><td>stack, heap, garbage</td><td>2.A (pro7)</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-2 · CT Library · ưu tiên: cao.</strong> "Tên và ISBN là chưa đủ. Mỗi cuốn cần tác giả, năm xuất bản và câu lạc bộ có bao nhiêu bản. Thành viên cũng phải được đăng ký (họ tên, email). Không ai phải gõ mã: chương trình tự cấp B001, B002… cho sách và M001… cho thành viên. Khi mất một bản, thủ thư cập nhật lại số bản — và danh sách phải hiện số mới." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>lớp, đối tượng, <code>new</code>, trường, phương thức</td><td>2.B (pro8 slide 1–8)</td></tr>
+<tr><td>constructor: mặc định, có tham số, constructor mặc định do trình biên dịch chèn</td><td>2.B–2.C (pro8 slide 9–10, 17–25)</td></tr>
+<tr><td><code>this</code> và <code>this(...)</code>, getter và setter</td><td>2.B (pro8 slide 11–15)</td></tr>
+<tr><td>truyền tham trị: tham chiếu được chép, đối tượng dùng chung</td><td>2.C (pro8 slide 16)</td></tr>
+<tr><td>stack, heap, rác</td><td>2.A (pro7)</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Book</strong> (model, JavaBean): <code>id, isbn, title, author, year, copies</code> — private fields, empty public constructor (via <code>this(...)</code>), full constructor, getters/setters. <strong>Member</strong>: <code>id, name, email</code>, same rules.</li>
+<li><strong>Ids</strong>: <code>BookRepository</code> gives B001, B002… and <code>MemberRepository</code> M001, M002… from a counter that is a field of the repository object (not <code>static</code>); the sample data takes B001–B004 and M001–M002.</li>
+<li><strong>Add book</strong>: title and ISBN as in Lab 1, plus author (letters and spaces, Title Case), year (integer 1450–2100), copies (integer 0–99). Success message with the new id and the number of books.</li>
+<li><strong>Update copies</strong> (menu 4): id typed as <code>B</code> + 3 digits (lower case accepted), new copies 0–99; unknown id → message; success message "old -&gt; new"; the change is visible in the next listing.</li>
+<li><strong>Members</strong> (menus 5, 6): add with a name (letters and spaces, Title Case) and an email (<code>name@domain.ext</code>, stored in lower case); list sorted by name, ties by id, numbered after sorting.</li>
+<li><strong>Every wrong value</strong> gets its own message naming the field and what was typed; the program asks again and never crashes.</li>
+<li><strong>Standards</strong> as in Lab 1 (nine packages, controller holds repositories, services hold none, controllers never import <code>model</code>, Message/Constants, comments, ≤ 2 parameters, ≤ 100 characters, Java 8).</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 113/113 dong khop expected.txt</code> · <code>lint.py</code> prints <code>✓ … — sạch</code> · <code>javac --release 8</code> compiles · your stack/heap drawing after <code>setCopies(7)</code> matches slide 8 · one more Git commit.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Book</strong> (model, JavaBean): <code>id, isbn, title, author, year, copies</code> — trường private, constructor rỗng public (qua <code>this(...)</code>), constructor đầy đủ, getter/setter. <strong>Member</strong>: <code>id, name, email</code>, cùng luật.</li>
+<li><strong>Mã</strong>: <code>BookRepository</code> cấp B001, B002… và <code>MemberRepository</code> cấp M001, M002… từ một bộ đếm là trường của đối tượng repository (không <code>static</code>); dữ liệu mẫu chiếm B001–B004 và M001–M002.</li>
+<li><strong>Thêm sách</strong>: tên và ISBN như Lab 1, thêm tác giả (chữ cái và dấu cách, Title Case), năm (số nguyên 1450–2100), số bản (số nguyên 0–99). Câu thành công kèm mã mới và số đầu sách.</li>
+<li><strong>Cập nhật số bản</strong> (menu 4): gõ mã dạng <code>B</code> + 3 chữ số (nhận cả chữ thường), số bản mới 0–99; mã không có → thông báo; câu thành công "cũ -&gt; mới"; lần liệt kê sau thấy ngay số mới.</li>
+<li><strong>Thành viên</strong> (menu 5, 6): thêm với họ tên (chữ cái và dấu cách, Title Case) và email (<code>ten@ten-mien.duoi</code>, lưu chữ thường); liệt kê theo họ tên, trùng thì theo mã, đánh số sau khi sắp.</li>
+<li><strong>Mọi giá trị sai</strong> đều có câu báo riêng nêu tên ô và chữ đã gõ; chương trình hỏi lại và không bao giờ sập.</li>
+<li><strong>Chuẩn code</strong> như Lab 1 (chín package, controller giữ repository, service không giữ, controller không import <code>model</code>, Message/Constants, comment, ≤ 2 tham số, ≤ 100 ký tự, Java 8).</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 113/113 dong khop expected.txt</code> · <code>lint.py</code> in <code>✓ … — sạch</code> · <code>javac --release 8</code> biên dịch được · hình vẽ stack/heap sau <code>setCopies(7)</code> của bạn khớp slide 8 · thêm một commit Git.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab2-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab2-starter.zip</span><span class="lc-sub">Lab 1 solution + the Lab 2 skeleton · 7 TODO groups · harness (113 lines) · CheckHarness · check.sh / check.bat</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab2-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab2-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<p>The starter is a fresh project: it does not depend on what you wrote in Lab 1. If you prefer to continue your own Lab 1 project, copy the new files from the starter (<code>model/Member.java</code>, the <code>Member*</code> classes in <code>dto</code>, <code>repository</code>, <code>service</code>, <code>controller</code>, <code>view</code>) and replace <code>Main</code>, <code>Message</code>, <code>Constants</code> and <code>harness/</code>.</p>
+<pre><code class="language-plaintext">CTLibrary-Lab2/src/
+  model/       Book.java (6 fields)  TODO 2.1 · Member.java  TODO 2.2
+  repository/  BookRepository.java   TODO 2.3, 2.4 · MemberRepository.java  TODO 2.5
+  service/     BookService.java (Lab 1) · MemberService.java  TODO 2.6
+  utils/       Validation.java       TODO 2.7 (getYear, getCopies, getBookId, getEmail, getPersonName)
+  controller/  BookController.java · MemberController.java   (given)
+  view/        BookView.java · MemberView.java               (given)
+  dto/         BookRequestDTO, BookResponseDTO, MemberRequestDTO, MemberResponseDTO (given)
+  constants/   Message.java · Constants.java                 (given)
+  main/        Main.java (6 menu items)                      (given)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab2-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab2-starter.zip</span><span class="lc-sub">đáp án Lab 1 + khung Lab 2 · 7 nhóm TODO · harness (113 dòng) · CheckHarness · check.sh / check.bat</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab2-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab2-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<p>Starter là một dự án sạch: không phụ thuộc thứ bạn đã viết ở Lab 1. Nếu muốn làm tiếp trên dự án Lab 1 của mình, chép các tệp mới từ starter (<code>model/Member.java</code>, các lớp <code>Member*</code> trong <code>dto</code>, <code>repository</code>, <code>service</code>, <code>controller</code>, <code>view</code>) và thay <code>Main</code>, <code>Message</code>, <code>Constants</code>, <code>harness/</code>.</p>
+<pre><code class="language-plaintext">CTLibrary-Lab2/src/
+  model/       Book.java (6 trường)  TODO 2.1 · Member.java  TODO 2.2
+  repository/  BookRepository.java   TODO 2.3, 2.4 · MemberRepository.java  TODO 2.5
+  service/     BookService.java (Lab 1) · MemberService.java  TODO 2.6
+  utils/       Validation.java       TODO 2.7 (getYear, getCopies, getBookId, getEmail, getPersonName)
+  controller/  BookController.java · MemberController.java   (cho sẵn)
+  view/        BookView.java · MemberView.java               (cho sẵn)
+  dto/         BookRequestDTO, BookResponseDTO, MemberRequestDTO, MemberResponseDTO (cho sẵn)
+  constants/   Message.java · Constants.java                 (cho sẵn)
+  main/        Main.java (6 mục menu)                        (cho sẵn)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — run the starter, read the first failure (10 min)</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 1:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: ========== CT LIBRARY ==========<br>
+&nbsp;&nbsp;ban in : Cannot invoke "String.equals(Object)" because the return value of "model.Book.getIsbn()" is null<br>
+…</div>
+<p>"<code>getIsbn()</code> is null" while loading the sample books: <code>new Book(…)</code> runs an empty constructor, so no field is set. The program does not crash — the controller catches the error and prints it — but nothing after it can be right.</p>
+
+<h4>Step 1 — TODO 2.1 and 2.2: the constructors (20 min)</h4>
+<p>In <code>Book</code>: the empty constructor calls the full one with <code>this("", "", "", "", 0, 0)</code>; the full one assigns six fields with <code>this.x = x</code>. Same for <code>Member</code> with three fields.</p>
+<details><summary>Solution — Book</summary>
+<pre class="trich"><code class="language-java">// Constructor rong (JavaBean): goi constructor day du voi chuoi rong va so 0
+public Book() {
+    this("", "", "", "", 0, 0);
+}</code></pre>
+</details>
+<p>(The <code>@Book</code> view above shows the empty constructor; the full one follows it in the file:)</p>
+<details><summary>Solution — the full constructors</summary>
+<pre><code class="language-java">public Book(String id, String isbn, String title, String author, int year, int copies) {
+    this.id = id;
+    this.isbn = isbn;
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.copies = copies;
+}
+
+public Member(String id, String name, String email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+}</code></pre>
+</details>
+
+<h4>Step 2 — TODO 2.3: ids for books (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Them 1 sach tu phieu nhap, tra ve ma vua cap; ISBN da co thi nem loi
+public String addBook(BookRequestDTO bookRequestDTO) throws Exception {
+    // Sach dang giu ISBN nay (null neu chua co) va ma se cap
+    Book existingBook = findByIsbn(bookRequestDTO.getIsbn());
+    String newId = "";
+
+    // Trung ISBN thi bao ro sach nao dang giu ISBN do
+    if (existingBook != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_ISBN,
+                existingBook.getIsbn(), existingBook.getId(), existingBook.getTitle()));
+    }
+
+    // Cap ma moi roi tang so thu tu cho lan sau
+    newId = String.format(Constants.BOOK_ID_FORMAT, nextBookNumber);
+    nextBookNumber++;
+
+    // new Book(...) tao 1 doi tuong moi tren heap; danh sach giu tham chieu toi no
+    bookList.add(new Book(newId, bookRequestDTO.getIsbn(), bookRequestDTO.getTitle(),
+            bookRequestDTO.getAuthor(), bookRequestDTO.getYear(), bookRequestDTO.getCopies()));
+    return newId;
+}</code></pre>
+</details>
+
+<h4>Step 3 — TODO 2.4: update through the reference (20 min)</h4>
+<p>First run the starter as it is: choose 4, type <code>b002</code> and <code>7</code>, then choose 2. The message says "2 -&gt; 7" — and the table still says 2. Explain to yourself <em>why</em> using slides 6–9 before you change the line.</p>
+<details><summary>Hint</summary><p>The private helper <code>findBookById</code> (given) returns the <code>Book</code> that is in the list. Call <code>setCopies</code> on <em>that</em>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Sua so ban cua sach mang ma trong phieu; khong co ma thi nem loi
+public void updateCopies(BookRequestDTO bookRequestDTO) throws Exception {
+    // book va phan tu trong bookList cung tro toi MOT doi tuong Book
+    Book book = findBookById(bookRequestDTO.getId());
+
+    // Khong co ma thi bao loi
+    if (book == null) {
+        throw new Exception(String.format(Message.ERROR_BOOK_NOT_FOUND,
+                bookRequestDTO.getId()));
+    }
+
+    // Sua qua tham chieu: doi tuong trong danh sach doi theo
+    book.setCopies(bookRequestDTO.getCopies());
+}</code></pre>
+</details>
+<p><strong>Draw it.</strong> On paper: the stack frames of <code>BookController.updateCopies</code> and <code>BookRepository.updateCopies</code>, the heap with <code>bookList</code>, the Book B002 and the DTO <code>before</code>, every arrow — right after <code>book.setCopies(7)</code>.</p>
+<details><summary>Answer</summary>
+<pre><code class="language-plaintext">STACK                                   HEAP
+BookController.updateCopies             bookList : ArrayList&lt;Book&gt;
+  before  ──────────────┐                 [0] → Book B001   [1] ──┐   [2] → B003   [3] → B004
+BookRepository.updateCopies              │                         ▼
+  book    ───────────────┼──────────────────────────────►  Book B002  copies = 7
+                         └──────────────►  BookResponseDTO (a copy)  copies = 2</code></pre>
+<p>Two arrows reach Book B002 (<code>book</code> and <code>bookList[1]</code>); one reaches the copy. When the repository method returns, <code>book</code> disappears but the Book lives on through the list.</p>
+</details>
+
+<h4>Step 4 — TODO 2.5 and 2.6: members (25 min)</h4>
+<details><summary>Solution — MemberRepository.addMember</summary>
+<pre class="trich"><code class="language-java">// Them 1 thanh vien tu phieu nhap, tra ve ma vua cap
+public String addMember(MemberRequestDTO memberRequestDTO) {
+    // Ma se cap cho thanh vien moi
+    String newId = String.format(Constants.MEMBER_ID_FORMAT, nextMemberNumber);
+
+    // Tang so thu tu cho lan sau roi them thanh vien moi
+    nextMemberNumber++;
+    memberList.add(new Member(newId, memberRequestDTO.getName(), memberRequestDTO.getEmail()));
+    return newId;
+}</code></pre>
+</details>
+<details><summary>Solution — MemberService.sortByName</summary>
+<pre class="trich"><code class="language-java">// Sap theo ho ten (A-Z, khong phan biet hoa thuong), trung ten thi theo ma; danh so tu 1
+public ArrayList&lt;MemberResponseDTO&gt; sortByName(ArrayList&lt;MemberResponseDTO&gt; memberList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;MemberResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(memberList);
+
+    // Luat so: ho ten truoc, trung ho ten thi ma
+    Collections.sort(sortedList, new Comparator&lt;MemberResponseDTO&gt;() {
+        // So ho ten, trung thi so ma
+        @Override
+        public int compare(MemberResponseDTO first, MemberResponseDTO second) {
+            // Ket qua so ho ten (0 = trung ten)
+            int byName = first.getName().compareToIgnoreCase(second.getName());
+
+            // Trung ho ten thi ma quyet dinh thu tu
+            if (byName == 0) {
+                return first.getId().compareTo(second.getId());
+            }
+
+            return byName;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+
+<h4>Step 5 — TODO 2.7: five validations (40 min)</h4>
+<p>Each one turns the typed text into a clean value or throws with a message from <code>Message</code>. Use the private helpers: <code>parseInteger</code> and <code>toTitleCase</code> are given.</p>
+<details><summary>Solution — getYear and getCopies</summary>
+<pre class="trich"><code class="language-java">// Doi chu thanh nam xuat ban va kiem trong [YEAR_MIN, YEAR_MAX]
+public static int getYear(String input) throws Exception {
+    // Nam sau khi doi
+    int year = parseInteger(input, Message.FIELD_YEAR);
+
+    // Ngoai khoang thi bao khoang dung va so da nhap
+    if ((year &lt; Constants.YEAR_MIN) || (year &gt; Constants.YEAR_MAX)) {
+        throw new Exception(String.format(Message.ERROR_NUMBER_RANGE, Message.FIELD_YEAR,
+                Constants.YEAR_MIN, Constants.YEAR_MAX, year));
+    }
+
+    return year;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi chu thanh so ban va kiem trong [COPIES_MIN, COPIES_MAX]
+public static int getCopies(String input) throws Exception {
+    // So ban sau khi doi
+    int copies = parseInteger(input, Message.FIELD_COPIES);
+
+    // Ngoai khoang thi bao khoang dung va so da nhap
+    if ((copies &lt; Constants.COPIES_MIN) || (copies &gt; Constants.COPIES_MAX)) {
+        throw new Exception(String.format(Message.ERROR_NUMBER_RANGE, Message.FIELD_COPIES,
+                Constants.COPIES_MIN, Constants.COPIES_MAX, copies));
+    }
+
+    return copies;
+}</code></pre>
+</details>
+<details><summary>Solution — getBookId, getEmail, getPersonName</summary>
+<pre class="trich"><code class="language-java">// Kiem ma sach: B + 3 chu so, nhan ca chu thuong (b002 -&gt; B002)
+public static String getBookId(String input) throws Exception {
+    // Ma da bo dau cach 2 dau va viet hoa
+    String bookId = input.trim().toUpperCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!bookId.matches(Constants.REGEX_BOOK_ID)) {
+        throw new Exception(String.format(Message.ERROR_BOOK_ID_FORMAT, input.trim()));
+    }
+
+    return bookId;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem email co ban: co phan truoc @, co ten mien co dau cham sau @
+public static String getEmail(String input) throws Exception {
+    // Email bo dau cach 2 dau, viet thuong
+    String email = input.trim().toLowerCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!email.matches(Constants.REGEX_EMAIL)) {
+        throw new Exception(String.format(Message.ERROR_EMAIL, input.trim()));
+    }
+
+    return email;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem ten nguoi (chi chu cai khong dau + dau cach) roi chuan hoa Title Case
+private static String getPersonName(String input, String fieldName) throws Exception {
+    // Ten da chuan hoa
+    String name = toTitleCase(input);
+
+    // Rong hoac co ky tu khac chu cai / dau cach thi bao loi kem ten o nhap
+    if (!name.matches(Constants.REGEX_PERSON_NAME)) {
+        throw new Exception(String.format(Message.ERROR_PERSON_NAME, fieldName));
+    }
+
+    return name;
+}</code></pre>
+</details>
+<p>The messages the grader expects for the add-book session (real output):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: ISBN-13: Tac gia: Tac gia chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Tac gia: Nam xuat ban: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 den 2100, ban nhap 1200. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap -1. Moi nhap lai.<br>
+So ban: Da them sach B005 "Clean Code". Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Step 6 — grade, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 113/113 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab2-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab2-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — chạy starter, đọc lỗi đầu tiên (10 phút)</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 1:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: ========== CT LIBRARY ==========<br>
+&nbsp;&nbsp;ban in : Cannot invoke "String.equals(Object)" because the return value of "model.Book.getIsbn()" is null<br>
+…</div>
+<p>"<code>getIsbn()</code> là null" ngay lúc nạp sách mẫu: <code>new Book(…)</code> chạy một constructor rỗng, nên không trường nào được gán. Chương trình không sập — controller bắt lỗi và in ra — nhưng mọi thứ sau đó không thể đúng.</p>
+
+<h4>Bước 1 — TODO 2.1 và 2.2: constructor (20 phút)</h4>
+<p>Trong <code>Book</code>: constructor rỗng gọi constructor đầy đủ bằng <code>this("", "", "", "", 0, 0)</code>; constructor đầy đủ gán sáu trường bằng <code>this.x = x</code>. Tương tự <code>Member</code> với ba trường.</p>
+<details><summary>Lời giải — Book</summary>
+<pre class="trich"><code class="language-java">// Constructor rong (JavaBean): goi constructor day du voi chuoi rong va so 0
+public Book() {
+    this("", "", "", "", 0, 0);
+}</code></pre>
+</details>
+<p>(Đoạn <code>@Book</code> ở trên là constructor rỗng; constructor đầy đủ nằm ngay sau trong tệp:)</p>
+<details><summary>Lời giải — các constructor đầy đủ</summary>
+<pre><code class="language-java">public Book(String id, String isbn, String title, String author, int year, int copies) {
+    this.id = id;
+    this.isbn = isbn;
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.copies = copies;
+}
+
+public Member(String id, String name, String email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+}</code></pre>
+</details>
+
+<h4>Bước 2 — TODO 2.3: cấp mã sách (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Them 1 sach tu phieu nhap, tra ve ma vua cap; ISBN da co thi nem loi
+public String addBook(BookRequestDTO bookRequestDTO) throws Exception {
+    // Sach dang giu ISBN nay (null neu chua co) va ma se cap
+    Book existingBook = findByIsbn(bookRequestDTO.getIsbn());
+    String newId = "";
+
+    // Trung ISBN thi bao ro sach nao dang giu ISBN do
+    if (existingBook != null) {
+        throw new Exception(String.format(Message.ERROR_DUPLICATE_ISBN,
+                existingBook.getIsbn(), existingBook.getId(), existingBook.getTitle()));
+    }
+
+    // Cap ma moi roi tang so thu tu cho lan sau
+    newId = String.format(Constants.BOOK_ID_FORMAT, nextBookNumber);
+    nextBookNumber++;
+
+    // new Book(...) tao 1 doi tuong moi tren heap; danh sach giu tham chieu toi no
+    bookList.add(new Book(newId, bookRequestDTO.getIsbn(), bookRequestDTO.getTitle(),
+            bookRequestDTO.getAuthor(), bookRequestDTO.getYear(), bookRequestDTO.getCopies()));
+    return newId;
+}</code></pre>
+</details>
+
+<h4>Bước 3 — TODO 2.4: sửa qua tham chiếu (20 phút)</h4>
+<p>Chạy starter nguyên trạng trước: chọn 4, gõ <code>b002</code> và <code>7</code>, rồi chọn 2. Câu báo ghi "2 -&gt; 7" — còn bảng vẫn ghi 2. Tự giải thích <em>tại sao</em> bằng slide 6–9 trước khi sửa dòng đó.</p>
+<details><summary>Gợi ý</summary><p>Hàm phụ private <code>findBookById</code> (cho sẵn) trả về chính <code>Book</code> nằm trong danh sách. Gọi <code>setCopies</code> trên <em>nó</em>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Sua so ban cua sach mang ma trong phieu; khong co ma thi nem loi
+public void updateCopies(BookRequestDTO bookRequestDTO) throws Exception {
+    // book va phan tu trong bookList cung tro toi MOT doi tuong Book
+    Book book = findBookById(bookRequestDTO.getId());
+
+    // Khong co ma thi bao loi
+    if (book == null) {
+        throw new Exception(String.format(Message.ERROR_BOOK_NOT_FOUND,
+                bookRequestDTO.getId()));
+    }
+
+    // Sua qua tham chieu: doi tuong trong danh sach doi theo
+    book.setCopies(bookRequestDTO.getCopies());
+}</code></pre>
+</details>
+<p><strong>Vẽ ra.</strong> Trên giấy: khung stack của <code>BookController.updateCopies</code> và <code>BookRepository.updateCopies</code>, heap có <code>bookList</code>, Book B002 và DTO <code>before</code>, đủ mọi mũi tên — ngay sau <code>book.setCopies(7)</code>.</p>
+<details><summary>Đáp án</summary>
+<pre><code class="language-plaintext">STACK                                   HEAP
+BookController.updateCopies             bookList : ArrayList&lt;Book&gt;
+  before  ──────────────┐                 [0] → Book B001   [1] ──┐   [2] → B003   [3] → B004
+BookRepository.updateCopies              │                         ▼
+  book    ───────────────┼──────────────────────────────►  Book B002  copies = 7
+                         └──────────────►  BookResponseDTO (bản sao)  copies = 2</code></pre>
+<p>Hai mũi tên tới Book B002 (<code>book</code> và <code>bookList[1]</code>); một mũi tên tới bản sao. Khi phương thức của repository kết thúc, <code>book</code> biến mất nhưng Book vẫn sống nhờ danh sách.</p>
+</details>
+
+<h4>Bước 4 — TODO 2.5 và 2.6: thành viên (25 phút)</h4>
+<details><summary>Lời giải — MemberRepository.addMember</summary>
+<pre class="trich"><code class="language-java">// Them 1 thanh vien tu phieu nhap, tra ve ma vua cap
+public String addMember(MemberRequestDTO memberRequestDTO) {
+    // Ma se cap cho thanh vien moi
+    String newId = String.format(Constants.MEMBER_ID_FORMAT, nextMemberNumber);
+
+    // Tang so thu tu cho lan sau roi them thanh vien moi
+    nextMemberNumber++;
+    memberList.add(new Member(newId, memberRequestDTO.getName(), memberRequestDTO.getEmail()));
+    return newId;
+}</code></pre>
+</details>
+<details><summary>Lời giải — MemberService.sortByName</summary>
+<pre class="trich"><code class="language-java">// Sap theo ho ten (A-Z, khong phan biet hoa thuong), trung ten thi theo ma; danh so tu 1
+public ArrayList&lt;MemberResponseDTO&gt; sortByName(ArrayList&lt;MemberResponseDTO&gt; memberList) {
+    // Ban sao de khong lam doi thu tu cua danh sach goc
+    ArrayList&lt;MemberResponseDTO&gt; sortedList = new ArrayList&lt;&gt;(memberList);
+
+    // Luat so: ho ten truoc, trung ho ten thi ma
+    Collections.sort(sortedList, new Comparator&lt;MemberResponseDTO&gt;() {
+        // So ho ten, trung thi so ma
+        @Override
+        public int compare(MemberResponseDTO first, MemberResponseDTO second) {
+            // Ket qua so ho ten (0 = trung ten)
+            int byName = first.getName().compareToIgnoreCase(second.getName());
+
+            // Trung ho ten thi ma quyet dinh thu tu
+            if (byName == 0) {
+                return first.getId().compareTo(second.getId());
+            }
+
+            return byName;
+        }
+    });
+
+    // Danh so thu tu sau khi sap xep
+    for (int i = 0; i &lt; sortedList.size(); i++) {
+        sortedList.get(i).setNo(i + 1);
+    }
+
+    return sortedList;
+}</code></pre>
+</details>
+
+<h4>Bước 5 — TODO 2.7: năm phép kiểm (40 phút)</h4>
+<p>Mỗi hàm biến chữ đã gõ thành giá trị sạch, hoặc ném lỗi kèm câu trong <code>Message</code>. Dùng các hàm phụ private: <code>parseInteger</code> và <code>toTitleCase</code> đã cho sẵn.</p>
+<details><summary>Lời giải — getYear và getCopies</summary>
+<pre class="trich"><code class="language-java">// Doi chu thanh nam xuat ban va kiem trong [YEAR_MIN, YEAR_MAX]
+public static int getYear(String input) throws Exception {
+    // Nam sau khi doi
+    int year = parseInteger(input, Message.FIELD_YEAR);
+
+    // Ngoai khoang thi bao khoang dung va so da nhap
+    if ((year &lt; Constants.YEAR_MIN) || (year &gt; Constants.YEAR_MAX)) {
+        throw new Exception(String.format(Message.ERROR_NUMBER_RANGE, Message.FIELD_YEAR,
+                Constants.YEAR_MIN, Constants.YEAR_MAX, year));
+    }
+
+    return year;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi chu thanh so ban va kiem trong [COPIES_MIN, COPIES_MAX]
+public static int getCopies(String input) throws Exception {
+    // So ban sau khi doi
+    int copies = parseInteger(input, Message.FIELD_COPIES);
+
+    // Ngoai khoang thi bao khoang dung va so da nhap
+    if ((copies &lt; Constants.COPIES_MIN) || (copies &gt; Constants.COPIES_MAX)) {
+        throw new Exception(String.format(Message.ERROR_NUMBER_RANGE, Message.FIELD_COPIES,
+                Constants.COPIES_MIN, Constants.COPIES_MAX, copies));
+    }
+
+    return copies;
+}</code></pre>
+</details>
+<details><summary>Lời giải — getBookId, getEmail, getPersonName</summary>
+<pre class="trich"><code class="language-java">// Kiem ma sach: B + 3 chu so, nhan ca chu thuong (b002 -&gt; B002)
+public static String getBookId(String input) throws Exception {
+    // Ma da bo dau cach 2 dau va viet hoa
+    String bookId = input.trim().toUpperCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!bookId.matches(Constants.REGEX_BOOK_ID)) {
+        throw new Exception(String.format(Message.ERROR_BOOK_ID_FORMAT, input.trim()));
+    }
+
+    return bookId;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem email co ban: co phan truoc @, co ten mien co dau cham sau @
+public static String getEmail(String input) throws Exception {
+    // Email bo dau cach 2 dau, viet thuong
+    String email = input.trim().toLowerCase();
+
+    // Sai dang thi bao lai dung chu nguoi dung go
+    if (!email.matches(Constants.REGEX_EMAIL)) {
+        throw new Exception(String.format(Message.ERROR_EMAIL, input.trim()));
+    }
+
+    return email;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem ten nguoi (chi chu cai khong dau + dau cach) roi chuan hoa Title Case
+private static String getPersonName(String input, String fieldName) throws Exception {
+    // Ten da chuan hoa
+    String name = toTitleCase(input);
+
+    // Rong hoac co ky tu khac chu cai / dau cach thi bao loi kem ten o nhap
+    if (!name.matches(Constants.REGEX_PERSON_NAME)) {
+        throw new Exception(String.format(Message.ERROR_PERSON_NAME, fieldName));
+    }
+
+    return name;
+}</code></pre>
+</details>
+<p>Các câu bộ chấm chờ ở phiên thêm sách (output thật):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ten sach: ISBN-13: Tac gia: Tac gia chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Tac gia: Nam xuat ban: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 den 2100, ban nhap 1200. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap -1. Moi nhap lai.<br>
+So ban: Da them sach B005 "Clean Code". Thu vien co 5 dau sach.<br>
+…</div>
+
+<h4>Bước 6 — chấm, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 113/113 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab2-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab2-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8 (Docker <code>eclipse-temurin:8-jdk</code>), and 113/113 lines on the grader. The complete run:</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (113 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Tac gia chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Tac gia: Nam xuat ban: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 den 2100, ban nhap 1200. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap -1. Moi nhap lai.<br>
+So ban: Da them sach B005 "Clean Code". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): Ma sach phai la chu B + 3 chu so (vi du B001), ban nhap "b9". Moi nhap lai.<br>
+Ma sach (vi du B001): So ban: Khong co sach nao mang ma B009. Hay chon 2 de xem ma sach roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 7.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B005 &nbsp;9780132350884 &nbsp;2008 &nbsp;5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert C Martin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clean Code<br>
+2 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+3 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+4 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+5 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Ho ten chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Ho ten: Ho ten chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Ho ten: Email: Email phai co dang ten@ten-mien (vi du an@ctlib.vn), ban nhap "cuong.le". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien (vi du an@ctlib.vn), ban nhap "cuong.le@ctlib". Moi nhap lai.<br>
+Email: Da them thanh vien M003 "Le Van Cuong". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Cuong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cuong.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 2 chi nam trong bo nho.</div>
+</details>
+<details><summary>BookController.java — updateCopies keeps a copy for the message</summary>
+<pre><code class="language-java">package controller;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import java.util.ArrayList;
+import repository.BookRepository;
+import service.BookService;
+import view.BookView;
+
+/**
+ * Dieu phoi moi yeu cau ve sach: goi Repository de them/tim/sua (CRUD), dua du lieu
+ * cho Service sap xep, roi dua ket qua cho View in. Khong import model.
+ *
+ * @author CuongThai Academy
+ */
+public class BookController {
+
+    // Kho sach (CRUD nam o Controller, khong o Service)
+    private BookRepository bookRepository;
+
+    // Nghiep vu sap xep
+    private BookService bookService;
+
+    // Man hinh in ket qua
+    private BookView bookView;
+
+    // Tao kho, service, view va nap sach mau
+    public BookController() {
+        bookRepository = new BookRepository();
+        bookService = new BookService();
+        bookView = new BookView();
+
+        // Nap sach mau; loi thi in ra (khong xay ra voi du lieu mau dung)
+        try {
+            loadSampleBooks();
+        } catch (Exception e) {
+            // Du lieu mau trung ISBN thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+
+    // Them 1 sach, bao ket qua (thanh cong kem ma moi, hoac trung ISBN)
+    public void addBook(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Them vao kho (kho cap ma); trung ISBN thi kho nem loi
+        try {
+            resultMessage = String.format(Message.SUCCESS_ADD,
+                    bookRepository.addBook(bookRequestDTO), bookRequestDTO.getTitle(),
+                    bookRepository.countBooks());
+        } catch (Exception e) {
+            // Trung ISBN thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // Sua so ban cua 1 sach (phieu dien ma + so ban moi), bao so cu -&gt; so moi
+    public void updateCopies(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Lay ban sao TRUOC khi sua (giu so cu), roi sua trong kho
+        try {
+            BookResponseDTO before = bookRepository.findById(bookRequestDTO.getId());
+
+            // Sua trong kho; ban sao "before" KHONG doi theo vi no la doi tuong khac
+            bookRepository.updateCopies(bookRequestDTO);
+            resultMessage = String.format(Message.SUCCESS_UPDATE_COPIES, before.getId(),
+                    before.getTitle(), before.getCopies(), bookRequestDTO.getCopies());
+        } catch (Exception e) {
+            // Khong co ma sach thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // In moi sach, sap theo ten
+    public void showAllBooks() {
+        // Kho tra ban sao, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; sortedList = bookService.sortByTitle(bookRepository.findAll());
+
+        // Kho rong thi chi in cau bao rong, nguoc lai chi in bang
+        if (sortedList.isEmpty()) {
+            showResult(Message.EMPTY_LIST, sortedList);
+        } else {
+            // Co sach thi in bang, khong kem cau nao
+            showResult("", sortedList);
+        }
+    }
+
+    // Tim sach co ten chua tu khoa (phieu chi dien ten), in ket qua da sap theo ten
+    public void searchBooks(BookRequestDTO bookRequestDTO) {
+        // Kho tim theo tu khoa, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; foundList
+                = bookService.sortByTitle(bookRepository.findByKeyword(bookRequestDTO.getTitle()));
+
+        // Khong tim thay thi chi in cau bao, nguoc lai chi in bang
+        if (foundList.isEmpty()) {
+            showResult(String.format(Message.NOT_FOUND, bookRequestDTO.getTitle()), foundList);
+        } else {
+            // Co ket qua thi in bang
+            showResult("", foundList);
+        }
+    }
+
+    // Dua cau thong bao + cac dong bang cho View roi goi in dung 1 lan
+    private void showResult(String message, ArrayList&lt;BookResponseDTO&gt; responseList) {
+        bookView.setMessage(message);
+        bookView.setResponseList(responseList);
+        bookView.display();
+    }
+
+    // Nap cac sach mau khai trong Constants
+    private void loadSampleBooks() throws Exception {
+        // Moi dong mau: { ten sach, ISBN, tac gia, nam, so ban }
+        for (String[] rowArray : Constants.SAMPLE_BOOK_ARRAY) {
+            bookRepository.addBook(toRequestDTO(rowArray));
+        }
+    }
+
+    // Doi 1 dong mau (mang chuoi) thanh phieu sach
+    private BookRequestDTO toRequestDTO(String[] rowArray) {
+        // Phieu sach moi
+        BookRequestDTO bookRequestDTO = new BookRequestDTO();
+
+        // Chep tung cot cua dong mau vao phieu
+        bookRequestDTO.setTitle(rowArray[Constants.SAMPLE_TITLE_INDEX]);
+        bookRequestDTO.setIsbn(rowArray[Constants.SAMPLE_ISBN_INDEX]);
+        bookRequestDTO.setAuthor(rowArray[Constants.SAMPLE_AUTHOR_INDEX]);
+        bookRequestDTO.setYear(Integer.parseInt(rowArray[Constants.SAMPLE_YEAR_INDEX]));
+        bookRequestDTO.setCopies(Integer.parseInt(rowArray[Constants.SAMPLE_COPIES_INDEX]));
+        return bookRequestDTO;
+    }
+}</code></pre>
+</details>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật (Docker <code>eclipse-temurin:8-jdk</code>) ra y hệt, và bộ chấm 113/113 dòng. Trọn lần chạy:</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (113 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Them sach ---<br>
+Ten sach: ISBN-13: Tac gia: Tac gia chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Tac gia: Nam xuat ban: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong. Moi nhap lai.<br>
+Nam xuat ban: Nam xuat ban phai tu 1450 den 2100, ban nhap 1200. Moi nhap lai.<br>
+Nam xuat ban: So ban: So ban phai tu 0 den 99, ban nhap -1. Moi nhap lai.<br>
+So ban: Da them sach B005 "Clean Code". Thu vien co 5 dau sach.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): Ma sach phai la chu B + 3 chu so (vi du B001), ban nhap "b9". Moi nhap lai.<br>
+Ma sach (vi du B001): So ban: Khong co sach nao mang ma B009. Hay chon 2 de xem ma sach roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 7.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B005 &nbsp;9780132350884 &nbsp;2008 &nbsp;5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert C Martin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clean Code<br>
+2 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+3 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+4 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+5 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Ho ten chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Ho ten: Ho ten chi gom chu cai khong dau va dau cach (vi du: Nguyen Van An), khong de trong, khong co chu so. Moi nhap lai.<br>
+Ho ten: Email: Email phai co dang ten@ten-mien (vi du an@ctlib.vn), ban nhap "cuong.le". Moi nhap lai.<br>
+Email: Email phai co dang ten@ten-mien (vi du an@ctlib.vn), ban nhap "cuong.le@ctlib". Moi nhap lai.<br>
+Email: Da them thanh vien M003 "Le Van Cuong". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Cuong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cuong.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Tim sach theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 2 chi nam trong bo nho.</div>
+</details>
+<details><summary>BookController.java — updateCopies giữ một bản sao cho câu báo</summary>
+<pre><code class="language-java">package controller;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import java.util.ArrayList;
+import repository.BookRepository;
+import service.BookService;
+import view.BookView;
+
+/**
+ * Dieu phoi moi yeu cau ve sach: goi Repository de them/tim/sua (CRUD), dua du lieu
+ * cho Service sap xep, roi dua ket qua cho View in. Khong import model.
+ *
+ * @author CuongThai Academy
+ */
+public class BookController {
+
+    // Kho sach (CRUD nam o Controller, khong o Service)
+    private BookRepository bookRepository;
+
+    // Nghiep vu sap xep
+    private BookService bookService;
+
+    // Man hinh in ket qua
+    private BookView bookView;
+
+    // Tao kho, service, view va nap sach mau
+    public BookController() {
+        bookRepository = new BookRepository();
+        bookService = new BookService();
+        bookView = new BookView();
+
+        // Nap sach mau; loi thi in ra (khong xay ra voi du lieu mau dung)
+        try {
+            loadSampleBooks();
+        } catch (Exception e) {
+            // Du lieu mau trung ISBN thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+
+    // Them 1 sach, bao ket qua (thanh cong kem ma moi, hoac trung ISBN)
+    public void addBook(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Them vao kho (kho cap ma); trung ISBN thi kho nem loi
+        try {
+            resultMessage = String.format(Message.SUCCESS_ADD,
+                    bookRepository.addBook(bookRequestDTO), bookRequestDTO.getTitle(),
+                    bookRepository.countBooks());
+        } catch (Exception e) {
+            // Trung ISBN thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // Sua so ban cua 1 sach (phieu dien ma + so ban moi), bao so cu -&gt; so moi
+    public void updateCopies(BookRequestDTO bookRequestDTO) {
+        // Cau ket qua se in
+        String resultMessage = "";
+
+        // Lay ban sao TRUOC khi sua (giu so cu), roi sua trong kho
+        try {
+            BookResponseDTO before = bookRepository.findById(bookRequestDTO.getId());
+
+            // Sua trong kho; ban sao "before" KHONG doi theo vi no la doi tuong khac
+            bookRepository.updateCopies(bookRequestDTO);
+            resultMessage = String.format(Message.SUCCESS_UPDATE_COPIES, before.getId(),
+                    before.getTitle(), before.getCopies(), bookRequestDTO.getCopies());
+        } catch (Exception e) {
+            // Khong co ma sach thi lay cau bao loi cua kho
+            resultMessage = e.getMessage();
+        }
+
+        // In ket qua 1 lan
+        showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+    }
+
+    // In moi sach, sap theo ten
+    public void showAllBooks() {
+        // Kho tra ban sao, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; sortedList = bookService.sortByTitle(bookRepository.findAll());
+
+        // Kho rong thi chi in cau bao rong, nguoc lai chi in bang
+        if (sortedList.isEmpty()) {
+            showResult(Message.EMPTY_LIST, sortedList);
+        } else {
+            // Co sach thi in bang, khong kem cau nao
+            showResult("", sortedList);
+        }
+    }
+
+    // Tim sach co ten chua tu khoa (phieu chi dien ten), in ket qua da sap theo ten
+    public void searchBooks(BookRequestDTO bookRequestDTO) {
+        // Kho tim theo tu khoa, Service sap xep + danh so
+        ArrayList&lt;BookResponseDTO&gt; foundList
+                = bookService.sortByTitle(bookRepository.findByKeyword(bookRequestDTO.getTitle()));
+
+        // Khong tim thay thi chi in cau bao, nguoc lai chi in bang
+        if (foundList.isEmpty()) {
+            showResult(String.format(Message.NOT_FOUND, bookRequestDTO.getTitle()), foundList);
+        } else {
+            // Co ket qua thi in bang
+            showResult("", foundList);
+        }
+    }
+
+    // Dua cau thong bao + cac dong bang cho View roi goi in dung 1 lan
+    private void showResult(String message, ArrayList&lt;BookResponseDTO&gt; responseList) {
+        bookView.setMessage(message);
+        bookView.setResponseList(responseList);
+        bookView.display();
+    }
+
+    // Nap cac sach mau khai trong Constants
+    private void loadSampleBooks() throws Exception {
+        // Moi dong mau: { ten sach, ISBN, tac gia, nam, so ban }
+        for (String[] rowArray : Constants.SAMPLE_BOOK_ARRAY) {
+            bookRepository.addBook(toRequestDTO(rowArray));
+        }
+    }
+
+    // Doi 1 dong mau (mang chuoi) thanh phieu sach
+    private BookRequestDTO toRequestDTO(String[] rowArray) {
+        // Phieu sach moi
+        BookRequestDTO bookRequestDTO = new BookRequestDTO();
+
+        // Chep tung cot cua dong mau vao phieu
+        bookRequestDTO.setTitle(rowArray[Constants.SAMPLE_TITLE_INDEX]);
+        bookRequestDTO.setIsbn(rowArray[Constants.SAMPLE_ISBN_INDEX]);
+        bookRequestDTO.setAuthor(rowArray[Constants.SAMPLE_AUTHOR_INDEX]);
+        bookRequestDTO.setYear(Integer.parseInt(rowArray[Constants.SAMPLE_YEAR_INDEX]));
+        bookRequestDTO.setCopies(Integer.parseInt(rowArray[Constants.SAMPLE_COPIES_INDEX]));
+        return bookRequestDTO;
+    }
+}</code></pre>
+</details>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — changing a copy.</strong> The project with only <code>updateCopies</code> wrong (it calls <code>setCopies</code> on the DTO from <code>findById</code>): "2 -&gt; 7" is printed, the list still says 2.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 7.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+…</div>
+<div class="pitfall"><p><strong>Trap 2 — <code>b2 = b1</code> copies the arrow.</strong></p></div>
+<pre><code class="language-java">// release: 8
+// Lab 2 trap — Book b2 = b1 copies the REFERENCE, not the book
+class Book {
+    private String title;
+    private int copies;
+
+    Book(String title, int copies) {
+        this.title = title;
+        this.copies = copies;
+    }
+
+    String getTitle() { return title; }
+    int getCopies() { return copies; }
+    void setCopies(int copies) { this.copies = copies; }
+}
+
+public class LabBayAlias {
+    public static void main(String[] args) {
+        Book b1 = new Book("Effective Java", 2);
+        Book b2 = b1;                                     // ONE object, two variables
+        b2.setCopies(7);
+        System.out.println("b1 copies = " + b1.getCopies() + ", b2 copies = " + b2.getCopies());
+        System.out.println("b1 == b2 : " + (b1 == b2));
+
+        Book b3 = new Book(b1.getTitle(), b1.getCopies()); // a real COPY: a second object
+        b3.setCopies(0);
+        System.out.println("b1 copies = " + b1.getCopies() + ", b3 copies = " + b3.getCopies());
+        System.out.println("b1 == b3 : " + (b1 == b3));
+    }
+}</code></pre>
+<div class="out">b1 copies = 7, b2 copies = 7<br>
+b1 == b2 : true<br>
+b1 copies = 7, b3 copies = 0<br>
+b1 == b3 : false</div>
+<div class="pitfall"><p><strong>Trap 3 — a constructor without <code>this.</code></strong> <code>name = name</code> assigns the parameter to itself; the field stays <code>null</code>, and javac says nothing.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 2 trap — a constructor that forgets "this." assigns the parameter to itself
+class Member {
+    private String name;
+    private String email;
+
+    Member(String name, String email) {
+        name = name;                                      // both sides are the PARAMETER: the field stays null
+        this.email = email;                               // this.email is the FIELD
+    }
+
+    String describe() { return name + " &lt;" + email + "&gt;"; }
+}
+
+public class LabBayThis {
+    public static void main(String[] args) {
+        Member member = new Member("Le Van Cuong", "cuong.le@ctlib.vn");
+        System.out.println(member.describe());
+    }
+}</code></pre>
+<div class="out">null &lt;cuong.le@ctlib.vn&gt;</div>
+<div class="pitfall"><p><strong>Trap 4 — a static id counter.</strong> It compiles and even passes this harness (one repository per run) — and <code>lint.py</code> rejects it: "package 'repository' không được dùng static". Lab 3 shows the real bug it hides.</p></div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — sửa bản sao.</strong> Dự án chỉ sai đúng <code>updateCopies</code> (gọi <code>setCopies</code> trên DTO lấy từ <code>findById</code>): in "2 -&gt; 7", danh sách vẫn ghi 2.</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma sach (vi du B001): So ban: Da cap nhat so ban cua B002 "Effective Java": 2 -&gt; 7.<br>
+========== CT LIBRARY ==========<br>
+1. Them sach<br>
+2. Danh sach sach (sap theo ten)<br>
+3. Tim sach theo ten<br>
+4. Cap nhat so ban cua sach<br>
+5. Them thanh vien<br>
+6. Danh sach thanh vien<br>
+0. Thoat<br>
+Lua chon: --- Danh sach sach ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;ISBN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B002 &nbsp;9780134685991 &nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+2 &nbsp;&nbsp;B004 &nbsp;9780596009205 &nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+3 &nbsp;&nbsp;B003 &nbsp;9780321349606 &nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Concurrency In Practice<br>
+4 &nbsp;&nbsp;B001 &nbsp;9780135957059 &nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+…</div>
+<div class="pitfall"><p><strong>Bẫy 2 — <code>b2 = b1</code> chép mũi tên.</strong></p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 2 — Book b2 = b1 chép THAM CHIẾU, không chép cuốn sách
+class Book {
+    private String title;
+    private int copies;
+
+    Book(String title, int copies) {
+        this.title = title;
+        this.copies = copies;
+    }
+
+    String getTitle() { return title; }
+    int getCopies() { return copies; }
+    void setCopies(int copies) { this.copies = copies; }
+}
+
+public class LabBayAlias {
+    public static void main(String[] args) {
+        Book b1 = new Book("Effective Java", 2);
+        Book b2 = b1;                                     // MỘT đối tượng, hai biến
+        b2.setCopies(7);
+        System.out.println("b1 copies = " + b1.getCopies() + ", b2 copies = " + b2.getCopies());
+        System.out.println("b1 == b2 : " + (b1 == b2));
+
+        Book b3 = new Book(b1.getTitle(), b1.getCopies()); // một BẢN SAO thật: đối tượng thứ hai
+        b3.setCopies(0);
+        System.out.println("b1 copies = " + b1.getCopies() + ", b3 copies = " + b3.getCopies());
+        System.out.println("b1 == b3 : " + (b1 == b3));
+    }
+}</code></pre>
+<div class="out">b1 copies = 7, b2 copies = 7<br>
+b1 == b2 : true<br>
+b1 copies = 7, b3 copies = 0<br>
+b1 == b3 : false</div>
+<div class="pitfall"><p><strong>Bẫy 3 — constructor quên <code>this.</code></strong> <code>name = name</code> gán tham số cho chính nó; trường vẫn <code>null</code>, và javac không nói gì.</p></div>
+<pre><code class="language-java">// release: 8
+// Bẫy Lab 2 — constructor quên "this." gán tham số cho chính nó
+class Member {
+    private String name;
+    private String email;
+
+    Member(String name, String email) {
+        name = name;                                      // hai vế đều là THAM SỐ: trường vẫn null
+        this.email = email;                               // this.email là TRƯỜNG
+    }
+
+    String describe() { return name + " &lt;" + email + "&gt;"; }
+}
+
+public class LabBayThis {
+    public static void main(String[] args) {
+        Member member = new Member("Le Van Cuong", "cuong.le@ctlib.vn");
+        System.out.println(member.describe());
+    }
+}</code></pre>
+<div class="out">null &lt;cuong.le@ctlib.vn&gt;</div>
+<div class="pitfall"><p><strong>Bẫy 4 — bộ đếm mã static.</strong> Biên dịch được, thậm chí qua bộ chấm này (mỗi lần chạy chỉ một repository) — và <code>lint.py</code> từ chối: "package 'repository' không được dùng static". Lab 3 cho thấy lỗi thật mà nó che giấu.</p></div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Book + Member JavaBeans: private fields, empty + full constructor, <code>this(...)</code></td><td>2</td><td>read the classes, <code>lint.py</code> JAVABEAN rule</td></tr>
+<tr><td>Ids B001 / M001 from an instance counter in the repository</td><td>2</td><td>grader lines 28, 78 + no <code>static</code></td></tr>
+<tr><td>Update copies changes the book in the list</td><td>2</td><td>grader lines 49, 61</td></tr>
+<tr><td>Members: add + list sorted by name</td><td>1</td><td>grader lines 87–91</td></tr>
+<tr><td>Validation: 5 new checks, precise messages</td><td>2</td><td>grader lines 24–27, 38–39, 74–77</td></tr>
+<tr><td><code>lint.py</code> 0 · comments · commit</td><td>1</td><td><code>lint.py</code>, <code>git log</code></td></tr>
+</tbody>
+</table>
+<details><summary>1. After <code>Book b2 = b1;</code> how many Book objects exist?</summary><p class="dap-an">✅ One. The assignment copies the reference; both variables point to the same object, so <code>b1 == b2</code> is true.</p></details>
+<details><summary>2. Why does <code>findById</code> return a DTO and not the Book?</summary><p class="dap-an">✅ So that nothing outside the repository can change the library's data by accident: the caller gets a copy. Only the repository's own methods (like <code>updateCopies</code>) change the real objects — and controllers never even import <code>model</code>.</p></details>
+<details><summary>3. The club wants a "publisher" for each book. Which files change?</summary><p class="dap-an">✅ <code>model/Book.java</code> (field, constructor, get/set), both book DTOs, <code>BookRepository</code> (copy the field in <code>addBook</code> and <code>toResponseDTO</code>), <code>Validation</code> (a check), <code>Message</code>/<code>Constants</code> (prompt, message, table format), <code>Main</code> (one more question). The controller and the service do not change — DTOs carry the new field through them.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td>JavaBean Book + Member: trường private, constructor rỗng + đầy đủ, <code>this(...)</code></td><td>2</td><td>đọc lớp, luật JAVABEAN của <code>lint.py</code></td></tr>
+<tr><td>Mã B001 / M001 từ bộ đếm là trường của repository</td><td>2</td><td>dòng 28, 78 của bộ chấm + không <code>static</code></td></tr>
+<tr><td>Cập nhật số bản sửa đúng sách trong danh sách</td><td>2</td><td>dòng 49, 61</td></tr>
+<tr><td>Thành viên: thêm + liệt kê theo họ tên</td><td>1</td><td>dòng 87–91</td></tr>
+<tr><td>Validation: 5 phép kiểm mới, câu báo rõ</td><td>2</td><td>dòng 24–27, 38–39, 74–77</td></tr>
+<tr><td><code>lint.py</code> 0 · comment · commit</td><td>1</td><td><code>lint.py</code>, <code>git log</code></td></tr>
+</tbody>
+</table>
+<details><summary>1. Sau <code>Book b2 = b1;</code> có bao nhiêu đối tượng Book?</summary><p class="dap-an">✅ Một. Phép gán chép tham chiếu; hai biến trỏ cùng một đối tượng, nên <code>b1 == b2</code> là true.</p></details>
+<details><summary>2. Vì sao <code>findById</code> trả về DTO chứ không trả Book?</summary><p class="dap-an">✅ Để không thứ gì ngoài repository vô tình sửa được dữ liệu thư viện: nơi gọi nhận bản sao. Chỉ phương thức của chính repository (như <code>updateCopies</code>) mới sửa đối tượng thật — và controller còn không hề import <code>model</code>.</p></details>
+<details><summary>3. Câu lạc bộ muốn thêm "nhà xuất bản" cho mỗi cuốn. Sửa những tệp nào?</summary><p class="dap-an">✅ <code>model/Book.java</code> (trường, constructor, get/set), hai DTO của sách, <code>BookRepository</code> (chép trường trong <code>addBook</code> và <code>toResponseDTO</code>), <code>Validation</code> (một phép kiểm), <code>Message</code>/<code>Constants</code> (câu nhắc, câu báo, định dạng bảng), <code>Main</code> (thêm một câu hỏi). Controller và service không đổi — DTO mang trường mới đi qua chúng.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Menu 7: show one book by id (use <code>findById</code>). Which layers do you touch?</li>
+<li>⭐ Count the total number of copies in the library — in the service, from the list the controller gives it.</li>
+<li>⭐⭐ Six parameters in <code>Book(…)</code> is a lot. Read about the <strong>Builder</strong> pattern (the LAB211 reviewer likes it for classes with ≥ 6 fields) and sketch <code>new BookBuilder().title(…).author(…).build()</code>.</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 3 (after Chapter 3):</strong> encapsulation for real. No book from the future, one email per member, delete without ever reusing an id, a report — and a teammate's pull request in which <code>lint.py</code> finds six mistakes for you to fix.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Menu 7: xem một cuốn theo mã (dùng <code>findById</code>). Bạn chạm vào những tầng nào?</li>
+<li>⭐ Đếm tổng số bản của cả thư viện — làm trong service, từ danh sách controller đưa cho.</li>
+<li>⭐⭐ Sáu tham số trong <code>Book(…)</code> là nhiều. Đọc về mẫu <strong>Builder</strong> (thầy LAB211 thích dùng cho lớp có ≥ 6 trường) và phác thảo <code>new BookBuilder().title(…).author(…).build()</code>.</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 3 (sau Chương 3):</strong> đóng gói làm thật. Không có sách từ tương lai, mỗi thành viên một email, xoá mà không bao giờ cấp lại mã, một bản thống kê — và pull request của bạn cùng nhóm, nơi <code>lint.py</code> tìm ra sáu lỗi để bạn sửa.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch2) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -4285,6 +5645,7 @@ public static void main(String[] args) {
 export default {
   slides: [L_pro7_1, L_pro8_1, L_pro8_2],
   practice: L_on_ch2,
+  labs: [L_lab2],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 2 (viết lại, có giải thích song ngữ, lấy cảm hứng từ đề FE thật): vai trò của bộ thu gom rác, đối tượng String thành rác sau dòng nào, truyền theo giá trị với mảng/int/StringBuilder, tham số che trường trong constructor, constructor mặc định biến mất khi tự viết constructor, constructor có override được không, thứ tự khởi tạo đối tượng, == và equals với String, chữ ký phương thức, biến và đối tượng nằm ở stack hay heap — mọi câu "in ra gì" đều đã chạy thật.',
 };

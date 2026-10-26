@@ -4799,14 +4799,14 @@ Tuan le doc sach (mien phi) -&gt; 0 &nbsp;&nbsp;[LabChinhSach$1]</div>`),
 <li>⭐ Do for members what you did for books: <code>interface MemberRepository</code> + <code>InMemoryMemberRepository</code>. Which controller line changes?</li>
 <li>⭐⭐ Give <code>LibraryItem</code> a <em>concrete</em> method <code>calculateLateFee(int daysKept)</code> that calls the abstract <code>getLoanDays()</code> and <code>getLateFeePerDay()</code> — that is the Template Method pattern (5.A-2). Where would CT Library call it, given that the controller never sees a model?</li>
 </ul>
-<div class="callout"><p><strong>Next — Lab 6 (after Chapter 6):</strong> borrowing for real, and when it fails. Checked business exceptions such as <code>BookNotAvailableException</code> and <code>MemberLimitExceededException</code>, thrown in the repository or service, caught in the controller, and a menu that never crashes.</p></div>`,
+<div class="callout"><p><strong>Next — Lab 6 (after Chapter 6):</strong> borrowing for real, and when it fails. Checked business exceptions such as <code>ItemNotAvailableException</code> and <code>LoanLimitException</code>, thrown in the repository or service, caught in the controller, and a menu that never crashes.</p></div>`,
     `<h2>8. Thử thách thêm và việc tiếp theo</h2>
 <ul>
 <li>⭐ Thêm chính sách thứ ba <code>GuestFeePolicy</code> (khách: phí đầy đủ + 1.000 đ phí dịch vụ nếu trễ): đếm số dòng bạn phải đổi ngoài lớp mới.</li>
 <li>⭐ Làm cho thành viên điều bạn đã làm cho sách: <code>interface MemberRepository</code> + <code>InMemoryMemberRepository</code>. Dòng nào trong controller đổi?</li>
 <li>⭐⭐ Cho <code>LibraryItem</code> một phương thức <em>cụ thể</em> <code>calculateLateFee(int daysKept)</code> gọi hai phương thức trừu tượng <code>getLoanDays()</code> và <code>getLateFeePerDay()</code> — đó là mẫu Template Method (5.A-2). CT Library sẽ gọi nó ở đâu, khi controller không bao giờ thấy model?</li>
 </ul>
-<div class="callout"><p><strong>Tiếp theo — Lab 6 (sau Chương 6):</strong> mượn sách thật, và khi nó thất bại. Ngoại lệ nghiệp vụ kiểu checked như <code>BookNotAvailableException</code>, <code>MemberLimitExceededException</code>, ném ở repository hoặc service, bắt ở controller, và một menu không bao giờ sập.</p></div>`),
+<div class="callout"><p><strong>Tiếp theo — Lab 6 (sau Chương 6):</strong> mượn sách thật, và khi nó thất bại. Ngoại lệ nghiệp vụ kiểu checked như <code>ItemNotAvailableException</code>, <code>LoanLimitException</code>, ném ở repository hoặc service, bắt ở controller, và một menu không bao giờ sập.</p></div>`),
   ].join('\n'),
 };
 

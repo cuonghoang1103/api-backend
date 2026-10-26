@@ -115,8 +115,8 @@ ${zm(run(`SELECT ('hi'::char(5)) || '|'    AS char_padded,
  hi|         |        2 |          5 | hi|
 (1 row)`, { hlOut: [3] }), 1.15)}
 <ul style="font-size:23px">
-<li><code class="i">char(5)</code> really stores <b>5 bytes</b>: <code class="i">hi</code> + three blanks — you can <i>see</i> them before the <code class="i">|</code>.</li>
-<li>Yet <code class="i">length()</code> says <b>2</b> — it ignores trailing blanks for char. Two numbers disagree about the same value.</li>
+<li><code class="i">||</code> casts <code class="i">char(5)</code> to text and <b>strips the trailing blanks</b> — so you get <code class="i">hi|</code>, the padding is <i>hidden</i>.</li>
+<li>Yet it is stored: <code class="i">octet_length</code> = <b>5</b>, <code class="i">pg_column_size</code> = <b>9 B</b> for char(5) vs <b>6 B</b> for text — while <code class="i">length()</code> says <b>2</b>.</li>
 </ul>
 ${box('Rule', 'Even for a fixed-width code, use <code class="i">varchar(n)</code> or <code class="i">text</code> + a CHECK. You avoid a lifetime of stray-space bugs.', 'do2')}` },
 
@@ -131,7 +131,7 @@ INSERT 0 1
 -------+-------+---------+-------
  hi    | t     | t       |     5
 (1 row)`, { hlOut: [6] }), 1.1)}
-${two(box('What you see', 'The value prints as <code class="i">hi···</code> with padding; equality quietly <b>ignores</b> the blanks.', ''), box('What you get', 'Casting to <code class="i">text</code> strips them, concatenating keeps them, byte size is 5 — each tool disagrees. That is the bug farm.', 'do2'))}
+${two(box('What you see', 'The value prints as <code class="i">hi···</code> with padding; equality quietly <b>ignores</b> the blanks.', ''), box('What you get', 'Casting to <code class="i">text</code> or <code class="i">||</code> strips them, <code class="i">length()</code> skips them, yet the byte size is 5 — each tool disagrees. That is the bug farm.', 'do2'))}
 <p style="font-size:22px;margin:0">Copying a char column to text, a file or an API changes the value. Avoid the type.</p>` },
 
   { t: 'Characters vs bytes (Unicode)', body: `

@@ -184,14 +184,21 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Trap 2: char(n) pads with spaces</h3>
 <p><code>char(5)</code> always stores exactly 5 characters, padding short values with trailing spaces. This bites you constantly — stored codes come back with invisible spaces, comparisons behave oddly:</p>
-<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'    AS char_padded,
-       length('hi'::char(5))     AS char_len,
-       ('hi'::varchar(5)) || '|' AS varchar_nopad;</code></pre>
-<div class="out"> char_padded | char_len | varchar_nopad
--------------+----------+---------------
- hi          |        2 | hi|
+<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'     AS char_padded,
+       length('hi'::char(5))       AS char_len,
+       octet_length('hi'::char(5)) AS char_bytes,
+       ('hi'::varchar(5)) || '|'   AS varchar_nopad;</code></pre>
+<div class="out"> char_padded | char_len | char_bytes | varchar_nopad
+-------------+----------+------------+---------------
+ hi|         |        2 |          5 | hi|
 (1 row)</div>
-<p>See the gap: <code>char(5)</code> stored <code>'hi   '</code> (with three trailing spaces before the <code>|</code>), while <code>varchar(5)</code> stored just <code>'hi'</code>. (Interestingly <code>length()</code> reports 2 because it ignores trailing blanks for <code>char</code> — which only adds to the confusion.) The lesson: <strong>never use <code>char(n)</code></strong>. Even for a fixed-width code, use <code>varchar(n)</code> or <code>text</code> and you'll avoid a lifetime of stray-space bugs.</p>
+<pre><code class="language-sql">SELECT pg_column_size('hi'::char(5)) AS char5_bytes,
+       pg_column_size('hi'::text)    AS text_bytes;</code></pre>
+<div class="out"> char5_bytes | text_bytes
+-------------+------------
+           9 |          6
+(1 row)</div>
+<p>Surprise: the first column prints <code>hi|</code>, exactly like varchar. The <code>||</code> operator casts <code>char(5)</code> to <code>text</code>, and that cast strips the trailing blanks — so the padding is <em>hidden</em>, not absent. It is really stored: <code>octet_length</code> reports <b>5</b> bytes, and <code>pg_column_size</code> is <b>9</b> bytes for <code>char(5)</code> against <b>6</b> for <code>text</code>. Meanwhile <code>length()</code> reports 2 because it ignores trailing blanks for <code>char</code>, and comparisons between char values ignore them too. One value, several tools, several different answers — that is the bug factory. The lesson: <strong>never use <code>char(n)</code></strong>. Even for a fixed-width code, use <code>varchar(n)</code> or <code>text</code> and you'll avoid a lifetime of stray-space bugs. (Output measured on PostgreSQL 17.11.)</p>
 
 <h3>Bonus: length in characters vs bytes (Unicode)</h3>
 <p>Postgres text is Unicode (UTF-8). A character is not always one byte — accented and non-Latin characters take more:</p>
@@ -246,14 +253,21 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 
 <h3>Bẫy 2: char(n) đệm khoảng trắng</h3>
 <p><code>char(5)</code> luôn lưu đúng 5 ký tự, đệm giá trị ngắn bằng khoảng trắng phía sau. Điều này cắn bạn liên tục — mã đã lưu quay về kèm khoảng trắng vô hình, so sánh hành xử kỳ lạ:</p>
-<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'    AS char_padded,
-       length('hi'::char(5))     AS char_len,
-       ('hi'::varchar(5)) || '|' AS varchar_nopad;</code></pre>
-<div class="out"> char_padded | char_len | varchar_nopad
--------------+----------+---------------
- hi          |        2 | hi|
+<pre><code class="language-sql">SELECT ('hi'::char(5)) || '|'     AS char_padded,
+       length('hi'::char(5))       AS char_len,
+       octet_length('hi'::char(5)) AS char_bytes,
+       ('hi'::varchar(5)) || '|'   AS varchar_nopad;</code></pre>
+<div class="out"> char_padded | char_len | char_bytes | varchar_nopad
+-------------+----------+------------+---------------
+ hi|         |        2 |          5 | hi|
 (1 row)</div>
-<p>Thấy khoảng trống chưa: <code>char(5)</code> lưu <code>'hi   '</code> (với ba khoảng trắng phía sau trước dấu <code>|</code>), còn <code>varchar(5)</code> chỉ lưu <code>'hi'</code>. (Thú vị là <code>length()</code> báo 2 vì nó bỏ qua khoảng trắng cuối với <code>char</code> — điều này chỉ càng thêm rối.) Bài học: <strong>đừng bao giờ dùng <code>char(n)</code></strong>. Kể cả với một mã cố định độ rộng, hãy dùng <code>varchar(n)</code> hoặc <code>text</code> và bạn sẽ tránh được một đời bug khoảng-trắng-lạc.</p>
+<pre><code class="language-sql">SELECT pg_column_size('hi'::char(5)) AS char5_bytes,
+       pg_column_size('hi'::text)    AS text_bytes;</code></pre>
+<div class="out"> char5_bytes | text_bytes
+-------------+------------
+           9 |          6
+(1 row)</div>
+<p>Bất ngờ: cột đầu in ra <code>hi|</code>, y như varchar. Toán tử <code>||</code> ép <code>char(5)</code> sang <code>text</code>, và phép ép đó cắt khoảng trắng cuối — nên phần đệm bị <em>giấu đi</em>, chứ không phải không có. Nó được lưu thật: <code>octet_length</code> báo <b>5</b> byte, và <code>pg_column_size</code> của <code>char(5)</code> là <b>9</b> byte so với <b>6</b> byte của <code>text</code>. Trong khi đó <code>length()</code> báo 2 vì nó bỏ qua khoảng trắng cuối với <code>char</code>, và phép so sánh giữa các giá trị char cũng bỏ qua chúng. Một giá trị, vài công cụ, vài câu trả lời khác nhau — đó là lò sinh bug. Bài học: <strong>đừng bao giờ dùng <code>char(n)</code></strong>. Kể cả với một mã cố định độ rộng, hãy dùng <code>varchar(n)</code> hoặc <code>text</code> và bạn sẽ tránh được một đời bug khoảng-trắng-lạc. (Output đo trên PostgreSQL 17.11.)</p>
 
 <h3>Thêm: độ dài theo ký tự vs byte (Unicode)</h3>
 <p>Chữ trong Postgres là Unicode (UTF-8). Một ký tự không phải luôn là một byte — ký tự có dấu và ngoài Latin chiếm nhiều hơn:</p>

@@ -16,7 +16,11 @@ import ch4 from './osg202/ch4.mjs';
 import ch5 from './osg202/ch5.mjs';
 import ch6 from './osg202/ch6.mjs';
 import n1 from './osg202/n1.mjs';
+import ch8 from './osg202/ch8.mjs';
 import ch9 from './osg202/ch9.mjs';
+import ch10 from './osg202/ch10.mjs';
+import ch11 from './osg202/ch11.mjs';
+import ch12 from './osg202/ch12.mjs';
 
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
@@ -2408,11 +2412,35 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
         n1.quizLesson,
       ],
     },
+    /* Section MỚI — Chương 8 — Multiple Processor Systems (osg8: 8.A 1–19, 8.B 20–50) — ./osg202/ch8.mjs */
+    {
+      title: "Chapter 8 — Multiple Processor Systems|||Chương 8 — Hệ thống nhiều bộ xử lý",
+      description: "Tanenbaum Ch.8: đa xử lý chia sẻ bộ nhớ (UMA/NUMA, đồng bộ, lập lịch nhiều CPU), đa máy tính truyền thông điệp (RPC, bộ nhớ chia sẻ phân tán) và hệ phân tán (middleware) — nền của máy chủ nhiều nhân và hệ thống backend phân tán.",
+      lessons: ch8.lessons,
+    },
     /* Section MỚI — Chương 9 — Security (osg9: 9.A 1–28, 9.B 29–54) — ./osg202/ch9.mjs */
     {
       title: "Chapter 9 — Security|||Chương 9 — Bảo mật",
       description: "Tanenbaum Ch.9: miền bảo vệ, ACL và capability, mô hình bảo mật hình thức, mật mã, xác thực, tấn công khai thác lỗi (tràn bộ đệm, chuỗi định dạng, chèn lệnh), mã độc và các lớp phòng thủ của hệ điều hành — có demo C chạy thật trên Linux.",
       lessons: ch9.lessons,
+    },
+    /* Section MỚI — Chương 10 — Case Study 1: UNIX, Linux & Android (osg10: 10.A 1–19, 10.B 20–48, 10.C 49–88) — ./osg202/ch10.mjs */
+    {
+      title: "Chapter 10 — Case Study 1: UNIX, Linux & Android|||Chương 10 — Nghiên cứu tình huống 1: UNIX, Linux & Android",
+      description: "Tanenbaum Ch.10 (chủ đề thuyết trình): Linux từ bên trong — tiến trình, luồng, lập lịch, bộ nhớ, I/O, hệ thống tệp ext2/VFS/NFS, bảo mật — và Android (Binder, vòng đời ứng dụng, sandbox); mọi khái niệm soi bằng lệnh và chương trình chạy thật trên Linux.",
+      lessons: ch10.lessons,
+    },
+    /* Section MỚI — Chương 11 — Case Study 2: Windows 8 (osg11: 11.A 1–27, 11.B 28–64) — ./osg202/ch11.mjs */
+    {
+      title: "Chapter 11 — Case Study 2: Windows 8|||Chương 11 — Nghiên cứu tình huống 2: Windows 8",
+      description: "Tanenbaum Ch.11 (chủ đề thuyết trình): kiến trúc Windows NT tới Windows 8 — NT API và Win32, Registry, HAL, trình quản lý đối tượng, tiến trình/luồng/fiber, lập lịch, bộ nhớ, I/O, NTFS, bảo mật — kèm phần cập nhật Windows 10/11 hiện đại.",
+      lessons: ch11.lessons,
+    },
+    /* Section MỚI — Chương 12 — Operating System Design (osg12: 12.A 1–18) — ./osg202/ch12.mjs */
+    {
+      title: "Chapter 12 — Operating System Design|||Chương 12 — Thiết kế hệ điều hành",
+      description: "Tanenbaum Ch.12: mục tiêu và nguyên tắc thiết kế giao diện, cấu trúc hệ thống, đặt tên, ẩn phần cứng, đánh đổi không gian – thời gian, bộ đệm, quản lý dự án và xu hướng — bài học thiết kế dùng được cho mọi hệ thống phần mềm lớn.",
+      lessons: ch12.lessons,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

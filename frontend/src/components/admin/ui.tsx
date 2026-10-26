@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * Mảnh giao diện dùng chung cho các trang admin viết theo khung mới.
- * Nguyên tắc (23/09/2026): phân vùng bằng VIỀN MẢNH và KHOẢNG TRẮNG, không
- * bằng thẻ nổi; số liệu thẳng cột (tabular-nums); màu chỉ để báo trạng thái.
+ * Mảnh giao diện dùng chung cho các trang admin.
+ * 27/10/2026 — phong cách aidev.edu.vn (chủ web chọn): THẺ bo 16px nền xanh than nổi nhẹ, viền mảnh, tiêu đề to đậm,
+ * nhãn nhỏ viết hoa màu xanh; số liệu thẳng cột (tabular-nums); màu chỉ để báo trạng thái.
  */
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
@@ -12,16 +12,20 @@ export function PageHeader({
   title,
   description,
   actions,
+  eyebrow,
 }: {
   title: ReactNode;
   description?: ReactNode;
   actions?: ReactNode;
+  /** Nhãn nhỏ viết hoa màu xanh phía trên tiêu đề (vd "QUẢN TRỊ"). */
+  eyebrow?: ReactNode;
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div className="min-w-0">
-        <h1 className="text-[17px] font-semibold leading-6 tracking-[-0.012em] text-[var(--a-text)]">{title}</h1>
-        {description && <p className="mt-0.5 text-[13px] text-[var(--a-text-3)]">{description}</p>}
+        {eyebrow && <p className="a-eyebrow mb-1.5">{eyebrow}</p>}
+        <h1 className="text-[26px] font-bold leading-8 tracking-[-0.02em] text-[var(--a-text)]">{title}</h1>
+        {description && <p className="mt-1 text-[14px] text-[var(--a-text-2)]">{description}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
@@ -47,10 +51,14 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={className}>
-      <div className="flex h-8 items-center justify-between border-b border-[var(--a-border)]">
-        <h2 className="flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--a-text-2)]">
-          {Icon && <Icon className="h-3.5 w-3.5" strokeWidth={2} style={tone ? { color: tone } : undefined} />}
+    <section className={`rounded-2xl border border-[var(--a-border)] bg-[var(--a-raised)] p-4 ${className}`}>
+      <div className="mb-2 flex min-h-8 items-center justify-between gap-2">
+        <h2 className="flex items-center gap-2 text-[15px] font-bold text-[var(--a-text)]">
+          {Icon && (
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: `color-mix(in srgb, ${tone ?? 'var(--a-accent)'} 18%, transparent)` }}>
+              <Icon className="h-4 w-4" strokeWidth={2} style={{ color: tone ?? 'var(--a-accent-text)' }} />
+            </span>
+          )}
           {title}
         </h2>
         {action}
@@ -79,8 +87,8 @@ export function Tabs<T extends string>({
             role="tab"
             aria-selected={on}
             onClick={() => onChange(it.value)}
-            className={`flex h-7 items-center gap-1.5 rounded-[6px] px-2.5 text-[12.5px] font-medium ${
-              on ? 'bg-[var(--a-active)] text-[var(--a-text)]' : 'text-[var(--a-text-3)] hover:bg-[var(--a-hover)] hover:text-[var(--a-text-2)]'
+            className={`flex h-8 items-center gap-1.5 rounded-[10px] px-3 text-[13px] font-semibold ${
+              on ? 'bg-[var(--a-accent-soft)] text-[var(--a-accent-text)]' : 'text-[var(--a-text-3)] hover:bg-[var(--a-hover)] hover:text-[var(--a-text-2)]'
             }`}
           >
             {it.label}
@@ -130,13 +138,13 @@ export function Metric({
 }) {
   const hintColor = up === undefined ? 'var(--a-text-3)' : up ? 'var(--a-green)' : 'var(--a-red)';
   return (
-    <div className="min-w-0 py-3 pr-4 xl:pl-4 xl:first:pl-0">
-      <p className="flex items-center gap-1.5 text-[12px] leading-4 text-[var(--a-text-3)]">
-        {tone && <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: tone }} />}
+    <div className="min-w-0 rounded-2xl border border-[var(--a-border)] bg-[var(--a-raised)] px-4 py-3.5">
+      <p className="flex items-center gap-1.5 text-[12.5px] font-medium leading-4 text-[var(--a-text-2)]">
+        {tone && <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: tone }} />}
         {label}
       </p>
-      <p className="mt-1 text-[20px] font-semibold leading-7 tracking-[-0.01em] tabular-nums text-[var(--a-text)]">{value}</p>
-      {hint && <p className="mt-0.5 truncate text-[11.5px]" style={{ color: hintColor }}>{hint}</p>}
+      <p className="mt-2 text-[24px] font-bold leading-8 tracking-[-0.02em] tabular-nums text-[var(--a-text)]">{value}</p>
+      {hint && <p className="mt-0.5 truncate text-[12px]" style={{ color: hintColor }}>{hint}</p>}
     </div>
   );
 }

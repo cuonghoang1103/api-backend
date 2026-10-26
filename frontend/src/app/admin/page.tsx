@@ -160,6 +160,7 @@ export default function AdminDashboard() {
   return (
     <div className="mx-auto max-w-[1180px]">
       <PageHeader
+        eyebrow="CuongThai · Admin"
         title={t('overview')}
         description={today}
         actions={
@@ -170,7 +171,7 @@ export default function AdminDashboard() {
       />
 
       {/* Dải chỉ số */}
-      <div className="grid grid-cols-2 border-y border-[var(--a-border)] sm:grid-cols-3 xl:grid-cols-6 [&>*]:border-[var(--a-border)] xl:[&>*:not(:first-child)]:border-l">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
         <Metric
           label={t('visitorsToday')}
           value={traffic ? n(traffic.today.visitors) : '—'}
@@ -185,7 +186,7 @@ export default function AdminDashboard() {
         <Metric label={t('aiConversations')} value={n(chat.totalSessions)} tone="var(--c-6)" hint={`${n(chat.totalMessages)} ${t('messages')}`} />
       </div>
 
-      <div className="mt-8 grid gap-x-10 gap-y-8 lg:grid-cols-2">
+      <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {/* Việc chờ */}
         <Section
           icon={Inbox}

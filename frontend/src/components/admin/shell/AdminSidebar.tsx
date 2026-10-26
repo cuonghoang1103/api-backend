@@ -71,12 +71,12 @@ export default function AdminSidebar({
       <div className="flex h-12 shrink-0 items-center gap-2 px-3">
         <div
           className="flex h-[22px] w-[22px] items-center justify-center rounded-[6px] text-[11px] font-semibold text-white"
-          style={{ background: 'linear-gradient(140deg, var(--a-accent), #4f5ae0)' }}
+          style={{ background: 'linear-gradient(140deg, #2563eb, #60a5fa)' }}
         >
           C
         </div>
         <div className="min-w-0 flex-1 leading-tight">
-          <p className="truncate text-[13px] font-medium text-[var(--a-text)]">cuongthai.com</p>
+          <p className="truncate text-[14px] font-bold text-[var(--a-text)]">CuongThai<span className="text-[var(--a-accent-text)]">.com</span></p>
         </div>
         {onCollapse && (
           <button onClick={onCollapse} className="a-icon-btn" title={`${t('hideSidebar')}  [`} aria-label={t('hideSidebar')}>
@@ -112,7 +112,7 @@ export default function AdminSidebar({
               {g.label && (
                 <button
                   onClick={() => toggle(g.id)}
-                  className="group flex h-6 w-full items-center gap-1 rounded-[5px] px-2 text-[11.5px] font-medium text-[var(--a-text-3)] hover:text-[var(--a-text-2)]"
+                  className="group flex h-6 w-full items-center gap-1 rounded-[5px] px-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--a-text-3)] hover:text-[var(--a-text-2)]"
                   aria-expanded={!collapsed}
                 >
                   {vi && g.viLabel ? g.viLabel : g.label}

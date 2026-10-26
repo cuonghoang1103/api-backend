@@ -12,6 +12,12 @@
  * Mờ-hiện (opacity) vẫn chạy, nên không có gì "giật".
  */
 import './admin.css';
+// 27/10/2026: chữ Be Vietnam Pro cho admin (phong cách aidev) — tự lưu qua @fontsource như layout gốc, build không gọi mạng.
+import '@fontsource/be-vietnam-pro/400.css';
+import '@fontsource/be-vietnam-pro/500.css';
+import '@fontsource/be-vietnam-pro/600.css';
+import '@fontsource/be-vietnam-pro/700.css';
+import '@fontsource/be-vietnam-pro/800.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { MotionConfig } from 'framer-motion';

@@ -62,15 +62,26 @@ const tsx = path.join(root, 'node_modules/.bin/tsx');
 // vào tệp này. Cuối bộ: tệp có dòng nào ⇒ cả bộ ĐỎ (rác thử từng lên bucket production — 10/10 dọn tay 98 tệp).
 const tripLog = path.join(mkdtempSync(path.join(os.tmpdir(), 'ctw-r2-trip-')), 'hits.jsonl');
 const tripImport = `--import=${path.join(root, 'scripts/r2-tripwire.mjs')}`;
+// 26/10/2026: tệp đỏ ⇒ chạy lại 1 lần (WORK_DB_TEST_RETRY, 0 = tắt). Lý do: deploy chạy bộ này trên Mac đang
+// render video (load ~15) ⇒ các phép chờ có trần (WS/Yjs `until` 5 s…) quá giờ — mỗi lượt đỏ một tệp KHÁC nhau
+// (ctwk3b, ctw6, ctw6b, ctw9a, uxb, dot8b…). Lỗi thật đỏ cả hai lần nên vẫn chặn; tệp "đỏ rồi xanh" in riêng.
+const RETRY = Number(process.env.WORK_DB_TEST_RETRY ?? 1);
+const runFile = (f) => spawnSync(tsx, ['--test', '--test-reporter=dot', f], {
+  cwd: root, stdio: 'inherit', timeout: PER_FILE_TIMEOUT_MS,
+  env: { ...process.env, WORK_DB_TEST: '1', R2_TRIPWIRE_LOG: tripLog, NODE_OPTIONS: [process.env.NODE_OPTIONS, tripImport].filter(Boolean).join(' ') },
+});
 const results = [];
+const flaky = [];
 const t0 = Date.now();
 for (const f of files) {
   const t = Date.now();
   process.stdout.write(`\n━━ ${f}\n`);
-  const r = spawnSync(tsx, ['--test', '--test-reporter=dot', f], {
-    cwd: root, stdio: 'inherit', timeout: PER_FILE_TIMEOUT_MS,
-    env: { ...process.env, WORK_DB_TEST: '1', R2_TRIPWIRE_LOG: tripLog, NODE_OPTIONS: [process.env.NODE_OPTIONS, tripImport].filter(Boolean).join(' ') },
-  });
+  let r = runFile(f);
+  for (let lan = 1; r.status !== 0 && r.error?.code !== 'ETIMEDOUT' && lan <= RETRY; lan++) {
+    process.stdout.write(`\n↻ ${f} đỏ — chạy lại lần ${lan}/${RETRY}\n`);
+    r = runFile(f);
+    if (r.status === 0) flaky.push(f);
+  }
   const ok = r.status === 0;
   const why = r.error?.code === 'ETIMEDOUT' ? `quá ${PER_FILE_TIMEOUT_MS / 1000}s` : r.signal ? `tín hiệu ${r.signal}` : `exit ${r.status}`;
   results.push({ f, ok, why, s: ((Date.now() - t) / 1000).toFixed(1) });
@@ -88,4 +99,5 @@ if (hits.length) {
 }
 console.log(`\n══ test:work-db — ${results.filter((r) => r.ok).length}/${results.length} tệp xanh trong ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 for (const r of failed) console.log(`  ✗ ${r.f} — ${r.why}`);
+for (const f of flaky) console.log(`  ⚠ ${f} — đỏ lần đầu, xanh khi chạy lại (chập chờn theo tải máy)`);
 process.exit(failed.length ? 1 : 0);

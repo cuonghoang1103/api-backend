@@ -373,7 +373,8 @@ describe('CT Work đợt 8B — AI làm thao tác thành viên + AI usage', { sk
     // AI web trong dự án (người nghe sổ chung)
     await recordLlmCall({ userId: lead.id, feature: 'work', purpose: 'work_assistant', model: 'gpt-6-sol', inputTokens: 100, outputTokens: 50, costUsd: 0.001, success: true }, { projectId: pid });
     await recordLlmCall({ userId: lead.id, feature: 'work', purpose: 'work_agent', model: 'gpt-6-sol', inputTokens: 100, outputTokens: 50, costUsd: 0.001, success: true }, { projectId: pid });
-    const to = new Date(t.getTime() + 4 * 3600_000).toISOString().slice(0, 10);
+    // 28/10: máy chủ hiểu `to` theo ngày giờ VN (+07:00) ⇒ tính ngày VN, không lấy ngày UTC (chạy 0h–7h sáng VN từng đỏ: lượt gọi rơi sau `to`).
+    const to = new Date(t.getTime() + 4 * 3600_000 + 7 * 3600_000).toISOString().slice(0, 10);
     const r = await call(lead, 'GET', `/projects/${pid}/ai-usage?to=${to}`);
     assert.equal(r.status, 200, JSON.stringify(r.raw));
     const d = r.data;

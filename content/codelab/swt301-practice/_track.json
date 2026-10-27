@@ -1,0 +1,31 @@
+{
+  "groupSlug": "fptu",
+  "slug": "swt301-practice",
+  "name": "SWT301 — Luyện tập",
+  "language": "javascript",
+  "color": "#16a34a",
+  "docsUrl": "https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn SWT301 (Software Testing) theo ISTQB Foundation và slide trường — mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (viết test bị chấm bằng mutant, đo độ phủ statement/decision/MC/DC trên mã đã gắn đo, test case hộp đen chạy qua hệ thống tham chiếu), mỗi chương một Lab + Deep Lab dạng bản in, luyện Lab 2–4 của trường, PE luyện định dạng SU26 và dự án xuyên suốt LabBook.",
+  "modules": [
+    {
+      "slug": "swt301-11-pe-1-grade-parking-library",
+      "name": "PE Practice 1 — GradeCalculator · calcParkingFee · Library Fine",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút định dạng SU26: review GradeCalculator (≥ 8 lỗi + sửa mã chạy thật) · bộ test tối thiểu statement/decision/MC/DC cho calcParkingFee (độ phủ đo thật) · test hộp đen Library Late-Return Fine (hợp lệ · bảng quyết định · BVA). Thang 10, chấm tự động từng phần."
+    },
+    {
+      "slug": "swt301-11-pe-2-password-shipping-ride",
+      "name": "PE Practice 2 — PasswordPolicy · calcShippingFee · Ride Fare",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút định dạng SU26: review PasswordPolicy (chuỗi, vòng lặp, ưu tiên toán tử) · MC/DC cho điều kiện OR ba vế của calcShippingFee (tối thiểu 6 ca) · test hộp đen Ride Fare Estimate (trường tuỳ chọn, bảng quyết định 3 điều kiện + trần khuyến mãi, BVA số thập phân)."
+    },
+    {
+      "slug": "swt301-11-pe-3-attendance-scholarship-gym",
+      "name": "PE Practice 3 — ExamEligibility · checkScholarship · Gym Fee",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút định dạng SU26: review ExamEligibility (== so chuỗi, static rò trạng thái, chia nguyên) · MC/DC AND ba vế có ngắn mạch cho checkScholarship (lỗi đặc tả lộ trong bộ tối thiểu) · test hộp đen Gym Membership Fee (bảng quyết định rút gọn có ô 'không quan tâm', BVA nhiều mốc)."
+    }
+  ]
+}

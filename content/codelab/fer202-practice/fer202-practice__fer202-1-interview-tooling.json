@@ -1,0 +1,215 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-interview-tooling",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-1-fullstack-react"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — React overview, npm & Git (Chapter 1)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "React overview, npm & Git"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>React overview, npm & Git</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>React overview, npm & Git</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React overview, npm & Git (Chapter 1)\n\nAnswer in the panel on the left (no code needed).\n\n1. Why would a team choose React?\n2. What is the difference between dependencies and devDependencies?\n3. Why commit package-lock.json?\n4. Describe your Git workflow in a team.\n5. What is the Virtual DOM and is it always faster?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React overview, npm & Git (Chapter 1) — answer key\n\n1. Why would a team choose React?\n   Answer: b) Component-based, declarative UI, a huge ecosystem and community, and skills that transfer to React Native.\n   Model answer: \"React lets us build the UI from reusable components and describe it declaratively from state, which keeps complex screens predictable. The ecosystem — routing, data fetching, testing, Next.js — is mature, hiring is easy, and the same ideas work in React Native.\" / Trả lời mẫu: \"React cho dựng giao diện từ component dùng lại được và mô tả nó theo kiểu khai báo từ state, nên màn hình phức tạp vẫn dự đoán được. Hệ sinh thái — router, gọi dữ liệu, test, Next.js — trưởng thành, dễ tuyển người, và cùng ý tưởng dùng được cho React Native.\"\n\n2. What is the difference between dependencies and devDependencies?\n   Answer: b) dependencies are needed by the app at runtime (react, axios); devDependencies only for development and build (testing tools, linters, json-server).\n   Model answer: \"Runtime libraries the app imports go in dependencies. Tools used only while developing or building — ESLint, Vitest, json-server — go in devDependencies, so production installs stay lean.\" / Trả lời mẫu: \"Thư viện app import khi chạy nằm ở dependencies. Công cụ chỉ dùng khi phát triển hoặc build — ESLint, Vitest, json-server — nằm ở devDependencies, để bản cài production gọn.\"\n\n3. Why commit package-lock.json?\n   Answer: b) It pins the exact versions of every installed package so everyone and CI get identical installs.\n   Model answer: \"package.json allows ranges like ^18.2.0; the lock file records the exact tree that was installed. Committing it makes builds reproducible and avoids 'works on my machine' bugs.\" / Trả lời mẫu: \"package.json cho phép khoảng như ^18.2.0; tệp lock ghi cây chính xác đã cài. Commit nó giúp build lặp lại được, tránh lỗi 'máy tôi chạy được'.\"\n\n4. Describe your Git workflow in a team.\n   Answer: b) Pull main, create a feature branch, commit small focused changes, push and open a pull request for review, then merge.\n   Model answer: \"I start from an up-to-date main, branch per task, commit in small steps with clear messages, push and open a pull request. A teammate reviews, CI runs, then we merge — main always stays deployable.\" / Trả lời mẫu: \"Tôi bắt đầu từ main mới nhất, mỗi việc một nhánh, commit từng bước nhỏ với message rõ ràng, đẩy lên và mở pull request. Bạn cùng nhóm review, CI chạy, rồi mới merge — main luôn ở trạng thái deploy được.\"\n\n5. What is the Virtual DOM and is it always faster?\n   Answer: b) An in-memory description of the UI that React diffs to apply minimal DOM updates; it makes updates predictable and usually fast enough, but it is not magic — unnecessary renders still cost time.\n   Model answer: \"React renders components to a lightweight tree, compares it with the previous one and patches only what changed. The main win is a simple programming model; performance is good by default, and I still avoid needless renders on hot paths.\" / Trả lời mẫu: \"React vẽ component ra một cây nhẹ, so với cây trước và chỉ vá chỗ đổi. Lợi ích chính là mô hình lập trình đơn giản; hiệu năng mặc định tốt, và tôi vẫn tránh render thừa ở chỗ nóng.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Why would a team choose React?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It includes a database."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Component-based, declarative UI, a huge ecosystem and community, and skills that transfer to React Native."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs no JavaScript."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is the only option."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React lets us build the UI from reusable components and describe it declaratively from state, which keeps complex screens predictable. The ecosystem — routing, data fetching, testing, Next.js — is mature, hiring is easy, and the same ideas work in React Native.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React cho dựng giao diện từ component dùng lại được và mô tả nó theo kiểu khai báo từ state, nên màn hình phức tạp vẫn dự đoán được. Hệ sinh thái — router, gọi dữ liệu, test, Next.js — trưởng thành, dễ tuyển người, và cùng ý tưởng dùng được cho React Native.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "What is the difference between dependencies and devDependencies?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None."
+              },
+              {
+                "ma": "b",
+                "noiDung": "dependencies are needed by the app at runtime (react, axios); devDependencies only for development and build (testing tools, linters, json-server)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "devDependencies are faster."
+              },
+              {
+                "ma": "d",
+                "noiDung": "dependencies are installed globally."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Runtime libraries the app imports go in dependencies. Tools used only while developing or building — ESLint, Vitest, json-server — go in devDependencies, so production installs stay lean.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Thư viện app import khi chạy nằm ở dependencies. Công cụ chỉ dùng khi phát triển hoặc build — ESLint, Vitest, json-server — nằm ở devDependencies, để bản cài production gọn.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "Why commit package-lock.json?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It stores passwords."
+              },
+              {
+                "ma": "b",
+                "noiDung": "It pins the exact versions of every installed package so everyone and CI get identical installs."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Git requires it."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is optional noise."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"package.json allows ranges like ^18.2.0; the lock file records the exact tree that was installed. Committing it makes builds reproducible and avoids 'works on my machine' bugs.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"package.json cho phép khoảng như ^18.2.0; tệp lock ghi cây chính xác đã cài. Commit nó giúp build lặp lại được, tránh lỗi 'máy tôi chạy được'.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Describe your Git workflow in a team.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Everyone pushes to main."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pull main, create a feature branch, commit small focused changes, push and open a pull request for review, then merge."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Email zip files."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the leader uses Git."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I start from an up-to-date main, branch per task, commit in small steps with clear messages, push and open a pull request. A teammate reviews, CI runs, then we merge — main always stays deployable.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi bắt đầu từ main mới nhất, mỗi việc một nhánh, commit từng bước nhỏ với message rõ ràng, đẩy lên và mở pull request. Bạn cùng nhóm review, CI chạy, rồi mới merge — main luôn ở trạng thái deploy được.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "What is the Virtual DOM and is it always faster?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, always."
+              },
+              {
+                "ma": "b",
+                "noiDung": "An in-memory description of the UI that React diffs to apply minimal DOM updates; it makes updates predictable and usually fast enough, but it is not magic — unnecessary renders still cost time."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a browser API."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It replaces HTML."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React renders components to a lightweight tree, compares it with the previous one and patches only what changed. The main win is a simple programming model; performance is good by default, and I still avoid needless renders on hot paths.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React vẽ component ra một cây nhẹ, so với cây trước và chỉ vá chỗ đổi. Lợi ích chính là mô hình lập trình đơn giản; hiệu năng mặc định tốt, và tôi vẫn tránh render thừa ở chỗ nóng.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

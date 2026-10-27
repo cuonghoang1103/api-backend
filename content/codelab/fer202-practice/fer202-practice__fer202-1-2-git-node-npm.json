@@ -1,0 +1,409 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-2-git-node-npm",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-2-git-node-npm"
+  },
+  "exercises": [
+    {
+      "title": "How npm reads ^ and ~ (semantic versioning)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "semver MAJOR.MINOR.PATCH",
+        "caret range",
+        "tilde range"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "npm",
+        "semver",
+        "javascript"
+      ],
+      "problemHtml": "<p>In <code>package.json</code>, <code>\"react\": \"^18.2.0\"</code> does not mean exactly 18.2.0. Write <code>satisfies(version, range)</code> for three range forms: exact <code>1.2.3</code>, tilde <code>~1.2.3</code> (same MAJOR.MINOR, PATCH ≥ 3) and caret <code>^1.2.3</code> (same MAJOR, version ≥ 1.2.3). For MAJOR 0, caret behaves like tilde: <code>^0.2.3</code> allows only 0.2.x ≥ 0.2.3.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Versions are plain <code>X.Y.Z</code> numbers (no pre-release tags). Compare numerically, not as strings.</li>\n  <li>Return <code>true</code>/<code>false</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong <code>package.json</code>, <code>\"react\": \"^18.2.0\"</code> không có nghĩa đúng 18.2.0. Viết <code>satisfies(version, range)</code> cho ba dạng: chính xác <code>1.2.3</code>, dấu ngã <code>~1.2.3</code> (cùng MAJOR.MINOR, PATCH ≥ 3) và dấu mũ <code>^1.2.3</code> (cùng MAJOR, phiên bản ≥ 1.2.3). Khi MAJOR là 0, dấu mũ giống dấu ngã: <code>^0.2.3</code> chỉ cho 0.2.x ≥ 0.2.3.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phiên bản dạng <code>X.Y.Z</code> (không có nhãn pre-release). So sánh theo SỐ, không theo chuỗi.</li>\n  <li>Trả <code>true</code>/<code>false</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "satisfies(\"18.3.1\", \"^18.2.0\")",
+          "output": "true",
+          "explanation": "Same major 18, and 18.3.1 ≥ 18.2.0.|||Cùng major 18, và 18.3.1 ≥ 18.2.0."
+        }
+      ],
+      "hintsJson": [
+        "const parse = (s) => s.split(\".\").map(Number); const cmp = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];",
+        "Dấu mũ: major khác ⇒ false; major 0 ⇒ minor cũng phải bằng; rồi cmp(v, r) >= 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — STARTER\nfunction satisfies(version, range) {\n  return version === range.replace(/[\\^~]/, '');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — so khớp semver cho ba dạng: chính xác, ~ và ^\nconst parse = (s) => s.split('.').map(Number);\nconst cmp = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];\n\nfunction satisfies(version, range) {\n  const ver = parse(version);\n  const op = range[0] === '^' || range[0] === '~' ? range[0] : '';\n  const base = parse(op ? range.slice(1) : range);\n\n  if (!op) return cmp(ver, base) === 0;\n  if (cmp(ver, base) < 0) return false;\n  if (ver[0] !== base[0]) return false; // khác MAJOR ⇒ không bao giờ khớp\n  if (op === '~' || base[0] === 0) return ver[1] === base[1]; // ~ hoặc ^0.x ⇒ giữ nguyên MINOR\n  return true; // ^ với MAJOR ≥ 1\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>MAJOR tăng khi phá tương thích, MINOR khi thêm tính năng, PATCH khi sửa lỗi. <code>^</code> cho phép cập nhật không phá vỡ; <code>package-lock.json</code> ghi lại phiên bản chính xác đã cài để mọi máy giống nhau.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Caret allows newer minor",
+            "goi": "satisfies(\"18.3.1\", \"^18.2.0\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Caret blocks a new major",
+            "goi": "satisfies(\"19.0.0\", \"^18.2.0\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": "Tilde allows only patches",
+            "goi": "[satisfies(\"1.2.9\", \"~1.2.3\"), satisfies(\"1.3.0\", \"~1.2.3\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Exact",
+            "goi": "[satisfies(\"4.17.21\", \"4.17.21\"), satisfies(\"4.17.20\", \"4.17.21\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Numeric, not string comparison",
+            "goi": "satisfies(\"18.10.0\", \"^18.9.0\")",
+            "mongDoi": true
+          },
+          {
+            "an": true,
+            "moTa": "Older version fails",
+            "goi": "satisfies(\"18.1.9\", \"^18.2.0\")",
+            "mongDoi": false
+          },
+          {
+            "an": true,
+            "moTa": "Caret on 0.x behaves like tilde",
+            "goi": "[satisfies(\"0.2.9\", \"^0.2.3\"), satisfies(\"0.3.0\", \"^0.2.3\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So chuỗi \"18.10.0\" < \"18.9.0\" ⇒ sai vì \"1\" < \"9\" theo ký tự."
+        },
+        {
+          "loi": "Quên trường hợp ^0.x — nhiều thư viện 0.x đổi API ở bản minor."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "semantic versioning",
+          "vi": "đánh số phiên bản MAJOR.MINOR.PATCH theo mức độ thay đổi"
+        },
+        {
+          "en": "breaking change",
+          "vi": "thay đổi làm hỏng code cũ (tăng MAJOR)"
+        }
+      ]
+    },
+    {
+      "title": "npm and node commands",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "npm install",
+        "devDependencies",
+        "npm run",
+        "npx"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "npm",
+        "table"
+      ],
+      "problemHtml": "<p>Write the command for each task. Use the short forms you would type in a terminal (for example <code>npm i axios</code> is accepted for <code>npm install axios</code>).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghi lệnh cho mỗi việc. Dùng dạng bạn gõ trong terminal (ví dụ <code>npm i axios</code> được chấp nhận thay cho <code>npm install axios</code>).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "devDependency = chỉ cần khi phát triển: -D.",
+        "Script tự đặt tên phải chạy bằng npm run."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# npm and node commands\n\nAnswer in the panel on the left (no code needed).\n\n1. Command for each task\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# npm and node commands — answer key\n\n1. Command for each task\n   - ver.cmd: node -v\n   - init.cmd: npm init -y\n   - add.cmd: npm install axios\n   - dev.cmd: npm install -D json-server\n   - all.cmd: npm install\n   - start.cmd: npm start\n   - test.cmd: npm run lint\n   start/test have shortcuts; any other script needs \"npm run \". node_modules is never committed — \"npm install\" rebuilds it from package.json (+ lock file).|||start/test có lối tắt; script khác cần \"npm run \". node_modules không bao giờ commit — \"npm install\" dựng lại từ package.json (+ lock).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>package.json mô tả dự án và phụ thuộc; npm tải gói vào node_modules; scripts gom các lệnh hay dùng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "c",
+            "de": "Command for each task",
+            "cot": [
+              {
+                "ma": "task",
+                "ten": "Task"
+              },
+              {
+                "ma": "cmd",
+                "ten": "Command"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "ver",
+                "o": {
+                  "task": "Show the installed Node.js version"
+                }
+              },
+              {
+                "ma": "init",
+                "o": {
+                  "task": "Create package.json with default answers"
+                }
+              },
+              {
+                "ma": "add",
+                "o": {
+                  "task": "Add axios as a dependency"
+                }
+              },
+              {
+                "ma": "dev",
+                "o": {
+                  "task": "Add json-server as a devDependency"
+                }
+              },
+              {
+                "ma": "all",
+                "o": {
+                  "task": "Install everything listed in package.json (after cloning)"
+                }
+              },
+              {
+                "ma": "start",
+                "o": {
+                  "task": "Run the \"start\" script"
+                }
+              },
+              {
+                "ma": "test",
+                "o": {
+                  "task": "Run the custom script \"lint\""
+                }
+              }
+            ],
+            "dapAn": {
+              "ver.cmd": [
+                "node -v",
+                "node --version"
+              ],
+              "init.cmd": [
+                "npm init -y",
+                "npm init --yes"
+              ],
+              "add.cmd": [
+                "npm install axios",
+                "npm i axios"
+              ],
+              "dev.cmd": [
+                "npm install -D json-server",
+                "npm i -D json-server",
+                "npm install --save-dev json-server",
+                "npm i --save-dev json-server"
+              ],
+              "all.cmd": [
+                "npm install",
+                "npm i",
+                "npm ci"
+              ],
+              "start.cmd": [
+                "npm start",
+                "npm run start"
+              ],
+              "test.cmd": "npm run lint"
+            },
+            "giaiThich": "<p>start/test have shortcuts; any other script needs \"npm run <name>\". node_modules is never committed — \"npm install\" rebuilds it from package.json (+ lock file).</p><p><i>🇻🇳 start/test có lối tắt; script khác cần \"npm run <tên>\". node_modules không bao giờ commit — \"npm install\" dựng lại từ package.json (+ lock).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Commit thư mục node_modules lên Git."
+        },
+        {
+          "loi": "Gõ <code>npm lint</code> ⇒ npm báo không có lệnh đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dependency",
+          "vi": "gói mà dự án cần để chạy"
+        },
+        {
+          "en": "devDependency",
+          "vi": "gói chỉ cần lúc phát triển/kiểm thử"
+        }
+      ]
+    },
+    {
+      "title": "Daily Git workflow",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "working tree",
+        "staging area",
+        "commit",
+        "push"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "git",
+        "order"
+      ],
+      "problemHtml": "<p>You edited <code>App.js</code> and want the change on GitHub. Order the commands you run, starting from checking what changed.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn đã sửa <code>App.js</code> và muốn thay đổi lên GitHub. Xếp các lệnh theo thứ tự, bắt đầu từ việc xem đã đổi gì.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thay đổi phải vào staging (add) trước khi commit.",
+        "Push gửi các commit lên remote."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Daily Git workflow\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the commands\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Daily Git workflow — answer key\n\n1. Order the commands\n   Answer: a) git status  →  b) git diff  →  c) git add src/App.js  →  d) git commit -m \"feat: show course list\"  →  e) git push origin main\n   Look → review → stage → commit → push. / Xem → kiểm → chọn → ghi → đẩy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>status → diff → add → commit → push: xem, kiểm, chọn, ghi lại, chia sẻ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "g1",
+            "de": "Order the commands",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "<code>git commit -m \"feat: show course list\"</code>"
+              },
+              {
+                "ma": "a",
+                "noiDung": "<code>git status</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>git push origin main</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>git add src/App.js</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>git diff</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Look → review → stage → commit → push.</p><p><i>🇻🇳 Xem → kiểm → chọn → ghi → đẩy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Push trước khi commit ⇒ \"Everything up-to-date\", không có gì lên."
+        },
+        {
+          "loi": "Commit message kiểu \"update\" — không nói được đã đổi gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "staging area",
+          "vi": "khu chờ: những thay đổi sẽ vào commit kế tiếp"
+        }
+      ]
+    }
+  ]
+}

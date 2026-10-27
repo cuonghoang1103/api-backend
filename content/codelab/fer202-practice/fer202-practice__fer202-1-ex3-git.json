@@ -1,0 +1,474 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-ex3-git",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-ex3-git"
+  },
+  "exercises": [
+    {
+      "title": "First push of a lab project to GitHub",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "git config",
+        "git init",
+        "remote",
+        "push -u"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "git",
+        "order",
+        "exercise-3"
+      ],
+      "problemHtml": "<p>You have a React project folder and an empty GitHub repository. Order the commands for the very first submission (identity is not configured on this computer yet).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn có thư mục dự án React và một repo GitHub trống. Xếp các lệnh cho lần nộp đầu tiên (máy này chưa cấu hình danh tính).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Danh tính phải có trước commit đầu tiên.",
+        "remote add trước push; -u nhớ nhánh mặc định cho lần sau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# First push of a lab project to GitHub\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the commands\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# First push of a lab project to GitHub — answer key\n\n1. Order the commands\n   Answer: a) git config --global user.name \"Your Name\" and user.email  →  b) git init  →  c) git add .  →  d) git commit -m \"Lab 1: first version\"  →  e) git branch -M main  →  f) git remote add origin https://github.com/you/fer202-lab1.git  →  g) git push -u origin main\n   Identity → repo → stage → commit → name the branch → link GitHub → push. / Danh tính → repo → chọn → commit → đặt tên nhánh → nối GitHub → đẩy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>config → init → add → commit → branch -M main → remote add → push -u.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "p1",
+            "de": "Order the commands",
+            "muc": [
+              {
+                "ma": "f",
+                "noiDung": "<code>git remote add origin https://github.com/you/fer202-lab1.git</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>git init</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>git commit -m \"Lab 1: first version\"</code>"
+              },
+              {
+                "ma": "a",
+                "noiDung": "<code>git config --global user.name \"Your Name\"</code> and <code>user.email</code>"
+              },
+              {
+                "ma": "g",
+                "noiDung": "<code>git push -u origin main</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>git add .</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>git branch -M main</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>Identity → repo → stage → commit → name the branch → link GitHub → push.</p><p><i>🇻🇳 Danh tính → repo → chọn → commit → đặt tên nhánh → nối GitHub → đẩy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Commit mà chưa cấu hình ⇒ \"Please tell me who you are\"."
+        },
+        {
+          "loi": "Đẩy cả node_modules vì quên .gitignore."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "remote",
+          "vi": "repo ở xa (GitHub) mà repo máy bạn liên kết tới"
+        }
+      ]
+    },
+    {
+      "title": "Git command for each need",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "status",
+        "log",
+        "clone",
+        "pull",
+        "branch"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "git",
+        "table",
+        "exercise-3"
+      ],
+      "problemHtml": "<p>Write the Git command for each situation you will meet while working on labs and the group project.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghi lệnh Git cho mỗi tình huống bạn gặp khi làm lab và dự án nhóm.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "status trả lời \"đang có gì thay đổi?\".",
+        "Tạo nhánh và chuyển sang luôn: checkout -b (hoặc switch -c)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Git command for each need\n\nAnswer in the panel on the left (no code needed).\n\n1. Command\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Git command for each need — answer key\n\n1. Command\n   - st.cmd: git status\n   - log.cmd: git log --oneline\n   - clone.cmd: git clone https://github.com/team/app.git\n   - pull.cmd: git pull\n   - branch.cmd: git checkout -b feature/login\n   switch -c is the modern spelling of checkout -b. Pull = fetch + merge.|||switch -c là cách viết mới của checkout -b. Pull = fetch + merge.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Năm lệnh này đủ cho phần lớn công việc hằng ngày; merge/rebase học khi làm nhóm.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "g",
+            "de": "Command",
+            "cot": [
+              {
+                "ma": "need",
+                "ten": "Need"
+              },
+              {
+                "ma": "cmd",
+                "ten": "Command"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "st",
+                "o": {
+                  "need": "See which files changed and what is staged"
+                }
+              },
+              {
+                "ma": "log",
+                "o": {
+                  "need": "See the commit history in one line per commit"
+                }
+              },
+              {
+                "ma": "clone",
+                "o": {
+                  "need": "Copy the group repo https://github.com/team/app.git to your computer"
+                }
+              },
+              {
+                "ma": "pull",
+                "o": {
+                  "need": "Get teammates' new commits on the current branch"
+                }
+              },
+              {
+                "ma": "branch",
+                "o": {
+                  "need": "Create and switch to a new branch feature/login"
+                }
+              }
+            ],
+            "dapAn": {
+              "st.cmd": "git status",
+              "log.cmd": [
+                "git log --oneline",
+                "git log --oneline --graph"
+              ],
+              "clone.cmd": "git clone https://github.com/team/app.git",
+              "pull.cmd": [
+                "git pull",
+                "git pull origin main"
+              ],
+              "branch.cmd": [
+                "git checkout -b feature/login",
+                "git switch -c feature/login"
+              ]
+            },
+            "giaiThich": "<p>switch -c is the modern spelling of checkout -b. Pull = fetch + merge.</p><p><i>🇻🇳 switch -c là cách viết mới của checkout -b. Pull = fetch + merge.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Làm thẳng trên main trong dự án nhóm ⇒ xung đột liên tục."
+        },
+        {
+          "loi": "Quên pull trước khi bắt đầu ⇒ code cũ, xung đột khi push."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "branch",
+          "vi": "nhánh: dòng phát triển riêng"
+        },
+        {
+          "en": "merge conflict",
+          "vi": "xung đột khi hai bên sửa cùng chỗ"
+        }
+      ]
+    },
+    {
+      "title": "Git situations: what do you do?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        ".gitignore",
+        "rejected push",
+        "merge conflict",
+        "secrets"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "git",
+        "quiz",
+        "exercise-3"
+      ],
+      "problemHtml": "<p>Five real situations from lab submissions. Choose the correct action — the wrong options are what students actually do and regret.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm tình huống thật khi nộp lab. Chọn cách xử lý đúng — các lựa chọn sai là điều sinh viên thật sự làm rồi hối hận.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không bao giờ force-push lên nhánh chung.",
+        "Lộ khoá bí mật ⇒ đổi khoá, không chỉ xoá file."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Git situations: what do you do?\n\nAnswer in the panel on the left (no code needed).\n\n1. git push says: rejected — the remote contains work that you do not have locally.\n2. You accidentally committed node_modules (200 MB).\n3. After pull you see >>>>>> in App.js.\n4. You pushed a .env file containing an API key to a public repo.\n5. Best commit message for adding the course list page:\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Git situations: what do you do? — answer key\n\n1. git push says: rejected — the remote contains work that you do not have locally.\n   Answer: b) git pull (resolve conflicts if any), then push again\n   Force would delete a teammate's commits. / Force sẽ xoá commit của bạn cùng nhóm.\n\n2. You accidentally committed node_modules (200 MB).\n   Answer: b) Add node_modules/ to .gitignore, run git rm -r --cached node_modules, commit\n   --cached removes it from Git but keeps the folder on disk. / --cached bỏ khỏi Git nhưng giữ thư mục trên máy.\n\n3. After pull you see >>>>>> in App.js.\n   Answer: b) A merge conflict: edit the file to keep the right code, remove the markers, add and commit\n   Both sides changed the same lines. / Cả hai bên sửa cùng dòng.\n\n4. You pushed a .env file containing an API key to a public repo.\n   Answer: b) Revoke/rotate the key immediately, then remove the file and add .env to .gitignore\n   History still contains the key; bots scan GitHub within minutes. / Lịch sử vẫn chứa khoá; bot quét GitHub trong vài phút.\n\n5. Best commit message for adding the course list page:\n   Answer: b) \"feat: add course list page with search\"\n   Say what and why in the imperative mood. / Nói làm gì, vì sao, dạng mệnh lệnh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đọc thông báo của Git: nó thường nói luôn lệnh nên chạy tiếp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "<code>git push</code> says: rejected — the remote contains work that you do not have locally.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "git push --force"
+              },
+              {
+                "ma": "b",
+                "noiDung": "git pull (resolve conflicts if any), then push again"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Delete the GitHub repo"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Copy files manually"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Force would delete a teammate's commits.</p><p><i>🇻🇳 Force sẽ xoá commit của bạn cùng nhóm.</i></p>"
+          },
+          {
+            "ma": "s2",
+            "de": "You accidentally committed node_modules (200 MB).",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Leave it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Add node_modules/ to .gitignore, run git rm -r --cached node_modules, commit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Delete the project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Zip it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>--cached removes it from Git but keeps the folder on disk.</p><p><i>🇻🇳 --cached bỏ khỏi Git nhưng giữ thư mục trên máy.</i></p>"
+          },
+          {
+            "ma": "s3",
+            "de": "After pull you see <<<<<<< HEAD … ======= … >>>>>>> in App.js.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Git is broken"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A merge conflict: edit the file to keep the right code, remove the markers, add and commit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Run npm install"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Revert everything"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both sides changed the same lines.</p><p><i>🇻🇳 Cả hai bên sửa cùng dòng.</i></p>"
+          },
+          {
+            "ma": "s4",
+            "de": "You pushed a .env file containing an API key to a public repo.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Delete the file in a new commit — done"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Revoke/rotate the key immediately, then remove the file and add .env to .gitignore"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Make the commit message vague"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing, nobody looks"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>History still contains the key; bots scan GitHub within minutes.</p><p><i>🇻🇳 Lịch sử vẫn chứa khoá; bot quét GitHub trong vài phút.</i></p>"
+          },
+          {
+            "ma": "s5",
+            "de": "Best commit message for adding the course list page:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"update\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"feat: add course list page with search\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"asdf\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"final final 2\""
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Say what and why in the imperative mood.</p><p><i>🇻🇳 Nói làm gì, vì sao, dạng mệnh lệnh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá cả repo rồi tạo lại khi gặp lỗi push."
+        },
+        {
+          "loi": "Commit tệp .env."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rejected (non-fast-forward)",
+          "vi": "bị từ chối vì remote có commit bạn chưa có"
+        }
+      ]
+    }
+  ]
+}

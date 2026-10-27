@@ -494,6 +494,48 @@
       "name": "Interview corner — Redux",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về Redux/RTK kèm câu trả lời mẫu."
+    },
+    {
+      "slug": "fer202-1-1-fullstack-react",
+      "name": "1.1 Full-stack & React",
+      "level": "EASY",
+      "description": "Tầng front-end/back-end/database, SPA và React giải quyết gì."
+    },
+    {
+      "slug": "fer202-1-2-git-node-npm",
+      "name": "1.2 Git, Node & npm",
+      "level": "EASY",
+      "description": "semver ^ ~ bằng JS, bảng lệnh npm, quy trình Git hằng ngày."
+    },
+    {
+      "slug": "fer202-1-3-slot1-slides",
+      "name": "1.3 Slide check — Slot 1",
+      "level": "EASY",
+      "description": "Trắc nghiệm 34 slide Slot 1."
+    },
+    {
+      "slug": "fer202-1-ex1-nodejs",
+      "name": "Exercise 1 — Install Node.js",
+      "level": "EASY",
+      "description": "Các bước cài Node LTS và đọc kết quả terminal."
+    },
+    {
+      "slug": "fer202-1-ex2-first-app",
+      "name": "Exercise 2 — Your first React app",
+      "level": "EASY",
+      "description": "Tạo app, dọn App.js, hiển thị dữ liệu và danh sách."
+    },
+    {
+      "slug": "fer202-1-ex3-git",
+      "name": "Exercise 3 — Git & GitHub",
+      "level": "EASY",
+      "description": "Lần đẩy đầu lên GitHub, lệnh Git theo tình huống, xử lý sự cố."
+    },
+    {
+      "slug": "fer202-1-interview-tooling",
+      "name": "Interview corner — React overview & tooling",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về React, npm và Git."
     }
   ]
 }

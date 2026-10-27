@@ -1,0 +1,348 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-ex2-first-app",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-ex2-first-app"
+  },
+  "exercises": [
+    {
+      "title": "Create and start a React app",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "create-react-app / Vite",
+        "dev server",
+        "hot reload"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react",
+        "order",
+        "exercise-2"
+      ],
+      "problemHtml": "<p>Order the steps from an empty folder to seeing your own text in the browser. The handout uses Create React App (<code>npx create-react-app my-app</code>); with Vite the commands are <code>npm create vite@latest</code> and <code>npm run dev</code>, but the steps are the same.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước từ thư mục trống tới khi thấy chữ của bạn trên trình duyệt. Handout dùng Create React App (<code>npx create-react-app my-app</code>); với Vite lệnh là <code>npm create vite@latest</code> và <code>npm run dev</code>, nhưng các bước giống nhau.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Phải cd vào thư mục dự án trước khi chạy npm start.",
+        "Dev server tự tải lại khi lưu tệp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Create and start a React app\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Create and start a React app — answer key\n\n1. Order the steps\n   Answer: a) npx create-react-app my-app  →  b) cd my-app  →  c) npm start  →  d) Open http://localhost:3000  →  e) Edit src/App.js, save, and watch the page update\n   Create → enter → start → open → edit. / Tạo → vào → chạy → mở → sửa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tạo dự án → vào thư mục → chạy dev server → mở localhost → sửa src/App.js và lưu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "a1",
+            "de": "Order the steps",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Open <code>http://localhost:3000</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>cd my-app</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Edit <code>src/App.js</code>, save, and watch the page update"
+              },
+              {
+                "ma": "a",
+                "noiDung": "<code>npx create-react-app my-app</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>npm start</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Create → enter → start → open → edit.</p><p><i>🇻🇳 Tạo → vào → chạy → mở → sửa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chạy npm start ở thư mục cha ⇒ \"Could not read package.json\"."
+        },
+        {
+          "loi": "Sửa tệp trong build/ thay vì src/."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dev server",
+          "vi": "máy chủ phát triển chạy trên máy, tự tải lại khi lưu"
+        }
+      ]
+    },
+    {
+      "title": "Clean up App.js: a minimal profile card",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "function component",
+        "JSX expressions",
+        "className"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react",
+        "jsx",
+        "exercise-2"
+      ],
+      "problemHtml": "<p>The generated <code>App.js</code> shows a spinning logo. Replace it with a minimal component that displays data from JavaScript constants: your name, student code and the current year computed with <code>new Date().getFullYear()</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Constants <code>name = \"Nguyen Van An\"</code>, <code>code = \"HE180001\"</code>. Card <code>div.card</code> with <code>h1#name</code>, <code>p#code</code> <code>Student code: HE180001</code>, <code>p#year</code> <code>FER202 · 2026</code> (real current year).</li>\n  <li>No logo, no <code>App.css</code> import, no leftover CRA markup.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>App.js</code> được sinh ra hiện logo quay. Thay bằng component tối giản hiển thị dữ liệu từ hằng JavaScript: tên, mã sinh viên và năm hiện tại tính bằng <code>new Date().getFullYear()</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hằng <code>name = \"Nguyen Van An\"</code>, <code>code = \"HE180001\"</code>. Thẻ <code>div.card</code> có <code>h1#name</code>, <code>p#code</code> <code>Student code: HE180001</code>, <code>p#year</code> <code>FER202 · 2026</code> (năm thật hiện tại).</li>\n  <li>Không còn logo, không import <code>App.css</code>, không sót markup mẫu của CRA.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "render",
+          "output": "Nguyen Van An · Student code: HE180001 · FER202 · <year>",
+          "explanation": "{expression} inside JSX inserts a JavaScript value.|||{biểu thức} trong JSX chèn giá trị JavaScript."
+        }
+      ],
+      "hintsJson": [
+        "const name = \"Nguyen Van An\"; … <h1 id=\"name\">{name}</h1>",
+        "JSX dùng className, không phải class."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER (bản sinh sẵn của Create React App)\nimport logo from './logo.svg';\nimport './App.css';\n\nfunction App() {\n  return (\n    <div className=\"App\">\n      <header className=\"App-header\">\n        <img src={logo} className=\"App-logo\" alt=\"logo\" />\n        <p>Edit <code>src/App.js</code> and save to reload.</p>\n      </header>\n    </div>\n  );\n}\n\nexport default App;\n"
+        },
+        {
+          "name": "src/logo.svg",
+          "language": "text",
+          "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"><circle cx=\"5\" cy=\"5\" r=\"4\"/></svg>\n"
+        },
+        {
+          "name": "src/App.css",
+          "language": "css",
+          "code": ".App { text-align: center; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — component tối giản hiển thị dữ liệu từ hằng JS\nconst name = 'Nguyen Van An';\nconst code = 'HE180001';\n\nexport default function App() {\n  const year = new Date().getFullYear();\n  return (\n    <div className=\"card\">\n      <h1 id=\"name\">{name}</h1>\n      <p id=\"code\">Student code: {code}</p>\n      <p id=\"year\">FER202 · {year}</p>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/logo.svg",
+          "language": "text",
+          "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"><circle cx=\"5\" cy=\"5\" r=\"4\"/></svg>\n"
+        },
+        {
+          "name": "src/App.css",
+          "language": "css",
+          "code": ".App { text-align: center; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Component là hàm trả về JSX. Dữ liệu nằm trong biến JavaScript và được chèn bằng <code>{}</code> — đó là ý tưởng nền của mọi bài React sau.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Name and code",
+            "kiem": "danh-sach-text",
+            "selector": "#name, #code",
+            "mongDoi": [
+              "Nguyen Van An",
+              "Student code: HE180001"
+            ]
+          },
+          {
+            "moTa": "Current year computed",
+            "kiem": "text",
+            "selector": "#year",
+            "khop": "^FER202 · 20\\d\\d$"
+          },
+          {
+            "moTa": "Card uses className",
+            "kiem": "ton-tai",
+            "selector": "div.card"
+          },
+          {
+            "an": true,
+            "moTa": "No CRA leftovers",
+            "kiem": "khong-ton-tai",
+            "selector": ".App-logo, .App-header"
+          },
+          {
+            "an": true,
+            "moTa": "Year not hard-coded",
+            "kiem": "ma-nguon",
+            "khop": "getFullYear\\(\\)"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>class=\"card\"</code> ⇒ React cảnh báo; dùng <code>className</code>."
+        },
+        {
+          "loi": "Gõ cứng năm 2026 ⇒ sang năm sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JSX expression",
+          "vi": "biểu thức JS trong cặp ngoặc nhọn của JSX"
+        }
+      ]
+    },
+    {
+      "title": "Render a list from an array",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "map",
+        "key",
+        "conditional text"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react",
+        "jsx",
+        "exercise-2"
+      ],
+      "problemHtml": "<p>Your second step: turn an array into UI. Render this semester's subjects as a list with <code>map</code>, each with a stable <code>key</code>, mark the ones you already passed, and show a summary line.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Data: FER202 (passed: false), SWT301 (true), SWR302 (true), PRO192 (false). Rows <code>li.subject</code> text <code>FER202</code> or <code>SWT301 ✓</code>; passed rows have class <code>passed</code>.</li>\n  <li><code>#summary</code>: <code>2 of 4 passed</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước thứ hai: biến mảng thành giao diện. Hiển thị các môn kỳ này thành danh sách bằng <code>map</code>, mỗi dòng có <code>key</code> ổn định, đánh dấu môn đã qua, và hiện dòng tóm tắt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dữ liệu: FER202 (passed: false), SWT301 (true), SWR302 (true), PRO192 (false). Dòng <code>li.subject</code> chữ <code>FER202</code> hoặc <code>SWT301 ✓</code>; dòng đã qua có class <code>passed</code>.</li>\n  <li><code>#summary</code>: <code>2 of 4 passed</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "render",
+          "output": "FER202 · SWT301 ✓ · SWR302 ✓ · PRO192 · 2 of 4 passed",
+          "explanation": "subjects.filter(s => s.passed).length|||subjects.filter(s => s.passed).length"
+        }
+      ],
+      "hintsJson": [
+        "{SUBJECTS.map((s) => <li key={s.code} className={s.passed ? \"subject passed\" : \"subject\"}>…</li>)}",
+        "Dấu tick: {s.passed && \" ✓\"}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst SUBJECTS = [\n  { code: 'FER202', passed: false },\n  { code: 'SWT301', passed: true },\n  { code: 'SWR302', passed: true },\n  { code: 'PRO192', passed: false },\n];\n\nexport default function App() {\n  return (\n    <ul>\n      <li className=\"subject\">{SUBJECTS[0].code}</li>\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — map mảng thành <li>, key = mã môn, tóm tắt bằng filter\nconst SUBJECTS = [\n  { code: 'FER202', passed: false },\n  { code: 'SWT301', passed: true },\n  { code: 'SWR302', passed: true },\n  { code: 'PRO192', passed: false },\n];\n\nexport default function App() {\n  const passed = SUBJECTS.filter((s) => s.passed).length;\n  return (\n    <div>\n      <ul>\n        {SUBJECTS.map((s) => (\n          <li key={s.code} className={s.passed ? 'subject passed' : 'subject'}>\n            {s.code}{s.passed && ' ✓'}\n          </li>\n        ))}\n      </ul>\n      <p id=\"summary\">{passed} of {SUBJECTS.length} passed</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>map trả mảng phần tử JSX; key (mã môn) giúp React cập nhật đúng dòng khi danh sách đổi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "All subjects rendered",
+            "kiem": "danh-sach-text",
+            "selector": "li.subject",
+            "mongDoi": [
+              "FER202",
+              "SWT301 ✓",
+              "SWR302 ✓",
+              "PRO192"
+            ]
+          },
+          {
+            "moTa": "Passed class",
+            "kiem": "so-luong",
+            "selector": "li.subject.passed",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Summary",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "2 of 4 passed"
+          },
+          {
+            "an": true,
+            "moTa": "Uses map with a key",
+            "kiem": "ma-nguon",
+            "khop": "\\.map\\([\\s\\S]*key=\\{"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thiếu <code>key</code> ⇒ cảnh báo \"Each child in a list should have a unique key\"."
+        },
+        {
+          "loi": "Dùng for/forEach trong JSX ⇒ không trả về phần tử nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key",
+          "vi": "định danh giúp React nhận ra từng phần tử danh sách"
+        }
+      ]
+    }
+  ]
+}

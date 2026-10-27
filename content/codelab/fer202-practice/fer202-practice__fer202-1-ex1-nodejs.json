@@ -1,0 +1,325 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-ex1-nodejs",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-ex1-nodejs"
+  },
+  "exercises": [
+    {
+      "title": "Install Node.js LTS and verify it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "LTS",
+        "installer",
+        "PATH",
+        "verification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "node",
+        "order",
+        "exercise-1"
+      ],
+      "problemHtml": "<p>Exercise 1 asks you to install Node.js and npm, then prove they work. Put the steps in order. (On macOS/Linux you may use a version manager such as <code>nvm</code>, but the order of ideas is the same.)</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Exercise 1 yêu cầu cài Node.js và npm rồi chứng minh chúng chạy. Hãy xếp các bước. (Trên macOS/Linux có thể dùng trình quản lý phiên bản như <code>nvm</code>, nhưng thứ tự ý tưởng vẫn vậy.)</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chọn bản LTS cho môn học: ổn định, được hỗ trợ lâu.",
+        "Terminal cũ không thấy PATH mới ⇒ mở terminal mới rồi mới kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Install Node.js LTS and verify it\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Install Node.js LTS and verify it — answer key\n\n1. Order the steps\n   Answer: a) Download the LTS installer from nodejs.org  →  b) Run the installer, keeping \"Add to PATH\" checked  →  c) Open a NEW terminal window  →  d) Run node -v and see a version such as v22.x  →  e) Run npm -v and see a version number\n   Download → install → new terminal → node -v → npm -v. / Tải → cài → terminal mới → node -v → npm -v.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tải LTS → chạy trình cài (giữ tuỳ chọn thêm vào PATH) → mở terminal MỚI → node -v → npm -v.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Order the steps",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Open a NEW terminal window"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Download the LTS installer from nodejs.org"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Run <code>npm -v</code> and see a version number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Run the installer, keeping \"Add to PATH\" checked"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Run <code>node -v</code> and see a version such as v22.x"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Download → install → new terminal → node -v → npm -v.</p><p><i>🇻🇳 Tải → cài → terminal mới → node -v → npm -v.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm trong terminal mở TRƯỚC khi cài ⇒ báo \"node is not recognized\"."
+        },
+        {
+          "loi": "Cài bản Current lẻ thay vì LTS ⇒ một số công cụ chưa hỗ trợ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LTS",
+          "vi": "Long-Term Support — bản hỗ trợ dài hạn"
+        },
+        {
+          "en": "PATH",
+          "vi": "danh sách thư mục hệ thống tìm lệnh"
+        }
+      ]
+    },
+    {
+      "title": "Read the terminal",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "node -v",
+        "npm -v",
+        "command not found"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "node",
+        "quiz",
+        "exercise-1"
+      ],
+      "problemHtml": "<p>Five terminal outputs you will meet on day one. Pick what each one means and what to do next. Reading error messages calmly is half of programming.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm kết quả terminal bạn gặp ngay ngày đầu. Chọn ý nghĩa và việc nên làm tiếp. Bình tĩnh đọc thông báo lỗi là một nửa của lập trình.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"not recognized\"/\"command not found\" ⇒ hệ thống không tìm thấy chương trình trong PATH.",
+        "Số phiên bản in ra ⇒ đã cài thành công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the terminal\n\nAnswer in the panel on the left (no code needed).\n\n1. node -v prints v22.11.0\n2. 'node' is not recognized as an internal or external command (Windows)\n3. npm -v prints 10.9.0\n4. zsh: command not found: npx on macOS right after installing\n5. Which version line should you install for FER202?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the terminal — answer key\n\n1. node -v prints v22.11.0\n   Answer: a) Node is installed; this is its version\n   v22 is an LTS line. / v22 là dòng LTS.\n\n2. 'node' is not recognized as an internal or external command (Windows)\n   Answer: b) The terminal cannot find node: open a new terminal; if still failing, add Node to PATH or reinstall\n   Usually just an old terminal session. / Thường chỉ là phiên terminal cũ.\n\n3. npm -v prints 10.9.0\n   Answer: a) npm comes with Node and works\n   npm is bundled with the Node installer. / npm đi kèm bộ cài Node.\n\n4. zsh: command not found: npx on macOS right after installing\n   Answer: b) Restart the terminal (or reload the shell profile) so PATH is refreshed\n   Same idea as on Windows. / Cùng ý như trên Windows.\n\n5. Which version line should you install for FER202?\n   Answer: b) An even-numbered LTS release\n   Even majors become LTS (18, 20, 22…). / Major chẵn trở thành LTS (18, 20, 22…).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi thông báo cho biết đúng một điều; đọc dòng đầu và tên lệnh trong đó trước.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "<code>node -v</code> prints <code>v22.11.0</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Node is installed; this is its version"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node failed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "npm is missing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "You must reinstall"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>v22 is an LTS line.</p><p><i>🇻🇳 v22 là dòng LTS.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "<code>'node' is not recognized as an internal or external command</code> (Windows)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Node is broken forever"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The terminal cannot find node: open a new terminal; if still failing, add Node to PATH or reinstall"
+              },
+              {
+                "ma": "c",
+                "noiDung": "You typed JavaScript wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "npm is too old"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Usually just an old terminal session.</p><p><i>🇻🇳 Thường chỉ là phiên terminal cũ.</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "<code>npm -v</code> prints <code>10.9.0</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "npm comes with Node and works"
+              },
+              {
+                "ma": "b",
+                "noiDung": "You must install npm separately"
+              },
+              {
+                "ma": "c",
+                "noiDung": "This is the Node version"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Error"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>npm is bundled with the Node installer.</p><p><i>🇻🇳 npm đi kèm bộ cài Node.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "<code>zsh: command not found: npx</code> on macOS right after installing",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "npx does not exist"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Restart the terminal (or reload the shell profile) so PATH is refreshed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Buy a license"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use Windows"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Same idea as on Windows.</p><p><i>🇻🇳 Cùng ý như trên Windows.</i></p>"
+          },
+          {
+            "ma": "t5",
+            "de": "Which version line should you install for FER202?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The newest \"Current\" odd release"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An even-numbered LTS release"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Any version from 2015"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It does not matter"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Even majors become LTS (18, 20, 22…).</p><p><i>🇻🇳 Major chẵn trở thành LTS (18, 20, 22…).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cài lại liên tục thay vì mở terminal mới."
+        },
+        {
+          "loi": "Bỏ qua thông báo và chép lệnh tiếp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "terminal",
+          "vi": "cửa sổ gõ lệnh"
+        }
+      ]
+    }
+  ]
+}

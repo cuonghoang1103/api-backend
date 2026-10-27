@@ -1,0 +1,452 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-1-1-fullstack-react",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-1-1-fullstack-react"
+  },
+  "exercises": [
+    {
+      "title": "Which layer does it belong to?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "front-end",
+        "back-end",
+        "database",
+        "full-stack"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fullstack",
+        "table"
+      ],
+      "problemHtml": "<p>A full-stack web app has three layers: the <b>front-end</b> (runs in the browser, draws the UI), the <b>back-end</b> (runs on a server, business rules and APIs) and the <b>database</b> (stores data). Write <code>front-end</code>, <code>back-end</code> or <code>database</code> for each item.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng dụng web full-stack có ba tầng: <b>front-end</b> (chạy trong trình duyệt, vẽ giao diện), <b>back-end</b> (chạy trên server, luật nghiệp vụ và API) và <b>database</b> (lưu dữ liệu). Ghi <code>front-end</code>, <code>back-end</code> hoặc <code>database</code> cho mỗi mục.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: đoạn mã này chạy ở đâu — trình duyệt, server, hay là nơi lưu trữ?",
+        "React Router vẫn là front-end: đổi trang ngay trong trình duyệt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which layer does it belong to?\n\nAnswer in the panel on the left (no code needed).\n\n1. Layer of each technology or task\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which layer does it belong to? — answer key\n\n1. Layer of each technology or task\n   - react.lop: front-end\n   - css.lop: front-end\n   - express.lop: back-end\n   - pg.lop: database\n   - validate.lop: back-end\n   - spring.lop: back-end\n   - mongo.lop: database\n   - router.lop: front-end\n   Anything that runs in the browser is front-end; validation must ALSO run on the server because the browser can be bypassed.|||Mọi thứ chạy trong trình duyệt là front-end; kiểm hợp lệ phải chạy CẢ ở server vì trình duyệt có thể bị vượt qua.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FER202 tập trung front-end (React). Các môn sau (PRJ301, SWD392…) đi vào back-end và database; hiểu ranh giới giúp biết lỗi nằm ở tầng nào.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "t",
+            "de": "Layer of each technology or task",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Technology / task"
+              },
+              {
+                "ma": "lop",
+                "ten": "Layer (front-end / back-end / database)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "react",
+                "o": {
+                  "x": "React components rendering a product list"
+                }
+              },
+              {
+                "ma": "css",
+                "o": {
+                  "x": "Bootstrap classes for a responsive grid"
+                }
+              },
+              {
+                "ma": "express",
+                "o": {
+                  "x": "Express route POST /api/orders"
+                }
+              },
+              {
+                "ma": "pg",
+                "o": {
+                  "x": "PostgreSQL table \"orders\""
+                }
+              },
+              {
+                "ma": "validate",
+                "o": {
+                  "x": "Checking on the server that an order total is not negative"
+                }
+              },
+              {
+                "ma": "spring",
+                "o": {
+                  "x": "Spring Boot REST controller"
+                }
+              },
+              {
+                "ma": "mongo",
+                "o": {
+                  "x": "MongoDB collection \"users\""
+                }
+              },
+              {
+                "ma": "router",
+                "o": {
+                  "x": "React Router switching pages without reload"
+                }
+              }
+            ],
+            "dapAn": {
+              "react.lop": "front-end",
+              "css.lop": "front-end",
+              "express.lop": "back-end",
+              "pg.lop": "database",
+              "validate.lop": "back-end",
+              "spring.lop": "back-end",
+              "mongo.lop": "database",
+              "router.lop": [
+                "front-end",
+                "frontend"
+              ]
+            },
+            "giaiThich": "<p>Anything that runs in the browser is front-end; validation must ALSO run on the server because the browser can be bypassed.</p><p><i>🇻🇳 Mọi thứ chạy trong trình duyệt là front-end; kiểm hợp lệ phải chạy CẢ ở server vì trình duyệt có thể bị vượt qua.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ kiểm hợp lệ ở form React là đủ — người dùng có thể gọi API trực tiếp."
+        },
+        {
+          "loi": "Nhầm Node.js chỉ là front-end vì \"cũng là JavaScript\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "full-stack",
+          "vi": "làm cả front-end lẫn back-end"
+        },
+        {
+          "en": "API",
+          "vi": "giao diện để chương trình gọi nhau (thường qua HTTP)"
+        }
+      ]
+    },
+    {
+      "title": "SPA and what React solves",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "SPA vs MPA",
+        "declarative UI",
+        "components",
+        "Virtual DOM"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fullstack",
+        "react",
+        "quiz"
+      ],
+      "problemHtml": "<p>Eight questions on single-page applications and the problems React was created to solve: keeping a complex UI in sync with changing data, reusing pieces of UI, and updating the DOM efficiently.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám câu về ứng dụng một trang và các vấn đề React ra đời để giải quyết: giữ giao diện phức tạp khớp với dữ liệu thay đổi, dùng lại các mảnh giao diện, và cập nhật DOM hiệu quả.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Declarative: mô tả giao diện TRÔNG RA SAO với state hiện tại, React lo phần cập nhật.",
+        "SPA tải một lần, sau đó chỉ trao đổi dữ liệu (JSON)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPA and what React solves\n\nAnswer in the panel on the left (no code needed).\n\n1. In a single-page application, after the first load…\n2. React is best described as…\n3. \"Declarative UI\" means…\n4. Why components? (choose all)\n5. The Virtual DOM is…\n6. Which company created and maintains React?\n7. A disadvantage of a pure client-side SPA:\n8. In FER202 you build mainly…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SPA and what React solves — answer key\n\n1. In a single-page application, after the first load…\n   Answer: b) the page stays loaded; JavaScript updates the view and fetches data (JSON)\n   That is why navigation feels instant. / Vì vậy chuyển trang có cảm giác tức thì.\n\n2. React is best described as…\n   Answer: b) a JavaScript library for building user interfaces (the view layer)\n   Routing, data fetching and state libraries are added separately. / Router, gọi dữ liệu, quản lý state được thêm riêng.\n\n3. \"Declarative UI\" means…\n   Answer: b) you describe what the UI should look like for the current state and React updates the DOM\n   Compare with jQuery-style imperative updates. / So với cách cập nhật mệnh lệnh kiểu jQuery.\n\n4. Why components? (choose all)\n   Answer: a) Reuse UI pieces + b) Split a complex page into small, testable parts + c) Each component owns its markup, logic and state\n   Components are functions that return UI. / Component là hàm trả về giao diện.\n\n5. The Virtual DOM is…\n   Answer: b) a lightweight JS description of the UI that React compares (diffs) to apply minimal real DOM changes\n   Diffing avoids rebuilding the whole page. / So sánh để không phải dựng lại cả trang.\n\n6. Which company created and maintains React?\n   Answer: b) Meta (Facebook)\n   Open-sourced in 2013. / Mở mã nguồn năm 2013.\n\n7. A disadvantage of a pure client-side SPA:\n   Answer: b) First load can be heavier and SEO needs extra care (SSR/SSG frameworks such as Next.js help)\n   Covered in the advanced chapter. / Có trong chương nâng cao.\n\n8. In FER202 you build mainly…\n   Answer: b) the front-end with React, talking to a (mock) REST API\n   json-server plays the back-end in labs. / json-server đóng vai back-end trong lab.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "In a single-page application, after the first load…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every click downloads a new HTML page"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the page stays loaded; JavaScript updates the view and fetches data (JSON)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the server renders every button"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no network is used ever again"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>That is why navigation feels instant.</p><p><i>🇻🇳 Vì vậy chuyển trang có cảm giác tức thì.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "React is best described as…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a full framework with router, HTTP and forms built in"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a JavaScript library for building user interfaces (the view layer)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a CSS framework"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Routing, data fetching and state libraries are added separately.</p><p><i>🇻🇳 Router, gọi dữ liệu, quản lý state được thêm riêng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "\"Declarative UI\" means…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "you write each DOM change step by step"
+              },
+              {
+                "ma": "b",
+                "noiDung": "you describe what the UI should look like for the current state and React updates the DOM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UI without JavaScript"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UI written in XML only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Compare with jQuery-style imperative updates.</p><p><i>🇻🇳 So với cách cập nhật mệnh lệnh kiểu jQuery.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Why components? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reuse UI pieces"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Split a complex page into small, testable parts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Each component owns its markup, logic and state"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They make the bundle disappear"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>Components are functions that return UI.</p><p><i>🇻🇳 Component là hàm trả về giao diện.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q5",
+            "de": "The Virtual DOM is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a second browser"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a lightweight JS description of the UI that React compares (diffs) to apply minimal real DOM changes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a CSS feature"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the server HTML"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Diffing avoids rebuilding the whole page.</p><p><i>🇻🇳 So sánh để không phải dựng lại cả trang.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Which company created and maintains React?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Google"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Meta (Facebook)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Microsoft"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Apple"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Open-sourced in 2013.</p><p><i>🇻🇳 Mở mã nguồn năm 2013.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "A disadvantage of a pure client-side SPA:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Navigation is slow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "First load can be heavier and SEO needs extra care (SSR/SSG frameworks such as Next.js help)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot call APIs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It cannot use CSS"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Covered in the advanced chapter.</p><p><i>🇻🇳 Có trong chương nâng cao.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "In FER202 you build mainly…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the back-end API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the front-end with React, talking to a (mock) REST API"
+              },
+              {
+                "ma": "c",
+                "noiDung": "database schemas"
+              },
+              {
+                "ma": "d",
+                "noiDung": "mobile apps"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>json-server plays the back-end in labs.</p><p><i>🇻🇳 json-server đóng vai back-end trong lab.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ React là framework đầy đủ như Angular — React là thư viện cho tầng view."
+        },
+        {
+          "loi": "Nghĩ SPA không cần server — vẫn cần API cho dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "declarative",
+          "vi": "khai báo kết quả mong muốn thay vì từng bước làm"
+        }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,8 @@ import { config } from '../../config/env.js';
 import { emailService, withFromName } from '../email.service.js';
 import { buildInviteEmail, deliverWorkEmail, emailCoverUrl, renderWorkEmail, shortLink, validReplyTo, WORK_FROM_NAME, workFromAddress } from './workEmail.js';
 import { sendWorkEmail } from './common.js';
+import { buildDigestEmail, buildGitEmail, buildMyWorkReminderEmail, buildNotifyEmail, gitSubject, loadGitEmailInput, notifySubjectVi, type GitEmailInput } from './notifyEmail.js';
+import { prisma } from '../../config/database.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const site = (config.frontendUrl || process.env.FRONTEND_URL || 'https://cuongthai.com').replace(/\/$/, '');
@@ -102,7 +104,98 @@ describe('UX-D email CT Work', () => {
     assert.equal(sent[0].fromAddress, workFromAddress());
     assert.equal(withFromName('noreply@cuongthai.com', 'A"\r\nBcc: x'), '"ABcc: x" <noreply@cuongthai.com>');
     assert.equal(validReplyTo('x@y'), false);
-    const g = renderWorkEmail({ heading: 'H', lines: [], reason: 'R' });
+    const g = renderWorkEmail({ heading: 'H', lines: [{ rich: '**x** `y<z`' }], reason: 'R' });
+    assert.ok(g.html.includes('<strong>x</strong>') && g.html.includes('y&lt;z</code>') && g.text.includes('x y<z'));
     assert.ok(g.html.includes('If you weren&#39;t expecting this email'));
+  });
+});
+
+const push: GitEmailInput = {
+  kind: 'PUSH', actor: 'Khoa Pham', provider: 'GITHUB', repo: 'cuonghoang1103/nha-tro', ref: 'nt-26-rental-dao', prNumber: null,
+  title: 'NT-26: model + khung RentalDAO', commitCount: 7,
+  commits: Array.from({ length: 7 }, (_, i) => ({ sha: `abcdef${i}0123456789`, message: i === 6 ? 'NT-26: model + khung RentalDAO\n\nchi tiết dài' : `commit <${i}>`, url: i === 0 ? null : `https://github.com/cuonghoang1103/nha-tro/commit/abcdef${i}` })),
+  externalUrl: 'https://github.com/cuonghoang1103/nha-tro/compare/a...b',
+  data: { forced: false, created: false },
+  project: { key: 'NT', name: 'Nhà trọ SV', color: '#0ea5e9' },
+  issues: [{ key: 'NT-26', title: 'RentalDAO' }],
+  url: '/work/prj301/NT/code?tab=activity&event=9',
+};
+
+describe('27/10/2026 thư thông báo CT Work tiếng Việt', () => {
+  it('Git — đẩy commit: tiêu đề Việt, tối đa 5 commit (sha mono + link), kho, nhánh, thẻ, 2 nút', () => {
+    const m = buildGitEmail(push);
+    assert.equal(m.subject, '[NT] Khoa Pham đẩy 7 commit lên nt-26-rental-dao: NT-26: model + khung RentalDAO');
+    for (const s of ['Khoa Pham đã đẩy 7 commit mới', 'nt-26-rental-dao</code>', 'Nhà trọ SV', 'cuonghoang1103/nha-tro', '>abcdef2<', '>abcdef6<', 'commit &lt;2&gt;',
+      'href="https://github.com/cuonghoang1103/nha-tro/commit/abcdef2"', '… và 2 commit trước đó', 'NT-26 · RentalDAO', 'Xem trong CT Work', 'Xem trên GitHub',
+      'href="https://github.com/cuonghoang1103/nha-tro/compare/a...b"', 'pushed 7 commits to nt-26-rental-dao', 'Cài đặt thông báo', 'tắt riêng thông báo Git']) {
+      assert.ok(m.html.includes(s), `thiếu "${s}"`);
+    }
+    assert.ok(!m.html.includes('abcdef1'), 'chỉ 5 commit mới nhất');
+    assert.ok(!m.html.includes('<2>'), 'thông điệp commit được escape');
+    assert.ok(!m.html.includes('Change how you get'), 'không còn câu tiếng Anh máy');
+    assert.ok(m.text.includes('abcdef2 commit <2>') && m.text.includes('/work/prj301/NT/code?tab=activity&event=9'));
+  });
+
+  it('Git — PR mở / merge / nhờ review; GitLab dùng MR !n', () => {
+    const pr = { ...push, kind: 'PR_OPENED', prNumber: 12, title: 'Thêm RentalDAO', commits: [], commitCount: 0, data: { headRef: 'nt-26', baseRef: 'main' } };
+    assert.equal(gitSubject(pr), '[NT] Khoa Pham mở PR #12: Thêm RentalDAO');
+    assert.ok(buildGitEmail(pr).html.includes('nt-26 → main'));
+    assert.equal(gitSubject({ ...pr, kind: 'PR_MERGED' }), '[NT] Khoa Pham đã merge PR #12: Thêm RentalDAO');
+    const rv = buildGitEmail({ ...pr, kind: 'REVIEW_REQUESTED' });
+    assert.equal(rv.subject, '[NT] Khoa Pham nhờ bạn review PR #12: Thêm RentalDAO');
+    assert.ok(rv.html.includes('được nhờ review PR #12'));
+    assert.equal(gitSubject({ ...pr, provider: 'GITLAB' }), '[NT] Khoa Pham mở MR !12: Thêm RentalDAO');
+    assert.ok(buildGitEmail({ ...pr, provider: 'GITLAB' }).html.includes('Xem trên GitLab'));
+  });
+
+  it('Git — nạp từ WorkGitEvent (prisma giả): commit JSON, compare link, thẻ liên quan', async () => {
+    const ev = {
+      kind: 'PUSH', provider: 'GITHUB', repo: 'o/r', ref: 'feat-x', prNumber: null, title: 'msg', commitCount: 2, url: 'https://github.com/o/r/commit/2',
+      commits: [{ sha: '1111111aaaa', message: 'NT-3 first', url: 'https://github.com/o/r/commit/1' }, { sha: '2222222bbbb', message: 'second' }],
+      data: { compare: 'https://github.com/o/r/compare/x...y', forced: true }, issueNumbers: [3, 3], projectId: 5, actorName: 'Git Name', actorLogin: 'gl',
+      project: { key: 'NT', name: 'Nhà trọ', color: null },
+    };
+    const p = prisma as any;
+    const keep = { g: Object.getOwnPropertyDescriptor(p, 'workGitEvent'), i: Object.getOwnPropertyDescriptor(p, 'workIssue') };
+    Object.defineProperty(p, 'workGitEvent', { configurable: true, value: { findUnique: async () => ev } });
+    Object.defineProperty(p, 'workIssue', { configurable: true, value: { findMany: async () => [{ number: 3, title: 'Đăng nhập' }] } });
+    try {
+      const g = await loadGitEmailInput(9, { actor: 'Khoa Pham', url: '/work/w/NT/code' });
+      assert.ok(g);
+      assert.equal(g!.actor, 'Khoa Pham');
+      assert.equal(g!.externalUrl, 'https://github.com/o/r/compare/x...y');
+      assert.deepEqual(g!.issues, [{ key: 'NT-3', title: 'Đăng nhập' }]);
+      assert.equal(g!.commits[1].url, null);
+      const m = buildGitEmail(g!);
+      assert.ok(m.html.includes('force push') && m.html.includes('NT-3 · Đăng nhập'));
+    } finally {
+      if (keep.g) Object.defineProperty(p, 'workGitEvent', keep.g); else delete p.workGitEvent;
+      if (keep.i) Object.defineProperty(p, 'workIssue', keep.i); else delete p.workIssue;
+    }
+  });
+
+  it('giao việc / @nhắc / trả lời / cảnh báo: tiêu đề Việt + chi tiết thẻ + trích đoạn; không "undefined"', () => {
+    const issue = { key: 'NT-24', title: 'Layout chung', projectName: 'Nhà trọ SV', projectColor: '#ea580c', type: 'Story', status: 'In Progress', priority: 2, dueDate: new Date('2026-10-30T00:00:00Z'), description: 'Header + footer' };
+    const a = buildNotifyEmail({ type: 'WORK_ASSIGN', payload: { issueKey: 'NT-24', title: 'Layout chung', url: '/work/w/NT/issue/24' }, sender: { name: 'Hoàng Cường' }, issue });
+    assert.equal(a.subject, 'NT-24 vừa được giao cho bạn: Layout chung');
+    for (const s of ['Bạn được giao một việc mới', 'Hoàng Cường', 'đã giao việc cho bạn', 'Nhà trọ SV', 'In Progress', 'Cao', '30/10/2026', 'Header + footer', 'Mở trong CT Work', 'background:#ea580c', 'was assigned to you']) assert.ok(a.html.includes(s), s);
+    const m = buildNotifyEmail({ type: 'WORK_MENTION', payload: { issueKey: 'NT-24', title: 'Layout chung', url: '/x', excerpt: '@bạn xem <giúp>' }, sender: { name: 'Khoa Pham' } });
+    assert.equal(m.subject, 'Khoa Pham nhắc bạn trong NT-24: Layout chung');
+    assert.ok(m.html.includes('@bạn xem &lt;giúp&gt;') && m.html.includes('Trả lời trong CT Work'));
+    assert.equal(notifySubjectVi('WORK_COMMENT', { issueKey: 'NT-1', title: 'T', reply: true }, 'An'), 'An trả lời bình luận của bạn trong NT-1: T');
+    assert.equal(notifySubjectVi('WORK_COMMENT', { issueKey: 'NT-1', title: 'T' }, 'An'), 'An bình luận trong NT-1: T');
+    assert.equal(notifySubjectVi('WORK_ALERT', { message: 'Grades published: Sprint 1' }), 'Grades published: Sprint 1');
+    assert.equal(notifySubjectVi('WORK_ALERT', { issueKey: 'NT-2', message: 'Bị chặn' }), 'NT-2: Bị chặn');
+    const al = buildNotifyEmail({ type: 'WORK_ALERT', payload: { message: 'Hết hạn' } });
+    assert.ok(!al.html.includes('undefined') && !al.subject.includes('undefined'));
+  });
+
+  it('thư gộp + nhắc việc buổi sáng: tiếng Việt, mỗi mục có link', () => {
+    const d = buildDigestEmail([{ subject: 'NT-1 vừa được giao cho bạn: A', url: '/work/w/NT/issue/1' }, { subject: 'B', url: null }]);
+    assert.equal(d.subject, 'Bạn có 2 cập nhật mới trong CT Work');
+    assert.ok(d.html.includes('Tóm tắt CT Work của bạn') && d.html.includes('/work/w/NT/issue/1"') && d.html.includes('Mở Việc của tôi'));
+    const r = buildMyWorkReminderEmail([{ key: 'NT-1', title: 'A', bucket: 'overdue', dueDate: '2026-10-20', url: '/work/w/NT/issue/1' }, { key: 'NT-2', title: 'B', bucket: 'today', dueDate: '2026-10-27', url: '/work/w/NT/issue/2' }]);
+    assert.equal(r.subject, 'CT Work: 2 việc cần chú ý hôm nay (1 quá hạn)');
+    assert.ok(r.html.includes('Quá hạn từ 20/10/2026') && r.html.includes('Đến hạn hôm nay'));
   });
 });

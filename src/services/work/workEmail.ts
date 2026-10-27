@@ -59,10 +59,19 @@ export interface WorkEmailParts {
   hero?: { url: string | null; color?: string | null; alt: string } | null;
   person?: { name: string; avatarUrl?: string | null; caption: string } | null;
   heading: string;
-  lines: string[];
+  /** Chuỗi thường được escape nguyên văn; `{ rich }` cho phép **đậm** và `mã` (áp SAU khi escape). */
+  lines: Array<string | { rich: string }>;
+  /** Trích dẫn (đoạn bình luận, mô tả thẻ…). */
+  quote?: { text: string; caption?: string } | null;
+  /** Danh sách có liên kết (commit Git: `mono` = sha rút gọn; thư gộp: các cập nhật). */
+  list?: { title?: string; items: Array<{ text: string; mono?: string | null; url?: string | null; meta?: string | null }>; more?: string | null } | null;
   details?: Array<{ label: string; value: string }>;
   note?: string | null;
   cta?: { label: string; url: string } | null;
+  /** Liên kết phụ cạnh nút chính (vd "Xem trên GitHub"). */
+  secondaryLink?: { label: string; url: string } | null;
+  /** Dòng chân thư "đổi cách nhận email" có liên kết tới trang cài đặt. */
+  manage?: { text: string; label: string; url: string } | null;
   /** Dòng phụ ngôn ngữ thứ hai (tiếng Anh dưới thư tiếng Việt). */
   secondary?: string[];
   /** Lý do nhận thư. */
@@ -73,6 +82,15 @@ export interface WorkEmailParts {
 
 const C = { bg: '#f4f3f0', card: '#ffffff', border: '#e7e5e0', text: '#1a1a17', muted: '#5f5e58', faint: '#8a8981', accent: '#4f5bd5', soft: '#eef0fc' };
 const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
+const MONO = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace";
+
+/** escape rồi mới áp **đậm** / `mã` — chữ người dùng không chèn được thẻ. */
+function rich(s: string): string {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, `<code class="cd" style="font-family:${MONO};font-size:13px;background:#f1f0ec;color:#2b2a26;padding:1px 5px;border-radius:4px">$1</code>`);
+}
+const plain = (l: string | { rich: string }) => (typeof l === 'string' ? l : l.rich.replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1'));
 
 export function renderWorkEmail(p: WorkEmailParts): { html: string; text: string } {
   const vi = p.lang === 'vi';
@@ -94,7 +112,20 @@ export function renderWorkEmail(p: WorkEmailParts): { html: string; text: string
 <td valign="middle" style="padding-left:10px;font:14px/1.4 ${FONT}"><div class="tx" style="color:${C.text};font-weight:600">${esc(p.person.name)}</div><div class="mu" style="color:${C.muted};font-size:13px">${esc(p.person.caption)}</div></td>
 </tr></table>`
     : '';
-  const lines = p.lines.map((l) => `<p class="tx" style="margin:0 0 14px;font:15px/1.6 ${FONT};color:${C.text}">${esc(l)}</p>`).join('');
+  const lines = p.lines.map((l) => `<p class="tx" style="margin:0 0 14px;font:15px/1.6 ${FONT};color:${C.text}">${typeof l === 'string' ? esc(l) : rich(l.rich)}</p>`).join('');
+  const quote = p.quote?.text
+    ? `${p.quote.caption ? `<p class="mu" style="margin:0 0 6px;font:13px/1.5 ${FONT};color:${C.muted}">${esc(p.quote.caption)}</p>` : ''}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px"><tr><td class="qt" style="padding:10px 14px;border-left:3px solid #c9cdf5;background:#faf9f7;border-radius:0 8px 8px 0;font:14px/1.6 ${FONT};color:${C.text};white-space:pre-line">${esc(p.quote.text)}</td></tr></table>`
+    : '';
+  const list = p.list?.items.length
+    ? `${p.list.title ? `<p class="mu" style="margin:0 0 6px;font:600 13px/1.5 ${FONT};color:${C.muted}">${esc(p.list.title)}</p>` : ''}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="box" style="margin:0 0 18px;background:#faf9f7;border:1px solid ${C.border};border-radius:10px">${p.list.items
+        .map((it, i) => {
+          const mono = it.mono ? `<span class="cd" style="font:600 12px ${MONO};color:${C.accent};background:${C.soft};padding:2px 6px;border-radius:4px">${esc(it.mono)}</span>&nbsp;&nbsp;` : '';
+          const txt = it.url ? `<a href="${esc(it.url)}" target="_blank" class="tx" style="color:${C.text};text-decoration:none">${esc(it.text)}</a>` : esc(it.text);
+          const meta = it.meta ? `<div class="mu" style="margin-top:2px;font:12px/1.5 ${FONT};color:${C.muted}">${esc(it.meta)}</div>` : '';
+          return `<tr><td class="tx rw" style="padding:10px 14px;${i ? `border-top:1px solid ${C.border};` : ''}font:14px/1.5 ${FONT};color:${C.text};word-break:break-word">${mono}${txt}${meta}</td></tr>`;
+        })
+        .join('')}${p.list.more ? `<tr><td class="mu rw" style="padding:8px 14px 10px;border-top:1px solid ${C.border};font:13px/1.5 ${FONT};color:${C.muted}">${esc(p.list.more)}</td></tr>` : ''}</table>`
+    : '';
   const details = p.details?.length
     ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="box" style="margin:6px 0 20px;background:#faf9f7;border:1px solid ${C.border};border-radius:10px">${p.details
         .map((d, i) => `<tr><td class="mu" width="38%" style="padding:${i ? 0 : 12}px 16px ${i === p.details!.length - 1 ? 12 : 8}px;font:13px/1.5 ${FONT};color:${C.muted};vertical-align:top">${esc(d.label)}</td><td class="tx" style="padding:${i ? 0 : 12}px 16px ${i === p.details!.length - 1 ? 12 : 8}px 0;font:600 14px/1.5 ${FONT};color:${C.text};vertical-align:top">${esc(d.value)}</td></tr>`)
@@ -104,6 +135,7 @@ export function renderWorkEmail(p: WorkEmailParts): { html: string; text: string
   const cta = p.cta
     ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 18px"><tr><td align="center" bgcolor="${C.accent}" style="border-radius:8px;background:${C.accent}">
 <a href="${esc(p.cta.url)}" target="_blank" style="display:inline-block;padding:13px 26px;font:600 15px ${FONT};color:#ffffff;text-decoration:none;border-radius:8px">${esc(p.cta.label)}</a></td></tr></table>
+${p.secondaryLink ? `<p class="tx" style="margin:0 0 12px;font:14px/1.6 ${FONT};color:${C.text}"><a href="${esc(p.secondaryLink.url)}" target="_blank" style="color:${C.accent};text-decoration:none;font-weight:600">${esc(p.secondaryLink.label)} &rarr;</a></p>` : ''}
 <p class="ft" style="margin:0 0 6px;font:12px/1.6 ${FONT};color:${C.faint}">${vi ? 'Nút không bấm được? Mở liên kết này:' : "Button not working? Open this link:"} <a href="${esc(p.cta.url)}" style="color:${C.accent};text-decoration:underline">${esc(shortLink(p.cta.url))}</a></p>`
     : '';
   const secondary = p.secondary?.length
@@ -127,6 +159,7 @@ export function renderWorkEmail(p: WorkEmailParts): { html: string; text: string
     .bg{background:#0f1012!important} .card{background:#17181b!important;border-color:#2b2c31!important}
     .tx{color:#ededef!important} .mu{color:#a5a5ad!important} .ft{color:#8b8b93!important}
     .box{background:#1e1f23!important;border-color:#2b2c31!important} .hr{border-color:#2b2c31!important} .chip{background:#232641!important;color:#c7ccfb!important}
+    .qt{background:#1e1f23!important;color:#ededef!important} .rw{border-color:#2b2c31!important} .cd{background:#25273a!important;color:#c7ccfb!important}
   }
   [data-ogsc] .tx{color:#ededef!important} [data-ogsc] .mu{color:#a5a5ad!important} [data-ogsb] .card{background:#17181b!important}
 </style>
@@ -139,7 +172,7 @@ ${p.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:
     <tr><td style="padding:0 4px 16px">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
         <td valign="middle"><img src="${esc(logo)}" width="28" height="28" alt="CT Work" style="display:block;width:28px;height:28px;border:0;border-radius:6px"></td>
-        <td valign="middle" class="tx" style="padding-left:9px;font:600 15px ${FONT};color:${C.text}">${esc(brand)}<span class="mu" style="font-weight:400;color:${C.muted}">&nbsp;&nbsp;by CuongThai</span></td>
+        <td valign="middle" class="tx" style="padding-left:9px;font:600 15px ${FONT};color:${C.text}">${esc(brand)}<span class="mu" style="font-weight:400;color:${C.muted}">&nbsp;&nbsp;· CuongThai.com</span></td>
       </tr></table>
     </td></tr>
     <tr><td>
@@ -148,14 +181,15 @@ ${p.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:
         <tr><td class="px" style="padding:30px 36px 30px">
           ${person}
           <h1 class="tx" style="margin:0 0 14px;font:700 21px/1.35 ${FONT};color:${C.text}">${esc(p.heading)}</h1>
-          ${lines}${details}${note}${cta}${secondary}
+          ${lines}${quote}${list}${details}${note}${cta}${secondary}
         </td></tr>
       </table>
     </td></tr>
     <tr><td class="px" style="padding:20px 8px 0;font:12px/1.65 ${FONT};color:${C.faint}">
       <p class="ft" style="margin:0 0 6px">${esc(p.reason)}</p>
-      <p class="ft" style="margin:0 0 6px">${esc(ignore)}</p>
-      <p class="ft" style="margin:0">CT Work by CuongThai · <a href="${esc(siteUrl('/work'))}" style="color:${C.faint};text-decoration:underline">cuongthai.com</a></p>
+      ${ignore ? `<p class="ft" style="margin:0 0 6px">${esc(ignore)}</p>` : ''}
+      ${p.manage ? `<p class="ft" style="margin:0 0 6px">${esc(p.manage.text)} <a href="${esc(p.manage.url)}" style="color:${C.faint};text-decoration:underline">${esc(p.manage.label)}</a></p>` : ''}
+      <p class="ft" style="margin:0">CT Work · CuongThai.com · <a href="${esc(siteUrl('/work'))}" style="color:${C.faint};text-decoration:underline">cuongthai.com/work</a></p>
     </td></tr>
   </table>
 </td></tr>
@@ -164,21 +198,25 @@ ${p.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:
 </html>`;
 
   const text = [
-    `${brand} — CuongThai`,
+    `${brand} · CuongThai.com`,
     '',
     ...(p.person ? [`${p.person.name} — ${p.person.caption}`, ''] : []),
     p.heading,
     '',
-    ...p.lines,
+    ...p.lines.map(plain),
+    ...(p.quote?.text ? ['', ...(p.quote.caption ? [p.quote.caption] : []), ...p.quote.text.split('\n').map((l) => `> ${l}`)] : []),
+    ...(p.list?.items.length ? ['', ...(p.list.title ? [p.list.title] : []), ...p.list.items.map((it) => `- ${it.mono ? `${it.mono} ` : ''}${it.text}${it.meta ? ` (${it.meta})` : ''}${it.url ? ` <${it.url}>` : ''}`), ...(p.list.more ? [p.list.more] : [])] : []),
     ...(p.details?.length ? ['', ...p.details.map((d) => `${d.label}: ${d.value}`)] : []),
     ...(p.note ? ['', p.note] : []),
     ...(p.cta ? ['', `${p.cta.label}:`, p.cta.url] : []),
+    ...(p.secondaryLink ? ['', `${p.secondaryLink.label}:`, p.secondaryLink.url] : []),
     ...(p.secondary?.length ? ['', '---', ...p.secondary] : []),
     '',
     '--',
     p.reason,
-    ignore,
-    'CT Work by CuongThai · https://cuongthai.com',
+    ...(ignore ? [ignore] : []),
+    ...(p.manage ? [`${p.manage.text} ${p.manage.label}: ${p.manage.url}`] : []),
+    'CT Work · CuongThai.com · https://cuongthai.com/work',
   ].join('\n');
   return { html, text };
 }

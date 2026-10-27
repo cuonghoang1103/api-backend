@@ -15,3 +15,18 @@ test('hộp thư giả: ngoài production mặc định không gửi; EMAIL_SAND
   assert.equal(emailSandboxReason('a@gmail.com', {} as NodeJS.ProcessEnv), 'non-production');
   assert.equal(emailSandboxReason('a@gmail.com', { NODE_ENV: 'development', EMAIL_SANDBOX: '0' } as NodeJS.ProcessEnv), null);
 });
+
+test('hộp thư giả: thư dựng trên khung chung được ghi ra $TMPDIR/ctw-email-sandbox (không gửi)', async () => {
+  const fs = await import('node:fs');
+  const os = await import('node:os');
+  const path = await import('node:path');
+  const { emailService } = await import('./email.service.js');
+  const res = await emailService.sendOtpEmail({ to: 'a@e2e.local', fullName: 'Thử', otp: '246810', type: 'verify' }) as { success: boolean; id?: string };
+  assert.equal(res.success, true);
+  assert.match(String(res.id), /^sandbox-/);
+  const file = path.join(os.tmpdir(), 'ctw-email-sandbox', `${res.id}.html`);
+  const html = fs.readFileSync(file, 'utf8');
+  assert.ok(html.includes('subject: Mã xác thực CuongThai.com: 246810'));
+  assert.ok(html.includes('https://cuongthai.com/favicon.png') && html.includes('>246810<'));
+  fs.unlinkSync(file);
+});

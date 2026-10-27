@@ -9,7 +9,8 @@
 
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
-import { frontendUrl, sendWorkEmail } from './common.js';
+import { buildMyWorkReminderEmail } from './notifyEmail.js';
+import { deliverWorkEmail } from './workEmail.js';
 import { clientScopedProjectIds, effectiveProjectRole, effectiveWorkspaceRole, portalOnlyWorkspaceIds } from './permissions.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { vnDay } from './sprints.service.js';
@@ -101,13 +102,9 @@ export async function sendMorningReminders(): Promise<number> {
       if (!urgent.length) continue;
       const user = await prisma.user.findUnique({ where: { id: r.assigneeId! }, select: { email: true, enabled: true } });
       if (!user?.enabled) continue;
-      await sendWorkEmail({
-        to: user.email,
-        subject: `CT Work: ${urgent.length} ${urgent.length === 1 ? 'issue needs' : 'issues need'} your attention today`,
-        heading: 'Your work for today',
-        lines: urgent.slice(0, 20).map((i) => `${i.key} — ${i.title} (${i.bucket === 'overdue' ? `overdue since ${i.dueDate}` : 'due today'})`),
-        cta: { label: 'Open My work', url: frontendUrl('/work?tab=my-work') },
-      });
+      // 27/10/2026: thư tiếng Việt, mỗi việc một dòng có link (notifyEmail.ts).
+      const mail = buildMyWorkReminderEmail(urgent);
+      await deliverWorkEmail({ to: user.email, subject: mail.subject, html: mail.html, text: mail.text });
       sent += 1;
     } catch (err) {
       logger.warn('[work] reminder failed', { userId: r.assigneeId, err: (err as Error).message });

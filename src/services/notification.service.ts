@@ -26,6 +26,7 @@
 
 import { prisma } from '../config/database.js';
 import { emailService } from './email.service.js';
+import { renderSiteEmail, siteUrl, vnDateTime } from './emailLayout.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
 import { logger } from '../utils/logger.js';
 
@@ -576,18 +577,42 @@ export async function nhacSapHetPro(
 
 /* ─── Email-only admin alerts (unchanged contract) ─────────── */
 
+/** Hộp thư quản trị nhận các thư báo dưới (giữ nguyên như trước). */
+const ADMIN_ALERT_INBOX = 'cuongthaihnhe176322@gmail.com';
+
+/** Thư báo quản trị "có nội dung mới chờ duyệt" trên khung chung (27/10/2026). HÀM THUẦN. */
+export function buildAdminReviewEmail(o: { kind: 'post' | 'project' | 'blog'; ref: number | string; title?: string; preview?: string; userId: number | string }) {
+  const what = { post: 'bài đăng', project: 'dự án', blog: 'bài blog' }[o.kind];
+  const path = { post: '/admin/posts', project: '/admin/projects', blog: '/admin/tech-trends' }[o.kind];
+  const { html, text } = renderSiteEmail({
+    preheader: `Có ${what} mới đang chờ duyệt${o.title ? `: ${o.title}` : ''}.`,
+    eyebrow: 'Quản trị · Chờ duyệt',
+    heading: `Có ${what} mới chờ duyệt`,
+    greeting: null,
+    blocks: [
+      { type: 'p', text: `Một ${what} vừa được gửi lên và đang chờ bạn xem xét trước khi hiển thị công khai.` },
+      { type: 'table', rows: [
+        ...(o.title ? [{ label: 'Tiêu đề', value: o.title }] : []),
+        { label: 'Mã', value: String(o.ref), mono: true },
+        { label: 'Người gửi (ID)', value: String(o.userId), mono: true },
+      ] },
+      ...(o.preview ? [{ type: 'quote' as const, caption: 'Xem trước nội dung', text: o.preview }] : []),
+      { type: 'button', label: 'Mở trang duyệt', url: siteUrl(path) },
+    ],
+    signoff: null,
+    reason: 'Bạn nhận thư này vì là quản trị viên của CuongThai.com.',
+  });
+  return { subject: `Có ${what} mới chờ duyệt${o.title ? `: ${o.title}` : ''}`.slice(0, 200), html, text };
+}
+
 /** Send admin alert when a new post is submitted */
 export async function notifyAdminPost(
-  _userId: number | string,
-  _slug: string,
-  _contentPreview?: string,
+  userId: number | string,
+  slug: string,
+  contentPreview?: string,
 ): Promise<void> {
   try {
-    await emailService.send({
-      to: 'cuongthaihnhe176322@gmail.com',
-      subject: '[CuongThai] New post submitted',
-      html: '<p>A new post has been submitted and is awaiting review.</p>',
-    });
+    await emailService.send({ to: ADMIN_ALERT_INBOX, ...buildAdminReviewEmail({ kind: 'post', ref: slug, preview: contentPreview, userId }) });
   } catch (err) {
     logger.warn('notifyAdminPost failed', { error: (err as Error).message });
   }
@@ -595,16 +620,12 @@ export async function notifyAdminPost(
 
 /** Send admin alert when a new project is submitted */
 export async function notifyAdminProject(
-  _userId: number | string,
-  _slug: string,
-  _title?: string,
+  userId: number | string,
+  slug: string,
+  title?: string,
 ): Promise<void> {
   try {
-    await emailService.send({
-      to: 'cuongthaihnhe176322@gmail.com',
-      subject: '[CuongThai] New project submitted',
-      html: '<p>A new project has been submitted and is awaiting review.</p>',
-    });
+    await emailService.send({ to: ADMIN_ALERT_INBOX, ...buildAdminReviewEmail({ kind: 'project', ref: slug, title, userId }) });
   } catch (err) {
     logger.warn('notifyAdminProject failed', { error: (err as Error).message });
   }
@@ -612,32 +633,45 @@ export async function notifyAdminProject(
 
 /** Send admin alert when a new blog post is submitted */
 export async function notifyAdminBlog(
-  _userId: number | string,
-  _slug: string,
-  _title?: string,
+  userId: number | string,
+  slug: string,
+  title?: string,
 ): Promise<void> {
   try {
-    await emailService.send({
-      to: 'cuongthaihnhe176322@gmail.com',
-      subject: '[CuongThai] New blog post submitted',
-      html: '<p>A new blog post has been submitted and is awaiting review.</p>',
-    });
+    await emailService.send({ to: ADMIN_ALERT_INBOX, ...buildAdminReviewEmail({ kind: 'blog', ref: slug, title, userId }) });
   } catch (err) {
     logger.warn('notifyAdminBlog failed', { error: (err as Error).message });
   }
 }
 
-/** Send password change confirmation email */
+/**
+ * Send password change confirmation email.
+ * ⚠️ Hiện KHÔNG nơi nào gọi, và hợp đồng cũ gửi về hộp thư quản trị (không biết email người dùng) — giữ nguyên người
+ * nhận; muốn dùng thật thì đổi tham số sang email người dùng.
+ */
 export async function notifyPasswordChanged(
-  _userId: number | string,
-  _ip?: string,
+  userId: number | string,
+  ip?: string,
 ): Promise<void> {
   try {
-    await emailService.send({
-      to: 'cuongthaihnhe176322@gmail.com',
-      subject: '[CuongThai] Password changed',
-      html: '<p>Your password was recently changed. If this wasn\'t you, please contact support immediately.</p>',
+    const { html, text } = renderSiteEmail({
+      preheader: 'Mật khẩu tài khoản vừa được thay đổi. Không phải bạn? Liên hệ hỗ trợ ngay.',
+      eyebrow: 'Bảo mật tài khoản',
+      heading: 'Mật khẩu của bạn vừa được thay đổi',
+      greeting: 'Xin chào,',
+      blocks: [
+        { type: 'p', text: 'Mật khẩu tài khoản **CuongThai.com** của bạn vừa được đổi thành công.' },
+        { type: 'table', rows: [
+          { label: 'Tài khoản (ID)', value: String(userId), mono: true },
+          { label: 'Thời gian', value: vnDateTime(new Date()) },
+          ...(ip ? [{ label: 'Địa chỉ IP', value: ip, mono: true }] : []),
+        ] },
+        { type: 'callout', tone: 'warning', title: 'Không phải bạn?', text: 'Hãy đặt lại mật khẩu ngay bằng chức năng "Quên mật khẩu" và liên hệ hỗ trợ.' },
+        { type: 'button', label: 'Đặt lại mật khẩu', url: siteUrl('/forgot-password') },
+      ],
+      reason: 'Bạn nhận thư này vì mật khẩu tài khoản CuongThai.com của bạn vừa thay đổi.',
     });
+    await emailService.send({ to: ADMIN_ALERT_INBOX, subject: 'Mật khẩu tài khoản CuongThai.com vừa được thay đổi', html, text });
   } catch (err) {
     logger.warn('notifyPasswordChanged failed', { error: (err as Error).message });
   }

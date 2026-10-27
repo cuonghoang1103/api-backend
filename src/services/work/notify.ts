@@ -20,6 +20,8 @@ import { notifyWork as pushWork } from '../notification.service.js';
 import { logger } from '../../utils/logger.js';
 import { pushPrefsFrom, type PushPrefs } from '../push/goiDayCtw.js';
 import { frontendUrl, sendWorkEmail } from './common.js';
+import { buildDigestEmail, buildGitEmail, buildNotifyEmail, loadGitEmailInput, loadIssueInfo, loadSender } from './notifyEmail.js';
+import { deliverWorkEmail } from './workEmail.js';
 import { onWorkEvent } from './events.js';
 import { clientEmailContent, clientMemberIds, registerPortalNotifications, routeForClient } from './portalNotify.js';
 
@@ -29,14 +31,6 @@ export const EMAIL_MODES = ['INSTANT', 'DIGEST', 'OFF'] as const;
 export type EmailMode = (typeof EMAIL_MODES)[number];
 
 type WorkNotifyArgs = Parameters<typeof pushWork>[0];
-
-const SUBJECT: Record<WorkNotifyArgs['type'], (p: Record<string, unknown>) => string> = {
-  WORK_INVITE: (p) => `You were added to ${p.workspaceName ?? 'a workspace'}`,
-  WORK_ASSIGN: (p) => `${p.issueKey} was assigned to you: ${p.title}`,
-  WORK_COMMENT: (p) => (p.reply ? `New reply to your comment on ${p.issueKey}: ${p.title}` : `New comment on ${p.issueKey}: ${p.title}`),
-  WORK_MENTION: (p) => `You were mentioned in ${p.issueKey}: ${p.title}`,
-  WORK_ALERT: (p) => `${p.issueKey}: ${p.message ?? 'needs your attention'}`,
-};
 
 /** Giờ hiện tại (0–23) theo múi giờ của người nhận — NULL/sai ⇒ giờ VN như trước 18/10/2026. */
 export function hourIn(tz: string | null | undefined, d = new Date()): number {
@@ -94,20 +88,16 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   if (args.receiverId === args.senderId) return;
   const settings = await getNotifySettings(args.receiverId);
   if (settings.emailMode === 'OFF') return;
-  const subject = (args.payload.portal === true ? clientEmailContent(args.payload).subject : SUBJECT[args.type](args.payload)).slice(0, 240);
   const url = typeof args.payload.url === 'string' ? args.payload.url : null;
-  if (settings.emailMode === 'DIGEST' || inQuietHours(settings.quietStart, settings.quietEnd, hourIn(settings.timezone))) {
-    await prisma.workEmailQueue.create({ data: { userId: args.receiverId, kind: args.type, subject, url } });
-    return;
-  }
-  const user = await prisma.user.findUnique({ where: { id: args.receiverId }, select: { email: true, enabled: true } });
-  if (!user?.enabled || !user.email) return;
   if (args.payload.portal === true) {
-    // Thư cho KHÁCH (cổng khách S2b): mẫu riêng, chỉ dữ liệu đã chia sẻ, link vào cổng khách.
+    // Thư cho KHÁCH (cổng khách S2b): mẫu riêng (tiếng Anh), chỉ dữ liệu đã chia sẻ, link vào cổng khách.
     const c = clientEmailContent(args.payload);
+    if (await queueIfDeferred(args, settings, c.subject.slice(0, 240), url)) return;
+    const to = await recipientEmail(args.receiverId);
+    if (!to) return;
     const project = String(args.payload.projectName ?? 'Your project');
     await sendWorkEmail({
-      to: user.email,
+      to,
       subject: `${project}: ${c.subject}`.slice(0, 240),
       heading: c.heading,
       lines: [...c.lines.filter(Boolean), 'You can change how you receive these emails in the client portal → Notification settings.'],
@@ -117,14 +107,30 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
     });
     return;
   }
-  const excerpt = typeof args.payload.excerpt === 'string' ? args.payload.excerpt : null;
-  await sendWorkEmail({
-    to: user.email,
-    subject: `CT Work: ${subject}`,
-    heading: subject,
-    lines: [excerpt ? `“${excerpt}”` : '', 'Change how you get these emails in CT Work → My work → Notification settings.'].filter(Boolean),
-    cta: url ? { label: 'Open in CT Work', url: frontendUrl(url) } : undefined,
-  });
+  // 27/10/2026: thư tiếng Việt có chi tiết — Git (secondaryEntityId = WorkGitEvent) / thẻ (entityId = thẻ) / còn lại.
+  const sender = await loadSender(args.senderId);
+  const git = args.payload.git === true && args.secondaryEntityId ? await loadGitEmailInput(args.secondaryEntityId, args.payload) : null;
+  const issue = !git && ISSUE_KINDS.has(args.type) ? await loadIssueInfo(args.entityId) : null;
+  const mail = git ? buildGitEmail(git) : buildNotifyEmail({ type: args.type, payload: args.payload, sender, issue });
+  const subject = mail.subject.slice(0, 240);
+  if (await queueIfDeferred(args, settings, subject, url)) return;
+  const to = await recipientEmail(args.receiverId);
+  if (!to) return;
+  await deliverWorkEmail({ to, subject, html: mail.html, text: mail.text });
+}
+
+const ISSUE_KINDS = new Set<WorkNotifyArgs['type']>(['WORK_ASSIGN', 'WORK_COMMENT', 'WORK_MENTION']);
+
+/** DIGEST hoặc đang giờ im lặng ⇒ dồn vào thư gộp 08:00 (true = đã dồn). */
+async function queueIfDeferred(args: WorkNotifyArgs, settings: Awaited<ReturnType<typeof getNotifySettings>>, subject: string, url: string | null): Promise<boolean> {
+  if (settings.emailMode !== 'DIGEST' && !inQuietHours(settings.quietStart, settings.quietEnd, hourIn(settings.timezone))) return false;
+  await prisma.workEmailQueue.create({ data: { userId: args.receiverId, kind: args.type, subject, url } });
+  return true;
+}
+
+async function recipientEmail(userId: number): Promise<string | null> {
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true, enabled: true } });
+  return user?.enabled && user.email ? user.email : null;
 }
 
 /**
@@ -170,13 +176,8 @@ export async function sendDigests(): Promise<number> {
       const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true, enabled: true } });
       const now = new Date();
       if (user?.enabled && user.email && items.length) {
-        await sendWorkEmail({
-          to: user.email,
-          subject: `CT Work: ${items.length} ${items.length === 1 ? 'update' : 'updates'} since your last digest`,
-          heading: 'Your CT Work digest',
-          lines: items.slice(0, 50).map((i) => `• ${i.subject}`).concat(items.length > 50 ? [`…and ${items.length - 50} more`] : []),
-          cta: { label: 'Open My work', url: frontendUrl('/work?tab=my-work') },
-        });
+        const mail = buildDigestEmail(items.map((i) => ({ subject: i.subject, url: i.url })));
+        await deliverWorkEmail({ to: user.email, subject: mail.subject, html: mail.html, text: mail.text });
         sent += 1;
       }
       await prisma.workEmailQueue.updateMany({ where: { id: { in: items.map((i) => i.id) } }, data: { sentAt: now } });

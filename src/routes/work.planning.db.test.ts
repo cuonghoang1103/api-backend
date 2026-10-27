@@ -271,7 +271,7 @@ describe('CT Work đợt 6 — HTTP + DB', { skip: !RUN }, () => {
     const t = await newIssue('Email me');
     await call(dev, 'PATCH', `/projects/${pid}/issues/${t.number}`, { assigneeId: dev2.id });
     await wait(400);
-    assert.ok(sent.some((m) => m.to === dev2.email && m.subject.includes('assigned to you')), JSON.stringify(sent));
+    assert.ok(sent.some((m) => m.to === dev2.email && m.subject.includes('vừa được giao cho bạn')), JSON.stringify(sent));
     assert.equal((await call(dev2, 'PUT', '/me/notify-settings', { quietStart: 22 })).status, 400);
     await call(dev2, 'PUT', '/me/notify-settings', { emailMode: 'DIGEST' });
     sent.length = 0;
@@ -281,7 +281,7 @@ describe('CT Work đợt 6 — HTTP + DB', { skip: !RUN }, () => {
     assert.equal(sent.filter((m) => m.to === dev2.email).length, 0, 'chế độ thư gộp không gửi ngay');
     assert.equal(await prisma.workEmailQueue.count({ where: { userId: dev2.id, sentAt: null } }), 1);
     await sendDigests();
-    assert.equal(sent.filter((m) => m.to === dev2.email && m.subject.includes('digest')).length, 1);
+    assert.equal(sent.filter((m) => m.to === dev2.email && m.subject.includes('cập nhật mới trong CT Work')).length, 1);
     assert.equal(await prisma.workEmailQueue.count({ where: { userId: dev2.id, sentAt: null } }), 0);
   });
 });

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { Resend } from 'resend';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
+import { greetingFor, renderSiteEmail, vnDateTime, type EmailBlock } from './emailLayout.js';
 
 const resend = config.resendApiKey ? new Resend(config.resendApiKey) : null;
 
@@ -113,48 +114,9 @@ export class EmailService {
     fullName?: string;
     token: string;
   }): Promise<{ success: boolean; error?: string }> {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const verifyUrl = `${frontendUrl}/verify-email?token=${opts.token}`;
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: #a78bfa; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #6366f1, #8b5cf6); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-    .link { color: #94a3b8; word-break: break-all; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Xác thực email của bạn</h1>
-    <p>${greeting}</p>
-    <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>CuongThai.com</strong>.</p>
-    <p>Vui lòng click vào nút bên dưới để xác thực email — link này có hiệu lực trong <strong>24 giờ</strong>:</p>
-    <p style="text-align: center; margin: 32px 0;">
-      <a href="${verifyUrl}" class="button">Xác thực email ngay</a>
-    </p>
-    <p>Hoặc copy link này vào trình duyệt:</p>
-    <p class="link">${verifyUrl}</p>
-    <p>Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: 'Xác thực email tài khoản CuongThai.com',
-      html,
-      text: `${greeting}\n\nVui lòng truy cập link sau để xác thực email (có hiệu lực 24h):\n${verifyUrl}\n\nNếu bạn không đăng ký, vui lòng bỏ qua email này.`,
-    });
+    const verifyUrl = `${frontendBase()}/verify-email?token=${opts.token}`;
+    const { subject, html, text } = buildVerificationEmail({ fullName: opts.fullName, verifyUrl });
+    return this.send({ to: opts.to, subject, html, text });
   }
 
   /**
@@ -168,59 +130,8 @@ export class EmailService {
     type: 'verify' | 'reset';
     ttlMinutes?: number;
   }): Promise<{ success: boolean; error?: string }> {
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-    const isVerify = opts.type === 'verify';
-    const ttl = opts.ttlMinutes ?? (isVerify ? 5 : 10);
-    const heading = isVerify ? 'Xác thực email của bạn' : 'Đặt lại mật khẩu';
-    const intro = isVerify
-      ? 'Cảm ơn bạn đã đăng ký tài khoản tại CuongThai.com. Sử dụng mã bên dưới để xác thực email:'
-      : 'Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Sử dụng mã bên dưới để tiếp tục:';
-    const footer = isVerify
-      ? 'Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.'
-      : 'Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này. Tài khoản của bạn vẫn an toàn.';
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: ${isVerify ? '#a78bfa' : '#f59e0b'}; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .otp-box { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #4338ca; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
-    .otp-code { font-size: 40px; font-weight: 800; letter-spacing: 12px; color: #c4b5fd; font-family: 'SF Mono', Monaco, Consolas, monospace; }
-    .otp-ttl { color: #94a3b8; font-size: 13px; margin-top: 12px; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-    .warning { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 12px; color: #fca5a5; font-size: 14px; margin-top: 16px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>${heading}</h1>
-    <p>${greeting}</p>
-    <p>${intro}</p>
-    <div class="otp-box">
-      <div class="otp-code">${opts.otp}</div>
-      <div class="otp-ttl">Mã có hiệu lực trong ${ttl} phút</div>
-    </div>
-    ${!isVerify ? `
-    <div class="warning">
-      <strong>Cảnh báo bảo mật:</strong> Không chia sẻ mã này cho bất kỳ ai. Nhân viên CuongThai.com sẽ không bao giờ yêu cầu mã này.
-    </div>` : ''}
-    <p>${footer}</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: `${heading} — Mã xác thực ${opts.otp}`,
-      html,
-      text: `${greeting}\n\n${isVerify ? 'Mã xác thực email' : 'Mã đặt lại mật khẩu'} của bạn: ${opts.otp}\n\nMã có hiệu lực trong ${ttl} phút.\n\n${footer}`,
-    });
+    const { subject, html, text } = buildOtpEmail(opts);
+    return this.send({ to: opts.to, subject, html, text });
   }
 
   /**
@@ -232,50 +143,9 @@ export class EmailService {
     fullName?: string;
     token: string;
   }): Promise<{ success: boolean; error?: string }> {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const resetUrl = `${frontendUrl}/reset-password?token=${opts.token}`;
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: #f59e0b; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #f59e0b, #ef4444); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-    .warning { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 12px; color: #fca5a5; font-size: 14px; }
-    .link { color: #94a3b8; word-break: break-all; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Đặt lại mật khẩu</h1>
-    <p>${greeting}</p>
-    <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Click nút bên dưới để tạo mật khẩu mới — link có hiệu lực trong <strong>1 giờ</strong>:</p>
-    <p style="text-align: center; margin: 32px 0;">
-      <a href="${resetUrl}" class="button">Đặt lại mật khẩu</a>
-    </p>
-    <p>Hoặc copy link:</p>
-    <p class="link">${resetUrl}</p>
-    <div class="warning">
-      <strong>Cảnh báo bảo mật:</strong> Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này. Tài khoản của bạn vẫn an toàn.
-    </div>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: 'Đặt lại mật khẩu — CuongThai.com',
-      html,
-      text: `${greeting}\n\nTruy cập link sau để đặt lại mật khẩu (có hiệu lực 1h):\n${resetUrl}\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.`,
-    });
+    const resetUrl = `${frontendBase()}/reset-password?token=${opts.token}`;
+    const { subject, html, text } = buildPasswordResetEmail({ fullName: opts.fullName, resetUrl });
+    return this.send({ to: opts.to, subject, html, text });
   }
 
   /**
@@ -283,84 +153,9 @@ export class EmailService {
    * Includes order code, amount, and a deep link to the learn page so
    * the user can start watching the course right away.
    */
-  async sendCourseReceiptEmail(opts: {
-    to: string;
-    fullName?: string;
-    orderCode: string;
-    courseTitle: string;
-    courseSlug: string;
-    amount: number;
-    paidAt: Date;
-  }): Promise<{ success: boolean; error?: string }> {
-    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
-    const learnUrl = `${frontendUrl}/courses/${opts.courseSlug}/learn`;
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-    const formattedAmount = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(opts.amount);
-    const paidAtStr = new Intl.DateTimeFormat('vi-VN', {
-      dateStyle: 'long',
-      timeStyle: 'short',
-    }).format(opts.paidAt);
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: #34d399; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #10b981, #34d399); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
-    .receipt { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
-    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .receipt-row:last-child { border-bottom: none; }
-    .receipt-label { color: #94a3b8; font-size: 14px; }
-    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Thanh toán thành công!</h1>
-    <p>${greeting}</p>
-    <p>Cảm ơn bạn đã đăng ký khóa học tại <strong>CuongThai.com</strong>. Đơn hàng của bạn đã được xác nhận và khóa học đã được mở khóa trong tài khoản.</p>
-    <div class="receipt">
-      <div class="receipt-row">
-        <span class="receipt-label">Khóa học</span>
-        <span class="receipt-value">${opts.courseTitle}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Mã đơn hàng</span>
-        <span class="receipt-value">${opts.orderCode}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Số tiền</span>
-        <span class="receipt-value">${formattedAmount}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Thời gian</span>
-        <span class="receipt-value">${paidAtStr}</span>
-      </div>
-    </div>
-    <p style="text-align: center; margin: 32px 0;">
-      <a href="${learnUrl}" class="button">Vào học ngay</a>
-    </p>
-    <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng phản hồi email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: `Xác nhận thanh toán — ${opts.courseTitle}`,
-      html,
-      text: `${greeting}\n\nCảm ơn bạn đã mua khóa học "${opts.courseTitle}".\n\nMã đơn: ${opts.orderCode}\nSố tiền: ${formattedAmount}\nThời gian: ${paidAtStr}\n\nVào học ngay: ${learnUrl}`,
-    });
+  async sendCourseReceiptEmail(opts: CourseReceiptInput & { to: string }): Promise<{ success: boolean; error?: string }> {
+    const { subject, html, text } = buildCourseReceiptEmail(opts);
+    return this.send({ to: opts.to, subject, html, text });
   }
 
   /**
@@ -368,86 +163,9 @@ export class EmailService {
    * Digital orders point to the delivery on /my-orders; physical orders
    * confirm the shipping address and that the order is being prepared.
    */
-  async sendShopReceiptEmail(opts: {
-    to: string;
-    fullName?: string;
-    orderCode: string;
-    orderType: string; // PHYSICAL | DIGITAL | MIXED
-    items: Array<{ name: string; quantity: number; total: number }>;
-    subtotal: number;
-    shippingFee: number;
-    total: number;
-    paidAt: Date;
-    shippingAddress?: string | null;
-  }): Promise<{ success: boolean; error?: string }> {
-    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
-    const ordersUrl = `${frontendUrl}/my-orders`;
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-    const money = (n: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
-    const paidAtStr = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'long', timeStyle: 'short' }).format(opts.paidAt);
-    const hasPhysical = opts.orderType === 'PHYSICAL' || opts.orderType === 'MIXED';
-    const hasDigital = opts.orderType === 'DIGITAL' || opts.orderType === 'MIXED';
-
-    const itemRows = opts.items.map((it) => `
-      <div class="receipt-row">
-        <span class="receipt-label">${it.name} × ${it.quantity}</span>
-        <span class="receipt-value">${money(it.total)}</span>
-      </div>`).join('');
-
-    const deliveryNote = hasPhysical
-      ? `<p>Đơn hàng của bạn đang được <strong>chuẩn bị và đóng gói</strong>. Chúng tôi sẽ cập nhật trạng thái giao hàng${opts.shippingAddress ? ` tới: <strong>${opts.shippingAddress}</strong>` : ''}.</p>`
-      : '';
-    const digitalNote = hasDigital
-      ? '<p>Sản phẩm số của bạn đã sẵn sàng — mở mục <strong>Đơn hàng của tôi</strong> để tải file / xem tài khoản-mã và hướng dẫn sử dụng.</p>'
-      : '';
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: #a78bfa; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .button { display: inline-block; padding: 14px 32px; background: linear-gradient(90deg, #6366f1, #a855f7); color: #fff !important; text-decoration: none; border-radius: 12px; font-weight: 600; margin: 16px 0; }
-    .receipt { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
-    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .receipt-row:last-child { border-bottom: none; }
-    .receipt-label { color: #94a3b8; font-size: 14px; }
-    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Đặt hàng thành công!</h1>
-    <p>${greeting}</p>
-    <p>Cảm ơn bạn đã mua sắm tại <strong>CuongThai</strong>. Đơn hàng <strong>${opts.orderCode}</strong> đã được thanh toán.</p>
-    <div class="receipt">
-      ${itemRows}
-      <div class="receipt-row"><span class="receipt-label">Tạm tính</span><span class="receipt-value">${money(opts.subtotal)}</span></div>
-      ${opts.shippingFee > 0 ? `<div class="receipt-row"><span class="receipt-label">Phí giao hàng</span><span class="receipt-value">${money(opts.shippingFee)}</span></div>` : ''}
-      <div class="receipt-row"><span class="receipt-label">Tổng cộng</span><span class="receipt-value">${money(opts.total)}</span></div>
-      <div class="receipt-row"><span class="receipt-label">Thời gian</span><span class="receipt-value">${paidAtStr}</span></div>
-    </div>
-    ${digitalNote}
-    ${deliveryNote}
-    <p style="text-align: center; margin: 32px 0;">
-      <a href="${ordersUrl}" class="button">Xem đơn hàng của tôi</a>
-    </p>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: `Xác nhận đơn hàng — ${opts.orderCode}`,
-      html,
-      text: `${greeting}\n\nĐơn hàng ${opts.orderCode} đã thanh toán.\nTổng cộng: ${money(opts.total)}\nThời gian: ${paidAtStr}\n\nXem đơn hàng: ${ordersUrl}`,
-    });
+  async sendShopReceiptEmail(opts: ShopReceiptInput & { to: string }): Promise<{ success: boolean; error?: string }> {
+    const { subject, html, text } = buildShopReceiptEmail(opts);
+    return this.send({ to: opts.to, subject, html, text });
   }
 
   /**
@@ -457,93 +175,190 @@ export class EmailService {
    * the actual bank transfer happens via VNPay's settlement, not from
    * our system.
    */
-  async sendCourseRefundEmail(opts: {
-    to: string;
-    fullName?: string;
-    orderCode: string;
-    courseTitle: string;
-    refundAmount: number;
-    originalAmount: number;
-    reason: string;
-    refundedAt: Date;
-  }): Promise<{ success: boolean; error?: string }> {
-    const greeting = opts.fullName ? `Xin chào ${opts.fullName},` : 'Xin chào,';
-    const formattedRefund = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(opts.refundAmount);
-    const formattedOriginal = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(opts.originalAmount);
-    const isPartial = opts.refundAmount < opts.originalAmount;
-    const refundedAtStr = new Intl.DateTimeFormat('vi-VN', {
-      dateStyle: 'long',
-      timeStyle: 'short',
-    }).format(opts.refundedAt);
-
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 40px 0; }
-    .container { max-width: 560px; margin: 0 auto; background: #1a1b2e; border-radius: 16px; padding: 40px; }
-    h1 { color: #f59e0b; font-size: 24px; margin: 0 0 16px; }
-    p { color: #cbd5e1; line-height: 1.6; margin: 0 0 16px; }
-    .receipt { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 20px; margin: 24px 0; }
-    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .receipt-row:last-child { border-bottom: none; }
-    .receipt-label { color: #94a3b8; font-size: 14px; }
-    .receipt-value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
-    .reason-box { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; font-size: 14px; color: #e2e8f0; margin: 12px 0; }
-    .footer { color: #64748b; font-size: 12px; margin-top: 32px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>${isPartial ? 'Hoàn tiền một phần' : 'Hoàn tiền thành công'}</h1>
-    <p>${greeting}</p>
-    <p>Đơn hàng của bạn đã được admin xử lý hoàn tiền. Vui lòng kiểm tra thông tin bên dưới:</p>
-    <div class="receipt">
-      <div class="receipt-row">
-        <span class="receipt-label">Khóa học</span>
-        <span class="receipt-value">${opts.courseTitle}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Mã đơn hàng</span>
-        <span class="receipt-value">${opts.orderCode}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Số tiền gốc</span>
-        <span class="receipt-value">${formattedOriginal}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Số tiền hoàn</span>
-        <span class="receipt-value">${formattedRefund}</span>
-      </div>
-      <div class="receipt-row">
-        <span class="receipt-label">Thời gian</span>
-        <span class="receipt-value">${refundedAtStr}</span>
-      </div>
-    </div>
-    <p><strong>Lý do hoàn tiền:</strong></p>
-    <div class="reason-box">${opts.reason}</div>
-    <p>Tiền sẽ được chuyển về phương thức thanh toán ban đầu trong vòng 3-7 ngày làm việc (tuỳ ngân hàng).</p>
-    <p>Nếu bạn có thắc mắc, vui lòng phản hồi email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
-  </div>
-</body>
-</html>`.trim();
-
-    return this.send({
-      to: opts.to,
-      subject: `Hoàn tiền khoá học — ${opts.courseTitle}`,
-      html,
-      text: `${greeting}\n\nĐơn hàng "${opts.courseTitle}" đã được hoàn tiền.\n\nMã đơn: ${opts.orderCode}\nSố tiền gốc: ${formattedOriginal}\nSố tiền hoàn: ${formattedRefund}\nLý do: ${opts.reason}\nThời gian: ${refundedAtStr}\n\nTiền sẽ được chuyển về phương thức ban đầu trong 3-7 ngày làm việc.`,
-    });
+  async sendCourseRefundEmail(opts: CourseRefundInput & { to: string }): Promise<{ success: boolean; error?: string }> {
+    const { subject, html, text } = buildCourseRefundEmail(opts);
+    return this.send({ to: opts.to, subject, html, text });
   }
 }
 
 export const emailService = new EmailService();
+
+// ─── Mẫu thư (27/10/2026) — HÀM THUẦN, dựng trên khung chung emailLayout.ts ─────────────────────────────────────────
+
+type Built = { subject: string; html: string; text: string };
+
+/** Gốc frontend cho link trong thư (giữ hành vi cũ: thiếu FRONTEND_URL ⇒ localhost khi dev). */
+function frontendBase(): string {
+  return (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
+}
+const vnd = (n: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
+const vnTime = vnDateTime;
+
+export function buildVerificationEmail(o: { fullName?: string; verifyUrl: string }): Built {
+  const { html, text } = renderSiteEmail({
+    preheader: 'Bấm nút trong thư để kích hoạt tài khoản. Liên kết có hiệu lực 24 giờ.',
+    eyebrow: 'Kích hoạt tài khoản',
+    heading: 'Xác thực địa chỉ email của bạn',
+    greeting: greetingFor(o.fullName),
+    blocks: [
+      { type: 'p', text: 'Cảm ơn bạn đã đăng ký tài khoản **CuongThai.com**. Chỉ còn một bước nữa: xác nhận đây đúng là email của bạn.' },
+      { type: 'button', label: 'Xác thực email', url: o.verifyUrl },
+      { type: 'callout', tone: 'info', text: 'Liên kết có hiệu lực trong **24 giờ** và chỉ dùng được một lần.' },
+      { type: 'p', muted: true, text: 'Nếu bạn không đăng ký tài khoản này, cứ bỏ qua thư — sẽ không có tài khoản nào được kích hoạt.' },
+    ],
+    reason: 'Bạn nhận thư này vì địa chỉ email này vừa được dùng để đăng ký tài khoản trên CuongThai.com.',
+  });
+  return { subject: 'Xác thực email tài khoản CuongThai.com', html, text };
+}
+
+export function buildOtpEmail(o: { fullName?: string; otp: string; type: 'verify' | 'reset'; ttlMinutes?: number }): Built {
+  const isVerify = o.type === 'verify';
+  const ttl = o.ttlMinutes ?? (isVerify ? 5 : 10);
+  const { html, text } = renderSiteEmail({
+    preheader: `${isVerify ? 'Mã xác thực email' : 'Mã đặt lại mật khẩu'} của bạn là ${o.otp} — hiệu lực ${ttl} phút.`,
+    eyebrow: isVerify ? 'Xác thực email' : 'Bảo mật tài khoản',
+    heading: isVerify ? 'Mã xác thực email của bạn' : 'Mã đặt lại mật khẩu',
+    greeting: greetingFor(o.fullName),
+    blocks: [
+      { type: 'p', text: isVerify
+        ? 'Cảm ơn bạn đã đăng ký **CuongThai.com**. Nhập mã dưới đây vào màn hình xác thực để kích hoạt tài khoản:'
+        : 'Chúng tôi vừa nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nhập mã dưới đây để tiếp tục:' },
+      { type: 'code', code: o.otp, caption: `Mã có hiệu lực trong ${ttl} phút` },
+      { type: 'callout', tone: isVerify ? 'info' : 'warning', title: isVerify ? undefined : 'Lưu ý bảo mật:',
+        text: 'Không chia sẻ mã này với bất kỳ ai. CuongThai.com không bao giờ hỏi mã qua tin nhắn, điện thoại hay email.' },
+      { type: 'p', muted: true, text: isVerify
+        ? 'Nếu bạn không đăng ký tài khoản này, cứ bỏ qua thư.'
+        : 'Nếu bạn không yêu cầu đặt lại mật khẩu, cứ bỏ qua thư — mật khẩu hiện tại vẫn giữ nguyên và tài khoản của bạn vẫn an toàn.' },
+    ],
+    reason: isVerify
+      ? 'Bạn nhận thư này vì địa chỉ email này vừa được dùng để đăng ký tài khoản trên CuongThai.com.'
+      : 'Bạn nhận thư này vì có yêu cầu đặt lại mật khẩu cho tài khoản CuongThai.com gắn với email này.',
+  });
+  return { subject: `${isVerify ? 'Mã xác thực' : 'Mã đặt lại mật khẩu'} CuongThai.com: ${o.otp}`, html, text };
+}
+
+export function buildPasswordResetEmail(o: { fullName?: string; resetUrl: string }): Built {
+  const { html, text } = renderSiteEmail({
+    preheader: 'Bấm nút trong thư để tạo mật khẩu mới. Liên kết có hiệu lực 1 giờ.',
+    eyebrow: 'Bảo mật tài khoản',
+    heading: 'Đặt lại mật khẩu',
+    greeting: greetingFor(o.fullName),
+    blocks: [
+      { type: 'p', text: 'Chúng tôi vừa nhận được yêu cầu đặt lại mật khẩu cho tài khoản **CuongThai.com** của bạn. Bấm nút dưới đây để tạo mật khẩu mới:' },
+      { type: 'button', label: 'Tạo mật khẩu mới', url: o.resetUrl },
+      { type: 'callout', tone: 'info', text: 'Liên kết có hiệu lực trong **1 giờ** và chỉ dùng được một lần.' },
+      { type: 'callout', tone: 'warning', title: 'Không phải bạn?', text: 'Cứ bỏ qua thư này — mật khẩu hiện tại vẫn giữ nguyên. Nếu bạn liên tục nhận thư như thế này, hãy liên hệ hỗ trợ.' },
+    ],
+    reason: 'Bạn nhận thư này vì có yêu cầu đặt lại mật khẩu cho tài khoản CuongThai.com gắn với email này.',
+  });
+  return { subject: 'Đặt lại mật khẩu tài khoản CuongThai.com', html, text };
+}
+
+export interface CourseReceiptInput {
+  fullName?: string;
+  orderCode: string;
+  courseTitle: string;
+  courseSlug: string;
+  amount: number;
+  paidAt: Date;
+}
+
+export function buildCourseReceiptEmail(o: CourseReceiptInput): Built {
+  const learnUrl = `${frontendBase()}/courses/${o.courseSlug}/learn`;
+  const amount = vnd(o.amount);
+  const paidAt = vnTime(o.paidAt);
+  const { html, text } = renderSiteEmail({
+    preheader: `Đơn ${o.orderCode} đã thanh toán ${amount}. Khoá học "${o.courseTitle}" đã sẵn sàng.`,
+    eyebrow: 'Xác nhận thanh toán',
+    heading: 'Khoá học của bạn đã sẵn sàng',
+    greeting: greetingFor(o.fullName),
+    blocks: [
+      { type: 'p', text: `Cảm ơn bạn đã tin chọn **CuongThai.com**. Thanh toán đã được xác nhận và khoá học **${o.courseTitle.replace(/\*/g, '')}** đã được mở trong tài khoản của bạn — bạn có thể bắt đầu học ngay.` },
+      { type: 'table', title: 'Chi tiết đơn hàng', rows: [
+        { label: 'Khoá học', value: o.courseTitle },
+        { label: 'Mã đơn hàng', value: o.orderCode, mono: true },
+        { label: 'Thời gian', value: paidAt },
+      ], total: { label: 'Đã thanh toán', value: amount } },
+      { type: 'button', label: 'Vào học ngay', url: learnUrl },
+      { type: 'p', muted: true, text: 'Hãy giữ thư này làm biên nhận. Khoá học luôn có trong mục **Khoá học của tôi** khi bạn đăng nhập.' },
+    ],
+    reason: 'Bạn nhận thư này vì vừa thanh toán một khoá học trên CuongThai.com.',
+  });
+  return { subject: `Xác nhận thanh toán khoá học ${o.courseTitle}`, html, text };
+}
+
+export interface ShopReceiptInput {
+  fullName?: string;
+  orderCode: string;
+  orderType: string; // PHYSICAL | DIGITAL | MIXED
+  items: Array<{ name: string; quantity: number; total: number }>;
+  subtotal: number;
+  shippingFee: number;
+  total: number;
+  paidAt: Date;
+  shippingAddress?: string | null;
+}
+
+export function buildShopReceiptEmail(o: ShopReceiptInput): Built {
+  const ordersUrl = `${frontendBase()}/my-orders`;
+  const hasPhysical = o.orderType === 'PHYSICAL' || o.orderType === 'MIXED';
+  const hasDigital = o.orderType === 'DIGITAL' || o.orderType === 'MIXED';
+  const blocks: EmailBlock[] = [
+    { type: 'p', text: `Cảm ơn bạn đã mua sắm tại **CuongThai.com**. Đơn hàng **${o.orderCode.replace(/\*/g, '')}** đã được thanh toán thành công.` },
+    { type: 'table', title: 'Chi tiết đơn hàng', rows: [
+      ...o.items.map((it) => ({ label: `${it.name} × ${it.quantity}`, value: vnd(it.total) })),
+      { label: 'Tạm tính', value: vnd(o.subtotal) },
+      ...(o.shippingFee > 0 ? [{ label: 'Phí giao hàng', value: vnd(o.shippingFee) }] : []),
+      { label: 'Thời gian', value: vnTime(o.paidAt) },
+    ], total: { label: 'Tổng cộng', value: vnd(o.total) } },
+  ];
+  if (hasDigital) blocks.push({ type: 'callout', tone: 'success', title: 'Sản phẩm số đã sẵn sàng.', text: 'Mở mục **Đơn hàng của tôi** để tải tệp, xem tài khoản/mã và hướng dẫn sử dụng.' });
+  if (hasPhysical) {
+    blocks.push({ type: 'callout', tone: 'info', title: 'Đang chuẩn bị hàng.', text: 'Đơn hàng đang được đóng gói. Chúng tôi sẽ cập nhật trạng thái giao hàng trong mục Đơn hàng của tôi.' });
+    if (o.shippingAddress) blocks.push({ type: 'quote', caption: 'Giao tới', text: o.shippingAddress });
+  }
+  blocks.push({ type: 'button', label: 'Xem đơn hàng của tôi', url: ordersUrl });
+  const { html, text } = renderSiteEmail({
+    preheader: `Đơn ${o.orderCode} đã thanh toán ${vnd(o.total)}.${hasDigital ? ' Sản phẩm số đã sẵn sàng.' : ''}`,
+    eyebrow: 'Xác nhận đơn hàng',
+    heading: 'Đặt hàng thành công',
+    greeting: greetingFor(o.fullName),
+    blocks,
+    reason: 'Bạn nhận thư này vì vừa đặt và thanh toán một đơn hàng trên CuongThai.com.',
+  });
+  return { subject: `Xác nhận đơn hàng ${o.orderCode} — CuongThai.com`, html, text };
+}
+
+export interface CourseRefundInput {
+  fullName?: string;
+  orderCode: string;
+  courseTitle: string;
+  refundAmount: number;
+  originalAmount: number;
+  reason: string;
+  refundedAt: Date;
+}
+
+export function buildCourseRefundEmail(o: CourseRefundInput): Built {
+  const isPartial = o.refundAmount < o.originalAmount;
+  const refund = vnd(o.refundAmount);
+  const { html, text } = renderSiteEmail({
+    preheader: `${isPartial ? 'Hoàn một phần' : 'Hoàn tiền'} ${refund} cho đơn ${o.orderCode}.`,
+    eyebrow: 'Hoàn tiền',
+    heading: isPartial ? 'Đã hoàn tiền một phần' : 'Đã hoàn tiền cho đơn hàng của bạn',
+    greeting: greetingFor(o.fullName),
+    blocks: [
+      { type: 'p', text: `Yêu cầu hoàn tiền cho khoá học **${o.courseTitle.replace(/\*/g, '')}** đã được xử lý. Thông tin chi tiết:` },
+      { type: 'table', rows: [
+        { label: 'Khoá học', value: o.courseTitle },
+        { label: 'Mã đơn hàng', value: o.orderCode, mono: true },
+        { label: 'Số tiền gốc', value: vnd(o.originalAmount) },
+        { label: 'Thời gian xử lý', value: vnTime(o.refundedAt) },
+      ], total: { label: 'Số tiền hoàn', value: refund } },
+      { type: 'quote', caption: 'Lý do hoàn tiền', text: o.reason },
+      { type: 'callout', tone: 'info', text: 'Tiền được chuyển về phương thức thanh toán ban đầu, thường trong **3–7 ngày làm việc** tuỳ ngân hàng.' },
+    ],
+    reason: 'Bạn nhận thư này vì một đơn hàng của bạn trên CuongThai.com vừa được hoàn tiền.',
+  });
+  return { subject: `${isPartial ? 'Hoàn tiền một phần' : 'Hoàn tiền'} khoá học ${o.courseTitle}`, html, text };
+}

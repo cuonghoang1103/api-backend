@@ -257,8 +257,11 @@ describe('CTW Code — HTTP + DB', { skip: !RUN }, () => {
     return Promise.resolve(h(404, { message: 'Not Found' }));
   }
 
+  // 27/10/2026: thư thông báo Git tiếng Việt (notifyEmail.ts) — bắt lại để kiểm nội dung.
+  const mails: Array<{ to: string; subject: string; html: string }> = [];
+
   before(async () => {
-    (emailService as any).send = async () => ({ success: true });
+    (emailService as any).send = async (m: any) => { mails.push({ to: m.to, subject: m.subject, html: m.html ?? '' }); return { success: true }; };
     __setGitFetchForTests(mockFetch as never);
     const { default: workRoutes } = await import('./work.routes.js');
     const app = express();
@@ -323,6 +326,10 @@ describe('CTW Code — HTTP + DB', { skip: !RUN }, () => {
     assert.equal((await prisma.workGitBranch.findFirst({ where: { projectId: pid, name: `feature/gc-${issueNum}-login` } }))?.commitCount, 3);
     const ev = await prisma.workGitEvent.findFirst({ where: { projectId: pid, ref: `feature/gc-${issueNum}-login` } });
     assert.deepEqual(ev?.issueNumbers, [issueNum]);
+    // Thư cho người được giao: tiêu đề Việt, danh sách commit, thẻ liên quan.
+    assert.ok(await settle(async () => mails.some((m) => m.to === dev2.email && /đẩy 3 commit lên feature\/gc-/.test(m.subject))), JSON.stringify(mails.map((m) => m.subject)));
+    const m = mails.find((x) => x.to === dev2.email && /đẩy 3 commit/.test(x.subject))!;
+    assert.ok(m.html.includes(`GC-${issueNum} validate`) && m.html.includes(`GC-${issueNum} ·`) && m.html.includes('Xem trong CT Work'), 'thư Git có commit + thẻ + nút');
   });
 
   it('QA 18/10: chữ ký webhook GitHub SAI ⇒ 401, không ghi sự kiện nào', async () => {

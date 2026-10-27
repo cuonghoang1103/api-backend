@@ -9,6 +9,7 @@
  */
 import { prisma } from '../config/database.js';
 import { emailService } from './email.service.js';
+import { greetingFor, renderSiteEmail } from './emailLayout.js';
 import { logger } from '../utils/logger.js';
 
 const TZ_OFFSET_MS = 7 * 60 * 60 * 1000; // Asia/Ho_Chi_Minh
@@ -18,20 +19,25 @@ function dayStr(d: Date): string {
   return new Date(d.getTime() + TZ_OFFSET_MS).toISOString().slice(0, 10);
 }
 
-function reminderHtml(name: string, streak: number, languageName: string, code: string): string {
-  const base = process.env.FRONTEND_URL || 'http://localhost:3000';
+/** Thư nhắc luyện tập trên khung chung (27/10/2026). HÀM THUẦN. */
+export function buildReminderEmail(name: string, streak: number, languageName: string, code: string): { subject: string; html: string; text: string } {
+  const base = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
   const url = `${base}/language/${code}/practice`;
-  const streakLine = streak > 0
-    ? `Bạn đang có chuỗi <strong>${streak} ngày</strong> — đừng để mất nhé!`
-    : `Học một chút hôm nay để bắt đầu chuỗi ngày của bạn nhé!`;
-  return `
-    <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#1f2937">
-      <h2 style="margin:0 0 8px">Xin chào ${name} 👋</h2>
-      <p style="margin:0 0 4px">Đã đến giờ luyện <strong>${languageName}</strong> rồi.</p>
-      <p style="margin:0 0 16px">${streakLine}</p>
-      <a href="${url}" style="display:inline-block;background:#7c3aed;color:#fff;text-decoration:none;padding:12px 22px;border-radius:9999px;font-weight:600">Luyện tập ngay</a>
-      <p style="margin:20px 0 0;font-size:12px;color:#6b7280">Chỉ 5 phút mỗi ngày. Bạn có thể tắt nhắc trong phần Luyện tập.</p>
-    </div>`;
+  const { html, text } = renderSiteEmail({
+    preheader: streak > 0 ? `Chuỗi ${streak} ngày đang chờ bạn — chỉ cần 5 phút hôm nay.` : `5 phút luyện ${languageName} hôm nay là đủ để bắt đầu chuỗi ngày.`,
+    eyebrow: `Luyện ${languageName}`,
+    heading: streak > 0 ? `Giữ chuỗi ${streak} ngày của bạn nhé` : `Đến giờ luyện ${languageName} rồi`,
+    greeting: greetingFor(name),
+    blocks: [
+      { type: 'p', text: streak > 0
+        ? `Bạn đang có chuỗi **${streak} ngày** luyện ${languageName} liên tiếp. Hôm nay bạn chưa luyện — vài phút thôi là giữ được chuỗi.`
+        : `Hôm nay là một ngày tốt để luyện **${languageName}**. Học đều mỗi ngày một chút hiệu quả hơn nhiều so với học dồn.` },
+      { type: 'button', label: 'Luyện tập ngay', url, fallback: false },
+      { type: 'p', muted: true, text: 'Không muốn nhận nhắc nữa? Tắt công tắc "Nhắc học hằng ngày" ở cuối trang Luyện tập.' },
+    ],
+    reason: 'Bạn nhận thư này vì đã bật nhắc luyện tập hằng ngày trong My Language trên CuongThai.com.',
+  });
+  return { subject: streak > 0 ? `Giữ chuỗi ${streak} ngày luyện ${languageName} nhé` : `Đến giờ luyện ${languageName} rồi`, html, text };
 }
 
 /**
@@ -65,11 +71,7 @@ export async function sendDueReminders(now: Date = new Date()): Promise<{ candid
 
     const name = r.user.displayName || r.user.fullName || r.user.username;
     try {
-      const res = await emailService.send({
-        to: email,
-        subject: r.streak > 0 ? `⏰ Giữ chuỗi ${r.streak} ngày ${r.language.name} nhé!` : `⏰ Đến giờ luyện ${r.language.name} rồi!`,
-        html: reminderHtml(name, r.streak, r.language.name, r.language.code),
-      });
+      const res = await emailService.send({ to: email, ...buildReminderEmail(name, r.streak, r.language.name, r.language.code) });
       // Mark reminded today regardless of provider result, to avoid re-sending
       // within the same day if the hourly job overlaps.
       await prisma.langGameState.update({ where: { id: r.id }, data: { lastReminderAt: now } }).catch(() => {});

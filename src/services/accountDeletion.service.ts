@@ -46,6 +46,7 @@ import { baoAdmin } from './thongBaoAdmin.service.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { anonymizeAccount } from './dataRights.service.js';
 import { emailService } from './email.service.js';
+import { renderSiteEmail, siteUrl, vnDateTime } from './emailLayout.js';
 import { logger } from '../utils/logger.js';
 
 export type DeletionStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
@@ -72,6 +73,35 @@ function cleanReason(v: unknown): string | null {
   if (typeof v !== 'string') return null;
   const t = v.replace(/\s+/g, ' ').trim().slice(0, 500);
   return t.length > 0 ? t : null;
+}
+
+/** Thư báo quản trị có yêu cầu xoá tài khoản (27/10/2026: khung chung, link TUYỆT ĐỐI tới trang duyệt). HÀM THUẦN. */
+export function buildDeletionRequestAdminEmail(o: { username: string; email: string; reason: string | null; requestId: number; createdAt: Date }) {
+  const fmt = vnDateTime;
+  const effectiveAt = new Date(o.createdAt.getTime() + HAN_TU_XOA_GIO * 3_600_000);
+  const url = siteUrl('/admin/deletion-requests');
+  const { html, text } = renderSiteEmail({
+    preheader: `${o.username} (${o.email}) yêu cầu xoá tài khoản — tự có hiệu lực lúc ${fmt(effectiveAt)}.`,
+    eyebrow: 'Quản trị · Cần xử lý',
+    heading: 'Có yêu cầu xoá tài khoản mới',
+    greeting: null,
+    blocks: [
+      { type: 'p', text: `Người dùng **${o.username.replace(/\*/g, '')}** vừa gửi yêu cầu xoá tài khoản và toàn bộ dữ liệu cá nhân.` },
+      { type: 'table', rows: [
+        { label: 'Tên đăng nhập', value: o.username, mono: true },
+        { label: 'Email', value: o.email },
+        { label: 'Mã yêu cầu', value: `#${o.requestId}`, mono: true },
+        { label: 'Gửi lúc', value: fmt(o.createdAt) },
+        { label: 'Tự có hiệu lực', value: fmt(effectiveAt) },
+      ] },
+      { type: 'quote', caption: 'Lý do người dùng ghi', text: o.reason || '(không ghi lý do)' },
+      { type: 'callout', tone: 'warning', title: `Tự xoá sau ${HAN_TU_XOA_GIO} giờ.`, text: 'Nếu người dùng không huỷ, yêu cầu tự có hiệu lực. Quản trị viên không thể từ chối — chỉ có thể duyệt sớm.' },
+      { type: 'button', label: 'Mở trang duyệt yêu cầu', url },
+    ],
+    signoff: null,
+    reason: 'Bạn nhận thư này vì là quản trị viên của CuongThai.com.',
+  });
+  return { subject: `Yêu cầu xoá tài khoản: ${o.username}`, html, text };
 }
 
 /* ─── User-facing ────────────────────────────────────────────────── */
@@ -128,16 +158,11 @@ export async function requestDeletion(userId: number, reason: unknown) {
   });
 
   // Best-effort admin alert — never let a mail failure block the request.
+  const mail = buildDeletionRequestAdminEmail({
+    username: user.username, email: user.email, reason: row.reason, requestId: row.id, createdAt: row.createdAt,
+  });
   emailService
-    .send({
-      to: ADMIN_INBOX,
-      subject: `[CuongThai] Yêu cầu xoá tài khoản: ${user.username}`,
-      html:
-        `<p>Người dùng <b>${user.username}</b> (${user.email}) đã yêu cầu xoá tài khoản.</p>` +
-        `<p>Lý do: ${row.reason ? row.reason : '<i>(không ghi)</i>'}</p>` +
-        `<p>Yêu cầu tự có hiệu lực sau ${HAN_TU_XOA_GIO} giờ nếu người dùng không huỷ (không thể từ chối). `
-        + `Duyệt sớm tại trang quản trị: /admin/deletion-requests</p>`,
-    })
+    .send({ to: ADMIN_INBOX, ...mail })
     .catch((err: unknown) => {
       logger.warn('deletion request admin email failed', { error: (err as Error).message });
     });

@@ -6563,10 +6563,10 @@ const L_lab9 = {
         `<p class="y-chinh">🎯 Trên JDK 8, <code>new FileReader(tep)</code> giải mã bằng bảng mã mặc định của máy — máy Windows thường là Cp1252 — nên các byte UTF-8 của "Mắt Biếc" quay về thành "Máº¯t Biáº¿c" (lần chạy thật <code>LabBangMa</code>).</p>
 <p>8 ký tự là 12 byte UTF-8: <code>ắ</code> và <code>ế</code> mỗi chữ ba byte. Các lần chạy của lab tự truyền <code>-Dfile.encoding=UTF-8</code>, nên bộ chấm không thấy lỗi — lên máy Windows của bạn cùng lớp thì nó hiện ra. Gọi tên bảng mã ở cả hai chiều, mọi lúc (<code>FileReader(tep, charset)</code> chỉ có từ Java 11; Java 18 mới lấy UTF-8 làm mặc định).</p>`],
       [10, 'Trap: the BOM nobody sees',
-        `<p class="y-chinh">🎯 Excel's "CSV UTF-8" and Notepad put three bytes EF BB BF at the start of the file; Java reads them as one invisible character, <code>﻿</code>. Forget to remove it and the header no longer equals the header (project <code>bay/quen-bom</code>).</p>
-<p>The real output reports "dong 1: loai 'loai' khong hop le" — the two words look identical on screen and are not: <code>"﻿loai".equals("loai")</code> is <code>false</code>, length 5 (real run of <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> on line 1 is the whole cure.</p>`,
-        `<p class="y-chinh">🎯 "CSV UTF-8" của Excel và Notepad đặt ba byte EF BB BF ở đầu tệp; Java đọc chúng thành một ký tự vô hình, <code>﻿</code>. Quên bỏ nó thì dòng tiêu đề không còn bằng dòng tiêu đề (dự án <code>bay/quen-bom</code>).</p>
-<p>Output thật báo "dong 1: loai 'loai' khong hop le" — hai chữ trông giống hệt trên màn hình mà không bằng nhau: <code>"﻿loai".equals("loai")</code> là <code>false</code>, độ dài 5 (lần chạy thật <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> ở dòng 1 là toàn bộ thuốc chữa.</p>`],
+        `<p class="y-chinh">🎯 Excel's "CSV UTF-8" and Notepad put three bytes EF BB BF at the start of the file; Java reads them as one invisible character, <code>⟨BOM⟩</code>. Forget to remove it and the header no longer equals the header (project <code>bay/quen-bom</code>).</p>
+<p>The real output reports "dong 1: loai 'loai' khong hop le" — the two words look identical on screen and are not: <code>"⟨BOM⟩loai".equals("loai")</code> is <code>false</code>, length 5 (real run of <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> on line 1 is the whole cure.</p>`,
+        `<p class="y-chinh">🎯 "CSV UTF-8" của Excel và Notepad đặt ba byte EF BB BF ở đầu tệp; Java đọc chúng thành một ký tự vô hình, <code>⟨BOM⟩</code>. Quên bỏ nó thì dòng tiêu đề không còn bằng dòng tiêu đề (dự án <code>bay/quen-bom</code>).</p>
+<p>Output thật báo "dong 1: loai 'loai' khong hop le" — hai chữ trông giống hệt trên màn hình mà không bằng nhau: <code>"⟨BOM⟩loai".equals("loai")</code> là <code>false</code>, độ dài 5 (lần chạy thật <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> ở dòng 1 là toàn bộ thuốc chữa.</p>`],
       [11, 'TODO 9.3 — quote what needs quoting',
         `<p class="y-chinh">🎯 A value with a comma or a quote is written as <code>"…"</code>, with every inner quote doubled; any other value is written as it is.</p>
 <p>Skip it (project <code>bay/khong-quote</code>) and nothing goes wrong — until the program is opened again: lines 4 and 7 of the saved file now have 8 columns, both books with a comma in the title are skipped, the shelf has 4 items instead of 6, and the search for "code" finds nothing. The bug is written in the first run and only seen in the second — that is why the grader reopens.</p>`,
@@ -8696,7 +8696,7 @@ BOM + "loai": length 5, equals("loai") false, after replace("\\uFEFF", "") true<
 $ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
 $ java -cp build main.Main &lt; harness/input.txt
 $ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
-<div class="out">Bo qua data/books.csv dong 1: loai '﻿loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+<div class="out">Bo qua data/books.csv dong 1: loai '⟨BOM⟩loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
 …</div>
 <div class="pitfall"><p><strong>Trap 4 — no quotes.</strong> Written without quotes, read back as 8 columns — two books lost at the reopen (project <code>bay/khong-quote</code>).</p></div>
 <pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
@@ -8851,7 +8851,7 @@ BOM + "loai": length 5, equals("loai") false, after replace("\\uFEFF", "") true<
 $ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
 $ java -cp build main.Main &lt; harness/input.txt
 $ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
-<div class="out">Bo qua data/books.csv dong 1: loai '﻿loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+<div class="out">Bo qua data/books.csv dong 1: loai '⟨BOM⟩loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
 …</div>
 <div class="pitfall"><p><strong>Bẫy 4 — không ngoặc kép.</strong> Ghi không ngoặc kép, đọc về thành 8 cột — mất hai cuốn khi mở lại (dự án <code>bay/khong-quote</code>).</p></div>
 <pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")

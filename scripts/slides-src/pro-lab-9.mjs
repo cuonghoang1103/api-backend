@@ -19,7 +19,7 @@ const boNhac = (t) => t.split('\n').map((x) => x.replace(NHAC, '')).join('\n');
 const R = (a, b) => boNhac(ra('lab9/solution:run', [a, b]));
 const P = (t, o) => psql(t, o).replace('<pre>', '<pre style="white-space:pre-wrap">');
 const cot = (t) => t.split('\n').map((l) => (/^(No |\d+ )/.test(l) ? (l.slice(0, 10) + l.slice(19, 32) + l.slice(45, 75)).trimEnd() : l)).join('\n');   // No, Id, Year, Copies, Title
-const bom = (t) => t.replace(/﻿/g, '<BOM>');
+const bom = (t) => t.replace(/\uFEFF/g, '<BOM>');
 
 /* Hình: một dòng CSV đi qua split(",") và qua splitLine */
 function hinhTach() {

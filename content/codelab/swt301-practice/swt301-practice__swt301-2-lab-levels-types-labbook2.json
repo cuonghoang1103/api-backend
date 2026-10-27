@@ -1,0 +1,528 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-2-lab-levels-types-labbook2",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-maintenance-test-plan"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2 — Test Levels and Test Types of LabBook 2.0",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 100,
+      "concepts": [
+        "test levels",
+        "test types",
+        "integration strategies",
+        "maintenance testing",
+        "impact analysis",
+        "IEEE 829",
+        "acceptance testing"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 2"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "test-levels"
+      ],
+      "problemHtml": "<h1>Lab 2 — Test Levels and Test Types of LabBook 2.0</h1>\n<p class=\"bi-phu\">Chapter 2 lab · levels × types, integration plan, maintenance testing, IEEE 829 and acceptance · 10 marks</p>\n<h2>1. Overview</h2>\n<p>LabBook 2.0 moves to the cloud and adds an exam-week rule. As test lead you prepare the test approach.</p>\n<p><b>A. Ten planned tests</b> — give each a level (CT, CIT, SIT, ST, UAT — the Overview.xlsx naming) and a type (Functional, Non-functional, White-box, Confirmation, Regression):</p><ul><li><b>T1</b> — JUnit: calcRefund returns 50 (%) when the booking is cancelled 3 hours before the start</li><li><b>T2</b> — JaCoCo shows that every branch of calcRefund has been executed</li><li><b>T3</b> — Postman: POST /api/bookings with the duration sent in minutes is rejected with 400 VALIDATION by the service</li><li><b>T4</b> — Booking e-mails sent through the university mail gateway arrive in the student’s Outlook mailbox with the right subject</li><li><b>T5</b> — 500 students book at 07:00 on Monday; 95% of the responses arrive within 1 second (SRS NFR-02)</li><li><b>T6</b> — The system test case ST-07, which failed with DEF-31, is run again on build 2.0.1 that contains the fix</li><li><b>T7</b> — After the PostgreSQL upgrade, the whole system test suite of booking and cancellation is run again</li><li><b>T8</b> — Lab managers use 2.0 for one week and decide whether closing and reopening labs supports their business process</li><li><b>T9</b> — During the acceptance week, ten students rate how easy it is to book without help</li><li><b>T10</b> — Every call path between the booking module and the mail module is exercised (interface coverage)</li></ul>\n<p><b>B. Integration plan</b> of the back-end (arrows: caller → called):</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 220\" width=\"100%\" style=\"max-width:560px;display:block;margin:8px auto\" role=\"img\" aria-label=\"LabBook call tree\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"560\" height=\"220\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"280\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">LabBook call tree</text><path d=\"M256.6,47.0 L193.4,93.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M305.5,47.0 L374.5,93.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M159.4,127.0 L130.6,173.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M201.9,127.0 L288.1,173.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M350.0,110.0 L220.0,110.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M383.0,127.0 L337.0,173.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"230\" y=\"13\" width=\"100\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"280\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\">controller</text><rect x=\"120\" y=\"93\" width=\"100\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"170\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">bookingSvc</text><rect x=\"350\" y=\"93\" width=\"100\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"114.0\" text-anchor=\"middle\" fill=\"#111827\">cancelSvc</text><rect x=\"75\" y=\"173\" width=\"90\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"120\" y=\"194.0\" text-anchor=\"middle\" fill=\"#111827\">seatRepo</text><rect x=\"280\" y=\"173\" width=\"80\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"320\" y=\"194.0\" text-anchor=\"middle\" fill=\"#111827\">mailer</text></svg><p>As data: <code>{\"controller\":[\"bookingSvc\",\"cancelSvc\"],\"bookingSvc\":[\"seatRepo\",\"mailer\"],\"cancelSvc\":[\"bookingSvc\",\"mailer\"],\"seatRepo\":[],\"mailer\":[]}</code>.</p>\n<p><b>C. Maintenance.</b> Events: <b>E1</b> LabBook moves to a cloud provider and all bookings are converted to the new database · <b>E2</b> hot-fix of DEF-31 in the cancel module · <b>E3</b> the old usage-report module is switched off and its data archived. Module dependencies (“depends on”): <code>{\"web-ui\":[\"api\"],\"api\":[\"booking\",\"cancel\",\"report\"],\"booking\":[\"repository\",\"mail\"],\"cancel\":[\"booking\",\"mail\"],\"report\":[\"repository\"],\"mail\":[],\"repository\":[]}</code>. System test suite (modules exercised, defect it last failed with): <code>ST-01</code> web-ui+api+booking · <code>ST-02</code> api+cancel · <code>ST-03</code> api+report · <code>ST-04</code> booking+mail · <code>ST-05</code> cancel+mail (failed: DEF-31) · <code>ST-06</code> repository · <code>ST-07</code> booking (failed: DEF-40). Build 2.0.1 fixes <b>DEF-31</b> by changing only <b>cancel</b>.</p>\n<p><b>D. Test plan and acceptance.</b> D1 “The usage report is not tested because it will be retired.” · D2 “Testing stops when the test server is down for more than 4 hours and restarts with the smoke suite.” · D3 “If the cloud environment is late, performance tests move to the week after.” · D4 “Build 2.0.0-rc1 (CI build 412) with release notes.” · A1 University IT tests backup, restore and user management before go-live. · A2 All students may use the pre-release from home before the launch.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Level and type of each of the 10 tests.</li>\n  <li>B. Top-down order, stubs and drivers.</li>\n  <li>C. Triggers, impact analysis, confirmation and regression sets.</li>\n  <li>D. IEEE 829 sections and acceptance forms.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use exactly the values listed in the data model (case does not matter).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-tests.js        ← const TESTS = { T1: { level, type }, … }\n├── b-integration.js  ← const INTEGRATION = { topDownOrder, stubsBaseline2, driversLeaves, driversBaseline3 }\n├── c-maintenance.js  ← const MAINTENANCE = { triggers: { E1, E2, E3 }, impacted, confirmation, regression }\n└── d-plan.js         ← const PLAN = { D1, D2, D3, D4, A1, A2 }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>level · type</code></td><td>string</td><td>CT · CIT · SIT · ST · UAT — Functional · Non-functional · White-box · Confirmation · Regression</td></tr><tr><td><code>triggers.*</code></td><td>string</td><td>Modification · Migration · Retirement</td></tr><tr><td><code>PLAN.D*</code></td><td>string</td><td>3 Test items · 5 Features not to be tested · 6 Approach · 7 Item pass/fail criteria · 8 Suspension and resumption criteria · 11 Environmental needs · 13 Staffing and training needs · 15 Risks and contingencies</td></tr><tr><td><code>PLAN.A*</code></td><td>string</td><td>UAT · OAT · Contractual AT · Regulatory AT · Alpha testing · Beta testing</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Levels × types <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>20 values; every type can appear at every level.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test levels</span> <span class=\"bi-hook\">test types</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Integration plan <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Breadth-first top-down order; stubs below, drivers above.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">integration strategies</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Maintenance testing <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Triggers, transitive impact set, confirmation vs regression.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">impact analysis</span> <span class=\"bi-hook\">regression</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Plan and acceptance <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Four IEEE 829 sections, two acceptance forms.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">IEEE 829</span> <span class=\"bi-hook\">acceptance testing</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>TESTS</code></td><td>answers/a-tests.js</td></tr><tr><td><code>INTEGRATION</code></td><td>answers/b-integration.js</td></tr><tr><td><code>MAINTENANCE</code></td><td>answers/c-maintenance.js</td></tr><tr><td><code>PLAN</code></td><td>answers/d-plan.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Levels × types</td><td>3</td></tr><tr><td>2</td><td>B. Integration plan</td><td>2</td></tr><tr><td>3</td><td>C. Maintenance testing</td><td>3</td></tr><tr><td>4</td><td>D. Plan and acceptance</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Regression set computed from the changed module only (misses ST-01 and ST-03, which reach cancel’s callers).</li>\n  <li>Putting ST-07 in confirmation — DEF-40 is not fixed in this build.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 2 — Test Levels and Test Types of LabBook 2.0</h1>\n<p class=\"bi-phu\">Lab chương 2 · cấp × loại, kế hoạch tích hợp, kiểm thử bảo trì, IEEE 829 và acceptance · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>LabBook 2.0 chuyển lên cloud và thêm luật tuần thi. Là trưởng nhóm test, bạn chuẩn bị cách tiếp cận test.</p>\n<p><b>A.</b> Mười test dự kiến (T1–T10 ở trên) — cho mỗi test một cấp (CT, CIT, SIT, ST, UAT — cách gọi của Overview.xlsx) và một loại (Functional, Non-functional, White-box, Confirmation, Regression).</p>\n<p><b>B.</b> Kế hoạch tích hợp back-end theo cây gọi ở trên (mũi tên: bên gọi → bên được gọi).</p>\n<p><b>C. Bảo trì.</b> E1 chuyển lên cloud kèm chuyển đổi dữ liệu · E2 bản sửa khẩn DEF-31 trong module cancel · E3 tắt module báo cáo cũ và lưu trữ dữ liệu. Đồ thị phụ thuộc và bộ system test như bản tiếng Anh. Build 2.0.1 sửa <b>DEF-31</b> và chỉ đổi <b>cancel</b>.</p>\n<p><b>D.</b> Bốn câu D1–D4 lấy từ test plan và hai tình huống acceptance A1–A2 ở trên.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Cấp và loại của 10 test.</li>\n  <li>B. Thứ tự top-down, stub và driver.</li>\n  <li>C. Tác nhân, phân tích tác động, tập confirmation và regression.</li>\n  <li>D. Mục IEEE 829 và dạng acceptance.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng đúng giá trị trong mô hình dữ liệu (không phân biệt hoa thường).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-tests.js        ← const TESTS = { T1: { level, type }, … }\n├── b-integration.js  ← const INTEGRATION = { topDownOrder, stubsBaseline2, driversLeaves, driversBaseline3 }\n├── c-maintenance.js  ← const MAINTENANCE = { triggers: { E1, E2, E3 }, impacted, confirmation, regression }\n└── d-plan.js         ← const PLAN = { D1, D2, D3, D4, A1, A2 }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>level · type</code></td><td>string</td><td>CT · CIT · SIT · ST · UAT — Functional · Non-functional · White-box · Confirmation · Regression</td></tr><tr><td><code>triggers.*</code></td><td>string</td><td>Modification · Migration · Retirement</td></tr><tr><td><code>PLAN.D*</code></td><td>string</td><td>3 Test items · 5 Features not to be tested · 6 Approach · 7 Item pass/fail criteria · 8 Suspension and resumption criteria · 11 Environmental needs · 13 Staffing and training needs · 15 Risks and contingencies</td></tr><tr><td><code>PLAN.A*</code></td><td>string</td><td>UAT · OAT · Contractual AT · Regulatory AT · Alpha testing · Beta testing</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Cấp × loại <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>20 giá trị; loại nào cũng có thể ở cấp nào.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test levels</span> <span class=\"bi-hook\">test types</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Kế hoạch tích hợp <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Thứ tự top-down theo chiều rộng; stub ở dưới, driver ở trên.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">integration strategies</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Kiểm thử bảo trì <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tác nhân, tập ảnh hưởng bắc cầu, confirmation và regression.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">impact analysis</span> <span class=\"bi-hook\">regression</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Kế hoạch và nghiệm thu <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bốn mục IEEE 829, hai dạng acceptance.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">IEEE 829</span> <span class=\"bi-hook\">acceptance testing</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>TESTS</code></td><td>answers/a-tests.js</td></tr><tr><td><code>INTEGRATION</code></td><td>answers/b-integration.js</td></tr><tr><td><code>MAINTENANCE</code></td><td>answers/c-maintenance.js</td></tr><tr><td><code>PLAN</code></td><td>answers/d-plan.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Cấp × loại</td><td>3</td></tr><tr><td>2</td><td>B. Kế hoạch tích hợp</td><td>2</td></tr><tr><td>3</td><td>C. Kiểm thử bảo trì</td><td>3</td></tr><tr><td>4</td><td>D. Kế hoạch và nghiệm thu</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Tính tập regression chỉ từ module bị đổi (sót ST-01, ST-03 chạy qua bên gọi cancel).</li>\n  <li>Đưa ST-07 vào confirmation — DEF-40 chưa được sửa ở build này.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use exactly the values listed in the data model (case does not matter).|||Dùng đúng giá trị trong mô hình dữ liệu (không phân biệt hoa thường).",
+      "examplesJson": [
+        {
+          "input": "T2 — JaCoCo shows that every branch of calcRefund has been executed",
+          "output": "{ level: 'CT', type: 'White-box' }",
+          "explanation": "Branch coverage of one method.|||Độ phủ nhánh của một method."
+        }
+      ],
+      "hintsJson": [
+        "A: cấp = test ở ĐÂU (đối tượng, test basis); loại = test CÁI GÌ (chức năng, chất lượng, cấu trúc, thay đổi).",
+        "B: baseline {controller, bookingSvc} thiếu cancelSvc (controller gọi), seatRepo và mailer (bookingSvc gọi).",
+        "C: đi NGƯỢC mũi tên phụ thuộc từ cancel; ST-07 fail với lỗi chưa sửa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-tests.js",
+          "language": "javascript",
+          "code": "// level: CT | CIT | SIT | ST | UAT\n// type: Functional | Non-functional | White-box | Confirmation | Regression\nconst TESTS = {\n  T1: { level: 'CT', type: 'Functional' },\n  T2: { level: '', type: '' },\n  T3: { level: '', type: '' },\n  T4: { level: '', type: '' },\n  T5: { level: '', type: '' },\n  T6: { level: '', type: '' },\n  T7: { level: '', type: '' },\n  T8: { level: '', type: '' },\n  T9: { level: '', type: '' },\n  T10: { level: '', type: '' },\n};\n"
+        },
+        {
+          "name": "answers/b-integration.js",
+          "language": "javascript",
+          "code": "const INTEGRATION = {\n  topDownOrder: [],\n  stubsBaseline2: [],\n  driversLeaves: [],\n  driversBaseline3: [],\n};\n"
+        },
+        {
+          "name": "answers/c-maintenance.js",
+          "language": "javascript",
+          "code": "const MAINTENANCE = {\n  triggers: { E1: '', E2: '', E3: '' },\n  impacted: [],\n  confirmation: [],\n  regression: [],\n};\n"
+        },
+        {
+          "name": "answers/d-plan.js",
+          "language": "javascript",
+          "code": "// D*: 3 Test items | 5 Features not to be tested | 6 Approach | 7 Item pass/fail criteria | 8 Suspension and resumption criteria | 11 Environmental needs | 13 Staffing and training needs | 15 Risks and contingencies\n// A*: UAT | OAT | Contractual AT | Regulatory AT | Alpha testing | Beta testing\nconst PLAN = { D1: '', D2: '', D3: '', D4: '', A1: '', A2: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-tests.js",
+          "language": "javascript",
+          "code": "const TESTS = {\n  T1: { level: 'CT', type: 'Functional' },\n  T2: { level: 'CT', type: 'White-box' },\n  T3: { level: 'CIT', type: 'Functional' },\n  T4: { level: 'SIT', type: 'Functional' },\n  T5: { level: 'ST', type: 'Non-functional' },\n  T6: { level: 'ST', type: 'Confirmation' },\n  T7: { level: 'ST', type: 'Regression' },\n  T8: { level: 'UAT', type: 'Functional' },\n  T9: { level: 'UAT', type: 'Non-functional' },\n  T10: { level: 'CIT', type: 'White-box' },\n};\n"
+        },
+        {
+          "name": "answers/b-integration.js",
+          "language": "javascript",
+          "code": "// Top-down breadth-first from controller. Baseline {controller, bookingSvc}: missing called components → stubs.\n// Bottom-up: callers of the baseline that are not integrated yet → drivers.\nconst INTEGRATION = {\n  topDownOrder: ['controller', 'bookingSvc', 'cancelSvc', 'seatRepo', 'mailer'],\n  stubsBaseline2: ['cancelSvc', 'mailer', 'seatRepo'],\n  driversLeaves: ['bookingSvc', 'cancelSvc'],\n  driversBaseline3: ['cancelSvc', 'controller'],\n};\n"
+        },
+        {
+          "name": "answers/c-maintenance.js",
+          "language": "javascript",
+          "code": "// Impact of a change in cancel: cancel ← api ← web-ui.\n// Confirmation: ST-05 (failed with DEF-31). Regression: other tests touching api, cancel or web-ui.\nconst MAINTENANCE = {\n  triggers: { E1: 'Migration', E2: 'Modification', E3: 'Retirement' },\n  impacted: ['api', 'cancel', 'web-ui'],\n  confirmation: ['ST-05'],\n  regression: ['ST-01', 'ST-02', 'ST-03'],\n};\n"
+        },
+        {
+          "name": "answers/d-plan.js",
+          "language": "javascript",
+          "code": "const PLAN = {\n  D1: '5 Features not to be tested',\n  D2: '8 Suspension and resumption criteria',\n  D3: '15 Risks and contingencies',\n  D4: '3 Test items',\n  A1: 'OAT',\n  A2: 'Beta testing',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> T1 CT/F · T2 CT/WB · T3 CIT/F · T4 SIT/F · T5 ST/NF · T6 ST/Conf · T7 ST/Reg · T8 UAT/F · T9 UAT/NF · T10 CIT/WB. <b>B.</b> controller, bookingSvc, cancelSvc, seatRepo, mailer · stubs cancelSvc, mailer, seatRepo · drivers bookingSvc, cancelSvc · drivers controller, cancelSvc. <b>C.</b> Migration, Modification, Retirement · api, cancel, web-ui · ST-05 · ST-01, ST-02, ST-03. <b>D.</b> 5, 8, 15, 3 · OAT, Beta.</p>",
+      "solutionExplanationHtmlVi": "<p>Xem bản tiếng Anh — đáp án từng phần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-tests.js",
+          "answers/b-integration.js",
+          "answers/c-maintenance.js",
+          "answers/d-plan.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — level of T1",
+              "vi": "A — cấp của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T1 || {}).level); } catch (e) { return '(TESTS.T1 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T1 || {}).level is empty';\n  var chap = [\"CT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T1",
+              "vi": "A — loại của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T1 || {}).type); } catch (e) { return '(TESTS.T1 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T1 || {}).type is empty';\n  var chap = [\"Functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T2",
+              "vi": "A — cấp của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T2 || {}).level); } catch (e) { return '(TESTS.T2 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T2 || {}).level is empty';\n  var chap = [\"CT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T2",
+              "vi": "A — loại của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T2 || {}).type); } catch (e) { return '(TESTS.T2 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T2 || {}).type is empty';\n  var chap = [\"White-box\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T3",
+              "vi": "A — cấp của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T3 || {}).level); } catch (e) { return '(TESTS.T3 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T3 || {}).level is empty';\n  var chap = [\"CIT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T3",
+              "vi": "A — loại của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T3 || {}).type); } catch (e) { return '(TESTS.T3 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T3 || {}).type is empty';\n  var chap = [\"Functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T4",
+              "vi": "A — cấp của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T4 || {}).level); } catch (e) { return '(TESTS.T4 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T4 || {}).level is empty';\n  var chap = [\"SIT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T4",
+              "vi": "A — loại của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T4 || {}).type); } catch (e) { return '(TESTS.T4 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T4 || {}).type is empty';\n  var chap = [\"Functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T5",
+              "vi": "A — cấp của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T5 || {}).level); } catch (e) { return '(TESTS.T5 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T5 || {}).level is empty';\n  var chap = [\"ST\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T5",
+              "vi": "A — loại của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T5 || {}).type); } catch (e) { return '(TESTS.T5 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T5 || {}).type is empty';\n  var chap = [\"Non-functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T6",
+              "vi": "A — cấp của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T6 || {}).level); } catch (e) { return '(TESTS.T6 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T6 || {}).level is empty';\n  var chap = [\"ST\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T6",
+              "vi": "A — loại của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T6 || {}).type); } catch (e) { return '(TESTS.T6 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T6 || {}).type is empty';\n  var chap = [\"Confirmation\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T7",
+              "vi": "A — cấp của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T7 || {}).level); } catch (e) { return '(TESTS.T7 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T7 || {}).level is empty';\n  var chap = [\"ST\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — type of T7",
+              "vi": "A — loại của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T7 || {}).type); } catch (e) { return '(TESTS.T7 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T7 || {}).type is empty';\n  var chap = [\"Regression\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — level of T8",
+              "vi": "A — cấp của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T8 || {}).level); } catch (e) { return '(TESTS.T8 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T8 || {}).level is empty';\n  var chap = [\"UAT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — type of T8",
+              "vi": "A — loại của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T8 || {}).type); } catch (e) { return '(TESTS.T8 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T8 || {}).type is empty';\n  var chap = [\"Functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — level of T9",
+              "vi": "A — cấp của T9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T9 || {}).level); } catch (e) { return '(TESTS.T9 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T9 || {}).level is empty';\n  var chap = [\"UAT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — type of T9",
+              "vi": "A — loại của T9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T9 || {}).type); } catch (e) { return '(TESTS.T9 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T9 || {}).type is empty';\n  var chap = [\"Non-functional\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — level of T10",
+              "vi": "A — cấp của T10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T10 || {}).level); } catch (e) { return '(TESTS.T10 || {}).level is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T10 || {}).level is empty';\n  var chap = [\"CIT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — type of T10",
+              "vi": "A — loại của T10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TESTS.T10 || {}).type); } catch (e) { return '(TESTS.T10 || {}).type is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TESTS.T10 || {}).type is empty';\n  var chap = [\"White-box\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — top-down integration order",
+              "vi": "B — thứ tự tích hợp top-down"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (JSON.stringify(INTEGRATION.topDownOrder)); } catch (e) { return 'JSON.stringify(INTEGRATION.topDownOrder) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'JSON.stringify(INTEGRATION.topDownOrder) is empty';\n  var chap = [\"[\\\"controller\\\",\\\"bookingSvc\\\",\\\"cancelSvc\\\",\\\"seatRepo\\\",\\\"mailer\\\"]\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — stubs for baseline {controller, bookingSvc}",
+              "vi": "B — stub cho baseline {controller, bookingSvc}"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INTEGRATION.stubsBaseline2 || []).map(String)); } catch (e) { return '(INTEGRATION.stubsBaseline2 || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INTEGRATION.stubsBaseline2 || []).map(String) is empty';\n  var chap = [[\"cancelSvc\",\"seatRepo\",\"mailer\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — drivers to test {seatRepo, mailer} bottom-up",
+              "vi": "B — driver để test {seatRepo, mailer} bottom-up"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INTEGRATION.driversLeaves || []).map(String)); } catch (e) { return '(INTEGRATION.driversLeaves || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INTEGRATION.driversLeaves || []).map(String) is empty';\n  var chap = [[\"bookingSvc\",\"cancelSvc\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — drivers for baseline {seatRepo, mailer, bookingSvc}",
+              "vi": "B — driver cho baseline {seatRepo, mailer, bookingSvc}"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INTEGRATION.driversBaseline3 || []).map(String)); } catch (e) { return '(INTEGRATION.driversBaseline3 || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INTEGRATION.driversBaseline3 || []).map(String) is empty';\n  var chap = [[\"controller\",\"cancelSvc\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — trigger of E1",
+              "vi": "C — tác nhân của E1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MAINTENANCE.triggers.E1); } catch (e) { return 'MAINTENANCE.triggers.E1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MAINTENANCE.triggers.E1 is empty';\n  var chap = [\"Migration\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — trigger of E2",
+              "vi": "C — tác nhân của E2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MAINTENANCE.triggers.E2); } catch (e) { return 'MAINTENANCE.triggers.E2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MAINTENANCE.triggers.E2 is empty';\n  var chap = [\"Modification\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — trigger of E3",
+              "vi": "C — tác nhân của E3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (MAINTENANCE.triggers.E3); } catch (e) { return 'MAINTENANCE.triggers.E3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'MAINTENANCE.triggers.E3 is empty';\n  var chap = [\"Retirement\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — modules impacted by the change in cancel",
+              "vi": "C — module bị ảnh hưởng bởi thay đổi ở cancel"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MAINTENANCE.impacted || []).map(String)); } catch (e) { return '(MAINTENANCE.impacted || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MAINTENANCE.impacted || []).map(String) is empty';\n  var chap = [[\"api\",\"cancel\",\"web-ui\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — the changed module + everything that depends on it, directly or transitively';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — confirmation tests for DEF-31",
+              "vi": "C — test confirmation cho DEF-31"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MAINTENANCE.confirmation || []).map(String)); } catch (e) { return '(MAINTENANCE.confirmation || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MAINTENANCE.confirmation || []).map(String) is empty';\n  var chap = [[\"ST-05\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — regression tests (exercise an impacted module, not confirmation)",
+              "vi": "C — test regression (chạy qua module bị ảnh hưởng, không phải confirmation)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MAINTENANCE.regression || []).map(String)); } catch (e) { return '(MAINTENANCE.regression || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MAINTENANCE.regression || []).map(String) is empty';\n  var chap = [[\"ST-01\",\"ST-02\",\"ST-03\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D — IEEE 829 section of D1",
+              "vi": "D — mục IEEE 829 của D1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.D1); } catch (e) { return 'PLAN.D1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.D1 is empty';\n  var chap = [\"5 Features not to be tested\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — IEEE 829 section of D2",
+              "vi": "D — mục IEEE 829 của D2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.D2); } catch (e) { return 'PLAN.D2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.D2 is empty';\n  var chap = [\"8 Suspension and resumption criteria\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — IEEE 829 section of D3",
+              "vi": "D — mục IEEE 829 của D3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.D3); } catch (e) { return 'PLAN.D3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.D3 is empty';\n  var chap = [\"15 Risks and contingencies\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — IEEE 829 section of D4",
+              "vi": "D — mục IEEE 829 của D4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.D4); } catch (e) { return 'PLAN.D4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.D4 is empty';\n  var chap = [\"3 Test items\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — acceptance form of A1",
+              "vi": "D — dạng acceptance của A1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.A1); } catch (e) { return 'PLAN.A1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.A1 is empty';\n  var chap = [\"OAT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — acceptance form of A2",
+              "vi": "D — dạng acceptance của A2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PLAN.A2); } catch (e) { return 'PLAN.A2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PLAN.A2 is empty';\n  var chap = [\"Beta testing\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Levels × types",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Integration plan",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Maintenance testing",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Plan and acceptance",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Gán T4 (cổng thư của trường) là CIT — hệ thống ngoài ⇒ SIT."
+        },
+        {
+          "loi": "Tính regression chỉ trên module bị đổi."
+        },
+        {
+          "loi": "Nhầm mục 7 và mục 8 của IEEE 829."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CT / CIT / SIT / ST / UAT",
+          "vi": "component / component integration / system integration / system / user acceptance test"
+        },
+        {
+          "en": "stub / driver",
+          "vi": "thay bên được gọi / thay bên gọi"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích tác động"
+        }
+      ]
+    }
+  ]
+}

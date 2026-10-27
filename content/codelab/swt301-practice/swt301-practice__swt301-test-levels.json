@@ -1,0 +1,831 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-levels",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-levels"
+  },
+  "exercises": [
+    {
+      "title": "Test levels 1 — Component or integration? (the five attributes)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "component testing",
+        "integration testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Every test level is described by five attributes: objectives, test basis, test objects, typical defects and failures, approaches and responsibilities. Decide which of the two lower levels each fact describes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi cấp test được mô tả bằng năm thuộc tính: mục tiêu, test basis, đối tượng test, lỗi điển hình, cách tiếp cận và trách nhiệm. Xác định mỗi dòng mô tả cấp nào trong hai cấp thấp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chữ “interface, protocol, API, communication” ⇒ integration.",
+        "Bên trong một method/class ⇒ component."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 1 — Component or integration? (the five attributes)\n\nAnswer in the answer panel (no code needed).\n\n1. Fact → levelĐặc điểm → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 1 — Component or integration? (the five attributes) — answer key\n\n1. Fact → levelĐặc điểm → cấp\n   - r0.l: Component testing\n   - r1.l: Integration testing\n   - r2.l: Integration testing\n   - r3.l: Component testing\n   - r4.l: Integration testing\n   - r5.l: Component testing\n   - r6.l: Integration testing\n   - r7.l: Integration testing\n   Component testing looks inside one isolated unit (design, code, logic, TDD); integration testing looks at the interfaces and interactions (sequence diagrams, protocols, APIs, timing, communication, integration strategies).VI: Component test nhìn bên trong một đơn vị cô lập (thiết kế, mã, logic, TDD); integration test nhìn vào giao diện và tương tác (sequence diagram, giao thức, API, thời điểm, giao tiếp, chiến lược tích hợp).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>C · I · I · C · I · C · I · I.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fact → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Đặc điểm → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Fact"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Component testing",
+                  "Integration testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "f": "Test basis: detailed design, code, data model, component specifications"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "Test basis: sequence diagrams, interface and communication protocol specifications"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "Typical defect: wrong assumptions about the meaning, units or boundaries of data passed between modules"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "Typical defect: incorrect logic inside a method, data-flow problems"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "Test objects: APIs, microservices, databases, infrastructure"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "Usually done by the developer who wrote the code, often test-first (TDD)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "Approaches: big-bang, top-down, bottom-up"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "f": "Typical failure: a message is lost or arrives in the wrong order (communication failure)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Component testing",
+              "r1.l": "Integration testing",
+              "r2.l": "Integration testing",
+              "r3.l": "Component testing",
+              "r4.l": "Integration testing",
+              "r5.l": "Component testing",
+              "r6.l": "Integration testing",
+              "r7.l": "Integration testing"
+            },
+            "giaiThich": "<p>Component testing looks inside one isolated unit (design, code, logic, TDD); integration testing looks at the interfaces and interactions (sequence diagrams, protocols, APIs, timing, communication, integration strategies).</p><p><i>VI: Component test nhìn bên trong một đơn vị cô lập (thiết kế, mã, logic, TDD); integration test nhìn vào giao diện và tương tác (sequence diagram, giao thức, API, thời điểm, giao tiếp, chiến lược tích hợp).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán “big-bang” cho component test."
+        },
+        {
+          "loi": "Gán CSDL (database) cho component — CSDL là đối tượng của integration; “database model” mới thuộc component."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "component (unit) testing",
+          "vi": "kiểm thử thành phần (đơn vị)"
+        },
+        {
+          "en": "integration testing",
+          "vi": "kiểm thử tích hợp"
+        },
+        {
+          "en": "TDD",
+          "vi": "phát triển hướng kiểm thử — viết test trước"
+        }
+      ]
+    },
+    {
+      "title": "Test levels 2 — Stubs, drivers and integration strategies",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "stubs and drivers",
+        "integration strategies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A <b>stub</b> replaces a <i>called</i> component that is not ready; a <b>driver</b> replaces the <i>caller</i> of the component under test. Top-down integration starts at the root and needs stubs; bottom-up starts at the leaves and needs drivers.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 520 230\" width=\"100%\" style=\"max-width:520px;display:block;margin:8px auto\" role=\"img\" aria-label=\"call tree\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"520\" height=\"230\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"260\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">call tree</text><path d=\"M244.8,39.7 L165.2,90.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.0,48.0 L260.0,82.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M275.2,39.7 L354.8,90.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M139.2,114.4 L100.8,165.6\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M159.5,115.3 L190.5,164.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M362.0,116.1 L338.0,163.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M379.5,115.3 L410.5,164.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><circle cx=\"260\" cy=\"30\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"260\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">a</text><circle cx=\"150\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"150\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">b</text><circle cx=\"260\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"260\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">c</text><circle cx=\"370\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"370\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">d</text><circle cx=\"90\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"90\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">e</text><circle cx=\"200\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">f</text><circle cx=\"330\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"330\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">g</text><circle cx=\"420\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">h</text></svg><p>Arrows point from caller to called component.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Stub</b> thay cho thành phần <i>được gọi</i> chưa sẵn sàng; <b>driver</b> thay cho thành phần <i>gọi</i> thành phần đang test. Tích hợp top-down bắt đầu từ gốc và cần stub; bottom-up bắt đầu từ lá và cần driver.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 520 230\" width=\"100%\" style=\"max-width:520px;display:block;margin:8px auto\" role=\"img\" aria-label=\"call tree\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"520\" height=\"230\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"260\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">call tree</text><path d=\"M244.8,39.7 L165.2,90.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.0,48.0 L260.0,82.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M275.2,39.7 L354.8,90.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M139.2,114.4 L100.8,165.6\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M159.5,115.3 L190.5,164.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M362.0,116.1 L338.0,163.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M379.5,115.3 L410.5,164.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><circle cx=\"260\" cy=\"30\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"260\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">a</text><circle cx=\"150\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"150\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">b</text><circle cx=\"260\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"260\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">c</text><circle cx=\"370\" cy=\"100\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"370\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">d</text><circle cx=\"90\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"90\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">e</text><circle cx=\"200\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">f</text><circle cx=\"330\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"330\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">g</text><circle cx=\"420\" cy=\"180\" r=\"18\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"184.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">h</text></svg><p>Mũi tên đi từ thành phần gọi tới thành phần được gọi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: thành phần thiếu GỌI baseline hay ĐƯỢC baseline gọi?",
+        "c đã có trong baseline {a, b, c, d}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 2 — Stubs, drivers and integration strategies\n\nAnswer in the answer panel (no code needed).\n\n1. What does each situation need for the named component?Mỗi tình huống cần gì cho thành phần được nêu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 2 — Stubs, drivers and integration strategies — answer key\n\n1. What does each situation need for the named component?Mỗi tình huống cần gì cho thành phần được nêu?\n   - r0.k: Stub\n   - r1.k: Stub\n   - r2.k: Driver\n   - r3.k: Driver\n   - r4.k: Neither\n   - r5.k: Stub\n   A missing component BELOW the baseline is replaced by a stub; a missing component ABOVE it (the caller) by a driver; a component already in the baseline needs nothing.VI: Thành phần thiếu NẰM DƯỚI baseline thay bằng stub; thành phần thiếu NẰM TRÊN (bên gọi) thay bằng driver; thành phần đã có trong baseline không cần gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stub · Stub · Driver · Driver · Neither · Stub.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>What does each situation need for the named component?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi tình huống cần gì cho thành phần được nêu?</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "k",
+                "ten": "Needed",
+                "luaChon": [
+                  "Stub",
+                  "Driver",
+                  "Neither"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Top-down, baseline {a}: what replaces b?"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Top-down, baseline {a, b}: what replaces e?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Bottom-up, testing e alone: what replaces b?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Bottom-up, baseline {e, f, b}: what replaces a?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Top-down, baseline {a, b, c, d}: what replaces c?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Top-down, baseline {a, b, c, d}: what replaces g?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Stub",
+              "r1.k": "Stub",
+              "r2.k": "Driver",
+              "r3.k": "Driver",
+              "r4.k": "Neither",
+              "r5.k": "Stub"
+            },
+            "giaiThich": "<p>A missing component BELOW the baseline is replaced by a stub; a missing component ABOVE it (the caller) by a driver; a component already in the baseline needs nothing.</p><p><i>VI: Thành phần thiếu NẰM DƯỚI baseline thay bằng stub; thành phần thiếu NẰM TRÊN (bên gọi) thay bằng driver; thành phần đã có trong baseline không cần gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đảo stub và driver."
+        },
+        {
+          "loi": "Cho rằng top-down cũng cần driver — gốc a không có ai gọi, công cụ test gọi trực tiếp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stub",
+          "vi": "thành phần giả thay cho bên ĐƯỢC GỌI"
+        },
+        {
+          "en": "driver",
+          "vi": "thành phần giả thay cho bên GỌI"
+        },
+        {
+          "en": "baseline",
+          "vi": "tập thành phần đã tích hợp tới thời điểm đó"
+        }
+      ]
+    },
+    {
+      "title": "Test levels 3 — Plan an incremental integration in code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "integration strategies",
+        "stubs and drivers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A call tree is an object <code>{ component: [called components] }</code> (every component appears as a key). Write three functions used by an integration test plan:</p>\n<ol>\n<li><code>topDownOrder(tree, root)</code> — integration order of top-down, breadth-first: the root, then its children in the listed order, then their children, and so on.</li>\n<li><code>stubsFor(tree, baseline)</code> — the components <b>called</b> by a member of <code>baseline</code> that are not in it (sorted A→Z, no duplicates).</li>\n<li><code>driversFor(tree, baseline)</code> — the components that <b>call</b> a member of <code>baseline</code> and are not in it (sorted A→Z, no duplicates).</li>\n</ol>\n<p>The tree of the figure in exercise 2 is <code>{ a: ['b','c','d'], b: ['e','f'], c: [], d: ['g','h'], e: [], f: [], g: [], h: [] }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A component reachable by two paths appears only once in <code>topDownOrder</code> (the first time it is reached).</li>\n</ul>",
+      "problemHtmlVi": "<p>Cây gọi là object <code>{ thànhPhần: [các thành phần nó gọi] }</code> (mọi thành phần đều là một khoá). Viết ba hàm dùng cho kế hoạch test tích hợp:</p>\n<ol>\n<li><code>topDownOrder(tree, root)</code> — thứ tự tích hợp top-down theo chiều rộng: gốc, rồi các con theo thứ tự liệt kê, rồi con của chúng…</li>\n<li><code>stubsFor(tree, baseline)</code> — các thành phần <b>được gọi</b> bởi một thành viên của <code>baseline</code> mà không nằm trong nó (sắp A→Z, không trùng).</li>\n<li><code>driversFor(tree, baseline)</code> — các thành phần <b>gọi</b> một thành viên của <code>baseline</code> mà không nằm trong nó (sắp A→Z, không trùng).</li>\n</ol>\n<p>Cây của hình ở bài 2 là <code>{ a: ['b','c','d'], b: ['e','f'], c: [], d: ['g','h'], e: [], f: [], g: [], h: [] }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thành phần tới được bằng hai đường chỉ xuất hiện một lần trong <code>topDownOrder</code> (lần đầu được chạm tới).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "topDownOrder(TREE, 'a')",
+          "output": "['a','b','c','d','e','f','g','h']",
+          "explanation": "Breadth-first.|||Theo chiều rộng."
+        },
+        {
+          "input": "stubsFor(TREE, ['a','b'])",
+          "output": "['c','d','e','f']",
+          "explanation": "Called by a or b but not yet integrated.|||Được a hoặc b gọi nhưng chưa tích hợp."
+        },
+        {
+          "input": "driversFor(TREE, ['e','f'])",
+          "output": "['b']",
+          "explanation": "b calls both.|||b gọi cả hai."
+        }
+      ],
+      "hintsJson": [
+        "BFS: hàng đợi bắt đầu bằng root, một Set “đã thăm”.",
+        "driversFor: duyệt mọi khoá k, nếu tree[k] có phần tử thuộc baseline và k không thuộc baseline thì k là driver."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "integration.js",
+          "language": "javascript",
+          "code": "function topDownOrder(tree, root) {\n  return [root];\n}\n\nfunction stubsFor(tree, baseline) {\n  return [];\n}\n\nfunction driversFor(tree, baseline) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "integration.js",
+          "language": "javascript",
+          "code": "function topDownOrder(tree, root) {\n  const order = [];\n  const seen = new Set([root]);\n  const queue = [root];\n  while (queue.length) {\n    const x = queue.shift();\n    order.push(x);\n    for (const c of tree[x] || []) if (!seen.has(c)) { seen.add(c); queue.push(c); }\n  }\n  return order;\n}\n\nfunction stubsFor(tree, baseline) {\n  const inB = new Set(baseline);\n  const out = new Set();\n  for (const m of baseline) for (const c of tree[m] || []) if (!inB.has(c)) out.add(c);\n  return [...out].sort();\n}\n\nfunction driversFor(tree, baseline) {\n  const inB = new Set(baseline);\n  const out = new Set();\n  for (const k of Object.keys(tree)) if (!inB.has(k) && (tree[k] || []).some((c) => inB.has(c))) out.add(k);\n  return [...out].sort();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Top-down needs stubs for everything just below the integrated part; bottom-up needs drivers for everything just above it. Planning them early (test implementation) is part of the integration strategy documented in the test plan.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "integration.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "topDownOrder — the figure",
+              "vi": "topDownOrder — hình"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t={a:[\"b\",\"c\",\"d\"],b:[\"e\",\"f\"],c:[],d:[\"g\",\"h\"],e:[],f:[],g:[],h:[]},r=topDownOrder(t,\"a\");return JSON.stringify(r)==='[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\"]'?\"OK\":\"got \"+JSON.stringify(r)+\" \\u2014 breadth-first, children in the listed order\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "topDownOrder — shared component appears once",
+              "vi": "topDownOrder — thành phần dùng chung chỉ một lần"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const r={m:[\"x\",\"y\"],x:[\"z\"],y:[\"z\"],z:[]},n=topDownOrder(r,\"m\");return JSON.stringify(n)==='[\"m\",\"x\",\"y\",\"z\"]'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "stubsFor — baseline {a, b}",
+              "vi": "stubsFor — baseline {a, b}"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const g={a:[\"b\",\"c\",\"d\"],b:[\"e\",\"f\"],c:[],d:[\"g\",\"h\"],e:[],f:[],g:[],h:[]},t=stubsFor(g,[\"a\",\"b\"]);return JSON.stringify(t)==='[\"c\",\"d\",\"e\",\"f\"]'?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "stubsFor — no duplicates, sorted",
+              "vi": "stubsFor — không trùng, đã sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t={m:[\"z\",\"y\"],n:[\"y\"],y:[],z:[]},n=stubsFor(t,[\"n\",\"m\"]);return JSON.stringify(n)==='[\"y\",\"z\"]'?\"OK\":\"got \"+JSON.stringify(n)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "driversFor — leaves e and f",
+              "vi": "driversFor — lá e và f"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const g={a:[\"b\",\"c\",\"d\"],b:[\"e\",\"f\"],c:[],d:[\"g\",\"h\"],e:[],f:[],g:[],h:[]},r=driversFor(g,[\"e\",\"f\"]);return JSON.stringify(r)==='[\"b\"]'?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "driversFor — baseline {e, f, b, g}",
+              "vi": "driversFor — baseline {e, f, b, g}"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const g={a:[\"b\",\"c\",\"d\"],b:[\"e\",\"f\"],c:[],d:[\"g\",\"h\"],e:[],f:[],g:[],h:[]},r=driversFor(g,[\"e\",\"f\",\"b\",\"g\"]);return JSON.stringify(r)==='[\"a\",\"d\"]'?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "whole tree integrated ⇒ no stubs, no drivers",
+              "vi": "tích hợp cả cây ⇒ không stub, không driver"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e={a:[\"b\"],b:[]};return stubsFor(e,[\"a\",\"b\"]).length===0&&driversFor(e,[\"a\",\"b\"]).length===0?\"OK\":\"expected [] and []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng DFS (a, b, e, f, c, …) thay cho BFS."
+        },
+        {
+          "loi": "Trả thành phần đã ở trong baseline như stub."
+        },
+        {
+          "loi": "Quên khử trùng khi hai thành viên cùng gọi một thành phần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breadth-first",
+          "vi": "theo chiều rộng"
+        },
+        {
+          "en": "call tree",
+          "vi": "cây gọi hàm"
+        }
+      ]
+    },
+    {
+      "title": "Test levels 4 — Exam questions on component and integration testing",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "integration testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT2 slides 36–74: integration strategies (big-bang, incremental), component integration versus system integration, what integration testing should focus on, test-driven development and typical interface defects.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT2 36–74: chiến lược tích hợp (big-bang, tăng dần), component integration và system integration, integration testing nên tập trung vào đâu, TDD và lỗi giao diện điển hình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Integration = giao diện, không phải chức năng bên trong.",
+        "CIT do developer, SIT do tester."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 4 — Exam questions on component and integration testing\n\nAnswer in the answer panel (no code needed).\n\n1. Why is big-bang integration usually slower in practice?Vì sao tích hợp big-bang thực tế thường chậm hơn?\n2. Which is the difference between component integration testing and system integration testing?Khác biệt giữa component integration testing và system integration testing là gì?\n3. Integration testing should concentrate on…Integration testing nên tập trung vào…\n4. A developer writes a failing JUnit test, then the code to pass it, then refactors. This is…Developer viết test JUnit trượt, rồi mã để test đạt, rồi refactor. Đây là…\n5. Which is a typical integration defect?Đâu là lỗi tích hợp điển hình?\n6. Why should integration be planned with the architecture?Vì sao nên lập kế hoạch tích hợp cùng kiến trúc?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 4 — Exam questions on component and integration testing — answer key\n\n1. Why is big-bang integration usually slower in practice?Vì sao tích hợp big-bang thực tế thường chậm hơn?\n   Answer: b) When a failure appears, it is hard to locate the faulty interface among all components integrated at once\n   Incremental integration localises defects to the last added component.VI: Tích hợp tăng dần khoanh vùng lỗi vào thành phần vừa thêm.\n\n2. Which is the difference between component integration testing and system integration testing?Khác biệt giữa component integration testing và system integration testing là gì?\n   Answer: b) CIT tests interactions between components (usually after component testing, by developers); SIT tests interactions between systems, packages and microservices or external interfaces (usually after system testing, by testers)\n   Two integration levels with different scope and responsibility.VI: Hai cấp tích hợp khác phạm vi và trách nhiệm.\n\n3. Integration testing should concentrate on…Integration testing nên tập trung vào…\n   Answer: b) the integration itself — the communication between the modules, not their internal functionality\n   Individual functionality was covered at component level.VI: Chức năng từng module đã được phủ ở cấp component.\n\n4. A developer writes a failing JUnit test, then the code to pass it, then refactors. This is…Developer viết test JUnit trượt, rồi mã để test đạt, rồi refactor. Đây là…\n   Answer: b) test-driven development at component level\n   TDD is an example of test-first at the component level.VI: TDD là ví dụ test trước ở cấp component.\n\n5. Which is a typical integration defect?Đâu là lỗi tích hợp điển hình?\n   Answer: b) Module A sends the duration in minutes; module B expects hours\n   Units mismatch across an interface = wrong assumptions about data.VI: Lệch đơn vị qua giao diện = giả định sai về dữ liệu.\n\n6. Why should integration be planned with the architecture?Vì sao nên lập kế hoạch tích hợp cùng kiến trúc?\n   Answer: a) To make the system build in the order most efficient for testing\n   The integration strategy (order, stubs/drivers) depends on the architecture and should be planned before building.VI: Chiến lược tích hợp (thứ tự, stub/driver) phụ thuộc kiến trúc và nên lập trước khi xây.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why is big-bang integration usually slower in practice?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao tích hợp big-bang thực tế thường chậm hơn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It needs many stubs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "When a failure appears, it is hard to locate the faulty interface among all components integrated at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It must be automated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is done by users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Incremental integration localises defects to the last added component.</p><p><i>VI: Tích hợp tăng dần khoanh vùng lỗi vào thành phần vừa thêm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is the difference between component integration testing and system integration testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khác biệt giữa component integration testing và system integration testing là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CIT tests interactions between components (usually after component testing, by developers); SIT tests interactions between systems, packages and microservices or external interfaces (usually after system testing, by testers)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SIT is done before component testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CIT is done by users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two integration levels with different scope and responsibility.</p><p><i>VI: Hai cấp tích hợp khác phạm vi và trách nhiệm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Integration testing should concentrate on…</p><p style=\"opacity:.75;font-size:.92em\"><i>Integration testing nên tập trung vào…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the functionality of each individual module"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the integration itself — the communication between the modules, not their internal functionality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "usability"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the user manual"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Individual functionality was covered at component level.</p><p><i>VI: Chức năng từng module đã được phủ ở cấp component.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A developer writes a failing JUnit test, then the code to pass it, then refactors. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Developer viết test JUnit trượt, rồi mã để test đạt, rồi refactor. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "acceptance testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "test-driven development at component level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "big-bang integration"
+              },
+              {
+                "ma": "d",
+                "noiDung": "system testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>TDD is an example of test-first at the component level.</p><p><i>VI: TDD là ví dụ test trước ở cấp component.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a typical integration defect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lỗi tích hợp điển hình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A loop iterates one time too many inside a method"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Module A sends the duration in minutes; module B expects hours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The UI colour is wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The user manual has a typo"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Units mismatch across an interface = wrong assumptions about data.</p><p><i>VI: Lệch đơn vị qua giao diện = giả định sai về dữ liệu.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Why should integration be planned with the architecture?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao nên lập kế hoạch tích hợp cùng kiến trúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To make the system build in the order most efficient for testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To avoid writing unit tests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To skip system testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It should not be"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The integration strategy (order, stubs/drivers) depends on the architecture and should be planned before building.</p><p><i>VI: Chiến lược tích hợp (thứ tự, stub/driver) phụ thuộc kiến trúc và nên lập trước khi xây.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “cần nhiều stub” cho câu big-bang — big-bang không cần stub, nó chỉ khó khoanh vùng."
+        },
+        {
+          "loi": "Chọn lỗi vòng lặp trong một method là lỗi tích hợp — đó là lỗi component."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "big-bang integration",
+          "vi": "tích hợp một lần tất cả"
+        },
+        {
+          "en": "CIT / SIT",
+          "vi": "component / system integration testing"
+        }
+      ]
+    },
+    {
+      "title": "Test levels 5 — At which level would LabBook find this defect first?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LabBook = web front-end → REST API → BookingService → SeatRepository (PostgreSQL), plus an external university e-mail gateway. Decide the lowest level at which each defect would be found.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabBook = giao diện web → REST API → BookingService → SeatRepository (PostgreSQL), cộng cổng e-mail ngoài của trường. Xác định cấp thấp nhất phát hiện được mỗi lỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lỗi nằm gọn trong một method? hay giữa hai thành phần của mình? hay với hệ thống ngoài?",
+        "Cổng e-mail của trường là hệ thống NGOÀI ⇒ system integration."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 5 — At which level would LabBook find this defect first?\n\nAnswer in the answer panel (no code needed).\n\n1. Defect → lowest levelLỗi → cấp thấp nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test levels 5 — At which level would LabBook find this defect first? — answer key\n\n1. Defect → lowest levelLỗi → cấp thấp nhất\n   - r0.l: Component testing\n   - r1.l: Component integration testing\n   - r2.l: System integration testing\n   - r3.l: Component testing\n   - r4.l: Component integration testing\n   - r5.l: System integration testing\n   Logic inside one method → component; mismatches between LabBook’s own components → component integration; problems with an external system → system integration.VI: Logic trong một method → component; lệch giữa các thành phần của LabBook → component integration; vấn đề với hệ thống bên ngoài → system integration.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CT · CIT · SIT · CT · CIT · SIT.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Defect → lowest level</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → cấp thấp nhất</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Defect"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Component testing",
+                  "Component integration testing",
+                  "System integration testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "d": "BookingService.weeklyHours adds the hours of cancelled bookings"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "BookingService passes (lab, studentId) but SeatRepository.countSeats expects (studentId, lab)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "The university e-mail gateway rejects messages whose subject contains Vietnamese characters"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "calcRefund returns 50% for 1 h 59 min before the start"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "The REST controller sends the date as “02/11/2026” but BookingService parses ISO “2026-11-02”"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "After a timeout of the e-mail gateway LabBook retries forever and blocks the booking"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Component testing",
+              "r1.l": "Component integration testing",
+              "r2.l": "System integration testing",
+              "r3.l": "Component testing",
+              "r4.l": "Component integration testing",
+              "r5.l": "System integration testing"
+            },
+            "giaiThich": "<p>Logic inside one method → component; mismatches between LabBook’s own components → component integration; problems with an external system → system integration.</p><p><i>VI: Logic trong một method → component; lệch giữa các thành phần của LabBook → component integration; vấn đề với hệ thống bên ngoài → system integration.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đẩy mọi lỗi lên system testing — lỗi nên tìm ở cấp thấp nhất có thể (rẻ hơn)."
+        },
+        {
+          "loi": "Xếp lệch định dạng ngày giữa controller và service vào component — lỗi nằm ở giao diện giữa hai thành phần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gateway",
+          "vi": "cổng kết nối tới hệ thống ngoài"
+        }
+      ]
+    }
+  ]
+}

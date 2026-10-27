@@ -1,0 +1,618 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-sdlc-models",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-sdlc-models"
+  },
+  "exercises": [
+    {
+      "title": "SDLC 1 — Which lifecycle model is described?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "SDLC models"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Sequential models (waterfall, V-model) make one linear pass; iterative and incremental models (RUP, Scrum, Kanban, spiral) deliver working software in short cycles. Match each description to the model.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình tuần tự (waterfall, V-model) đi một lượt tuyến tính; mô hình lặp và tăng dần (RUP, Scrum, Kanban, spiral) giao phần mềm chạy được theo các vòng ngắn. Ghép mỗi mô tả với mô hình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chữ “sprint” ⇒ Scrum; “board, WIP” ⇒ Kanban; “risk analysis mỗi vòng, bỏ đi” ⇒ Spiral.",
+        "Test lên kế hoạch ngay từ yêu cầu và có nhánh trái/phải ⇒ V-model."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 1 — Which lifecycle model is described?\n\nAnswer in the answer panel (no code needed).\n\n1. Description → modelMô tả → mô hình\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 1 — Which lifecycle model is described? — answer key\n\n1. Description → modelMô tả → mô hình\n   - r0.m: Waterfall\n   - r1.m: V-model\n   - r2.m: Iterative & incremental (Scrum)\n   - r3.m: Kanban\n   - r4.m: Spiral\n   Waterfall tests at the end; the V-model integrates the test process throughout; Scrum works in sprints; Kanban has no fixed iterations and limits WIP; Spiral (prototyping) builds experimental increments, heavily reworked or abandoned.VI: Waterfall test ở cuối; V-model gắn quy trình test xuyên suốt; Scrum chạy theo sprint; Kanban không có vòng cố định, giới hạn WIP; Spiral (prototyping) dựng bản thử nghiệm, có thể làm lại nhiều hay bỏ đi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Waterfall · V-model · Scrum · Kanban · Spiral.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Description → model</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả → mô hình</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Description"
+              },
+              {
+                "ma": "m",
+                "ten": "Model",
+                "luaChon": [
+                  "Waterfall",
+                  "V-model",
+                  "Iterative & incremental (Scrum)",
+                  "Kanban",
+                  "Spiral"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "d": "Each phase starts when the previous one is finished; testing happens once, at the end, after all code is written"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "Each development phase on the left arm has a corresponding test level on the right arm; test planning starts with the requirements"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "Fixed-length sprints; at the end of each sprint a potentially shippable increment is demonstrated"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "No fixed iterations: work items flow through a board with work-in-progress limits; a feature can be released at any time"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "Experimental increments are built, tested and possibly thrown away after a risk analysis in each loop"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.m": "Waterfall",
+              "r1.m": "V-model",
+              "r2.m": "Iterative & incremental (Scrum)",
+              "r3.m": "Kanban",
+              "r4.m": "Spiral"
+            },
+            "giaiThich": "<p>Waterfall tests at the end; the V-model integrates the test process throughout; Scrum works in sprints; Kanban has no fixed iterations and limits WIP; Spiral (prototyping) builds experimental increments, heavily reworked or abandoned.</p><p><i>VI: Waterfall test ở cuối; V-model gắn quy trình test xuyên suốt; Scrum chạy theo sprint; Kanban không có vòng cố định, giới hạn WIP; Spiral (prototyping) dựng bản thử nghiệm, có thể làm lại nhiều hay bỏ đi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm V-model với waterfall vì cả hai đều tuần tự."
+        },
+        {
+          "loi": "Gán Kanban có iteration cố định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sequential model",
+          "vi": "mô hình tuần tự"
+        },
+        {
+          "en": "iterative & incremental",
+          "vi": "lặp và tăng dần"
+        },
+        {
+          "en": "WIP limit",
+          "vi": "giới hạn việc đang làm"
+        },
+        {
+          "en": "increment",
+          "vi": "phần tăng thêm — phần mềm chạy được sau một vòng"
+        }
+      ]
+    },
+    {
+      "title": "SDLC 2 — Complete the V-model",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "V-model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>In the V-model each development activity on the left has a corresponding test level on the right, and the test basis of that level is the work product on the left (dashed lines).</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 300\" width=\"100%\" style=\"max-width:640px;display:block;margin:8px auto\" role=\"img\" aria-label=\"V-model\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"640\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"320\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">V-model</text><path d=\"M125.7,57.0 L154.3,88.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M185.7,122.0 L214.3,153.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M245.7,187.0 L274.3,218.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M301.3,252.0 L311.3,267.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M328.7,267.0 L338.7,252.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M365.7,218.0 L394.3,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M425.7,153.0 L454.3,122.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M485.7,88.0 L514.3,57.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M195.0,40.0 L475.0,40.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M255.0,105.0 L415.0,105.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M315.0,170.0 L355.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M365.0,235.0 L295.0,235.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><rect x=\"25\" y=\"23\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"44.0\" text-anchor=\"middle\" fill=\"#111827\">User requirements</text><rect x=\"85\" y=\"88\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"170\" y=\"109.0\" text-anchor=\"middle\" fill=\"#111827\">System requirements</text><rect x=\"145\" y=\"153\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"230\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">Architectural design</text><rect x=\"215\" y=\"218\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"290\" y=\"239.0\" text-anchor=\"middle\" fill=\"#111827\">Detailed design</text><rect x=\"275\" y=\"267\" width=\"90\" height=\"26\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"320\" y=\"284.0\" text-anchor=\"middle\" fill=\"#111827\">Coding</text><rect x=\"295\" y=\"218\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"350\" y=\"239.0\" text-anchor=\"middle\" fill=\"#111827\">(4) ?</text><rect x=\"355\" y=\"153\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"410\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">(3) ?</text><rect x=\"415\" y=\"88\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"470\" y=\"109.0\" text-anchor=\"middle\" fill=\"#111827\">(2) ?</text><rect x=\"475\" y=\"23\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"530\" y=\"44.0\" text-anchor=\"middle\" fill=\"#111827\">(1) ?</text></svg>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong V-model mỗi hoạt động phát triển bên trái có một cấp test tương ứng bên phải, và test basis của cấp đó là sản phẩm bên trái (đường nét đứt).</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 300\" width=\"100%\" style=\"max-width:640px;display:block;margin:8px auto\" role=\"img\" aria-label=\"V-model\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"640\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"320\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">V-model</text><path d=\"M125.7,57.0 L154.3,88.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M185.7,122.0 L214.3,153.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M245.7,187.0 L274.3,218.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M301.3,252.0 L311.3,267.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M328.7,267.0 L338.7,252.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M365.7,218.0 L394.3,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M425.7,153.0 L454.3,122.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M485.7,88.0 L514.3,57.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M195.0,40.0 L475.0,40.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M255.0,105.0 L415.0,105.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M315.0,170.0 L355.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><path d=\"M365.0,235.0 L295.0,235.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" stroke-dasharray=\"5 4\" marker-end=\"url(#mt)\"/><rect x=\"25\" y=\"23\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"44.0\" text-anchor=\"middle\" fill=\"#111827\">User requirements</text><rect x=\"85\" y=\"88\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"170\" y=\"109.0\" text-anchor=\"middle\" fill=\"#111827\">System requirements</text><rect x=\"145\" y=\"153\" width=\"170\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"230\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">Architectural design</text><rect x=\"215\" y=\"218\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"290\" y=\"239.0\" text-anchor=\"middle\" fill=\"#111827\">Detailed design</text><rect x=\"275\" y=\"267\" width=\"90\" height=\"26\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"320\" y=\"284.0\" text-anchor=\"middle\" fill=\"#111827\">Coding</text><rect x=\"295\" y=\"218\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"350\" y=\"239.0\" text-anchor=\"middle\" fill=\"#111827\">(4) ?</text><rect x=\"355\" y=\"153\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"410\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">(3) ?</text><rect x=\"415\" y=\"88\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"470\" y=\"109.0\" text-anchor=\"middle\" fill=\"#111827\">(2) ?</text><rect x=\"475\" y=\"23\" width=\"110\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"530\" y=\"44.0\" text-anchor=\"middle\" fill=\"#111827\">(1) ?</text></svg>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc chữ V theo hàng ngang: tầng cao nhất bên trái đi với tầng cao nhất bên phải.",
+        "Sản phẩm bên trái là test basis của cấp bên phải: thiết kế chi tiết là cơ sở của component test."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 2 — Complete the V-model\n\nAnswer in the answer panel (no code needed).\n\n1. Name the test levels (1)–(4)Gọi tên các cấp test (1)–(4)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 2 — Complete the V-model — answer key\n\n1. Name the test levels (1)–(4)Gọi tên các cấp test (1)–(4)\n   - r0.l: Acceptance testing\n   - r1.l: System testing\n   - r2.l: Integration testing\n   - r3.l: Component testing\n   User requirements ↔ acceptance; system requirements ↔ system; architecture ↔ integration; detailed design ↔ component.VI: Yêu cầu người dùng ↔ acceptance; yêu cầu hệ thống ↔ system; kiến trúc ↔ integration; thiết kế chi tiết ↔ component.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1) acceptance · (2) system · (3) integration · (4) component.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Name the test levels (1)–(4)</p><p style=\"opacity:.75;font-size:.92em\"><i>Gọi tên các cấp test (1)–(4)</i></p>",
+            "cot": [
+              {
+                "ma": "b",
+                "ten": "Box"
+              },
+              {
+                "ma": "l",
+                "ten": "Test level",
+                "luaChon": [
+                  "Component testing",
+                  "Integration testing",
+                  "System testing",
+                  "Acceptance testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "b": "(1) — paired with user requirements"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "b": "(2) — paired with system requirements"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "b": "(3) — paired with architectural design"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "b": "(4) — paired with detailed design"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Acceptance testing",
+              "r1.l": "System testing",
+              "r2.l": "Integration testing",
+              "r3.l": "Component testing"
+            },
+            "giaiThich": "<p>User requirements ↔ acceptance; system requirements ↔ system; architecture ↔ integration; detailed design ↔ component.</p><p><i>VI: Yêu cầu người dùng ↔ acceptance; yêu cầu hệ thống ↔ system; kiến trúc ↔ integration; thiết kế chi tiết ↔ component.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép kiến trúc với system testing."
+        },
+        {
+          "loi": "Ghép yêu cầu hệ thống với acceptance — acceptance đi với yêu cầu NGƯỜI DÙNG/nghiệp vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "V-model",
+          "vi": "mô hình chữ V"
+        },
+        {
+          "en": "test level",
+          "vi": "cấp kiểm thử"
+        }
+      ]
+    },
+    {
+      "title": "SDLC 3 — Good testing in any lifecycle (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "SDLC models",
+        "good testing practices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The syllabus lists characteristics of good testing that hold for <b>every</b> lifecycle model. Select all of them, then answer four exam questions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Syllabus nêu các đặc điểm của kiểm thử tốt đúng với <b>mọi</b> mô hình vòng đời. Chọn tất cả, rồi trả lời bốn câu thi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bốn đặc điểm: tương ứng hoạt động, mục tiêu riêng mỗi cấp, phân tích/thiết kế sớm, tester review bản nháp sớm.",
+        "Mô hình lặp ⇒ mỗi vòng thêm phần mới nhưng phải giữ phần cũ ⇒ hồi quy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 3 — Good testing in any lifecycle (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Select ALL characteristics of good testing in any SDLC.Chọn TẤT CẢ đặc điểm của kiểm thử tốt trong mọi SDLC.\n2. In an iterative model, what grows with every iteration and calls for automation?Trong mô hình lặp, thứ gì phình ra mỗi vòng và đòi tự động hoá?\n3. Why must a lifecycle model be adapted to the context?Vì sao mô hình vòng đời phải điều chỉnh theo ngữ cảnh?\n4. In the V-model, when should acceptance test design start?Trong V-model, khi nào nên bắt đầu thiết kế acceptance test?\n5. Which is a typical risk of the waterfall model for testing?Rủi ro điển hình của waterfall với kiểm thử là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 3 — Good testing in any lifecycle (K2) — answer key\n\n1. Select ALL characteristics of good testing in any SDLC.Chọn TẤT CẢ đặc điểm của kiểm thử tốt trong mọi SDLC.\n   Answer: a) For every development activity there is a corresponding test activity + b) Each test level has test objectives specific to that level + c) Test analysis and design for a level begin during the corresponding development activity + d) Testers participate in discussions and review work products as soon as drafts are available\n   a–d are the four characteristics; e and f contradict early testing and the need to adapt to context.VI: a–d là bốn đặc điểm; e, f trái với test sớm và việc điều chỉnh theo ngữ cảnh.\n\n2. In an iterative model, what grows with every iteration and calls for automation?Trong mô hình lặp, thứ gì phình ra mỗi vòng và đòi tự động hoá?\n   Answer: b) The regression test suite\n   Each increment must not break the previous ones, so regression testing grows.VI: Mỗi phần tăng không được làm hỏng phần trước, nên regression phình ra.\n\n3. Why must a lifecycle model be adapted to the context?Vì sao mô hình vòng đời phải điều chỉnh theo ngữ cảnh?\n   Answer: a) Because of project goal, type of product, business priorities (time-to-market) and identified product and project risks\n   E.g. a COTS integration may run integration testing at system level and acceptance in two steps; a safety-critical product needs a more formal model.VI: Vd tích hợp phần mềm thương mại có sẵn có thể test tích hợp ở mức hệ thống và acceptance hai bước; sản phẩm an toàn sống còn cần mô hình chính quy hơn.\n\n4. In the V-model, when should acceptance test design start?Trong V-model, khi nào nên bắt đầu thiết kế acceptance test?\n   Answer: b) When the user requirements are written (test analysis and design begin during the corresponding development activity)\n   Early test design also reviews the requirements and finds defects in them.VI: Thiết kế test sớm cũng là review yêu cầu và tìm lỗi trong đó.\n\n5. Which is a typical risk of the waterfall model for testing?Rủi ro điển hình của waterfall với kiểm thử là gì?\n   Answer: b) Defects are found late, when they are expensive to fix, and testing is squeezed at the end\n   Late feedback is the price of a single pass.VI: Phản hồi muộn là cái giá của một lượt duy nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>q1 a, b, c, d · q2 b · q3 a · q4 b · q5 b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "nhieu": true,
+            "de": "<p>Select ALL characteristics of good testing in any SDLC.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn TẤT CẢ đặc điểm của kiểm thử tốt trong mọi SDLC.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For every development activity there is a corresponding test activity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each test level has test objectives specific to that level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test analysis and design for a level begin during the corresponding development activity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testers participate in discussions and review work products as soon as drafts are available"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Testing starts only when coding is finished"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Every project must use the same four test levels in the same order"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "giaiThich": "<p>a–d are the four characteristics; e and f contradict early testing and the need to adapt to context.</p><p><i>VI: a–d là bốn đặc điểm; e, f trái với test sớm và việc điều chỉnh theo ngữ cảnh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In an iterative model, what grows with every iteration and calls for automation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong mô hình lặp, thứ gì phình ra mỗi vòng và đòi tự động hoá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The number of requirements documents"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The regression test suite"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The number of test levels"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The size of the test team"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each increment must not break the previous ones, so regression testing grows.</p><p><i>VI: Mỗi phần tăng không được làm hỏng phần trước, nên regression phình ra.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why must a lifecycle model be adapted to the context?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mô hình vòng đời phải điều chỉnh theo ngữ cảnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because of project goal, type of product, business priorities (time-to-market) and identified product and project risks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because testers prefer Agile"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It must not be adapted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only to reduce documentation"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>E.g. a COTS integration may run integration testing at system level and acceptance in two steps; a safety-critical product needs a more formal model.</p><p><i>VI: Vd tích hợp phần mềm thương mại có sẵn có thể test tích hợp ở mức hệ thống và acceptance hai bước; sản phẩm an toàn sống còn cần mô hình chính quy hơn.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>In the V-model, when should acceptance test design start?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong V-model, khi nào nên bắt đầu thiết kế acceptance test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "After system testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "When the user requirements are written (test analysis and design begin during the corresponding development activity)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After deployment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "When the customer complains"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Early test design also reviews the requirements and finds defects in them.</p><p><i>VI: Thiết kế test sớm cũng là review yêu cầu và tìm lỗi trong đó.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a typical risk of the waterfall model for testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Rủi ro điển hình của waterfall với kiểm thử là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Too much regression testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Defects are found late, when they are expensive to fix, and testing is squeezed at the end"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No documentation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Too many releases"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Late feedback is the price of a single pass.</p><p><i>VI: Phản hồi muộn là cái giá của một lượt duy nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “mọi dự án dùng cùng bốn cấp” — các cấp có thể gộp hay bỏ theo ngữ cảnh."
+        },
+        {
+          "loi": "Cho rằng V-model thiết kế acceptance test sau system test — thiết kế bắt đầu ngay khi có yêu cầu người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COTS",
+          "vi": "phần mềm thương mại có sẵn (commercial off-the-shelf)"
+        },
+        {
+          "en": "time-to-market",
+          "vi": "thời gian đưa sản phẩm ra thị trường"
+        }
+      ]
+    },
+    {
+      "title": "SDLC 4 — Which family fits this project?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "SDLC models"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Choose the lifecycle family that fits each project best, using the comparison table of lesson 2.1 (test basis, change rate, risk, regulation).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn họ mô hình hợp nhất với từng dự án, dựa vào bảng so sánh của bài 2.1 (test basis, tần suất thay đổi, rủi ro, quy định).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: yêu cầu có ổn định và được duyệt chính thức không? có cần phản hồi sớm không?",
+        "Quy định pháp lý + hợp đồng trọn gói ⇒ tài liệu chính thức ⇒ tuần tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 4 — Which family fits this project?\n\nAnswer in the answer panel (no code needed).\n\n1. Project → lifecycle familyDự án → họ mô hình\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SDLC 4 — Which family fits this project? — answer key\n\n1. Project → lifecycle familyDự án → họ mô hình\n   - r0.f: Sequential (V-model)\n   - r1.f: Iterative & incremental (Agile)\n   - r2.f: Sequential (V-model)\n   - r3.f: Iterative & incremental (Agile)\n   Stable, formal, regulated requirements fit the V-model; frequent feedback and changing requirements fit iterative and incremental development.VI: Yêu cầu ổn định, chính thức, có quy định hợp V-model; phản hồi thường xuyên và yêu cầu hay đổi hợp mô hình lặp và tăng dần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>V-model · Agile · V-model · Agile.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Project → lifecycle family</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự án → họ mô hình</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Project"
+              },
+              {
+                "ma": "f",
+                "ten": "Family",
+                "luaChon": [
+                  "Sequential (V-model)",
+                  "Iterative & incremental (Agile)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "p": "Software for a radiotherapy machine; every requirement must be approved by a regulator before coding"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "LabBook: a student startup that wants feedback from real students every two weeks"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "A bank’s fixed-price contract with a complete, signed requirements specification and one delivery date"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "A mobile game whose features change after every A/B test"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.f": "Sequential (V-model)",
+              "r1.f": "Iterative & incremental (Agile)",
+              "r2.f": "Sequential (V-model)",
+              "r3.f": "Iterative & incremental (Agile)"
+            },
+            "giaiThich": "<p>Stable, formal, regulated requirements fit the V-model; frequent feedback and changing requirements fit iterative and incremental development.</p><p><i>VI: Yêu cầu ổn định, chính thức, có quy định hợp V-model; phản hồi thường xuyên và yêu cầu hay đổi hợp mô hình lặp và tăng dần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng Agile luôn tốt hơn — ngữ cảnh quyết định."
+        },
+        {
+          "loi": "Chọn V-model cho sản phẩm đổi tính năng sau mỗi A/B test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "regulator",
+          "vi": "cơ quan quản lý"
+        },
+        {
+          "en": "fixed-price contract",
+          "vi": "hợp đồng trọn gói"
+        }
+      ]
+    }
+  ]
+}

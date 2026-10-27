@@ -1,0 +1,622 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-levels-overview-matrix",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-levels-overview-matrix"
+  },
+  "exercises": [
+    {
+      "title": "Overview 1 — Rebuild the Overview.xlsx rows",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "test levels overview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The teacher’s spreadsheet <i>Overview.xlsx</i> compresses chapter 2 into one table using the five-level naming of FPT projects: <b>UAT</b> (user acceptance), <b>SIT</b> (system integration), <b>ST</b> (system), <b>CIT</b> (component integration), <b>CT</b> (component/unit). Put each cell back in its row.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng <i>Overview.xlsx</i> của thầy/cô nén chương 2 vào một bảng theo cách gọi năm cấp của dự án FPT: <b>UAT</b>, <b>SIT</b>, <b>ST</b>, <b>CIT</b>, <b>CT</b>. Đặt mỗi ô về đúng dòng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dòng trên validate, dòng dưới verify.",
+        "Mở tài liệu nào để thiết kế test? SRS ⇒ ST; ADD ⇒ CIT; đặc tả lớp ⇒ CT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 1 — Rebuild the Overview.xlsx rows\n\nAnswer in the answer panel (no code needed).\n\n1. Cell → levelÔ → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 1 — Rebuild the Overview.xlsx rows — answer key\n\n1. Cell → levelÔ → cấp\n   - r0.l: UAT\n   - r1.l: CT\n   - r2.l: CIT\n   - r3.l: ST\n   - r4.l: SIT\n   - r5.l: UAT\n   - r6.l: CIT\n   - r7.l: CT\n   Only UAT validates; every lower level verifies against a document: SRS for ST, ADD/sequence diagrams for CIT, the class specification for CT. White-box appears only at CT and CIT, done by developers.VI: Chỉ UAT validate; mọi cấp thấp hơn verify theo một tài liệu: SRS cho ST, ADD/sequence diagram cho CIT, đặc tả lớp cho CT. White-box chỉ có ở CT và CIT, do developer làm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>UAT · CT · CIT · ST · SIT · UAT · CIT · CT.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Cell → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Ô → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Cell of the sheet"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "UAT",
+                  "SIT",
+                  "ST",
+                  "CIT",
+                  "CT"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "c": "Objective: validate user requirements / system requirements"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "Objective: method correctness, robustness, coding logic"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "Test basis: architectural design document (ADD), sequence diagrams"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "Test basis: software requirement specification (SRS)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "Test object: subsystem / system interfaces"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "Approach: business-process-based, user-requirement-based, monkey test"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "c": "Common test types: API test, GUI integration, front-end → back-end function integration"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "c": "Techniques: black-box on inputs/outputs of a method, white-box statement and branch coverage"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "UAT",
+              "r1.l": "CT",
+              "r2.l": "CIT",
+              "r3.l": "ST",
+              "r4.l": "SIT",
+              "r5.l": "UAT",
+              "r6.l": "CIT",
+              "r7.l": "CT"
+            },
+            "giaiThich": "<p>Only UAT validates; every lower level verifies against a document: SRS for ST, ADD/sequence diagrams for CIT, the class specification for CT. White-box appears only at CT and CIT, done by developers.</p><p><i>VI: Chỉ UAT validate; mọi cấp thấp hơn verify theo một tài liệu: SRS cho ST, ADD/sequence diagram cho CIT, đặc tả lớp cho CT. White-box chỉ có ở CT và CIT, do developer làm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán SRS cho SIT — SIT verify theo đặc tả yêu cầu hệ thống nhưng đối tượng là GIAO DIỆN hệ thống."
+        },
+        {
+          "loi": "Gán monkey test cho ST."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ADD",
+          "vi": "tài liệu thiết kế kiến trúc"
+        },
+        {
+          "en": "monkey test",
+          "vi": "nhập ngẫu nhiên không kịch bản xem có gì vỡ"
+        }
+      ]
+    },
+    {
+      "title": "Overview 2 — One requirement, four levels (PE FA23 style)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test levels overview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Requirement from a practical exam: “<i>Lab name is a required string of 5–30 characters; the first character must be a letter; no special characters.</i>” LabBook uses it in the “Create lab” function. Decide the level of each planned test.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu kiểu đề PE: “<i>Tên phòng lab là chuỗi bắt buộc 5–30 ký tự; ký tự đầu phải là chữ cái; không có ký tự đặc biệt.</i>” LabBook dùng nó trong chức năng “Tạo phòng lab”. Xác định cấp của từng test dự kiến.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Gọi thẳng method ⇒ CT; gọi API/giữa hai lớp ⇒ CIT; qua UI theo SRS ⇒ ST.",
+        "Kiểm API bằng Postman thuộc CIT trong bảng của thầy/cô."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 2 — One requirement, four levels (PE FA23 style)\n\nAnswer in the answer panel (no code needed).\n\n1. Planned test → levelTest dự kiến → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 2 — One requirement, four levels (PE FA23 style) — answer key\n\n1. Planned test → levelTest dự kiến → cấp\n   - r0.l: CT\n   - r1.l: CT\n   - r2.l: CIT\n   - r3.l: ST\n   - r4.l: UAT\n   - r5.l: CIT\n   The worked example of the lesson: EP + BVA and branch coverage on the method (CT); form ↔ service and API calls (CIT); the whole function against the SRS through the UI (ST); a real user end-to-end (UAT).VI: Ví dụ mẫu của bài: EP + BVA và branch coverage trên method (CT); form ↔ service và gọi API (CIT); cả chức năng theo SRS qua giao diện (ST); người dùng thật đầu-cuối (UAT).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CT · CT · CIT · ST · UAT · CIT.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Planned test → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Test dự kiến → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Planned test"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "UAT",
+                  "CIT",
+                  "ST",
+                  "CT"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "isValidLabName(String) with lengths 4, 5, 30, 31, a first digit and a “#”"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Branch coverage of isValidLabName"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "The form posts the name to the service; the service’s error message comes back and is shown on the form"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "The whole “Create lab” function through the UI against the SRS, with a decision table of name × capacity × building"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "The head of the lab department creates the real labs for next semester end-to-end"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Postman: POST /labs with a 31-character name returns 400 and the error code LAB_NAME_LENGTH"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "CT",
+              "r1.l": "CT",
+              "r2.l": "CIT",
+              "r3.l": "ST",
+              "r4.l": "UAT",
+              "r5.l": "CIT"
+            },
+            "giaiThich": "<p>The worked example of the lesson: EP + BVA and branch coverage on the method (CT); form ↔ service and API calls (CIT); the whole function against the SRS through the UI (ST); a real user end-to-end (UAT).</p><p><i>VI: Ví dụ mẫu của bài: EP + BVA và branch coverage trên method (CT); form ↔ service và gọi API (CIT); cả chức năng theo SRS qua giao diện (ST); người dùng thật đầu-cuối (UAT).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán Postman vào ST."
+        },
+        {
+          "loi": "Gán branch coverage vào ST — white-box chỉ ở CT/CIT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Postman",
+          "vi": "công cụ gọi API thủ công/tự động"
+        }
+      ]
+    },
+    {
+      "title": "Overview 3 — Reading the sheet (exam style)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test levels overview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five questions that check you can read the overview table — the kind of reasoning PE Question 3 and the Lab reports (Report 5.1 unit, 5.2 integration, 5.3 system) rely on.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểm tra bạn đọc được bảng tổng quan — kiểu lập luận mà câu 3 đề PE và các báo cáo Lab (Report 5.1 unit, 5.2 integration, 5.3 system) dựa vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "5.1 / 5.2 / 5.3 = unit / integration / system.",
+        "Validate chỉ có ở UAT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 3 — Reading the sheet (exam style)\n\nAnswer in the answer panel (no code needed).\n\n1. Which techniques appear at EVERY level of the sheet?Kỹ thuật nào có ở MỌI cấp của bảng?\n2. Which FPT report template matches CT?Template báo cáo nào của FPT ứng với CT?\n3. Why do FPT projects report CIT and SIT separately?Vì sao dự án FPT báo cáo CIT và SIT riêng?\n4. In the sheet, which levels use white-box techniques?Trong bảng, cấp nào dùng kỹ thuật white-box?\n5. Which objective appears ONLY in the UAT row?Mục tiêu nào CHỈ có ở dòng UAT?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 3 — Reading the sheet (exam style) — answer key\n\n1. Which techniques appear at EVERY level of the sheet?Kỹ thuật nào có ở MỌI cấp của bảng?\n   Answer: b) Equivalence partitioning, boundary value analysis, decision tables\n   They are the black-box workhorses of chapter 4.VI: Chúng là “ngựa thồ” black-box của chương 4.\n\n2. Which FPT report template matches CT?Template báo cáo nào của FPT ứng với CT?\n   Answer: a) Report 5.1 Unit Test\n   5.1 = unit (Lab 2), 5.2 = integration (Lab 3), 5.3 = system (Lab 4).VI: 5.1 = unit (Lab 2), 5.2 = integration (Lab 3), 5.3 = system (Lab 4).\n\n3. Why do FPT projects report CIT and SIT separately?Vì sao dự án FPT báo cáo CIT và SIT riêng?\n   Answer: b) Different people do them: developers with API tools (CIT) and the test team against external systems (SIT)\n   CTFL has one integration level with two sub-levels; industry often reports them separately.VI: CTFL có một cấp integration với hai cấp con; thực tế thường báo cáo riêng.\n\n4. In the sheet, which levels use white-box techniques?Trong bảng, cấp nào dùng kỹ thuật white-box?\n   Answer: b) Only CT and CIT, by developers\n   Consistent with the slide: white-box at component and component-integration level is done by developers. (In theory white-box can be applied at any level — e.g. menu coverage at system level — but the sheet records common practice.)VI: Khớp slide: white-box ở component và component integration do developer làm. (Về lý thuyết white-box làm được ở mọi cấp — vd độ phủ menu ở system — nhưng bảng ghi theo thực tế phổ biến.)\n\n5. Which objective appears ONLY in the UAT row?Mục tiêu nào CHỈ có ở dòng UAT?\n   Answer: b) Validate\n   Top row validates, lower rows verify.VI: Dòng trên validate, dòng dưới verify.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which techniques appear at EVERY level of the sheet?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật nào có ở MỌI cấp của bảng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Statement and branch coverage"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Equivalence partitioning, boundary value analysis, decision tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Monkey testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Load testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They are the black-box workhorses of chapter 4.</p><p><i>VI: Chúng là “ngựa thồ” black-box của chương 4.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which FPT report template matches CT?</p><p style=\"opacity:.75;font-size:.92em\"><i>Template báo cáo nào của FPT ứng với CT?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Report 5.1 Unit Test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Report 5.3 System Test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Report 3 SRS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>5.1 = unit (Lab 2), 5.2 = integration (Lab 3), 5.3 = system (Lab 4).</p><p><i>VI: 5.1 = unit (Lab 2), 5.2 = integration (Lab 3), 5.3 = system (Lab 4).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why do FPT projects report CIT and SIT separately?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dự án FPT báo cáo CIT và SIT riêng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The syllabus requires two separate levels"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Different people do them: developers with API tools (CIT) and the test team against external systems (SIT)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SIT does not exist"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To have more reports"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>CTFL has one integration level with two sub-levels; industry often reports them separately.</p><p><i>VI: CTFL có một cấp integration với hai cấp con; thực tế thường báo cáo riêng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>In the sheet, which levels use white-box techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bảng, cấp nào dùng kỹ thuật white-box?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All levels"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only CT and CIT, by developers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only UAT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only ST"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Consistent with the slide: white-box at component and component-integration level is done by developers. (In theory white-box can be applied at any level — e.g. menu coverage at system level — but the sheet records common practice.)</p><p><i>VI: Khớp slide: white-box ở component và component integration do developer làm. (Về lý thuyết white-box làm được ở mọi cấp — vd độ phủ menu ở system — nhưng bảng ghi theo thực tế phổ biến.)</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which objective appears ONLY in the UAT row?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu nào CHỈ có ở dòng UAT?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Verify"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Validate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Find interface defects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Coding logic"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Top row validates, lower rows verify.</p><p><i>VI: Dòng trên validate, dòng dưới verify.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “mọi cấp” cho white-box trong bảng của thầy/cô."
+        },
+        {
+          "loi": "Cho rằng syllabus có hai cấp integration riêng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Report 5.1 / 5.2 / 5.3",
+          "vi": "template báo cáo unit / integration / system test của FPT"
+        }
+      ]
+    },
+    {
+      "title": "Overview 4 — Which document do you open first?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "test basis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Before designing tests you open the test basis of the level. For each task of the LabBook team, pick the document to open first (the “Test approach / basis” column of the sheet).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi thiết kế test, bạn mở test basis của cấp đó. Với mỗi việc của nhóm LabBook, chọn tài liệu cần mở trước (cột “Test approach / basis” của bảng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi báo cáo ứng với một cấp; mỗi cấp có một test basis.",
+        "Lab 2 dùng bộ Javadoc “Detail Design”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 4 — Which document do you open first?\n\nAnswer in the answer panel (no code needed).\n\n1. Task → documentViệc → tài liệu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Overview 4 — Which document do you open first? — answer key\n\n1. Task → documentViệc → tài liệu\n   - r0.d: Detailed design (class specification / Javadoc)\n   - r1.d: Architectural design and sequence diagrams\n   - r2.d: Software requirement specification (SRS)\n   - r3.d: Business processes and user requirements\n   CT ↔ detailed design; CIT ↔ ADD and sequence diagrams; ST ↔ SRS; UAT ↔ business processes and user requirements.VI: CT ↔ thiết kế chi tiết; CIT ↔ ADD và sequence diagram; ST ↔ SRS; UAT ↔ quy trình nghiệp vụ và yêu cầu người dùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Detailed design · ADD/sequence · SRS · business processes.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Task → document</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → tài liệu</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Task"
+              },
+              {
+                "ma": "d",
+                "ten": "Document",
+                "luaChon": [
+                  "Detailed design (class specification / Javadoc)",
+                  "Architectural design and sequence diagrams",
+                  "Software requirement specification (SRS)",
+                  "Business processes and user requirements"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Write Report 5.1 for reserveSeat (Lab 2)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Write Report 5.2 for the booking flow between the controller, BookingService and the repository (Lab 3)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Write Report 5.3 for the whole “Book a seat” function (Lab 4)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Prepare the acceptance week with the lab department"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.d": "Detailed design (class specification / Javadoc)",
+              "r1.d": "Architectural design and sequence diagrams",
+              "r2.d": "Software requirement specification (SRS)",
+              "r3.d": "Business processes and user requirements"
+            },
+            "giaiThich": "<p>CT ↔ detailed design; CIT ↔ ADD and sequence diagrams; ST ↔ SRS; UAT ↔ business processes and user requirements.</p><p><i>VI: CT ↔ thiết kế chi tiết; CIT ↔ ADD và sequence diagram; ST ↔ SRS; UAT ↔ quy trình nghiệp vụ và yêu cầu người dùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mở SRS cho Report 5.1."
+        },
+        {
+          "loi": "Mở mã nguồn làm test basis cho system test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sequence diagram",
+          "vi": "sơ đồ tuần tự — thứ tự lời gọi giữa các thành phần"
+        }
+      ]
+    }
+  ]
+}

@@ -58,6 +58,60 @@
       "description": "Dự án LabBook — mốc chương 1: review user story bản 1.0 trước khi có mã (mơ hồ, mâu thuẫn, thiếu, không đo được; có bẫy), viết ≥ 14 test condition truy vết về story, gọi tên hoạt động/sản phẩm/nguyên tắc; kèm góc phỏng vấn 1."
     },
     {
+      "slug": "swt301-sdlc-models",
+      "name": "2.1 Software development lifecycle models",
+      "level": "BEGINNER",
+      "description": "Waterfall, V-model, Scrum, Kanban, Spiral; hoàn thiện sơ đồ chữ V; bốn đặc điểm kiểm thử tốt; chọn họ mô hình theo ngữ cảnh dự án."
+    },
+    {
+      "slug": "swt301-test-levels",
+      "name": "2.2 Test levels: component and integration testing",
+      "level": "BEGINNER",
+      "description": "Năm thuộc tính của component và integration testing, stub/driver trên cây gọi, viết code lập kế hoạch tích hợp top-down/bottom-up, câu thi, chọn cấp phát hiện lỗi LabBook."
+    },
+    {
+      "slug": "swt301-system-acceptance",
+      "name": "2.3 Test levels: system and acceptance testing",
+      "level": "BEGINNER",
+      "description": "Thuộc tính của system và acceptance testing, sáu dạng acceptance (UAT, OAT, hợp đồng, quy định, alpha, beta) trên LabBook, đặt từng test LabBook vào đúng cấp, câu thi."
+    },
+    {
+      "slug": "swt301-test-types",
+      "name": "2.4 Test types: functional, non-functional, white-box, change-related",
+      "level": "BEGINNER",
+      "description": "Phân loại test LabBook theo loại, đặc tính ISO 25010, mọi loại ở mọi cấp, viết code lập kế hoạch confirmation + regression sau bản sửa, câu thi."
+    },
+    {
+      "slug": "swt301-maintenance-test-plan",
+      "name": "2.5 Maintenance testing and the high-level test plan",
+      "level": "BEGINNER",
+      "description": "Ba tác nhân kiểm thử bảo trì, viết code phân tích tác động trên đồ thị phụ thuộc LabBook, điền test plan IEEE 829 16 mục cho đợt chuyển đổi LabBook 2.0, câu thi."
+    },
+    {
+      "slug": "swt301-levels-overview-matrix",
+      "name": "2.6 The teacher’s overview: UAT · SIT · ST · CIT · CT",
+      "level": "BEGINNER",
+      "description": "Dựng lại bảng Overview.xlsx (mục tiêu, đối tượng, cơ sở, kỹ thuật của 5 cấp), một yêu cầu kiểu PE qua bốn cấp, đọc bảng kiểu đề, chọn tài liệu cần mở cho Report 5.1/5.2/5.3."
+    },
+    {
+      "slug": "swt301-2-lab-levels-types-labbook2",
+      "name": "Lab 2 — Test Levels and Test Types of LabBook 2.0",
+      "level": "ADVANCED",
+      "description": "Lab chương 2: cấp × loại của 10 test (CT/CIT/SIT/ST/UAT), kế hoạch tích hợp top-down/bottom-up với stub/driver, kiểm thử bảo trì (tác nhân, phân tích tác động bắc cầu, confirmation/regression), mục IEEE 829 và dạng acceptance."
+    },
+    {
+      "slug": "swt301-2-deep-integration-test-doubles",
+      "name": "Deep Lab 2 — Component Integration Testing with Test Doubles",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 2: viết test tích hợp cho BookingService với stub/spy thay repository, mailer, clock; chấm bằng 11 mutant lỗi giao diện (đảo tham số, sai đơn vị phút/giờ, gửi thư trước khi lưu, nuốt lỗi, nâng hạng sai, kiểm chủ muộn)."
+    },
+    {
+      "slug": "swt301-2-project-labbook-hotfix-regression",
+      "name": "LabBook Project 2 — Hot-fix 1.0.1: Confirmation and Regression Testing",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 2: bản sửa khẩn luật huỷ 2 giờ — viết ca confirmation + bộ regression chạy thật (CSDL, thư, nâng hạng FIFO, quyền chủ, giới hạn tuần) bắt các bản build lỗi; chiến lược bảo trì; kèm góc phỏng vấn 2."
+    },
+    {
       "slug": "swt301-static-testing-basics",
       "name": "3.1 Static testing basics",
       "level": "BEGINNER",

@@ -1,0 +1,695 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-maintenance-test-plan",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-maintenance-test-plan"
+  },
+  "exercises": [
+    {
+      "title": "Maintenance 1 — Which trigger starts maintenance testing?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "maintenance testing triggers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Maintenance testing is triggered by <b>modification</b> (enhancements, corrective and emergency fixes, environment changes, patches), <b>migration</b> (to another platform, including data conversion) or <b>retirement</b> (data archiving and restoring). Classify each LabBook event.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử bảo trì được kích hoạt bởi <b>modification</b> (nâng cấp, sửa lỗi thường/khẩn, đổi môi trường, bản vá), <b>migration</b> (sang nền tảng khác, kèm chuyển đổi dữ liệu) hoặc <b>retirement</b> (lưu trữ và khôi phục dữ liệu). Phân loại từng sự kiện của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chữ “convert/import data, new platform” ⇒ migration.",
+        "Nâng cấp CSDL/HĐH trên cùng máy = thay đổi môi trường ⇒ modification."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 1 — Which trigger starts maintenance testing?\n\nAnswer in the answer panel (no code needed).\n\n1. Event → triggerSự kiện → tác nhân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 1 — Which trigger starts maintenance testing? — answer key\n\n1. Event → triggerSự kiện → tác nhân\n   - r0.t: Modification\n   - r1.t: Migration\n   - r2.t: Retirement\n   - r3.t: Modification\n   - r4.t: Modification\n   - r5.t: Migration\n   Fixes, upgrades of the environment and enhancements are modifications; moving to another platform with data conversion is migration; switching a system off with archiving is retirement. The 1.x → 2.0 case is migration (data moved into the new system); the retirement of 1.x would be tested separately.VI: Sửa lỗi, nâng cấp môi trường, thêm tính năng là modification; chuyển nền tảng kèm chuyển dữ liệu là migration; tắt hệ thống kèm lưu trữ là retirement. Trường hợp 1.x → 2.0 là migration (dữ liệu chuyển sang hệ mới); việc ngừng 1.x sẽ test riêng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Modification · Migration · Retirement · Modification · Modification · Migration.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Event → trigger</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện → tác nhân</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Event"
+              },
+              {
+                "ma": "t",
+                "ten": "Trigger",
+                "luaChon": [
+                  "Modification",
+                  "Migration",
+                  "Retirement"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "e": "A hot-fix for DEF-31 is deployed on Friday night"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "LabBook moves from an on-premise server to a cloud provider; all bookings are converted to the new database"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "The old paper-based booking module is switched off; ten years of records must be archived and restorable"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "PostgreSQL is upgraded from version 15 to 17 on the same server"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "A new “exam week” rule limits bookings to 4 hours"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "The legacy LabBook 1.x is replaced by 2.0; its data is imported into 2.0 and 1.x is decommissioned"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Modification",
+              "r1.t": "Migration",
+              "r2.t": "Retirement",
+              "r3.t": "Modification",
+              "r4.t": "Modification",
+              "r5.t": "Migration"
+            },
+            "giaiThich": "<p>Fixes, upgrades of the environment and enhancements are modifications; moving to another platform with data conversion is migration; switching a system off with archiving is retirement. The 1.x → 2.0 case is migration (data moved into the new system); the retirement of 1.x would be tested separately.</p><p><i>VI: Sửa lỗi, nâng cấp môi trường, thêm tính năng là modification; chuyển nền tảng kèm chuyển dữ liệu là migration; tắt hệ thống kèm lưu trữ là retirement. Trường hợp 1.x → 2.0 là migration (dữ liệu chuyển sang hệ mới); việc ngừng 1.x sẽ test riêng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán nâng cấp PostgreSQL vào migration."
+        },
+        {
+          "loi": "Quên rằng retirement cũng cần test (lưu trữ và khôi phục dữ liệu)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "maintenance testing",
+          "vi": "kiểm thử bảo trì"
+        },
+        {
+          "en": "hot-fix",
+          "vi": "bản sửa khẩn"
+        },
+        {
+          "en": "decommission",
+          "vi": "ngừng vận hành"
+        }
+      ]
+    },
+    {
+      "title": "Maintenance 2 — Impact analysis on the dependency graph",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "impact analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Impact analysis asks: <i>what could this change affect?</i> A module is impacted by a change when it <b>depends</b> on the changed module, directly or through other modules.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 230\" width=\"100%\" style=\"max-width:600px;display:block;margin:8px auto\" role=\"img\" aria-label=\"LabBook module dependencies\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"600\" height=\"230\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"300\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">LabBook module dependencies</text><path d=\"M300.0,47.0 L300.0,78.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M265.0,111.3 L196.6,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M300.0,112.0 L300.0,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M335.0,110.2 L410.8,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M205.0,171.3 L330.0,202.5\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.0,160.0 L205.0,160.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M278.4,177.0 L251.6,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M428.4,177.0 L401.6,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M181.6,177.0 L208.4,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255\" y=\"13\" width=\"90\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\">web-ui</text><rect x=\"265\" y=\"78\" width=\"70\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"99.0\" text-anchor=\"middle\" fill=\"#111827\">api</text><rect x=\"115\" y=\"143\" width=\"90\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"160\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">booking</text><rect x=\"260\" y=\"143\" width=\"80\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">cancel</text><rect x=\"410\" y=\"143\" width=\"80\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"450\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">report</text><rect x=\"195\" y=\"198\" width=\"70\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"230\" y=\"219.0\" text-anchor=\"middle\" fill=\"#111827\">mail</text><rect x=\"330\" y=\"198\" width=\"100\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"380\" y=\"219.0\" text-anchor=\"middle\" fill=\"#111827\">repository</text></svg><p>Arrows mean “depends on / calls”. As data: <code>{ 'web-ui': ['api'], api: ['booking','cancel','report'], booking: ['repository','mail'], cancel: ['booking','mail'], report: ['repository'], mail: [], repository: [] }</code>.</p>\n<p>Write <code>impacted(deps, changed)</code>: the changed modules <b>plus</b> every module that depends on one of them, directly or transitively — sorted A→Z.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The graph may contain a cycle — do not loop forever.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân tích tác động hỏi: <i>thay đổi này có thể ảnh hưởng tới đâu?</i> Một module bị ảnh hưởng khi nó <b>phụ thuộc</b> vào module bị đổi, trực tiếp hoặc qua module khác.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 230\" width=\"100%\" style=\"max-width:600px;display:block;margin:8px auto\" role=\"img\" aria-label=\"LabBook module dependencies\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"600\" height=\"230\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"300\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">LabBook module dependencies</text><path d=\"M300.0,47.0 L300.0,78.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M265.0,111.3 L196.6,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M300.0,112.0 L300.0,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M335.0,110.2 L410.8,143.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M205.0,171.3 L330.0,202.5\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.0,160.0 L205.0,160.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M278.4,177.0 L251.6,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M428.4,177.0 L401.6,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M181.6,177.0 L208.4,198.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255\" y=\"13\" width=\"90\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"34.0\" text-anchor=\"middle\" fill=\"#111827\">web-ui</text><rect x=\"265\" y=\"78\" width=\"70\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"99.0\" text-anchor=\"middle\" fill=\"#111827\">api</text><rect x=\"115\" y=\"143\" width=\"90\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"160\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">booking</text><rect x=\"260\" y=\"143\" width=\"80\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">cancel</text><rect x=\"410\" y=\"143\" width=\"80\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"450\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\">report</text><rect x=\"195\" y=\"198\" width=\"70\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"230\" y=\"219.0\" text-anchor=\"middle\" fill=\"#111827\">mail</text><rect x=\"330\" y=\"198\" width=\"100\" height=\"34\" rx=\"0\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"380\" y=\"219.0\" text-anchor=\"middle\" fill=\"#111827\">repository</text></svg><p>Mũi tên nghĩa là “phụ thuộc / gọi”. Dữ liệu như bản tiếng Anh.</p><p>Viết <code>impacted(deps, changed)</code>: các module bị đổi <b>cộng</b> mọi module phụ thuộc vào chúng, trực tiếp hay bắc cầu — sắp A→Z.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đồ thị có thể có chu trình — đừng lặp vô hạn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "impacted(DEPS, ['mail'])",
+          "output": "['api','booking','cancel','mail','web-ui']",
+          "explanation": "booking and cancel call mail; api calls them; web-ui calls api. report is not impacted.|||booking, cancel gọi mail; api gọi chúng; web-ui gọi api. report không bị ảnh hưởng."
+        }
+      ],
+      "hintsJson": [
+        "Đảo chiều đồ thị: với mỗi module m, ai gọi m?",
+        "BFS từ các module bị đổi theo chiều đảo, dùng Set “đã thăm” để chống chu trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "impact.js",
+          "language": "javascript",
+          "code": "function impacted(deps, changed) {\n  return [...changed];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "impact.js",
+          "language": "javascript",
+          "code": "function impacted(deps, changed) {\n  const callers = {};\n  for (const [m, list] of Object.entries(deps)) for (const d of list) (callers[d] = callers[d] || []).push(m);\n  const seen = new Set(changed);\n  const queue = [...changed];\n  while (queue.length) {\n    const x = queue.shift();\n    for (const c of callers[x] || []) if (!seen.has(c)) { seen.add(c); queue.push(c); }\n  }\n  return [...seen].sort();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reverse the edges and collect everything reachable from the changed modules. The result tells you where to run regression tests; how DEEP to test each impacted area then depends on risk (“it depends”).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "impact.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "change in mail",
+              "vi": "đổi mail"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o={\"web-ui\":[\"api\"],api:[\"booking\",\"cancel\",\"report\"],booking:[\"repository\",\"mail\"],cancel:[\"booking\",\"mail\"],report:[\"repository\"],mail:[],repository:[]},i=impacted(o,[\"mail\"]);return JSON.stringify(i)==='[\"api\",\"booking\",\"cancel\",\"mail\",\"web-ui\"]'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "change in repository impacts everything except mail",
+              "vi": "đổi repository ảnh hưởng mọi thứ trừ mail"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i={\"web-ui\":[\"api\"],api:[\"booking\",\"cancel\",\"report\"],booking:[\"repository\",\"mail\"],cancel:[\"booking\",\"mail\"],report:[\"repository\"],mail:[],repository:[]},o=impacted(i,[\"repository\"]);return JSON.stringify(o)==='[\"api\",\"booking\",\"cancel\",\"report\",\"repository\",\"web-ui\"]'?\"OK\":\"got \"+JSON.stringify(o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "change in web-ui impacts only itself",
+              "vi": "đổi web-ui chỉ ảnh hưởng chính nó"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o={\"web-ui\":[\"api\"],api:[\"booking\"],booking:[]},i=impacted(o,[\"web-ui\"]);return JSON.stringify(i)==='[\"web-ui\"]'?\"OK\":\"got \"+JSON.stringify(i)+\" \\u2014 follow the callers, not the callees\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "two changed modules, no duplicates",
+              "vi": "hai module đổi, không trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t={a:[\"c\"],b:[\"c\",\"d\"],c:[],d:[]},c=impacted(t,[\"c\",\"d\"]);return JSON.stringify(c)==='[\"a\",\"b\",\"c\",\"d\"]'?\"OK\":\"got \"+JSON.stringify(c)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "a dependency cycle does not hang",
+              "vi": "chu trình phụ thuộc không treo"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const a={a:[\"b\"],b:[\"a\"],c:[\"a\"]},t=impacted(a,[\"a\"]);return JSON.stringify(t)==='[\"a\",\"b\",\"c\"]'?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đi theo chiều thuận (những gì module bị đổi gọi tới) — đó là phụ thuộc của nó, không phải vùng bị ảnh hưởng."
+        },
+        {
+          "loi": "Quên đưa chính module bị đổi vào kết quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "impact analysis",
+          "vi": "phân tích tác động"
+        },
+        {
+          "en": "transitive",
+          "vi": "bắc cầu"
+        },
+        {
+          "en": "dependency graph",
+          "vi": "đồ thị phụ thuộc"
+        }
+      ]
+    },
+    {
+      "title": "Maintenance 3 — Fill the IEEE 829 test plan of LabBook 2.0",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "IEEE 829 test plan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>SWT2 ends with the 16-item IEEE 829 high-level test plan. Each sentence below comes from the test plan of the LabBook 2.0 migration. Put it in its section.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>SWT2 kết thúc bằng test plan tổng thể IEEE 829 16 mục. Mỗi câu dưới đây lấy từ test plan đợt chuyển đổi LabBook 2.0. Đặt nó vào đúng mục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu có “không test… vì” ⇒ mục 5; “dừng… tiếp tục” ⇒ mục 8.",
+        "Kỹ thuật test (EP, BVA) thuộc Approach (mục 6), không phải mục 4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 3 — Fill the IEEE 829 test plan of LabBook 2.0\n\nAnswer in the answer panel (no code needed).\n\n1. Sentence → IEEE 829 sectionCâu → mục IEEE 829\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 3 — Fill the IEEE 829 test plan of LabBook 2.0 — answer key\n\n1. Sentence → IEEE 829 sectionCâu → mục IEEE 829\n   - r0.m: 5 Features not to be tested\n   - r1.m: 8 Suspension and resumption criteria\n   - r2.m: 9 Test deliverables\n   - r3.m: 15 Risks and contingencies\n   - r4.m: 13 Staffing and training needs\n   - r5.m: 3 Test items\n   - r6.m: 6 Approach\n   - r7.m: 7 Item pass/fail criteria\n   - r8.m: 16 Approvals\n   - r9.m: 11 Environmental needs\n   What is not tested and why = item 5; stop/restart = 8; document set = 9; contingency for a risk = 15; training = 13; versions and delivery = 3; activities and techniques = 6 (approach); pass rule per item = 7; sign-off = 16; hardware, software, tools = 11.VI: Không test gì và vì sao = mục 5; dừng/tiếp = 8; bộ tài liệu = 9; phương án cho rủi ro = 15; đào tạo = 13; phiên bản và bàn giao = 3; hoạt động và kỹ thuật = 6; luật đạt của từng hạng mục = 7; ký duyệt = 16; phần cứng, phần mềm, công cụ = 11.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>5 · 8 · 9 · 15 · 13 · 3 · 6 · 7 · 16 · 11.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Sentence → IEEE 829 section</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu → mục IEEE 829</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Sentence"
+              },
+              {
+                "ma": "m",
+                "ten": "Section",
+                "luaChon": [
+                  "1 Test plan identifier",
+                  "2 Introduction",
+                  "3 Test items",
+                  "4 Features to be tested",
+                  "5 Features not to be tested",
+                  "6 Approach",
+                  "7 Item pass/fail criteria",
+                  "8 Suspension and resumption criteria",
+                  "9 Test deliverables",
+                  "10 Testing tasks",
+                  "11 Environmental needs",
+                  "12 Responsibilities",
+                  "13 Staffing and training needs",
+                  "14 Schedule",
+                  "15 Risks and contingencies",
+                  "16 Approvals"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The admin usage report is not tested in this release because it is unchanged and will be retired in May"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Testing stops if more than 20% of the smoke tests fail on a build; it resumes when a new build passes the smoke suite"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Deliverables: test design specification, test cases, test logs, incident reports, test summary report"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "If the cloud environment is late, we test on the old server and repeat the performance tests later"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Two testers need a one-day course on the new load-testing tool"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Test items: LabBook 2.0.0-rc1 (build 412) delivered through the CI pipeline, with its release notes"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Booking, cancellation and the data conversion of 2025–2026 bookings will be tested with EP, BVA and decision tables"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A test item passes when all its high-priority test cases pass and no Critical defect is open"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "The head of the lab department and the test manager sign the plan"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "A cloud test environment with production-like data, Chrome and Firefox, and the load-testing tool"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.m": "5 Features not to be tested",
+              "r1.m": "8 Suspension and resumption criteria",
+              "r2.m": "9 Test deliverables",
+              "r3.m": "15 Risks and contingencies",
+              "r4.m": "13 Staffing and training needs",
+              "r5.m": "3 Test items",
+              "r6.m": "6 Approach",
+              "r7.m": "7 Item pass/fail criteria",
+              "r8.m": "16 Approvals",
+              "r9.m": "11 Environmental needs"
+            },
+            "giaiThich": "<p>What is not tested and why = item 5; stop/restart = 8; document set = 9; contingency for a risk = 15; training = 13; versions and delivery = 3; activities and techniques = 6 (approach); pass rule per item = 7; sign-off = 16; hardware, software, tools = 11.</p><p><i>VI: Không test gì và vì sao = mục 5; dừng/tiếp = 8; bộ tài liệu = 9; phương án cho rủi ro = 15; đào tạo = 13; phiên bản và bàn giao = 3; hoạt động và kỹ thuật = 6; luật đạt của từng hạng mục = 7; ký duyệt = 16; phần cứng, phần mềm, công cụ = 11.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm mục 7 (đạt/trượt của hạng mục) với mục 8 (tạm dừng/tiếp tục)."
+        },
+        {
+          "loi": "Đưa test case chi tiết vào test plan — chúng nằm ở đặc tả thiết kế/test case."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "suspension / resumption criteria",
+          "vi": "tiêu chí tạm dừng / tiếp tục"
+        },
+        {
+          "en": "contingency",
+          "vi": "phương án dự phòng"
+        },
+        {
+          "en": "test item transmittal",
+          "vi": "bàn giao hạng mục test"
+        }
+      ]
+    },
+    {
+      "title": "Maintenance 4 — Exam questions on maintenance testing",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "maintenance testing",
+        "impact analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT2 slides 131–137: how maintenance testing differs from development testing, the role of impact analysis, testing with poor specifications and what a test plan contains.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT2 131–137: kiểm thử bảo trì khác kiểm thử phát triển thế nào, vai trò của phân tích tác động, test khi đặc tả kém và test plan chứa gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bảo trì = thay đổi + hồi quy; phân tích tác động quyết định test bao nhiêu.",
+        "Test plan nói về phạm vi, cách tiếp cận, tiêu chí, nguồn lực — không chứa từng bước test."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 4 — Exam questions on maintenance testing\n\nAnswer in the answer panel (no code needed).\n\n1. Maintenance testing is predominantly…Kiểm thử bảo trì chủ yếu là…\n2. What is the role of impact analysis?Vai trò của phân tích tác động là gì?\n3. Which makes impact analysis difficult?Điều gì làm phân tích tác động khó?\n4. There is no specification for the changed system. What can be used as the regression baseline?Hệ thống không có đặc tả. Có thể dùng gì làm mốc hồi quy?\n5. How does maintenance testing typically differ from development testing (slide 132)?Kiểm thử bảo trì khác kiểm thử phát triển thế nào (slide 132)?\n6. What is NOT included in a high-level test plan?Cái gì KHÔNG nằm trong test plan tổng thể?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Maintenance 4 — Exam questions on maintenance testing — answer key\n\n1. Maintenance testing is predominantly…Kiểm thử bảo trì chủ yếu là…\n   Answer: b) regression testing (plus testing of the change itself)\n   Preserve what works while checking the change.VI: Giữ cái đang chạy tốt trong khi kiểm thay đổi.\n\n2. What is the role of impact analysis?Vai trò của phân tích tác động là gì?\n   Answer: b) To identify the intended consequences and possible side effects of a change and the areas to regression-test\n   It can also help decide whether the change should be made at all.VI: Nó còn giúp quyết định có nên thay đổi hay không.\n\n3. Which makes impact analysis difficult?Điều gì làm phân tích tác động khó?\n   Answer: a) Specifications are out of date or missing, test cases are not documented, traceability is not maintained\n   Plus weak tool support, people without domain knowledge, little attention to maintainability.VI: Thêm: công cụ yếu, người thiếu hiểu biết nghiệp vụ, ít chú ý khả năng bảo trì.\n\n4. There is no specification for the changed system. What can be used as the regression baseline?Hệ thống không có đặc tả. Có thể dùng gì làm mốc hồi quy?\n   Answer: b) The current behaviour of the existing system (except for the change), user manuals and the knowledge of current users\n   You can validate but not really verify; document your assumptions.VI: Có thể validate nhưng không thật sự verify; ghi lại giả định.\n\n5. How does maintenance testing typically differ from development testing (slide 132)?Kiểm thử bảo trì khác kiểm thử phát triển thế nào (slide 132)?\n   Answer: b) It runs top-down, uses a live data profile, breadth tests for overall confidence and depth tests around the change\n   Different sequence, different test data, breadth + depth.VI: Thứ tự khác, dữ liệu khác, diện rộng + chiều sâu.\n\n6. What is NOT included in a high-level test plan?Cái gì KHÔNG nằm trong test plan tổng thể?\n   Answer: b) The detailed test cases with their steps and data\n   Test cases live in the test design and test case specifications.VI: Test case nằm ở đặc tả thiết kế test và đặc tả test case.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Maintenance testing is predominantly…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm thử bảo trì chủ yếu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "acceptance testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "regression testing (plus testing of the change itself)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "static analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "usability testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Preserve what works while checking the change.</p><p><i>VI: Giữ cái đang chạy tốt trong khi kiểm thay đổi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is the role of impact analysis?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vai trò của phân tích tác động là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To fix defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To identify the intended consequences and possible side effects of a change and the areas to regression-test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To write the test plan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To measure performance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It can also help decide whether the change should be made at all.</p><p><i>VI: Nó còn giúp quyết định có nên thay đổi hay không.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which makes impact analysis difficult?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì làm phân tích tác động khó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Specifications are out of date or missing, test cases are not documented, traceability is not maintained"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Too many testers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Automated tests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Short release cycles only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Plus weak tool support, people without domain knowledge, little attention to maintainability.</p><p><i>VI: Thêm: công cụ yếu, người thiếu hiểu biết nghiệp vụ, ít chú ý khả năng bảo trì.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>There is no specification for the changed system. What can be used as the regression baseline?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ thống không có đặc tả. Có thể dùng gì làm mốc hồi quy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — testing is impossible"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The current behaviour of the existing system (except for the change), user manuals and the knowledge of current users"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The developer’s opinion only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A random sample"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>You can validate but not really verify; document your assumptions.</p><p><i>VI: Có thể validate nhưng không thật sự verify; ghi lại giả định.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>How does maintenance testing typically differ from development testing (slide 132)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm thử bảo trì khác kiểm thử phát triển thế nào (slide 132)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It runs bottom-up with synthetic data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It runs top-down, uses a live data profile, breadth tests for overall confidence and depth tests around the change"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs no planning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is only done by users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Different sequence, different test data, breadth + depth.</p><p><i>VI: Thứ tự khác, dữ liệu khác, diện rộng + chiều sâu.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>What is NOT included in a high-level test plan?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái gì KHÔNG nằm trong test plan tổng thể?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Features not to be tested"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The detailed test cases with their steps and data"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Suspension and resumption criteria"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Risks and contingencies"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Test cases live in the test design and test case specifications.</p><p><i>VI: Test case nằm ở đặc tả thiết kế test và đặc tả test case.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “bottom-up” cho bảo trì — đó là thứ tự của phát triển."
+        },
+        {
+          "loi": "Cho rằng không có đặc tả thì không test được gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "live data profile",
+          "vi": "hồ sơ dữ liệu thật"
+        },
+        {
+          "en": "breadth / depth tests",
+          "vi": "test diện rộng / chiều sâu"
+        }
+      ]
+    }
+  ]
+}

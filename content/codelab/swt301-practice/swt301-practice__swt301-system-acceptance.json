@@ -1,0 +1,679 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-system-acceptance",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-system-acceptance"
+  },
+  "exercises": [
+    {
+      "title": "System & acceptance 1 — Which upper level is described?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "system testing",
+        "acceptance testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>System testing checks the whole product end-to-end against the specification, usually by independent testers. Acceptance testing checks it against the users’ needs, business processes, contracts and regulations to decide whether it can be accepted. Classify each fact.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>System testing kiểm cả sản phẩm đầu-cuối so với đặc tả, thường do tester độc lập. Acceptance testing kiểm so với nhu cầu người dùng, quy trình nghiệp vụ, hợp đồng và quy định để quyết định có nghiệm thu không. Phân loại từng đặc điểm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tài liệu kỹ thuật (SRS, state diagram) ⇒ system; tài liệu nghiệp vụ (hợp đồng, quy định) ⇒ acceptance.",
+        "Mục tiêu “niềm tin, không chủ yếu tìm lỗi” ⇒ acceptance."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 1 — Which upper level is described?\n\nAnswer in the answer panel (no code needed).\n\n1. Fact → levelĐặc điểm → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 1 — Which upper level is described? — answer key\n\n1. Fact → levelĐặc điểm → cấp\n   - r0.l: Acceptance testing\n   - r1.l: System testing\n   - r2.l: Acceptance testing\n   - r3.l: System testing\n   - r4.l: Acceptance testing\n   - r5.l: System testing\n   - r6.l: Acceptance testing\n   - r7.l: Acceptance testing\n   System testing verifies against the specification (SRS, risk reports, state diagrams; end-to-end tasks; independent testers). Acceptance testing validates against needs, processes, contracts and laws, aims at confidence and ends with sign-off.VI: System test verify theo đặc tả (SRS, báo cáo rủi ro, state diagram; tác vụ đầu-cuối; tester độc lập). Acceptance test validate theo nhu cầu, quy trình, hợp đồng, luật, nhắm niềm tin và kết thúc bằng ký nghiệm thu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A · S · A · S · A · S · A · A.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fact → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Đặc điểm → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Fact"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "System testing",
+                  "Acceptance testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "f": "Main objective: establish confidence; finding defects is often not the main goal"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "Test basis: system and software requirement specifications, risk analysis reports, state diagrams"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "Test basis: business processes, contracts, regulations and legal standards"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "Typical failure: the system cannot complete an end-to-end task such as “book a seat and receive the e-mail”"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "Typical failure: system workflows do not meet business or user requirements"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "Carried out by independent testers in an environment that corresponds to production"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "Can end with the customer’s final sign-off"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "f": "Test objects include recovery systems and hot sites, forms and reports"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Acceptance testing",
+              "r1.l": "System testing",
+              "r2.l": "Acceptance testing",
+              "r3.l": "System testing",
+              "r4.l": "Acceptance testing",
+              "r5.l": "System testing",
+              "r6.l": "Acceptance testing",
+              "r7.l": "Acceptance testing"
+            },
+            "giaiThich": "<p>System testing verifies against the specification (SRS, risk reports, state diagrams; end-to-end tasks; independent testers). Acceptance testing validates against needs, processes, contracts and laws, aims at confidence and ends with sign-off.</p><p><i>VI: System test verify theo đặc tả (SRS, báo cáo rủi ro, state diagram; tác vụ đầu-cuối; tester độc lập). Acceptance test validate theo nhu cầu, quy trình, hợp đồng, luật, nhắm niềm tin và kết thúc bằng ký nghiệm thu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng acceptance test nhắm tìm thật nhiều lỗi."
+        },
+        {
+          "loi": "Gán “tác vụ đầu-cuối” cho acceptance — đó là failure điển hình của system testing."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "end-to-end",
+          "vi": "đầu-cuối — trọn một tác vụ từ đầu tới cuối"
+        },
+        {
+          "en": "sign-off",
+          "vi": "ký nghiệm thu"
+        },
+        {
+          "en": "hot site",
+          "vi": "trung tâm dự phòng chạy sẵn"
+        }
+      ]
+    },
+    {
+      "title": "System & acceptance 2 — Which form of acceptance testing?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "acceptance testing forms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The syllabus names user acceptance (UAT), operational acceptance (OAT), contractual and regulatory acceptance, and alpha/beta testing. Match each LabBook situation to its form.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Syllabus nêu user acceptance (UAT), operational acceptance (OAT), contractual và regulatory acceptance, alpha/beta testing. Ghép mỗi tình huống LabBook với dạng của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Alpha = ở nhà phát triển; beta = ở chỗ người dùng.",
+        "Sao lưu/khôi phục/quản lý người dùng ⇒ OAT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 2 — Which form of acceptance testing?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → formTình huống → dạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 2 — Which form of acceptance testing? — answer key\n\n1. Situation → formTình huống → dạng\n   - r0.f: UAT\n   - r1.f: OAT\n   - r2.f: Contractual AT\n   - r3.f: Regulatory AT\n   - r4.f: Alpha testing\n   - r5.f: Beta testing\n   UAT: real users, business fit. OAT: administrators, operation (backup, disaster recovery, user management, maintenance, security). Contractual: the contract. Regulatory: laws and regulations. Alpha: at the developer’s site. Beta: at the users’ own locations.VI: UAT: người dùng thật, hợp nghiệp vụ. OAT: quản trị viên, vận hành (sao lưu, khôi phục thảm hoạ, quản lý người dùng, bảo trì, bảo mật). Contractual: hợp đồng. Regulatory: luật. Alpha: tại nơi phát triển. Beta: tại nơi của người dùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>UAT · OAT · Contractual · Regulatory · Alpha · Beta.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → form</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → dạng</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "f",
+                "ten": "Form",
+                "luaChon": [
+                  "UAT",
+                  "OAT",
+                  "Contractual AT",
+                  "Regulatory AT",
+                  "Alpha testing",
+                  "Beta testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Lab managers book, close and reopen labs in a copy of production to see if it fits their daily work"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "University IT checks backup and restore, user management and patching of LabBook before go-live"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The vendor shows that all 42 requirements listed in the signed contract are met"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Testers check LabBook against Vietnam’s personal-data protection decree with a university lawyer present"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Students of one class use LabBook at the vendor’s office, watched by the developers"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "LabBook is opened to all FPT students in their own labs and homes before the official launch"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.f": "UAT",
+              "r1.f": "OAT",
+              "r2.f": "Contractual AT",
+              "r3.f": "Regulatory AT",
+              "r4.f": "Alpha testing",
+              "r5.f": "Beta testing"
+            },
+            "giaiThich": "<p>UAT: real users, business fit. OAT: administrators, operation (backup, disaster recovery, user management, maintenance, security). Contractual: the contract. Regulatory: laws and regulations. Alpha: at the developer’s site. Beta: at the users’ own locations.</p><p><i>VI: UAT: người dùng thật, hợp nghiệp vụ. OAT: quản trị viên, vận hành (sao lưu, khôi phục thảm hoạ, quản lý người dùng, bảo trì, bảo mật). Contractual: hợp đồng. Regulatory: luật. Alpha: tại nơi phát triển. Beta: tại nơi của người dùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm alpha với beta."
+        },
+        {
+          "loi": "Gán việc kiểm theo luật cho contractual — hợp đồng khác luật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UAT / OAT",
+          "vi": "nghiệm thu người dùng / nghiệm thu vận hành"
+        },
+        {
+          "en": "alpha / beta testing",
+          "vi": "thử tại nơi phát triển / tại nơi người dùng"
+        },
+        {
+          "en": "go-live",
+          "vi": "chính thức đưa vào vận hành"
+        }
+      ]
+    },
+    {
+      "title": "System & acceptance 3 — Place each LabBook test on a level",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Across chapters 2–5 you will test LabBook at every level. Decide the test level of each planned test, using objective and test basis.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ chương 2 tới 5 bạn sẽ test LabBook ở mọi cấp. Xác định cấp của từng test đã lên kế hoạch, dựa vào mục tiêu và test basis.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mở test basis: Javadoc ⇒ component; đặc tả API/sequence ⇒ integration; SRS ⇒ system; nhu cầu nghiệp vụ ⇒ acceptance.",
+        "Load test theo SRS là test phi chức năng ở cấp system."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 3 — Place each LabBook test on a level\n\nAnswer in the answer panel (no code needed).\n\n1. Test → levelTest → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 3 — Place each LabBook test on a level — answer key\n\n1. Test → levelTest → cấp\n   - r0.l: Component testing\n   - r1.l: Integration testing\n   - r2.l: System testing\n   - r3.l: Acceptance testing\n   - r4.l: Integration testing\n   - r5.l: System testing\n   Detailed design → component; interfaces (API ↔ DB, service ↔ repository) → integration; SRS end-to-end and non-functional requirements → system; acceptance decision by the business → acceptance.VI: Thiết kế chi tiết → component; giao diện (API ↔ DB, service ↔ repository) → integration; SRS đầu-cuối và yêu cầu phi chức năng → system; quyết định nghiệm thu của nghiệp vụ → acceptance.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CT · IT · ST · AT · IT · ST.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Test → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Test → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Planned test"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Component testing",
+                  "Integration testing",
+                  "System testing",
+                  "Acceptance testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "JUnit tests of reserveSeat with the detailed design (Javadoc) as basis"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Postman: POST /bookings then GET /me/bookings — does the API save and return the same booking?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Log in as student1, book LAB02, cancel, see student2 promoted and e-mailed — following the SRS use case"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "The head of the lab department tries a week of real bookings and decides whether to accept release 1.0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "BookingService with a stub SeatRepository: is the seat count requested with the right parameters?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Load test: 300 students book at 07:00 on Monday; response time within the SRS limit"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Component testing",
+              "r1.l": "Integration testing",
+              "r2.l": "System testing",
+              "r3.l": "Acceptance testing",
+              "r4.l": "Integration testing",
+              "r5.l": "System testing"
+            },
+            "giaiThich": "<p>Detailed design → component; interfaces (API ↔ DB, service ↔ repository) → integration; SRS end-to-end and non-functional requirements → system; acceptance decision by the business → acceptance.</p><p><i>VI: Thiết kế chi tiết → component; giao diện (API ↔ DB, service ↔ repository) → integration; SRS đầu-cuối và yêu cầu phi chức năng → system; quyết định nghiệm thu của nghiệp vụ → acceptance.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng load test là một cấp riêng — đó là một LOẠI test (bài 2.4) chạy ở cấp system."
+        },
+        {
+          "loi": "Gán test có stub vào component — stub để kiểm giao diện giữa service và repository."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "load test",
+          "vi": "kiểm thử tải"
+        },
+        {
+          "en": "Javadoc",
+          "vi": "tài liệu đặc tả lớp/method sinh từ chú thích Java"
+        }
+      ]
+    },
+    {
+      "title": "System & acceptance 4 — Exam questions (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "system testing",
+        "acceptance testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on SWT2 slides 75–105: the objectives and responsibilities of system and acceptance testing, the environment they need, alpha versus beta testing, and why system testing should be done by independent testers.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về slide SWT2 75–105: mục tiêu và trách nhiệm của system và acceptance testing, môi trường cần có, alpha và beta, vì sao system test nên do tester độc lập.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Môi trường system test ≈ production nhưng KHÔNG dùng dữ liệu thật của khách.",
+        "Acceptance tìm ra nhiều lỗi = dấu hiệu rủi ro dự án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 4 — Exam questions (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which environment should system testing use?System testing nên dùng môi trường nào?\n2. Who typically performs operational acceptance testing?Ai thường làm operational acceptance testing?\n3. What is the main difference between alpha and beta testing?Khác biệt chính giữa alpha và beta testing là gì?\n4. A defect is found during acceptance testing. What does this suggest?Tìm thấy defect trong acceptance testing. Điều đó cho thấy gì?\n5. Why is system testing usually done by independent testers?Vì sao system testing thường do tester độc lập làm?\n6. Which test basis is typical for UAT?Test basis điển hình của UAT là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# System & acceptance 4 — Exam questions (K2) — answer key\n\n1. Which environment should system testing use?System testing nên dùng môi trường nào?\n   Answer: b) An environment that corresponds as closely as possible to the final target or production environment\n   To minimise the risk of environment-specific failures not being found.VI: Để giảm rủi ro bỏ sót failure đặc thù môi trường.\n\n2. Who typically performs operational acceptance testing?Ai thường làm operational acceptance testing?\n   Answer: b) Operations or system administration staff\n   They test backup/restore, installation, disaster recovery, user management, maintenance, data load and migration, security, performance.VI: Họ test sao lưu/khôi phục, cài đặt, khôi phục thảm hoạ, quản lý người dùng, bảo trì, nạp và chuyển dữ liệu, bảo mật, hiệu năng.\n\n3. What is the main difference between alpha and beta testing?Khác biệt chính giữa alpha và beta testing là gì?\n   Answer: b) Alpha is performed at the developing organisation’s site; beta by customers or users at their own locations\n   Both are done by potential or existing customers/users or an independent test team.VI: Cả hai do khách hàng/người dùng tiềm năng hoặc hiện có, hoặc nhóm test độc lập thực hiện.\n\n4. A defect is found during acceptance testing. What does this suggest?Tìm thấy defect trong acceptance testing. Điều đó cho thấy gì?\n   Answer: b) Finding significant defects in acceptance testing may be a major project risk — they should have been found earlier\n   Acceptance testing is not mainly for finding defects; late defects are expensive and threaten the release.VI: Acceptance test không chủ yếu để tìm lỗi; lỗi muộn rất đắt và đe doạ ngày phát hành.\n\n5. Why is system testing usually done by independent testers?Vì sao system testing thường do tester độc lập làm?\n   Answer: b) Independent testers do not share the developers’ assumptions, so they find more defects in the specification and the system\n   Independence (lesson 1.5) — and defects in specifications can also be found then.VI: Tính độc lập (bài 1.5) — và cũng tìm được lỗi trong đặc tả.\n\n6. Which test basis is typical for UAT?Test basis điển hình của UAT là gì?\n   Answer: b) Business processes and user or business requirements\n   Plus use cases, installation procedures, risk analysis reports.VI: Cùng với use case, quy trình cài đặt, báo cáo phân tích rủi ro.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which environment should system testing use?</p><p style=\"opacity:.75;font-size:.92em\"><i>System testing nên dùng môi trường nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The developer’s laptop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An environment that corresponds as closely as possible to the final target or production environment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The production environment with real customer data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Any environment"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>To minimise the risk of environment-specific failures not being found.</p><p><i>VI: Để giảm rủi ro bỏ sót failure đặc thù môi trường.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Who typically performs operational acceptance testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai thường làm operational acceptance testing?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "End users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Operations or system administration staff"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Developers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Lawyers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They test backup/restore, installation, disaster recovery, user management, maintenance, data load and migration, security, performance.</p><p><i>VI: Họ test sao lưu/khôi phục, cài đặt, khôi phục thảm hoạ, quản lý người dùng, bảo trì, nạp và chuyển dữ liệu, bảo mật, hiệu năng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What is the main difference between alpha and beta testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khác biệt chính giữa alpha và beta testing là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Alpha is done by developers, beta by testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Alpha is performed at the developing organisation’s site; beta by customers or users at their own locations"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Beta comes before alpha"
+              },
+              {
+                "ma": "d",
+                "noiDung": "There is no difference"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both are done by potential or existing customers/users or an independent test team.</p><p><i>VI: Cả hai do khách hàng/người dùng tiềm năng hoặc hiện có, hoặc nhóm test độc lập thực hiện.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A defect is found during acceptance testing. What does this suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm thấy defect trong acceptance testing. Điều đó cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Acceptance testing worked perfectly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Finding significant defects in acceptance testing may be a major project risk — they should have been found earlier"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Acceptance testing should be skipped"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Acceptance testing is not mainly for finding defects; late defects are expensive and threaten the release.</p><p><i>VI: Acceptance test không chủ yếu để tìm lỗi; lỗi muộn rất đắt và đe doạ ngày phát hành.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Why is system testing usually done by independent testers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao system testing thường do tester độc lập làm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Developers are not allowed to test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Independent testers do not share the developers’ assumptions, so they find more defects in the specification and the system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is cheaper"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Users demand it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Independence (lesson 1.5) — and defects in specifications can also be found then.</p><p><i>VI: Tính độc lập (bài 1.5) — và cũng tìm được lỗi trong đặc tả.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Which test basis is typical for UAT?</p><p style=\"opacity:.75;font-size:.92em\"><i>Test basis điển hình của UAT là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Source code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Business processes and user or business requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sequence diagrams"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Database schema"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plus use cases, installation procedures, risk analysis reports.</p><p><i>VI: Cùng với use case, quy trình cài đặt, báo cáo phân tích rủi ro.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn production thật cho system test."
+        },
+        {
+          "loi": "Chọn “alpha do developer, beta do tester”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "disaster recovery",
+          "vi": "khôi phục sau thảm hoạ"
+        }
+      ]
+    }
+  ]
+}

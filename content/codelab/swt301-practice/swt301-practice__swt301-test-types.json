@@ -1,0 +1,815 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-types",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-types"
+  },
+  "exercises": [
+    {
+      "title": "Test types 1 — Which test type is this?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "test types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A test level says <i>where</i> in the lifecycle you test; a test type says <i>what characteristic</i> you test: functions, quality characteristics, structure, or the effect of a change (confirmation and regression). Classify each LabBook test.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cấp test cho biết test <i>ở đâu</i> trong vòng đời; loại test cho biết test <i>đặc tính gì</i>: chức năng, đặc tính chất lượng, cấu trúc, hay ảnh hưởng của thay đổi (confirmation và regression). Phân loại từng test LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hệ thống LÀM GÌ ⇒ functional; làm TỐT tới đâu ⇒ non-functional.",
+        "Confirmation = đúng test đã fail; regression = phần còn lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 1 — Which test type is this?\n\nAnswer in the answer panel (no code needed).\n\n1. Test → typeTest → loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 1 — Which test type is this? — answer key\n\n1. Test → typeTest → loại\n   - r0.k: Functional\n   - r1.k: Non-functional\n   - r2.k: White-box\n   - r3.k: Confirmation\n   - r4.k: Regression\n   - r5.k: Non-functional\n   - r6.k: Non-functional\n   - r7.k: Functional\n   Business rules = functional; performance, usability and security = non-functional; decision coverage = white-box; re-running the failed test = confirmation; re-running unchanged areas = regression.VI: Luật nghiệp vụ = chức năng; hiệu năng, khả dụng, bảo mật = phi chức năng; độ phủ quyết định = white-box; chạy lại test đã fail = confirmation; chạy lại vùng không đổi = regression.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>F · NF · WB · Conf · Reg · NF · NF · F.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Test → type</p><p style=\"opacity:.75;font-size:.92em\"><i>Test → loại</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Test"
+              },
+              {
+                "ma": "k",
+                "ten": "Type",
+                "luaChon": [
+                  "Functional",
+                  "Non-functional",
+                  "White-box",
+                  "Confirmation",
+                  "Regression"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Check that a student cannot book more than 6 hours per week"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Measure that the lab list loads within 2 seconds with 300 concurrent users"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Design tests until every decision in calcRefund has been TRUE and FALSE"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Re-run the test that failed for DEF-31 on the build that contains its fix"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "After fixing DEF-31, re-run the whole booking suite to check nothing else broke"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Ask five students to book a seat without help and count the errors they make"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Check that a student’s session token cannot be reused after logout"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Check that cancelling a confirmed booking promotes the first pending student"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Functional",
+              "r1.k": "Non-functional",
+              "r2.k": "White-box",
+              "r3.k": "Confirmation",
+              "r4.k": "Regression",
+              "r5.k": "Non-functional",
+              "r6.k": "Non-functional",
+              "r7.k": "Functional"
+            },
+            "giaiThich": "<p>Business rules = functional; performance, usability and security = non-functional; decision coverage = white-box; re-running the failed test = confirmation; re-running unchanged areas = regression.</p><p><i>VI: Luật nghiệp vụ = chức năng; hiệu năng, khả dụng, bảo mật = phi chức năng; độ phủ quyết định = white-box; chạy lại test đã fail = confirmation; chạy lại vùng không đổi = regression.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp bảo mật vào functional — theo ISO 25010 security là đặc tính phi chức năng (đề FE theo cách này)."
+        },
+        {
+          "loi": "Đảo confirmation và regression."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional testing",
+          "vi": "kiểm thử chức năng — hệ thống làm gì"
+        },
+        {
+          "en": "non-functional testing",
+          "vi": "kiểm thử phi chức năng — làm tốt tới đâu"
+        },
+        {
+          "en": "confirmation testing",
+          "vi": "kiểm thử xác nhận"
+        },
+        {
+          "en": "regression testing",
+          "vi": "kiểm thử hồi quy"
+        }
+      ]
+    },
+    {
+      "title": "Test types 2 — Which ISO 25010 quality characteristic?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "non-functional testing",
+        "ISO 25010"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Non-functional testing evaluates characteristics such as those of ISO/IEC 25010. Match each non-functional requirement of LabBook to its characteristic.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử phi chức năng đánh giá các đặc tính như trong ISO/IEC 25010. Ghép mỗi yêu cầu phi chức năng của LabBook với đặc tính của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Phục hồi sau sự cố, % thời gian sẵn sàng” ⇒ reliability.",
+        "“Chạy cạnh / chia sẻ với hệ thống khác” ⇒ compatibility; “cài trên nền tảng khác” ⇒ portability."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 2 — Which ISO 25010 quality characteristic?\n\nAnswer in the answer panel (no code needed).\n\n1. Requirement → characteristicYêu cầu → đặc tính\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 2 — Which ISO 25010 quality characteristic? — answer key\n\n1. Requirement → characteristicYêu cầu → đặc tính\n   - r0.c: Performance efficiency\n   - r1.c: Usability\n   - r2.c: Security\n   - r3.c: Reliability\n   - r4.c: Compatibility\n   - r5.c: Maintainability\n   - r6.c: Portability\n   Time behaviour/capacity = performance efficiency; learnability = usability; confidentiality = security; availability/recoverability = reliability; co-existence/interoperability = compatibility; modifiability = maintainability; installability/adaptability = portability.VI: Thời gian/sức chứa = hiệu năng; dễ học = khả dụng; bảo mật = security; sẵn sàng/phục hồi = tin cậy; cùng tồn tại/tương tác = tương thích; dễ sửa = bảo trì; dễ cài/thích nghi = khả chuyển.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Performance · Usability · Security · Reliability · Compatibility · Maintainability · Portability.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Requirement → characteristic</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu → đặc tính</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Requirement"
+              },
+              {
+                "ma": "c",
+                "ten": "Characteristic",
+                "luaChon": [
+                  "Performance efficiency",
+                  "Usability",
+                  "Security",
+                  "Reliability",
+                  "Compatibility",
+                  "Maintainability",
+                  "Portability"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "r": "95% of booking requests answer within 1 second with 500 concurrent users"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "A first-year student books a seat in under 60 seconds without training"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "Passwords are stored hashed; a student can never read another student’s bookings"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "The service is available 99.5% of the time during the semester and recovers within 5 minutes after a crash"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "LabBook runs next to the university’s single sign-on and shares its user database without conflicts"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "A new rule (e.g. a 4-hour limit for exam weeks) can be added by changing one configuration file"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "r": "LabBook can be installed on the university’s new Linux servers as well as on Windows Server"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.c": "Performance efficiency",
+              "r1.c": "Usability",
+              "r2.c": "Security",
+              "r3.c": "Reliability",
+              "r4.c": "Compatibility",
+              "r5.c": "Maintainability",
+              "r6.c": "Portability"
+            },
+            "giaiThich": "<p>Time behaviour/capacity = performance efficiency; learnability = usability; confidentiality = security; availability/recoverability = reliability; co-existence/interoperability = compatibility; modifiability = maintainability; installability/adaptability = portability.</p><p><i>VI: Thời gian/sức chứa = hiệu năng; dễ học = khả dụng; bảo mật = security; sẵn sàng/phục hồi = tin cậy; cùng tồn tại/tương tác = tương thích; dễ sửa = bảo trì; dễ cài/thích nghi = khả chuyển.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm compatibility với portability."
+        },
+        {
+          "loi": "Gán “dễ thêm luật mới” cho usability — đó là maintainability."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ISO/IEC 25010",
+          "vi": "chuẩn mô hình chất lượng sản phẩm phần mềm"
+        },
+        {
+          "en": "availability",
+          "vi": "tính sẵn sàng"
+        },
+        {
+          "en": "interoperability",
+          "vi": "khả năng tương tác"
+        }
+      ]
+    },
+    {
+      "title": "Test types 3 — Every type at every level",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test types",
+        "test levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The key exam point of lesson 2.4: functional, non-functional and white-box tests can be performed at <b>any</b> test level. For each example, name the level; its type is given in brackets.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ý thi quan trọng nhất của bài 2.4: test chức năng, phi chức năng và white-box đều làm được ở <b>mọi</b> cấp. Với mỗi ví dụ, gọi tên cấp; loại đã ghi trong ngoặc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đối tượng là một method ⇒ component; tương tác giữa module ⇒ integration; cả ứng dụng ⇒ system; người dùng đánh giá ⇒ acceptance.",
+        "White-box ở cấp system = độ phủ menu, màn hình, quy trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 3 — Every type at every level\n\nAnswer in the answer panel (no code needed).\n\n1. Example → levelVí dụ → cấp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 3 — Every type at every level — answer key\n\n1. Example → levelVí dụ → cấp\n   - r0.l: Component testing\n   - r1.l: Integration testing\n   - r2.l: System testing\n   - r3.l: Acceptance testing\n   - r4.l: Component testing\n   - r5.l: Integration testing\n   The slides’ own examples: performance of a component, white-box coverage of interfaces at integration, menu/navigation coverage at system level, usability at acceptance.VI: Đúng ví dụ của slide: hiệu năng một component, độ phủ white-box các giao diện ở integration, độ phủ menu/điều hướng ở system, khả dụng ở acceptance.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CT · IT · ST · AT · CT · IT.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Example → level</p><p style=\"opacity:.75;font-size:.92em\"><i>Ví dụ → cấp</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Example"
+              },
+              {
+                "ma": "l",
+                "ten": "Level",
+                "luaChon": [
+                  "Component testing",
+                  "Integration testing",
+                  "System testing",
+                  "Acceptance testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "e": "[non-functional] Measure how many CPU cycles calcRefund takes on a large input"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "[white-box] Exercise every call between the booking module and the e-mail module"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "[white-box] Cover every menu item and screen transition of the web application"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "[non-functional] Lab managers rate how easy closing a lab is during a pilot week"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "[functional] Check that reserveSeat returns the code BK-LAB01-0900"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "[non-functional] Measure response time when the API calls the repository 1,000 times"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.l": "Component testing",
+              "r1.l": "Integration testing",
+              "r2.l": "System testing",
+              "r3.l": "Acceptance testing",
+              "r4.l": "Component testing",
+              "r5.l": "Integration testing"
+            },
+            "giaiThich": "<p>The slides’ own examples: performance of a component, white-box coverage of interfaces at integration, menu/navigation coverage at system level, usability at acceptance.</p><p><i>VI: Đúng ví dụ của slide: hiệu năng một component, độ phủ white-box các giao diện ở integration, độ phủ menu/điều hướng ở system, khả dụng ở acceptance.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng white-box chỉ có ở component."
+        },
+        {
+          "loi": "Cho rằng phi chức năng chỉ ở system."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "navigation coverage",
+          "vi": "độ phủ điều hướng — menu, màn hình"
+        }
+      ]
+    },
+    {
+      "title": "Test types 4 — Confirmation or regression? Build the re-test plan",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "confirmation testing",
+        "regression testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Build 1.4.1 fixes some defects. Write <code>retestPlan(fixed, tests, changedModules)</code>:</p>\n<ul>\n<li><code>fixed</code> — ids of the defects fixed in this build, e.g. <code>['DEF-31']</code>.</li>\n<li><code>tests</code> — <code>[{ id, modules: [...], failedWith: 'DEF-31' | null }]</code>: the modules each test exercises and the defect it failed with in the previous build (or <code>null</code>).</li>\n<li><code>changedModules</code> — modules touched by the fixes.</li>\n</ul>\n<p>Return <code>{ confirmation, regression }</code> (both sorted A→Z, no test in both):</p>\n<ol><li><b>confirmation</b> — tests that failed with one of the fixed defects (they must now pass).</li>\n<li><b>regression</b> — the other tests that exercise at least one changed module (the unchanged areas around the fix).</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>A test that failed with a defect that is NOT fixed yet is neither confirmation nor (because of that) excluded from regression — treat it like any other test.</li>\n</ul>",
+      "problemHtmlVi": "<p>Build 1.4.1 sửa một số lỗi. Viết <code>retestPlan(fixed, tests, changedModules)</code>:</p>\n<ul><li><code>fixed</code> — mã các lỗi đã sửa trong build này.</li><li><code>tests</code> — <code>[{ id, modules, failedWith }]</code>: module mỗi test chạy qua và lỗi nó fail ở build trước (hoặc <code>null</code>).</li><li><code>changedModules</code> — module bị bản sửa chạm tới.</li></ul>\n<p>Trả <code>{ confirmation, regression }</code> (sắp A→Z, không test nào ở cả hai): <b>confirmation</b> = test đã fail với một lỗi đã sửa; <b>regression</b> = các test còn lại chạy qua ít nhất một module bị đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Test fail với lỗi CHƯA sửa không phải confirmation — xét nó như mọi test khác.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "retestPlan(['DEF-31'], [{id:'T1',modules:['cancel'],failedWith:'DEF-31'},{id:'T2',modules:['cancel','mail'],failedWith:null},{id:'T3',modules:['auth'],failedWith:null}], ['cancel'])",
+          "output": "{ confirmation: ['T1'], regression: ['T2'] }",
+          "explanation": "T1 failed with the fixed defect; T2 touches the changed module; T3 does not.|||T1 fail với lỗi đã sửa; T2 chạm module đổi; T3 thì không."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt tests một lần: nếu failedWith thuộc fixed ⇒ confirmation; ngược lại nếu modules giao changedModules khác rỗng ⇒ regression.",
+        "Sắp cả hai mảng trước khi trả."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "retest.js",
+          "language": "javascript",
+          "code": "function retestPlan(fixed, tests, changedModules) {\n  return { confirmation: [], regression: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "retest.js",
+          "language": "javascript",
+          "code": "function retestPlan(fixed, tests, changedModules) {\n  const fx = new Set(fixed);\n  const ch = new Set(changedModules);\n  const confirmation = [];\n  const regression = [];\n  for (const t of tests) {\n    if (t.failedWith && fx.has(t.failedWith)) confirmation.push(t.id);\n    else if ((t.modules || []).some((m) => ch.has(m))) regression.push(t.id);\n  }\n  return { confirmation: confirmation.sort(), regression: regression.sort() };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Confirmation testing checks the fix; regression testing checks that the change broke nothing else. Both are change-related testing — and regression suites are the prime candidates for automation.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "retest.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=retestPlan([\"DEF-31\"],[{id:\"T1\",modules:[\"cancel\"],failedWith:\"DEF-31\"},{id:\"T2\",modules:[\"cancel\",\"mail\"],failedWith:null},{id:\"T3\",modules:[\"auth\"],failedWith:null}],[\"cancel\"]);return JSON.stringify(i)==='{\"confirmation\":[\"T1\"],\"regression\":[\"T2\"]}'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "a test failing with an unfixed defect is not confirmation",
+              "vi": "test fail với lỗi chưa sửa không phải confirmation"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=retestPlan([\"DEF-31\"],[{id:\"T4\",modules:[\"auth\"],failedWith:\"DEF-40\"},{id:\"T5\",modules:[\"cancel\"],failedWith:\"DEF-40\"}],[\"cancel\"]);return JSON.stringify(i)==='{\"confirmation\":[],\"regression\":[\"T5\"]}'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "confirmation tests are not repeated in regression",
+              "vi": "test confirmation không lặp ở regression"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=retestPlan([\"A\"],[{id:\"X\",modules:[\"m\"],failedWith:\"A\"}],[\"m\"]);return JSON.stringify(i)==='{\"confirmation\":[\"X\"],\"regression\":[]}'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "several fixed defects and modules, sorted output",
+              "vi": "nhiều lỗi và module, kết quả đã sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=retestPlan([\"D2\",\"D1\"],[{id:\"T9\",modules:[\"b\"],failedWith:null},{id:\"T3\",modules:[\"a\"],failedWith:\"D2\"},{id:\"T1\",modules:[\"c\",\"a\"],failedWith:null},{id:\"T2\",modules:[\"x\"],failedWith:\"D1\"}],[\"a\",\"b\"]);return JSON.stringify(i)==='{\"confirmation\":[\"T2\",\"T3\"],\"regression\":[\"T1\",\"T9\"]}'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "nothing changed, nothing fixed",
+              "vi": "không đổi, không sửa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const i=retestPlan([],[{id:\"T1\",modules:[\"a\"],failedWith:null}],[]);return JSON.stringify(i)==='{\"confirmation\":[],\"regression\":[]}'?\"OK\":\"got \"+JSON.stringify(i)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho test fail với lỗi chưa sửa vào confirmation."
+        },
+        {
+          "loi": "Để một test vừa ở confirmation vừa ở regression."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "change-related testing",
+          "vi": "kiểm thử liên quan thay đổi"
+        },
+        {
+          "en": "re-test",
+          "vi": "test lại"
+        }
+      ]
+    },
+    {
+      "title": "Test types 5 — Exam questions (K1–K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions: how coverage is measured for each test type, black-box versus white-box at different levels, and the purpose of confirmation and regression testing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE: đo độ phủ thế nào cho từng loại test, black-box và white-box ở các cấp, mục đích của confirmation và regression testing.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi loại đo độ phủ bằng phần tử riêng của nó.",
+        "Regression = tác dụng phụ không mong muốn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 5 — Exam questions (K1–K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Functional coverage is measured as the extent to which…Độ phủ chức năng đo bằng mức độ…\n2. Which statement about white-box testing is TRUE?Phát biểu nào về white-box testing là ĐÚNG?\n3. What is the purpose of regression testing?Mục đích của regression testing là gì?\n4. Why are regression test suites a strong candidate for automation?Vì sao bộ regression là ứng viên mạnh cho tự động hoá?\n5. Which knowledge supports non-functional test design?Kiến thức nào hỗ trợ thiết kế test phi chức năng?\n6. At which levels can confirmation and regression testing be performed?Confirmation và regression testing làm được ở cấp nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test types 5 — Exam questions (K1–K2) — answer key\n\n1. Functional coverage is measured as the extent to which…Độ phủ chức năng đo bằng mức độ…\n   Answer: b) some type of functional element (requirements, features, user stories) has been exercised by tests\n   Expressed as a percentage of the type(s) of element covered.VI: Biểu thị bằng % số phần tử đã được phủ.\n\n2. Which statement about white-box testing is TRUE?Phát biểu nào về white-box testing là ĐÚNG?\n   Answer: b) At component integration level it may be based on the architecture, e.g. interfaces between components\n   White-box can be based on code, architecture, workflows or data flows.VI: White-box có thể dựa trên mã, kiến trúc, luồng công việc hay luồng dữ liệu.\n\n3. What is the purpose of regression testing?Mục đích của regression testing là gì?\n   Answer: b) To detect unintended side-effects of changes in the changed and in other, unchanged parts\n   Changes may also come from the environment (new OS, database version).VI: Thay đổi cũng có thể đến từ môi trường (HĐH mới, phiên bản CSDL).\n\n4. Why are regression test suites a strong candidate for automation?Vì sao bộ regression là ứng viên mạnh cho tự động hoá?\n   Answer: a) They run many times and evolve slowly\n   Run repeatedly, especially in iterative lifecycles and CI.VI: Chạy lặp lại nhiều lần, nhất là với vòng đời lặp và CI.\n\n5. Which knowledge supports non-functional test design?Kiến thức nào hỗ trợ thiết kế test phi chức năng?\n   Answer: b) Knowledge of the underlying technology (e.g. security vulnerabilities of a language) and of the user base\n   Non-functional testing often needs specialised skills.VI: Kiểm thử phi chức năng thường cần kỹ năng chuyên biệt.\n\n6. At which levels can confirmation and regression testing be performed?Confirmation và regression testing làm được ở cấp nào?\n   Answer: b) At all test levels\n   Like every test type.VI: Như mọi loại test.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Functional coverage is measured as the extent to which…</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ phủ chức năng đo bằng mức độ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "statements have been executed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "some type of functional element (requirements, features, user stories) has been exercised by tests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "users are satisfied"
+              },
+              {
+                "ma": "d",
+                "noiDung": "defects have been fixed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Expressed as a percentage of the type(s) of element covered.</p><p><i>VI: Biểu thị bằng % số phần tử đã được phủ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which statement about white-box testing is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về white-box testing là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It can only be done at component level"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At component integration level it may be based on the architecture, e.g. interfaces between components"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not measure coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is done only by users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>White-box can be based on code, architecture, workflows or data flows.</p><p><i>VI: White-box có thể dựa trên mã, kiến trúc, luồng công việc hay luồng dữ liệu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What is the purpose of regression testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục đích của regression testing là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To confirm that a defect has been fixed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To detect unintended side-effects of changes in the changed and in other, unchanged parts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To test new features"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To measure performance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Changes may also come from the environment (new OS, database version).</p><p><i>VI: Thay đổi cũng có thể đến từ môi trường (HĐH mới, phiên bản CSDL).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why are regression test suites a strong candidate for automation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bộ regression là ứng viên mạnh cho tự động hoá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They run many times and evolve slowly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are always short"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Automation finds new defects better"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They need no maintenance"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Run repeatedly, especially in iterative lifecycles and CI.</p><p><i>VI: Chạy lặp lại nhiều lần, nhất là với vòng đời lặp và CI.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which knowledge supports non-functional test design?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiến thức nào hỗ trợ thiết kế test phi chức năng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the source code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Knowledge of the underlying technology (e.g. security vulnerabilities of a language) and of the user base"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The developers’ names"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing special"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Non-functional testing often needs specialised skills.</p><p><i>VI: Kiểm thử phi chức năng thường cần kỹ năng chuyên biệt.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>At which levels can confirmation and regression testing be performed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Confirmation và regression testing làm được ở cấp nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only at system level"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At all test levels"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only at component level"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only during maintenance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Like every test type.</p><p><i>VI: Như mọi loại test.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “chỉ ở system” cho câu 6."
+        },
+        {
+          "loi": "Nhầm mục đích regression với confirmation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side-effect",
+          "vi": "tác dụng phụ"
+        }
+      ]
+    }
+  ]
+}

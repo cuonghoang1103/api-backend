@@ -118,7 +118,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>justify-content: center</code> lên chính <code>.hop-dang-nhap</code> — thuộc tính căn chỉnh tác động lên CON của vật chứa flex."
+        },
+        {
+          "loi": "Quên <code>min-height</code> — căn ngang chạy, căn dọc \"không ăn\"."
+        },
+        {
+          "loi": "Dùng <code>height: 100vh</code> — chạy được, nhưng nội dung dài hơn màn hình sẽ tràn; min-height cho phép nở ra."
+        }
+      ]
     },
     {
       "title": "Hàng nút bấm: display: flex và gap thay cho margin vá víu",
@@ -217,7 +230,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>display: flex</code> lên từng button — mỗi nút thành vật chứa của chữ bên trong nó, các nút vẫn chồng dọc."
+        },
+        {
+          "loi": "Giữ margin-right và thêm gap — khoảng cách cộng dồn thành 22–24px."
+        },
+        {
+          "loi": "Viết <code>gap</code> trên button — gap là thuộc tính của vật chứa."
+        }
+      ]
     },
     {
       "title": "Đổi trục: flex-direction: column cho menu dọc",
@@ -321,7 +347,20 @@
             "khop": "^0(px)?$"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>flex-direction: vertical</code> — không có giá trị đó; đúng là <code>column</code>."
+        },
+        {
+          "loi": "Thêm <code>display: block</code> cho từng a rồi margin — chạy, nhưng là cách cũ, nhiều quy tắc hơn."
+        },
+        {
+          "loi": "Quên <code>display: flex</code> — <code>flex-direction</code> một mình không có tác dụng."
+        }
+      ]
     },
     {
       "title": "Thanh điều hướng kinh điển: logo bên trái, menu bên phải, căn giữa dọc",
@@ -456,7 +495,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ flex <code>.navbar</code> rồi thắc mắc vì sao các li vẫn chồng dọc."
+        },
+        {
+          "loi": "Dùng <code>space-around</code> — logo và menu cách mép một khoảng, không sát mép như thiết kế."
+        },
+        {
+          "loi": "Quên <code>align-items: center</code> — mặc định <code>stretch</code> kéo item cao bằng thanh, chữ menu nằm lệch lên trên so với logo."
+        }
+      ]
     },
     {
       "title": "Thanh bên rộng cố định, nội dung lấp phần còn lại với flex: 1",
@@ -578,7 +630,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>flex: 1</code> lên <code>.bo-cuc</code> — vật chứa không nở theo con của nó."
+        },
+        {
+          "loi": "Giữ <code>width: 1000px</code> cùng <code>flex: 1</code> — flex-basis 0% thắng width trong hàng, nhưng mã gây hiểu lầm; xoá đi."
+        },
+        {
+          "loi": "Đặt <code>flex: 1</code> cho cả thanh bên — hai cột chia đôi, thanh bên không còn 240px."
+        }
+      ]
     },
     {
       "title": "Hàng thẻ co giãn và xuống dòng: flex-wrap với flex: 1 1 200px",
@@ -706,7 +771,20 @@
             "khop": "flex\\s*:\\s*1\\s+1\\s+200px"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>flex-wrap: wrap</code> — năm thẻ bị ép co trên một hàng, chữ dài tràn ra."
+        },
+        {
+          "loi": "Viết <code>flex: 200px</code> — một giá trị độ dài nghĩa là <code>1 1 200px</code>; chạy được, nhưng đề yêu cầu viết rõ ba giá trị để nhớ ý nghĩa."
+        },
+        {
+          "loi": "Giữ <code>margin-right: 2%</code> cùng gap — khoảng cách cộng dồn, hàng bị lệch."
+        }
+      ]
     },
     {
       "title": "Bẫy đổi trục: sửa thanh bên column mà justify và align đang làm ngược việc",
@@ -863,7 +941,23 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi <code>.khung</code> sang row cho \"dễ\" — sai thiết kế, đề cấm."
+        },
+        {
+          "loi": "Dùng <code>justify-content: space-around</code> — logo và thẻ người dùng cách mép một khoảng, không sát."
+        },
+        {
+          "loi": "Ở <code>.the-nguoi-dung</code> viết <code>justify-content: center</code> để \"giữa dọc\" — với row nó căn giữa NGANG."
+        },
+        {
+          "loi": "Thêm <code>margin-top: auto</code> cho thẻ người dùng — đẩy được xuống đáy, nhưng nhóm nút không còn ở giữa."
+        }
+      ]
     }
   ]
 }

@@ -107,7 +107,17 @@
             "khop": "duDoan\\s*=\\s*\\[\\s*\"[A-Z]\""
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp D trước E vì D được viết trước — thời điểm hẹn (10 ms) mới quyết định."
+        },
+        {
+          "loi": "Xếp B ngay sau A vì \"0 ms là ngay lập tức\"."
+        }
+      ]
     },
     {
       "title": "Đoán thứ tự in: microtask chen trước setTimeout",
@@ -199,7 +209,17 @@
             "mongDoi": "2"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"4\" sau \"5\" vì nghĩ queueMicrotask là một hàng riêng — cùng một hàng."
+        },
+        {
+          "loi": "Xếp \"2\" trước \"3\" vì setTimeout được viết trước."
+        }
+      ]
     },
     {
       "title": "Hoãn việc chậm ra sau: trang hiện trước, email gửi sau",
@@ -286,7 +306,17 @@
             "khop": "setTimeout\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "console",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bọc cả hai dòng trong setTimeout — \"Đang xử lý\" cũng bị trễ."
+        },
+        {
+          "loi": "Viết <code>setTimeout(console.log(…), 0)</code> — gọi log NGAY rồi đưa kết quả (undefined) cho setTimeout."
+        }
+      ]
     },
     {
       "title": "Thông báo ưu tiên: microtask cho việc gấp, task cho việc thường",
@@ -387,7 +417,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "console",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng setTimeout cho cả hai với độ trễ khác nhau (0 và 1 ms) — chạy được ở đây, nhưng phụ thuộc thời gian thay vì cơ chế."
+        },
+        {
+          "loi": "Ném lỗi bên trong callback — người gọi không bắt được."
+        }
+      ]
     },
     {
       "title": "Đồng hồ đếm ngược in toàn số 0: var trong vòng lặp hẹn giờ",
@@ -505,7 +545,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "console",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt mọi hẹn giờ cùng độ trễ 1000 — cả ba in cùng lúc."
+        },
+        {
+          "loi": "Dùng setInterval rồi quên clearInterval — đếm xuống số âm mãi."
+        }
+      ]
     },
     {
       "title": "Đoán thứ tự in: hẹn giờ trong microtask, microtask trong hẹn giờ",
@@ -604,7 +654,17 @@
             "mongDoi": 3
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp C ở cuối cùng (sau mọi task) — microtask được xả sau MỖI task, không chỉ sau đồng bộ."
+        },
+        {
+          "loi": "Xếp E trước F vì E nằm trong microtask \"chạy sớm\" — chỉ D chạy sớm; E vẫn là task, xếp sau những task có sẵn."
+        }
+      ]
     },
     {
       "title": "Xử lý theo lô: đừng để vòng lặp dài đóng băng trang",
@@ -758,7 +818,23 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt mọi lô vào hẹn giờ cùng lúc trong một vòng for — chúng vẫn chạy liền nhau, cú bấm chỉ chen được trước lô đầu."
+        },
+        {
+          "loi": "Gọi xong(ketQua) đồng bộ khi mảng rỗng."
+        },
+        {
+          "loi": "Ném RangeError bên trong setTimeout — người gọi không bắt được."
+        },
+        {
+          "loi": "Dùng ketQua[i] = … với chỉ số lệch giữa các lô."
+        }
+      ]
     }
   ]
 }

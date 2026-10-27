@@ -104,7 +104,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>setTimeout(resolve(giaTri), ms)</code> — gọi resolve NGAY, không chờ."
+        },
+        {
+          "loi": "Quên return trước new Promise — hàm vẫn trả về undefined."
+        }
+      ]
     },
     {
       "title": ".then, .catch và .finally: mô tả một người dùng",
@@ -224,7 +234,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "log trong then thay vì return — Promise trả về undefined."
+        },
+        {
+          "loi": "Đặt catch TRƯỚC then — lỗi bị chữa xong thì then nhận chuỗi lỗi và cố đọc u.ten."
+        },
+        {
+          "loi": "Trả về <code>err</code> thay vì <code>err.message</code> — chuỗi thành \"Lỗi: Error: …\"."
+        }
+      ]
     },
     {
       "title": "Quên return trong .then: chuỗi gãy mà không báo lỗi",
@@ -339,7 +362,17 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ thêm return ở một trong hai chỗ."
+        },
+        {
+          "loi": "Lồng .then bên trong .then — chạy được nhưng quay lại \"kim tự tháp\"."
+        }
+      ]
     },
     {
       "title": "Bọc API callback cũ thành Promise",
@@ -460,7 +493,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>if (duLieu) resolve(duLieu)</code> — tệp rỗng treo mãi."
+        },
+        {
+          "loi": "<code>reject(new Error(\"Lỗi đọc tệp\"))</code> — vứt mất thông điệp gốc."
+        },
+        {
+          "loi": "Đọc hai tệp song song rồi ghép sai thứ tự (đây là đọc liên tiếp)."
+        }
+      ]
     },
     {
       "title": "Chuỗi ba bước đặt hàng với MỘT .catch ở cuối",
@@ -586,7 +632,17 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm catch sau mỗi then — lỗi ở bước 1 bị \"chữa\" thành chuỗi, bước 2 lại nhận chuỗi đó thay vì sản phẩm."
+        },
+        {
+          "loi": "Quên return trong then — bước sau nhận undefined."
+        }
+      ]
     },
     {
       "title": "Hạn chờ cho một Promise: settle đúng một lần",
@@ -695,7 +751,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "reject bằng chuỗi thay vì Error — người gọi đọc err.message ra undefined."
+        },
+        {
+          "loi": "Chờ promise gốc xong rồi mới kiểm \"đã quá giờ chưa\" — reject muộn ở mốc 500."
+        }
+      ]
     },
     {
       "title": "Chạy tuần tự một danh sách việc bất đồng bộ bằng chuỗi then",
@@ -810,7 +876,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi viec() khi dựng chuỗi (ngoài then) — mọi việc vẫn bắt đầu cùng lúc."
+        },
+        {
+          "loi": "Dùng Promise.all — song song, đề cấm."
+        },
+        {
+          "loi": "push vào một mảng dùng chung rồi trả về mảng đó trước khi các việc xong."
+        }
+      ]
     }
   ]
 }

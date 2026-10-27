@@ -116,7 +116,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>img { width: 100%; }</code> — ảnh nhỏ (icon 32px) cũng bị kéo căng hết hàng."
+        },
+        {
+          "loi": "Xoá width/height của thẻ img để \"hết méo\" — mất chỗ giữ, trang nhảy khi ảnh tải."
+        },
+        {
+          "loi": "Thêm <code>overflow-x: hidden</code> cho body — giấu triệu chứng, ảnh vẫn bị cắt."
+        }
+      ]
     },
     {
       "title": "Đổi px sang rem để chữ và khoảng cách co giãn cùng nhau",
@@ -237,7 +250,20 @@
             "khop": "\\d(\\.\\d+)?rem"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>em</code> thay rem cho cỡ chữ lồng nhau — em tính theo cha, lồng hai tầng 0.875em là 0.766 lần."
+        },
+        {
+          "loi": "Viết <code>0,875rem</code> với dấu phẩy — CSS chỉ nhận dấu chấm."
+        },
+        {
+          "loi": "Đặt <code>html { font-size: 62.5% }</code> cho \"dễ tính\" — ghi đè cỡ người dùng chọn, đúng thứ ta muốn tránh."
+        }
+      ]
     },
     {
       "title": "Media query đầu tiên: rộng tay hơn từ 768px trở lên",
@@ -365,7 +391,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt media query LÊN TRÊN kiểu nền — kiểu nền đứng sau sẽ đè, media query vô hiệu."
+        },
+        {
+          "loi": "Viết <code>@media (min-width = 768px)</code> — cú pháp đúng là dấu hai chấm."
+        },
+        {
+          "loi": "Chép lại mọi thuộc tính vào media query — chỉ cần thứ thay đổi."
+        }
+      ]
     },
     {
       "title": "Mobile-first đúng như bài học: 1 cột → 2 cột từ 768px → 3 cột từ 1024px",
@@ -489,7 +528,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết khối 1024px trước khối 768px — ở màn lớn, khối 768px đứng sau đè lại thành 2 cột."
+        },
+        {
+          "loi": "Lặp lại <code>display: grid</code> và <code>gap</code> trong mỗi media query — thừa, chỉ cần thứ thay đổi."
+        },
+        {
+          "loi": "Dùng <code>max-width: 767px</code> cho điện thoại — đó là desktop-first, bài sau sẽ chuyển ngược."
+        }
+      ]
     },
     {
       "title": "Lật ngược bảng kiểu desktop-first thành mobile-first mà kết quả y nguyên",
@@ -646,7 +698,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lật <code>max-width: 767px</code> thành <code>min-width: 767px</code> — ở đúng 767px ra kiểu tablet."
+        },
+        {
+          "loi": "Giữ kiểu nền desktop và chỉ đổi chữ max thành min — hành vi đảo lộn hoàn toàn."
+        },
+        {
+          "loi": "Đặt khối 1024px trước khối 768px — màn lớn ra 2 cột."
+        }
+      ]
     },
     {
       "title": "Thanh điều hướng xếp dọc trên điện thoại, nằm ngang từ 768px",
@@ -799,7 +864,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt min-height lên <code>&lt;li&gt;</code> thay vì <code>&lt;a&gt;</code> — dải cao 44px nhưng chỉ chữ là bấm được."
+        },
+        {
+          "loi": "Quên <code>display: block</code> trên liên kết — padding dọc của phần tử dòng không đẩy dòng, vùng bấm vẫn bé."
+        },
+        {
+          "loi": "Viết <code>justify-content: space-between</code> ở kiểu nền column — với column nó trải theo chiều dọc."
+        }
+      ]
     },
     {
       "title": "Trang sản phẩm responsive trọn vẹn: 1 cột < 600px, 2 cột 600–899px, 3 cột + thanh lọc ≥ 900px",
@@ -1002,7 +1080,23 @@
             "khop": "^(?![\\s\\S]*(@media[\\s\\S]*){3})[\\s\\S]*@media\\s*\\(\\s*min-width\\s*:\\s*600px\\s*\\)[\\s\\S]*@media\\s*\\(\\s*min-width\\s*:\\s*900px\\s*\\)"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>.loc { display: none }</code> trong media query max-width cho màn nhỏ — desktop-first lén quay lại."
+        },
+        {
+          "loi": "Ở khối 600px lặp lại toàn bộ kiểu nền — dài gấp đôi, đổi một chỗ phải sửa ba chỗ."
+        },
+        {
+          "loi": "Dùng <code>min-width: 899px</code> — ở đúng 899px thanh lọc hiện ra sớm một pixel."
+        },
+        {
+          "loi": "Quên thẻ viewport — trên điện thoại thật mọi media query đo nhầm 980px, hiện bản desktop thu nhỏ."
+        }
+      ]
     }
   ]
 }

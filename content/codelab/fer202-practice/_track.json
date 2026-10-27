@@ -1,0 +1,19 @@
+{
+  "groupSlug": "fptu",
+  "slug": "fer202-practice",
+  "name": "FER202 — Luyện tập",
+  "language": "javascript",
+  "color": "#0ea5e9",
+  "docsUrl": "https://react.dev/learn",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn FER202 (Front-End Web Development with React) — mỗi bài học một bộ đề từ dễ đến khó có máy chấm React, mỗi chương một Lab trình bày như đề trường, cuối môn PE luyện có đồng hồ.",
+  "modules": [
+    {
+      "slug": "fer202-8-lab-movie-hooks",
+      "name": "Lab 8 — Movie Management System (React Hooks)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 8 (Hooks): ứng dụng quản lý phim đủ 8 chức năng — useState, useEffect, useRef, useMemo, useContext + custom hook useLocalStorage. Chấm tự động theo thang điểm 10 như PE."
+    }
+  ]
+}

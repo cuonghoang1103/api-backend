@@ -110,7 +110,20 @@
             "giaTri": 4
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ <code>&lt;h3&gt;</code> cho tiêu đề trang vì \"h1 to quá\" — muốn nhỏ thì CSS <code>font-size</code>, không hạ cấp."
+        },
+        {
+          "loi": "Đánh \"Đồ chua\" là <code>&lt;h2&gt;</code> — nó thành một phần ngang hàng \"Nguyên liệu\", mất quan hệ cha–con."
+        },
+        {
+          "loi": "Dùng <code>&lt;strong&gt;</code> thay tiêu đề — strong là \"quan trọng\" trong câu, không phải tên một mục."
+        }
+      ]
     },
     {
       "title": "ul hay ol? Danh sách nguyên liệu và các bước pha cà phê",
@@ -220,7 +233,20 @@
             ]
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để nguyên \"1.\" trong <code>&lt;li&gt;</code> — hiện thành \"1. 1. Pha cà phê\"."
+        },
+        {
+          "loi": "Dùng <code>&lt;ol&gt;</code> cho nguyên liệu \"cho có số\" — số ngụ ý thứ tự mà nội dung không có."
+        },
+        {
+          "loi": "Đặt chữ trực tiếp trong <code>&lt;ul&gt;</code> không có <code>&lt;li&gt;</code> — không hợp lệ, trình duyệt hiện lệch."
+        }
+      ]
     },
     {
       "title": "Ba kiểu liên kết: tương đối, tuyệt đối và mở tab mới an toàn",
@@ -327,7 +353,20 @@
             "giaTri": 1
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>target=\"blank\"</code> (thiếu gạch dưới) — mở vào một tab tên \"blank\", lần bấm sau tái dùng tab đó."
+        },
+        {
+          "loi": "Đặt <code>target=\"_blank\"</code> cho mọi liên kết — người dùng mất nút Back quen thuộc."
+        },
+        {
+          "loi": "Dùng <code>/about.html</code> (tương đối theo gốc) khi trang nằm trong thư mục con — trỏ nhầm về gốc site."
+        }
+      ]
     },
     {
       "title": "alt có nghĩa hay alt rỗng? Sửa bộ ảnh của trang du lịch Đà Lạt",
@@ -450,7 +489,20 @@
             "giaTri": 5
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá hẳn alt của ảnh trang trí — trạng thái \"thiếu alt\", trình đọc đọc tên tệp \"vien hoa van chấm png\"."
+        },
+        {
+          "loi": "Viết <code>alt=\"Ảnh hồ\"</code> — có alt nhưng gần như không có thông tin."
+        },
+        {
+          "loi": "Lặp lại chú thích ngay dưới ảnh vào alt — người nghe nghe hai lần; alt nên bổ sung, không lặp."
+        }
+      ]
     },
     {
       "title": "Mục lục nhảy trong trang bằng href=\"#id\"",
@@ -570,7 +622,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt id lên <code>&lt;a&gt;</code> trong mục lục thay vì lên tiêu đề đích — liên kết nhảy tới chính nó."
+        },
+        {
+          "loi": "Viết <code>href=\"hoc-phi\"</code> thiếu dấu # — thành liên kết tương đối tới tệp \"hoc-phi\" ⇒ 404."
+        },
+        {
+          "loi": "Dùng id có dấu cách <code>id=\"hoc phi\"</code> — không hợp lệ, href phải mã hoá thành %20."
+        }
+      ]
     },
     {
       "title": "Trang hồ sơ cá nhân: tiêu đề, danh sách, liên kết ngoài và ảnh đại diện",
@@ -702,7 +767,20 @@
             "selector": "br, b, font"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết kỹ năng là <code>&lt;p&gt;HTML · CSS · Git&lt;/p&gt;</code> như bản nháp — mất cấu trúc danh sách."
+        },
+        {
+          "loi": "Cho \"Chi tiết dự án\" là h2 — nó thành mục ngang hàng, không còn thuộc \"Mục tiêu\"."
+        },
+        {
+          "loi": "Viết <code>href=\"an@vidu.com\"</code> thiếu <code>mailto:</code> — trình duyệt tìm tệp tên \"an@vidu.com\"."
+        }
+      ]
     },
     {
       "title": "Mục lục khoá học lồng ba cấp với đường dẫn tương đối từ thư mục con",
@@ -830,7 +908,20 @@
             "selector": "a[href*=\"localhost\"]"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đóng <code>&lt;/li&gt;</code> của chương ngay sau chữ \"Chương 1: HTML\" rồi mới mở <code>&lt;ol&gt;</code> — ol con lại đứng cạnh li."
+        },
+        {
+          "loi": "Viết <code>href=\"/tai-lieu.html\"</code> — theo gốc thì trỏ tới <code>/tai-lieu.html</code>, không phải <code>/khoa-hoc/tai-lieu.html</code>."
+        },
+        {
+          "loi": "Viết <code>href=\"../html/bai-2.html\"</code> — lên một cấp rồi mới vào html/ ⇒ <code>/khoa-hoc/html/bai-2.html</code>, sai thư mục."
+        }
+      ]
     }
   ]
 }

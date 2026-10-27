@@ -117,7 +117,20 @@
             "giaTri": "300px"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ đặt <code>box-sizing</code> cho <code>.the</code> — chạy được ở bài này, nhưng mỗi thành phần mới lại phải nhớ thêm; quy tắc toàn cục là thói quen đúng."
+        },
+        {
+          "loi": "Sửa thành <code>width: 258px</code> — đúng con số, sai cách: đổi padding là phải tính lại."
+        },
+        {
+          "loi": "Viết <code>box-sizing: border</code> — giá trị không hợp lệ, bị bỏ qua lặng lẽ."
+        }
+      ]
     },
     {
       "title": "Cú pháp rút gọn margin và padding: 1, 2 và 4 giá trị",
@@ -244,7 +257,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>margin: 4px 16px 12px 8px</code> — nhầm thứ tự thành trên–trái–dưới–phải."
+        },
+        {
+          "loi": "Ngăn cách bằng dấu phẩy <code>padding: 8px, 24px</code> — sai cú pháp, cả dòng bị bỏ."
+        },
+        {
+          "loi": "Viết <code>padding: 24px 8px</code> — đảo nghĩa: trên/dưới 24, trái/phải 8."
+        }
+      ]
     },
     {
       "title": "Khoảng cách giữa các thẻ bằng margin, không bằng <br>",
@@ -354,7 +380,20 @@
             "selector": "body div:empty, body p:empty"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>padding-bottom: 24px</code> để tách thẻ — khoảng trống nằm TRONG viền, thẻ trông cao bất thường."
+        },
+        {
+          "loi": "Dùng <code>margin: 16px</code> cho chữ cách viền — margin ở ngoài viền, chữ vẫn dính viền."
+        },
+        {
+          "loi": "Thay <code>&lt;br&gt;</code> bằng <code>&lt;div class=\"cach\"&gt;&lt;/div&gt;</code> rỗng — vẫn là chèn phần tử chỉ để tạo khoảng."
+        }
+      ]
     },
     {
       "title": "Đọc sơ đồ hộp của DevTools rồi viết lại CSS sinh ra nó",
@@ -483,7 +522,20 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>width: 252px</code> — nhầm ô content với hộp hiển thị."
+        },
+        {
+          "loi": "Cộng margin vào bề rộng (284px) — margin không thuộc kích thước phần tử."
+        },
+        {
+          "loi": "Không ghi <code>box-sizing: content-box</code> trong khi trang có quy tắc <code>* { box-sizing: border-box }</code> ở chỗ khác — nút co còn 200px."
+        }
+      ]
     },
     {
       "title": "Margin dọc gộp: vì sao 20 + 20 chỉ ra 20, và cách lấy đúng 40px",
@@ -592,7 +644,20 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>margin: 40px 0</code> — gộp thành max(40, 40) = 40, đúng con số giữa các mục nhưng mục đầu cách tiêu đề 40 và vẫn hiểu sai cơ chế."
+        },
+        {
+          "loi": "Bù bằng <code>padding-bottom: 20px</code> — khoảng hở nằm trong viền, thẻ phình ra."
+        },
+        {
+          "loi": "Nghĩ margin ngang cũng gộp — margin ngang không bao giờ gộp."
+        }
+      ]
     },
     {
       "title": "Hai cột 50% không nằm cạnh nhau nổi: sửa bẫy content-box",
@@ -713,7 +778,20 @@
             "giaTri": "wrap"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi thành <code>width: 45%</code> — vừa ở 800px, vỡ lại ở khung khác."
+        },
+        {
+          "loi": "Dùng <code>calc(50% - 42px)</code> — đúng nhưng phải sửa lại mỗi lần đổi padding."
+        },
+        {
+          "loi": "Bỏ <code>flex-wrap</code> để ép hai cột cùng hàng — flex co cột lại, che mất lỗi thay vì sửa nó."
+        }
+      ]
     },
     {
       "title": "Ba thẻ vừa khít khung 960px: tự tính width từ margin, padding và viền",
@@ -848,7 +926,20 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính margin gộp thành 10px giữa hai thẻ (như margin dọc) ⇒ width 306.67 — margin ngang không gộp."
+        },
+        {
+          "loi": "Viết <code>.noi-bat { width: 296px }</code> để bù viền — đúng với content-box, nhưng là việc border-box làm giùm."
+        },
+        {
+          "loi": "Dùng <code>flex: 1</code> — ra đúng kích thước nhưng bỏ qua toàn bộ bài học tính toán (đề cấm)."
+        }
+      ]
     }
   ]
 }

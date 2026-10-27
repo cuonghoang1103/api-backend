@@ -323,6 +323,11 @@ export function xuatDe(de, { baiHoc, ngonNgu, loaiKiem }) {
     diagramMermaid: de.soDo ?? null,
     referenceUrl: de.thamKhao ?? null,
     testsJson: dungTests(de, loaiKiem),
+    // đợt Academy 28/10/2026 — cột mới của code_exercises (content/codelab/README.md)
+    gradeKind: de.loaiKiem || loaiKiem || 'dom',
+    kind: de.dangBai || 'practice',
+    mistakesJson: (de.loiHayGap || []).map((loi) => ({ loi })),
+    ...(de.thuatNgu ? { glossaryJson: de.thuatNgu } : {}),
   };
 }
 

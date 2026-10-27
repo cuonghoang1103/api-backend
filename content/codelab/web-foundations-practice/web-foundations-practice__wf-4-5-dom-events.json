@@ -176,7 +176,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa id nhưng vẫn quên cập nhật textContent trong handler — con số đứng yên ở 0."
+        },
+        {
+          "loi": "Dùng <code>innerHTML</code> cho một con số — chạy được, nhưng <code>textContent</code> đúng việc và an toàn hơn."
+        },
+        {
+          "loi": "Gắn <code>onclick=\"…\"</code> trong HTML — trộn logic vào trang, đề cấm."
+        }
+      ]
     },
     {
       "title": "Script trong <head> chạy quá sớm: sửa bằng defer",
@@ -292,7 +305,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>async</code> thay vì <code>defer</code> — async chạy ngay khi tải xong, có thể vẫn trước khi HTML đọc xong."
+        },
+        {
+          "loi": "Sửa app.js thêm if (nut) — che lỗi, nút vẫn không bao giờ chạy."
+        },
+        {
+          "loi": "Viết <code>defer=\"false\"</code> — thuộc tính boolean có mặt là bật, bất kể giá trị."
+        }
+      ]
     },
     {
       "title": "Đọc ô nhập và chào bằng textContent",
@@ -497,7 +523,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên classList.remove(\"loi\") — sau một lần để trống, lời chào đúng vẫn hiện màu đỏ."
+        },
+        {
+          "loi": "Kiểm <code>if (!ten)</code> TRƯỚC khi trim — \"   \" là truthy, lọt qua."
+        },
+        {
+          "loi": "Dùng innerHTML vì \"ngắn hơn\" — mở cửa cho XSS."
+        }
+      ]
     },
     {
       "title": "Nút mở menu: classList.toggle và aria-expanded",
@@ -692,7 +731,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>setAttribute(\"aria-expanded\", dangMo)</code> với boolean — được ép thành chuỗi \"true\"/\"false\", nhưng viết <code>String(...)</code> rõ ý hơn."
+        },
+        {
+          "loi": "Dùng hai biến riêng cho class và aria — sớm muộn sẽ lệch nhau."
+        },
+        {
+          "loi": "Quên quy tắc <code>#menu.mo</code> trong CSS — class bật rồi mà menu vẫn ẩn."
+        }
+      ]
     },
     {
       "title": "Form đăng ký: preventDefault, kiểm email và báo lỗi",
@@ -909,7 +961,20 @@
             "khop": "\\.preventDefault\\(\\s*\\)"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gắn handler vào click của nút — Enter trong ô nhập không qua đó."
+        },
+        {
+          "loi": "Gọi <code>e.preventDefault</code> thiếu <code>()</code> — không làm gì."
+        },
+        {
+          "loi": "Không xoá thông báo lỗi khi lần sau nhập đúng — trang hiện cùng lúc \"không hợp lệ\" và \"đã đăng ký\"."
+        }
+      ]
     },
     {
       "title": "Ủy quyền sự kiện: một listener cho cả danh sách",
@@ -1118,7 +1183,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So <code>e.target.className === \"xoa\"</code> — vỡ ngay khi nút có thêm class hoặc có phần tử con."
+        },
+        {
+          "loi": "Xoá <code>e.target</code> thay vì <code>&lt;li&gt;</code> — chỉ mất cái nút, dòng còn nguyên."
+        },
+        {
+          "loi": "Dựng dòng bằng <code>innerHTML = `&lt;span&gt;${viec}&lt;/span&gt;…`</code> — chữ người dùng gõ thành HTML."
+        }
+      ]
     },
     {
       "title": "Danh sách việc cần làm hoàn chỉnh: thêm, đánh dấu xong, xoá, đếm",
@@ -1467,7 +1545,23 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên gọi capNhatDem() lúc tải trang — #dem trống cho tới thao tác đầu."
+        },
+        {
+          "loi": "Giữ biến đếm riêng (<code>let soViec</code>) rồi quên trừ khi xoá một dòng đã xong."
+        },
+        {
+          "loi": "Dùng <code>classList.toggle(\"xong\")</code> không có force — lệch với ô khi trạng thái bị đổi bằng cách khác."
+        },
+        {
+          "loi": "Gắn listener cho checkbox lúc tạo dòng — chạy được, nhưng trái yêu cầu ủy quyền và tốn bộ nhớ khi danh sách dài."
+        }
+      ]
     }
   ]
 }

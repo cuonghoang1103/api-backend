@@ -115,7 +115,20 @@
             "khop": "\\dfr"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>grid-template-columns: 3fr</code> — một cột chiếm ba phần, không phải ba cột."
+        },
+        {
+          "loi": "Giữ <code>width: 32%</code> trên ô — % giờ tính theo ô lưới, ảnh co lại còn 1/3 ô."
+        },
+        {
+          "loi": "Quên <code>display: grid</code> — grid-template-columns không có tác dụng."
+        }
+      ]
     },
     {
       "title": "repeat(): bốn cột sản phẩm mà không gõ lặp 1fr",
@@ -217,7 +230,20 @@
             "khop": "^20px( 20px)?$"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>repeat(4 1fr)</code> thiếu dấu phẩy — không hợp lệ, cả dòng bị bỏ."
+        },
+        {
+          "loi": "Viết <code>repeat(1fr, 4)</code> — đảo thứ tự tham số."
+        },
+        {
+          "loi": "Quên <code>display: grid</code>."
+        }
+      ]
     },
     {
       "title": "Thanh bên cố định 240px và nội dung linh hoạt bằng Grid",
@@ -322,7 +348,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>grid-template-columns: 240px auto</code> — thường cũng chạy, nhưng auto co theo nội dung; 1fr mới là \"lấy phần còn lại\"."
+        },
+        {
+          "loi": "Đặt thêm <code>width: 240px</code> lên aside — thừa, và lệch khi đổi rãnh."
+        },
+        {
+          "loi": "Viết <code>240 1fr</code> thiếu đơn vị — không hợp lệ."
+        }
+      ]
     },
     {
       "title": "Bài viết và thanh bên tỉ lệ 2:1, phần đầu và chân trang trải hết bề ngang",
@@ -449,7 +488,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến <code>body</code> thành grid <code>2fr 1fr</code> — header và footer bị nhét vào một ô mỗi cái."
+        },
+        {
+          "loi": "Viết <code>1fr 2fr</code> — thanh bên rộng gấp đôi bài viết."
+        },
+        {
+          "loi": "Dùng <code>66% 34%</code> + gap — tổng vượt 100%, tràn ngang."
+        }
+      ]
     },
     {
       "title": "Lưới thẻ tự đổi số cột: repeat(auto-fit, minmax(220px, 1fr))",
@@ -571,7 +623,20 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>repeat(auto-fit, 220px)</code> — cột cứng 220px, không nở, lưới lệch về bên trái với khoảng trống bên phải."
+        },
+        {
+          "loi": "Quên <code>max-width</code> rồi tính 5 cột ở 1280px."
+        },
+        {
+          "loi": "Giữ lại một media query \"cho chắc\" — nó sẽ đè auto-fit ở bề rộng đó."
+        }
+      ]
     },
     {
       "title": "Grid cho bộ khung, Flexbox bên trong: trang quản trị hai tầng bố cục",
@@ -713,7 +778,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng grid cho cả <code>.hang-nut</code> — chạy được, nhưng phải khai số cột; thêm nút là phải sửa CSS."
+        },
+        {
+          "loi": "Giữ <code>width: 860px</code> trên nội dung — tràn ngang trên laptop 1024px."
+        },
+        {
+          "loi": "Bốn ô chỉ số bằng <code>flex: 1</code> — lệch cột khi một số dài."
+        }
+      ]
     },
     {
       "title": "Lưới lồng lưới: thư viện auto-fill trong cột 1fr, tính đúng số cột ở ba màn hình",
@@ -856,7 +934,20 @@
             "giuChuThich": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính theo bề rộng màn hình thay vì bề rộng main — ra 6–7 cột ở 1400px."
+        },
+        {
+          "loi": "Quên gap của grid ngoài (24px) — lệch một cột ở ranh giới."
+        },
+        {
+          "loi": "Dùng <code>repeat(auto-fill, 180px)</code> — cột cứng, thừa khoảng trống bên phải."
+        }
+      ]
     }
   ]
 }

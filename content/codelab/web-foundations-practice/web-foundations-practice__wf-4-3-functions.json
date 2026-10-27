@@ -108,7 +108,20 @@
             "khop": "tong\\s*=\\s*\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>\\s*a\\s*\\+\\s*b"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>const tong = a, b =&gt; a + b</code> — thiếu ngoặc, JavaScript hiểu thành hai khai báo."
+        },
+        {
+          "loi": "Giữ ngoặc nhọn mà bỏ <code>return</code>: <code>n =&gt; { n * n }</code> trả về <code>undefined</code>."
+        },
+        {
+          "loi": "Gọi hàm trước dòng <code>const</code> khai báo nó — ReferenceError."
+        }
+      ]
     },
     {
       "title": "Bẫy arrow có ngoặc nhọn: hàm trả về undefined",
@@ -219,7 +232,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa <code>taoNguoiDung</code> thành <code>(ten) =&gt; { ten: ten, vaiTro: \"…\" }</code> — giờ thì thành LỖI CÚ PHÁP (nhãn không có dấu phẩy)."
+        },
+        {
+          "loi": "Trả về <code>{ name: …, role: … }</code> — sai tên khoá đề yêu cầu."
+        },
+        {
+          "loi": "Làm tròn VAT — <code>100000 * 0.1</code> đã đúng <code>10000</code>."
+        }
+      ]
     },
     {
       "title": "Tham số mặc định: khi nào thì giá trị mặc định được dùng?",
@@ -331,7 +357,20 @@
             "khop": "ten\\s*=\\s*[\"']bạn[\"'][\\s\\S]*loiChao\\s*=\\s*[\"']Xin chào[\"']"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tham số mặc định ở GIỮA danh sách rồi gọi thiếu đối số — muốn bỏ qua tham số đầu thì phải truyền <code>undefined</code>."
+        },
+        {
+          "loi": "Giữ thêm <code>if (!ten)</code> — \"\" lại thành \"bạn\"."
+        },
+        {
+          "loi": "Tưởng <code>null</code> cũng kích hoạt mặc định."
+        }
+      ]
     },
     {
       "title": "Phạm vi: hai bộ đếm dùng chung một biến toàn cục",
@@ -440,7 +479,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>let dem = 0</code> BÊN TRONG hàm trả về — mỗi lần gọi <code>a()</code> lại về 0, luôn trả 1."
+        },
+        {
+          "loi": "Quên <code>return</code> hàm con — <code>taoBoDem()</code> trả về undefined, gọi <code>a()</code> ném TypeError \"a is not a function\"."
+        },
+        {
+          "loi": "Bỏ qua <code>batDau</code> — <code>taoBoDem(10)</code> vẫn bắt đầu từ 0."
+        }
+      ]
     },
     {
       "title": "Mệnh đề chốt chặn thay cho if lồng bốn tầng",
@@ -567,7 +619,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm <code>if (!matKhau)</code> rồi gọi <code>matKhau.length</code> khi matKhau là số — số không có length (undefined < 8 là false!)."
+        },
+        {
+          "loi": "Đặt luật \"trùng tên\" trước \"quá ngắn\" như bản cũ."
+        },
+        {
+          "loi": "Đặt <code>return \"Cần ít nhất một chữ số\"</code> TRONG vòng lặp — trả về ngay ở ký tự đầu không phải số."
+        }
+      ]
     },
     {
       "title": "Hàm làm đối số: áp một phép biến đổi n lần",
@@ -679,7 +744,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>f(x)</code> trong vòng lặp mà không gán lại — lần nào cũng áp lên x gốc, ra f(x) thay vì f(f(f(x)))."
+        },
+        {
+          "loi": "Truyền <code>dieuKien</code> rồi so <code>dieuKien(so) === true</code> — callback trả về số khác 0 (truthy) sẽ bị bỏ qua."
+        },
+        {
+          "loi": "Gọi <code>f()</code> không đối số."
+        }
+      ]
     },
     {
       "title": "Nhà máy định dạng tiền: hàm trả về hàm",
@@ -824,7 +902,23 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt mặc định <code>function taoDinhDang({ kyHieu = \"đ\" })</code> mà thiếu <code>= {}</code> — gọi <code>taoDinhDang()</code> ném TypeError (không destructure được undefined)."
+        },
+        {
+          "loi": "Chèn phân cách ở đầu với số có số chữ số chia hết cho 3 — <code>\".100đ\"</code>."
+        },
+        {
+          "loi": "Chia nhóm trên <code>String(-1500)</code> — dấu trừ bị đếm như một chữ số."
+        },
+        {
+          "loi": "Dùng <code>if (!so)</code> để chặn đầu vào — chặn luôn số 0 hợp lệ."
+        }
+      ]
     }
   ]
 }

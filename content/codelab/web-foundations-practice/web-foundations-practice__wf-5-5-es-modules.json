@@ -102,7 +102,17 @@
             "mongDoi": 20
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>export { add, multiply, PI }</code> ở cuối tệp cũng đúng — miễn là có export."
+        },
+        {
+          "loi": "Chỉ export add và PI — multiply vẫn cần cho các tệp khác (máy chấm kiểm)."
+        }
+      ]
     },
     {
       "title": "Export default: import không có ngoặc nhọn",
@@ -197,7 +207,17 @@
             "khop": "import\\s+\\w+\\s+from\\s+[\"']\\./User\\.js[\"']"
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa User.js thành export có tên — đề cấm; React và nhiều thư viện dùng default, bạn phải đọc được cả hai."
+        },
+        {
+          "loi": "<code>import * from \"./User.js\"</code> — thiếu <code>as tên</code>, lỗi cú pháp."
+        }
+      ]
     },
     {
       "title": "Đường dẫn import: có đuôi .js, đúng ./ và ../",
@@ -305,7 +325,17 @@
             "mongDoi": "5đ"
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa thành \"/config.js\" (đường dẫn tuyệt đối) — trỏ về gốc tên miền, không phải gốc dự án; dễ vỡ khi trang nằm trong thư mục con."
+        },
+        {
+          "loi": "Chép config.js vào utils/ — giờ có hai bản cấu hình lệch nhau."
+        }
+      ]
     },
     {
       "title": "Tách một tệp 60 dòng thành ba module",
@@ -429,7 +459,17 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để lại bản sao hàm trong main.js \"cho chắc\" — hai bản sẽ lệch nhau."
+        },
+        {
+          "loi": "Export default trong gio-hang.js một object { themVao, tongTien } — chạy được nhưng mất lợi ích của export có tên."
+        }
+      ]
     },
     {
       "title": "Module chạy một lần: trạng thái dùng chung giữa các tệp",
@@ -548,7 +588,17 @@
             "mongDoi": 2
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Import \"./Kho.js\" hay \"./kho.js?x\" ở một chỗ — URL khác ⇒ module khác ⇒ hai kho."
+        },
+        {
+          "loi": "Gán dem = 5 trong main.js — binding import là chỉ đọc (TypeError)."
+        }
+      ]
     },
     {
       "title": "Gom export qua utils/index.js (barrel file)",
@@ -679,7 +729,20 @@
             "khop": "export\\s*\\{[^}]*default\\s+as\\s+taoSlug[^}]*\\}\\s*from"
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>export default from \"./slug.js\"</code> — không phải cú pháp hợp lệ."
+        },
+        {
+          "loi": "<code>export * from \"./slug.js\"</code> — export * KHÔNG mang theo default."
+        },
+        {
+          "loi": "Giữ nguyên ba dòng import rồi thêm export { … } ở cuối — đúng, nhưng dài gấp đôi."
+        }
+      ]
     },
     {
       "title": "Ghép ứng dụng thời tiết từ bốn module + fetch",
@@ -869,7 +932,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "module",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bắt lỗi bằng một try/catch quanh cả Promise.all — một thành phố lỗi làm mất cả ba dòng."
+        },
+        {
+          "loi": "Gọi taiTatCa nhưng quên await ở cấp cao nhất — console in \"[object Promise]\" hoặc không in gì."
+        },
+        {
+          "loi": "Import \"./api\" thiếu đuôi .js."
+        }
+      ]
     }
   ]
 }

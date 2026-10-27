@@ -121,7 +121,20 @@
             "giaTri": "rgb(0, 0, 128)"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>&lt;link href=\"styles.css\"&gt;</code> thiếu <code>rel=\"stylesheet\"</code> — trình duyệt không biết đó là bảng kiểu, bỏ qua."
+        },
+        {
+          "loi": "Chép cả thẻ <code>&lt;style&gt;</code> vào tệp .css — tệp CSS chỉ chứa quy tắc, không có thẻ HTML."
+        },
+        {
+          "loi": "Quên dấu <code>;</code> giữa hai khai báo — khai báo thứ hai bị nuốt vào giá trị của khai báo đầu, cả hai cùng hỏng."
+        }
+      ]
     },
     {
       "title": "Ba bộ chọn dùng hằng ngày: theo thẻ, theo class, theo id",
@@ -248,7 +261,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>card { … }</code> thiếu dấu chấm — đó là bộ chọn thẻ tìm phần tử tên \"card\", không khớp gì."
+        },
+        {
+          "loi": "Viết <code>.site-nav</code> cho id — dấu chấm là class; id dùng <code>#</code>."
+        },
+        {
+          "loi": "Viết <code>.card.noi-bat</code> hay <code>.card .noi-bat</code> lẫn lộn — có dấu cách nghĩa là \"con cháu\", không dấu cách nghĩa là \"cùng phần tử\"."
+        }
+      ]
     },
     {
       "title": "Bộ chọn con cháu: chỉ tô liên kết nằm trong thanh điều hướng",
@@ -366,7 +392,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>nav, a</code> (có dấu phẩy) — dấu phẩy nghĩa là \"nav VÀ mọi a\", vẫn tô mọi liên kết."
+        },
+        {
+          "loi": "Viết <code>nav &gt; a</code> — trong bài này cũng chạy (a là con trực tiếp), nhưng hỏng ngay khi menu được bọc trong ul/li."
+        },
+        {
+          "loi": "Thêm <code>main a { color: blue; }</code> để \"đè lại\" — chữa triệu chứng, quy tắc gốc vẫn quá rộng."
+        }
+      ]
     },
     {
       "title": "Style \"không ăn\": tìm luật đặc hiệu hơn đang đè lên và cân bằng lại",
@@ -479,7 +518,20 @@
             "khop": "^none$"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>!important</code> vào .active — chạy ngay, và từ đó mỗi lần đổi màu active phải có thêm một !important nữa."
+        },
+        {
+          "loi": "Viết <code>#menu .active</code> — thắng, nhưng leo thang id: luật sau muốn đè lại phải có id."
+        },
+        {
+          "loi": "Chỉ đổi <code>#menu a</code> → <code>.menu a</code> rồi tưởng xong — .active vẫn xám vì (0,1,0) < (0,1,1)."
+        }
+      ]
     },
     {
       "title": "Hai tệp CSS, một trận hoà: thứ tự thẻ <link> quyết định ai thắng",
@@ -603,7 +655,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>!important</code> vào theme.css — chạy, nhưng đề cấm sửa tệp, và đó là chữa sai chỗ."
+        },
+        {
+          "loi": "Xoá link base.css — theme thắng, nhưng nút mất padding, chữ trắng, phông chữ."
+        },
+        {
+          "loi": "Đổi thành <code>body h1</code> trong theme \"cho mạnh hơn\" — leo thang đặc hiệu thay vì dùng đúng thứ tự."
+        }
+      ]
     },
     {
       "title": "Gỡ năm cái !important mà trang vẫn y nguyên",
@@ -747,7 +812,20 @@
             "giaTri": "line-through"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá hết !important mà giữ <code>#kho .the</code> — thẻ hết hàng mất nền xám (bị id đè)."
+        },
+        {
+          "loi": "Giữ quy tắc <code>h3 { color: #374151 }</code> và đặt nó cuối tệp — vẫn thua <code>.the h3</code> nên vô hại, nhưng là mã chết; xoá đi."
+        },
+        {
+          "loi": "Viết <code>.kho .the.het-hang .gia</code> \"cho chắc\" — bộ chọn dài vô cớ là leo thang kiểu mới."
+        }
+      ]
     },
     {
       "title": "Cuộc chiến xếp tầng: dự đoán người thắng rồi đưa sáu phần tử về đúng màu",
@@ -899,7 +977,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>.ghi-chu { color: #059669; }</code> rồi thắc mắc vì sao vẫn xám — quên rằng đoạn đó cũng khớp luật có id."
+        },
+        {
+          "loi": "Gắn id cho cả nav và thẻ \"cho đồng bộ\" — leo thang không cần thiết, sau này đè lại sẽ khổ."
+        },
+        {
+          "loi": "Đặt luật (1) <code>#trang .noi-dung p</code> SAU luật (2) — (1,2,0) vẫn thắng (1,1,1) nên không sao; nhưng nếu bạn viết (2) bằng (1,1,1) như <code>#trang .noi-dung p.ghi-chu</code>… thật ra đó là (1,2,1). Hãy luôn tính điểm, đừng đoán."
+        }
+      ]
     }
   ]
 }

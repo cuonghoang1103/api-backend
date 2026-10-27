@@ -123,7 +123,23 @@
             "min": 1
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>&lt;!DOCTYPE html&gt;</code> — trang vẫn hiện, nhưng trình duyệt chạy quirks mode, và lỗi chỉ lộ ra khi học box model."
+        },
+        {
+          "loi": "Đặt <code>&lt;title&gt;</code> trong <code>&lt;body&gt;</code>: trình duyệt tự dời nó lên head nên trông như chạy được — nhưng đó là trình duyệt vá giùm, không phải bạn viết đúng."
+        },
+        {
+          "loi": "Gõ <code>charset=\"UTF8\"</code> (thiếu gạch) hoặc để meta charset sau một đoạn dài — chữ tiếng Việt thành \"Xin chÃ o\"."
+        },
+        {
+          "loi": "Hai <code>&lt;h1&gt;</code> vì \"muốn chữ to\" — chữ to là việc của CSS, h1 là \"tiêu đề của trang\"."
+        }
+      ]
     },
     {
       "title": "Thuộc tính đầu tiên: cho liên kết một đích, cho ảnh một nguồn và lời mô tả",
@@ -240,7 +256,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết thuộc tính vào thẻ đóng: <code>&lt;/a href=\"…\"&gt;</code> — trình duyệt bỏ qua, liên kết vẫn chết."
+        },
+        {
+          "loi": "Quên dấu nháy đóng: <code>&lt;a href=\"https://cuongthai.com&gt;</code> — phần còn lại của dòng bị nuốt vào giá trị href."
+        },
+        {
+          "loi": "Viết <code>alt=\"image\"</code> hoặc <code>alt=\"meo.jpg\"</code> — có alt nhưng chẳng mô tả gì; hãy viết điều tấm ảnh thật sự cho thấy."
+        }
+      ]
     },
     {
       "title": "Phần tử rỗng: ngắt dòng địa chỉ bằng <br> mà không đóng thẻ",
@@ -350,7 +379,20 @@
             "giaTri": "Logo Phở Hà Nội"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>&lt;br/&gt;</code> rồi lo là sai — dấu <code>/</code> trước <code>&gt;</code> được phép (di sản XHTML) và bị bỏ qua; cái sai là <code>&lt;/br&gt;</code>."
+        },
+        {
+          "loi": "Dùng năm <code>&lt;br&gt;</code> liên tiếp để tạo khoảng trống — đó là việc của <code>margin</code> trong CSS (bài 3.2)."
+        },
+        {
+          "loi": "Gắn class vào <code>&lt;br&gt;</code> hay cố đặt chữ giữa <code>&lt;br&gt;</code> và <code>&lt;/br&gt;</code> — br không chứa gì cả."
+        }
+      ]
     },
     {
       "title": "Cứu trang tiếng Việt bị vỡ chữ và tí hon trên điện thoại",
@@ -470,7 +512,20 @@
             "giaTri": 2
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm title mới trong head nhưng quên xoá title cũ trong body — trang có hai title."
+        },
+        {
+          "loi": "Viết <code>lang=\"vn\"</code> — mã ngôn ngữ tiếng Việt là <code>vi</code> (vn là mã quốc gia)."
+        },
+        {
+          "loi": "Viết viewport thành <code>content=\"width=device-width; initial-scale=1\"</code> với dấu chấm phẩy — dấu phân cách đúng là dấu phẩy."
+        }
+      ]
     },
     {
       "title": "Dựng đúng cây DOM theo sơ đồ cho trước",
@@ -592,7 +647,20 @@
             "giaTri": "Tab Elements của DevTools"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bọc mọi thứ trong một <code>&lt;div&gt;</code> cho \"gọn\" — body khi đó chỉ còn một con, sai sơ đồ."
+        },
+        {
+          "loi": "Đặt <code>&lt;strong&gt;</code> sau <code>&lt;/p&gt;</code> — nhìn trên trang gần như giống, nhưng cây khác: strong không còn thuộc đoạn văn."
+        },
+        {
+          "loi": "Gõ class thành <code>class=\"ghi chu\"</code> (dấu cách) — đó là HAI class \"ghi\" và \"chu\", bộ chọn <code>.ghi-chu</code> không khớp."
+        }
+      ]
     },
     {
       "title": "Sửa 5 lỗi lồng thẻ mà trình duyệt đã lặng lẽ vá giùm",
@@ -722,7 +790,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa lỗi (4) bằng cách đổi <code>&lt;div&gt;</code> thành <code>&lt;span&gt;</code> nhưng vẫn để trong p — hợp lệ, nhưng làm mất khối \"thẻ\" riêng mà CSS sẽ tạo kiểu ở chương sau; đề yêu cầu đưa div ra ngoài."
+        },
+        {
+          "loi": "Thêm <code>&lt;/a&gt;</code> ở cuối đoạn thay vì ngay sau chữ \"Tài liệu MDN\" — liên kết vẫn dài cả câu."
+        },
+        {
+          "loi": "Tin rằng \"trang hiện đúng là xong\" — luôn mở DevTools → Elements so cây với mã."
+        }
+      ]
     },
     {
       "title": "Chân trang chui vào thanh bên: truy ra thẻ </div> bị thiếu",
@@ -834,7 +915,20 @@
             "selector": ".trang > .noi-dung > h1"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>&lt;/div&gt;</code> ở cuối tệp — số thẻ cân bằng, nhưng nội dung và chân trang vẫn nằm trong thanh bên."
+        },
+        {
+          "loi": "Xoá một <code>&lt;div class=\"hop\"&gt;</code> cho \"cân\" — mất cấu trúc hộp, sai yêu cầu \"chỉ thêm một thẻ đóng\"."
+        },
+        {
+          "loi": "Đếm bằng mắt trên mã thụt lề sai — thụt lề không phải là cây; hãy tin DevTools Elements (hoặc phép đếm), không tin khoảng trắng."
+        }
+      ]
     }
   ]
 }

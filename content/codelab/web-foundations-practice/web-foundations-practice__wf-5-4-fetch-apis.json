@@ -123,7 +123,17 @@
             "khop": "\\.json\\s*\\(\\s*\\)"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "return res.json() thiếu await — vẫn đúng ở đây (async tự chờ Promise được return), nhưng sẽ hỏng ngay khi bạn bọc nó trong try/catch."
+        },
+        {
+          "loi": "Đọc res.body — đó là một luồng byte, không phải object."
+        }
+      ]
     },
     {
       "title": "fetch không reject khi 404: tự kiểm res.ok",
@@ -257,7 +267,17 @@
             "khop": "\\.ok\\b"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm <code>res.status === 200</code> — 201 Created hay 204 cũng là thành công; dùng res.ok."
+        },
+        {
+          "loi": "Bọc try/catch rồi trả null bên trong layJson — người gọi mất thông tin lỗi."
+        }
+      ]
     },
     {
       "title": "Gửi dữ liệu bằng POST: method, headers, body",
@@ -364,7 +384,17 @@
             "khop": "JSON\\.stringify\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>header</code> (thiếu s) hay <code>\"content-type\": \"json\"</code>."
+        },
+        {
+          "loi": "JSON.stringify(noiDung) — gửi chuỗi trần, không phải object { noiDung }."
+        }
+      ]
     },
     {
       "title": "Kết quả có cấu trúc thay vì ném lỗi: { ok, duLieu | maLoi }",
@@ -516,7 +546,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc res.json() trước khi kiểm ok — 500 HTML ném SyntaxError, rơi vào catch ⇒ maLoi 0 thay vì 500."
+        },
+        {
+          "loi": "Trả maLoi: \"Failed to fetch\" — đề yêu cầu số 0."
+        }
+      ]
     },
     {
       "title": "Tìm kiếm có tiếng Việt: dựng query string đúng cách",
@@ -673,7 +713,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "encodeURI(cả URL) — không mã hoá & và =, \"bút & vở\" vẫn vỡ."
+        },
+        {
+          "loi": "Quên giá trị mặc định ⇒ page=undefined."
+        }
+      ]
     },
     {
       "title": "Mất mạng hay máy chủ lỗi? Báo đúng cho người dùng",
@@ -787,7 +837,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ném Error cho HTTP rồi bắt lại trong catch nhưng không phân biệt — 503 rơi vào nhánh \"mất mạng\"."
+        },
+        {
+          "loi": "Kiểm err.message === \"Failed to fetch\" — thông điệp khác nhau giữa các trình duyệt; kiểm err.name."
+        }
+      ]
     },
     {
       "title": "Thử lại có chờ lùi dần (retry with backoff)",
@@ -948,7 +1008,23 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return ham()</code> trong try thiếu await — reject không vào catch, không bao giờ thử lại."
+        },
+        {
+          "loi": "Chờ cả sau lần cuối — tốn thêm thời gian rồi vẫn thất bại."
+        },
+        {
+          "loi": "Thử lại cả 404."
+        },
+        {
+          "loi": "Đếm soLan là số lần THỬ LẠI (thành 4 lần gọi) thay vì tổng số lần gọi."
+        }
+      ]
     }
   ]
 }

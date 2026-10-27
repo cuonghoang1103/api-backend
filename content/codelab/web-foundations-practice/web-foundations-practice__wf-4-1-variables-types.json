@@ -97,7 +97,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng dấu nháy đơn <code>'Xin chào, ${ten}'</code> — nháy đơn không phải template literal, ra nguyên văn chữ <code>${ten}</code>."
+        },
+        {
+          "loi": "Thiếu dấu chấm cuối hoặc dấu cách sau dấu phẩy — máy chấm so từng ký tự."
+        },
+        {
+          "loi": "Viết <code>$ {ten}</code> có dấu cách giữa <code>$</code> và <code>{</code> — không còn là chỗ nhúng."
+        }
+      ]
     },
     {
       "title": "Sửa lỗi \"Assignment to constant variable\"",
@@ -198,7 +211,20 @@
             "khop": "(diem\\s*=\\s*diem\\s*\\+[^\\n]*\\n[\\s\\S]*){3}"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi TẤT CẢ thành <code>let</code> cho chắc — chạy được, nhưng mất lời hứa \"không đổi\" mà <code>const</code> cho người đọc."
+        },
+        {
+          "loi": "Đổi <code>var</code> thành <code>let</code> — chạy được, nhưng hằng số thưởng không bị gán lại nên <code>const</code> mới đúng ý."
+        },
+        {
+          "loi": "Gộp thành <code>const diem = 10 + 5 + 20</code> — ra 35 nhưng xoá mất các dòng cộng (đề cấm)."
+        }
+      ]
     },
     {
       "title": "Bẫy dấu +: cộng tiền đọc từ ô nhập",
@@ -303,7 +329,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi kiểu SAU khi cộng: <code>Number(giaNhap + phiShip)</code> — chuỗi đã nối thành <code>\"12000030000\"</code> rồi mới đổi, ra số sai."
+        },
+        {
+          "loi": "Viết <code>kieuKetQua</code> trả về chuỗi cứng <code>\"number\"</code> — máy chấm có kiểm ẩn gọi hàm thật."
+        },
+        {
+          "loi": "Tưởng <code>-</code> cũng nối chuỗi: <code>\"5\" - 2</code> ra <code>3</code> (trừ luôn đổi sang số) — chỉ <code>+</code> có hai vai."
+        }
+      ]
     },
     {
       "title": "Bảng so sánh == với ===",
@@ -444,7 +483,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết cứng <code>bangLong: true</code> vì \"thấy ví dụ ra true\" — cặp ẩn <code>(\"\", \"0\")</code> ra false."
+        },
+        {
+          "loi": "Đặt sai tên trường (<code>kieu_a</code>, <code>KieuA</code>) — object so khớp từng tên khoá."
+        },
+        {
+          "loi": "Tưởng <code>typeof null</code> là <code>\"null\"</code>."
+        }
+      ]
     },
     {
       "title": "Thẻ hồ sơ nhiều dòng: template literal + biểu thức",
@@ -543,7 +595,20 @@
             "khop": "`[^`]*\\$\\{[^`]*`"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thụt lề dòng 2 và 3 trong template literal — chuỗi có thêm khoảng trắng đầu dòng."
+        },
+        {
+          "loi": "Tính độ dài <code>ho.length + ten.length</code> — thiếu dấu cách ở giữa (ra 9 thay vì 10)."
+        },
+        {
+          "loi": "Viết <code>ho.toUpperCase</code> thiếu <code>()</code> — chèn nguyên mã của hàm vào chuỗi."
+        }
+      ]
     },
     {
       "title": "const khoá cái tên, không khoá giá trị",
@@ -647,7 +712,20 @@
             "khop": "const\\s+x\\s*=[^;\\n]*;?\\s*\\n?\\s*x\\s*="
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi <code>const ketQua</code> thành <code>let</code> rồi vẫn gán object mới — hết lỗi, nhưng object của người gọi không đổi tên."
+        },
+        {
+          "loi": "Trả về <code>{ ...nguoiDung, name: tenMoi }</code> — một bản sao: <code>r === u</code> là false (cách này đúng ở chỗ khác, như React, nhưng không phải yêu cầu ở đây)."
+        },
+        {
+          "loi": "Trong <code>catch</code> trả về <code>e.message</code> — đề hỏi tên lỗi (<code>e.name</code>)."
+        }
+      ]
     },
     {
       "title": "Gỡ năm lỗi kiểu dữ liệu trong hàm tính điểm",
@@ -764,7 +842,23 @@
             "khop": "`[^`]*\\$\\{ten\\}[^`]*`"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi kiểu sau khi cộng: <code>Number(diemGK + diemCK)</code> — ra 78, không phải 15."
+        },
+        {
+          "loi": "So <code>tb === \"10\"</code> — số không bao giờ === chuỗi, luôn false."
+        },
+        {
+          "loi": "Sửa nháy đơn thành nháy kép — vẫn không phải template literal."
+        },
+        {
+          "loi": "Làm tròn <code>Math.round(tb)</code> — 7.5 thành 8, sai đề."
+        }
+      ]
     }
   ]
 }

@@ -106,7 +106,20 @@
             "selector": "body > p"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>&lt;td&gt;&lt;strong&gt;Món&lt;/strong&gt;&lt;/td&gt;</code> thay vì <code>&lt;th&gt;</code> — nhìn đậm như nhau, nhưng không còn là tiêu đề với trình đọc."
+        },
+        {
+          "loi": "Quên một <code>&lt;td&gt;</code> ở một hàng — cả cột sau lệch sang trái."
+        },
+        {
+          "loi": "Đặt chữ trực tiếp trong <code>&lt;tr&gt;</code> không qua ô — không hợp lệ, trình duyệt đẩy chữ ra ngoài bảng."
+        }
+      ]
     },
     {
       "title": "Chia bảng làm hai phần: thead cho tiêu đề, tbody cho dữ liệu",
@@ -212,7 +225,20 @@
             "giaTri": "Dùng nhiều cho"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bọc thead nhưng giữ <code>&lt;td&gt;</code> bên trong — có vùng tiêu đề mà ô không phải tiêu đề."
+        },
+        {
+          "loi": "Đặt <code>&lt;thead&gt;</code> sau <code>&lt;tbody&gt;</code> — sai thứ tự nội dung của bảng."
+        },
+        {
+          "loi": "Mỗi hàng một <code>&lt;tbody&gt;</code> — hợp lệ nhưng vô nghĩa ở đây; nhiều tbody dùng khi chia nhóm hàng."
+        }
+      ]
     },
     {
       "title": "Video và audio có nút điều khiển, chữ dự phòng và phụ đề",
@@ -321,7 +347,20 @@
             "khop": "\\S{3,}"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>controls=\"false\"</code> để tắt — thuộc tính boolean có mặt là bật, kể cả giá trị \"false\"."
+        },
+        {
+          "loi": "Đặt <code>&lt;track&gt;</code> ngoài <code>&lt;/video&gt;</code> — nó không gắn với video nào."
+        },
+        {
+          "loi": "Viết <code>&lt;/track&gt;</code> — track là phần tử rỗng."
+        }
+      ]
     },
     {
       "title": "Gỡ bảng dàn trang kiểu thập niên 90 thành landmark",
@@ -427,7 +466,20 @@
             "selector": "[width], [border], [colspan]"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi <code>&lt;td&gt;</code> thành <code>&lt;div&gt;</code> và giữ <code>&lt;tr&gt;</code> — vẫn là bảng trá hình, lại thêm HTML không hợp lệ."
+        },
+        {
+          "loi": "Giữ thuộc tính <code>width=\"200\"</code> chuyển sang aside — kích thước là việc của CSS."
+        },
+        {
+          "loi": "Đặt aside trước main \"cho giống màn hình\" — cấu trúc nên theo ý nghĩa, không theo vị trí."
+        }
+      ]
     },
     {
       "title": "Thời khoá biểu: bảng có tiêu đề cột và tiêu đề hàng",
@@ -540,7 +592,20 @@
             "khop": "^(?!.*trống)"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ ô trống — MAE101 của Thứ Năm, Ca 2 trượt sang cột Thứ Ba."
+        },
+        {
+          "loi": "Ghi chữ \"trống\" hay \"-\" vào ô — trình đọc đọc \"gạch ngang\"; ô rỗng là đủ nghĩa."
+        },
+        {
+          "loi": "Dùng <code>&lt;td&gt;&lt;strong&gt;Ca 1&lt;/strong&gt;&lt;/td&gt;</code> cho tiêu đề hàng — mất vai trò tiêu đề."
+        }
+      ]
     },
     {
       "title": "Placeholder không phải nhãn, \"bấm vào đây\" không phải liên kết",
@@ -644,7 +709,20 @@
             "khop": "^(?!(bấm vào đây|tại đây|click here|link)$)"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ <code>placeholder=\"Email\"</code> cạnh nhãn \"Email\" — lặp lại vô ích; placeholder nên là ví dụ."
+        },
+        {
+          "loi": "Đổi chữ liên kết thành \"tại đây\" hay \"link\" — vẫn mơ hồ."
+        },
+        {
+          "loi": "Thêm nhãn nhưng ẩn bằng CSS \"cho gọn\" — người nhìn mất nhãn, quay về vấn đề cũ."
+        }
+      ]
     },
     {
       "title": "Kiểm a11y năm phút: soát trang thật theo 8 dòng danh sách kiểm",
@@ -793,7 +871,23 @@
             "giaTri": 7
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa poster bằng <code>alt=\"poster\"</code> — có alt nhưng người nghe vẫn không biết giờ và địa điểm."
+        },
+        {
+          "loi": "Thêm <code>role=\"banner\"</code> cho div đầu trang thay vì đổi sang <code>&lt;header&gt;</code> — aria là lối thoát cuối cùng, không phải cách sửa đầu tiên."
+        },
+        {
+          "loi": "Đổi h3 thành h2 cho \"Thông tin\" nhưng sót hai h3 còn lại — dàn ý vẫn nhảy cấp ở chỗ khác."
+        },
+        {
+          "loi": "Giữ <code>&lt;div onclick&gt;</code> và thêm <code>tabindex=\"0\"</code> — vẫn không phản hồi Enter/Space, và không gửi được form khi tắt JavaScript."
+        }
+      ]
     }
   ]
 }

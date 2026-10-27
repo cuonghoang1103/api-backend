@@ -123,7 +123,20 @@
             "khop": "\\.filter\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>ds.map(u =&gt; { u.name })</code> — ngoặc nhọn không return, ra mảng toàn <code>undefined</code>."
+        },
+        {
+          "loi": "<code>filter(u =&gt; u.name)</code> khi cần tên — filter trả về object, không phải tên."
+        },
+        {
+          "loi": "Dùng <code>&gt;</code> thay <code>&gt;=</code>."
+        }
+      ]
     },
     {
       "title": "Tổng giỏ hàng bằng reduce — và giá trị khởi đầu bị quên",
@@ -217,7 +230,20 @@
             "khop": "\\.reduce\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên giá trị khởi đầu (như bản cũ)."
+        },
+        {
+          "loi": "Đặt giá trị khởi đầu là <code>\"\"</code> — ra chuỗi nối, không phải tổng."
+        },
+        {
+          "loi": "Quên <code>return</code> khi viết hàm gộp có ngoặc nhọn — lượt sau <code>tong</code> là undefined, ra NaN."
+        }
+      ]
     },
     {
       "title": "find trả về undefined khi không thấy — đừng quên ca đó",
@@ -312,7 +338,20 @@
             "khop": "\\.find\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>filter(...)[0]</code> — chạy được nhưng duyệt hết mảng, và vẫn phải xử lý undefined."
+        },
+        {
+          "loi": "Bọc <code>try/catch</code> quanh <code>.ten</code> — che lỗi thay vì xử lý đúng ca."
+        },
+        {
+          "loi": "So <code>sp.ma == ma</code>."
+        }
+      ]
     },
     {
       "title": "Khoá động bằng ngoặc vuông: đếm đơn theo trạng thái",
@@ -438,7 +477,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>dem.trangThai</code> — mọi đơn được đếm vào một khoá tên \"trangThai\"."
+        },
+        {
+          "loi": "Khởi tạo sẵn <code>{ moi: 0, dangGiao: 0, daGiao: 0 }</code> — trạng thái mới (vd \"huy\") không được đếm, và thừa khoá giá trị 0."
+        },
+        {
+          "loi": "<code>obj[tenTruong] || null</code> — trường có giá trị 0 hoặc \"\" bị biến thành null."
+        }
+      ]
     },
     {
       "title": "Bản chép nông: sửa một bài thì bài gốc cũng đổi",
@@ -571,7 +623,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>const ban = baiViet</code> — không chép gì cả, chỉ thêm một tên cho cùng object."
+        },
+        {
+          "loi": "<code>{ ...baiViet, the: baiViet.the.push(the) }</code> — push trả về ĐỘ DÀI mới (một số), và vẫn sửa mảng gốc."
+        },
+        {
+          "loi": "Tưởng <code>{...obj}</code> chép sâu."
+        }
+      ]
     },
     {
       "title": "Thống kê lớp học: chuỗi filter, map, reduce",
@@ -709,7 +774,20 @@
             "khop": "\\.reduce\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính trung bình trên cả danh sách thay vì lớp đã lọc."
+        },
+        {
+          "loi": "Làm tròn bằng <code>toFixed(2)</code> — trả về CHUỖI <code>\"7.25\"</code>, không phải số."
+        },
+        {
+          "loi": "Lớp rỗng ra <code>NaN</code> hoặc ném lỗi."
+        }
+      ]
     },
     {
       "title": "Tự viết groupBy: gom mảng theo khoá hoặc theo hàm",
@@ -886,7 +964,23 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>return nhom</code> trong hàm gộp — lượt thứ hai ném TypeError (đọc thuộc tính của undefined)."
+        },
+        {
+          "loi": "<code>nhom[k] = [x]</code> mỗi lượt — mỗi nhóm chỉ còn phần tử cuối."
+        },
+        {
+          "loi": "Dùng <code>nhom.k</code> thay vì <code>nhom[k]</code> — mọi thứ dồn vào một nhóm tên \"k\"."
+        },
+        {
+          "loi": "Chép phần tử (<code>{...x}</code>) vào nhóm — đề yêu cầu giữ chính object gốc."
+        }
+      ]
     }
   ]
 }

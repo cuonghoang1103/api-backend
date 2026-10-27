@@ -126,7 +126,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>diem &gt; 80</code> — 80 rơi xuống \"Đạt\"."
+        },
+        {
+          "loi": "Viết <code>diem &lt; 0 &amp;&amp; diem &gt; 100</code> — không số nào vừa âm vừa lớn hơn 100, điều kiện luôn sai."
+        },
+        {
+          "loi": "Đặt kiểm \"Không hợp lệ\" ở cuối — 120 đã bị nhánh >= 80 bắt mất."
+        }
+      ]
     },
     {
       "title": "Giá vé vào cổng: && , || và toán tử ba ngôi",
@@ -245,7 +258,20 @@
             "khop": "function\\s+nhanVe[\\s\\S]*\\?[\\s\\S]*:"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>tuoi &gt; 60</code> — người đúng 60 tuổi không được giảm."
+        },
+        {
+          "loi": "Viết <code>tuoi &lt;= 6</code> — bé đúng 6 tuổi được miễn phí, sai luật \"dưới 6\"."
+        },
+        {
+          "loi": "Ở nhanVe quên chữ <code>đ</code> hoặc thêm dấu chấm phân cách nghìn — máy chấm so đúng <code>\"20000đ\"</code>."
+        }
+      ]
     },
     {
       "title": "Tổng các số chẵn bằng vòng lặp for",
@@ -353,7 +379,20 @@
             "khop": "%\\s*2\\s*===\\s*0"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return tong</code> đặt TRONG vòng lặp — hàm kết thúc ngay ở lượt đầu."
+        },
+        {
+          "loi": "Viết <code>i % 2 == 0</code> — ra đúng nhưng trái luật <code>===</code> của bài."
+        },
+        {
+          "loi": "Bắt đầu <code>i = 0</code> rồi quên rằng 0 cũng chẵn — vô hại ở đây (cộng 0), nhưng hãy biết vì sao."
+        }
+      ]
     },
     {
       "title": "FizzBuzz tiếng Việt: in ra console theo đúng thứ tự",
@@ -469,7 +508,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>else</code> cuối — chỉ in ra các chữ, không in số."
+        },
+        {
+          "loi": "Gom kết quả vào chuỗi rồi in một lần — máy chấm đếm từng dòng in."
+        },
+        {
+          "loi": "<code>return</code> thay vì <code>console.log</code> — vòng lặp dừng ngay lượt đầu."
+        }
+      ]
     },
     {
       "title": "Bẫy || nuốt mất số 0: đặt mặc định bằng ??",
@@ -597,7 +649,20 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>soLuong !== undefined ? soLuong : 1</code> — quên <code>null</code>."
+        },
+        {
+          "loi": "Tin rằng <code>\"0\"</code> là falsy — nó là chuỗi không rỗng, nên truthy."
+        },
+        {
+          "loi": "Tin rằng <code>[]</code> là falsy — mọi object, kể cả mảng rỗng, đều truthy."
+        }
+      ]
     },
     {
       "title": "Đi qua danh sách bằng for...of và while",
@@ -726,7 +791,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>i++</code> trong while — vòng lặp vô hạn (máy chấm cắt sau 1 giây và báo trượt)."
+        },
+        {
+          "loi": "Viết <code>if (ds[i] == giaTri)</code> — tìm <code>0</code> sẽ khớp nhầm <code>\"\"</code> hay <code>\"0\"</code>."
+        },
+        {
+          "loi": "Đếm falsy bằng <code>x === false || x === 0 || …</code> và quên <code>NaN</code> (NaN !== NaN!)."
+        }
+      ]
     },
     {
       "title": "Tính tiền điện bậc thang",
@@ -859,7 +937,23 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhân cả tổng với giá một bậc (như bản cũ) — 150 kWh ra 325050 thay vì 291950."
+        },
+        {
+          "loi": "Dùng <code>if (!kWh) return null</code> — chặn luôn 0 kWh hợp lệ (0 là falsy!)."
+        },
+        {
+          "loi": "Kiểm <code>kWh === NaN</code> — không bao giờ đúng; dùng <code>Number.isNaN</code> hoặc <code>Number.isFinite</code>."
+        },
+        {
+          "loi": "Làm tròn từng bậc rồi cộng — với số lẻ có thể lệch 1 đồng; làm tròn MỘT lần ở cuối."
+        }
+      ]
     }
   ]
 }

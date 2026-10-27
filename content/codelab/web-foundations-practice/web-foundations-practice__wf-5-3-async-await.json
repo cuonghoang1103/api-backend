@@ -118,7 +118,17 @@
             "khop": "\\bawait\\b"
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên async trước function — await trong hàm thường là lỗi cú pháp."
+        },
+        {
+          "loi": "Quên await trước layNguoiDung — u là một Promise, u.id là undefined."
+        }
+      ]
     },
     {
       "title": "try/catch quanh await: tải an toàn",
@@ -236,7 +246,17 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return layNguoiDung(id)</code> trong try mà không await — lỗi lọt ra ngoài."
+        },
+        {
+          "loi": "Trả về <code>thongBao: err</code> (cả object Error) thay vì <code>err.message</code>."
+        }
+      ]
     },
     {
       "title": "\"[object Promise][object Promise]\": quên await",
@@ -344,7 +364,17 @@
             }
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm await nhưng quên async — lỗi cú pháp \"await is only valid in async functions\"."
+        },
+        {
+          "loi": "Gọi tongDiem() mà không await ở phía người gọi — lại nhận một Promise."
+        }
+      ]
     },
     {
       "title": "Bảng điều khiển chậm gấp ba: chạy song song bằng Promise.all",
@@ -465,7 +495,17 @@
             "khop": "Promise\\.all\\s*\\("
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truyền hàm thay vì lời gọi: Promise.all([layNguoiDung, …]) — nhận về chính các hàm."
+        },
+        {
+          "loi": "await từng phần tử trong mảng trước khi đưa vào Promise.all — lại tuần tự."
+        }
+      ]
     },
     {
       "title": "await trong forEach không chờ gì cả",
@@ -579,7 +619,17 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm await trước ds.forEach(…) — forEach trả về undefined, await undefined chẳng chờ gì."
+        },
+        {
+          "loi": "Dùng map(async …) mà không Promise.all — mảng Promise không được chờ."
+        }
+      ]
     },
     {
       "title": "Tải nhiều người dùng song song mà vẫn giữ thứ tự",
@@ -706,7 +756,17 @@
             "phuDinh": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await trong vòng for — đúng thứ tự nhưng 100 ms × số người."
+        },
+        {
+          "loi": "Gom kết quả bằng push trong .then — thứ tự theo ai xong trước."
+        }
+      ]
     },
     {
       "title": "Trang cá nhân: tuần tự khi phụ thuộc, song song khi độc lập",
@@ -844,7 +904,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa layNguoiDung vào cùng Promise.all — nhưng bước 2, 3 cần u.id."
+        },
+        {
+          "loi": "<code>return layBanBe(uid)</code> trong try mà thiếu await — lỗi lọt ra, Promise.all reject."
+        },
+        {
+          "loi": "Một try/catch bọc tất cả rồi trả null — nuốt lỗi người dùng không tồn tại."
+        }
+      ]
     }
   ]
 }

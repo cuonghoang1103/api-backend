@@ -1,0 +1,815 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-lab-movie-hooks",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-3-slot9-hooks-slides"
+  },
+  "exercises": [
+    {
+      "title": "Lab 8 — Movie Management System using React Hooks",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "useState",
+        "useEffect",
+        "useRef",
+        "useMemo",
+        "useContext",
+        "custom hook",
+        "controlled form",
+        "Local Storage"
+      ],
+      "prerequisites": [
+        "JSX & props",
+        "map/filter/sort",
+        "event handling"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "hooks",
+        "react"
+      ],
+      "problemHtml": "<h1>LAB 8: Movie Management System using React Hooks</h1>\n<p class=\"bi-phu\">FER202 · Chapter 8 — Hooks · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build a ReactJS application that lets a user manage a personal movie watchlist: browse the list, search by title, filter by genre, sort, open a movie's details, add new movies, delete movies and mark favourites. All data must <b>persist across page reloads</b> with Local Storage, and the app supports <b>Light/Dark mode</b> shared through React Context.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Display, search, filter and sort the movie list.</li>\n  <li>View details · add · delete · favourite a movie.</li>\n  <li>Persist movies and the chosen theme in Local Storage.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Function components + Hooks only (no class components).</li>\n  <li>All form inputs are <b>controlled components</b>; the form must not reload the page.</li>\n  <li>Never mutate state directly (no <code>push</code>, no in-place <code>sort</code> on state arrays).</li>\n  <li>Keep the ids / class names in section 6 exactly — the auto-grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── components/\n│   ├── Header.js          # title, counters, Light/Dark button\n│   ├── Toolbar.js         # search · genre filter · sort\n│   ├── MovieList.js\n│   ├── MovieCard.js\n│   ├── MovieDetail.js\n│   └── MovieForm.js\n├── context/\n│   └── ThemeContext.js    # ThemeProvider + useTheme()\n├── hooks/\n│   └── useLocalStorage.js # custom hook\n├── datas/\n│   └── movies.js          # 6 sample movies + GENRES\n├── App.js\n├── index.css\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+---------------------------------------------------------------------------+\n| Movie Manager    Showing 6 of 6 movies    Favorites: 0       [Dark mode]  |\n+-----------------------------------------------+---------------------------+\n| [Search by title    ] [All Genres v] [Sort v] | +- Inception -----------+ |\n| +-------------+ +-------------+ +-----------+ | | Genre     Sci-Fi      | |\n| | Inception   | | The Dark    | | Spirited  | | | Year      2010        | |\n| | Sci-Fi 2010 | | Knight      | | Away      | | | Duration  148 min     | |\n| | * 8.8       | | Action 2008 | | ...       | | | Rating    8.8 / 10    | |\n| | [Fav][Det.] | | * 9.0       | |           | | |             [Close]   | |\n| | [Delete]    | | ...         | |           | | +-----------------------+ |\n| +-------------+ +-------------+ +-----------+ | +- Add a movie ---------+ |\n|                                               | | Title [            ]  | |\n|                                               | | Genre [Action v]      | |\n|                                               | | Year [    ] Rating [ ]| |\n|                                               | |          [Add movie]  | |\n+-----------------------------------------------+---------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Movie</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>unique; new id = max(id) + 1</td></tr><tr><td><code>title</code></td><td>string</td><td>required, trimmed</td></tr><tr><td><code>genre</code></td><td>'Action' | 'Comedy' | 'Drama' | 'Sci-Fi' | 'Animation'</td><td>from GENRES</td></tr><tr><td><code>year</code></td><td>number</td><td>integer 1900–2030</td></tr><tr><td><code>rating</code></td><td>number</td><td>0–10 (one decimal)</td></tr><tr><td><code>duration</code></td><td>number | null</td><td>minutes; optional</td></tr><tr><td><code>favorite</code></td><td>boolean</td><td>false for new movies</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>// src/datas/movies.js (given) — favorite: false for all\n{ id: 1, title: 'Inception', genre: 'Sci-Fi', year: 2010, rating: 8.8, duration: 148 }\n{ id: 2, title: 'The Dark Knight', genre: 'Action', year: 2008, rating: 9.0, duration: 152 }\n{ id: 3, title: 'Spirited Away', genre: 'Animation', year: 2001, rating: 8.6, duration: 125 }\n{ id: 4, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, rating: 8.1, duration: 99 }\n{ id: 5, title: 'Parasite', genre: 'Drama', year: 2019, rating: 8.5, duration: 132 }\n{ id: 6, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, rating: 8.1, duration: 120 }</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Display the movie list <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>On first load show every movie as a card, in data order.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Each card <code>.movie-card</code> shows <code>.movie-title</code>, genre · year and rating.</li>\n  <li><code>#movie-count</code> reads <code>Showing X of Y movies</code> (X = currently shown, Y = all).</li>\n  <li>The movie array lives in a custom hook <code>useLocalStorage(key, initialValue)</code> (lazy initializer + <code>useEffect</code> to write).</li>\n  <li>Use a stable <code>key</code> (the movie id), never the array index.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">custom hook</span></p>\n<p><b>Local Storage key:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Search by title <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Input <code>#search</code> is <b>auto-focused</b> when the page loads.</li>\n  <li>Case-insensitive \"contains\" match on the title; updates as you type.</li>\n  <li>No result ⇒ show <code>.empty</code> with the text <code>No movies found</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useRef</span> <span class=\"bi-hook\">useEffect</span></p>\n<p><b>Example:</b></p>\n<pre>Type \"the\" ⇒ The Dark Knight, The Grand Budapest Hotel (Showing 2 of 6)</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Filter by genre <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#genre-filter</code>: \"All Genres\" (value <code>All</code>) + the five genres.</li>\n  <li>Filter and search work <b>together</b>.</li>\n  <li>The shown list is <b>derived</b> with <code>useMemo</code> — do not store it in a second state.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Example:</b></p>\n<pre>All Genres: Showing 6 of 6  →  Action: Showing 2 of 6</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Sort <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#sort</code> values: <code>none</code> (data order), <code>rating-desc</code>, <code>year-desc</code>, <code>title-asc</code>.</li>\n  <li>Equal ratings keep their original order (stable sort). Sort a <b>copy</b>, never the state array.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Movie details <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-detail</code> on a card opens <code>#movie-detail</code>: title, genre, year, duration as <code>148 min</code>, rating.</li>\n  <li><code>#close-detail</code> closes it (the panel is removed from the page).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Add a movie <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form <code>#movie-form</code> with <code>#title</code>, <code>#genre</code>, <code>#year</code>, <code>#rating</code>, <code>#duration</code> — all controlled.</li>\n  <li>Validate: title required; year 1900–2030; rating 0–10. Show the message in <code>.error</code> (e.g. <code>Title is required</code>) and add nothing.</li>\n  <li>A valid movie is appended at the end with <code>id = max(id) + 1</code>; the form resets; the page never reloads.</li>\n  <li>The list is saved to Local Storage and survives a reload.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">controlled form</span></p>\n<p><b>Local Storage key:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Delete &amp; favourite <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-delete</code> asks <code>window.confirm</code> first, then removes the movie.</li>\n  <li><code>.btn-fav</code> toggles ☆/★; a favourite card has class <code>is-fav</code>; header <code>#fav-count</code> reads <code>Favorites: N</code>.</li>\n  <li>Both changes are persisted.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span></p>\n<p><b>Local Storage key:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Light / Dark mode <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>ThemeContext</code> provides <code>{ theme, toggleTheme }</code>; components read it with <code>useContext</code> (via <code>useTheme()</code>).</li>\n  <li>The root element is <code>.app.theme-light</code> or <code>.app.theme-dark</code>; <code>#theme-toggle</code> switches it.</li>\n  <li>The choice is remembered (Local Storage key <code>theme</code>).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">createContext</span></p>\n<p><b>Local Storage key:</b> <code>theme</code></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#movie-count · #fav-count</code></td><td>header counters</td></tr><tr><td><code>#search · #genre-filter · #sort</code></td><td>toolbar controls</td></tr><tr><td><code>.movie-card · .movie-title · .is-fav</code></td><td>one card per shown movie</td></tr><tr><td><code>.btn-fav · .btn-detail · .btn-delete</code></td><td>card buttons</td></tr><tr><td><code>#movie-detail · #close-detail</code></td><td>details panel</td></tr><tr><td><code>#movie-form · #title · #genre · #year · #rating · #duration · .error</code></td><td>add form + validation message</td></tr><tr><td><code>.empty</code></td><td>\"No movies found\"</td></tr><tr><td><code>.app.theme-light / .app.theme-dark · #theme-toggle</code></td><td>theme</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Display the movie list</td><td>1.5</td></tr><tr><td>2</td><td>Search by title</td><td>1</td></tr><tr><td>3</td><td>Filter by genre</td><td>1</td></tr><tr><td>4</td><td>Sort</td><td>1</td></tr><tr><td>5</td><td>Movie details</td><td>1</td></tr><tr><td>6</td><td>Add a movie</td><td>2</td></tr><tr><td>7</td><td>Delete &amp; favourite</td><td>1.5</td></tr><tr><td>8</td><td>Light / Dark mode</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Page reloads on submit (missing <code>e.preventDefault()</code>) — whole feature 6 = 0.</li>\n  <li>Data lost after reload (no Local Storage) — features 1, 6, 7, 8 lose their persistence marks.</li>\n  <li>Sorting the state array in place / mutating with <code>push</code> — list stops updating.</li>\n  <li>Using the array index as <code>key</code> — wrong card removed/highlighted after delete or sort.</li>\n  <li>Renamed ids/classes — the grader cannot find the element.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, build it with Vite/CRA on your machine and paste/import the files back. Press <b>Run</b> for the sample checks, <b>Submit</b> for the full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 8: Hệ thống quản lý phim dùng React Hooks</h1>\n<p class=\"bi-phu\">FER202 · Chương 8 — Hooks · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Xây dựng ứng dụng ReactJS cho người dùng quản lý danh sách phim cá nhân: xem danh sách, tìm theo tên, lọc theo thể loại, sắp xếp, xem chi tiết một phim, thêm phim mới, xoá phim và đánh dấu yêu thích. Mọi dữ liệu phải <b>còn nguyên sau khi tải lại trang</b> nhờ Local Storage, và ứng dụng có <b>chế độ Sáng/Tối</b> dùng chung qua React Context.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Hiển thị, tìm, lọc và sắp xếp danh sách phim.</li>\n  <li>Xem chi tiết · thêm · xoá · yêu thích một phim.</li>\n  <li>Lưu danh sách phim và theme đã chọn vào Local Storage.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ dùng function component + Hooks (không class component).</li>\n  <li>Mọi ô nhập là <b>controlled component</b>; gửi form không được tải lại trang.</li>\n  <li>Không sửa state trực tiếp (không <code>push</code>, không <code>sort</code> tại chỗ trên mảng state).</li>\n  <li>Giữ ĐÚNG id / class ở mục 6 — máy chấm dựa vào chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── components/\n│   ├── Header.js          # title, counters, Light/Dark button\n│   ├── Toolbar.js         # search · genre filter · sort\n│   ├── MovieList.js\n│   ├── MovieCard.js\n│   ├── MovieDetail.js\n│   └── MovieForm.js\n├── context/\n│   └── ThemeContext.js    # ThemeProvider + useTheme()\n├── hooks/\n│   └── useLocalStorage.js # custom hook\n├── datas/\n│   └── movies.js          # 6 sample movies + GENRES\n├── App.js\n├── index.css\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+---------------------------------------------------------------------------+\n| Movie Manager    Showing 6 of 6 movies    Favorites: 0       [Dark mode]  |\n+-----------------------------------------------+---------------------------+\n| [Search by title    ] [All Genres v] [Sort v] | +- Inception -----------+ |\n| +-------------+ +-------------+ +-----------+ | | Genre     Sci-Fi      | |\n| | Inception   | | The Dark    | | Spirited  | | | Year      2010        | |\n| | Sci-Fi 2010 | | Knight      | | Away      | | | Duration  148 min     | |\n| | * 8.8       | | Action 2008 | | ...       | | | Rating    8.8 / 10    | |\n| | [Fav][Det.] | | * 9.0       | |           | | |             [Close]   | |\n| | [Delete]    | | ...         | |           | | +-----------------------+ |\n| +-------------+ +-------------+ +-----------+ | +- Add a movie ---------+ |\n|                                               | | Title [            ]  | |\n|                                               | | Genre [Action v]      | |\n|                                               | | Year [    ] Rating [ ]| |\n|                                               | |          [Add movie]  | |\n+-----------------------------------------------+---------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Movie</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>duy nhất; id mới = max(id) + 1</td></tr><tr><td><code>title</code></td><td>string</td><td>bắt buộc, bỏ khoảng trắng đầu/cuối</td></tr><tr><td><code>genre</code></td><td>'Action' | 'Comedy' | 'Drama' | 'Sci-Fi' | 'Animation'</td><td>lấy từ GENRES</td></tr><tr><td><code>year</code></td><td>number</td><td>số nguyên 1900–2030</td></tr><tr><td><code>rating</code></td><td>number</td><td>0–10 (một chữ số thập phân)</td></tr><tr><td><code>duration</code></td><td>number | null</td><td>phút; có thể bỏ trống</td></tr><tr><td><code>favorite</code></td><td>boolean</td><td>phim mới: false</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>// src/datas/movies.js (given) — favorite: false for all\n{ id: 1, title: 'Inception', genre: 'Sci-Fi', year: 2010, rating: 8.8, duration: 148 }\n{ id: 2, title: 'The Dark Knight', genre: 'Action', year: 2008, rating: 9.0, duration: 152 }\n{ id: 3, title: 'Spirited Away', genre: 'Animation', year: 2001, rating: 8.6, duration: 125 }\n{ id: 4, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, rating: 8.1, duration: 99 }\n{ id: 5, title: 'Parasite', genre: 'Drama', year: 2019, rating: 8.5, duration: 132 }\n{ id: 6, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, rating: 8.1, duration: 120 }</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Hiển thị danh sách phim <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Lần tải đầu, mỗi phim là một thẻ, đúng thứ tự dữ liệu.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi thẻ <code>.movie-card</code> có <code>.movie-title</code>, thể loại · năm và điểm.</li>\n  <li><code>#movie-count</code> ghi <code>Showing X of Y movies</code> (X = đang hiện, Y = tổng).</li>\n  <li>Mảng phim nằm trong custom hook <code>useLocalStorage(key, initialValue)</code> (lazy initializer + <code>useEffect</code> để ghi).</li>\n  <li>Dùng <code>key</code> ổn định (id phim), không dùng index.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">custom hook</span></p>\n<p><b>Khoá Local Storage:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Tìm theo tên <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ô <code>#search</code> <b>tự focus</b> khi trang tải xong.</li>\n  <li>Khớp \"chứa\" không phân biệt hoa/thường; cập nhật ngay khi gõ.</li>\n  <li>Không có kết quả ⇒ hiện <code>.empty</code> với chữ <code>No movies found</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useRef</span> <span class=\"bi-hook\">useEffect</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>Gõ \"the\" ⇒ The Dark Knight, The Grand Budapest Hotel (Showing 2 of 6)</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Lọc theo thể loại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#genre-filter</code>: \"All Genres\" (value <code>All</code>) + năm thể loại.</li>\n  <li>Lọc và tìm hoạt động <b>cùng lúc</b>.</li>\n  <li>Danh sách hiển thị là <b>giá trị suy ra</b> bằng <code>useMemo</code> — không lưu thành state thứ hai.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>All Genres: Showing 6 of 6  →  Action: Showing 2 of 6</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Sắp xếp <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#sort</code> có: <code>none</code> (thứ tự dữ liệu), <code>rating-desc</code>, <code>year-desc</code>, <code>title-asc</code>.</li>\n  <li>Điểm bằng nhau giữ thứ tự gốc (sắp xếp ổn định). Sắp xếp trên <b>bản sao</b>, không phải mảng state.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Chi tiết phim <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-detail</code> trên thẻ mở <code>#movie-detail</code>: tên, thể loại, năm, thời lượng dạng <code>148 min</code>, điểm.</li>\n  <li><code>#close-detail</code> đóng lại (khung biến khỏi trang).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Thêm phim <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Form <code>#movie-form</code> gồm <code>#title</code>, <code>#genre</code>, <code>#year</code>, <code>#rating</code>, <code>#duration</code> — tất cả controlled.</li>\n  <li>Kiểm: bắt buộc tên; năm 1900–2030; điểm 0–10. Báo lỗi trong <code>.error</code> (vd <code>Title is required</code>) và không thêm gì.</li>\n  <li>Phim hợp lệ thêm vào cuối với <code>id = max(id) + 1</code>; form trống lại; trang không tải lại.</li>\n  <li>Danh sách được lưu Local Storage và còn sau khi tải lại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">controlled form</span></p>\n<p><b>Khoá Local Storage:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Xoá &amp; yêu thích <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-delete</code> hỏi <code>window.confirm</code> trước, rồi mới xoá.</li>\n  <li><code>.btn-fav</code> bật/tắt ☆/★; thẻ yêu thích có class <code>is-fav</code>; <code>#fav-count</code> ghi <code>Favorites: N</code>.</li>\n  <li>Cả hai thay đổi đều được lưu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span></p>\n<p><b>Khoá Local Storage:</b> <code>movies</code></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Chế độ Sáng / Tối <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>ThemeContext</code> cung cấp <code>{ theme, toggleTheme }</code>; component đọc bằng <code>useContext</code> (qua <code>useTheme()</code>).</li>\n  <li>Phần tử gốc là <code>.app.theme-light</code> hoặc <code>.app.theme-dark</code>; <code>#theme-toggle</code> đổi qua lại.</li>\n  <li>Lựa chọn được nhớ (khoá Local Storage <code>theme</code>).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">createContext</span></p>\n<p><b>Khoá Local Storage:</b> <code>theme</code></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#movie-count · #fav-count</code></td><td>bộ đếm ở header</td></tr><tr><td><code>#search · #genre-filter · #sort</code></td><td>thanh công cụ</td></tr><tr><td><code>.movie-card · .movie-title · .is-fav</code></td><td>mỗi phim đang hiện một thẻ</td></tr><tr><td><code>.btn-fav · .btn-detail · .btn-delete</code></td><td>nút trên thẻ</td></tr><tr><td><code>#movie-detail · #close-detail</code></td><td>khung chi tiết</td></tr><tr><td><code>#movie-form · #title · #genre · #year · #rating · #duration · .error</code></td><td>form thêm + thông báo lỗi</td></tr><tr><td><code>.empty</code></td><td>\"No movies found\"</td></tr><tr><td><code>.app.theme-light / .app.theme-dark · #theme-toggle</code></td><td>theme</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Hiển thị danh sách phim</td><td>1.5</td></tr><tr><td>2</td><td>Tìm theo tên</td><td>1</td></tr><tr><td>3</td><td>Lọc theo thể loại</td><td>1</td></tr><tr><td>4</td><td>Sắp xếp</td><td>1</td></tr><tr><td>5</td><td>Chi tiết phim</td><td>1</td></tr><tr><td>6</td><td>Thêm phim</td><td>2</td></tr><tr><td>7</td><td>Xoá &amp; yêu thích</td><td>1.5</td></tr><tr><td>8</td><td>Chế độ Sáng / Tối</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Trang tải lại khi gửi form (thiếu <code>e.preventDefault()</code>) — chức năng 6 = 0.</li>\n  <li>Mất dữ liệu sau khi tải lại (không Local Storage) — mất điểm phần lưu của chức năng 1, 6, 7, 8.</li>\n  <li>Sắp xếp tại chỗ mảng state / sửa bằng <code>push</code> — danh sách không cập nhật.</li>\n  <li>Dùng index làm <code>key</code> — xoá/sắp xếp xong thẻ bị lẫn.</li>\n  <li>Đổi tên id/class — máy chấm không tìm thấy phần tử.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy bằng Vite/CRA trên máy rồi dán/nhập lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Function components + Hooks only (no class components).|||Chỉ dùng function component + Hooks (không class component).\nAll form inputs are <b>controlled components</b>; the form must not reload the page.|||Mọi ô nhập là <b>controlled component</b>; gửi form không được tải lại trang.\nNever mutate state directly (no <code>push</code>, no in-place <code>sort</code> on state arrays).|||Không sửa state trực tiếp (không <code>push</code>, không <code>sort</code> tại chỗ trên mảng state).\nKeep the ids / class names in section 6 exactly — the auto-grader uses them.|||Giữ ĐÚNG id / class ở mục 6 — máy chấm dựa vào chúng.",
+      "examplesJson": [
+        {
+          "input": "Search by title|||Tìm theo tên",
+          "output": "Type \"the\" ⇒ The Dark Knight, The Grand Budapest Hotel (Showing 2 of 6)|||Gõ \"the\" ⇒ The Dark Knight, The Grand Budapest Hotel (Showing 2 of 6)",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ hook: viết xong useLocalStorage (lazy initializer + useEffect ghi lại) rồi dùng nó cho cả \"movies\" lẫn \"theme\".",
+        "Đừng tạo state \"filteredMovies\". Tính danh sách hiển thị bằng useMemo từ movies + search + genre + sortBy; sort trên [...list].",
+        "Auto-focus: useRef gắn vào #search, useEffect(() => ref.current.focus(), []). Form: e.preventDefault() là dòng ĐẦU của handleSubmit.",
+        "Thêm phim: setMovies(list => [...list, { ...movie, id: Math.max(0, ...list.map(m => m.id)) + 1, favorite: false }])."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào: bọc App trong ThemeProvider để mọi component đọc được theme\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\nimport { ThemeProvider } from './context/ThemeContext';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <ThemeProvider>\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER. Hoàn thành theo đề: state phim (useLocalStorage), tìm/lọc/sắp xếp (useMemo),\n// chi tiết, thêm, xoá, yêu thích. Đừng đổi id/class mà đề yêu cầu — máy chấm dựa vào chúng.\nimport Header from './components/Header';\nimport Toolbar from './components/Toolbar';\nimport MovieList from './components/MovieList';\nimport MovieDetail from './components/MovieDetail';\nimport MovieForm from './components/MovieForm';\nimport initialMovies from './datas/movies';\n\nexport default function App() {\n  const movies = initialMovies; // TODO: state + Local Storage (key \"movies\")\n\n  return (\n    <div className=\"app theme-light\">\n      <Header shown={movies.length} total={movies.length} favorites={0} />\n      <main className=\"layout\">\n        <section className=\"content\">\n          <Toolbar />\n          <MovieList movies={movies} onDetail={() => {}} onDelete={() => {}} onToggleFavorite={() => {}} />\n        </section>\n        <aside className=\"side\">\n          <MovieDetail movie={null} onClose={() => {}} />\n          <MovieForm onAdd={() => {}} />\n        </aside>\n      </main>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — giao diện gọn, có Light/Dark theo lớp của .app */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; }\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\n.header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 16px; }\n.header h1 { margin: 0; font-size: 24px; }\n.header p { margin: 0; font-size: 14px; opacity: .8; }\n.header button { margin-left: auto; }\nbutton { padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }\n.theme-dark button { background: #1e293b; color: #e2e8f0; border-color: #334155; }\n.layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\n@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\n.toolbar input { flex: 1; min-width: 180px; }\ninput, select { padding: 7px 9px; border-radius: 8px; border: 1px solid #cbd5e1; font: inherit; }\n.theme-dark input, .theme-dark select { background: #1e293b; color: #e2e8f0; border-color: #334155; }\n.movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }\n.movie-card { padding: 14px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; }\n.theme-dark .movie-card { background: #1e293b; border-color: #334155; }\n.movie-card.is-fav { border-color: #f59e0b; box-shadow: 0 0 0 2px #fde68a; }\n.movie-title { margin: 0 0 4px; font-size: 16px; }\n.movie-meta, .movie-rating { margin: 2px 0; font-size: 13px; opacity: .85; }\n.card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }\n.empty { padding: 24px; text-align: center; opacity: .7; }\n.panel { padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; margin-bottom: 14px; }\n.theme-dark .panel { background: #1e293b; border-color: #334155; }\n.panel h2 { margin: 0 0 10px; font-size: 17px; }\n.panel label { display: grid; gap: 4px; font-size: 13px; margin-bottom: 8px; }\n.panel dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 14px; }\n.panel dd { margin: 0; }\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 8px; }\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js — STARTER\nexport default function Header({ shown, total, favorites }) {\n  return (\n    <header className=\"header\">\n      <h1>🎬 Movie Manager</h1>\n      <p id=\"movie-count\">Showing {shown} of {total} movies</p>\n      <p id=\"fav-count\">Favorites: {favorites}</p>\n      <button id=\"theme-toggle\" type=\"button\">🌙 Dark mode</button>\n    </header>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Toolbar.js",
+          "language": "javascript",
+          "code": "// src/components/Toolbar.js — STARTER: các ô đã có id đúng, chưa nối state, chưa tự focus\nimport { GENRES } from '../datas/movies';\n\nexport default function Toolbar() {\n  return (\n    <div className=\"toolbar\">\n      <input id=\"search\" type=\"search\" placeholder=\"Search by title\" />\n      <select id=\"genre-filter\">\n        <option value=\"All\">All Genres</option>\n        {GENRES.map((g) => <option key={g} value={g}>{g}</option>)}\n      </select>\n      <select id=\"sort\">\n        <option value=\"none\">Sort: default</option>\n        <option value=\"rating-desc\">Rating (high → low)</option>\n        <option value=\"year-desc\">Year (new → old)</option>\n        <option value=\"title-asc\">Title (A → Z)</option>\n      </select>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieList.js",
+          "language": "javascript",
+          "code": "// src/components/MovieList.js\nimport MovieCard from './MovieCard';\n\nexport default function MovieList({ movies, onDetail, onDelete, onToggleFavorite }) {\n  if (movies.length === 0) return <p className=\"empty\">No movies found</p>;\n  return (\n    <div className=\"movie-grid\">\n      {movies.map((m) => (\n        // key = id ổn định (KHÔNG dùng index: xoá/sắp xếp làm index đổi chủ)\n        <MovieCard key={m.id} movie={m} onDetail={onDetail} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />\n      ))}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieCard.js",
+          "language": "javascript",
+          "code": "// src/components/MovieCard.js\nexport default function MovieCard({ movie, onDetail, onDelete, onToggleFavorite }) {\n  return (\n    <article className={`movie-card${movie.favorite ? ' is-fav' : ''}`}>\n      <h3 className=\"movie-title\">{movie.title}</h3>\n      <p className=\"movie-meta\">{movie.genre} · {movie.year}</p>\n      <p className=\"movie-rating\">⭐ {Number(movie.rating).toFixed(1)}</p>\n      <div className=\"card-actions\">\n        <button type=\"button\" className=\"btn-fav\" aria-pressed={movie.favorite} onClick={() => onToggleFavorite(movie.id)}>\n          {movie.favorite ? '★ Favorite' : '☆ Favorite'}\n        </button>\n        <button type=\"button\" className=\"btn-detail\" onClick={() => onDetail(movie.id)}>Details</button>\n        <button type=\"button\" className=\"btn-delete\" onClick={() => onDelete(movie.id)}>Delete</button>\n      </div>\n    </article>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieDetail.js",
+          "language": "javascript",
+          "code": "// src/components/MovieDetail.js — STARTER\nexport default function MovieDetail({ movie, onClose }) {\n  // TODO: hiện #movie-detail với title, genre, year, duration (\"148 min\"), rating + nút #close-detail\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/MovieForm.js",
+          "language": "javascript",
+          "code": "// src/components/MovieForm.js — STARTER: chưa controlled, chưa kiểm hợp lệ, chưa chặn tải lại trang\nimport { GENRES } from '../datas/movies';\n\nexport default function MovieForm({ onAdd }) {\n  return (\n    <form id=\"movie-form\" className=\"panel\">\n      <h2>Add a movie</h2>\n      <label>Title <input id=\"title\" name=\"title\" /></label>\n      <label>Genre\n        <select id=\"genre\" name=\"genre\">\n          {GENRES.map((g) => <option key={g} value={g}>{g}</option>)}\n        </select>\n      </label>\n      <label>Year <input id=\"year\" name=\"year\" type=\"number\" /></label>\n      <label>Rating <input id=\"rating\" name=\"rating\" type=\"number\" step=\"0.1\" /></label>\n      <label>Duration (min) <input id=\"duration\" name=\"duration\" type=\"number\" /></label>\n      <button type=\"submit\">Add movie</button>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/context/ThemeContext.js",
+          "language": "javascript",
+          "code": "// src/context/ThemeContext.js — STARTER\nimport { createContext, useContext } from 'react';\n\nconst ThemeContext = createContext({ theme: 'light', toggleTheme: () => {} });\n\nexport function ThemeProvider({ children }) {\n  // TODO: theme lưu Local Storage (key \"theme\"), toggleTheme đổi light ⇄ dark\n  return <ThemeContext.Provider value={{ theme: 'light', toggleTheme: () => {} }}>{children}</ThemeContext.Provider>;\n}\n\nexport function useTheme() {\n  return useContext(ThemeContext);\n}\n"
+        },
+        {
+          "name": "src/hooks/useLocalStorage.js",
+          "language": "javascript",
+          "code": "// src/hooks/useLocalStorage.js — STARTER\nimport { useState } from 'react';\n\nexport default function useLocalStorage(key, initialValue) {\n  // TODO: đọc localStorage[key] lúc khởi tạo (lazy initializer) và ghi lại mỗi khi value đổi (useEffect)\n  return useState(initialValue);\n}\n"
+        },
+        {
+          "name": "src/datas/movies.js",
+          "language": "javascript",
+          "code": "// src/datas/movies.js — dữ liệu mẫu (6 phim) + danh sách thể loại dùng chung\nexport const GENRES = ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Animation'];\n\nconst movies = [\n  { id: 1, title: 'Inception', genre: 'Sci-Fi', year: 2010, rating: 8.8, duration: 148, favorite: false },\n  { id: 2, title: 'The Dark Knight', genre: 'Action', year: 2008, rating: 9.0, duration: 152, favorite: false },\n  { id: 3, title: 'Spirited Away', genre: 'Animation', year: 2001, rating: 8.6, duration: 125, favorite: false },\n  { id: 4, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, rating: 8.1, duration: 99, favorite: false },\n  { id: 5, title: 'Parasite', genre: 'Drama', year: 2019, rating: 8.5, duration: 132, favorite: false },\n  { id: 6, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, rating: 8.1, duration: 120, favorite: false },\n];\n\nexport default movies;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào: bọc App trong ThemeProvider để mọi component đọc được theme\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\nimport { ThemeProvider } from './context/ThemeContext';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <ThemeProvider>\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — giữ state chính; danh sách hiển thị là state SUY RA (useMemo), không lưu riêng\nimport { useMemo, useState } from 'react';\nimport Header from './components/Header';\nimport Toolbar from './components/Toolbar';\nimport MovieList from './components/MovieList';\nimport MovieDetail from './components/MovieDetail';\nimport MovieForm from './components/MovieForm';\nimport useLocalStorage from './hooks/useLocalStorage';\nimport { useTheme } from './context/ThemeContext';\nimport initialMovies from './datas/movies';\n\nexport default function App() {\n  const { theme } = useTheme();\n  const [movies, setMovies] = useLocalStorage('movies', initialMovies);\n  const [search, setSearch] = useState('');\n  const [genre, setGenre] = useState('All');\n  const [sortBy, setSortBy] = useState('none');\n  const [selectedId, setSelectedId] = useState(null);\n\n  // Lọc + tìm + sắp xếp: chỉ tính lại khi một trong 4 đầu vào đổi\n  const visible = useMemo(() => {\n    const q = search.trim().toLowerCase();\n    const list = movies.filter((m) => (genre === 'All' || m.genre === genre) && m.title.toLowerCase().includes(q));\n    // sort trên BẢN SAO — sort() đổi mảng tại chỗ, không được đụng vào state\n    if (sortBy === 'rating-desc') return [...list].sort((a, b) => b.rating - a.rating);\n    if (sortBy === 'year-desc') return [...list].sort((a, b) => b.year - a.year);\n    if (sortBy === 'title-asc') return [...list].sort((a, b) => a.title.localeCompare(b.title));\n    return list;\n  }, [movies, search, genre, sortBy]);\n\n  const addMovie = (movie) =>\n    setMovies((list) => [...list, { ...movie, id: Math.max(0, ...list.map((m) => m.id)) + 1, favorite: false }]);\n\n  const deleteMovie = (id) => {\n    if (!window.confirm('Delete this movie?')) return;\n    setMovies((list) => list.filter((m) => m.id !== id));\n    if (selectedId === id) setSelectedId(null);\n  };\n\n  const toggleFavorite = (id) =>\n    setMovies((list) => list.map((m) => (m.id === id ? { ...m, favorite: !m.favorite } : m)));\n\n  const selected = movies.find((m) => m.id === selectedId) ?? null;\n  const favorites = movies.filter((m) => m.favorite).length;\n\n  return (\n    <div className={`app theme-${theme}`}>\n      <Header shown={visible.length} total={movies.length} favorites={favorites} />\n      <main className=\"layout\">\n        <section className=\"content\">\n          <Toolbar search={search} onSearch={setSearch} genre={genre} onGenre={setGenre} sortBy={sortBy} onSort={setSortBy} />\n          <MovieList movies={visible} onDetail={setSelectedId} onDelete={deleteMovie} onToggleFavorite={toggleFavorite} />\n        </section>\n        <aside className=\"side\">\n          <MovieDetail movie={selected} onClose={() => setSelectedId(null)} />\n          <MovieForm onAdd={addMovie} />\n        </aside>\n      </main>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — giao diện gọn, có Light/Dark theo lớp của .app */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; }\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\n.header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 16px; }\n.header h1 { margin: 0; font-size: 24px; }\n.header p { margin: 0; font-size: 14px; opacity: .8; }\n.header button { margin-left: auto; }\nbutton { padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }\n.theme-dark button { background: #1e293b; color: #e2e8f0; border-color: #334155; }\n.layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\n@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\n.toolbar input { flex: 1; min-width: 180px; }\ninput, select { padding: 7px 9px; border-radius: 8px; border: 1px solid #cbd5e1; font: inherit; }\n.theme-dark input, .theme-dark select { background: #1e293b; color: #e2e8f0; border-color: #334155; }\n.movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }\n.movie-card { padding: 14px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; }\n.theme-dark .movie-card { background: #1e293b; border-color: #334155; }\n.movie-card.is-fav { border-color: #f59e0b; box-shadow: 0 0 0 2px #fde68a; }\n.movie-title { margin: 0 0 4px; font-size: 16px; }\n.movie-meta, .movie-rating { margin: 2px 0; font-size: 13px; opacity: .85; }\n.card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }\n.empty { padding: 24px; text-align: center; opacity: .7; }\n.panel { padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; margin-bottom: 14px; }\n.theme-dark .panel { background: #1e293b; border-color: #334155; }\n.panel h2 { margin: 0 0 10px; font-size: 17px; }\n.panel label { display: grid; gap: 4px; font-size: 13px; margin-bottom: 8px; }\n.panel dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 14px; }\n.panel dd { margin: 0; }\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 8px; }\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js\nimport { useTheme } from '../context/ThemeContext';\n\nexport default function Header({ shown, total, favorites }) {\n  const { theme, toggleTheme } = useTheme();\n  return (\n    <header className=\"header\">\n      <h1>🎬 Movie Manager</h1>\n      <p id=\"movie-count\">Showing {shown} of {total} movies</p>\n      <p id=\"fav-count\">Favorites: {favorites}</p>\n      <button id=\"theme-toggle\" type=\"button\" onClick={toggleTheme}>\n        {theme === 'light' ? '🌙 Dark mode' : '☀️ Light mode'}\n      </button>\n    </header>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Toolbar.js",
+          "language": "javascript",
+          "code": "// src/components/Toolbar.js — ô tìm (tự focus), lọc thể loại, sắp xếp: đều là controlled component\nimport { useEffect, useRef } from 'react';\nimport { GENRES } from '../datas/movies';\n\nexport default function Toolbar({ search, onSearch, genre, onGenre, sortBy, onSort }) {\n  const inputRef = useRef(null);\n\n  // [] ⇒ chỉ focus MỘT lần sau lần render đầu (không có [] là giành focus sau mỗi lần gõ ô khác)\n  useEffect(() => {\n    inputRef.current.focus();\n  }, []);\n\n  return (\n    <div className=\"toolbar\">\n      <input\n        id=\"search\"\n        ref={inputRef}\n        type=\"search\"\n        placeholder=\"Search by title\"\n        value={search}\n        onChange={(e) => onSearch(e.target.value)}\n      />\n      <select id=\"genre-filter\" value={genre} onChange={(e) => onGenre(e.target.value)}>\n        <option value=\"All\">All Genres</option>\n        {GENRES.map((g) => (\n          <option key={g} value={g}>{g}</option>\n        ))}\n      </select>\n      <select id=\"sort\" value={sortBy} onChange={(e) => onSort(e.target.value)}>\n        <option value=\"none\">Sort: default</option>\n        <option value=\"rating-desc\">Rating (high → low)</option>\n        <option value=\"year-desc\">Year (new → old)</option>\n        <option value=\"title-asc\">Title (A → Z)</option>\n      </select>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieList.js",
+          "language": "javascript",
+          "code": "// src/components/MovieList.js\nimport MovieCard from './MovieCard';\n\nexport default function MovieList({ movies, onDetail, onDelete, onToggleFavorite }) {\n  if (movies.length === 0) return <p className=\"empty\">No movies found</p>;\n  return (\n    <div className=\"movie-grid\">\n      {movies.map((m) => (\n        // key = id ổn định (KHÔNG dùng index: xoá/sắp xếp làm index đổi chủ)\n        <MovieCard key={m.id} movie={m} onDetail={onDetail} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />\n      ))}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieCard.js",
+          "language": "javascript",
+          "code": "// src/components/MovieCard.js\nexport default function MovieCard({ movie, onDetail, onDelete, onToggleFavorite }) {\n  return (\n    <article className={`movie-card${movie.favorite ? ' is-fav' : ''}`}>\n      <h3 className=\"movie-title\">{movie.title}</h3>\n      <p className=\"movie-meta\">{movie.genre} · {movie.year}</p>\n      <p className=\"movie-rating\">⭐ {Number(movie.rating).toFixed(1)}</p>\n      <div className=\"card-actions\">\n        <button type=\"button\" className=\"btn-fav\" aria-pressed={movie.favorite} onClick={() => onToggleFavorite(movie.id)}>\n          {movie.favorite ? '★ Favorite' : '☆ Favorite'}\n        </button>\n        <button type=\"button\" className=\"btn-detail\" onClick={() => onDetail(movie.id)}>Details</button>\n        <button type=\"button\" className=\"btn-delete\" onClick={() => onDelete(movie.id)}>Delete</button>\n      </div>\n    </article>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieDetail.js",
+          "language": "javascript",
+          "code": "// src/components/MovieDetail.js\nexport default function MovieDetail({ movie, onClose }) {\n  if (!movie) return null;\n  return (\n    <section id=\"movie-detail\" className=\"panel\">\n      <h2>{movie.title}</h2>\n      <dl>\n        <dt>Genre</dt><dd>{movie.genre}</dd>\n        <dt>Year</dt><dd>{movie.year}</dd>\n        <dt>Duration</dt><dd>{movie.duration ? `${movie.duration} min` : 'N/A'}</dd>\n        <dt>Rating</dt><dd>{Number(movie.rating).toFixed(1)} / 10</dd>\n      </dl>\n      <button id=\"close-detail\" type=\"button\" onClick={onClose}>Close</button>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MovieForm.js",
+          "language": "javascript",
+          "code": "// src/components/MovieForm.js — form controlled + kiểm hợp lệ trước khi thêm\nimport { useState } from 'react';\nimport { GENRES } from '../datas/movies';\n\nconst EMPTY = { title: '', genre: 'Action', year: '', rating: '', duration: '' };\n\nexport default function MovieForm({ onAdd }) {\n  const [form, setForm] = useState(EMPTY);\n  const [error, setError] = useState('');\n\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\n\n  const handleSubmit = (e) => {\n    e.preventDefault(); // không có dòng này: trình duyệt tải lại trang, mất hết state\n    const title = form.title.trim();\n    const year = Number(form.year);\n    const rating = Number(form.rating);\n    if (!title) return setError('Title is required');\n    if (!Number.isInteger(year) || year < 1900 || year > 2030) return setError('Year must be between 1900 and 2030');\n    if (form.rating === '' || Number.isNaN(rating) || rating < 0 || rating > 10) return setError('Rating must be between 0 and 10');\n    onAdd({ title, genre: form.genre, year, rating, duration: form.duration ? Number(form.duration) : null });\n    setForm(EMPTY);\n    setError('');\n  };\n\n  return (\n    <form id=\"movie-form\" className=\"panel\" onSubmit={handleSubmit} noValidate>\n      <h2>Add a movie</h2>\n      <label>Title <input id=\"title\" name=\"title\" value={form.title} onChange={update} /></label>\n      <label>Genre\n        <select id=\"genre\" name=\"genre\" value={form.genre} onChange={update}>\n          {GENRES.map((g) => <option key={g} value={g}>{g}</option>)}\n        </select>\n      </label>\n      <label>Year <input id=\"year\" name=\"year\" type=\"number\" value={form.year} onChange={update} /></label>\n      <label>Rating <input id=\"rating\" name=\"rating\" type=\"number\" step=\"0.1\" value={form.rating} onChange={update} /></label>\n      <label>Duration (min) <input id=\"duration\" name=\"duration\" type=\"number\" value={form.duration} onChange={update} /></label>\n      {error && <p className=\"error\" role=\"alert\">{error}</p>}\n      <button type=\"submit\">Add movie</button>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/context/ThemeContext.js",
+          "language": "javascript",
+          "code": "// src/context/ThemeContext.js — Light/Dark mode dùng chung qua Context (không truyền props qua 3 tầng)\nimport { createContext, useContext } from 'react';\nimport useLocalStorage from '../hooks/useLocalStorage';\n\nconst ThemeContext = createContext(null);\n\nexport function ThemeProvider({ children }) {\n  const [theme, setTheme] = useLocalStorage('theme', 'light'); // nhớ lựa chọn qua lần tải lại\n  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));\n  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;\n}\n\nexport function useTheme() {\n  const ctx = useContext(ThemeContext);\n  if (!ctx) throw new Error('useTheme must be used inside <ThemeProvider>');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/hooks/useLocalStorage.js",
+          "language": "javascript",
+          "code": "// src/hooks/useLocalStorage.js — custom hook: state \"nhớ\" qua lần tải lại trang\nimport { useEffect, useState } from 'react';\n\nexport default function useLocalStorage(key, initialValue) {\n  // Lazy initializer: chỉ đọc localStorage MỘT lần lúc mount, không phải mỗi lần render\n  const [value, setValue] = useState(() => {\n    try {\n      const raw = localStorage.getItem(key);\n      return raw !== null ? JSON.parse(raw) : initialValue;\n    } catch {\n      return initialValue; // JSON hỏng / storage bị chặn ⇒ dùng giá trị khởi đầu\n    }\n  });\n\n  // Mỗi khi value đổi ⇒ ghi lại (JSON vì localStorage chỉ giữ chuỗi)\n  useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n\n  return [value, setValue];\n}\n"
+        },
+        {
+          "name": "src/datas/movies.js",
+          "language": "javascript",
+          "code": "// src/datas/movies.js — dữ liệu mẫu (6 phim) + danh sách thể loại dùng chung\nexport const GENRES = ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Animation'];\n\nconst movies = [\n  { id: 1, title: 'Inception', genre: 'Sci-Fi', year: 2010, rating: 8.8, duration: 148, favorite: false },\n  { id: 2, title: 'The Dark Knight', genre: 'Action', year: 2008, rating: 9.0, duration: 152, favorite: false },\n  { id: 3, title: 'Spirited Away', genre: 'Animation', year: 2001, rating: 8.6, duration: 125, favorite: false },\n  { id: 4, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, rating: 8.1, duration: 99, favorite: false },\n  { id: 5, title: 'Parasite', genre: 'Drama', year: 2019, rating: 8.5, duration: 132, favorite: false },\n  { id: 6, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, rating: 8.1, duration: 120, favorite: false },\n];\n\nexport default movies;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lời giải giữ <b>một nguồn sự thật</b>: mảng <code>movies</code> (trong <code>useLocalStorage</code>) + ba lựa chọn (search, genre, sortBy). Danh sách hiển thị được <em>suy ra</em> bằng <code>useMemo</code>, nên thêm/xoá/yêu thích tự phản ánh vào kết quả tìm/lọc/sắp xếp. Mọi thay đổi state dùng mảng MỚI (<code>[...list, m]</code>, <code>filter</code>, <code>map</code>) — React so tham chiếu để biết cần render lại. Theme đi qua Context để Header (và mọi component khác) đọc trực tiếp, không truyền props qua nhiều tầng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/reference/react/hooks",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "6 movie cards are rendered on first load",
+            "kiem": "so-luong",
+            "selector": ".movie-card",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Cards show titles in data order",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-card .movie-title",
+            "mongDoi": [
+              "Inception",
+              "The Dark Knight",
+              "Spirited Away",
+              "The Grand Budapest Hotel",
+              "Parasite",
+              "Mad Max: Fury Road"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "#movie-count reads \"Showing 6 of 6 movies\"",
+            "kiem": "text",
+            "selector": "#movie-count",
+            "khop": "Showing\\s+6\\s+of\\s+6"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Custom hook useLocalStorage reads and writes localStorage",
+            "kiem": "ma-nguon",
+            "tep": "src/hooks/useLocalStorage.js",
+            "khop": "localStorage\\.getItem[\\s\\S]*localStorage\\.setItem"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Search box #search is auto-focused on load",
+            "kiem": "focus",
+            "selector": "#search"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Typing \"the\" shows 2 movies",
+            "kiem": "so-luong",
+            "selector": ".movie-card",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "the"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "No match ⇒ \"No movies found\"",
+            "kiem": "text",
+            "selector": ".empty",
+            "khop": "No movies found",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "zzz"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Search is case-insensitive",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "Inception"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "INCEPTION"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Genre \"Action\" ⇒ 2 movies, count updates",
+            "kiem": "text",
+            "selector": "#movie-count",
+            "khop": "Showing\\s+2\\s+of\\s+6",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#genre-filter",
+                "giaTri": "Action"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Filtered/sorted list is memoized with useMemo",
+            "kiem": "ma-nguon",
+            "khop": "\\buseMemo\\s*\\("
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Filter + search combine",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "Mad Max: Fury Road"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#genre-filter",
+                "giaTri": "Action"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "max"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Sort by rating (high → low)",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "The Dark Knight",
+              "Inception",
+              "Spirited Away",
+              "Parasite",
+              "The Grand Budapest Hotel",
+              "Mad Max: Fury Road"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#sort",
+                "giaTri": "rating-desc"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Sort by title (A → Z)",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "Inception",
+              "Mad Max: Fury Road",
+              "Parasite",
+              "Spirited Away",
+              "The Dark Knight",
+              "The Grand Budapest Hotel"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#sort",
+                "giaTri": "title-asc"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Sort by year (new → old)",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "Parasite",
+              "Mad Max: Fury Road",
+              "The Grand Budapest Hotel",
+              "Inception",
+              "The Dark Knight",
+              "Spirited Away"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#sort",
+                "giaTri": "year-desc"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "\"Details\" opens #movie-detail with title and \"148 min\"",
+            "kiem": "text",
+            "selector": "#movie-detail",
+            "khop": "Inception[\\s\\S]*148 min",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-detail"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#close-detail closes the panel",
+            "kiem": "khong-ton-tai",
+            "selector": "#movie-detail",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-detail"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#close-detail"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Adding \"Dune\" appends a 7th card at the end",
+            "kiem": "danh-sach-text",
+            "selector": ".movie-title",
+            "mongDoi": [
+              "Inception",
+              "The Dark Knight",
+              "Spirited Away",
+              "The Grand Budapest Hotel",
+              "Parasite",
+              "Mad Max: Fury Road",
+              "Dune"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Dune"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#genre",
+                "giaTri": "Sci-Fi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#year",
+                "giaTri": "2021"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#rating",
+                "giaTri": "8"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Submitting does not reload the page",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Dune"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#genre",
+                "giaTri": "Sci-Fi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#year",
+                "giaTri": "2021"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#rating",
+                "giaTri": "8"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Empty title ⇒ \"Title is required\", nothing added",
+            "kiem": "text",
+            "selector": ".error",
+            "khop": "Title is required",
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Movies are saved to localStorage key \"movies\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "movies",
+            "doDai": 7,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Dune"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#genre",
+                "giaTri": "Sci-Fi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#year",
+                "giaTri": "2021"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#rating",
+                "giaTri": "8"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Rating 11 is rejected",
+            "kiem": "text",
+            "selector": ".error",
+            "khop": "rating",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "X"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#year",
+                "giaTri": "2020"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#rating",
+                "giaTri": "11"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Added movie survives a page reload",
+            "kiem": "so-luong",
+            "selector": ".movie-card",
+            "giaTri": 7,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#title",
+                "giaTri": "Dune"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#genre",
+                "giaTri": "Sci-Fi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#year",
+                "giaTri": "2021"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#rating",
+                "giaTri": "8"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#movie-form"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Favorite toggles ★ and \"Favorites: 1\"",
+            "kiem": "text",
+            "selector": "#fav-count",
+            "khop": "Favorites:\\s*1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-fav"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Favorite card gets class is-fav",
+            "kiem": "so-luong",
+            "selector": ".movie-card.is-fav",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-fav"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Delete (after confirm) removes the card",
+            "kiem": "so-luong",
+            "selector": ".movie-card",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-delete"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Delete is persisted to localStorage",
+            "kiem": "kho-cuc-bo",
+            "khoa": "movies",
+            "doDai": 5,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-delete"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Favorite survives a page reload",
+            "kiem": "so-luong",
+            "selector": ".movie-card.is-fav",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-fav"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "App starts in light mode (.app.theme-light)",
+            "kiem": "ton-tai",
+            "selector": ".app.theme-light"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "#theme-toggle switches to dark mode",
+            "kiem": "ton-tai",
+            "selector": ".app.theme-dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#theme-toggle"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Theme is shared with useContext",
+            "kiem": "ma-nguon",
+            "khop": "\\buseContext\\s*\\("
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Theme choice is saved (localStorage \"theme\")",
+            "kiem": "kho-cuc-bo",
+            "khoa": "theme",
+            "khop": "dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#theme-toggle"
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Display the movie list",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Search by title",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Filter by genre",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Sort",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Movie details",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Add a movie",
+            "diem": 2
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Delete & favourite",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Light / Dark mode",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Đọc <code>localStorage</code> ngay trong thân component (<code>useState(JSON.parse(localStorage.getItem(…)))</code>) — chạy lại mỗi lần render; dùng lazy initializer <code>useState(() => …)</code>."
+        },
+        {
+          "loi": "Thêm phim bằng <code>movies.push(m); setMovies(movies)</code> — cùng một mảng ⇒ React không render lại."
+        },
+        {
+          "loi": "Quên <code>e.preventDefault()</code> — trang tải lại, mất state, máy chấm báo \"trang tải lại\"."
+        },
+        {
+          "loi": "<code>movies.sort(…)</code> trực tiếp trên state — đổi thứ tự gốc, chọn \"Sort: default\" không quay về được."
+        },
+        {
+          "loi": "<code>useEffect(() => ref.current.focus())</code> thiếu <code>[]</code> — mỗi lần gõ ô khác, focus lại bị giật về ô tìm."
+        },
+        {
+          "loi": "Lưu danh sách đã lọc vào một state riêng rồi quên cập nhật khi thêm/xoá ⇒ hai nguồn sự thật lệch nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "watchlist",
+          "vi": "danh sách phim muốn xem"
+        },
+        {
+          "en": "persist / persistence",
+          "vi": "lưu bền (còn sau khi tải lại trang)"
+        },
+        {
+          "en": "auto-focus",
+          "vi": "tự đặt con trỏ vào ô nhập"
+        },
+        {
+          "en": "controlled component",
+          "vi": "ô nhập do state React điều khiển (value + onChange)"
+        },
+        {
+          "en": "derived state",
+          "vi": "giá trị suy ra từ state khác — tính lại, không lưu riêng"
+        },
+        {
+          "en": "memoize (useMemo)",
+          "vi": "nhớ kết quả tính, chỉ tính lại khi đầu vào đổi"
+        },
+        {
+          "en": "lazy initializer",
+          "vi": "hàm khởi tạo state chỉ chạy một lần (useState(() => …))"
+        },
+        {
+          "en": "mutate",
+          "vi": "sửa trực tiếp (đối tượng/mảng) — cấm với state"
+        },
+        {
+          "en": "stable sort",
+          "vi": "sắp xếp giữ thứ tự gốc của các phần tử bằng nhau"
+        },
+        {
+          "en": "case-insensitive",
+          "vi": "không phân biệt chữ hoa/thường"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 8 — Movie Management System using React Hooks — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào: bọc App trong ThemeProvider để mọi component đọc được theme\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\nvar _ThemeContext = require('./context/ThemeContext');\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _ThemeContext.ThemeProvider, { children: \\n      _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n    })\\n  })\\n);\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/App.js — giữ state chính; danh sách hiển thị là state SUY RA (useMemo), không lưu riêng\\nvar _react = require('react');\\nvar _Header = require('./components/Header'); var _Header2 = _interopRequireDefault(_Header);\\nvar _Toolbar = require('./components/Toolbar'); var _Toolbar2 = _interopRequireDefault(_Toolbar);\\nvar _MovieList = require('./components/MovieList'); var _MovieList2 = _interopRequireDefault(_MovieList);\\nvar _MovieDetail = require('./components/MovieDetail'); var _MovieDetail2 = _interopRequireDefault(_MovieDetail);\\nvar _MovieForm = require('./components/MovieForm'); var _MovieForm2 = _interopRequireDefault(_MovieForm);\\nvar _useLocalStorage = require('./hooks/useLocalStorage'); var _useLocalStorage2 = _interopRequireDefault(_useLocalStorage);\\nvar _ThemeContext = require('./context/ThemeContext');\\nvar _movies = require('./datas/movies'); var _movies2 = _interopRequireDefault(_movies);\\n\\n function App() {\\n  const { theme } = _ThemeContext.useTheme.call(void 0, );\\n  const [movies, setMovies] = _useLocalStorage2.default.call(void 0, 'movies', _movies2.default);\\n  const [search, setSearch] = _react.useState.call(void 0, '');\\n  const [genre, setGenre] = _react.useState.call(void 0, 'All');\\n  const [sortBy, setSortBy] = _react.useState.call(void 0, 'none');\\n  const [selectedId, setSelectedId] = _react.useState.call(void 0, null);\\n\\n  // Lọc + tìm + sắp xếp: chỉ tính lại khi một trong 4 đầu vào đổi\\n  const visible = _react.useMemo.call(void 0, () => {\\n    const q = search.trim().toLowerCase();\\n    const list = movies.filter((m) => (genre === 'All' || m.genre === genre) && m.title.toLowerCase().includes(q));\\n    // sort trên BẢN SAO — sort() đổi mảng tại chỗ, không được đụng vào state\\n    if (sortBy === 'rating-desc') return [...list].sort((a, b) => b.rating - a.rating);\\n    if (sortBy === 'year-desc') return [...list].sort((a, b) => b.year - a.year);\\n    if (sortBy === 'title-asc') return [...list].sort((a, b) => a.title.localeCompare(b.title));\\n    return list;\\n  }, [movies, search, genre, sortBy]);\\n\\n  const addMovie = (movie) =>\\n    setMovies((list) => [...list, { ...movie, id: Math.max(0, ...list.map((m) => m.id)) + 1, favorite: false }]);\\n\\n  const deleteMovie = (id) => {\\n    if (!window.confirm('Delete this movie?')) return;\\n    setMovies((list) => list.filter((m) => m.id !== id));\\n    if (selectedId === id) setSelectedId(null);\\n  };\\n\\n  const toggleFavorite = (id) =>\\n    setMovies((list) => list.map((m) => (m.id === id ? { ...m, favorite: !m.favorite } : m)));\\n\\n  const selected = _nullishCoalesce(movies.find((m) => m.id === selectedId), () => ( null));\\n  const favorites = movies.filter((m) => m.favorite).length;\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: `app theme-${theme}`, children: [\\n      _jsxruntime.jsx.call(void 0, _Header2.default, { shown: visible.length, total: movies.length, favorites: favorites,} )\\n      , _jsxruntime.jsxs.call(void 0, 'main', { className: \\\"layout\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"content\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _Toolbar2.default, { search: search, onSearch: setSearch, genre: genre, onGenre: setGenre, sortBy: sortBy, onSort: setSortBy,} )\\n          , _jsxruntime.jsx.call(void 0, _MovieList2.default, { movies: visible, onDetail: setSelectedId, onDelete: deleteMovie, onToggleFavorite: toggleFavorite,} )\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'aside', { className: \\\"side\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _MovieDetail2.default, { movie: selected, onClose: () => setSelectedId(null),} )\\n          , _jsxruntime.jsx.call(void 0, _MovieForm2.default, { onAdd: addMovie,} )\\n        ]})\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/Header.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Header.js\\nvar _ThemeContext = require('../context/ThemeContext');\\n\\n function Header({ shown, total, favorites }) {\\n  const { theme, toggleTheme } = _ThemeContext.useTheme.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'header', { className: \\\"header\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"🎬 Movie Manager\\\"  })\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"movie-count\\\", children: [\\\"Showing \\\" , shown, \\\" of \\\"  , total, \\\" movies\\\" ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"fav-count\\\", children: [\\\"Favorites: \\\" , favorites]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"theme-toggle\\\", type: \\\"button\\\", onClick: toggleTheme, children: \\n        theme === 'light' ? '🌙 Dark mode' : '☀️ Light mode'\\n      })\\n    ]})\\n  );\\n} exports.default = Header;\\n\",\"src/components/Toolbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Toolbar.js — ô tìm (tự focus), lọc thể loại, sắp xếp: đều là controlled component\\nvar _react = require('react');\\nvar _movies = require('../datas/movies');\\n\\n function Toolbar({ search, onSearch, genre, onGenre, sortBy, onSort }) {\\n  const inputRef = _react.useRef.call(void 0, null);\\n\\n  // [] ⇒ chỉ focus MỘT lần sau lần render đầu (không có [] là giành focus sau mỗi lần gõ ô khác)\\n  _react.useEffect.call(void 0, () => {\\n    inputRef.current.focus();\\n  }, []);\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'input', {\\n        id: \\\"search\\\",\\n        ref: inputRef,\\n        type: \\\"search\\\",\\n        placeholder: \\\"Search by title\\\"  ,\\n        value: search,\\n        onChange: (e) => onSearch(e.target.value),}\\n      )\\n      , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"genre-filter\\\", value: genre, onChange: (e) => onGenre(e.target.value), children: [\\n        _jsxruntime.jsx.call(void 0, 'option', { value: \\\"All\\\", children: \\\"All Genres\\\" })\\n        , _movies.GENRES.map((g) => (\\n          _jsxruntime.jsx.call(void 0, 'option', { value: g, children: g}, g)\\n        ))\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"sort\\\", value: sortBy, onChange: (e) => onSort(e.target.value), children: [\\n        _jsxruntime.jsx.call(void 0, 'option', { value: \\\"none\\\", children: \\\"Sort: default\\\" })\\n        , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"rating-desc\\\", children: \\\"Rating (high → low)\\\"   })\\n        , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"year-desc\\\", children: \\\"Year (new → old)\\\"   })\\n        , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"title-asc\\\", children: \\\"Title (A → Z)\\\"   })\\n      ]})\\n    ]})\\n  );\\n} exports.default = Toolbar;\\n\",\"src/components/MovieList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/MovieList.js\\nvar _MovieCard = require('./MovieCard'); var _MovieCard2 = _interopRequireDefault(_MovieCard);\\n\\n function MovieList({ movies, onDetail, onDelete, onToggleFavorite }) {\\n  if (movies.length === 0) return _jsxruntime.jsx.call(void 0, 'p', { className: \\\"empty\\\", children: \\\"No movies found\\\"  });\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"movie-grid\\\", children: \\n      movies.map((m) => (\\n        // key = id ổn định (KHÔNG dùng index: xoá/sắp xếp làm index đổi chủ)\\n        _jsxruntime.jsx.call(void 0, _MovieCard2.default, { movie: m, onDetail: onDetail, onDelete: onDelete, onToggleFavorite: onToggleFavorite,}, m.id )\\n      ))\\n    })\\n  );\\n} exports.default = MovieList;\\n\",\"src/components/MovieCard.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/MovieCard.js\\n function MovieCard({ movie, onDetail, onDelete, onToggleFavorite }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'article', { className: `movie-card${movie.favorite ? ' is-fav' : ''}`, children: [\\n      _jsxruntime.jsx.call(void 0, 'h3', { className: \\\"movie-title\\\", children: movie.title})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"movie-meta\\\", children: [movie.genre, \\\" · \\\"  , movie.year]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { className: \\\"movie-rating\\\", children: [\\\"⭐ \\\" , Number(movie.rating).toFixed(1)]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"card-actions\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-fav\\\", 'aria-pressed': movie.favorite, onClick: () => onToggleFavorite(movie.id), children: \\n          movie.favorite ? '★ Favorite' : '☆ Favorite'\\n        })\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-detail\\\", onClick: () => onDetail(movie.id), children: \\\"Details\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-delete\\\", onClick: () => onDelete(movie.id), children: \\\"Delete\\\"})\\n      ]})\\n    ]})\\n  );\\n} exports.default = MovieCard;\\n\",\"src/components/MovieDetail.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/MovieDetail.js\\n function MovieDetail({ movie, onClose }) {\\n  if (!movie) return null;\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"movie-detail\\\", className: \\\"panel\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: movie.title})\\n      , _jsxruntime.jsxs.call(void 0, 'dl', { children: [\\n        _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Genre\\\"}), _jsxruntime.jsx.call(void 0, 'dd', { children: movie.genre})\\n        , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Year\\\"}), _jsxruntime.jsx.call(void 0, 'dd', { children: movie.year})\\n        , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Duration\\\"}), _jsxruntime.jsx.call(void 0, 'dd', { children: movie.duration ? `${movie.duration} min` : 'N/A'})\\n        , _jsxruntime.jsx.call(void 0, 'dt', { children: \\\"Rating\\\"}), _jsxruntime.jsxs.call(void 0, 'dd', { children: [Number(movie.rating).toFixed(1), \\\" / 10\\\"  ]})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { id: \\\"close-detail\\\", type: \\\"button\\\", onClick: onClose, children: \\\"Close\\\"})\\n    ]})\\n  );\\n} exports.default = MovieDetail;\\n\",\"src/components/MovieForm.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/MovieForm.js — form controlled + kiểm hợp lệ trước khi thêm\\nvar _react = require('react');\\nvar _movies = require('../datas/movies');\\n\\nconst EMPTY = { title: '', genre: 'Action', year: '', rating: '', duration: '' };\\n\\n function MovieForm({ onAdd }) {\\n  const [form, setForm] = _react.useState.call(void 0, EMPTY);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n\\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault(); // không có dòng này: trình duyệt tải lại trang, mất hết state\\n    const title = form.title.trim();\\n    const year = Number(form.year);\\n    const rating = Number(form.rating);\\n    if (!title) return setError('Title is required');\\n    if (!Number.isInteger(year) || year \\u003c 1900 || year > 2030) return setError('Year must be between 1900 and 2030');\\n    if (form.rating === '' || Number.isNaN(rating) || rating \\u003c 0 || rating > 10) return setError('Rating must be between 0 and 10');\\n    onAdd({ title, genre: form.genre, year, rating, duration: form.duration ? Number(form.duration) : null });\\n    setForm(EMPTY);\\n    setError('');\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"movie-form\\\", className: \\\"panel\\\", onSubmit: handleSubmit, noValidate: true, children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Add a movie\\\"  })\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Title \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"title\\\", name: \\\"title\\\", value: form.title, onChange: update,} )]})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Genre\\\"\\n        , _jsxruntime.jsx.call(void 0, 'select', { id: \\\"genre\\\", name: \\\"genre\\\", value: form.genre, onChange: update, children: \\n          _movies.GENRES.map((g) => _jsxruntime.jsx.call(void 0, 'option', { value: g, children: g}, g))\\n        })\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Year \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"year\\\", name: \\\"year\\\", type: \\\"number\\\", value: form.year, onChange: update,} )]})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Rating \\\" , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"rating\\\", name: \\\"rating\\\", type: \\\"number\\\", step: \\\"0.1\\\", value: form.rating, onChange: update,} )]})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [\\\"Duration (min) \\\"  , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"duration\\\", name: \\\"duration\\\", type: \\\"number\\\", value: form.duration, onChange: update,} )]})\\n      , error && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"error\\\", role: \\\"alert\\\", children: error})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", children: \\\"Add movie\\\" })\\n    ]})\\n  );\\n} exports.default = MovieForm;\\n\",\"src/context/ThemeContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/context/ThemeContext.js — Light/Dark mode dùng chung qua Context (không truyền props qua 3 tầng)\\nvar _react = require('react');\\nvar _useLocalStorage = require('../hooks/useLocalStorage'); var _useLocalStorage2 = _interopRequireDefault(_useLocalStorage);\\n\\nconst ThemeContext = _react.createContext.call(void 0, null);\\n\\n function ThemeProvider({ children }) {\\n  const [theme, setTheme] = _useLocalStorage2.default.call(void 0, 'theme', 'light'); // nhớ lựa chọn qua lần tải lại\\n  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));\\n  return _jsxruntime.jsx.call(void 0, ThemeContext.Provider, { value: { theme, toggleTheme }, children: children});\\n} exports.ThemeProvider = ThemeProvider;\\n\\n function useTheme() {\\n  const ctx = _react.useContext.call(void 0, ThemeContext);\\n  if (!ctx) throw new Error('useTheme must be used inside \\u003cThemeProvider>');\\n  return ctx;\\n} exports.useTheme = useTheme;\\n\",\"src/hooks/useLocalStorage.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/hooks/useLocalStorage.js — custom hook: state \\\"nhớ\\\" qua lần tải lại trang\\nvar _react = require('react');\\n\\n function useLocalStorage(key, initialValue) {\\n  // Lazy initializer: chỉ đọc localStorage MỘT lần lúc mount, không phải mỗi lần render\\n  const [value, setValue] = _react.useState.call(void 0, () => {\\n    try {\\n      const raw = localStorage.getItem(key);\\n      return raw !== null ? JSON.parse(raw) : initialValue;\\n    } catch (e) {\\n      return initialValue; // JSON hỏng / storage bị chặn ⇒ dùng giá trị khởi đầu\\n    }\\n  });\\n\\n  // Mỗi khi value đổi ⇒ ghi lại (JSON vì localStorage chỉ giữ chuỗi)\\n  _react.useEffect.call(void 0, () => {\\n    localStorage.setItem(key, JSON.stringify(value));\\n  }, [key, value]);\\n\\n  return [value, setValue];\\n} exports.default = useLocalStorage;\\n\",\"src/datas/movies.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/datas/movies.js — dữ liệu mẫu (6 phim) + danh sách thể loại dùng chung\\n const GENRES = ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Animation']; exports.GENRES = GENRES;\\n\\nconst movies = [\\n  { id: 1, title: 'Inception', genre: 'Sci-Fi', year: 2010, rating: 8.8, duration: 148, favorite: false },\\n  { id: 2, title: 'The Dark Knight', genre: 'Action', year: 2008, rating: 9.0, duration: 152, favorite: false },\\n  { id: 3, title: 'Spirited Away', genre: 'Animation', year: 2001, rating: 8.6, duration: 125, favorite: false },\\n  { id: 4, title: 'The Grand Budapest Hotel', genre: 'Comedy', year: 2014, rating: 8.1, duration: 99, favorite: false },\\n  { id: 5, title: 'Parasite', genre: 'Drama', year: 2019, rating: 8.5, duration: 132, favorite: false },\\n  { id: 6, title: 'Mad Max: Fury Road', genre: 'Action', year: 2015, rating: 8.1, duration: 120, favorite: false },\\n];\\n\\nexports. default = movies;\\n\"};\nvar CSS={\"src/index.css\":\"/* src/index.css — giao diện gọn, có Light/Dark theo lớp của .app */\\n* { box-sizing: border-box; }\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; }\\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\\n.header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 16px; }\\n.header h1 { margin: 0; font-size: 24px; }\\n.header p { margin: 0; font-size: 14px; opacity: .8; }\\n.header button { margin-left: auto; }\\nbutton { padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; }\\n.theme-dark button { background: #1e293b; color: #e2e8f0; border-color: #334155; }\\n.layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\\n@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }\\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\\n.toolbar input { flex: 1; min-width: 180px; }\\ninput, select { padding: 7px 9px; border-radius: 8px; border: 1px solid #cbd5e1; font: inherit; }\\n.theme-dark input, .theme-dark select { background: #1e293b; color: #e2e8f0; border-color: #334155; }\\n.movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }\\n.movie-card { padding: 14px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; }\\n.theme-dark .movie-card { background: #1e293b; border-color: #334155; }\\n.movie-card.is-fav { border-color: #f59e0b; box-shadow: 0 0 0 2px #fde68a; }\\n.movie-title { margin: 0 0 4px; font-size: 16px; }\\n.movie-meta, .movie-rating { margin: 2px 0; font-size: 13px; opacity: .85; }\\n.card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }\\n.empty { padding: 24px; text-align: center; opacity: .7; }\\n.panel { padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; margin-bottom: 14px; }\\n.theme-dark .panel { background: #1e293b; border-color: #334155; }\\n.panel h2 { margin: 0 0 10px; font-size: 17px; }\\n.panel label { display: grid; gap: 4px; font-size: 13px; margin-bottom: 8px; }\\n.panel dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 14px; }\\n.panel dd { margin: 0; }\\n.error { color: #dc2626; font-size: 13px; margin: 4px 0 8px; }\\n\"};\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m)};\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-router-dom':window.ReactRouterDOM,'react-bootstrap':window.ReactBootstrap};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

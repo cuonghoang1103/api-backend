@@ -104,7 +104,20 @@
             "selector": "label[for=\"e-mail\"]"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>for</code> bằng giá trị <code>name</code> (<code>for=\"hoTen\"</code>) — for trỏ tới id, không phải name."
+        },
+        {
+          "loi": "Hai ô cùng <code>id</code> — nhãn chỉ nối với ô đầu."
+        },
+        {
+          "loi": "Bọc ô trong nhãn (<code>&lt;label&gt;Email &lt;input …&gt;&lt;/label&gt;</code>) cũng đúng; nhưng đề này yêu cầu dùng for/id để luyện ghép đôi."
+        }
+      ]
     },
     {
       "title": "Không có name thì không được gửi: hoàn thiện action, method và name",
@@ -206,7 +219,20 @@
             "selector": "form button[type=\"submit\"]"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>name</code> cho hai ô, quên ô thứ ba — form vẫn gửi, backend báo \"thiếu họ tên\" mà trang không có lỗi nào."
+        },
+        {
+          "loi": "Viết <code>method=\"POST\"</code> — vẫn đúng (không phân biệt hoa thường); viết <code>method=\"put\"</code> thì form HTML không hỗ trợ, trình duyệt quay về GET."
+        },
+        {
+          "loi": "Đặt <code>name</code> lên <code>&lt;label&gt;</code> — label không được gửi đi."
+        }
+      ]
     },
     {
       "title": "Chọn đúng type cho từng ô: email, password, number, date, tel, url",
@@ -337,7 +363,20 @@
             "giaTri": false
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>type=\"number\"</code> cho số điện thoại hay mã sinh viên — mất số 0 đầu."
+        },
+        {
+          "loi": "Nghĩ <code>type=\"email\"</code> là đủ an toàn — người dùng tắt được trong DevTools; máy chủ vẫn phải kiểm (bài 2.4)."
+        },
+        {
+          "loi": "Dùng <code>type=\"text\"</code> + chú thích \"dd/mm/yyyy\" cho ngày — mỗi người gõ một kiểu; <code>date</code> gửi đi chuẩn YYYY-MM-DD."
+        }
+      ]
     },
     {
       "title": "Form đăng ký tự kiểm tra: required, minlength, min/max và pattern",
@@ -482,7 +521,20 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>pattern=\"^[A-Z]{2}[0-9]{6}$\"</code> — vẫn chạy, nhưng thừa: trình duyệt tự neo đầu–cuối."
+        },
+        {
+          "loi": "Viết <code>pattern=\"[A-Z]{2}\\d{6}\"</code> trong một số công cụ cũ — <code>\\d</code> chạy được ở trình duyệt hiện đại, nhưng <code>[0-9]</code> rõ nghĩa hơn với người mới."
+        },
+        {
+          "loi": "Để Năm học <code>type=\"text\"</code> rồi thêm min/max — min/max chỉ có tác dụng với number/date/range."
+        }
+      ]
     },
     {
       "title": "Phiếu khảo sát: radio cùng name, checkbox, select và textarea",
@@ -598,7 +650,20 @@
             "giaTri": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>name</code> khác nhau cho từng radio — thành ba câu hỏi có/không độc lập."
+        },
+        {
+          "loi": "Quên <code>value</code> trên option — option gửi đi CHỮ hiển thị (\"Hà Nội\"), dễ vỡ khi đổi chữ."
+        },
+        {
+          "loi": "Đặt <code>required</code> lên checkbox với ý \"chọn ít nhất một\" — HTML không làm vậy; required trên checkbox nghĩa là chính ô đó phải được tích."
+        }
+      ]
     },
     {
       "title": "GET hay POST? Một form tìm kiếm và một form đăng nhập trên cùng trang",
@@ -701,7 +766,20 @@
             "giaTri": 2
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để tìm kiếm là POST \"cho an toàn\" — người dùng không chia sẻ được kết quả, bấm Back hiện hộp \"Gửi lại biểu mẫu?\"."
+        },
+        {
+          "loi": "Quên <code>name=\"q\"</code> — URL thành <code>/tim-kiem?</code>, máy chủ không nhận từ khoá."
+        },
+        {
+          "loi": "Bỏ method của form đăng nhập — mặc định là GET."
+        }
+      ]
     },
     {
       "title": "Biểu mẫu đăng ký khoá học hoàn chỉnh từ đặc tả, có 9 kịch bản kiểm",
@@ -937,7 +1015,23 @@
             "an": true
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Option giả không có <code>value=\"\"</code> — required trên select mất tác dụng."
+        },
+        {
+          "loi": "Đặt <code>required</code> cho Tuổi \"cho chắc\" — sai đặc tả: tuổi không bắt buộc."
+        },
+        {
+          "loi": "Dùng <code>type=\"number\"</code> + <code>pattern</code> cho điện thoại — pattern bị bỏ qua trên number, số 0 đầu cũng mất."
+        },
+        {
+          "loi": "Radio \"Hình thức\" thiếu value — máy chủ nhận <code>hinh-thuc=on</code>."
+        }
+      ]
     }
   ]
 }

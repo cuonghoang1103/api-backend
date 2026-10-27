@@ -110,7 +110,20 @@
             "giaTri": "Bài viết đầu tiên"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi thẻ mở thành <code>&lt;header&gt;</code> nhưng quên đổi <code>&lt;/div&gt;</code> đóng — trình duyệt đóng header ở chỗ khác, cây méo."
+        },
+        {
+          "loi": "Giữ <code>class=\"header\"</code> trên <code>&lt;header&gt;</code> — không sai, nhưng thừa; tạo kiểu bằng bộ chọn <code>header</code> là đủ."
+        },
+        {
+          "loi": "Bọc <code>&lt;main&gt;</code> trong <code>&lt;header&gt;</code> — header chỉ là phần mở đầu."
+        }
+      ]
     },
     {
       "title": "Ngữ nghĩa cấp chữ: strong, em, time và code thay cho b, i và chữ trơn",
@@ -209,7 +222,20 @@
             "selector": "b, i"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>datetime=\"18/10/2026\"</code> — không phải định dạng máy hiểu; phải là <code>2026-10-18</code>."
+        },
+        {
+          "loi": "Đổi mọi chữ đậm thành strong kể cả chỗ chỉ để trang trí — strong khi đó mất giá trị."
+        },
+        {
+          "loi": "Dùng <code>&lt;em&gt;</code> vì \"muốn chữ nghiêng\" cho tên tác phẩm — đó là việc của CSS hoặc <code>&lt;cite&gt;</code>."
+        }
+      ]
     },
     {
       "title": "Nút thật thay cho div bấm được",
@@ -313,7 +339,20 @@
             "khop": "^Lưu Xoá Chia sẻ$"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>tabindex=\"0\"</code> vào div rồi coi là xong — Tab tới được nhưng Enter/Space vẫn không làm gì."
+        },
+        {
+          "loi": "Đổi sang <code>&lt;a href=\"#\"&gt;</code> — liên kết là để <em>đi tới</em> đâu đó; hành động là việc của button."
+        },
+        {
+          "loi": "Quên <code>type=\"button\"</code> — mọi thứ chạy cho tới ngày nút nằm trong một form."
+        }
+      ]
     },
     {
       "title": "Một bài blog đầy đủ: article, section và aside đúng chỗ",
@@ -428,7 +467,20 @@
             ]
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến cả trang thành một section lớn — section không thay được main."
+        },
+        {
+          "loi": "Dùng section cho khối không có tiêu đề chỉ để \"bớt div\" — section không tiêu đề là dấu hiệu nên dùng div."
+        },
+        {
+          "loi": "Bỏ <code>&lt;header&gt;</code> trong article vì \"header chỉ có một\" — một trang có thể có nhiều header (của trang, của từng bài)."
+        }
+      ]
     },
     {
       "title": "Lưới thẻ bài viết: mỗi thẻ là một article có ngày giờ máy đọc được",
@@ -548,7 +600,20 @@
             "selector": "main div"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>datetime=\"2026-03-10\"</code> cho ngày 03/10 — đảo nhầm tháng và ngày."
+        },
+        {
+          "loi": "Dùng <code>&lt;h2&gt;</code> cho tên từng bài — ngang hàng với \"Bài mới\", mất quan hệ cha–con."
+        },
+        {
+          "loi": "Bọc cả thẻ trong <code>&lt;a&gt;</code> rồi vẫn thêm liên kết \"Đọc tiếp\" bên trong — liên kết lồng liên kết là không hợp lệ."
+        }
+      ]
     },
     {
       "title": "Bắt lỗi ngữ nghĩa: hai main, section câm, footer lạc và div bấm được",
@@ -670,7 +735,20 @@
             "selector": "b"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá main thứ hai cùng nội dung bên trong — mất phần Đăng ký."
+        },
+        {
+          "loi": "Thêm một tiêu đề giả vào section khung ảnh để \"giữ section\" — tiêu đề phải có nghĩa thật; ở đây khối không có chủ đề riêng."
+        },
+        {
+          "loi": "Đưa footer ra ngoài nhưng đặt trước main — chân trang phải ở cuối."
+        }
+      ]
     },
     {
       "title": "Từ bản vẽ khung tới trang tin tức ngữ nghĩa hoàn chỉnh, không một div",
@@ -811,7 +889,20 @@
             "kiem": "tieu-de"
           }
         ]
-      }
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>&lt;h1&gt;</code> cho tên bài vì \"nó là tiêu đề to nhất trong nội dung\" — h1 đã là tên trang; tên bài là h2 (hoặc đổi thiết kế cho tên bài là h1 và tên trang thành phần tử khác — nhưng không bao giờ hai h1)."
+        },
+        {
+          "loi": "Đặt <code>&lt;aside&gt;</code> trong <code>&lt;article&gt;</code> vì nó \"nằm cạnh bài\" — vị trí trên màn hình là việc của CSS (bài 3.4)."
+        },
+        {
+          "loi": "Bọc tác giả + giờ trong <code>&lt;span&gt;</code> để \"giữ một dòng\" — <code>&lt;p&gt;</code> là đủ; xuống dòng hay không là chuyện CSS."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,838 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-process",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-process"
+  },
+  "exercises": [
+    {
+      "title": "Test process 1 — Put the seven activity groups in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "test process"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>SWT1 slide 77 shows the seven activity groups on one arrow. Put them in order. (In practice they overlap and iterate, and monitoring & control runs during the whole project — but the exam asks for this order.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide SWT1 77 vẽ bảy nhóm hoạt động trên một mũi tên. Sắp chúng theo thứ tự. (Thực tế chúng chồng lấn, lặp lại, và giám sát & kiểm soát chạy suốt dự án — nhưng đề thi hỏi thứ tự này.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Analysis trả lời “test CÁI GÌ”, design trả lời “test THẾ NÀO”.",
+        "Implementation = chuẩn bị mọi thứ để chạy; execution = chạy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 1 — Put the seven activity groups in order\n\nAnswer in the answer panel (no code needed).\n\n1. The test process — first to lastQuy trình kiểm thử — từ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 1 — Put the seven activity groups in order — answer key\n\n1. The test process — first to lastQuy trình kiểm thử — từ đầu tới cuối\n   Answer: a) Test planning  →  b) Test monitoring and control  →  c) Test analysis  →  d) Test design  →  e) Test implementation  →  f) Test execution  →  g) Test completion\n   Planning → Monitoring & control → Analysis (what) → Design (how) → Implementation (ready?) → Execution (run) → Completion (learn, hand over).VI: Lập kế hoạch → Giám sát & kiểm soát → Phân tích (test gì) → Thiết kế (test thế nào) → Triển khai (sẵn sàng?) → Thực thi (chạy) → Hoàn tất (rút kinh nghiệm, bàn giao).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a → b → c → d → e → f → g.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>The test process — first to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy trình kiểm thử — từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "e",
+                "noiDung": "Test implementation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test analysis"
+              },
+              {
+                "ma": "g",
+                "noiDung": "Test completion"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Test planning"
+              },
+              {
+                "ma": "f",
+                "noiDung": "Test execution"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test monitoring and control"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Test design"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g"
+            ],
+            "giaiThich": "<p>Planning → Monitoring & control → Analysis (what) → Design (how) → Implementation (ready?) → Execution (run) → Completion (learn, hand over).</p><p><i>VI: Lập kế hoạch → Giám sát & kiểm soát → Phân tích (test gì) → Thiết kế (test thế nào) → Triển khai (sẵn sàng?) → Thực thi (chạy) → Hoàn tất (rút kinh nghiệm, bàn giao).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt design trước analysis."
+        },
+        {
+          "loi": "Nhầm implementation (chuẩn bị) với execution (chạy)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test activity",
+          "vi": "hoạt động kiểm thử"
+        }
+      ]
+    },
+    {
+      "title": "Test process 2 — In which activity does each task happen?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "test process",
+        "test activities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The exam’s favourite question shape: “task X belongs to which activity?”. Map each LabBook task to its activity group (CTFL 2018).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dạng câu đề thích nhất: “việc X thuộc hoạt động nào?”. Ghép mỗi việc của LabBook với nhóm hoạt động của nó (CTFL 2018).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "XÁC ĐỊNH nhu cầu môi trường/dữ liệu = design; DỰNG môi trường, nạp dữ liệu = implementation.",
+        "Confirmation testing và regression testing nằm trong execution."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 2 — In which activity does each task happen?\n\nAnswer in the answer panel (no code needed).\n\n1. Task → activityViệc → hoạt động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 2 — In which activity does each task happen? — answer key\n\n1. Task → activityViệc → hoạt động\n   - r0.h: Test planning\n   - r1.h: Test monitoring and control\n   - r2.h: Test analysis\n   - r3.h: Test design\n   - r4.h: Test implementation\n   - r5.h: Test execution\n   - r6.h: Test completion\n   - r7.h: Test execution\n   - r8.h: Test design\n   - r9.h: Test monitoring and control\n   Scope + exit criteria = planning; comparing with plan, corrective action, evaluating exit criteria, progress reports = monitoring & control; analysing the test basis and test conditions = analysis; test cases and identifying environment/data needs = design; preparing data, environment and suites = implementation; running, comparing, logging defects, retest and regression = execution; closing defects, archiving, lessons learned = completion.VI: Phạm vi + tiêu chí ra = lập kế hoạch; so với kế hoạch, hành động khắc phục, đánh giá tiêu chí ra, báo cáo tiến độ = giám sát & kiểm soát; phân tích test basis và test condition = phân tích; test case và xác định nhu cầu môi trường/dữ liệu = thiết kế; chuẩn bị dữ liệu, môi trường, suite = triển khai; chạy, so sánh, ghi lỗi, test lại, hồi quy = thực thi; đóng lỗi, lưu trữ, bài học = hoàn tất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Planning · M&C · Analysis · Design · Implementation · Execution · Completion · Execution · Design · M&C.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Task → activity</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → hoạt động</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Task"
+              },
+              {
+                "ma": "h",
+                "ten": "Activity",
+                "luaChon": [
+                  "Test planning",
+                  "Test monitoring and control",
+                  "Test analysis",
+                  "Test design",
+                  "Test implementation",
+                  "Test execution",
+                  "Test completion"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Decide that booking and cancellation are in scope and the admin report is not; set the exit criteria"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Compare the number of executed tests with the plan every Friday and move a tester to the booking module"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Read the booking user stories, find that “week” is ambiguous, and write the test condition “weekly limit of 6 hours”"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Apply boundary value analysis to the weekly limit and write test cases with inputs 5, 6 and 7 hours"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Create the test accounts student1–3, load LAB01–LAB03 into the test database and group the cases into a smoke suite"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Run the smoke suite on build 1.4, compare actual with expected results and log a defect for TC-07"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Check that all defect reports are closed or deferred, archive the test suite and hold a lessons-learned meeting"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Re-run TC-07 and the booking regression suite on build 1.5"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "t": "Identify that a second browser must be installed in the test environment (design of the environment)"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "t": "Evaluate the exit criteria and send the test progress report to the product owner"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.h": "Test planning",
+              "r1.h": "Test monitoring and control",
+              "r2.h": "Test analysis",
+              "r3.h": "Test design",
+              "r4.h": "Test implementation",
+              "r5.h": "Test execution",
+              "r6.h": "Test completion",
+              "r7.h": "Test execution",
+              "r8.h": "Test design",
+              "r9.h": "Test monitoring and control"
+            },
+            "giaiThich": "<p>Scope + exit criteria = planning; comparing with plan, corrective action, evaluating exit criteria, progress reports = monitoring & control; analysing the test basis and test conditions = analysis; test cases and identifying environment/data needs = design; preparing data, environment and suites = implementation; running, comparing, logging defects, retest and regression = execution; closing defects, archiving, lessons learned = completion.</p><p><i>VI: Phạm vi + tiêu chí ra = lập kế hoạch; so với kế hoạch, hành động khắc phục, đánh giá tiêu chí ra, báo cáo tiến độ = giám sát & kiểm soát; phân tích test basis và test condition = phân tích; test case và xác định nhu cầu môi trường/dữ liệu = thiết kế; chuẩn bị dữ liệu, môi trường, suite = triển khai; chạy, so sánh, ghi lỗi, test lại, hồi quy = thực thi; đóng lỗi, lưu trữ, bài học = hoàn tất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp “đánh giá tiêu chí ra” vào completion (đó là quy trình 5 bước cũ: evaluating exit criteria & reporting)."
+        },
+        {
+          "loi": "Xếp “tìm defect trong user story” vào design."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test basis",
+          "vi": "cơ sở kiểm thử — tài liệu/tri thức để suy ra test"
+        },
+        {
+          "en": "test condition",
+          "vi": "điều kiện kiểm thử — một khía cạnh cần test"
+        },
+        {
+          "en": "exit criteria",
+          "vi": "tiêu chí ra — điều kiện để coi là xong"
+        },
+        {
+          "en": "smoke suite",
+          "vi": "bộ test khói — kiểm nhanh các chức năng chính"
+        }
+      ]
+    },
+    {
+      "title": "Test process 3 — Which activity produces each work product?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "test work products"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-1.4.3: differentiate the work products. For each activity, pick the work product it typically produces.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-1.4.3: phân biệt sản phẩm công việc. Với mỗi hoạt động, chọn sản phẩm điển hình nó tạo ra.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi sản phẩm khớp đúng một hoạt động.",
+        "Test procedure (thứ tự bước chạy) thuộc implementation, không phải design."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 3 — Which activity produces each work product?\n\nAnswer in the answer panel (no code needed).\n\n1. Activity → main work productHoạt động → sản phẩm chính\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 3 — Which activity produces each work product? — answer key\n\n1. Activity → main work productHoạt động → sản phẩm chính\n   - r0.s: Test plan\n   - r1.s: Test progress report\n   - r2.s: Test conditions\n   - r3.s: Test cases\n   - r4.s: Test procedures and test suites\n   - r5.s: Test logs and defect reports\n   - r6.s: Test summary report and archived testware\n   Plan → progress reports → conditions (and charters) → cases (and test data needs) → procedures, suites, execution schedule → logs, status, defect reports → summary report, change requests, archived testware.VI: Kế hoạch → báo cáo tiến độ → điều kiện (và charter) → test case (và nhu cầu dữ liệu) → thủ tục, suite, lịch thực thi → nhật ký, trạng thái, báo cáo lỗi → báo cáo tổng kết, change request, testware lưu trữ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows map in order: plan, progress report, conditions, cases, procedures/suites, logs/defects, summary/archive.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Activity → main work product</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động → sản phẩm chính</i></p>",
+            "cot": [
+              {
+                "ma": "h",
+                "ten": "Activity"
+              },
+              {
+                "ma": "s",
+                "ten": "Work product",
+                "luaChon": [
+                  "Test plan",
+                  "Test progress report",
+                  "Test conditions",
+                  "Test cases",
+                  "Test procedures and test suites",
+                  "Test logs and defect reports",
+                  "Test summary report and archived testware"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "h": "Test planning"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "h": "Test monitoring and control"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "h": "Test analysis"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "h": "Test design"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "h": "Test implementation"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "h": "Test execution"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "h": "Test completion"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.s": "Test plan",
+              "r1.s": "Test progress report",
+              "r2.s": "Test conditions",
+              "r3.s": "Test cases",
+              "r4.s": "Test procedures and test suites",
+              "r5.s": "Test logs and defect reports",
+              "r6.s": "Test summary report and archived testware"
+            },
+            "giaiThich": "<p>Plan → progress reports → conditions (and charters) → cases (and test data needs) → procedures, suites, execution schedule → logs, status, defect reports → summary report, change requests, archived testware.</p><p><i>VI: Kế hoạch → báo cáo tiến độ → điều kiện (và charter) → test case (và nhu cầu dữ liệu) → thủ tục, suite, lịch thực thi → nhật ký, trạng thái, báo cáo lỗi → báo cáo tổng kết, change request, testware lưu trữ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp test procedure vào design."
+        },
+        {
+          "loi": "Xếp test summary report vào monitoring & control — nó CŨNG có thể xuất hiện ở đó, nhưng sản phẩm đặc trưng của completion là summary report + testware lưu trữ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test procedure",
+          "vi": "thủ tục kiểm thử — chuỗi test case theo thứ tự thực thi"
+        },
+        {
+          "en": "testware",
+          "vi": "mọi sản phẩm của việc kiểm thử (case, dữ liệu, script…)"
+        },
+        {
+          "en": "test charter",
+          "vi": "hiến chương — mục tiêu cho một phiên test thăm dò"
+        }
+      ]
+    },
+    {
+      "title": "Test process 4 — Traceability: requirement coverage and impact analysis",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "traceability",
+        "coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LO-1.4.4: traceability between the test basis and test work products lets you measure coverage, find gaps and analyse the impact of a change. Slide 76 computes requirement coverage as <i>requirements touched by executed tests ÷ all requirements</i>.</p>\n<p>A traceability matrix is an object <code>{ testCaseId: [requirementIds] }</code>. Write three functions:</p>\n<ol>\n<li><code>coverage(requirements, matrix, executed)</code> — percentage (0–100, rounded to 2 decimals) of <code>requirements</code> that are linked to at least one test case in <code>executed</code> (an array of test-case ids). Links to unknown requirements are ignored. No requirements ⇒ 100.</li>\n<li><code>untested(requirements, matrix)</code> — requirement ids (in the order of <code>requirements</code>) not linked to <b>any</b> test case.</li>\n<li><code>impacted(matrix, changedRequirement)</code> — test-case ids (sorted A→Z) that must be re-run when that requirement changes.</li>\n</ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Round with <code>Math.round(x * 100) / 100</code>.</li>\n  <li>Do not count a requirement twice when two executed tests cover it.</li>\n</ul>",
+      "problemHtmlVi": "<p>LO-1.4.4: truy vết giữa test basis và sản phẩm kiểm thử giúp đo độ phủ, tìm chỗ trống và phân tích ảnh hưởng của thay đổi. Slide 76 tính độ phủ yêu cầu = <i>số yêu cầu được test đã chạy chạm tới ÷ tổng số yêu cầu</i>.</p>\n<p>Ma trận truy vết là object <code>{ maTestCase: [maYeuCau] }</code>. Viết ba hàm:</p>\n<ol>\n<li><code>coverage(requirements, matrix, executed)</code> — phần trăm (0–100, làm tròn 2 chữ số) số <code>requirements</code> được nối với ít nhất một test case trong <code>executed</code>. Liên kết tới yêu cầu lạ bị bỏ qua. Không có yêu cầu ⇒ 100.</li>\n<li><code>untested(requirements, matrix)</code> — các mã yêu cầu (theo thứ tự <code>requirements</code>) KHÔNG nối với test case nào.</li>\n<li><code>impacted(matrix, changedRequirement)</code> — các mã test case (sắp A→Z) phải chạy lại khi yêu cầu đó đổi.</li>\n</ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Làm tròn bằng <code>Math.round(x * 100) / 100</code>.</li>\n  <li>Không đếm một yêu cầu hai lần khi hai test đã chạy cùng phủ nó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "coverage(['R1','R2','R3','R4'], { TC1:['R1'], TC2:['R1','R2'], TC3:['R4'] }, ['TC1','TC2'])",
+          "output": "50",
+          "explanation": "R1 and R2 touched by executed tests: 2/4.|||R1, R2 được test đã chạy chạm tới: 2/4."
+        },
+        {
+          "input": "untested(['R1','R2','R3','R4'], { TC1:['R1'], TC2:['R1','R2'], TC3:['R4'] })",
+          "output": "['R3']",
+          "explanation": "R3 has no test case at all — a gap in test analysis.|||R3 không có test case nào — lỗ hổng của bước phân tích."
+        }
+      ],
+      "hintsJson": [
+        "Dùng Set cho các yêu cầu đã phủ.",
+        "impacted: lọc Object.keys(matrix) theo matrix[tc].includes(req), rồi sort."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "trace.js",
+          "language": "javascript",
+          "code": "function coverage(requirements, matrix, executed) {\n  return 0;\n}\n\nfunction untested(requirements, matrix) {\n  return [];\n}\n\nfunction impacted(matrix, changedRequirement) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "trace.js",
+          "language": "javascript",
+          "code": "function coverage(requirements, matrix, executed) {\n  if (requirements.length === 0) return 100;\n  const known = new Set(requirements);\n  const hit = new Set();\n  for (const tc of executed) for (const r of matrix[tc] || []) if (known.has(r)) hit.add(r);\n  return Math.round((hit.size / known.size) * 100 * 100) / 100;\n}\n\nfunction untested(requirements, matrix) {\n  const linked = new Set(Object.values(matrix).flat());\n  return requirements.filter((r) => !linked.has(r));\n}\n\nfunction impacted(matrix, changedRequirement) {\n  return Object.keys(matrix).filter((tc) => (matrix[tc] || []).includes(changedRequirement)).sort();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Traceability supports coverage evaluation, impact analysis of changes, audits and understandable status reports — all four uses listed on the slide.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "trace.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "coverage — the example (50%)",
+              "vi": "coverage — ví dụ (50%)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const R=coverage([\"R1\",\"R2\",\"R3\",\"R4\"],{TC1:[\"R1\"],TC2:[\"R1\",\"R2\"],TC3:[\"R4\"]},[\"TC1\",\"TC2\"]);return R===50?\"OK\":\"expected 50, got \"+R})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "coverage — slide 76 numbers (9 of 12 requirements)",
+              "vi": "coverage — số của slide 76 (9/12 yêu cầu)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const c=Array.from({length:12},(e,r)=>\"R\"+(r+1)),t={};for(let e=1;e<=9;e++)t[\"T\"+e]=[\"R\"+e];t.T10=[\"R10\"];const o=coverage(c,t,Object.keys(t).slice(0,9));return o===75?\"OK\":\"expected 75, got \"+o})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "coverage — rounding and duplicates",
+              "vi": "coverage — làm tròn và trùng lặp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=coverage([\"A\",\"B\",\"C\"],{t1:[\"A\"],t2:[\"A\"]},[\"t1\",\"t2\"]);return t===33.33?\"OK\":\"A is covered once: 1/3 = 33.33, got \"+t})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "coverage — unknown requirements and empty list",
+              "vi": "coverage — yêu cầu lạ và danh sách rỗng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=coverage([\"A\"],{t1:[\"A\",\"Z\"]},[\"t1\"]),t=coverage([],{t1:[\"A\"]},[\"t1\"]);return e===100&&t===100?\"OK\":\"Z is not a requirement (expect 100), and no requirements \\u21D2 100; got \"+e+\" and \"+t})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "untested — gaps in order",
+              "vi": "untested — chỗ trống theo thứ tự"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const R=untested([\"R3\",\"R1\",\"R2\",\"R4\"],{TC1:[\"R1\"],TC3:[\"R4\"]});return JSON.stringify(R)==='[\"R3\",\"R2\"]'?\"OK\":'expected [\"R3\",\"R2\"], got '+JSON.stringify(R)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "impacted — tests to re-run, sorted",
+              "vi": "impacted — test cần chạy lại, đã sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const C=impacted({TC9:[\"R2\"],TC1:[\"R1\"],TC2:[\"R1\",\"R2\"],TC10:[\"R2\"]},\"R2\");return JSON.stringify(C)==='[\"TC10\",\"TC2\",\"TC9\"]'?\"OK\":'expected [\"TC10\",\"TC2\",\"TC9\"] (string sort), got '+JSON.stringify(C)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "impacted — requirement with no tests",
+              "vi": "impacted — yêu cầu không có test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const e=impacted({TC1:[\"R1\"]},\"R7\");return Array.isArray(e)&&e.length===0?\"OK\":\"expected []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tính độ phủ trên mọi test case thay vì chỉ test đã CHẠY."
+        },
+        {
+          "loi": "Đếm cả yêu cầu lạ không có trong danh sách nên vượt 100%."
+        },
+        {
+          "loi": "Trả 0 khi không có yêu cầu nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "traceability",
+          "vi": "truy vết — liên kết hai chiều giữa yêu cầu và test"
+        },
+        {
+          "en": "impact analysis",
+          "vi": "phân tích ảnh hưởng của thay đổi"
+        },
+        {
+          "en": "requirement coverage",
+          "vi": "độ phủ yêu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Test process 5 — Context, the old 5-step process and exam questions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test process",
+        "traceability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions: what shapes a test process (LO-1.4.1), how the CTFL 2011 five-step process maps to the 2018 activities, and the slide-16 style questions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu: điều gì định hình quy trình test (LO-1.4.1), quy trình 5 bước CTFL 2011 quy đổi thế nào sang hoạt động 2018, và câu hỏi kiểu slide 16.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhớ bảng quy đổi: closure = completion; evaluating exit criteria ⇒ monitoring & control.",
+        "Analysis = what, design = how."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 5 — Context, the old 5-step process and exam questions\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a contextual factor that influences an organisation’s test process?Đâu là yếu tố ngữ cảnh ảnh hưởng quy trình test của tổ chức?\n2. In the CTFL 2011 five-step process, “evaluating exit criteria and reporting” corresponds in CTFL 2018 mainly to…Trong quy trình 5 bước CTFL 2011, “đánh giá tiêu chí ra và báo cáo” tương ứng CTFL 2018 chủ yếu với…\n3. Which activity answers the question “what to test?”Hoạt động nào trả lời câu “test cái gì?”\n4. Which task is part of test implementation?Việc nào thuộc test implementation?\n5. Which is a benefit of good traceability?Đâu là lợi ích của truy vết tốt?\n6. In an Agile project, which statement about the test activities is TRUE?Trong dự án Agile, phát biểu nào về các hoạt động test là ĐÚNG?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Test process 5 — Context, the old 5-step process and exam questions — answer key\n\n1. Which is a contextual factor that influences an organisation’s test process?Đâu là yếu tố ngữ cảnh ảnh hưởng quy trình test của tổ chức?\n   Answer: b) The software development lifecycle model and the project methodologies\n   Lifecycle model, test levels and types, product and project risks, business domain, operational constraints (budget, time, complexity, contracts), organisational policies, required standards.VI: Mô hình vòng đời, cấp và loại test, rủi ro sản phẩm/dự án, lĩnh vực, ràng buộc vận hành (ngân sách, thời gian, độ phức tạp, hợp đồng), chính sách tổ chức, chuẩn bắt buộc.\n\n2. In the CTFL 2011 five-step process, “evaluating exit criteria and reporting” corresponds in CTFL 2018 mainly to…Trong quy trình 5 bước CTFL 2011, “đánh giá tiêu chí ra và báo cáo” tương ứng CTFL 2018 chủ yếu với…\n   Answer: b) Test monitoring and control\n   Evaluating exit criteria now sits inside monitoring and control; “closure” became completion.VI: Đánh giá tiêu chí ra nay nằm trong giám sát và kiểm soát; “closure” thành completion.\n\n3. Which activity answers the question “what to test?”Hoạt động nào trả lời câu “test cái gì?”\n   Answer: b) Test analysis\n   Analysis identifies testable features and defines test conditions; design answers “how”.VI: Phân tích xác định đặc tính test được và định nghĩa test condition; thiết kế trả lời “như thế nào”.\n\n4. Which task is part of test implementation?Việc nào thuộc test implementation?\n   Answer: b) Creating test suites from test procedures and arranging them in a test execution schedule\n   Implementation builds procedures, suites, the execution schedule, the environment and the data.VI: Triển khai dựng thủ tục, suite, lịch thực thi, môi trường và dữ liệu.\n\n5. Which is a benefit of good traceability?Đâu là lợi ích của truy vết tốt?\n   Answer: b) Analysing the impact of changes and making testing auditable\n   Plus: evaluating coverage, meeting IT governance criteria, understandable progress reports.VI: Ngoài ra: đánh giá độ phủ, đáp ứng tiêu chí quản trị CNTT, báo cáo tiến độ dễ hiểu.\n\n6. In an Agile project, which statement about the test activities is TRUE?Trong dự án Agile, phát biểu nào về các hoạt động test là ĐÚNG?\n   Answer: b) Analysis, design, implementation and execution happen in every iteration, overlapping each other\n   The groups exist in every lifecycle; in Agile they iterate within each sprint.VI: Các nhóm có trong mọi vòng đời; với Agile chúng lặp trong mỗi sprint.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a contextual factor that influences an organisation’s test process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố ngữ cảnh ảnh hưởng quy trình test của tổ chức?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The colour of the user interface"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The software development lifecycle model and the project methodologies"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The name of the test manager"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The programming language’s keywords"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Lifecycle model, test levels and types, product and project risks, business domain, operational constraints (budget, time, complexity, contracts), organisational policies, required standards.</p><p><i>VI: Mô hình vòng đời, cấp và loại test, rủi ro sản phẩm/dự án, lĩnh vực, ràng buộc vận hành (ngân sách, thời gian, độ phức tạp, hợp đồng), chính sách tổ chức, chuẩn bắt buộc.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In the CTFL 2011 five-step process, “evaluating exit criteria and reporting” corresponds in CTFL 2018 mainly to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong quy trình 5 bước CTFL 2011, “đánh giá tiêu chí ra và báo cáo” tương ứng CTFL 2018 chủ yếu với…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test completion"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test monitoring and control"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Test execution"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Evaluating exit criteria now sits inside monitoring and control; “closure” became completion.</p><p><i>VI: Đánh giá tiêu chí ra nay nằm trong giám sát và kiểm soát; “closure” thành completion.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which activity answers the question “what to test?”</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động nào trả lời câu “test cái gì?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test planning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test analysis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test design"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Test implementation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Analysis identifies testable features and defines test conditions; design answers “how”.</p><p><i>VI: Phân tích xác định đặc tính test được và định nghĩa test condition; thiết kế trả lời “như thế nào”.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which task is part of test implementation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc nào thuộc test implementation?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Defining the exit criteria"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Creating test suites from test procedures and arranging them in a test execution schedule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prioritising test conditions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Archiving testware"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Implementation builds procedures, suites, the execution schedule, the environment and the data.</p><p><i>VI: Triển khai dựng thủ tục, suite, lịch thực thi, môi trường và dữ liệu.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a benefit of good traceability?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lợi ích của truy vết tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It removes the need for test design"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Analysing the impact of changes and making testing auditable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It guarantees 100% coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It reduces the number of requirements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plus: evaluating coverage, meeting IT governance criteria, understandable progress reports.</p><p><i>VI: Ngoài ra: đánh giá độ phủ, đáp ứng tiêu chí quản trị CNTT, báo cáo tiến độ dễ hiểu.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>In an Agile project, which statement about the test activities is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dự án Agile, phát biểu nào về các hoạt động test là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are not needed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Analysis, design, implementation and execution happen in every iteration, overlapping each other"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They must be strictly sequential"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only execution is done"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The groups exist in every lifecycle; in Agile they iterate within each sprint.</p><p><i>VI: Các nhóm có trong mọi vòng đời; với Agile chúng lặp trong mỗi sprint.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn completion cho câu 2."
+        },
+        {
+          "loi": "Cho rằng Agile không có quy trình test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test execution schedule",
+          "vi": "lịch thực thi test"
+        }
+      ]
+    }
+  ]
+}

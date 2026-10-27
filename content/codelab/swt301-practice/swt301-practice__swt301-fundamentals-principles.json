@@ -1,0 +1,718 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-fundamentals-principles",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-fundamentals-principles"
+  },
+  "exercises": [
+    {
+      "title": "What is testing 1 — Definition and objectives (K1)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "testing definition",
+        "test objectives"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>ISTQB: testing is a <b>process</b> of all lifecycle activities, both static and dynamic, concerned with planning, preparation and evaluation of a component or system and related work products, to determine that they satisfy specified requirements, to demonstrate that they are fit for purpose and to detect defects. Six questions on the definition and the typical objectives.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ISTQB: kiểm thử là một <b>quy trình</b> gồm mọi hoạt động trong vòng đời, cả tĩnh lẫn động, liên quan tới lập kế hoạch, chuẩn bị và đánh giá một thành phần/hệ thống cùng sản phẩm liên quan, để xác định chúng thoả yêu cầu, chứng minh phù hợp mục đích và tìm defect. Sáu câu về định nghĩa và các mục tiêu điển hình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm thử = quy trình, gồm cả tĩnh và động.",
+        "Mục tiêu thay đổi theo ngữ cảnh, cấp test, mô hình vòng đời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 1 — Definition and objectives (K1)\n\nAnswer in the answer panel (no code needed).\n\n1. Which statement matches the ISTQB view of testing?Phát biểu nào khớp quan điểm ISTQB về kiểm thử?\n2. Which is a typical objective of testing?Đâu là mục tiêu điển hình của kiểm thử?\n3. Which is NOT a typical objective of testing?Đâu KHÔNG phải mục tiêu điển hình của kiểm thử?\n4. Verification vs validation: which pair is correct?Verification và validation: cặp nào đúng?\n5. The objectives of testing…Mục tiêu của kiểm thử…\n6. A tester finds two contradictory requirements while reading the SRS. Which objective does this mainly serve?Tester thấy hai yêu cầu mâu thuẫn khi đọc SRS. Việc này chủ yếu phục vụ mục tiêu nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 1 — Definition and objectives (K1) — answer key\n\n1. Which statement matches the ISTQB view of testing?Phát biểu nào khớp quan điểm ISTQB về kiểm thử?\n   Answer: b) Testing includes static activities such as reviews, and dynamic activities that execute the software\n   Testing is a process across the lifecycle, static and dynamic; it cannot prove absence of defects.VI: Kiểm thử là quy trình xuyên vòng đời, gồm tĩnh và động; không chứng minh được không còn lỗi.\n\n2. Which is a typical objective of testing?Đâu là mục tiêu điển hình của kiểm thử?\n   Answer: b) To provide sufficient information to stakeholders to allow them to make informed decisions\n   Informing stakeholders is one of the listed objectives (slide 20). Shortening the project is not.VI: Cung cấp thông tin cho bên liên quan là một mục tiêu (slide 20). Rút ngắn dự án thì không.\n\n3. Which is NOT a typical objective of testing?Đâu KHÔNG phải mục tiêu điển hình của kiểm thử?\n   Answer: d) To guarantee that the project finishes on time\n   Evaluating work products, reducing risk and preventing defects are objectives; schedule guarantees are not.VI: Đánh giá sản phẩm, giảm rủi ro và ngăn ngừa lỗi là mục tiêu; bảo đảm tiến độ thì không.\n\n4. Verification vs validation: which pair is correct?Verification và validation: cặp nào đúng?\n   Answer: b) Verification: does it meet the specified requirements? Validation: does it meet the users’ needs in its operational environment?\n   Verification checks against the specification (building it right); validation checks fitness for the users (building the right thing).VI: Verification so với đặc tả (làm đúng cách); validation kiểm sự phù hợp với người dùng (làm đúng thứ cần).\n\n5. The objectives of testing…Mục tiêu của kiểm thử…\n   Answer: b) vary with the context — the component or system, the test level and the lifecycle model\n   E.g. component testing aims at finding defects and building code coverage; acceptance testing aims at confidence and fitness for use.VI: Vd component test nhắm tìm lỗi và độ phủ mã; acceptance test nhắm tạo niềm tin và phù hợp sử dụng.\n\n6. A tester finds two contradictory requirements while reading the SRS. Which objective does this mainly serve?Tester thấy hai yêu cầu mâu thuẫn khi đọc SRS. Việc này chủ yếu phục vụ mục tiêu nào?\n   Answer: b) Prevent defects (by evaluating work products early)\n   Finding the contradiction before design and code prevents the defects it would cause.VI: Tìm mâu thuẫn trước khi thiết kế và viết mã ngăn các lỗi mà nó sẽ gây ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · d · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which statement matches the ISTQB view of testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào khớp quan điểm ISTQB về kiểm thử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testing is only executing the software"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Testing includes static activities such as reviews, and dynamic activities that execute the software"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing starts after coding is complete"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testing proves the software has no defects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Testing is a process across the lifecycle, static and dynamic; it cannot prove absence of defects.</p><p><i>VI: Kiểm thử là quy trình xuyên vòng đời, gồm tĩnh và động; không chứng minh được không còn lỗi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a typical objective of testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là mục tiêu điển hình của kiểm thử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To deliver the project faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To provide sufficient information to stakeholders to allow them to make informed decisions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To decide the developers’ bonuses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To write the requirements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Informing stakeholders is one of the listed objectives (slide 20). Shortening the project is not.</p><p><i>VI: Cung cấp thông tin cho bên liên quan là một mục tiêu (slide 20). Rút ngắn dự án thì không.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is NOT a typical objective of testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải mục tiêu điển hình của kiểm thử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To evaluate work products such as requirements, user stories, design and code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To reduce the level of risk of inadequate software quality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To prevent defects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To guarantee that the project finishes on time"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Evaluating work products, reducing risk and preventing defects are objectives; schedule guarantees are not.</p><p><i>VI: Đánh giá sản phẩm, giảm rủi ro và ngăn ngừa lỗi là mục tiêu; bảo đảm tiến độ thì không.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Verification vs validation: which pair is correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Verification và validation: cặp nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Verification: are we building the right product? Validation: are we building the product right?"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Verification: does it meet the specified requirements? Validation: does it meet the users’ needs in its operational environment?"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both mean executing tests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Validation is only done by developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Verification checks against the specification (building it right); validation checks fitness for the users (building the right thing).</p><p><i>VI: Verification so với đặc tả (làm đúng cách); validation kiểm sự phù hợp với người dùng (làm đúng thứ cần).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>The objectives of testing…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu của kiểm thử…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "are the same for every project"
+              },
+              {
+                "ma": "b",
+                "noiDung": "vary with the context — the component or system, the test level and the lifecycle model"
+              },
+              {
+                "ma": "c",
+                "noiDung": "are always to find as many defects as possible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "are set by the developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>E.g. component testing aims at finding defects and building code coverage; acceptance testing aims at confidence and fitness for use.</p><p><i>VI: Vd component test nhắm tìm lỗi và độ phủ mã; acceptance test nhắm tạo niềm tin và phù hợp sử dụng.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>A tester finds two contradictory requirements while reading the SRS. Which objective does this mainly serve?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tester thấy hai yêu cầu mâu thuẫn khi đọc SRS. Việc này chủ yếu phục vụ mục tiêu nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Comply with legal requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prevent defects (by evaluating work products early)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Measure performance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Train users"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Finding the contradiction before design and code prevents the defects it would cause.</p><p><i>VI: Tìm mâu thuẫn trước khi thiết kế và viết mã ngăn các lỗi mà nó sẽ gây ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng kiểm thử chứng minh phần mềm không có lỗi."
+        },
+        {
+          "loi": "Đảo nghĩa verification/validation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verification",
+          "vi": "kiểm chứng — đúng với đặc tả"
+        },
+        {
+          "en": "validation",
+          "vi": "thẩm định — đúng nhu cầu người dùng"
+        },
+        {
+          "en": "stakeholder",
+          "vi": "bên liên quan"
+        }
+      ]
+    },
+    {
+      "title": "What is testing 2 — Static or dynamic? Verification or validation?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "static vs dynamic",
+        "verification vs validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Classify each LabBook activity on two axes: does it execute the software (dynamic) or not (static)? Does it check against the specification (verification) or against the users’ real needs (validation)?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng hoạt động LabBook theo hai trục: có chạy phần mềm (dynamic) hay không (static)? Kiểm theo đặc tả (verification) hay theo nhu cầu thật của người dùng (validation)?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Trục 1: có chạy phần mềm không?",
+        "Trục 2: so với tài liệu hay với nhu cầu người dùng thật?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 2 — Static or dynamic? Verification or validation?\n\nAnswer in the answer panel (no code needed).\n\n1. Kind of each activityLoại của từng hoạt động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 2 — Static or dynamic? Verification or validation? — answer key\n\n1. Kind of each activityLoại của từng hoạt động\n   - r0.k: Static · verification\n   - r1.k: Dynamic · verification\n   - r2.k: Dynamic · validation\n   - r3.k: Static · validation\n   - r4.k: Dynamic · verification\n   - r5.k: Static · validation\n   Reading/reviewing = static; running = dynamic. Against a document (SRS, design, API contract) = verification; against what users need = validation.VI: Đọc/review = tĩnh; chạy = động. So với tài liệu (SRS, thiết kế, hợp đồng API) = verification; so với điều người dùng cần = validation.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Static·verification · Dynamic·verification · Dynamic·validation · Static·validation · Dynamic·verification · Static·validation.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Kind of each activity</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại của từng hoạt động</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Activity"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Static · verification",
+                  "Static · validation",
+                  "Dynamic · verification",
+                  "Dynamic · validation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "a": "A tester reads the SRS and finds two requirements that contradict each other"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "A JUnit test checks that reserveSeat rejects 7 hours, as the design says"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "Students try the beta and say booking a seat takes too many clicks"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "The product owner walks through the screen mock-ups with real students to see if they match how they book labs"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "Postman checks that DELETE returns 409 TOO_LATE as the API contract says"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "A UX expert reads the user stories and asks whether a waitlist is what students actually want"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Static · verification",
+              "r1.k": "Dynamic · verification",
+              "r2.k": "Dynamic · validation",
+              "r3.k": "Static · validation",
+              "r4.k": "Dynamic · verification",
+              "r5.k": "Static · validation"
+            },
+            "giaiThich": "<p>Reading/reviewing = static; running = dynamic. Against a document (SRS, design, API contract) = verification; against what users need = validation.</p><p><i>VI: Đọc/review = tĩnh; chạy = động. So với tài liệu (SRS, thiết kế, hợp đồng API) = verification; so với điều người dùng cần = validation.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng mọi việc đọc tài liệu đều là verification — hỏi “sinh viên có thật sự cần…?” là validation."
+        },
+        {
+          "loi": "Coi phản hồi beta là verification."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "beta testing",
+          "vi": "người dùng thật dùng thử bản beta"
+        }
+      ]
+    },
+    {
+      "title": "What is testing 3 — Testing or debugging?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "testing vs debugging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Testing shows failures caused by defects; debugging is the development activity that finds, analyses and removes the cause. Confirmation testing then checks the fix. Classify each step of one LabBook bug’s life.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử làm lộ failure do defect gây ra; debugging là hoạt động phát triển tìm, phân tích và loại bỏ nguyên nhân. Sau đó confirmation testing kiểm lại bản sửa. Phân loại từng bước trong đời một lỗi của LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có sửa/định vị mã không? ⇒ debugging.",
+        "Chạy test để quan sát kết quả ⇒ testing (kể cả test lại sau khi sửa)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 3 — Testing or debugging?\n\nAnswer in the answer panel (no code needed).\n\n1. Testing or debugging?Kiểm thử hay gỡ lỗi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 3 — Testing or debugging? — answer key\n\n1. Testing or debugging?Kiểm thử hay gỡ lỗi?\n   - r0.k: Testing (tester)\n   - r1.k: Debugging (developer)\n   - r2.k: Debugging (developer)\n   - r3.k: Testing (tester)\n   - r4.k: Testing (tester)\n   - r5.k: Debugging (developer)\n   Running tests that show failures, re-testing and regression testing are testing; locating, analysing and fixing the cause are debugging.VI: Chạy test làm lộ failure, test lại và hồi quy là kiểm thử; định vị, phân tích, sửa nguyên nhân là gỡ lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Testing · Debugging · Debugging · Testing · Testing · Debugging.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Testing or debugging?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm thử hay gỡ lỗi?</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Step"
+              },
+              {
+                "ma": "k",
+                "ten": "Activity",
+                "luaChon": [
+                  "Testing (tester)",
+                  "Debugging (developer)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Run the system test: a booking of exactly 6 weekly hours is refused"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Set a breakpoint in BookingService and step through the weekly-limit check"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Change >= to > on line 17 and commit"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Re-run the failed system test on the new build (confirmation testing)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Re-run the whole booking regression suite to check nothing else broke"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Find in the logs which method computed the weekly total"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Testing (tester)",
+              "r1.k": "Debugging (developer)",
+              "r2.k": "Debugging (developer)",
+              "r3.k": "Testing (tester)",
+              "r4.k": "Testing (tester)",
+              "r5.k": "Debugging (developer)"
+            },
+            "giaiThich": "<p>Running tests that show failures, re-testing and regression testing are testing; locating, analysing and fixing the cause are debugging.</p><p><i>VI: Chạy test làm lộ failure, test lại và hồi quy là kiểm thử; định vị, phân tích, sửa nguyên nhân là gỡ lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp confirmation testing vào debugging vì \"liên quan đến lỗi\"."
+        },
+        {
+          "loi": "Cho rằng tester phải tự sửa lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "debugging",
+          "vi": "gỡ lỗi — tìm, phân tích, sửa nguyên nhân"
+        },
+        {
+          "en": "confirmation testing",
+          "vi": "kiểm thử xác nhận — chạy lại test đã fail sau khi sửa"
+        }
+      ]
+    },
+    {
+      "title": "What is testing 4 — Objectives in context (exam style)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "test objectives"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five questions in the style of SWT1 slides 21–25: which objective fits which test level or situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu theo kiểu slide SWT1 21–25: mục tiêu nào hợp với cấp test hay tình huống nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cấp thấp ⇒ tìm lỗi; cấp cao ⇒ niềm tin, phù hợp sử dụng, tuân thủ.",
+        "Bảo trì ⇒ hồi quy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 4 — Objectives in context (exam style)\n\nAnswer in the answer panel (no code needed).\n\n1. What is typically the main objective of component testing?Mục tiêu chính điển hình của component testing là gì?\n2. What is typically the main objective of acceptance testing?Mục tiêu chính điển hình của acceptance testing là gì?\n3. During maintenance testing after a small change, which objective is most important?Khi kiểm thử bảo trì sau một thay đổi nhỏ, mục tiêu nào quan trọng nhất?\n4. A bank must show auditors that every transfer rule was tested. Which objective is this?Ngân hàng phải cho kiểm toán thấy mọi luật chuyển tiền đã được test. Đây là mục tiêu nào?\n5. Why can testing NOT show that software is defect-free?Vì sao kiểm thử KHÔNG chứng minh được phần mềm hết lỗi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What is testing 4 — Objectives in context (exam style) — answer key\n\n1. What is typically the main objective of component testing?Mục tiêu chính điển hình của component testing là gì?\n   Answer: b) To find as many failures as possible so that defects are identified and fixed early\n   Component testing aims at finding defects early (and building code coverage); compliance and confidence are acceptance-level objectives.VI: Component test nhắm tìm lỗi sớm (và độ phủ mã); tuân thủ và niềm tin là mục tiêu cấp acceptance.\n\n2. What is typically the main objective of acceptance testing?Mục tiêu chính điển hình của acceptance testing là gì?\n   Answer: b) To confirm that the system works as expected and build confidence that it is fit for use\n   Acceptance testing focuses on validation and confidence rather than defect hunting.VI: Acceptance test tập trung vào thẩm định và niềm tin hơn là săn lỗi.\n\n3. During maintenance testing after a small change, which objective is most important?Khi kiểm thử bảo trì sau một thay đổi nhỏ, mục tiêu nào quan trọng nhất?\n   Answer: b) Checking that no new defects were introduced (regression)\n   Regression and confirmation of the change dominate maintenance testing.VI: Hồi quy và xác nhận thay đổi là chủ đạo của kiểm thử bảo trì.\n\n4. A bank must show auditors that every transfer rule was tested. Which objective is this?Ngân hàng phải cho kiểm toán thấy mọi luật chuyển tiền đã được test. Đây là mục tiêu nào?\n   Answer: a) To comply with contractual, legal or regulatory requirements or standards\n   Compliance with laws/standards and verifying compliance is an explicit objective.VI: Tuân thủ luật/chuẩn và kiểm chứng sự tuân thủ là một mục tiêu rõ ràng.\n\n5. Why can testing NOT show that software is defect-free?Vì sao kiểm thử KHÔNG chứng minh được phần mềm hết lỗi?\n   Answer: b) Because testing can show the presence of defects but cannot prove their absence; exhaustive testing is impossible\n   Principles 1 and 2 (lesson 1.3).VI: Nguyên tắc 1 và 2 (bài 1.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is typically the main objective of component testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu chính điển hình của component testing là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To confirm that the system meets legal requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To find as many failures as possible so that defects are identified and fixed early"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To demonstrate the system to the customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To measure user satisfaction"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Component testing aims at finding defects early (and building code coverage); compliance and confidence are acceptance-level objectives.</p><p><i>VI: Component test nhắm tìm lỗi sớm (và độ phủ mã); tuân thủ và niềm tin là mục tiêu cấp acceptance.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is typically the main objective of acceptance testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục tiêu chính điển hình của acceptance testing là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To find as many defects as possible in the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To confirm that the system works as expected and build confidence that it is fit for use"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To measure statement coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To debug the code"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Acceptance testing focuses on validation and confidence rather than defect hunting.</p><p><i>VI: Acceptance test tập trung vào thẩm định và niềm tin hơn là săn lỗi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>During maintenance testing after a small change, which objective is most important?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi kiểm thử bảo trì sau một thay đổi nhỏ, mục tiêu nào quan trọng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Finding new requirements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Checking that no new defects were introduced (regression)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Training the users"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Writing the user guide"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Regression and confirmation of the change dominate maintenance testing.</p><p><i>VI: Hồi quy và xác nhận thay đổi là chủ đạo của kiểm thử bảo trì.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A bank must show auditors that every transfer rule was tested. Which objective is this?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngân hàng phải cho kiểm toán thấy mọi luật chuyển tiền đã được test. Đây là mục tiêu nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To comply with contractual, legal or regulatory requirements or standards"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To prevent defects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To reduce costs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To find failures"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Compliance with laws/standards and verifying compliance is an explicit objective.</p><p><i>VI: Tuân thủ luật/chuẩn và kiểm chứng sự tuân thủ là một mục tiêu rõ ràng.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Why can testing NOT show that software is defect-free?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao kiểm thử KHÔNG chứng minh được phần mềm hết lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because testers are not careful enough"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because testing can show the presence of defects but cannot prove their absence; exhaustive testing is impossible"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because tools are not good enough"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It can, with enough tests"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Principles 1 and 2 (lesson 1.3).</p><p><i>VI: Nguyên tắc 1 và 2 (bài 1.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng acceptance test nhắm tìm thật nhiều lỗi."
+        },
+        {
+          "loi": "Chọn \"giảm chi phí\" cho câu kiểm toán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "regression",
+          "vi": "hồi quy — lỗi mới do thay đổi gây ra ở phần cũ"
+        }
+      ]
+    }
+  ]
+}

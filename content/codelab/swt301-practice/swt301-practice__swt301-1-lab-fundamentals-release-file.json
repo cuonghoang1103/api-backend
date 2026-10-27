@@ -1,0 +1,493 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-1-lab-fundamentals-release-file",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-process"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1 — Fundamentals of Testing: the Test File of LabBook 1.4",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "error defect failure",
+        "test process",
+        "traceability",
+        "exit criteria",
+        "seven principles",
+        "code of ethics"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 1"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "fundamentals"
+      ],
+      "problemHtml": "<h1>Lab 1 — Fundamentals of Testing: the Test File of LabBook 1.4</h1>\n<p class=\"bi-phu\">Chapter 1 lab · incident analysis, test process, traceability and exit criteria, principles and ethics · 10 marks</p>\n<h2>1. Overview</h2>\n<p>You are the tester of <b>LabBook release 1.4</b> (booking university lab seats). The test lead hands you the release file and asks four things before the go/no-go meeting.</p>\n<p><b>A. Incident from release 1.3</b> — sentences numbered 1–7:</p><ol><li>The SRS v2 says a student may cancel free of charge until 2 hours before the start.</li><li>The project wiki still linked SRS v1, and nobody was responsible for document versions.</li><li>The developer implemented the 24-hour rule of SRS v1.</li><li>CancelService contains: if (hoursBefore < 24) return TOO_LATE;</li><li>Students cancelling 3 hours before the start receive 409 TOO_LATE.</li><li>Seats stay blocked, 12 students on the waiting list cannot attend, and the lab is half empty on Friday.</li><li>The test team found the problem in system testing on Thursday.</li></ol>\n<p><b>B. Tasks of the 1.4 test cycle:</b></p><ul><li><b>T1</b> — Write the exit criteria of release 1.4: 100% of high-risk requirements covered, no open Critical defect</li><li><b>T2</b> — Review the cancellation user story and raise that “free of charge” is undefined for PENDING bookings</li><li><b>T3</b> — Define the test conditions “cancel ≥ 2 h before”, “cancel < 2 h before”, “cancel another student’s booking”</li><li><b>T4</b> — Apply boundary value analysis to the 2-hour rule: 1 h 59 min and 2 h 00 min</li><li><b>T5</b> — Order the Postman requests into a collection and create the accounts student1–3 in the test database</li><li><b>T6</b> — Run a smoke check that the test server and seed data are ready before the test cycle starts</li><li><b>T7</b> — Run the collection on build 1.4.0 and record pass/fail for each test case</li><li><b>T8</b> — Log defect DEF-31 with steps, expected and actual result</li><li><b>T9</b> — On Wednesday, notice that 62% of the tests are executed against 80% planned and move a tester to cancellation</li><li><b>T10</b> — After the release, archive the collection and test data and hold a lessons-learned meeting</li><li><b>T11</b> — Re-run the failed cancellation test on build 1.4.1</li><li><b>T12</b> — Identify the test data needed: a booking that starts exactly 2 hours after “now”</li></ul>\n<p><b>C. Requirements, traceability and results of build 1.4.0</b></p><table><thead><tr><th>Req</th><th>Name</th><th>Risk</th></tr></thead><tbody><tr><td>R1</td><td>Log in</td><td>High</td></tr><tr><td>R2</td><td>List labs</td><td>Low</td></tr><tr><td>R3</td><td>Book a seat</td><td>High</td></tr><tr><td>R4</td><td>Weekly limit (6 h)</td><td>High</td></tr><tr><td>R5</td><td>Cancel a booking</td><td>High</td></tr><tr><td>R6</td><td>Waiting-list promotion</td><td>High</td></tr><tr><td>R7</td><td>Close a lab</td><td>Low</td></tr><tr><td>R8</td><td>Admin usage report</td><td>Low</td></tr></tbody></table><table><thead><tr><th>Test case</th><th>Requirements</th><th>Result on 1.4.0</th></tr></thead><tbody><tr><td>TC01</td><td>R1</td><td>PASS</td></tr><tr><td>TC02</td><td>R1</td><td>PASS</td></tr><tr><td>TC03</td><td>R2</td><td>PASS</td></tr><tr><td>TC04</td><td>R3</td><td>FAIL</td></tr><tr><td>TC05</td><td>R3, R4</td><td>PASS</td></tr><tr><td>TC06</td><td>R4</td><td>PASS</td></tr><tr><td>TC07</td><td>R5</td><td>FAIL</td></tr><tr><td>TC08</td><td>R5, R6</td><td><i>not run</i></td></tr><tr><td>TC09</td><td>R7</td><td>PASS</td></tr><tr><td>TC10</td><td>R3, R5</td><td>PASS</td></tr><tr><td>TC11</td><td>R6</td><td><i>not run</i></td></tr><tr><td>TC12</td><td>R2, R7</td><td><i>not run</i></td></tr></tbody></table><table><thead><tr><th>Defect</th><th>Severity</th><th>Status</th><th>Found by</th></tr></thead><tbody><tr><td>DEF-29</td><td>Critical</td><td>Closed</td><td>TC04</td></tr><tr><td>DEF-30</td><td>Major</td><td>Open</td><td>TC04</td></tr><tr><td>DEF-31</td><td>Critical</td><td>Open</td><td>TC07</td></tr></tbody></table>\n<p>Exit criteria (from T1): <b>100% of high-risk requirements covered by executed tests</b> and <b>no open Critical defect</b>. Requirement coverage counts a requirement when at least one <i>executed</i> test case (pass or fail) is linked to it.</p>\n<p><b>D. Statements heard in the meeting</b></p><ul>\n<li><b>S1</b> — “Before release, let’s test every combination of lab, date, start hour and duration.”</li>\n<li><b>S2</b> — “Half of all open defects of the last three releases are in cancellation and waiting-list code, so we plan extra exploratory sessions there.”</li>\n<li><b>S3</b> — “The 2025 regression suite still passes every night, yet students found three new bugs in the QR check-in.”</li>\n<li><b>S4</b> — “All 9 executed tests on 1.4.1 passed, so the release has no defects.”</li>\n<li><b>E1</b> — A vendor offers the tester a free laptop while she is evaluating the vendor’s test tool for the university.</li>\n<li><b>E2</b> — A senior tester spends an afternoon showing the developers how to write boundary tests.</li></ul>\n<h3>Main features</h3>\n<ul>\n  <li>A. Place every sentence of the incident in the chain root cause → error → defect → failure → effect (or context).</li>\n  <li>B. Name the test activity of each task T1–T12.</li>\n  <li>C. Coverage, gaps, impact analysis, pass rate and the go/no-go decision.</li>\n  <li>D. The principle behind S1–S4 and the ethics principle of E1–E2.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Use exactly the allowed values listed in the data model (spelling matters, case does not).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-incident.js   ← const INCIDENT = { rootCause, error, defect, failure, effect, context }   (arrays of sentence numbers)\n├── b-tasks.js      ← const TASKS = { T1: 'Test planning', … }\n├── c-trace.js      ← const TRACE = { reqCoverage, highRiskCoverage, untested, rerunForR5, passRate, decision, failedCriteria }\n└── d-principles.js ← const PRINCIPLES = { S1..S4 }; const ETHICS = { E1, E2 }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>TASKS.*</code></td><td>string</td><td>Test planning · Test monitoring and control · Test analysis · Test design · Test implementation · Test execution · Test completion</td></tr><tr><td><code>TRACE.decision · failedCriteria</code></td><td>string · string[]</td><td>'GO' | 'NO-GO' · 'HIGH_RISK_COVERAGE' | 'OPEN_CRITICAL'; percentages rounded to 2 decimals</td></tr><tr><td><code>PRINCIPLES.*</code></td><td>string</td><td>PRESENCE · EXHAUSTIVE · EARLY · CLUSTERING · PESTICIDE · CONTEXT · ABSENCE_OF_ERRORS</td></tr><tr><td><code>ETHICS.*</code></td><td>string</td><td>PUBLIC · CLIENT_AND_EMPLOYER · PRODUCT · JUDGMENT · MANAGEMENT · PROFESSION · COLLEAGUES · SELF</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Incident analysis <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every sentence in exactly one place of the chain.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">error-defect-failure</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Test process <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Activity of each of the 12 tasks (CTFL 2018 names).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test activities</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Traceability and exit criteria <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Coverage figures, the untested requirement, the impact of a change to R5, the pass rate and the decision with the failed criteria.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">traceability</span> <span class=\"bi-hook\">exit criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Principles and ethics <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One principle per statement, one ethics principle per situation.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">seven principles</span> <span class=\"bi-hook\">code of ethics</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>INCIDENT</code></td><td>answers/a-incident.js</td></tr><tr><td><code>TASKS</code></td><td>answers/b-tasks.js</td></tr><tr><td><code>TRACE</code></td><td>answers/c-trace.js</td></tr><tr><td><code>PRINCIPLES · ETHICS</code></td><td>answers/d-principles.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Incident analysis</td><td>2</td></tr><tr><td>2</td><td>B. Test process</td><td>3</td></tr><tr><td>3</td><td>C. Traceability and exit criteria</td><td>3</td></tr><tr><td>4</td><td>D. Principles and ethics</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Counting all 12 test cases for coverage (87.5%) instead of the executed ones.</li>\n  <li>Answering GO because 77.78% of the executed tests pass — the pass rate is not an exit criterion here.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 1 — Fundamentals of Testing: the Test File of LabBook 1.4</h1>\n<p class=\"bi-phu\">Lab chương 1 · phân tích sự cố, quy trình test, truy vết và tiêu chí ra, nguyên tắc và đạo đức · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bạn là tester của <b>LabBook bản 1.4</b> (đặt chỗ phòng lab). Trưởng nhóm test giao hồ sơ bản phát hành và hỏi bốn việc trước buổi họp go/no-go.</p>\n<p><b>A. Sự cố của bản 1.3</b> — các câu đánh số 1–7 (bản tiếng Anh ở trên): SRS v2 cho huỷ miễn phí tới 2 giờ trước giờ bắt đầu · wiki vẫn trỏ SRS v1, không ai phụ trách phiên bản tài liệu · developer cài luật 24 giờ của SRS v1 · CancelService chứa <code>if (hoursBefore &lt; 24) return TOO_LATE;</code> · sinh viên huỷ trước 3 giờ nhận 409 TOO_LATE · chỗ bị giữ, 12 sinh viên chờ không được học, phòng trống một nửa · nhóm test phát hiện ở system test thứ Năm.</p>\n<p><b>B. Các việc của chu kỳ test 1.4</b> — xem danh sách T1–T12 ở trên (phạm vi + tiêu chí ra; review user story; điều kiện test; BVA; sắp collection + tạo tài khoản; smoke môi trường; chạy; ghi lỗi; theo dõi tiến độ; lưu trữ + bài học; chạy lại; xác định dữ liệu test).</p>\n<p><b>C.</b> Bảng yêu cầu, ma trận truy vết, kết quả build 1.4.0 và danh sách lỗi ở trên. Tiêu chí ra: <b>phủ 100% yêu cầu rủi ro cao bằng test đã chạy</b> và <b>không còn lỗi Critical mở</b>. Một yêu cầu được tính là phủ khi có ít nhất một test case <i>đã chạy</i> (đạt hay trượt) nối với nó.</p>\n<p><b>D.</b> Bốn câu S1–S4 (nguyên tắc) và hai tình huống E1–E2 (đạo đức) ở trên.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Xếp mỗi câu của sự cố vào chuỗi nguyên nhân gốc → error → defect → failure → effect (hoặc bối cảnh).</li>\n  <li>B. Gọi tên hoạt động kiểm thử của mỗi việc T1–T12.</li>\n  <li>C. Độ phủ, chỗ trống, phân tích ảnh hưởng, tỉ lệ đạt và quyết định go/no-go.</li>\n  <li>D. Nguyên tắc đằng sau S1–S4 và nguyên tắc đạo đức của E1–E2.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Dùng đúng giá trị cho phép trong mô hình dữ liệu (đúng chính tả, không phân biệt hoa thường).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-incident.js   ← const INCIDENT = { rootCause, error, defect, failure, effect, context }   (arrays of sentence numbers)\n├── b-tasks.js      ← const TASKS = { T1: 'Test planning', … }\n├── c-trace.js      ← const TRACE = { reqCoverage, highRiskCoverage, untested, rerunForR5, passRate, decision, failedCriteria }\n└── d-principles.js ← const PRINCIPLES = { S1..S4 }; const ETHICS = { E1, E2 }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>TASKS.*</code></td><td>string</td><td>Test planning · Test monitoring and control · Test analysis · Test design · Test implementation · Test execution · Test completion</td></tr><tr><td><code>TRACE.decision · failedCriteria</code></td><td>string · string[]</td><td>'GO' | 'NO-GO' · 'HIGH_RISK_COVERAGE' | 'OPEN_CRITICAL'; phần trăm làm tròn 2 chữ số</td></tr><tr><td><code>PRINCIPLES.*</code></td><td>string</td><td>PRESENCE · EXHAUSTIVE · EARLY · CLUSTERING · PESTICIDE · CONTEXT · ABSENCE_OF_ERRORS</td></tr><tr><td><code>ETHICS.*</code></td><td>string</td><td>PUBLIC · CLIENT_AND_EMPLOYER · PRODUCT · JUDGMENT · MANAGEMENT · PROFESSION · COLLEAGUES · SELF</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Phân tích sự cố <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi câu đúng một vị trí trong chuỗi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">error-defect-failure</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Quy trình kiểm thử <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hoạt động của từng việc trong 12 việc (tên theo CTFL 2018).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test activities</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Truy vết và tiêu chí ra <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Các số độ phủ, yêu cầu chưa có test, ảnh hưởng khi R5 đổi, tỉ lệ đạt và quyết định kèm tiêu chí chưa đạt.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">traceability</span> <span class=\"bi-hook\">exit criteria</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Nguyên tắc và đạo đức <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi câu một nguyên tắc, mỗi tình huống một nguyên tắc đạo đức.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">seven principles</span> <span class=\"bi-hook\">code of ethics</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>INCIDENT</code></td><td>answers/a-incident.js</td></tr><tr><td><code>TASKS</code></td><td>answers/b-tasks.js</td></tr><tr><td><code>TRACE</code></td><td>answers/c-trace.js</td></tr><tr><td><code>PRINCIPLES · ETHICS</code></td><td>answers/d-principles.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Phân tích sự cố</td><td>2</td></tr><tr><td>2</td><td>B. Quy trình kiểm thử</td><td>3</td></tr><tr><td>3</td><td>C. Truy vết và tiêu chí ra</td><td>3</td></tr><tr><td>4</td><td>D. Nguyên tắc và đạo đức</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Tính độ phủ trên cả 12 test case (87,5%) thay vì test đã chạy.</li>\n  <li>Trả lời GO vì 77,78% test đã chạy đạt — tỉ lệ đạt không phải tiêu chí ra ở đây.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Use exactly the allowed values listed in the data model (spelling matters, case does not).|||Dùng đúng giá trị cho phép trong mô hình dữ liệu (đúng chính tả, không phân biệt hoa thường).",
+      "examplesJson": [
+        {
+          "input": "sentence 4: CancelService contains if (hoursBefore < 24) return TOO_LATE;",
+          "output": "defect",
+          "explanation": "An imperfection in a work product (the code).|||Khiếm khuyết trong sản phẩm (mã)."
+        }
+      ],
+      "hintsJson": [
+        "A: câu nào là HÀNH ĐỘNG của người (error), câu nào là thứ NẰM TRONG mã (defect), câu nào xảy ra KHI CHẠY (failure)?",
+        "B: xác định dữ liệu test = design; tạo dữ liệu/kiểm môi trường sẵn sàng = implementation; chạy lại = execution.",
+        "C: chỉ test ĐÃ CHẠY mới tính độ phủ; R6 chỉ nối với TC08 và TC11 (chưa chạy)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-incident.js",
+          "language": "javascript",
+          "code": "const INCIDENT = {\n  rootCause: [],\n  error: [],\n  defect: [],\n  failure: [5],\n  effect: [],\n  context: [],\n};\n"
+        },
+        {
+          "name": "answers/b-tasks.js",
+          "language": "javascript",
+          "code": "// Test planning | Test monitoring and control | Test analysis | Test design | Test implementation | Test execution | Test completion\nconst TASKS = {\n  T1: 'Test planning',\n  T2: '',\n  T3: '',\n  T4: '',\n  T5: '',\n  T6: '',\n  T7: '',\n  T8: '',\n  T9: '',\n  T10: '',\n  T11: '',\n  T12: '',\n};\n"
+        },
+        {
+          "name": "answers/c-trace.js",
+          "language": "javascript",
+          "code": "const TRACE = {\n  reqCoverage: 0,\n  highRiskCoverage: 0,\n  untested: [],\n  rerunForR5: [],\n  passRate: 0,\n  decision: '',\n  failedCriteria: [],\n};\n"
+        },
+        {
+          "name": "answers/d-principles.js",
+          "language": "javascript",
+          "code": "// PRESENCE | EXHAUSTIVE | EARLY | CLUSTERING | PESTICIDE | CONTEXT | ABSENCE_OF_ERRORS\nconst PRINCIPLES = { S1: '', S2: '', S3: '', S4: '' };\n// PUBLIC | CLIENT_AND_EMPLOYER | PRODUCT | JUDGMENT | MANAGEMENT | PROFESSION | COLLEAGUES | SELF\nconst ETHICS = { E1: '', E2: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-incident.js",
+          "language": "javascript",
+          "code": "// Chain: root cause 2 (no owner of document versions) → error 3 (implementing the old rule)\n// → defect 4 (the wrong condition in the code) → failure 5 (409 at run time) → effect 6 (blocked seats).\nconst INCIDENT = {\n  rootCause: [2],\n  error: [3],\n  defect: [4],\n  failure: [5],\n  effect: [6],\n  context: [1, 7],\n};\n"
+        },
+        {
+          "name": "answers/b-tasks.js",
+          "language": "javascript",
+          "code": "const TASKS = {\n  T1: 'Test planning',\n  T2: 'Test analysis',\n  T3: 'Test analysis',\n  T4: 'Test design',\n  T5: 'Test implementation',\n  T6: 'Test implementation',\n  T7: 'Test execution',\n  T8: 'Test execution',\n  T9: 'Test monitoring and control',\n  T10: 'Test completion',\n  T11: 'Test execution',\n  T12: 'Test design',\n};\n"
+        },
+        {
+          "name": "answers/c-trace.js",
+          "language": "javascript",
+          "code": "// Executed: TC01–TC07, TC09, TC10 (TC08, TC11, TC12 not run).\n// Requirements touched by executed tests: R1 R2 R3 R4 R5 R7 → 6/8 = 75%.\n// High risk: R1 R3 R4 R5 R6 → R6 is only linked to TC08/TC11 (not run) → 4/5 = 80%.\n// R8 has no test case. R5 is linked to TC07, TC08, TC10. Pass rate 7/9 = 77.78%.\n// Exit: high-risk coverage 80% < 100% and DEF-31 (Critical) is open → NO-GO.\nconst TRACE = {\n  reqCoverage: 75,\n  highRiskCoverage: 80,\n  untested: ['R8'],\n  rerunForR5: ['TC07', 'TC08', 'TC10'],\n  passRate: 77.78,\n  decision: 'NO-GO',\n  failedCriteria: ['HIGH_RISK_COVERAGE', 'OPEN_CRITICAL'],\n};\n"
+        },
+        {
+          "name": "answers/d-principles.js",
+          "language": "javascript",
+          "code": "const PRINCIPLES = {\n  S1: 'EXHAUSTIVE',  // every combination: exhaustive testing is impossible\n  S2: 'CLUSTERING',  // defects cluster together\n  S3: 'PESTICIDE',   // the same old tests stop finding new defects\n  S4: 'PRESENCE',    // testing shows presence, not absence, of defects\n};\nconst ETHICS = {\n  E1: 'JUDGMENT',    // integrity and independence: decline gifts from a vendor under evaluation\n  E2: 'COLLEAGUES',  // fair and supportive, promote cooperation with developers\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> root cause 2 · error 3 · defect 4 · failure 5 · effect 6 · context 1, 7. <b>B.</b> T1 planning · T2, T3 analysis · T4, T12 design · T5, T6 implementation · T7, T8, T11 execution · T9 monitoring & control · T10 completion. <b>C.</b> 75% · 80% · R8 · TC07/TC08/TC10 · 77.78% · NO-GO (high-risk coverage, open Critical). <b>D.</b> EXHAUSTIVE · CLUSTERING · PESTICIDE · PRESENCE · JUDGMENT · COLLEAGUES.</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> gốc 2 · error 3 · defect 4 · failure 5 · effect 6 · bối cảnh 1, 7. <b>B.</b> T1 lập kế hoạch · T2, T3 phân tích · T4, T12 thiết kế · T5, T6 triển khai · T7, T8, T11 thực thi · T9 giám sát & kiểm soát · T10 hoàn tất. <b>C.</b> 75% · 80% · R8 · TC07/TC08/TC10 · 77,78% · NO-GO. <b>D.</b> như trên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-incident.js",
+          "answers/b-tasks.js",
+          "answers/c-trace.js",
+          "answers/d-principles.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — INCIDENT.rootCause",
+              "vi": "A — INCIDENT.rootCause"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.rootCause || []).map(String)); } catch (e) { return '(INCIDENT.rootCause || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.rootCause || []).map(String) is empty';\n  var chap = [[\"2\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — INCIDENT.error",
+              "vi": "A — INCIDENT.error"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.error || []).map(String)); } catch (e) { return '(INCIDENT.error || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.error || []).map(String) is empty';\n  var chap = [[\"3\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — INCIDENT.defect",
+              "vi": "A — INCIDENT.defect"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.defect || []).map(String)); } catch (e) { return '(INCIDENT.defect || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.defect || []).map(String) is empty';\n  var chap = [[\"4\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — INCIDENT.failure",
+              "vi": "A — INCIDENT.failure"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.failure || []).map(String)); } catch (e) { return '(INCIDENT.failure || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.failure || []).map(String) is empty';\n  var chap = [[\"5\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — INCIDENT.effect",
+              "vi": "A — INCIDENT.effect"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.effect || []).map(String)); } catch (e) { return '(INCIDENT.effect || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.effect || []).map(String) is empty';\n  var chap = [[\"6\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — INCIDENT.context",
+              "vi": "A — INCIDENT.context"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((INCIDENT.context || []).map(String)); } catch (e) { return '(INCIDENT.context || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(INCIDENT.context || []).map(String) is empty';\n  var chap = [[\"1\",\"7\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T1",
+              "vi": "B — hoạt động của T1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T1); } catch (e) { return 'TASKS.T1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T1 is empty';\n  var chap = [\"Test planning\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T2",
+              "vi": "B — hoạt động của T2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T2); } catch (e) { return 'TASKS.T2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T2 is empty';\n  var chap = [\"Test analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T3",
+              "vi": "B — hoạt động của T3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T3); } catch (e) { return 'TASKS.T3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T3 is empty';\n  var chap = [\"Test analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T4",
+              "vi": "B — hoạt động của T4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T4); } catch (e) { return 'TASKS.T4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T4 is empty';\n  var chap = [\"Test design\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T5",
+              "vi": "B — hoạt động của T5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T5); } catch (e) { return 'TASKS.T5 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T5 is empty';\n  var chap = [\"Test implementation\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T6",
+              "vi": "B — hoạt động của T6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T6); } catch (e) { return 'TASKS.T6 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T6 is empty';\n  var chap = [\"Test implementation\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T7",
+              "vi": "B — hoạt động của T7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T7); } catch (e) { return 'TASKS.T7 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T7 is empty';\n  var chap = [\"Test execution\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T8",
+              "vi": "B — hoạt động của T8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T8); } catch (e) { return 'TASKS.T8 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T8 is empty';\n  var chap = [\"Test execution\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T9",
+              "vi": "B — hoạt động của T9"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T9); } catch (e) { return 'TASKS.T9 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T9 is empty';\n  var chap = [\"Test monitoring and control\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T10",
+              "vi": "B — hoạt động của T10"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T10); } catch (e) { return 'TASKS.T10 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T10 is empty';\n  var chap = [\"Test completion\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T11",
+              "vi": "B — hoạt động của T11"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T11); } catch (e) { return 'TASKS.T11 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T11 is empty';\n  var chap = [\"Test execution\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — activity of T12",
+              "vi": "B — hoạt động của T12"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TASKS.T12); } catch (e) { return 'TASKS.T12 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TASKS.T12 is empty';\n  var chap = [\"Test design\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — requirement coverage by executed tests (%)",
+              "vi": "C — độ phủ yêu cầu theo test đã chạy (%)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TRACE.reqCoverage); } catch (e) { return 'TRACE.reqCoverage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TRACE.reqCoverage is empty';\n  var chap = [75];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet — only test cases that were RUN count';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — coverage of high-risk requirements (%)",
+              "vi": "C — độ phủ yêu cầu rủi ro cao (%)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TRACE.highRiskCoverage); } catch (e) { return 'TRACE.highRiskCoverage is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TRACE.highRiskCoverage is empty';\n  var chap = [80];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — requirements with no test case at all",
+              "vi": "C — yêu cầu không có test case nào"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TRACE.untested || []).map(String)); } catch (e) { return '(TRACE.untested || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TRACE.untested || []).map(String) is empty';\n  var chap = [[\"R8\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — test cases to re-run when R5 changes",
+              "vi": "C — test case phải chạy lại khi R5 đổi"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TRACE.rerunForR5 || []).map(String)); } catch (e) { return '(TRACE.rerunForR5 || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TRACE.rerunForR5 || []).map(String) is empty';\n  var chap = [[\"TC07\",\"TC08\",\"TC10\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — pass rate of executed tests (%)",
+              "vi": "C — tỉ lệ đạt của test đã chạy (%)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TRACE.passRate); } catch (e) { return 'TRACE.passRate is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TRACE.passRate is empty';\n  var chap = [77.78];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 0.006; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — release decision",
+              "vi": "C — quyết định phát hành"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TRACE.decision); } catch (e) { return 'TRACE.decision is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TRACE.decision is empty';\n  var chap = [\"NO-GO\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — exit criteria that are not met",
+              "vi": "C — tiêu chí ra chưa đạt"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((TRACE.failedCriteria || []).map(String)); } catch (e) { return '(TRACE.failedCriteria || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(TRACE.failedCriteria || []).map(String) is empty';\n  var chap = [[\"HIGH_RISK_COVERAGE\",\"OPEN_CRITICAL\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — principle of S1",
+              "vi": "D — nguyên tắc của S1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PRINCIPLES.S1); } catch (e) { return 'PRINCIPLES.S1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PRINCIPLES.S1 is empty';\n  var chap = [\"EXHAUSTIVE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — principle of S2",
+              "vi": "D — nguyên tắc của S2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PRINCIPLES.S2); } catch (e) { return 'PRINCIPLES.S2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PRINCIPLES.S2 is empty';\n  var chap = [\"CLUSTERING\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — principle of S3",
+              "vi": "D — nguyên tắc của S3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PRINCIPLES.S3); } catch (e) { return 'PRINCIPLES.S3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PRINCIPLES.S3 is empty';\n  var chap = [\"PESTICIDE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — principle of S4",
+              "vi": "D — nguyên tắc của S4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (PRINCIPLES.S4); } catch (e) { return 'PRINCIPLES.S4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'PRINCIPLES.S4 is empty';\n  var chap = [\"PRESENCE\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — ethics principle of E1",
+              "vi": "D — nguyên tắc đạo đức của E1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ETHICS.E1); } catch (e) { return 'ETHICS.E1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ETHICS.E1 is empty';\n  var chap = [\"JUDGMENT\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — ethics principle of E2",
+              "vi": "D — nguyên tắc đạo đức của E2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (ETHICS.E2); } catch (e) { return 'ETHICS.E2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'ETHICS.E2 is empty';\n  var chap = [\"COLLEAGUES\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Incident analysis",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Test process",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Traceability and exit criteria",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Principles and ethics",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Tính độ phủ trên mọi test case."
+        },
+        {
+          "loi": "Cho rằng tỉ lệ đạt 77,78% quyết định go/no-go."
+        },
+        {
+          "loi": "Xếp T9 vào planning — theo dõi và điều chỉnh là monitoring & control."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error (mistake)",
+          "vi": "lỗi của CON NGƯỜI dẫn tới defect"
+        },
+        {
+          "en": "defect (bug, fault)",
+          "vi": "khiếm khuyết trong sản phẩm (mã, tài liệu)"
+        },
+        {
+          "en": "failure",
+          "vi": "thất bại — hệ thống chạy sai quan sát được"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc"
+        },
+        {
+          "en": "exit criteria",
+          "vi": "tiêu chí ra"
+        },
+        {
+          "en": "go/no-go",
+          "vi": "quyết định phát hành hay không"
+        },
+        {
+          "en": "traceability matrix",
+          "vi": "ma trận truy vết"
+        },
+        {
+          "en": "pass rate",
+          "vi": "tỉ lệ đạt"
+        }
+      ]
+    }
+  ]
+}

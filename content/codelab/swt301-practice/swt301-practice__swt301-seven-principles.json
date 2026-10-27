@@ -1,0 +1,660 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-seven-principles",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-seven-principles"
+  },
+  "exercises": [
+    {
+      "title": "Seven principles 1 — Which principle does each situation show?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "seven principles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The seven ISTQB principles appear in almost every SWT301 exam as a short story: “a team did X — which principle?”. Match each LabBook story to exactly one principle. Every principle is used once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy nguyên tắc ISTQB xuất hiện trong gần như mọi đề SWT301 dưới dạng một câu chuyện ngắn: “nhóm đã làm X — nguyên tắc nào?”. Ghép mỗi câu chuyện LabBook với đúng một nguyên tắc. Mỗi nguyên tắc dùng đúng một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Từ khoá: “unchanged / same tests” ⇒ pesticide; “most defects in one module” ⇒ clustering; “every combination” ⇒ exhaustive.",
+        "“Không ai dùng dù hết lỗi” ⇒ absence-of-errors fallacy; “không còn lỗi nữa” ⇒ nguyên tắc 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 1 — Which principle does each situation show?\n\nAnswer in the answer panel (no code needed).\n\n1. Story → principleCâu chuyện → nguyên tắc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 1 — Which principle does each situation show? — answer key\n\n1. Story → principleCâu chuyện → nguyên tắc\n   - r0.p: 5. Beware of the pesticide paradox\n   - r1.p: 4. Defects cluster together\n   - r2.p: 2. Exhaustive testing is impossible\n   - r3.p: 7. Absence-of-errors is a fallacy\n   - r4.p: 3. Early testing saves time and money\n   - r5.p: 6. Testing is context dependent\n   - r6.p: 1. Testing shows the presence of defects, not their absence\n   Unchanged tests stop finding new defects (pesticide paradox); defects concentrate in a few modules (clustering); combinations explode (exhaustive testing impossible); a defect-free system that does not meet the users’ needs is useless (absence-of-errors fallacy); reviewing stories early (early testing); safety-critical vs hobby context; passing tests reduce risk but cannot prove absence (principle 1).VI: Bộ test không đổi hết tìm được lỗi mới (thuốc trừ sâu); lỗi tập trung ở ít module (phân cụm); tổ hợp bùng nổ (không thể test hết); hệ thống không lỗi nhưng không đáp ứng nhu cầu là vô ích (ngụy biện không lỗi); review story sớm (test sớm); ngữ cảnh an toàn y tế vs câu lạc bộ; test đạt giảm rủi ro nhưng không chứng minh hết lỗi (nguyên tắc 1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>5 · 4 · 2 · 7 · 3 · 6 · 1.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Story → principle</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu chuyện → nguyên tắc</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Story"
+              },
+              {
+                "ma": "p",
+                "ten": "Principle",
+                "luaChon": [
+                  "1. Testing shows the presence of defects, not their absence",
+                  "2. Exhaustive testing is impossible",
+                  "3. Early testing saves time and money",
+                  "4. Defects cluster together",
+                  "5. Beware of the pesticide paradox",
+                  "6. Testing is context dependent",
+                  "7. Absence-of-errors is a fallacy"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The regression suite has run unchanged for five sprints and has not found a defect for three of them, yet users keep reporting bugs in new booking screens"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "70% of last semester’s defects were found in the booking-conflict module, so the team plans extra tests there"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The booking form takes a date, a start hour, a duration and a lab — trying every combination would take years"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The release passed all 400 tests, but students refuse to use it because they still have to phone the lab manager to confirm"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Testers reviewed the user stories in sprint planning and found that “week” was undefined before any code was written"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The hospital lab-booking version needs audit trails and formal test documentation; the student club version does not"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "After 300 passing tests the manager says “so there are no bugs left”; the test lead corrects him"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.p": "5. Beware of the pesticide paradox",
+              "r1.p": "4. Defects cluster together",
+              "r2.p": "2. Exhaustive testing is impossible",
+              "r3.p": "7. Absence-of-errors is a fallacy",
+              "r4.p": "3. Early testing saves time and money",
+              "r5.p": "6. Testing is context dependent",
+              "r6.p": "1. Testing shows the presence of defects, not their absence"
+            },
+            "giaiThich": "<p>Unchanged tests stop finding new defects (pesticide paradox); defects concentrate in a few modules (clustering); combinations explode (exhaustive testing impossible); a defect-free system that does not meet the users’ needs is useless (absence-of-errors fallacy); reviewing stories early (early testing); safety-critical vs hobby context; passing tests reduce risk but cannot prove absence (principle 1).</p><p><i>VI: Bộ test không đổi hết tìm được lỗi mới (thuốc trừ sâu); lỗi tập trung ở ít module (phân cụm); tổ hợp bùng nổ (không thể test hết); hệ thống không lỗi nhưng không đáp ứng nhu cầu là vô ích (ngụy biện không lỗi); review story sớm (test sớm); ngữ cảnh an toàn y tế vs câu lạc bộ; test đạt giảm rủi ro nhưng không chứng minh hết lỗi (nguyên tắc 1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm nguyên tắc 1 (test không chứng minh hết lỗi) với nguyên tắc 7 (hết lỗi vẫn có thể vô dụng)."
+        },
+        {
+          "loi": "Nhầm “test sớm” với “test theo ngữ cảnh” khi câu chuyện nhắc tới Agile."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pesticide paradox",
+          "vi": "nghịch lý thuốc trừ sâu — chạy mãi một bộ test thì không còn tìm ra lỗi mới"
+        },
+        {
+          "en": "defect clustering",
+          "vi": "lỗi phân cụm — đa số lỗi nằm ở ít module"
+        },
+        {
+          "en": "exhaustive testing",
+          "vi": "kiểm thử vét cạn — thử mọi tổ hợp đầu vào"
+        },
+        {
+          "en": "fallacy",
+          "vi": "ngụy biện / niềm tin sai"
+        }
+      ]
+    },
+    {
+      "title": "Seven principles 2 — Exam questions (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "seven principles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six FE-style questions on the seven principles. Several distractors are true sentences that answer a different question — read the stem carefully.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu FE về bảy nguyên tắc. Nhiều phương án nhiễu là câu đúng nhưng trả lời câu hỏi khác — đọc kỹ đề.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tìm từ khoá trong đề, không chọn câu “nghe đúng”.",
+        "Nguyên tắc 7 nói về NHU CẦU người dùng, nguyên tắc 1 nói về CHỨNG MINH."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 2 — Exam questions (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. How should a team respond to the pesticide paradox?Nhóm nên phản ứng thế nào với nghịch lý thuốc trừ sâu?\n2. Instead of exhaustive testing, what should be used to focus test effort?Thay vì test vét cạn, nên dùng gì để tập trung công sức test?\n3. Which principle is the reason testers should take part in requirement reviews?Nguyên tắc nào là lý do tester nên tham gia review yêu cầu?\n4. How is defect clustering useful for test planning?Phân cụm lỗi hữu ích thế nào cho lập kế hoạch test?\n5. An e-commerce site and a pacemaker are tested differently. Which principle?Trang thương mại điện tử và máy tạo nhịp tim được test khác nhau. Nguyên tắc nào?\n6. “Finding and fixing many defects guarantees a successful system” is wrong because…“Tìm và sửa thật nhiều lỗi bảo đảm hệ thống thành công” sai vì…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 2 — Exam questions (K2) — answer key\n\n1. How should a team respond to the pesticide paradox?Nhóm nên phản ứng thế nào với nghịch lý thuốc trừ sâu?\n   Answer: b) Regularly review and revise existing tests and write new, different tests\n   Tests and test data must be changed and new tests written to exercise different parts of the software. Note: in automated regression, an unchanged suite finding nothing can be a GOOD outcome.VI: Phải sửa test và dữ liệu test, viết test mới để chạm phần khác. Lưu ý: với hồi quy tự động, bộ test không đổi mà không tìm ra lỗi có thể là kết quả TỐT.\n\n2. Instead of exhaustive testing, what should be used to focus test effort?Thay vì test vét cạn, nên dùng gì để tập trung công sức test?\n   Answer: b) Risk analysis, test techniques and priorities\n   Exhaustive testing is impossible except in trivial cases; risk analysis, techniques and priorities focus effort.VI: Vét cạn bất khả thi trừ trường hợp tầm thường; phân tích rủi ro, kỹ thuật và ưu tiên giúp tập trung.\n\n3. Which principle is the reason testers should take part in requirement reviews?Nguyên tắc nào là lý do tester nên tham gia review yêu cầu?\n   Answer: b) Early testing saves time and money (shift left)\n   Removing defects early prevents derived defects later — this is “shift left”.VI: Gỡ lỗi sớm ngăn các lỗi phái sinh về sau — đó là “shift left”.\n\n4. How is defect clustering useful for test planning?Phân cụm lỗi hữu ích thế nào cho lập kế hoạch test?\n   Answer: a) Predicted and observed clusters are an input to risk analysis to focus effort\n   Clusters feed risk-based testing; other modules still need testing.VI: Cụm lỗi là đầu vào cho test dựa trên rủi ro; module khác vẫn cần test.\n\n5. An e-commerce site and a pacemaker are tested differently. Which principle?Trang thương mại điện tử và máy tạo nhịp tim được test khác nhau. Nguyên tắc nào?\n   Answer: a) Testing is context dependent\n   Safety-critical software is tested differently from an e-commerce site; Agile differently from sequential.VI: Phần mềm an toàn sống còn được test khác trang TMĐT; Agile khác mô hình tuần tự.\n\n6. “Finding and fixing many defects guarantees a successful system” is wrong because…“Tìm và sửa thật nhiều lỗi bảo đảm hệ thống thành công” sai vì…\n   Answer: b) a system can be defect-free yet unusable or not meet the users’ needs and expectations\n   Principle 7. (a) is true too but it answers principle 1/2, not this claim about success.VI: Nguyên tắc 7. (a) cũng đúng nhưng ứng với nguyên tắc 1/2, không phải nhận định về thành công.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How should a team respond to the pesticide paradox?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm nên phản ứng thế nào với nghịch lý thuốc trừ sâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stop running regression tests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Regularly review and revise existing tests and write new, different tests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Run the same tests more often"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Automate all tests"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Tests and test data must be changed and new tests written to exercise different parts of the software. Note: in automated regression, an unchanged suite finding nothing can be a GOOD outcome.</p><p><i>VI: Phải sửa test và dữ liệu test, viết test mới để chạm phần khác. Lưu ý: với hồi quy tự động, bộ test không đổi mà không tìm ra lỗi có thể là kết quả TỐT.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Instead of exhaustive testing, what should be used to focus test effort?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay vì test vét cạn, nên dùng gì để tập trung công sức test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Random testing only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Risk analysis, test techniques and priorities"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing only the user interface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Doubling the number of testers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Exhaustive testing is impossible except in trivial cases; risk analysis, techniques and priorities focus effort.</p><p><i>VI: Vét cạn bất khả thi trừ trường hợp tầm thường; phân tích rủi ro, kỹ thuật và ưu tiên giúp tập trung.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which principle is the reason testers should take part in requirement reviews?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nguyên tắc nào là lý do tester nên tham gia review yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Defects cluster together"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Early testing saves time and money (shift left)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing is context dependent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exhaustive testing is impossible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Removing defects early prevents derived defects later — this is “shift left”.</p><p><i>VI: Gỡ lỗi sớm ngăn các lỗi phái sinh về sau — đó là “shift left”.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>How is defect clustering useful for test planning?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân cụm lỗi hữu ích thế nào cho lập kế hoạch test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Predicted and observed clusters are an input to risk analysis to focus effort"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It means other modules need no testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It proves the code is of good quality"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is only useful after release"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Clusters feed risk-based testing; other modules still need testing.</p><p><i>VI: Cụm lỗi là đầu vào cho test dựa trên rủi ro; module khác vẫn cần test.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>An e-commerce site and a pacemaker are tested differently. Which principle?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang thương mại điện tử và máy tạo nhịp tim được test khác nhau. Nguyên tắc nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testing is context dependent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Defects cluster together"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Absence-of-errors is a fallacy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pesticide paradox"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Safety-critical software is tested differently from an e-commerce site; Agile differently from sequential.</p><p><i>VI: Phần mềm an toàn sống còn được test khác trang TMĐT; Agile khác mô hình tuần tự.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>“Finding and fixing many defects guarantees a successful system” is wrong because…</p><p style=\"opacity:.75;font-size:.92em\"><i>“Tìm và sửa thật nhiều lỗi bảo đảm hệ thống thành công” sai vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "testing cannot find all defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a system can be defect-free yet unusable or not meet the users’ needs and expectations"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fixing defects introduces new ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is right"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Principle 7. (a) is true too but it answers principle 1/2, not this claim about success.</p><p><i>VI: Nguyên tắc 7. (a) cũng đúng nhưng ứng với nguyên tắc 1/2, không phải nhận định về thành công.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “dừng hồi quy” cho nghịch lý thuốc trừ sâu."
+        },
+        {
+          "loi": "Chọn “không cần test module khác” cho phân cụm lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shift left",
+          "vi": "dịch trái — đưa hoạt động test lên sớm hơn trong vòng đời"
+        }
+      ]
+    },
+    {
+      "title": "Seven principles 3 — Put numbers on clustering and exhaustive testing",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "defect clustering",
+        "exhaustive testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Two principles become concrete when you compute them.</p>\n<ol><li><b>Exhaustive testing is impossible.</b> Write <code>combinations(fields)</code>: <code>fields</code> is an array of how many distinct values each input field can take; return the number of input combinations (the product). An empty array means one combination (nothing to vary).</li>\n<li><b>Defects cluster together.</b> Write <code>hotSpots(defectsByModule, share)</code>: <code>defectsByModule</code> is an object <code>{ module: count }</code>. Sort modules by count (descending; ties by module name A→Z) and return the <b>smallest prefix</b> of module names whose counts reach at least <code>share</code> (0–1) of all defects. If there are no defects return <code>[]</code>.</li></ol>\n<p>Example from the LabBook defect log: <code>{ booking: 42, auth: 6, labs: 5, report: 4, ui: 3 }</code>, share 0.8 ⇒ <code>[\"booking\", \"auth\"]</code> (48 of 60 = 80%).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>combinations([31, 14, 4, 3])</code> — day of month, start hour 7–20, duration 1–4, lab — returns 5208.</li>\n  <li><code>hotSpots</code> must not modify its input and must treat “reach” as ≥ (not >).</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai nguyên tắc trở nên cụ thể khi bạn tính ra số.</p>\n<ol><li><b>Không thể test vét cạn.</b> Viết <code>combinations(fields)</code>: <code>fields</code> là mảng số giá trị khác nhau mỗi trường nhập nhận được; trả số tổ hợp đầu vào (tích). Mảng rỗng ⇒ 1 tổ hợp.</li>\n<li><b>Lỗi phân cụm.</b> Viết <code>hotSpots(defectsByModule, share)</code>: <code>defectsByModule</code> là object <code>{ module: số lỗi }</code>. Sắp module theo số lỗi giảm dần (bằng nhau thì theo tên A→Z) và trả <b>tiền tố ngắn nhất</b> các tên module có tổng lỗi đạt ít nhất <code>share</code> (0–1) tổng số lỗi. Không có lỗi ⇒ <code>[]</code>.</li></ol>\n<p>Ví dụ từ nhật ký lỗi LabBook: <code>{ booking: 42, auth: 6, labs: 5, report: 4, ui: 3 }</code>, share 0.8 ⇒ <code>[\"booking\", \"auth\"]</code> (48/60 = 80%).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>combinations([31, 14, 4, 3])</code> — ngày, giờ bắt đầu 7–20, thời lượng 1–4, phòng lab — trả 5208.</li>\n  <li><code>hotSpots</code> không được sửa đầu vào và “đạt” nghĩa là ≥ (không phải >).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "combinations([2, 2, 2])",
+          "output": "8",
+          "explanation": "Three yes/no fields.|||Ba trường có/không."
+        },
+        {
+          "input": "hotSpots({ booking: 42, auth: 6, labs: 5, report: 4, ui: 3 }, 0.8)",
+          "output": "[\"booking\",\"auth\"]",
+          "explanation": "42/60 = 70% < 80%, 48/60 = 80% ≥ 80%.|||42/60 = 70% < 80%, 48/60 = 80% ≥ 80%."
+        }
+      ],
+      "hintsJson": [
+        "combinations = fields.reduce((p, n) => p * n, 1).",
+        "hotSpots: Object.entries → sort → cộng dồn tới khi tổng ≥ share × tổng tất cả.",
+        "So sánh bằng phép nhân (sum ≥ share × total) và cẩn thận sai số số thực — 0.8 × 60 = 48.00000000000001? Thử cộng một epsilon nhỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "principles.js",
+          "language": "javascript",
+          "code": "function combinations(fields) {\n  // product of the number of values of each field\n  return 0;\n}\n\nfunction hotSpots(defectsByModule, share) {\n  // smallest prefix of modules (most defects first) reaching share of all defects\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "principles.js",
+          "language": "javascript",
+          "code": "function combinations(fields) {\n  return fields.reduce((p, n) => p * n, 1);\n}\n\nfunction hotSpots(defectsByModule, share) {\n  const rows = Object.entries(defectsByModule).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));\n  const total = rows.reduce((s, r) => s + r[1], 0);\n  if (total === 0) return [];\n  const out = [];\n  let sum = 0;\n  for (const [name, n] of rows) {\n    out.push(name);\n    sum += n;\n    if (sum + 1e-9 >= share * total) break;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sort entries by (−count, name), accumulate, stop at the first prefix with sum ≥ share·total (use a tiny epsilon for floating point). 5,208 combinations for one small form already — real forms have free-text fields, so exhaustive testing is impossible.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "principles.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "combinations — example and the LabBook form",
+              "vi": "combinations — ví dụ và form LabBook"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>combinations([2,2,2])===8&&combinations([31,14,4,3])===5208?\"OK\":\"combinations([2,2,2]) should be 8 and combinations([31,14,4,3]) should be 5208\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "combinations — empty array and a single field",
+              "vi": "combinations — mảng rỗng và một trường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>combinations([])===1&&combinations([7])===7?\"OK\":\"combinations([]) should be 1 (one way to vary nothing) and combinations([7]) should be 7\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — the LabBook example (≥, not >)",
+              "vi": "hotSpots — ví dụ LabBook (≥, không phải >)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const o=hotSpots({booking:42,auth:6,labs:5,report:4,ui:3},.8);return JSON.stringify(o)==='[\"booking\",\"auth\"]'?\"OK\":'expected [\"booking\",\"auth\"], got '+JSON.stringify(o)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — input order does not matter, ties by name",
+              "vi": "hotSpots — thứ tự đầu vào không ảnh hưởng, bằng nhau xếp theo tên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=hotSpots({zeta:5,alpha:5,mid:10},.7);return JSON.stringify(t)==='[\"mid\",\"alpha\"]'?\"OK\":'expected [\"mid\",\"alpha\"] (10 then the tie 5/5 by name), got '+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — share 1 returns every module with defects",
+              "vi": "hotSpots — share 1 trả mọi module"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=hotSpots({a:1,b:2,c:3},1);return JSON.stringify(t)==='[\"c\",\"b\",\"a\"]'?\"OK\":'expected [\"c\",\"b\",\"a\"], got '+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — no defects",
+              "vi": "hotSpots — không có lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const r=hotSpots({a:0,b:0},.8),t=hotSpots({},.8);return Array.isArray(r)&&r.length===0&&Array.isArray(t)&&t.length===0?\"OK\":\"no defects \\u21D2 []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — does not modify the input",
+              "vi": "hotSpots — không sửa đầu vào"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t={b:1,a:9};return hotSpots(t,.5),JSON.stringify(t)==='{\"b\":1,\"a\":9}'?\"OK\":\"the input object was changed\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "hotSpots — floating point at exactly the share",
+              "vi": "hotSpots — số thực đúng bằng share"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=hotSpots({a:7,b:2,c:1},.9);return JSON.stringify(t)==='[\"a\",\"b\"]'?\"OK\":'7+2 = 9 is exactly 90% of 10 \\u2014 expected [\"a\",\"b\"], got '+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng > thay vì ≥ nên ví dụ trả thêm \"labs\"."
+        },
+        {
+          "loi": "Quên sắp tên khi số lỗi bằng nhau."
+        },
+        {
+          "loi": "Sort trực tiếp mảng đầu vào hay sửa object đầu vào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Pareto principle",
+          "vi": "nguyên lý Pareto (80/20) — 80% lỗi nằm ở 20% module"
+        },
+        {
+          "en": "combinatorial explosion",
+          "vi": "bùng nổ tổ hợp"
+        }
+      ]
+    },
+    {
+      "title": "Seven principles 4 — True or false? Misconceptions about the principles",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "seven principles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Mark every statement that is <b>TRUE</b>. Each wrong statement is a misconception seen in student answers.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn mọi phát biểu <b>ĐÚNG</b>. Mỗi phát biểu sai là một hiểu lầm thường gặp trong bài làm sinh viên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nguyên tắc 2 có chữ “except in trivial cases”.",
+        "Nguyên tắc 6: không có một cách test cho mọi dự án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 4 — True or false? Misconceptions about the principles\n\nAnswer in the answer panel (no code needed).\n\n1. Select ALL true statements.Chọn TẤT CẢ phát biểu đúng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Seven principles 4 — True or false? Misconceptions about the principles — answer key\n\n1. Select ALL true statements.Chọn TẤT CẢ phát biểu đúng.\n   Answer: a) Testing reduces the probability of undiscovered defects remaining in the software + c) Static testing of requirements is one way of applying “early testing” + e) Exhaustive testing is possible for a function with one boolean input\n   a — principle 1 wording; c — early testing includes static testing; e — “except in trivial cases”. b, d, f contradict principles 4, 1 and 6.VI: a — đúng lời nguyên tắc 1; c — test sớm gồm cả kiểm thử tĩnh; e — “trừ trường hợp tầm thường”. b, d, f trái nguyên tắc 4, 1 và 6.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>True: a, c, e.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "nhieu": true,
+            "de": "<p>Select ALL true statements.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn TẤT CẢ phát biểu đúng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testing reduces the probability of undiscovered defects remaining in the software"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because of defect clustering, modules with no defects so far need no testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Static testing of requirements is one way of applying “early testing”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "If 100% of the planned tests pass, the software is defect-free"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Exhaustive testing is possible for a function with one boolean input"
+              },
+              {
+                "ma": "f",
+                "noiDung": "The same test approach should be used for every project to keep quality consistent"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "c",
+              "e"
+            ],
+            "giaiThich": "<p>a — principle 1 wording; c — early testing includes static testing; e — “except in trivial cases”. b, d, f contradict principles 4, 1 and 6.</p><p><i>VI: a — đúng lời nguyên tắc 1; c — test sớm gồm cả kiểm thử tĩnh; e — “trừ trường hợp tầm thường”. b, d, f trái nguyên tắc 4, 1 và 6.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ qua câu e vì nhớ máy móc “vét cạn là không thể”."
+        },
+        {
+          "loi": "Chọn d vì “đã chạy đủ kế hoạch”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trivial case",
+          "vi": "trường hợp tầm thường — rất ít đầu vào"
+        }
+      ]
+    }
+  ]
+}

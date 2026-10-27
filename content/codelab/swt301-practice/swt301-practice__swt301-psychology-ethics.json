@@ -1,0 +1,666 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-psychology-ethics",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-psychology-ethics"
+  },
+  "exercises": [
+    {
+      "title": "Psychology & ethics 1 — Which ethics principle applies?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "code of ethics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The ISTQB code of ethics has eight principles: <b>PUBLIC</b>, <b>CLIENT AND EMPLOYER</b>, <b>PRODUCT</b>, <b>JUDGMENT</b>, <b>MANAGEMENT</b>, <b>PROFESSION</b>, <b>COLLEAGUES</b>, <b>SELF</b>. Match each situation to the principle it is mainly about. Each principle is used once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ quy tắc đạo đức ISTQB có tám nguyên tắc: <b>PUBLIC</b>, <b>CLIENT AND EMPLOYER</b>, <b>PRODUCT</b>, <b>JUDGMENT</b>, <b>MANAGEMENT</b>, <b>PROFESSION</b>, <b>COLLEAGUES</b>, <b>SELF</b>. Ghép mỗi tình huống với nguyên tắc chủ yếu của nó. Mỗi nguyên tắc dùng một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có người ngoài/an toàn xã hội ⇒ PUBLIC; bảo mật dữ liệu của công ty/khách ⇒ CLIENT AND EMPLOYER.",
+        "Quà tặng / xung đột lợi ích ⇒ JUDGMENT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 1 — Which ethics principle applies?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → principleTình huống → nguyên tắc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 1 — Which ethics principle applies? — answer key\n\n1. Situation → principleTình huống → nguyên tắc\n   - r0.p: PUBLIC\n   - r1.p: CLIENT AND EMPLOYER\n   - r2.p: PRODUCT\n   - r3.p: JUDGMENT\n   - r4.p: MANAGEMENT\n   - r5.p: PROFESSION\n   - r6.p: COLLEAGUES\n   - r7.p: SELF\n   PUBLIC — public interest and safety; CLIENT AND EMPLOYER — their best interests incl. confidentiality; PRODUCT — deliverables (reports too) meet the highest standards; JUDGMENT — integrity and independence (no conflict of interest); MANAGEMENT — ethical management of testing; PROFESSION — integrity and reputation of the profession; COLLEAGUES — fair and supportive, cooperation with developers; SELF — lifelong learning.VI: PUBLIC — lợi ích, an toàn công chúng; CLIENT AND EMPLOYER — lợi ích của họ gồm bảo mật; PRODUCT — sản phẩm bàn giao (cả báo cáo) đạt chuẩn cao nhất; JUDGMENT — chính trực, độc lập (không xung đột lợi ích); MANAGEMENT — quản lý kiểm thử có đạo đức; PROFESSION — uy tín nghề; COLLEAGUES — công bằng, hỗ trợ, hợp tác với developer; SELF — học suốt đời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows are in the order PUBLIC, CLIENT AND EMPLOYER, PRODUCT, JUDGMENT, MANAGEMENT, PROFESSION, COLLEAGUES, SELF.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → principle</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → nguyên tắc</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "p",
+                "ten": "Principle",
+                "luaChon": [
+                  "PUBLIC",
+                  "CLIENT AND EMPLOYER",
+                  "PRODUCT",
+                  "JUDGMENT",
+                  "MANAGEMENT",
+                  "PROFESSION",
+                  "COLLEAGUES",
+                  "SELF"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A tester refuses to sign off a hospital lab system with an unfixed defect that could mix up patients’ samples"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A tester keeps the university’s student data confidential and does not copy it to a personal laptop"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A tester makes sure the test summary report states the real coverage reached, not the planned one"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A test lead is offered a gift by the vendor whose product she is evaluating and declines it"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A test manager plans realistic schedules and does not pressure testers to hide failing results"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A tester presents a talk at a local meetup to share good testing practice and the value of the profession"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A tester helps a new junior tester and credits a developer’s idea in the retrospective"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A tester takes the ISTQB Advanced course and keeps learning new automation tools"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.p": "PUBLIC",
+              "r1.p": "CLIENT AND EMPLOYER",
+              "r2.p": "PRODUCT",
+              "r3.p": "JUDGMENT",
+              "r4.p": "MANAGEMENT",
+              "r5.p": "PROFESSION",
+              "r6.p": "COLLEAGUES",
+              "r7.p": "SELF"
+            },
+            "giaiThich": "<p>PUBLIC — public interest and safety; CLIENT AND EMPLOYER — their best interests incl. confidentiality; PRODUCT — deliverables (reports too) meet the highest standards; JUDGMENT — integrity and independence (no conflict of interest); MANAGEMENT — ethical management of testing; PROFESSION — integrity and reputation of the profession; COLLEAGUES — fair and supportive, cooperation with developers; SELF — lifelong learning.</p><p><i>VI: PUBLIC — lợi ích, an toàn công chúng; CLIENT AND EMPLOYER — lợi ích của họ gồm bảo mật; PRODUCT — sản phẩm bàn giao (cả báo cáo) đạt chuẩn cao nhất; JUDGMENT — chính trực, độc lập (không xung đột lợi ích); MANAGEMENT — quản lý kiểm thử có đạo đức; PROFESSION — uy tín nghề; COLLEAGUES — công bằng, hỗ trợ, hợp tác với developer; SELF — học suốt đời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm PRODUCT (chất lượng sản phẩm bàn giao) với PUBLIC."
+        },
+        {
+          "loi": "Nhầm PROFESSION (uy tín nghề) với SELF (tự học)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code of ethics",
+          "vi": "bộ quy tắc đạo đức nghề nghiệp"
+        },
+        {
+          "en": "conflict of interest",
+          "vi": "xung đột lợi ích"
+        }
+      ]
+    },
+    {
+      "title": "Psychology & ethics 2 — Levels of independence",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "independent testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Slide 103 lists five levels of independence of the test designer. Order them from <b>least</b> to <b>most</b> independent.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 103 liệt kê năm mức độc lập của người thiết kế test. Sắp từ <b>ít</b> tới <b>nhiều</b> độc lập nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Càng xa người viết mã càng độc lập.",
+        "Công cụ đứng cuối danh sách của slide 103."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 2 — Levels of independence\n\nAnswer in the answer panel (no code needed).\n\n1. Least → most independentÍt → nhiều độc lập\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 2 — Levels of independence — answer key\n\n1. Least → most independentÍt → nhiều độc lập\n   Answer: a) Tests designed by the author of the code  →  b) Tests designed by another developer in the same team  →  c) Tests designed by a different team (e.g. the test team)  →  d) Tests designed by a different organisation (e.g. a certification body)  →  e) Tests generated by a tool\n   Author → another developer → another team → another organisation → tool (independent of human bias, but possibly low quality).VI: Tác giả → developer khác → nhóm khác → tổ chức khác → công cụ (không thiên kiến người, nhưng có thể chất lượng thấp).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a → b → c → d → e.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Least → most independent</p><p style=\"opacity:.75;font-size:.92em\"><i>Ít → nhiều độc lập</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Tests designed by a different team (e.g. the test team)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Tests generated by a tool"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Tests designed by the author of the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Tests designed by a different organisation (e.g. a certification body)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Tests designed by another developer in the same team"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Author → another developer → another team → another organisation → tool (independent of human bias, but possibly low quality).</p><p><i>VI: Tác giả → developer khác → nhóm khác → tổ chức khác → công cụ (không thiên kiến người, nhưng có thể chất lượng thấp).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt “tổ chức khác” sau “công cụ”."
+        },
+        {
+          "loi": "Cho rằng độc lập càng cao luôn càng tốt — nó tốn giao tiếp và hiểu biết sản phẩm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "independence of testing",
+          "vi": "tính độc lập của kiểm thử"
+        }
+      ]
+    },
+    {
+      "title": "Psychology & ethics 3 — Mindset, bias and communication (K1–K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "psychology of testing",
+        "tester mindset"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Seven questions on slides 100–111: why we test, confirmation bias, the tester’s mindset, the testing paradox and the rights and responsibilities of testers.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy câu về slide 100–111: vì sao test, thiên kiến xác nhận, tư duy tester, nghịch lý kiểm thử, quyền và trách nhiệm của tester.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Slide 100: một dấu ✗ duy nhất là “chứng minh phần mềm đúng”.",
+        "Test thành công = test tìm ra lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 3 — Mindset, bias and communication (K1–K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is NOT a reason to test (slide 100)?Đâu KHÔNG phải lý do để test (slide 100)?\n2. Few defects were found. When does that really indicate good software?Tìm được ít lỗi. Khi nào điều đó thực sự cho thấy phần mềm tốt?\n3. About what share of their own faults do authors find when testing their own work?Tác giả tự test thì tìm được khoảng bao nhiêu lỗi của chính mình?\n4. Which mindset fits test activities best?Tư duy nào hợp hoạt động kiểm thử nhất?\n5. What is confirmation bias?Thiên kiến xác nhận là gì?\n6. Which is a tester’s responsibility (slide 111)?Đâu là trách nhiệm của tester (slide 111)?\n7. Resolve the testing paradox: finding faults destroys confidence, so…Giải nghịch lý: tìm ra lỗi phá niềm tin, vậy…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Psychology & ethics 3 — Mindset, bias and communication (K1–K2) — answer key\n\n1. Which is NOT a reason to test (slide 100)?Đâu KHÔNG phải lý do để test (slide 100)?\n   Answer: c) Prove that the software is correct\n   Proving correctness is impossible (principle 1).VI: Chứng minh phần mềm đúng là bất khả (nguyên tắc 1).\n\n2. Few defects were found. When does that really indicate good software?Tìm được ít lỗi. Khi nào điều đó thực sự cho thấy phần mềm tốt?\n   Answer: b) Only when the tests themselves are of high quality\n   Weak tests that find little prove nothing (slide 101).VI: Bộ test yếu tìm được ít lỗi thì không chứng minh gì (slide 101).\n\n3. About what share of their own faults do authors find when testing their own work?Tác giả tự test thì tìm được khoảng bao nhiêu lỗi của chính mình?\n   Answer: b) 30–50%\n   Same assumptions, seeing what you meant, emotional attachment (slide 102).VI: Cùng giả định, thấy điều mình định viết, gắn bó cảm xúc (slide 102).\n\n4. Which mindset fits test activities best?Tư duy nào hợp hoạt động kiểm thử nhất?\n   Answer: b) Curiosity, professional pessimism, a critical eye and attention to detail\n   Developers aim to design and build solutions; testers aim to verify and validate and find defects — a test that finds a fault is a successful test.VI: Developer nhắm thiết kế và xây giải pháp; tester nhắm kiểm chứng, thẩm định và tìm lỗi — test tìm ra lỗi là test thành công.\n\n5. What is confirmation bias?Thiên kiến xác nhận là gì?\n   Answer: b) The tendency to accept information that agrees with current beliefs and reject information that does not\n   It makes people reject test results that contradict what they hoped.VI: Nó khiến người ta bác bỏ kết quả test trái với điều họ mong.\n\n6. Which is a tester’s responsibility (slide 111)?Đâu là trách nhiệm của tester (slide 111)?\n   Answer: b) Check that their tests are correct before reporting software faults\n   Avoid false positives; report objectively; remember the software, not the programmer, is tested.VI: Tránh dương tính giả; báo cáo khách quan; nhớ rằng thứ được test là phần mềm, không phải lập trình viên.\n\n7. Resolve the testing paradox: finding faults destroys confidence, so…Giải nghịch lý: tìm ra lỗi phá niềm tin, vậy…\n   Answer: b) software that survived serious attempts to break it deserves more trust\n   The best way to build confidence is to try to destroy it (slide 108).VI: Cách tốt nhất để xây niềm tin là cố phá nó (slide 108).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is NOT a reason to test (slide 100)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải lý do để test (slide 100)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Build confidence"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Find faults"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prove that the software is correct"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Assess the software quality"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Proving correctness is impossible (principle 1).</p><p><i>VI: Chứng minh phần mềm đúng là bất khả (nguyên tắc 1).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Few defects were found. When does that really indicate good software?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm được ít lỗi. Khi nào điều đó thực sự cho thấy phần mềm tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only when the tests themselves are of high quality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "When the developers say so"
+              },
+              {
+                "ma": "d",
+                "noiDung": "When the release date is met"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Weak tests that find little prove nothing (slide 101).</p><p><i>VI: Bộ test yếu tìm được ít lỗi thì không chứng minh gì (slide 101).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>About what share of their own faults do authors find when testing their own work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tác giả tự test thì tìm được khoảng bao nhiêu lỗi của chính mình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "90–100%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "30–50%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "70–80%"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Same assumptions, seeing what you meant, emotional attachment (slide 102).</p><p><i>VI: Cùng giả định, thấy điều mình định viết, gắn bó cảm xúc (slide 102).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which mindset fits test activities best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tư duy nào hợp hoạt động kiểm thử nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Showing that the system works with easy test cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Curiosity, professional pessimism, a critical eye and attention to detail"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Trusting the developer’s judgement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Avoiding difficult test cases to save time"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Developers aim to design and build solutions; testers aim to verify and validate and find defects — a test that finds a fault is a successful test.</p><p><i>VI: Developer nhắm thiết kế và xây giải pháp; tester nhắm kiểm chứng, thẩm định và tìm lỗi — test tìm ra lỗi là test thành công.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>What is confirmation bias?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiên kiến xác nhận là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Confirming a bug fix with a re-test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The tendency to accept information that agrees with current beliefs and reject information that does not"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Confirming that the requirements are approved"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Asking the developer to confirm a defect"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It makes people reject test results that contradict what they hoped.</p><p><i>VI: Nó khiến người ta bác bỏ kết quả test trái với điều họ mong.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Which is a tester’s responsibility (slide 111)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là trách nhiệm của tester (slide 111)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fix the defects they find"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Check that their tests are correct before reporting software faults"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Decide the developers’ salaries"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hide defects that are hard to reproduce"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Avoid false positives; report objectively; remember the software, not the programmer, is tested.</p><p><i>VI: Tránh dương tính giả; báo cáo khách quan; nhớ rằng thứ được test là phần mềm, không phải lập trình viên.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "<p>Resolve the testing paradox: finding faults destroys confidence, so…</p><p style=\"opacity:.75;font-size:.92em\"><i>Giải nghịch lý: tìm ra lỗi phá niềm tin, vậy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "testers should look for fewer faults"
+              },
+              {
+                "ma": "b",
+                "noiDung": "software that survived serious attempts to break it deserves more trust"
+              },
+              {
+                "ma": "c",
+                "noiDung": "testing should be skipped"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only developers should test"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The best way to build confidence is to try to destroy it (slide 108).</p><p><i>VI: Cách tốt nhất để xây niềm tin là cố phá nó (slide 108).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng tester phải sửa lỗi."
+        },
+        {
+          "loi": "Nhầm “confirmation bias” với “confirmation testing”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "confirmation bias",
+          "vi": "thiên kiến xác nhận"
+        },
+        {
+          "en": "professional pessimism",
+          "vi": "bi quan chuyên nghiệp — luôn hỏi “cái gì có thể hỏng?”"
+        },
+        {
+          "en": "blame the messenger",
+          "vi": "đổ lỗi cho người đưa tin"
+        }
+      ]
+    },
+    {
+      "title": "Psychology & ethics 4 — Rewrite an angry message as a neutral, factual defect report",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "communicating defects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A teammate posted this in the LabBook group chat:</p><blockquote>“Your booking code is garbage again!! It crashes all the time, did you even test it???”</blockquote>\n<p>What really happened (from the logs): on build <b>1.4.2</b>, Chrome 130, logged in as <b>student1</b>, choosing lab <b>LAB02</b>, date <b>2026-11-03</b>, start 09:00, duration 2 h and pressing <b>Book</b> shows a blank page; the API returned <b>HTTP 500</b>. Expected: the booking is created with status CONFIRMED. It happens 5 out of 5 times; LAB01 works.</p>\n<p>Following slide 105 (neutral, fact-focused, objective, collaboration not battles), write the defect report as the object <code>REPORT</code>:</p>\n<pre>{ title, build, environment, steps: [..], expected, actual, reproducibility, severity }</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>No blaming or emotional words anywhere: <i>you, your, garbage, stupid, again, even, terrible</i>, no “!!” or “???”.</li>\n  <li>The title names the symptom and the condition (mention 500 and LAB02). At least 3 reproduction steps; the steps mention LAB02.</li>\n  <li><code>build</code> is \"1.4.2\", <code>environment</code> mentions Chrome; <code>actual</code> mentions 500; <code>expected</code> mentions CONFIRMED; <code>reproducibility</code> is \"5/5\"; <code>severity</code> is one of Critical, High, Medium, Low.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bạn trong nhóm đăng vào nhóm chat LabBook:</p><blockquote>“Your booking code is garbage again!! It crashes all the time, did you even test it???”</blockquote>\n<p>Điều thật sự xảy ra (theo log): trên build <b>1.4.2</b>, Chrome 130, đăng nhập <b>student1</b>, chọn phòng <b>LAB02</b>, ngày <b>2026-11-03</b>, bắt đầu 09:00, thời lượng 2 giờ rồi bấm <b>Book</b> thì hiện trang trắng; API trả <b>HTTP 500</b>. Mong đợi: tạo được lượt đặt trạng thái CONFIRMED. Xảy ra 5/5 lần; LAB01 vẫn chạy.</p>\n<p>Theo slide 105 (trung lập, dựa trên sự kiện, khách quan, hợp tác không gây chiến), viết báo cáo lỗi thành object <code>REPORT</code>:</p>\n<pre>{ title, build, environment, steps: [..], expected, actual, reproducibility, severity }</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không có từ đổ lỗi hay cảm xúc ở bất kỳ đâu: <i>you, your, garbage, stupid, again, even, terrible</i>, không “!!” hay “???”.</li>\n  <li>Tiêu đề nêu triệu chứng và điều kiện (có 500 và LAB02). Ít nhất 3 bước tái hiện; các bước có nhắc LAB02.</li>\n  <li><code>build</code> là \"1.4.2\", <code>environment</code> có Chrome; <code>actual</code> có 500; <code>expected</code> có CONFIRMED; <code>reproducibility</code> là \"5/5\"; <code>severity</code> là một trong Critical, High, Medium, Low.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "title",
+          "output": "\"Booking LAB02 returns HTTP 500 and a blank page\"",
+          "explanation": "Symptom + condition, no person.|||Triệu chứng + điều kiện, không nhắc người."
+        }
+      ],
+      "hintsJson": [
+        "Mô tả PHẦN MỀM làm gì, không mô tả NGƯỜI viết mã.",
+        "Bước tái hiện: đăng nhập → chọn phòng/ngày/giờ → bấm Book."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "report.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  title: \"Your booking code is garbage again!!\",\n  build: \"\",\n  environment: \"\",\n  steps: [],\n  expected: \"\",\n  actual: \"It crashes all the time\",\n  reproducibility: \"\",\n  severity: \"\",\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "report.js",
+          "language": "javascript",
+          "code": "const REPORT = {\n  title: \"Booking LAB02 returns HTTP 500 and a blank page\",\n  build: \"1.4.2\",\n  environment: \"Chrome 130, test server, account student1\",\n  steps: [\n    \"Log in as student1\",\n    \"Choose lab LAB02, date 2026-11-03, start 09:00, duration 2 h\",\n    \"Press Book\",\n  ],\n  expected: \"The booking is created with status CONFIRMED\",\n  actual: \"A blank page is shown; the API returns HTTP 500 (LAB01 works)\",\n  reproducibility: \"5/5\",\n  severity: \"High\",\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A report like “Booking LAB02 returns HTTP 500 and a blank page — build 1.4.2, Chrome 130, 5/5, steps attached” lets the developer reproduce the failure and keeps the conversation about the product, not the person.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "report.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No blaming or emotional words",
+              "vi": "Không từ đổ lỗi/cảm xúc"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=JSON.stringify(REPORT).toLowerCase(),e=[\"you\",\"your\",\"garbage\",\"stupid\",\"again\",\"even\",\"terrible\"].filter(r=>new RegExp(\"\\\\b\"+r+\"\\\\b\").test(t));return/!!|\\?\\?/.test(t)&&e.push(\"!! or ??\"),e.length?\"remove: \"+e.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Title names the symptom and the condition",
+              "vi": "Tiêu đề nêu triệu chứng và điều kiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>typeof REPORT.title==\"string\"&&/500/.test(REPORT.title)&&/lab02/i.test(REPORT.title)&&REPORT.title.length<=90?\"OK\":\"the title should mention 500 and LAB02 and be short (\\u2264 90 characters)\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 3 reproduction steps mentioning LAB02",
+              "vi": "Ít nhất 3 bước tái hiện có LAB02"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>Array.isArray(REPORT.steps)&&REPORT.steps.length>=3&&REPORT.steps.every(e=>typeof e==\"string\"&&e.trim().length>3)&&REPORT.steps.some(e=>/lab02/i.test(e))?\"OK\":\"need \\u2265 3 non-empty steps, one of them choosing LAB02\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Build and environment",
+              "vi": "Build và môi trường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>REPORT.build===\"1.4.2\"&&/chrome/i.test(REPORT.environment||\"\")?\"OK\":'build must be \"1.4.2\" and environment must mention Chrome')))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Expected vs actual",
+              "vi": "Mong đợi và thực tế"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>/confirmed/i.test(REPORT.expected||\"\")&&/500/.test(REPORT.actual||\"\")&&REPORT.expected!==REPORT.actual?\"OK\":\"expected must mention CONFIRMED, actual must mention 500\")))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Reproducibility and severity",
+              "vi": "Tái hiện và mức nghiêm trọng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>String(REPORT.reproducibility).replace(/\\s/g,\"\")===\"5/5\"&&[\"Critical\",\"High\",\"Medium\",\"Low\"].includes(REPORT.severity)?\"OK\":'reproducibility must be \"5/5\" and severity one of Critical, High, Medium, Low')))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ lại “again” hay “all the time” — cảm xúc, không phải số liệu; dùng “5/5”."
+        },
+        {
+          "loi": "Chỉ ghi “it crashes” mà không có điều kiện (LAB02) và kết quả quan sát (HTTP 500)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defect report",
+          "vi": "báo cáo lỗi"
+        },
+        {
+          "en": "reproducibility",
+          "vi": "khả năng tái hiện"
+        },
+        {
+          "en": "severity",
+          "vi": "mức nghiêm trọng"
+        }
+      ]
+    }
+  ]
+}

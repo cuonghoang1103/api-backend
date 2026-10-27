@@ -10,6 +10,54 @@
   "description": "Bộ luyện môn SWT301 (Software Testing) theo ISTQB Foundation và slide trường — mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (viết test bị chấm bằng mutant, đo độ phủ statement/decision/MC/DC trên mã đã gắn đo, test case hộp đen chạy qua hệ thống tham chiếu), mỗi chương một Lab + Deep Lab dạng bản in, luyện Lab 2–4 của trường, PE luyện định dạng SU26 và dự án xuyên suốt LabBook.",
   "modules": [
     {
+      "slug": "swt301-fundamentals-principles",
+      "name": "1.1 What is testing? Objectives, testing vs debugging",
+      "level": "BEGINNER",
+      "description": "Định nghĩa kiểm thử theo ISTQB, mục tiêu điển hình và theo ngữ cảnh, tĩnh/động × verification/validation trên tình huống LabBook, phân biệt testing với debugging."
+    },
+    {
+      "slug": "swt301-why-testing-necessary",
+      "name": "1.2 Why is testing necessary? Error, defect, failure",
+      "level": "BEGINNER",
+      "description": "Chuỗi nguyên nhân gốc → error → defect → failure → effect trên sự cố LabBook thật, phân tích báo cáo sự cố, quan hệ kiểm thử – QA – QC, chi phí lỗi, bẫy từ vựng của đề FE."
+    },
+    {
+      "slug": "swt301-seven-principles",
+      "name": "1.3 Seven testing principles",
+      "level": "BEGINNER",
+      "description": "Bảy nguyên tắc ISTQB qua câu chuyện LabBook, câu hỏi kiểu FE, tính số tổ hợp (vét cạn) và điểm nóng lỗi (phân cụm Pareto) bằng code, bẫy hiểu lầm."
+    },
+    {
+      "slug": "swt301-test-process",
+      "name": "1.4 The test process: activities, tasks and work products",
+      "level": "BEGINNER",
+      "description": "Bảy nhóm hoạt động kiểm thử theo thứ tự, ghép việc ↔ hoạt động ↔ sản phẩm trên dự án LabBook, viết ma trận truy vết tính độ phủ yêu cầu và phân tích ảnh hưởng, quy đổi quy trình 5 bước cũ."
+    },
+    {
+      "slug": "swt301-psychology-ethics",
+      "name": "1.5 Psychology of testing and code of ethics",
+      "level": "BEGINNER",
+      "description": "Tám nguyên tắc đạo đức ISTQB qua tình huống, các mức độc lập, tư duy tester, thiên kiến xác nhận, nghịch lý kiểm thử, viết lại một tin nhắn giận dữ thành báo cáo lỗi trung lập."
+    },
+    {
+      "slug": "swt301-1-lab-fundamentals-release-file",
+      "name": "Lab 1 — Fundamentals: the Test File of LabBook 1.4",
+      "level": "ADVANCED",
+      "description": "Lab chương 1: phân tích sự cố theo chuỗi lỗi, gọi tên hoạt động của 12 việc trong chu kỳ test, tính độ phủ yêu cầu/rủi ro cao từ ma trận truy vết, phân tích ảnh hưởng, quyết định go/no-go theo tiêu chí ra, nguyên tắc và đạo đức."
+    },
+    {
+      "slug": "swt301-1-deep-test-monitoring-engine",
+      "name": "Deep Lab 1 — Build the Engine of Test Monitoring and Control",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 1: tự viết testStatus — kết quả mới nhất, độ phủ yêu cầu/rủi ro cao qua ma trận truy vết, lỗi mở theo mức, điểm nóng lỗi (phân cụm), test cũ mòn (thuốc trừ sâu), quyết định GO/NO-GO; kiểm ẩn đổi dữ liệu."
+    },
+    {
+      "slug": "swt301-1-project-labbook-test-basis",
+      "name": "LabBook Project 1 — Review the Test Basis and Write Test Conditions",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 1: review user story bản 1.0 trước khi có mã (mơ hồ, mâu thuẫn, thiếu, không đo được; có bẫy), viết ≥ 14 test condition truy vết về story, gọi tên hoạt động/sản phẩm/nguyên tắc; kèm góc phỏng vấn 1."
+    },
+    {
       "slug": "swt301-static-testing-basics",
       "name": "3.1 Static testing basics",
       "level": "BEGINNER",

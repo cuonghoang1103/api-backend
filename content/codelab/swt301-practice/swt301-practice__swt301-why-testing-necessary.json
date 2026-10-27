@@ -1,0 +1,738 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-why-testing-necessary",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-why-testing-necessary"
+  },
+  "exercises": [
+    {
+      "title": "Why testing 1 — Root cause, error, defect, failure or effect?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "error defect failure",
+        "root cause"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Every incident follows the chain <b>root cause → error (human mistake) → defect (in a work product) → failure (at run time) → effect (consequence)</b>. Classify each fact of this LabBook incident.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi sự cố đi theo chuỗi <b>nguyên nhân gốc → error (sai sót của người) → defect (trong sản phẩm) → failure (khi chạy) → effect (hậu quả)</b>. Phân loại từng sự kiện trong sự cố LabBook này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Error là HÀNH ĐỘNG của con người; defect nằm TRONG sản phẩm; failure là sự kiện khi CHẠY.",
+        "Root cause trả lời “vì sao người đó mắc sai sót?”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 1 — Root cause, error, defect, failure or effect?\n\nAnswer in the answer panel (no code needed).\n\n1. Place in the chainVị trí trong chuỗi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 1 — Root cause, error, defect, failure or effect? — answer key\n\n1. Place in the chainVị trí trong chuỗi\n   - r0.k: Root cause\n   - r1.k: Error (mistake)\n   - r2.k: Defect (fault, bug)\n   - r3.k: Failure\n   - r4.k: Effect\n   The missing knowledge is why the mistake happened (root cause); writing the wrong rule is the human error; the wrong condition in the code is the defect; the refused booking is the failure; missed classes and complaints are the effect.VI: Thiếu thông tin là lý do sai sót xảy ra (nguyên nhân gốc); viết sai luật là error; điều kiện sai trong mã là defect; bị từ chối đặt chỗ là failure; lỡ buổi học và khiếu nại là effect.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Root cause · Error · Defect · Failure · Effect.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Place in the chain</p><p style=\"opacity:.75;font-size:.92em\"><i>Vị trí trong chuỗi</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Fact"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Root cause",
+                  "Error (mistake)",
+                  "Defect (fault, bug)",
+                  "Failure",
+                  "Effect"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "f": "The business analyst had never been told that students may book up to exactly 6 hours"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "The analyst wrote “fewer than 6 hours per week” in the user story"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "BookingService contains if (used + hours >= 6)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "On Monday a student with 4 booked hours is refused a 2-hour booking"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "Forty students miss their lab practice and complain to the department"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Root cause",
+              "r1.k": "Error (mistake)",
+              "r2.k": "Defect (fault, bug)",
+              "r3.k": "Failure",
+              "r4.k": "Effect"
+            },
+            "giaiThich": "<p>The missing knowledge is why the mistake happened (root cause); writing the wrong rule is the human error; the wrong condition in the code is the defect; the refused booking is the failure; missed classes and complaints are the effect.</p><p><i>VI: Thiếu thông tin là lý do sai sót xảy ra (nguyên nhân gốc); viết sai luật là error; điều kiện sai trong mã là defect; bị từ chối đặt chỗ là failure; lỡ buổi học và khiếu nại là effect.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi dòng mã sai là failure."
+        },
+        {
+          "loi": "Gọi việc viết sai user story là defect — defect là thứ nằm trong user story/mã, còn việc viết sai là error."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error (mistake)",
+          "vi": "lỗi của CON NGƯỜI dẫn tới defect"
+        },
+        {
+          "en": "defect (bug, fault)",
+          "vi": "khiếm khuyết trong sản phẩm (mã, tài liệu)"
+        },
+        {
+          "en": "failure",
+          "vi": "thất bại — hệ thống chạy sai quan sát được"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc"
+        }
+      ]
+    },
+    {
+      "title": "Why testing 2 — Testing, quality assurance and the cost of defects",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "quality assurance",
+        "cost of defects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on LO-1.2.1–1.2.4: why testing is necessary, how it relates to quality assurance and quality control, and where defects come from.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về LO-1.2.1–1.2.4: vì sao cần kiểm thử, quan hệ với đảm bảo chất lượng và kiểm soát chất lượng, và defect sinh ra từ đâu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "QA = quy trình; QC/kiểm thử = sản phẩm.",
+        "Failure có thể do môi trường, không chỉ do defect."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 2 — Testing, quality assurance and the cost of defects\n\nAnswer in the answer panel (no code needed).\n\n1. What is the relationship between testing and quality assurance (QA)?Quan hệ giữa kiểm thử và đảm bảo chất lượng (QA) là gì?\n2. Which can be a source of a defect?Đâu có thể là nguồn gốc của defect?\n3. Can a failure happen without a defect in the software?Failure có thể xảy ra mà phần mềm không có defect không?\n4. Why is a defect found by a user in production usually the most expensive?Vì sao defect do người dùng phát hiện khi đã vận hành thường đắt nhất?\n5. What is the main purpose of root-cause analysis?Mục đích chính của phân tích nguyên nhân gốc là gì?\n6. Which is an example of testing contributing to success?Ví dụ nào cho thấy kiểm thử góp phần thành công?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 2 — Testing, quality assurance and the cost of defects — answer key\n\n1. What is the relationship between testing and quality assurance (QA)?Quan hệ giữa kiểm thử và đảm bảo chất lượng (QA) là gì?\n   Answer: b) QA focuses on adherence to proper processes; testing is part of quality control, which focuses on the product\n   Quality management = QA (process) + quality control (product activities, including testing).VI: Quản lý chất lượng = QA (quy trình) + QC (hoạt động trên sản phẩm, gồm kiểm thử).\n\n2. Which can be a source of a defect?Đâu có thể là nguồn gốc của defect?\n   Answer: b) Time pressure, human fallibility, complexity, miscommunication, new technologies, environmental conditions\n   Defects arise in requirements, design, code and documents for many reasons; environmental conditions (radiation, magnetism) can also cause failures by changing hardware conditions.VI: Defect sinh ra trong yêu cầu, thiết kế, mã, tài liệu vì nhiều lý do; điều kiện môi trường (bức xạ, từ trường) cũng gây failure.\n\n3. Can a failure happen without a defect in the software?Failure có thể xảy ra mà phần mềm không có defect không?\n   Answer: b) Yes — environmental conditions such as radiation or a faulty disk can cause failures\n   The syllabus notes that environmental conditions can cause failures (not every unexpected result is a software defect — false positives also exist).VI: Syllabus nói điều kiện môi trường có thể gây failure (không phải kết quả lạ nào cũng là defect phần mềm — còn có dương tính giả).\n\n4. Why is a defect found by a user in production usually the most expensive?Vì sao defect do người dùng phát hiện khi đã vận hành thường đắt nhất?\n   Answer: b) The fix must go through design, code, tests and release again, plus the business damage (data, reputation, support)\n   The later a defect is found, the more work products and consequences are affected.VI: Defect phát hiện càng muộn càng nhiều sản phẩm và hậu quả bị ảnh hưởng.\n\n5. What is the main purpose of root-cause analysis?Mục đích chính của phân tích nguyên nhân gốc là gì?\n   Answer: b) To identify why defects happen so that process improvements prevent similar defects in future\n   Root-cause analysis turns one defect into a process improvement — never a blame exercise.VI: Phân tích nguyên nhân gốc biến một lỗi thành cải tiến quy trình — không phải để đổ lỗi.\n\n6. Which is an example of testing contributing to success?Ví dụ nào cho thấy kiểm thử góp phần thành công?\n   Answer: b) Testers taking part in requirements reviews detect ambiguities before they become defects in code\n   Early involvement in requirement reviews, design reviews, close work with developers and verification before release all reduce risk.VI: Tham gia sớm vào review yêu cầu, review thiết kế, làm việc sát với developer và kiểm tra trước phát hành đều giảm rủi ro.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What is the relationship between testing and quality assurance (QA)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Quan hệ giữa kiểm thử và đảm bảo chất lượng (QA) là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are the same thing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "QA focuses on adherence to proper processes; testing is part of quality control, which focuses on the product"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing contains QA"
+              },
+              {
+                "ma": "d",
+                "noiDung": "QA is done only by testers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Quality management = QA (process) + quality control (product activities, including testing).</p><p><i>VI: Quản lý chất lượng = QA (quy trình) + QC (hoạt động trên sản phẩm, gồm kiểm thử).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which can be a source of a defect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu có thể là nguồn gốc của defect?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only programmers’ mistakes in code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Time pressure, human fallibility, complexity, miscommunication, new technologies, environmental conditions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the testing tools"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the customer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Defects arise in requirements, design, code and documents for many reasons; environmental conditions (radiation, magnetism) can also cause failures by changing hardware conditions.</p><p><i>VI: Defect sinh ra trong yêu cầu, thiết kế, mã, tài liệu vì nhiều lý do; điều kiện môi trường (bức xạ, từ trường) cũng gây failure.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Can a failure happen without a defect in the software?</p><p style=\"opacity:.75;font-size:.92em\"><i>Failure có thể xảy ra mà phần mềm không có defect không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No, never"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — environmental conditions such as radiation or a faulty disk can cause failures"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in mobile apps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only during testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The syllabus notes that environmental conditions can cause failures (not every unexpected result is a software defect — false positives also exist).</p><p><i>VI: Syllabus nói điều kiện môi trường có thể gây failure (không phải kết quả lạ nào cũng là defect phần mềm — còn có dương tính giả).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why is a defect found by a user in production usually the most expensive?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao defect do người dùng phát hiện khi đã vận hành thường đắt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Users charge money for reports"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The fix must go through design, code, tests and release again, plus the business damage (data, reputation, support)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Production servers are expensive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is not more expensive"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The later a defect is found, the more work products and consequences are affected.</p><p><i>VI: Defect phát hiện càng muộn càng nhiều sản phẩm và hậu quả bị ảnh hưởng.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>What is the main purpose of root-cause analysis?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mục đích chính của phân tích nguyên nhân gốc là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To find who is to blame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To identify why defects happen so that process improvements prevent similar defects in future"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To fix the failing test"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To estimate the test effort"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Root-cause analysis turns one defect into a process improvement — never a blame exercise.</p><p><i>VI: Phân tích nguyên nhân gốc biến một lỗi thành cải tiến quy trình — không phải để đổ lỗi.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Which is an example of testing contributing to success?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ví dụ nào cho thấy kiểm thử góp phần thành công?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Testers write all the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Testers taking part in requirements reviews detect ambiguities before they become defects in code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testers decide the release date alone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testing slows the project"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Early involvement in requirement reviews, design reviews, close work with developers and verification before release all reduce risk.</p><p><i>VI: Tham gia sớm vào review yêu cầu, review thiết kế, làm việc sát với developer và kiểm tra trước phát hành đều giảm rủi ro.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi QA và testing là một."
+        },
+        {
+          "loi": "Dùng phân tích nguyên nhân gốc để tìm người có lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality assurance (QA)",
+          "vi": "đảm bảo chất lượng — tập trung vào quy trình"
+        },
+        {
+          "en": "quality control (QC)",
+          "vi": "kiểm soát chất lượng — tập trung vào sản phẩm"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc"
+        }
+      ]
+    },
+    {
+      "title": "Why testing 3 — Analyse an incident report (error, defect, failure, root cause, effect)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "error defect failure",
+        "root cause analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Read the incident report of LabBook’s first night in production. Each sentence has a number. Put the numbers in the right place of the chain; one sentence is only context.</p><pre>(1) LabBook went live on Monday at 07:00.\n(2) The developer copied the time-zone code from an old project without reading the new SRS.\n(3) The SRS says that the booking window is computed in Vietnam time (UTC+7).\n(4) BookingService computes \"today\" with the server clock in UTC.\n(5) Between 00:00 and 07:00 Vietnam time, students could not book any slot for that day.\n(6) The lab manager received 25 complaint e-mails before 08:00.\n(7) The team had no review step for configuration and time-zone code.\n(8) The developer forgot to convert the server time to UTC+7.</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ANALYSIS = { rootCause: [..], error: [..], defect: [..], failure: [..], effect: [..], context: [..] }</code> — arrays of sentence numbers.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc báo cáo sự cố đêm đầu LabBook chạy thật. Mỗi câu có số thứ tự. Xếp số vào đúng vị trí trong chuỗi; có một câu chỉ là bối cảnh.</p><pre>(1) LabBook went live on Monday at 07:00.\n(2) The developer copied the time-zone code from an old project without reading the new SRS.\n(3) The SRS says that the booking window is computed in Vietnam time (UTC+7).\n(4) BookingService computes \"today\" with the server clock in UTC.\n(5) Between 00:00 and 07:00 Vietnam time, students could not book any slot for that day.\n(6) The lab manager received 25 complaint e-mails before 08:00.\n(7) The team had no review step for configuration and time-zone code.\n(8) The developer forgot to convert the server time to UTC+7.</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ANALYSIS = { rootCause: [..], error: [..], defect: [..], failure: [..], effect: [..], context: [..] }</code> — mảng số câu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sentence (5)",
+          "output": "failure",
+          "explanation": "Observed at run time: bookings refused.|||Quan sát khi chạy: đặt chỗ bị từ chối."
+        }
+      ],
+      "hintsJson": [
+        "Có hai nguyên nhân gốc: quy trình (không review mã múi giờ) và thói quen (chép mã cũ không đọc SRS).",
+        "Câu (3) là yêu cầu — chỉ là bối cảnh; câu (1) cũng là bối cảnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ANALYSIS = {\n  rootCause: [],\n  error: [],\n  defect: [],\n  failure: [5],\n  effect: [],\n  context: [],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Chain: root cause (2, 7) → error (8) → defect (4) → failure (5) → effect (6). Sentences 1 and 3 are context.\nconst ANALYSIS = {\n  rootCause: [2, 7],\n  error: [8],\n  defect: [4],\n  failure: [5],\n  effect: [6],\n  context: [1, 3],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Root causes 2 and 7 · error 8 · defect 4 · failure 5 · effect 6 · context 1 and 3.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "ANALYSIS.rootCause — root causes",
+              "vi": "ANALYSIS.rootCause — root causes"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.rootCause || []).map(String)); } catch (e) { return '(ANALYSIS.rootCause || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.rootCause || []).map(String) is empty';\n  var chap = [[\"2\",\"7\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ANALYSIS.error — error",
+              "vi": "ANALYSIS.error — error"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.error || []).map(String)); } catch (e) { return '(ANALYSIS.error || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.error || []).map(String) is empty';\n  var chap = [[\"8\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ANALYSIS.defect — defect",
+              "vi": "ANALYSIS.defect — defect"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.defect || []).map(String)); } catch (e) { return '(ANALYSIS.defect || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.defect || []).map(String) is empty';\n  var chap = [[\"4\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ANALYSIS.failure — failure",
+              "vi": "ANALYSIS.failure — failure"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.failure || []).map(String)); } catch (e) { return '(ANALYSIS.failure || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.failure || []).map(String) is empty';\n  var chap = [[\"5\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ANALYSIS.effect — effect",
+              "vi": "ANALYSIS.effect — effect"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.effect || []).map(String)); } catch (e) { return '(ANALYSIS.effect || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.effect || []).map(String) is empty';\n  var chap = [[\"6\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ANALYSIS.context — context",
+              "vi": "ANALYSIS.context — context"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((ANALYSIS.context || []).map(String)); } catch (e) { return '(ANALYSIS.context || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(ANALYSIS.context || []).map(String) is empty';\n  var chap = [[\"1\",\"3\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp câu (4) vào error — đó là trạng thái của mã (defect)."
+        },
+        {
+          "loi": "Xếp câu (8) vào defect — \"quên chuyển đổi\" là hành động của người (error)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error (mistake)",
+          "vi": "lỗi của CON NGƯỜI dẫn tới defect"
+        },
+        {
+          "en": "defect (bug, fault)",
+          "vi": "khiếm khuyết trong sản phẩm (mã, tài liệu)"
+        },
+        {
+          "en": "failure",
+          "vi": "thất bại — hệ thống chạy sai quan sát được"
+        },
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc"
+        }
+      ]
+    },
+    {
+      "title": "Why testing 4 — Errors, defects and failures: exam traps",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "error defect failure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five short exam-style questions about the vocabulary of chapter 1 — the FE likes to swap the three words.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu ngắn kiểu đề thi về từ vựng chương 1 — đề FE hay đánh tráo ba chữ này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người làm → error; nằm trong sản phẩm → defect; khi chạy → failure.",
+        "False positive = báo nhầm có lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 4 — Errors, defects and failures: exam traps\n\nAnswer in the answer panel (no code needed).\n\n1. A programmer types Lập trình viên gõ\n2. The wrong “Dấu “\n3. A defect in code that is never executed…Defect trong đoạn mã không bao giờ được chạy…\n4. A test reports a failure, but analysis shows the test data was wrong. This is…Test báo failure, nhưng phân tích cho thấy dữ liệu test sai. Đây là…\n5. Which word describes the consequence for users or the business?Từ nào mô tả hậu quả với người dùng hay doanh nghiệp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Why testing 4 — Errors, defects and failures: exam traps — answer key\n\n1. A programmer types Lập trình viên gõ\n   Answer: b) an error (mistake)\n   The human action is the error; the resulting “VI: Hành động của người là error; dấu “\n\n2. The wrong “Dấu “\n   Answer: b) a defect\n   A defect (fault, bug) is an imperfection in a work product.VI: Defect (fault, bug) là khiếm khuyết trong sản phẩm.\n\n3. A defect in code that is never executed…Defect trong đoạn mã không bao giờ được chạy…\n   Answer: b) may never cause a failure\n   A defect causes a failure only when the defective code is executed under the right conditions.VI: Defect chỉ gây failure khi đoạn mã lỗi được chạy trong điều kiện phù hợp.\n\n4. A test reports a failure, but analysis shows the test data was wrong. This is…Test báo failure, nhưng phân tích cho thấy dữ liệu test sai. Đây là…\n   Answer: a) a false positive\n   A false positive reports a defect that is not there; a false negative misses one that is.VI: Dương tính giả báo lỗi không có thật; âm tính giả bỏ sót lỗi có thật.\n\n5. Which word describes the consequence for users or the business?Từ nào mô tả hậu quả với người dùng hay doanh nghiệp?\n   Answer: a) Effect\n   Effects: complaints, money lost, reputation damage.VI: Effect: khiếu nại, mất tiền, mất uy tín.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A programmer types < instead of <=. This action is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lập trình viên gõ < thay vì <=. Hành động đó là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a failure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an error (mistake)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a defect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a root cause"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The human action is the error; the resulting “<” in the code is the defect.</p><p><i>VI: Hành động của người là error; dấu “<” sai nằm trong mã là defect.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The wrong “<” stays in the code. It is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Dấu “<” sai nằm lại trong mã. Nó là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an error"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a defect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a failure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an effect"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A defect (fault, bug) is an imperfection in a work product.</p><p><i>VI: Defect (fault, bug) là khiếm khuyết trong sản phẩm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A defect in code that is never executed…</p><p style=\"opacity:.75;font-size:.92em\"><i>Defect trong đoạn mã không bao giờ được chạy…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always causes a failure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "may never cause a failure"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is not a defect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is an error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A defect causes a failure only when the defective code is executed under the right conditions.</p><p><i>VI: Defect chỉ gây failure khi đoạn mã lỗi được chạy trong điều kiện phù hợp.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A test reports a failure, but analysis shows the test data was wrong. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Test báo failure, nhưng phân tích cho thấy dữ liệu test sai. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a false positive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a false negative"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a root cause"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a regression"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A false positive reports a defect that is not there; a false negative misses one that is.</p><p><i>VI: Dương tính giả báo lỗi không có thật; âm tính giả bỏ sót lỗi có thật.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which word describes the consequence for users or the business?</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ nào mô tả hậu quả với người dùng hay doanh nghiệp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Effect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Defect"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Root cause"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Effects: complaints, money lost, reputation damage.</p><p><i>VI: Effect: khiếu nại, mất tiền, mất uy tín.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm false positive với false negative."
+        },
+        {
+          "loi": "Cho rằng mọi defect đều gây failure."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error (mistake)",
+          "vi": "lỗi của CON NGƯỜI dẫn tới defect"
+        },
+        {
+          "en": "defect (bug, fault)",
+          "vi": "khiếm khuyết trong sản phẩm (mã, tài liệu)"
+        },
+        {
+          "en": "failure",
+          "vi": "thất bại — hệ thống chạy sai quan sát được"
+        },
+        {
+          "en": "false positive / false negative",
+          "vi": "dương tính giả (báo nhầm có lỗi) / âm tính giả (bỏ sót lỗi)"
+        }
+      ]
+    }
+  ]
+}

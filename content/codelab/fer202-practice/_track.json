@@ -74,6 +74,24 @@
       "name": "Lab 3 — Class Report Card (JSX rendering)",
       "level": "BEGINNER",
       "description": "Lab chương 3: bảng điểm lớp chỉ bằng render — biểu thức JSX, danh sách + key, render có điều kiện, Fragment, map/filter/reduce/sort, style object, chữ an toàn. Thang 10."
+    },
+    {
+      "slug": "fer202-4-lab-cafe-landing",
+      "name": "Lab 4 — Café Landing Page (React-Bootstrap)",
+      "level": "BEGINNER",
+      "description": "Lab chương 4: trang quán cà phê bằng React-Bootstrap — navbar thu gọn, lưới responsive row-cols, Card, pills lọc, Modal form kiểm hợp lệ kiểu Bootstrap, Accordion, Table, ListGroup. Thang 10."
+    },
+    {
+      "slug": "fer202-10-lab-lazy-dashboard",
+      "name": "Lab 10 — Admin Dashboard (lazy & Suspense)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 10: tách mã bảng quản trị — lazy theo route, Suspense trong layout, độ trễ giả, Suspense lồng, Error Boundary, tải trước khi rê/focus, named export, khung Help tải theo yêu cầu. Thang 10."
+    },
+    {
+      "slug": "fer202-2-lab-es6-toolkit",
+      "name": "Lab 2 — Student Data Toolkit (ES6+)",
+      "level": "BEGINNER",
+      "description": "Lab chương 2: 13 hàm thuần ES6+ — destructuring/mặc định, map+spread bất biến, rest, groupBy bằng reduce, sort bản sao, gộp object, Promise.all/race/allSettled, ?. và ??. Thang 10."
     }
   ]
 }

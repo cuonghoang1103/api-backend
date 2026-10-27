@@ -1,0 +1,657 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-lab-cafe-landing",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-1-bootstrap"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 — Café Landing Page (Navbar · grid · Card · Modal form · Accordion)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "Bootstrap grid",
+        "breakpoints",
+        "React-Bootstrap",
+        "Navbar collapse",
+        "Card",
+        "Nav pills",
+        "Modal",
+        "form validation",
+        "Accordion",
+        "Table",
+        "ListGroup"
+      ],
+      "prerequisites": [
+        "JSX",
+        "useState"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "bootstrap",
+        "react-bootstrap"
+      ],
+      "problemHtml": "<h1>LAB 4: Café Landing Page — Bootstrap 5 &amp; React-Bootstrap</h1>\n<p class=\"bi-phu\">FER202 · Chapter 4 — Bootstrap & React-Bootstrap · Suggested time: 90 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build a one-page landing site for a café using <b>React-Bootstrap</b> components on top of Bootstrap 5: a responsive navbar, a two-column hero, a responsive card grid filtered by pills, an order <b>Modal</b> with a validated form, a success <b>Alert</b>, an <b>Accordion</b>, a <b>Table</b> and a horizontal <b>ListGroup</b>. Almost no custom CSS — let the grid and utility classes do the work.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Navbar · hero · menu grid + filter · order modal · FAQ · hours · contact.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li><code>react-bootstrap</code> components + <code>import 'bootstrap/dist/css/bootstrap.min.css'</code> (given in <code>index.js</code>).</li>\n  <li>Responsive: the layout must work from 360px phones to large screens using the grid breakpoints.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── components/\n│   ├── AppNavbar.js      # Navbar expand=\"lg\" + Toggle + Collapse\n│   ├── Hero.js           # Row &gt; Col md={6} × 2\n│   ├── MenuSection.js    # Nav pills + Row xs/md/lg + Card\n│   ├── OrderModal.js     # Modal + validated Form\n│   └── InfoSection.js    # Accordion + Table + ListGroup\n├── data/menu.js          # MENU, HOURS, FAQ (given)\n├── App.js                # modal + alert state\n└── index.js              # bootstrap.min.css (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| ☕ Bean &amp; Leaf                              Home  Menu  FAQ  Contact   [☰] |\n+-----------------------------------------------------------------------------+\n| Fresh coffee, slow mornings.             |  +--------------------------+    |\n| Specialty coffee and handmade cakes...   |  |        [ image ]         |    |\n| [Order now] [View menu]                  |  +--------------------------+    |\n| Our menu   (All) (Coffee) (Tea) (Cake)                                      |\n| +-------------------+ +-------------------+ +-------------------+           |\n| | [img]             | | [img]             | | [img]             |  lg: 3   |\n| | Espresso [Bestsel]| | Cappuccino [Best] | | Cold Brew         |  md: 2   |\n| | 35,000 VND        | | 45,000 VND        | | 50,000 VND        |  xs: 1   |\n| | [Order this]      | | [Order this]      | | [Order this]      |           |\n| FAQ (accordion)                    | Opening hours (striped table)          |\n| [ 📍 address | 📞 phone | ✉️ email ]  (horizontal list group)               |\n+-----------------------------------------------------------------------------+\n  Modal: Place an order — Your name [   ]  Drink / cake [Choose... v]\n         Size (o) S (•) M (o) L                    [Cancel] [Place order]</pre>\n<h2>4. Data model</h2>\n<p><b>MenuItem (src/data/menu.js)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id / name</code></td><td>number / string</td><td></td></tr><tr><td><code>category</code></td><td>'coffee' | 'tea' | 'cake'</td><td></td></tr><tr><td><code>priceK</code></td><td>number</td><td>thousand VND ⇒ show \"45,000 VND\"</td></tr><tr><td><code>bestseller</code></td><td>boolean</td><td></td></tr><tr><td><code>image</code></td><td>string (URL)</td><td></td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Responsive navbar <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Navbar expand=\"lg\"</code>, <code>#brand</code>, <code>Navbar.Toggle aria-controls=\"main-nav\"</code>, <code>Navbar.Collapse id=\"main-nav\"</code> with 4 <code>Nav.Link</code> (Home, Menu, FAQ, Contact → <code>#home</code>, <code>#menu</code>, <code>#faq</code>, <code>#contact</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Hero grid <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>section#home.hero</code>: one <code>Row</code> with two <code>Col md={6}</code> (text + <code>img-fluid</code> image); buttons <code>#btn-order</code> (primary, opens the modal) and \"View menu\" (<code>outline-secondary</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Menu card grid <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Row xs={1} md={2} lg={3} id=\"menu-grid\"</code>; each item a <code>Card.menu-card</code>: image, <code>.item-name</code>, <code>Badge.price</code> <code>45,000 VND</code>, <code>Badge bg=\"danger\" .bestseller</code>, button <code>.btn-pick</code> \"Order this\" (opens the modal with the item pre-selected).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Category pills <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Nav variant=\"pills\"</code> with <code>#cat-all</code>, <code>#cat-coffee</code>, <code>#cat-tea</code>, <code>#cat-cake</code>; the selected pill is <code>.active</code> and filters the grid.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">activeKey + onSelect</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Order modal &amp; validation <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Modal</code> (title <code>Place an order</code>) wrapping <code>Form#order-form noValidate validated={…}</code>: <code>#order-name</code> (required), <code>#order-item</code> (required select), inline radios <code>#size-S/M/L</code> (M default), submit <code>#btn-place</code>.</li>\n  <li>Invalid ⇒ form shows Bootstrap feedback (<code>.was-validated</code>) and stays open. Valid ⇒ close and show <code>Alert#order-alert</code> (dismissible) <code>Thanks, Lan! Your Cappuccino (L) is on the way.</code></li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Modal show/onHide</span> <span class=\"bi-hook\">checkValidity()</span></p>\n<p><b>Example:</b></p>\n<pre>Lan · Cappuccino · L ⇒ \"Thanks, Lan! Your Cappuccino (L) is on the way.\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>6. FAQ accordion <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#faq</code>: <code>Accordion defaultActiveKey=\"0\"</code> with 3 items; one open at a time.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Opening hours table <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Table#hours</code> <code>striped bordered hover size=\"sm\"</code>: Day · Open · Close (3 rows).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Contact list group <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>footer#contact</code>: <code>ListGroup horizontal=\"md\"</code> with address, phone, email.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#brand · .navbar-toggler · #main-nav</code></td><td>navbar</td></tr><tr><td><code>#home · #btn-order</code></td><td>hero</td></tr><tr><td><code>#menu-grid · .menu-card · .item-name · .price · .bestseller · .btn-pick · #cat-{all|coffee|tea|cake}</code></td><td>menu</td></tr><tr><td><code>#order-form · #order-name · #order-item · #size-{S|M|L} · #btn-place · #order-alert</code></td><td>order</td></tr><tr><td><code>#faq · #hours · #contact</code></td><td>info</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Responsive navbar</td><td>1.5</td></tr><tr><td>2</td><td>Hero grid</td><td>1.5</td></tr><tr><td>3</td><td>Menu card grid</td><td>1.5</td></tr><tr><td>4</td><td>Category pills</td><td>1</td></tr><tr><td>5</td><td>Order modal &amp; validation</td><td>1.5</td></tr><tr><td>6</td><td>FAQ accordion</td><td>1</td></tr><tr><td>7</td><td>Opening hours table</td><td>1</td></tr><tr><td>8</td><td>Contact list group</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Writing <code>class=\"col-md-6\"</code> divs by hand everywhere instead of React-Bootstrap components.</li>\n  <li>Forgetting the Bootstrap CSS import — components render unstyled.</li>\n  <li>Missing <code>aria-controls</code>/<code>id</code> pair — the hamburger button does nothing on mobile.</li>\n  <li>Form submit without <code>noValidate</code> + <code>preventDefault</code> — the browser's own popups appear and the page reloads.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 4: Trang giới thiệu quán cà phê — Bootstrap 5 &amp; React-Bootstrap</h1>\n<p class=\"bi-phu\">FER202 · Chương 4 — Bootstrap & React-Bootstrap · Thời gian gợi ý: 90 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm trang giới thiệu một trang cho quán cà phê bằng các component <b>React-Bootstrap</b> trên nền Bootstrap 5: navbar responsive, khối hero hai cột, lưới thẻ responsive lọc bằng pills, <b>Modal</b> đặt món có form kiểm hợp lệ, <b>Alert</b> báo thành công, <b>Accordion</b>, <b>Table</b> và <b>ListGroup</b> ngang. Gần như không viết CSS — để lưới và class tiện ích làm việc.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Navbar · hero · lưới menu + lọc · modal đặt món · FAQ · giờ mở cửa · liên hệ.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Component <code>react-bootstrap</code> + <code>import 'bootstrap/dist/css/bootstrap.min.css'</code> (có sẵn trong <code>index.js</code>).</li>\n  <li>Responsive: bố cục chạy từ điện thoại 360px đến màn hình lớn nhờ các mốc của lưới.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── components/\n│   ├── AppNavbar.js      # Navbar expand=\"lg\" + Toggle + Collapse\n│   ├── Hero.js           # Row &gt; Col md={6} × 2\n│   ├── MenuSection.js    # Nav pills + Row xs/md/lg + Card\n│   ├── OrderModal.js     # Modal + validated Form\n│   └── InfoSection.js    # Accordion + Table + ListGroup\n├── data/menu.js          # MENU, HOURS, FAQ (given)\n├── App.js                # modal + alert state\n└── index.js              # bootstrap.min.css (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| ☕ Bean &amp; Leaf                              Home  Menu  FAQ  Contact   [☰] |\n+-----------------------------------------------------------------------------+\n| Fresh coffee, slow mornings.             |  +--------------------------+    |\n| Specialty coffee and handmade cakes...   |  |        [ image ]         |    |\n| [Order now] [View menu]                  |  +--------------------------+    |\n| Our menu   (All) (Coffee) (Tea) (Cake)                                      |\n| +-------------------+ +-------------------+ +-------------------+           |\n| | [img]             | | [img]             | | [img]             |  lg: 3   |\n| | Espresso [Bestsel]| | Cappuccino [Best] | | Cold Brew         |  md: 2   |\n| | 35,000 VND        | | 45,000 VND        | | 50,000 VND        |  xs: 1   |\n| | [Order this]      | | [Order this]      | | [Order this]      |           |\n| FAQ (accordion)                    | Opening hours (striped table)          |\n| [ 📍 address | 📞 phone | ✉️ email ]  (horizontal list group)               |\n+-----------------------------------------------------------------------------+\n  Modal: Place an order — Your name [   ]  Drink / cake [Choose... v]\n         Size (o) S (•) M (o) L                    [Cancel] [Place order]</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>MenuItem (src/data/menu.js)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id / name</code></td><td>number / string</td><td></td></tr><tr><td><code>category</code></td><td>'coffee' | 'tea' | 'cake'</td><td></td></tr><tr><td><code>priceK</code></td><td>number</td><td>nghìn đồng ⇒ hiện \"45,000 VND\"</td></tr><tr><td><code>bestseller</code></td><td>boolean</td><td></td></tr><tr><td><code>image</code></td><td>string (URL)</td><td></td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Navbar responsive <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Navbar expand=\"lg\"</code>, <code>#brand</code>, <code>Navbar.Toggle aria-controls=\"main-nav\"</code>, <code>Navbar.Collapse id=\"main-nav\"</code> chứa 4 <code>Nav.Link</code> (Home, Menu, FAQ, Contact → <code>#home</code>, <code>#menu</code>, <code>#faq</code>, <code>#contact</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Lưới hero <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>section#home.hero</code>: một <code>Row</code> với hai <code>Col md={6}</code> (chữ + ảnh <code>img-fluid</code>); nút <code>#btn-order</code> (primary, mở modal) và \"View menu\" (<code>outline-secondary</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Lưới thẻ menu <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Row xs={1} md={2} lg={3} id=\"menu-grid\"</code>; mỗi món một <code>Card.menu-card</code>: ảnh, <code>.item-name</code>, <code>Badge.price</code> <code>45,000 VND</code>, <code>Badge bg=\"danger\" .bestseller</code>, nút <code>.btn-pick</code> \"Order this\" (mở modal đã chọn sẵn món).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Pills lọc loại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Nav variant=\"pills\"</code> gồm <code>#cat-all</code>, <code>#cat-coffee</code>, <code>#cat-tea</code>, <code>#cat-cake</code>; pill đang chọn có <code>.active</code> và lọc lưới.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">activeKey + onSelect</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Modal đặt món &amp; kiểm hợp lệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Modal</code> (tiêu đề <code>Place an order</code>) bọc <code>Form#order-form noValidate validated={…}</code>: <code>#order-name</code> (bắt buộc), <code>#order-item</code> (select bắt buộc), radio inline <code>#size-S/M/L</code> (mặc định M), nút <code>#btn-place</code>.</li>\n  <li>Sai ⇒ form hiện phản hồi Bootstrap (<code>.was-validated</code>) và giữ nguyên. Đúng ⇒ đóng và hiện <code>Alert#order-alert</code> (đóng được) <code>Thanks, Lan! Your Cappuccino (L) is on the way.</code></li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Modal show/onHide</span> <span class=\"bi-hook\">checkValidity()</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>Lan · Cappuccino · L ⇒ \"Thanks, Lan! Your Cappuccino (L) is on the way.\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>6. Accordion hỏi đáp <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#faq</code>: <code>Accordion defaultActiveKey=\"0\"</code> với 3 mục; mỗi lúc mở một mục.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Bảng giờ mở cửa <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Table#hours</code> <code>striped bordered hover size=\"sm\"</code>: Day · Open · Close (3 hàng).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Danh sách liên hệ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>footer#contact</code>: <code>ListGroup horizontal=\"md\"</code> với địa chỉ, điện thoại, email.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#brand · .navbar-toggler · #main-nav</code></td><td>navbar</td></tr><tr><td><code>#home · #btn-order</code></td><td>hero</td></tr><tr><td><code>#menu-grid · .menu-card · .item-name · .price · .bestseller · .btn-pick · #cat-{all|coffee|tea|cake}</code></td><td>menu</td></tr><tr><td><code>#order-form · #order-name · #order-item · #size-{S|M|L} · #btn-place · #order-alert</code></td><td>đặt món</td></tr><tr><td><code>#faq · #hours · #contact</code></td><td>thông tin</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Navbar responsive</td><td>1.5</td></tr><tr><td>2</td><td>Lưới hero</td><td>1.5</td></tr><tr><td>3</td><td>Lưới thẻ menu</td><td>1.5</td></tr><tr><td>4</td><td>Pills lọc loại</td><td>1</td></tr><tr><td>5</td><td>Modal đặt món &amp; kiểm hợp lệ</td><td>1.5</td></tr><tr><td>6</td><td>Accordion hỏi đáp</td><td>1</td></tr><tr><td>7</td><td>Bảng giờ mở cửa</td><td>1</td></tr><tr><td>8</td><td>Danh sách liên hệ</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Viết tay <code>class=\"col-md-6\"</code> khắp nơi thay vì dùng component React-Bootstrap.</li>\n  <li>Quên import CSS Bootstrap — component hiện \"trần trụi\".</li>\n  <li>Thiếu cặp <code>aria-controls</code>/<code>id</code> — nút ☰ không làm gì trên điện thoại.</li>\n  <li>Gửi form thiếu <code>noValidate</code> + <code>preventDefault</code> — hiện bong bóng mặc định của trình duyệt và trang tải lại.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "<code>react-bootstrap</code> components + <code>import 'bootstrap/dist/css/bootstrap.min.css'</code> (given in <code>index.js</code>).|||Component <code>react-bootstrap</code> + <code>import 'bootstrap/dist/css/bootstrap.min.css'</code> (có sẵn trong <code>index.js</code>).\nResponsive: the layout must work from 360px phones to large screens using the grid breakpoints.|||Responsive: bố cục chạy từ điện thoại 360px đến màn hình lớn nhờ các mốc của lưới.",
+      "examplesJson": [
+        {
+          "input": "Order modal & validation|||Modal đặt món & kiểm hợp lệ",
+          "output": "Lan · Cappuccino · L ⇒ \"Thanks, Lan! Your Cappuccino (L) is on the way.\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Lưới: <Row xs={1} md={2} lg={3}> sinh row-cols-1 row-cols-md-2 row-cols-lg-3 — mỗi <Col> không cần md nữa.",
+        "Navbar: <Navbar expand=\"lg\"> + <Navbar.Toggle aria-controls=\"main-nav\" /> + <Navbar.Collapse id=\"main-nav\">.",
+        "Modal: App giữ show; OrderModal nhận show/onClose/onPlaced. Form: noValidate validated={validated}; onSubmit: preventDefault, setValidated(true), if (!e.currentTarget.checkValidity()) return.",
+        "Pills: <Nav variant=\"pills\" activeKey={cat} onSelect={setCat}> + <Nav.Link eventKey=\"tea\" id=\"cat-tea\">."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: HTML thô, chưa dùng React-Bootstrap\nimport { MENU } from './data/menu';\n\nexport default function App() {\n  // TODO: AppNavbar · Hero · MenuSection · OrderModal · InfoSection · Alert sau khi đặt\n  return (\n    <div>\n      <h1>Bean &amp; Leaf</h1>\n      <ul>{MENU.map((m) => <li key={m.id}>{m.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — STARTER\n// TODO: Navbar expand=\"lg\" + Navbar.Toggle (aria-controls=\"main-nav\") + Navbar.Collapse id=\"main-nav\", #brand, 4 Nav.Link\nexport default function AppNavbar() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/Hero.js",
+          "language": "javascript",
+          "code": "// src/components/Hero.js — STARTER\n// TODO: section#home.hero: Row > 2 × Col md={6}; #btn-order (primary) + \"View menu\" (outline-secondary)\nexport default function Hero() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/MenuSection.js",
+          "language": "javascript",
+          "code": "// src/components/MenuSection.js — STARTER\n// TODO: Nav pills #cat-all/#cat-coffee/#cat-tea/#cat-cake + Row xs={1} md={2} lg={3} của .menu-card\nexport default function MenuSection() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/OrderModal.js",
+          "language": "javascript",
+          "code": "// src/components/OrderModal.js — STARTER\n// TODO: Modal \"Place an order\" + Form #order-form noValidate validated, #order-name, #order-item, #size-S/M/L\nexport default function OrderModal() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/InfoSection.js",
+          "language": "javascript",
+          "code": "// src/components/InfoSection.js — STARTER\n// TODO: Accordion (mục đầu mở) + Table #hours (striped bordered hover sm) + ListGroup ngang\nexport default function InfoSection() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/data/menu.js",
+          "language": "javascript",
+          "code": "// src/data/menu.js — đã cho (priceK = nghìn đồng)\nexport const MENU = [\n  { id: 1, name: 'Espresso', category: 'coffee', priceK: 35, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=espresso' },\n  { id: 2, name: 'Cappuccino', category: 'coffee', priceK: 45, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=cappuccino' },\n  { id: 3, name: 'Cold Brew', category: 'coffee', priceK: 50, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=coldbrew' },\n  { id: 4, name: 'Matcha Latte', category: 'tea', priceK: 55, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=matcha' },\n  { id: 5, name: 'Peach Tea', category: 'tea', priceK: 40, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=peachtea' },\n  { id: 6, name: 'Tiramisu', category: 'cake', priceK: 60, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=tiramisu' },\n];\n\nexport const HOURS = [\n  { day: 'Monday – Friday', open: '07:00', close: '22:00' },\n  { day: 'Saturday', open: '08:00', close: '23:00' },\n  { day: 'Sunday', open: '08:00', close: '21:00' },\n];\n\nexport const FAQ = [\n  { q: 'Do you have Wi-Fi?', a: 'Yes — free Wi-Fi, ask the barista for the password.' },\n  { q: 'Can I book a table?', a: 'Tables for 6+ people can be booked one day ahead.' },\n  { q: 'Do you deliver?', a: 'We deliver within 3 km through our app partners.' },\n];\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — App giữ trạng thái Modal + Alert; các phần là component riêng\nimport { useState } from 'react';\nimport { Alert, Container } from 'react-bootstrap';\nimport AppNavbar from './components/AppNavbar';\nimport Hero from './components/Hero';\nimport MenuSection from './components/MenuSection';\nimport OrderModal from './components/OrderModal';\nimport InfoSection from './components/InfoSection';\n\nexport default function App() {\n  const [show, setShow] = useState(false);\n  const [initialItem, setInitialItem] = useState('');\n  const [placed, setPlaced] = useState(null);\n\n  const openOrder = (item = '') => {\n    setInitialItem(item);\n    setShow(true);\n  };\n\n  return (\n    <>\n      <AppNavbar />\n      {placed && (\n        <Container className=\"pt-3\">\n          <Alert variant=\"success\" dismissible onClose={() => setPlaced(null)} id=\"order-alert\">\n            Thanks, {placed.name}! Your {placed.item} ({placed.size}) is on the way.\n          </Alert>\n        </Container>\n      )}\n      <Hero onOrder={() => openOrder()} />\n      <MenuSection onOrder={openOrder} />\n      <InfoSection />\n      <OrderModal\n        show={show}\n        initialItem={initialItem}\n        onClose={() => setShow(false)}\n        onPlaced={(o) => {\n          setPlaced(o);\n          setShow(false);\n        }}\n      />\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — Navbar responsive: dưới lg thu thành nút ☰ (Toggle) bung ra Collapse\nimport { Container, Nav, Navbar } from 'react-bootstrap';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar expand=\"lg\" bg=\"dark\" data-bs-theme=\"dark\" sticky=\"top\">\n      <Container>\n        <Navbar.Brand href=\"#home\" id=\"brand\">☕ Bean &amp; Leaf</Navbar.Brand>\n        {/* aria-controls trỏ đúng id của Collapse */}\n        <Navbar.Toggle aria-controls=\"main-nav\" />\n        <Navbar.Collapse id=\"main-nav\">\n          <Nav className=\"ms-auto\">\n            <Nav.Link href=\"#home\">Home</Nav.Link>\n            <Nav.Link href=\"#menu\">Menu</Nav.Link>\n            <Nav.Link href=\"#faq\">FAQ</Nav.Link>\n            <Nav.Link href=\"#contact\">Contact</Nav.Link>\n          </Nav>\n        </Navbar.Collapse>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Hero.js",
+          "language": "javascript",
+          "code": "// src/components/Hero.js — lưới 12 cột: 2 cột md={6}; dưới md tự xếp chồng\nimport { Button, Col, Container, Row } from 'react-bootstrap';\n\nexport default function Hero({ onOrder }) {\n  return (\n    <Container as=\"section\" id=\"home\" className=\"hero py-5\">\n      <Row className=\"align-items-center g-4\">\n        <Col md={6}>\n          <h1 className=\"display-5 fw-bold\">Fresh coffee, slow mornings.</h1>\n          <p className=\"lead\">Specialty coffee and handmade cakes in the heart of Hanoi.</p>\n          <Button variant=\"primary\" size=\"lg\" id=\"btn-order\" onClick={onOrder}>Order now</Button>{' '}\n          <Button variant=\"outline-secondary\" size=\"lg\" href=\"#menu\">View menu</Button>\n        </Col>\n        <Col md={6}>\n          <img src=\"https://api.dicebear.com/9.x/shapes/svg?seed=hero-cafe\" alt=\"Our café\" className=\"img-fluid rounded-4 shadow\" />\n        </Col>\n      </Row>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/MenuSection.js",
+          "language": "javascript",
+          "code": "// src/components/MenuSection.js — Nav pills để lọc + lưới thẻ: Row xs/md/lg ⇒ row-cols-1/2/3\nimport { useState } from 'react';\nimport { Badge, Button, Card, Col, Container, Nav, Row } from 'react-bootstrap';\nimport { MENU } from '../data/menu';\n\nconst CATS = [\n  { key: 'all', label: 'All' },\n  { key: 'coffee', label: 'Coffee' },\n  { key: 'tea', label: 'Tea' },\n  { key: 'cake', label: 'Cake' },\n];\n\nexport default function MenuSection({ onOrder }) {\n  const [cat, setCat] = useState('all');\n  const items = MENU.filter((m) => cat === 'all' || m.category === cat);\n  return (\n    <Container as=\"section\" id=\"menu\" className=\"py-4\">\n      <h2 className=\"mb-3\">Our menu</h2>\n      <Nav variant=\"pills\" activeKey={cat} onSelect={(k) => setCat(k)} className=\"mb-3\">\n        {CATS.map((c) => (\n          <Nav.Item key={c.key}>\n            <Nav.Link eventKey={c.key} id={`cat-${c.key}`}>{c.label}</Nav.Link>\n          </Nav.Item>\n        ))}\n      </Nav>\n      <Row xs={1} md={2} lg={3} className=\"g-4\" id=\"menu-grid\">\n        {items.map((m) => (\n          <Col key={m.id}>\n            <Card className=\"menu-card h-100 shadow-sm\">\n              <Card.Img variant=\"top\" src={m.image} alt={m.name} style={{ height: 160, objectFit: 'cover' }} />\n              <Card.Body className=\"d-flex flex-column\">\n                <Card.Title className=\"d-flex justify-content-between align-items-center\">\n                  <span className=\"item-name\">{m.name}</span>\n                  {m.bestseller && <Badge bg=\"danger\" className=\"bestseller\">Bestseller</Badge>}\n                </Card.Title>\n                <Badge bg=\"light\" text=\"dark\" className=\"price align-self-start mb-3\">{(m.priceK * 1000).toLocaleString('en-US')} VND</Badge>\n                <Button variant=\"outline-primary\" className=\"mt-auto btn-pick\" onClick={() => onOrder(m.name)}>Order this</Button>\n              </Card.Body>\n            </Card>\n          </Col>\n        ))}\n      </Row>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/OrderModal.js",
+          "language": "javascript",
+          "code": "// src/components/OrderModal.js — Modal + Form kiểm hợp lệ kiểu Bootstrap: noValidate + validated + required\nimport { useEffect, useState } from 'react';\nimport { Button, Form, Modal } from 'react-bootstrap';\nimport { MENU } from '../data/menu';\n\nexport default function OrderModal({ show, initialItem, onClose, onPlaced }) {\n  const [validated, setValidated] = useState(false);\n  const [form, setForm] = useState({ name: '', item: '', size: 'M' });\n\n  // mỗi lần mở: đặt lại form (chọn sẵn món nếu mở từ một thẻ)\n  useEffect(() => {\n    if (show) {\n      setForm({ name: '', item: initialItem || '', size: 'M' });\n      setValidated(false);\n    }\n  }, [show, initialItem]);\n\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    const formEl = e.currentTarget;\n    setValidated(true); // thêm class .was-validated ⇒ Bootstrap tô đỏ/xanh các ô\n    if (!formEl.checkValidity()) return; // dùng luật HTML: required…\n    onPlaced({ ...form, name: form.name.trim() });\n  };\n\n  return (\n    <Modal show={show} onHide={onClose} centered>\n      <Modal.Header closeButton>\n        <Modal.Title>Place an order</Modal.Title>\n      </Modal.Header>\n      <Form id=\"order-form\" noValidate validated={validated} onSubmit={handleSubmit}>\n        <Modal.Body>\n          <Form.Group className=\"mb-3\" controlId=\"order-name\">\n            <Form.Label>Your name</Form.Label>\n            <Form.Control name=\"name\" required value={form.name} onChange={update} placeholder=\"e.g. Lan\" />\n            <Form.Control.Feedback type=\"invalid\">Please tell us your name.</Form.Control.Feedback>\n          </Form.Group>\n          <Form.Group className=\"mb-3\" controlId=\"order-item\">\n            <Form.Label>Drink / cake</Form.Label>\n            <Form.Select name=\"item\" required value={form.item} onChange={update}>\n              <option value=\"\">Choose...</option>\n              {MENU.map((m) => <option key={m.id} value={m.name}>{m.name}</option>)}\n            </Form.Select>\n            <Form.Control.Feedback type=\"invalid\">Please choose an item.</Form.Control.Feedback>\n          </Form.Group>\n          <Form.Group>\n            <Form.Label className=\"d-block\">Size</Form.Label>\n            {['S', 'M', 'L'].map((s) => (\n              <Form.Check key={s} inline type=\"radio\" id={`size-${s}`} name=\"size\" value={s} label={s} checked={form.size === s} onChange={update} />\n            ))}\n          </Form.Group>\n        </Modal.Body>\n        <Modal.Footer>\n          <Button variant=\"secondary\" onClick={onClose}>Cancel</Button>\n          <Button type=\"submit\" variant=\"primary\" id=\"btn-place\">Place order</Button>\n        </Modal.Footer>\n      </Form>\n    </Modal>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/InfoSection.js",
+          "language": "javascript",
+          "code": "// src/components/InfoSection.js — Accordion + Table + ListGroup ngang\nimport { Accordion, Col, Container, ListGroup, Row, Table } from 'react-bootstrap';\nimport { FAQ, HOURS } from '../data/menu';\n\nexport default function InfoSection() {\n  return (\n    <Container as=\"section\" className=\"py-4\">\n      <Row className=\"g-4\">\n        <Col lg={6} id=\"faq\">\n          <h2>FAQ</h2>\n          {/* defaultActiveKey=\"0\": mục đầu mở sẵn */}\n          <Accordion defaultActiveKey=\"0\">\n            {FAQ.map((f, i) => (\n              <Accordion.Item eventKey={String(i)} key={f.q}>\n                <Accordion.Header>{f.q}</Accordion.Header>\n                <Accordion.Body>{f.a}</Accordion.Body>\n              </Accordion.Item>\n            ))}\n          </Accordion>\n        </Col>\n        <Col lg={6}>\n          <h2>Opening hours</h2>\n          <Table striped bordered hover size=\"sm\" id=\"hours\">\n            <thead><tr><th>Day</th><th>Open</th><th>Close</th></tr></thead>\n            <tbody>\n              {HOURS.map((h) => (\n                <tr key={h.day}><td>{h.day}</td><td>{h.open}</td><td>{h.close}</td></tr>\n              ))}\n            </tbody>\n          </Table>\n        </Col>\n      </Row>\n      <footer id=\"contact\" className=\"mt-4\">\n        <ListGroup horizontal=\"md\">\n          <ListGroup.Item>📍 12 Tran Hung Dao, Hanoi</ListGroup.Item>\n          <ListGroup.Item>📞 024 3999 8888</ListGroup.Item>\n          <ListGroup.Item>✉️ hello@beanandleaf.vn</ListGroup.Item>\n        </ListGroup>\n      </footer>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/data/menu.js",
+          "language": "javascript",
+          "code": "// src/data/menu.js — đã cho (priceK = nghìn đồng)\nexport const MENU = [\n  { id: 1, name: 'Espresso', category: 'coffee', priceK: 35, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=espresso' },\n  { id: 2, name: 'Cappuccino', category: 'coffee', priceK: 45, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=cappuccino' },\n  { id: 3, name: 'Cold Brew', category: 'coffee', priceK: 50, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=coldbrew' },\n  { id: 4, name: 'Matcha Latte', category: 'tea', priceK: 55, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=matcha' },\n  { id: 5, name: 'Peach Tea', category: 'tea', priceK: 40, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=peachtea' },\n  { id: 6, name: 'Tiramisu', category: 'cake', priceK: 60, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=tiramisu' },\n];\n\nexport const HOURS = [\n  { day: 'Monday – Friday', open: '07:00', close: '22:00' },\n  { day: 'Saturday', open: '08:00', close: '23:00' },\n  { day: 'Sunday', open: '08:00', close: '21:00' },\n];\n\nexport const FAQ = [\n  { q: 'Do you have Wi-Fi?', a: 'Yes — free Wi-Fi, ask the barista for the password.' },\n  { q: 'Can I book a table?', a: 'Tables for 6+ people can be booked one day ahead.' },\n  { q: 'Do you deliver?', a: 'We deliver within 3 km through our app partners.' },\n];\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lưới Bootstrap làm phần nặng: <code>Row xs/md/lg</code> chia cột theo mốc màn hình, <code>Col md={6}</code> cho hero hai cột. Navbar dùng cặp <code>Navbar.Toggle aria-controls</code> ↔ <code>Navbar.Collapse id</code> để thu gọn trên điện thoại. State <code>show</code> của Modal nằm ở <code>App</code> (cha chung của Hero và thẻ menu) nên cả hai mở được modal, thẻ còn chọn sẵn món. Form dùng kiểm hợp lệ HTML (<code>required</code>) + hiển thị kiểu Bootstrap (<code>noValidate validated</code>), hợp lệ mới báo lên App để đóng modal và hiện Alert.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react-bootstrap.netlify.app/docs/layout/grid",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Navbar collapses below lg (.navbar-expand-lg)",
+            "kiem": "ton-tai",
+            "selector": "nav.navbar.navbar-expand-lg"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Toggle button controls #main-nav",
+            "kiem": "thuoc-tinh",
+            "selector": ".navbar-toggler",
+            "thuocTinh": "aria-controls",
+            "giaTri": "main-nav"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "#main-nav is a .navbar-collapse with 4 links",
+            "kiem": "so-luong",
+            "selector": "#main-nav.navbar-collapse .nav-link",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Brand #brand",
+            "kiem": "text",
+            "selector": "#brand",
+            "khop": "Bean & Leaf"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Hero section #home has a row with two .col-md-6",
+            "kiem": "so-luong",
+            "selector": "#home .row > .col-md-6",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Primary \"Order now\" + outline \"View menu\" buttons",
+            "kiem": "so-luong",
+            "selector": "#home .btn-primary#btn-order, #home .btn-outline-secondary",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Hero image is responsive (.img-fluid)",
+            "kiem": "ton-tai",
+            "selector": "#home img.img-fluid"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Menu grid uses row-cols 1 / md 2 / lg 3",
+            "kiem": "ton-tai",
+            "selector": "#menu-grid.row.row-cols-1.row-cols-md-2.row-cols-lg-3"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "6 .menu-card cards (.card)",
+            "kiem": "so-luong",
+            "selector": ".menu-card.card",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Price badge \"45,000 VND\" and 3 bestseller badges",
+            "kiem": "danh-sach-text",
+            "selector": ".menu-card .price",
+            "mongDoi": [
+              "35,000 VND",
+              "45,000 VND",
+              "50,000 VND",
+              "55,000 VND",
+              "40,000 VND",
+              "60,000 VND"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Bestseller badges are .badge.bg-danger",
+            "kiem": "so-luong",
+            "selector": ".bestseller.badge.bg-danger",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Nav pills with 4 categories",
+            "kiem": "so-luong",
+            "selector": ".nav-pills .nav-link",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Tea ⇒ 2 cards and #cat-tea is active",
+            "kiem": "danh-sach-text",
+            "selector": ".nav-pills .nav-link.active, .menu-card .item-name",
+            "mongDoi": [
+              "Tea",
+              "Matcha Latte",
+              "Peach Tea"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#cat-tea"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Back to All ⇒ 6 cards",
+            "kiem": "so-luong",
+            "selector": ".menu-card",
+            "giaTri": 6,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#cat-cake"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cat-all"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#btn-order opens a modal titled \"Place an order\"",
+            "kiem": "text",
+            "selector": ".modal.show .modal-title",
+            "giaTri": "Place an order",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Empty submit ⇒ form gets .was-validated and the modal stays open",
+            "kiem": "so-luong",
+            "selector": "#order-form.was-validated, .modal.show",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#order-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Valid order closes the modal and shows #order-alert",
+            "kiem": "text",
+            "selector": "#order-alert",
+            "khop": "Thanks, Lan! Your Cappuccino \\(L\\) is on the way\\.",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#order-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#order-item",
+                "giaTri": "Cappuccino"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#size-L"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#order-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "\"Order this\" on a card pre-selects the item",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#order-item",
+            "thuocTinh": "value",
+            "giaTri": "Tiramisu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#cat-cake"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".menu-card .btn-pick"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Modal is gone after ordering",
+            "kiem": "so-luong",
+            "selector": ".modal",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#order-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#order-item",
+                "giaTri": "Cappuccino"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#size-L"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#order-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Inline radios S/M/L (M checked by default)",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#size-M",
+            "thuocTinh": "checked",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Alert can be dismissed",
+            "kiem": "so-luong",
+            "selector": "#order-alert",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-order"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#order-name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#order-item",
+                "giaTri": "Cappuccino"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#size-L"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#order-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#order-alert .btn-close"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "3 accordion items",
+            "kiem": "so-luong",
+            "selector": "#faq .accordion-item",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f6",
+            "moTa": "First item open by default",
+            "kiem": "so-luong",
+            "selector": "#faq .accordion-collapse.show",
+            "giaTri": 1
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Opening item 2 closes item 1",
+            "kiem": "text",
+            "selector": "#faq .accordion-collapse.show",
+            "khop": "Tables for 6\\+ people",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#faq .accordion-item:nth-child(2) .accordion-button"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Hours table is striped, bordered, hover, sm",
+            "kiem": "ton-tai",
+            "selector": "table#hours.table.table-striped.table-bordered.table-hover.table-sm"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "3 rows of opening hours",
+            "kiem": "so-luong",
+            "selector": "#hours tbody tr",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Footer #contact has a horizontal list group",
+            "kiem": "so-luong",
+            "selector": "#contact .list-group.list-group-horizontal-md .list-group-item",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Uses React-Bootstrap components (not hand-written class strings only)",
+            "kiem": "ma-nguon",
+            "khop": "from\\s+['\"]react-bootstrap['\"]"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Responsive navbar",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Hero grid",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Menu card grid",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Category pills",
+            "diem": 1
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Order modal & validation",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. FAQ accordion",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Opening hours table",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Contact list group",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>md={4}</code> trên từng Col trong khi đã dùng <code>Row md={2}</code> ⇒ hai cách chia cột đè nhau."
+        },
+        {
+          "loi": "Nút ☰ không mở vì <code>aria-controls</code> khác <code>id</code> của <code>Navbar.Collapse</code>."
+        },
+        {
+          "loi": "Quên <code>import 'bootstrap/dist/css/bootstrap.min.css'</code> ⇒ component đúng mà giao diện vỡ."
+        },
+        {
+          "loi": "Form trong Modal thiếu <code>noValidate</code> ⇒ trình duyệt hiện bong bóng mặc định thay vì phản hồi Bootstrap."
+        },
+        {
+          "loi": "Để state <code>show</code> của Modal trong Hero ⇒ thẻ menu không mở được modal (state phải ở cha chung)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breakpoint",
+          "vi": "mốc bề rộng màn hình (sm 576 · md 768 · lg 992 · xl 1200)"
+        },
+        {
+          "en": "gutter (g-4)",
+          "vi": "khoảng cách giữa các cột"
+        },
+        {
+          "en": "collapse / hamburger",
+          "vi": "thu gọn / nút ba gạch ☰"
+        },
+        {
+          "en": "modal",
+          "vi": "hộp thoại nổi che trang"
+        },
+        {
+          "en": "dismissible",
+          "vi": "đóng được (có nút ×)"
+        },
+        {
+          "en": "accordion",
+          "vi": "các khối gập/mở, mỗi lúc mở một"
+        },
+        {
+          "en": "utility class",
+          "vi": "class tiện ích (mb-3, d-flex, fw-bold…)"
+        },
+        {
+          "en": "validate / validation",
+          "vi": "kiểm tra dữ liệu hợp lệ"
+        },
+        {
+          "en": "badge",
+          "vi": "nhãn nhỏ có màu (Bootstrap .badge)"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 4 — Café Landing Page (Navbar · grid · Card · Modal form · Accordion) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — App giữ trạng thái Modal + Alert; các phần là component riêng\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _AppNavbar = require('./components/AppNavbar'); var _AppNavbar2 = _interopRequireDefault(_AppNavbar);\\nvar _Hero = require('./components/Hero'); var _Hero2 = _interopRequireDefault(_Hero);\\nvar _MenuSection = require('./components/MenuSection'); var _MenuSection2 = _interopRequireDefault(_MenuSection);\\nvar _OrderModal = require('./components/OrderModal'); var _OrderModal2 = _interopRequireDefault(_OrderModal);\\nvar _InfoSection = require('./components/InfoSection'); var _InfoSection2 = _interopRequireDefault(_InfoSection);\\n\\n function App() {\\n  const [show, setShow] = _react.useState.call(void 0, false);\\n  const [initialItem, setInitialItem] = _react.useState.call(void 0, '');\\n  const [placed, setPlaced] = _react.useState.call(void 0, null);\\n\\n  const openOrder = (item = '') => {\\n    setInitialItem(item);\\n    setShow(true);\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _AppNavbar2.default, {} )\\n      , placed && (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { className: \\\"pt-3\\\", children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Alert, { variant: \\\"success\\\", dismissible: true, onClose: () => setPlaced(null), id: \\\"order-alert\\\", children: [\\\"Thanks, \\\"\\n             , placed.name, \\\"! Your \\\"  , placed.item, \\\" (\\\" , placed.size, \\\") is on the way.\\\"\\n          ]})\\n        })\\n      )\\n      , _jsxruntime.jsx.call(void 0, _Hero2.default, { onOrder: () => openOrder(),} )\\n      , _jsxruntime.jsx.call(void 0, _MenuSection2.default, { onOrder: openOrder,} )\\n      , _jsxruntime.jsx.call(void 0, _InfoSection2.default, {} )\\n      , _jsxruntime.jsx.call(void 0, _OrderModal2.default, {\\n        show: show,\\n        initialItem: initialItem,\\n        onClose: () => setShow(false),\\n        onPlaced: (o) => {\\n          setPlaced(o);\\n          setShow(false);\\n        },}\\n      )\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/AppNavbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/AppNavbar.js — Navbar responsive: dưới lg thu thành nút ☰ (Toggle) bung ra Collapse\\nvar _reactbootstrap = require('react-bootstrap');\\n\\n function AppNavbar() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { expand: \\\"lg\\\", bg: \\\"dark\\\", 'data-bs-theme': \\\"dark\\\", sticky: \\\"top\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { href: \\\"#home\\\", id: \\\"brand\\\", children: \\\"☕ Bean & Leaf\\\"   })\\n        /* aria-controls trỏ đúng id của Collapse */\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Toggle, { 'aria-controls': \\\"main-nav\\\",} )\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Collapse, { id: \\\"main-nav\\\", children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"ms-auto\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#home\\\", children: \\\"Home\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#menu\\\", children: \\\"Menu\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#faq\\\", children: \\\"FAQ\\\"})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { href: \\\"#contact\\\", children: \\\"Contact\\\"})\\n          ]})\\n        })\\n      ]})\\n    })\\n  );\\n} exports.default = AppNavbar;\\n\",\"src/components/Hero.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Hero.js — lưới 12 cột: 2 cột md={6}; dưới md tự xếp chồng\\nvar _reactbootstrap = require('react-bootstrap');\\n\\n function Hero({ onOrder }) {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { as: \\\"section\\\", id: \\\"home\\\", className: \\\"hero py-5\\\" , children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Row, { className: \\\"align-items-center g-4\\\" , children: [\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Col, { md: 6, children: [\\n          _jsxruntime.jsx.call(void 0, 'h1', { className: \\\"display-5 fw-bold\\\" , children: \\\"Fresh coffee, slow mornings.\\\"   })\\n          , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"lead\\\", children: \\\"Specialty coffee and handmade cakes in the heart of Hanoi.\\\"         })\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"primary\\\", size: \\\"lg\\\", id: \\\"btn-order\\\", onClick: onOrder, children: \\\"Order now\\\" }), ' '\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"outline-secondary\\\", size: \\\"lg\\\", href: \\\"#menu\\\", children: \\\"View menu\\\" })\\n        ]})\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 6, children: \\n          _jsxruntime.jsx.call(void 0, 'img', { src: \\\"https://api.dicebear.com/9.x/shapes/svg?seed=hero-cafe\\\", alt: \\\"Our café\\\" , className: \\\"img-fluid rounded-4 shadow\\\"  ,} )\\n        })\\n      ]})\\n    })\\n  );\\n} exports.default = Hero;\\n\",\"src/components/MenuSection.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/MenuSection.js — Nav pills để lọc + lưới thẻ: Row xs/md/lg ⇒ row-cols-1/2/3\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _menu = require('../data/menu');\\n\\nconst CATS = [\\n  { key: 'all', label: 'All' },\\n  { key: 'coffee', label: 'Coffee' },\\n  { key: 'tea', label: 'Tea' },\\n  { key: 'cake', label: 'Cake' },\\n];\\n\\n function MenuSection({ onOrder }) {\\n  const [cat, setCat] = _react.useState.call(void 0, 'all');\\n  const items = _menu.MENU.filter((m) => cat === 'all' || m.category === cat);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { as: \\\"section\\\", id: \\\"menu\\\", className: \\\"py-4\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { className: \\\"mb-3\\\", children: \\\"Our menu\\\" })\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav, { variant: \\\"pills\\\", activeKey: cat, onSelect: (k) => setCat(k), className: \\\"mb-3\\\", children: \\n        CATS.map((c) => (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Item, { children: \\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { eventKey: c.key, id: `cat-${c.key}`, children: c.label})\\n          }, c.key)\\n        ))\\n      })\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { xs: 1, md: 2, lg: 3, className: \\\"g-4\\\", id: \\\"menu-grid\\\", children: \\n        items.map((m) => (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { children: \\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { className: \\\"menu-card h-100 shadow-sm\\\"  , children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Img, { variant: \\\"top\\\", src: m.image, alt: m.name, style: { height: 160, objectFit: 'cover' },} )\\n              , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { className: \\\"d-flex flex-column\\\" , children: [\\n                _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Title, { className: \\\"d-flex justify-content-between align-items-center\\\"  , children: [\\n                  _jsxruntime.jsx.call(void 0, 'span', { className: \\\"item-name\\\", children: m.name})\\n                  , m.bestseller && _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"danger\\\", className: \\\"bestseller\\\", children: \\\"Bestseller\\\"})\\n                ]})\\n                , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Badge, { bg: \\\"light\\\", text: \\\"dark\\\", className: \\\"price align-self-start mb-3\\\"  , children: [(m.priceK * 1000).toLocaleString('en-US'), \\\" VND\\\" ]})\\n                , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"outline-primary\\\", className: \\\"mt-auto btn-pick\\\" , onClick: () => onOrder(m.name), children: \\\"Order this\\\" })\\n              ]})\\n            ]})\\n          }, m.id)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = MenuSection;\\n\",\"src/components/OrderModal.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/OrderModal.js — Modal + Form kiểm hợp lệ kiểu Bootstrap: noValidate + validated + required\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _menu = require('../data/menu');\\n\\n function OrderModal({ show, initialItem, onClose, onPlaced }) {\\n  const [validated, setValidated] = _react.useState.call(void 0, false);\\n  const [form, setForm] = _react.useState.call(void 0, { name: '', item: '', size: 'M' });\\n\\n  // mỗi lần mở: đặt lại form (chọn sẵn món nếu mở từ một thẻ)\\n  _react.useEffect.call(void 0, () => {\\n    if (show) {\\n      setForm({ name: '', item: initialItem || '', size: 'M' });\\n      setValidated(false);\\n    }\\n  }, [show, initialItem]);\\n\\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault();\\n    const formEl = e.currentTarget;\\n    setValidated(true); // thêm class .was-validated ⇒ Bootstrap tô đỏ/xanh các ô\\n    if (!formEl.checkValidity()) return; // dùng luật HTML: required…\\n    onPlaced({ ...form, name: form.name.trim() });\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Modal, { show: show, onHide: onClose, centered: true, children: [\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Modal.Header, { closeButton: true, children: \\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Modal.Title, { children: \\\"Place an order\\\"  })\\n      })\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"order-form\\\", noValidate: true, validated: validated, onSubmit: handleSubmit, children: [\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Modal.Body, { children: [\\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"order-name\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Your name\\\" })\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"name\\\", required: true, value: form.name, onChange: update, placeholder: \\\"e.g. Lan\\\" ,} )\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", children: \\\"Please tell us your name.\\\"    })\\n          ]})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"order-item\\\", children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Drink / cake\\\"  })\\n            , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { name: \\\"item\\\", required: true, value: form.item, onChange: update, children: [\\n              _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"Choose...\\\"})\\n              , _menu.MENU.map((m) => _jsxruntime.jsx.call(void 0, 'option', { value: m.name, children: m.name}, m.id))\\n            ]})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", children: \\\"Please choose an item.\\\"   })\\n          ]})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { children: [\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { className: \\\"d-block\\\", children: \\\"Size\\\"})\\n            , ['S', 'M', 'L'].map((s) => (\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Check, { inline: true, type: \\\"radio\\\", id: `size-${s}`, name: \\\"size\\\", value: s, label: s, checked: form.size === s, onChange: update,}, s )\\n            ))\\n          ]})\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Modal.Footer, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"secondary\\\", onClick: onClose, children: \\\"Cancel\\\"})\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { type: \\\"submit\\\", variant: \\\"primary\\\", id: \\\"btn-place\\\", children: \\\"Place order\\\" })\\n        ]})\\n      ]})\\n    ]})\\n  );\\n} exports.default = OrderModal;\\n\",\"src/components/InfoSection.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/InfoSection.js — Accordion + Table + ListGroup ngang\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _menu = require('../data/menu');\\n\\n function InfoSection() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { as: \\\"section\\\", className: \\\"py-4\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Row, { className: \\\"g-4\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Col, { lg: 6, id: \\\"faq\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"FAQ\\\"})\\n          /* defaultActiveKey=\\\"0\\\": mục đầu mở sẵn */\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Accordion, { defaultActiveKey: \\\"0\\\", children: \\n            _menu.FAQ.map((f, i) => (\\n              _jsxruntime.jsxs.call(void 0, _reactbootstrap.Accordion.Item, { eventKey: String(i), children: [\\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Accordion.Header, { children: f.q})\\n                , _jsxruntime.jsx.call(void 0, _reactbootstrap.Accordion.Body, { children: f.a})\\n              ]}, f.q)\\n            ))\\n          })\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Col, { lg: 6, children: [\\n          _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Opening hours\\\" })\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { striped: true, bordered: true, hover: true, size: \\\"sm\\\", id: \\\"hours\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'thead', { children: _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'th', { children: \\\"Day\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Open\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Close\\\"})]})})\\n            , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n              _menu.HOURS.map((h) => (\\n                _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'td', { children: h.day}), _jsxruntime.jsx.call(void 0, 'td', { children: h.open}), _jsxruntime.jsx.call(void 0, 'td', { children: h.close})]}, h.day)\\n              ))\\n            })\\n          ]})\\n        ]})\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'footer', { id: \\\"contact\\\", className: \\\"mt-4\\\", children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.ListGroup, { horizontal: \\\"md\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup.Item, { children: \\\"📍 12 Tran Hung Dao, Hanoi\\\"     })\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup.Item, { children: \\\"📞 024 3999 8888\\\"   })\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.ListGroup.Item, { children: \\\"✉️ hello@beanandleaf.vn\\\" })\\n        ]})\\n      })\\n    ]})\\n  );\\n} exports.default = InfoSection;\\n\",\"src/data/menu.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/menu.js — đã cho (priceK = nghìn đồng)\\n const MENU = [\\n  { id: 1, name: 'Espresso', category: 'coffee', priceK: 35, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=espresso' },\\n  { id: 2, name: 'Cappuccino', category: 'coffee', priceK: 45, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=cappuccino' },\\n  { id: 3, name: 'Cold Brew', category: 'coffee', priceK: 50, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=coldbrew' },\\n  { id: 4, name: 'Matcha Latte', category: 'tea', priceK: 55, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=matcha' },\\n  { id: 5, name: 'Peach Tea', category: 'tea', priceK: 40, bestseller: false, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=peachtea' },\\n  { id: 6, name: 'Tiramisu', category: 'cake', priceK: 60, bestseller: true, image: 'https://api.dicebear.com/9.x/shapes/svg?seed=tiramisu' },\\n]; exports.MENU = MENU;\\n\\n const HOURS = [\\n  { day: 'Monday – Friday', open: '07:00', close: '22:00' },\\n  { day: 'Saturday', open: '08:00', close: '23:00' },\\n  { day: 'Sunday', open: '08:00', close: '21:00' },\\n]; exports.HOURS = HOURS;\\n\\n const FAQ = [\\n  { q: 'Do you have Wi-Fi?', a: 'Yes — free Wi-Fi, ask the barista for the password.' },\\n  { q: 'Can I book a table?', a: 'Tables for 6+ people can be booked one day ahead.' },\\n  { q: 'Do you deliver?', a: 'We deliver within 3 km through our app partners.' },\\n]; exports.FAQ = FAQ;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\"};var CSS={};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

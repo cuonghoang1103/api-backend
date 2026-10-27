@@ -1,0 +1,644 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-lab-lazy-dashboard",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-1-lazy-suspense"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10 — Admin Dashboard (lazy routes · Suspense · Error Boundary · preload)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "code splitting",
+        "React.lazy",
+        "dynamic import",
+        "Suspense",
+        "nested Suspense",
+        "Error Boundary",
+        "preloading",
+        "named export lazy"
+      ],
+      "prerequisites": [
+        "React Router (layout route, Outlet)",
+        "Promise",
+        "class component"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "lazy",
+        "suspense"
+      ],
+      "problemHtml": "<h1>LAB 10: Admin Dashboard — code splitting with lazy &amp; Suspense</h1>\n<p class=\"bi-phu\">FER202 · Chapter 10 — Code Splitting · Suggested time: 90 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>The dashboard bundle has become heavy. Split it so the first screen loads fast: pages are downloaded only when visited (<code>React.lazy</code>), a loading <code>Suspense</code> fallback appears <b>inside</b> the layout, a nested Suspense keeps the page visible while a heavy chart loads, an <b>Error Boundary</b> catches chunks that fail to download, links <b>preload</b> their page on hover/focus, and a help panel is fetched on demand.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Overview (eager) · Reports · Users · Settings (lazy) · Broken page · Help panel.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pages and components under <code>src/pages</code>, <code>src/components</code> are GIVEN — your work is in <code>App.js</code>, <code>utils/lazyLoad.js</code>, <code>ErrorBoundary.js</code> and the nested Suspense in <code>Reports.js</code>.</li>\n  <li>Simulate network latency: every lazy page waits 600 ms, the chart 800 ms, the help panel 500 ms (use <code>withDelay</code>).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── utils/lazyLoad.js         # delay · withDelay · lazyWithPreload\n├── components/\n│   ├── ErrorBoundary.js      # class component\n│   ├── RevenueChart.js       # given (\"heavy\")\n│   └── HelpPanel.js          # given\n├── pages/\n│   ├── Overview.js           # given — eager\n│   ├── Reports.js            # given + nested Suspense\n│   ├── Users.js              # given — NAMED export UsersPage\n│   └── Settings.js           # given\n├── App.js                    # lazy routes + Layout\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+------------------+--------------------------------------------------------+\n| Overview         | Reports                                                |\n|[Reports] (active)| Loading chart...          ← nested fallback (800 ms)   |\n| Users            |                                                        |\n| Settings         |   …then: Jan ████ 120 · Feb █████ 150 · Mar ██████ 180  |\n| Broken page      |                                                        |\n| [Help]           | (switching pages: \"Loading page...\" for 600 ms here,   |\n|                  |  the sidebar never disappears)                         |\n+------------------+--------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Lazy modules</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Reports / Settings</code></td><td>default export</td><td>lazyWithPreload(withDelay(() => import(…), 600))</td></tr><tr><td><code>Users</code></td><td>named export UsersPage</td><td>map to { default: m.UsersPage }</td></tr><tr><td><code>RevenueChart</code></td><td>default export</td><td>lazy inside Reports, 800 ms</td></tr><tr><td><code>Broken</code></td><td>—</td><td>factory rejects: ChunkLoadError</td></tr><tr><td><code>HelpPanel</code></td><td>default export</td><td>lazy, only after #btn-help, 500 ms</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Lazy routes <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Routes <code>/</code> (Overview, eager), <code>/reports</code>, <code>/users</code>, <code>/settings</code> (lazy, dynamic <code>import()</code>), <code>/broken</code>, all inside a layout route with the sidebar (<code>#nav-overview</code>, <code>#nav-reports</code>, <code>#nav-users</code>, <code>#nav-settings</code>, <code>#nav-broken</code>, <code>#btn-help</code>).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">React.lazy</span> <span class=\"bi-hook\">import()</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Suspense in the layout <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Suspense fallback={&lt;p id=\"page-loading\"&gt;Loading page...&lt;/p&gt;}&gt;</code> wraps the <code>&lt;Outlet /&gt;</code> only — the sidebar never disappears.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Suspense</span> <span class=\"bi-hook\">Outlet</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Simulated latency <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>withDelay(factory, ms)</code> = <code>() =&gt; Promise.all([factory(), delay(ms)]).then(([m]) =&gt; m)</code>; pages wait 600 ms.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Nested Suspense <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>In <code>Reports.js</code>: lazy <code>RevenueChart</code> (800 ms) inside its own Suspense (<code>#chart-loading</code> <code>Loading chart...</code>) — <code>#reports-title</code> is visible meanwhile.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>click Reports → 600 ms \"Loading page...\" → \"Reports\" + \"Loading chart...\" → 800 ms → chart</pre>\n</div>\n<div class=\"bi-cn\"><h3>5. Error boundary <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Class <code>ErrorBoundary</code> (<code>getDerivedStateFromError</code>) around the Suspense, <code>key={location.pathname}</code>; failure shows <code>#chunk-error</code> <code>Could not load this page.</code> + link <code>#btn-home</code> to <code>/</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">getDerivedStateFromError</span> <span class=\"bi-hook\">componentDidCatch</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Preload on hover / focus <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>lazyWithPreload(factory)</code> memoizes the promise and exposes <code>.preload()</code>; sidebar links call it on <code>onMouseEnter</code> and <code>onFocus</code> — a preloaded page shows with no fallback.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Named export <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Users.js</code> only has <code>export function UsersPage</code>: lazy-load it with <code>.then((m) =&gt; ({ default: m.UsersPage }))</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. On-demand help panel <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Nothing is loaded at start. <code>#btn-help</code> renders lazy <code>HelpPanel</code> (500 ms, fallback <code>#help-loading</code>); <code>#btn-close-help</code> closes it.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#nav-overview · #nav-reports · #nav-users · #nav-settings · #nav-broken · #btn-help</code></td><td>sidebar</td></tr><tr><td><code>#page-loading · #chart-loading · #help-loading</code></td><td>fallbacks</td></tr><tr><td><code>#overview-page · #reports-page · #reports-title · #chart · #users-page · #settings-page · #help-panel</code></td><td>content (given)</td></tr><tr><td><code>#chunk-error · #btn-home</code></td><td>error boundary</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Lazy routes</td><td>1.5</td></tr><tr><td>2</td><td>Suspense in the layout</td><td>1.5</td></tr><tr><td>3</td><td>Simulated latency</td><td>1</td></tr><tr><td>4</td><td>Nested Suspense</td><td>1.5</td></tr><tr><td>5</td><td>Error boundary</td><td>1.5</td></tr><tr><td>6</td><td>Preload on hover / focus</td><td>1</td></tr><tr><td>7</td><td>Named export</td><td>1</td></tr><tr><td>8</td><td>On-demand help panel</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>One Suspense around the whole app — the sidebar flashes away on every navigation.</li>\n  <li><code>lazy(() =&gt; import('./pages/Users'))</code> on a named export — \"Element type is invalid\".</li>\n  <li>Declaring <code>lazy()</code> INSIDE a component — a new component every render, state lost and endless loading.</li>\n  <li>No error boundary: a failed chunk blanks the whole screen.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 10: Bảng quản trị — tách mã với lazy &amp; Suspense</h1>\n<p class=\"bi-phu\">FER202 · Chương 10 — Tách mã · Thời gian gợi ý: 90 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bundle của bảng quản trị đã nặng. Hãy tách nó để màn đầu tải nhanh: mỗi trang chỉ tải khi được mở (<code>React.lazy</code>), fallback của <code>Suspense</code> hiện <b>bên trong</b> layout, một Suspense lồng giữ trang hiện trong lúc biểu đồ nặng còn tải, <b>Error Boundary</b> bắt chunk tải lỗi, link <b>tải trước</b> trang khi rê chuột/focus, và khung trợ giúp chỉ tải khi cần.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Overview (tải ngay) · Reports · Users · Settings (lazy) · trang lỗi · khung Help.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Các trang/component trong <code>src/pages</code>, <code>src/components</code> ĐÃ CHO — bạn làm ở <code>App.js</code>, <code>utils/lazyLoad.js</code>, <code>ErrorBoundary.js</code> và Suspense lồng trong <code>Reports.js</code>.</li>\n  <li>Giả lập độ trễ mạng: mỗi trang lazy chờ 600 ms, biểu đồ 800 ms, khung help 500 ms (dùng <code>withDelay</code>).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── utils/lazyLoad.js         # delay · withDelay · lazyWithPreload\n├── components/\n│   ├── ErrorBoundary.js      # class component\n│   ├── RevenueChart.js       # given (\"heavy\")\n│   └── HelpPanel.js          # given\n├── pages/\n│   ├── Overview.js           # given — eager\n│   ├── Reports.js            # given + nested Suspense\n│   ├── Users.js              # given — NAMED export UsersPage\n│   └── Settings.js           # given\n├── App.js                    # lazy routes + Layout\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+------------------+--------------------------------------------------------+\n| Overview         | Reports                                                |\n|[Reports] (active)| Loading chart...          ← nested fallback (800 ms)   |\n| Users            |                                                        |\n| Settings         |   …then: Jan ████ 120 · Feb █████ 150 · Mar ██████ 180  |\n| Broken page      |                                                        |\n| [Help]           | (switching pages: \"Loading page...\" for 600 ms here,   |\n|                  |  the sidebar never disappears)                         |\n+------------------+--------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Lazy modules</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Reports / Settings</code></td><td>default export</td><td>lazyWithPreload(withDelay(() => import(…), 600))</td></tr><tr><td><code>Users</code></td><td>named export UsersPage</td><td>đổi thành { default: m.UsersPage }</td></tr><tr><td><code>RevenueChart</code></td><td>default export</td><td>lazy bên trong Reports, 800 ms</td></tr><tr><td><code>Broken</code></td><td>—</td><td>factory reject: ChunkLoadError</td></tr><tr><td><code>HelpPanel</code></td><td>default export</td><td>lazy, chỉ sau khi bấm #btn-help, 500 ms</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Route lazy <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Route <code>/</code> (Overview, tải ngay), <code>/reports</code>, <code>/users</code>, <code>/settings</code> (lazy, <code>import()</code> động), <code>/broken</code>, đều nằm trong route layout có thanh bên (<code>#nav-overview</code>, <code>#nav-reports</code>, <code>#nav-users</code>, <code>#nav-settings</code>, <code>#nav-broken</code>, <code>#btn-help</code>).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">React.lazy</span> <span class=\"bi-hook\">import()</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Suspense trong layout <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Suspense fallback={&lt;p id=\"page-loading\"&gt;Loading page...&lt;/p&gt;}&gt;</code> chỉ bọc <code>&lt;Outlet /&gt;</code> — thanh bên không bao giờ biến mất.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Suspense</span> <span class=\"bi-hook\">Outlet</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Giả lập độ trễ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>withDelay(factory, ms)</code> = <code>() =&gt; Promise.all([factory(), delay(ms)]).then(([m]) =&gt; m)</code>; mỗi trang chờ 600 ms.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Suspense lồng nhau <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Trong <code>Reports.js</code>: <code>RevenueChart</code> lazy (800 ms) nằm trong Suspense riêng (<code>#chart-loading</code> <code>Loading chart...</code>) — <code>#reports-title</code> hiện trong lúc chờ.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>bấm Reports → 600 ms \"Loading page...\" → \"Reports\" + \"Loading chart...\" → 800 ms → biểu đồ</pre>\n</div>\n<div class=\"bi-cn\"><h3>5. Error Boundary <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Class <code>ErrorBoundary</code> (<code>getDerivedStateFromError</code>) bọc ngoài Suspense, <code>key={location.pathname}</code>; lỗi thì hiện <code>#chunk-error</code> <code>Could not load this page.</code> + link <code>#btn-home</code> về <code>/</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">getDerivedStateFromError</span> <span class=\"bi-hook\">componentDidCatch</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Tải trước khi rê chuột / focus <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>lazyWithPreload(factory)</code> ghi nhớ promise và có <code>.preload()</code>; link thanh bên gọi nó ở <code>onMouseEnter</code> và <code>onFocus</code> — trang đã tải trước hiện ngay không qua fallback.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Named export <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Users.js</code> chỉ có <code>export function UsersPage</code>: lazy bằng <code>.then((m) =&gt; ({ default: m.UsersPage }))</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Khung Help tải theo yêu cầu <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Lúc đầu không tải gì. <code>#btn-help</code> vẽ <code>HelpPanel</code> lazy (500 ms, fallback <code>#help-loading</code>); <code>#btn-close-help</code> đóng lại.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#nav-overview · #nav-reports · #nav-users · #nav-settings · #nav-broken · #btn-help</code></td><td>thanh bên</td></tr><tr><td><code>#page-loading · #chart-loading · #help-loading</code></td><td>fallback</td></tr><tr><td><code>#overview-page · #reports-page · #reports-title · #chart · #users-page · #settings-page · #help-panel</code></td><td>nội dung (đã cho)</td></tr><tr><td><code>#chunk-error · #btn-home</code></td><td>error boundary</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Route lazy</td><td>1.5</td></tr><tr><td>2</td><td>Suspense trong layout</td><td>1.5</td></tr><tr><td>3</td><td>Giả lập độ trễ</td><td>1</td></tr><tr><td>4</td><td>Suspense lồng nhau</td><td>1.5</td></tr><tr><td>5</td><td>Error Boundary</td><td>1.5</td></tr><tr><td>6</td><td>Tải trước khi rê chuột / focus</td><td>1</td></tr><tr><td>7</td><td>Named export</td><td>1</td></tr><tr><td>8</td><td>Khung Help tải theo yêu cầu</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Một Suspense bọc cả app — thanh bên chớp mất mỗi lần chuyển trang.</li>\n  <li><code>lazy(() =&gt; import('./pages/Users'))</code> với named export — lỗi \"Element type is invalid\".</li>\n  <li>Khai <code>lazy()</code> BÊN TRONG component — mỗi lần render một component mới, mất state và tải mãi.</li>\n  <li>Không có error boundary: một chunk lỗi làm trắng cả màn hình.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pages and components under <code>src/pages</code>, <code>src/components</code> are GIVEN — your work is in <code>App.js</code>, <code>utils/lazyLoad.js</code>, <code>ErrorBoundary.js</code> and the nested Suspense in <code>Reports.js</code>.|||Các trang/component trong <code>src/pages</code>, <code>src/components</code> ĐÃ CHO — bạn làm ở <code>App.js</code>, <code>utils/lazyLoad.js</code>, <code>ErrorBoundary.js</code> và Suspense lồng trong <code>Reports.js</code>.\nSimulate network latency: every lazy page waits 600 ms, the chart 800 ms, the help panel 500 ms (use <code>withDelay</code>).|||Giả lập độ trễ mạng: mỗi trang lazy chờ 600 ms, biểu đồ 800 ms, khung help 500 ms (dùng <code>withDelay</code>).",
+      "examplesJson": [
+        {
+          "input": "Nested Suspense|||Suspense lồng nhau",
+          "output": "click Reports → 600 ms \"Loading page...\" → \"Reports\" + \"Loading chart...\" → 800 ms → chart|||bấm Reports → 600 ms \"Loading page...\" → \"Reports\" + \"Loading chart...\" → 800 ms → biểu đồ",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Khai mọi lazy ở CẤP MODULE (ngoài component). Users: lazy(() => import(\"./pages/Users\").then(m => ({ default: m.UsersPage }))).",
+        "Layout route: <Route element={<Layout/>}> bọc các route con; trong Layout: <ErrorBoundary key={location.pathname}><Suspense fallback={…}><Outlet/></Suspense></ErrorBoundary>.",
+        "lazyWithPreload: let p = null; const load = () => (p ??= factory()); const C = lazy(load); C.preload = load; return C.",
+        "Help: {help && <Suspense fallback={<p id=\"help-loading\">…</p>}><HelpPanel onClose={…} /></Suspense>}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mọi trang import THẲNG (gói chung một bundle), chưa có fallback/ErrorBoundary\nimport { NavLink, Route, Routes } from 'react-router-dom';\nimport Overview from './pages/Overview';\nimport Reports from './pages/Reports';\nimport { UsersPage } from './pages/Users';\nimport Settings from './pages/Settings';\n\nexport default function App() {\n  // TODO: lazy (+ withDelay, lazyWithPreload), Suspense trong layout (#page-loading), ErrorBoundary (key = pathname),\n  //       route /broken, preload khi rê chuột/focus, Help panel lazy (#help-loading → #help-panel)\n  return (\n    <div className=\"layout\">\n      <nav className=\"side\">\n        <NavLink to=\"/\" end id=\"nav-overview\">Overview</NavLink>\n        <NavLink to=\"/reports\" id=\"nav-reports\">Reports</NavLink>\n        <NavLink to=\"/users\" id=\"nav-users\">Users</NavLink>\n        <NavLink to=\"/settings\" id=\"nav-settings\">Settings</NavLink>\n      </nav>\n      <main className=\"main\">\n        <Routes>\n          <Route path=\"/\" element={<Overview />} />\n          <Route path=\"/reports\" element={<Reports />} />\n          <Route path=\"/users\" element={<UsersPage />} />\n          <Route path=\"/settings\" element={<Settings />} />\n        </Routes>\n      </main>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/lazyLoad.js",
+          "language": "javascript",
+          "code": "// src/utils/lazyLoad.js — STARTER\nexport const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n// TODO: withDelay(factory, ms) và lazyWithPreload(factory) (ghi nhớ promise, gắn .preload)\n"
+        },
+        {
+          "name": "src/components/ErrorBoundary.js",
+          "language": "javascript",
+          "code": "// src/components/ErrorBoundary.js — STARTER\nimport { Component } from 'react';\n\nexport default class ErrorBoundary extends Component {\n  // TODO: static getDerivedStateFromError + giao diện #chunk-error (\"Could not load this page.\" + #btn-home)\n  render() {\n    return this.props.children;\n  }\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.layout { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }\n.side { background: #0f172a; padding: 16px; display: flex; flex-direction: column; gap: 6px; }\n.side a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; }\n.side a.active { background: #1e293b; color: #fff; }\n.main { padding: 20px; }\n.loading { color: #64748b; font-style: italic; }\n.error { color: #dc2626; }\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/pages/Overview.js",
+          "language": "javascript",
+          "code": "// src/pages/Overview.js — trang chủ: tải NGAY (eager), không cần chờ\nexport default function Overview() {\n  return (\n    <section id=\"overview-page\">\n      <h1>Welcome back!</h1>\n      <p>Pick a section on the left. Other pages are downloaded only when you open them.</p>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Reports.js",
+          "language": "javascript",
+          "code": "// src/pages/Reports.js — trang lazy chứa một component lazy NỮA (Suspense lồng nhau)\n\nimport RevenueChart from '../components/RevenueChart';\n\nexport default function Reports() {\n  return (\n    <section id=\"reports-page\">\n      <h1 id=\"reports-title\">Reports</h1>\n      {/* fallback RIÊNG: tiêu đề trang hiện ngay, chỉ ô biểu đồ chờ */}\n      <RevenueChart /> {/* TODO: lazy + Suspense riêng (#chart-loading) */}\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/RevenueChart.js",
+          "language": "javascript",
+          "code": "// src/components/RevenueChart.js — \"nặng\" (thư viện biểu đồ thật vài trăm KB) ⇒ tách riêng\nconst DATA = [['Jan', 120], ['Feb', 150], ['Mar', 180]];\n\nexport default function RevenueChart() {\n  return (\n    <figure id=\"chart\">\n      {DATA.map(([m, v]) => (\n        <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>\n          <span style={{ width: 32 }}>{m}</span>\n          <span style={{ display: 'inline-block', height: 14, width: v, background: '#38bdf8' }} />\n          <span>{v}</span>\n        </div>\n      ))}\n      <figcaption>Revenue chart: {DATA.map(([m, v]) => `${m} ${v}`).join(' · ')}</figcaption>\n    </figure>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Users.js",
+          "language": "javascript",
+          "code": "// src/pages/Users.js — NAMED export (không có export default) ⇒ lazy phải đổi thành { default: … }\nconst USERS = ['Nguyen Van An', 'Tran Thi Binh', 'Le Hoang Cuong'];\n\nexport function UsersPage() {\n  return (\n    <section id=\"users-page\">\n      <h1>Users</h1>\n      <ul>{USERS.map((u) => <li key={u} className=\"user\">{u}</li>)}</ul>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js\nexport default function Settings() {\n  return (\n    <section id=\"settings-page\">\n      <h1>Settings</h1>\n      <label><input type=\"checkbox\" defaultChecked /> Email notifications</label>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/HelpPanel.js",
+          "language": "javascript",
+          "code": "// src/components/HelpPanel.js — chỉ tải khi người dùng bấm Help\nexport default function HelpPanel({ onClose }) {\n  return (\n    <aside id=\"help-panel\">\n      <h2>Help</h2>\n      <p>Code splitting downloads each page only when it is needed.</p>\n      <button type=\"button\" id=\"btn-close-help\" onClick={onClose}>Close</button>\n    </aside>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lazy theo route, Suspense trong layout, ErrorBoundary, preload, help panel tải theo yêu cầu\nimport { Suspense, lazy, useState } from 'react';\nimport { NavLink, Outlet, Route, Routes, useLocation } from 'react-router-dom';\nimport Overview from './pages/Overview';\nimport ErrorBoundary from './components/ErrorBoundary';\nimport { lazyWithPreload, withDelay } from './utils/lazyLoad';\n\nconst PAGE_DELAY = 600;\nconst Reports = lazyWithPreload(withDelay(() => import('./pages/Reports'), PAGE_DELAY));\n// named export ⇒ trả về object có khoá default\nconst Users = lazyWithPreload(withDelay(() => import('./pages/Users').then((m) => ({ default: m.UsersPage })), PAGE_DELAY));\nconst Settings = lazyWithPreload(withDelay(() => import('./pages/Settings'), PAGE_DELAY));\n// chunk hỏng (mất mạng / bản deploy cũ đã bị xoá) ⇒ promise reject\nconst Broken = lazy(() => Promise.reject(new Error('ChunkLoadError: Loading chunk 7 failed')));\nconst HelpPanel = lazy(withDelay(() => import('./components/HelpPanel'), 500));\n\n// rê chuột HOẶC focus (bàn phím) vào link ⇒ tải trước\nconst preload = (C) => ({ onMouseEnter: () => C.preload(), onFocus: () => C.preload() });\n\nfunction Layout() {\n  const location = useLocation();\n  const [help, setHelp] = useState(false);\n  return (\n    <div className=\"layout\">\n      <nav className=\"side\">\n        <NavLink to=\"/\" end id=\"nav-overview\">Overview</NavLink>\n        <NavLink to=\"/reports\" id=\"nav-reports\" {...preload(Reports)}>Reports</NavLink>\n        <NavLink to=\"/users\" id=\"nav-users\" {...preload(Users)}>Users</NavLink>\n        <NavLink to=\"/settings\" id=\"nav-settings\" {...preload(Settings)}>Settings</NavLink>\n        <NavLink to=\"/broken\" id=\"nav-broken\">Broken page</NavLink>\n        <button type=\"button\" id=\"btn-help\" onClick={() => setHelp(true)}>Help</button>\n      </nav>\n      <main className=\"main\">\n        {/* key = đường dẫn ⇒ đổi trang là ErrorBoundary mới (lỗi trang cũ không \"dính\" sang trang khác) */}\n        <ErrorBoundary key={location.pathname}>\n          <Suspense fallback={<p id=\"page-loading\" className=\"loading\">Loading page...</p>}>\n            <Outlet />\n          </Suspense>\n        </ErrorBoundary>\n        {help && (\n          <Suspense fallback={<p id=\"help-loading\" className=\"loading\">Loading help...</p>}>\n            <HelpPanel onClose={() => setHelp(false)} />\n          </Suspense>\n        )}\n      </main>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route element={<Layout />}>\n        <Route path=\"/\" element={<Overview />} />\n        <Route path=\"/reports\" element={<Reports />} />\n        <Route path=\"/users\" element={<Users />} />\n        <Route path=\"/settings\" element={<Settings />} />\n        <Route path=\"/broken\" element={<Broken />} />\n      </Route>\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/lazyLoad.js",
+          "language": "javascript",
+          "code": "// src/utils/lazyLoad.js — tiện ích cho code splitting\nimport { lazy } from 'react';\n\n// Giả lập mạng chậm: chunk chỉ \"tới\" sau ms (dev server cục bộ quá nhanh, không thấy fallback)\nexport const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nexport function withDelay(factory, ms) {\n  return () => Promise.all([factory(), delay(ms)]).then(([module]) => module);\n}\n\n// lazy + preload(): GHI NHỚ promise ⇒ tải trước khi rê chuột, lúc mở trang dùng lại đúng promise đó\nexport function lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n"
+        },
+        {
+          "name": "src/components/ErrorBoundary.js",
+          "language": "javascript",
+          "code": "// src/components/ErrorBoundary.js — chỉ CLASS component bắt được lỗi khi render (kể cả chunk lazy hỏng)\nimport { Component } from 'react';\nimport { Link } from 'react-router-dom';\n\nexport default class ErrorBoundary extends Component {\n  state = { error: null };\n\n  // lỗi ở con ⇒ cập nhật state để lần render sau hiện giao diện dự phòng\n  static getDerivedStateFromError(error) {\n    return { error };\n  }\n\n  componentDidCatch(error, info) {\n    // nơi gửi lỗi lên hệ thống theo dõi (Sentry…) — ở đây chỉ ghi lại\n    console.warn('Chunk failed:', error.message, info.componentStack ? '' : '');\n  }\n\n  render() {\n    if (this.state.error) {\n      return (\n        <div id=\"chunk-error\" className=\"error\">\n          <p>Could not load this page.</p>\n          <Link to=\"/\" id=\"btn-home\">Back to overview</Link>\n        </div>\n      );\n    }\n    return this.props.children;\n  }\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.layout { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }\n.side { background: #0f172a; padding: 16px; display: flex; flex-direction: column; gap: 6px; }\n.side a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; }\n.side a.active { background: #1e293b; color: #fff; }\n.main { padding: 20px; }\n.loading { color: #64748b; font-style: italic; }\n.error { color: #dc2626; }\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/pages/Overview.js",
+          "language": "javascript",
+          "code": "// src/pages/Overview.js — trang chủ: tải NGAY (eager), không cần chờ\nexport default function Overview() {\n  return (\n    <section id=\"overview-page\">\n      <h1>Welcome back!</h1>\n      <p>Pick a section on the left. Other pages are downloaded only when you open them.</p>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Reports.js",
+          "language": "javascript",
+          "code": "// src/pages/Reports.js — trang lazy chứa một component lazy NỮA (Suspense lồng nhau)\nimport { Suspense, lazy } from 'react';\nimport { withDelay } from '../utils/lazyLoad';\n\nconst RevenueChart = lazy(withDelay(() => import('../components/RevenueChart'), 800));\n\nexport default function Reports() {\n  return (\n    <section id=\"reports-page\">\n      <h1 id=\"reports-title\">Reports</h1>\n      {/* fallback RIÊNG: tiêu đề trang hiện ngay, chỉ ô biểu đồ chờ */}\n      <Suspense fallback={<p id=\"chart-loading\" className=\"loading\">Loading chart...</p>}>\n        <RevenueChart />\n      </Suspense>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/RevenueChart.js",
+          "language": "javascript",
+          "code": "// src/components/RevenueChart.js — \"nặng\" (thư viện biểu đồ thật vài trăm KB) ⇒ tách riêng\nconst DATA = [['Jan', 120], ['Feb', 150], ['Mar', 180]];\n\nexport default function RevenueChart() {\n  return (\n    <figure id=\"chart\">\n      {DATA.map(([m, v]) => (\n        <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>\n          <span style={{ width: 32 }}>{m}</span>\n          <span style={{ display: 'inline-block', height: 14, width: v, background: '#38bdf8' }} />\n          <span>{v}</span>\n        </div>\n      ))}\n      <figcaption>Revenue chart: {DATA.map(([m, v]) => `${m} ${v}`).join(' · ')}</figcaption>\n    </figure>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Users.js",
+          "language": "javascript",
+          "code": "// src/pages/Users.js — NAMED export (không có export default) ⇒ lazy phải đổi thành { default: … }\nconst USERS = ['Nguyen Van An', 'Tran Thi Binh', 'Le Hoang Cuong'];\n\nexport function UsersPage() {\n  return (\n    <section id=\"users-page\">\n      <h1>Users</h1>\n      <ul>{USERS.map((u) => <li key={u} className=\"user\">{u}</li>)}</ul>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js\nexport default function Settings() {\n  return (\n    <section id=\"settings-page\">\n      <h1>Settings</h1>\n      <label><input type=\"checkbox\" defaultChecked /> Email notifications</label>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/HelpPanel.js",
+          "language": "javascript",
+          "code": "// src/components/HelpPanel.js — chỉ tải khi người dùng bấm Help\nexport default function HelpPanel({ onClose }) {\n  return (\n    <aside id=\"help-panel\">\n      <h2>Help</h2>\n      <p>Code splitting downloads each page only when it is needed.</p>\n      <button type=\"button\" id=\"btn-close-help\" onClick={onClose}>Close</button>\n    </aside>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi trang là một <code>lazy</code> khai ở cấp module, bọc <code>withDelay</code> để thấy rõ fallback. Suspense đặt quanh <code>&lt;Outlet /&gt;</code> trong layout nên chỉ vùng nội dung chờ, thanh bên giữ nguyên. Reports có Suspense riêng cho biểu đồ — tiêu đề hiện trước. <code>ErrorBoundary</code> (class, <code>getDerivedStateFromError</code>) bắt chunk lỗi; <code>key={location.pathname}</code> tạo boundary mới mỗi khi đổi trang. <code>lazyWithPreload</code> ghi nhớ promise: link gọi <code>preload()</code> khi rê chuột/focus, lúc mở trang <code>lazy</code> dùng lại đúng promise đã xong nên không qua fallback.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/reference/react/lazy",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "url": "/",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Overview is shown immediately at \"/\"",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": "#overview-page"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Reports page appears after loading",
+            "kiem": "text",
+            "selector": "#reports-title",
+            "giaTri": "Reports",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-reports"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Pages are loaded with React.lazy + dynamic import()",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "import\\(\\s*['\"]\\./pages/Reports['\"]\\s*\\)[\\s\\S]*import\\(\\s*['\"]\\./pages/Settings['\"]\\s*\\)"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Settings page loads too",
+            "kiem": "ton-tai",
+            "selector": "#settings-page",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Overview stays eager (no lazy for it)",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "import Overview from ['\"]\\./pages/Overview['\"]"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Fallback #page-loading while the page downloads",
+            "kiem": "text",
+            "selector": "#page-loading",
+            "giaTri": "Loading page...",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-users"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "The sidebar stays visible during loading (Suspense inside the layout)",
+            "kiem": "so-luong",
+            "selector": "#page-loading, #nav-overview",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-users"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Fallback disappears once the page is ready",
+            "kiem": "khong-ton-tai",
+            "selector": "#page-loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-users"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Simulated network: still loading after 300 ms",
+            "kiem": "ton-tai",
+            "selector": "#page-loading",
+            "choToiDa": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "withDelay uses Promise.all with the import",
+            "kiem": "ma-nguon",
+            "tep": "src/utils/lazyLoad.js",
+            "khop": "Promise\\.all\\(\\s*\\[\\s*factory\\(\\)"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Reports title shows while the chart is still loading",
+            "kiem": "so-luong",
+            "selector": "#reports-title, #chart-loading",
+            "giaTri": 2,
+            "choToiDa": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-reports"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 750
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Chart appears after its own chunk",
+            "kiem": "text",
+            "selector": "#chart figcaption",
+            "giaTri": "Revenue chart: Jan 120 · Feb 150 · Mar 180",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-reports"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1700
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Nested Suspense in Reports.js",
+            "kiem": "ma-nguon",
+            "tep": "src/pages/Reports.js",
+            "khop": "<Suspense[\\s\\S]*RevenueChart"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Broken chunk ⇒ #chunk-error message",
+            "kiem": "text",
+            "selector": "#chunk-error p",
+            "giaTri": "Could not load this page.",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-broken"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "The rest of the app keeps working (sidebar still there)",
+            "kiem": "ton-tai",
+            "selector": "#nav-reports",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-broken"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Navigating away resets the boundary",
+            "kiem": "so-luong",
+            "selector": "#overview-page, #chunk-error",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-broken"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-home"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "ErrorBoundary is a class with getDerivedStateFromError",
+            "kiem": "ma-nguon",
+            "tep": "src/components/ErrorBoundary.js",
+            "khop": "static\\s+getDerivedStateFromError"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Focus (or hover) preloads: no fallback after a later click",
+            "kiem": "khong-ton-tai",
+            "selector": "#page-loading",
+            "choToiDa": 0,
+            "truoc": [
+              {
+                "hanhDong": "focus",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Preloaded page is shown right away",
+            "kiem": "ton-tai",
+            "selector": "#settings-page",
+            "choToiDa": 0,
+            "truoc": [
+              {
+                "hanhDong": "focus",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-settings"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "lazyWithPreload memoizes the promise",
+            "kiem": "ma-nguon",
+            "tep": "src/utils/lazyLoad.js",
+            "khop": "\\.preload\\s*="
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Users page (named export) renders 3 users",
+            "kiem": "so-luong",
+            "selector": "#users-page .user",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-users"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Named export mapped to { default }",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "default:\\s*m\\.UsersPage"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Help panel is not loaded until needed",
+            "kiem": "so-luong",
+            "selector": "#help-panel, #help-loading",
+            "giaTri": 0
+          },
+          {
+            "nhom": "f8",
+            "moTa": "#btn-help ⇒ #help-loading then #help-panel",
+            "kiem": "ton-tai",
+            "selector": "#help-loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-help"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Help panel appears and can be closed",
+            "kiem": "so-luong",
+            "selector": "#help-panel",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-help"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-close-help"
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Lazy routes",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Suspense in the layout",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Simulated latency",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Nested Suspense",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Error boundary",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Preload on hover / focus",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Named export",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. On-demand help panel",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>lazy()</code> trong thân component ⇒ mỗi lần render tạo component mới ⇒ fallback nháy mãi, mất state."
+        },
+        {
+          "loi": "Quên Suspense ⇒ lỗi \"A component suspended while responding to synchronous input\"."
+        },
+        {
+          "loi": "Đặt Suspense ở ngoài <code>&lt;BrowserRouter&gt;</code>/cả App ⇒ navbar biến mất mỗi lần đổi trang."
+        },
+        {
+          "loi": "Error Boundary viết bằng function component (hook không bắt được lỗi render)."
+        },
+        {
+          "loi": "Error Boundary không có <code>key</code> ⇒ đã lỗi một lần là trang nào cũng hiện lỗi."
+        },
+        {
+          "loi": "Preload gọi <code>import()</code> MỚI thay vì dùng lại promise của lazy ⇒ mở trang vẫn chờ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code splitting",
+          "vi": "tách mã thành nhiều gói tải riêng"
+        },
+        {
+          "en": "chunk",
+          "vi": "một gói mã được tải riêng"
+        },
+        {
+          "en": "bundle",
+          "vi": "gói mã JavaScript của ứng dụng"
+        },
+        {
+          "en": "dynamic import",
+          "vi": "import() — tải module lúc chạy, trả về Promise"
+        },
+        {
+          "en": "error boundary",
+          "vi": "component bắt lỗi của cây con và hiện giao diện dự phòng"
+        },
+        {
+          "en": "preload",
+          "vi": "tải trước, trước khi người dùng thật sự cần"
+        },
+        {
+          "en": "latency",
+          "vi": "độ trễ mạng"
+        },
+        {
+          "en": "fallback",
+          "vi": "giao diện tạm hiện trong lúc chờ"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 10 — Admin Dashboard (lazy routes · Suspense · Error Boundary · preload) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — lazy theo route, Suspense trong layout, ErrorBoundary, preload, help panel tải theo yêu cầu\\nvar _react = require('react');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _Overview = require('./pages/Overview'); var _Overview2 = _interopRequireDefault(_Overview);\\nvar _ErrorBoundary = require('./components/ErrorBoundary'); var _ErrorBoundary2 = _interopRequireDefault(_ErrorBoundary);\\nvar _lazyLoad = require('./utils/lazyLoad');\\n\\nconst PAGE_DELAY = 600;\\nconst Reports = _lazyLoad.lazyWithPreload.call(void 0, _lazyLoad.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Reports'))), PAGE_DELAY));\\n// named export ⇒ trả về object có khoá default\\nconst Users = _lazyLoad.lazyWithPreload.call(void 0, _lazyLoad.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Users'))).then((m) => ({ default: m.UsersPage })), PAGE_DELAY));\\nconst Settings = _lazyLoad.lazyWithPreload.call(void 0, _lazyLoad.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./pages/Settings'))), PAGE_DELAY));\\n// chunk hỏng (mất mạng / bản deploy cũ đã bị xoá) ⇒ promise reject\\nconst Broken = _react.lazy.call(void 0, () => Promise.reject(new Error('ChunkLoadError: Loading chunk 7 failed')));\\nconst HelpPanel = _react.lazy.call(void 0, _lazyLoad.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('./components/HelpPanel'))), 500));\\n\\n// rê chuột HOẶC focus (bàn phím) vào link ⇒ tải trước\\nconst preload = (C) => ({ onMouseEnter: () => C.preload(), onFocus: () => C.preload() });\\n\\nfunction Layout() {\\n  const location = _reactrouterdom.useLocation.call(void 0, );\\n  const [help, setHelp] = _react.useState.call(void 0, false);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"layout\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'nav', { className: \\\"side\\\", children: [\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/\\\", end: true, id: \\\"nav-overview\\\", children: \\\"Overview\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/reports\\\", id: \\\"nav-reports\\\", ...preload(Reports), children: \\\"Reports\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/users\\\", id: \\\"nav-users\\\", ...preload(Users), children: \\\"Users\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/settings\\\", id: \\\"nav-settings\\\", ...preload(Settings), children: \\\"Settings\\\"})\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/broken\\\", id: \\\"nav-broken\\\", children: \\\"Broken page\\\" })\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-help\\\", onClick: () => setHelp(true), children: \\\"Help\\\"})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'main', { className: \\\"main\\\", children: [\\n        /* key = đường dẫn ⇒ đổi trang là ErrorBoundary mới (lỗi trang cũ không \\\"dính\\\" sang trang khác) */\\n        _jsxruntime.jsx.call(void 0, _ErrorBoundary2.default, { children: \\n          _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"page-loading\\\", className: \\\"loading\\\", children: \\\"Loading page...\\\" }), children: \\n            _jsxruntime.jsx.call(void 0, _reactrouterdom.Outlet, {} )\\n          })\\n        }, location.pathname)\\n        , help && (\\n          _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"help-loading\\\", className: \\\"loading\\\", children: \\\"Loading help...\\\" }), children: \\n            _jsxruntime.jsx.call(void 0, HelpPanel, { onClose: () => setHelp(false),} )\\n          })\\n        )\\n      ]})\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.Routes, { children: \\n      _jsxruntime.jsxs.call(void 0, _reactrouterdom.Route, { element: _jsxruntime.jsx.call(void 0, Layout, {} ), children: [\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/\\\", element: _jsxruntime.jsx.call(void 0, _Overview2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/reports\\\", element: _jsxruntime.jsx.call(void 0, Reports, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/users\\\", element: _jsxruntime.jsx.call(void 0, Users, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/settings\\\", element: _jsxruntime.jsx.call(void 0, Settings, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/broken\\\", element: _jsxruntime.jsx.call(void 0, Broken, {} ),} )\\n      ]})\\n    })\\n  );\\n} exports.default = App;\\n\",\"src/utils/lazyLoad.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/lazyLoad.js — tiện ích cho code splitting\\nvar _react = require('react');\\n\\n// Giả lập mạng chậm: chunk chỉ \\\"tới\\\" sau ms (dev server cục bộ quá nhanh, không thấy fallback)\\n const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); exports.delay = delay;\\n\\n function withDelay(factory, ms) {\\n  return () => Promise.all([factory(), exports.delay.call(void 0, ms)]).then(([module]) => module);\\n} exports.withDelay = withDelay;\\n\\n// lazy + preload(): GHI NHỚ promise ⇒ tải trước khi rê chuột, lúc mở trang dùng lại đúng promise đó\\n function lazyWithPreload(factory) {\\n  let promise = null;\\n  const load = () => {\\n    if (!promise) promise = factory();\\n    return promise;\\n  };\\n  const Component = _react.lazy.call(void 0, load);\\n  Component.preload = load;\\n  return Component;\\n} exports.lazyWithPreload = lazyWithPreload;\\n\",\"src/components/ErrorBoundary.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/ErrorBoundary.js — chỉ CLASS component bắt được lỗi khi render (kể cả chunk lazy hỏng)\\nvar _react = require('react');\\nvar _reactrouterdom = require('react-router-dom');\\n\\n class ErrorBoundary extends _react.Component {constructor(...args) { super(...args); ErrorBoundary.prototype.__init.call(this); }\\n  __init() {this.state = { error: null }}\\n\\n  // lỗi ở con ⇒ cập nhật state để lần render sau hiện giao diện dự phòng\\n  static getDerivedStateFromError(error) {\\n    return { error };\\n  }\\n\\n  componentDidCatch(error, info) {\\n    // nơi gửi lỗi lên hệ thống theo dõi (Sentry…) — ở đây chỉ ghi lại\\n    console.warn('Chunk failed:', error.message, info.componentStack ? '' : '');\\n  }\\n\\n  render() {\\n    if (this.state.error) {\\n      return (\\n        _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"chunk-error\\\", className: \\\"error\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Could not load this page.\\\"    })\\n          , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/\\\", id: \\\"btn-home\\\", children: \\\"Back to overview\\\"  })\\n        ]})\\n      );\\n    }\\n    return this.props.children;\\n  }\\n} exports.default = ErrorBoundary;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nvar _reactrouterdom = require('react-router-dom');\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"src/pages/Overview.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Overview.js — trang chủ: tải NGAY (eager), không cần chờ\\n function Overview() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"overview-page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Welcome back!\\\" })\\n      , _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Pick a section on the left. Other pages are downloaded only when you open them.\\\"              })\\n    ]})\\n  );\\n} exports.default = Overview;\\n\",\"src/pages/Reports.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } }// src/pages/Reports.js — trang lazy chứa một component lazy NỮA (Suspense lồng nhau)\\nvar _react = require('react');\\nvar _lazyLoad = require('../utils/lazyLoad');\\n\\nconst RevenueChart = _react.lazy.call(void 0, _lazyLoad.withDelay.call(void 0, () => Promise.resolve().then(() => _interopRequireWildcard(require('../components/RevenueChart'))), 800));\\n\\n function Reports() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"reports-page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"reports-title\\\", children: \\\"Reports\\\"})\\n      /* fallback RIÊNG: tiêu đề trang hiện ngay, chỉ ô biểu đồ chờ */\\n      , _jsxruntime.jsx.call(void 0, _react.Suspense, { fallback: _jsxruntime.jsx.call(void 0, 'p', { id: \\\"chart-loading\\\", className: \\\"loading\\\", children: \\\"Loading chart...\\\" }), children: \\n        _jsxruntime.jsx.call(void 0, RevenueChart, {} )\\n      })\\n    ]})\\n  );\\n} exports.default = Reports;\\n\",\"src/components/RevenueChart.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/RevenueChart.js — \\\"nặng\\\" (thư viện biểu đồ thật vài trăm KB) ⇒ tách riêng\\nconst DATA = [['Jan', 120], ['Feb', 150], ['Mar', 180]];\\n\\n function RevenueChart() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'figure', { id: \\\"chart\\\", children: [\\n      DATA.map(([m, v]) => (\\n        _jsxruntime.jsxs.call(void 0, 'div', { style: { display: 'flex', alignItems: 'center', gap: 8 }, children: [\\n          _jsxruntime.jsx.call(void 0, 'span', { style: { width: 32 }, children: m})\\n          , _jsxruntime.jsx.call(void 0, 'span', { style: { display: 'inline-block', height: 14, width: v, background: '#38bdf8' },} )\\n          , _jsxruntime.jsx.call(void 0, 'span', { children: v})\\n        ]}, m)\\n      ))\\n      , _jsxruntime.jsxs.call(void 0, 'figcaption', { children: [\\\"Revenue chart: \\\"  , DATA.map(([m, v]) => `${m} ${v}`).join(' · ')]})\\n    ]})\\n  );\\n} exports.default = RevenueChart;\\n\",\"src/pages/Users.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Users.js — NAMED export (không có export default) ⇒ lazy phải đổi thành { default: … }\\nconst USERS = ['Nguyen Van An', 'Tran Thi Binh', 'Le Hoang Cuong'];\\n\\n function UsersPage() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"users-page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Users\\\"})\\n      , _jsxruntime.jsx.call(void 0, 'ul', { children: USERS.map((u) => _jsxruntime.jsx.call(void 0, 'li', { className: \\\"user\\\", children: u}, u))})\\n    ]})\\n  );\\n} exports.UsersPage = UsersPage;\\n\",\"src/pages/Settings.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Settings.js\\n function Settings() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"settings-page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Settings\\\"})\\n      , _jsxruntime.jsxs.call(void 0, 'label', { children: [_jsxruntime.jsx.call(void 0, 'input', { type: \\\"checkbox\\\", defaultChecked: true,} ), \\\" Email notifications\\\"  ]})\\n    ]})\\n  );\\n} exports.default = Settings;\\n\",\"src/components/HelpPanel.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/HelpPanel.js — chỉ tải khi người dùng bấm Help\\n function HelpPanel({ onClose }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'aside', { id: \\\"help-panel\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Help\\\"})\\n      , _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Code splitting downloads each page only when it is needed.\\\"         })\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-close-help\\\", onClick: onClose, children: \\\"Close\\\"})\\n    ]})\\n  );\\n} exports.default = HelpPanel;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; color: #0f172a; }\\n.layout { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }\\n.side { background: #0f172a; padding: 16px; display: flex; flex-direction: column; gap: 6px; }\\n.side a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; }\\n.side a.active { background: #1e293b; color: #fff; }\\n.main { padding: 20px; }\\n.loading { color: #64748b; font-style: italic; }\\n.error { color: #dc2626; }\\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=\"/\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

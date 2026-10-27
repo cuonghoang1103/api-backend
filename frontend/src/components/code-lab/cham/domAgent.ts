@@ -110,6 +110,131 @@ export const AGENT_SRC = String.raw`
     };
   }
 
+  // ── json-server GIẢ có TRẠNG THÁI (29/10/2026 — đề PE FER202): CFG.jsonServer = { base, db }. GET/POST/PUT/
+  //    PATCH/DELETE trên bảng của db như json-server 0.17 (lọc ?field=v, _sort/_order, _limit/_page, q, _like,
+  //    _gte/_lte/_ne, _expand/_embed). Dữ liệu sống suốt khung (kể cả 'tai-lai' — như máy chủ thật).
+  //    ⚠ Bản sao trong content/codelab/_chung/deLon.mjs (demo) — sửa thì sửa cả hai.
+  var jsDb = null, jsBase = null;
+  if (CFG.jsonServer && CFG.jsonServer.db) {
+    jsBase = String(CFG.jsonServer.base || 'http://localhost:9999').replace(/\/+$/, '');
+    try { jsDb = JSON.parse(JSON.stringify(CFG.jsonServer.db)); } catch (e) { jsDb = {}; }
+  }
+  W.__clDb = function () { return jsDb; };
+  function jsTraLoi(status, body) {
+    return new Response(body === undefined ? '{}' : JSON.stringify(body), { status: status, headers: { 'content-type': 'application/json' } });
+  }
+  function jsLay(o, k) { return String(k).split('.').reduce(function (a, p) { return a == null ? undefined : a[p]; }, o); }
+  function jsMot(ten) { return /ies$/.test(ten) ? ten.slice(0, -3) + 'y' : ten.replace(/s$/, ''); }
+  function jsXuLy(method, url, body) {
+    var u = new URL(url);
+    var phan = u.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean).map(decodeURIComponent);
+    var ten = phan[0], id = phan[1];
+    if (!ten || !(ten in jsDb)) return jsTraLoi(404, {});
+    var bang = jsDb[ten];
+    var duLieu = null;
+    if (body != null && body !== '') { try { duLieu = JSON.parse(body); } catch (e) { return jsTraLoi(400, { error: 'invalid JSON' }); } }
+    if (!Array.isArray(bang)) { // tài nguyên số ít (vd "profile": {})
+      if (method === 'GET') return jsTraLoi(200, bang);
+      if (method === 'PUT' || method === 'POST') { jsDb[ten] = duLieu || {}; return jsTraLoi(200, jsDb[ten]); }
+      if (method === 'PATCH') { jsDb[ten] = Object.assign({}, bang, duLieu || {}); return jsTraLoi(200, jsDb[ten]); }
+      return jsTraLoi(404, {});
+    }
+    var viTriId = function (x) { return bang.findIndex(function (r) { return String(r.id) === String(x); }); };
+    var morong = function (r) {
+      var o = Object.assign({}, r);
+      u.searchParams.getAll('_expand').forEach(function (e) { var b = jsDb[e + 's'] || jsDb[e]; if (Array.isArray(b)) o[e] = b.find(function (x) { return String(x.id) === String(r[e + 'Id']); }); });
+      u.searchParams.getAll('_embed').forEach(function (e) { var b = jsDb[e]; if (Array.isArray(b)) { var k = jsMot(ten) + 'Id'; o[e] = b.filter(function (x) { return String(x[k]) === String(r.id); }); } });
+      return o;
+    };
+    if (method === 'GET') {
+      if (id != null) { var i = viTriId(id); return i < 0 ? jsTraLoi(404, {}) : jsTraLoi(200, morong(bang[i])); }
+      var ds = bang.slice();
+      var loc = {};
+      u.searchParams.forEach(function (v, k) { if (k.charAt(0) !== '_' && k !== 'q') (loc[k] = loc[k] || []).push(v); });
+      Object.keys(loc).forEach(function (k) {
+        var vs = loc[k], m = /^(.*)_(like|gte|lte|ne)$/.exec(k);
+        ds = ds.filter(function (r) {
+          if (m) {
+            var gv = jsLay(r, m[1]);
+            return vs.every(function (v) {
+              if (m[2] === 'like') return new RegExp(v, 'i').test(String(gv));
+              if (m[2] === 'ne') return String(gv) !== v;
+              var a = Number(gv), b = Number(v); var so = !isNaN(a) && !isNaN(b);
+              return m[2] === 'gte' ? (so ? a >= b : String(gv) >= v) : (so ? a <= b : String(gv) <= v);
+            });
+          }
+          var g = jsLay(r, k);
+          return vs.some(function (v) { return String(g) === v; });
+        });
+      });
+      var qq = u.searchParams.get('q');
+      if (qq) ds = ds.filter(function (r) { return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase()) >= 0; });
+      var sx = u.searchParams.get('_sort');
+      if (sx) {
+        var truong = sx.split(','), thu = (u.searchParams.get('_order') || 'asc').split(',');
+        ds.sort(function (a, b) {
+          for (var t = 0; t < truong.length; t++) {
+            var f = truong[t].replace(/^-/, ''), giam = truong[t].charAt(0) === '-' || (thu[t] || thu[0]) === 'desc';
+            var x = jsLay(a, f), y = jsLay(b, f);
+            var c = (typeof x === 'number' && typeof y === 'number') ? x - y : String(x).localeCompare(String(y));
+            if (c) return giam ? -c : c;
+          }
+          return 0;
+        });
+      }
+      var gh = u.searchParams.get('_limit'), tr = u.searchParams.get('_page');
+      var tong = ds.length;
+      if (tr) { var n = Number(gh) || 10; ds = ds.slice((Number(tr) - 1) * n, Number(tr) * n); } else if (gh) ds = ds.slice(0, Number(gh));
+      var res = jsTraLoi(200, ds.map(morong));
+      try { res.headers.set('X-Total-Count', String(tong)); } catch (e) { /* bỏ qua */ }
+      return res;
+    }
+    if (method === 'POST') {
+      if (id != null) return jsTraLoi(404, {});
+      var moi = Object.assign({}, duLieu || {});
+      if (moi.id == null) {
+        var so = bang.length && bang.every(function (r) { return typeof r.id === 'number'; });
+        moi.id = so || !bang.length ? bang.reduce(function (mx, r) { return Math.max(mx, Number(r.id) || 0); }, 0) + 1 : Math.random().toString(16).slice(2, 6);
+      }
+      bang.push(moi);
+      return jsTraLoi(201, moi);
+    }
+    if (id == null) return jsTraLoi(404, {});
+    var j = viTriId(id);
+    if (j < 0) return jsTraLoi(404, {});
+    if (method === 'PUT') { bang[j] = Object.assign({}, duLieu || {}, { id: bang[j].id }); return jsTraLoi(200, bang[j]); }
+    if (method === 'PATCH') { bang[j] = Object.assign({}, bang[j], duLieu || {}, { id: bang[j].id }); return jsTraLoi(200, bang[j]); }
+    if (method === 'DELETE') { bang.splice(j, 1); return jsTraLoi(200, {}); }
+    return jsTraLoi(404, {});
+  }
+  if (jsDb) {
+    var fetchTruoc = fetchGia ? W.fetch : null;
+    W.fetch = function (url, init) {
+      init = init || {};
+      var s = String(url && url.url ? url.url : url);
+      var method = String(init.method || 'GET').toUpperCase();
+      if (fetchGia && (((method + ' ' + s) in fetchGia) || (s in fetchGia))) return fetchTruoc(url, init);
+      W.__fetchDaGoi.push({ url: s, method: method, headers: init.headers || {}, body: init.body === undefined ? null : init.body });
+      return new Promise(function (res) {
+        _st(function () {
+          if (s.indexOf(jsBase + '/') !== 0) return res(new Response('Not Found', { status: 404, headers: { 'content-type': 'text/plain' } }));
+          try { res(jsXuLy(method, s, init.body)); } catch (e) { res(jsTraLoi(500, { error: String(e) })); }
+        }, 10);
+      });
+    };
+  }
+
+  // ── .env (CRA: process.env.REACT_APP_* · Vite: import.meta.env.VITE_*) đọc từ tệp .env của bài ──
+  var ENV = { NODE_ENV: 'production', MODE: 'production', PROD: true, DEV: false, BASE_URL: '/' };
+  try {
+    String((CFG.files || {})['.env'] || '').split(/\r?\n/).forEach(function (d) {
+      var m = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/.exec(d);
+      if (m) ENV[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2');
+    });
+  } catch (e) { /* bỏ qua */ }
+  W.__CL_ENV__ = ENV;
+  if (!W.process) W.process = { env: ENV };
+
   // ── form gửi đi thật ⇒ trình duyệt sẽ tải lại trang (mô phỏng như máy chấm Node) ──
   var guiChuaChan = false;
   W.addEventListener('submit', function (e) {
@@ -261,9 +386,32 @@ export const AGENT_SRC = String.raw`
         }
         return { dat: true, thay: raw.slice(0, 160) };
       }
+      case 'duong-dan': { // URL hiện tại của React Router (pathname + search)
+        var vt = viTri || CFG.url || '/';
+        var dungDD = k.giaTri !== undefined ? vt === k.giaTri : re(k.khop).test(vt);
+        return { dat: dungDD, thay: vt };
+      }
+      case 'du-lieu-server': { // dữ liệu trong json-server giả: bang + doDai | chua {…} | khongChua {…}
+        if (!jsDb) return { dat: false, thay: 'đề không bật jsonServer' };
+        var bg = jsDb[k.bang];
+        if (!Array.isArray(bg)) return { dat: false, thay: 'không có bảng ' + k.bang };
+        // so lỏng KIỂU chỉ với giá trị nguyên thuỷ (3 khớp "3"); object/mảng so sâu đúng kiểu
+        var khopCon = function (r, mau) { return Object.keys(mau).every(function (f) { var m = mau[f]; return bangSau(r[f], m) || (!k.chat && (m === null || typeof m !== 'object') && r[f] != null && typeof r[f] !== 'object' && String(r[f]) === String(m)); }); };
+        if (k.doDai !== undefined) return { dat: bg.length === k.doDai, thay: bg.length + ' bản ghi' };
+        if (k.chua) { var co = bg.filter(function (r) { return khopCon(r, k.chua); }); return { dat: co.length > 0, thay: co.length ? JSON.stringify(co[0]).slice(0, 200) : 'không bản ghi nào khớp · ' + JSON.stringify(bg.slice(-2)).slice(0, 200) }; }
+        if (k.khongChua) { var co2 = bg.filter(function (r) { return khopCon(r, k.khongChua); }); return { dat: co2.length === 0, thay: co2.length + ' bản ghi khớp' }; }
+        return { dat: true, thay: bg.length + ' bản ghi' };
+      }
       case 'goi-fetch': {
         var goi = (W.__fetchDaGoi || []).map(function (g) { return g.method + ' ' + g.url; });
-        var khop = goi.filter(function (g) { return re(k.khop).test(g); }).length;
+        // than: { field: giá trị } ⇒ chỉ tính lời gọi có body JSON chứa các trường đó (vd POST đúng dữ liệu)
+        var coThan = function (g) {
+          if (!k.than) return true;
+          var b; try { b = JSON.parse(g.body); } catch (e) { return false; }
+          var ds2 = Array.isArray(b) ? b : [b];
+          return ds2.some(function (x) { return x && Object.keys(k.than).every(function (f) { var m = k.than[f]; return bangSau(x[f], m) || (!k.chat && (m === null || typeof m !== 'object') && x[f] != null && typeof x[f] !== 'object' && String(x[f]) === String(m)); }); });
+        };
+        var khop = (W.__fetchDaGoi || []).filter(function (g) { return re(k.khop).test(g.method + ' ' + g.url) && coThan(g); }).length;
         return { dat: khop >= (k.min == null ? 1 : k.min) && (k.max == null || khop <= k.max), thay: goi.slice(0, 6).join(' · ') || 'chưa gọi fetch' };
       }
       default: return { dat: false, thay: 'loại kiểm lạ: ' + k.kiem };
@@ -373,6 +521,41 @@ export const AGENT_SRC = String.raw`
     }
     var ax = tao({}); ax.default = ax; return ax;
   }
+  // ── React Router (29/10/2026): khung srcdoc (about:srcdoc) KHÔNG pushState được ⇒ BrowserRouter/HashRouter
+  //    chạy bằng MemoryRouter; URL đầu = CFG.url (kiểm "mở thẳng /subjects?status=ACTIVE"); vị trí GIỮ qua
+  //    'tai-lai' (như trình duyệt tải lại cùng URL). Kiểm 'duong-dan' đọc viTri.
+  var viTri = null;
+  var routerBoc = null;
+  function routerGia() {
+    var RRD = W.ReactRouterDOM;
+    if (!RRD) return null;
+    if (routerBoc) return routerBoc;
+    var R = W.React;
+    var batDauTai = function () { return viTri || CFG.url || '/'; };
+    function GhiViTri() {
+      var l = RRD.useLocation();
+      viTri = l.pathname + l.search + l.hash;
+      return null;
+    }
+    function RouterGia(props) {
+      var dau = R.useState(function () { return [batDauTai()]; })[0];
+      return R.createElement(RRD.MemoryRouter, { initialEntries: dau, basename: props.basename, future: props.future }, R.createElement(GhiViTri), props.children);
+    }
+    function taoRouterGia(routes, opts) {
+      var r = RRD.createMemoryRouter(routes, Object.assign({}, opts || {}, { initialEntries: [batDauTai()] }));
+      var ghi = function (s) { viTri = s.location.pathname + s.location.search + s.location.hash; };
+      ghi(r.state);
+      r.subscribe(ghi);
+      return r;
+    }
+    routerBoc = Object.assign({}, RRD, { BrowserRouter: RouterGia, HashRouter: RouterGia, createBrowserRouter: taoRouterGia, createHashRouter: taoRouterGia });
+    return routerBoc;
+  }
+  // redux-thunk: vài dòng, không cần tải gói
+  function thunkGia() {
+    var t = function (api) { return function (next) { return function (action) { return typeof action === 'function' ? action(api.dispatch, api.getState) : next(action); }; }; };
+    return { 'default': t, thunk: t, __esModule: true };
+  }
   var THU_VIEN = {
     'react': function () { return W.React; },
     'react-dom': function () { return W.ReactDOM; },
@@ -380,10 +563,14 @@ export const AGENT_SRC = String.raw`
     'react/jsx-runtime': jsxShim,
     'react/jsx-dev-runtime': jsxShim,
     'prop-types': function () { return W.PropTypes; },
-    'react-router-dom': function () { return W.ReactRouterDOM; },
-    'react-router': function () { return W.ReactRouter || W.ReactRouterDOM; },
+    'react-router-dom': routerGia,
+    'react-router': function () { return routerGia() || W.ReactRouter; },
     'react-bootstrap': function () { return W.ReactBootstrap; },
-    'axios': axiosGia
+    'axios': axiosGia,
+    '@reduxjs/toolkit': function () { return W.RTK; },
+    'redux': function () { return W.RTK; },
+    'react-redux': function () { return W.ReactRedux; },
+    'redux-thunk': thunkGia
   };
   function yeuCau(tu, spec) {
     if (THU_VIEN[spec]) {
@@ -392,7 +579,7 @@ export const AGENT_SRC = String.raw`
       return m;
     }
     if (/\.css$/.test(spec) && !/^\.{1,2}\//.test(spec)) return {}; // css của gói (bootstrap…) — đã nạp qua thuVien
-    if (!/^\.{1,2}\//.test(spec) && spec.charAt(0) !== '/') throw new Error('Không tìm thấy gói "' + spec + '" (Code Lab chỉ có react, react-dom, prop-types, react-router-dom, react-bootstrap, axios)');
+    if (!/^\.{1,2}\//.test(spec) && spec.charAt(0) !== '/') throw new Error('Không tìm thấy gói "' + spec + '" (Code Lab chỉ có react, react-dom, prop-types, react-router-dom, react-bootstrap, axios, @reduxjs/toolkit, redux, react-redux, redux-thunk)');
     var p = timTep(spec.charAt(0) === '/' ? spec.slice(1) : duongDan(tu, spec));
     if (!p) throw new Error('Không tìm thấy tệp "' + spec + '" (import từ ' + tu + ')');
     return napModule(p);

@@ -46,6 +46,25 @@ for (const t of fs.readdirSync(thuMuc)) {
   if (!fs.statSync(d).isDirectory() || (TRACK && t !== TRACK)) continue;
   for (const f of fs.readdirSync(d)) if (f.startsWith(`${t}__`) && f.endsWith('.json')) tepDe.push(path.join(d, f));
 }
+/**
+ * Câu trả lời ĐÚNG dựng từ đáp án tác giả (choice/order/table) khi JSON không có `dapAnMau` — để kiểm
+ * "đáp án đạt 100%" (code khởi đầu = không trả lời gì ⇒ trượt). Lấy đáp án chấp nhận ĐẦU TIÊN.
+ */
+function dapAnTuDe(tj) {
+  if (!tj || !['choice', 'order', 'table'].includes(tj.loai)) return null;
+  const out = {};
+  if (tj.loai === 'table') {
+    for (const b of tj.bang || []) for (const [o, v] of Object.entries(b.dapAn || {})) out[`${b.ma}.${o}`] = Array.isArray(v) ? v[0] : v;
+    return out;
+  }
+  for (const c of tj.cauHoi || []) {
+    const d = c.dapAn;
+    if (tj.loai === 'choice') out[c.ma] = Array.isArray(d) ? (Array.isArray(d[0]) ? d[0] : d) : [d];
+    else out[c.ma] = Array.isArray(d[0]) ? d[0] : d;
+  }
+  return out;
+}
+
 const de = [];
 let soId = 1;
 for (const f of tepDe.sort()) {
@@ -56,7 +75,7 @@ for (const f of tepDe.sort()) {
     const id = soId++;
     const tj = testsDayDu(ex.testsJson, id);
     const tep = (b) => Object.fromEntries((b || []).map((x) => [x.name, x.code]));
-    de.push({ id, module: p.moduleSlug, title: ex.title, tj, giai: tep(ex.solutionCodeJson), dau: tep(ex.starterCodeJson), traLoi: ex.dapAnMau ?? null });
+    de.push({ id, module: p.moduleSlug, title: ex.title, tj, giai: tep(ex.solutionCodeJson), dau: tep(ex.starterCodeJson), traLoi: ex.dapAnMau ?? dapAnTuDe(ex.testsJson) });
   }
 }
 if (!de.length) { console.log('Không có đề nào có bộ kiểm.'); process.exit(0); }

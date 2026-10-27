@@ -34,6 +34,10 @@ export const THU_VIEN_CDN: Record<string, string[]> = {
     'react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js',
   ],
   'react-bootstrap': ['react-bootstrap@2.10.5/dist/react-bootstrap.min.js'],
+  // Redux (29/10/2026 — FER202 Ch12): RTK 1.9.7 + react-redux 8.1.3 là hai bản CUỐI còn bản UMD (2.x/9.x bỏ UMD).
+  // 'redux' trỏ cùng RTK (RTK xuất lại createStore/combineReducers/applyMiddleware…); redux-thunk tác tử tự có.
+  '@reduxjs/toolkit': ['@reduxjs/toolkit@1.9.7/dist/redux-toolkit.umd.min.js'],
+  'react-redux': ['react-redux@8.1.3/dist/react-redux.min.js'],
 };
 /** CSS của gói: CSP style-src của web KHÔNG cho jsdelivr ⇒ tải bằng fetch (connect-src cho) rồi nhét <style>. */
 export const CSS_CDN: Record<string, string> = {
@@ -52,7 +56,8 @@ export async function bienDichReact(files: TepMap): Promise<{ maDich: Record<str
   for (const [ten, code] of Object.entries(files)) {
     if (!/\.(m?jsx?|tsx?)$/.test(ten)) continue;
     try {
-      maDich[ten] = transform(code, {
+      // Vite: import.meta.env.VITE_* — mã chạy như script thường (không phải module) ⇒ đổi sang biến của tác tử
+      maDich[ten] = transform(code.replace(/\bimport\.meta\.env\b/g, 'window.__CL_ENV__'), {
         transforms: /\.tsx?$/.test(ten) ? ['typescript', 'jsx', 'imports'] : ['jsx', 'imports'],
         jsxRuntime: 'automatic', production: true, filePath: ten,
       }).code;
@@ -250,7 +255,8 @@ export async function chamKhung(tj: TestsJson, kiem: Kiem[], files: TepMap, onTu
     if (k.kiem === 'ma-nguon') { xong(idx, kiemMaNguon(k, files)); return; }
     const w = Number(k.beRong) || (react ? 1280 : 1024);
     const rieng = (Array.isArray(k.truoc) && k.truoc.length > 0) || k.kiem === 'hop-le';
-    const khoa = rieng ? `r${idx}` : `w${w}`;
+    // kiểm tĩnh dùng chung khung theo bề rộng + URL đầu của router (`url`)
+    const khoa = rieng ? `r${idx}` : `w${w}|${String(k.url ?? '')}`;
     nhom.set(khoa, [...(nhom.get(khoa) ?? []), idx]);
   });
 
@@ -273,6 +279,9 @@ export async function chamKhung(tj: TestsJson, kiem: Kiem[], files: TepMap, onTu
         fetchGia: react || tj.fetchGia || dau.fetchGia ? { ...((tj.fetchGia as object) ?? {}), ...((dau.fetchGia as object) ?? {}) } : null,
         confirm: dau.confirm ?? tj.confirm,
         prompt: dau.prompt ?? tj.prompt,
+        // React Router: URL mở đầu (BrowserRouter chạy bằng MemoryRouter trong khung) · json-server giả có trạng thái
+        url: dau.url ?? tj.url ?? null,
+        jsonServer: dau.jsonServer ?? tj.jsonServer ?? null,
       };
       let html: string;
       try {

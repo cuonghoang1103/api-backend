@@ -92,6 +92,21 @@ Form gửi đi không `preventDefault` ⇒ máy chấm mô phỏng TẢI LẠI T
 Khung chấm: localStorage/sessionStorage GIẢ (bắt đầu rỗng, hoặc `khoCucBo`), `confirm()` ⇒ true (`confirm:false` để đổi),
 `alert()` ghi vào console, `fetch` GIẢ khi có `fetchGia` (cùng giao ước máy chấm JS), link ngoài không điều hướng.
 
+**Mở rộng 29/10/2026 (bộ luyện FER202 — đề PE):**
+- **React Router**: khung srcdoc không `pushState` được ⇒ `BrowserRouter`/`HashRouter`/`createBrowserRouter` tự chạy bằng
+  bộ nhớ (MemoryRouter). `url: '/subjects?status=ACTIVE'` (trên `tests` hoặc từng kiểm) = URL mở đầu; vị trí GIỮ qua `tai-lai`.
+  Kiểm **`duong-dan` {giaTri | khop}** so URL hiện tại (pathname + search) — vd sau khi lưu phải về `/sneakers`.
+- **json-server GIẢ có trạng thái**: `tests.jsonServer = { base: 'http://localhost:9999', db: { subjects: […], … } }` ⇒
+  GET/POST/PUT/PATCH/DELETE như json-server 0.17 (lọc `?field=v`, `_sort/_order`, `_limit/_page`, `q`, `_like/_gte/_lte/_ne`,
+  `_expand/_embed`, id mới = max+1). POST rồi GET thấy bản ghi mới; dữ liệu sống qua `tai-lai`. `fetchGia` (nếu khớp) thắng.
+  Kiểm **`du-lieu-server` {bang, doDai | chua:{…} | khongChua:{…}}** soi dữ liệu máy chủ; **`goi-fetch` thêm `than:{…}`** (body JSON chứa các trường đó). Cả hai so giá trị nguyên thuỷ LỎNG kiểu (3 khớp "3"); thêm `chat: true` để bắt đúng kiểu (số phải là số).
+- **`.env`** trong bài ⇒ `process.env.REACT_APP_*` (CRA) và `import.meta.env.VITE_*` (Vite) đọc được.
+- **Thư viện**: `thuVien` thêm `@reduxjs/toolkit` (1.9.7 UMD — `redux` trỏ cùng) · `react-redux` (8.1.3); `redux-thunk` có sẵn.
+  Đừng kiểm CSS tính toán của Bootstrap (app desktop nạp CSS bất đồng bộ) — kiểm class/cấu trúc.
+- Demo (`demo: { tepChinh, url?, jsonServer? }` — mặc định lấy `tests.jsonServer/url`): json-server giả + thanh địa chỉ (app có router).
+- `choice`/`order`/`table`: bộ kiểm trình duyệt tự dựng câu trả lời đúng từ `dapAn` (không cần `dapAnMau`); vẫn cần `khoiDau`/`loiGiai`
+  (vd `answers.md`) vì bộ xuất bắt buộc.
+
 ## 4. Lệnh
 
 ```bash

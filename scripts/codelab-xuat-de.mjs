@@ -102,7 +102,7 @@ function xuat(de, m) {
   const files = Object.fromEntries(khoiCode(de.loiGiai).map((b) => [b.name, b.code]));
   let demoHtml;
   if (de.demo && tests?.loai === 'react') {
-    demoHtml = dungDemoReact(files, { tepChinh: de.demo.tepChinh || tests.tepChinh || 'src/index.js', thuVien: tests.thuVien || [], tieuDe: `${de.tieuDe} — Live demo` });
+    demoHtml = dungDemoReact(files, { tepChinh: de.demo.tepChinh || tests.tepChinh || 'src/index.js', thuVien: tests.thuVien || [], tieuDe: `${hai(de.tieuDe)[0]} — Live demo`, jsonServer: de.demo.jsonServer ?? tests.jsonServer ?? null, url: de.demo.url ?? tests.url ?? null });
   }
   return {
     title: hai(de.tieuDe)[0],

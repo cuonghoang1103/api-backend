@@ -96,14 +96,82 @@ const THU_VIEN_DEMO = {
   'prop-types': ['prop-types@15.8.1/prop-types.min.js'],
   'react-router-dom': ['@remix-run/router@1.19.2/dist/router.umd.min.js', 'react-router@6.26.2/dist/umd/react-router.production.min.js', 'react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js'],
   'react-bootstrap': ['react-bootstrap@2.10.5/dist/react-bootstrap.min.js'],
+  '@reduxjs/toolkit': ['@reduxjs/toolkit@1.9.7/dist/redux-toolkit.umd.min.js'],
+  'react-redux': ['react-redux@8.1.3/dist/react-redux.min.js'],
 };
+/** CSS gói: style-src của web không cho jsdelivr ⇒ demo tải bằng fetch (connect-src cho) rồi nhét <style>. */
+const CSS_DEMO = { bootstrap: 'bootstrap@5.3.3/dist/css/bootstrap.min.css' };
+
+/**
+ * RUNTIME của demo (ES5, chạy trong iframe sandbox gốc mờ). Bản sao các phần tương ứng của tác tử chấm
+ * (frontend/src/components/code-lab/cham/domAgent.ts): kho localStorage giả, json-server GIẢ có trạng thái,
+ * axios giả (qua fetch), React Router chạy bằng MemoryRouter (+ thanh địa chỉ nhỏ để thấy URL), .env,
+ * redux-thunk. ⚠ Sửa json-server/router ở đây thì sửa cả domAgent.ts.
+ * Chỗ trống: __MODS__ __CSS__ __CHINH__ __DB__ __BASE__ __URL__ __THANH__
+ */
+const RUNTIME_DEMO = String.raw`(function(){
+var M=__MODS__;var CSS=__CSS__;var DB=__DB__;var BASE=__BASE__;var URL0=__URL__;var THANH=__THANH__;
+function kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}
+try{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}
+try{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}
+window.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};
+var ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};
+String(M['.env']||'').split(/\r?\n/).forEach(function(d){var m=/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['"])(.*)\1$/,'$2')});
+window.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};
+// json-server giả (bản sao domAgent.ts)
+var jsDb=DB?JSON.parse(JSON.stringify(DB)):null;
+function tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}
+function lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}
+function mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}
+function xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\/+|\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];
+if(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}
+if(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}
+var vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};
+var mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};
+if(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});
+Object.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});
+var qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});
+var sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}
+var gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}
+if(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}
+if(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});
+if(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}
+if(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}
+function axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);
+return window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}
+function tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}
+var ax=tao({});ax.default=ax;return ax}
+var R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};
+var j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};
+var js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};
+// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)
+var viTri=null,routerBoc=null,dieuHuong=null;
+function datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}
+function routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;
+function Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}
+function RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}
+function tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}
+routerBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}
+var thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};
+var LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};
+var C={};
+function dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}
+function tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}
+function req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\.css$/.test(s)&&!/^\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}
+function nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}
+if(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style="color:#475569">URL</span><input id="cl-demo-url" style="flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace" aria-label="Address bar"><button style="padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer">Go</button>';
+bar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\/\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}
+nap(__CHINH__);
+})();`;
 
 /**
  * Trang demo tự chứa từ LỜI GIẢI (React): biên dịch mọi tệp .js/.jsx/.ts/.tsx bằng sucrase (CommonJS + JSX
  * automatic), gói vào một runtime require tí hon, nạp React UMD từ jsdelivr. Chạy trong iframe sandbox gốc
  * mờ ⇒ localStorage thật bị chặn: dùng kho trong bộ nhớ (demo không nhớ qua lần mở). confirm() ⇒ true.
+ * `jsonServer: { base, db }` ⇒ json-server GIẢ có trạng thái (thêm/sửa/xoá thấy ngay); app có React Router ⇒
+ * thanh địa chỉ nhỏ trên cùng (URL hiện tại, gõ được). `url` = URL mở đầu.
  */
-export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], tieuDe = 'Live demo', htmlThan = '<div id="root"></div>' } = {}) {
+export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], tieuDe = 'Live demo', htmlThan = '<div id="root"></div>', jsonServer = null, url = null } = {}) {
   // sucrase: repo gốc không cài; frontend/desktop có (gián tiếp qua tailwind) — tìm lần lượt
   let transform;
   for (const goc of ['../../../package.json', '../../../frontend/package.json', '../../../desktop/package.json']) {
@@ -114,32 +182,25 @@ export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], 
   const css = [];
   for (const [ten, code] of Object.entries(files)) {
     if (/\.css$/.test(ten)) { css.push([ten, code]); continue; }
+    if (ten === '.env' || /\.json$/.test(ten)) { mods[ten] = code; continue; }
     if (!/\.(m?jsx?|tsx?)$/.test(ten)) continue;
-    mods[ten] = transform(code, {
+    mods[ten] = transform(code.replace(/\bimport\.meta\.env\b/g, 'window.__CL_ENV__'), {
       transforms: /\.tsx?$/.test(ten) ? ['typescript', 'jsx', 'imports'] : ['jsx', 'imports'],
       jsxRuntime: 'automatic', production: true, filePath: ten,
     }).code;
   }
-  const lib = ['react', ...thuVien].flatMap((t) => THU_VIEN_DEMO[t] ?? []).map((u) => `<script src="${CDN}${u}" crossorigin="anonymous"></script>`).join('\n');
-  const goi = `(function(){
-var M=${JSON.stringify(mods).replace(/</g, '\\u003c')};
-var CSS=${JSON.stringify(Object.fromEntries(css)).replace(/</g, '\\u003c')};
-function kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}
-try{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}
-try{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}
-window.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m)};
-var R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};
-var j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};
-var js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};
-var LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-router-dom':window.ReactRouterDOM,'react-bootstrap':window.ReactBootstrap};
-var C={};
-function dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}
-function tim(p){var d=['','.js','.jsx','.ts','.tsx','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}
-function req(tu,s){if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}
-function nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}
-nap(${JSON.stringify(tepChinh)});
-})();`;
+  const ds = ['react', ...thuVien];
+  const lib = ds.flatMap((t) => THU_VIEN_DEMO[t] ?? []).map((u) => `<script src="${CDN}${u}" crossorigin="anonymous"></script>`).join('\n');
+  const cssGoi = ds.map((t) => CSS_DEMO[t]).filter(Boolean)
+    .map((u) => `<script>fetch(${JSON.stringify(CDN + u)}).then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>`).join('');
+  const J = (v) => JSON.stringify(v).replace(/</g, '\\u003c');
+  const goi = RUNTIME_DEMO
+    .replace('__MODS__', () => J(mods)).replace('__CSS__', () => J(Object.fromEntries(css)))
+    .replace('__DB__', () => J(jsonServer?.db ?? null)).replace('__BASE__', () => J(String(jsonServer?.base || 'http://localhost:9999').replace(/\/+$/, '')))
+    .replace('__URL__', () => J(url)).replace('__THANH__', () => J(ds.includes('react-router-dom')))
+    .replace('__CHINH__', () => J(tepChinh));
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(tieuDe)}</title>
 ${lib}
+${cssGoi}
 </head><body>${htmlThan}<script>${goi.replace(/<\/script/gi, '<\\/script')}</script></body></html>`;
 }

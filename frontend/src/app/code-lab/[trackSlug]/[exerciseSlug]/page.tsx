@@ -278,7 +278,7 @@ export default function ExerciseDetailPage() {
   const moXemTruoc = useCallback(async () => {
     if (!ex || !tj) return;
     try {
-      const cfg = { id: 'xem', kiem: [] as unknown[], truoc: [], choToiDa: 0, khoCucBo: null, fetchGia: tj.fetchGia ?? null, files: tepMap } as Record<string, unknown>;
+      const cfg = { id: 'xem', kiem: [] as unknown[], truoc: [], choToiDa: 0, khoCucBo: null, fetchGia: tj.fetchGia ?? null, url: tj.url ?? null, jsonServer: tj.jsonServer ?? null, files: tepMap } as Record<string, unknown>;
       if (tj.loai === 'react') {
         const r = await bienDichReact(tepMap);
         if ('loi' in r) { toast.error(r.loi); return; }

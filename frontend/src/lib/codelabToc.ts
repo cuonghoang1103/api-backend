@@ -63,6 +63,8 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     10: 'Code splitting: lazy & Suspense',
     11: 'Giao tiếp client-server',
     12: 'Kiến trúc Flux & Redux',
+    13: 'Luyện PE — đề thực hành có đồng hồ',
+    14: 'Nâng cao: hiệu năng, kiểm thử, TypeScript',
   },
 });
 

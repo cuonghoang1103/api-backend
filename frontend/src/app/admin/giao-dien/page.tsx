@@ -31,7 +31,8 @@ const NEN: Array<{ id: NenAdmin; ten: string; mo: string; mau: string }> = [
 async function goi(init?: RequestInit): Promise<GiaoDienWeb> {
   const r = await fetch(`/api/v1/giao-dien${init ? '/admin' : ''}`, {
     credentials: 'include', ...init, headers: { 'Content-Type': 'application/json' },
-  });
+    signal: AbortSignal.timeout(15_000), // không bao giờ xoay mãi: quá 15 s ⇒ báo lỗi, trả lựa chọn cũ
+  }).catch((e: Error) => { throw new Error(e.name === 'TimeoutError' ? 'Máy chủ không trả lời — thử lại' : e.message); });
   const j = await r.json().catch(() => ({}));
   if (!r.ok || j.success === false) throw new Error(j.message ?? `Lỗi ${r.status}`);
   return j.data as GiaoDienWeb;

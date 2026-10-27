@@ -1,0 +1,455 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-ex17-render-commit",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-ex17-render-commit"
+  },
+  "exercises": [
+    {
+      "title": "Order the steps of a React update",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "trigger",
+        "render",
+        "commit",
+        "paint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "rendering",
+        "exercise-17"
+      ],
+      "problemHtml": "<p>React serves UI like a restaurant kitchen: an order is placed (trigger), the cook prepares it (render), the dish is served (commit), then the customer sees it (browser paint). Put the steps in order.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>React phục vụ giao diện như bếp nhà hàng: khách gọi món (trigger), đầu bếp nấu (render), mang món ra (commit), rồi khách thấy món (trình duyệt vẽ). Hãy xếp các bước đúng thứ tự.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không thể \"commit\" thứ chưa được tính ra.",
+        "Trình duyệt chỉ vẽ sau khi DOM đã được cập nhật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the steps of a React update\n\nAnswer in the panel on the left (no code needed).\n\n1. A user clicks \"+\" in a counter. Order what happens.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the steps of a React update — answer key\n\n1. A user clicks \"+\" in a counter. Order what happens.\n   Answer: a) The click handler calls setCount(c => c + 1) (trigger)  →  b) React calls Counter() again to get new JSX (render)  →  c) React compares the new JSX with the previous one  →  d) React updates only the changed text node in the DOM (commit)  →  e) The browser paints the new number\n   Trigger → render → diff → commit → paint. / Trigger → render → so sánh → commit → vẽ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trigger (lần đầu hoặc setState) → React gọi component (render) → so sánh và áp thay đổi tối thiểu vào DOM (commit) → trình duyệt vẽ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "r1",
+            "de": "A user clicks \"+\" in a counter. Order what happens.",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "React compares the new JSX with the previous one"
+              },
+              {
+                "ma": "a",
+                "noiDung": "The click handler calls <code>setCount(c =&gt; c + 1)</code> (trigger)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "The browser paints the new number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "React calls <code>Counter()</code> again to get new JSX (render)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "React updates only the changed text node in the DOM (commit)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Trigger → render → diff → commit → paint.</p><p><i>🇻🇳 Trigger → render → so sánh → commit → vẽ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ render = cập nhật DOM. Render chỉ là gọi component để tính JSX."
+        },
+        {
+          "loi": "Nghĩ mọi lần render đều đổi DOM."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trigger",
+          "vi": "kích hoạt"
+        },
+        {
+          "en": "commit",
+          "vi": "áp thay đổi vào DOM"
+        },
+        {
+          "en": "paint",
+          "vi": "trình duyệt vẽ lên màn hình"
+        }
+      ]
+    },
+    {
+      "title": "Render vs commit: true or false?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "render",
+        "commit",
+        "reconciliation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "rendering",
+        "exercise-17"
+      ],
+      "problemHtml": "<p>Six statements from the Exercise 17 experiment (put <code>console.log('render')</code> in a component and watch).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu nhận định từ thí nghiệm của Exercise 17 (đặt <code>console.log('render')</code> trong component và quan sát).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Render là gọi hàm component; commit mới đụng DOM.",
+        "Cha render thì con render theo (trừ khi được memo)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Render vs commit: true or false?\n\nAnswer in the panel on the left (no code needed).\n\n1. Every render changes the DOM.\n2. When a parent re-renders, its children re-render too (by default).\n3. Rendering must be pure: no side effects such as fetching or changing the DOM.\n4. setCount(count) with the same value always triggers a full DOM rewrite.\n5. React keeps a DOM input's typed text when the surrounding JSX re-renders with the same structure.\n6. In StrictMode (development), React may call your component twice to detect impure renders.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Render vs commit: true or false? — answer key\n\n1. Every render changes the DOM.\n   Answer: b) False\n   If the JSX is the same, the commit step changes nothing. / Nếu JSX như cũ, bước commit không đổi gì.\n\n2. When a parent re-renders, its children re-render too (by default).\n   Answer: a) True\n   Unless wrapped in React.memo with unchanged props. / Trừ khi bọc React.memo và props không đổi.\n\n3. Rendering must be pure: no side effects such as fetching or changing the DOM.\n   Answer: a) True\n   Side effects go into event handlers or useEffect. / Tác dụng phụ đặt trong handler sự kiện hoặc useEffect.\n\n4. setCount(count) with the same value always triggers a full DOM rewrite.\n   Answer: b) False\n   React may bail out; even if it renders, the commit finds nothing to change. / React có thể bỏ qua; kể cả có render thì commit cũng không thấy gì để đổi.\n\n5. React keeps a DOM input's typed text when the surrounding JSX re-renders with the same structure.\n   Answer: a) True\n   Same element in the same place ⇒ React reuses the DOM node. / Cùng phần tử ở cùng vị trí ⇒ React dùng lại nút DOM.\n\n6. In StrictMode (development), React may call your component twice to detect impure renders.\n   Answer: a) True\n   That is why you can see \"render\" logged twice in development. / Vì vậy ở development bạn có thể thấy \"render\" in hai lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "t1",
+            "de": "Every render changes the DOM.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>If the JSX is the same, the commit step changes nothing.</p><p><i>🇻🇳 Nếu JSX như cũ, bước commit không đổi gì.</i></p>"
+          },
+          {
+            "ma": "t2",
+            "de": "When a parent re-renders, its children re-render too (by default).",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Unless wrapped in React.memo with unchanged props.</p><p><i>🇻🇳 Trừ khi bọc React.memo và props không đổi.</i></p>"
+          },
+          {
+            "ma": "t3",
+            "de": "Rendering must be pure: no side effects such as fetching or changing the DOM.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Side effects go into event handlers or useEffect.</p><p><i>🇻🇳 Tác dụng phụ đặt trong handler sự kiện hoặc useEffect.</i></p>"
+          },
+          {
+            "ma": "t4",
+            "de": "<code>setCount(count)</code> with the same value always triggers a full DOM rewrite.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>React may bail out; even if it renders, the commit finds nothing to change.</p><p><i>🇻🇳 React có thể bỏ qua; kể cả có render thì commit cũng không thấy gì để đổi.</i></p>"
+          },
+          {
+            "ma": "t5",
+            "de": "React keeps a DOM input's typed text when the surrounding JSX re-renders with the same structure.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Same element in the same place ⇒ React reuses the DOM node.</p><p><i>🇻🇳 Cùng phần tử ở cùng vị trí ⇒ React dùng lại nút DOM.</i></p>"
+          },
+          {
+            "ma": "t6",
+            "de": "In StrictMode (development), React may call your component twice to detect impure renders.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is why you can see \"render\" logged twice in development.</p><p><i>🇻🇳 Vì vậy ở development bạn có thể thấy \"render\" in hai lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt lệnh đổi DOM / gọi API trong thân component (lúc render)."
+        },
+        {
+          "loi": "Lo sợ render \"tốn kém\" — đa số render rẻ, commit mới tốn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reconciliation",
+          "vi": "đối chiếu cây cũ/mới"
+        }
+      ]
+    },
+    {
+      "title": "See render vs commit: count renders without re-rendering",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "useRef",
+        "render count",
+        "same-value update"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "rendering",
+        "exercise-17"
+      ],
+      "problemHtml": "<p>Make the render/commit cycle visible. A <code>useRef</code> counts how many times <code>Counter</code> renders (a ref change does NOT trigger a render). \"+1\" changes state; \"Same value\" calls <code>setCount(count)</code>, which React may skip entirely.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#count</code> shows the count; <code>#renders</code> shows \"Renders: N\" where N increments inside the component body via <code>renders.current += 1</code>.</li>\n  <li><code>#plus</code> ⇒ count + 1; <code>#same</code> ⇒ <code>setCount(count)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm cho chu trình render/commit hiện ra. <code>useRef</code> đếm số lần <code>Counter</code> render (đổi ref KHÔNG gây render). \"+1\" đổi state; \"Same value\" gọi <code>setCount(count)</code>, React có thể bỏ qua hoàn toàn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#count</code> hiện số đếm; <code>#renders</code> hiện \"Renders: N\", N tăng trong thân component qua <code>renders.current += 1</code>.</li>\n  <li><code>#plus</code> ⇒ count + 1; <code>#same</code> ⇒ <code>setCount(count)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click +1 twice",
+          "output": "count 2 · Renders: 3",
+          "explanation": "1 initial render + 2 updates (production build, no StrictMode double render).|||1 lần render đầu + 2 lần cập nhật (bản production, không render đôi của StrictMode)."
+        }
+      ],
+      "hintsJson": [
+        "const renders = useRef(0); renders.current += 1; — đếm trong thân hàm (chính là lúc render).",
+        "Đừng dùng useState để đếm render — set state trong lúc render gây vòng lặp vô hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  // TODO: đếm số lần render bằng useRef\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <p id=\"renders\">Renders: ?</p>\n      <button id=\"plus\" onClick={() => setCount(count + 1)}>+1</button>\n      <button id=\"same\">Same value</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return <Counter />;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ref đếm render (đổi ref không gây render); setCount(count) có thể bị React bỏ qua\nimport { useRef, useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n  const renders = useRef(0);\n  renders.current += 1; // thân component chạy = một lần render\n\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <p id=\"renders\">Renders: {renders.current}</p>\n      <button id=\"plus\" type=\"button\" onClick={() => setCount((c) => c + 1)}>+1</button>\n      <button id=\"same\" type=\"button\" onClick={() => setCount(count)}>Same value</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return <Counter />;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thân component chạy mỗi lần render nên bộ đếm trong ref tăng đúng số lần render. Đặt cùng giá trị (<code>Object.is</code> bằng nhau) cho phép React \"bail out\" — không render lại con và không commit gì.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "First render",
+            "kiem": "text",
+            "selector": "#renders",
+            "giaTri": "Renders: 1"
+          },
+          {
+            "moTa": "Two updates ⇒ three renders",
+            "kiem": "danh-sach-text",
+            "selector": "#count, #renders",
+            "mongDoi": [
+              "2",
+              "Renders: 3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#plus"
+              }
+            ]
+          },
+          {
+            "moTa": "Same value does not change the count",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#same"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Same value adds at most one render",
+            "kiem": "text",
+            "selector": "#renders",
+            "khop": "^Renders: [12]$",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#same"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#same"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#same"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Render count uses useRef",
+            "kiem": "ma-nguon",
+            "khop": "useRef\\(\\s*0\\s*\\)"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>const [renders, setRenders] = useState(0); setRenders(renders + 1)</code> trong thân ⇒ \"Too many re-renders\"."
+        },
+        {
+          "loi": "Nghĩ \"Same value\" sẽ làm số render tăng mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ref",
+          "vi": "hộp chứa giá trị sống qua các lần render, đổi không gây render"
+        }
+      ]
+    }
+  ]
+}

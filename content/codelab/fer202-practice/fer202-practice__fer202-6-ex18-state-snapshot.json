@@ -1,0 +1,401 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-ex18-state-snapshot",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-ex18-state-snapshot"
+  },
+  "exercises": [
+    {
+      "title": "Predict the number: state as a snapshot",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "snapshot",
+        "batching",
+        "updater function"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "exercise-18"
+      ],
+      "problemHtml": "<p><code>count</code> starts at 0 in every question. What does the button show after ONE click? Remember: inside one render, <code>count</code> never changes; updater functions are queued and run in order.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>count</code> bắt đầu là 0 ở mọi câu. Nút hiện số mấy sau MỘT lần bấm? Nhớ: trong một lần render, <code>count</code> không bao giờ đổi; hàm cập nhật được xếp hàng và chạy theo thứ tự.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thay count bằng con số của lần render đó (0) rồi tính.",
+        "setX(5) = \"thay bằng 5\"; setX(n => n + 1) = \"lấy giá trị đang chờ rồi +1\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the number: state as a snapshot\n\nAnswer in the panel on the left (no code needed).\n\n1. setCount(count + 1); setCount(count + 1); setCount(count + 1);\n2. setCount(c => c + 1); setCount(c => c + 1); setCount(c => c + 1);\n3. setCount(count + 5); setCount(c => c + 1);\n4. setCount(c => c + 1); setCount(42);\n5. setCount(count + 1); alert(count); — what does the alert show?\n6. setCount(count + 1); setTimeout(() => alert(count), 3000); — after 3 s the alert shows…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the number: state as a snapshot — answer key\n\n1. setCount(count + 1); setCount(count + 1); setCount(count + 1);\n   Answer: a) 1\n   Three times \"replace with 0 + 1\". / Ba lần \"thay bằng 0 + 1\".\n\n2. setCount(c => c + 1); setCount(c => c + 1); setCount(c => c + 1);\n   Answer: b) 3\n   Each updater gets the result of the previous one: 1, 2, 3. / Mỗi hàm cập nhật nhận kết quả của hàm trước: 1, 2, 3.\n\n3. setCount(count + 5); setCount(c => c + 1);\n   Answer: c) 6\n   Replace with 5, then 5 + 1. / Thay bằng 5, rồi 5 + 1.\n\n4. setCount(c => c + 1); setCount(42);\n   Answer: b) 42\n   The last \"replace\" wins: 42. / Lệnh \"thay\" cuối cùng thắng: 42.\n\n5. setCount(count + 1); alert(count); — what does the alert show?\n   Answer: b) 0\n   The handler still reads the snapshot of this render. / Handler vẫn đọc ảnh chụp của lần render này.\n\n6. setCount(count + 1); setTimeout(() => alert(count), 3000); — after 3 s the alert shows…\n   Answer: b) 0\n   The timeout closure captured count = 0 from the render that created it. / Closure của setTimeout đã \"chụp\" count = 0 từ lần render tạo ra nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi lần render có \"ảnh chụp\" state riêng; handler đọc ảnh chụp đó. Hàm cập nhật nhận giá trị mới nhất trong hàng đợi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "<code>setCount(count + 1); setCount(count + 1); setCount(count + 1);</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Three times \"replace with 0 + 1\".</p><p><i>🇻🇳 Ba lần \"thay bằng 0 + 1\".</i></p>"
+          },
+          {
+            "ma": "s2",
+            "de": "<code>setCount(c =&gt; c + 1); setCount(c =&gt; c + 1); setCount(c =&gt; c + 1);</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each updater gets the result of the previous one: 1, 2, 3.</p><p><i>🇻🇳 Mỗi hàm cập nhật nhận kết quả của hàm trước: 1, 2, 3.</i></p>"
+          },
+          {
+            "ma": "s3",
+            "de": "<code>setCount(count + 5); setCount(c =&gt; c + 1);</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Replace with 5, then 5 + 1.</p><p><i>🇻🇳 Thay bằng 5, rồi 5 + 1.</i></p>"
+          },
+          {
+            "ma": "s4",
+            "de": "<code>setCount(c =&gt; c + 1); setCount(42);</code>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "43"
+              },
+              {
+                "ma": "b",
+                "noiDung": "42"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The last \"replace\" wins: 42.</p><p><i>🇻🇳 Lệnh \"thay\" cuối cùng thắng: 42.</i></p>"
+          },
+          {
+            "ma": "s5",
+            "de": "<code>setCount(count + 1); alert(count);</code> — what does the alert show?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It never shows"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The handler still reads the snapshot of this render.</p><p><i>🇻🇳 Handler vẫn đọc ảnh chụp của lần render này.</i></p>"
+          },
+          {
+            "ma": "s6",
+            "de": "<code>setCount(count + 1); setTimeout(() =&gt; alert(count), 3000);</code> — after 3 s the alert shows…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the latest count"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The timeout closure captured count = 0 from the render that created it.</p><p><i>🇻🇳 Closure của setTimeout đã \"chụp\" count = 0 từ lần render tạo ra nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ setCount đổi count ngay dòng sau."
+        },
+        {
+          "loi": "Quên rằng alert/setTimeout đọc count của lần render đã tạo ra chúng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "queue",
+          "vi": "hàng đợi"
+        },
+        {
+          "en": "batching",
+          "vi": "gom nhiều lần đặt state thành một lần render"
+        }
+      ]
+    },
+    {
+      "title": "Fix the +3 button and the delayed alert",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "updater function",
+        "snapshot",
+        "event loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "exercise-18"
+      ],
+      "problemHtml": "<p>Reproduce and fix Exercise 18. \"+3\" must really add 3. \"+5 then +1\" must add 6. And the \"log in 1 s\" button logs the count <b>as it was when clicked</b> — explain why that is the correct behaviour.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#plus3</code> adds 3 with three updater calls; <code>#plus6</code> = <code>setCount(count + 5)</code> then <code>setCount(c =&gt; c + 1)</code>.</li>\n  <li><code>#log-later</code> logs <code>count at click: N</code> after 1 s (snapshot of that render).</li>\n</ul>",
+      "problemHtmlVi": "<p>Tái hiện và sửa Exercise 18. \"+3\" phải cộng đủ 3. \"+5 then +1\" phải cộng 6. Nút \"log in 1 s\" in số đếm <b>tại lúc bấm</b> — giải thích vì sao đó là hành vi đúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#plus3</code> cộng 3 bằng ba lần gọi hàm cập nhật; <code>#plus6</code> = <code>setCount(count + 5)</code> rồi <code>setCount(c =&gt; c + 1)</code>.</li>\n  <li><code>#log-later</code> in <code>count at click: N</code> sau 1 giây (ảnh chụp của lần render đó).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click +3 twice",
+          "output": "6",
+          "explanation": "Updaters see the queued value.|||Hàm cập nhật thấy giá trị đang chờ."
+        }
+      ],
+      "hintsJson": [
+        "setCount((c) => c + 1) ba lần.",
+        "setTimeout(() => console.log(`count at click: ${count}`), 1000)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER (bug: +3 chỉ cộng 1)\nimport { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <button id=\"plus3\" onClick={() => { setCount(count + 1); setCount(count + 1); setCount(count + 1); }}>+3</button>\n      <button id=\"plus6\">+5 then +1</button>\n      <button id=\"log-later\">log in 1 s</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — hàm cập nhật cho các lần đặt nối tiếp; setTimeout đọc ảnh chụp của lần render\nimport { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n\n  const plus3 = () => {\n    setCount((c) => c + 1);\n    setCount((c) => c + 1);\n    setCount((c) => c + 1);\n  };\n  const plus6 = () => {\n    setCount(count + 5); // \"thay bằng count + 5\"\n    setCount((c) => c + 1); // rồi +1 trên giá trị đang chờ\n  };\n  const logLater = () => {\n    setTimeout(() => console.log(`count at click: ${count}`), 1000);\n  };\n\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <button id=\"plus3\" type=\"button\" onClick={plus3}>+3</button>\n      <button id=\"plus6\" type=\"button\" onClick={plus6}>+5 then +1</button>\n      <button id=\"log-later\" type=\"button\" onClick={logLater}>log in 1 s</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm cập nhật đọc giá trị mới nhất trong hàng đợi nên cộng dồn đúng. Còn setTimeout giữ closure của lần render tạo ra nó — đó là đặc tính (nhất quán), không phải lỗi; muốn đọc giá trị mới nhất về sau thì dùng ref (chương 8).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "+3 adds three",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus3",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "+5 then +1 adds six",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "6",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus6",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Logged value is the snapshot at click time",
+            "kiem": "console",
+            "mongDoi": [
+              "count at click: 3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus3",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#log-later",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#plus3",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1300
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "+3 twice ⇒ 6",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "6",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus3",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#plus3",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cố \"sửa\" bằng cách đọc giá trị mới ngay sau setCount — state không đổi giữa chừng."
+        },
+        {
+          "loi": "Dùng biến toàn cục để \"đồng bộ\" — phá luồng dữ liệu của React."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stale closure",
+          "vi": "closure giữ giá trị cũ"
+        }
+      ]
+    }
+  ]
+}

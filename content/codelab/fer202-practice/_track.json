@@ -248,6 +248,42 @@
       "name": "Interview corner — components, props & state",
       "level": "BEGINNER",
       "description": "8 câu phỏng vấn kèm câu trả lời mẫu: props vs state, callback, state tối thiểu, class vs function, bất biến, nâng state, PropTypes vs TypeScript, tách component."
+    },
+    {
+      "slug": "fer202-6-1-events-forms",
+      "name": "6.1 Event handlers, synthetic events & forms",
+      "level": "INTERMEDIATE",
+      "description": "6 bài: truyền hàm không gọi, ô controlled + bộ đếm, onSubmit + preventDefault, phím Enter/Escape, ủy quyền sự kiện data-*, form góp ý hợp lệ suy ra."
+    },
+    {
+      "slug": "fer202-6-2-slot11-events-slides",
+      "name": "6.2 Slide check — Events, render & snapshot",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 11–12."
+    },
+    {
+      "slug": "fer202-6-ex16-event-handling",
+      "name": "6.3 Exercise 16 — Event handling",
+      "level": "INTERMEDIATE",
+      "description": "4 bài theo Exercise 16: tham số cho handler, stopPropagation, preventDefault link, ủy quyền theo data-action."
+    },
+    {
+      "slug": "fer202-6-ex17-render-commit",
+      "name": "6.4 Exercise 17 — Render and Commit",
+      "level": "INTERMEDIATE",
+      "description": "Sắp các bước trigger→render→commit, 6 câu đúng/sai, bài React đếm render bằng useRef."
+    },
+    {
+      "slug": "fer202-6-ex18-state-snapshot",
+      "name": "6.5 Exercise 18 — State as a snapshot",
+      "level": "INTERMEDIATE",
+      "description": "6 câu đoán kết quả + bài sửa nút +3, +5 rồi +1, log trễ đọc ảnh chụp."
+    },
+    {
+      "slug": "fer202-6-interview-events",
+      "name": "Interview corner — events, forms & rendering",
+      "level": "INTERMEDIATE",
+      "description": "8 câu phỏng vấn kèm câu trả lời mẫu: controlled/uncontrolled, SyntheticEvent, snapshot, render vs commit, form nhiều ô, preventDefault vs stopPropagation, hiệu năng arrow, a11y."
     }
   ]
 }

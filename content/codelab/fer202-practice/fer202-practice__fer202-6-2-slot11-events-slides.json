@@ -1,0 +1,347 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-2-slot11-events-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-2-slot11-events-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: event handling in React",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "synthetic events",
+        "handlers",
+        "preventDefault",
+        "stopPropagation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 11–12: naming and passing handlers, the synthetic event object, default actions and propagation.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 11–12: đặt tên và truyền handler, object sự kiện tổng hợp, hành vi mặc định và lan truyền.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Handler nhận HÀM, không phải kết quả của lời gọi.",
+        "preventDefault ≠ stopPropagation."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: event handling in React\n\nAnswer in the panel on the left (no code needed).\n\n1. Correct way to attach a click handler in React?\n2. <button onClick={save()}> will…\n3. Pass an id to a handler:\n4. Stop a form from reloading the page:\n5. A click on a child also triggers the parent's onClick because of…\n6. Difference between e.target and e.currentTarget?\n7. Read the text of a controlled input in onChange:\n8. Which run during RENDER and must stay pure? (choose all)\n9. Inside one handler, after setName('An'), name is…\n10. Multiple setState calls in one click usually cause…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: event handling in React — answer key\n\n1. Correct way to attach a click handler in React?\n   Answer: b) onClick={handle}\n   camelCase prop + a function reference. / Prop camelCase + tham chiếu hàm.\n\n2. <button onClick={save()}> will…\n   Answer: b) call save during every render\n   The expression is evaluated while rendering. / Biểu thức được tính ngay khi render.\n\n3. Pass an id to a handler:\n   Answer: b) onClick={() => remove(id)}\n   Wrap in an arrow so it runs later. / Bọc bằng arrow để chạy về sau.\n\n4. Stop a form from reloading the page:\n   Answer: b) e.preventDefault() in onSubmit\n   preventDefault cancels the browser's default action. / preventDefault huỷ hành vi mặc định của trình duyệt.\n\n5. A click on a child also triggers the parent's onClick because of…\n   Answer: b) bubbling\n   Events bubble from the target up through its ancestors. / Sự kiện nổi bọt từ phần tử đích lên các tổ tiên.\n\n6. Difference between e.target and e.currentTarget?\n   Answer: b) target = element actually clicked; currentTarget = element whose handler is running\n   Important for delegation. / Quan trọng khi ủy quyền sự kiện.\n\n7. Read the text of a controlled input in onChange:\n   Answer: b) e.target.value\n   For checkboxes use e.target.checked. / Với checkbox dùng e.target.checked.\n\n8. Which run during RENDER and must stay pure? (choose all)\n   Answer: a) The component function body + c) Calculating JSX from props/state\n   Handlers run later (on events) and may have side effects. / Handler chạy về sau (khi có sự kiện) và được phép có tác dụng phụ.\n\n9. Inside one handler, after setName('An'), name is…\n   Answer: b) still the value from this render\n   State is a snapshot for the whole render. / State là ảnh chụp cho cả lần render.\n\n10. Multiple setState calls in one click usually cause…\n   Answer: a) one re-render (batching)\n   React 18 batches updates in event handlers, timeouts and promises. / React 18 gom các lần cập nhật trong handler, timeout và promise.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Correct way to attach a click handler in React?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>onclick=\"handle()\"</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>onClick={handle}</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>onClick=\"handle\"</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>on-click={handle}</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>camelCase prop + a function reference.</p><p><i>🇻🇳 Prop camelCase + tham chiếu hàm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<code>&lt;button onClick={save()}&gt;</code> will…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "call save on click"
+              },
+              {
+                "ma": "b",
+                "noiDung": "call save during every render"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never call save"
+              },
+              {
+                "ma": "d",
+                "noiDung": "throw a syntax error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The expression is evaluated while rendering.</p><p><i>🇻🇳 Biểu thức được tính ngay khi render.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Pass an id to a handler:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>onClick={remove(id)}</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>onClick={() =&gt; remove(id)}</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>onClick={remove, id}</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>onClick:remove(id)</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Wrap in an arrow so it runs later.</p><p><i>🇻🇳 Bọc bằng arrow để chạy về sau.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Stop a form from reloading the page:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>return false</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>e.preventDefault()</code> in onSubmit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>e.stopPropagation()</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "remove the button"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>preventDefault cancels the browser's default action.</p><p><i>🇻🇳 preventDefault huỷ hành vi mặc định của trình duyệt.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "A click on a child also triggers the parent's onClick because of…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "capturing only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bubbling"
+              },
+              {
+                "ma": "c",
+                "noiDung": "hoisting"
+              },
+              {
+                "ma": "d",
+                "noiDung": "batching"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Events bubble from the target up through its ancestors.</p><p><i>🇻🇳 Sự kiện nổi bọt từ phần tử đích lên các tổ tiên.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Difference between <code>e.target</code> and <code>e.currentTarget</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None"
+              },
+              {
+                "ma": "b",
+                "noiDung": "target = element actually clicked; currentTarget = element whose handler is running"
+              },
+              {
+                "ma": "c",
+                "noiDung": "target is always the button"
+              },
+              {
+                "ma": "d",
+                "noiDung": "currentTarget is the window"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Important for delegation.</p><p><i>🇻🇳 Quan trọng khi ủy quyền sự kiện.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "Read the text of a controlled input in onChange:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>e.value</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>e.target.value</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>this.value</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>e.data</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>For checkboxes use <code>e.target.checked</code>.</p><p><i>🇻🇳 Với checkbox dùng e.target.checked.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Which run during RENDER and must stay pure? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The component function body"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Event handlers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Calculating JSX from props/state"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A fetch inside onClick"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>Handlers run later (on events) and may have side effects.</p><p><i>🇻🇳 Handler chạy về sau (khi có sự kiện) và được phép có tác dụng phụ.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q9",
+            "de": "Inside one handler, after <code>setName('An')</code>, <code>name</code> is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"An\" immediately"
+              },
+              {
+                "ma": "b",
+                "noiDung": "still the value from this render"
+              },
+              {
+                "ma": "c",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "d",
+                "noiDung": "null"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>State is a snapshot for the whole render.</p><p><i>🇻🇳 State là ảnh chụp cho cả lần render.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "Multiple setState calls in one click usually cause…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one re-render (batching)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one render per call"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no render"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an error"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>React 18 batches updates in event handlers, timeouts and promises.</p><p><i>🇻🇳 React 18 gom các lần cập nhật trong handler, timeout và promise.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết onclick chữ thường; truyền chuỗi như HTML."
+        },
+        {
+          "loi": "Trả false để chặn mặc định (không có tác dụng trong React)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "synthetic event",
+          "vi": "sự kiện tổng hợp của React (bọc sự kiện gốc)"
+        }
+      ]
+    }
+  ]
+}

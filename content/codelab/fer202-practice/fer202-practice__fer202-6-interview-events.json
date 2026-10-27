@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-interview-events",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-1-events-forms"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — events, forms & rendering (Chapter 6)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "events, forms & rendering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>events, forms & rendering</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>events, forms & rendering</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — events, forms & rendering (Chapter 6)\n\nAnswer in the panel on the left (no code needed).\n\n1. Controlled vs uncontrolled input?\n2. What is a SyntheticEvent?\n3. Why does setCount(count + 1) three times only add 1?\n4. What is the difference between render and commit?\n5. How do you handle a form with many fields cleanly?\n6. preventDefault vs stopPropagation?\n7. Is creating an arrow function in onClick={() => …} on every render a performance problem?\n8. How would you make a custom button component accessible?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — events, forms & rendering (Chapter 6) — answer key\n\n1. Controlled vs uncontrolled input?\n   Answer: b) Controlled: React state is the source of truth (value + onChange). Uncontrolled: the DOM keeps the value and you read it with a ref.\n   Model answer: \"With a controlled input the value lives in state, so I can validate, format or disable buttons on every keystroke. Uncontrolled inputs keep their own value in the DOM; I read it with a ref when needed — simpler for one-off forms or file inputs.\" / Trả lời mẫu: \"Ô controlled giữ giá trị trong state nên tôi kiểm, định dạng hay khoá nút theo từng phím gõ. Ô uncontrolled tự giữ giá trị trong DOM; khi cần thì đọc bằng ref — gọn cho form đơn giản hoặc ô chọn tệp.\"\n\n2. What is a SyntheticEvent?\n   Answer: b) React's cross-browser wrapper around the native event, with the same interface (target, preventDefault…).\n   Model answer: \"React wraps native events in a SyntheticEvent that behaves the same in every browser. Since React 17 handlers are attached at the root container, not on the document. If I really need the native one there is e.nativeEvent.\" / Trả lời mẫu: \"React bọc sự kiện gốc trong SyntheticEvent chạy giống nhau trên mọi trình duyệt. Từ React 17 handler gắn ở root container, không phải document. Cần sự kiện gốc thì có e.nativeEvent.\"\n\n3. Why does setCount(count + 1) three times only add 1?\n   Answer: b) Each call reads the same snapshot of count from the current render; use the updater form.\n   Model answer: \"Within one render, state is a constant snapshot, so all three calls compute 0 + 1. When the next value depends on the previous one I use setCount(c => c + 1); React queues those and applies them in order.\" / Trả lời mẫu: \"Trong một lần render state là ảnh chụp cố định, nên cả ba lần đều tính 0 + 1. Khi giá trị sau phụ thuộc giá trị trước tôi dùng setCount(c => c + 1); React xếp hàng và áp lần lượt.\"\n\n4. What is the difference between render and commit?\n   Answer: b) Render = React calls components to compute JSX; commit = React applies the minimal changes to the DOM.\n   Model answer: \"Rendering is pure computation: calling my components to get a new tree. Commit is when React touches the DOM, only where the trees differ. That's why I keep side effects out of the render phase.\" / Trả lời mẫu: \"Render là tính toán thuần: gọi component để có cây mới. Commit là lúc React đụng vào DOM, chỉ ở chỗ hai cây khác nhau. Vì vậy tôi không đặt tác dụng phụ trong giai đoạn render.\"\n\n5. How do you handle a form with many fields cleanly?\n   Answer: b) One state object + one handleChange using e.target.name; validation derived from values (or a form library for big forms).\n   Model answer: \"For small and medium forms I keep one object and a generic handleChange keyed by name. Errors are computed from the values. For large forms with complex validation I reach for React Hook Form or Formik with a schema like Yup or Zod.\" / Trả lời mẫu: \"Form vừa và nhỏ: một object + handleChange chung theo name, lỗi tính từ giá trị. Form lớn, kiểm phức tạp: dùng React Hook Form hoặc Formik với schema như Yup/Zod.\"\n\n6. preventDefault vs stopPropagation?\n   Answer: b) preventDefault cancels the browser's default action (submit, follow link); stopPropagation stops the event from reaching ancestors.\n   Model answer: \"They solve different problems. I call preventDefault in onSubmit so the page doesn't reload; I call stopPropagation when a button inside a clickable card shouldn't also trigger the card.\" / Trả lời mẫu: \"Hai việc khác nhau. preventDefault trong onSubmit để trang không tải lại; stopPropagation khi nút trong thẻ bấm được không nên kích hoạt cả thẻ.\"\n\n7. Is creating an arrow function in onClick={() => …} on every render a performance problem?\n   Answer: b) Usually not; it only matters when passing callbacks to memoised children, where useCallback helps.\n   Model answer: \"Creating a small function is cheap. It becomes relevant only when the callback is a prop of a component wrapped in React.memo — then a new function each render defeats the memo, and I'd use useCallback. I measure before optimising.\" / Trả lời mẫu: \"Tạo một hàm nhỏ rất rẻ. Chỉ đáng bận tâm khi callback là prop của component bọc React.memo — hàm mới mỗi lần render làm memo vô tác dụng, khi đó dùng useCallback. Tôi đo trước rồi mới tối ưu.\"\n\n8. How would you make a custom button component accessible?\n   Answer: b) Render a real <button type=\"button\"> so keyboard and screen readers work; add aria-label when it has only an icon.\n   Model answer: \"I build on the native button — it is focusable, works with Enter/Space and is announced correctly. Icon-only buttons get an aria-label, and I never remove the focus outline without a visible replacement.\" / Trả lời mẫu: \"Tôi dựa trên thẻ button gốc — focus được, chạy với Enter/Space và trình đọc màn hình đọc đúng. Nút chỉ có biểu tượng thì thêm aria-label, và không xoá viền focus nếu không có thay thế dễ thấy.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Controlled vs uncontrolled input?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Controlled inputs are disabled."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Controlled: React state is the source of truth (value + onChange). Uncontrolled: the DOM keeps the value and you read it with a ref."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Uncontrolled inputs cannot be submitted."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Same thing."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"With a controlled input the value lives in state, so I can validate, format or disable buttons on every keystroke. Uncontrolled inputs keep their own value in the DOM; I read it with a ref when needed — simpler for one-off forms or file inputs.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Ô controlled giữ giá trị trong state nên tôi kiểm, định dạng hay khoá nút theo từng phím gõ. Ô uncontrolled tự giữ giá trị trong DOM; khi cần thì đọc bằng ref — gọn cho form đơn giản hoặc ô chọn tệp.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "What is a SyntheticEvent?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A fake event for tests."
+              },
+              {
+                "ma": "b",
+                "noiDung": "React's cross-browser wrapper around the native event, with the same interface (target, preventDefault…)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "An event from Redux."
+              },
+              {
+                "ma": "d",
+                "noiDung": "A custom DOM event."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React wraps native events in a SyntheticEvent that behaves the same in every browser. Since React 17 handlers are attached at the root container, not on the document. If I really need the native one there is <code>e.nativeEvent</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React bọc sự kiện gốc trong SyntheticEvent chạy giống nhau trên mọi trình duyệt. Từ React 17 handler gắn ở root container, không phải document. Cần sự kiện gốc thì có e.nativeEvent.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "Why does <code>setCount(count + 1)</code> three times only add 1?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A React bug."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each call reads the same snapshot of count from the current render; use the updater form."
+              },
+              {
+                "ma": "c",
+                "noiDung": "setState is synchronous."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because of StrictMode."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Within one render, state is a constant snapshot, so all three calls compute 0 + 1. When the next value depends on the previous one I use <code>setCount(c =&gt; c + 1)</code>; React queues those and applies them in order.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Trong một lần render state là ảnh chụp cố định, nên cả ba lần đều tính 0 + 1. Khi giá trị sau phụ thuộc giá trị trước tôi dùng setCount(c => c + 1); React xếp hàng và áp lần lượt.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "What is the difference between render and commit?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Same thing."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Render = React calls components to compute JSX; commit = React applies the minimal changes to the DOM."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Commit happens before render."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Render writes to the DOM directly."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Rendering is pure computation: calling my components to get a new tree. Commit is when React touches the DOM, only where the trees differ. That's why I keep side effects out of the render phase.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Render là tính toán thuần: gọi component để có cây mới. Commit là lúc React đụng vào DOM, chỉ ở chỗ hai cây khác nhau. Vì vậy tôi không đặt tác dụng phụ trong giai đoạn render.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "How do you handle a form with many fields cleanly?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One useState per field and one handler per field always."
+              },
+              {
+                "ma": "b",
+                "noiDung": "One state object + one handleChange using <code>e.target.name</code>; validation derived from values (or a form library for big forms)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Read values from the DOM with querySelector."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use global variables."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"For small and medium forms I keep one object and a generic <code>handleChange</code> keyed by <code>name</code>. Errors are computed from the values. For large forms with complex validation I reach for React Hook Form or Formik with a schema like Yup or Zod.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Form vừa và nhỏ: một object + handleChange chung theo name, lỗi tính từ giá trị. Form lớn, kiểm phức tạp: dùng React Hook Form hoặc Formik với schema như Yup/Zod.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "preventDefault vs stopPropagation?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Identical."
+              },
+              {
+                "ma": "b",
+                "noiDung": "preventDefault cancels the browser's default action (submit, follow link); stopPropagation stops the event from reaching ancestors."
+              },
+              {
+                "ma": "c",
+                "noiDung": "stopPropagation prevents form submit."
+              },
+              {
+                "ma": "d",
+                "noiDung": "preventDefault stops bubbling."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"They solve different problems. I call preventDefault in onSubmit so the page doesn't reload; I call stopPropagation when a button inside a clickable card shouldn't also trigger the card.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Hai việc khác nhau. preventDefault trong onSubmit để trang không tải lại; stopPropagation khi nút trong thẻ bấm được không nên kích hoạt cả thẻ.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Is creating an arrow function in <code>onClick={() =&gt; …}</code> on every render a performance problem?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always — never do it."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Usually not; it only matters when passing callbacks to memoised children, where useCallback helps."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It leaks memory."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It breaks React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Creating a small function is cheap. It becomes relevant only when the callback is a prop of a component wrapped in <code>React.memo</code> — then a new function each render defeats the memo, and I'd use <code>useCallback</code>. I measure before optimising.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tạo một hàm nhỏ rất rẻ. Chỉ đáng bận tâm khi callback là prop của component bọc React.memo — hàm mới mỗi lần render làm memo vô tác dụng, khi đó dùng useCallback. Tôi đo trước rồi mới tối ưu.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "How would you make a custom button component accessible?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use a div with onClick."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Render a real <code>&lt;button type=\"button\"&gt;</code> so keyboard and screen readers work; add aria-label when it has only an icon."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Disable focus outlines."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use only colour to show state."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I build on the native button — it is focusable, works with Enter/Space and is announced correctly. Icon-only buttons get an <code>aria-label</code>, and I never remove the focus outline without a visible replacement.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi dựa trên thẻ button gốc — focus được, chạy với Enter/Space và trình đọc màn hình đọc đúng. Nút chỉ có biểu tượng thì thêm aria-label, và không xoá viền focus nếu không có thay thế dễ thấy.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

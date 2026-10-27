@@ -1,0 +1,908 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-1-events-forms",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-1-events-forms"
+  },
+  "exercises": [
+    {
+      "title": "Pass a handler, do not call it",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "onClick",
+        "function reference",
+        "render vs event"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events"
+      ],
+      "problemHtml": "<p>The starter writes <code>onClick={showDetails()}</code>: the function runs during <b>render</b> (logging \"details\" on page load) and the button does nothing. Pass the function itself so it runs only when clicked.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Nothing is logged when the page loads.</li>\n  <li>Each click on <code>#btn-details</code> logs <code>details</code> and toggles <code>#details</code> visibility.</li>\n</ul>",
+      "problemHtmlVi": "<p>Starter viết <code>onClick={showDetails()}</code>: hàm chạy ngay lúc <b>render</b> (in \"details\" khi trang vừa tải) và nút không làm gì. Hãy truyền chính hàm để nó chỉ chạy khi bấm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không in gì khi trang vừa tải.</li>\n  <li>Mỗi lần bấm <code>#btn-details</code> in <code>details</code> và bật/tắt <code>#details</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "onClick={showDetails}",
+          "output": "runs on click only",
+          "explanation": "onClick={showDetails()} passes the RESULT of calling it (undefined).|||onClick={showDetails()} truyền KẾT QUẢ của lời gọi (undefined)."
+        }
+      ],
+      "hintsJson": [
+        "onClick={showDetails} — không có ngoặc tròn.",
+        "Cần tham số? onClick={() => showDetails(id)}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [open, setOpen] = useState(false);\n  function showDetails() {\n    console.log('details');\n  }\n  return (\n    <div>\n      <button id=\"btn-details\" onClick={showDetails()}>Details</button>\n      {open && <p id=\"details\">Shipping in 2 days.</p>}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — truyền HÀM (không gọi) cho onClick\nimport { useState } from 'react';\n\nexport default function App() {\n  const [open, setOpen] = useState(false);\n  function showDetails() {\n    console.log('details');\n    setOpen((o) => !o);\n  }\n  return (\n    <div>\n      <button id=\"btn-details\" type=\"button\" onClick={showDetails}>Details</button>\n      {open && <p id=\"details\">Shipping in 2 days.</p>}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>JSX tính mọi thứ trong <code>{ }</code> ngay khi render. <code>{showDetails}</code> là tham chiếu hàm — React giữ lại và gọi khi có sự kiện; <code>{showDetails()}</code> gọi luôn và chỉ đưa cho React kết quả.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Nothing logged on load",
+            "kiem": "console",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Click logs once and shows details",
+            "kiem": "console",
+            "mongDoi": [
+              "details"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-details",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Details visible after one click",
+            "kiem": "ton-tai",
+            "selector": "#details",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-details",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Second click hides details",
+            "kiem": "khong-ton-tai",
+            "selector": "#details",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-details",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>onClick={setOpen(!open)}</code> ⇒ đổi state ngay khi render ⇒ \"Too many re-renders\"."
+        },
+        {
+          "loi": "Viết <code>onclick</code> (chữ thường) ⇒ React không nhận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "function reference",
+          "vi": "tham chiếu tới hàm (chưa gọi)"
+        }
+      ]
+    },
+    {
+      "title": "Controlled textarea with a live counter",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "controlled input",
+        "onChange",
+        "e.target.value",
+        "derived value"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "forms"
+      ],
+      "problemHtml": "<p>A tweet box: 140 characters max. Show how many characters remain; turn the counter red (class <code>over</code>) and disable \"Post\" when the text is empty or too long.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>textarea#tweet</code> controlled; <code>#remaining</code> = 140 − length (can go negative).</li>\n  <li><code>#remaining.over</code> when negative; <code>#btn-post</code> disabled when trimmed text is empty or length &gt; 140.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ô viết tweet: tối đa 140 ký tự. Hiện số ký tự còn lại; bộ đếm đỏ (class <code>over</code>) và nút \"Post\" bị vô hiệu khi chữ rỗng hoặc quá dài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>textarea#tweet</code> controlled; <code>#remaining</code> = 140 − độ dài (có thể âm).</li>\n  <li><code>#remaining.over</code> khi âm; <code>#btn-post</code> vô hiệu khi chữ (đã trim) rỗng hoặc độ dài &gt; 140.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type 150 characters",
+          "output": "-10 (red), Post disabled",
+          "explanation": "Do not cut the text — tell the user.|||Không tự cắt chữ — hãy báo cho người dùng."
+        }
+      ],
+      "hintsJson": [
+        "const [text, setText] = useState(\"\"); const left = 140 - text.length;",
+        "disabled={!text.trim() || left < 0}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return (\n    <div>\n      <textarea id=\"tweet\" />\n      <span id=\"remaining\">140</span>\n      <button id=\"btn-post\">Post</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một state (text); mọi thứ khác suy ra\nimport { useState } from 'react';\n\nconst LIMIT = 140;\n\nexport default function App() {\n  const [text, setText] = useState('');\n  const left = LIMIT - text.length;\n  return (\n    <div>\n      <textarea id=\"tweet\" rows={3} value={text} onChange={(e) => setText(e.target.value)} />\n      <span id=\"remaining\" className={left < 0 ? 'over' : ''}>{left}</span>\n      <button id=\"btn-post\" type=\"button\" disabled={!text.trim() || left < 0}>Post</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chữ là state; số còn lại, màu, trạng thái nút đều suy ra từ chữ khi render. <code>onChange</code> của React chạy mỗi lần gõ (khác <code>change</code> của HTML chỉ chạy khi rời ô).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Post disabled when empty",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-post",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "Counter follows typing",
+            "kiem": "text",
+            "selector": "#remaining",
+            "giaTri": "129",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tweet",
+                "giaTri": "Hello React"
+              }
+            ]
+          },
+          {
+            "moTa": "Too long ⇒ negative, red, disabled",
+            "kiem": "text",
+            "selector": "#remaining.over",
+            "giaTri": "-10",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tweet",
+                "giaTri": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Whitespace only ⇒ still disabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-post",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tweet",
+                "giaTri": "    "
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Valid text enables Post",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-post",
+            "thuocTinh": "disabled",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tweet",
+                "giaTri": "Ready"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>remaining</code> trong state riêng ⇒ lệch khi dán/xoá nhanh."
+        },
+        {
+          "loi": "Dùng <code>maxLength</code> rồi quên báo người dùng vì sao không gõ được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "counter",
+          "vi": "bộ đếm"
+        }
+      ]
+    },
+    {
+      "title": "onSubmit and preventDefault: newsletter sign-up",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "onSubmit",
+        "preventDefault",
+        "validation",
+        "form reset"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "forms"
+      ],
+      "problemHtml": "<p>Handle the form's <code>submit</code> event (not the button's click) so pressing Enter also works. Stop the browser from reloading the page, validate the email, then show a thank-you message and clear the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>form#signup</code> + <code>#email</code>; invalid ⇒ <code>#error</code> \"Please enter a valid email\"; valid ⇒ <code>#thanks</code> \"Thanks! Check {email}\", input cleared.</li>\n  <li>The page must never reload.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bắt sự kiện <code>submit</code> của form (không phải click của nút) để nhấn Enter cũng gửi được. Chặn trình duyệt tải lại trang, kiểm email, rồi hiện lời cảm ơn và xoá ô.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>form#signup</code> + <code>#email</code>; sai ⇒ <code>#error</code> \"Please enter a valid email\"; đúng ⇒ <code>#thanks</code> \"Thanks! Check {email}\", xoá ô.</li>\n  <li>Trang không bao giờ tải lại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "submit \"an@fpt.edu.vn\"",
+          "output": "Thanks! Check an@fpt.edu.vn",
+          "explanation": "e.preventDefault() is the first line of the submit handler.|||e.preventDefault() là dòng đầu của handler submit."
+        }
+      ],
+      "hintsJson": [
+        "<form id=\"signup\" onSubmit={handleSubmit}> và nút type=\"submit\".",
+        "const ok = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim());"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [email, setEmail] = useState('');\n  return (\n    <form id=\"signup\">\n      <input id=\"email\" value={email} onChange={(e) => setEmail(e.target.value)} />\n      <button type=\"submit\">Subscribe</button>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — xử lý ở onSubmit của FORM, chặn tải lại trang trước tiên\nimport { useState } from 'react';\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function App() {\n  const [email, setEmail] = useState('');\n  const [error, setError] = useState('');\n  const [done, setDone] = useState('');\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    const value = email.trim();\n    if (!EMAIL_RE.test(value)) {\n      setError('Please enter a valid email');\n      setDone('');\n      return;\n    }\n    setError('');\n    setDone(value);\n    setEmail('');\n  };\n\n  return (\n    <form id=\"signup\" onSubmit={handleSubmit} noValidate>\n      <input id=\"email\" type=\"email\" value={email} onChange={(e) => setEmail(e.target.value)} placeholder=\"you@example.com\" />\n      <button type=\"submit\">Subscribe</button>\n      {error && <p id=\"error\">{error}</p>}\n      {done && <p id=\"thanks\">Thanks! Check {done}</p>}\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Form HTML mặc định gửi request và tải lại trang. Trong React ta tự xử lý dữ liệu nên luôn gọi <code>e.preventDefault()</code> trong <code>onSubmit</code>. Bắt ở form (không ở nút) để cả Enter lẫn nút đều đi qua một chỗ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Valid email ⇒ thanks message",
+            "kiem": "text",
+            "selector": "#thanks",
+            "giaTri": "Thanks! Check an@fpt.edu.vn",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#signup"
+              }
+            ]
+          },
+          {
+            "moTa": "Invalid email ⇒ error",
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Please enter a valid email",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#signup"
+              }
+            ]
+          },
+          {
+            "moTa": "No page reload",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#signup"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Input cleared after success",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#email",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#signup"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thiếu <code>e.preventDefault()</code> ⇒ trang tải lại, mọi state mất, thông báo chớp rồi biến."
+        },
+        {
+          "loi": "Gắn logic vào <code>onClick</code> của nút ⇒ Enter trong ô không chạy logic."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default behavior",
+          "vi": "hành vi mặc định của trình duyệt"
+        }
+      ]
+    },
+    {
+      "title": "Keyboard events: Enter to add, Escape to clear",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "onKeyDown",
+        "e.key",
+        "shortcuts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "keyboard"
+      ],
+      "problemHtml": "<p>A quick-add box for tags (no form element): <b>Enter</b> adds the trimmed text as a tag, <b>Escape</b> clears the box, and <b>Ctrl+Backspace</b> removes the last tag.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#tag-input</code> with <code>onKeyDown</code>; tags in <code>ul#tags li</code>; duplicates ignored.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ô thêm nhãn nhanh (không có thẻ form): <b>Enter</b> thêm chữ (đã trim) thành nhãn, <b>Escape</b> xoá ô, <b>Ctrl+Backspace</b> xoá nhãn cuối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#tag-input</code> có <code>onKeyDown</code>; nhãn trong <code>ul#tags li</code>; bỏ qua nhãn trùng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"react\" + Enter, \"hooks\" + Enter, Escape",
+          "output": "tags: react, hooks; input empty",
+          "explanation": "e.key is \"Enter\", \"Escape\", \"Backspace\"…; e.ctrlKey tells whether Ctrl is held.|||e.key là \"Enter\", \"Escape\", \"Backspace\"…; e.ctrlKey cho biết có giữ Ctrl không."
+        }
+      ],
+      "hintsJson": [
+        "if (e.key === \"Enter\") { … } else if (e.key === \"Escape\") setText(\"\");",
+        "Ctrl+Backspace: if (e.key === \"Backspace\" && e.ctrlKey) setTags(t => t.slice(0, -1))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [text, setText] = useState('');\n  const [tags, setTags] = useState([]);\n  return (\n    <div>\n      <input id=\"tag-input\" value={text} onChange={(e) => setText(e.target.value)} />\n      <ul id=\"tags\">{tags.map((t) => <li key={t}>{t}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — onKeyDown + e.key: Enter thêm, Escape xoá ô, Ctrl+Backspace bỏ nhãn cuối\nimport { useState } from 'react';\n\nexport default function App() {\n  const [text, setText] = useState('');\n  const [tags, setTags] = useState([]);\n\n  const handleKeyDown = (e) => {\n    if (e.key === 'Enter') {\n      const tag = text.trim();\n      if (tag && !tags.includes(tag)) setTags((t) => [...t, tag]);\n      setText('');\n    } else if (e.key === 'Escape') {\n      setText('');\n    } else if (e.key === 'Backspace' && e.ctrlKey) {\n      setTags((t) => t.slice(0, -1));\n    }\n  };\n\n  return (\n    <div>\n      <input id=\"tag-input\" value={text} onChange={(e) => setText(e.target.value)} onKeyDown={handleKeyDown} placeholder=\"Add a tag and press Enter\" />\n      <ul id=\"tags\">{tags.map((t) => <li key={t}>{t}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>onKeyDown</code> nhận mọi phím (kể cả Escape, mũi tên). So sánh <code>e.key</code> theo tên phím, đọc <code>e.ctrlKey</code>/<code>e.shiftKey</code> cho tổ hợp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Enter adds tags",
+            "kiem": "danh-sach-text",
+            "selector": "#tags li",
+            "mongDoi": [
+              "react",
+              "hooks"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tag-input",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#tag-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#tag-input",
+                "giaTri": " hooks "
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#tag-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "moTa": "Escape clears the input",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#tag-input",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tag-input",
+                "giaTri": "draft"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#tag-input",
+                "phim": "Escape"
+              }
+            ]
+          },
+          {
+            "moTa": "Duplicates ignored",
+            "kiem": "so-luong",
+            "selector": "#tags li",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#tag-input",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#tag-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#tag-input",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#tag-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses e.key, not keyCode",
+            "kiem": "ma-nguon",
+            "khop": "keyCode|which",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>e.keyCode</code> (đã lỗi thời) thay vì <code>e.key</code>."
+        },
+        {
+          "loi": "Bắt <code>onKeyPress</code> — đã bị bỏ, không bắt được Escape."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keyboard shortcut",
+          "vi": "phím tắt"
+        }
+      ]
+    },
+    {
+      "title": "Event delegation with data attributes",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "event bubbling",
+        "e.target vs e.currentTarget",
+        "data-* attributes",
+        "closest()"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "delegation"
+      ],
+      "problemHtml": "<p>A colour palette of 8 swatches. Instead of 8 handlers, put ONE <code>onClick</code> on the container, find the clicked swatch with <code>e.target.closest('[data-color]')</code> and read <code>dataset.color</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#palette</code> with 8 <code>button.swatch[data-color]</code>, each containing a <code>span.dot</code> (clicking the dot must work too).</li>\n  <li><code>#chosen</code> \"Chosen: teal\"; the chosen swatch has class <code>active</code>; clicks on the gap between swatches do nothing.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng 8 ô màu. Thay vì 8 handler, đặt MỘT <code>onClick</code> ở khung chứa, tìm ô được bấm bằng <code>e.target.closest('[data-color]')</code> và đọc <code>dataset.color</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#palette</code> có 8 <code>button.swatch[data-color]</code>, mỗi nút chứa <code>span.dot</code> (bấm vào chấm cũng phải được).</li>\n  <li><code>#chosen</code> \"Chosen: teal\"; ô được chọn có class <code>active</code>; bấm vào khe giữa các ô thì không làm gì.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click the dot inside the \"teal\" swatch",
+          "output": "Chosen: teal",
+          "explanation": "e.target is the span; closest() walks up to the button.|||e.target là span; closest() đi ngược lên tới button."
+        }
+      ],
+      "hintsJson": [
+        "const btn = e.target.closest(\"[data-color]\"); if (!btn) return; setColor(btn.dataset.color);",
+        "e.currentTarget là phần tử GẮN handler (#palette), e.target là phần tử THẬT SỰ được bấm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst COLORS = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink'];\n\nexport default function App() {\n  const [color, setColor] = useState('none');\n  return (\n    <div>\n      <div id=\"palette\" onClick={(e) => setColor(e.target.dataset.color)}>\n        {COLORS.map((c) => <button key={c} className=\"swatch\" data-color={c}><span className=\"dot\" />{c}</button>)}\n      </div>\n      <p id=\"chosen\">Chosen: {color}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — MỘT handler ở khung chứa; closest() tìm nút được bấm (kể cả khi bấm vào phần tử con)\nimport { useState } from 'react';\n\nconst COLORS = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink'];\n\nexport default function App() {\n  const [color, setColor] = useState('none');\n\n  const handleClick = (e) => {\n    const btn = e.target.closest('[data-color]'); // e.target có thể là span.dot\n    if (!btn) return; // bấm vào khe giữa các ô\n    setColor(btn.dataset.color);\n  };\n\n  return (\n    <div>\n      <div id=\"palette\" onClick={handleClick} style={{ display: 'flex', gap: 8, padding: 8 }}>\n        {COLORS.map((c) => (\n          <button key={c} type=\"button\" className={c === color ? 'swatch active' : 'swatch'} data-color={c}>\n            <span className=\"dot\" style={{ display: 'inline-block', width: 10, height: 10, background: c }} /> {c}\n          </button>\n        ))}\n      </div>\n      <p id=\"chosen\">Chosen: {color}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sự kiện click nổi bọt từ phần tử được bấm lên các tổ tiên, nên handler ở <code>#palette</code> nhận mọi click bên trong. <code>closest</code> tìm nút gần nhất có <code>data-color</code>; React vẫn khuyến khích handler riêng cho từng nút trong danh sách nhỏ, nhưng ủy quyền hữu ích với danh sách rất dài.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Clicking a swatch chooses it",
+            "kiem": "text",
+            "selector": "#chosen",
+            "giaTri": "Chosen: blue",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-color=\"blue\"]",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Clicking the inner dot works",
+            "kiem": "text",
+            "selector": "#chosen",
+            "giaTri": "Chosen: teal",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-color=\"teal\"] .dot",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Clicking the gap does nothing",
+            "kiem": "text",
+            "selector": "#chosen",
+            "giaTri": "Chosen: none",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#palette",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Active class on the chosen swatch",
+            "kiem": "so-luong",
+            "selector": ".swatch.active[data-color=\"pink\"]",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-color=\"pink\"] .dot",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Only one onClick handler (on the container)",
+            "kiem": "ma-nguon",
+            "khop": "onClick=[\\s\\S]*onClick=",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc <code>e.target.dataset.color</code> ⇒ undefined khi bấm vào span bên trong."
+        },
+        {
+          "loi": "Không kiểm <code>btn</code> null ⇒ lỗi khi bấm vào khoảng trống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bubbling",
+          "vi": "sự kiện nổi bọt từ phần tử con lên cha"
+        },
+        {
+          "en": "delegation",
+          "vi": "ủy quyền: một handler ở cha xử lý cho nhiều con"
+        }
+      ]
+    },
+    {
+      "title": "Course feedback form: submit enabled only when valid",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "select",
+        "radio group",
+        "checkbox",
+        "derived validity",
+        "reset"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "forms"
+      ],
+      "problemHtml": "<p>A feedback form for a course. The submit button stays disabled until the form is valid — validity is <b>derived</b> from the current values, not stored. After submitting, show the summary and reset the form.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#course</code> select (required, empty default), rating radios <code>#rate-1</code>…<code>#rate-5</code> (required), checkbox <code>#anonymous</code>, <code>#comment</code> textarea (required when rating ≤ 2, at least 10 characters).</li>\n  <li><code>#btn-send</code> disabled while invalid; on submit ⇒ <code>#sent</code> \"FER202 · 5★ · anonymous\" (or \"named\"), form reset.</li>\n</ul>",
+      "problemHtmlVi": "<p>Form góp ý khoá học. Nút gửi bị vô hiệu cho tới khi form hợp lệ — tính hợp lệ là giá trị <b>suy ra</b> từ giá trị hiện tại, không lưu. Gửi xong thì hiện tóm tắt và làm trống form.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#course</code> select (bắt buộc, mặc định rỗng), radio điểm <code>#rate-1</code>…<code>#rate-5</code> (bắt buộc), checkbox <code>#anonymous</code>, textarea <code>#comment</code> (bắt buộc khi điểm ≤ 2, ít nhất 10 ký tự).</li>\n  <li><code>#btn-send</code> vô hiệu khi chưa hợp lệ; gửi ⇒ <code>#sent</code> \"FER202 · 5★ · anonymous\" (hoặc \"named\"), làm trống form.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "FER202, rating 2, comment \"too fast\"",
+          "output": "still disabled (comment < 10 chars)",
+          "explanation": "A low rating needs a reason.|||Điểm thấp cần lý do."
+        }
+      ],
+      "hintsJson": [
+        "const valid = course !== \"\" && rating > 0 && (rating > 2 || comment.trim().length >= 10);",
+        "Radio: checked={rating === n} onChange={() => setRating(n)}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return (\n    <form id=\"feedback\">\n      <select id=\"course\"><option value=\"\">Choose a course</option><option>FER202</option><option>SWT301</option></select>\n      {[1, 2, 3, 4, 5].map((n) => <label key={n}><input type=\"radio\" name=\"rate\" id={`rate-${n}`} /> {n}</label>)}\n      <label><input type=\"checkbox\" id=\"anonymous\" /> Anonymous</label>\n      <textarea id=\"comment\" />\n      <button id=\"btn-send\">Send</button>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — tính hợp lệ SUY RA từ giá trị hiện tại; gửi xong làm trống form\nimport { useState } from 'react';\n\nexport default function App() {\n  const [course, setCourse] = useState('');\n  const [rating, setRating] = useState(0);\n  const [anonymous, setAnonymous] = useState(false);\n  const [comment, setComment] = useState('');\n  const [sent, setSent] = useState('');\n\n  const needsComment = rating > 0 && rating <= 2;\n  const valid = course !== '' && rating > 0 && (!needsComment || comment.trim().length >= 10);\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    if (!valid) return;\n    setSent(`${course} · ${rating}★ · ${anonymous ? 'anonymous' : 'named'}`);\n    setCourse('');\n    setRating(0);\n    setAnonymous(false);\n    setComment('');\n  };\n\n  return (\n    <form id=\"feedback\" onSubmit={handleSubmit}>\n      <select id=\"course\" value={course} onChange={(e) => setCourse(e.target.value)}>\n        <option value=\"\">Choose a course</option>\n        <option value=\"FER202\">FER202</option>\n        <option value=\"SWT301\">SWT301</option>\n      </select>\n      <div>\n        {[1, 2, 3, 4, 5].map((n) => (\n          <label key={n}>\n            <input type=\"radio\" name=\"rate\" id={`rate-${n}`} checked={rating === n} onChange={() => setRating(n)} /> {n}\n          </label>\n        ))}\n      </div>\n      <label><input type=\"checkbox\" id=\"anonymous\" checked={anonymous} onChange={(e) => setAnonymous(e.target.checked)} /> Anonymous</label>\n      <textarea id=\"comment\" value={comment} onChange={(e) => setComment(e.target.value)} placeholder={needsComment ? 'Tell us what went wrong (10+ characters)' : 'Optional comment'} />\n      <button id=\"btn-send\" type=\"submit\" disabled={!valid}>Send</button>\n      {sent && <p id=\"sent\">{sent}</p>}\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tính <code>valid</code> ngay trong render từ các giá trị hiện tại nên luật có điều kiện (comment bắt buộc khi điểm thấp) luôn đúng. Gửi: chặn mặc định, ghi kết quả, đặt mọi state về giá trị ban đầu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Disabled at start",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-send",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "Course + 5★ ⇒ enabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-send",
+            "thuocTinh": "disabled",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#course",
+                "giaTri": "FER202"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#rate-5"
+              }
+            ]
+          },
+          {
+            "moTa": "Low rating needs a 10+ character comment",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-send",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#course",
+                "giaTri": "FER202"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#rate-2"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#comment",
+                "giaTri": "too fast"
+              }
+            ]
+          },
+          {
+            "moTa": "Submit shows the summary and resets",
+            "kiem": "danh-sach-text",
+            "selector": "#course, #sent",
+            "mongDoi": [
+              "Choose a courseFER202SWT301",
+              "FER202 · 5★ · anonymous"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#course",
+                "giaTri": "FER202"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#rate-5"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#anonymous"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#feedback"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Course select is reset to empty",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#course",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#course",
+                "giaTri": "SWT301"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#rate-4"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#feedback"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Low rating with a long reason is accepted",
+            "kiem": "text",
+            "selector": "#sent",
+            "giaTri": "SWT301 · 1★ · named",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#course",
+                "giaTri": "SWT301"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#rate-1"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#comment",
+                "giaTri": "The lab instructions were unclear"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#feedback"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>isValid</code> trong state và cập nhật ở vài onChange ⇒ quên một chỗ là sai."
+        },
+        {
+          "loi": "Nút trong form không ghi <code>type</code> ⇒ là submit — được, nhưng nhớ chặn tải lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "conditional requirement",
+          "vi": "yêu cầu có điều kiện"
+        }
+      ]
+    }
+  ]
+}

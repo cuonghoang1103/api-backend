@@ -1,0 +1,485 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-ex16-event-handling",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-ex16-event-handling"
+  },
+  "exercises": [
+    {
+      "title": "Pass parameters to an event handler",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "arrow wrapper",
+        "handler parameters"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "exercise-16"
+      ],
+      "problemHtml": "<p>One <code>greet(name)</code> function, three buttons. Wrap the call in an arrow function so each button passes its own name — and nothing runs during render.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Buttons <code>.greet</code> for React, Vue, Angular; clicking shows <code>#greeting</code> \"Hello React!\".</li>\n  <li><code>greet</code> also receives the event as a second argument and logs its type (<code>click</code>).</li>\n</ul>",
+      "problemHtmlVi": "<p>Một hàm <code>greet(name)</code>, ba nút. Bọc lời gọi trong arrow function để mỗi nút truyền tên của nó — và không có gì chạy khi render.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nút <code>.greet</code> cho React, Vue, Angular; bấm thì <code>#greeting</code> hiện \"Hello React!\".</li>\n  <li><code>greet</code> còn nhận event làm đối số thứ hai và in kiểu của nó (<code>click</code>).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "onClick={(e) => greet(\"Vue\", e)}",
+          "output": "Hello Vue! · logs \"click\"",
+          "explanation": "The arrow receives the event and forwards it.|||Arrow nhận event và chuyển tiếp."
+        }
+      ],
+      "hintsJson": [
+        "onClick={(e) => greet(fw, e)}",
+        "function greet(name, e) { console.log(e.type); setMsg(`Hello ${name}!`); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [msg, setMsg] = useState('');\n  function greet(name) {\n    setMsg('Hello ' + name + '!');\n  }\n  return (\n    <div>\n      {['React', 'Vue', 'Angular'].map((fw) => <button key={fw} className=\"greet\">{fw}</button>)}\n      <p id=\"greeting\">{msg}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — arrow bọc lời gọi để truyền tham số (và event)\nimport { useState } from 'react';\n\nexport default function App() {\n  const [msg, setMsg] = useState('');\n  function greet(name, e) {\n    console.log(e.type);\n    setMsg(`Hello ${name}!`);\n  }\n  return (\n    <div>\n      {['React', 'Vue', 'Angular'].map((fw) => (\n        <button key={fw} type=\"button\" className=\"greet\" onClick={(e) => greet(fw, e)}>{fw}</button>\n      ))}\n      <p id=\"greeting\">{msg}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Arrow function tạo một hàm mới cho mỗi nút, \"nhớ\" tên của nút đó và chỉ gọi <code>greet</code> khi có click. Event là đối số đầu của handler — muốn dùng thì chuyển tiếp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Vue button greets Vue",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Hello Vue!",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".greet:nth-child(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Event type is logged",
+            "kiem": "console",
+            "mongDoi": [
+              "click"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".greet:nth-child(3)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Nothing happens before a click",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": ""
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>onClick={greet('React')}</code> ⇒ chạy khi render."
+        },
+        {
+          "loi": "Quên chuyển <code>e</code> nên trong greet không có event."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wrapper function",
+          "vi": "hàm bọc"
+        }
+      ]
+    },
+    {
+      "title": "stopPropagation: a delete button inside a clickable card",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "bubbling",
+        "stopPropagation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "exercise-16"
+      ],
+      "problemHtml": "<p>Clicking a card opens it. Each card also has a Delete button — but clicking Delete must NOT open the card. Stop the click from bubbling up.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>.note</code> click ⇒ <code>#opened</code> \"Opened: {title}\"; <code>.btn-del</code> removes the note and leaves <code>#opened</code> unchanged.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bấm thẻ thì mở thẻ. Mỗi thẻ có nút Delete — nhưng bấm Delete KHÔNG được mở thẻ. Hãy chặn click nổi bọt lên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bấm <code>.note</code> ⇒ <code>#opened</code> \"Opened: {tiêu đề}\"; <code>.btn-del</code> xoá ghi chú và giữ nguyên <code>#opened</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click Delete on the first note",
+          "output": "note removed, \"Opened: none\"",
+          "explanation": "e.stopPropagation() in the button handler.|||e.stopPropagation() trong handler của nút."
+        }
+      ],
+      "hintsJson": [
+        "onClick={(e) => { e.stopPropagation(); remove(n.id); }}",
+        "Thẻ cha: onClick={() => setOpened(n.title)}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [notes, setNotes] = useState([{ id: 1, title: 'Lab 6' }, { id: 2, title: 'Quiz 3' }]);\n  const [opened, setOpened] = useState('none');\n  return (\n    <div>\n      {notes.map((n) => (\n        <div key={n.id} className=\"note\" onClick={() => setOpened(n.title)}>\n          {n.title}\n          <button className=\"btn-del\" onClick={() => setNotes(notes.filter((x) => x.id !== n.id))}>Delete</button>\n        </div>\n      ))}\n      <p id=\"opened\">Opened: {opened}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — stopPropagation ở nút con để click không nổi bọt lên thẻ cha\nimport { useState } from 'react';\n\nexport default function App() {\n  const [notes, setNotes] = useState([{ id: 1, title: 'Lab 6' }, { id: 2, title: 'Quiz 3' }]);\n  const [opened, setOpened] = useState('none');\n  const remove = (id) => setNotes((list) => list.filter((x) => x.id !== id));\n  return (\n    <div>\n      {notes.map((n) => (\n        <div key={n.id} className=\"note\" onClick={() => setOpened(n.title)}>\n          <span className=\"note-title\">{n.title}</span>\n          <button\n            type=\"button\"\n            className=\"btn-del\"\n            onClick={(e) => {\n              e.stopPropagation(); // không cho click \"đi lên\" .note\n              remove(n.id);\n            }}\n          >\n            Delete\n          </button>\n        </div>\n      ))}\n      <p id=\"opened\">Opened: {opened}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Click trên nút nổi bọt lên thẻ cha nên cả hai handler chạy. <code>e.stopPropagation()</code> ở nút cắt chuỗi đó. (<code>preventDefault</code> chỉ chặn hành vi mặc định như gửi form/đi theo link.)</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Clicking a card opens it",
+            "kiem": "text",
+            "selector": "#opened",
+            "giaTri": "Opened: Quiz 3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".note:nth-child(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Delete does not open the card",
+            "kiem": "text",
+            "selector": "#opened",
+            "giaTri": "Opened: none",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".note:first-child .btn-del",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Delete removes the note",
+            "kiem": "so-luong",
+            "selector": ".note",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".note:first-child .btn-del",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>preventDefault</code> thay vì <code>stopPropagation</code> — hai việc khác nhau."
+        },
+        {
+          "loi": "Kiểm <code>e.target.tagName</code> trong handler của thẻ — rối và dễ sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "propagation",
+          "vi": "sự lan truyền sự kiện lên các phần tử cha"
+        }
+      ]
+    },
+    {
+      "title": "preventDefault on a link",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "preventDefault",
+        "default actions",
+        "anchor"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "exercise-16"
+      ],
+      "problemHtml": "<p>A \"Cancel\" link (<code>&lt;a href=\"/home\"&gt;</code>) inside an editor must not navigate when there are unsaved changes: it asks to discard them instead. Without changes it may follow the link (here: shows \"Leaving…\").</p>\n<h4>Requirements</h4>\n<ul>\n  <li>With unsaved text: clicking <code>#cancel</code> calls <code>e.preventDefault()</code> and shows <code>#warn</code> \"You have unsaved changes\".</li>\n  <li>Without changes: <code>#status</code> \"Leaving…\" (no warning).</li>\n</ul>",
+      "problemHtmlVi": "<p>Link \"Cancel\" (<code>&lt;a href=\"/home\"&gt;</code>) trong trình soạn thảo không được chuyển trang khi còn thay đổi chưa lưu: nó hỏi có bỏ thay đổi không. Không có thay đổi thì được đi (ở đây: hiện \"Leaving…\").</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Có chữ chưa lưu: bấm <code>#cancel</code> gọi <code>e.preventDefault()</code> và hiện <code>#warn</code> \"You have unsaved changes\".</li>\n  <li>Không có thay đổi: <code>#status</code> \"Leaving…\" (không cảnh báo).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"draft\", click Cancel",
+          "output": "You have unsaved changes",
+          "explanation": "The default action of a link is navigation.|||Hành vi mặc định của link là chuyển trang."
+        }
+      ],
+      "hintsJson": [
+        "onClick={(e) => { if (text) { e.preventDefault(); setWarn(true); } else setStatus(\"Leaving…\"); }}",
+        "preventDefault chặn hành vi mặc định; không chặn nổi bọt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [text, setText] = useState('');\n  return (\n    <div>\n      <textarea id=\"editor\" value={text} onChange={(e) => setText(e.target.value)} />\n      <a id=\"cancel\" href=\"/home\" onClick={() => { if (text) return false; }}>Cancel</a>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — preventDefault TƯỜNG MINH (return false không có tác dụng trong React)\nimport { useState } from 'react';\n\nexport default function App() {\n  const [text, setText] = useState('');\n  const [warn, setWarn] = useState(false);\n  const [status, setStatus] = useState('');\n\n  const handleCancel = (e) => {\n    if (text.trim()) {\n      e.preventDefault();\n      setWarn(true);\n      return;\n    }\n    setStatus('Leaving…');\n  };\n\n  return (\n    <div>\n      <textarea id=\"editor\" value={text} onChange={(e) => { setText(e.target.value); setWarn(false); }} />\n      <a id=\"cancel\" href=\"/home\" onClick={handleCancel}>Cancel</a>\n      {warn && <p id=\"warn\">You have unsaved changes</p>}\n      {status && <p id=\"status\">{status}</p>}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trong React phải gọi <code>e.preventDefault()</code> tường minh — trả về <code>false</code> không có tác dụng như HTML/jQuery.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Unsaved changes ⇒ warning",
+            "kiem": "text",
+            "selector": "#warn",
+            "giaTri": "You have unsaved changes",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#editor",
+                "giaTri": "draft"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cancel",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "No changes ⇒ leaving",
+            "kiem": "danh-sach-text",
+            "selector": "#warn, #status",
+            "mongDoi": [
+              "Leaving…"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#cancel",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "preventDefault is called explicitly",
+            "kiem": "ma-nguon",
+            "khop": "\\.preventDefault\\(\\)"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>return false</code> như jQuery ⇒ React KHÔNG coi đó là preventDefault."
+        },
+        {
+          "loi": "Đổi link thành nút chỉ để né vấn đề — mất ngữ nghĩa điều hướng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unsaved changes",
+          "vi": "thay đổi chưa lưu"
+        }
+      ]
+    },
+    {
+      "title": "Inbox actions with one delegated handler",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "delegation",
+        "data-action",
+        "data-id",
+        "switch on action"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "events",
+        "exercise-16"
+      ],
+      "problemHtml": "<p>An inbox list where each row has three actions (star, archive, delete). Put ONE <code>onClick</code> on the <code>ul</code>; each button carries <code>data-action</code> and the row carries <code>data-id</code>. Dispatch on the action name.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ul#inbox</code> → <code>li.mail[data-id]</code> with buttons <code>[data-action=\"star\"]</code>, <code>[data-action=\"archive\"]</code>, <code>[data-action=\"delete\"]</code>.</li>\n  <li>star toggles class <code>starred</code>; archive moves it to <code>ul#archive</code>; delete removes it. <code>#counts</code> \"Inbox 3 · Archive 0\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Hộp thư mỗi dòng có ba hành động (gắn sao, lưu trữ, xoá). Đặt MỘT <code>onClick</code> trên <code>ul</code>; mỗi nút mang <code>data-action</code>, mỗi dòng mang <code>data-id</code>. Xử lý theo tên hành động.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ul#inbox</code> → <code>li.mail[data-id]</code> với nút <code>[data-action=\"star\"]</code>, <code>[data-action=\"archive\"]</code>, <code>[data-action=\"delete\"]</code>.</li>\n  <li>star bật/tắt class <code>starred</code>; archive chuyển sang <code>ul#archive</code>; delete xoá. <code>#counts</code> \"Inbox 3 · Archive 0\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "archive mail 2",
+          "output": "Inbox 2 · Archive 1",
+          "explanation": "const id = Number(row.dataset.id); switch (btn.dataset.action) …|||const id = Number(row.dataset.id); switch (btn.dataset.action) …"
+        }
+      ],
+      "hintsJson": [
+        "const btn = e.target.closest(\"[data-action]\"); const row = e.target.closest(\"[data-id]\"); if (!btn || !row) return;",
+        "Mỗi mail { id, subject, starred, archived } — hai danh sách là giá trị suy ra (filter theo archived)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [mails, setMails] = useState([\n    { id: 1, subject: 'Exam schedule', starred: false, archived: false },\n    { id: 2, subject: 'Lab 6 feedback', starred: false, archived: false },\n    { id: 3, subject: 'Club meeting', starred: false, archived: false },\n  ]);\n  // TODO: một onClick trên #inbox, data-action / data-id\n  return <ul id=\"inbox\">{mails.map((m) => <li key={m.id} className=\"mail\">{m.subject}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — MỘT handler trên ul: đọc data-id (dòng nào) + data-action (làm gì)\nimport { useState } from 'react';\n\nexport default function App() {\n  const [mails, setMails] = useState([\n    { id: 1, subject: 'Exam schedule', starred: false, archived: false },\n    { id: 2, subject: 'Lab 6 feedback', starred: false, archived: false },\n    { id: 3, subject: 'Club meeting', starred: false, archived: false },\n  ]);\n\n  const handleClick = (e) => {\n    const btn = e.target.closest('[data-action]');\n    const row = e.target.closest('[data-id]');\n    if (!btn || !row) return;\n    const id = Number(row.dataset.id); // dataset luôn là CHUỖI\n    switch (btn.dataset.action) {\n      case 'star':\n        setMails((ms) => ms.map((m) => (m.id === id ? { ...m, starred: !m.starred } : m)));\n        break;\n      case 'archive':\n        setMails((ms) => ms.map((m) => (m.id === id ? { ...m, archived: true } : m)));\n        break;\n      case 'delete':\n        setMails((ms) => ms.filter((m) => m.id !== id));\n        break;\n      default:\n    }\n  };\n\n  const row = (m) => (\n    <li key={m.id} data-id={m.id} className={m.starred ? 'mail starred' : 'mail'}>\n      <span className=\"subject\">{m.subject}</span>\n      <button type=\"button\" data-action=\"star\">★</button>\n      {!m.archived && <button type=\"button\" data-action=\"archive\">Archive</button>}\n      <button type=\"button\" data-action=\"delete\">Delete</button>\n    </li>\n  );\n  const inbox = mails.filter((m) => !m.archived);\n  const archive = mails.filter((m) => m.archived);\n\n  return (\n    <div onClick={handleClick}>\n      <ul id=\"inbox\">{inbox.map(row)}</ul>\n      <ul id=\"archive\">{archive.map(row)}</ul>\n      <p id=\"counts\">Inbox {inbox.length} · Archive {archive.length}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một handler đọc hai thứ từ DOM: dòng nào (<code>data-id</code>) và làm gì (<code>data-action</code>), rồi cập nhật MỘT mảng mail. Hai danh sách Inbox/Archive là bộ lọc của cùng mảng — không thể lệch nhau. Mẫu \"action + id\" này chính là ý tưởng của reducer ở chương 8.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Initial counts",
+            "kiem": "text",
+            "selector": "#counts",
+            "giaTri": "Inbox 3 · Archive 0"
+          },
+          {
+            "moTa": "Archive moves a mail",
+            "kiem": "danh-sach-text",
+            "selector": "#archive .subject, #counts",
+            "mongDoi": [
+              "Lab 6 feedback",
+              "Inbox 2 · Archive 1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-id=\"2\"] [data-action=\"archive\"]",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Star toggles the class",
+            "kiem": "so-luong",
+            "selector": ".mail.starred",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-id=\"3\"] [data-action=\"star\"]",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Delete removes",
+            "kiem": "danh-sach-text",
+            "selector": "#inbox .subject",
+            "mongDoi": [
+              "Exam schedule",
+              "Club meeting"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-id=\"2\"] [data-action=\"delete\"]",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Star twice ⇒ not starred",
+            "kiem": "so-luong",
+            "selector": ".mail.starred",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "[data-id=\"1\"] [data-action=\"star\"]",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "[data-id=\"1\"] [data-action=\"star\"]",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>dataset.id</code> là CHUỖI — so với id số bằng <code>===</code> sẽ sai, phải Number()."
+        },
+        {
+          "loi": "Giữ hai mảng state inbox/archive riêng ⇒ chuyển qua lại dễ nhân bản/mất thư."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dispatch",
+          "vi": "phân luồng xử lý theo loại hành động"
+        }
+      ]
+    }
+  ]
+}

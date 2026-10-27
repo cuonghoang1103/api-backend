@@ -33,6 +33,7 @@ export type ProjectAction =
   | 'attachment.add'
   | 'sprint.manage'         // tạo/bắt đầu/kết thúc sprint, xếp backlog
   | 'ai.use'                // gọi trợ lý AI trong dự án (hạn mức kiểm riêng)
+  | 'ai.review'             // 27/10/2026: nhờ CuongMini review code (PR/nhánh) thay trưởng nhóm/mentor/giảng viên — xem canAiCodeReview
   // ── Lớp studio (đợt S1, 04/10/2026) ──
   | 'studio.configure'      // đổi loại dự án, bật/tắt mô-đun, người duyệt cổng
   | 'stage.manage'          // tạo/sửa giai đoạn, kích hoạt, ghi đè thứ tự (có lý do)
@@ -78,6 +79,8 @@ const PROJECT_MATRIX: Record<ProjectAction, readonly ProjectRole[]> = {
   'attachment.add': ['ADMIN', 'MEMBER', 'CLIENT'],
   'sprint.manage': ['ADMIN'],
   'ai.use': ['ADMIN', 'MEMBER'],
+  // Trưởng dự án (leadId) / trưởng bộ phận vai MEMBER cũng được — luật theo NGƯỜI ở canAiCodeReview, không nới cả MEMBER.
+  'ai.review': ['ADMIN', 'TEACHER'],
   'studio.configure': ['ADMIN'],
   'stage.manage': ['ADMIN'],
   'stage.requestGate': ['ADMIN', 'MEMBER'],
@@ -235,6 +238,31 @@ export function canCancelHandoff(role: ProjectRole | null, userId: number, creat
 export function canAssignTeamIssue(role: ProjectRole | null, isTeamLead: boolean): boolean {
   if (can(role, 'issue.edit')) return true;
   return isTeamLead && (role === 'VIEWER' || role === 'MEMBER' || role === 'ADMIN');
+}
+
+/**
+ * 27/10/2026 — ai được nhờ CuongMini REVIEW CODE (đọc PR/nhánh, lưu phiên review, đăng nhận xét cho thành viên):
+ * ADMIN dự án, giảng viên (TEACHER), trưởng dự án (WorkProject.leadId) và trưởng bộ phận (LEAD của bộ phận chứa thẻ /
+ * người làm) khi họ là MEMBER. MEMBER thường thì không — review là việc của người dẫn dắt, và mỗi lượt tốn tiền LLM.
+ * AI agent: không bao giờ. VIEWER / CLIENT: không. AI chỉ GỢI Ý kết luận — không duyệt, không merge, không đổi quyết định.
+ */
+export function canAiCodeReview(
+  role: ProjectRole | null, who: { isProjectLead?: boolean; isTeamLead?: boolean } = {}, principal: Principal = 'HUMAN',
+): boolean {
+  if (principal === 'AGENT' || role === null) return false;
+  if (can(role, 'ai.review', {}, principal)) return true;
+  return role === 'MEMBER' && (who.isProjectLead === true || who.isTeamLead === true);
+}
+
+/**
+ * 27/10/2026 — "Hỏi CuongMini" (hội thoại Ask) cho giảng viên: TEACHER hỏi được ở dự án mình hướng dẫn nhưng CHỈ ĐỌC —
+ * trợ lý không mời đề xuất ghi nào ngoài bình luận (quyền comment.create) + review code (canAiCodeReview); mọi Apply vẫn
+ * chạy dưới quyền người bấm nên không vượt được bảng quyền. `ai.use` GIỮ NGUYÊN (nó mở cả việc AI khác: sơ đồ, gợi ý
+ * SRS, biên bản họp… — chưa rà hết đường ghi của chúng cho TEACHER).
+ */
+export function canAskAssistant(role: ProjectRole | null, principal: Principal = 'HUMAN'): boolean {
+  if (can(role, 'ai.use', {}, principal)) return true;
+  return principal === 'HUMAN' && role === 'TEACHER';
 }
 
 // ─── Tài liệu dự án (đợt S2a): luật theo NGƯỜI + chế độ hiển thị ──
@@ -407,6 +435,15 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
 }
 
 /** Như loadProjectAccess nhưng ném lỗi: 404 khi không thấy, 403 khi thấy mà không được làm. */
+/** 27/10/2026: chốt "Hỏi CuongMini" (hội thoại Ask) — như `requireProject(…, 'ai.use')` nhưng mở cho giảng viên (canAskAssistant). */
+export async function requireAskAssistant(userId: number, projectId: number): Promise<ProjectAccess> {
+  const access = await loadProjectAccess(userId, projectId);
+  if (!access) throw new NotFoundError('Project not found');
+  if (access.principal === 'AGENT') throw await agentForbidden(userId, AGENT_ACTION_VERBS['ai.use'] ?? 'use the AI assistant');
+  if (!canAskAssistant(access.role, access.principal)) throw new ForbiddenError('You do not have permission to do this in this project');
+  return access;
+}
+
 export async function requireProject(userId: number, projectId: number, action: ProjectAction): Promise<ProjectAccess> {
   const access = await loadProjectAccess(userId, projectId);
   if (!access) throw new NotFoundError('Project not found');
@@ -625,6 +662,7 @@ export const AGENT_DENIED_ACTIONS: ReadonlySet<ProjectAction> = new Set<ProjectA
   'handoff.manage',
   'page.manage',
   'ai.use',                       // GĐ1: agent bên ngoài không tiêu lượt trợ lý AI của web
+  'ai.review',                    // 27/10/2026: review code thay người (tốn tiền LLM + đăng nhận xét) — chỉ NGƯỜI bấm
 ]);
 
 const AGENT_ACTION_VERBS: Partial<Record<ProjectAction, string>> = {
@@ -632,7 +670,7 @@ const AGENT_ACTION_VERBS: Partial<Record<ProjectAction, string>> = {
   'issue.delete': 'delete issues', 'comment.moderate': 'moderate comments', 'sprint.manage': 'manage sprints',
   'studio.configure': 'configure the project', 'stage.manage': 'manage stages', 'stage.requestGate': 'request stage gates',
   'approval.decide': 'decide approvals', 'approval.manage': 'manage approvals', 'handoff.manage': 'manage handoffs',
-  'page.manage': 'manage pages', 'ai.use': 'use the CT Work AI assistant',
+  'page.manage': 'manage pages', 'ai.use': 'use the CT Work AI assistant', 'ai.review': 'request AI code reviews',
 };
 const WORKSPACE_ACTION_VERBS: Record<WorkspaceAction, string> = {
   'workspace.view': 'view the workspace', 'workspace.settings': 'change workspace settings', 'workspace.members': 'manage workspace members',
@@ -738,6 +776,10 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/contrib(\/.*)?$/],
   // CTW Code (18/10/2026): agent ĐỌC được hoạt động Git (dev_activity) nhưng KHÔNG xem mã nguồn qua proxy (code.service chặn lần nữa).
   ['*', /^\/code\/source(\/.*)?$/],
+  // 27/10/2026: CuongMini review code (tốn tiền LLM của web + đăng nhận xét thay người) — chỉ NGƯỜI (service chặn lần nữa).
+  ['*', /^\/code\/review(\/.*)?$/],
+  // 27/10/2026: "CuongMini hỏi nhanh" — gợi ý chuyển thẻ của CHÍNH người dùng (Có/Chưa) là của NGƯỜI.
+  ['*', /^\/nudges(\/.*)?$/],
   // CTW đợt 5: điểm rubric của sinh viên — agent không đọc, không chấm (teaching.service gradeGate cũng chặn).
   ['*', /^\/grades(\/.*)?$/],
   // CTW K-2: agent không ghi âm, không điểm danh/RSVP, không đổi cấu hình họp, không duyệt biên bản. Đọc transcript +

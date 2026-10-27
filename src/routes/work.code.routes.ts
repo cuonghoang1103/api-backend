@@ -11,6 +11,9 @@
  *   GET  /projects/:pid/code/issues/:num                      panel Development (commit nhóm theo PR/nhánh)
  *   GET  /projects/:pid/code/source/meta|refs|tree|blob|commits?provider&ref&path
  *   GET  /projects/:pid/code/source/commit/:sha
+ *   GET  /projects/:pid/code/source/pull/:n | pull/:n/files | compare?base&head   (27/10/2026)
+ *   POST /projects/:pid/code/review                         { pr | issue, notify? } — CuongMini review (codeReview.service)
+ *   GET  /me/nudges · GET /projects/:pid/nudges · POST /projects/:pid/nudges/:num/apply|snooze — CuongMini hỏi nhanh
  *   PUT  /projects/:pid/(github|gitlab)/read-token            { token|null } — ADMIN; token không bao giờ trả về
  *   PUT  /projects/:pid/(github|gitlab)/activity              { chatChannelId?, notify? } — ADMIN
  *   POST /projects/:pid/(github|gitlab)/test                  gửi thử — ADMIN
@@ -99,6 +102,49 @@ router.get('/projects/:pid/code/source/commits', asyncHandler(async (req, res) =
 }));
 router.get('/projects/:pid/code/source/commit/:sha', asyncHandler(async (req, res) => {
   ok(res, await code.sourceCommit(callerId(req), P(req, 'pid'), String(req.params.sha), parse(srcQ, req.query).provider));
+}));
+
+// 27/10/2026: PR/MR + so sánh nhánh (CuongMini đọc code để review). Cùng chốt `codeGate({source})`; agent bị chặn ở
+// AGENT_DENIED_ROUTES (`/code/source/**`) + service.
+router.get('/projects/:pid/code/source/pull/:n', asyncHandler(async (req, res) => {
+  ok(res, await code.sourcePull(callerId(req), P(req, 'pid'), P(req, 'n'), parse(srcQ, req.query).provider));
+}));
+router.get('/projects/:pid/code/source/pull/:n/files', asyncHandler(async (req, res) => {
+  ok(res, await code.sourcePullFiles(callerId(req), P(req, 'pid'), P(req, 'n'), parse(srcQ, req.query).provider));
+}));
+router.get('/projects/:pid/code/source/compare', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ provider, base: z.string().max(200).optional(), head: z.string().min(1).max(200) }), req.query);
+  ok(res, await code.sourceCompare(callerId(req), P(req, 'pid'), q));
+}));
+
+// 27/10/2026: CuongMini review code (PR số `pr`, hoặc thẻ `issue` ⇒ PR/nhánh của thẻ). Quyền + trần ở codeReview.service;
+// kết quả là phiên review (GET /reviews/:num như cũ) + bình luận nội bộ vào thẻ. Agent bị chặn ở AGENT_DENIED_ROUTES + service.
+router.post('/projects/:pid/code/review', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
+  const { runCodeReview } = await import('../services/work/codeReview.service.js');
+  ok(res, await runCodeReview(callerId(req), P(req, 'pid'), body), 201);
+}));
+
+// ─── CuongMini "hỏi nhanh": gợi ý chuyển trạng thái thẻ của CHÍNH mình (27/10/2026, goiYChuyenThe.service) ──
+// Nằm ở file này cho gọn đợt; agent bị chặn ở AGENT_DENIED_ROUTES (`/nudges`) + `/me/nudges` ngoài danh sách trắng + service.
+router.get('/me/nudges', asyncHandler(async (req, res) => {
+  const { limit } = parse(z.object({ limit: z.coerce.number().int().min(1).max(20).optional() }), req.query);
+  const { goiYCuaToi } = await import('../services/work/goiYChuyenThe.service.js');
+  ok(res, await goiYCuaToi(callerId(req), { limit }));
+}));
+router.get('/projects/:pid/nudges', asyncHandler(async (req, res) => {
+  const { limit } = parse(z.object({ limit: z.coerce.number().int().min(1).max(20).optional() }), req.query);
+  const { goiYChuyenThe } = await import('../services/work/goiYChuyenThe.service.js');
+  ok(res, await goiYChuyenThe(callerId(req), P(req, 'pid'), { limit }));
+}));
+router.post('/projects/:pid/nudges/:num/apply', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ note: z.string().max(2000).nullable().optional(), attachmentIds: z.array(id).max(10).optional() }), req.body ?? {});
+  const { applyGoiY } = await import('../services/work/goiYChuyenThe.service.js');
+  ok(res, await applyGoiY(callerId(req), P(req, 'pid'), P(req, 'num'), body));
+}));
+router.post('/projects/:pid/nudges/:num/snooze', asyncHandler(async (req, res) => {
+  const { snoozeGoiY } = await import('../services/work/goiYChuyenThe.service.js');
+  ok(res, await snoozeGoiY(callerId(req), P(req, 'pid'), P(req, 'num')));
 }));
 
 // ─── Cài đặt (ADMIN) — nằm dưới /github|/gitlab nên agent bị chặn sẵn (AGENT_DENIED_ROUTES) ──

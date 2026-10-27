@@ -769,6 +769,10 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
   Không có lệnh cho: quyết định duyệt / APPROVED (cả quyết định CR + `decision` review), tài chính, gửi khách/ra ngoài, cấu hình dự án, làm quiz/chấm điểm/điểm danh. Token người thấy 277 lệnh (731 tuyến ghi: 369 có lệnh, 362 chỉ người, 0 thiếu) — mục lục máy chủ trần 300 (`parseMucLucMcp`), app trần 300, `registry.test` chặn > 280: lệnh mới phải gộp vào `action` của lệnh sẵn có (`*_extras`, `ctwork_read`, `ctwork_delete`). Bảng đối
   chiếu đầy đủ + việc còn thiếu: `docs/cuongmini-ctwork-parity.md`. Thêm lệnh xoá mới ⇒ thêm tuyến DELETE vào
   `AGENT_DENIED_ROUTES` (bảng `permissions.test.ts`) — `registry.test.ts` bắt lệnh tên `*delete*` thiếu destructive/personOnly.
+- **CuongMini đọc + review code (27/10/2026)** — `code_read` (một lệnh, action activity/tree/file/commits/commit/compare/pr/pr_files,
+  chỉ token người) + `POST /projects/:pid/code/review` (hành động `ai.review`: ADMIN/TEACHER + trưởng dự án/bộ phận; agent cấm;
+  lưu phiên review CODE + bình luận isAi; KHÔNG duyệt/merge/quyết định). Giảng viên hỏi CuongMini chỉ đọc (`canAskAssistant`,
+  `ai.use` không đổi). Chi tiết + trần lượt/ngày: `docs/ctw-code-review.md`.
 - Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.agents.db.test.ts src/routes/work.agentsUi.db.test.ts` +
   `npx tsx --test src/services/work/permissions.test.ts src/services/work/jql.test.ts`.
 

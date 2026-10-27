@@ -187,4 +187,15 @@ export const code = {
   // Cài đặt cá nhân
   myGitNotify: 'Git activity notifications',
   myGitNotifyHelp: 'Pushes, pull requests and review requests on issues you are assigned (or projects you lead).',
+  // 27/10/2026: CuongMini review code
+  aiReview: 'CuongMini review',
+  aiReviewHint: 'CuongMini reads the real diff, checks it against the issue’s acceptance criteria and the Definition of Done, saves a code review and comments on the issue. You decide — it never approves or merges.',
+  aiReviewing: 'CuongMini is reading the code…',
+  aiReviewNotify: 'Also notify the member',
+  aiReviewDone: '{key} · {n} findings',
+  aiReviewOpen: 'Open review',
+  aiReviewFailed: 'CuongMini could not review this',
+  verdictAPPROVE: 'Looks ready to approve',
+  verdictCHANGES: 'Changes needed',
+  verdictCOMMENT: 'Comments only',
 };

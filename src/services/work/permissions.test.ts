@@ -43,6 +43,8 @@ describe('bảng quyền dự án', () => {
     'attachment.add':   [true,  true,  false, false, true ],
     'sprint.manage':    [true,  false, false, false, false],
     'ai.use':           [true,  true,  false, false, false],
+    // 27/10/2026: review code bằng CuongMini — ADMIN + giảng viên; trưởng dự án/bộ phận vai MEMBER qua canAiCodeReview
+    'ai.review':        [true,  false, false, true,  false],
     // Lớp studio (đợt S1)
     'studio.configure':  [true,  false, false, false, false],
     'stage.manage':      [true,  false, false, false, false],
@@ -187,6 +189,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/meetings/3/report'], ['POST', '/issues/12/comments/4/report'], ['POST', '/chat/dm'], ['POST', '/chat/channels/2/messages/9/report'],
     // CTW Code (18/10/2026): agent không xem mã nguồn qua proxy; cài token chỉ đọc / kênh / gửi thử nằm dưới /github|/gitlab.
     ['GET', '/code/source/tree'], ['GET', '/code/source/blob'], ['GET', '/code/source/commit/abc1234'], ['GET', '/code/source'],
+    // 27/10/2026: PR/so sánh nhánh (cùng proxy mã nguồn) + CuongMini review code (tiền LLM + đăng nhận xét thay người)
+    ['GET', '/code/source/pull/3'], ['GET', '/code/source/pull/3/files'], ['GET', '/code/source/compare'], ['POST', '/code/review'],
     ['PUT', '/github/read-token'], ['PUT', '/gitlab/activity'], ['POST', '/github/test'],
     // 19/10/2026: token Figma chỉ đọc của dự án
     ['GET', '/figma'], ['PUT', '/figma/token'],
@@ -347,5 +351,32 @@ describe('22/10/2026 — token ctw_ của NGƯỜI (AI / script): xoá không ba
     assert.equal(P.tokenDeleteAllowed('POST', '/projects/5/issues/bulk', { numbers: [1], patch: { priority: 2 } }), true);
     assert.equal(P.tokenDeleteAllowed('POST', '/projects/5/fpt-tests/import'), true, 'import replace ⇒ service xếp hàng');
     assert.equal(P.tokenDeleteAllowed('PUT', '/projects/5/fpt-tests/unit/4/matrix'), true, 'lưu làm mất UTCID ⇒ service trả 409');
+  });
+});
+
+describe('27/10/2026 — CuongMini review code + Hỏi CuongMini cho giảng viên', async () => {
+  const P = await import('./permissions.js');
+  it('review: ADMIN / TEACHER được; MEMBER chỉ khi là trưởng dự án hoặc trưởng bộ phận; VIEWER/CLIENT/agent không', () => {
+    assert.equal(P.canAiCodeReview('ADMIN'), true);
+    assert.equal(P.canAiCodeReview('TEACHER'), true);
+    assert.equal(P.canAiCodeReview('MEMBER'), false);
+    assert.equal(P.canAiCodeReview('MEMBER', { isProjectLead: true }), true);
+    assert.equal(P.canAiCodeReview('MEMBER', { isTeamLead: true }), true);
+    assert.equal(P.canAiCodeReview('VIEWER', { isProjectLead: true, isTeamLead: true }), false);
+    assert.equal(P.canAiCodeReview('CLIENT', { isProjectLead: true }), false);
+    assert.equal(P.canAiCodeReview(null, { isProjectLead: true }), false);
+    for (const r of ['ADMIN', 'MEMBER', 'TEACHER'] as const) assert.equal(P.canAiCodeReview(r, { isProjectLead: true, isTeamLead: true }, 'AGENT'), false, r);
+    assert.ok(P.AGENT_DENIED_ACTIONS.has('ai.review'));
+    assert.equal(P.agentRouteAllowed('POST', '/code/review'), false);
+    assert.equal(P.agentRouteAllowed('GET', '/code/source/pull/3/files'), false);
+  });
+  it('Hỏi CuongMini: TEACHER hỏi được (chỉ đọc), ai.use không đổi; VIEWER/CLIENT/agent không', () => {
+    assert.equal(P.canAskAssistant('ADMIN'), true);
+    assert.equal(P.canAskAssistant('MEMBER'), true);
+    assert.equal(P.canAskAssistant('TEACHER'), true);
+    assert.equal(P.canAskAssistant('VIEWER'), false);
+    assert.equal(P.canAskAssistant('CLIENT'), false);
+    assert.equal(P.canAskAssistant('TEACHER', 'AGENT'), false);
+    assert.equal(P.can('TEACHER', 'ai.use'), false);
   });
 });

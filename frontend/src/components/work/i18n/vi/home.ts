@@ -123,4 +123,15 @@ export const home: Strings<typeof En> = {
   typeTesting: 'Kiểm thử',
   setupCuongMini: 'Dựng cùng CuongMini',
   setupCuongMiniHint: 'Đưa CuongMini đề bài, thành viên và hạn chót — nó lập kế hoạch một dự án hoặc cả không gian nhiều nhóm',
+  // 27/10/2026: CuongMini hỏi nhanh — gợi ý chuyển trạng thái thẻ
+  nudgeTitle: 'CuongMini hỏi nhanh',
+  nudgeMove: 'Chuyển sang {to}?',
+  nudgeDoneQ: 'Bạn làm xong chưa? Chuyển sang {to}?',
+  nudgeYes: 'Có, chuyển',
+  nudgeNotYet: 'Chưa',
+  nudgeAddProof: 'Thêm ghi chú / ảnh',
+  nudgeNotePh: 'Bạn đã làm gì? (không bắt buộc)',
+  nudgeMoved: 'Đã chuyển {key} sang {to}',
+  nudgeFailed: 'Chưa chuyển được',
+  nudgeAttach: 'Đính ảnh',
 };

@@ -288,10 +288,10 @@ const swrExtras = defineTool({
 
 const issueExtras = defineTool({
   name: 'issue_extras', title: 'Issue extras (notes, reactions, move, handoffs)', group: 'issues',
-  description: 'action: note_link / note_unlink (noteId of YOUR personal note) | comment_react (comment id, emoji, active) | move_project (target project key in the same workspace) | handoff (to user or team id, checklist, note) | handoff_accept (handoff id, checklist ticks) | handoff_return (handoff id, reason) | handoff_cancel (handoff id) | web_link_save (link id ⇒ project Resources, groupId, tags) | approval_cancel (YOUR approval request id, reason).',
+  description: 'action: note_link / note_unlink (noteId of YOUR personal note) | comment_react (comment id, emoji, active) | move_project (target project key in the same workspace) | handoff (to user or team id, checklist, note) | handoff_accept (handoff id, checklist ticks) | handoff_return (handoff id, reason) | handoff_cancel (handoff id) | web_link_save (link id ⇒ project Resources, groupId, tags) | approval_cancel (YOUR approval request id, reason) | status_suggestions (CuongMini: YOUR issues that look done — merged PR, commits on main, checklist/subtasks done, idle basic tasks — with target status + evidence) | status_suggestion_apply (issue, note: move it + evidence comment) | status_suggestion_snooze (issue: "not yet", 3 days).',
   write: true,
   input: z.object({
-    project: projectArg, action: z.enum(['note_link', 'note_unlink', 'comment_react', 'move_project', 'handoff', 'handoff_accept', 'handoff_return', 'handoff_cancel', 'web_link_save', 'approval_cancel']),
+    project: projectArg, action: z.enum(['note_link', 'note_unlink', 'comment_react', 'move_project', 'handoff', 'handoff_accept', 'handoff_return', 'handoff_cancel', 'web_link_save', 'approval_cancel', 'status_suggestions', 'status_suggestion_apply', 'status_suggestion_snooze']),
     issue: issueArg.optional(), noteId: z.number().int().positive().optional(), comment: z.number().int().positive().optional(), emoji: z.string().max(16).optional(), active: z.boolean().optional(),
     targetProject: z.string().max(80).optional(), toUser: z.string().max(254).optional(), toTeamId: z.number().int().positive().optional(),
     checklist: z.array(z.string().min(1).max(300)).max(30).optional(), ticks: z.array(z.boolean()).max(30).optional(), note: z.string().max(5000).optional(),
@@ -304,6 +304,14 @@ const issueExtras = defineTool({
     const n = () => issueNumber(p0.key, need(a.issue, 'issue'));
     const P = (m: string, p: string) => projectFor(ctx, a.project, [[m, p]]);
     switch (a.action) {
+      case 'status_suggestions': case 'status_suggestion_apply': case 'status_suggestion_snooze': {
+        await requirePerson(ctx, 'use status suggestions');
+        const m = await import('../goiYChuyenThe.service.js');
+        if (a.action === 'status_suggestions') { const p = await P('GET', '/nudges'); return m.goiYChuyenThe(ctx.userId, p.id, { limit: 20, record: false }); }
+        const num = n();
+        const p = await P('POST', `/nudges/${num}/${a.action === 'status_suggestion_apply' ? 'apply' : 'snooze'}`);
+        return a.action === 'status_suggestion_apply' ? m.applyGoiY(ctx.userId, p.id, num, { note: a.note ?? null }) : m.snoozeGoiY(ctx.userId, p.id, num);
+      }
       case 'note_link': case 'note_unlink': {
         const num = n(); const nid = need(a.noteId, 'noteId');
         const p = await P(a.action === 'note_link' ? 'POST' : 'DELETE', `/issues/${num}/notes${a.action === 'note_link' ? '' : `/${nid}`}`);

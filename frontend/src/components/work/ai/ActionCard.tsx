@@ -48,6 +48,8 @@ export function blockedReason(action: AiAction, config: ProjectConfig): string |
       return p.editDocs ? null : wt('ai.noPermDocs');
     // Đợt 3C: lệnh dùng chung — tài liệu cần quyền Docs, còn lại quyền sửa thẻ; server kiểm lại đúng quyền của lệnh.
     case 'command':
+      // 27/10/2026: CuongMini review code — quyền riêng (ADMIN / trưởng dự án / trưởng bộ phận / giảng viên).
+      if (action.command === 'code_review') return p.aiCodeReview ? null : wt('ai.noPermChange');
       return action.command.startsWith('docs_') ? (p.editDocs ? null : wt('ai.noPermDocs'))
         : p.editIssues ? null : wt('ai.noPermChange');
     default:
@@ -211,6 +213,7 @@ const COMMAND_LABEL: Record<string, string> = {
   get weekly_report_generate() { return wt('ai.cWeekly'); },
   get transition() { return wt('ai.cTransition'); },
   get log_work() { return wt('ai.cLogWork'); },
+  get code_review() { return wt('code.aiReview'); },
 };
 const commandLabel = (c: string) => COMMAND_LABEL[c] ?? c.replace(/_/g, ' ');
 

@@ -26,6 +26,7 @@ import {
   EmptyState, IssueTypeIcon, isTyping, UserAvatar, PageLoading,
 } from '@/components/work/ui';
 import { wt } from '@/components/work/i18n';
+import CuongMiniHoiNhanh from '@/components/work/CuongMiniHoiNhanh';
 
 function daysLeft(end: string | null) {
   if (!end) return null;
@@ -212,6 +213,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
       {/* Danh sách "Getting started" — tự ẩn khi xong hoặc bị tắt. */}
       <GettingStartedCard config={config} slug={slug} onCreateIssue={config.permissions.createIssues ? () => setCreateOpen(true) : undefined} className="mx-4 mt-3 shrink-0" />
 
+      {config.permissions.transition && <CuongMiniHoiNhanh pid={config.id} slug={config.workspace.slug} projectKey={config.key} className="w-card mx-4 mb-2 shrink-0 overflow-hidden" />}
       <div className="min-h-0 flex-1">
         {board.isLoading ? (
           <PageLoading />

@@ -481,6 +481,177 @@ export async function sourceCommit(userId: number, projectId: number, shaRaw: st
   return { ...c, authorEmail: undefined, author: who(ctx, { login: c.authorLogin, name: c.authorName, email: c.authorEmail }), issues };
 }
 
+/** 27/10/2026: một PR/MR — tiêu đề, MÔ TẢ, nhánh head/base + sha, tác giả (khớp thành viên), +/−, thẻ nhắc tới. */
+export async function sourcePull(userId: number, projectId: number, nRaw: unknown, provider?: Provider) {
+  await codeGate(userId, projectId, { source: true });
+  const t = await target(projectId, provider);
+  const ctx = await loadCtx(projectId);
+  const p = await src.pull(t, src.cleanPrNumber(nRaw));
+  const issues = await issueRefs(projectId, ctx.key, keyNums(`${p.title}\n${p.headRef}\n${p.body ?? ''}`, ctx.key));
+  return { provider: t.provider, repo: t.repo, ...p, author: p.authorLogin ? who(ctx, { login: p.authorLogin }) : null, issues };
+}
+
+/** Tệp đổi của một PR/MR kèm patch (trần như commit). */
+export async function sourcePullFiles(userId: number, projectId: number, nRaw: unknown, provider?: Provider) {
+  await codeGate(userId, projectId, { source: true });
+  const t = await target(projectId, provider);
+  const n = src.cleanPrNumber(nRaw);
+  return { number: n, ...(await src.pullFiles(t, n)) };
+}
+
+/** So sánh base...head (base trống ⇒ nhánh mặc định) — commit + tệp + patch. Email tác giả không trả ra. */
+export async function sourceCompare(userId: number, projectId: number, q: { base?: string; head?: string; provider?: Provider }) {
+  await codeGate(userId, projectId, { source: true });
+  const t = await target(projectId, q.provider);
+  const head = src.cleanRef(q.head);
+  if (!head) throw new BadRequestError('Pick the branch or commit to compare (head)', 'VALIDATION_ERROR');
+  const base = await refOrDefault(t, src.cleanRef(q.base));
+  const ctx = await loadCtx(projectId);
+  const c = await src.compare(t, base, head);
+  return { ...c, commits: c.commits.map((x) => ({ ...x, author: who(ctx, { login: x.authorLogin, name: x.authorName, email: x.authorEmail }), authorEmail: undefined })) };
+}
+
+/** Thành viên ứng với một danh tính git (login / tên / email; bảng ánh xạ tay + khớp tự động) — null nếu không khớp. */
+export async function memberForGit(projectId: number, a: { login?: string | null; name?: string | null; email?: string | null }): Promise<number | null> {
+  return (await loadCtx(projectId)).resolve(a);
+}
+
+/** Repo đã nối (nhánh mặc định) — cho review / code_read khi cần biết base. */
+export async function sourceDefaultBranch(userId: number, projectId: number, provider?: Provider): Promise<string> {
+  await codeGate(userId, projectId, { source: true });
+  return (await src.repoMeta(await target(projectId, provider))).defaultBranch;
+}
+
+// ─── Hoạt động Git THEO NGƯỜI (27/10/2026 — "Khoa đã push gì, tuần này ai commit bao nhiêu") ──
+
+export interface MemberActivityQuery { member?: string | null; since?: string | null; until?: string | null; branch?: string | null; provider?: Provider }
+
+/**
+ * Hoạt động Git theo NGƯỜI trong một khoảng thời gian (mặc định 7 ngày): commit (đã khử trùng theo sha — một commit đẩy
+ * lên nhiều nhánh chỉ đếm một lần), lần push, nhánh, PR mở/merge, commit gần nhất. Lọc một người (`member` = username /
+ * tên / login git) ⇒ thêm "tệp đổi nhiều nhất" từ diff THẬT của ≤ 5 commit mới nhất (proxy có đệm; hết hạn mức thì bỏ qua).
+ * Quyền như xem mã nguồn: thành viên đội (không CLIENT, không agent).
+ */
+export async function memberActivity(userId: number, projectId: number, q: MemberActivityQuery) {
+  await codeGate(userId, projectId, { source: true });
+  const { parseWhen } = await import('./codeText.js');
+  const now = new Date();
+  const since = parseWhen(q.since, now, 'start') ?? new Date(now.getTime() - 7 * 86_400_000);
+  const until = parseWhen(q.until, now, 'end') ?? now;
+  if (since > until) throw new BadRequestError('"since" is after "until"', 'VALIDATION_ERROR');
+  const ctx = await loadCtx(projectId);
+  const branch = q.branch?.trim() || null;
+
+  // Người được hỏi: thành viên (username / tên hiển thị) hoặc danh tính git thô.
+  let want: { userId: number | null; label: string } | null = null;
+  if (q.member?.trim()) {
+    const m = q.member.trim().replace(/^@/, '').toLowerCase();
+    const partial = ctx.members.filter((x) => [x.displayName, x.fullName, x.username].some((n) => n && n.toLowerCase().includes(m)));
+    const hit = ctx.members.find((x) => x.username.toLowerCase() === m)
+      ?? ctx.members.find((x) => [x.displayName, x.fullName].some((n) => n && n.toLowerCase() === m))
+      ?? (partial.length === 1 ? partial[0] : undefined);
+    if (!hit && partial.length > 1) {
+      throw new BadRequestError(`"${q.member}" matches several members: ${partial.slice(0, 8).map((x) => `@${x.username}`).join(', ')} — use the username`, 'WORK_AMBIGUOUS_MEMBER');
+    }
+    const viaGit = hit ? null : ctx.resolve({ login: m, name: m, email: m.includes('@') ? m : null });
+    want = hit ? { userId: hit.id, label: displayName(hit) } : viaGit ? { userId: viaGit, label: displayName(ctx.users.get(viaGit)!) } : { userId: null, label: m };
+  }
+  const matches = (w: Who) => !want || (want.userId ? w.user?.id === want.userId : w.label.toLowerCase() === want.label || (w.user ? false : w.label.toLowerCase().includes(want.label)));
+
+  const [events, prRows, legacy] = await Promise.all([
+    prisma.workGitEvent.findMany({
+      where: { projectId, kind: 'PUSH', occurredAt: { gte: since, lte: until }, ...(branch ? { ref: branch } : {}) },
+      orderBy: { occurredAt: 'desc' }, take: 1000,
+      select: { ref: true, actorLogin: true, actorName: true, actorEmail: true, commits: true, occurredAt: true, data: true },
+    }),
+    prisma.workGitPull.findMany({
+      where: { projectId, OR: [{ openedAt: { gte: since, lte: until } }, { mergedAt: { gte: since, lte: until } }, { closedAt: { gte: since, lte: until } }], ...(branch ? { headRef: branch } : {}) },
+      orderBy: { openedAt: 'desc' }, take: 300,
+      select: { number: true, title: true, state: true, authorLogin: true, headRef: true, baseRef: true, openedAt: true, mergedAt: true, issueNumbers: true },
+    }),
+    branch ? Promise.resolve([]) : prisma.workDevContribution.findMany({
+      where: { projectId, kind: 'COMMIT', occurredAt: { gte: since, lte: until } }, orderBy: { occurredAt: 'desc' }, take: 500,
+      select: { externalId: true, title: true, authorLogin: true, authorName: true, authorEmail: true, occurredAt: true, filesChanged: true, issueNumbers: true },
+    }),
+  ]);
+
+  type Row = { who: Who; commits: Map<string, { sha: string; message: string; at: string; branch: string | null; files: number | null; issues: number[] }>; pushes: number; branches: Set<string>; prs: Array<{ number: number; title: string; state: string; branch: string | null; issues: number[] }> };
+  const rows = new Map<string, Row>();
+  const rowOf = (w: Who): Row => {
+    const k = whoKey(w);
+    let r = rows.get(k);
+    if (!r) { r = { who: w, commits: new Map(), pushes: 0, branches: new Set(), prs: [] }; rows.set(k, r); }
+    return r;
+  };
+  for (const e of events) {
+    const pusher = who(ctx, { login: e.actorLogin, name: e.actorName, email: e.actorEmail });
+    if (matches(pusher)) { const r = rowOf(pusher); r.pushes += 1; if (e.ref) r.branches.add(e.ref); }
+    for (const c of (Array.isArray(e.commits) ? e.commits : []) as any[]) {
+      const sha = String(c?.sha ?? '');
+      if (!sha) continue;
+      const at = c.at ? new Date(String(c.at)) : e.occurredAt;
+      if (Number.isNaN(at.getTime()) || at < since || at > until) continue;
+      const a = who(ctx, { login: c.authorLogin, name: c.authorName, email: c.authorEmail });
+      if (!matches(a)) continue;
+      const r = rowOf(a);
+      if (e.ref) r.branches.add(e.ref);
+      if (!r.commits.has(sha)) r.commits.set(sha, { sha, message: String(c.message ?? '').split('\n')[0].slice(0, 200), at: at.toISOString(), branch: e.ref, files: typeof c.files === 'number' ? c.files : null, issues: Array.isArray(c.issueNumbers) ? c.issueNumbers : [] });
+    }
+  }
+  const knownSha = new Set([...rows.values()].flatMap((r) => [...r.commits.keys()]));
+  for (const l of legacy) {
+    if (knownSha.has(l.externalId)) continue;
+    const a = who(ctx, { login: l.authorLogin, name: l.authorName, email: l.authorEmail });
+    if (!matches(a)) continue;
+    rowOf(a).commits.set(l.externalId, { sha: l.externalId, message: (l.title ?? '').slice(0, 200), at: l.occurredAt.toISOString(), branch: null, files: l.filesChanged, issues: l.issueNumbers });
+  }
+  for (const p of prRows) {
+    const a = p.authorLogin ? who(ctx, { login: p.authorLogin }) : { user: null, label: 'unknown' };
+    if (!matches(a)) continue;
+    rowOf(a).prs.push({ number: p.number, title: p.title, state: p.state, branch: p.headRef, issues: p.issueNumbers });
+  }
+
+  const people = [...rows.values()].map((r) => {
+    const list = [...r.commits.values()].sort((a, b) => b.at.localeCompare(a.at));
+    return {
+      member: r.who.user ? { username: r.who.user.username, name: displayName(r.who.user) } : null, gitName: r.who.user ? null : r.who.label,
+      commits: list.length, pushes: r.pushes, branches: [...r.branches].slice(0, 20),
+      prs: r.prs.slice(0, 20), issues: [...new Set([...list.flatMap((c) => c.issues), ...r.prs.flatMap((p) => p.issues)])].slice(0, 30).map((n) => `${ctx.key}-${n}`),
+      latest: list.slice(0, 10).map((c) => ({ sha: c.sha.slice(0, 12), at: c.at, branch: c.branch, message: c.message, files: c.files })),
+      topFiles: [] as Array<{ file: string; commits: number; changes: number }>,
+      _shas: list.slice(0, 5).map((c) => c.sha),
+    };
+  }).sort((a, b) => b.commits - a.commits || b.pushes - a.pushes || b.prs.length - a.prs.length);
+
+  // Một người ⇒ tệp đổi nhiều nhất từ diff thật của ≤ 5 commit mới nhất (sha ⇒ đệm 1 giờ). Lỗi (hết hạn mức, repo
+  // private chưa có token, commit đã bị force-push mất) ⇒ bỏ qua, ghi chú.
+  let filesNote: string | null = null;
+  if (want && people.length === 1 && people[0]._shas.length) {
+    try {
+      const t = await target(projectId, q.provider);
+      const agg = new Map<string, { commits: number; changes: number }>();
+      for (const sha of people[0]._shas) {
+        const c = await src.commit(t, sha).catch(() => null);
+        if (!c) continue;
+        for (const f of c.files) {
+          const x = agg.get(f.filename) ?? { commits: 0, changes: 0 };
+          x.commits += 1;
+          x.changes += f.additions + f.deletions;
+          agg.set(f.filename, x);
+        }
+      }
+      people[0].topFiles = [...agg.entries()].map(([file, v]) => ({ file, ...v })).sort((a, b) => b.commits - a.commits || b.changes - a.changes).slice(0, 10);
+    } catch (err) {
+      filesNote = `changed files not available: ${(err as Error).message.slice(0, 160)}`;
+    }
+  }
+  return {
+    since: since.toISOString(), until: until.toISOString(), branch, member: want ? (want.userId ? want.label : `${want.label} (git name, not matched to a member)`) : null,
+    people: people.map(({ _shas, ...p }) => p), filesNote,
+    totals: { commits: people.reduce((s, p) => s + p.commits, 0), pushes: people.reduce((s, p) => s + p.pushes, 0), prs: people.reduce((s, p) => s + p.prs.length, 0) },
+  };
+}
+
 function keyNums(text: string, key: string): number[] {
   const re = new RegExp(`(?<![A-Za-z0-9])${key}-(\\d{1,7})(?![0-9])`, 'gi');
   return [...new Set([...text.matchAll(re)].map((m) => Number(m[1])))];

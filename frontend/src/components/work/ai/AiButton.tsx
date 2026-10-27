@@ -8,7 +8,8 @@ import { openAiPanel } from './store';
 import { wt } from '@/components/work/i18n';
 
 export default function AiButton({ config, issueNumber }: { config: ProjectConfig; issueNumber?: number }) {
-  if (!config.permissions.useAi) return null;
+  // 27/10/2026: giảng viên hỏi CuongMini được (chỉ đọc) — askAi; server cũ chưa gửi askAi ⇒ theo useAi.
+  if (!(config.permissions.askAi ?? config.permissions.useAi)) return null;
   return (
     <button
       type="button"

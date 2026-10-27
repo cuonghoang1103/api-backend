@@ -21,7 +21,7 @@ import { noiDungChoLichSu } from './aiTep.js'; // 22/10/2026: dấu tệp đính
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import { requireProject, type ProjectAccess } from './permissions.js';
+import { can, requireAskAssistant, requireProject, type ProjectAccess } from './permissions.js';
 
 export type ThreadVisibility = 'PROJECT' | 'PRIVATE';
 export type StoredActionStatus = 'pending' | 'applying' | 'done' | 'error' | 'dismissed';
@@ -116,7 +116,9 @@ export async function clearFailed(messageId: number) {
 
 /** Tạo hội thoại trống TRƯỚC câu hỏi đầu tiên — để câu đầu mà hỏng thì client vẫn biết hội thoại nào có nút "Retry". */
 export async function createThread(userId: number, projectId: number, input: { title: string; issueNumber?: number | null; visibility?: ThreadVisibility; mode?: 'CHAT' | 'DEFENSE' }) {
-  await requireProject(userId, projectId, 'ai.use');
+  // 27/10/2026: giảng viên hỏi CuongMini được (chỉ đọc) — luyện bảo vệ vẫn chỉ cho người có ai.use.
+  const askAccess = await requireAskAssistant(userId, projectId);
+  if (input.mode === 'DEFENSE' && !can(askAccess.role, 'ai.use', askAccess.options, askAccess.principal)) throw new ForbiddenError('Defense practice is for the project team');
   const t = await prisma.workAiThread.create({
     data: {
       projectId, createdById: userId, title: clip(input.title.replace(/\s+/g, ' ').trim() || 'New conversation', 160),

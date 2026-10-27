@@ -16,7 +16,7 @@ import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules
 import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
-  can, deskAccess, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
+  can, canAskAssistant, deskAccess, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
   type ProjectOptions, principalOf } from './permissions.js';
 import { financeAccess } from './financeRules.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
@@ -206,7 +206,11 @@ export async function getProjectConfig(userId: number, projectId: number) {
     modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access), ...(await s4Flags(access, userId)), ...deskFlags(access) },
+    permissions: {
+      ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access), ...(await s4Flags(access, userId)), ...deskFlags(access),
+      // 27/10/2026: nút "CuongMini review" (ADMIN / trưởng dự án / trưởng bộ phận / giảng viên) — server kiểm lại theo thẻ/PR.
+      aiCodeReview: await import('./codeReview.service.js').then((m) => m.canRequestCodeReview(userId, access)).catch(() => false),
+    },
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
@@ -225,6 +229,8 @@ export function permissionFlags(role: ProjectRole, opts: ProjectOptions = {}) {
     settings: can(role, 'project.settings'),
     manageMembers: can(role, 'project.members'),
     useAi: can(role, 'ai.use'),
+    // 27/10/2026: "Hỏi CuongMini" — thêm giảng viên (chỉ đọc); các nút AI khác vẫn theo useAi.
+    askAi: canAskAssistant(role),
     // Lớp studio — chỉ là quyền theo VAI; mô-đun tắt thì route vẫn 403 MODULE_DISABLED.
     configureStudio: can(role, 'studio.configure'),
     manageStages: can(role, 'stage.manage'),

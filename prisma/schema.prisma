@@ -14029,6 +14029,25 @@ model WorkReviewItem {
   @@map("work_review_items")
 }
 
+/// 27/10/2026 — CuongMini "hỏi nhanh" chuyển trạng thái thẻ (goiYChuyenThe.service): lần hiện gần nhất + "Chưa" (hoãn) theo
+/// NGƯỜI + THẺ. Không FK (thẻ xoá mềm; dòng mồ côi vô hại). answer: NOT_YET | APPLIED.
+model WorkStatusNudge {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  issueId      Int       @map("issue_id")
+  userId       Int       @map("user_id")
+  lastShownAt  DateTime? @map("last_shown_at")
+  snoozedUntil DateTime? @map("snoozed_until")
+  answer       String?   @db.VarChar(12)
+  answeredAt   DateTime? @map("answered_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@unique([issueId, userId], map: "uk_work_status_nudge")
+  @@index([projectId, userId], map: "idx_work_status_nudge_user")
+  @@map("work_status_nudges")
+}
+
 /// Baseline bộ yêu cầu/tài liệu (Wiegers Ch27 · bài 7.1): ảnh chụp REQ/UC/BR/Docs + hash. status DRAFT → PENDING →
 /// APPROVED (đóng băng, `locked`) | REJECTED; APPROVED cũ ⇒ SUPERSEDED khi baseline mới được duyệt.
 model WorkBaseline {

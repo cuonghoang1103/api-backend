@@ -19,6 +19,7 @@ import ProjectHeader from '@/components/work/ProjectHeader';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import { EmptyState, isTyping, UserAvatar, PageLoading } from '@/components/work/ui';
 import { wt } from '@/components/work/i18n';
+import CuongMiniHoiNhanh from '@/components/work/CuongMiniHoiNhanh';
 
 const EPIC_PANEL_KEY = 'work.backlog.epics';
 
@@ -191,6 +192,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
           </aside>
         )}
         <div className="min-w-0 flex-1 overflow-y-auto">
+          {config.permissions.transition && <CuongMiniHoiNhanh pid={config.id} slug={config.workspace.slug} projectKey={config.key} className="w-card mb-3 overflow-hidden" />}
           {/* UX-A: "Getting started" chỉ còn ở Board (không lặp ở đây). */}
           {backlog.isLoading ? (
             <PageLoading />

@@ -113,6 +113,10 @@ export interface ProjectPermissions {
   settings: boolean;
   manageMembers: boolean;
   useAi: boolean;
+  /** 27/10/2026: "Hỏi CuongMini" — gồm cả giảng viên (chỉ đọc). Server cũ không gửi ⇒ dùng useAi. */
+  askAi?: boolean;
+  /** 27/10/2026: nút "CuongMini review" (ADMIN / trưởng dự án / trưởng bộ phận / giảng viên). */
+  aiCodeReview?: boolean;
   // Lớp studio (S1) — quyền theo VAI; mô-đun tắt thì API vẫn trả 403 MODULE_DISABLED.
   configureStudio?: boolean;
   manageStages?: boolean;
@@ -861,7 +865,7 @@ export const workApi = {
       d<{ locked: boolean }>(api.get(`${B}/projects/${pid}/edit-lock`)).catch(() => ({ locked: false })),
     ]);
     if (!lock.locked) return { ...cfg, editLocked: false, rolePermissions: cfg.permissions };
-    const off = Object.fromEntries(Object.keys(cfg.permissions).map((k) => [k, k === 'comment' || k === 'useAi' || k === 'viewProject' ? (cfg.permissions as unknown as Record<string, boolean>)[k] : false]));
+    const off = Object.fromEntries(Object.keys(cfg.permissions).map((k) => [k, k === 'comment' || k === 'useAi' || k === 'askAi' || k === 'viewProject' ? (cfg.permissions as unknown as Record<string, boolean>)[k] : false]));
     return { ...cfg, editLocked: true, rolePermissions: cfg.permissions, permissions: off as unknown as ProjectPermissions };
   },
   updateProject: (pid: number, body: { name?: string; description?: string | null; visibility?: 'WORKSPACE' | 'PRIVATE'; leadId?: number | null; settings?: Record<string, unknown> }) =>

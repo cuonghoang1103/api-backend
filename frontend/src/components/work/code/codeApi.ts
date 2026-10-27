@@ -65,6 +65,12 @@ export interface SourceCommit { sha: string; message: string; authorLogin: strin
 export interface DiffFile { filename: string; previous: string | null; status: string; additions: number; deletions: number; patch: string | null; truncated: boolean }
 export interface CommitDetail extends SourceCommit { parents: string[]; stats: { additions: number; deletions: number; files: number }; files: DiffFile[]; truncated: boolean; issues: Record<number, IssueRef> }
 
+/** 27/10/2026: kết quả "CuongMini review" — phiên review CODE vừa lưu + bình luận vào thẻ. */
+export interface AiReviewResult {
+  review: number; key: string; url: string; verdict: 'APPROVE' | 'CHANGES' | 'COMMENT'; findings: number; blockers: number;
+  issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string;
+}
+
 export interface ConnStats { hasReadToken?: boolean; events24h?: number; lastEvent?: { kind: string; title: string | null; ref: string | null; actorLogin: string | null; actorName: string | null; prNumber: number | null; commitCount: number; createdAt: string } | null }
 export interface TestSendResult { bellSent: boolean; chat: { posted: boolean; channel: string | null }; notifyEnabled: boolean; recipientsOnPush: Array<{ id: number; name: string }>; note: string }
 
@@ -85,6 +91,7 @@ export const codeApi = {
   blob: (pid: number, q: { ref?: string; path?: string; provider?: GitProvider }) => d<BlobView>(api.get(`${P(pid)}/code/source/blob${qs(q)}`)),
   commits: (pid: number, q: { ref?: string; path?: string; provider?: GitProvider }) => d<{ ref: string; items: SourceCommit[] }>(api.get(`${P(pid)}/code/source/commits${qs(q)}`)),
   commit: (pid: number, sha: string, provider?: GitProvider) => d<CommitDetail>(api.get(`${P(pid)}/code/source/commit/${encodeURIComponent(sha)}${qs({ provider })}`)),
+  aiReview: (pid: number, body: { pr?: number; issue?: number; notify?: boolean }) => d<AiReviewResult>(api.post(`${P(pid)}/code/review`, body, { timeout: 240_000 })),
   // Cài đặt (ADMIN) — token gửi đi một chiều, không bao giờ đọc lại được.
   setReadToken: (pid: number, provider: GitProvider, token: string | null) =>
     d<{ hasReadToken: boolean; verified: boolean | null }>(api.put(`${P(pid)}/${host(provider)}/read-token`, { token })),

@@ -685,7 +685,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
         {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
         <TimeTrackingBlock pid={pid} issue={issue} config={config} />
-        <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
+        <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} canAiReview={!!config.permissions.aiCodeReview} />
       </PropGroup>
       <div className="mt-3 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
         <div>{wt('detail.createdLine', { d: formatDate(issue.createdAt), r: relativeTime(issue.createdAt) })}</div>

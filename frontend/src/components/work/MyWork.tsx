@@ -8,6 +8,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import CuongMiniHoiNhanh from './CuongMiniHoiNhanh';
 import { toast } from 'sonner';
 import { AlertTriangle, Bell, CalendarClock, CheckCircle2, CircleDot, Inbox } from 'lucide-react';
 import { workApi, workError, type EmailMode, type MyWorkItem, type NotifySettings } from '@/lib/work-api';
@@ -194,6 +195,8 @@ export default function MyWork() {
       <WaitingOnMe />
       {/* CTW-28: owner của agent — thẻ agent chờ duyệt, lease hết hạn, phê duyệt agent gửi. Rỗng thì không hiện. */}
       <AgentsNeedYou />
+      {/* 27/10/2026: CuongMini hỏi nhanh — thẻ của tôi trông như đã xong ⇒ Có/Chưa. Rỗng thì không hiện. */}
+      <CuongMiniHoiNhanh />
 
       {!items.length ? (
         <div className="w-card flex flex-col items-center px-6 py-14 text-center">

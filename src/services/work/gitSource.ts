@@ -376,6 +376,154 @@ export async function commit(t: RepoTarget, sha: string): Promise<CommitDetail> 
   };
 }
 
+// ─── Pull request + so sánh nhánh (27/10/2026 — CuongMini đọc code để review) ─────────────
+
+/** Map một file trong diff của GitHub (commit / PR files / compare dùng chung hình dạng). */
+function ghFile(f: any): DiffFile {
+  return {
+    filename: String(f.filename), previous: f.previous_filename ? String(f.previous_filename) : null, status: String(f.status ?? 'modified'),
+    additions: Number(f.additions) || 0, deletions: Number(f.deletions) || 0, patch: typeof f.patch === 'string' ? f.patch : null,
+    truncated: typeof f.patch !== 'string' && (Number(f.changes) || 0) > 0,
+  };
+}
+/** Map một mục diff của GitLab (commit diff / MR diffs / compare). Không có số +/− ⇒ đếm từ patch. */
+function glDiff(d: any): DiffFile {
+  const patch = typeof d.diff === 'string' && d.diff ? d.diff : null;
+  const lines: string[] = patch ? patch.split('\n') : [];
+  return {
+    filename: String(d.new_path ?? d.old_path), previous: d.renamed_file ? String(d.old_path) : null,
+    status: d.new_file ? 'added' : d.deleted_file ? 'removed' : d.renamed_file ? 'renamed' : 'modified',
+    additions: lines.filter((l) => l.startsWith('+') && !l.startsWith('+++')).length, deletions: lines.filter((l) => l.startsWith('-') && !l.startsWith('---')).length,
+    patch, truncated: !patch && (d.too_large === true || d.collapsed === true),
+  };
+}
+function ghCommitSummary(t: RepoTarget, c: any): CommitSummary {
+  return {
+    sha: String(c.sha), message: String(c.commit?.message ?? '').slice(0, 2000), authorLogin: c.author?.login ? String(c.author.login) : null,
+    authorName: c.commit?.author?.name ? String(c.commit.author.name) : null, authorEmail: c.commit?.author?.email ? String(c.commit.author.email) : null,
+    at: c.commit?.author?.date ? String(c.commit.author.date) : null, url: String(c.html_url ?? `${t.webBase}/${t.repo}/commit/${c.sha}`),
+  };
+}
+function glCommitSummary(t: RepoTarget, c: any): CommitSummary {
+  return {
+    sha: String(c.id), message: String(c.message ?? c.title ?? '').slice(0, 2000), authorLogin: null, authorName: c.author_name ? String(c.author_name) : null,
+    authorEmail: c.author_email ? String(c.author_email) : null, at: c.authored_date ? String(c.authored_date) : null, url: String(c.web_url ?? `${t.webBase}/${t.repo}/-/commit/${c.id}`),
+  };
+}
+
+export function cleanPrNumber(raw: unknown): number {
+  const n = typeof raw === 'number' ? raw : Number(String(raw ?? '').trim().replace(/^[#!]/, ''));
+  if (!Number.isInteger(n) || n <= 0 || n > 10_000_000) throw new BadRequestError('Invalid pull request number', 'VALIDATION_ERROR');
+  return n;
+}
+
+export type PullState = 'open' | 'draft' | 'merged' | 'closed';
+export interface PullDetail {
+  number: number; title: string; body: string | null; state: PullState; draft: boolean; mergeable: boolean | null;
+  headRef: string; headSha: string | null; baseRef: string; baseSha: string | null; authorLogin: string | null;
+  additions: number | null; deletions: number | null; changedFiles: number | null; commits: number | null;
+  createdAt: string | null; mergedAt: string | null; url: string;
+}
+const MAX_PR_BODY = 20_000;
+
+/** Chi tiết MỘT PR (GitHub) / MR (GitLab). Đệm 60 s (PR còn đổi). */
+export async function pull(t: RepoTarget, n: number): Promise<PullDetail> {
+  if (t.provider === 'GITHUB') {
+    const p = await getJson<any>(t, `/repos/${t.repo}/pulls/${n}`, 60_000);
+    const merged = !!p.merged || !!p.merged_at;
+    return {
+      number: Number(p.number) || n, title: String(p.title ?? '').slice(0, 300), body: p.body ? String(p.body).slice(0, MAX_PR_BODY) : null,
+      state: merged ? 'merged' : p.state === 'closed' ? 'closed' : p.draft ? 'draft' : 'open', draft: !!p.draft,
+      mergeable: typeof p.mergeable === 'boolean' ? p.mergeable : null,
+      headRef: String(p.head?.ref ?? ''), headSha: p.head?.sha ? String(p.head.sha) : null, baseRef: String(p.base?.ref ?? ''), baseSha: p.base?.sha ? String(p.base.sha) : null,
+      authorLogin: p.user?.login ? String(p.user.login) : null,
+      additions: Number.isFinite(Number(p.additions)) ? Number(p.additions) : null, deletions: Number.isFinite(Number(p.deletions)) ? Number(p.deletions) : null,
+      changedFiles: Number.isFinite(Number(p.changed_files)) ? Number(p.changed_files) : null, commits: Number.isFinite(Number(p.commits)) ? Number(p.commits) : null,
+      createdAt: p.created_at ? String(p.created_at) : null, mergedAt: p.merged_at ? String(p.merged_at) : null, url: String(p.html_url ?? `${t.webBase}/${t.repo}/pull/${n}`),
+    };
+  }
+  const m = await getJson<any>(t, `/projects/${encodeURIComponent(t.repo)}/merge_requests/${n}`, 60_000);
+  const st = String(m.state ?? 'opened');
+  const draft = !!(m.draft ?? m.work_in_progress);
+  const ms = String(m.detailed_merge_status ?? m.merge_status ?? '');
+  const changes = Number(String(m.changes_count ?? '').replace(/\D/g, ''));
+  return {
+    number: Number(m.iid) || n, title: String(m.title ?? '').slice(0, 300), body: m.description ? String(m.description).slice(0, MAX_PR_BODY) : null,
+    state: st === 'merged' ? 'merged' : st === 'closed' || st === 'locked' ? 'closed' : draft ? 'draft' : 'open', draft,
+    mergeable: /^(can_be_merged|mergeable)$/.test(ms) ? true : /cannot|conflict|broken/.test(ms) ? false : null,
+    headRef: String(m.source_branch ?? ''), headSha: m.sha ? String(m.sha) : m.diff_refs?.head_sha ? String(m.diff_refs.head_sha) : null,
+    baseRef: String(m.target_branch ?? ''), baseSha: m.diff_refs?.base_sha ? String(m.diff_refs.base_sha) : null,
+    authorLogin: m.author?.username ? String(m.author.username) : null, additions: null, deletions: null,
+    changedFiles: Number.isFinite(changes) && changes > 0 ? changes : null, commits: null,
+    createdAt: m.created_at ? String(m.created_at) : null, mergedAt: m.merged_at ? String(m.merged_at) : null, url: String(m.web_url ?? `${t.webBase}/${t.repo}/-/merge_requests/${n}`),
+  };
+}
+
+const MAX_PR_FILES = 300;
+
+/** Tệp đổi trong một PR/MR kèm patch (cùng trần với `commit`: 200 KB/tệp, 800 KB tổng; tối đa 300 tệp). */
+export async function pullFiles(t: RepoTarget, n: number): Promise<{ files: DiffFile[]; truncated: boolean }> {
+  if (t.provider === 'GITHUB') {
+    const all: any[] = [];
+    for (let page = 1; page <= 3; page++) {
+      const r = await getJson<any[]>(t, `/repos/${t.repo}/pulls/${n}/files?per_page=100&page=${page}`, 60_000);
+      const list = Array.isArray(r) ? r : [];
+      all.push(...list);
+      if (list.length < 100) break;
+    }
+    const capped = capPatches(all.slice(0, MAX_PR_FILES).map(ghFile));
+    return { files: capped.files, truncated: capped.truncated || all.length >= MAX_PR_FILES };
+  }
+  const id = encodeURIComponent(t.repo);
+  let diffs: any[];
+  try {
+    const r = await getJson<any[]>(t, `/projects/${id}/merge_requests/${n}/diffs?per_page=100`, 60_000);
+    diffs = Array.isArray(r) ? r : [];
+  } catch (err) {
+    // GitLab < 15.7 không có /diffs ⇒ /changes (cùng dữ liệu, gói trong `changes`). MR không tồn tại ⇒ /changes cũng 404.
+    if (!(err instanceof AppError) || err.statusCode !== 404) throw err;
+    const r = await getJson<any>(t, `/projects/${id}/merge_requests/${n}/changes`, 60_000);
+    diffs = Array.isArray(r?.changes) ? r.changes : [];
+  }
+  const capped = capPatches(diffs.slice(0, MAX_PR_FILES).map(glDiff));
+  return { files: capped.files, truncated: capped.truncated || diffs.length > MAX_PR_FILES };
+}
+
+export interface CompareView {
+  base: string; head: string; status: string | null; aheadBy: number; behindBy: number | null; totalCommits: number;
+  commits: CommitSummary[]; files: DiffFile[]; truncated: boolean; url: string;
+}
+const MAX_COMPARE_COMMITS = 100;
+
+/** So sánh `base...head` (điểm rẽ chung → head, như trang Compare / diff của PR). Hai đầu là sha ⇒ đệm 1 giờ. */
+export async function compare(t: RepoTarget, base: string, head: string): Promise<CompareView> {
+  const ttl = isSha(base) && isSha(head) ? 3_600_000 : 60_000;
+  if (t.provider === 'GITHUB') {
+    const c = await getJson<any>(t, `/repos/${t.repo}/compare/${enc(base)}...${enc(head)}`, ttl);
+    const commitsAll = (Array.isArray(c.commits) ? c.commits : []) as any[];
+    const filesAll = (Array.isArray(c.files) ? c.files : []) as any[];
+    const capped = capPatches(filesAll.slice(0, MAX_PR_FILES).map(ghFile));
+    return {
+      base, head, status: c.status ? String(c.status) : null, aheadBy: Number(c.ahead_by) || 0, behindBy: Number.isFinite(Number(c.behind_by)) ? Number(c.behind_by) : null,
+      totalCommits: Number(c.total_commits) || commitsAll.length,
+      // GitHub trả cũ → mới; giữ 100 commit MỚI nhất.
+      commits: commitsAll.slice(-MAX_COMPARE_COMMITS).map((x) => ghCommitSummary(t, x)),
+      files: capped.files, truncated: capped.truncated || filesAll.length > MAX_PR_FILES || (Number(c.total_commits) || 0) > commitsAll.length,
+      url: String(c.html_url ?? `${t.webBase}/${t.repo}/compare/${enc(base)}...${enc(head)}`),
+    };
+  }
+  const c = await getJson<any>(t, `/projects/${encodeURIComponent(t.repo)}/repository/compare?from=${encodeURIComponent(base)}&to=${encodeURIComponent(head)}&straight=false`, ttl);
+  const commitsAll = (Array.isArray(c.commits) ? c.commits : []) as any[];
+  const diffs = (Array.isArray(c.diffs) ? c.diffs : []) as any[];
+  const capped = capPatches(diffs.slice(0, MAX_PR_FILES).map(glDiff));
+  return {
+    base, head, status: c.compare_same_ref ? 'identical' : commitsAll.length ? 'ahead' : 'identical', aheadBy: commitsAll.length, behindBy: null,
+    totalCommits: commitsAll.length, commits: commitsAll.slice(0, MAX_COMPARE_COMMITS).map((x) => glCommitSummary(t, x)),
+    files: capped.files, truncated: capped.truncated || diffs.length > MAX_PR_FILES || c.compare_timeout === true,
+    url: String(c.web_url ?? `${t.webBase}/${t.repo}/-/compare/${encodeURIComponent(base)}...${encodeURIComponent(head)}`),
+  };
+}
+
 /** Kiểm một token chỉ đọc có đọc được repo không (gọi /repos hoặc /projects, không đệm). */
 export async function verifyToken(t: RepoTarget): Promise<boolean> {
   const path = t.provider === 'GITHUB' ? `/repos/${t.repo}` : `/projects/${encodeURIComponent(t.repo)}`;

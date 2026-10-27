@@ -621,7 +621,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               {threadId && !thread && threadQ.isLoading ? (
                 <div className="flex justify-center pt-10"><Spinner size={16} /></div>
               ) : !messages.length && !pendingQ && !waiting ? (
-                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} onTool={runTool} onDefense={startDefense} docsTools={!!config?.modules?.docs && !!config?.permissions.editDocs} />
+                <EmptyState suggestions={suggestions} onPick={fill} disabled={aiOff} onBrowse={() => setView('history')} onTool={config?.permissions.useAi ? runTool : undefined} onDefense={config?.permissions.useAi ? startDefense : undefined} docsTools={!!config?.modules?.docs && !!config?.permissions.editDocs} />
               ) : (
                 <div className="space-y-4">
                   {messages.map((m) => (m.role === 'user' ? (

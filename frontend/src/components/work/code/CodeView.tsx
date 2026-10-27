@@ -152,6 +152,7 @@ export default function CodeView({ config, pid, onOpenIssue }: { config: Project
       {tab === 'pulls' && (
         <PullsTab
           pid={pid} projectKey={config.key} onIssue={onOpenIssue} onSource={openRef}
+          reviewsHref={`/work/${config.workspace.slug}/${config.key}/reviews`} canAiReview={!!config.permissions.aiCodeReview}
           state={(['open', 'merged', 'closed', 'all'].includes(search?.get('state') ?? '') ? search!.get('state') : search?.get('pr') ? 'all' : 'open') as 'open' | 'merged' | 'closed' | 'all'}
           onState={(s) => setParam({ state: s === 'open' ? null : s, pr: null })}
           focus={Number(search?.get('pr')) || null}

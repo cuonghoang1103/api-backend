@@ -31,7 +31,7 @@ import { displayName } from './common.js';
 import { foldVi } from './fold.js';
 import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
-import { can, canViewPage, isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
+import { can, canAiCodeReview, canViewPage, isClientScoped, requireAskAssistant, requireProject, type ProjectAccess } from './permissions.js';
 import { activeSprintPace, type SprintPace } from './sprintPace.js';
 import { computeLoads, LOAD_WINDOW_DAYS, overloadFact, workingDaysLeft } from './insightLoad.js';
 import { dayInZone, lastWeekPeriod, projectTimezone } from './projectTime.js';
@@ -185,7 +185,7 @@ async function ask(userId: number, projectId: number, system: string, user: stri
  * đúng mã HTTP + JSON như route thường, thay vì thành sự kiện `error` sau khi đã trả 200. chat() vẫn kiểm lại như cũ.
  */
 export async function chatPrecheck(userId: number, projectId: number): Promise<void> {
-  await requireProject(userId, projectId, 'ai.use');
+  await requireAskAssistant(userId, projectId); // 27/10/2026: giảng viên hỏi được (chỉ đọc) — xem canAskAssistant
   if (!askOverride && !boQuaHanMuc) await assertQuota(userId, projectId, { chiKiem: true });
 }
 
@@ -469,19 +469,50 @@ const registry = () => import('./toolRegistry/index.js');
  * `get_issue` (MCP) nhường chỗ cho `read_issue` ở đường Ask (18/10/2026): cùng thẻ nhưng đủ hơn (web links, Docs gắn
  * thẻ, chữ của tệp, thẻ cha) — hai lệnh đọc gần giống nhau chỉ làm model chọn sai. Gọi `get_issue` vẫn chạy được.
  */
-async function askCommandsFor(access: ProjectAccess) {
+async function askCommandsFor(access: ProjectAccess, userId?: number) {
   const r = await registry();
   const docs = docsAiOn(access);
   const canEdit = can(access.role, 'issue.edit');
   const DOC_READ = new Set(['list_pages', 'get_page']);
   const all = r.askCommands();
   const hasReadIssue = all.some((t) => t.name === 'read_issue');
+  // 27/10/2026: đề xuất review code chỉ cho người được review (ADMIN / trưởng dự án / trưởng bộ phận / giảng viên).
+  const reviewer = all.some((t) => t.name === 'code_review') ? await canReviewCode(access, userId) : false;
   return all.filter((t) => {
     if (DOC_READ.has(t.name)) return docs.read;
     if (t.name.startsWith('docs_')) return docs.write;
     if (t.name === 'get_issue' && hasReadIssue) return false;
+    if (t.name === 'code_review') return reviewer;
     return !t.write || canEdit;
   });
+}
+
+async function canReviewCode(access: ProjectAccess, userId?: number): Promise<boolean> {
+  try {
+    const { canRequestCodeReview } = await import('./codeReview.service.js');
+    // Không biết người hỏi ⇒ chỉ luật theo vai (ADMIN / giảng viên); trưởng dự án / bộ phận cần userId.
+    if (userId === undefined) return canAiCodeReview(access.role, {}, access.principal);
+    return await canRequestCodeReview(userId, access);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * 27/10/2026 — hướng dẫn ĐỌC CODE cho trợ lý (chỉ khi dự án đã nối GitHub/GitLab và người hỏi là người của đội). Ngắn:
+ * prompt này trả tiền ở MỌI câu hỏi.
+ */
+async function codeDocFor(access: ProjectAccess, userId: number): Promise<string> {
+  if (access.role === 'CLIENT' || isClientScoped(access)) return '';
+  const [gh, gl] = await Promise.all([
+    prisma.workGithubConnection.findUnique({ where: { projectId: access.projectId }, select: { id: true } }),
+    prisma.workGitlabConnection.findUnique({ where: { projectId: access.projectId }, select: { id: true } }),
+  ]).catch(() => [null, null]);
+  if (!gh && !gl) return '';
+  return `CODE (a GitHub/GitLab repo is linked — you CAN read it):
+- To check or review someone's work on an issue: dev_activity(issue) finds its branches/PRs ⇒ code_read pr + pr_files (or compare head=<branch>) reads the REAL diff ⇒ compare it with the issue's acceptance criteria ("Xong khi"/Done when) and the project's Definition of Done. Cite file:line from the diff.
+- "What did <member> push / change / this week": code_read activity(member, since e.g. 7d) ⇒ code_read commit(sha) for the commits that matter ⇒ summarise per file.
+- Say exactly which files you read and which you did not. Never judge code you have not read.${(await canReviewCode(access, userId)) ? '\n- A formal review that saves findings and comments to the member: propose the code_review command (the user applies it).' : ''}`;
 }
 
 /**
@@ -489,10 +520,10 @@ async function askCommandsFor(access: ProjectAccess) {
  * `writes: false` (câu hỏi chỉ để HIỂU — "việc của tôi", "thẻ X cần đọc gì"): bỏ mục lục lệnh GHI (~17k ký tự ≈ 1/2
  * prompt hệ thống) — câu hỏi kiểu đó không cần đề xuất lệnh; các đề xuất cơ bản (ACTIONS_DOC) vẫn còn.
  */
-export async function commandsDoc(access: ProjectAccess, opts: { writes?: boolean } = {}): Promise<string> {
+export async function commandsDoc(access: ProjectAccess, opts: { writes?: boolean; userId?: number } = {}): Promise<string> {
   const r = await registry();
-  const list = await askCommandsFor(access);
-  const writes = opts.writes === false ? [] : list.filter((t) => t.write);
+  const list = await askCommandsFor(access, opts.userId);
+  const writes = opts.writes === false ? list.filter((t) => t.name === 'code_review') : list.filter((t) => t.write);
   const writeBlock = writes.length
     ? `WRITE commands — you can NOT run them. PROPOSE them as actions {"type":"command","command":"<write command>","args":{…},"summary":"one line: what applying it will do"}; the user reviews and applies:
 ${r.commandCatalog(writes)}`
@@ -513,7 +544,7 @@ export interface RejectedCommand { command: string; error: string }
  * (chưa đọc ma trận) ⇒ bị lọc im lặng ⇒ người dùng thấy câu "Đề xuất…" mà không có nút Apply nào. Lý do được đưa lại
  * cho model sửa MỘT lần (chat) và ghi chú cuối câu trả lời nếu vẫn hỏng — không bao giờ im lặng.
  */
-export async function checkCommandActions(raw: unknown, access: ProjectAccess): Promise<{ kept: AiAction[]; rejected: RejectedCommand[] }> {
+export async function checkCommandActions(raw: unknown, access: ProjectAccess, userId?: number): Promise<{ kept: AiAction[]; rejected: RejectedCommand[] }> {
   // Model trả JSON THIẾU `actions` (chỉ có "reply") ⇒ `raw` là undefined. Trước 18/10/2026 dòng này ép kiểu
   // `raw as AiAction[]` ⇒ `.some` trên undefined ⇒ 500 cho MỌI câu hỏi không đề xuất thay đổi (thành viên PRJ301 gặp).
   const actions = Array.isArray(raw) ? saneActions(raw) : [];
@@ -527,7 +558,7 @@ export async function checkCommandActions(raw: unknown, access: ProjectAccess): 
   if (!actions.some((a) => a.type === 'command')) return { kept: actions, rejected };
   const r = await registry();
   const ref = await r.projectRefOf(access.projectId);
-  const allowed = new Set((await askCommandsFor(access)).filter((t) => t.write).map((t) => t.name));
+  const allowed = new Set((await askCommandsFor(access, userId)).filter((t) => t.write).map((t) => t.name));
   const kept = actions.filter((a) => {
     if (a.type !== 'command') return true;
     const t = r.commandByName(a.command);
@@ -569,6 +600,14 @@ const ACTIONS_DOC = `Actions you may PROPOSE (the user reviews and applies them;
 - {"type":"create_test","title":"…","preconditions":"…","steps":[{"action":"…","data":"…","expected":"…"}],"requirement":<number of the story/requirement it verifies>}
 Priority: 1=Highest 2=High 3=Medium 4=Low 5=Lowest. Use issue NUMBERS (12), not keys (ABC-12). Only use usernames from the member list.`;
 
+/**
+ * 27/10/2026: người không sửa được thẻ (giảng viên TEACHER — "Hỏi CuongMini" chỉ đọc) ⇒ chỉ mời đề xuất BÌNH LUẬN
+ * (quyền comment.create). Apply vẫn chạy dưới quyền người bấm nên đề xuất khác (nếu model vẫn viết) bị server từ chối.
+ */
+const READONLY_ACTIONS_DOC = `This user can READ the project and COMMENT, but cannot change issues. The only action you may propose (the user reviews and applies it; never claim you already did it):
+- {"type":"add_comment","number":12,"text":"…"}
+Use issue NUMBERS (12), not keys.`;
+
 // ─── Trợ lý hội thoại ────────────────────────────────────────────
 
 export async function chat(
@@ -586,7 +625,7 @@ export async function chat(
   /** Bản STREAM (route `/ai/chat/stream`, 20/10/2026): báo tiến độ + chữ trả lời khi đang viết. Bỏ trống = như cũ. */
   hooks?: AskStreamHooks,
 ) {
-  const access = await requireProject(userId, projectId, 'ai.use');
+  const access = await requireAskAssistant(userId, projectId);
   // Lượt "hỏi lại": lấy lại đúng câu hỏi đã lưu, kiểm nó thuộc hội thoại người này xem được.
   let retry: Awaited<ReturnType<typeof threads.visibleMessage>> | null = null;
   if (input.retryMessageId) {
@@ -609,6 +648,7 @@ export async function chat(
 
   // Chế độ luyện bảo vệ: AI là hội đồng — chấm câu vừa trả lời rồi hỏi câu kế. Không đề xuất thay đổi gì.
   if (thread.mode === 'DEFENSE') {
+    if (!can(access.role, 'ai.use', access.options, access.principal)) throw new BadRequestError('Defense practice is for the project team', 'WORK_AI_DEFENSE_TEAM_ONLY');
     const lbl = /·\s*(C[1-5]|my screens|whole project)\s*$/i.exec(thread.title)?.[1] ?? 'whole project';
     const focusTag = /^C[1-5]$/i.test(lbl) ? lbl.toUpperCase() : lbl.toLowerCase() === 'my screens' ? 'me' : 'all';
     const scope = await defenseScope(projectId, userId, focusTag);
@@ -631,7 +671,8 @@ export async function chat(
   // Câu hỏi để HIỂU (việc của tôi / đọc gì / giải thích / các bước) mà không đòi thay đổi ⇒ không nhét mục lục lệnh GHI.
   const learnOnly = (intent.myWork || intent.understand || intent.question) && !intent.change;
   const docsBlock = docsOn.read ? `\n${DOCS_READ_DOC}${docsOn.write && !learnOnly ? `\n${DOCS_WRITE_DOC}` : ''}` : '';
-  const cmdBlock = `\n${await commandsDoc(access, { writes: !learnOnly })}`;
+  const cmdBlock = `\n${await commandsDoc(access, { writes: !learnOnly, userId })}`;
+  const codeBlock = await codeDocFor(access, userId).catch(() => '');
   // Đọc SẴN (mã, không tốn lượt model): người hỏi + việc của họ + thẻ được hỏi (đủ mô tả/link/tệp/Docs) + Resources.
   // Câu hỏi ĐÃ LƯU ở trên ⇒ phần đọc sẵn hỏng thì chỉ ghi log và trả lời với ít ngữ cảnh hơn (không để câu hỏi treo).
   const soft = <T>(what: string, fallback: T) => (err: unknown): T => {
@@ -647,9 +688,10 @@ export async function chat(
   const tep = attachments.length ? await docTepChoModel(projectId, attachments).catch(soft('tệp đính kèm', { images: [] as ClaudeImageBlock[], text: '' })) : { images: [] as ClaudeImageBlock[], text: '' };
   if (attachments.length) hooks?.onProgress?.({ phase: 'reading', round: 0, prefetched: true, items: attachments.map((f) => f.name).slice(0, 12) });
   const system = `${mentorSystem(me.username, dayInZone(new Date()), links, ngonNguCauHoi(input.message))}
-${ACTIONS_DOC}${docsBlock}${cmdBlock}
+${can(access.role, 'issue.edit') ? ACTIONS_DOC : READONLY_ACTIONS_DOC}${docsBlock}${cmdBlock}${codeBlock ? `\n${codeBlock}` : ''}
 ${LINK_VA_SO_DO_DOC}
 ${learnOnly ? '' : await xoaDoc()}
+${can(access.role, 'issue.transition') ? 'When the user says they FINISHED an issue ("xong rồi", "làm xong", "done"): propose update_issue with its next status (the Review column if the project has one and it is not there yet, otherwise Done) AND add_comment with the evidence (what they said, commits/PR from dev_activity, checklist). Never claim it is moved before they apply.' : ''}
 Only propose actions when the user asks for changes or clearly benefits from them; otherwise add no actions block.
 Never invent issue numbers that are not in the context (except for issues you propose to create).
 ${khuonTraLoi({ reads: true, actions: true, docs: docsOn.read })}`;
@@ -671,7 +713,7 @@ ${khuonTraLoi({ reads: true, actions: true, docs: docsOn.read })}`;
     await threads.markFailed(questionId, err);
     throw err;
   }
-  let checked = await checkCommandActions(out.actions, access);
+  let checked = await checkCommandActions(out.actions, access, userId);
   // Bản stream mà client đã ngắt ⇒ không tốn thêm lượt sửa (câu trả lời đã có vẫn được LƯU bên dưới).
   if (checked.rejected.length && !hooks?.signal?.aborted) {
     // Một lượt sửa: đưa lý do bị loại cho model (nó được đọc thêm trước khi trả lời lại). Không lặp quá một lần.
@@ -679,7 +721,7 @@ ${khuonTraLoi({ reads: true, actions: true, docs: docsOn.read })}`;
     hooks?.onProgress?.({ phase: 'checking' });
     try {
       const again = await askWithReads(userId, access, system, `${user}\n\nYour previous answer:\n${clip(out.reply, 6000)}\n${MO_DE_XUAT}\n${JSON.stringify(out.actions ?? []).slice(0, 4000)}\n${DONG_DE_XUAT}\n\nThese proposed command actions were REJECTED and will not be shown:\n${checked.rejected.map((x) => `- ${x.command}: ${x.error}`).join('\n')}\nRead what you need first (read tools), then write the WHOLE answer again with corrected actions.`, ASK_LIMITS.answerTokens, docsOn.read, links, hooks ? { onProgress: hooks.onProgress, signal: hooks.signal } : undefined, tep.images);
-      const second = await checkCommandActions(again.actions, access);
+      const second = await checkCommandActions(again.actions, access, userId);
       if (second.kept.length >= checked.kept.length) { out = again; checked = second; }
     } catch (err) {
       logger.warn('[work] ai: lượt sửa đề xuất lệnh lỗi', { err: (err as Error).message });

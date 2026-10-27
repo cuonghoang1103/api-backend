@@ -10,6 +10,7 @@ import { workError } from '@/lib/work-api';
 import { Spinner } from '../ui';
 import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys, type PullItem } from './codeApi';
+import AiReviewButton from './AiReviewButton';
 import { BranchName, IssueChips, LineDelta, prIcon, WhoChip } from './parts';
 import { safeHref } from './codeText';
 
@@ -21,8 +22,10 @@ function when(p: PullItem): string {
   return wt('code.openedAgo', { t: wfmt.relative(p.openedAt) });
 }
 
-export default function PullsTab({ pid, projectKey, state, onState, focus, onIssue, onSource }: {
+export default function PullsTab({ pid, projectKey, state, onState, focus, onIssue, onSource, reviewsHref, canAiReview = false }: {
   pid: number; projectKey: string; state: St; onState: (s: St) => void; focus: number | null; onIssue: (n: number) => void; onSource: (ref: string) => void;
+  /** 27/10/2026: nút "CuongMini review" trên PR (chỉ người được review). */
+  reviewsHref?: string; canAiReview?: boolean;
 }) {
   const q = useQuery({ queryKey: codeKeys.pulls(pid, state), queryFn: () => codeApi.pulls(pid, state), staleTime: 30_000 });
   useEffect(() => {
@@ -81,6 +84,9 @@ export default function PullsTab({ pid, projectKey, state, onState, focus, onIss
                     )}
                     {p.mergedBy && p.state === 'merged' && <span>{wt('code.mergedBy')} <WhoChip who={p.mergedBy} size={16} muted /></span>}
                   </div>
+                  {canAiReview && reviewsHref && !p.legacy && p.state !== 'closed' && (
+                    <AiReviewButton pid={pid} pr={p.number} issue={p.issueNumbers[0]} reviewsHref={reviewsHref} compact className="mt-2" />
+                  )}
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1.5">
                   <LineDelta add={p.additions} del={p.deletions} />

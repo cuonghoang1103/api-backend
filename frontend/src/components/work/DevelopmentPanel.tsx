@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowUpRight, ChevronDown, ChevronRight, GitBranch, GitCommitHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { codeApi, codeKeys, type IssueDevGroup } from './code/codeApi';
+import AiReviewButton from './code/AiReviewButton';
 import { PrState, WhoChip } from './code/parts';
 import { safeHref } from './code/codeText';
 import { relativeTime, Spinner } from './ui';
@@ -77,7 +78,7 @@ function GroupBlock({ g, codeHref, defaultOpen }: { g: IssueDevGroup; codeHref: 
   );
 }
 
-export default function DevelopmentPanel({ pid, num, issueKey }: { pid: number; num: number; issueKey: string }) {
+export default function DevelopmentPanel({ pid, num, issueKey, canAiReview = false }: { pid: number; num: number; issueKey: string; canAiReview?: boolean }) {
   const dev = useQuery({ queryKey: codeKeys.issueDev(pid, num), queryFn: () => codeApi.issueDev(pid, num), staleTime: 30_000, retry: false });
   const d = dev.data;
   if (dev.isError || !d) return null;
@@ -109,6 +110,10 @@ export default function DevelopmentPanel({ pid, num, issueKey }: { pid: number; 
           <ul className="space-y-1.5">
             {d.groups.map((g, i) => <GroupBlock key={g.key} g={g} codeHref={d.codeHref} defaultOpen={i === 0} />)}
           </ul>
+          {/* 27/10/2026: CuongMini review PR/nhánh của thẻ (chỉ người được review; server kiểm lại). */}
+          {canAiReview && d.connected && d.groups.some((g) => g.kind === 'PR' || g.kind === 'BRANCH') && (
+            <AiReviewButton pid={pid} issue={num} reviewsHref={d.codeHref.replace(/\/code$/, '/reviews')} className="mt-2" />
+          )}
         </>
       )}
     </div>

@@ -120,4 +120,15 @@ export const home = {
   typeTesting: 'Testing',
   setupCuongMini: 'Set up with CuongMini',
   setupCuongMiniHint: 'Give CuongMini the brief, members and deadlines — it plans one project or a whole workspace of groups',
+  // 27/10/2026: CuongMini hỏi nhanh — gợi ý chuyển trạng thái thẻ
+  nudgeTitle: 'CuongMini quick check',
+  nudgeMove: 'Move to {to}?',
+  nudgeDoneQ: 'Is it done? Move to {to}?',
+  nudgeYes: 'Yes, move it',
+  nudgeNotYet: 'Not yet',
+  nudgeAddProof: 'Add a note or screenshot',
+  nudgeNotePh: 'What did you do? (optional)',
+  nudgeMoved: 'Moved {key} to {to}',
+  nudgeFailed: 'Could not move it',
+  nudgeAttach: 'Attach image',
 };

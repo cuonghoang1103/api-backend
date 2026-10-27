@@ -19,7 +19,7 @@ import { AppError, BadRequestError, NotFoundError } from '../../middleware/error
 import { logger } from '../../utils/logger.js';
 import type { ClaudeImageBlock } from '../claudeChat.js';
 import { assertCommentStorage, commentStore } from './commentFiles.service.js';
-import { requireProject } from './permissions.js';
+import { requireAskAssistant, requireProject } from './permissions.js';
 import { bangXlsx, kiemZip, laDocx, laTepChu, laXlsx } from './xemTep.js';
 
 /** Trần mỗi tệp (ảnh lẫn tài liệu). */
@@ -59,7 +59,7 @@ export function loaiTep(fileName: string, mime: string): LoaiTep | null {
 
 /** Tải một tệp lên kho cho câu hỏi sắp gửi. */
 export async function taiTepAi(userId: number, projectId: number, input: { buffer: Buffer; fileName: string; mime: string }): Promise<TepAi> {
-  await requireProject(userId, projectId, 'ai.use');
+  await requireAskAssistant(userId, projectId); // 27/10/2026: cả giảng viên (Hỏi CuongMini chỉ đọc)
   if (!input.buffer.length) throw new BadRequestError('Tệp trống. / The file is empty.', 'WORK_FILE_EMPTY');
   if (input.buffer.length > MAX_AI_FILE_BYTES) throw new AppError(`Tệp phải ≤ ${MAX_AI_FILE_BYTES / 1024 / 1024} MB.`, 413, 'WORK_FILE_TOO_LARGE');
   const kind = loaiTep(input.fileName, input.mime);

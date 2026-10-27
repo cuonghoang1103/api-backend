@@ -182,4 +182,15 @@ export const code: Strings<typeof En> = {
   tokStep4: 'Đặt ngày hết hạn, sao chép token rồi dán vào đây.',
   myGitNotify: 'Thông báo hoạt động Git',
   myGitNotifyHelp: 'Push, pull request và yêu cầu review trên thẻ bạn được giao (hoặc dự án bạn làm trưởng nhóm).',
+  // 27/10/2026: CuongMini review code
+  aiReview: 'CuongMini review',
+  aiReviewHint: 'CuongMini đọc diff thật, đối chiếu tiêu chí "Xong khi" của thẻ và Definition of Done, lưu một phiên review code và bình luận vào thẻ. Bạn quyết định — CuongMini không duyệt, không merge.',
+  aiReviewing: 'CuongMini đang đọc code…',
+  aiReviewNotify: 'Báo luôn cho thành viên',
+  aiReviewDone: '{key} · {n} góp ý',
+  aiReviewOpen: 'Mở phiên review',
+  aiReviewFailed: 'CuongMini chưa review được',
+  verdictAPPROVE: 'Có thể duyệt',
+  verdictCHANGES: 'Cần sửa',
+  verdictCOMMENT: 'Chỉ góp ý',
 };

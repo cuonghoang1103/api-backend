@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-3-interview-jsx",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-3-1-jsx-basics"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — JSX & rendering (Chapter 3)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "JSX & rendering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>JSX & rendering</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>JSX & rendering</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — JSX & rendering (Chapter 3)\n\nAnswer in the panel on the left (no code needed).\n\n1. What is JSX, really?\n2. Why must a component return a single root element?\n3. What problems does using the array index as a key cause?\n4. Name three ways to render conditionally and when you use each.\n5. How does React protect you against XSS in JSX?\n6. Why className and htmlFor instead of class and for?\n7. What is the virtual DOM, briefly?\n8. Where should derived values like totals be computed?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — JSX & rendering (Chapter 3) — answer key\n\n1. What is JSX, really?\n   Answer: b) Syntax that compiles to React.createElement calls returning plain objects.\n   Model answer: \"JSX is syntax sugar. A compiler like Babel or SWC turns <Button color=\"red\"/> into React.createElement(Button, { color: 'red' }), which returns a lightweight object describing the UI. React then turns that description into DOM updates.\" / Trả lời mẫu: \"JSX là cú pháp rút gọn. Trình biên dịch như Babel/SWC đổi thành React.createElement(Button, { color: 'red' }), trả về object mô tả giao diện. React dựa vào mô tả đó để cập nhật DOM.\"\n\n2. Why must a component return a single root element?\n   Answer: b) A return value is one expression — one createElement call; use a Fragment to group siblings.\n   Model answer: \"Because JSX compiles to one function call and a function returns one value. When I need siblings without a wrapper div — inside a table row for example — I use a Fragment.\" / Trả lời mẫu: \"Vì JSX biên dịch thành một lời gọi hàm, mà hàm trả về một giá trị. Khi cần nhiều phần tử ngang hàng không có div bọc — vd trong hàng của bảng — tôi dùng Fragment.\"\n\n3. What problems does using the array index as a key cause?\n   Answer: b) When items are inserted, removed or reordered, React reuses the wrong elements — inputs keep the wrong text, animations jump.\n   Model answer: \"The key tells React which item is which between renders. If I delete item 0, every index shifts, so React thinks item 1 became item 0 and keeps its DOM and state — a classic bug with input fields. Stable ids avoid that; the index is only safe for static lists.\" / Trả lời mẫu: \"Key cho React biết phần tử nào là phần tử nào giữa các lần render. Xoá phần tử 0 thì mọi index dịch chuyển, React tưởng phần tử 1 thành phần tử 0 và giữ DOM/state cũ — lỗi kinh điển với ô input. Id ổn định tránh được; index chỉ an toàn với danh sách tĩnh.\"\n\n4. Name three ways to render conditionally and when you use each.\n   Answer: b) if/return for very different branches, ? : for either/or inline, && for show/hide with a boolean.\n   Model answer: \"Early return when the whole output differs, like loading or error screens. A ternary when I choose between two inline elements. && to show or hide one element — always with a real boolean, otherwise a 0 can appear. For many cases a lookup object is cleaner than nested ternaries.\" / Trả lời mẫu: \"Return sớm khi cả giao diện khác hẳn, như màn hình đang tải/lỗi. Toán tử 3 ngôi khi chọn giữa hai phần tử ngay trong JSX. && để ẩn/hiện một phần tử — luôn với boolean thật, nếu không số 0 sẽ hiện ra. Nhiều trường hợp thì object tra cứu gọn hơn ?: lồng nhau.\"\n\n5. How does React protect you against XSS in JSX?\n   Answer: b) Values inside { } are escaped as text; only dangerouslySetInnerHTML injects raw HTML.\n   Model answer: \"React escapes every string it renders, so user input like <script> shows as text. The escape hatch is dangerouslySetInnerHTML; if I ever need it, I sanitise the HTML first, for example with DOMPurify.\" / Trả lời mẫu: \"React escape mọi chuỗi nó vẽ nên dữ liệu người dùng như hiện ra là chữ. Lối thoát là dangerouslySetInnerHTML; nếu buộc phải dùng tôi làm sạch HTML trước, vd bằng DOMPurify.\"\n\n6. Why className and htmlFor instead of class and for?\n   Answer: b) JSX is JavaScript and follows DOM property names; class/for are reserved words in JS.\n   Model answer: \"JSX props map to DOM properties, and in JavaScript class and for are keywords. So React uses className/htmlFor and camelCase for everything else, like onClick or tabIndex.\" / Trả lời mẫu: \"Prop JSX ứng với thuộc tính DOM, mà class và for là từ khoá JavaScript. Nên React dùng className/htmlFor và camelCase cho mọi thứ khác, như onClick, tabIndex.\"\n\n7. What is the virtual DOM, briefly?\n   Answer: b) The tree of plain objects React creates on each render; React compares it with the previous one and applies minimal DOM changes.\n   Model answer: \"Each render produces a tree of React elements — plain JS objects. React diffs the new tree against the previous one (reconciliation) and commits only the necessary DOM operations, which are the expensive part.\" / Trả lời mẫu: \"Mỗi lần render tạo ra cây React element — object JS thường. React so cây mới với cây trước (reconciliation) và chỉ áp dụng những thao tác DOM cần thiết, vốn là phần tốn kém.\"\n\n8. Where should derived values like totals be computed?\n   Answer: b) Computed during render from props/state (memoised only if expensive).\n   Model answer: \"If I can calculate it from existing data, I calculate it while rendering instead of storing it, so it can never get out of sync. If the calculation is expensive, I wrap it in useMemo.\" / Trả lời mẫu: \"Nếu tính được từ dữ liệu sẵn có, tôi tính ngay khi render thay vì lưu, nên không bao giờ lệch. Nếu phép tính nặng thì bọc useMemo.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "What is JSX, really?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A templating language that outputs HTML strings."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Syntax that compiles to <code>React.createElement</code> calls returning plain objects."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A browser feature."
+              },
+              {
+                "ma": "d",
+                "noiDung": "A CSS-in-JS library."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"JSX is syntax sugar. A compiler like Babel or SWC turns <code>&lt;Button color=\"red\"/&gt;</code> into <code>React.createElement(Button, { color: 'red' })</code>, which returns a lightweight object describing the UI. React then turns that description into DOM updates.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"JSX là cú pháp rút gọn. Trình biên dịch như Babel/SWC đổi <Button color='red'/> thành React.createElement(Button, { color: 'red' }), trả về object mô tả giao diện. React dựa vào mô tả đó để cập nhật DOM.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Why must a component return a single root element?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because of CSS."
+              },
+              {
+                "ma": "b",
+                "noiDung": "A return value is one expression — one <code>createElement</code> call; use a Fragment to group siblings."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not; arrays are forbidden."
+              },
+              {
+                "ma": "d",
+                "noiDung": "For SEO."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Because JSX compiles to one function call and a function returns one value. When I need siblings without a wrapper div — inside a table row for example — I use a Fragment.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Vì JSX biên dịch thành một lời gọi hàm, mà hàm trả về một giá trị. Khi cần nhiều phần tử ngang hàng không có div bọc — vd trong hàng của bảng — tôi dùng Fragment.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "What problems does using the array index as a key cause?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None."
+              },
+              {
+                "ma": "b",
+                "noiDung": "When items are inserted, removed or reordered, React reuses the wrong elements — inputs keep the wrong text, animations jump."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is slower to type."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Index keys are forbidden by React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"The key tells React which item is which between renders. If I delete item 0, every index shifts, so React thinks item 1 became item 0 and keeps its DOM and state — a classic bug with input fields. Stable ids avoid that; the index is only safe for static lists.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Key cho React biết phần tử nào là phần tử nào giữa các lần render. Xoá phần tử 0 thì mọi index dịch chuyển, React tưởng phần tử 1 thành phần tử 0 và giữ DOM/state cũ — lỗi kinh điển với ô input. Id ổn định tránh được; index chỉ an toàn với danh sách tĩnh.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Name three ways to render conditionally and when you use each.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only CSS <code>display: none</code>."
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>if/return</code> for very different branches, <code>? :</code> for either/or inline, <code>&amp;&amp;</code> for show/hide with a boolean."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the ternary operator."
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>switch</code> inside JSX."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Early return when the whole output differs, like loading or error screens. A ternary when I choose between two inline elements. <code>&amp;&amp;</code> to show or hide one element — always with a real boolean, otherwise a 0 can appear. For many cases a lookup object is cleaner than nested ternaries.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Return sớm khi cả giao diện khác hẳn, như màn hình đang tải/lỗi. Toán tử 3 ngôi khi chọn giữa hai phần tử ngay trong JSX. && để ẩn/hiện một phần tử — luôn với boolean thật, nếu không số 0 sẽ hiện ra. Nhiều trường hợp thì object tra cứu gọn hơn ?: lồng nhau.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "How does React protect you against XSS in JSX?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It does not."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Values inside <code>{ }</code> are escaped as text; only <code>dangerouslySetInnerHTML</code> injects raw HTML."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It removes all angle brackets."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Through Content-Security-Policy only."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React escapes every string it renders, so user input like <code>&lt;script&gt;</code> shows as text. The escape hatch is <code>dangerouslySetInnerHTML</code>; if I ever need it, I sanitise the HTML first, for example with DOMPurify.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React escape mọi chuỗi nó vẽ nên dữ liệu người dùng như <script> hiện ra là chữ. Lối thoát là dangerouslySetInnerHTML; nếu buộc phải dùng tôi làm sạch HTML trước, vd bằng DOMPurify.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Why <code>className</code> and <code>htmlFor</code> instead of <code>class</code> and <code>for</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are shorter."
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSX is JavaScript and follows DOM property names; <code>class</code>/<code>for</code> are reserved words in JS."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Browsers changed the attribute names."
+              },
+              {
+                "ma": "d",
+                "noiDung": "TypeScript requires it."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"JSX props map to DOM properties, and in JavaScript <code>class</code> and <code>for</code> are keywords. So React uses <code>className</code>/<code>htmlFor</code> and camelCase for everything else, like <code>onClick</code> or <code>tabIndex</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Prop JSX ứng với thuộc tính DOM, mà class và for là từ khoá JavaScript. Nên React dùng className/htmlFor và camelCase cho mọi thứ khác, như onClick, tabIndex.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "What is the virtual DOM, briefly?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A second browser."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The tree of plain objects React creates on each render; React compares it with the previous one and applies minimal DOM changes."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A copy of the DOM stored in localStorage."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Shadow DOM."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Each render produces a tree of React elements — plain JS objects. React diffs the new tree against the previous one (reconciliation) and commits only the necessary DOM operations, which are the expensive part.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Mỗi lần render tạo ra cây React element — object JS thường. React so cây mới với cây trước (reconciliation) và chỉ áp dụng những thao tác DOM cần thiết, vốn là phần tốn kém.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "Where should derived values like totals be computed?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Stored in their own state and updated manually."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Computed during render from props/state (memoised only if expensive)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "In the CSS."
+              },
+              {
+                "ma": "d",
+                "noiDung": "On the server only."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"If I can calculate it from existing data, I calculate it while rendering instead of storing it, so it can never get out of sync. If the calculation is expensive, I wrap it in <code>useMemo</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Nếu tính được từ dữ liệu sẵn có, tôi tính ngay khi render thay vì lưu, nên không bao giờ lệch. Nếu phép tính nặng thì bọc useMemo.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

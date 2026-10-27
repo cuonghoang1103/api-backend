@@ -1,0 +1,353 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-3-3-slot3-jsx-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-3-3-slot3-jsx-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: rendering with JSX",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "JSX",
+        "createElement",
+        "expressions",
+        "lists & keys",
+        "Fragment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on how JSX works and how React renders it. Most of them are \"what appears on the screen?\" — read the code carefully.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về cách JSX hoạt động và React hiển thị nó. Phần lớn là \"màn hình hiện gì?\" — đọc kỹ mã.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nhớ: JSX chỉ là cú pháp cho React.createElement(type, props, ...children).",
+        "React không vẽ false/null/undefined/true nhưng VẼ số 0 và chuỗi rỗng không hiện gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: rendering with JSX\n\nAnswer in the panel on the left (no code needed).\n\n1. <h1 className=\"t\">Hi</h1> compiles to…\n2. Which can you put inside { } in JSX?\n3. What does <div>{[1, 2, 3]}</div> show?\n4. What does <p>{0 && 'Items'}</p> show?\n5. Why does a list item need a key?\n6. Which keys are acceptable? (choose all)\n7. Why use <> … </> instead of a div?\n8. Correct inline style in JSX?\n9. A comment inside JSX is written as…\n10. User text \"<script>alert(1)</script>\" rendered with {text}…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: rendering with JSX — answer key\n\n1. <h1 className=\"t\">Hi</h1> compiles to…\n   Answer: a) React.createElement('h1', { className: 't' }, 'Hi')\n   JSX is syntax sugar for React.createElement(type, props, ...children), which returns a plain object (a React element). / JSX là cú pháp rút gọn cho React.createElement(type, props, ...children), trả về object thường (React element).\n\n2. Which can you put inside { } in JSX?\n   Answer: c) Any expression, e.g. a ? b : c\n   Only expressions (they produce a value). Statements go before the return. / Chỉ biểu thức (ra giá trị). Câu lệnh đặt trước return.\n\n3. What does <div>{[1, 2, 3]}</div> show?\n   Answer: b) 123\n   Arrays are rendered item by item without separators. / Mảng được vẽ từng phần tử, không có dấu phân cách.\n\n4. What does <p>{0 && 'Items'}</p> show?\n   Answer: b) 0\n   0 && x is 0, and React renders numbers. Use a boolean condition. / 0 && x là 0, và React vẽ số. Hãy dùng điều kiện boolean.\n\n5. Why does a list item need a key?\n   Answer: b) So React can match items between renders\n   Keys identify elements across renders so React reuses the right DOM nodes and state. / Key định danh phần tử giữa các lần render để React dùng lại đúng nút DOM và state.\n\n6. Which keys are acceptable? (choose all)\n   Answer: a) A database id + c) The index, for a static list that never changes + d) A unique slug\n   Keys must be stable and unique among siblings. Random keys change every render and destroy state. / Key phải ổn định và duy nhất giữa anh em. Key ngẫu nhiên đổi mỗi lần render và phá state.\n\n7. Why use <> … </> instead of a div?\n   Answer: b) It groups children without adding a DOM node\n   A Fragment groups elements without an extra wrapper — important inside tables, lists and flex/grid layouts. / Fragment gom phần tử mà không thêm thẻ bọc — quan trọng trong bảng, danh sách, bố cục flex/grid.\n\n8. Correct inline style in JSX?\n   Answer: b) style={{ color: 'red', fontSize: 16 }}\n   An object with camelCase keys inside an expression (hence the double braces). / Một object khoá camelCase nằm trong biểu thức (nên có hai cặp ngoặc).\n\n9. A comment inside JSX is written as…\n   Answer: c) {/* note */}\n   Comments are JavaScript, so they go inside braces: {/* … */}. / Chú thích là JavaScript nên đặt trong ngoặc nhọn: {/* … */}.\n\n10. User text \"<script>alert(1)</script>\" rendered with {text}…\n   Answer: b) Is shown as text (escaped)\n   React escapes strings, protecting against XSS. Only dangerouslySetInnerHTML bypasses it. / React escape chuỗi nên chống XSS. Chỉ dangerouslySetInnerHTML mới bỏ qua cơ chế này.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Giải thích từng câu hiện sau khi nộp; câu sai ⇒ xem lại bài 3.1–3.2.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<code>&lt;h1 className=\"t\"&gt;Hi&lt;/h1&gt;</code> compiles to…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>React.createElement('h1', { className: 't' }, 'Hi')</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>document.createElement('h1')</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An HTML string"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A template literal"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>JSX is syntax sugar for <code>React.createElement(type, props, ...children)</code>, which returns a plain object (a React element).</p><p><i>🇻🇳 JSX là cú pháp rút gọn cho React.createElement(type, props, ...children), trả về object thường (React element).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Which can you put inside <code>{ }</code> in JSX?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An <code>if</code> statement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A <code>for</code> loop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Any expression, e.g. <code>a ? b : c</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A variable declaration"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Only expressions (they produce a value). Statements go before the <code>return</code>.</p><p><i>🇻🇳 Chỉ biểu thức (ra giá trị). Câu lệnh đặt trước return.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "What does <code>&lt;div&gt;{[1, 2, 3]}&lt;/div&gt;</code> show?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1,2,3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "123"
+              },
+              {
+                "ma": "c",
+                "noiDung": "[1, 2, 3]"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Arrays are rendered item by item without separators.</p><p><i>🇻🇳 Mảng được vẽ từng phần tử, không có dấu phân cách.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "What does <code>&lt;p&gt;{0 &amp;&amp; 'Items'}&lt;/p&gt;</code> show?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Items"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "false"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><code>0 &amp;&amp; x</code> is <code>0</code>, and React renders numbers. Use a boolean condition.</p><p><i>🇻🇳 0 && x là 0, và React vẽ số. Hãy dùng điều kiện boolean.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Why does a list item need a <code>key</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For CSS styling"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So React can match items between renders"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It becomes the HTML id"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keys are optional decoration"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Keys identify elements across renders so React reuses the right DOM nodes and state.</p><p><i>🇻🇳 Key định danh phần tử giữa các lần render để React dùng lại đúng nút DOM và state.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Which keys are acceptable? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A database id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>Math.random()</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The index, for a static list that never changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A unique slug"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Keys must be stable and unique among siblings. Random keys change every render and destroy state.</p><p><i>🇻🇳 Key phải ổn định và duy nhất giữa anh em. Key ngẫu nhiên đổi mỗi lần render và phá state.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q7",
+            "de": "Why use <code>&lt;&gt; … &lt;/&gt;</code> instead of a <code>div</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It renders faster CSS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It groups children without adding a DOM node"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is required by React 18"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It creates a new scope for variables"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A Fragment groups elements without an extra wrapper — important inside tables, lists and flex/grid layouts.</p><p><i>🇻🇳 Fragment gom phần tử mà không thêm thẻ bọc — quan trọng trong bảng, danh sách, bố cục flex/grid.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Correct inline style in JSX?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>style=\"color: red\"</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>style={{ color: 'red', fontSize: 16 }}</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>style={color: red}</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>css={{ color: red }}</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An object with camelCase keys inside an expression (hence the double braces).</p><p><i>🇻🇳 Một object khoá camelCase nằm trong biểu thức (nên có hai cặp ngoặc).</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "A comment inside JSX is written as…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>&lt;!-- note --&gt;</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>// note</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>{/* note */}</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code># note</code>"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Comments are JavaScript, so they go inside braces: <code>{/* … */}</code>.</p><p><i>🇻🇳 Chú thích là JavaScript nên đặt trong ngoặc nhọn: {/* … */}.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "User text <code>\"&lt;script&gt;alert(1)&lt;/script&gt;\"</code> rendered with <code>{text}</code>…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Runs the script"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Is shown as text (escaped)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Crashes React"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Is removed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>React escapes strings, protecting against XSS. Only <code>dangerouslySetInnerHTML</code> bypasses it.</p><p><i>🇻🇳 React escape chuỗi nên chống XSS. Chỉ dangerouslySetInnerHTML mới bỏ qua cơ chế này.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ JSX là HTML: thuộc tính, sự kiện, style đều theo quy tắc JavaScript."
+        },
+        {
+          "loi": "Quên rằng key không được truyền xuống như một prop đọc được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transpile",
+          "vi": "biên dịch cú pháp mới sang JavaScript thường"
+        },
+        {
+          "en": "virtual DOM",
+          "vi": "cây đối tượng mô tả giao diện trong bộ nhớ"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,538 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-3-ex4-jsx-es6",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-3-ex4-jsx-es6"
+  },
+  "exercises": [
+    {
+      "title": "filter + map: available books",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "filter",
+        "map",
+        "key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "array-methods"
+      ],
+      "problemHtml": "<p>A library page must list only the books that can be borrowed right now. Select them with <code>filter</code>, turn them into list items with <code>map</code>, and reuse the filtered array for a counter — one source, two outputs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ul#available</code> lists the titles with <code>available: true</code> (data order).</li>\n  <li><code>#available-count</code> ⇒ <code>3 of 5 books available</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang thư viện chỉ được liệt kê sách đang cho mượn. Chọn chúng bằng <code>filter</code>, biến thành các mục danh sách bằng <code>map</code>, và dùng lại mảng đã lọc cho bộ đếm — một nguồn, hai kết quả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ul#available</code> liệt kê tên sách có <code>available: true</code> (thứ tự dữ liệu).</li>\n  <li><code>#available-count</code> ⇒ <code>3 of 5 books available</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "BOOKS.filter((b) => b.available)",
+          "output": "3 books",
+          "explanation": "filter returns a new array; map turns it into <li> elements.|||filter trả mảng mới; map biến nó thành các <li>."
+        }
+      ],
+      "hintsJson": [
+        "const available = BOOKS.filter((b) => b.available);",
+        "{available.map((b) => <li key={b.id}>{b.title}</li>)}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst BOOKS = [\n  { id: 1, title: 'Clean Code', available: true },\n  { id: 2, title: 'Refactoring', available: false },\n  { id: 3, title: 'The Pragmatic Programmer', available: true },\n  { id: 4, title: 'Design Patterns', available: false },\n  { id: 5, title: 'Eloquent JavaScript', available: true },\n];\n\nexport default function App() {\n  // TODO: ul#available + #available-count\n  return <h2>Library</h2>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — filter để chọn, map để hiển thị\nconst BOOKS = [\n  { id: 1, title: 'Clean Code', available: true },\n  { id: 2, title: 'Refactoring', available: false },\n  { id: 3, title: 'The Pragmatic Programmer', available: true },\n  { id: 4, title: 'Design Patterns', available: false },\n  { id: 5, title: 'Eloquent JavaScript', available: true },\n];\n\nexport default function App() {\n  const available = BOOKS.filter((b) => b.available);\n  return (\n    <section>\n      <h2>Library</h2>\n      <ul id=\"available\">\n        {available.map((b) => <li key={b.id}>{b.title}</li>)}\n      </ul>\n      <p id=\"available-count\">{available.length} of {BOOKS.length} books available</p>\n    </section>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lọc trước (<code>filter</code>), hiển thị sau (<code>map</code>): mảng đã lọc dùng được cho cả danh sách lẫn bộ đếm.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Only available titles",
+            "kiem": "danh-sach-text",
+            "selector": "#available li",
+            "mongDoi": [
+              "Clean Code",
+              "The Pragmatic Programmer",
+              "Eloquent JavaScript"
+            ]
+          },
+          {
+            "moTa": "Counter",
+            "kiem": "text",
+            "selector": "#available-count",
+            "giaTri": "3 of 5 books available"
+          },
+          {
+            "an": true,
+            "moTa": "Uses filter",
+            "kiem": "ma-nguon",
+            "khop": "\\.filter\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>map</code> rồi trả <code>null</code> cho sách không có ⇒ đếm sai (length vẫn là 5)."
+        },
+        {
+          "loi": "Đếm bằng biến tăng dần trong vòng lặp thay vì <code>available.length</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "predicate",
+          "vi": "hàm điều kiện trả true/false"
+        }
+      ]
+    },
+    {
+      "title": "Sort a copy: leaderboard table",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "sort",
+        "spread copy",
+        "compare function",
+        "tie-break"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "array-methods",
+        "sort"
+      ],
+      "problemHtml": "<p>Render a leaderboard sorted by score (highest first, ties by name A → Z) with a rank column. <code>sort</code> changes the array it is called on — the original roster below must keep its order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#leaderboard tbody tr</code>: <code>#rank</code>, name, score.</li>\n  <li><code>ul#roster</code> lists PLAYERS in the original order.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vẽ bảng xếp hạng theo điểm (cao trước, bằng điểm theo tên A → Z) có cột hạng. <code>sort</code> sửa chính mảng nó được gọi — danh sách gốc bên dưới phải giữ thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#leaderboard tbody tr</code>: hạng, tên, điểm.</li>\n  <li><code>ul#roster</code> liệt kê PLAYERS theo thứ tự gốc.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[...PLAYERS].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name))",
+          "output": "Huy 95, Lan 88, Minh 88, An 70",
+          "explanation": "Lan and Minh tie: sorted by name.|||Lan và Minh bằng điểm: xếp theo tên."
+        }
+      ],
+      "hintsJson": [
+        "Sắp trên bản sao: [...PLAYERS].sort(…).",
+        "b.score - a.score cho giảm dần; || a.name.localeCompare(b.name) cho tiêu chí phụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst PLAYERS = [\n  { id: 'p1', name: 'Minh', score: 88 },\n  { id: 'p2', name: 'An', score: 70 },\n  { id: 'p3', name: 'Huy', score: 95 },\n  { id: 'p4', name: 'Lan', score: 88 },\n];\n\nexport default function App() {\n  const ranked = PLAYERS.sort((a, b) => b.score - a.score); // ⚠ sửa luôn PLAYERS\n  return (\n    <div>\n      <table id=\"leaderboard\"><tbody>{ranked.map((p, i) => <tr key={p.id}><td>{i + 1}</td><td>{p.name}</td><td>{p.score}</td></tr>)}</tbody></table>\n      <ul id=\"roster\">{PLAYERS.map((p) => <li key={p.id}>{p.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — sort trên BẢN SAO; tiêu chí phụ cho các điểm bằng nhau\nconst PLAYERS = [\n  { id: 'p1', name: 'Minh', score: 88 },\n  { id: 'p2', name: 'An', score: 70 },\n  { id: 'p3', name: 'Huy', score: 95 },\n  { id: 'p4', name: 'Lan', score: 88 },\n];\n\nexport default function App() {\n  const ranked = [...PLAYERS].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));\n  return (\n    <div>\n      <table id=\"leaderboard\">\n        <thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead>\n        <tbody>\n          {ranked.map((p, i) => (\n            <tr key={p.id}>\n              <td>{i + 1}</td>\n              <td>{p.name}</td>\n              <td>{p.score}</td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n      <ul id=\"roster\">{PLAYERS.map((p) => <li key={p.id}>{p.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>sort</code> sắp TẠI CHỖ và trả về chính mảng đó. Trong React dữ liệu props/state không được sửa, nên luôn sắp trên bản sao <code>[...arr]</code> (hoặc <code>toSorted</code> ở trình duyệt mới).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Leaderboard order with tie-break",
+            "kiem": "danh-sach-text",
+            "selector": "#leaderboard tbody tr td:nth-child(2)",
+            "mongDoi": [
+              "Huy",
+              "Lan",
+              "Minh",
+              "An"
+            ]
+          },
+          {
+            "moTa": "Rank column 1..4",
+            "kiem": "danh-sach-text",
+            "selector": "#leaderboard tbody tr td:first-child",
+            "mongDoi": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ]
+          },
+          {
+            "moTa": "Roster keeps the original order",
+            "kiem": "danh-sach-text",
+            "selector": "#roster li",
+            "mongDoi": [
+              "Minh",
+              "An",
+              "Huy",
+              "Lan"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>PLAYERS.sort(…)</code> ⇒ danh sách gốc (roster) cũng bị đảo."
+        },
+        {
+          "loi": "<code>sort()</code> không có hàm so sánh ⇒ so như chuỗi: 100 đứng trước 95."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "compare function",
+          "vi": "hàm so sánh (a, b) ⇒ âm/0/dương"
+        },
+        {
+          "en": "tie-break",
+          "vi": "tiêu chí phụ khi bằng nhau"
+        }
+      ]
+    },
+    {
+      "title": "reduce: order summary with discount and shipping",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "reduce",
+        "derived values",
+        "business rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "array-methods",
+        "reduce"
+      ],
+      "problemHtml": "<p>Compute an order summary from the cart lines during render. Rules: subtotal = Σ price × qty; 10% discount when subtotal ≥ 500,000; shipping 30,000 unless the discounted amount ≥ 1,000,000 (then free).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Render <code>#subtotal</code>, <code>#discount</code> (<code>-60,000 VND</code> or <code>0 VND</code>), <code>#shipping</code> (<code>Free</code> or <code>30,000 VND</code>), <code>#total</code>.</li>\n  <li>App (given) renders the summary for two carts: <code>#cart-small</code> and <code>#cart-big</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính phần tổng kết đơn từ các dòng giỏ ngay khi render. Luật: tạm tính = Σ giá × số lượng; giảm 10% khi tạm tính ≥ 500,000; phí ship 30,000 trừ khi số tiền sau giảm ≥ 1,000,000 (thì miễn phí).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hiện <code>#subtotal</code>, <code>#discount</code> (<code>-60,000 VND</code> hoặc <code>0 VND</code>), <code>#shipping</code> (<code>Free</code> hoặc <code>30,000 VND</code>), <code>#total</code>.</li>\n  <li>App (đã cho) vẽ tổng kết cho hai giỏ: <code>#cart-small</code> và <code>#cart-big</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "subtotal 600,000",
+          "output": "discount -60,000 · shipping 30,000 · total 570,000",
+          "explanation": "540,000 < 1,000,000 ⇒ shipping is charged.|||540,000 < 1,000,000 ⇒ vẫn tính ship."
+        }
+      ],
+      "hintsJson": [
+        "const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);",
+        "Tính theo thứ tự: discount → afterDiscount → shipping → total."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction Summary({ lines }) {\n  // TODO: #subtotal, #discount, #shipping, #total\n  return <dl />;\n}\n\nexport default function App() {\n  const small = [{ id: 1, name: 'Notebook', price: 150000, qty: 2 }, { id: 2, name: 'Pen', price: 50000, qty: 6 }];\n  const big = [{ id: 3, name: 'Keyboard', price: 900000, qty: 1 }, { id: 4, name: 'Mouse', price: 350000, qty: 1 }];\n  return (\n    <div>\n      <section id=\"cart-small\"><Summary lines={small} /></section>\n      <section id=\"cart-big\"><Summary lines={big} /></section>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — reduce cho tạm tính; các luật nghiệp vụ là hằng số đặt tên rõ ràng\nconst DISCOUNT_FROM = 500000;\nconst FREE_SHIP_FROM = 1000000;\nconst SHIPPING = 30000;\nconst vnd = (n) => `${n.toLocaleString('en-US')} VND`;\n\nfunction Summary({ lines }) {\n  const subtotal = lines.reduce((sum, l) => sum + l.price * l.qty, 0); // nhớ giá trị đầu 0\n  const discount = subtotal >= DISCOUNT_FROM ? Math.round(subtotal * 0.1) : 0;\n  const afterDiscount = subtotal - discount;\n  const shipping = afterDiscount >= FREE_SHIP_FROM ? 0 : SHIPPING;\n  return (\n    <dl>\n      <dt>Subtotal</dt><dd id=\"subtotal\">{vnd(subtotal)}</dd>\n      <dt>Discount</dt><dd id=\"discount\">{discount ? `-${vnd(discount)}` : vnd(0)}</dd>\n      <dt>Shipping</dt><dd id=\"shipping\">{shipping === 0 ? 'Free' : vnd(shipping)}</dd>\n      <dt>Total</dt><dd id=\"total\">{vnd(afterDiscount + shipping)}</dd>\n    </dl>\n  );\n}\n\nexport default function App() {\n  const small = [{ id: 1, name: 'Notebook', price: 150000, qty: 2 }, { id: 2, name: 'Pen', price: 50000, qty: 6 }];\n  const big = [{ id: 3, name: 'Keyboard', price: 900000, qty: 1 }, { id: 4, name: 'Mouse', price: 350000, qty: 1 }];\n  return (\n    <div>\n      <section id=\"cart-small\"><Summary lines={small} /></section>\n      <section id=\"cart-big\"><Summary lines={big} /></section>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi con số là giá trị suy ra từ <code>lines</code> nên tính ngay trong component, không lưu state. Đặt luật nghiệp vụ thành các hằng (<code>DISCOUNT_FROM</code>, <code>FREE_SHIP_FROM</code>) cho dễ đọc và dễ đổi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Small cart: 600,000 − 60,000 + 30,000",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-small dd",
+            "mongDoi": [
+              "600,000 VND",
+              "-60,000 VND",
+              "30,000 VND",
+              "570,000 VND"
+            ]
+          },
+          {
+            "moTa": "Big cart: free shipping after discount ≥ 1,000,000",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-big dd",
+            "mongDoi": [
+              "1,250,000 VND",
+              "-125,000 VND",
+              "Free",
+              "1,125,000 VND"
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses reduce",
+            "kiem": "ma-nguon",
+            "khop": "\\.reduce\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên giá trị khởi đầu <code>0</code> của reduce ⇒ phần tử đầu (object) bị cộng như chuỗi \"[object Object]…\"."
+        },
+        {
+          "loi": "Xét miễn ship theo tạm tính thay vì số tiền SAU giảm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subtotal",
+          "vi": "tạm tính"
+        },
+        {
+          "en": "accumulator",
+          "vi": "biến cộng dồn của reduce"
+        }
+      ]
+    },
+    {
+      "title": "find, some and every: class status panel",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "find",
+        "some",
+        "every",
+        "Math.max"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "array-methods"
+      ],
+      "problemHtml": "<p><code>ClassStatus</code> summarises a class: the top student (<code>find</code> the first with the highest score), a warning if <b>some</b> score is below 4, a banner if <b>every</b> student passed (≥ 5).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>.top</code> ⇒ <code>Top: Binh (9.5)</code>.</li>\n  <li><code>.warning</code> \"Some students are at risk\" only when some score &lt; 4; <code>.all-passed</code> \"Everyone passed!\" only when every score ≥ 5.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>ClassStatus</code> tóm tắt một lớp: sinh viên cao điểm nhất (<code>find</code> người đầu tiên có điểm cao nhất), cảnh báo nếu <b>có</b> điểm dưới 4, băng chúc mừng nếu <b>mọi</b> sinh viên đều qua (≥ 5).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.top</code> ⇒ <code>Top: Binh (9.5)</code>.</li>\n  <li><code>.warning</code> \"Some students are at risk\" chỉ khi có điểm &lt; 4; <code>.all-passed</code> \"Everyone passed!\" chỉ khi mọi điểm ≥ 5.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "scores [6, 9.5, 3, 9.5]",
+          "output": "Top: Binh (9.5) · warning shown · no banner",
+          "explanation": "find returns the FIRST match (Binh, not the second 9.5).|||find trả phần tử khớp ĐẦU TIÊN (Binh, không phải người 9.5 thứ hai)."
+        }
+      ],
+      "hintsJson": [
+        "const best = Math.max(...students.map((s) => s.score)); const top = students.find((s) => s.score === best);",
+        "students.some((s) => s.score < 4) / students.every((s) => s.score >= 5)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction ClassStatus({ students }) {\n  // TODO: .top, .warning, .all-passed\n  return <p>{students.length} students</p>;\n}\n\nexport default function App() {\n  const a = [{ id: 1, name: 'An', score: 6 }, { id: 2, name: 'Binh', score: 9.5 }, { id: 3, name: 'Cuong', score: 3 }, { id: 4, name: 'Dung', score: 9.5 }];\n  const b = [{ id: 1, name: 'Em', score: 7 }, { id: 2, name: 'Giang', score: 5 }, { id: 3, name: 'Hoa', score: 8 }];\n  return (\n    <div>\n      <section id=\"class-a\"><ClassStatus students={a} /></section>\n      <section id=\"class-b\"><ClassStatus students={b} /></section>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — find / some / every trả kết quả sớm, đúng ý định\nfunction ClassStatus({ students }) {\n  const best = Math.max(...students.map((s) => s.score));\n  const top = students.find((s) => s.score === best); // người ĐẦU TIÊN đạt điểm cao nhất\n  const atRisk = students.some((s) => s.score < 4);\n  const allPassed = students.every((s) => s.score >= 5);\n  return (\n    <div>\n      <p className=\"top\">Top: {top.name} ({top.score})</p>\n      {atRisk && <p className=\"warning\">Some students are at risk</p>}\n      {allPassed && <p className=\"all-passed\">Everyone passed!</p>}\n    </div>\n  );\n}\n\nexport default function App() {\n  const a = [{ id: 1, name: 'An', score: 6 }, { id: 2, name: 'Binh', score: 9.5 }, { id: 3, name: 'Cuong', score: 3 }, { id: 4, name: 'Dung', score: 9.5 }];\n  const b = [{ id: 1, name: 'Em', score: 7 }, { id: 2, name: 'Giang', score: 5 }, { id: 3, name: 'Hoa', score: 8 }];\n  return (\n    <div>\n      <section id=\"class-a\"><ClassStatus students={a} /></section>\n      <section id=\"class-b\"><ClassStatus students={b} /></section>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>find</code> dừng ở phần tử khớp đầu tiên; <code>some</code> dừng khi gặp một phần tử đúng; <code>every</code> dừng khi gặp một phần tử sai. Kết quả boolean của some/every hợp ngay với <code>&amp;&amp;</code> trong JSX (không có bẫy số 0).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Class A: top + warning, no banner",
+            "kiem": "danh-sach-text",
+            "selector": "#class-a p",
+            "mongDoi": [
+              "Top: Binh (9.5)",
+              "Some students are at risk"
+            ]
+          },
+          {
+            "moTa": "Class B: top + banner, no warning",
+            "kiem": "danh-sach-text",
+            "selector": "#class-b p",
+            "mongDoi": [
+              "Top: Hoa (8)",
+              "Everyone passed!"
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses find, some and every",
+            "kiem": "ma-nguon",
+            "khop": "\\.find\\([\\s\\S]*\\.some\\([\\s\\S]*\\.every\\(|\\.find\\([\\s\\S]*\\.every\\([\\s\\S]*\\.some\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>filter(...)[0]</code> thay cho <code>find</code> — chạy hết mảng, kém rõ ý."
+        },
+        {
+          "loi": "<code>every</code> trên mảng rỗng trả <code>true</code> — cẩn thận với lớp chưa có ai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "some / every",
+          "vi": "có ít nhất một / tất cả đều"
+        }
+      ]
+    },
+    {
+      "title": "Group transactions by month",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "reduce groupBy",
+        "Object.entries",
+        "sort",
+        "derived totals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "jsx",
+        "array-methods",
+        "reduce"
+      ],
+      "problemHtml": "<p>Render a statement grouped by month (newest month first). Each month is a <code>section.month</code> with a heading showing income, expense and balance, then its transactions (newest date first).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Heading <code>h3</code>: <code>2026-10 · +1,500,000 · -450,000 · balance 1,050,000</code>.</li>\n  <li>Items <code>li.tx</code>: <code>05/10 Salary +1,500,000</code> / <code>03/10 Coffee -50,000</code> (dd/MM, sign by type).</li>\n</ul>",
+      "problemHtmlVi": "<p>Vẽ sao kê nhóm theo tháng (tháng mới nhất trước). Mỗi tháng là một <code>section.month</code> có tiêu đề ghi thu, chi và số dư, rồi các giao dịch (ngày mới nhất trước).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tiêu đề <code>h3</code>: <code>2026-10 · +1,500,000 · -450,000 · balance 1,050,000</code>.</li>\n  <li>Dòng <code>li.tx</code>: <code>05/10 Salary +1,500,000</code> / <code>03/10 Coffee -50,000</code> (dd/MM, dấu theo loại).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ date: '2026-10-05', type: 'income', amount: 1500000, note: 'Salary' }",
+          "output": "05/10 Salary +1,500,000",
+          "explanation": "Month key = date.slice(0, 7).|||Khoá tháng = date.slice(0, 7)."
+        }
+      ],
+      "hintsJson": [
+        "const byMonth = TX.reduce((acc, t) => { const m = t.date.slice(0, 7); return { ...acc, [m]: [...(acc[m] ?? []), t] }; }, {});",
+        "Object.entries(byMonth).sort(([a], [b]) => b.localeCompare(a)) cho tháng mới trước; trong tháng sắp [...txs] theo date giảm dần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst TX = [\n  { id: 1, date: '2026-09-28', type: 'expense', amount: 200000, note: 'Books' },\n  { id: 2, date: '2026-10-03', type: 'expense', amount: 50000, note: 'Coffee' },\n  { id: 3, date: '2026-10-05', type: 'income', amount: 1500000, note: 'Salary' },\n  { id: 4, date: '2026-09-15', type: 'income', amount: 800000, note: 'Freelance' },\n  { id: 5, date: '2026-10-20', type: 'expense', amount: 400000, note: 'Rent share' },\n];\n\nexport default function App() {\n  // TODO: section.month (tháng mới trước) — h3 tổng kết + li.tx\n  return <h2>Statement</h2>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — nhóm bằng reduce, sắp bằng Object.entries + sort, tổng bằng filter + reduce\nconst TX = [\n  { id: 1, date: '2026-09-28', type: 'expense', amount: 200000, note: 'Books' },\n  { id: 2, date: '2026-10-03', type: 'expense', amount: 50000, note: 'Coffee' },\n  { id: 3, date: '2026-10-05', type: 'income', amount: 1500000, note: 'Salary' },\n  { id: 4, date: '2026-09-15', type: 'income', amount: 800000, note: 'Freelance' },\n  { id: 5, date: '2026-10-20', type: 'expense', amount: 400000, note: 'Rent share' },\n];\n\nconst fmt = (n) => n.toLocaleString('en-US');\nconst sumOf = (list, type) => list.filter((t) => t.type === type).reduce((s, t) => s + t.amount, 0);\n\nexport default function App() {\n  const byMonth = TX.reduce((acc, t) => {\n    const m = t.date.slice(0, 7);\n    return { ...acc, [m]: [...(acc[m] ?? []), t] };\n  }, {});\n  const months = Object.entries(byMonth).sort(([a], [b]) => b.localeCompare(a)); // \"yyyy-mm\" so chuỗi = so tháng\n\n  return (\n    <main>\n      <h2>Statement</h2>\n      {months.map(([month, txs]) => {\n        const income = sumOf(txs, 'income');\n        const expense = sumOf(txs, 'expense');\n        const sorted = [...txs].sort((a, b) => b.date.localeCompare(a.date));\n        return (\n          <section key={month} className=\"month\">\n            <h3>{month} · +{fmt(income)} · -{fmt(expense)} · balance {fmt(income - expense)}</h3>\n            <ul>\n              {sorted.map((t) => (\n                <li key={t.id} className=\"tx\">\n                  {t.date.slice(8, 10)}/{t.date.slice(5, 7)} {t.note} {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}\n                </li>\n              ))}\n            </ul>\n          </section>\n        );\n      })}\n    </main>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bước 1 <code>reduce</code> nhóm theo khoá tháng; bước 2 <code>Object.entries</code> + <code>sort</code> để có thứ tự; bước 3 với mỗi nhóm tính thu/chi bằng <code>filter</code> + <code>reduce</code>. Tất cả là dữ liệu suy ra, tính trong render.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Months newest first with totals",
+            "kiem": "danh-sach-text",
+            "selector": ".month h3",
+            "mongDoi": [
+              "2026-10 · +1,500,000 · -450,000 · balance 1,050,000",
+              "2026-09 · +800,000 · -200,000 · balance 600,000"
+            ]
+          },
+          {
+            "moTa": "October transactions newest first",
+            "kiem": "danh-sach-text",
+            "selector": ".month:first-of-type .tx",
+            "mongDoi": [
+              "20/10 Rent share -400,000",
+              "05/10 Salary +1,500,000",
+              "03/10 Coffee -50,000"
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "September transactions",
+            "kiem": "danh-sach-text",
+            "selector": ".month:nth-of-type(2) .tx",
+            "mongDoi": [
+              "28/09 Books -200,000",
+              "15/09 Freelance +800,000"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sắp tháng bằng <code>new Date(m)</code> với chuỗi \"2026-10\" — được nhưng thừa; chuỗi yyyy-mm so sánh trực tiếp là đủ."
+        },
+        {
+          "loi": "Cộng chi tiêu vào tổng thu vì quên phân loại <code>type</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "statement",
+          "vi": "sao kê"
+        },
+        {
+          "en": "balance",
+          "vi": "số dư"
+        },
+        {
+          "en": "income / expense",
+          "vi": "thu / chi"
+        }
+      ]
+    }
+  ]
+}

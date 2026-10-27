@@ -116,6 +116,36 @@
       "name": "Interview corner — ES6 for React",
       "level": "BEGINNER",
       "description": "8 câu phỏng vấn React junior về ES6 kèm câu trả lời mẫu song ngữ để luyện nói."
+    },
+    {
+      "slug": "fer202-3-1-jsx-basics",
+      "name": "3.1 JSX: HTML inside JavaScript",
+      "level": "BEGINNER",
+      "description": "5 bài luyện React: biểu thức JSX, thuộc tính JSX (className/htmlFor/style), danh sách + key, sửa lỗi cú pháp JSX, danh sách lồng."
+    },
+    {
+      "slug": "fer202-3-2-fragments-conditional",
+      "name": "3.2 Fragments & conditional rendering",
+      "level": "BEGINNER",
+      "description": "5 bài: return sớm, bẫy && với số 0, bảng tra thay ?: lồng, Fragment trong bảng, 4 trạng thái giao diện."
+    },
+    {
+      "slug": "fer202-3-3-slot3-jsx-slides",
+      "name": "3.3 Slide check — Rendering with JSX",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm kiểm tra slide Slot 2–3 phần JSX."
+    },
+    {
+      "slug": "fer202-3-ex4-jsx-es6",
+      "name": "3.4 Exercise 4 — JSX & ES6 array methods",
+      "level": "BEGINNER",
+      "description": "5 bài theo Exercise 4 của trường: filter/map, sort bản sao, reduce tổng kết, find/some/every, nhóm theo tháng."
+    },
+    {
+      "slug": "fer202-3-interview-jsx",
+      "name": "Interview corner — JSX & rendering",
+      "level": "BEGINNER",
+      "description": "8 câu phỏng vấn về JSX, key, điều kiện, XSS, virtual DOM kèm câu trả lời mẫu."
     }
   ]
 }

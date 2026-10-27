@@ -1,0 +1,657 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-choosing-test-techniques",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-choosing-test-techniques"
+  },
+  "exercises": [
+    {
+      "title": "Choosing techniques 1 — Which factor is at work?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "choosing test techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Slides 111–112 list the factors that decide which technique fits. Each statement below shows one factor at work. Name it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 111–112 liệt kê các yếu tố quyết định kỹ thuật nào phù hợp. Mỗi phát biểu dưới đây cho thấy một yếu tố đang tác động. Gọi tên nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chữ “chuẩn/luật bắt buộc” ⇒ regulatory; “hợp đồng” ⇒ contractual.",
+        "“Lỗi hay gặp ở bản trước” ⇒ expected types of defects."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 1 — Which factor is at work?\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → factorPhát biểu → yếu tố\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 1 — Which factor is at work? — answer key\n\n1. Statement → factorPhát biểu → yếu tố\n   - r0.f: Available documentation\n   - r1.f: Regulatory standards\n   - r2.f: Type of component/system\n   - r3.f: Time and budget\n   - r4.f: Test objectives\n   - r5.f: Expected types of defects\n   - r6.f: Tester knowledge and skills\n   - r7.f: Customer or contractual requirements\n   Each row restates one factor of slides 111–112 (the teacher’s notes give the same examples: financial → BVA; aircraft → EP, BVA, state transition; typical tasks → use cases; existing decision tables/state graphs → their techniques).VI: Mỗi dòng nhắc lại một yếu tố của slide 111–112 (ghi chú của thầy/cô có đúng các ví dụ: tài chính → BVA; hàng không → EP, BVA, state transition; tác vụ điển hình → use case; đặc tả có sẵn decision table/đồ thị trạng thái → kỹ thuật tương ứng).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Documentation · Regulatory · Type of system · Time and budget · Test objectives · Expected defects · Tester knowledge · Contractual.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → factor</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → yếu tố</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "f",
+                "ten": "Factor",
+                "luaChon": [
+                  "Type of component/system",
+                  "Complexity",
+                  "Regulatory standards",
+                  "Customer or contractual requirements",
+                  "Risk levels and types",
+                  "Test objectives",
+                  "Available documentation",
+                  "Tester knowledge and skills",
+                  "Available tools",
+                  "Time and budget",
+                  "SDLC model",
+                  "Expected use of the software",
+                  "Expected types of defects"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The SRS of the refund rules already contains a decision table, so the team uses decision-table testing"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The flight-control software must be tested with EP, BVA and state transition testing because the aviation standard says so"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The fee calculator has many money calculations, so BVA is applied to every amount"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The release is in three days; the team plans two exploratory sessions instead of full test design"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The team wants confidence that students can complete their typical daily tasks, so it uses use case testing"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Past releases showed many off-by-one defects, so BVA is emphasised"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The new tester has never used state transition testing, so the senior tester pairs with her"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The contract with the university requires 100% decision coverage of the payment module"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.f": "Available documentation",
+              "r1.f": "Regulatory standards",
+              "r2.f": "Type of component/system",
+              "r3.f": "Time and budget",
+              "r4.f": "Test objectives",
+              "r5.f": "Expected types of defects",
+              "r6.f": "Tester knowledge and skills",
+              "r7.f": "Customer or contractual requirements"
+            },
+            "giaiThich": "<p>Each row restates one factor of slides 111–112 (the teacher’s notes give the same examples: financial → BVA; aircraft → EP, BVA, state transition; typical tasks → use cases; existing decision tables/state graphs → their techniques).</p><p><i>VI: Mỗi dòng nhắc lại một yếu tố của slide 111–112 (ghi chú của thầy/cô có đúng các ví dụ: tài chính → BVA; hàng không → EP, BVA, state transition; tác vụ điển hình → use case; đặc tả có sẵn decision table/đồ thị trạng thái → kỹ thuật tương ứng).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán dòng hợp đồng cho regulatory."
+        },
+        {
+          "loi": "Gán dòng “ứng dụng nhiều phép tính tiền” cho complexity — slide gọi đó là loại hệ thống (financial)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "factor",
+          "vi": "yếu tố"
+        },
+        {
+          "en": "high-integrity system",
+          "vi": "hệ thống đòi độ toàn vẹn cao"
+        }
+      ]
+    },
+    {
+      "title": "Choosing techniques 2 — Pick the best technique for each LabBook feature",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "choosing test techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Using the “typical consequence” column of the lesson (financial → BVA, combinations of rules → decision table, life cycle → state transition, typical tasks → use cases, no spec + time pressure → exploratory…), pick the technique that fits each situation best.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng cột “hệ quả điển hình” của bài (tài chính → BVA, tổ hợp luật → decision table, vòng đời → state transition, tác vụ điển hình → use case, không có đặc tả + gấp → exploratory…), chọn kỹ thuật hợp nhất cho từng tình huống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có “cùng lúc nhiều điều kiện” ⇒ decision table.",
+        "“Có biên rõ” ⇒ BVA; “xử lý như nhau” ⇒ EP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 2 — Pick the best technique for each LabBook feature\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → techniqueTình huống → kỹ thuật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 2 — Pick the best technique for each LabBook feature — answer key\n\n1. Situation → techniqueTình huống → kỹ thuật\n   - r0.t: Decision table testing\n   - r1.t: State transition testing\n   - r2.t: Boundary value analysis\n   - r3.t: Equivalence partitioning\n   - r4.t: Exploratory testing\n   - r5.t: Use case testing\n   - r6.t: Decision coverage\n   - r7.t: Checklist-based testing\n   Combinations of conditions → decision table; states and events → state transition; ranges with edges → BVA; groups processed alike → EP; no spec + time pressure → exploratory; end-to-end scenarios → use case; structural coverage → decision coverage; recurring conventions → checklist.VI: Tổ hợp điều kiện → decision table; trạng thái và sự kiện → state transition; khoảng có biên → BVA; nhóm xử lý như nhau → EP; không đặc tả + gấp → exploratory; kịch bản đầu-cuối → use case; độ phủ cấu trúc → decision coverage; quy ước lặp lại → checklist.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DT · ST · BVA · EP · Exploratory · Use case · Decision coverage · Checklist.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → technique</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → kỹ thuật</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "t",
+                "ten": "Technique",
+                "luaChon": [
+                  "Equivalence partitioning",
+                  "Boundary value analysis",
+                  "Decision table testing",
+                  "State transition testing",
+                  "Use case testing",
+                  "Decision coverage",
+                  "Exploratory testing",
+                  "Checklist-based testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The refund depends on three conditions together: hours before the start, booking status and whether the student is a teaching assistant"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A booking moves NONE → PENDING → CONFIRMED → CANCELLED and some events are not allowed in some states"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The weekly limit is “at most 6 hours”, an integer range with a clear edge"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The “lab type” field accepts one of five codes; each code is handled the same way"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A new lab-map screen arrived without any specification two days before the demo"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The team must show the department that the main scenarios “book, cancel, get promoted” work end to end"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The payment module must reach a measurable structural coverage before release"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Every new screen is checked against the team’s accessibility and UI conventions"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Decision table testing",
+              "r1.t": "State transition testing",
+              "r2.t": "Boundary value analysis",
+              "r3.t": "Equivalence partitioning",
+              "r4.t": "Exploratory testing",
+              "r5.t": "Use case testing",
+              "r6.t": "Decision coverage",
+              "r7.t": "Checklist-based testing"
+            },
+            "giaiThich": "<p>Combinations of conditions → decision table; states and events → state transition; ranges with edges → BVA; groups processed alike → EP; no spec + time pressure → exploratory; end-to-end scenarios → use case; structural coverage → decision coverage; recurring conventions → checklist.</p><p><i>VI: Tổ hợp điều kiện → decision table; trạng thái và sự kiện → state transition; khoảng có biên → BVA; nhóm xử lý như nhau → EP; không đặc tả + gấp → exploratory; kịch bản đầu-cuối → use case; độ phủ cấu trúc → decision coverage; quy ước lặp lại → checklist.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn EP cho giới hạn 6 giờ — có biên rõ thì BVA hiệu quả hơn."
+        },
+        {
+          "loi": "Chọn use case cho vòng đời booking — trạng thái và sự kiện là state transition."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "accessibility",
+          "vi": "khả năng tiếp cận (người khuyết tật dùng được)"
+        }
+      ]
+    },
+    {
+      "title": "Choosing techniques 3 — How formally? (slide 110)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "formality of testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Which technique and how formally are two separate decisions. Slide 110 names four factors for formality: safety or regulatory industry, organisational maturity, lifecycle model, testers’ knowledge and skills. Decide whether each team should apply its techniques more or less formally.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn kỹ thuật nào và áp dụng hình thức đến đâu là hai quyết định riêng. Slide 110 nêu bốn yếu tố của mức hình thức: ngành an toàn/có quy định, độ trưởng thành của tổ chức, mô hình vòng đời, kiến thức kỹ năng của tester. Quyết định mỗi nhóm nên áp dụng hình thức hơn hay ít hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Người mới cần khung ⇒ hình thức hơn.",
+        "Chuyên gia + nguyên mẫu ⇒ phi hình thức vẫn hiệu quả."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 3 — How formally? (slide 110)\n\nAnswer in the answer panel (no code needed).\n\n1. Team → formalityNhóm → mức hình thức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 3 — How formally? (slide 110) — answer key\n\n1. Team → formalityNhóm → mức hình thức\n   - r0.f: More formal\n   - r1.f: Less formal\n   - r2.f: More formal\n   - r3.f: Less formal\n   - r4.f: More formal\n   Safety/regulation, maturity and sequential models push towards formal; short iterations and expert testers allow informal work; beginners need the structure of formal techniques.VI: An toàn/quy định, độ trưởng thành và mô hình tuần tự đẩy về phía hình thức; vòng lặp ngắn và tester giỏi cho phép phi hình thức; người mới cần khung của kỹ thuật hình thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>More · Less · More · Less · More.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Team → formality</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm → mức hình thức</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Team"
+              },
+              {
+                "ma": "f",
+                "ten": "Formality",
+                "luaChon": [
+                  "More formal",
+                  "Less formal"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "A railway-signalling supplier audited against a safety standard"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "A two-person student start-up building LabBook in one-week sprints"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "A CMMI level-5 outsourcing company with a V-model contract"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "A senior exploratory tester working alone on a prototype"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "A team of first-year interns who have never designed tests"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.f": "More formal",
+              "r1.f": "Less formal",
+              "r2.f": "More formal",
+              "r3.f": "Less formal",
+              "r4.f": "More formal"
+            },
+            "giaiThich": "<p>Safety/regulation, maturity and sequential models push towards formal; short iterations and expert testers allow informal work; beginners need the structure of formal techniques.</p><p><i>VI: An toàn/quy định, độ trưởng thành và mô hình tuần tự đẩy về phía hình thức; vòng lặp ngắn và tester giỏi cho phép phi hình thức; người mới cần khung của kỹ thuật hình thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng người mới nên làm phi hình thức “cho nhanh”."
+        },
+        {
+          "loi": "Cho rằng start-up Agile cần tài liệu như CMMI 5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CMMI",
+          "vi": "mô hình đánh giá độ trưởng thành quy trình"
+        },
+        {
+          "en": "formality",
+          "vi": "mức hình thức — tài liệu, truy vết"
+        }
+      ]
+    },
+    {
+      "title": "Choosing techniques 4 — Exam questions, internal and external factors",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "choosing test techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five FE-style questions, including the older CTFL 2011 grouping of the factors into internal (what the test team knows and has) and external (what the project, the customer and the law impose) — hidden slides 114–115.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu FE, gồm cả cách chia cũ của CTFL 2011 thành yếu tố bên trong (đội test biết và có gì) và bên ngoài (dự án, khách hàng, luật áp đặt gì) — slide ẩn 114–115.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bên trong = đội test biết và có gì; bên ngoài = dự án, khách hàng, luật áp đặt gì.",
+        "Mô hình tuần tự ⇒ hình thức; mô hình lặp ⇒ khám phá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 4 — Exam questions, internal and external factors\n\nAnswer in the answer panel (no code needed).\n\n1. Which is an EXTERNAL factor in the CTFL 2011 grouping?Đâu là yếu tố BÊN NGOÀI theo cách chia CTFL 2011?\n2. Which is an INTERNAL factor?Đâu là yếu tố BÊN TRONG?\n3. What is the best statement about choosing test techniques?Phát biểu đúng nhất về chọn kỹ thuật test?\n4. A sequential lifecycle model tends to lead to…Mô hình vòng đời tuần tự có xu hướng dẫn tới…\n5. Safety-critical use (e.g. medical monitoring) mainly implies…Phần mềm dùng trong tình huống an toàn sống còn (vd theo dõi y tế) chủ yếu đòi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing techniques 4 — Exam questions, internal and external factors — answer key\n\n1. Which is an EXTERNAL factor in the CTFL 2011 grouping?Đâu là yếu tố BÊN NGOÀI theo cách chia CTFL 2011?\n   Answer: b) Regulatory requirements\n   External: risk, customer/contractual requirements, type of system, regulatory requirements, time and budget.VI: Bên ngoài: rủi ro, yêu cầu khách hàng/hợp đồng, loại hệ thống, yêu cầu quy định, thời gian và ngân sách.\n\n2. Which is an INTERNAL factor?Đâu là yếu tố BÊN TRONG?\n   Answer: c) Test objective\n   Internal: models used, tester knowledge/experience, likely defects, test objective, documentation, lifecycle model.VI: Bên trong: mô hình dùng, kiến thức/kinh nghiệm tester, lỗi dự kiến, mục tiêu test, tài liệu, mô hình vòng đời.\n\n3. What is the best statement about choosing test techniques?Phát biểu đúng nhất về chọn kỹ thuật test?\n   Answer: b) Techniques are usually combined; the choice depends on many factors and some techniques fit some situations better\n   No technique is best in all situations.VI: Không có kỹ thuật nào tốt nhất cho mọi tình huống.\n\n4. A sequential lifecycle model tends to lead to…Mô hình vòng đời tuần tự có xu hướng dẫn tới…\n   Answer: a) more formal techniques\n   Iterative models lean towards an exploratory approach.VI: Mô hình lặp nghiêng về cách tiếp cận khám phá.\n\n5. Safety-critical use (e.g. medical monitoring) mainly implies…Phần mềm dùng trong tình huống an toàn sống còn (vd theo dõi y tế) chủ yếu đòi…\n   Answer: b) more thorough testing\n   Expected use of the software.VI: Yếu tố cách phần mềm sẽ được dùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · c · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is an EXTERNAL factor in the CTFL 2011 grouping?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố BÊN NGOÀI theo cách chia CTFL 2011?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tester knowledge and experience"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Regulatory requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Models used"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Likely defects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>External: risk, customer/contractual requirements, type of system, regulatory requirements, time and budget.</p><p><i>VI: Bên ngoài: rủi ro, yêu cầu khách hàng/hợp đồng, loại hệ thống, yêu cầu quy định, thời gian và ngân sách.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is an INTERNAL factor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố BÊN TRONG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Time and budget"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Type of system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Test objective"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Risk"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Internal: models used, tester knowledge/experience, likely defects, test objective, documentation, lifecycle model.</p><p><i>VI: Bên trong: mô hình dùng, kiến thức/kinh nghiệm tester, lỗi dự kiến, mục tiêu test, tài liệu, mô hình vòng đời.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What is the best statement about choosing test techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu đúng nhất về chọn kỹ thuật test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One technique is always the best"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Techniques are usually combined; the choice depends on many factors and some techniques fit some situations better"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only black-box techniques are needed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The cheapest technique is always chosen"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No technique is best in all situations.</p><p><i>VI: Không có kỹ thuật nào tốt nhất cho mọi tình huống.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A sequential lifecycle model tends to lead to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô hình vòng đời tuần tự có xu hướng dẫn tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "more formal techniques"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only exploratory testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no test design"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only acceptance testing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Iterative models lean towards an exploratory approach.</p><p><i>VI: Mô hình lặp nghiêng về cách tiếp cận khám phá.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Safety-critical use (e.g. medical monitoring) mainly implies…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần mềm dùng trong tình huống an toàn sống còn (vd theo dõi y tế) chủ yếu đòi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "less testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "more thorough testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only usability testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only exploratory testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Expected use of the software.</p><p><i>VI: Yếu tố cách phần mềm sẽ được dùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp “time and budget” vào bên trong."
+        },
+        {
+          "loi": "Chọn “một kỹ thuật tốt nhất”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "internal / external factors",
+          "vi": "yếu tố bên trong / bên ngoài"
+        }
+      ]
+    }
+  ]
+}

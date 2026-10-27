@@ -1,0 +1,436 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-6-lab-experience-based-booking-form",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-experience-based"
+  },
+  "exercises": [
+    {
+      "title": "Lab 6 — Experience-based Testing of the LabBook Booking Form",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 100,
+      "concepts": [
+        "error guessing",
+        "checklist-based testing",
+        "choosing test techniques"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 6"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "experience-based"
+      ],
+      "problemHtml": "<h1>Lab 6 — Experience-based Testing of the LabBook Booking Form</h1>\n<p class=\"bi-phu\">Chapter 6 lab · error guessing in code, checklist-based testing, choosing techniques · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>A. Error guessing.</b> The booking form sends the chosen slot as a text range. <code>parseTimeRange(s)</code> accepts exactly <code>HH:MM-HH:MM</code> (two digits each, no spaces), times 00:00–23:59, end strictly after start, at most 180 minutes, and returns minutes since midnight <code>{ start, end }</code>; anything else returns <code>null</code> (never throws).</p><pre>function parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 &gt; 23 || h2 &gt; 23 || m1 &gt; 59 || m2 &gt; 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end &lt;= start) return null;\n  if (end - start &gt; 180) return null;\n  return { start, end };\n}</pre><p>Write a fault attack list as tests in <code>tests.js</code>. The grader runs them on the correct function and on 9 versions with typical developer mistakes (6 listed, 3 hidden).</p>\n<p><b>B. Checklist-based testing.</b> Run the team’s UI checklist against the new “Book a seat” screen. What the tester observed:</p><ol><li>Fields: Lab (dropdown, required, marked *), Date (date picker, required, marked *), Start hour (dropdown 07–20, required, not marked), Duration (1–3, default 1).</li><li>Pressing Book with an empty Date shows “Error 400” in red at the top of the page.</li><li>When the weekly limit would be exceeded: “You have 5 of 6 hours this week. Choose at most 1 hour.” next to Duration.</li><li>The Book button stays enabled while the request is in progress; a double click sends two requests.</li><li>The form shows the date as 2026-11-02; the confirmation dialog shows 02/11/2026.</li><li>Tab moves Lab → Date → Start hour → Duration → Book, the order in which they appear.</li><li>Text contrast was measured with a WCAG checker: all ratios ≥ 4.5:1.</li><li>The “Cancel booking” link opens “Cancel BK0001? Yes / No” before cancelling.</li></ol><p>Checklist: <b>C1</b> Every required field is marked with * · <b>C2</b> Every error message says what is wrong and how to fix it · <b>C3</b> Submit buttons are disabled while a request is in progress (no double submission) · <b>C4</b> Dates use one consistent format everywhere · <b>C5</b> The tab order follows the visual order · <b>C6</b> Colour contrast meets WCAG AA · <b>C7</b> Destructive actions ask for confirmation · <b>C8</b> Fields have sensible defaults where possible. Mark every item PASS or FAIL.</p>\n<p><b>C. Choosing techniques.</b> <b>F1</b> The late-cancellation fee depends on hours before the start (≥ 24, 2–24, < 2) × booking status × whether the student is a teaching assistant · <b>F2</b> An account is locked after 3 wrong passwords and unlocked by an admin; a locked account rejects old tokens · <b>F3</b> The lab capacity field accepts integers from 1 to 60 · <b>F4</b> A new statistics dashboard arrived without any specification; the demo is tomorrow · <b>F5</b> The contract requires a measured structural coverage of the payment module · <b>F6</b> The lab department wants evidence that the end-to-end “set up next semester’s labs” scenario works.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. A fault attack list that kills the typical-mistake versions of parseTimeRange.</li>\n  <li>B. PASS/FAIL for eight checklist items.</li>\n  <li>C. The best technique for six features.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Do not declare parseTimeRange in tests.js — the grader provides it.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>lib/testkit.js           ← Jest-like runner (do not edit)\ntests.js                 ← Part A: your fault attack list\nanswers/b-checklist.js   ← const CHECKLIST = { C1: 'PASS' | 'FAIL', … }\nanswers/c-techniques.js  ← const TECHNIQUES = { F1: '…', … }</pre>\n<h2>3. Data model</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>CHECKLIST.*</code></td><td>string</td><td>PASS · FAIL</td></tr><tr><td><code>TECHNIQUES.*</code></td><td>string</td><td>Equivalence partitioning · Boundary value analysis · Decision table testing · State transition testing · Use case testing · Decision coverage · Exploratory testing · Checklist-based testing</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A1 Attack list — listed mistakes <span class=\"bi-diem\">4 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A valid suite (≥ 10 tests, all pass on the correct function) that kills M1–M6.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2 Attack list — hidden mistakes <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Three more typical mistakes you must guess.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. Checklist-based testing <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Eight items.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">checklist-based testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Choosing techniques <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Six features.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">choosing test techniques</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>tests.js</code></td><td>tests.js</td></tr><tr><td><code>CHECKLIST</code></td><td>answers/b-checklist.js</td></tr><tr><td><code>TECHNIQUES</code></td><td>answers/c-techniques.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A1 Attack list — listed mistakes</td><td>4</td></tr><tr><td>2</td><td>A2 Attack list — hidden mistakes</td><td>1</td></tr><tr><td>3</td><td>B. Checklist-based testing</td><td>3</td></tr><tr><td>4</td><td>C. Choosing techniques</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Never guessing null or a non-string input — the version that crashes on null survives.</li>\n  <li>Passing a checklist item because MOST of the screen complies.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 6 — Experience-based Testing of the LabBook Booking Form</h1>\n<p class=\"bi-phu\">Lab chương 6 · error guessing bằng code, kiểm thử theo checklist, chọn kỹ thuật · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>A. Error guessing.</b> Form đặt chỗ gửi khung giờ đã chọn dưới dạng chuỗi. <code>parseTimeRange(s)</code> chỉ nhận đúng <code>HH:MM-HH:MM</code> (mỗi phần hai chữ số, không khoảng trắng), giờ 00:00–23:59, kết thúc sau bắt đầu, tối đa 180 phút, trả số phút tính từ nửa đêm <code>{ start, end }</code>; mọi thứ khác trả <code>null</code> (không ném lỗi). Viết danh sách tấn công dưới dạng test trong <code>tests.js</code>; máy chấm chạy trên hàm đúng và 9 phiên bản chứa sai sót điển hình (6 công khai, 3 ẩn).</p>\n<p><b>B. Kiểm thử theo checklist.</b> Áp checklist UI của nhóm lên màn hình “Đặt chỗ” mới; quan sát của tester và các mục C1–C8 ở trên. Đánh mỗi mục PASS hoặc FAIL.</p>\n<p><b>C. Chọn kỹ thuật</b> cho sáu tính năng F1–F6 ở trên.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Danh sách tấn công giết được các phiên bản sai sót điển hình của parseTimeRange.</li>\n  <li>B. PASS/FAIL cho tám mục checklist.</li>\n  <li>C. Kỹ thuật hợp nhất cho sáu tính năng.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Không khai báo parseTimeRange trong tests.js — máy chấm cung cấp.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>lib/testkit.js           ← Jest-like runner (do not edit)\ntests.js                 ← Part A: your fault attack list\nanswers/b-checklist.js   ← const CHECKLIST = { C1: 'PASS' | 'FAIL', … }\nanswers/c-techniques.js  ← const TECHNIQUES = { F1: '…', … }</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Allowed values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>CHECKLIST.*</code></td><td>string</td><td>PASS · FAIL</td></tr><tr><td><code>TECHNIQUES.*</code></td><td>string</td><td>Equivalence partitioning · Boundary value analysis · Decision table testing · State transition testing · Use case testing · Decision coverage · Exploratory testing · Checklist-based testing</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A1 Danh sách tấn công — sai sót công khai <span class=\"bi-diem\">4 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bộ test hợp lệ (≥ 10 test, đạt hết trên hàm đúng) giết M1–M6.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. A2 Danh sách tấn công — sai sót ẩn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ba sai sót điển hình nữa bạn phải tự đoán.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. B. Kiểm thử theo checklist <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tám mục.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">checklist-based testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C. Chọn kỹ thuật <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Sáu tính năng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">choosing test techniques</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>tests.js</code></td><td>tests.js</td></tr><tr><td><code>CHECKLIST</code></td><td>answers/b-checklist.js</td></tr><tr><td><code>TECHNIQUES</code></td><td>answers/c-techniques.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A1 Danh sách tấn công — sai sót công khai</td><td>4</td></tr><tr><td>2</td><td>A2 Danh sách tấn công — sai sót ẩn</td><td>1</td></tr><tr><td>3</td><td>B. Kiểm thử theo checklist</td><td>3</td></tr><tr><td>4</td><td>C. Chọn kỹ thuật</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Không đoán đầu vào null hay không phải chuỗi — phiên bản sập khi gặp null sống sót.</li>\n  <li>Cho mục checklist PASS vì PHẦN LỚN màn hình đúng.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Do not declare parseTimeRange in tests.js — the grader provides it.|||Không khai báo parseTimeRange trong tests.js — máy chấm cung cấp.",
+      "examplesJson": [
+        {
+          "input": "expect(parseTimeRange('23:00-24:00')).toBeNull()",
+          "output": "kills M1 (hour 24 accepted)",
+          "explanation": "A classic guess: 24:00 is not a valid clock time here.|||Đoán kinh điển: 24:00 không phải giờ hợp lệ ở đây."
+        }
+      ],
+      "hintsJson": [
+        "A: liệt kê sai sót hay gặp với khoảng giờ: 24:00, phút 60, độ dài 0, khoảng ngược, đúng 3 giờ, giờ một chữ số, khoảng trắng, null, đổi đơn vị.",
+        "A: kiểm GIÁ TRỊ trả về (start/end tính bằng phút), không chỉ null hay khác null.",
+        "B: một mục checklist FAIL nếu có BẤT KỲ chỗ nào trên màn hình vi phạm.",
+        "C: tổ hợp điều kiện → decision table; trạng thái → state transition; khoảng số → BVA; không đặc tả + gấp → exploratory."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Part A — fault attack list for parseTimeRange (error guessing).\ntest.each([\n  ['09:00-11:00', { start: 540, end: 660 }],\n])('parseTimeRange(%p)', (s, want) => {\n  expect(parseTimeRange(s)).toEqual(want);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "answers/b-checklist.js",
+          "language": "javascript",
+          "code": "// 'PASS' | 'FAIL'\nconst CHECKLIST = { C1: '', C2: '', C3: '', C4: '', C5: '', C6: '', C7: '', C8: '' };\n"
+        },
+        {
+          "name": "answers/c-techniques.js",
+          "language": "javascript",
+          "code": "// Equivalence partitioning | Boundary value analysis | Decision table testing | State transition testing | Use case testing | Decision coverage | Exploratory testing | Checklist-based testing\nconst TECHNIQUES = { F1: '', F2: '', F3: '', F4: '', F5: '', F6: '' };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Part A — fault attack list for parseTimeRange: one row per mistake developers make with time ranges.\ntest.each([\n  ['09:00-11:00', { start: 540, end: 660 }],   // normal\n  ['09:30-10:15', { start: 570, end: 615 }],   // minutes are converted to minutes since midnight\n  ['09:00-12:00', { start: 540, end: 720 }],   // exactly 3 hours is allowed\n  ['00:00-00:01', { start: 0, end: 1 }],       // first minute of the day\n  ['22:59-23:59', { start: 1379, end: 1439 }], // last valid minute\n])('valid: parseTimeRange(%p)', (s, want) => {\n  expect(parseTimeRange(s)).toEqual(want);\n});\n\ntest.each([\n  ['09:00-12:01'],   // 3 h 1 min — too long\n  ['09:00-09:00'],   // zero length\n  ['11:00-09:00'],   // reversed\n  ['23:00-24:00'],   // hour 24\n  ['09:60-10:30'],   // minute 60\n  ['9:00-10:00'],    // single-digit hour\n  ['09:00 - 10:00'], // spaces around the dash\n  ['09:00-'],        // missing end\n  [''],              // empty\n  ['0900-1000'],     // no colon\n])('invalid: parseTimeRange(%p) is null', (s) => {\n  expect(parseTimeRange(s)).toBeNull();\n});\n\ntest.each([[null], [undefined], [930]])('parseTimeRange(%p) returns null and never throws', (v) => {\n  expect(() => parseTimeRange(v)).not.toThrow();\n  expect(parseTimeRange(v)).toBeNull();\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "answers/b-checklist.js",
+          "language": "javascript",
+          "code": "// Checklist run on the \"Book a seat\" screen.\nconst CHECKLIST = {\n  C1: 'FAIL', // Start hour is required but not marked\n  C2: 'FAIL', // \"Error 400\" says neither what is wrong nor how to fix it\n  C3: 'FAIL', // Book stays enabled; a double click sends two requests\n  C4: 'FAIL', // 2026-11-02 on the form, 02/11/2026 in the dialog\n  C5: 'PASS',\n  C6: 'PASS',\n  C7: 'PASS',\n  C8: 'PASS', // Duration defaults to 1\n};\n"
+        },
+        {
+          "name": "answers/c-techniques.js",
+          "language": "javascript",
+          "code": "const TECHNIQUES = {\n  F1: 'Decision table testing',\n  F2: 'State transition testing',\n  F3: 'Boundary value analysis',\n  F4: 'Exploratory testing',\n  F5: 'Decision coverage',\n  F6: 'Use case testing',\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A: one test row per guessed mistake (hour 24, minute 60, zero length, reversed, exactly 180 minutes, single digit, spaces, null, unit). B: C1–C4 FAIL (start hour not marked; “Error 400”; button not disabled; two date formats), C5–C8 PASS. C: DT · ST · BVA · Exploratory · Decision coverage · Use case.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js",
+          "answers/b-checklist.js",
+          "answers/c-techniques.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof parseTimeRange !== 'undefined' && parseTimeRange !== globalThis[\"parseTimeRange\"]) return 'tests.js must not declare parseTimeRange itself (let/const/class/copy of the code) — call the global parseTimeRange that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 10 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 10 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 10) return 'only ' + r.tong + ' test(s) — write at least 10';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: hour 24 is accepted",
+              "vi": "Giết mutant M1: nhận giờ 24"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 24 || h2 > 24 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: minute 60 is accepted",
+              "vi": "Giết mutant M2: nhận phút 60"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 60 || m2 > 60) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: a zero-length range is accepted",
+              "vi": "Giết mutant M3: nhận khoảng dài 0"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end < start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: a reversed range (end before start) is accepted",
+              "vi": "Giết mutant M4: nhận khoảng ngược (kết thúc trước bắt đầu)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: exactly 3 hours is rejected",
+              "vi": "Giết mutant M5: từ chối đúng 3 giờ"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start >= 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M6: null crashes instead of returning null",
+              "vi": "Giết mutant M6: null làm sập thay vì trả null"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (s.length > 11) return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{1,2}):(\\d{2})-(\\d{1,2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M8 is killed",
+              "vi": "Mutant ẩn M8 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})\\s*-\\s*(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M9 is killed",
+              "vi": "Mutant ẩn M9 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 60 + m1;\n  const end = h2 * 60 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction parseTimeRange(s) {\n  if (typeof s !== 'string') return null;\n  const m = /^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$/.exec(s);\n  if (!m) return null;\n  const [h1, m1, h2, m2] = m.slice(1).map(Number);\n  if (h1 > 23 || h2 > 23 || m1 > 59 || m2 > 59) return null;\n  const start = h1 * 100 + m1;\n  const end = h2 * 100 + m2;\n  if (end <= start) return null;\n  if (end - start > 180) return null;\n  return { start, end };\n}\nreturn { \"parseTimeRange\": parseTimeRange };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C1",
+              "vi": "B — mục checklist C1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C1); } catch (e) { return 'CHECKLIST.C1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C1 is empty';\n  var chap = [\"FAIL\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C2",
+              "vi": "B — mục checklist C2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C2); } catch (e) { return 'CHECKLIST.C2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C2 is empty';\n  var chap = [\"FAIL\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C3",
+              "vi": "B — mục checklist C3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C3); } catch (e) { return 'CHECKLIST.C3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C3 is empty';\n  var chap = [\"FAIL\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C4",
+              "vi": "B — mục checklist C4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C4); } catch (e) { return 'CHECKLIST.C4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C4 is empty';\n  var chap = [\"FAIL\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C5",
+              "vi": "B — mục checklist C5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C5); } catch (e) { return 'CHECKLIST.C5 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C5 is empty';\n  var chap = [\"PASS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C6",
+              "vi": "B — mục checklist C6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C6); } catch (e) { return 'CHECKLIST.C6 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C6 is empty';\n  var chap = [\"PASS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C7",
+              "vi": "B — mục checklist C7"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C7); } catch (e) { return 'CHECKLIST.C7 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C7 is empty';\n  var chap = [\"PASS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — checklist item C8",
+              "vi": "B — mục checklist C8"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (CHECKLIST.C8); } catch (e) { return 'CHECKLIST.C8 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'CHECKLIST.C8 is empty';\n  var chap = [\"PASS\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F1",
+              "vi": "C — kỹ thuật cho F1"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F1); } catch (e) { return 'TECHNIQUES.F1 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F1 is empty';\n  var chap = [\"Decision table testing\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F2",
+              "vi": "C — kỹ thuật cho F2"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F2); } catch (e) { return 'TECHNIQUES.F2 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F2 is empty';\n  var chap = [\"State transition testing\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F3",
+              "vi": "C — kỹ thuật cho F3"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F3); } catch (e) { return 'TECHNIQUES.F3 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F3 is empty';\n  var chap = [\"Boundary value analysis\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F4",
+              "vi": "C — kỹ thuật cho F4"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F4); } catch (e) { return 'TECHNIQUES.F4 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F4 is empty';\n  var chap = [\"Exploratory testing\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F5",
+              "vi": "C — kỹ thuật cho F5"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F5); } catch (e) { return 'TECHNIQUES.F5 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F5 is empty';\n  var chap = [\"Decision coverage\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "C — technique for F6",
+              "vi": "C — kỹ thuật cho F6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (TECHNIQUES.F6); } catch (e) { return 'TECHNIQUES.F6 is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'TECHNIQUES.F6 is empty';\n  var chap = [\"Use case testing\"];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"chuoi\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"chuoi\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"chuoi\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A1 Attack list — listed mistakes",
+            "diem": 4
+          },
+          {
+            "ma": "f2",
+            "ten": "2. A2 Attack list — hidden mistakes",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. B. Checklist-based testing",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. C. Choosing techniques",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test chuỗi hợp lệ và một chuỗi rác."
+        },
+        {
+          "loi": "Đánh C2 là PASS vì thông báo giới hạn tuần tốt — thông báo “Error 400” vẫn làm mục này FAIL."
+        },
+        {
+          "loi": "Chọn EP cho F3 — có biên rõ thì BVA."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "fault attack list",
+          "vi": "danh sách tấn công lỗi"
+        },
+        {
+          "en": "WCAG",
+          "vi": "chuẩn khả năng tiếp cận nội dung web"
+        },
+        {
+          "en": "double submission",
+          "vi": "gửi trùng do bấm đúp"
+        }
+      ]
+    }
+  ]
+}

@@ -238,6 +238,36 @@
       "description": "Dự án LabBook — mốc chương 5: white-box cho thuật toán còn-chỗ (hai vòng lặp lồng, quyết định bốn điều kiện): chỉ số, phủ vòng lặp 0/1/nhiều + thoát sớm, decision + MC/DC đo thật; kèm góc phỏng vấn về coverage."
     },
     {
+      "slug": "swt301-experience-based",
+      "name": "6.1 Experience-based techniques: error guessing, exploratory, checklist",
+      "level": "BEGINNER",
+      "description": "Nhận diện ba kỹ thuật dựa kinh nghiệm trên LabBook, viết danh sách tấn công (error guessing) cho isValidDate chấm bằng mutant, tính số liệu debrief của session-based testing, câu thi."
+    },
+    {
+      "slug": "swt301-choosing-test-techniques",
+      "name": "6.2 Choosing test techniques",
+      "level": "BEGINNER",
+      "description": "Nhận diện 13 yếu tố chọn kỹ thuật, chọn kỹ thuật cho tám tình huống LabBook, quyết định mức hình thức, câu thi về yếu tố bên trong/bên ngoài."
+    },
+    {
+      "slug": "swt301-6-lab-experience-based-booking-form",
+      "name": "Lab 6 — Experience-based Testing of the LabBook Booking Form",
+      "level": "ADVANCED",
+      "description": "Lab chương 6: danh sách tấn công (error guessing) cho parseTimeRange chấm bằng 9 mutant sai sót điển hình, chạy checklist UI trên màn hình đặt chỗ, chọn kỹ thuật cho sáu tính năng LabBook."
+    },
+    {
+      "slug": "swt301-6-deep-attack-generator",
+      "name": "Deep Lab 6 — Automate Error Guessing: an Attack-Value Generator",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 6: viết attackValues(spec) sinh tối đa 20 giá trị tấn công cho trường int/string/date (BVA + đoán lỗi), chấm bằng 26 validator lỗi thật (lệch biên, số thực, chuỗi số, NaN, null, trim, Unicode, cuối tháng, năm nhuận, thiếu đệm 0); kiểm ẩn đổi khoảng."
+    },
+    {
+      "slug": "swt301-6-project-labbook-exploratory",
+      "name": "LabBook Project 6 — Exploratory Sessions on the 1.3 Beta",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 6: ba phiên exploratory có charter trên bản beta có lỗi chưa biết (phân quyền, đóng/mở phòng, đăng nhập sai); báo mỗi lỗi bằng ca tái hiện chạy thật, nộp phiếu phiên; kèm góc phỏng vấn 6."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
       "level": "ADVANCED",

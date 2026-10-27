@@ -1,0 +1,428 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-6-deep-attack-generator",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-experience-based"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 6 — Automate Error Guessing: an Attack-Value Generator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "error guessing",
+        "boundary value analysis",
+        "fuzzing",
+        "test automation"
+      ],
+      "prerequisites": [
+        "SWT301 lessons 4.3 and 6.1"
+      ],
+      "tags": [
+        "swt301",
+        "deep-lab",
+        "error-guessing"
+      ],
+      "problemHtml": "<h1>Deep Lab 6 — Automate Error Guessing: an Attack-Value Generator</h1>\n<p class=\"bi-phu\">Chapter 6 deep lab · error guessing + BVA turned into code · graded by faulty validators · 10 marks</p>\n<h2>1. Overview</h2>\n<p>Error guessing becomes much stronger when the fault attack list is generated, not typed. Tools such as property-based testing libraries and fuzzers do this. Write <code>attackValues(spec)</code> that returns <b>at most 20</b> distinct values for a field specification:</p>\n<pre>{ type: 'int',    min, max }          // integer, both ends included\n{ type: 'string', minLen, maxLen }    // a letter, then letters or digits; length within [minLen, maxLen]\n{ type: 'date',   from, to }          // 'YYYY-MM-DD' (zero-padded), a real calendar day, from ≤ date ≤ to</pre>\n<p>The grader holds the <b>correct validator</b> of each type and <b>26 faulty validators</b>, each with one mistake developers really make (boundaries off by one, non-integers, numeric strings, NaN, null coerced to 0, trimming, special or accented characters, month ends, leap years, missing zero padding…). A faulty validator is <b>caught</b> when at least one of your values gets a different answer from it than from the correct validator (or makes it throw). Hidden checks use other ranges, so the list must be computed from the spec, not hard-coded.</p>\n<h3>Main features</h3>\n<ul>\n  <li>f1 Integer fields.</li>\n  <li>f2 String fields.</li>\n  <li>f3 Date fields.</li>\n  <li>f4 List rules: ≤ 20 distinct values, unknown type → [], deterministic.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Values may be of any JavaScript type (numbers, strings, null, undefined, NaN). Two values are the same when typeof and String() are equal.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n└── attack-values.js   ← function attackValues(spec)</pre>\n<h2>3. Data model</h2>\n<p><b>Field specifications</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>int</code></td><td>{ type, min, max }</td><td>valid: typeof number, integer, min ≤ v ≤ max</td></tr><tr><td><code>string</code></td><td>{ type, minLen, maxLen }</td><td>valid: /^[A-Za-z][A-Za-z0-9]*$/ and length in range</td></tr><tr><td><code>date</code></td><td>{ type, from, to }</td><td>valid: YYYY-MM-DD, a real Gregorian day, inside the window</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. f1 Integers <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Catch 9 faulty validators (6 listed).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">BVA</span> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Strings <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Catch 9 faulty validators (6 listed).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Dates <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Catch 8 faulty validators (6 listed).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 List rules <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Size, uniqueness, unknown type, determinism.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">test design</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>attackValues(spec)</code></td><td>src/attack-values.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>f1 Integers</td><td>3</td></tr><tr><td>2</td><td>f2 Strings</td><td>3</td></tr><tr><td>3</td><td>f3 Dates</td><td>3</td></tr><tr><td>4</td><td>f4 List rules</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Hard-coding the values of the visible specs — hidden specs use other ranges.</li>\n  <li>Random values: a fuzzer without boundary knowledge rarely hits min − 1 exactly.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 6 — Automate Error Guessing: an Attack-Value Generator</h1>\n<p class=\"bi-phu\">Deep Lab chương 6 · error guessing + BVA thành code · chấm bằng validator lỗi · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Error guessing mạnh hơn nhiều khi danh sách tấn công được SINH ra chứ không gõ tay — các thư viện property-based testing và fuzzer làm đúng việc đó. Viết <code>attackValues(spec)</code> trả <b>tối đa 20</b> giá trị khác nhau cho một đặc tả trường (int, string, date như khối trên). Máy chấm giữ <b>validator đúng</b> của từng kiểu và <b>26 validator lỗi</b>, mỗi cái một sai sót developer hay mắc. Validator lỗi bị <b>bắt</b> khi ít nhất một giá trị của bạn cho kết quả khác với validator đúng (hoặc làm nó ném lỗi). Kiểm ẩn dùng khoảng khác, nên danh sách phải TÍNH từ đặc tả, không viết cứng.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>f1 Trường số nguyên.</li>\n  <li>f2 Trường chuỗi.</li>\n  <li>f3 Trường ngày.</li>\n  <li>f4 Luật danh sách: ≤ 20 giá trị khác nhau, kiểu lạ → [], tất định.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Giá trị có thể thuộc mọi kiểu JavaScript (số, chuỗi, null, undefined, NaN). Hai giá trị trùng khi typeof và String() bằng nhau.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n└── attack-values.js   ← function attackValues(spec)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Field specifications</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>int</code></td><td>{ type, min, max }</td><td>hợp lệ: kiểu number, số nguyên, min ≤ v ≤ max</td></tr><tr><td><code>string</code></td><td>{ type, minLen, maxLen }</td><td>hợp lệ: /^[A-Za-z][A-Za-z0-9]*$/ và độ dài trong khoảng</td></tr><tr><td><code>date</code></td><td>{ type, from, to }</td><td>hợp lệ: YYYY-MM-DD, ngày Gregory có thật, trong cửa sổ</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. f1 Số nguyên <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bắt 9 validator lỗi (6 công khai).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">BVA</span> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. f2 Chuỗi <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bắt 9 validator lỗi (6 công khai).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. f3 Ngày <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bắt 8 validator lỗi (6 công khai).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">error guessing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. f4 Luật danh sách <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Kích thước, không trùng, kiểu lạ, tất định.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">test design</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>attackValues(spec)</code></td><td>src/attack-values.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>f1 Số nguyên</td><td>3</td></tr><tr><td>2</td><td>f2 Chuỗi</td><td>3</td></tr><tr><td>3</td><td>f3 Ngày</td><td>3</td></tr><tr><td>4</td><td>f4 Luật danh sách</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Viết cứng giá trị cho đặc tả công khai — đặc tả ẩn dùng khoảng khác.</li>\n  <li>Giá trị ngẫu nhiên: fuzzer không biết biên hiếm khi trúng đúng min − 1.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Values may be of any JavaScript type (numbers, strings, null, undefined, NaN). Two values are the same when typeof and String() are equal.|||Giá trị có thể thuộc mọi kiểu JavaScript (số, chuỗi, null, undefined, NaN). Hai giá trị trùng khi typeof và String() bằng nhau.",
+      "examplesJson": [
+        {
+          "input": "attackValues({ type: 'int', min: 1, max: 60 })",
+          "output": "[0, 1, 2, 30, 59, 60, 61, -1, 1.5, NaN, Infinity, null, undefined, '1', '']",
+          "explanation": "BVA values plus guessed mistakes, computed from min and max.|||Giá trị BVA cộng các đoán lỗi, tính từ min và max."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu bằng BVA: min−1, min, min+1, max−1, max, max+1 (với chuỗi là độ dài).",
+        "Thêm đoán lỗi theo kiểu: số không nguyên, NaN, chuỗi số, null; chuỗi bắt đầu bằng số, ký tự đặc biệt, khoảng trắng, chữ có dấu; ngày sau cuối tháng, 29/2, không đệm 0.",
+        "Với ngày, dùng Date.UTC để cộng/trừ ngày và tìm số ngày của tháng (new Date(Date.UTC(y, m, 0)).getUTCDate()).",
+        "Khử trùng theo typeof + String(v) để không vượt 20 giá trị."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/attack-values.js",
+          "language": "javascript",
+          "code": "// Return at most 20 distinct attack values for the field specification.\nfunction attackValues(spec) {\n  if (spec.type === 'int') return [spec.min, spec.max];\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/attack-values.js",
+          "language": "javascript",
+          "code": "// Deep Lab 6 — automated error guessing: attack values from a field specification.\nfunction attackValues(spec) {\n  if (!spec || typeof spec !== 'object') return [];\n  if (spec.type === 'int') return intAttacks(spec);\n  if (spec.type === 'string') return stringAttacks(spec);\n  if (spec.type === 'date') return dateAttacks(spec);\n  return [];\n}\n\nfunction uniq(list) {\n  const seen = new Set();\n  return list.filter((v) => {\n    const k = typeof v + ':' + String(v);\n    if (seen.has(k)) return false;\n    seen.add(k);\n    return true;\n  });\n}\n\n// Integers: both boundaries ±1 (BVA), a middle value, then the guesses —\n// zero/negative, non-integer, NaN, Infinity, null/undefined, numeric string, empty string.\nfunction intAttacks({ min, max }) {\n  const mid = Math.floor((min + max) / 2);\n  return uniq([min - 1, min, min + 1, mid, max - 1, max, max + 1, 0, -1, min + 0.5, NaN, Infinity, null, undefined, String(min), '']);\n}\n\n// Strings: lengths min−1, min, min+1, max, max+1 (all made of allowed characters),\n// then one guessed mistake each: digit first, special character, spaces, accented letter, empty, null.\nfunction stringAttacks({ minLen, maxLen }) {\n  const word = (n) => (n <= 0 ? '' : 'A' + 'b1'.repeat(n).slice(0, n - 1));\n  const base = word(Math.max(minLen, 2));\n  return uniq([\n    word(minLen - 1), word(minLen), word(minLen + 1), word(maxLen), word(maxLen + 1),\n    '1' + base.slice(1), base.slice(0, -1) + '#', ' ' + base, base + ' ', 'Đ' + base.slice(1), '', null,\n  ]);\n}\n\n// Dates: window boundaries ±1 day, the day after each month end inside the window,\n// 29 February of every year in it, then format guesses (no padding, spaces, month 13, day 00, time suffix).\nfunction dateAttacks({ from, to }) {\n  const add = (iso, n) => new Date(Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10) + n)).toISOString().slice(0, 10);\n  const pad = (n) => String(n).padStart(2, '0');\n  const out = [add(from, -1), from, to, add(to, 1)];\n  let y = +from.slice(0, 4), m = +from.slice(5, 7);\n  const endY = +to.slice(0, 4), endM = +to.slice(5, 7);\n  while (y < endY || (y === endY && m <= endM)) {\n    const dim = new Date(Date.UTC(y, m, 0)).getUTCDate();\n    out.push(y + '-' + pad(m) + '-' + pad(dim + 1));\n    if (m === 2) out.push(y + '-02-29');\n    m++; if (m > 12) { m = 1; y++; }\n  }\n  const [fy, fm, fd] = from.split('-').map(Number);\n  out.push(fy + '-' + fm + '-' + fd, ' ' + from, from + ' ', fy + '-13-' + pad(fd), fy + '-' + pad(fm) + '-00', from + 'T00:00', '', null);\n  return uniq(out);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution combines BVA (both edges ±1, computed from the spec) with a fixed catalogue of typical mistakes for each type. Each catalogue entry exists because one faulty validator needs it: NaN for range checks written with negations, numeric strings for loose coercion, a leading space for trimming, an accented letter for Unicode-aware regexes, “day after month end” and 29 February for date arithmetic.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham chiếu kết hợp BVA (hai biên ±1, tính từ đặc tả) với danh mục cố định các sai sót điển hình của từng kiểu. Mỗi mục có mặt vì một validator lỗi cần nó: NaN cho kiểm khoảng viết bằng phủ định, chuỗi số cho ép kiểu lỏng, khoảng trắng đầu cho trim, chữ có dấu cho regex Unicode, “ngày sau cuối tháng” và 29/2 cho tính ngày.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "src/attack-values.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "I1 — catches a validator that rejects the minimum (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I1 — bắt validator từ chối giá trị nhỏ nhất (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>t.min&&e<=t.max;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "I2 — catches a validator that rejects the maximum (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I2 — bắt validator từ chối giá trị lớn nhất (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<t.max;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "I3 — catches a validator that accepts min − 1 (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I3 — bắt validator nhận min − 1 (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min-1&&e<=t.max;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "I4 — catches a validator that accepts max + 1 (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I4 — bắt validator nhận max + 1 (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max+1;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "I5 — catches a validator that accepts non-integers such as 2.5 (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I5 — bắt validator nhận số không nguyên như 2.5 (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&e>=t.min&&e<=t.max;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "I6 — catches a validator that accepts numeric strings such as \"5\" (spec {\"type\":\"int\",\"min\":1,\"max\":60})",
+              "vi": "I6 — bắt validator nhận chuỗi số như \"5\" (đặc tả {\"type\":\"int\",\"min\":1,\"max\":60})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(e,t)=>typeof t==\"number\"&&Number.isInteger(t)&&t>=e.min&&t<=e.max,u=(e,t)=>Number.isInteger(Number(t))&&t!==\"\"&&t!==null&&Number(t)>=e.min&&Number(t)<=e.max;return r.some(e=>{try{return n(a,e)!==u(a,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator I7 is caught",
+              "vi": "Validator lỗi ẩn I7 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:1,max:60};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(e,t)=>typeof t==\"number\"&&Number.isInteger(t)&&t>=e.min&&t<=e.max,o=(e,t)=>typeof t==\"number\"&&(Number.isInteger(t)||Number.isNaN(t))&&!(t<e.min)&&!(t>e.max);return r.some(e=>{try{return n(a,e)!==o(a,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator I8 is caught",
+              "vi": "Validator lỗi ẩn I8 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:0,max:3};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(e,t)=>typeof t==\"number\"&&Number.isInteger(t)&&t>=e.min&&t<=e.max,u=(e,t)=>(t===null||typeof t==\"number\"&&Number.isInteger(t))&&Number(t)>=e.min&&Number(t)<=e.max;return r.some(e=>{try{return n(a,e)!==u(a,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator I9 is caught",
+              "vi": "Validator lỗi ẩn I9 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a={type:\"int\",min:-10,max:10};let r;try{r=attackValues(JSON.parse(JSON.stringify(a)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const n=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>=t.min&&e<=t.max,o=(t,e)=>typeof e==\"number\"&&Number.isInteger(e)&&e>t.min&&e<=t.max;return r.some(t=>{try{return n(a,t)!==o(a,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "S1 — catches a validator that rejects exactly minLen characters (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S1 — bắt validator từ chối đúng minLen ký tự (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "S2 — catches a validator that rejects exactly maxLen characters (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S2 — bắt validator từ chối đúng maxLen ký tự (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "S3 — catches a validator that accepts minLen − 1 characters (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S3 — bắt validator nhận minLen − 1 ký tự (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen-1&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "S4 — catches a validator that accepts maxLen + 1 characters (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S4 — bắt validator nhận maxLen + 1 ký tự (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen+1&&/^[A-Za-z][A-Za-z0-9]*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "S5 — catches a validator that accepts a digit as the first character (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S5 — bắt validator nhận chữ số ở ký tự đầu (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z0-9]+$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "S6 — catches a validator that trims surrounding spaces before checking (spec {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})",
+              "vi": "S6 — bắt validator cắt khoảng trắng hai đầu rồi mới kiểm (đặc tả {\"type\":\"string\",\"minLen\":5,\"maxLen\":30})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n={type:\"string\",minLen:5,maxLen:30};let r;try{r=attackValues(JSON.parse(JSON.stringify(n)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(r))return\"attackValues must return an array\";if(r.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.trim().length>=t.minLen&&e.trim().length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e.trim());return r.some(t=>{try{return a(n,t)!==s(n,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator S7 is caught",
+              "vi": "Validator lỗi ẩn S7 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z]\\S*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator S8 is caught",
+              "vi": "Validator lỗi ẩn S8 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:5,maxLen:30};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^\\p{L}[\\p{L}\\d]*$/u.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator S9 is caught",
+              "vi": "Validator lỗi ẩn S9 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={type:\"string\",minLen:1,maxLen:8};let n;try{n=attackValues(JSON.parse(JSON.stringify(r)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(n))return\"attackValues must return an array\";if(n.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const a=(t,e)=>typeof e==\"string\"&&e.length>=t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e),s=(t,e)=>typeof e==\"string\"&&e.length>t.minLen&&e.length<=t.maxLen&&/^[A-Za-z][A-Za-z0-9]*$/.test(e);return n.some(t=>{try{return a(r,t)!==s(r,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D1 — catches a validator that rejects the first day of the window (spec {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})",
+              "vi": "D1 — bắt validator từ chối ngày đầu cửa sổ (đặc tả {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>i?!1:t>=e.from&&t<=e.to},c=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>i?!1:t>e.from&&t<=e.to};return a.some(e=>{try{return l(o,e)!==c(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D2 — catches a validator that rejects the last day of the window (spec {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})",
+              "vi": "D2 — bắt validator từ chối ngày cuối cửa sổ (đặc tả {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>i?!1:t>=e.from&&t<=e.to},c=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>i?!1:t>=e.from&&t<e.to};return a.some(e=>{try{return l(o,e)!==c(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D3 — catches a validator that accepts the day before the window (spec {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})",
+              "vi": "D3 — bắt validator nhận ngày trước cửa sổ (đặc tả {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,c=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>c?!1:t>=e.from&&t<=e.to},f=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,c=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>c?!1:t>=((i,d)=>new Date(Date.UTC(+i.slice(0,4),+i.slice(5,7)-1,+i.slice(8,10)+d)).toISOString().slice(0,10))(e.from,-1)&&t<=e.to};return a.some(e=>{try{return l(o,e)!==f(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D4 — catches a validator that accepts the day after the window (spec {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})",
+              "vi": "D4 — bắt validator nhận ngày sau cửa sổ (đặc tả {\"type\":\"date\",\"from\":\"2026-11-02\",\"to\":\"2026-11-16\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,c=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>c?!1:t>=e.from&&t<=e.to},f=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,c=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;if(s>c)return!1;const d=(i,m)=>new Date(Date.UTC(+i.slice(0,4),+i.slice(5,7)-1,+i.slice(8,10)+m)).toISOString().slice(0,10);return t>=e.from&&t<=d(e.to,1)};return a.some(e=>{try{return l(o,e)!==f(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D5 — catches a validator that every month has 31 days (window 2028-02-20 … 2028-03-05) (spec {\"type\":\"date\",\"from\":\"2028-02-20\",\"to\":\"2028-03-05\"})",
+              "vi": "D5 — bắt validator tháng nào cũng 31 ngày (cửa sổ 2028-02-20 … 2028-03-05) (đặc tả {\"type\":\"date\",\"from\":\"2028-02-20\",\"to\":\"2028-03-05\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2028-02-20\",to:\"2028-03-05\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>i?!1:t>=e.from&&t<=e.to},c=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const u=n%4===0&&n%100!==0||n%400===0,i=r===2?u?29:28:[4,6,9,11].includes(r)?30:31;return s>31?!1:t>=e.from&&t<=e.to};return a.some(e=>{try{return l(o,e)!==c(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "D6 — catches a validator that no leap years (window 2028-02-20 … 2028-03-05) (spec {\"type\":\"date\",\"from\":\"2028-02-20\",\"to\":\"2028-03-05\"})",
+              "vi": "D6 — bắt validator không có năm nhuận (cửa sổ 2028-02-20 … 2028-03-05) (đặc tả {\"type\":\"date\",\"from\":\"2028-02-20\",\"to\":\"2028-03-05\"})"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o={type:\"date\",from:\"2028-02-20\",to:\"2028-03-05\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(o)))}catch(e){return\"attackValues threw: \"+e.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const l=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const i=n%4===0&&n%100!==0||n%400===0,u=r===2?i?29:28:[4,6,9,11].includes(r)?30:31;return s>u?!1:t>=e.from&&t<=e.to},c=(e,t)=>{if(typeof t!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(t))return!1;const[n,r,s]=t.split(\"-\").map(Number);if(r<1||r>12||s<1)return!1;const i=n%4===0&&n%100!==0||n%400===0,u=r===2?28:[4,6,9,11].includes(r)?30:31;return s>u?!1:t>=e.from&&t<=e.to};return a.some(e=>{try{return l(o,e)!==c(o,e)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator D7 is caught",
+              "vi": "Validator lỗi ẩn D7 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let o;try{o=attackValues(JSON.parse(JSON.stringify(i)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(o))return\"attackValues must return an array\";if(o.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const c=(t,e)=>{if(typeof e!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(e))return!1;const[n,r,a]=e.split(\"-\").map(Number);if(r<1||r>12||a<1)return!1;const s=n%4===0&&n%100!==0||n%400===0,u=r===2?s?29:28:[4,6,9,11].includes(r)?30:31;return a>u?!1:e>=t.from&&e<=t.to},l=(t,e)=>{if(typeof e!=\"string\"||!/^\\d{4}-\\d{1,2}-\\d{1,2}$/.test(e))return!1;const[n,r,a]=e.split(\"-\").map(Number),s=new Date(Date.UTC(n,r-1,a));if(s.getUTCMonth()!==r-1||s.getUTCDate()!==a)return!1;const u=s.toISOString().slice(0,10);return u>=t.from&&u<=t.to};return o.some(t=>{try{return c(i,t)!==l(i,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden faulty validator D8 is caught",
+              "vi": "Validator lỗi ẩn D8 bị bắt"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const u={type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"};let a;try{a=attackValues(JSON.parse(JSON.stringify(u)))}catch(t){return\"attackValues threw: \"+t.message}if(!Array.isArray(a))return\"attackValues must return an array\";if(a.length>20)return\"at most 20 values per field \\u2014 choose them, do not brute-force\";const c=(t,e)=>{if(typeof e!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(e))return!1;const[r,n,s]=e.split(\"-\").map(Number);if(n<1||n>12||s<1)return!1;const o=r%4===0&&r%100!==0||r%400===0,i=n===2?o?29:28:[4,6,9,11].includes(n)?30:31;return s>i?!1:e>=t.from&&e<=t.to},f=(t,e)=>{const r=typeof e==\"string\"?e.trim():e;if(typeof r!=\"string\"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(r))return!1;const[n,s,o]=r.split(\"-\").map(Number);if(s<1||s>12||o<1)return!1;const i=n%4===0&&n%100!==0||n%400===0,l=s===2?i?29:28:[4,6,9,11].includes(s)?30:31;return o>l?!1:r>=t.from&&r<=t.to};return a.some(t=>{try{return c(u,t)!==f(u,t)}catch{return!0}})?\"OK\":\"no value in your list tells this faulty validator apart from the correct one\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "f4 — at most 20 distinct values for each visible spec",
+              "vi": "f4 — tối đa 20 giá trị khác nhau cho mỗi đặc tả công khai"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a=[{type:\"int\",min:1,max:60},{type:\"string\",minLen:5,maxLen:30},{type:\"date\",from:\"2026-11-02\",to:\"2026-11-16\"}];for(const e of a){let t;try{t=attackValues(e)}catch(n){return\"threw on \"+e.type+\": \"+n.message}if(!Array.isArray(t)||t.length===0||t.length>20)return e.type+\": return 1\\u201320 values\";const r=t.map(n=>typeof n+\":\"+String(n));if(new Set(r).size!==r.length)return e.type+\": duplicate values\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — unknown field type returns [] without throwing",
+              "vi": "f4 — kiểu trường lạ trả [] không ném lỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){let e;try{e=attackValues({type:\"email\"})}catch(t){return\"threw: \"+t.message}return Array.isArray(e)&&e.length===0?\"OK\":\"expected []\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "f4 — deterministic (same spec ⇒ same list) and does not modify the spec",
+              "vi": "f4 — tất định (cùng đặc tả ⇒ cùng danh sách) và không sửa đặc tả"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n={type:\"date\",from:\"2028-02-20\",to:\"2028-03-05\"},o=JSON.stringify(n),s=attackValues(n).map(t=>typeof t+\":\"+String(t)).join(\"|\"),a=attackValues(n).map(t=>typeof t+\":\"+String(t)).join(\"|\");return s===a&&JSON.stringify(n)===o?\"OK\":\"two calls gave different lists, or the spec was modified\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f4",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. f1 Integers",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. f2 Strings",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. f3 Dates",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. f4 List rules",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Chuỗi biên được tạo bằng ký tự không hợp lệ (vd toàn chữ số) nên không phân biệt được lỗi độ dài."
+        },
+        {
+          "loi": "Quên 29/2 khi cửa sổ có tháng Hai."
+        },
+        {
+          "loi": "Sinh quá 20 giá trị vì vét cạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fuzzing",
+          "vi": "kiểm thử mờ — bơm đầu vào bất thường"
+        },
+        {
+          "en": "property-based testing",
+          "vi": "kiểm thử dựa thuộc tính — thư viện tự sinh đầu vào"
+        },
+        {
+          "en": "validator",
+          "vi": "hàm kiểm hợp lệ"
+        },
+        {
+          "en": "zero padding",
+          "vi": "đệm số 0"
+        }
+      ]
+    }
+  ]
+}

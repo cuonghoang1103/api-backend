@@ -1,0 +1,734 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-experience-based",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-experience-based"
+  },
+  "exercises": [
+    {
+      "title": "Experience-based 1 — Which technique is the tester using?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "experience-based techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Black-box tests come from a specification, white-box tests from the structure, experience-based tests from the tester’s skill, intuition and knowledge of past failures. Name the technique in each LabBook situation.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Test black-box lấy từ đặc tả, white-box từ cấu trúc, dựa kinh nghiệm từ kỹ năng, trực giác và hiểu biết về các lần hỏng trước của tester. Gọi tên kỹ thuật trong từng tình huống LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“time-box”, “charter”, “thiết kế test kế tiếp từ kết quả trước” ⇒ exploratory.",
+        "“danh sách lỗi hay gặp / lỗi từng thấy” ⇒ error guessing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Experience-based 1 — Which technique is the tester using?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → techniqueTình huống → kỹ thuật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Experience-based 1 — Which technique is the tester using? — answer key\n\n1. Situation → techniqueTình huống → kỹ thuật\n   - r0.k: Error guessing\n   - r1.k: Exploratory testing\n   - r2.k: Checklist-based testing\n   - r3.k: Black-box (specification-based)\n   - r4.k: White-box (structure-based)\n   - r5.k: Error guessing\n   A list of likely mistakes turned into tests = error guessing; time-box + charter + learning loop = exploratory (session-based); checklist items = checklist-based; partitions from the SRS = black-box; decision coverage = white-box.VI: Danh sách sai sót dễ gặp biến thành test = error guessing; khung giờ + charter + vòng học = exploratory (theo phiên); mục checklist = checklist-based; phân vùng từ SRS = black-box; độ phủ quyết định = white-box.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Error guessing · Exploratory · Checklist-based · Black-box · White-box · Error guessing.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → technique</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → kỹ thuật</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "k",
+                "ten": "Technique",
+                "luaChon": [
+                  "Error guessing",
+                  "Exploratory testing",
+                  "Checklist-based testing",
+                  "Black-box (specification-based)",
+                  "White-box (structure-based)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "From last semester’s bug tracker the tester lists “double click on Book”, “29 February”, “emoji in the note” and designs a test for each"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "With a 90-minute time-box and the charter “explore the waitlist with three students”, the tester designs the next test from what the last one revealed"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Using the team’s UI checklist (“every error message tells how to fix it”, “required fields are marked”…) the tester checks the new booking screen"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The tester derives tests for the start hour from the partitions 7–20 and its boundaries in the SRS"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The tester adds tests until every decision in calcRefund has been true and false"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The tester tries a booking at 23:59 on Sunday, because time-zone and week-boundary code broke in two earlier projects"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Error guessing",
+              "r1.k": "Exploratory testing",
+              "r2.k": "Checklist-based testing",
+              "r3.k": "Black-box (specification-based)",
+              "r4.k": "White-box (structure-based)",
+              "r5.k": "Error guessing"
+            },
+            "giaiThich": "<p>A list of likely mistakes turned into tests = error guessing; time-box + charter + learning loop = exploratory (session-based); checklist items = checklist-based; partitions from the SRS = black-box; decision coverage = white-box.</p><p><i>VI: Danh sách sai sót dễ gặp biến thành test = error guessing; khung giờ + charter + vòng học = exploratory (theo phiên); mục checklist = checklist-based; phân vùng từ SRS = black-box; độ phủ quyết định = white-box.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi error guessing là “đoán bừa” — nó là danh sách tấn công có phương pháp."
+        },
+        {
+          "loi": "Nhầm checklist-based testing với review theo checklist của chương 3 (ở đây CHẠY phần mềm)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error guessing",
+          "vi": "đoán lỗi — danh sách tấn công từ kinh nghiệm"
+        },
+        {
+          "en": "fault attack",
+          "vi": "đòn tấn công lỗi"
+        },
+        {
+          "en": "exploratory testing",
+          "vi": "kiểm thử khám phá"
+        },
+        {
+          "en": "checklist-based testing",
+          "vi": "kiểm thử theo checklist"
+        }
+      ]
+    },
+    {
+      "title": "Experience-based 2 — Error guessing: attack isValidDate with a fault attack list",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>LabBook validates booking dates with <code>isValidDate(s)</code>: <code>s</code> must be a string <code>YYYY-MM-DD</code> (exactly 4-2-2 digits, nothing around it) naming a real calendar day — Gregorian leap years: divisible by 4, except centuries, except multiples of 400. Anything else (including <code>null</code>) returns <code>false</code>, never throws.</p><pre>function isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo &lt; 1 || mo &gt; 12 || d &lt; 1) return false;\n  const leap = (y % 4 === 0 &amp;&amp; y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d &lt;= days;\n}</pre><p>Use <b>error guessing</b>: list the mistakes developers typically make with dates (leap years, month ends, month 0/13, day 0, missing zero padding, spaces, null…) and write a Jest-like test for each. The grader runs your suite on the correct function and on versions containing those typical mistakes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>test.each</code> for the attack table — one row per guessed mistake.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabBook kiểm ngày đặt chỗ bằng <code>isValidDate(s)</code>: <code>s</code> phải là chuỗi <code>YYYY-MM-DD</code> (đúng 4-2-2 chữ số, không có gì xung quanh) chỉ một ngày có thật — năm nhuận Gregory: chia hết cho 4, trừ năm tròn thế kỷ, trừ bội của 400. Mọi thứ khác (kể cả <code>null</code>) trả <code>false</code>, không bao giờ ném lỗi.</p><p>Dùng <b>error guessing</b>: liệt kê các sai sót developer hay mắc với ngày tháng (năm nhuận, cuối tháng, tháng 0/13, ngày 0, thiếu số 0 đệm, khoảng trắng, null…) và viết một test cho mỗi sai sót. Máy chấm chạy bộ test của bạn trên hàm đúng và trên các phiên bản chứa những sai sót điển hình đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng <code>test.each</code> cho bảng tấn công — mỗi dòng một sai sót đoán được.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "expect(isValidDate('2100-02-29')).toBe(false)",
+          "output": "kills the “every 4th year is leap” mutant",
+          "explanation": "2100 is a century not divisible by 400.|||2100 là năm tròn thế kỷ không chia hết cho 400."
+        }
+      ],
+      "hintsJson": [
+        "Năm nhuận: 2028-02-29 đúng, 2026-02-29 sai, 2100-02-29 sai, 2000-02-29 đúng.",
+        "Cuối tháng: 2026-04-31 sai, 2026-01-31 đúng; tháng 00 và 13; ngày 00.",
+        "Định dạng: \"2026-2-3\", \" 2026-11-02\", \"\", null, undefined, 20261102."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Fault attack list for isValidDate — one row per guessed mistake.\ntest.each([\n  ['2026-11-02', true],\n])('isValidDate(%p) is %p', (s, ok) => {\n  expect(isValidDate(s)).toBe(ok);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Fault attack list for isValidDate — one row per mistake developers typically make with dates.\ntest.each([\n  ['2026-11-02', true],   // a normal valid date\n  ['2026-01-31', true],   // a 31-day month end\n  ['2026-04-31', false],  // April has 30 days (month-end mistake)\n  ['2026-04-30', true],\n  ['2028-02-29', true],   // leap year divisible by 4\n  ['2026-02-29', false],  // not a leap year\n  ['2026-02-28', true],\n  ['2100-02-29', false],  // century, not divisible by 400\n  ['2000-02-29', true],   // divisible by 400 → leap\n  ['2026-13-01', false],  // month 13\n  ['2026-00-10', false],  // month 0\n  ['2026-11-00', false],  // day 0\n  ['2026-2-3', false],    // missing zero padding\n  [' 2026-11-02', false], // leading space\n  ['2026-11-02 ', false], // trailing space\n  ['', false],            // empty string\n  ['02/11/2026', false],  // another format\n])('isValidDate(%p) is %p', (s, ok) => {\n  expect(isValidDate(s)).toBe(ok);\n});\n\ntest.each([[null], [undefined], [20261102], [{}]])('isValidDate(%p) returns false and never throws', (v) => {\n  expect(() => isValidDate(v)).not.toThrow();\n  expect(isValidDate(v)).toBe(false);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Error guessing is methodical: the attack list comes from experience, defect data and common knowledge of why software fails. Each guessed mistake becomes one row of a parameterised test. JUnit 5: <code>@ParameterizedTest @CsvSource({\"2100-02-29,false\", …})</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof isValidDate !== 'undefined' && isValidDate !== globalThis[\"isValidDate\"]) return 'tests.js must not declare isValidDate itself (let/const/class/copy of the code) — call the global isValidDate that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 8 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 8 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 8) return 'only ' + r.tong + ' test(s) — write at least 8';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: every year divisible by 4 is a leap year",
+              "vi": "Giết mutant M1: năm nào chia hết cho 4 cũng nhuận"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = y % 4 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: all months have 31 days",
+              "vi": "Giết mutant M2: tháng nào cũng 31 ngày"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= 31;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: month 13 is accepted",
+              "vi": "Giết mutant M3: nhận tháng 13"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 13 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: day 0 is accepted",
+              "vi": "Giết mutant M4: nhận ngày 0"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 0) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: null crashes instead of returning false",
+              "vi": "Giết mutant M5: null làm sập thay vì trả false"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (s.length !== 10) return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M6: surrounding spaces are accepted",
+              "vi": "Giết mutant M6: nhận khoảng trắng bao quanh"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s.trim());\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{1,2})-(\\d{1,2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M8 is killed",
+              "vi": "Mutant ẩn M8 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = y % 4 === 0 && y % 100 !== 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M9 is killed",
+              "vi": "Mutant ẩn M9 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? (leap ? 29 : 28) : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction isValidDate(s) {\n  if (typeof s !== 'string') return false;\n  const m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(s);\n  if (!m) return false;\n  const y = +m[1], mo = +m[2], d = +m[3];\n  if (mo < 1 || mo > 12 || d < 1) return false;\n  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;\n  const days = mo === 2 ? 28 : [4, 6, 9, 11].includes(mo) ? 30 : 31;\n  return d <= days;\n}\nreturn { \"isValidDate\": isValidDate };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test một ngày hợp lệ và một chuỗi rác — các mutant năm nhuận sống sót."
+        },
+        {
+          "loi": "Quên trường hợp null/số: hàm phải trả false, không ném lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "leap year",
+          "vi": "năm nhuận"
+        },
+        {
+          "en": "zero padding",
+          "vi": "đệm số 0 (02 thay vì 2)"
+        }
+      ]
+    },
+    {
+      "title": "Experience-based 3 — Session-based test management: compute the debrief metrics",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "exploratory testing",
+        "session-based test management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Session-based testing gives exploratory testing structure: a <b>charter</b>, a <b>time-box</b> and a <b>session sheet</b> discussed at the debrief. A LabBook session sheet is <code>{ charter, minutes, setup, testing, bugInvestigation, onCharter, bugs, issues }</code>, where <code>setup</code>, <code>testing</code> and <code>bugInvestigation</code> are percentages of the session (they add up to 100), <code>onCharter</code> is the percentage spent on the charter (the rest was “opportunity” testing), and <code>bugs</code>/<code>issues</code> are arrays.</p>\n<p>Write <code>debrief(sessions)</code> returning:</p>\n<ul><li><code>sessions</code> — number of sessions; <code>hours</code> — total minutes ÷ 60 (2 decimals);</li>\n<li><code>testPct</code>, <code>bugPct</code>, <code>setupPct</code> — time-weighted averages over all sessions (2 decimals);</li>\n<li><code>onCharterPct</code> — time-weighted average of onCharter (2 decimals);</li>\n<li><code>bugsPerHour</code> — total bugs ÷ hours (2 decimals; 0 when no time);</li>\n<li><code>charters</code> — distinct charters sorted A→Z; <code>warnings</code> — ids-free messages in this order: <code>'SETUP_HEAVY'</code> if setupPct &gt; 30, <code>'OFF_CHARTER'</code> if onCharterPct &lt; 70, <code>'OPEN_ISSUES'</code> if any session has issues.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Weighted average: Σ(value × minutes) ÷ Σ minutes. Round only at the end with <code>Math.round(x * 100) / 100</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Session-based testing cho exploratory testing một cấu trúc: <b>charter</b>, <b>khung giờ</b> và <b>phiếu phiên</b> được trao đổi ở buổi debrief. Phiếu phiên LabBook là <code>{ charter, minutes, setup, testing, bugInvestigation, onCharter, bugs, issues }</code>; <code>setup</code>, <code>testing</code>, <code>bugInvestigation</code> là % thời gian phiên (cộng lại 100), <code>onCharter</code> là % dành cho charter (phần còn lại là test “cơ hội”), <code>bugs</code>/<code>issues</code> là mảng.</p>\n<p>Viết <code>debrief(sessions)</code> trả các số liệu như bản tiếng Anh: số phiên, số giờ, các trung bình có trọng số theo thời gian (2 chữ số), số bug/giờ, danh sách charter (sắp, không trùng) và cảnh báo theo thứ tự SETUP_HEAVY (&gt; 30% chuẩn bị), OFF_CHARTER (&lt; 70% đúng charter), OPEN_ISSUES (có phiên còn câu hỏi).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trung bình có trọng số: Σ(giá trị × phút) ÷ Σ phút. Chỉ làm tròn ở cuối bằng <code>Math.round(x * 100) / 100</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "debrief([{ charter: 'Waitlist', minutes: 90, setup: 10, testing: 70, bugInvestigation: 20, onCharter: 80, bugs: ['B1','B2'], issues: [] }, { charter: 'Close lab', minutes: 30, setup: 50, testing: 40, bugInvestigation: 10, onCharter: 50, bugs: [], issues: ['Q1'] }])",
+          "output": "{ sessions: 2, hours: 2, testPct: 62.5, bugPct: 17.5, setupPct: 20, onCharterPct: 72.5, bugsPerHour: 1, charters: ['Close lab','Waitlist'], warnings: ['OPEN_ISSUES'] }",
+          "explanation": "testPct = (70·90 + 40·30) ÷ 120 = 62.5.|||testPct = (70·90 + 40·30) ÷ 120 = 62,5."
+        }
+      ],
+      "hintsJson": [
+        "Cộng dồn tổng phút và Σ(giá trị × phút) cho từng chỉ số trong một vòng lặp.",
+        "Không có phiên nào ⇒ mọi số = 0, mảng rỗng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "debrief.js",
+          "language": "javascript",
+          "code": "function debrief(sessions) {\n  return { sessions: 0, hours: 0, testPct: 0, bugPct: 0, setupPct: 0, onCharterPct: 0, bugsPerHour: 0, charters: [], warnings: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "debrief.js",
+          "language": "javascript",
+          "code": "function debrief(sessions) {\n  const r2 = (x) => Math.round(x * 100) / 100;\n  let min = 0, t = 0, b = 0, s = 0, on = 0, bugs = 0, issues = false;\n  const charters = new Set();\n  for (const x of sessions) {\n    min += x.minutes;\n    t += x.testing * x.minutes;\n    b += x.bugInvestigation * x.minutes;\n    s += x.setup * x.minutes;\n    on += x.onCharter * x.minutes;\n    bugs += (x.bugs || []).length;\n    if ((x.issues || []).length) issues = true;\n    charters.add(x.charter);\n  }\n  const avg = (v) => (min ? r2(v / min) : 0);\n  const out = {\n    sessions: sessions.length,\n    hours: r2(min / 60),\n    testPct: avg(t), bugPct: avg(b), setupPct: avg(s), onCharterPct: avg(on),\n    bugsPerHour: min ? r2(bugs / (min / 60)) : 0,\n    charters: [...charters].sort(),\n    warnings: [],\n  };\n  if (min && out.setupPct > 30) out.warnings.push('SETUP_HEAVY');\n  if (min && out.onCharterPct < 70) out.warnings.push('OFF_CHARTER');\n  if (issues) out.warnings.push('OPEN_ISSUES');\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The debrief numbers (TBS: test design & execution, bug investigation, setup) tell the test manager whether sessions are productive: much setup means environment problems, low on-charter time means the charters are wrong or the product is buggier than expected.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "debrief.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the example",
+              "vi": "ví dụ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=debrief([{charter:\"Waitlist\",minutes:90,setup:10,testing:70,bugInvestigation:20,onCharter:80,bugs:[\"B1\",\"B2\"],issues:[]},{charter:\"Close lab\",minutes:30,setup:50,testing:40,bugInvestigation:10,onCharter:50,bugs:[],issues:[\"Q1\"]}]),s={sessions:2,hours:2,testPct:62.5,bugPct:17.5,setupPct:20,onCharterPct:72.5,bugsPerHour:1,charters:[\"Close lab\",\"Waitlist\"],warnings:[\"OPEN_ISSUES\"]};return JSON.stringify(t)===JSON.stringify(s)?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "warnings SETUP_HEAVY and OFF_CHARTER",
+              "vi": "cảnh báo SETUP_HEAVY và OFF_CHARTER"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const r=debrief([{charter:\"Login\",minutes:60,setup:40,testing:50,bugInvestigation:10,onCharter:60,bugs:[\"B9\"],issues:[]}]);return JSON.stringify(r.warnings)==='[\"SETUP_HEAVY\",\"OFF_CHARTER\"]'&&r.bugsPerHour===1?\"OK\":\"got warnings \"+JSON.stringify(r.warnings)+\", bugsPerHour \"+r.bugsPerHour})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "charters are distinct and sorted",
+              "vi": "charter không trùng và đã sắp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const s=t=>({charter:t,minutes:60,setup:10,testing:80,bugInvestigation:10,onCharter:90,bugs:[],issues:[]}),r=debrief([s(\"b\"),s(\"a\"),s(\"b\")]);return JSON.stringify(r.charters)==='[\"a\",\"b\"]'&&r.hours===3?\"OK\":\"got \"+JSON.stringify(r.charters)+\", hours \"+r.hours})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "no sessions",
+              "vi": "không có phiên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const r=debrief([]);return r.sessions===0&&r.hours===0&&r.bugsPerHour===0&&r.charters.length===0&&r.warnings.length===0?\"OK\":\"got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "rounding happens at the end",
+              "vi": "chỉ làm tròn ở cuối"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((()=>{const t=debrief([{charter:\"x\",minutes:45,setup:33,testing:33,bugInvestigation:34,onCharter:71,bugs:[\"a\"],issues:[]},{charter:\"y\",minutes:25,setup:20,testing:60,bugInvestigation:20,onCharter:100,bugs:[],issues:[]}]);return t.setupPct===28.36&&t.testPct===42.64&&t.onCharterPct===81.36&&t.bugsPerHour===.86&&t.hours===1.17?\"OK\":\"got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy trung bình thường (không trọng số) — phiên 30 phút nặng ngang phiên 90 phút."
+        },
+        {
+          "loi": "Làm tròn từng phiên rồi mới cộng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "session-based testing",
+          "vi": "kiểm thử theo phiên"
+        },
+        {
+          "en": "charter",
+          "vi": "nhiệm vụ của phiên khám phá"
+        },
+        {
+          "en": "time-box",
+          "vi": "khung thời gian cố định"
+        },
+        {
+          "en": "debrief",
+          "vi": "buổi trao đổi sau phiên"
+        }
+      ]
+    },
+    {
+      "title": "Experience-based 4 — Exam questions (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "experience-based techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions in the style of SWT4 slides 106–108 and the FE: why experience-based testing is used, when exploratory testing fits best, what a checklist is built from and what the weaknesses of each technique are.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu theo kiểu slide SWT4 106–108 và đề FE: vì sao dùng test dựa kinh nghiệm, khi nào exploratory hợp nhất, checklist được xây từ đâu và điểm yếu của từng kỹ thuật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc lại 4 phát biểu của slide 101: nguồn, sức mạnh, biến thiên, khó đo.",
+        "Session-based = khung giờ + charter + phiếu phiên + debrief."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Experience-based 4 — Exam questions (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a good reason to use experience-based testing?Đâu là lý do tốt để dùng test dựa kinh nghiệm?\n2. Exploratory testing with time-boxes and charters is called…Exploratory testing với khung giờ và charter được gọi là…\n3. When is exploratory testing most useful?Khi nào exploratory testing hữu ích nhất?\n4. A checklist for checklist-based testing is built from…Checklist cho kiểm thử theo checklist được xây từ…\n5. Which is a typical weakness of checklist-based testing?Đâu là điểm yếu điển hình của test theo checklist?\n6. Error guessing is best described as…Mô tả đúng nhất về error guessing là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Experience-based 4 — Exam questions (K2) — answer key\n\n1. Which is a good reason to use experience-based testing?Đâu là lý do tốt để dùng test dựa kinh nghiệm?\n   Answer: b) It can find defects that other, more systematic techniques miss\n   Slide 101, bullet 2.VI: Slide 101, gạch đầu dòng 2.\n\n2. Exploratory testing with time-boxes and charters is called…Exploratory testing với khung giờ và charter được gọi là…\n   Answer: b) session-based testing\n   Time-box + charter = session-based testing.VI: Khung giờ + charter = session-based testing.\n\n3. When is exploratory testing most useful?Khi nào exploratory testing hữu ích nhất?\n   Answer: a) When there are few or inadequate specifications or significant time pressure\n   It complements formal techniques and suits reactive strategies.VI: Nó bổ sung kỹ thuật chính thức và hợp chiến lược phản ứng.\n\n4. A checklist for checklist-based testing is built from…Checklist cho kiểm thử theo checklist được xây từ…\n   Answer: b) experience, knowledge of what is important for the user, and an understanding of why and how software fails\n   Slide 105.VI: Slide 105.\n\n5. Which is a typical weakness of checklist-based testing?Đâu là điểm yếu điển hình của test theo checklist?\n   Answer: b) High-level items lead to variability between testers and less repeatability\n   Variability gives somewhat more coverage but less repeatability.VI: Biến thiên cho coverage rộng hơn chút nhưng khó lặp lại.\n\n6. Error guessing is best described as…Mô tả đúng nhất về error guessing là…\n   Answer: b) a methodical approach: list possible mistakes, defects and failures, then design tests to expose them\n   The fault attack list.VI: Danh sách fault attack.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a good reason to use experience-based testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lý do tốt để dùng test dựa kinh nghiệm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is easy to automate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It can find defects that other, more systematic techniques miss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It uses the experience of the end users"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its coverage is easy to measure"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Slide 101, bullet 2.</p><p><i>VI: Slide 101, gạch đầu dòng 2.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Exploratory testing with time-boxes and charters is called…</p><p style=\"opacity:.75;font-size:.92em\"><i>Exploratory testing với khung giờ và charter được gọi là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "checklist-based testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "session-based testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "error guessing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ad hoc testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Time-box + charter = session-based testing.</p><p><i>VI: Khung giờ + charter = session-based testing.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>When is exploratory testing most useful?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào exploratory testing hữu ích nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When there are few or inadequate specifications or significant time pressure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "When regulators require full traceability"
+              },
+              {
+                "ma": "c",
+                "noiDung": "When the system is safety-critical and fully specified"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only after all other techniques"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It complements formal techniques and suits reactive strategies.</p><p><i>VI: Nó bổ sung kỹ thuật chính thức và hợp chiến lược phản ứng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A checklist for checklist-based testing is built from…</p><p style=\"opacity:.75;font-size:.92em\"><i>Checklist cho kiểm thử theo checklist được xây từ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the source code only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "experience, knowledge of what is important for the user, and an understanding of why and how software fails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the test summary report"
+              },
+              {
+                "ma": "d",
+                "noiDung": "random ideas"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Slide 105.</p><p><i>VI: Slide 105.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which is a typical weakness of checklist-based testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là điểm yếu điển hình của test theo checklist?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It cannot be used for non-functional testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "High-level items lead to variability between testers and less repeatability"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs detailed test cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It only works for code"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Variability gives somewhat more coverage but less repeatability.</p><p><i>VI: Biến thiên cho coverage rộng hơn chút nhưng khó lặp lại.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>Error guessing is best described as…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả đúng nhất về error guessing là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "random input generation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a methodical approach: list possible mistakes, defects and failures, then design tests to expose them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "guessing the expected results"
+              },
+              {
+                "ma": "d",
+                "noiDung": "testing without any preparation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The fault attack list.</p><p><i>VI: Danh sách fault attack.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “kinh nghiệm của người dùng cuối” cho câu 1."
+        },
+        {
+          "loi": "Chọn “ad hoc” cho câu 2 — exploratory có mục tiêu và ghi chép."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reactive test strategy",
+          "vi": "chiến lược test phản ứng — thiết kế test khi đã có phần mềm"
+        }
+      ]
+    }
+  ]
+}

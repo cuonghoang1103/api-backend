@@ -1,0 +1,475 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-ex26-json-server",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-ex26-json-server"
+  },
+  "exercises": [
+    {
+      "title": "Set up a fake REST API with json-server",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "npm",
+        "db.json",
+        "watch mode",
+        "port"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "json-server",
+        "order",
+        "exercise-26"
+      ],
+      "problemHtml": "<p>You need a backend for the fetch/axios exercises before the real API exists. Put the steps in the right order, from installing the tool to calling it from React.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn cần backend cho các bài fetch/axios khi API thật chưa có. Hãy xếp các bước đúng thứ tự, từ cài công cụ tới gọi nó từ React.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không thể chạy server khi chưa có tệp dữ liệu.",
+        "Kiểm bằng trình duyệt trước khi viết code React."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Set up a fake REST API with json-server\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Set up a fake REST API with json-server — answer key\n\n1. Order the steps\n   Answer: a) Install: npm install -g json-server (or use npx)  →  b) Create db.json with collections such as posts and users  →  c) Run npx json-server --watch db.json --port 9999  →  d) Open http://localhost:9999/posts in the browser to check the JSON  →  e) Call http://localhost:9999/posts from React with axios\n   Install → data file → start server → check in browser → use from React. / Cài → tệp dữ liệu → chạy server → thử bằng trình duyệt → dùng từ React.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cài → tạo db.json → chạy với --watch và cổng riêng → mở thử URL → gọi từ React.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "Order the steps",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Run <code>npx json-server --watch db.json --port 9999</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Call <code>http://localhost:9999/posts</code> from React with axios"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Install: <code>npm install -g json-server</code> (or use npx)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Open <code>http://localhost:9999/posts</code> in the browser to check the JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Create <code>db.json</code> with collections such as <code>posts</code> and <code>users</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Install → data file → start server → check in browser → use from React.</p><p><i>🇻🇳 Cài → tệp dữ liệu → chạy server → thử bằng trình duyệt → dùng từ React.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chạy React và json-server cùng cổng 3000 ⇒ xung đột cổng; dùng --port 9999."
+        },
+        {
+          "loi": "Quên --watch ⇒ sửa db.json tay không thấy cập nhật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mock API",
+          "vi": "API giả để phát triển giao diện trước"
+        }
+      ]
+    },
+    {
+      "title": "Predict json-server responses from db.json",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "routes from collections",
+        "filters",
+        "_sort/_order/_limit",
+        "q search",
+        "POST ids"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "json-server",
+        "table",
+        "exercise-26"
+      ],
+      "problemHtml": "<p>json-server serves this <code>db.json</code>:</p><pre>{\n  \"posts\": [\n    { \"id\": 1, \"title\": \"Hello json-server\", \"views\": 120, \"userId\": 1 },\n    { \"id\": 2, \"title\": \"React + axios\",     \"views\": 340, \"userId\": 2 },\n    { \"id\": 3, \"title\": \"Routing in React\",  \"views\": 90,  \"userId\": 1 },\n    { \"id\": 4, \"title\": \"Redux Toolkit\",     \"views\": 510, \"userId\": 3 },\n    { \"id\": 5, \"title\": \"Testing React\",     \"views\": 200, \"userId\": 2 }\n  ],\n  \"users\": [\n    { \"id\": 1, \"name\": \"An\" }, { \"id\": 2, \"name\": \"Binh\" }, { \"id\": 3, \"name\": \"Cuong\" }\n  ],\n  \"comments\": [\n    { \"id\": 1, \"postId\": 2, \"body\": \"Nice\" },\n    { \"id\": 2, \"postId\": 2, \"body\": \"Thanks\" },\n    { \"id\": 3, \"postId\": 4, \"body\": \"Great intro\" }\n  ]\n}</pre><p>For each request fill what the server returns. Requests are independent (each starts from this file).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>json-server phục vụ <code>db.json</code> này:</p><pre>{\n  \"posts\": [\n    { \"id\": 1, \"title\": \"Hello json-server\", \"views\": 120, \"userId\": 1 },\n    { \"id\": 2, \"title\": \"React + axios\",     \"views\": 340, \"userId\": 2 },\n    { \"id\": 3, \"title\": \"Routing in React\",  \"views\": 90,  \"userId\": 1 },\n    { \"id\": 4, \"title\": \"Redux Toolkit\",     \"views\": 510, \"userId\": 3 },\n    { \"id\": 5, \"title\": \"Testing React\",     \"views\": 200, \"userId\": 2 }\n  ],\n  \"users\": [\n    { \"id\": 1, \"name\": \"An\" }, { \"id\": 2, \"name\": \"Binh\" }, { \"id\": 3, \"name\": \"Cuong\" }\n  ],\n  \"comments\": [\n    { \"id\": 1, \"postId\": 2, \"body\": \"Nice\" },\n    { \"id\": 2, \"postId\": 2, \"body\": \"Thanks\" },\n    { \"id\": 3, \"postId\": 4, \"body\": \"Great intro\" }\n  ]\n}</pre><p>Với mỗi request, điền kết quả server trả về. Các request độc lập (đều bắt đầu từ tệp này).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi khoá cấp đầu của db.json là một route: /posts, /users, /comments.",
+        "_sort + _order sắp xếp, _limit cắt, q tìm trong mọi trường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict json-server responses from db.json\n\nAnswer in the panel on the left (no code needed).\n\n1. What comes back?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict json-server responses from db.json — answer key\n\n1. What comes back?\n   - all.ans: 5\n   - user1.ans: 2\n   - top.ans: Redux Toolkit\n   - one.ans: Routing in React\n   - q.ans: 3\n   - missing.ans: 404\n   - post.ans: 6\n   - embed.ans: 2\n   q is a full-text search over all fields (case-insensitive): \"React + axios\", \"Routing in React\", \"Testing React\". POST gets the next id (6). _embed=comments attaches comments whose postId = 2.|||q tìm toàn văn trên mọi trường (không phân biệt hoa thường): \"React + axios\", \"Routing in React\", \"Testing React\". POST nhận id kế tiếp (6). _embed=comments gắn các comment có postId = 2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>json-server tạo REST API đầy đủ (GET/POST/PUT/PATCH/DELETE) từ các mảng trong db.json, kèm lọc, sắp xếp, phân trang, tìm kiếm và quan hệ qua <code>xxxId</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "r",
+            "de": "What comes back?",
+            "cot": [
+              {
+                "ma": "req",
+                "ten": "Request"
+              },
+              {
+                "ma": "ans",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "all",
+                "o": {
+                  "req": "GET /posts — how many items?"
+                }
+              },
+              {
+                "ma": "user1",
+                "o": {
+                  "req": "GET /posts?userId=1 — how many items?"
+                }
+              },
+              {
+                "ma": "top",
+                "o": {
+                  "req": "GET /posts?_sort=views&_order=desc&_limit=1 — title?"
+                }
+              },
+              {
+                "ma": "one",
+                "o": {
+                  "req": "GET /posts/3 — title?"
+                }
+              },
+              {
+                "ma": "q",
+                "o": {
+                  "req": "GET /posts?q=react — how many items?"
+                }
+              },
+              {
+                "ma": "missing",
+                "o": {
+                  "req": "GET /posts/99 — status code?"
+                }
+              },
+              {
+                "ma": "post",
+                "o": {
+                  "req": "POST /posts {\"title\":\"New\"} — id of the created post?"
+                }
+              },
+              {
+                "ma": "embed",
+                "o": {
+                  "req": "GET /posts/2?_embed=comments — number of comments?"
+                }
+              }
+            ],
+            "dapAn": {
+              "all.ans": "5",
+              "user1.ans": "2",
+              "top.ans": "Redux Toolkit",
+              "one.ans": "Routing in React",
+              "q.ans": "3",
+              "missing.ans": "404",
+              "post.ans": "6",
+              "embed.ans": "2"
+            },
+            "giaiThich": "<p>q is a full-text search over all fields (case-insensitive): \"React + axios\", \"Routing in React\", \"Testing React\". POST gets the next id (6). _embed=comments attaches comments whose postId = 2.</p><p><i>🇻🇳 q tìm toàn văn trên mọi trường (không phân biệt hoa thường): \"React + axios\", \"Routing in React\", \"Testing React\". POST nhận id kế tiếp (6). _embed=comments gắn các comment có postId = 2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm \"React\" phân biệt hoa thường ⇒ thiếu kết quả."
+        },
+        {
+          "loi": "Nghĩ GET /posts/99 trả mảng rỗng — nó trả 404 với object rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "full-text search",
+          "vi": "tìm chuỗi trong mọi trường"
+        }
+      ]
+    },
+    {
+      "title": "Relationships: _expand=user and _embed=comments",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "_expand",
+        "_embed",
+        "one request instead of N"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "json-server",
+        "axios",
+        "exercise-26"
+      ],
+      "problemHtml": "<p>Show each post with its author's name and its number of comments using ONE request: <code>GET /posts?_expand=user&amp;_embed=comments</code>. <code>_expand=user</code> follows <code>userId</code> to attach <code>post.user</code>; <code>_embed=comments</code> attaches <code>post.comments</code> (comments whose <code>postId</code> matches).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Rows <code>li.post</code>: <code>.title</code>, <code>.author</code> (<code>by Binh</code>), <code>.comments</code> (<code>2 comments</code> / <code>1 comment</code> / <code>No comments</code>).</li>\n  <li>Exactly one HTTP request.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiện mỗi bài viết kèm tên tác giả và số bình luận chỉ bằng MỘT request: <code>GET /posts?_expand=user&amp;_embed=comments</code>. <code>_expand=user</code> theo <code>userId</code> để gắn <code>post.user</code>; <code>_embed=comments</code> gắn <code>post.comments</code> (comment có <code>postId</code> khớp).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng <code>li.post</code>: <code>.title</code>, <code>.author</code> (<code>by Binh</code>), <code>.comments</code> (<code>2 comments</code> / <code>1 comment</code> / <code>No comments</code>).</li>\n  <li>Đúng một request HTTP.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "post 2",
+          "output": "React + axios · by Binh · 2 comments",
+          "explanation": "axios.get(url, { params: { _expand: \"user\", _embed: \"comments\" } })|||axios.get(url, { params: { _expand: \"user\", _embed: \"comments\" } })"
+        }
+      ],
+      "hintsJson": [
+        "axios.get('http://localhost:9999/posts', { params: { _expand: 'user', _embed: 'comments' } })",
+        "const label = (n) => (n === 0 ? \"No comments\" : n === 1 ? \"1 comment\" : `${n} comments`);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect, useState } from 'react';\nimport axios from 'axios';\n\nexport default function App() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    axios.get('http://localhost:9999/posts').then((r) => setPosts(r.data));\n  }, []);\n  return (\n    <ul>\n      {posts.map((p) => (\n        <li key={p.id} className=\"post\"><span className=\"title\">{p.title}</span> <span className=\"author\">by user {p.userId}</span></li>\n      ))}\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một request kèm quan hệ: _expand=user (cha) + _embed=comments (con)\nimport { useEffect, useState } from 'react';\nimport axios from 'axios';\n\nconst countLabel = (n) => (n === 0 ? 'No comments' : n === 1 ? '1 comment' : `${n} comments`);\n\nexport default function App() {\n  const [posts, setPosts] = useState([]);\n\n  useEffect(() => {\n    axios\n      .get('http://localhost:9999/posts', { params: { _expand: 'user', _embed: 'comments' } })\n      .then((res) => setPosts(res.data));\n  }, []);\n\n  return (\n    <ul>\n      {posts.map((p) => (\n        <li key={p.id} className=\"post\">\n          <span className=\"title\">{p.title}</span>{' '}\n          <span className=\"author\">by {p.user?.name ?? 'unknown'}</span>{' '}\n          <span className=\"comments\">{countLabel(p.comments?.length ?? 0)}</span>\n        </li>\n      ))}\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>_expand đi theo khoá ngoại của CHÍNH bản ghi (post.userId → user); _embed gom bản ghi CON trỏ về nó (comments.postId → post). Một request thay cho hàng chục.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "axios"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "posts": [
+              {
+                "id": 1,
+                "title": "Hello json-server",
+                "views": 120,
+                "userId": 1
+              },
+              {
+                "id": 2,
+                "title": "React + axios",
+                "views": 340,
+                "userId": 2
+              },
+              {
+                "id": 3,
+                "title": "Routing in React",
+                "views": 90,
+                "userId": 1
+              },
+              {
+                "id": 4,
+                "title": "Redux Toolkit",
+                "views": 510,
+                "userId": 3
+              },
+              {
+                "id": 5,
+                "title": "Testing React",
+                "views": 200,
+                "userId": 2
+              }
+            ],
+            "users": [
+              {
+                "id": 1,
+                "name": "An"
+              },
+              {
+                "id": 2,
+                "name": "Binh"
+              },
+              {
+                "id": 3,
+                "name": "Cuong"
+              }
+            ],
+            "comments": [
+              {
+                "id": 1,
+                "postId": 2,
+                "body": "Nice"
+              },
+              {
+                "id": 2,
+                "postId": 2,
+                "body": "Thanks"
+              },
+              {
+                "id": 3,
+                "postId": 4,
+                "body": "Great intro"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Author names",
+            "kiem": "danh-sach-text",
+            "selector": "li.post .author",
+            "mongDoi": [
+              "by An",
+              "by Binh",
+              "by An",
+              "by Cuong",
+              "by Binh"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Comment counts",
+            "kiem": "danh-sach-text",
+            "selector": "li.post .comments",
+            "mongDoi": [
+              "No comments",
+              "2 comments",
+              "No comments",
+              "1 comment",
+              "No comments"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Uses _expand and _embed",
+            "kiem": "goi-fetch",
+            "khop": "/posts\\?(?=.*_expand=user)(?=.*_embed=comments)",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Exactly one request",
+            "kiem": "goi-fetch",
+            "khop": "localhost:9999",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi /users/:id cho TỪNG bài ⇒ N+1 request, chậm."
+        },
+        {
+          "loi": "Viết _expand=users (số nhiều) ⇒ json-server tìm trường usersId, không gắn được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "N+1 problem",
+          "vi": "1 request danh sách + N request chi tiết — chậm"
+        }
+      ]
+    }
+  ]
+}

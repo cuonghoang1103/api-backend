@@ -1,0 +1,267 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-interview-http",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-1-fetch-async"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — HTTP, REST & data fetching (Chapter 11)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "HTTP, REST & data fetching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>HTTP, REST & data fetching</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>HTTP, REST & data fetching</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — HTTP, REST & data fetching (Chapter 11)\n\nAnswer in the panel on the left (no code needed).\n\n1. fetch vs axios — which do you use and why?\n2. Explain REST in one minute.\n3. How do you avoid race conditions when fetching in React?\n4. Sequential vs parallel requests?\n5. How do you handle API errors for the user?\n6. What is json-server good for, and what are its limits?\n7. Where should the API base URL live in a React project?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — HTTP, REST & data fetching (Chapter 11) — answer key\n\n1. fetch vs axios — which do you use and why?\n   Answer: b) Either: fetch is built in but needs res.ok checks and manual JSON; axios adds automatic JSON, rejection on bad status, instances and interceptors. I pick per project and wrap it in one API module.\n   Model answer: \"fetch is native and fine with a small wrapper that checks res.ok and parses JSON. axios gives that out of the box plus baseURL instances and interceptors for auth tokens. Either way I keep calls in one api module so components never build URLs themselves.\" / Trả lời mẫu: \"fetch có sẵn và đủ dùng nếu bọc một hàm kiểm res.ok và parse JSON. axios có sẵn những thứ đó, thêm instance có baseURL và interceptor để gắn token. Dù dùng gì tôi cũng gom lời gọi vào một module api để component không tự dựng URL.\"\n\n2. Explain REST in one minute.\n   Answer: b) An architectural style: resources identified by URIs, manipulated with standard HTTP methods, exchanged as representations like JSON, stateless requests, meaningful status codes.\n   Model answer: \"REST models the API as resources — /students, /students/5. HTTP methods say what to do: GET reads, POST creates, PUT/PATCH update, DELETE removes. Each request is stateless and carries its auth, and status codes report the outcome: 2xx success, 4xx client error, 5xx server error.\" / Trả lời mẫu: \"REST mô hình hoá API thành tài nguyên — /students, /students/5. Method HTTP cho biết làm gì: GET đọc, POST tạo, PUT/PATCH sửa, DELETE xoá. Mỗi request phi trạng thái, tự mang thông tin xác thực, và mã trạng thái báo kết quả: 2xx thành công, 4xx lỗi phía client, 5xx lỗi server.\"\n\n3. How do you avoid race conditions when fetching in React?\n   Answer: b) Ignore results from outdated effects with a cleanup flag or AbortController, so a slow old response cannot overwrite a newer one.\n   Model answer: \"When the input changes quickly — typing in a search box — responses can return out of order. In the effect cleanup I set ignore = true or abort the request, so only the latest response updates state.\" / Trả lời mẫu: \"Khi đầu vào đổi nhanh — gõ ô tìm — phản hồi có thể về sai thứ tự. Trong cleanup của effect tôi đặt ignore = true hoặc huỷ request, để chỉ phản hồi mới nhất được cập nhật state.\"\n\n4. Sequential vs parallel requests?\n   Answer: b) Await sequentially only when a request depends on the previous result; independent requests start together with Promise.all (or allSettled when partial results are fine).\n   Model answer: \"If I need the user id before loading orders, I await in sequence. For a dashboard with independent widgets I start everything at once with Promise.all, so total time is the slowest request, and use allSettled if one failure should not block the others.\" / Trả lời mẫu: \"Cần id người dùng trước khi tải đơn hàng thì tôi await tuần tự. Dashboard có các widget độc lập thì khởi chạy cùng lúc bằng Promise.all, tổng thời gian bằng request chậm nhất, và dùng allSettled nếu một cái lỗi không nên chặn cái khác.\"\n\n5. How do you handle API errors for the user?\n   Answer: b) Distinguish network, 4xx and 5xx; show a clear message with a retry where useful; keep form input on validation errors; log details for developers.\n   Model answer: \"Network or 5xx errors get a friendly message and a Retry button. 400/422 map to field errors and keep what the user typed. 401 sends them to login. Technical details go to logging, not to the screen.\" / Trả lời mẫu: \"Lỗi mạng hoặc 5xx hiện thông báo thân thiện kèm nút Thử lại. 400/422 chuyển thành lỗi từng ô và giữ nguyên dữ liệu người dùng đã nhập. 401 đưa về trang đăng nhập. Chi tiết kỹ thuật ghi vào log, không hiện lên màn hình.\"\n\n6. What is json-server good for, and what are its limits?\n   Answer: b) A quick fake REST API for frontend development and demos; it has no real auth, validation or business rules, so it never replaces the real backend.\n   Model answer: \"It lets the frontend start before the backend is ready: full CRUD, filters and pagination from one JSON file. But there is no validation, authorisation or concurrency control, so it is for development and prototypes only.\" / Trả lời mẫu: \"Nó cho frontend làm trước khi backend xong: đủ CRUD, lọc, phân trang từ một tệp JSON. Nhưng không có kiểm hợp lệ, phân quyền hay xử lý đồng thời, nên chỉ dùng để phát triển và làm mẫu.\"\n\n7. Where should the API base URL live in a React project?\n   Answer: b) In an environment variable (REACT_APP_… / VITE_…) read by one axios instance or api module.\n   Model answer: \"In an env variable such as VITE_API_URL, read once when creating the axios instance. Dev, staging and production then differ only by configuration — and remember those variables are public in the bundle, so no secrets there.\" / Trả lời mẫu: \"Trong biến môi trường như VITE_API_URL, đọc một lần khi tạo instance axios. Dev, staging, production chỉ khác cấu hình — và nhớ các biến đó công khai trong bundle, nên không đặt bí mật ở đó.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "fetch vs axios — which do you use and why?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "axios always, fetch is deprecated."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Either: fetch is built in but needs res.ok checks and manual JSON; axios adds automatic JSON, rejection on bad status, instances and interceptors. I pick per project and wrap it in one API module."
+              },
+              {
+                "ma": "c",
+                "noiDung": "fetch only works in Node."
+              },
+              {
+                "ma": "d",
+                "noiDung": "axios cannot send POST."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"fetch is native and fine with a small wrapper that checks res.ok and parses JSON. axios gives that out of the box plus baseURL instances and interceptors for auth tokens. Either way I keep calls in one api module so components never build URLs themselves.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"fetch có sẵn và đủ dùng nếu bọc một hàm kiểm res.ok và parse JSON. axios có sẵn những thứ đó, thêm instance có baseURL và interceptor để gắn token. Dù dùng gì tôi cũng gom lời gọi vào một module api để component không tự dựng URL.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Explain REST in one minute.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A database."
+              },
+              {
+                "ma": "b",
+                "noiDung": "An architectural style: resources identified by URIs, manipulated with standard HTTP methods, exchanged as representations like JSON, stateless requests, meaningful status codes."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A React library."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only GET requests."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"REST models the API as resources — /students, /students/5. HTTP methods say what to do: GET reads, POST creates, PUT/PATCH update, DELETE removes. Each request is stateless and carries its auth, and status codes report the outcome: 2xx success, 4xx client error, 5xx server error.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"REST mô hình hoá API thành tài nguyên — /students, /students/5. Method HTTP cho biết làm gì: GET đọc, POST tạo, PUT/PATCH sửa, DELETE xoá. Mỗi request phi trạng thái, tự mang thông tin xác thực, và mã trạng thái báo kết quả: 2xx thành công, 4xx lỗi phía client, 5xx lỗi server.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "How do you avoid race conditions when fetching in React?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use setTimeout."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ignore results from outdated effects with a cleanup flag or AbortController, so a slow old response cannot overwrite a newer one."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fetch twice."
+              },
+              {
+                "ma": "d",
+                "noiDung": "They cannot happen in React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"When the input changes quickly — typing in a search box — responses can return out of order. In the effect cleanup I set ignore = true or abort the request, so only the latest response updates state.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Khi đầu vào đổi nhanh — gõ ô tìm — phản hồi có thể về sai thứ tự. Trong cleanup của effect tôi đặt ignore = true hoặc huỷ request, để chỉ phản hồi mới nhất được cập nhật state.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Sequential vs parallel requests?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always sequential."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Await sequentially only when a request depends on the previous result; independent requests start together with Promise.all (or allSettled when partial results are fine)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Always Promise.all."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Parallel requests are not possible in browsers."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"If I need the user id before loading orders, I await in sequence. For a dashboard with independent widgets I start everything at once with Promise.all, so total time is the slowest request, and use allSettled if one failure should not block the others.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Cần id người dùng trước khi tải đơn hàng thì tôi await tuần tự. Dashboard có các widget độc lập thì khởi chạy cùng lúc bằng Promise.all, tổng thời gian bằng request chậm nhất, và dùng allSettled nếu một cái lỗi không nên chặn cái khác.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "How do you handle API errors for the user?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "console.log only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Distinguish network, 4xx and 5xx; show a clear message with a retry where useful; keep form input on validation errors; log details for developers."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Reload the page automatically."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hide the component."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Network or 5xx errors get a friendly message and a Retry button. 400/422 map to field errors and keep what the user typed. 401 sends them to login. Technical details go to logging, not to the screen.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Lỗi mạng hoặc 5xx hiện thông báo thân thiện kèm nút Thử lại. 400/422 chuyển thành lỗi từng ô và giữ nguyên dữ liệu người dùng đã nhập. 401 đưa về trang đăng nhập. Chi tiết kỹ thuật ghi vào log, không hiện lên màn hình.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "What is json-server good for, and what are its limits?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Production backend."
+              },
+              {
+                "ma": "b",
+                "noiDung": "A quick fake REST API for frontend development and demos; it has no real auth, validation or business rules, so it never replaces the real backend."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only static files."
+              },
+              {
+                "ma": "d",
+                "noiDung": "A database engine."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"It lets the frontend start before the backend is ready: full CRUD, filters and pagination from one JSON file. But there is no validation, authorisation or concurrency control, so it is for development and prototypes only.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Nó cho frontend làm trước khi backend xong: đủ CRUD, lọc, phân trang từ một tệp JSON. Nhưng không có kiểm hợp lệ, phân quyền hay xử lý đồng thời, nên chỉ dùng để phát triển và làm mẫu.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Where should the API base URL live in a React project?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hard-coded in every component."
+              },
+              {
+                "ma": "b",
+                "noiDung": "In an environment variable (REACT_APP_… / VITE_…) read by one axios instance or api module."
+              },
+              {
+                "ma": "c",
+                "noiDung": "In localStorage."
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the CSS."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"In an env variable such as VITE_API_URL, read once when creating the axios instance. Dev, staging and production then differ only by configuration — and remember those variables are public in the bundle, so no secrets there.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Trong biến môi trường như VITE_API_URL, đọc một lần khi tạo instance axios. Dev, staging, production chỉ khác cấu hình — và nhớ các biến đó công khai trong bundle, nên không đặt bí mật ở đó.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

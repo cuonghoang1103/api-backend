@@ -154,10 +154,10 @@ export function reactNho(o) {
 
 /** Bài nhỏ JS (máy chấm gọi hàm): một tệp main.js (hoặc tep), nạp như script thường. */
 export function jsNho(o) {
-  const { giai, dau, tep = 'main.js', tepNap, them = {}, kiem, loai = 'js', ...rest } = o;
+  const { giai, dau, tep = 'main.js', tepNap, them = {}, kiem, loai = 'js', fetchGia, ...rest } = o;
   return {
     ...rest,
-    tests: { loai, phienBan: 1, tepChinh: tep, ...(tepNap ? { tepNap } : {}), kiem },
+    tests: { loai, phienBan: 1, tepChinh: tep, ...(tepNap ? { tepNap } : {}), ...(fetchGia ? { fetchGia } : {}), kiem },
     khoiDau: { [tep]: dau, ...them },
     loiGiai: { [tep]: giai, ...them },
   };

@@ -416,6 +416,48 @@
       "name": "Interview corner — Code splitting",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về chia mã và hiệu năng tải trang."
+    },
+    {
+      "slug": "fer202-11-1-fetch-async",
+      "name": "11.1 Promise, async/await & fetch",
+      "level": "MEDIUM",
+      "description": "Promise tự tạo + timeout, getJSON kiểm res.ok, request tuần tự, Promise.all song song, thử lại + allSettled."
+    },
+    {
+      "slug": "fer202-11-2-axios-json-server",
+      "name": "11.2 axios & json-server",
+      "level": "MEDIUM",
+      "description": "axios GET/POST/PATCH/DELETE với json-server, confirm khi xoá, axios.create + params + phân trang phía server."
+    },
+    {
+      "slug": "fer202-11-3-slot18-http-rest-slides",
+      "name": "11.3 Slide check — HTTP & REST",
+      "level": "EASY",
+      "description": "Điền bảng method/URI/mã trạng thái REST + trắc nghiệm Slot 18."
+    },
+    {
+      "slug": "fer202-11-4-slot19-fetch-axios-slides",
+      "name": "11.4 Slide check — fetch & axios",
+      "level": "EASY",
+      "description": "Trắc nghiệm Slot 19 + sắp thứ tự in ra của vòng lặp sự kiện."
+    },
+    {
+      "slug": "fer202-11-ex26-json-server",
+      "name": "Exercise 26 — json-server",
+      "level": "EASY",
+      "description": "Các bước dựng json-server, đoán kết quả request từ db.json, quan hệ _expand/_embed trong React."
+    },
+    {
+      "slug": "fer202-11-ex27-axios",
+      "name": "Exercise 27 — axios",
+      "level": "MEDIUM",
+      "description": "AxiosDemo ba trạng thái + tải lại, custom hook useAxios có refetch và so params theo nội dung."
+    },
+    {
+      "slug": "fer202-11-interview-http",
+      "name": "Interview corner — HTTP & data fetching",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về REST, fetch/axios, xử lý lỗi và race condition."
     }
   ]
 }

@@ -1,0 +1,551 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-ex27-axios",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-ex27-axios"
+  },
+  "exercises": [
+    {
+      "title": "AxiosDemo: loading, error and data (handout)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "axios in useEffect",
+        "three UI states",
+        "params"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "axios",
+        "exercise-27"
+      ],
+      "problemHtml": "<p>The handout's <code>AxiosDemo</code> component, against our json-server instead of JSONPlaceholder. Fetch the first <b>5</b> posts with <code>axios.get(url, { params: { _limit: 5 } })</code> and render exactly one of three states: loading, error, or the list. A <b>Reload</b> button fetches again.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#loading</code> <code>Loading posts...</code>; <code>#error</code> <code>Failed to load posts</code>; <code>li.post</code> with <code>h3</code> (title) and <code>p</code> (body).</li>\n  <li><code>#btn-reload</code> re-runs the request (a <code>reloadKey</code> state in the dependency array).</li>\n</ul>",
+      "problemHtmlVi": "<p>Component <code>AxiosDemo</code> của handout, gọi json-server của ta thay vì JSONPlaceholder. Tải <b>5</b> bài đầu bằng <code>axios.get(url, { params: { _limit: 5 } })</code> và hiển thị đúng một trong ba trạng thái: đang tải, lỗi, hoặc danh sách. Nút <b>Reload</b> tải lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#loading</code> <code>Loading posts...</code>; <code>#error</code> <code>Failed to load posts</code>; <code>li.post</code> có <code>h3</code> (tiêu đề) và <code>p</code> (nội dung).</li>\n  <li><code>#btn-reload</code> chạy lại request (state <code>reloadKey</code> nằm trong mảng phụ thuộc).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "server has 8 posts",
+          "output": "5 li.post",
+          "explanation": "_limit=5 is applied by the server.|||Server áp _limit=5."
+        }
+      ],
+      "hintsJson": [
+        "const res = await axios.get('http://localhost:9999/posts', { params: { _limit: 5 } });",
+        "const [reloadKey, setReloadKey] = useState(0); useEffect(…, [reloadKey]); onClick={() => setReloadKey((k) => k + 1)}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect, useState } from 'react';\nimport axios from 'axios';\n\nexport default function AxiosDemo() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    axios.get('http://localhost:9999/posts').then((res) => setPosts(res.data.slice(0, 5)));\n  }, []);\n  return <ul>{posts.map((p) => <li key={p.id} className=\"post\"><h3>{p.title}</h3></li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — AxiosDemo: ba trạng thái + tải lại bằng reloadKey\nimport { useEffect, useState } from 'react';\nimport axios from 'axios';\n\nexport default function AxiosDemo() {\n  const [posts, setPosts] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(false);\n  const [reloadKey, setReloadKey] = useState(0);\n\n  useEffect(() => {\n    let ignore = false;\n    setLoading(true);\n    setError(false);\n    axios\n      .get('http://localhost:9999/posts', { params: { _limit: 5 } })\n      .then((res) => { if (!ignore) setPosts(res.data); })\n      .catch(() => { if (!ignore) setError(true); })\n      .finally(() => { if (!ignore) setLoading(false); });\n    return () => { ignore = true; };\n  }, [reloadKey]);\n\n  let content;\n  if (loading) content = <p id=\"loading\">Loading posts...</p>;\n  else if (error) content = <p id=\"error\">Failed to load posts</p>;\n  else {\n    content = (\n      <ul>\n        {posts.map((p) => (\n          <li key={p.id} className=\"post\">\n            <h3>{p.title}</h3>\n            <p>{p.body}</p>\n          </li>\n        ))}\n      </ul>\n    );\n  }\n\n  return (\n    <div>\n      <button id=\"btn-reload\" type=\"button\" onClick={() => setReloadKey((k) => k + 1)}>Reload</button>\n      {content}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi request có ba trạng thái loại trừ nhau. Render bằng early return (loading → error → data) giúp không bao giờ hiện hai trạng thái cùng lúc. Đổi một state phụ thuộc là cách đơn giản để \"chạy lại effect\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "axios"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "posts": [
+              {
+                "id": 1,
+                "userId": 1,
+                "title": "sunt aut facere",
+                "body": "Lorem ipsum 1"
+              },
+              {
+                "id": 2,
+                "userId": 2,
+                "title": "qui est esse",
+                "body": "Lorem ipsum 2"
+              },
+              {
+                "id": 3,
+                "userId": 3,
+                "title": "ea molestias quasi",
+                "body": "Lorem ipsum 3"
+              },
+              {
+                "id": 4,
+                "userId": 1,
+                "title": "eum et est occaecati",
+                "body": "Lorem ipsum 4"
+              },
+              {
+                "id": 5,
+                "userId": 2,
+                "title": "nesciunt quas odio",
+                "body": "Lorem ipsum 5"
+              },
+              {
+                "id": 6,
+                "userId": 3,
+                "title": "dolorem eum magni",
+                "body": "Lorem ipsum 6"
+              },
+              {
+                "id": 7,
+                "userId": 1,
+                "title": "magnam facilis autem",
+                "body": "Lorem ipsum 7"
+              },
+              {
+                "id": 8,
+                "userId": 2,
+                "title": "dolorem dolore est",
+                "body": "Lorem ipsum 8"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Five posts from the server",
+            "kiem": "so-luong",
+            "selector": "li.post",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Uses _limit=5",
+            "kiem": "goi-fetch",
+            "khop": "/posts\\?_limit=5",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Loading state",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "posts": [
+                  {
+                    "id": 1,
+                    "userId": 1,
+                    "title": "sunt aut facere",
+                    "body": "Lorem ipsum 1"
+                  },
+                  {
+                    "id": 2,
+                    "userId": 2,
+                    "title": "qui est esse",
+                    "body": "Lorem ipsum 2"
+                  },
+                  {
+                    "id": 3,
+                    "userId": 3,
+                    "title": "ea molestias quasi",
+                    "body": "Lorem ipsum 3"
+                  },
+                  {
+                    "id": 4,
+                    "userId": 1,
+                    "title": "eum et est occaecati",
+                    "body": "Lorem ipsum 4"
+                  },
+                  {
+                    "id": 5,
+                    "userId": 2,
+                    "title": "nesciunt quas odio",
+                    "body": "Lorem ipsum 5"
+                  },
+                  {
+                    "id": 6,
+                    "userId": 3,
+                    "title": "dolorem eum magni",
+                    "body": "Lorem ipsum 6"
+                  },
+                  {
+                    "id": 7,
+                    "userId": 1,
+                    "title": "magnam facilis autem",
+                    "body": "Lorem ipsum 7"
+                  },
+                  {
+                    "id": 8,
+                    "userId": 2,
+                    "title": "dolorem dolore est",
+                    "body": "Lorem ipsum 8"
+                  }
+                ]
+              },
+              "treMs": 1200
+            },
+            "kiem": "text",
+            "selector": "#loading",
+            "giaTri": "Loading posts..."
+          },
+          {
+            "moTa": "Error state",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Failed to load posts",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Reload fetches again",
+            "kiem": "goi-fetch",
+            "khop": "/posts",
+            "min": 2,
+            "max": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reload",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Title and body rendered",
+            "kiem": "danh-sach-text",
+            "selector": "li.post:first-child h3, li.post:first-child p",
+            "mongDoi": [
+              "sunt aut facere",
+              "Lorem ipsum 1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hiện cả \"Loading\" lẫn danh sách cùng lúc ⇒ quên tắt loading ở nhánh lỗi (dùng finally)."
+        },
+        {
+          "loi": "Tải hết rồi slice(0, 5) ở client ⇒ đúng hình nhưng phí băng thông."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UI state",
+          "vi": "trạng thái giao diện (loading/error/data)"
+        }
+      ]
+    },
+    {
+      "title": "A reusable useAxios hook with refetch",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "custom hook",
+        "generic data fetching",
+        "stable params",
+        "refetch"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "axios",
+        "custom-hooks",
+        "exercise-27"
+      ],
+      "problemHtml": "<p>Two widgets repeat the same loading/error/data code. Extract <code>useAxios(url, params)</code> returning <code>{ data, loading, error, refetch }</code>. It refetches when <code>url</code> or the <b>content</b> of <code>params</code> changes (compare <code>JSON.stringify(params)</code> — a new object literal every render must not cause an infinite loop).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Widget 1 <code>#users</code>: <code>li.user</code> from <code>/users</code>. Widget 2 <code>#posts</code>: posts of the selected user (<code>#user-filter</code> select 1/2/3) via <code>params: { userId }</code>, rows <code>li.post</code>, button <code>#refresh-posts</code> calls <code>refetch</code>.</li>\n  <li>Each widget shows its own <code>.loading</code> / <code>.error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai widget lặp lại cùng đoạn loading/error/data. Rút thành <code>useAxios(url, params)</code> trả <code>{ data, loading, error, refetch }</code>. Nó tải lại khi <code>url</code> hoặc <b>nội dung</b> của <code>params</code> đổi (so <code>JSON.stringify(params)</code> — object literal mới mỗi lần render không được gây vòng lặp vô hạn).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Widget 1 <code>#users</code>: <code>li.user</code> từ <code>/users</code>. Widget 2 <code>#posts</code>: bài của user đang chọn (select <code>#user-filter</code> 1/2/3) qua <code>params: { userId }</code>, dòng <code>li.post</code>, nút <code>#refresh-posts</code> gọi <code>refetch</code>.</li>\n  <li>Mỗi widget có <code>.loading</code> / <code>.error</code> riêng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "select user 2",
+          "output": "posts 2, 5, 8 · one new request",
+          "explanation": "The effect depends on [url, JSON.stringify(params), tick].|||Effect phụ thuộc [url, JSON.stringify(params), tick]."
+        }
+      ],
+      "hintsJson": [
+        "const key = JSON.stringify(params ?? {}); const [tick, setTick] = useState(0); useEffect(() => { … axios.get(url, { params: JSON.parse(key) }) … }, [url, key, tick]);",
+        "refetch = useCallback(() => setTick((t) => t + 1), []) — hoặc đơn giản () => setTick(…)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect, useState } from 'react';\nimport axios from 'axios';\n\nfunction useAxios(url, params) {\n  const [data, setData] = useState(null);\n  useEffect(() => {\n    axios.get(url, { params }).then((r) => setData(r.data));\n  }, [url, params]);\n  return { data };\n}\n\nexport default function App() {\n  const [userId, setUserId] = useState(1);\n  const users = useAxios('http://localhost:9999/users');\n  const posts = useAxios('http://localhost:9999/posts', { userId });\n  return (\n    <div>\n      <ul id=\"users\">{(users.data || []).map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>\n      <select id=\"user-filter\" value={userId} onChange={(e) => setUserId(Number(e.target.value))}>\n        <option value=\"1\">1</option><option value=\"2\">2</option><option value=\"3\">3</option>\n      </select>\n      <ul id=\"posts\">{(posts.data || []).map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useAxios: so params theo NỘI DUNG (JSON), refetch bằng bộ đếm\nimport { useCallback, useEffect, useState } from 'react';\nimport axios from 'axios';\n\nfunction useAxios(url, params) {\n  const key = JSON.stringify(params ?? {});\n  const [data, setData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n  const [tick, setTick] = useState(0);\n\n  useEffect(() => {\n    let ignore = false;\n    setLoading(true);\n    setError(null);\n    axios\n      .get(url, { params: JSON.parse(key) })\n      .then((res) => { if (!ignore) setData(res.data); })\n      .catch((err) => { if (!ignore) setError(err.message); })\n      .finally(() => { if (!ignore) setLoading(false); });\n    return () => { ignore = true; };\n  }, [url, key, tick]);\n\n  const refetch = useCallback(() => setTick((t) => t + 1), []);\n  return { data, loading, error, refetch };\n}\n\nfunction Status({ state }) {\n  if (state.loading) return <p className=\"loading\">Loading...</p>;\n  if (state.error) return <p className=\"error\">{state.error}</p>;\n  return null;\n}\n\nexport default function App() {\n  const [userId, setUserId] = useState(1);\n  const users = useAxios('http://localhost:9999/users');\n  const posts = useAxios('http://localhost:9999/posts', { userId });\n\n  return (\n    <div>\n      <section>\n        <h2>Users</h2>\n        <Status state={users} />\n        <ul id=\"users\">{(users.data ?? []).map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>\n      </section>\n      <section>\n        <h2>Posts</h2>\n        <select id=\"user-filter\" value={userId} onChange={(e) => setUserId(Number(e.target.value))}>\n          <option value=\"1\">1</option>\n          <option value=\"2\">2</option>\n          <option value=\"3\">3</option>\n        </select>\n        <button id=\"refresh-posts\" type=\"button\" onClick={posts.refetch}>Refresh</button>\n        <Status state={posts} />\n        <ul id=\"posts\">{(posts.data ?? []).map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>\n      </section>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>React so mảng phụ thuộc bằng <code>Object.is</code>: object literal mới mỗi lần render luôn \"khác\". Chuyển nó thành chuỗi JSON (giá trị nguyên thuỷ) để so theo NỘI DUNG. Đây là tiền thân của thư viện như SWR/TanStack Query.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "axios"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "posts": [
+              {
+                "id": 1,
+                "userId": 1,
+                "title": "sunt aut facere",
+                "body": "Lorem ipsum 1"
+              },
+              {
+                "id": 2,
+                "userId": 2,
+                "title": "qui est esse",
+                "body": "Lorem ipsum 2"
+              },
+              {
+                "id": 3,
+                "userId": 3,
+                "title": "ea molestias quasi",
+                "body": "Lorem ipsum 3"
+              },
+              {
+                "id": 4,
+                "userId": 1,
+                "title": "eum et est occaecati",
+                "body": "Lorem ipsum 4"
+              },
+              {
+                "id": 5,
+                "userId": 2,
+                "title": "nesciunt quas odio",
+                "body": "Lorem ipsum 5"
+              },
+              {
+                "id": 6,
+                "userId": 3,
+                "title": "dolorem eum magni",
+                "body": "Lorem ipsum 6"
+              },
+              {
+                "id": 7,
+                "userId": 1,
+                "title": "magnam facilis autem",
+                "body": "Lorem ipsum 7"
+              },
+              {
+                "id": 8,
+                "userId": 2,
+                "title": "dolorem dolore est",
+                "body": "Lorem ipsum 8"
+              }
+            ],
+            "users": [
+              {
+                "id": 1,
+                "name": "Leanne"
+              },
+              {
+                "id": 2,
+                "name": "Ervin"
+              },
+              {
+                "id": 3,
+                "name": "Clementine"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Users widget",
+            "kiem": "danh-sach-text",
+            "selector": "li.user",
+            "mongDoi": [
+              "Leanne",
+              "Ervin",
+              "Clementine"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Posts for user 1",
+            "kiem": "danh-sach-text",
+            "selector": "li.post",
+            "mongDoi": [
+              "sunt aut facere",
+              "eum et est occaecati",
+              "magnam facilis autem"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Changing the filter refetches",
+            "kiem": "so-luong",
+            "selector": "li.post",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#user-filter",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "No infinite loop (exactly 2 requests on mount)",
+            "kiem": "goi-fetch",
+            "khop": "localhost:9999",
+            "min": 2,
+            "max": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "refetch sends one more posts request",
+            "kiem": "goi-fetch",
+            "khop": "/posts\\?userId=1",
+            "min": 2,
+            "max": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#refresh-posts",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Error state per widget",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "users": [
+                  {
+                    "id": 1,
+                    "name": "Leanne"
+                  }
+                ]
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Request failed with status code 404"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "A useAxios hook returns data, not JSX",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+useAxios[\\s\\S]*return\\s*\\{\\s*data"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa thẳng object <code>params</code> vào mảng phụ thuộc ⇒ mỗi render là object mới ⇒ gọi API vô hạn."
+        },
+        {
+          "loi": "Hook trả về JSX ⇒ đó là component, không phải hook; hook trả DỮ LIỆU."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "referential equality",
+          "vi": "so sánh theo tham chiếu: hai object giống nội dung vẫn khác nhau"
+        }
+      ]
+    }
+  ]
+}

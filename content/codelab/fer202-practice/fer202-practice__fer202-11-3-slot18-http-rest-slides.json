@@ -1,0 +1,567 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-3-slot18-http-rest-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-3-slot18-http-rest-slides"
+  },
+  "exercises": [
+    {
+      "title": "REST table: method, URI and status code",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "HTTP verbs",
+        "resource URIs",
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "http",
+        "rest",
+        "table"
+      ],
+      "problemHtml": "<p>A REST API for students lives at <code>/students</code>. For each operation fill the HTTP <b>method</b> (GET, POST, PUT, PATCH, DELETE), the <b>URI</b> (use <code>/students</code> or <code>/students/5</code>) and the usual <b>success status code</b>. Then match common error situations to their status code.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>API REST cho sinh viên ở <code>/students</code>. Với mỗi thao tác điền <b>method</b> HTTP (GET, POST, PUT, PATCH, DELETE), <b>URI</b> (dùng <code>/students</code> hoặc <code>/students/5</code>) và <b>mã thành công</b> thường gặp. Sau đó ghép tình huống lỗi với mã trạng thái.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Danh từ số nhiều cho tập hợp, thêm /id cho một phần tử; động từ nằm ở METHOD, không nằm trong URI.",
+        "2xx thành công · 4xx lỗi phía client · 5xx lỗi phía server."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# REST table: method, URI and status code\n\nAnswer in the panel on the left (no code needed).\n\n1. Operations on the students resource\n2. Which status code?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# REST table: method, URI and status code — answer key\n\n1. Operations on the students resource\n   - list.m: GET\n   - list.u: /students\n   - list.s: 200\n   - one.m: GET\n   - one.u: /students/5\n   - one.s: 200\n   - create.m: POST\n   - create.u: /students\n   - create.s: 201\n   - replace.m: PUT\n   - replace.u: /students/5\n   - replace.s: 200\n   - email.m: PATCH\n   - email.u: /students/5\n   - email.s: 200\n   - delete.m: DELETE\n   - delete.u: /students/5\n   - delete.s: 204\n   Collections (/students) are listed and created into; single items (/students/5) are read, replaced, patched and deleted. 201 Created for POST; DELETE returns 204 No Content (json-server answers 200).|||Tập hợp (/students) để liệt kê và tạo mới; phần tử (/students/5) để đọc, thay, sửa một phần, xoá. POST trả 201 Created; DELETE trả 204 No Content (json-server trả 200).\n\n2. Which status code?\n   - nf.s: 404\n   - bad.s: 400\n   - auth.s: 401\n   - forbid.s: 403\n   - crash.s: 500\n   4xx = the client did something wrong (400 bad data, 401 not authenticated, 403 not allowed, 404 not found); 5xx = the server failed.|||4xx = phía client sai (400 dữ liệu sai, 401 chưa xác thực, 403 không được phép, 404 không tìm thấy); 5xx = server lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>REST: tài nguyên là danh từ (URI), hành động là method HTTP, kết quả là mã trạng thái. PUT thay toàn bộ, PATCH sửa một phần.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "crud",
+            "de": "Operations on the students resource",
+            "cot": [
+              {
+                "ma": "op",
+                "ten": "Operation"
+              },
+              {
+                "ma": "m",
+                "ten": "Method"
+              },
+              {
+                "ma": "u",
+                "ten": "URI"
+              },
+              {
+                "ma": "s",
+                "ten": "Success status"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "list",
+                "o": {
+                  "op": "List all students"
+                }
+              },
+              {
+                "ma": "one",
+                "o": {
+                  "op": "Read student #5"
+                }
+              },
+              {
+                "ma": "create",
+                "o": {
+                  "op": "Create a new student"
+                }
+              },
+              {
+                "ma": "replace",
+                "o": {
+                  "op": "Replace student #5 completely"
+                }
+              },
+              {
+                "ma": "email",
+                "o": {
+                  "op": "Change only the email of student #5"
+                }
+              },
+              {
+                "ma": "delete",
+                "o": {
+                  "op": "Delete student #5"
+                }
+              }
+            ],
+            "dapAn": {
+              "list.m": "GET",
+              "list.u": "/students",
+              "list.s": "200",
+              "one.m": "GET",
+              "one.u": "/students/5",
+              "one.s": "200",
+              "create.m": "POST",
+              "create.u": "/students",
+              "create.s": "201",
+              "replace.m": "PUT",
+              "replace.u": "/students/5",
+              "replace.s": "200",
+              "email.m": "PATCH",
+              "email.u": "/students/5",
+              "email.s": "200",
+              "delete.m": "DELETE",
+              "delete.u": "/students/5",
+              "delete.s": [
+                "204",
+                "200"
+              ]
+            },
+            "giaiThich": "<p>Collections (/students) are listed and created into; single items (/students/5) are read, replaced, patched and deleted. 201 Created for POST; DELETE returns 204 No Content (json-server answers 200).</p><p><i>🇻🇳 Tập hợp (/students) để liệt kê và tạo mới; phần tử (/students/5) để đọc, thay, sửa một phần, xoá. POST trả 201 Created; DELETE trả 204 No Content (json-server trả 200).</i></p>"
+          },
+          {
+            "ma": "err",
+            "de": "Which status code?",
+            "cot": [
+              {
+                "ma": "tinh",
+                "ten": "Situation"
+              },
+              {
+                "ma": "s",
+                "ten": "Status"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "nf",
+                "o": {
+                  "tinh": "GET /students/999 — no such student"
+                }
+              },
+              {
+                "ma": "bad",
+                "o": {
+                  "tinh": "POST with an invalid email in the body"
+                }
+              },
+              {
+                "ma": "auth",
+                "o": {
+                  "tinh": "No login token sent"
+                }
+              },
+              {
+                "ma": "forbid",
+                "o": {
+                  "tinh": "Logged in as a student, trying to delete another student"
+                }
+              },
+              {
+                "ma": "crash",
+                "o": {
+                  "tinh": "Unhandled exception on the server"
+                }
+              }
+            ],
+            "dapAn": {
+              "nf.s": "404",
+              "bad.s": [
+                "400",
+                "422"
+              ],
+              "auth.s": "401",
+              "forbid.s": "403",
+              "crash.s": "500"
+            },
+            "giaiThich": "<p>4xx = the client did something wrong (400 bad data, 401 not authenticated, 403 not allowed, 404 not found); 5xx = the server failed.</p><p><i>🇻🇳 4xx = phía client sai (400 dữ liệu sai, 401 chưa xác thực, 403 không được phép, 404 không tìm thấy); 5xx = server lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết URI kiểu động từ <code>/getStudents</code>, <code>/deleteStudent?id=5</code> — không phải REST."
+        },
+        {
+          "loi": "Nhầm 401 (chưa đăng nhập) với 403 (đã đăng nhập nhưng không có quyền)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "resource",
+          "vi": "tài nguyên (sinh viên, bài viết…)"
+        },
+        {
+          "en": "idempotent",
+          "vi": "gọi nhiều lần cho cùng kết quả như một lần (GET, PUT, DELETE)"
+        }
+      ]
+    },
+    {
+      "title": "Slide check: client/server, HTTP, JSON, REST",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "client/server",
+        "request/response",
+        "JSON",
+        "REST constraints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "http",
+        "rest",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 18: why the network is asynchronous, what is inside an HTTP request and response, JSON syntax, and the principles of REST (resources, representations, statelessness).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 18: vì sao mạng là bất đồng bộ, trong request/response HTTP có gì, cú pháp JSON, và nguyên tắc REST (tài nguyên, biểu diễn, phi trạng thái).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "JSON: khoá luôn trong nháy kép, không có hàm, không có undefined, không dấu phẩy thừa.",
+        "Stateless: mỗi request tự mang đủ thông tin (vd token)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: client/server, HTTP, JSON, REST\n\nAnswer in the panel on the left (no code needed).\n\n1. Why are network calls asynchronous in the browser?\n2. An HTTP request contains… (choose all)\n3. Which is valid JSON?\n4. Convert a JS object to a JSON string:\n5. The Content-Type: application/json header tells the receiver…\n6. In REST, a URI should name…\n7. \"Stateless\" means…\n8. Which methods should NOT change data on the server?\n9. A \"representation\" of a resource is…\n10. PUT vs PATCH:\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: client/server, HTTP, JSON, REST — answer key\n\n1. Why are network calls asynchronous in the browser?\n   Answer: b) A response may take a long time; blocking the single UI thread would freeze the page\n   The browser keeps the UI responsive and calls you back later. / Trình duyệt giữ giao diện mượt và gọi lại bạn sau.\n\n2. An HTTP request contains… (choose all)\n   Answer: a) A method + b) A URL + c) Headers\n   The status code is in the RESPONSE. A body is optional. / Mã trạng thái nằm ở RESPONSE. Body là tuỳ chọn.\n\n3. Which is valid JSON?\n   Answer: b) { \"name\": \"An\", \"age\": 20 }\n   Double-quoted keys and strings, no trailing comma, no functions. / Khoá và chuỗi trong nháy kép, không phẩy thừa, không hàm.\n\n4. Convert a JS object to a JSON string:\n   Answer: b) JSON.stringify(obj)\n   parse goes the other way: string → value. / parse làm chiều ngược lại: chuỗi → giá trị.\n\n5. The Content-Type: application/json header tells the receiver…\n   Answer: a) the body is JSON\n   axios sets it automatically when you send an object. / axios tự đặt khi bạn gửi object.\n\n6. In REST, a URI should name…\n   Answer: b) a resource (/students/5)\n   The method says what to do with it. / Method cho biết làm gì với nó.\n\n7. \"Stateless\" means…\n   Answer: b) each request carries all information needed; the server keeps no client session between requests\n   That is why APIs send a token with every request. / Vì vậy API gửi token kèm mọi request.\n\n8. Which methods should NOT change data on the server?\n   Answer: a) GET\n   GET is safe; it only reads. / GET là \"an toàn\": chỉ đọc.\n\n9. A \"representation\" of a resource is…\n   Answer: b) the format it is transferred in, e.g. JSON or XML\n   Same resource, different representations. / Cùng tài nguyên, nhiều cách biểu diễn.\n\n10. PUT vs PATCH:\n   Answer: b) PUT replaces the whole resource; PATCH changes only the given fields\n   Sending a partial object with PUT can wipe the other fields. / Gửi object thiếu bằng PUT có thể xoá mất các trường còn lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Why are network calls asynchronous in the browser?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JavaScript cannot do math while waiting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A response may take a long time; blocking the single UI thread would freeze the page"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Servers require it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are not"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The browser keeps the UI responsive and calls you back later.</p><p><i>🇻🇳 Trình duyệt giữ giao diện mượt và gọi lại bạn sau.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "An HTTP request contains… (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A method"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A URL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Headers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A status code"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>The status code is in the RESPONSE. A body is optional.</p><p><i>🇻🇳 Mã trạng thái nằm ở RESPONSE. Body là tuỳ chọn.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q3",
+            "de": "Which is valid JSON?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>{ name: 'An' }</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>{ \"name\": \"An\", \"age\": 20 }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>{ \"name\": \"An\", }</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>{ \"fn\": function() {} }</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Double-quoted keys and strings, no trailing comma, no functions.</p><p><i>🇻🇳 Khoá và chuỗi trong nháy kép, không phẩy thừa, không hàm.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Convert a JS object to a JSON string:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>JSON.parse(obj)</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>JSON.stringify(obj)</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>obj.toJSON()</code> always"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>String(obj)</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>parse goes the other way: string → value.</p><p><i>🇻🇳 parse làm chiều ngược lại: chuỗi → giá trị.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "The <code>Content-Type: application/json</code> header tells the receiver…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the body is JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the user is logged in"
+              },
+              {
+                "ma": "c",
+                "noiDung": "to cache the response"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the request is GET"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>axios sets it automatically when you send an object.</p><p><i>🇻🇳 axios tự đặt khi bạn gửi object.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "In REST, a URI should name…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an action (/createStudent)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a resource (/students/5)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a file on disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a database table only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The method says what to do with it.</p><p><i>🇻🇳 Method cho biết làm gì với nó.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "\"Stateless\" means…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the server has no database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "each request carries all information needed; the server keeps no client session between requests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "responses are never cached"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only GET is allowed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>That is why APIs send a token with every request.</p><p><i>🇻🇳 Vì vậy API gửi token kèm mọi request.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Which methods should NOT change data on the server?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "GET"
+              },
+              {
+                "ma": "b",
+                "noiDung": "POST"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DELETE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PATCH"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>GET is safe; it only reads.</p><p><i>🇻🇳 GET là \"an toàn\": chỉ đọc.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "A \"representation\" of a resource is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "its database row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the format it is transferred in, e.g. JSON or XML"
+              },
+              {
+                "ma": "c",
+                "noiDung": "its URL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a React component"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Same resource, different representations.</p><p><i>🇻🇳 Cùng tài nguyên, nhiều cách biểu diễn.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "PUT vs PATCH:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Identical"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PUT replaces the whole resource; PATCH changes only the given fields"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PATCH creates; PUT deletes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PUT is only for files"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Sending a partial object with PUT can wipe the other fields.</p><p><i>🇻🇳 Gửi object thiếu bằng PUT có thể xoá mất các trường còn lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ JSON là object JavaScript — nó là CHUỖI văn bản theo cú pháp gần giống."
+        },
+        {
+          "loi": "Nghĩ GET có thể gửi body để tạo dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stateless",
+          "vi": "server không nhớ trạng thái giữa các request"
+        }
+      ]
+    }
+  ]
+}

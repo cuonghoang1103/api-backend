@@ -1,0 +1,464 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-4-slot19-fetch-axios-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-4-slot19-fetch-axios-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: promises, async/await, fetch and axios",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "Promise states",
+        "callback hell",
+        "async/await",
+        "fetch",
+        "axios"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "async",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 19: the three states of a Promise, escaping callback hell, how <code>async/await</code> works, running async code in <code>useEffect</code>, and the practical differences between <code>fetch</code> and <code>axios</code>.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 19: ba trạng thái của Promise, thoát callback hell, <code>async/await</code> hoạt động thế nào, chạy code async trong <code>useEffect</code>, và khác biệt thực tế giữa <code>fetch</code> và <code>axios</code>.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "async function LUÔN trả Promise.",
+        "fetch không reject khi 404/500; axios thì có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: promises, async/await, fetch and axios\n\nAnswer in the panel on the left (no code needed).\n\n1. The three states of a Promise:\n2. What does an async function return?\n3. How do you handle errors with async/await?\n4. fetch(\"/api/x\") gets a 404. The promise…\n5. With fetch, reading the JSON body requires…\n6. Sending JSON with fetch needs… (choose all)\n7. axios rejects when…\n8. Correct way to fetch in useEffect:\n9. Promise.all([a, b]) rejects when…\n10. Which is an advantage of axios over fetch?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: promises, async/await, fetch and axios — answer key\n\n1. The three states of a Promise:\n   Answer: b) pending, fulfilled, rejected\n   Once settled it never changes again. / Đã settle thì không đổi nữa.\n\n2. What does an async function return?\n   Answer: b) Always a Promise\n   return 5 inside async ⇒ Promise resolving to 5. / return 5 trong async ⇒ Promise resolve ra 5.\n\n3. How do you handle errors with async/await?\n   Answer: b) try { await … } catch (e) { … }\n   A rejected awaited promise throws at the await. / Promise bị reject sẽ ném lỗi tại chỗ await.\n\n4. fetch(\"/api/x\") gets a 404. The promise…\n   Answer: b) resolves with res.ok === false\n   Only network failures reject. / Chỉ lỗi mạng mới reject.\n\n5. With fetch, reading the JSON body requires…\n   Answer: b) await res.json()\n   axios puts it in res.data instead. / axios đặt sẵn ở res.data.\n\n6. Sending JSON with fetch needs… (choose all)\n   Answer: a) method: \"POST\" + b) headers: { \"Content-Type\": \"application/json\" } + c) body: JSON.stringify(data)\n   axios.post(url, data) does all three for you. / axios.post(url, data) làm cả ba giúp bạn.\n\n7. axios rejects when…\n   Answer: b) the status is outside 2xx, or the network fails\n   err.response.status tells you which code. / err.response.status cho biết mã nào.\n\n8. Correct way to fetch in useEffect:\n   Answer: b) useEffect(() => { const load = async () => { … }; load(); }, [])\n   The effect must return nothing or a cleanup, not a Promise. / Effect phải trả về không gì hoặc cleanup, không phải Promise.\n\n9. Promise.all([a, b]) rejects when…\n   Answer: b) any one rejects\n   Use Promise.allSettled to get every outcome. / Dùng Promise.allSettled để nhận mọi kết quả.\n\n10. Which is an advantage of axios over fetch?\n   Answer: b) Automatic JSON, errors on bad status, instances with baseURL, interceptors\n   fetch needs no install; axios saves boilerplate. / fetch không cần cài; axios bớt code lặp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "The three states of a Promise:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "start, run, stop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pending, fulfilled, rejected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "open, closed, error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "sync, async, await"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Once settled it never changes again.</p><p><i>🇻🇳 Đã settle thì không đổi nữa.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "What does an <code>async function</code> return?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Whatever you return, directly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Always a Promise"
+              },
+              {
+                "ma": "c",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A callback"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>return 5 inside async ⇒ Promise resolving to 5.</p><p><i>🇻🇳 return 5 trong async ⇒ Promise resolve ra 5.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "How do you handle errors with async/await?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>.catch</code> is impossible"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>try { await … } catch (e) { … }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Errors are ignored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use <code>if (error)</code> after await"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A rejected awaited promise throws at the await.</p><p><i>🇻🇳 Promise bị reject sẽ ném lỗi tại chỗ await.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<code>fetch(\"/api/x\")</code> gets a 404. The promise…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "rejects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "resolves with res.ok === false"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never settles"
+              },
+              {
+                "ma": "d",
+                "noiDung": "throws synchronously"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Only network failures reject.</p><p><i>🇻🇳 Chỉ lỗi mạng mới reject.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "With fetch, reading the JSON body requires…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing, res is the data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>await res.json()</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>res.data</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>JSON.parse(res)</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>axios puts it in res.data instead.</p><p><i>🇻🇳 axios đặt sẵn ở res.data.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Sending JSON with fetch needs… (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "method: \"POST\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "headers: { \"Content-Type\": \"application/json\" }"
+              },
+              {
+                "ma": "c",
+                "noiDung": "body: JSON.stringify(data)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "res.json() before sending"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>axios.post(url, data) does all three for you.</p><p><i>🇻🇳 axios.post(url, data) làm cả ba giúp bạn.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q7",
+            "de": "axios rejects when…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "never"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the status is outside 2xx, or the network fails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only on network failure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the body is empty"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>err.response.status tells you which code.</p><p><i>🇻🇳 err.response.status cho biết mã nào.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Correct way to fetch in useEffect:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>useEffect(async () =&gt; { await load(); }, [])</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>useEffect(() =&gt; { const load = async () =&gt; { … }; load(); }, [])</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>await useEffect(…)</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fetch in the render body"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The effect must return nothing or a cleanup, not a Promise.</p><p><i>🇻🇳 Effect phải trả về không gì hoặc cleanup, không phải Promise.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "<code>Promise.all([a, b])</code> rejects when…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "both reject"
+              },
+              {
+                "ma": "b",
+                "noiDung": "any one rejects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the array is empty"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Use Promise.allSettled to get every outcome.</p><p><i>🇻🇳 Dùng Promise.allSettled để nhận mọi kết quả.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "Which is an advantage of axios over fetch?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is built into the browser"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Automatic JSON, errors on bad status, instances with baseURL, interceptors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It does not use Promises"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It only works with json-server"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>fetch needs no install; axios saves boilerplate.</p><p><i>🇻🇳 fetch không cần cài; axios bớt code lặp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết useEffect(async () => …)."
+        },
+        {
+          "loi": "Quên rằng await chỉ dùng được trong async function (hoặc top-level module)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "callback hell",
+          "vi": "callback lồng nhau nhiều tầng, khó đọc"
+        }
+      ]
+    },
+    {
+      "title": "Event loop: order the console output",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "call stack",
+        "microtasks",
+        "macrotasks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "async",
+        "order"
+      ],
+      "problemHtml": "<p>Code:</p><pre>console.log(\"A\");\nsetTimeout(() =&gt; console.log(\"B\"), 0);\nPromise.resolve().then(() =&gt; console.log(\"C\"));\n(async () =&gt; { console.log(\"D\"); await null; console.log(\"E\"); })();\nconsole.log(\"F\");</pre><p>Put the letters in the order they are printed.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đoạn mã:</p><pre>console.log(\"A\");\nsetTimeout(() =&gt; console.log(\"B\"), 0);\nPromise.resolve().then(() =&gt; console.log(\"C\"));\n(async () =&gt; { console.log(\"D\"); await null; console.log(\"E\"); })();\nconsole.log(\"F\");</pre><p>Hãy sắp các chữ theo thứ tự được in ra.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Code đồng bộ chạy hết trước; thân async chạy đồng bộ tới await đầu tiên.",
+        "Microtask (then, phần sau await) chạy trước macrotask (setTimeout)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Event loop: order the console output\n\nAnswer in the panel on the left (no code needed).\n\n1. Order of output\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Event loop: order the console output — answer key\n\n1. Order of output\n   Answer: A) A  →  D) D  →  F) F  →  C) C  →  E) E  →  B) B\n   Synchronous first (A, D, F), then microtasks in queue order (C, E), then the timer (B). / Đồng bộ trước (A, D, F), rồi microtask theo thứ tự (C, E), rồi hẹn giờ (B).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A, D, F (đồng bộ) → C, E (microtask theo thứ tự xếp hàng) → B (macrotask).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "e1",
+            "de": "Order of output",
+            "muc": [
+              {
+                "ma": "F",
+                "noiDung": "F"
+              },
+              {
+                "ma": "B",
+                "noiDung": "B"
+              },
+              {
+                "ma": "D",
+                "noiDung": "D"
+              },
+              {
+                "ma": "A",
+                "noiDung": "A"
+              },
+              {
+                "ma": "E",
+                "noiDung": "E"
+              },
+              {
+                "ma": "C",
+                "noiDung": "C"
+              }
+            ],
+            "dapAn": [
+              "A",
+              "D",
+              "F",
+              "C",
+              "E",
+              "B"
+            ],
+            "giaiThich": "<p>Synchronous first (A, D, F), then microtasks in queue order (C, E), then the timer (B).</p><p><i>🇻🇳 Đồng bộ trước (A, D, F), rồi microtask theo thứ tự (C, E), rồi hẹn giờ (B).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ setTimeout 0 chạy ngay."
+        },
+        {
+          "loi": "Nghĩ thân async function chờ tới sau mọi thứ — phần trước await chạy ngay."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "microtask",
+          "vi": "việc nhỏ chạy ngay sau code đồng bộ (Promise)"
+        },
+        {
+          "en": "macrotask",
+          "vi": "việc chạy ở lượt vòng lặp sau (setTimeout)"
+        }
+      ]
+    }
+  ]
+}

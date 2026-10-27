@@ -1562,9 +1562,9 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
       ],
     },
     /* ══════════════════ PROGRESS TEST 2 ══════════════════ */
-    /* Section MỚI — 🎓 LAB211 thực chiến — khung chung + cách qua review, P0011, P0021, P0056 (đợt 1) — ./pro192/lab211.mjs */
+    /* Section MỚI — 🎓 LAB211 thực chiến — khung chung + cách qua review, P0011, P0021, P0056 (đợt 1), P0070, P0071, P0073 (đợt 2) — ./pro192/lab211.mjs */
     {
-      title: "🎓 LAB211 in practice — pass the lecturer’s review: the shared skeleton, P0011, P0021, P0056 …|||🎓 LAB211 thực chiến — qua review của thầy: khung chung, P0011, P0021, P0056…",
+      title: "🎓 LAB211 in practice — pass the lecturer’s review: the shared skeleton, P0011, P0021, P0056, P0070, P0071, P0073|||🎓 LAB211 thực chiến — qua review của thầy: khung chung, P0011, P0021, P0056, P0070, P0071, P0073",
       description: "Phần TỰ THÊM: LAB211 là PRO192 làm thật. Bài đầu là cách qua review (năm cửa, tờ checklist 25 mục, lint.py, javac --release 8, câu thầy hay hỏi) trên khung chung dùng cho mọi bài; sau đó từng bài LAB211 của kỳ: đọc đề → thiết kế lớp → code đúng checklist (controller giữ repository, service không giữ) → chạy thật → lint sạch → câu thầy hỏi khi review. Code là bản ĐÃ SỬA theo review thật, đã bỏ mã sinh viên.",
       lessons: l211.lessons,
     },

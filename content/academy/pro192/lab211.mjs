@@ -1,6 +1,6 @@
 /**
- * PRO192 · 🎓 LAB211 thực chiến — khung chung + cách qua review, P0011, P0021, P0056 (đợt 1).
- * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab211-cach-qua-review, pro192-lab211-p0011-change-base-number, pro192-lab211-p0021-student-management, pro192-lab211-p0056-worker-management.
+ * PRO192 · 🎓 LAB211 thực chiến — khung chung + cách qua review, P0011, P0021, P0056 (đợt 1), P0070, P0071, P0073 (đợt 2).
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab211-cach-qua-review, pro192-lab211-p0011-change-base-number, pro192-lab211-p0021-student-management, pro192-lab211-p0056-worker-management, pro192-lab211-p0070-ebank-login, pro192-lab211-p0071-task-management, pro192-lab211-p0073-handy-expense.
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
@@ -12,6 +12,9 @@ registerDeck('l211-review', { code: 'PRO192 · LAB211', en: "LAB211 in practice 
 registerDeck('l211-p0011', { code: 'PRO192 · LAB211 P0011', en: 'LAB211 · J1.S.P0011 — Change Base Number System', vi: 'LAB211 · J1.S.P0011 — Đổi hệ cơ số', total: 13, w: 1280, h: 720 });
 registerDeck('l211-p0021', { code: 'PRO192 · LAB211 P0021', en: 'LAB211 · J1.L.P0021 — Student Management', vi: 'LAB211 · J1.L.P0021 — Quản lý sinh viên', total: 14, w: 1280, h: 720 });
 registerDeck('l211-p0056', { code: 'PRO192 · LAB211 P0056', en: 'LAB211 · J1.S.P0056 — Worker Management', vi: 'LAB211 · J1.S.P0056 — Quản lý công nhân', total: 13, w: 1280, h: 720 });
+registerDeck('l211-p0070', { code: 'PRO192 · LAB211 P0070', en: 'LAB211 · J1.S.P0070 — Ebank Login (TPBank)', vi: 'LAB211 · J1.S.P0070 — Đăng nhập Ebank (TPBank)', total: 14, w: 1280, h: 720 });
+registerDeck('l211-p0071', { code: 'PRO192 · LAB211 P0071', en: 'LAB211 · J1.S.P0071 — Task Management', vi: 'LAB211 · J1.S.P0071 — Quản lý task', total: 14, w: 1280, h: 720 });
+registerDeck('l211-p0073', { code: 'PRO192 · LAB211 P0073', en: 'LAB211 · J1.S.P0073 — Handy Expense', vi: 'LAB211 · J1.S.P0073 — Quản lý chi tiêu', total: 14, w: 1280, h: 720 });
 
 /* ───────── L.0 — 🎓 How to pass the LAB211 review: five gates, the 25-item checklist, lint.py, JDK 8 and the lecturer's questions ───────── */
 const L_l211_review = {
@@ -4291,7 +4294,7 @@ W 3 &nbsp;&nbsp;&nbsp;&nbsp;Lien &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20 &n
 <span class="lc-body"><span class="lc-title">MSSV_J1SP0056_WorkerManagement-solution.zip</span><span class="lc-sub">NetBeans project (Java 8) · 14 files · harness/input.txt (test keys) + harness/man-hinh-mong-doi.txt (expected screen)</span></span>
 <span class="lc-cta">Download</span>
 </a>
-<div class="callout"><p><strong>Coming next in this section:</strong> P0070 (TPBank login with captcha and two languages), P0071 (Task Management without a service), P0073 (Handy Expense with a file) — the same checklist, each one from a real review.</p></div>`,
+<div class="callout"><p><strong>Next:</strong> P0070 Ebank Login (TPBank login with a captcha and two languages), then P0071 (Task Management without a service) and P0073 (Handy Expense with a file) — the same checklist.</p></div>`,
     `<h2>5. Chạy thật</h2>
 <details><summary>Toàn bộ lần chạy (101 dòng)</summary>
 <pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
@@ -4440,10 +4443,3594 @@ W 3 &nbsp;&nbsp;&nbsp;&nbsp;Lien &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20 &n
 <span class="lc-body"><span class="lc-title">MSSV_J1SP0056_WorkerManagement-solution.zip</span><span class="lc-sub">project NetBeans (Java 8) · 14 tệp · harness/input.txt (phím test) + harness/man-hinh-mong-doi.txt (màn hình mong đợi)</span></span>
 <span class="lc-cta">Tải về</span>
 </a>
-<div class="callout"><p><strong>Sắp có trong phần này:</strong> P0070 (đăng nhập TPBank có captcha và hai ngôn ngữ), P0071 (Task Management không có service), P0073 (Handy Expense có lưu tệp) — cùng tờ checklist, bài nào cũng từ một lần review thật.</p></div>`),
+<div class="callout"><p><strong>Bài tiếp:</strong> P0070 Đăng nhập Ebank (TPBank có captcha và hai ngôn ngữ), rồi P0071 (Task Management không có service) và P0073 (Handy Expense có lưu tệp) — cùng tờ checklist.</p></div>`),
+  ].join('\n'),
+};
+
+/* ───────── L.4 — 🎓 LAB211 J1.S.P0070 Ebank Login (TPBank): two languages, regex, a random captcha checked first, no service ───────── */
+const L_l211_p0070 = {
+  title: 'L.4 — 🎓 LAB211 J1.S.P0070 Ebank Login (TPBank): two languages, regex, a random captcha checked first, no service|||L.4 — 🎓 LAB211 J1.S.P0070 Đăng nhập Ebank (TPBank): hai ngôn ngữ, regex, captcha ngẫu nhiên kiểm trước, không service',
+  slug: 'pro192-lab211-p0070-ebank-login',
+  type: 'VIDEO',
+  description: 'Bài LAB211 J1.S.P0070 (150 LOC) đi từ bản thầy đã review: đọc đề (menu Việt/Anh, số tài khoản đúng 10 chữ số, mật khẩu 8–31 ký tự có chữ và số, captcha ngẫu nhiên mỗi lần đăng nhập kiểm bằng contains), hiểu hai câu thầy nói ("đưa captcha lên đầu" — bản cũ hỏi kho tài khoản trước rồi mới hỏi captcha; "gì đó trong Main" — Main tự in kết quả, captcha so equals, hàm bốn tham số, System.exit), cái bẫy không ai thấy (Preferences làm lần mở sau ra tiếng Việt), rồi dựng bản sạch: ResourceBundle hai tệp .properties, Validation ba hàm kiểm của đề, CaptchaUtils bằng StringBuilder, controller hỏi thẳng repository vì bài không có tính toán nghiệp vụ, view in một lần. Chạy thật bằng bàn phím biết đọc captcha trên màn hình, lint.py sạch, 25 mục 0 vi phạm, JDK 8 thật. Kèm câu thầy hay hỏi và dự án tải về.',
+  content: [
+    bi(`<span class="eyebrow">🎓 LAB211 in practice · L.4 · J1.S.P0070</span>
+<h2>Ebank Login — "put the captcha first"</h2>
+<p class="lead">This lab comes back from a real review. The lecturer looked at the login of TienPhong Bank's Ebank and said two things: <em>"put the captcha first"</em> and <em>"something in Main"</em>. Neither sentence names a line of code — so this lesson finds the lines: the old program asked the account store whether the password was right <strong>before</strong> the captcha, and its Main printed results, compared the captcha with <code>equals</code> instead of the brief's <code>contains</code>, took four parameters and called <code>System.exit</code>.</p>
+<p>On top of that, a bug nobody saw in class: the language was saved in the machine's preferences, so the program opened in Vietnamese the next day. Plan about <strong>2 hours</strong> to retype (two <code>.properties</code> files included), 20 minutes for the test keys.</p>`,
+    `<span class="eyebrow">🎓 LAB211 thực chiến · L.4 · J1.S.P0070</span>
+<h2>Đăng nhập Ebank — "đưa captcha lên đầu"</h2>
+<p class="lead">Bài này trở về từ một lần review thật. Thầy xem chức năng đăng nhập Ebank của ngân hàng Tiên Phong và nói hai câu: <em>"đưa captcha lên đầu"</em> và <em>"gì đó trong Main"</em>. Không câu nào chỉ ra dòng code — nên bài này đi tìm đúng các dòng đó: chương trình cũ hỏi kho tài khoản xem mật khẩu đúng hay sai <strong>trước</strong> khi hỏi captcha, còn Main thì tự in kết quả, so captcha bằng <code>equals</code> thay vì <code>contains</code> của đề, nhận bốn tham số và gọi <code>System.exit</code>.</p>
+<p>Thêm một lỗi trên lớp không ai thấy: ngôn ngữ được lưu vào cài đặt của máy, nên hôm sau mở chương trình lên là tiếng Việt. Dành khoảng <strong>2 giờ</strong> để gõ lại (kể cả hai tệp <code>.properties</code>), 20 phút cho bộ phím test.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 · LAB211 P0070 (14 slides)</h2>
+<p>The deck of this LAB211 lesson, made by CuongThai (it is not a school deck and not the lecturer's). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project in this lesson — checked by <code>lint.py</code> (the lecturer's rules), compiled with <code>javac --release 8</code> and run on a real JDK 8, like the machines in the lab room.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 · LAB211 P0070 (14 slide)</h2>
+<p>Bộ slide của bài LAB211 này do CuongThai dựng (không phải slide của trường, cũng không phải của thầy). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ đúng dự án trong bài — qua <code>lint.py</code> (luật của thầy), biên dịch bằng <code>javac --release 8</code> và chạy trên JDK 8 thật, giống máy phòng lab.</p>`),
+    walk('l211-p0070', [
+      [1, 'J1.S.P0070 — Ebank Login (TPBank)',
+        `<p class="y-chinh">🎯 A login with two languages, two regular expressions and a random captcha — rebuilt after a real review.</p>
+<p>The deck: the brief, ResourceBundle, the two regexes by hand, what the lecturer meant, the Preferences trap, the clean design without a service, each layer, the real run, the questions.</p>`,
+        `<p class="y-chinh">🎯 Một màn đăng nhập có hai ngôn ngữ, hai biểu thức chính quy và captcha ngẫu nhiên — dựng lại sau một lần review thật.</p>
+<p>Bộ slide: đề, ResourceBundle, hai regex chạy tay, ý thầy là gì, bẫy Preferences, thiết kế sạch không có service, từng tầng, lần chạy thật, các câu hỏi.</p>`],
+      [2, 'The brief',
+        `<p class="y-chinh">🎯 Menu 1 Vietnamese · 2 English · 3 Exit, then a login: account number, password, captcha — each one asked again until it is right.</p>
+<p>The account number is a number of exactly 10 digits; the password has 8 to 31 characters with letters and digits; the captcha is random, made again at each login, and the user types one or more of its characters — checked with <code>contains()</code>. The brief names five functions: <code>setLocate</code>, <code>checkAccountNumber</code>, <code>checkPassword</code>, <code>generateCaptcha</code>, <code>checkCaptcha</code>, and two property files, one per language. The sentences are copied from the brief, English mistakes included ("must is a number").</p>`,
+        `<p class="y-chinh">🎯 Menu 1 Vietnamese · 2 English · 3 Exit, rồi đăng nhập: số tài khoản, mật khẩu, captcha — ô nào sai hỏi lại ô đó.</p>
+<p>Số tài khoản là số có đúng 10 chữ số; mật khẩu dài 8 tới 31 ký tự, có cả chữ và số; captcha ngẫu nhiên, sinh lại mỗi lần đăng nhập, người dùng gõ một hay nhiều ký tự của nó — kiểm bằng <code>contains()</code>. Đề đặt tên năm hàm: <code>setLocate</code>, <code>checkAccountNumber</code>, <code>checkPassword</code>, <code>generateCaptcha</code>, <code>checkCaptcha</code>, và hai tệp properties, mỗi ngôn ngữ một tệp. Câu chữ chép đúng đề, kể cả tiếng Anh sai ("must is a number").</p>`],
+      [3, 'Two languages without one if',
+        `<p class="y-chinh">🎯 Every sentence lives twice — in <code>Language_en.properties</code> and <code>Language_vi.properties</code> under the same key; <code>Resource.setLocate(locale)</code> loads one of them.</p>
+<p>The code only names keys (<code>Message.getAccountPrompt()</code> reads the key <code>account</code>), so switching the language is one call, not an <code>if</code> on every line. The file names must be <code>_vi</code> (language code), not <code>_vn</code> (country code). Java 8 reads .properties as ISO-8859-1, so the Vietnamese file stays without accents.</p>`,
+        `<p class="y-chinh">🎯 Mỗi câu có hai bản — trong <code>Language_en.properties</code> và <code>Language_vi.properties</code>, cùng một khoá; <code>Resource.setLocate(locale)</code> nạp một trong hai.</p>
+<p>Code chỉ gọi tên khoá (<code>Message.getAccountPrompt()</code> đọc khoá <code>account</code>), nên đổi ngôn ngữ là một lời gọi, không phải một cái <code>if</code> ở mỗi dòng. Tên tệp phải là <code>_vi</code> (mã ngôn ngữ), không phải <code>_vn</code> (mã quốc gia). Java 8 đọc .properties theo ISO-8859-1, nên tệp tiếng Việt viết không dấu.</p>`],
+      [4, 'Regex, by hand',
+        `<p class="y-chinh">🎯 Account: <code>^[0-9]{10}$</code>. Password: <code>^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,31}$</code> — two look-aheads say "has a letter" and "has a digit".</p>
+<p>The brief's own examples prove "alphanumeric" means letters AND digits: <code>12345678</code> and <code>aaaaaaaa</code> are refused. <code>matches</code> tests the whole string, so <code>abc0123456789xyz</code> fails too. The account number stays a <code>String</code>: it keeps a leading 0, and ten digits overflow an <code>int</code>.</p>`,
+        `<p class="y-chinh">🎯 Tài khoản: <code>^[0-9]{10}$</code>. Mật khẩu: <code>^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,31}$</code> — hai phép nhìn trước nói "có chữ" và "có số".</p>
+<p>Chính ví dụ của đề chứng minh "alphanumeric" nghĩa là chữ VÀ số: <code>12345678</code> và <code>aaaaaaaa</code> bị từ chối. <code>matches</code> so cả chuỗi, nên <code>abc0123456789xyz</code> cũng trượt. Số tài khoản giữ kiểu <code>String</code>: giữ số 0 đầu, và mười chữ số thì tràn <code>int</code>.</p>`],
+      [5, '"Put the captcha first"',
+        `<p class="y-chinh">🎯 The reviewed version asked the repository "is this account right?" first and showed the captcha only when it was. The fix: make the captcha at the start of each login and pass it in Main before the controller asks anything.</p>
+<p>A captcha exists to stop a machine guessing passwords; answering "right/wrong" before it defeats the purpose. The input order stays the brief's — account, password, captcha. If the lecturer meant "show the captcha above the account field", two lines of <code>inputLogin</code> move up and nothing else changes; ask him one question to be sure.</p>`,
+        `<p class="y-chinh">🎯 Bản đã review hỏi repository "tài khoản này đúng không?" trước, chỉ khi đúng mới hiện captcha. Sửa: sinh captcha đầu mỗi lần đăng nhập và cho qua captcha ở Main trước khi controller hỏi bất cứ gì.</p>
+<p>Captcha sinh ra để chặn máy dò mật khẩu; trả lời "đúng/sai" trước captcha là mất tác dụng. Thứ tự nhập vẫn như đề — tài khoản, mật khẩu, captcha. Nếu thầy muốn "hiện captcha trên cả ô tài khoản", chỉ cần chuyển hai dòng trong <code>inputLogin</code> lên trên, không sửa gì khác; hỏi thầy một câu cho chắc.</p>`],
+      [6, '"Something in Main" — what the tools say',
+        `<p class="y-chinh">🎯 On the reviewed version (names hidden): <code>lint.py</code> 171 violations, the paper audit 26. In Main itself: it printed the login result, called the controller after the <code>switch</code>, compared the captcha with <code>equals</code>, had 4-parameter public helpers and <code>System.exit(0)</code>.</p>
+<p>Each one has a rule: results go through the view (1.1), one controller call inside each case (Guide), the brief says <code>contains()</code>, at most two parameters (V4), helpers are private, no <code>System.exit</code>. And <code>Resource.resourceBundle</code> was a public static field read straight from Main.</p>`,
+        `<p class="y-chinh">🎯 Trên bản đã review (đã ẩn tên): <code>lint.py</code> 171 vi phạm, soát tờ giấy 26. Riêng Main: tự in kết quả đăng nhập, gọi controller sau <code>switch</code>, so captcha bằng <code>equals</code>, hàm phụ public bốn tham số, và <code>System.exit(0)</code>.</p>
+<p>Mỗi chỗ có một luật: kết quả đi qua view (1.1), mỗi case gọi controller một lần (Guide), đề bắt <code>contains()</code>, tối đa hai tham số (V4), hàm phụ private, không <code>System.exit</code>. Thêm nữa, <code>Resource.resourceBundle</code> là trường public static mà Main đọc thẳng.</p>`],
+      [7, 'The trap no one saw: Preferences',
+        `<p class="y-chinh">🎯 The old <code>Resource</code> saved the chosen language in the machine's user preferences and read it back in a <code>static</code> block — so after choosing Vietnamese once, the next run opened in Vietnamese.</p>
+<p>The comment said "English by default"; the code did something else, on every later run, and on Windows it could also print a warning about the preferences root node. The fix deletes Preferences and the static block: the bundle starts in English, <code>setLocate</code> switches it, nothing outlives the program.</p>`,
+        `<p class="y-chinh">🎯 <code>Resource</code> cũ lưu ngôn ngữ đã chọn vào cài đặt người dùng của máy rồi đọc lại trong khối <code>static</code> — chọn tiếng Việt một lần là lần chạy sau mở ra tiếng Việt.</p>
+<p>Comment ghi "mặc định tiếng Anh"; code làm việc khác, ở mọi lần chạy sau, và trên Windows còn có thể in cảnh báo về preferences. Bản sửa bỏ Preferences và khối static: bundle bắt đầu bằng tiếng Anh, <code>setLocate</code> đổi nó, không gì sống lâu hơn chương trình.</p>`],
+      [8, 'The clean design: no service',
+        `<p class="y-chinh">🎯 Main → <code>AccountController</code> (one call) → <code>AccountRepository.checkLogin</code> → <code>AccountView.display()</code> once. No service.</p>
+<p>The old <code>AccountService.login</code> only forwarded one line to the repository: the paper adds a service only when there is business computation — the same reason the lecturer gave for P0071. Names follow the class: <code>AccountController</code>, <code>accountController</code>, and <code>CaptchaUtils</code> (the Guide writes <i>CapchaUtils</i>).</p>`,
+        `<p class="y-chinh">🎯 Main → <code>AccountController</code> (một lần gọi) → <code>AccountRepository.checkLogin</code> → <code>AccountView.display()</code> một lần. Không có service.</p>
+<p><code>AccountService.login</code> cũ chỉ chuyển tiếp một dòng xuống repository: tờ giấy chỉ thêm service khi có tính toán nghiệp vụ — đúng lý do thầy đưa ra ở P0071. Tên theo lớp: <code>AccountController</code>, <code>accountController</code>, và <code>CaptchaUtils</code> (Guide viết <i>CapchaUtils</i>).</p>`],
+      [9, 'Model and repository',
+        `<p class="y-chinh">🎯 <code>Account</code> is a JavaBean with two fields; <code>AccountRepository</code> loads the four sample accounts in its constructor and answers <code>checkLogin(accountDTO)</code>.</p>
+<p>The sample data comes from <code>Constants.SAMPLE_ACCOUNT_ARRAY</code> and <code>SAMPLE_PASSWORD_ARRAY</code> — same position, same account. The list is an <code>ArrayList&lt;Account&gt; accountList</code> (V5, 1.5). The long condition breaks after <code>&amp;&amp;</code> with parentheses around each test (2.3, 3.3).</p>`,
+        `<p class="y-chinh">🎯 <code>Account</code> là JavaBean hai trường; <code>AccountRepository</code> nạp bốn tài khoản mẫu trong constructor và trả lời <code>checkLogin(accountDTO)</code>.</p>
+<p>Dữ liệu mẫu lấy từ <code>Constants.SAMPLE_ACCOUNT_ARRAY</code> và <code>SAMPLE_PASSWORD_ARRAY</code> — cùng vị trí là cùng một tài khoản. Danh sách là <code>ArrayList&lt;Account&gt; accountList</code> (V5, 1.5). Điều kiện dài xuống dòng sau <code>&amp;&amp;</code>, mỗi vế có ngoặc riêng (2.3, 3.3).</p>`],
+      [10, 'Utils: three checks and one captcha',
+        `<p class="y-chinh">🎯 <code>Validation.checkAccountNumber</code> and <code>checkPassword</code> keep the brief's names and throw the sentence of the chosen language; <code>checkCaptcha</code> refuses an empty input, then tests <code>captcha.contains(text)</code>.</p>
+<p>Every string contains the empty string, so without the <code>isEmpty()</code> test, Enter alone would log in. <code>CaptchaUtils.generateCaptcha()</code> picks five random positions in a character table and appends them to a <code>StringBuilder</code> (3.8: no <code>+=</code> in a loop).</p>`,
+        `<p class="y-chinh">🎯 <code>Validation.checkAccountNumber</code> và <code>checkPassword</code> giữ tên đề và ném câu lỗi theo ngôn ngữ đang chọn; <code>checkCaptcha</code> chặn chuỗi rỗng trước, rồi mới kiểm <code>captcha.contains(text)</code>.</p>
+<p>Chuỗi nào cũng chứa chuỗi rỗng, nên thiếu phép kiểm <code>isEmpty()</code> thì chỉ nhấn Enter cũng đăng nhập được. <code>CaptchaUtils.generateCaptcha()</code> chọn năm vị trí ngẫu nhiên trong bảng ký tự rồi nối vào <code>StringBuilder</code> (3.8: không <code>+=</code> trong vòng lặp).</p>`],
+      [11, 'Main: one login, captcha before the controller',
+        `<p class="y-chinh">🎯 <code>inputLogin</code>: make a new captcha, ask the account and the password, show the captcha and ask until it is right — then return the DTO. Each case: set the language, <code>inputLogin</code>, one <code>login</code> call.</p>
+<p>The captcha is the first line of <code>inputLogin</code> because the brief says "in each login". Every helper is private and takes at most two parameters (the Scanner and, for the captcha, the string to compare). The Scanner is a local variable of <code>main</code>, passed down — no static variable in Main.</p>`,
+        `<p class="y-chinh">🎯 <code>inputLogin</code>: sinh captcha mới, hỏi tài khoản và mật khẩu, hiện captcha và hỏi tới khi đúng — rồi trả phiếu DTO. Mỗi case: đổi ngôn ngữ, <code>inputLogin</code>, một lần <code>login</code>.</p>
+<p>Captcha là dòng đầu của <code>inputLogin</code> vì đề ghi "mỗi lần đăng nhập". Mọi hàm phụ đều private và nhận tối đa hai tham số (Scanner và, với captcha, chuỗi để so). Scanner là biến cục bộ của <code>main</code>, truyền xuống — không có biến static trong Main.</p>`],
+      [12, 'Controller and view: print once',
+        `<p class="y-chinh">🎯 <code>login(accountDTO)</code>: the repository answers true or false, the controller puts the success or failure sentence in a <code>ResponseDTO</code>, the view prints it with <code>display()</code> — once.</p>
+<p>The sentence is already in the chosen language (it comes from <code>Message</code>, which reads the bundle). The controller imports no model and prints nothing; Main never prints a login result any more.</p>`,
+        `<p class="y-chinh">🎯 <code>login(accountDTO)</code>: repository trả lời đúng hay sai, controller đặt câu thành công hoặc thất bại vào <code>ResponseDTO</code>, view in bằng <code>display()</code> — một lần.</p>
+<p>Câu đó đã theo ngôn ngữ đang chọn (lấy từ <code>Message</code>, vốn đọc bundle). Controller không import model, không in gì; Main không còn tự in kết quả đăng nhập.</p>`],
+      [13, 'The real run, lint and JDK 8',
+        `<p class="y-chinh">🎯 English: four wrong accounts, four wrong passwords, a wrong captcha, an empty one, then one right character — "Login failed" because 0123456789 is not in the store. Vietnamese: a real account, two middle characters — "Dang nhap thanh cong!".</p>
+<p>The captcha changes every run, so the test keys hold placeholders: <code>{CAP1}</code> (first character) and <code>{CAPMID}</code> (the two middle ones). The runner waits until the captcha appears on screen, then types. Below, the captcha is written XXXXX. <code>lint.py</code> clean, 25 paper items 0 violations, a real JDK 8 prints the same 29 lines.</p>`,
+        `<p class="y-chinh">🎯 Tiếng Anh: bốn tài khoản sai, bốn mật khẩu sai, một captcha sai, một ô trống, rồi một ký tự đúng — "Login failed" vì 0123456789 không có trong kho. Tiếng Việt: một tài khoản thật, hai ký tự giữa — "Dang nhap thanh cong!".</p>
+<p>Captcha đổi mỗi lần chạy, nên bộ phím test có chỗ giữ chỗ: <code>{CAP1}</code> (ký tự đầu) và <code>{CAPMID}</code> (hai ký tự giữa). Bộ chạy đợi captcha hiện trên màn hình rồi mới gõ. Bên dưới, captcha được ghi là XXXXX. <code>lint.py</code> sạch, 25 mục tờ giấy 0 vi phạm, JDK 8 thật in đúng 29 dòng đó.</p>`],
+      [14, 'What the lecturer asks',
+        `<p class="y-chinh">🎯 "Why is the captcha checked before the account?", "Why no service?", "Where is contains(), and an empty input?", "How does the language switch?", "Why is the account number a String?", "Why no System.exit?"</p>
+<p>The first one is the review itself: answer with the purpose of a captcha — stopping a machine that guesses passwords — not with "because you said so".</p>`,
+        `<p class="y-chinh">🎯 "Sao captcha kiểm trước tài khoản?", "Sao không có service?", "contains() ở đâu, gõ rỗng thì sao?", "Đổi ngôn ngữ chạy thế nào?", "Sao số tài khoản là String?", "Sao không dùng System.exit?"</p>
+<p>Câu đầu chính là nội dung lần review: trả lời bằng mục đích của captcha — chặn máy dò mật khẩu — chứ không phải "vì thầy bảo".</p>`],
+    ]),
+    bi(`<h2>1. The brief</h2>
+<table>
+<thead><tr><th>The brief says</th><th>Where it lives</th></tr></thead>
+<tbody>
+<tr><td><code>void setLocate(Locate locate)</code> — change language</td><td><code>Resource.setLocate(Locale locale)</code> — the brief's name, the real Java type</td></tr>
+<tr><td><code>String checkAccountNumber(String)</code> — a number, 10 digits</td><td><code>Validation.checkAccountNumber</code> + <code>Constants.ACCOUNT_NUMBER</code></td></tr>
+<tr><td><code>String checkPassword(String)</code> — 8–31, letters and digits</td><td><code>Validation.checkPassword</code> + <code>Constants.PASSWORD</code></td></tr>
+<tr><td><code>String generateCaptcha()</code> — Random, then <code>char</code></td><td><code>CaptchaUtils.generateCaptcha()</code> (the Guide lists *CapchaUtils* among Main's tools)</td></tr>
+<tr><td><code>String checkCaptcha(captchaInput, captchaGenerate)</code> — <code>contains()</code></td><td><code>Validation.checkCaptcha(input, captcha)</code> — throws the sentence instead of returning it</td></tr>
+<tr><td>"En.properties and Vi.properties"</td><td><code>constants/Language_en.properties</code>, <code>Language_vi.properties</code> (getBundle needs <code>&lt;name&gt;_&lt;code&gt;</code>)</td></tr>
+</tbody>
+</table>
+<p>The two language files, as they are in the project (the prompts end with spaces — two after <code>Account number:</code>, as in the brief):</p>
+<pre><code class="language-properties">account=Account number:
+password=Password:
+captcha=Captcha:
+inputCaptcha=Enter a Captcha incorrect characters:
+accountInvalid=Account number must is a number and must have 10 digits
+passwordInvalid=Password must be between 8 and 31 characters and must be alphanumeric</code></pre>
+<h2>2. What the lecturer meant</h2>
+<p>The version the lecturer reviewed (names hidden), through his tool:</p>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0070_EbankLogin</code></pre>
+<div class="out">✗ MSSV_J1SP0070_EbankLogin — 171 vi phạm<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Message.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Constants.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants — thiếu package constants/ (Guide.xlsx)<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants/Message.java — thiếu constants/Message.java<br>
+&nbsp;&nbsp;[HEADER] src/constant/Constants.java:1 — còn header mẫu của NetBeans — xoá đi<br>
+&nbsp;&nbsp;[MAGIC] src/constant/Constants.java:17 — số 5 viết thẳng — đặt tên hằng trong Constants (CC §10.3)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:19 — chuỗi "^(?=.*[A-Za-z])(?=.*\\\\d)[A-Za-z\\\\d]{8,31" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:20 — chuỗi "^[A-Za-z0-9 ,\\\\.]+$" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:21 — chuỗi "^[A-Za-z0-9]{5}$" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:17 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:18 — package 'constant' không được dùng static (Guide.xlsx)<br>
+…</div>
+<p>Its Main asked the store before the captcha — this is "put the captcha first":</p>
+<pre><code class="language-java">String captchaGenerate = Helper.generateCaptcha(Constants.CAPTCHA_LENGTH);
+if (control.login(dto)) {                 // the account is checked FIRST
+    System.out.println(... "captcha" ... + captchaGenerate);
+    verifyCaptcha(sc, message, messageError, captchaGenerate);   // only if right
+    System.out.println(... "loginSuccess" ...);                  // Main prints
+} else {
+    System.out.println(... "loginFailed" ...);                   // no captcha at all
+}</code></pre>
+<table>
+<thead><tr><th>In the reviewed version</th><th>Rule</th><th>In the clean version</th></tr></thead>
+<tbody>
+<tr><td>captcha asked only after a right account</td><td>the purpose of a captcha</td><td>captcha made per login, passed in Main, then one <code>login</code> call</td></tr>
+<tr><td>Main prints "Login success / failed"</td><td>1.1: results through the view</td><td><code>AccountView.display()</code> from the controller</td></tr>
+<tr><td><code>control.login(dto)</code> after the <code>switch</code>, <code>generateAccount()</code> from Main</td><td>Guide: one call inside each case</td><td>each case: <code>setLocate</code>, <code>inputLogin</code>, <code>login</code></td></tr>
+<tr><td>captcha compared with <code>equals</code></td><td>the brief: <code>contains()</code></td><td><code>checkCaptcha</code>: empty refused, then <code>contains</code></td></tr>
+<tr><td><code>verifyCaptcha(sc, message, messageError, captcha)</code> public</td><td>V4: at most 2 parameters, helpers private</td><td><code>inputCaptcha(scanner, captcha)</code> private</td></tr>
+<tr><td><code>System.exit(0)</code>, <code>case 1:</code></td><td>no exit, 2.10</td><td><code>isRunning = false</code>, <code>Constants.MENU_*</code></td></tr>
+<tr><td><code>Resource.resourceBundle</code> public static + Preferences</td><td>V2, and a real bug</td><td>private bundle, <code>getString(key)</code>, no Preferences</td></tr>
+<tr><td><code>AccountService.login</code> = one forwarding line</td><td>the paper: service only for computation</td><td>no service</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Đề bài</h2>
+<table>
+<thead><tr><th>Đề nói</th><th>Nằm ở đâu</th></tr></thead>
+<tbody>
+<tr><td><code>void setLocate(Locate locate)</code> — đổi ngôn ngữ</td><td><code>Resource.setLocate(Locale locale)</code> — tên của đề, kiểu Java thật</td></tr>
+<tr><td><code>String checkAccountNumber(String)</code> — là số, 10 chữ số</td><td><code>Validation.checkAccountNumber</code> + <code>Constants.ACCOUNT_NUMBER</code></td></tr>
+<tr><td><code>String checkPassword(String)</code> — 8–31, chữ và số</td><td><code>Validation.checkPassword</code> + <code>Constants.PASSWORD</code></td></tr>
+<tr><td><code>String generateCaptcha()</code> — Random rồi đổi sang <code>char</code></td><td><code>CaptchaUtils.generateCaptcha()</code> (Guide ghi *CapchaUtils* trong công cụ của Main)</td></tr>
+<tr><td><code>String checkCaptcha(captchaInput, captchaGenerate)</code> — <code>contains()</code></td><td><code>Validation.checkCaptcha(input, captcha)</code> — ném câu lỗi thay vì trả về</td></tr>
+<tr><td>"En.properties và Vi.properties"</td><td><code>constants/Language_en.properties</code>, <code>Language_vi.properties</code> (getBundle cần dạng <code>&lt;tên&gt;_&lt;mã&gt;</code>)</td></tr>
+</tbody>
+</table>
+<p>Hai tệp ngôn ngữ đúng như trong dự án (câu nhắc kết thúc bằng dấu cách — hai dấu cách sau <code>Account number:</code>, như đề):</p>
+<pre><code class="language-properties">account=So tai khoan:
+password=Mat khau:
+captcha=Captcha:
+inputCaptcha=Nhap 1 ky tu captcha:
+accountInvalid=So tai khoan phai la 1 so va phai co 10 chu so
+passwordInvalid=Mat khau phai trong khoang 8-31 ky tu va phai chua ky tu va so</code></pre>
+<h2>2. Ý thầy là gì</h2>
+<p>Bản thầy đã review (đã ẩn tên), qua công cụ của thầy:</p>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0070_EbankLogin</code></pre>
+<div class="out">✗ MSSV_J1SP0070_EbankLogin — 171 vi phạm<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Message.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Constants.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants — thiếu package constants/ (Guide.xlsx)<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants/Message.java — thiếu constants/Message.java<br>
+&nbsp;&nbsp;[HEADER] src/constant/Constants.java:1 — còn header mẫu của NetBeans — xoá đi<br>
+&nbsp;&nbsp;[MAGIC] src/constant/Constants.java:17 — số 5 viết thẳng — đặt tên hằng trong Constants (CC §10.3)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:19 — chuỗi "^(?=.*[A-Za-z])(?=.*\\\\d)[A-Za-z\\\\d]{8,31" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:20 — chuỗi "^[A-Za-z0-9 ,\\\\.]+$" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:21 — chuỗi "^[A-Za-z0-9]{5}$" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:17 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:18 — package 'constant' không được dùng static (Guide.xlsx)<br>
+…</div>
+<p>Main của bản đó hỏi kho trước khi hỏi captcha — đây là "đưa captcha lên đầu":</p>
+<pre><code class="language-java">String captchaGenerate = Helper.generateCaptcha(Constants.CAPTCHA_LENGTH);
+if (control.login(dto)) {                 // kiem tai khoan TRUOC
+    System.out.println(... "captcha" ... + captchaGenerate);
+    verifyCaptcha(sc, message, messageError, captchaGenerate);   // chi khi dung
+    System.out.println(... "loginSuccess" ...);                  // Main tu in
+} else {
+    System.out.println(... "loginFailed" ...);                   // khong co captcha
+}</code></pre>
+<table>
+<thead><tr><th>Trong bản đã review</th><th>Luật</th><th>Trong bản sạch</th></tr></thead>
+<tbody>
+<tr><td>captcha chỉ hỏi sau khi tài khoản đúng</td><td>mục đích của captcha</td><td>captcha sinh mỗi lần đăng nhập, qua ở Main, rồi một lần <code>login</code></td></tr>
+<tr><td>Main tự in "Login success / failed"</td><td>1.1: kết quả qua view</td><td><code>AccountView.display()</code> từ controller</td></tr>
+<tr><td><code>control.login(dto)</code> sau <code>switch</code>, <code>generateAccount()</code> gọi từ Main</td><td>Guide: mỗi case gọi một lần</td><td>mỗi case: <code>setLocate</code>, <code>inputLogin</code>, <code>login</code></td></tr>
+<tr><td>so captcha bằng <code>equals</code></td><td>đề: <code>contains()</code></td><td><code>checkCaptcha</code>: chặn rỗng, rồi <code>contains</code></td></tr>
+<tr><td><code>verifyCaptcha(sc, message, messageError, captcha)</code> public</td><td>V4: tối đa 2 tham số, hàm phụ private</td><td><code>inputCaptcha(scanner, captcha)</code> private</td></tr>
+<tr><td><code>System.exit(0)</code>, <code>case 1:</code></td><td>không exit, 2.10</td><td><code>isRunning = false</code>, <code>Constants.MENU_*</code></td></tr>
+<tr><td><code>Resource.resourceBundle</code> public static + Preferences</td><td>V2, và một lỗi thật</td><td>bundle private, <code>getString(key)</code>, bỏ Preferences</td></tr>
+<tr><td><code>AccountService.login</code> = một dòng chuyển tiếp</td><td>tờ giấy: service chỉ khi có tính toán</td><td>không có service</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>3. Class design</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/9973ab2c9dc706eb1d628526ab6c7378a22855f0.svg" alt="P0070: no service — the controller asks the repository; Main makes and checks the captcha before calling it" loading="lazy" /><p class="chu-thich">🧩 P0070: no service — the controller asks the repository; Main makes and checks the captcha before calling it</p></div>
+<details><summary>PlantUML source of this diagram — copy, edit and re-render</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0070 Ebank Login — no service: the controller asks the repository, Main checks the captcha first
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} inputLogin(scanner : Scanner) : AccountDTO
+    - {static} inputCaptcha(scanner : Scanner, captcha : String) : void
+  }
+}
+package controller {
+  class AccountController {
+    - accountRepository : AccountRepository
+    - accountView : AccountView
+    + login(accountDTO : AccountDTO) : void
+  }
+}
+package repository {
+  class AccountRepository {
+    - accountList : ArrayList&lt;Account&gt;
+    + checkLogin(accountDTO : AccountDTO) : boolean
+  }
+}
+package model {
+  class Account {
+    - account : String
+    - password : String
+  }
+}
+package view {
+  class AccountView {
+    - responseDTO : ResponseDTO
+    + display() : void
+  }
+}
+package dto {
+  class AccountDTO {
+    - account : String
+    - password : String
+  }
+  class ResponseDTO {
+    - message : String
+  }
+}
+package utils {
+  class Validation &lt;&lt;final&gt;&gt; {
+    + {static} checkAccountNumber(accountNumber : String) : String
+    + {static} checkPassword(password : String) : String
+    + {static} checkCaptcha(input : String, captcha : String) : void
+  }
+  class CaptchaUtils &lt;&lt;final&gt;&gt; {
+    + {static} generateCaptcha() : String
+  }
+  class Resource &lt;&lt;final&gt;&gt; {
+    - {static} resourceBundle : ResourceBundle
+    + {static} setLocate(locale : Locale) : void
+    + {static} getString(key : String) : String
+  }
+}
+package constants {
+  class Message &lt;&lt;final&gt;&gt; {
+    + {static} getAccountPrompt() : String
+    + {static} getLoginSuccess() : String
+  }
+  class "Language_en / Language_vi" as Lang &lt;&lt;properties&gt;&gt;
+}
+Main ..&gt; AccountController : one call per case
+Main ..&gt; Validation : account, password, captcha
+Main ..&gt; CaptchaUtils : a new captcha per login
+Main ..&gt; Resource : setLocate(vi / en)
+AccountController *-- AccountRepository : checkLogin
+AccountController *-- AccountView : display() once
+AccountRepository o-- "0..*" Account
+Message ..&gt; Resource : getString(key)
+Resource ..&gt; Lang : getBundle(name, locale)
+@enduml</code></pre></details>
+<h2>4. The code, model first</h2>
+<h4>Step 1 — model and repository</h4>
+<pre class="trich"><code class="language-java">public class Account {
+
+    // So tai khoan (10 chu so)
+    private String account;
+
+    // Mat khau
+    private String password;
+
+    // Tao tai khoan rong (JavaBean)
+    public Account() {
+    }
+
+    // Tao tai khoan voi so tai khoan va mat khau
+    public Account(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }</code></pre>
+<pre class="trich"><code class="language-java">// Tao kho va nap cac tai khoan mau
+public AccountRepository() {
+    this.accountList = new ArrayList&lt;&gt;();
+
+    // Moi vong them 1 tai khoan mau (so tai khoan + mat khau cung vi tri)
+    for (int i = 0; i &lt; Constants.SAMPLE_ACCOUNT_ARRAY.length; i++) {
+        accountList.add(new Account(Constants.SAMPLE_ACCOUNT_ARRAY[i],
+                Constants.SAMPLE_PASSWORD_ARRAY[i]));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem dang nhap: true neu co tai khoan trung ca so tai khoan lan mat khau
+public boolean checkLogin(AccountDTO accountDTO) {
+    // Duyet tung tai khoan trong kho
+    for (Account account : accountList) {
+        // Trung ca 2 thi dang nhap dung
+        if ((accountDTO.getAccount().equals(account.getAccount())) &amp;&amp;
+                (accountDTO.getPassword().equals(account.getPassword()))) {
+            return true;
+        }
+    }
+
+    return false;
+}</code></pre>
+<h4>Step 2 — the language: Resource and Message</h4>
+<pre class="trich"><code class="language-java">// Doi sang ngon ngu moi: nap file .properties tuong ung
+public static void setLocate(Locale locale) {
+    resourceBundle = ResourceBundle.getBundle(Constants.LANGUAGE_FILE, locale);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Cau nhac nhap so tai khoan
+public static String getAccountPrompt() {
+    return Resource.getString("account");
+}</code></pre>
+<h4>Step 3 — Validation and CaptchaUtils</h4>
+<pre class="trich"><code class="language-java">// Kiem mat khau: 8-31 ky tu, co ca chu va so (ham checkPassword cua de)
+public static String checkPassword(String password) throws Exception {
+    // Khong khop regex mat khau thi bao loi
+    if (!password.matches(Constants.PASSWORD)) {
+        throw new Exception(Message.getPasswordInvalid());
+    }
+
+    return password;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem captcha: chuoi go vao khong rong va nam trong captcha (dung contains() nhu de)
+public static void checkCaptcha(String input, String captcha) throws Exception {
+    String text = input.trim();
+
+    // Rong hoac khong nam trong captcha thi bao sai
+    if ((text.isEmpty()) || (!captcha.contains(text))) {
+        throw new Exception(Message.getCaptchaInvalid());
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Sinh 1 chuoi captcha gom chu hoa, chu thuong va so (Random -&gt; vi tri -&gt; char)
+public static String generateCaptcha() {
+    StringBuilder captchaBuilder = new StringBuilder();
+    Random random = new Random();
+    int index = 0;
+
+    // Moi vong lay ngau nhien 1 ky tu trong bang ky tu
+    for (int i = 0; i &lt; Constants.CAPTCHA_LENGTH; i++) {
+        index = random.nextInt(Constants.CAPTCHA_CHARACTERS.length());
+        captchaBuilder.append(Constants.CAPTCHA_CHARACTERS.charAt(index));
+    }
+
+    return captchaBuilder.toString();
+}</code></pre>
+<h4>Step 4 — view and controller</h4>
+<pre class="trich"><code class="language-java">// Dang nhap bang phieu Main da kiem (ca captcha), in ket qua 1 lan
+public void login(AccountDTO accountDTO) {
+    ResponseDTO responseDTO = new ResponseDTO();
+
+    // Dung tai khoan va mat khau thi bao thanh cong, nguoc lai bao that bai
+    if (accountRepository.checkLogin(accountDTO)) {
+        responseDTO.setMessage(Message.getLoginSuccess());
+    } else {
+        // Sai so tai khoan hoac mat khau
+        responseDTO.setMessage(Message.getLoginFailed());
+    }
+
+    accountView.setResponseDTO(responseDTO);
+    accountView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// In cau ket qua dang nhap
+public void display() {
+    System.out.println(responseDTO.getMessage());
+}</code></pre>
+<h4>Step 5 — Main</h4>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: lap menu den khi chon 3
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    AccountController accountController = new AccountController();
+    AccountDTO accountDTO = null;
+    boolean isRunning = true;
+
+    // Hien lai menu sau moi lan dang nhap, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.getMenuHeader().concat(Message.getMenuBody()));
+
+        // Moi lua chon: doi ngon ngu, nhap du, goi controller dung 1 lan
+        switch (inputChoice(scanner)) {
+            // 1: doi sang tieng Viet roi dang nhap
+            case Constants.MENU_VIETNAMESE:
+                Resource.setLocate(Constants.LOCALE_VIETNAMESE);
+                accountDTO = inputLogin(scanner);
+                accountController.login(accountDTO);
+                break;
+
+            // 2: doi sang tieng Anh roi dang nhap
+            case Constants.MENU_ENGLISH:
+                Resource.setLocate(Constants.LOCALE_ENGLISH);
+                accountDTO = inputLogin(scanner);
+                accountController.login(accountDTO);
+                break;
+
+            // 3: tat co de thoat vong lap
+            case Constants.MENU_EXIT:
+                isRunning = false;
+                break;
+
+            // Khong xay ra: inputChoice chi tra ve 1 den 3
+            default:
+                break;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nhap du 1 lan dang nhap theo thu tu de: tai khoan, mat khau, captcha
+private static AccountDTO inputLogin(Scanner scanner) {
+    AccountDTO accountDTO = new AccountDTO();
+    String captcha = CaptchaUtils.generateCaptcha();
+
+    accountDTO.setAccount(inputAccountNumber(scanner));
+    accountDTO.setPassword(inputPassword(scanner));
+
+    // Captcha sinh moi moi lan dang nhap, kiem o Main TRUOC khi Controller hoi kho tai khoan
+    System.out.println(Message.getCaptchaLabel().concat(captcha));
+    inputCaptcha(scanner, captcha);
+
+    return accountDTO;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Hoi captcha den khi chuoi go vao nam trong captcha (contains, chan chuoi rong)
+private static void inputCaptcha(Scanner scanner, String captcha) {
+    boolean isValid = false;
+
+    // Lap den khi go dung captcha
+    while (!isValid) {
+        // In cau nhac, doc dong va kiem
+        try {
+            System.out.print(Message.getCaptchaPrompt());
+            Validation.checkCaptcha(scanner.nextLine(), captcha);
+            isValid = true;
+        } catch (Exception e) {
+            // Sai thi in cau bao loi (theo ngon ngu) roi hoi lai
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<div class="pitfall"><p>⚠️ Traps of this lab: <code>Language_vn</code> instead of <code>_vi</code> · the .properties in the wrong package (MissingResourceException) · a Vietnamese file with accents read as ISO-8859-1 · NetBeans removing the trailing spaces of a prompt · <code>[A-Za-z0-9]{8,31}</code> without the two look-aheads (12345678 passes) · <code>{8,}</code> instead of <code>{8,31}</code> · <code>contains("")</code> is always true · <code>Locale.setDefault</code> changing the whole JVM · <code>printf(text)</code> with a <code>%</code> inside.</p></div>`,
+    `<h2>3. Thiết kế lớp</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/9973ab2c9dc706eb1d628526ab6c7378a22855f0.svg" alt="P0070: không service — controller hỏi repository; Main sinh và kiểm captcha trước khi gọi" loading="lazy" /><p class="chu-thich">🧩 P0070: không service — controller hỏi repository; Main sinh và kiểm captcha trước khi gọi</p></div>
+<details><summary>Mã PlantUML của sơ đồ — chép, sửa rồi dựng lại</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0070 Ebank Login — no service: the controller asks the repository, Main checks the captcha first
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} inputLogin(scanner : Scanner) : AccountDTO
+    - {static} inputCaptcha(scanner : Scanner, captcha : String) : void
+  }
+}
+package controller {
+  class AccountController {
+    - accountRepository : AccountRepository
+    - accountView : AccountView
+    + login(accountDTO : AccountDTO) : void
+  }
+}
+package repository {
+  class AccountRepository {
+    - accountList : ArrayList&lt;Account&gt;
+    + checkLogin(accountDTO : AccountDTO) : boolean
+  }
+}
+package model {
+  class Account {
+    - account : String
+    - password : String
+  }
+}
+package view {
+  class AccountView {
+    - responseDTO : ResponseDTO
+    + display() : void
+  }
+}
+package dto {
+  class AccountDTO {
+    - account : String
+    - password : String
+  }
+  class ResponseDTO {
+    - message : String
+  }
+}
+package utils {
+  class Validation &lt;&lt;final&gt;&gt; {
+    + {static} checkAccountNumber(accountNumber : String) : String
+    + {static} checkPassword(password : String) : String
+    + {static} checkCaptcha(input : String, captcha : String) : void
+  }
+  class CaptchaUtils &lt;&lt;final&gt;&gt; {
+    + {static} generateCaptcha() : String
+  }
+  class Resource &lt;&lt;final&gt;&gt; {
+    - {static} resourceBundle : ResourceBundle
+    + {static} setLocate(locale : Locale) : void
+    + {static} getString(key : String) : String
+  }
+}
+package constants {
+  class Message &lt;&lt;final&gt;&gt; {
+    + {static} getAccountPrompt() : String
+    + {static} getLoginSuccess() : String
+  }
+  class "Language_en / Language_vi" as Lang &lt;&lt;properties&gt;&gt;
+}
+Main ..&gt; AccountController : one call per case
+Main ..&gt; Validation : account, password, captcha
+Main ..&gt; CaptchaUtils : a new captcha per login
+Main ..&gt; Resource : setLocate(vi / en)
+AccountController *-- AccountRepository : checkLogin
+AccountController *-- AccountView : display() once
+AccountRepository o-- "0..*" Account
+Message ..&gt; Resource : getString(key)
+Resource ..&gt; Lang : getBundle(name, locale)
+@enduml</code></pre></details>
+<h2>4. Code, model trước</h2>
+<h4>Bước 1 — model và repository</h4>
+<pre class="trich"><code class="language-java">public class Account {
+
+    // So tai khoan (10 chu so)
+    private String account;
+
+    // Mat khau
+    private String password;
+
+    // Tao tai khoan rong (JavaBean)
+    public Account() {
+    }
+
+    // Tao tai khoan voi so tai khoan va mat khau
+    public Account(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }</code></pre>
+<pre class="trich"><code class="language-java">// Tao kho va nap cac tai khoan mau
+public AccountRepository() {
+    this.accountList = new ArrayList&lt;&gt;();
+
+    // Moi vong them 1 tai khoan mau (so tai khoan + mat khau cung vi tri)
+    for (int i = 0; i &lt; Constants.SAMPLE_ACCOUNT_ARRAY.length; i++) {
+        accountList.add(new Account(Constants.SAMPLE_ACCOUNT_ARRAY[i],
+                Constants.SAMPLE_PASSWORD_ARRAY[i]));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem dang nhap: true neu co tai khoan trung ca so tai khoan lan mat khau
+public boolean checkLogin(AccountDTO accountDTO) {
+    // Duyet tung tai khoan trong kho
+    for (Account account : accountList) {
+        // Trung ca 2 thi dang nhap dung
+        if ((accountDTO.getAccount().equals(account.getAccount())) &amp;&amp;
+                (accountDTO.getPassword().equals(account.getPassword()))) {
+            return true;
+        }
+    }
+
+    return false;
+}</code></pre>
+<h4>Bước 2 — ngôn ngữ: Resource và Message</h4>
+<pre class="trich"><code class="language-java">// Doi sang ngon ngu moi: nap file .properties tuong ung
+public static void setLocate(Locale locale) {
+    resourceBundle = ResourceBundle.getBundle(Constants.LANGUAGE_FILE, locale);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Cau nhac nhap so tai khoan
+public static String getAccountPrompt() {
+    return Resource.getString("account");
+}</code></pre>
+<h4>Bước 3 — Validation và CaptchaUtils</h4>
+<pre class="trich"><code class="language-java">// Kiem mat khau: 8-31 ky tu, co ca chu va so (ham checkPassword cua de)
+public static String checkPassword(String password) throws Exception {
+    // Khong khop regex mat khau thi bao loi
+    if (!password.matches(Constants.PASSWORD)) {
+        throw new Exception(Message.getPasswordInvalid());
+    }
+
+    return password;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Kiem captcha: chuoi go vao khong rong va nam trong captcha (dung contains() nhu de)
+public static void checkCaptcha(String input, String captcha) throws Exception {
+    String text = input.trim();
+
+    // Rong hoac khong nam trong captcha thi bao sai
+    if ((text.isEmpty()) || (!captcha.contains(text))) {
+        throw new Exception(Message.getCaptchaInvalid());
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Sinh 1 chuoi captcha gom chu hoa, chu thuong va so (Random -&gt; vi tri -&gt; char)
+public static String generateCaptcha() {
+    StringBuilder captchaBuilder = new StringBuilder();
+    Random random = new Random();
+    int index = 0;
+
+    // Moi vong lay ngau nhien 1 ky tu trong bang ky tu
+    for (int i = 0; i &lt; Constants.CAPTCHA_LENGTH; i++) {
+        index = random.nextInt(Constants.CAPTCHA_CHARACTERS.length());
+        captchaBuilder.append(Constants.CAPTCHA_CHARACTERS.charAt(index));
+    }
+
+    return captchaBuilder.toString();
+}</code></pre>
+<h4>Bước 4 — view và controller</h4>
+<pre class="trich"><code class="language-java">// Dang nhap bang phieu Main da kiem (ca captcha), in ket qua 1 lan
+public void login(AccountDTO accountDTO) {
+    ResponseDTO responseDTO = new ResponseDTO();
+
+    // Dung tai khoan va mat khau thi bao thanh cong, nguoc lai bao that bai
+    if (accountRepository.checkLogin(accountDTO)) {
+        responseDTO.setMessage(Message.getLoginSuccess());
+    } else {
+        // Sai so tai khoan hoac mat khau
+        responseDTO.setMessage(Message.getLoginFailed());
+    }
+
+    accountView.setResponseDTO(responseDTO);
+    accountView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// In cau ket qua dang nhap
+public void display() {
+    System.out.println(responseDTO.getMessage());
+}</code></pre>
+<h4>Bước 5 — Main</h4>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: lap menu den khi chon 3
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    AccountController accountController = new AccountController();
+    AccountDTO accountDTO = null;
+    boolean isRunning = true;
+
+    // Hien lai menu sau moi lan dang nhap, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.getMenuHeader().concat(Message.getMenuBody()));
+
+        // Moi lua chon: doi ngon ngu, nhap du, goi controller dung 1 lan
+        switch (inputChoice(scanner)) {
+            // 1: doi sang tieng Viet roi dang nhap
+            case Constants.MENU_VIETNAMESE:
+                Resource.setLocate(Constants.LOCALE_VIETNAMESE);
+                accountDTO = inputLogin(scanner);
+                accountController.login(accountDTO);
+                break;
+
+            // 2: doi sang tieng Anh roi dang nhap
+            case Constants.MENU_ENGLISH:
+                Resource.setLocate(Constants.LOCALE_ENGLISH);
+                accountDTO = inputLogin(scanner);
+                accountController.login(accountDTO);
+                break;
+
+            // 3: tat co de thoat vong lap
+            case Constants.MENU_EXIT:
+                isRunning = false;
+                break;
+
+            // Khong xay ra: inputChoice chi tra ve 1 den 3
+            default:
+                break;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nhap du 1 lan dang nhap theo thu tu de: tai khoan, mat khau, captcha
+private static AccountDTO inputLogin(Scanner scanner) {
+    AccountDTO accountDTO = new AccountDTO();
+    String captcha = CaptchaUtils.generateCaptcha();
+
+    accountDTO.setAccount(inputAccountNumber(scanner));
+    accountDTO.setPassword(inputPassword(scanner));
+
+    // Captcha sinh moi moi lan dang nhap, kiem o Main TRUOC khi Controller hoi kho tai khoan
+    System.out.println(Message.getCaptchaLabel().concat(captcha));
+    inputCaptcha(scanner, captcha);
+
+    return accountDTO;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Hoi captcha den khi chuoi go vao nam trong captcha (contains, chan chuoi rong)
+private static void inputCaptcha(Scanner scanner, String captcha) {
+    boolean isValid = false;
+
+    // Lap den khi go dung captcha
+    while (!isValid) {
+        // In cau nhac, doc dong va kiem
+        try {
+            System.out.print(Message.getCaptchaPrompt());
+            Validation.checkCaptcha(scanner.nextLine(), captcha);
+            isValid = true;
+        } catch (Exception e) {
+            // Sai thi in cau bao loi (theo ngon ngu) roi hoi lai
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<div class="pitfall"><p>⚠️ Bẫy của bài: đặt <code>Language_vn</code> thay vì <code>_vi</code> · để .properties sai package (MissingResourceException) · tệp tiếng Việt có dấu bị Java 8 đọc theo ISO-8859-1 · NetBeans xoá dấu cách cuối câu nhắc · <code>[A-Za-z0-9]{8,31}</code> thiếu hai phép nhìn trước (12345678 lọt) · <code>{8,}</code> thay cho <code>{8,31}</code> · <code>contains("")</code> luôn đúng · <code>Locale.setDefault</code> đổi cả máy ảo · <code>printf(chữ)</code> mà chữ có <code>%</code>.</p></div>`),
+    bi(`<h2>5. Run it for real</h2>
+<p>The test keys (<code>harness/input.txt</code>): English, accounts <code>1</code>, <code>a</code>, <code>aaaaaaaaaa</code>, <code>123456789</code>, then <code>0123456789</code>; passwords <code>1</code>, <code>12345678</code>, <code>aaaaaaaa</code>, 32 ones, then <code>123456ab</code>; captcha <code>Adafda</code>, Enter, <code>{CAP1}</code>; then Vietnamese, <code>1029817261</code> / <code>matkhau123a</code> / <code>{CAPMID}</code>; menu <code>0</code>, <code>x</code>, <code>3</code>.</p>
+<details><summary>The whole run (29 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">-------Login Program-------<br>
+1. Vietnamese<br>
+2. English<br>
+3. Exit<br>
+Please choice one option: Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Captcha: XXXXX<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Login failed: the account number or password is wrong. Please try again.<br>
+-------Login Program-------<br>
+1. Vietnamese<br>
+2. English<br>
+3. Exit<br>
+Please choice one option: So tai khoan: &nbsp;Mat khau: Captcha: XXXXX<br>
+Nhap 1 ky tu captcha: Dang nhap thanh cong!<br>
+-------Chuong Trinh Dang Nhap-------<br>
+1. Tieng Viet<br>
+2. Tieng Anh<br>
+3. Thoat<br>
+Moi chon 1 chuc nang: Lua chon phai la so tu 1 den 3. Moi nhap lai.<br>
+Moi chon 1 chuc nang: Ban phai nhap so (1, 2 hoac 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Moi chon 1 chuc nang:</div>
+</details>
+<p>Every validation message once, then the login that fails — the account passed the regex but is not in the store:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Please choice one option: Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Captcha: XXXXX<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Login failed: the account number or password is wrong. Please try again.<br>
+…</div>
+<p>The same program in Vietnamese, after <code>setLocate</code>:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Please choice one option: So tai khoan: &nbsp;Mat khau: Captcha: XXXXX<br>
+Nhap 1 ky tu captcha: Dang nhap thanh cong!<br>
+-------Chuong Trinh Dang Nhap-------<br>
+1. Tieng Viet<br>
+2. Tieng Anh<br>
+3. Thoat<br>
+Moi chon 1 chuc nang: Lua chon phai la so tu 1 den 3. Moi nhap lai.<br>
+Moi chon 1 chuc nang: Ban phai nhap so (1, 2 hoac 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0070_EbankLogin</code></pre>
+<div class="out">✓ MSSV_J1SP0070_EbankLogin — sạch</div>
+<p>A real JDK 8 prints the same 29 lines. The paper checklist audit: 0 violations. There is no automatic grader for this lab — the captcha changes every run: type the keys of <code>harness/input.txt</code> (for <code>{CAP1}</code> type the first character of the captcha on screen, for <code>{CAPMID}</code> the second and third) and compare with <code>harness/man-hinh-mong-doi.txt</code>.</p>
+<h2>6. Debug it</h2>
+<p>Breakpoint on <code>if ((text.isEmpty()) || (!captcha.contains(text)))</code> in <code>Validation.checkCaptcha</code> → Ctrl+F5 → choose 2, type a good account and password → at the captcha press Enter: <code>text</code> is <code>""</code>, F8 goes to the <code>throw</code>. Type the first character of the captcha: <code>captcha.contains(text)</code> is true, F8 leaves the method. Then F7 into <code>accountController.login</code>: only now is the repository asked.</p>
+<h2>7. The questions — answer out loud</h2>
+<details><summary>Why is the captcha checked before the account?</summary><p class="dap-an">✅ A captcha stops a machine trying passwords. If the program says "wrong account" before the captcha, the machine learns right from wrong without solving it. The captcha is made again at each login, as the brief says.</p></details>
+<details><summary>Why is there no service?</summary><p class="dap-an">✅ There is no business computation: the old service forwarded one line to the repository. The paper adds a service only when something is computed. Controller → repository → view.</p></details>
+<details><summary>Where is contains(), and what if I press Enter?</summary><p class="dap-an">✅ <code>Validation.checkCaptcha</code>. Every string contains the empty string, so the empty input is refused first; then <code>captcha.contains(text)</code>. <code>contains</code> is case-sensitive: <code>h</code> does not match <code>H</code>.</p></details>
+<details><summary>How does the language switch?</summary><p class="dap-an">✅ <code>Resource.setLocate(locale)</code> loads <code>Language_vi</code> or <code>Language_en</code>; every sentence goes through <code>Message.getX()</code> → <code>Resource.getString(key)</code>, so one call changes the whole screen. A third language is one more file.</p></details>
+<details><summary>Why is the account number a String?</summary><p class="dap-an">✅ It keeps the leading 0 (<code>0123456789</code>) and ten digits overflow an <code>int</code> (max 2,147,483,647).</p></details>
+<details><summary>Why not System.exit?</summary><p class="dap-an">✅ It stops the JVM at once and skips any cleanup; with a flag the loop ends and <code>main</code> returns normally.</p></details>
+<h2>8. Download</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v2/MSSV_J1SP0070_EbankLogin-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0070_EbankLogin-solution.zip</span><span class="lc-sub">NetBeans project (Java 8) · 12 Java files + 2 .properties · harness/input.txt (test keys) + harness/man-hinh-mong-doi.txt (expected screen)</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<div class="callout"><p><strong>Next:</strong> P0071 Task Management — the lab where the lecturer said "no service" and "every error in Vietnamese".</p></div>`,
+    `<h2>5. Chạy thật</h2>
+<p>Bộ phím test (<code>harness/input.txt</code>): tiếng Anh, tài khoản <code>1</code>, <code>a</code>, <code>aaaaaaaaaa</code>, <code>123456789</code>, rồi <code>0123456789</code>; mật khẩu <code>1</code>, <code>12345678</code>, <code>aaaaaaaa</code>, 32 số 1, rồi <code>123456ab</code>; captcha <code>Adafda</code>, Enter, <code>{CAP1}</code>; rồi tiếng Việt, <code>1029817261</code> / <code>matkhau123a</code> / <code>{CAPMID}</code>; menu <code>0</code>, <code>x</code>, <code>3</code>.</p>
+<details><summary>Toàn bộ lần chạy (29 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">-------Login Program-------<br>
+1. Vietnamese<br>
+2. English<br>
+3. Exit<br>
+Please choice one option: Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Captcha: XXXXX<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Login failed: the account number or password is wrong. Please try again.<br>
+-------Login Program-------<br>
+1. Vietnamese<br>
+2. English<br>
+3. Exit<br>
+Please choice one option: So tai khoan: &nbsp;Mat khau: Captcha: XXXXX<br>
+Nhap 1 ky tu captcha: Dang nhap thanh cong!<br>
+-------Chuong Trinh Dang Nhap-------<br>
+1. Tieng Viet<br>
+2. Tieng Anh<br>
+3. Thoat<br>
+Moi chon 1 chuc nang: Lua chon phai la so tu 1 den 3. Moi nhap lai.<br>
+Moi chon 1 chuc nang: Ban phai nhap so (1, 2 hoac 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Moi chon 1 chuc nang:</div>
+</details>
+<p>Mọi câu báo lỗi một lần, rồi lần đăng nhập thất bại — tài khoản qua regex nhưng không có trong kho:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Please choice one option: Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Account number must is a number and must have 10 digits<br>
+Account number: &nbsp;Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Password must be between 8 and 31 characters and must be alphanumeric<br>
+Password: Captcha: XXXXX<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Captcha incorrect<br>
+Enter a Captcha incorrect characters: Login failed: the account number or password is wrong. Please try again.<br>
+…</div>
+<p>Cùng chương trình bằng tiếng Việt, sau <code>setLocate</code>:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Please choice one option: So tai khoan: &nbsp;Mat khau: Captcha: XXXXX<br>
+Nhap 1 ky tu captcha: Dang nhap thanh cong!<br>
+-------Chuong Trinh Dang Nhap-------<br>
+1. Tieng Viet<br>
+2. Tieng Anh<br>
+3. Thoat<br>
+Moi chon 1 chuc nang: Lua chon phai la so tu 1 den 3. Moi nhap lai.<br>
+Moi chon 1 chuc nang: Ban phai nhap so (1, 2 hoac 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0070_EbankLogin</code></pre>
+<div class="out">✓ MSSV_J1SP0070_EbankLogin — sạch</div>
+<p>JDK 8 thật in đúng 29 dòng đó. Soát tờ checklist giấy: 0 vi phạm. Bài này không có bộ chấm tự động — captcha đổi mỗi lần chạy: gõ các phím trong <code>harness/input.txt</code> (gặp <code>{CAP1}</code> thì gõ ký tự đầu của captcha trên màn hình, gặp <code>{CAPMID}</code> thì gõ ký tự thứ hai và thứ ba) rồi so với <code>harness/man-hinh-mong-doi.txt</code>.</p>
+<h2>6. Debug</h2>
+<p>Breakpoint ở <code>if ((text.isEmpty()) || (!captcha.contains(text)))</code> trong <code>Validation.checkCaptcha</code> → Ctrl+F5 → chọn 2, gõ tài khoản và mật khẩu đúng dạng → tới captcha nhấn Enter: <code>text</code> là <code>""</code>, F8 nhảy vào <code>throw</code>. Gõ ký tự đầu của captcha: <code>captcha.contains(text)</code> đúng, F8 ra khỏi hàm. Rồi F7 vào <code>accountController.login</code>: lúc này repository mới được hỏi.</p>
+<h2>7. Câu thầy hỏi — trả lời thành tiếng</h2>
+<details><summary>Sao captcha kiểm trước tài khoản?</summary><p class="dap-an">✅ Captcha chặn máy dò mật khẩu. Nếu chương trình báo "sai tài khoản" trước captcha thì máy biết đúng sai mà không cần giải captcha. Captcha sinh lại mỗi lần đăng nhập, đúng như đề.</p></details>
+<details><summary>Sao không có service?</summary><p class="dap-an">✅ Bài không có tính toán nghiệp vụ: service cũ chỉ chuyển tiếp một dòng xuống repository. Tờ giấy chỉ thêm service khi có tính toán. Controller → repository → view.</p></details>
+<details><summary>contains() ở đâu, nhấn Enter thì sao?</summary><p class="dap-an">✅ <code>Validation.checkCaptcha</code>. Chuỗi nào cũng chứa chuỗi rỗng, nên ô trống bị chặn trước; rồi mới <code>captcha.contains(text)</code>. <code>contains</code> phân biệt hoa thường: <code>h</code> không khớp <code>H</code>.</p></details>
+<details><summary>Đổi ngôn ngữ chạy thế nào?</summary><p class="dap-an">✅ <code>Resource.setLocate(locale)</code> nạp <code>Language_vi</code> hoặc <code>Language_en</code>; mọi câu chữ đi qua <code>Message.getX()</code> → <code>Resource.getString(key)</code>, nên một lời gọi đổi cả màn hình. Thêm ngôn ngữ thứ ba là thêm một tệp.</p></details>
+<details><summary>Sao số tài khoản là String?</summary><p class="dap-an">✅ Giữ số 0 đầu (<code>0123456789</code>), và mười chữ số tràn <code>int</code> (tối đa 2.147.483.647).</p></details>
+<details><summary>Sao không dùng System.exit?</summary><p class="dap-an">✅ Nó tắt máy ảo ngay, bỏ qua mọi việc dọn dẹp; dùng cờ thì vòng lặp tự kết thúc và <code>main</code> chạy hết bình thường.</p></details>
+<h2>8. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v2/MSSV_J1SP0070_EbankLogin-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0070_EbankLogin-solution.zip</span><span class="lc-sub">project NetBeans (Java 8) · 12 tệp Java + 2 tệp .properties · harness/input.txt (phím test) + harness/man-hinh-mong-doi.txt (màn hình mong đợi)</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<div class="callout"><p><strong>Bài tiếp:</strong> P0071 Task Management — bài thầy nói "bỏ service" và "mọi câu lỗi tiếng Việt".</p></div>`),
+  ].join('\n'),
+};
+
+/* ───────── L.5 — 🎓 LAB211 J1.S.P0071 Task Management: no service, the repository checks the ID, a real date, a half hour, Vietnamese errors ───────── */
+const L_l211_p0071 = {
+  title: 'L.5 — 🎓 LAB211 J1.S.P0071 Task Management: no service, the repository checks the ID, a real date, a half hour, Vietnamese errors|||L.5 — 🎓 LAB211 J1.S.P0071 Quản lý task: không service, kho kiểm ID, ngày có thật, nửa giờ, câu lỗi tiếng Việt',
+  slug: 'pro192-lab211-p0071-task-management',
+  type: 'VIDEO',
+  description: 'Bài LAB211 J1.S.P0071 (150 LOC) đi từ bản thầy đã review với hai câu dặn: mọi câu lỗi tiếng Việt nói rõ sai gì và nhập lại thế nào, và bỏ service — bài vốn không có package service nhưng controller vẫn làm việc của service (gọi findById lấy model Task rồi tự quyết). Đọc đề (Requirement Name, loại 1–4, ngày dd-MM-yyyy có thật, giờ 8.0–17.5 bước 0.5 với From nhỏ hơn To, ID = ID cuối + 1, ba hàm addTask/deleteTask/getDataTasks), chạy lại bản cũ thấy lỗi thật (Enter ở ô Date được nhận rồi Display sập "date must not be null", 26-06-2015abc lọt, bảng lệch, 10,0 trên Windows tiếng Việt), rồi dựng bản sạch: TaskRepository tự kiểm ID có hay không, Validation so ngày theo hai chiều, view một display() mỗi luồng, Main một lần gọi mỗi case, không static, không System.exit. Chạy thật, PASS 99/99, lint.py sạch, 25 mục 0 vi phạm, JDK 8 thật. Kèm câu thầy hỏi và dự án tải về.',
+  content: [
+    bi(`<span class="eyebrow">🎓 LAB211 in practice · L.5 · J1.S.P0071</span>
+<h2>Task Management — "no service, and say what to type"</h2>
+<p class="lead">The lecturer reviewed this lab and asked for two things: every error message in Vietnamese, saying what is wrong and what to type; and <em>no service</em>. The second one was surprising — the lab had no <code>service</code> package. But its controller still did a service's job: it looked a task up, got a <code>Task</code> model back and decided. That decision moves to the repository.</p>
+<p>Running the reviewed version again with the test keys found worse: pressing Enter at <code>Date</code> was accepted, and the next Display crashed. Plan about <strong>2 hours</strong> to retype, 20 minutes for the test keys.</p>`,
+    `<span class="eyebrow">🎓 LAB211 thực chiến · L.5 · J1.S.P0071</span>
+<h2>Quản lý task — "bỏ service, và nói rõ phải nhập gì"</h2>
+<p class="lead">Thầy review bài này và dặn hai việc: mọi câu lỗi viết tiếng Việt, nói rõ sai gì và phải nhập gì; và <em>bỏ service</em>. Câu thứ hai nghe lạ — bài không có package <code>service</code>. Nhưng controller vẫn làm việc của service: tự tìm task, nhận về model <code>Task</code> rồi tự quyết. Việc quyết đó chuyển về repository.</p>
+<p>Chạy lại bản đã review bằng bộ phím test còn thấy chuyện nặng hơn: nhấn Enter ở ô <code>Date</code> vẫn được nhận, và lần Display sau thì sập. Dành khoảng <strong>2 giờ</strong> để gõ lại, 20 phút cho bộ phím test.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 · LAB211 P0071 (14 slides)</h2>
+<p>The deck of this LAB211 lesson, made by CuongThai (it is not a school deck and not the lecturer's). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project in this lesson — checked by <code>lint.py</code> (the lecturer's rules), compiled with <code>javac --release 8</code> and run on a real JDK 8, like the machines in the lab room.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 · LAB211 P0071 (14 slide)</h2>
+<p>Bộ slide của bài LAB211 này do CuongThai dựng (không phải slide của trường, cũng không phải của thầy). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ đúng dự án trong bài — qua <code>lint.py</code> (luật của thầy), biên dịch bằng <code>javac --release 8</code> và chạy trên JDK 8 thật, giống máy phòng lab.</p>`),
+    walk('l211-p0071', [
+      [1, 'J1.S.P0071 — Task Management',
+        `<p class="y-chinh">🎯 Add, delete and list tasks with a type, a date and a plan time — the lab where the lecturer said "no service".</p>
+<p>The deck: the brief, plan time by hand, what the lecturer said, a real crash, what the test keys found, the clean design, each layer, the real run, the questions.</p>`,
+        `<p class="y-chinh">🎯 Thêm, xoá và liệt kê task có loại, ngày và giờ kế hoạch — bài thầy nói "bỏ service".</p>
+<p>Bộ slide: đề, giờ kế hoạch chạy tay, thầy đã nói gì, một lần sập thật, phím test tìm ra gì, thiết kế sạch, từng tầng, lần chạy thật, các câu hỏi.</p>`],
+      [2, 'The brief',
+        `<p class="y-chinh">🎯 Menu 1 Add Task · 2 Delete task · 3 Display Task · 4 exit. A task: Requirement Name, Task Type 1–4, Date dd-MM-yyyy, From, To, Assignee, Reviewer; ID = last ID + 1.</p>
+<p>The type must exist (1 Code, 2 Test, 3 Design, 4 Review), the date must be real, From and To go from 8.0 to 17.5 by half hours with From before To. Delete needs an existing ID; Display lists the tasks by ascending ID. The brief names three methods: <code>addTask</code> (returns the id), <code>deleteTask</code>, <code>getDataTasks</code>.</p>`,
+        `<p class="y-chinh">🎯 Menu 1 Add Task · 2 Delete task · 3 Display Task · 4 exit. Một task: Requirement Name, Task Type 1–4, Date dd-MM-yyyy, From, To, Assignee, Reviewer; ID = ID cuối + 1.</p>
+<p>Loại phải tồn tại (1 Code, 2 Test, 3 Design, 4 Review), ngày phải có thật, From và To từ 8.0 tới 17.5 theo từng nửa giờ, From trước To. Xoá cần ID đang có; Display liệt kê task theo ID tăng dần. Đề đặt tên ba hàm: <code>addTask</code> (trả về id), <code>deleteTask</code>, <code>getDataTasks</code>.</p>`],
+      [3, 'Plan time, by hand',
+        `<p class="y-chinh">🎯 From is asked in [8.0, 17.0] so that a half hour stays for To; To is asked in [From + 0.5, 17.5]. Time in the table = To − From.</p>
+<p>The second range depends on the first answer, so Main passes <code>planFrom</code> into <code>getPlanTo</code>. 9.7 is refused even inside the range: only whole or half hours. 8 to 16 gives 8.0, 8 to 9 gives 1.0.</p>`,
+        `<p class="y-chinh">🎯 From hỏi trong [8.0, 17.0] để còn nửa giờ cho To; To hỏi trong [From + 0.5, 17.5]. Time trong bảng = To − From.</p>
+<p>Khoảng thứ hai phụ thuộc câu trả lời thứ nhất, nên Main truyền <code>planFrom</code> vào <code>getPlanTo</code>. 9.7 bị từ chối dù nằm trong khoảng: chỉ giờ tròn hoặc nửa giờ. 8 tới 16 ra 8.0, 8 tới 9 ra 1.0.</p>`],
+      [4, 'What the lecturer said in review',
+        `<p class="y-chinh">🎯 (a) every error in Vietnamese, saying what is wrong and what to type; (b) no service. The reviewed controller called <code>findById</code>, received a model <code>Task</code> and decided — a service's job in the wrong layer.</p>
+<p>The lecturer's tool on that version (names hidden): <code>lint.py</code> 343 violations — 195 comments, 48 hard-coded strings, 30 static, 26 fields — and 31 on the paper audit. Its messages were "Invalid!" and "Please input number in a range…".</p>`,
+        `<p class="y-chinh">🎯 (a) mọi câu lỗi tiếng Việt, nói rõ sai gì và nhập gì; (b) bỏ service. Controller của bản đã review gọi <code>findById</code>, nhận model <code>Task</code> rồi tự quyết — việc của service nằm sai tầng.</p>
+<p>Công cụ của thầy trên bản đó (đã ẩn tên): <code>lint.py</code> 343 vi phạm — 195 comment, 48 chuỗi viết thẳng, 30 static, 26 trường — và 31 khi soát tờ giấy. Câu báo lỗi là "Invalid!" và "Please input number in a range…".</p>`],
+      [5, 'A real crash: Enter on Date',
+        `<p class="y-chinh">🎯 The reviewed <code>getDate</code> returned <code>null</code> for an empty line: the task was added without a date, and the next Display printed the header, then "date must not be null".</p>
+<p>The error appears in a different flow from the one that caused it — the hardest kind to find during a review. In the fixed version an empty line is simply a wrong date: <code>parse("")</code> throws and Main asks again.</p>`,
+        `<p class="y-chinh">🎯 <code>getDate</code> của bản đã review trả <code>null</code> khi dòng trống: task được thêm mà không có ngày, và lần Display sau in tiêu đề rồi báo "date must not be null".</p>
+<p>Lỗi hiện ra ở một luồng khác với luồng gây ra nó — loại khó tìm nhất lúc review. Ở bản sửa, dòng trống chỉ là một ngày sai: <code>parse("")</code> ném lỗi và Main hỏi lại.</p>`],
+      [6, 'What the test keys found',
+        `<p class="y-chinh">🎯 <code>26-06-2015abc</code> and <code>1-2-2015</code> accepted, an Assignee of spaces accepted, <code>" 1"</code> refused, a long name broke the table, Windows in Vietnamese printed <code>10,0 -&gt; 17,5</code>.</p>
+<p>Each has a one-line cause: <code>parse</code> reads the beginning only; the name regex allowed <code>\\s</code> without a trim; no <code>trim()</code> before <code>parseInt</code>; header and rows had different formats plus a <code>\\n</code>; <code>%.1f</code> follows the machine's language.</p>`,
+        `<p class="y-chinh">🎯 <code>26-06-2015abc</code> và <code>1-2-2015</code> được nhận, Assignee toàn dấu cách được nhận, <code>" 1"</code> bị từ chối, tên dài làm lệch bảng, Windows tiếng Việt in <code>10,0 -&gt; 17,5</code>.</p>
+<p>Mỗi lỗi có nguyên nhân một dòng: <code>parse</code> chỉ đọc phần đầu; regex tên cho <code>\\s</code> mà không trim; không <code>trim()</code> trước <code>parseInt</code>; tiêu đề và các dòng khác định dạng, còn thừa <code>\\n</code>; <code>%.1f</code> theo ngôn ngữ của máy.</p>`],
+      [7, 'The clean design: no service',
+        `<p class="y-chinh">🎯 Main → <code>TaskController</code> (one call per case) → <code>TaskRepository</code> (add, delete — the ID exists or it throws —, getDataTasks) → <code>TaskView.display()</code> once.</p>
+<p>"Is there a task with ID 99?" is a question about stored data, so the repository answers it. The controller never touches <code>Task</code> and imports no model. Names: <code>TaskController</code>, <code>taskController</code>, <code>getDataTasks</code> (the brief's name).</p>`,
+        `<p class="y-chinh">🎯 Main → <code>TaskController</code> (mỗi case một lần gọi) → <code>TaskRepository</code> (thêm, xoá — ID có hoặc ném lỗi —, getDataTasks) → <code>TaskView.display()</code> một lần.</p>
+<p>"Có task ID 99 không?" là câu hỏi về dữ liệu đang lưu, nên repository trả lời. Controller không đụng <code>Task</code>, không import model. Tên: <code>TaskController</code>, <code>taskController</code>, <code>getDataTasks</code> (tên của đề).</p>`],
+      [8, 'Model and the enum TaskType',
+        `<p class="y-chinh">🎯 <code>Task</code> is a JavaBean with eight fields; <code>TaskType</code> is an enum of four constants with an id and a name, and <code>getTaskTypeById</code> loops over <code>values()</code>.</p>
+<p>The old lookup was a <code>switch</code> on 1, 2, 3, 4 — four magic numbers. The loop compares each constant's <code>getId()</code>; a fifth type would be one line in the enum. Main has already checked the range, so the loop always finds one.</p>`,
+        `<p class="y-chinh">🎯 <code>Task</code> là JavaBean tám trường; <code>TaskType</code> là enum bốn hằng có id và tên, <code>getTaskTypeById</code> duyệt <code>values()</code>.</p>
+<p>Cách cũ là <code>switch</code> theo 1, 2, 3, 4 — bốn con số viết thẳng. Vòng lặp so <code>getId()</code> của từng hằng; thêm loại thứ năm chỉ là một dòng trong enum. Main đã kiểm khoảng nên vòng lặp luôn tìm thấy.</p>`],
+      [9, 'Repository: add, delete, the table',
+        `<p class="y-chinh">🎯 <code>addTask</code>: build the Task, <code>lastId++</code>, add, return the id. <code>deleteTask</code>: find it, throw "Khong co task nao co ID = 99…" if missing, remove. <code>getDataTasks</code>: one <code>ResponseDTO</code> per task with Time = To − From.</p>
+<p><code>findById</code> is private — only the repository looks a task up. <code>lastId</code> keeps growing: delete 2 then add, the new task is 3, never a second 2.</p>`,
+        `<p class="y-chinh">🎯 <code>addTask</code>: dựng Task, <code>lastId++</code>, thêm, trả id. <code>deleteTask</code>: tìm, không có thì ném "Khong co task nao co ID = 99…", có thì xoá. <code>getDataTasks</code>: mỗi task một <code>ResponseDTO</code> với Time = To − From.</p>
+<p><code>findById</code> là private — chỉ repository được tìm task. <code>lastId</code> chỉ tăng: xoá 2 rồi thêm thì task mới là 3, không bao giờ có hai số 2.</p>`],
+      [10, 'Validation: a real date, a half hour',
+        `<p class="y-chinh">🎯 <code>getDate</code>: <code>setLenient(false)</code>, parse, then format the date back and compare with what was typed. <code>getDouble</code>: a number, inside the range (written so that NaN fails too), and a multiple of 0.5.</p>
+<p>The round trip catches what <code>parse</code> lets through: <code>1-2-2015</code> comes back as <code>01-02-2015</code>, <code>26-06-2015abc</code> as <code>26-06-2015</code> — both different from the text. Every message is a Vietnamese sentence from <code>Message</code>, with an example.</p>`,
+        `<p class="y-chinh">🎯 <code>getDate</code>: <code>setLenient(false)</code>, parse, rồi format ngày ngược ra chữ và so với chữ đã gõ. <code>getDouble</code>: là số, nằm trong khoảng (viết sao cho NaN cũng trượt), và là bội của 0.5.</p>
+<p>Phép đi rồi về bắt được thứ <code>parse</code> bỏ lọt: <code>1-2-2015</code> quay về thành <code>01-02-2015</code>, <code>26-06-2015abc</code> thành <code>26-06-2015</code> — cả hai khác chữ gõ. Mọi câu báo là một câu tiếng Việt trong <code>Message</code>, có ví dụ.</p>`],
+      [11, 'Controller and view: print once',
+        `<p class="y-chinh">🎯 <code>deleteTask</code>: try the repository, the success sentence or the repository's error goes into the view, then one <code>display()</code>. <code>displayTasks</code>: an empty store gives a message, otherwise the rows.</p>
+<p><code>TaskView</code> holds the rows and a message; <code>display()</code> prints the message if there is one, the table otherwise, then clears the message. The reviewed controller called <code>printMessage</code> or <code>printTask</code> — two render methods for one flow.</p>`,
+        `<p class="y-chinh">🎯 <code>deleteTask</code>: thử repository, câu thành công hoặc câu lỗi của repository đưa vào view, rồi một lần <code>display()</code>. <code>displayTasks</code>: kho rỗng thì một câu báo, có task thì các dòng.</p>
+<p><code>TaskView</code> giữ các dòng và một câu báo; <code>display()</code> in câu báo nếu có, không thì in bảng, rồi xoá câu báo. Controller của bản đã review gọi <code>printMessage</code> hoặc <code>printTask</code> — hai hàm render cho một luồng.</p>`],
+      [12, 'Main: one call per case',
+        `<p class="y-chinh">🎯 <code>inputTaskData</code> fills a new <code>TaskDTO</code> field by field — each field asked again until it is right — and the case calls <code>taskController.addTask</code> once.</p>
+<p>The Scanner is a local variable of <code>main</code>, passed to every helper (the Guide forbids static variables); option 4 sets <code>isRunning</code> to false instead of <code>System.exit</code>; every helper takes at most two parameters.</p>`,
+        `<p class="y-chinh">🎯 <code>inputTaskData</code> điền một <code>TaskDTO</code> mới từng ô — ô nào sai hỏi lại ô đó — rồi case gọi <code>taskController.addTask</code> một lần.</p>
+<p>Scanner là biến cục bộ của <code>main</code>, truyền vào mọi hàm phụ (Guide cấm biến static); lựa chọn 4 đặt <code>isRunning</code> về false thay vì <code>System.exit</code>; mọi hàm phụ nhận tối đa hai tham số.</p>`],
+      [13, 'The real run, lint, JDK 8, PASS',
+        `<p class="y-chinh">🎯 Every message once: empty name, type abc and 5, four bad dates, hours abc, 7.5, 9.7, 17.5, To 9.0, two bad names — then the table with a long name, straight columns, Time 8.0 and 1.0.</p>
+<p><code>lint.py</code> clean, <code>check.sh</code> PASS 99/99, 25 paper items 0 violations, a real JDK 8 prints the same 99 lines.</p>`,
+        `<p class="y-chinh">🎯 Mọi câu báo một lần: tên trống, loại abc và 5, bốn ngày sai, giờ abc, 7.5, 9.7, 17.5, To 9.0, hai tên sai — rồi bảng có tên dài, cột thẳng, Time 8.0 và 1.0.</p>
+<p><code>lint.py</code> sạch, <code>check.sh</code> PASS 99/99, 25 mục tờ giấy 0 vi phạm, JDK 8 thật in đúng 99 dòng đó.</p>`],
+      [14, 'What the lecturer asks',
+        `<p class="y-chinh">🎯 "No service — where is the ID check?", "Why is 26-06-2015abc refused?", "%s or %.1f?", "Why no parameter in the view?", "Why is the Scanner not static?", "Why getDataTasks?"</p>
+<p>The first answer carries the lab: only the repository knows what it stores, and the controller never handles a model.</p>`,
+        `<p class="y-chinh">🎯 "Bỏ service rồi thì kiểm ID ở đâu?", "Sao 26-06-2015abc bị chặn?", "%s hay %.1f?", "Sao view không nhận tham số?", "Sao Scanner không static?", "Sao là getDataTasks?"</p>
+<p>Câu đầu là cả bài: chỉ repository biết mình đang giữ gì, còn controller không bao giờ cầm model.</p>`],
+    ]),
+    bi(`<h2>1. The brief</h2>
+<table>
+<thead><tr><th>The brief says</th><th>Where it lives</th></tr></thead>
+<tbody>
+<tr><td>Task type 1–4 fixed (Code, Test, Design, Review)</td><td><code>enum TaskType</code> + <code>getTaskTypeById</code></td></tr>
+<tr><td>Date dd-MM-yyyy, a valid date</td><td><code>Validation.getDate</code> (setLenient false + round trip)</td></tr>
+<tr><td>Plan From / To 8.0 … 17.5, step 0.5, From &lt; To</td><td><code>Validation.getDouble</code> + Main <code>getPlanFrom</code> / <code>getPlanTo(scanner, planFrom)</code></td></tr>
+<tr><td>ID = ID last task + 1</td><td><code>TaskRepository.addTask</code> (<code>lastId</code>)</td></tr>
+<tr><td><code>int addTask(...)</code> returns the id</td><td><code>TaskRepository.addTask(TaskDTO)</code> — 7 strings become one DTO checked by Main</td></tr>
+<tr><td><code>void deleteTask(String id)</code>, the ID must exist</td><td><code>TaskRepository.deleteTask(int)</code> throws when missing</td></tr>
+<tr><td><code>getDataTasks()</code> — ascending by ID</td><td><code>TaskRepository.getDataTasks()</code> → <code>ArrayList&lt;ResponseDTO&gt;</code></td></tr>
+<tr><td>try-catch NumberFormatException, SimpleDateFormat, wrapper classes</td><td><code>Validation.getInt</code>, <code>getTaskId</code>, <code>getDouble</code>, <code>getDate</code></td></tr>
+</tbody>
+</table>
+<h2>2. What the lecturer saw</h2>
+<p>The reviewed version (names hidden), through his tool:</p>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0071_TaskManagement</code></pre>
+<div class="out">✗ MSSV_J1SP0071_TaskManagement — 343 vi phạm<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Message.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/TaskType.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Constants.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants — thiếu package constants/ (Guide.xlsx)<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants/Message.java — thiếu constants/Message.java<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:9 — chuỗi ".*\\\\S.*" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:10 — chuỗi "dd-MM-yyyy" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:12 — chuỗi "[A-Za-z0-9\\\\s]+" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:9 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:10 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:11 — package 'constant' không được dùng static (Guide.xlsx)<br>
+…</div>
+<p>Its controller decided whether the ID existed — the "service" the lecturer asked to remove:</p>
+<pre class="trich"><code class="language-java">public void deleteTask() {
+    // Logic kiểm tra ID tồn tại trước khi xóa (Thay cho Service)
+    if (taskRepository.findById(taskDto.getId()) == null) {
+        taskView.printMessage(Message.ERROR_CANNOT_FOUND); 
+        return;
+    }
+
+    if (taskRepository.deleteTask(taskDto.getId())) {
+        taskView.printMessage(Message.SUCCESS_DELETE_MESSAGE); 
+    }
+}</code></pre>
+<p>And the date that let an empty line through:</p>
+<pre class="trich"><code class="language-java">public static Date getDate(String input, final String REGEX) throws Exception {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(REGEX);
+    dateFormat.setLenient(false);
+    try {
+        if (input.isEmpty()) {
+            return null;
+        }
+        return dateFormat.parse(input);
+    } catch (ParseException e) {
+        throw new Exception(Message.ERROR_INVALID_DATE_FORMAT);
+    }
+}</code></pre>
+<p>Add a task with Enter at Date, then choose 3 — the reviewed version, really run:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Enter your choice: Date: From:To:Assignee: Reviewer: Add success!<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assign &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+date must not be null<br>
+…</div>
+<table>
+<thead><tr><th>In the reviewed version</th><th>Rule</th><th>In the clean version</th></tr></thead>
+<tbody>
+<tr><td>controller calls <code>findById</code>, gets a <code>Task</code>, decides</td><td>lecturer 24/10: no service; 1.1: controller does not touch the model</td><td><code>TaskRepository.deleteTask</code> throws, the controller passes the sentence on</td></tr>
+<tr><td>"Invalid!", "Please input number in a range…", "Must be x.0 or x.5"</td><td>lecturer: say what is wrong and what to type</td><td>Vietnamese sentences with an example, all in <code>Message</code></td></tr>
+<tr><td>empty Date ⇒ <code>null</code> ⇒ crash at Display</td><td>test keys</td><td>an empty line is a wrong date</td></tr>
+<tr><td><code>private static final Scanner sc</code></td><td>Guide: no static variable</td><td>local <code>Scanner scanner</code> passed to the helpers</td></tr>
+<tr><td><code>System.exit(0)</code>, <code>case 1:</code></td><td>no exit, 2.10</td><td><code>isRunning = false</code>, <code>Constants.MENU_*</code></td></tr>
+<tr><td>two DTOs (one in Main, one <code>new</code> in the controller)</td><td>3.6</td><td>one <code>TaskDTO</code>, passed as a parameter</td></tr>
+<tr><td><code>printMessage(String)</code> / <code>printTask()</code></td><td>1.1: attributes, one render per flow</td><td><code>setMessage</code> / <code>setResponseList</code> + <code>display()</code></td></tr>
+<tr><td><code>List&lt;Task&gt;</code>, <code>List&lt;ResponseDTO&gt; responseDTO</code></td><td>V5, 1.5</td><td><code>ArrayList&lt;Task&gt; taskList</code>, <code>responseList</code></td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Đề bài</h2>
+<table>
+<thead><tr><th>Đề nói</th><th>Nằm ở đâu</th></tr></thead>
+<tbody>
+<tr><td>Loại task 1–4 cố định (Code, Test, Design, Review)</td><td><code>enum TaskType</code> + <code>getTaskTypeById</code></td></tr>
+<tr><td>Ngày dd-MM-yyyy, ngày có thật</td><td><code>Validation.getDate</code> (setLenient false + đi rồi về)</td></tr>
+<tr><td>Plan From / To 8.0 … 17.5, bước 0.5, From &lt; To</td><td><code>Validation.getDouble</code> + Main <code>getPlanFrom</code> / <code>getPlanTo(scanner, planFrom)</code></td></tr>
+<tr><td>ID = ID task cuối + 1</td><td><code>TaskRepository.addTask</code> (<code>lastId</code>)</td></tr>
+<tr><td><code>int addTask(...)</code> trả về id</td><td><code>TaskRepository.addTask(TaskDTO)</code> — 7 chuỗi thành một DTO Main đã kiểm</td></tr>
+<tr><td><code>void deleteTask(String id)</code>, ID phải có</td><td><code>TaskRepository.deleteTask(int)</code> ném lỗi khi không có</td></tr>
+<tr><td><code>getDataTasks()</code> — tăng dần theo ID</td><td><code>TaskRepository.getDataTasks()</code> → <code>ArrayList&lt;ResponseDTO&gt;</code></td></tr>
+<tr><td>try-catch NumberFormatException, SimpleDateFormat, lớp bao</td><td><code>Validation.getInt</code>, <code>getTaskId</code>, <code>getDouble</code>, <code>getDate</code></td></tr>
+</tbody>
+</table>
+<h2>2. Thầy đã thấy gì</h2>
+<p>Bản thầy đã review (đã ẩn tên), qua công cụ của thầy:</p>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0071_TaskManagement</code></pre>
+<div class="out">✗ MSSV_J1SP0071_TaskManagement — 343 vi phạm<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Message.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/TaskType.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constant/Constants.java — package 'constant' không thuộc kiến trúc Guide<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants — thiếu package constants/ (Guide.xlsx)<br>
+&nbsp;&nbsp;[STRUCTURE] src/constants/Message.java — thiếu constants/Message.java<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:9 — chuỗi ".*\\\\S.*" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:10 — chuỗi "dd-MM-yyyy" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[HARDCODE] src/constant/Constants.java:12 — chuỗi "[A-Za-z0-9\\\\s]+" phải khai báo ở constants (Message/Constants)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:9 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:10 — package 'constant' không được dùng static (Guide.xlsx)<br>
+&nbsp;&nbsp;[STATIC] src/constant/Constants.java:11 — package 'constant' không được dùng static (Guide.xlsx)<br>
+…</div>
+<p>Controller của bản đó tự quyết ID có hay không — chính là "service" thầy bảo bỏ:</p>
+<pre class="trich"><code class="language-java">public void deleteTask() {
+    // Logic kiểm tra ID tồn tại trước khi xóa (Thay cho Service)
+    if (taskRepository.findById(taskDto.getId()) == null) {
+        taskView.printMessage(Message.ERROR_CANNOT_FOUND); 
+        return;
+    }
+
+    if (taskRepository.deleteTask(taskDto.getId())) {
+        taskView.printMessage(Message.SUCCESS_DELETE_MESSAGE); 
+    }
+}</code></pre>
+<p>Và hàm ngày để lọt dòng trống:</p>
+<pre class="trich"><code class="language-java">public static Date getDate(String input, final String REGEX) throws Exception {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(REGEX);
+    dateFormat.setLenient(false);
+    try {
+        if (input.isEmpty()) {
+            return null;
+        }
+        return dateFormat.parse(input);
+    } catch (ParseException e) {
+        throw new Exception(Message.ERROR_INVALID_DATE_FORMAT);
+    }
+}</code></pre>
+<p>Thêm một task, ô Date nhấn Enter, rồi chọn 3 — bản đã review, chạy thật:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Enter your choice: Date: From:To:Assignee: Reviewer: Add success!<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assign &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+date must not be null<br>
+…</div>
+<table>
+<thead><tr><th>Trong bản đã review</th><th>Luật</th><th>Trong bản sạch</th></tr></thead>
+<tbody>
+<tr><td>controller gọi <code>findById</code>, nhận <code>Task</code>, tự quyết</td><td>thầy 24/10: bỏ service; 1.1: controller không đụng model</td><td><code>TaskRepository.deleteTask</code> ném lỗi, controller chuyển câu đó cho view</td></tr>
+<tr><td>"Invalid!", "Please input number in a range…", "Must be x.0 or x.5"</td><td>thầy: nói rõ sai gì, nhập gì</td><td>câu tiếng Việt có ví dụ, tất cả trong <code>Message</code></td></tr>
+<tr><td>Date trống ⇒ <code>null</code> ⇒ sập ở Display</td><td>phím test</td><td>dòng trống là ngày sai</td></tr>
+<tr><td><code>private static final Scanner sc</code></td><td>Guide: không biến static</td><td><code>Scanner scanner</code> cục bộ, truyền vào hàm phụ</td></tr>
+<tr><td><code>System.exit(0)</code>, <code>case 1:</code></td><td>không exit, 2.10</td><td><code>isRunning = false</code>, <code>Constants.MENU_*</code></td></tr>
+<tr><td>hai DTO (một ở Main, một <code>new</code> trong controller)</td><td>3.6</td><td>một <code>TaskDTO</code>, truyền qua tham số</td></tr>
+<tr><td><code>printMessage(String)</code> / <code>printTask()</code></td><td>1.1: nhận qua thuộc tính, một lần render mỗi luồng</td><td><code>setMessage</code> / <code>setResponseList</code> + <code>display()</code></td></tr>
+<tr><td><code>List&lt;Task&gt;</code>, <code>List&lt;ResponseDTO&gt; responseDTO</code></td><td>V5, 1.5</td><td><code>ArrayList&lt;Task&gt; taskList</code>, <code>responseList</code></td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>3. Class design</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/75429b55320097f944008b9163537b5c555fd96f.svg" alt="P0071: no service — the repository answers &quot;does this ID exist&quot;; the view prints once" loading="lazy" /><p class="chu-thich">🧩 P0071: no service — the repository answers "does this ID exist"; the view prints once</p></div>
+<details><summary>PlantUML source of this diagram — copy, edit and re-render</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0071 Task Management — no service: the repository checks "does this ID exist"
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} inputTaskData(scanner : Scanner) : TaskDTO
+    - {static} getPlanTo(scanner : Scanner, planFrom : double) : double
+  }
+}
+package controller {
+  class TaskController {
+    - taskRepository : TaskRepository
+    - taskView : TaskView
+    + addTask(taskDTO : TaskDTO) : void
+    + deleteTask(taskDTO : TaskDTO) : void
+    + displayTasks() : void
+  }
+}
+package repository {
+  class TaskRepository {
+    - taskList : ArrayList&lt;Task&gt;
+    - lastId : int
+    + addTask(taskDTO : TaskDTO) : int
+    + deleteTask(taskId : int) : void
+    + getDataTasks() : ArrayList&lt;ResponseDTO&gt;
+    - findById(taskId : int) : Task
+  }
+}
+package model {
+  class Task {
+    - id : int
+    - taskType : TaskType
+    - requirementName : String
+    - date : Date
+    - planFrom : double
+    - planTo : double
+    - assign : String
+    - reviewer : String
+  }
+}
+package constants {
+  enum TaskType {
+    CODE
+    TEST
+    DESIGN
+    REVIEW
+    + {static} getTaskTypeById(taskTypeId : int) : TaskType
+  }
+}
+package view {
+  class TaskView {
+    - responseList : ArrayList&lt;ResponseDTO&gt;
+    - message : String
+    + display() : void
+  }
+}
+package dto {
+  class TaskDTO
+  class ResponseDTO {
+    - time : double
+    + toString() : String
+  }
+}
+Main ..&gt; TaskController : one call per case
+TaskController *-- TaskRepository : add / delete / getDataTasks
+TaskController *-- TaskView : display() once
+TaskRepository o-- "0..*" Task
+Task --&gt; TaskType
+@enduml</code></pre></details>
+<h2>4. The code, model first</h2>
+<h4>Step 1 — constants and model</h4>
+<pre class="trich"><code class="language-java">// Tim loai task theo ma; Main da kiem ma tu 1 den 4 nen luon tim thay
+public static TaskType getTaskTypeById(int taskTypeId) {
+    TaskType result = null;
+
+    // Duyet tung loai task de so ma
+    for (TaskType taskType : TaskType.values()) {
+        // Trung ma thi giu lai loai task do
+        if (taskType.getId() == taskTypeId) {
+            result = taskType;
+        }
+    }
+
+    return result;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghep 1 dong bang theo dung dinh dang cot cua tieu de
+@Override
+public String toString() {
+    // Dinh dang ngay dd-MM-yyyy
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN);
+
+    // Ghep cac cot: ID, ten, loai, ngay, gio, nguoi lam, nguoi review
+    return String.format(Constants.TABLE_FORMAT, getId(), getRequirementName(),
+            getTaskType().getName(), dateFormat.format(getDate()), getTime(), getAssign(),
+            getReviewer());
+}</code></pre>
+<h4>Step 2 — repository</h4>
+<pre class="trich"><code class="language-java">// Them task moi tu phieu DTO, tra ve ID vua cap (ham addTask cua de)
+public int addTask(TaskDTO taskDTO) {
+    Task task = new Task(taskDTO.getTaskType(), taskDTO.getRequirementName(),
+            taskDTO.getDate(), taskDTO.getPlanFrom(), taskDTO.getPlanTo(),
+            taskDTO.getAssign(), taskDTO.getReviewer());
+
+    // Cap ID moi = ID task cuoi + 1 roi them vao cuoi danh sach
+    lastId++;
+    task.setId(lastId);
+    taskList.add(task);
+
+    return lastId;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa task theo ID; khong co ID do thi nem loi cho Controller bao lai (ham deleteTask cua de)
+public void deleteTask(int taskId) throws Exception {
+    Task task = findById(taskId);
+
+    // Khong tim thay task thi bao ID khong ton tai
+    if (task == null) {
+        throw new Exception(String.format(Message.ERROR_TASK_NOT_FOUND, taskId));
+    }
+
+    taskList.remove(task);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi tung Task thanh 1 dong ResponseDTO de View in (ham getDataTasks cua de)
+public ArrayList&lt;ResponseDTO&gt; getDataTasks() {
+    ArrayList&lt;ResponseDTO&gt; responseList = new ArrayList&lt;&gt;();
+
+    // Duyet tung task (da tang dan theo ID vi luon them vao cuoi)
+    for (Task task : taskList) {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        // Chep du lieu task sang dong bang; Time = To - From
+        responseDTO.setId(task.getId());
+        responseDTO.setRequirementName(task.getRequirementName());
+        responseDTO.setTaskType(task.getTaskType());
+        responseDTO.setDate(task.getDate());
+        responseDTO.setTime(task.getPlanTo() - task.getPlanFrom());
+        responseDTO.setAssign(task.getAssign());
+        responseDTO.setReviewer(task.getReviewer());
+        responseList.add(responseDTO);
+    }
+
+    return responseList;
+}</code></pre>
+<h4>Step 3 — Validation</h4>
+<pre class="trich"><code class="language-java">// Doi chu thanh ngay theo dang dd-MM-yyyy, chi nhan ngay co that
+public static Date getDate(String input) throws Exception {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN);
+    String text = input.trim();
+    Date date = null;
+
+    // Khong cho tu doi ngay sai (vi du 31-02 thanh 03-03)
+    dateFormat.setLenient(false);
+
+    // Thu doi chu sang ngay
+    try {
+        date = dateFormat.parse(text);
+    } catch (ParseException e) {
+        // De trong hoac sai dang thi bao loi
+        throw new Exception(Message.ERROR_INVALID_DATE);
+    }
+
+    // In nguoc ngay ra chu phai giong chu da go (chan 1-2-2015, 26-06-2015abc)
+    if (!dateFormat.format(date).equals(text)) {
+        throw new Exception(Message.ERROR_INVALID_DATE);
+    }
+
+    return date;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi chu thanh gio, kiem trong [min, max] va la so tron hoac nua tieng
+public static double getDouble(String input, double min, double max) throws Exception {
+    double number = 0;
+
+    // Thu doi chu sang so thuc (bo dau cach 2 dau truoc)
+    try {
+        number = Double.parseDouble(input.trim());
+    } catch (NumberFormatException e) {
+        // Go chu hoac de trong thi bao phai nhap so
+        throw new Exception(Message.ERROR_NOT_REAL_NUMBER);
+    }
+
+    // Ngoai khoang (viet dang "khong nam trong" de chan ca NaN) thi bao khoang dung
+    if (!((number &gt;= min) &amp;&amp; (number &lt;= max))) {
+        throw new Exception(String.format(Message.ERROR_PLAN_RANGE, min, max));
+    }
+
+    // Chia cho 0.5 con du thi khong phai so tron hoac nua tieng
+    if ((number % Constants.PLAN_STEP) != 0) {
+        throw new Exception(Message.ERROR_PLAN_STEP);
+    }
+
+    return number;
+}</code></pre>
+<h4>Step 4 — view and controller</h4>
+<pre class="trich"><code class="language-java">// In ket qua cua 1 luong roi xoa cau thong bao de luong sau bat dau sach
+public void display() {
+    // Co cau thong bao thi chi in cau do
+    if (!message.isEmpty()) {
+        System.out.println(message);
+    } else {
+        // Bang: tieu de, ten cot (cung dinh dang voi tung dong), roi tung dong task
+        System.out.println(Message.TITLE_DISPLAY);
+        System.out.println(String.format(Constants.TABLE_FORMAT, Message.COLUMN_ID,
+                Message.COLUMN_NAME, Message.COLUMN_TASK_TYPE, Message.COLUMN_DATE,
+                Message.COLUMN_TIME, Message.COLUMN_ASSIGNEE, Message.COLUMN_REVIEWER));
+
+        // Moi task 1 dong
+        for (ResponseDTO responseDTO : responseList) {
+            System.out.println(responseDTO);
+        }
+    }
+
+    message = "";
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 2: kho xoa theo ID trong phieu (khong co ID thi kho nem loi), View bao ket qua
+public void deleteTask(TaskDTO taskDTO) {
+    // Kho xoa duoc thi bao thanh cong
+    try {
+        taskRepository.deleteTask(taskDTO.getId());
+        taskView.setMessage(String.format(Message.SUCCESS_DELETE_MESSAGE, taskDTO.getId()));
+    } catch (Exception e) {
+        // Kho bao ID khong ton tai thi dua cau loi do cho View
+        taskView.setMessage(e.getMessage());
+    }
+
+    taskView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 3: kho lay bang task (tang dan theo ID), View in bang hoac bao danh sach rong
+public void displayTasks() {
+    // Kho rong thi chi bao rong, co task thi dua bang cho View
+    if (taskRepository.isEmpty()) {
+        taskView.setMessage(Message.ERROR_EMPTY);
+    } else {
+        // Co task: dua cac dong bang cho View
+        taskView.setResponseList(taskRepository.getDataTasks());
+    }
+
+    taskView.display();
+}</code></pre>
+<h4>Step 5 — Main</h4>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: lap menu den khi chon 4
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    TaskController taskController = new TaskController();
+    TaskDTO taskDTO = null;
+    boolean isRunning = true;
+
+    // Hien lai menu sau moi chuc nang, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.MENU_HEADER.concat(Message.MENU_BODY));
+
+        // Moi lua chon goi controller dung 1 lan
+        switch (getMenuChoice(scanner)) {
+            // 1: nhap va kiem du 7 o roi them task
+            case Constants.MENU_ADD:
+                System.out.println(Message.TITLE_ADD);
+                taskDTO = inputTaskData(scanner);
+                taskController.addTask(taskDTO);
+                break;
+
+            // 2: nhap va kiem ID roi xoa task (kho tu kiem ID co hay khong)
+            case Constants.MENU_DELETE:
+                System.out.println(Message.TITLE_DELETE);
+                taskDTO = new TaskDTO();
+                taskDTO.setId(getTaskId(scanner));
+                taskController.deleteTask(taskDTO);
+                break;
+
+            // 3: hien thi bang task
+            case Constants.MENU_DISPLAY:
+                taskController.displayTasks();
+                break;
+
+            // 4: tat co de thoat vong lap
+            case Constants.MENU_EXIT:
+                isRunning = false;
+                break;
+
+            // Khong xay ra: getMenuChoice chi tra ve 1 den 4
+            default:
+                break;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nhap va kiem du thong tin 1 task, gom vao 1 phieu DTO moi
+private static TaskDTO inputTaskData(Scanner scanner) {
+    TaskDTO taskDTO = new TaskDTO();
+    double planFrom = 0;
+
+    taskDTO.setRequirementName(getRequirementName(scanner));
+    taskDTO.setTaskType(TaskType.getTaskTypeById(getTaskTypeChoice(scanner)));
+    taskDTO.setDate(getDate(scanner));
+
+    // Gio bat dau toi da 17.0 de con cho cho gio ket thuc; To phai lon hon From
+    planFrom = getPlanFrom(scanner);
+    taskDTO.setPlanFrom(planFrom);
+    taskDTO.setPlanTo(getPlanTo(scanner, planFrom));
+
+    // Nguoi lam va nguoi review cung 1 luat ten
+    taskDTO.setAssign(getPersonName(scanner, Message.INPUT_ASSIGNEE));
+    taskDTO.setReviewer(getPersonName(scanner, Message.INPUT_REVIEWER));
+
+    return taskDTO;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Hoi gio ket thuc: lon hon gio bat dau it nhat 0.5, toi da 17.5
+private static double getPlanTo(Scanner scanner, double planFrom) {
+    // Lap den khi Validation chap nhan
+    while (true) {
+        // In cau nhac, doc dong va kiem
+        try {
+            System.out.print(Message.INPUT_PLAN_TO);
+            return Validation.getDouble(scanner.nextLine(), planFrom + Constants.PLAN_STEP,
+                    Constants.PLAN_MAX);
+        } catch (Exception e) {
+            // Sai thi in cau bao loi roi hoi lai
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<div class="pitfall"><p>⚠️ Traps of this lab: <code>parse</code> without the round trip (1-2-2015 and 26-06-2015abc pass) · forgetting <code>setLenient(false)</code> (31-02 becomes 03-03) · returning <code>null</code> for an empty date · <code>%.1f</code> on a Vietnamese Windows · <code>toString()</code> ending with <code>\\n</code> under a <code>println</code> (an empty line between rows) · header and rows with different formats · From allowed up to 17.5 (no room left for To) · <code>isEmpty()</code> before <code>trim()</code>.</p></div>`,
+    `<h2>3. Thiết kế lớp</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/75429b55320097f944008b9163537b5c555fd96f.svg" alt="P0071: không service — repository trả lời &quot;ID này có không&quot;; view in một lần" loading="lazy" /><p class="chu-thich">🧩 P0071: không service — repository trả lời "ID này có không"; view in một lần</p></div>
+<details><summary>Mã PlantUML của sơ đồ — chép, sửa rồi dựng lại</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0071 Task Management — no service: the repository checks "does this ID exist"
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} inputTaskData(scanner : Scanner) : TaskDTO
+    - {static} getPlanTo(scanner : Scanner, planFrom : double) : double
+  }
+}
+package controller {
+  class TaskController {
+    - taskRepository : TaskRepository
+    - taskView : TaskView
+    + addTask(taskDTO : TaskDTO) : void
+    + deleteTask(taskDTO : TaskDTO) : void
+    + displayTasks() : void
+  }
+}
+package repository {
+  class TaskRepository {
+    - taskList : ArrayList&lt;Task&gt;
+    - lastId : int
+    + addTask(taskDTO : TaskDTO) : int
+    + deleteTask(taskId : int) : void
+    + getDataTasks() : ArrayList&lt;ResponseDTO&gt;
+    - findById(taskId : int) : Task
+  }
+}
+package model {
+  class Task {
+    - id : int
+    - taskType : TaskType
+    - requirementName : String
+    - date : Date
+    - planFrom : double
+    - planTo : double
+    - assign : String
+    - reviewer : String
+  }
+}
+package constants {
+  enum TaskType {
+    CODE
+    TEST
+    DESIGN
+    REVIEW
+    + {static} getTaskTypeById(taskTypeId : int) : TaskType
+  }
+}
+package view {
+  class TaskView {
+    - responseList : ArrayList&lt;ResponseDTO&gt;
+    - message : String
+    + display() : void
+  }
+}
+package dto {
+  class TaskDTO
+  class ResponseDTO {
+    - time : double
+    + toString() : String
+  }
+}
+Main ..&gt; TaskController : one call per case
+TaskController *-- TaskRepository : add / delete / getDataTasks
+TaskController *-- TaskView : display() once
+TaskRepository o-- "0..*" Task
+Task --&gt; TaskType
+@enduml</code></pre></details>
+<h2>4. Code, model trước</h2>
+<h4>Bước 1 — constants và model</h4>
+<pre class="trich"><code class="language-java">// Tim loai task theo ma; Main da kiem ma tu 1 den 4 nen luon tim thay
+public static TaskType getTaskTypeById(int taskTypeId) {
+    TaskType result = null;
+
+    // Duyet tung loai task de so ma
+    for (TaskType taskType : TaskType.values()) {
+        // Trung ma thi giu lai loai task do
+        if (taskType.getId() == taskTypeId) {
+            result = taskType;
+        }
+    }
+
+    return result;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghep 1 dong bang theo dung dinh dang cot cua tieu de
+@Override
+public String toString() {
+    // Dinh dang ngay dd-MM-yyyy
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN);
+
+    // Ghep cac cot: ID, ten, loai, ngay, gio, nguoi lam, nguoi review
+    return String.format(Constants.TABLE_FORMAT, getId(), getRequirementName(),
+            getTaskType().getName(), dateFormat.format(getDate()), getTime(), getAssign(),
+            getReviewer());
+}</code></pre>
+<h4>Bước 2 — repository</h4>
+<pre class="trich"><code class="language-java">// Them task moi tu phieu DTO, tra ve ID vua cap (ham addTask cua de)
+public int addTask(TaskDTO taskDTO) {
+    Task task = new Task(taskDTO.getTaskType(), taskDTO.getRequirementName(),
+            taskDTO.getDate(), taskDTO.getPlanFrom(), taskDTO.getPlanTo(),
+            taskDTO.getAssign(), taskDTO.getReviewer());
+
+    // Cap ID moi = ID task cuoi + 1 roi them vao cuoi danh sach
+    lastId++;
+    task.setId(lastId);
+    taskList.add(task);
+
+    return lastId;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa task theo ID; khong co ID do thi nem loi cho Controller bao lai (ham deleteTask cua de)
+public void deleteTask(int taskId) throws Exception {
+    Task task = findById(taskId);
+
+    // Khong tim thay task thi bao ID khong ton tai
+    if (task == null) {
+        throw new Exception(String.format(Message.ERROR_TASK_NOT_FOUND, taskId));
+    }
+
+    taskList.remove(task);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi tung Task thanh 1 dong ResponseDTO de View in (ham getDataTasks cua de)
+public ArrayList&lt;ResponseDTO&gt; getDataTasks() {
+    ArrayList&lt;ResponseDTO&gt; responseList = new ArrayList&lt;&gt;();
+
+    // Duyet tung task (da tang dan theo ID vi luon them vao cuoi)
+    for (Task task : taskList) {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        // Chep du lieu task sang dong bang; Time = To - From
+        responseDTO.setId(task.getId());
+        responseDTO.setRequirementName(task.getRequirementName());
+        responseDTO.setTaskType(task.getTaskType());
+        responseDTO.setDate(task.getDate());
+        responseDTO.setTime(task.getPlanTo() - task.getPlanFrom());
+        responseDTO.setAssign(task.getAssign());
+        responseDTO.setReviewer(task.getReviewer());
+        responseList.add(responseDTO);
+    }
+
+    return responseList;
+}</code></pre>
+<h4>Bước 3 — Validation</h4>
+<pre class="trich"><code class="language-java">// Doi chu thanh ngay theo dang dd-MM-yyyy, chi nhan ngay co that
+public static Date getDate(String input) throws Exception {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN);
+    String text = input.trim();
+    Date date = null;
+
+    // Khong cho tu doi ngay sai (vi du 31-02 thanh 03-03)
+    dateFormat.setLenient(false);
+
+    // Thu doi chu sang ngay
+    try {
+        date = dateFormat.parse(text);
+    } catch (ParseException e) {
+        // De trong hoac sai dang thi bao loi
+        throw new Exception(Message.ERROR_INVALID_DATE);
+    }
+
+    // In nguoc ngay ra chu phai giong chu da go (chan 1-2-2015, 26-06-2015abc)
+    if (!dateFormat.format(date).equals(text)) {
+        throw new Exception(Message.ERROR_INVALID_DATE);
+    }
+
+    return date;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi chu thanh gio, kiem trong [min, max] va la so tron hoac nua tieng
+public static double getDouble(String input, double min, double max) throws Exception {
+    double number = 0;
+
+    // Thu doi chu sang so thuc (bo dau cach 2 dau truoc)
+    try {
+        number = Double.parseDouble(input.trim());
+    } catch (NumberFormatException e) {
+        // Go chu hoac de trong thi bao phai nhap so
+        throw new Exception(Message.ERROR_NOT_REAL_NUMBER);
+    }
+
+    // Ngoai khoang (viet dang "khong nam trong" de chan ca NaN) thi bao khoang dung
+    if (!((number &gt;= min) &amp;&amp; (number &lt;= max))) {
+        throw new Exception(String.format(Message.ERROR_PLAN_RANGE, min, max));
+    }
+
+    // Chia cho 0.5 con du thi khong phai so tron hoac nua tieng
+    if ((number % Constants.PLAN_STEP) != 0) {
+        throw new Exception(Message.ERROR_PLAN_STEP);
+    }
+
+    return number;
+}</code></pre>
+<h4>Bước 4 — view và controller</h4>
+<pre class="trich"><code class="language-java">// In ket qua cua 1 luong roi xoa cau thong bao de luong sau bat dau sach
+public void display() {
+    // Co cau thong bao thi chi in cau do
+    if (!message.isEmpty()) {
+        System.out.println(message);
+    } else {
+        // Bang: tieu de, ten cot (cung dinh dang voi tung dong), roi tung dong task
+        System.out.println(Message.TITLE_DISPLAY);
+        System.out.println(String.format(Constants.TABLE_FORMAT, Message.COLUMN_ID,
+                Message.COLUMN_NAME, Message.COLUMN_TASK_TYPE, Message.COLUMN_DATE,
+                Message.COLUMN_TIME, Message.COLUMN_ASSIGNEE, Message.COLUMN_REVIEWER));
+
+        // Moi task 1 dong
+        for (ResponseDTO responseDTO : responseList) {
+            System.out.println(responseDTO);
+        }
+    }
+
+    message = "";
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 2: kho xoa theo ID trong phieu (khong co ID thi kho nem loi), View bao ket qua
+public void deleteTask(TaskDTO taskDTO) {
+    // Kho xoa duoc thi bao thanh cong
+    try {
+        taskRepository.deleteTask(taskDTO.getId());
+        taskView.setMessage(String.format(Message.SUCCESS_DELETE_MESSAGE, taskDTO.getId()));
+    } catch (Exception e) {
+        // Kho bao ID khong ton tai thi dua cau loi do cho View
+        taskView.setMessage(e.getMessage());
+    }
+
+    taskView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 3: kho lay bang task (tang dan theo ID), View in bang hoac bao danh sach rong
+public void displayTasks() {
+    // Kho rong thi chi bao rong, co task thi dua bang cho View
+    if (taskRepository.isEmpty()) {
+        taskView.setMessage(Message.ERROR_EMPTY);
+    } else {
+        // Co task: dua cac dong bang cho View
+        taskView.setResponseList(taskRepository.getDataTasks());
+    }
+
+    taskView.display();
+}</code></pre>
+<h4>Bước 5 — Main</h4>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: lap menu den khi chon 4
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    TaskController taskController = new TaskController();
+    TaskDTO taskDTO = null;
+    boolean isRunning = true;
+
+    // Hien lai menu sau moi chuc nang, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.MENU_HEADER.concat(Message.MENU_BODY));
+
+        // Moi lua chon goi controller dung 1 lan
+        switch (getMenuChoice(scanner)) {
+            // 1: nhap va kiem du 7 o roi them task
+            case Constants.MENU_ADD:
+                System.out.println(Message.TITLE_ADD);
+                taskDTO = inputTaskData(scanner);
+                taskController.addTask(taskDTO);
+                break;
+
+            // 2: nhap va kiem ID roi xoa task (kho tu kiem ID co hay khong)
+            case Constants.MENU_DELETE:
+                System.out.println(Message.TITLE_DELETE);
+                taskDTO = new TaskDTO();
+                taskDTO.setId(getTaskId(scanner));
+                taskController.deleteTask(taskDTO);
+                break;
+
+            // 3: hien thi bang task
+            case Constants.MENU_DISPLAY:
+                taskController.displayTasks();
+                break;
+
+            // 4: tat co de thoat vong lap
+            case Constants.MENU_EXIT:
+                isRunning = false;
+                break;
+
+            // Khong xay ra: getMenuChoice chi tra ve 1 den 4
+            default:
+                break;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nhap va kiem du thong tin 1 task, gom vao 1 phieu DTO moi
+private static TaskDTO inputTaskData(Scanner scanner) {
+    TaskDTO taskDTO = new TaskDTO();
+    double planFrom = 0;
+
+    taskDTO.setRequirementName(getRequirementName(scanner));
+    taskDTO.setTaskType(TaskType.getTaskTypeById(getTaskTypeChoice(scanner)));
+    taskDTO.setDate(getDate(scanner));
+
+    // Gio bat dau toi da 17.0 de con cho cho gio ket thuc; To phai lon hon From
+    planFrom = getPlanFrom(scanner);
+    taskDTO.setPlanFrom(planFrom);
+    taskDTO.setPlanTo(getPlanTo(scanner, planFrom));
+
+    // Nguoi lam va nguoi review cung 1 luat ten
+    taskDTO.setAssign(getPersonName(scanner, Message.INPUT_ASSIGNEE));
+    taskDTO.setReviewer(getPersonName(scanner, Message.INPUT_REVIEWER));
+
+    return taskDTO;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Hoi gio ket thuc: lon hon gio bat dau it nhat 0.5, toi da 17.5
+private static double getPlanTo(Scanner scanner, double planFrom) {
+    // Lap den khi Validation chap nhan
+    while (true) {
+        // In cau nhac, doc dong va kiem
+        try {
+            System.out.print(Message.INPUT_PLAN_TO);
+            return Validation.getDouble(scanner.nextLine(), planFrom + Constants.PLAN_STEP,
+                    Constants.PLAN_MAX);
+        } catch (Exception e) {
+            // Sai thi in cau bao loi roi hoi lai
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<div class="pitfall"><p>⚠️ Bẫy của bài: <code>parse</code> mà không so ngược (1-2-2015 và 26-06-2015abc lọt) · quên <code>setLenient(false)</code> (31-02 thành 03-03) · trả <code>null</code> khi ngày trống · <code>%.1f</code> trên Windows tiếng Việt · <code>toString()</code> kết thúc bằng <code>\\n</code> rồi lại <code>println</code> (dòng trống giữa các hàng) · tiêu đề và các dòng khác định dạng · cho From tới 17.5 (không còn chỗ cho To) · kiểm <code>isEmpty()</code> trước <code>trim()</code>.</p></div>`),
+    bi(`<h2>5. Run it for real</h2>
+<p>The test keys (<code>harness/input.txt</code>): Display on an empty list, then Add with every mistake once, a second task with a long name, Display, Delete <code>abc</code>, <code>0</code>, <code>99</code>, Delete <code> 2</code>, Display, menu <code>0</code>, <code>x</code>, <code>4</code>.</p>
+<details><summary>The whole run (99 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: Danh sach task dang trong. Hay chon chuc nang 1 de them task truoc.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Requirement Name khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: From: Gio phai la 1 so (vi du: 8.0, 8.5, 9.0), khong nhap chu hay de trong. Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: Gio chi duoc la so tron hoac nua tieng (vi du: 8.0, 8.5, 9.0). Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: To: Gio phai tu 10.0 den 17.5 (To phai lon hon From). Moi nhap lai.<br>
+To: Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Reviewer: Them task thanh cong, ID cua task la 1.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: From: To: Assignee: Reviewer: Them task thanh cong, ID cua task la 2.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+2 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Program &nbsp;&nbsp;Test &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28-08-2015 &nbsp;&nbsp;1.0 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Lead<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ---------Del Task------<br>
+ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+ID: ID phai la so nguyen lon hon hoac bang 1 (xem ID o chuc nang 3). Moi nhap lai.<br>
+ID: Khong co task nao co ID = 99. Hay chon chuc nang 3 de xem ID roi xoa lai.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ---------Del Task------<br>
+ID: Xoa task co ID = 2 thanh cong.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice:</div>
+</details>
+<p>Every validation message once (Add, field by field):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Requirement Name khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: From: Gio phai la 1 so (vi du: 8.0, 8.5, 9.0), khong nhap chu hay de trong. Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: Gio chi duoc la so tron hoac nua tieng (vi du: 8.0, 8.5, 9.0). Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: To: Gio phai tu 10.0 den 17.5 (To phai lon hon From). Moi nhap lai.<br>
+To: Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Reviewer: Them task thanh cong, ID cua task la 1.<br>
+…</div>
+<p>The table with a long name — straight columns, Time = To − From:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+2 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Program &nbsp;&nbsp;Test &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28-08-2015 &nbsp;&nbsp;1.0 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Lead<br>
+…</div>
+<p>Delete: a letter, 0, an ID that does not exist (the repository's sentence), then ID 2:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ---------Del Task------<br>
+ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+ID: ID phai la so nguyen lon hon hoac bang 1 (xem ID o chuc nang 3). Moi nhap lai.<br>
+ID: Khong co task nao co ID = 99. Hay chon chuc nang 3 de xem ID roi xoa lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+ID: Xoa task co ID = 2 thanh cong.<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0071_TaskManagement</code></pre>
+<div class="out">✓ MSSV_J1SP0071_TaskManagement — sạch</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 99/99 dong khop expected.txt</div>
+<p>A real JDK 8 prints the same 99 lines. The paper checklist audit: 0 violations.</p>
+<h2>6. Debug it</h2>
+<p>Breakpoint on <code>if (task == null) {</code> in <code>TaskRepository.deleteTask</code> → Ctrl+F5 → add one task, then 2 and 99 → stop: <code>taskId</code> is 99, <code>task</code> is null, <code>taskList</code> has one element. F8 goes to the <code>throw</code>; F8 again lands in the <code>catch</code> of <code>TaskController.deleteTask</code> with the message. Then 2 and 1: <code>task</code> is the object, F8 skips the <code>throw</code>.</p>
+<h2>7. The questions — answer out loud</h2>
+<details><summary>No service — where is "the ID exists", and why not in the controller?</summary><p class="dap-an">✅ In <code>TaskRepository.deleteTask</code>: only the store knows what it holds. The controller must not handle the model <code>Task</code>; it passes a DTO and gives the result to the view. The lab is pure CRUD, so there is no service.</p></details>
+<details><summary>Why is 26-06-2015abc refused?</summary><p class="dap-an">✅ <code>setLenient(false)</code> refuses impossible dates, but <code>parse</code> reads the beginning only. So the date is formatted back to text and compared with what was typed; a difference means a wrong date.</p></details>
+<details><summary>Why %s and not %.1f in the hour message?</summary><p class="dap-an">✅ <code>%.1f</code> follows the machine's language: a Vietnamese Windows prints 10,0. A <code>double</code> through <code>%s</code> is always 10.0.</p></details>
+<details><summary>Why does the view not take the message as a parameter?</summary><p class="dap-an">✅ The paper (1.1): the view receives through attributes. The controller calls <code>setMessage</code> or <code>setResponseList</code>, then <code>display()</code> once per menu choice.</p></details>
+<details><summary>Why is the Scanner not static?</summary><p class="dap-an">✅ The Guide forbids static variables in Main. One local <code>Scanner</code> is created in <code>main</code> and passed to each helper.</p></details>
+<details><summary>Why is Time not stored in Task?</summary><p class="dap-an">✅ It is To − From: storing it would be a second copy that can disagree. It is computed when the table row is built.</p></details>
+<h2>8. Download</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v1/MSSV_J1SP0071_TaskManagement-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0071_TaskManagement-solution.zip</span><span class="lc-sub">NetBeans project (Java 8) · 11 files · check.sh / check.bat + test/harness (automatic grader, PASS 99/99)</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<div class="callout"><p><strong>Next:</strong> P0073 Handy Expense — the same rules, plus a file that must survive a restart.</p></div>`,
+    `<h2>5. Chạy thật</h2>
+<p>Bộ phím test (<code>harness/input.txt</code>): Display khi danh sách rỗng, rồi Add với mọi lỗi một lần, task thứ hai tên dài, Display, Delete <code>abc</code>, <code>0</code>, <code>99</code>, Delete <code> 2</code>, Display, menu <code>0</code>, <code>x</code>, <code>4</code>.</p>
+<details><summary>Toàn bộ lần chạy (99 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: Danh sach task dang trong. Hay chon chuc nang 1 de them task truoc.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Requirement Name khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: From: Gio phai la 1 so (vi du: 8.0, 8.5, 9.0), khong nhap chu hay de trong. Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: Gio chi duoc la so tron hoac nua tieng (vi du: 8.0, 8.5, 9.0). Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: To: Gio phai tu 10.0 den 17.5 (To phai lon hon From). Moi nhap lai.<br>
+To: Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Reviewer: Them task thanh cong, ID cua task la 1.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: From: To: Assignee: Reviewer: Them task thanh cong, ID cua task la 2.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+2 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Program &nbsp;&nbsp;Test &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28-08-2015 &nbsp;&nbsp;1.0 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Lead<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ---------Del Task------<br>
+ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+ID: ID phai la so nguyen lon hon hoac bang 1 (xem ID o chuc nang 3). Moi nhap lai.<br>
+ID: Khong co task nao co ID = 99. Hay chon chuc nang 3 de xem ID roi xoa lai.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ---------Del Task------<br>
+ID: Xoa task co ID = 2 thanh cong.<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+========= Task program =========<br>
+1. Add Task<br>
+2. Delete task<br>
+3. Display Task<br>
+4. exit<br>
+Your choice: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice:</div>
+</details>
+<p>Mọi câu báo lỗi một lần (Add, từng ô một):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ------------Add Task---------------<br>
+Requirement Name: Requirement Name khong duoc de trong hoac chi co dau cach. Moi nhap lai.<br>
+Requirement Name: Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: So ban nhap nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Please enter 1-&gt;4<br>
+ID &nbsp;Name<br>
+1.Code<br>
+2.Test<br>
+3.Design<br>
+4.Review<br>
+Task Type: Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: Ngay phai theo dang dd-MM-yyyy va la ngay co that, vi du 28-08-2015. Moi nhap lai.<br>
+Date: From: Gio phai la 1 so (vi du: 8.0, 8.5, 9.0), khong nhap chu hay de trong. Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: Gio chi duoc la so tron hoac nua tieng (vi du: 8.0, 8.5, 9.0). Moi nhap lai.<br>
+From: Gio phai tu 8.0 den 17.0 (To phai lon hon From). Moi nhap lai.<br>
+From: To: Gio phai tu 10.0 den 17.5 (To phai lon hon From). Moi nhap lai.<br>
+To: Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Ten chi gom chu cai khong dau, so va dau cach (vi du: Nguyen Van A), khong de trong. Moi nhap lai.<br>
+Assignee: Reviewer: Them task thanh cong, ID cua task la 1.<br>
+…</div>
+<p>Bảng có tên dài — cột thẳng, Time = To − From:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ----------------------------------------- Task ---------------------------------------<br>
+ID &nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Task Type &nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time &nbsp;&nbsp;Assignee &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reviewer<br>
+1 &nbsp;&nbsp;&nbsp;Dev Program &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26-06-2015 &nbsp;&nbsp;8.0 &nbsp;&nbsp;&nbsp;Dev &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lead<br>
+2 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Program &nbsp;&nbsp;Test &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;28-08-2015 &nbsp;&nbsp;1.0 &nbsp;&nbsp;&nbsp;Nguyen Van Thanh Hai Lead<br>
+…</div>
+<p>Delete: một chữ, số 0, một ID không có (câu của repository), rồi ID 2:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Your choice: ---------Del Task------<br>
+ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+ID: ID phai la so nguyen lon hon hoac bang 1 (xem ID o chuc nang 3). Moi nhap lai.<br>
+ID: Khong co task nao co ID = 99. Hay chon chuc nang 3 de xem ID roi xoa lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+ID: Xoa task co ID = 2 thanh cong.<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0071_TaskManagement</code></pre>
+<div class="out">✓ MSSV_J1SP0071_TaskManagement — sạch</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 99/99 dong khop expected.txt</div>
+<p>JDK 8 thật in đúng 99 dòng đó. Soát tờ checklist giấy: 0 vi phạm.</p>
+<h2>6. Debug</h2>
+<p>Breakpoint ở <code>if (task == null) {</code> trong <code>TaskRepository.deleteTask</code> → Ctrl+F5 → thêm một task, rồi 2 và 99 → dừng: <code>taskId</code> là 99, <code>task</code> là null, <code>taskList</code> có một phần tử. F8 vào <code>throw</code>; F8 tiếp rơi vào <code>catch</code> của <code>TaskController.deleteTask</code> kèm câu báo. Rồi 2 và 1: <code>task</code> là đối tượng thật, F8 bỏ qua <code>throw</code>.</p>
+<h2>7. Câu thầy hỏi — trả lời thành tiếng</h2>
+<details><summary>Bỏ service rồi thì kiểm "ID có không" ở đâu, sao không để controller?</summary><p class="dap-an">✅ Ở <code>TaskRepository.deleteTask</code>: chỉ kho biết mình giữ gì. Controller không được cầm model <code>Task</code>; nó chuyển DTO và đưa kết quả cho view. Bài chỉ có CRUD nên không có service.</p></details>
+<details><summary>Sao 26-06-2015abc bị chặn?</summary><p class="dap-an">✅ <code>setLenient(false)</code> chặn ngày không có thật, nhưng <code>parse</code> chỉ đọc phần đầu. Nên em format ngày ngược ra chữ rồi so với chữ đã gõ; khác là ngày sai.</p></details>
+<details><summary>Sao câu báo giờ dùng %s mà không %.1f?</summary><p class="dap-an">✅ <code>%.1f</code> theo ngôn ngữ của máy: Windows tiếng Việt in 10,0. Một số <code>double</code> qua <code>%s</code> luôn in 10.0.</p></details>
+<details><summary>Sao view không nhận câu báo qua tham số?</summary><p class="dap-an">✅ Tờ giấy (1.1): view nhận qua thuộc tính. Controller gọi <code>setMessage</code> hoặc <code>setResponseList</code>, rồi <code>display()</code> một lần cho mỗi lựa chọn menu.</p></details>
+<details><summary>Sao Scanner không static?</summary><p class="dap-an">✅ Guide cấm biến static trong Main. Một <code>Scanner</code> cục bộ tạo trong <code>main</code>, truyền vào từng hàm phụ.</p></details>
+<details><summary>Sao không lưu Time trong Task?</summary><p class="dap-an">✅ Time là To − From: lưu thêm là một bản sao có thể lệch. Nó được tính khi dựng dòng bảng.</p></details>
+<h2>8. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v1/MSSV_J1SP0071_TaskManagement-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0071_TaskManagement-solution.zip</span><span class="lc-sub">project NetBeans (Java 8) · 11 tệp · check.sh / check.bat + test/harness (bộ chấm tự động, PASS 99/99)</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<div class="callout"><p><strong>Bài tiếp:</strong> P0073 Handy Expense — cùng bộ luật, thêm một tệp dữ liệu phải sống qua lần tắt mở chương trình.</p></div>`),
+  ].join('\n'),
+};
+
+/* ───────── L.6 — 🎓 LAB211 J1.S.P0073 Handy Expense: a file that survives a restart, ID = max + 1, a service that only computes ───────── */
+const L_l211_p0073 = {
+  title: 'L.6 — 🎓 LAB211 J1.S.P0073 Handy Expense: a file that survives a restart, ID = max + 1, a service that only computes|||L.6 — 🎓 LAB211 J1.S.P0073 Quản lý chi tiêu: tệp sống qua lần mở lại, ID = lớn nhất + 1, service chỉ tính toán',
+  slug: 'pro192-lab211-p0073-handy-expense',
+  type: 'VIDEO',
+  description: 'Bài LAB211 J1.S.P0073 (100 LOC) làm mới theo khuôn bài Worker đã pass và mọi luật thầy bắt sau đó: đọc đề (thêm chi tiêu với ID = ID lớn nhất + 1, ngày dạng 11-Apr-2009, bảng ID Date Amount Content kèm Total, xoá theo ID với đúng hai câu "Delete an expense fail/successful", dữ liệu nằm trong tệp), ai đụng tệp (tờ giấy 1.1: Main đọc, repository tách dòng và ghi lại sau mỗi lần đổi, FileUtils lo vào ra bằng UTF-8), một dòng một chi tiêu với dấu |, bẫy thật split("|") làm bảng nát khi mở lại mà không báo lỗi nào, ngày tháng tiếng Anh với Locale.ENGLISH và setLenient(false), service chỉ tính (ID mới, dòng bảng, tổng tiền 0.## với Locale.US) và không giữ repository, view in một lần mỗi luồng. Chạy thật ra đúng ví dụ của đề (Total: 550), tắt rồi mở lại vẫn đủ dữ liệu, PASS 112/112, lint.py sạch, 25 mục 0 vi phạm, JDK 8 thật. Kèm câu thầy hỏi và dự án tải về.',
+  content: [
+    bi(`<span class="eyebrow">🎓 LAB211 in practice · L.6 · J1.S.P0073</span>
+<h2>Handy Expense — a file that survives a restart</h2>
+<p class="lead">The last lab of this section is new: no review yet, written on the skeleton of the Worker lab that passed and under every rule the lecturer enforced afterwards. What is new is a file. The expenses must still be there when the program is closed and opened again — and that one requirement decides who reads the file, who writes it, how an ID is made and which bug only appears on the second run.</p>
+<p>The version of 26/10 was already clean for <code>lint.py</code>; the paper audit still found 34 violations, Main printed results itself and the repository read the file although the paper gives that job to Main. Plan about <strong>1 hour 30</strong> to retype, 20 minutes for the test keys (two runs).</p>`,
+    `<span class="eyebrow">🎓 LAB211 thực chiến · L.6 · J1.S.P0073</span>
+<h2>Quản lý chi tiêu — một tệp sống qua lần mở lại</h2>
+<p class="lead">Bài cuối của phần này là bài mới: chưa review, viết trên khuôn bài Worker đã pass và theo mọi luật thầy bắt sau đó. Cái mới là một tệp. Tắt chương trình rồi mở lại, các khoản chi phải còn nguyên — và chỉ một yêu cầu đó quyết định ai đọc tệp, ai ghi tệp, ID sinh thế nào, và lỗi nào chỉ lộ ra ở lần chạy thứ hai.</p>
+<p>Bản 26/10 đã sạch với <code>lint.py</code>; soát tờ giấy vẫn ra 34 vi phạm, Main tự in kết quả, và repository tự đọc tệp dù tờ giấy giao việc đó cho Main. Dành khoảng <strong>1 giờ 30</strong> để gõ lại, 20 phút cho bộ phím test (hai lần chạy).</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 · LAB211 P0073 (14 slides)</h2>
+<p>The deck of this LAB211 lesson, made by CuongThai (it is not a school deck and not the lecturer's). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project in this lesson — checked by <code>lint.py</code> (the lecturer's rules), compiled with <code>javac --release 8</code> and run on a real JDK 8, like the machines in the lab room.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 · LAB211 P0073 (14 slide)</h2>
+<p>Bộ slide của bài LAB211 này do CuongThai dựng (không phải slide của trường, cũng không phải của thầy). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ đúng dự án trong bài — qua <code>lint.py</code> (luật của thầy), biên dịch bằng <code>javac --release 8</code> và chạy trên JDK 8 thật, giống máy phòng lab.</p>`),
+    walk('l211-p0073', [
+      [1, 'J1.S.P0073 — Handy Expense',
+        `<p class="y-chinh">🎯 Add, list and delete expenses, with a total — and keep them in a file between two runs of the program.</p>
+<p>The deck: the brief, the ID by hand, who touches the file, the file format and its trap, dates, the clean design, each layer, two real runs, the questions.</p>`,
+        `<p class="y-chinh">🎯 Thêm, liệt kê và xoá khoản chi, có tổng tiền — và giữ chúng trong một tệp giữa hai lần chạy chương trình.</p>
+<p>Bộ slide: đề, ID chạy tay, ai đụng tệp, định dạng tệp và cái bẫy của nó, ngày tháng, thiết kế sạch, từng tầng, hai lần chạy thật, các câu hỏi.</p>`],
+      [2, 'The brief',
+        `<p class="y-chinh">🎯 Menu 1 Add an expense · 2 Display all expenses · 3 Delete an expense · 4 Quit. An expense: ID, Date, Amount, Content; ID = last + 1, the first is 1. Display: a table and Total. Delete: "Delete an expense fail" or "Delete an expense successful".</p>
+<p>The brief names <code>addExpense(List, Date, double, String)</code>, <code>displayAll(List)</code>, <code>deleteExpense(List, Expense)</code>. The names stay; the signatures cannot — four parameters break the lecturer's rule of two, and printing is the view's job. The real run reproduces the brief's example exactly: 100, 250, 200, Total: 550.</p>`,
+        `<p class="y-chinh">🎯 Menu 1 Add an expense · 2 Display all expenses · 3 Delete an expense · 4 Quit. Một khoản chi: ID, Date, Amount, Content; ID = cuối + 1, khoản đầu là 1. Display: bảng và Total. Delete: "Delete an expense fail" hoặc "Delete an expense successful".</p>
+<p>Đề đặt tên <code>addExpense(List, Date, double, String)</code>, <code>displayAll(List)</code>, <code>deleteExpense(List, Expense)</code>. Giữ tên; chữ ký thì không giữ được — bốn tham số phạm luật hai tham số của thầy, và in là việc của view. Lần chạy thật ra đúng ví dụ của đề: 100, 250, 200, Total: 550.</p>`],
+      [3, 'ID = max + 1, by hand',
+        `<p class="y-chinh">🎯 Add three: 1, 2, 3. Close, open: 1, 2, 3 read back. Delete 2: 1, 3. Add: 4 — the largest ID plus one.</p>
+<p>The ID is computed from the list every time, so it needs no counter — a counter field would be lost when the program stops, because the file has no counter. P0071 keeps a <code>lastId</code> in memory because nothing there is saved: the same brief rule, a different storage, a different answer.</p>`,
+        `<p class="y-chinh">🎯 Thêm ba: 1, 2, 3. Tắt, mở: đọc lại 1, 2, 3. Xoá 2: 1, 3. Thêm: 4 — ID lớn nhất cộng một.</p>
+<p>ID tính từ danh sách mỗi lần, nên không cần biến đếm — một trường đếm sẽ mất khi chương trình tắt, vì tệp không lưu biến đếm. P0071 giữ <code>lastId</code> trong bộ nhớ vì ở đó không lưu gì: cùng luật của đề, cách lưu khác, câu trả lời khác.</p>`],
+      [4, 'Who touches the file',
+        `<p class="y-chinh">🎯 Main reads the file once at start (<code>FileUtils.readLines</code>) and hands the lines to the controller; the repository turns each line into an <code>Expense</code>, and writes the whole file again after every add or delete.</p>
+<p>The paper, row 1.1, word for word: "all input, validation, <b>reading from a file</b> and encryption happen in Main", and the Guide lists FileUtils among Main's tools. Writing is not mentioned, so the repository saves through <code>FileUtils</code>. Lab 9 let the repository read too — that is the trade's habit; for the lecturer, follow the paper and say so if asked.</p>`,
+        `<p class="y-chinh">🎯 Main đọc tệp một lần lúc mở (<code>FileUtils.readLines</code>) và đưa các dòng cho controller; repository đổi mỗi dòng thành một <code>Expense</code>, và ghi lại cả tệp sau mỗi lần thêm hoặc xoá.</p>
+<p>Tờ giấy, mục 1.1, nguyên văn: "toàn bộ việc nhập dữ liệu, validate, <b>đọc từ file</b>, mã hoá thực hiện ở Main", và Guide liệt kê FileUtils trong công cụ của Main. Việc ghi thì không nói, nên repository lưu qua <code>FileUtils</code>. Lab 9 để repository tự đọc — đó là thói quen của nghề; với thầy, làm theo tờ giấy và nói rõ khi được hỏi.</p>`],
+      [5, 'One line per expense',
+        `<p class="y-chinh">🎯 <code>id|date|amount|content</code>, one expense per line, UTF-8. <code>loadExpenses</code> splits each line with <code>split("\\\\|", 4)</code>, skips a short or broken line, and adds the rest.</p>
+<p>A bar instead of a comma because a content may contain a comma; the limit 4 keeps everything after the third bar in the content. Deleting a line in the middle of a text file has no other way than rewriting the file. The content of the file after both runs is shown real.</p>`,
+        `<p class="y-chinh">🎯 <code>id|date|amount|content</code>, mỗi khoản chi một dòng, UTF-8. <code>loadExpenses</code> tách từng dòng bằng <code>split("\\\\|", 4)</code>, bỏ qua dòng thiếu hoặc hỏng, thêm các dòng còn lại.</p>
+<p>Dùng gạch đứng thay dấu phẩy vì nội dung có thể có dấu phẩy; giới hạn 4 giữ mọi thứ sau gạch thứ ba trong nội dung. Xoá một dòng giữa tệp văn bản thì không có cách nào khác ngoài ghi lại cả tệp. Nội dung tệp sau hai lần chạy là thật.</p>`],
+      [6, 'The trap: split("|")',
+        `<p class="y-chinh">🎯 Change <code>"\\\\|"</code> into <code>"|"</code> and reopen the program: the table shows dates "|", amounts 1, 2, 3 and Total: 6 — no error at all.</p>
+<p>In a regex <code>|</code> means "or"; <code>"|"</code> alone is "empty or empty", which matches between every two characters, so the line is cut into single characters. The first run looks perfect because nothing is read; the bug appears only after a restart — which is why the test keys of a file lab must include one.</p>`,
+        `<p class="y-chinh">🎯 Đổi <code>"\\\\|"</code> thành <code>"|"</code> rồi mở lại chương trình: bảng hiện ngày là "|", số tiền 1, 2, 3 và Total: 6 — không một lỗi nào.</p>
+<p>Trong regex, <code>|</code> nghĩa là "hoặc"; <code>"|"</code> đứng một mình là "rỗng hoặc rỗng", khớp giữa mọi cặp ký tự, nên dòng bị cắt thành từng ký tự. Lần chạy đầu trông hoàn hảo vì chưa đọc gì; lỗi chỉ lộ sau khi mở lại — vì thế bộ phím test của bài có tệp phải có một lần mở lại.</p>`],
+      [7, 'Dates like 11-Apr-2009',
+        `<p class="y-chinh">🎯 <code>getDate</code>: check the shape with a regex, parse with <code>dd-MMM-yyyy</code> in <code>Locale.ENGLISH</code> with <code>setLenient(false)</code>, return the date formatted back — <code>11-apr-2009</code> is stored as <code>11-Apr-2009</code>.</p>
+<p>Three traps in one line: <code>MMM</code> follows the machine's language (a Vietnamese machine would expect "thg 4"); a lenient parser turns 31-Feb into 3-Mar; <code>parse</code> reads the beginning only, so the regex refuses <code>11-Apr-2009abc</code> first.</p>`,
+        `<p class="y-chinh">🎯 <code>getDate</code>: kiểm hình dạng bằng regex, parse theo <code>dd-MMM-yyyy</code> với <code>Locale.ENGLISH</code> và <code>setLenient(false)</code>, trả ngày đã format lại — <code>11-apr-2009</code> được lưu thành <code>11-Apr-2009</code>.</p>
+<p>Ba cái bẫy trong một dòng: <code>MMM</code> theo ngôn ngữ của máy (máy tiếng Việt sẽ đòi "thg 4"); parser dễ dãi biến 31-Feb thành 3-Mar; <code>parse</code> chỉ đọc phần đầu, nên regex chặn <code>11-Apr-2009abc</code> trước.</p>`],
+      [8, 'The clean design',
+        `<p class="y-chinh">🎯 Main → <code>ExpenseController</code>, which holds <code>ExpenseRepository</code> (list, CRUD, save), <code>ExpenseService</code> (next ID, table rows, total) and <code>ExpenseView</code> (display once).</p>
+<p>The service holds nothing: it receives the list from the controller and returns numbers and rows — the rule the lecturer enforced on P0011 and P0021. From the 26/10 version: Main printed "Add an expense successful" itself (now the view), the repository read the file (now Main), <code>int choice</code> was declared in the middle of a block, and 34 paper violations became 0.</p>`,
+        `<p class="y-chinh">🎯 Main → <code>ExpenseController</code>, giữ <code>ExpenseRepository</code> (danh sách, CRUD, lưu tệp), <code>ExpenseService</code> (ID mới, dòng bảng, tổng tiền) và <code>ExpenseView</code> (in một lần).</p>
+<p>Service không giữ gì: nhận danh sách từ controller, trả về con số và dòng bảng — đúng luật thầy bắt ở P0011 và P0021. So với bản 26/10: Main tự in "Add an expense successful" (nay là view), repository tự đọc tệp (nay là Main), <code>int choice</code> khai giữa khối, và 34 vi phạm tờ giấy thành 0.</p>`],
+      [9, 'Repository: add, delete, save',
+        `<p class="y-chinh">🎯 <code>addExpense</code> adds and saves; <code>deleteExpense(id)</code> removes the matching expense, saves and returns true — or returns false when the ID is not there; <code>saveToFile</code> joins every expense with bars and writes the file.</p>
+<p>A missing ID is an expected answer that the brief prints ("Delete an expense fail"), so it is a <code>boolean</code>, not an exception. A write failure is the exception: "Khong ghi duoc tep data/expenses.txt…".</p>`,
+        `<p class="y-chinh">🎯 <code>addExpense</code> thêm rồi lưu; <code>deleteExpense(id)</code> xoá khoản chi trùng ID, lưu và trả true — hoặc trả false khi không có ID đó; <code>saveToFile</code> ghép từng khoản chi bằng gạch đứng rồi ghi tệp.</p>
+<p>ID không có là một câu trả lời bình thường mà đề in ra ("Delete an expense fail"), nên dùng <code>boolean</code>, không dùng ngoại lệ. Ghi tệp thất bại mới là ngoại lệ: "Khong ghi duoc tep data/expenses.txt…".</p>`],
+      [10, 'Service: only computing',
+        `<p class="y-chinh">🎯 <code>generateNextId</code> (largest + 1, 1 for an empty list), <code>createExpense</code>, <code>toResponseList</code>, <code>calculateTotal</code> — each one works on the list the controller gives.</p>
+<p><code>formatMoney</code> uses <code>"0.##"</code>, so 100 prints as 100 like the brief's table and 50.5 as 50.5, with <code>Locale.US</code> so a Vietnamese Windows does not print 50,5.</p>`,
+        `<p class="y-chinh">🎯 <code>generateNextId</code> (lớn nhất + 1, danh sách rỗng thì 1), <code>createExpense</code>, <code>toResponseList</code>, <code>calculateTotal</code> — hàm nào cũng làm trên danh sách controller đưa.</p>
+<p><code>formatMoney</code> dùng <code>"0.##"</code> nên 100 in thành 100 như bảng của đề, 50.5 in thành 50.5, và dùng <code>Locale.US</code> để Windows tiếng Việt không in 50,5.</p>`],
+      [11, 'Controller and view',
+        `<p class="y-chinh">🎯 <code>addExpense</code>: the service gives the next ID, the repository adds, the view says "Add an expense successful (ID 4)". <code>deleteExpense</code>: the repository's true or false becomes the brief's sentence. One <code>display()</code> per flow.</p>
+<p>The view holds rows, a total and a message: a message is printed alone, otherwise the table and the Total line. The brief's sentences are copied exactly — "fail", not "failed", no full stop.</p>`,
+        `<p class="y-chinh">🎯 <code>addExpense</code>: service đưa ID mới, repository thêm, view báo "Add an expense successful (ID 4)". <code>deleteExpense</code>: true hay false của repository thành câu của đề. Mỗi luồng một <code>display()</code>.</p>
+<p>View giữ các dòng, tổng tiền và một câu báo: có câu báo thì chỉ in câu đó, không thì in bảng và dòng Total. Câu của đề chép đúng — "fail", không phải "failed", không dấu chấm.</p>`],
+      [12, 'Main and FileUtils',
+        `<p class="y-chinh">🎯 <code>readExpenseFile</code> puts the lines into an <code>ExpenseRequestDTO</code> (an unreadable file prints a message and starts empty); <code>inputExpense</code> fills a new DTO field by field; each case calls the controller once.</p>
+<p><code>FileUtils.writeLines</code> has three small guards: create the <code>data</code> folder on the very first run, write UTF-8 (read UTF-8 too), and ask <code>checkError()</code> because a <code>PrintWriter</code> never throws on its own.</p>`,
+        `<p class="y-chinh">🎯 <code>readExpenseFile</code> đưa các dòng vào một <code>ExpenseRequestDTO</code> (tệp không đọc được thì báo và bắt đầu rỗng); <code>inputExpense</code> điền một DTO mới từng ô; mỗi case gọi controller một lần.</p>
+<p><code>FileUtils.writeLines</code> có ba chốt nhỏ: tạo thư mục <code>data</code> ở lần chạy đầu tiên, ghi UTF-8 (đọc cũng UTF-8), và hỏi <code>checkError()</code> vì <code>PrintWriter</code> không bao giờ tự ném lỗi.</p>`],
+      [13, 'Two runs, lint, JDK 8, PASS',
+        `<p class="y-chinh">🎯 Run 1: every error once, the brief's three expenses, Total: 550. The program is opened again (<code>harness/input-2.txt</code>): the same table is read back, delete abc, 9 (fail), 2 (successful), add one more — ID 4, Total: 350.5.</p>
+<p><code>lint.py</code> clean, <code>check.sh</code> PASS 112/112 over both runs, 25 paper items 0 violations, a real JDK 8 prints the same 112 lines.</p>`,
+        `<p class="y-chinh">🎯 Lần 1: mọi lỗi một lần, ba khoản chi của đề, Total: 550. Mở lại chương trình (<code>harness/input-2.txt</code>): đọc lại đúng bảng đó, xoá abc, 9 (fail), 2 (successful), thêm một khoản — ID 4, Total: 350.5.</p>
+<p><code>lint.py</code> sạch, <code>check.sh</code> PASS 112/112 qua cả hai lần chạy, 25 mục tờ giấy 0 vi phạm, JDK 8 thật in đúng 112 dòng đó.</p>`],
+      [14, 'What the lecturer asks',
+        `<p class="y-chinh">🎯 "Who reads the file, who writes it?", "Why does the service not call the repository?", "How is the ID made?", "split("\\\\|") or split("|")?", "Locale.ENGLISH and Locale.US — why?", "Why does deleteExpense return a boolean?"</p>
+<p>This lab has not been reviewed yet: answer the file question with the paper's own words, and be ready for the lecturer to prefer the Lab 9 way — moving the read into the repository is a two-line change.</p>`,
+        `<p class="y-chinh">🎯 "Ai đọc tệp, ai ghi tệp?", "Sao service không gọi repository?", "ID sinh thế nào?", "split("\\\\|") hay split("|")?", "Locale.ENGLISH và Locale.US — để làm gì?", "Sao deleteExpense trả boolean?"</p>
+<p>Bài này chưa được review: trả lời câu về tệp bằng chính chữ của tờ giấy, và sẵn sàng nếu thầy thích cách của Lab 9 — chuyển việc đọc vào repository chỉ là sửa hai dòng.</p>`],
+    ]),
+    bi(`<h2>1. The brief</h2>
+<table>
+<thead><tr><th>The brief says</th><th>Where it lives</th></tr></thead>
+<tbody>
+<tr><td>ID auto increase: max + 1, the first is 1</td><td><code>ExpenseService.generateNextId(ArrayList&lt;Expense&gt;)</code> — computed from the list</td></tr>
+<tr><td>date 11-Apr-2009</td><td><code>Validation.getDate</code> + <code>Constants.DATE_FORMAT = "dd-MMM-yyyy"</code>, <code>Locale.ENGLISH</code></td></tr>
+<tr><td><code>boolean addExpense(List, Date, double, String)</code></td><td><code>ExpenseController.addExpense(ExpenseRequestDTO)</code> → service <code>createExpense</code> → <code>ExpenseRepository.addExpense(Expense)</code></td></tr>
+<tr><td><code>void displayAll(List)</code> — table + Total</td><td><code>ExpenseController.displayAll()</code> → service rows + <code>calculateTotal</code> → <code>ExpenseView.display()</code></td></tr>
+<tr><td><code>boolean deleteExpense(List, Expense)</code></td><td><code>ExpenseRepository.deleteExpense(int)</code> returns false when the ID is missing</td></tr>
+<tr><td>"Delete an expense fail" · "Delete an expense successful"</td><td><code>Message.DELETE_FAIL</code>, <code>DELETE_SUCCESS</code> — copied exactly</td></tr>
+<tr><td>"Write a file processing program"</td><td><code>data/expenses.txt</code>: Main reads, the repository saves after each change</td></tr>
+</tbody>
+</table>
+<h2>2. The file, and the bug that waits for a restart</h2>
+<p>The file after both runs (real):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/expenses.txt (87 byte)<br>
+1|11-Apr-2009|100.0|Tuition fee<br>
+3|30-Apr-2009|200.0|Food<br>
+4|01-May-2009|50.5|Bus ticket</div>
+<p>The same project with <code>split("|")</code> instead of <code>split("\\\\|")</code> — run 1 is identical, then the program is opened again:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1-Apr-2009|100.0|Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-Apr-2009|250.0|Rent house<br>
+3 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-Apr-2009|200.0|Food<br>
+Total: 6<br>
+…</div>
+<table>
+<thead><tr><th>In the version of 26/10</th><th>Rule</th><th>In this version</th></tr></thead>
+<tbody>
+<tr><td><code>ExpenseRepository.loadFromFile()</code> read the file</td><td>paper 1.1: reading a file happens in Main</td><td><code>Main.readExpenseFile()</code> → DTO → <code>loadExpenses(lineList)</code></td></tr>
+<tr><td>Main printed "Add an expense successful", "Delete an expense successful"</td><td>1.1: results through the view</td><td>the controller sets the message, <code>ExpenseView.display()</code></td></tr>
+<tr><td><code>deleteExpense(int expenseId)</code> on the controller</td><td>1.1: the controller receives a DTO</td><td><code>deleteExpense(ExpenseRequestDTO)</code></td></tr>
+<tr><td><code>int choice = promptChoice(scanner);</code> inside the loop</td><td>2.6, 3.7</td><td>declared at the top of <code>main</code></td></tr>
+<tr><td>a comment on every line, no blank line before it (34 rows of 2.8)</td><td>1.6, 2.8</td><td>one comment per block, a blank line before it</td></tr>
+<tr><td><code>expenses.txt</code> in the project folder, default charset</td><td>repeatable checks, Lab 9</td><td><code>data/expenses.txt</code>, UTF-8, <code>data/</code> created on first run</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Đề bài</h2>
+<table>
+<thead><tr><th>Đề nói</th><th>Nằm ở đâu</th></tr></thead>
+<tbody>
+<tr><td>ID tự tăng: lớn nhất + 1, khoản đầu là 1</td><td><code>ExpenseService.generateNextId(ArrayList&lt;Expense&gt;)</code> — tính từ danh sách</td></tr>
+<tr><td>ngày 11-Apr-2009</td><td><code>Validation.getDate</code> + <code>Constants.DATE_FORMAT = "dd-MMM-yyyy"</code>, <code>Locale.ENGLISH</code></td></tr>
+<tr><td><code>boolean addExpense(List, Date, double, String)</code></td><td><code>ExpenseController.addExpense(ExpenseRequestDTO)</code> → service <code>createExpense</code> → <code>ExpenseRepository.addExpense(Expense)</code></td></tr>
+<tr><td><code>void displayAll(List)</code> — bảng + Total</td><td><code>ExpenseController.displayAll()</code> → service dựng dòng + <code>calculateTotal</code> → <code>ExpenseView.display()</code></td></tr>
+<tr><td><code>boolean deleteExpense(List, Expense)</code></td><td><code>ExpenseRepository.deleteExpense(int)</code> trả false khi không có ID</td></tr>
+<tr><td>"Delete an expense fail" · "Delete an expense successful"</td><td><code>Message.DELETE_FAIL</code>, <code>DELETE_SUCCESS</code> — chép đúng</td></tr>
+<tr><td>"Write a file processing program"</td><td><code>data/expenses.txt</code>: Main đọc, repository lưu sau mỗi lần đổi</td></tr>
+</tbody>
+</table>
+<h2>2. Tệp dữ liệu, và lỗi đợi tới lần mở lại</h2>
+<p>Tệp sau hai lần chạy (thật):</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/expenses.txt (87 byte)<br>
+1|11-Apr-2009|100.0|Tuition fee<br>
+3|30-Apr-2009|200.0|Food<br>
+4|01-May-2009|50.5|Bus ticket</div>
+<p>Cùng dự án nhưng dùng <code>split("|")</code> thay vì <code>split("\\\\|")</code> — lần chạy 1 y hệt, rồi mở lại chương trình:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1-Apr-2009|100.0|Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-Apr-2009|250.0|Rent house<br>
+3 &nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-Apr-2009|200.0|Food<br>
+Total: 6<br>
+…</div>
+<table>
+<thead><tr><th>Trong bản 26/10</th><th>Luật</th><th>Trong bản này</th></tr></thead>
+<tbody>
+<tr><td><code>ExpenseRepository.loadFromFile()</code> tự đọc tệp</td><td>tờ giấy 1.1: đọc file thực hiện ở Main</td><td><code>Main.readExpenseFile()</code> → DTO → <code>loadExpenses(lineList)</code></td></tr>
+<tr><td>Main tự in "Add an expense successful", "Delete an expense successful"</td><td>1.1: kết quả qua view</td><td>controller đặt câu báo, <code>ExpenseView.display()</code></td></tr>
+<tr><td><code>deleteExpense(int expenseId)</code> ở controller</td><td>1.1: controller nhận DTO</td><td><code>deleteExpense(ExpenseRequestDTO)</code></td></tr>
+<tr><td><code>int choice = promptChoice(scanner);</code> trong vòng lặp</td><td>2.6, 3.7</td><td>khai báo đầu <code>main</code></td></tr>
+<tr><td>comment trên từng dòng, không có dòng trống trước (34 dòng mục 2.8)</td><td>1.6, 2.8</td><td>một comment mỗi khối, có dòng trống trước</td></tr>
+<tr><td><code>expenses.txt</code> ở thư mục project, bảng mã mặc định</td><td>chấm lặp lại được, Lab 9</td><td><code>data/expenses.txt</code>, UTF-8, tự tạo <code>data/</code> lần đầu</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>3. Class design</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/49bb9feca89a91fa0a61cafb7e7902761d3f8719.svg" alt="P0073: Main reads the file, the controller holds repository, service and view; the service only computes" loading="lazy" /><p class="chu-thich">🧩 P0073: Main reads the file, the controller holds repository, service and view; the service only computes</p></div>
+<details><summary>PlantUML source of this diagram — copy, edit and re-render</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0073 Handy Expense — Main reads the file, the repository keeps and saves, the service only computes
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} readExpenseFile() : ExpenseRequestDTO
+    - {static} inputExpense(scanner : Scanner) : ExpenseRequestDTO
+  }
+}
+package controller {
+  class ExpenseController {
+    - expenseRepository : ExpenseRepository
+    - expenseService : ExpenseService
+    - expenseView : ExpenseView
+    + loadExpenses(expenseRequestDTO : ExpenseRequestDTO) : void
+    + addExpense(expenseRequestDTO : ExpenseRequestDTO) : void
+    + displayAll() : void
+    + deleteExpense(expenseRequestDTO : ExpenseRequestDTO) : void
+  }
+}
+package repository {
+  class ExpenseRepository {
+    - expenseList : ArrayList&lt;Expense&gt;
+    + loadExpenses(lineList : ArrayList&lt;String&gt;) : void
+    + addExpense(expense : Expense) : void
+    + deleteExpense(expenseId : int) : boolean
+    - saveToFile() : void
+  }
+}
+package service {
+  class ExpenseService {
+    + generateNextId(expenseList : ArrayList&lt;Expense&gt;) : int
+    + createExpense(expenseRequestDTO : ExpenseRequestDTO, expenseId : int) : Expense
+    + toResponseList(expenseList : ArrayList&lt;Expense&gt;) : ArrayList&lt;ExpenseResponseDTO&gt;
+    + calculateTotal(expenseList : ArrayList&lt;Expense&gt;) : String
+  }
+}
+package model {
+  class Expense {
+    - id : int
+    - date : String
+    - amount : double
+    - content : String
+  }
+}
+package view {
+  class ExpenseView {
+    - responseList : ArrayList&lt;ExpenseResponseDTO&gt;
+    - total : String
+    - message : String
+    + display() : void
+  }
+}
+package utils {
+  class FileUtils &lt;&lt;final&gt;&gt; {
+    + {static} readLines(fileName : String) : ArrayList&lt;String&gt;
+    + {static} writeLines(fileName : String, lineList : ArrayList&lt;String&gt;) : void
+  }
+}
+package dto {
+  class ExpenseRequestDTO {
+    - lineList : ArrayList&lt;String&gt;
+  }
+  class ExpenseResponseDTO {
+    + toString() : String
+  }
+}
+Main ..&gt; FileUtils : read data/expenses.txt once
+Main ..&gt; ExpenseController : one call per case
+ExpenseController *-- ExpenseRepository : load / add / delete (CRUD)
+ExpenseController *-- ExpenseService : next ID, rows, total
+ExpenseController *-- ExpenseView : display() once
+ExpenseRepository o-- "0..*" Expense
+ExpenseRepository ..&gt; FileUtils : write after each change
+ExpenseService ..&gt; Expense : computes on what it is given
+@enduml</code></pre></details>
+<h2>4. The code, model first</h2>
+<h4>Step 1 — model, constants and the request DTO</h4>
+<pre class="trich"><code class="language-java">public class Expense {
+
+    // Ma chi tieu (tu tang)
+    private int id;
+
+    // Ngay chi tieu, dang dd-MMM-yyyy (vd 11-Apr-2009)
+    private String date;
+
+    // So tien
+    private double amount;
+
+    // Noi dung chi tieu
+    private String content;
+
+    // Constructor rong (JavaBean)
+    public Expense() {
+    }
+
+    // Constructor day du thuoc tinh
+    public Expense(int id, String date, double amount, String content) {
+        this.id = id;
+        this.date = date;
+        this.amount = amount;
+        this.content = content;
+    }</code></pre>
+<pre class="trich"><code class="language-java">// Dau ngan cach cac cot trong tep
+public static final String FILE_SEPARATOR = "|";
+
+// Regex tach theo dau | (| la ky tu dac biet cua regex nen phai co \\\\)
+public static final String FILE_SEPARATOR_REGEX = "\\\\|";
+
+// So cot cua 1 dong trong tep: id|date|amount|content
+public static final int FILE_FIELDS = 4;</code></pre>
+<h4>Step 2 — FileUtils and the repository</h4>
+<pre class="trich"><code class="language-java">// Doc tat ca dong cua tep; tep chua co (lan chay dau) thi tra ve danh sach rong
+public static ArrayList&lt;String&gt; readLines(String fileName) throws IOException {
+    ArrayList&lt;String&gt; lineList = new ArrayList&lt;&gt;();
+    File file = new File(fileName);
+    String line = null;
+
+    // Chua co tep thi khong co gi de doc
+    if (!file.exists()) {
+        return lineList;
+    }
+
+    // try-with-resources: tu dong dong tep ke ca khi loi
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+            new FileInputStream(file), Constants.FILE_CHARSET))) {
+        line = reader.readLine();
+
+        // Doc tung dong cho den het tep
+        while (line != null) {
+            lineList.add(line);
+            line = reader.readLine();
+        }
+    }
+
+    return lineList;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghi de toan bo tep bang danh sach dong moi (tao thu muc data neu chua co)
+public static void writeLines(String fileName, ArrayList&lt;String&gt; lineList)
+        throws IOException {
+    File file = new File(fileName);
+    File folder = file.getParentFile();
+
+    // Lan chay dau chua co thu muc data thi tao
+    if ((folder != null) &amp;&amp; (!folder.exists())) {
+        folder.mkdirs();
+    }
+
+    // try-with-resources: tu dong dong tep ke ca khi loi
+    try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+            new FileOutputStream(file), Constants.FILE_CHARSET))) {
+        // Ghi tung dong
+        for (String line : lineList) {
+            writer.println(line);
+        }
+
+        // PrintWriter khong nem loi nen phai tu hoi
+        if (writer.checkError()) {
+            throw new IOException(fileName);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nap cac dong Main da doc tu tep, moi dong id|date|amount|content (dong hong thi bo qua)
+public void loadExpenses(ArrayList&lt;String&gt; lineList) {
+    String[] partArray = null;
+
+    // Doi tung dong thanh 1 chi tieu
+    for (String line : lineList) {
+        partArray = line.split(Constants.FILE_SEPARATOR_REGEX, Constants.FILE_FIELDS);
+
+        // Dong thieu cot thi bo qua
+        if (partArray.length &lt; Constants.FILE_FIELDS) {
+            continue;
+        }
+
+        // Doi id va so tien sang so; dong hong thi bo qua, khong dung chuong trinh
+        try {
+            expenseList.add(new Expense(
+                    Integer.parseInt(partArray[Constants.FIELD_ID].trim()),
+                    partArray[Constants.FIELD_DATE].trim(),
+                    Double.parseDouble(partArray[Constants.FIELD_AMOUNT].trim()),
+                    partArray[Constants.FIELD_CONTENT]));
+        } catch (NumberFormatException e) {
+            // Bo qua dong hong
+            continue;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa chi tieu theo ID roi ghi lai tep; false = khong co ID do (ham deleteExpense cua de)
+public boolean deleteExpense(int expenseId) throws Exception {
+    // Duyet tim chi tieu co ID can xoa
+    for (Expense expense : expenseList) {
+        // Trung ID thi xoa, ghi tep, bao thanh cong
+        if (expense.getId() == expenseId) {
+            expenseList.remove(expense);
+            saveToFile();
+            return true;
+        }
+    }
+
+    return false;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghi toan bo danh sach xuong tep, moi chi tieu 1 dong
+private void saveToFile() throws Exception {
+    ArrayList&lt;String&gt; lineList = new ArrayList&lt;&gt;();
+
+    // Ghep tung chi tieu thanh 1 dong id|date|amount|content
+    for (Expense expense : expenseList) {
+        lineList.add(String.join(Constants.FILE_SEPARATOR, String.valueOf(expense.getId()),
+                expense.getDate(), String.valueOf(expense.getAmount()), expense.getContent()));
+    }
+
+    // Ghi tep, loi thi bao cho nguoi dung
+    try {
+        FileUtils.writeLines(Constants.FILE_NAME, lineList);
+    } catch (Exception e) {
+        // Ghi tep that bai: bao loi ro rang
+        throw new Exception(Message.WRITE_FAIL);
+    }
+}</code></pre>
+<h4>Step 3 — service</h4>
+<pre class="trich"><code class="language-java">// Tim ID lon nhat roi cong 1 (danh sach rong thi ID dau tien la 1)
+public int generateNextId(ArrayList&lt;Expense&gt; expenseList) {
+    int maxId = Constants.START_ID;
+
+    // Duyet tim ID lon nhat
+    for (Expense expense : expenseList) {
+        // Gap ID lon hon thi cap nhat
+        if (expense.getId() &gt; maxId) {
+            maxId = expense.getId();
+        }
+    }
+
+    return maxId + 1;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi danh sach chi tieu sang cac dong bang de View in (tien da dinh dang)
+public ArrayList&lt;ExpenseResponseDTO&gt; toResponseList(ArrayList&lt;Expense&gt; expenseList) {
+    ArrayList&lt;ExpenseResponseDTO&gt; responseList = new ArrayList&lt;&gt;();
+
+    // Moi chi tieu 1 dong
+    for (Expense expense : expenseList) {
+        responseList.add(new ExpenseResponseDTO(expense.getId(), expense.getDate(),
+                formatMoney(expense.getAmount()), expense.getContent()));
+    }
+
+    return responseList;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Dinh dang tien: 100 / 100.5, luon dau cham (Locale.US) ke ca may tieng Viet
+private String formatMoney(double amount) {
+    DecimalFormat moneyFormat = new DecimalFormat(Constants.MONEY_FORMAT,
+            new DecimalFormatSymbols(Locale.US));
+
+    return moneyFormat.format(amount);
+}</code></pre>
+<h4>Step 4 — view and controller</h4>
+<pre class="trich"><code class="language-java">// Chuc nang 1: Service tao chi tieu voi ID moi, kho them va ghi tep, View bao ID
+public void addExpense(ExpenseRequestDTO expenseRequestDTO) throws Exception {
+    int expenseId = expenseService.generateNextId(expenseRepository.getExpenseList());
+
+    expenseRepository.addExpense(expenseService.createExpense(expenseRequestDTO, expenseId));
+
+    // Bao them thanh cong kem ID vua cap
+    expenseView.setMessage(String.format(Message.ADD_SUCCESS, expenseId));
+    expenseView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 2: kho lay danh sach, Service doi thanh dong bang + tong tien, View in (displayAll)
+public void displayAll() {
+    ArrayList&lt;ExpenseResponseDTO&gt; responseList
+            = expenseService.toResponseList(expenseRepository.getExpenseList());
+
+    // Chua co chi tieu nao thi bao, co thi dua bang + tong tien cho View
+    if (responseList.isEmpty()) {
+        expenseView.setMessage(Message.NO_EXPENSE);
+    } else {
+        // Co chi tieu: dua cac dong va tong tien
+        expenseView.setResponseList(responseList);
+        expenseView.setTotal(expenseService.calculateTotal(expenseRepository.getExpenseList()));
+    }
+
+    expenseView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// In ket qua cua 1 luong roi xoa cau thong bao de luong sau bat dau sach
+public void display() {
+    // Co cau thong bao thi chi in cau do
+    if (!message.isEmpty()) {
+        System.out.println(message);
+    } else {
+        // Bang theo de: tieu de cot, tung dong, dong Total
+        System.out.println(String.format(Constants.HEADER_FORMAT, Message.HEADER_ID,
+                Message.HEADER_DATE, Message.HEADER_AMOUNT, Message.HEADER_CONTENT));
+
+        // Moi chi tieu 1 dong
+        for (ExpenseResponseDTO responseDTO : responseList) {
+            System.out.println(responseDTO);
+        }
+
+        System.out.println(Message.TOTAL_LABEL.concat(total));
+    }
+
+    message = "";
+}</code></pre>
+<h4>Step 5 — Validation and Main</h4>
+<pre class="trich"><code class="language-java">// Kiem ngay dung dang dd-MMM-yyyy va co that; tra ve dang chuan (11-apr-2009 -&gt; 11-Apr-2009)
+public static String getDate(String input) throws Exception {
+    String text = input.trim();
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
+    Date date = null;
+
+    // Khong cho tu "lam tron" ngay sai (31-Feb thanh 03-Mar); ten thang luon tieng Anh
+    dateFormat.setLenient(false);
+
+    // Sai hinh dang (vd 2009-04-20, 11-Apr-09, 11-Apr-2009abc) thi bao loi
+    if (!text.matches(Constants.DATE_REGEX)) {
+        throw new Exception(Message.INVALID_DATE);
+    }
+
+    // Doi sang Date; ngay khong co that thi bao loi
+    try {
+        date = dateFormat.parse(text);
+    } catch (ParseException e) {
+        // Vi du 31-Feb-2009
+        throw new Exception(Message.INVALID_DATE);
+    }
+
+    return dateFormat.format(date);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: doc tep, lap menu den khi chon 4
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    ExpenseController expenseController = new ExpenseController();
+    boolean isRunning = true;
+    int choice = 0;
+
+    // Mo chuong trinh: doc tep roi dua cac dong cho Controller nap vao kho
+    expenseController.loadExpenses(readExpenseFile());
+
+    // Hien lai menu sau moi chuc nang, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.MENU);
+        choice = promptChoice(scanner);
+
+        // Loi ghi tep (tu kho) in o catch
+        try {
+            // Moi lua chon goi controller dung 1 lan
+            switch (choice) {
+                // 1: nhap tung o (sai o nao hoi lai o do) roi them chi tieu
+                case Constants.MENU_ADD:
+                    System.out.println(Message.TITLE_ADD);
+                    expenseController.addExpense(inputExpense(scanner));
+                    break;
+
+                // 2: in bang chi tieu + tong tien
+                case Constants.MENU_DISPLAY:
+                    System.out.println(Message.TITLE_DISPLAY);
+                    expenseController.displayAll();
+                    break;
+
+                // 3: nhap ID roi xoa
+                case Constants.MENU_DELETE:
+                    System.out.println(Message.TITLE_DELETE);
+                    expenseController.deleteExpense(inputExpenseId(scanner));
+                    break;
+
+                // 4: chao va tat co de thoat vong lap
+                case Constants.MENU_EXIT:
+                    System.out.println(Message.GOODBYE);
+                    isRunning = false;
+                    break;
+
+                // Khong xay ra: promptChoice chi tra ve 1 den 4
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            // Cau loi da viet san o Message
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doc tep data/expenses.txt thanh phieu chua cac dong; doc loi thi bao va bat dau rong
+private static ExpenseRequestDTO readExpenseFile() {
+    ExpenseRequestDTO expenseRequestDTO = new ExpenseRequestDTO();
+
+    // Tep chua co (lan chay dau) thi FileUtils tra danh sach rong
+    try {
+        expenseRequestDTO.setLineList(FileUtils.readLines(Constants.FILE_NAME));
+    } catch (IOException e) {
+        // Khong doc duoc thi chay tiep voi danh sach rong
+        System.out.println(Message.READ_FAIL);
+    }
+
+    return expenseRequestDTO;
+}</code></pre>
+<div class="pitfall"><p>⚠️ Traps of this lab: <code>split("|")</code> (cuts every character) · a counter field for the ID (lost at restart) · <code>MMM</code> without <code>Locale.ENGLISH</code> · lenient dates (31-Feb) · <code>PrintWriter</code> errors never thrown — ask <code>checkError()</code> · the default charset (Vietnamese content broken on another machine) · forgetting to save after delete · testing only one run.</p></div>`,
+    `<h2>3. Thiết kế lớp</h2>
+<div class="anh-slide uml"><img src="https://media.cuongthai.com/images/academy/PRO192/uml/49bb9feca89a91fa0a61cafb7e7902761d3f8719.svg" alt="P0073: Main đọc tệp, controller giữ repository, service và view; service chỉ tính toán" loading="lazy" /><p class="chu-thich">🧩 P0073: Main đọc tệp, controller giữ repository, service và view; service chỉ tính toán</p></div>
+<details><summary>Mã PlantUML của sơ đồ — chép, sửa rồi dựng lại</summary><pre><code class="language-plantuml">@startuml
+title J1.S.P0073 Handy Expense — Main reads the file, the repository keeps and saves, the service only computes
+package main {
+  class Main &lt;&lt;final&gt;&gt; {
+    + {static} main(args : String[]) : void
+    - {static} readExpenseFile() : ExpenseRequestDTO
+    - {static} inputExpense(scanner : Scanner) : ExpenseRequestDTO
+  }
+}
+package controller {
+  class ExpenseController {
+    - expenseRepository : ExpenseRepository
+    - expenseService : ExpenseService
+    - expenseView : ExpenseView
+    + loadExpenses(expenseRequestDTO : ExpenseRequestDTO) : void
+    + addExpense(expenseRequestDTO : ExpenseRequestDTO) : void
+    + displayAll() : void
+    + deleteExpense(expenseRequestDTO : ExpenseRequestDTO) : void
+  }
+}
+package repository {
+  class ExpenseRepository {
+    - expenseList : ArrayList&lt;Expense&gt;
+    + loadExpenses(lineList : ArrayList&lt;String&gt;) : void
+    + addExpense(expense : Expense) : void
+    + deleteExpense(expenseId : int) : boolean
+    - saveToFile() : void
+  }
+}
+package service {
+  class ExpenseService {
+    + generateNextId(expenseList : ArrayList&lt;Expense&gt;) : int
+    + createExpense(expenseRequestDTO : ExpenseRequestDTO, expenseId : int) : Expense
+    + toResponseList(expenseList : ArrayList&lt;Expense&gt;) : ArrayList&lt;ExpenseResponseDTO&gt;
+    + calculateTotal(expenseList : ArrayList&lt;Expense&gt;) : String
+  }
+}
+package model {
+  class Expense {
+    - id : int
+    - date : String
+    - amount : double
+    - content : String
+  }
+}
+package view {
+  class ExpenseView {
+    - responseList : ArrayList&lt;ExpenseResponseDTO&gt;
+    - total : String
+    - message : String
+    + display() : void
+  }
+}
+package utils {
+  class FileUtils &lt;&lt;final&gt;&gt; {
+    + {static} readLines(fileName : String) : ArrayList&lt;String&gt;
+    + {static} writeLines(fileName : String, lineList : ArrayList&lt;String&gt;) : void
+  }
+}
+package dto {
+  class ExpenseRequestDTO {
+    - lineList : ArrayList&lt;String&gt;
+  }
+  class ExpenseResponseDTO {
+    + toString() : String
+  }
+}
+Main ..&gt; FileUtils : read data/expenses.txt once
+Main ..&gt; ExpenseController : one call per case
+ExpenseController *-- ExpenseRepository : load / add / delete (CRUD)
+ExpenseController *-- ExpenseService : next ID, rows, total
+ExpenseController *-- ExpenseView : display() once
+ExpenseRepository o-- "0..*" Expense
+ExpenseRepository ..&gt; FileUtils : write after each change
+ExpenseService ..&gt; Expense : computes on what it is given
+@enduml</code></pre></details>
+<h2>4. Code, model trước</h2>
+<h4>Bước 1 — model, constants và phiếu yêu cầu</h4>
+<pre class="trich"><code class="language-java">public class Expense {
+
+    // Ma chi tieu (tu tang)
+    private int id;
+
+    // Ngay chi tieu, dang dd-MMM-yyyy (vd 11-Apr-2009)
+    private String date;
+
+    // So tien
+    private double amount;
+
+    // Noi dung chi tieu
+    private String content;
+
+    // Constructor rong (JavaBean)
+    public Expense() {
+    }
+
+    // Constructor day du thuoc tinh
+    public Expense(int id, String date, double amount, String content) {
+        this.id = id;
+        this.date = date;
+        this.amount = amount;
+        this.content = content;
+    }</code></pre>
+<pre class="trich"><code class="language-java">// Dau ngan cach cac cot trong tep
+public static final String FILE_SEPARATOR = "|";
+
+// Regex tach theo dau | (| la ky tu dac biet cua regex nen phai co \\\\)
+public static final String FILE_SEPARATOR_REGEX = "\\\\|";
+
+// So cot cua 1 dong trong tep: id|date|amount|content
+public static final int FILE_FIELDS = 4;</code></pre>
+<h4>Bước 2 — FileUtils và repository</h4>
+<pre class="trich"><code class="language-java">// Doc tat ca dong cua tep; tep chua co (lan chay dau) thi tra ve danh sach rong
+public static ArrayList&lt;String&gt; readLines(String fileName) throws IOException {
+    ArrayList&lt;String&gt; lineList = new ArrayList&lt;&gt;();
+    File file = new File(fileName);
+    String line = null;
+
+    // Chua co tep thi khong co gi de doc
+    if (!file.exists()) {
+        return lineList;
+    }
+
+    // try-with-resources: tu dong dong tep ke ca khi loi
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+            new FileInputStream(file), Constants.FILE_CHARSET))) {
+        line = reader.readLine();
+
+        // Doc tung dong cho den het tep
+        while (line != null) {
+            lineList.add(line);
+            line = reader.readLine();
+        }
+    }
+
+    return lineList;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghi de toan bo tep bang danh sach dong moi (tao thu muc data neu chua co)
+public static void writeLines(String fileName, ArrayList&lt;String&gt; lineList)
+        throws IOException {
+    File file = new File(fileName);
+    File folder = file.getParentFile();
+
+    // Lan chay dau chua co thu muc data thi tao
+    if ((folder != null) &amp;&amp; (!folder.exists())) {
+        folder.mkdirs();
+    }
+
+    // try-with-resources: tu dong dong tep ke ca khi loi
+    try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+            new FileOutputStream(file), Constants.FILE_CHARSET))) {
+        // Ghi tung dong
+        for (String line : lineList) {
+            writer.println(line);
+        }
+
+        // PrintWriter khong nem loi nen phai tu hoi
+        if (writer.checkError()) {
+            throw new IOException(fileName);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Nap cac dong Main da doc tu tep, moi dong id|date|amount|content (dong hong thi bo qua)
+public void loadExpenses(ArrayList&lt;String&gt; lineList) {
+    String[] partArray = null;
+
+    // Doi tung dong thanh 1 chi tieu
+    for (String line : lineList) {
+        partArray = line.split(Constants.FILE_SEPARATOR_REGEX, Constants.FILE_FIELDS);
+
+        // Dong thieu cot thi bo qua
+        if (partArray.length &lt; Constants.FILE_FIELDS) {
+            continue;
+        }
+
+        // Doi id va so tien sang so; dong hong thi bo qua, khong dung chuong trinh
+        try {
+            expenseList.add(new Expense(
+                    Integer.parseInt(partArray[Constants.FIELD_ID].trim()),
+                    partArray[Constants.FIELD_DATE].trim(),
+                    Double.parseDouble(partArray[Constants.FIELD_AMOUNT].trim()),
+                    partArray[Constants.FIELD_CONTENT]));
+        } catch (NumberFormatException e) {
+            // Bo qua dong hong
+            continue;
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Xoa chi tieu theo ID roi ghi lai tep; false = khong co ID do (ham deleteExpense cua de)
+public boolean deleteExpense(int expenseId) throws Exception {
+    // Duyet tim chi tieu co ID can xoa
+    for (Expense expense : expenseList) {
+        // Trung ID thi xoa, ghi tep, bao thanh cong
+        if (expense.getId() == expenseId) {
+            expenseList.remove(expense);
+            saveToFile();
+            return true;
+        }
+    }
+
+    return false;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ghi toan bo danh sach xuong tep, moi chi tieu 1 dong
+private void saveToFile() throws Exception {
+    ArrayList&lt;String&gt; lineList = new ArrayList&lt;&gt;();
+
+    // Ghep tung chi tieu thanh 1 dong id|date|amount|content
+    for (Expense expense : expenseList) {
+        lineList.add(String.join(Constants.FILE_SEPARATOR, String.valueOf(expense.getId()),
+                expense.getDate(), String.valueOf(expense.getAmount()), expense.getContent()));
+    }
+
+    // Ghi tep, loi thi bao cho nguoi dung
+    try {
+        FileUtils.writeLines(Constants.FILE_NAME, lineList);
+    } catch (Exception e) {
+        // Ghi tep that bai: bao loi ro rang
+        throw new Exception(Message.WRITE_FAIL);
+    }
+}</code></pre>
+<h4>Bước 3 — service</h4>
+<pre class="trich"><code class="language-java">// Tim ID lon nhat roi cong 1 (danh sach rong thi ID dau tien la 1)
+public int generateNextId(ArrayList&lt;Expense&gt; expenseList) {
+    int maxId = Constants.START_ID;
+
+    // Duyet tim ID lon nhat
+    for (Expense expense : expenseList) {
+        // Gap ID lon hon thi cap nhat
+        if (expense.getId() &gt; maxId) {
+            maxId = expense.getId();
+        }
+    }
+
+    return maxId + 1;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doi danh sach chi tieu sang cac dong bang de View in (tien da dinh dang)
+public ArrayList&lt;ExpenseResponseDTO&gt; toResponseList(ArrayList&lt;Expense&gt; expenseList) {
+    ArrayList&lt;ExpenseResponseDTO&gt; responseList = new ArrayList&lt;&gt;();
+
+    // Moi chi tieu 1 dong
+    for (Expense expense : expenseList) {
+        responseList.add(new ExpenseResponseDTO(expense.getId(), expense.getDate(),
+                formatMoney(expense.getAmount()), expense.getContent()));
+    }
+
+    return responseList;
+}</code></pre>
+<pre class="trich"><code class="language-java">// Dinh dang tien: 100 / 100.5, luon dau cham (Locale.US) ke ca may tieng Viet
+private String formatMoney(double amount) {
+    DecimalFormat moneyFormat = new DecimalFormat(Constants.MONEY_FORMAT,
+            new DecimalFormatSymbols(Locale.US));
+
+    return moneyFormat.format(amount);
+}</code></pre>
+<h4>Bước 4 — view và controller</h4>
+<pre class="trich"><code class="language-java">// Chuc nang 1: Service tao chi tieu voi ID moi, kho them va ghi tep, View bao ID
+public void addExpense(ExpenseRequestDTO expenseRequestDTO) throws Exception {
+    int expenseId = expenseService.generateNextId(expenseRepository.getExpenseList());
+
+    expenseRepository.addExpense(expenseService.createExpense(expenseRequestDTO, expenseId));
+
+    // Bao them thanh cong kem ID vua cap
+    expenseView.setMessage(String.format(Message.ADD_SUCCESS, expenseId));
+    expenseView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chuc nang 2: kho lay danh sach, Service doi thanh dong bang + tong tien, View in (displayAll)
+public void displayAll() {
+    ArrayList&lt;ExpenseResponseDTO&gt; responseList
+            = expenseService.toResponseList(expenseRepository.getExpenseList());
+
+    // Chua co chi tieu nao thi bao, co thi dua bang + tong tien cho View
+    if (responseList.isEmpty()) {
+        expenseView.setMessage(Message.NO_EXPENSE);
+    } else {
+        // Co chi tieu: dua cac dong va tong tien
+        expenseView.setResponseList(responseList);
+        expenseView.setTotal(expenseService.calculateTotal(expenseRepository.getExpenseList()));
+    }
+
+    expenseView.display();
+}</code></pre>
+<pre class="trich"><code class="language-java">// In ket qua cua 1 luong roi xoa cau thong bao de luong sau bat dau sach
+public void display() {
+    // Co cau thong bao thi chi in cau do
+    if (!message.isEmpty()) {
+        System.out.println(message);
+    } else {
+        // Bang theo de: tieu de cot, tung dong, dong Total
+        System.out.println(String.format(Constants.HEADER_FORMAT, Message.HEADER_ID,
+                Message.HEADER_DATE, Message.HEADER_AMOUNT, Message.HEADER_CONTENT));
+
+        // Moi chi tieu 1 dong
+        for (ExpenseResponseDTO responseDTO : responseList) {
+            System.out.println(responseDTO);
+        }
+
+        System.out.println(Message.TOTAL_LABEL.concat(total));
+    }
+
+    message = "";
+}</code></pre>
+<h4>Bước 5 — Validation và Main</h4>
+<pre class="trich"><code class="language-java">// Kiem ngay dung dang dd-MMM-yyyy va co that; tra ve dang chuan (11-apr-2009 -&gt; 11-Apr-2009)
+public static String getDate(String input) throws Exception {
+    String text = input.trim();
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
+    Date date = null;
+
+    // Khong cho tu "lam tron" ngay sai (31-Feb thanh 03-Mar); ten thang luon tieng Anh
+    dateFormat.setLenient(false);
+
+    // Sai hinh dang (vd 2009-04-20, 11-Apr-09, 11-Apr-2009abc) thi bao loi
+    if (!text.matches(Constants.DATE_REGEX)) {
+        throw new Exception(Message.INVALID_DATE);
+    }
+
+    // Doi sang Date; ngay khong co that thi bao loi
+    try {
+        date = dateFormat.parse(text);
+    } catch (ParseException e) {
+        // Vi du 31-Feb-2009
+        throw new Exception(Message.INVALID_DATE);
+    }
+
+    return dateFormat.format(date);
+}</code></pre>
+<pre class="trich"><code class="language-java">// Chay chuong trinh: doc tep, lap menu den khi chon 4
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    ExpenseController expenseController = new ExpenseController();
+    boolean isRunning = true;
+    int choice = 0;
+
+    // Mo chuong trinh: doc tep roi dua cac dong cho Controller nap vao kho
+    expenseController.loadExpenses(readExpenseFile());
+
+    // Hien lai menu sau moi chuc nang, den khi chon thoat (khong dung System.exit)
+    while (isRunning) {
+        System.out.println(Message.MENU);
+        choice = promptChoice(scanner);
+
+        // Loi ghi tep (tu kho) in o catch
+        try {
+            // Moi lua chon goi controller dung 1 lan
+            switch (choice) {
+                // 1: nhap tung o (sai o nao hoi lai o do) roi them chi tieu
+                case Constants.MENU_ADD:
+                    System.out.println(Message.TITLE_ADD);
+                    expenseController.addExpense(inputExpense(scanner));
+                    break;
+
+                // 2: in bang chi tieu + tong tien
+                case Constants.MENU_DISPLAY:
+                    System.out.println(Message.TITLE_DISPLAY);
+                    expenseController.displayAll();
+                    break;
+
+                // 3: nhap ID roi xoa
+                case Constants.MENU_DELETE:
+                    System.out.println(Message.TITLE_DELETE);
+                    expenseController.deleteExpense(inputExpenseId(scanner));
+                    break;
+
+                // 4: chao va tat co de thoat vong lap
+                case Constants.MENU_EXIT:
+                    System.out.println(Message.GOODBYE);
+                    isRunning = false;
+                    break;
+
+                // Khong xay ra: promptChoice chi tra ve 1 den 4
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            // Cau loi da viet san o Message
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">// Doc tep data/expenses.txt thanh phieu chua cac dong; doc loi thi bao va bat dau rong
+private static ExpenseRequestDTO readExpenseFile() {
+    ExpenseRequestDTO expenseRequestDTO = new ExpenseRequestDTO();
+
+    // Tep chua co (lan chay dau) thi FileUtils tra danh sach rong
+    try {
+        expenseRequestDTO.setLineList(FileUtils.readLines(Constants.FILE_NAME));
+    } catch (IOException e) {
+        // Khong doc duoc thi chay tiep voi danh sach rong
+        System.out.println(Message.READ_FAIL);
+    }
+
+    return expenseRequestDTO;
+}</code></pre>
+<div class="pitfall"><p>⚠️ Bẫy của bài: <code>split("|")</code> (cắt từng ký tự) · dùng trường đếm cho ID (mất khi mở lại) · <code>MMM</code> thiếu <code>Locale.ENGLISH</code> · ngày dễ dãi (31-Feb) · <code>PrintWriter</code> không bao giờ ném lỗi — phải hỏi <code>checkError()</code> · bảng mã mặc định (nội dung tiếng Việt hỏng ở máy khác) · quên lưu sau khi xoá · chỉ test một lần chạy.</p></div>`),
+    bi(`<h2>5. Run it for real — twice</h2>
+<p>Run 1 (<code>harness/input.txt</code>, empty file): menu <code>x</code>, <code>9</code>, Display on an empty list, Add with <code>31-Feb-2009</code>, <code>11-apr-2009</code>, amounts <code>abc</code>, <code>0</code>, <code>100</code>, an empty content, <code>Tuition fee</code>, then the brief's two other expenses, Display, Quit. Run 2 (<code>harness/input-2.txt</code>, the program opened again): Display, Delete <code>abc</code>, <code>9</code>, Delete <code>2</code>, Display, Add <code>01-May-2009</code> <code>50.5</code> <code>Bus ticket</code>, Display, Quit.</p>
+<details><summary>Both runs (112 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: ---------Display all expenses------------<br>
+Chua co chi tieu nao de hien thi. Hay chon 1 de them chi tieu truoc.<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Ngay phai dung dang dd-MMM-yyyy va la ngay co that (vi du: 11-Apr-2009). Moi nhap lai.<br>
+Enter Date: Enter Amount: So tien phai la 1 so (vi du: 100 hoac 100.5), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter Amount: So tien phai lon hon 0. Moi nhap lai.<br>
+Enter Amount: Enter Content: Noi dung khong duoc de trong (vi du: Tuition fee). Moi nhap lai.<br>
+Enter Content: Add an expense successful (ID 1)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 2)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 3)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Bye.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: --------Delete an expense------<br>
+Enter ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter ID: Delete an expense fail<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: --------Delete an expense------<br>
+Enter ID: Delete an expense successful<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 300<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 4)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+4 &nbsp;&nbsp;&nbsp;01-May-2009 &nbsp;&nbsp;50.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bus ticket<br>
+Total: 350.5<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Bye.</div>
+</details>
+<p>Every validation message once, then the brief's table:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: ---------Display all expenses------------<br>
+Chua co chi tieu nao de hien thi. Hay chon 1 de them chi tieu truoc.<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Ngay phai dung dang dd-MMM-yyyy va la ngay co that (vi du: 11-Apr-2009). Moi nhap lai.<br>
+Enter Date: Enter Amount: So tien phai la 1 so (vi du: 100 hoac 100.5), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter Amount: So tien phai lon hon 0. Moi nhap lai.<br>
+Enter Amount: Enter Content: Noi dung khong duoc de trong (vi du: Tuition fee). Moi nhap lai.<br>
+Enter Content: Add an expense successful (ID 1)<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+…</div>
+<p>Opened again — read back from the file, delete fail and successful, a new ID 4:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Enter ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter ID: Delete an expense fail<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+4 &nbsp;&nbsp;&nbsp;01-May-2009 &nbsp;&nbsp;50.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bus ticket<br>
+Total: 350.5<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0073_HandyExpense</code></pre>
+<div class="out">✓ MSSV_J1SP0073_HandyExpense — sạch</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 112/112 dong khop expected.txt</div>
+<p>A real JDK 8 prints the same 112 lines. The paper checklist audit: 0 violations. The grader copies <code>harness/data/expenses.txt</code> (empty) over <code>data/</code> before each check, so every check starts from the same file.</p>
+<h2>6. Debug it</h2>
+<p>Breakpoint on <code>if (expense.getId() > maxId) {</code> in <code>ExpenseService.generateNextId</code> → run 1, then run 2 up to the Add → stop: <code>expenseList</code> holds IDs 1 and 3 (2 was deleted), <code>maxId</code> goes 0 → 1 → 3, the method returns 4. Then a breakpoint on <code>partArray = line.split(…)</code> in <code>loadExpenses</code> at the start of run 2: Variables shows the four parts of <code>"1|11-Apr-2009|100.0|Tuition fee"</code>.</p>
+<h2>7. The questions — answer out loud</h2>
+<details><summary>Who reads the file, who writes it?</summary><p class="dap-an">✅ Main reads it once at start — the paper (1.1) puts reading a file in Main — and gives the lines to the controller; the repository parses them and saves the whole list after every add or delete, through <code>FileUtils</code>.</p></details>
+<details><summary>Why does the service not call the repository?</summary><p class="dap-an">✅ It only computes — next ID, rows, total — on the list the controller gives. Storage is the repository's job; changing the file to a database would not touch the service.</p></details>
+<details><summary>How is the ID made, and what after a delete?</summary><p class="dap-an">✅ Largest ID in the list + 1, computed every time, so it is right after a restart. Delete 2 from 1, 2, 3, then add: 4. Delete 3 instead: the next is 3 again.</p></details>
+<details><summary>Why split("\\\\|") and not split("|")?</summary><p class="dap-an">✅ <code>split</code> takes a regex and <code>|</code> means "or": unescaped it matches the empty string between every two characters, and the line falls apart — without any error.</p></details>
+<details><summary>Locale.ENGLISH for the date, Locale.US for money — why?</summary><p class="dap-an">✅ Month names must be English (Apr) on any machine; money must print a dot (50.5), never a comma, even on a Vietnamese Windows.</p></details>
+<details><summary>Why does deleteExpense return a boolean?</summary><p class="dap-an">✅ A missing ID is a normal answer that the brief prints ("Delete an expense fail"). Only a write failure is an exception.</p></details>
+<h2>8. Download</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v1/MSSV_J1SP0073_HandyExpense-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0073_HandyExpense-solution.zip</span><span class="lc-sub">NetBeans project (Java 8) · 12 files · check.sh / check.bat + test/harness (two runs, PASS 112/112) · harness/data/expenses.txt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<div class="callout"><p><strong>End of 🎓 LAB211 in practice:</strong> seven lessons, one skeleton, one checklist. Next in the course: Progress Test 2.</p></div>`,
+    `<h2>5. Chạy thật — hai lần</h2>
+<p>Lần 1 (<code>harness/input.txt</code>, tệp rỗng): menu <code>x</code>, <code>9</code>, Display khi danh sách rỗng, Add với <code>31-Feb-2009</code>, <code>11-apr-2009</code>, số tiền <code>abc</code>, <code>0</code>, <code>100</code>, nội dung trống, <code>Tuition fee</code>, rồi hai khoản còn lại của đề, Display, Quit. Lần 2 (<code>harness/input-2.txt</code>, mở lại chương trình): Display, Delete <code>abc</code>, <code>9</code>, Delete <code>2</code>, Display, Add <code>01-May-2009</code> <code>50.5</code> <code>Bus ticket</code>, Display, Quit.</p>
+<details><summary>Cả hai lần chạy (112 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: ---------Display all expenses------------<br>
+Chua co chi tieu nao de hien thi. Hay chon 1 de them chi tieu truoc.<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Ngay phai dung dang dd-MMM-yyyy va la ngay co that (vi du: 11-Apr-2009). Moi nhap lai.<br>
+Enter Date: Enter Amount: So tien phai la 1 so (vi du: 100 hoac 100.5), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter Amount: So tien phai lon hon 0. Moi nhap lai.<br>
+Enter Amount: Enter Content: Noi dung khong duoc de trong (vi du: Tuition fee). Moi nhap lai.<br>
+Enter Content: Add an expense successful (ID 1)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 2)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 3)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Bye.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: --------Delete an expense------<br>
+Enter ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter ID: Delete an expense fail<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: --------Delete an expense------<br>
+Enter ID: Delete an expense successful<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 300<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Enter Amount: Enter Content: Add an expense successful (ID 4)<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+4 &nbsp;&nbsp;&nbsp;01-May-2009 &nbsp;&nbsp;50.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bus ticket<br>
+Total: 350.5<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: Bye.</div>
+</details>
+<p>Mọi câu báo lỗi một lần, rồi bảng của đề:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Your choice: Lua chon nam ngoai khoang cho phep. Hay nhap 1 so tu 1 den 4. Moi nhap lai.<br>
+Your choice: ---------Display all expenses------------<br>
+Chua co chi tieu nao de hien thi. Hay chon 1 de them chi tieu truoc.<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: -------- Add an expense--------<br>
+Enter Date: Ngay phai dung dang dd-MMM-yyyy va la ngay co that (vi du: 11-Apr-2009). Moi nhap lai.<br>
+Enter Date: Enter Amount: So tien phai la 1 so (vi du: 100 hoac 100.5), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter Amount: So tien phai lon hon 0. Moi nhap lai.<br>
+Enter Amount: Enter Content: Noi dung khong duoc de trong (vi du: Tuition fee). Moi nhap lai.<br>
+Enter Content: Add an expense successful (ID 1)<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+…</div>
+<p>Mở lại — đọc lại từ tệp, xoá fail và successful, ID mới là 4:</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+=======Handy Expense program======<br>
+1. Add an expense<br>
+2. Display all expenses<br>
+3. Delete an expense<br>
+4. Quit<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+2 &nbsp;&nbsp;&nbsp;20-Apr-2009 &nbsp;&nbsp;250 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rent house<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+Total: 550<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Enter ID: Ban phai nhap 1 so nguyen (vi du: 1, 2, 3), khong nhap chu hay de trong. Moi nhap lai.<br>
+Enter ID: Delete an expense fail<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Your choice: ---------Display all expenses------------<br>
+ID &nbsp;&nbsp;Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content<br>
+1 &nbsp;&nbsp;&nbsp;11-Apr-2009 &nbsp;&nbsp;100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuition fee<br>
+3 &nbsp;&nbsp;&nbsp;30-Apr-2009 &nbsp;&nbsp;200 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Food<br>
+4 &nbsp;&nbsp;&nbsp;01-May-2009 &nbsp;&nbsp;50.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bus ticket<br>
+Total: 350.5<br>
+…</div>
+<pre><code class="language-bash">$ python3 lint.py MSSV_J1SP0073_HandyExpense</code></pre>
+<div class="out">✓ MSSV_J1SP0073_HandyExpense — sạch</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 112/112 dong khop expected.txt</div>
+<p>JDK 8 thật in đúng 112 dòng đó. Soát tờ checklist giấy: 0 vi phạm. Bộ chấm chép <code>harness/data/expenses.txt</code> (rỗng) đè lên <code>data/</code> trước mỗi lần chấm, nên lần chấm nào cũng bắt đầu từ cùng một tệp.</p>
+<h2>6. Debug</h2>
+<p>Breakpoint ở <code>if (expense.getId() > maxId) {</code> trong <code>ExpenseService.generateNextId</code> → chạy lần 1, rồi lần 2 tới chỗ Add → dừng: <code>expenseList</code> giữ ID 1 và 3 (2 đã xoá), <code>maxId</code> đi 0 → 1 → 3, hàm trả 4. Rồi breakpoint ở <code>partArray = line.split(…)</code> trong <code>loadExpenses</code> lúc đầu lần 2: Variables hiện bốn phần của <code>"1|11-Apr-2009|100.0|Tuition fee"</code>.</p>
+<h2>7. Câu thầy hỏi — trả lời thành tiếng</h2>
+<details><summary>Ai đọc tệp, ai ghi tệp?</summary><p class="dap-an">✅ Main đọc một lần lúc mở — tờ giấy (1.1) đặt việc đọc file ở Main — rồi đưa các dòng cho controller; repository tách dòng và lưu lại cả danh sách sau mỗi lần thêm hoặc xoá, qua <code>FileUtils</code>.</p></details>
+<details><summary>Sao service không gọi repository?</summary><p class="dap-an">✅ Service chỉ tính — ID mới, dòng bảng, tổng tiền — trên danh sách controller đưa. Lưu trữ là việc của repository; đổi tệp thành cơ sở dữ liệu cũng không phải sửa service.</p></details>
+<details><summary>ID sinh thế nào, xoá xong thì sao?</summary><p class="dap-an">✅ ID lớn nhất trong danh sách + 1, tính lại mỗi lần, nên mở lại vẫn đúng. Có 1, 2, 3 xoá 2 rồi thêm: 4. Nếu xoá 3: khoản sau lại là 3.</p></details>
+<details><summary>Sao split("\\\\|") mà không split("|")?</summary><p class="dap-an">✅ <code>split</code> nhận regex và <code>|</code> nghĩa là "hoặc": không thoát thì nó khớp chuỗi rỗng giữa mọi cặp ký tự, dòng bị cắt vụn — mà không có lỗi nào.</p></details>
+<details><summary>Locale.ENGLISH cho ngày, Locale.US cho tiền — để làm gì?</summary><p class="dap-an">✅ Tên tháng phải là tiếng Anh (Apr) trên mọi máy; tiền phải in dấu chấm (50.5), không bao giờ dấu phẩy, kể cả trên Windows tiếng Việt.</p></details>
+<details><summary>Sao deleteExpense trả boolean?</summary><p class="dap-an">✅ ID không có là một câu trả lời bình thường mà đề in ra ("Delete an expense fail"). Chỉ ghi tệp thất bại mới là ngoại lệ.</p></details>
+<h2>8. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/lab211/v1/MSSV_J1SP0073_HandyExpense-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">MSSV_J1SP0073_HandyExpense-solution.zip</span><span class="lc-sub">project NetBeans (Java 8) · 12 tệp · check.sh / check.bat + test/harness (hai lần chạy, PASS 112/112) · harness/data/expenses.txt</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<div class="callout"><p><strong>Hết phần 🎓 LAB211 thực chiến:</strong> bảy bài, một bộ khung, một tờ checklist. Tiếp theo trong khoá: Progress Test 2.</p></div>`),
   ].join('\n'),
 };
 
 export default {
-  lessons: [L_l211_review, L_l211_p0011, L_l211_p0021, L_l211_p0056],
+  lessons: [L_l211_review, L_l211_p0011, L_l211_p0021, L_l211_p0056, L_l211_p0070, L_l211_p0071, L_l211_p0073],
 };

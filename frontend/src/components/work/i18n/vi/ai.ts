@@ -189,5 +189,7 @@ export const ai: Strings<typeof En> = {
   removeFile: 'Bỏ tệp {name}',
   seeAttached: 'Xem ảnh/tệp đính kèm',
   onlyFiles: '(xem ảnh/tệp đính kèm)',
+  diagramZoom: 'Phóng to sơ đồ',
+  diagramClose: 'Đóng',
   diagramFailed: 'Không vẽ được sơ đồ này — xem mã bên dưới.',
 };

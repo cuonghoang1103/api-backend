@@ -186,5 +186,7 @@ export const ai = {
   removeFile: 'Remove {name}',
   seeAttached: 'Open attachment',
   onlyFiles: '(see the attached images/files)',
+  diagramZoom: 'Enlarge diagram',
+  diagramClose: 'Close',
   diagramFailed: 'This diagram could not be drawn — see the code below.',
 };

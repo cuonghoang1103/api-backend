@@ -607,6 +607,27 @@ CVIDEO_SEED_RC="$(printf '%s\n' "$CVIDEO_SEED_OUT" | sed -n 's/^__SEED_RC__=//p'
 CVIDEO_SEED_OUT="$(printf '%s\n' "$CVIDEO_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Course video-track seed" "seed-course-videos" "$CVIDEO_SEED_OUT" "${CVIDEO_SEED_RC:-0}" || true
 
+# ── Step 3.12a: Code Lab — bộ luyện theo môn/khoá (content/codelab/*-practice) ──
+# 28/10/2026. Mỗi thư mục: _track.json (tạo track + module còn thiếu, idempotent)
+# + *.json đề (--update: trùng tiêu đề ⇒ sửa tại chỗ, giữ tiến độ/lượt nộp người học).
+# Phải nằm TRƯỚC `report_seed "IELTS seed"` (mốc cắt của deploy-nha.sh).
+info "Running Code Lab practice seed..."
+CODELAB_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for d in content/codelab/*-practice; do
+    [ -f "$d/_track.json" ] || continue
+    echo "── $d"
+    o=$(node scripts/codelab-create-track.mjs --file "$d/_track.json" --apply 2>&1) || rc=1
+    printf "%s\n" "$o" | tail -3
+    o=$(node scripts/codelab-seed-authored.mjs --dir "$d" --apply --update 2>&1) || rc=1
+    printf "%s\n" "$o" | tail -4
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+CODELAB_SEED_RC="$(printf '%s\n' "$CODELAB_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+CODELAB_SEED_OUT="$(printf '%s\n' "$CODELAB_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Code Lab practice seed" "seed-codelab-practice" "$CODELAB_SEED_OUT" "${CODELAB_SEED_RC:-0}" || true
+
 # ── Step 3.12b: phụ đề tiếng Anh của video bài giảng ────────────
 # Nguồn đã làm sạch sẵn trong repo (content/phu-de/*.jsonl.gz). Idempotent,
 # upsert theo lessonId. Phải nằm TRƯỚC `report_seed "IELTS seed"` vì

@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-interview-components",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — components, props & state (Chapter 5)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "components, props & state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>components, props & state</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>components, props & state</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — components, props & state (Chapter 5)\n\nAnswer in the panel on the left (no code needed).\n\n1. Props vs state — the one-sentence difference?\n2. How does a child change data that lives in its parent?\n3. When should data NOT be in state?\n4. Class components vs function components today?\n5. Why is mutating state a bug?\n6. What is \"lifting state up\"?\n7. What are PropTypes good for, and what replaced them in many projects?\n8. How do you decide where to split a component?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — components, props & state (Chapter 5) — answer key\n\n1. Props vs state — the one-sentence difference?\n   Answer: b) Props are inputs given by the parent and read-only; state is data the component owns and changes over time.\n   Model answer: \"Props are like function arguments — the parent decides them and the child only reads them. State is the component's own memory; when it changes through the setter, React re-renders that component and its children.\" / Trả lời mẫu: \"Props như tham số hàm — cha quyết định, con chỉ đọc. State là bộ nhớ riêng của component; khi đổi qua hàm đặt, React vẽ lại component đó và các con.\"\n\n2. How does a child change data that lives in its parent?\n   Answer: b) The parent passes a callback; the child calls it; the parent updates its state.\n   Model answer: \"Data flows down and events flow up. The parent keeps the state and passes a function like onChange; the child calls it with the new value. That keeps a single source of truth.\" / Trả lời mẫu: \"Dữ liệu đi xuống, sự kiện đi lên. Cha giữ state và truyền hàm như onChange; con gọi hàm với giá trị mới. Nhờ vậy chỉ có một nguồn sự thật.\"\n\n3. When should data NOT be in state?\n   Answer: b) When it can be computed from props or other state (derived), or never changes.\n   Model answer: \"I keep state minimal. Totals, filtered lists, 'is form valid' — I compute them while rendering. Storing them duplicates data and creates bugs when one copy is forgotten.\" / Trả lời mẫu: \"Tôi giữ state tối thiểu. Tổng, danh sách đã lọc, 'form hợp lệ chưa' — tính khi render. Lưu chúng là nhân bản dữ liệu và sinh lỗi khi quên cập nhật một bản.\"\n\n4. Class components vs function components today?\n   Answer: b) Both work; new code uses functions + hooks (simpler, reusable logic); classes remain in legacy code and for error boundaries.\n   Model answer: \"Function components with hooks are the standard now — less boilerplate, no this, and custom hooks to share logic. I can still read class components and their lifecycle methods, and error boundaries still need a class.\" / Trả lời mẫu: \"Function component + hooks là chuẩn hiện nay — gọn, không có this, chia sẻ logic bằng custom hook. Tôi vẫn đọc được class component và vòng đời của nó; error boundary vẫn cần class.\"\n\n5. Why is mutating state a bug?\n   Answer: b) React compares references; a mutated object is the same reference, so React may skip the re-render and memoised children keep stale data.\n   Model answer: \"React decides what changed by reference equality. If I push into the existing array, the reference is the same, so React can skip updating. I always produce a new array or object with spread, map or filter.\" / Trả lời mẫu: \"React xét thay đổi bằng so sánh tham chiếu. Push vào mảng cũ thì tham chiếu không đổi nên React có thể bỏ qua cập nhật. Tôi luôn tạo mảng/object mới bằng spread, map, filter.\"\n\n6. What is \"lifting state up\"?\n   Answer: b) Moving shared state to the nearest common parent so siblings stay in sync.\n   Model answer: \"When two siblings need the same data — like a filter box and a list — I move the state to their closest common parent, pass the value down to both and a setter to the one that changes it.\" / Trả lời mẫu: \"Khi hai component anh em cần cùng dữ liệu — vd ô lọc và danh sách — tôi chuyển state lên cha chung gần nhất, truyền giá trị xuống cả hai và hàm đặt cho cái cần thay đổi.\"\n\n7. What are PropTypes good for, and what replaced them in many projects?\n   Answer: b) Development-time warnings documenting a component's props; TypeScript types now give the same at compile time.\n   Model answer: \"PropTypes document and check props at runtime in development only. Many teams moved to TypeScript, which catches the same mistakes in the editor before the code runs. Neither replaces validating user input.\" / Trả lời mẫu: \"PropTypes mô tả và kiểm props lúc chạy, chỉ ở development. Nhiều nhóm chuyển sang TypeScript, bắt cùng loại lỗi ngay trong editor trước khi chạy. Cả hai đều không thay thế việc kiểm dữ liệu người dùng nhập.\"\n\n8. How do you decide where to split a component?\n   Answer: b) By responsibility: a part that is reused, has its own state/logic, or makes the parent hard to read becomes its own component.\n   Model answer: \"I split by responsibility. If a piece is repeated, has its own logic, or the parent is getting long, I extract it and give it the smallest props it needs. Small components are easier to test and reuse.\" / Trả lời mẫu: \"Tôi tách theo trách nhiệm. Phần lặp lại, có logic riêng, hoặc làm component cha quá dài thì tách ra và cho nó props tối thiểu. Component nhỏ dễ kiểm và dễ tái sử dụng.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Props vs state — the one-sentence difference?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are the same."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Props are inputs given by the parent and read-only; state is data the component owns and changes over time."
+              },
+              {
+                "ma": "c",
+                "noiDung": "State comes from the server."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Props can only be strings."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Props are like function arguments — the parent decides them and the child only reads them. State is the component's own memory; when it changes through the setter, React re-renders that component and its children.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Props như tham số hàm — cha quyết định, con chỉ đọc. State là bộ nhớ riêng của component; khi đổi qua hàm đặt, React vẽ lại component đó và các con.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "How does a child change data that lives in its parent?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It edits the prop directly."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The parent passes a callback; the child calls it; the parent updates its state."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Using a global variable."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It cannot."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Data flows down and events flow up. The parent keeps the state and passes a function like <code>onChange</code>; the child calls it with the new value. That keeps a single source of truth.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Dữ liệu đi xuống, sự kiện đi lên. Cha giữ state và truyền hàm như onChange; con gọi hàm với giá trị mới. Nhờ vậy chỉ có một nguồn sự thật.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "When should data NOT be in state?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never — everything belongs in state."
+              },
+              {
+                "ma": "b",
+                "noiDung": "When it can be computed from props or other state (derived), or never changes."
+              },
+              {
+                "ma": "c",
+                "noiDung": "When it is a number."
+              },
+              {
+                "ma": "d",
+                "noiDung": "When the component is small."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I keep state minimal. Totals, filtered lists, 'is form valid' — I compute them while rendering. Storing them duplicates data and creates bugs when one copy is forgotten.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi giữ state tối thiểu. Tổng, danh sách đã lọc, 'form hợp lệ chưa' — tính khi render. Lưu chúng là nhân bản dữ liệu và sinh lỗi khi quên cập nhật một bản.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Class components vs function components today?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Classes are required for state."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both work; new code uses functions + hooks (simpler, reusable logic); classes remain in legacy code and for error boundaries."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Functions cannot have lifecycle."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Classes are faster."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Function components with hooks are the standard now — less boilerplate, no <code>this</code>, and custom hooks to share logic. I can still read class components and their lifecycle methods, and error boundaries still need a class.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Function component + hooks là chuẩn hiện nay — gọn, không có this, chia sẻ logic bằng custom hook. Tôi vẫn đọc được class component và vòng đời của nó; error boundary vẫn cần class.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "Why is mutating state a bug?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is slower."
+              },
+              {
+                "ma": "b",
+                "noiDung": "React compares references; a mutated object is the same reference, so React may skip the re-render and memoised children keep stale data."
+              },
+              {
+                "ma": "c",
+                "noiDung": "JavaScript forbids it."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is not a bug."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React decides what changed by reference equality. If I push into the existing array, the reference is the same, so React can skip updating. I always produce a new array or object with spread, map or filter.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React xét thay đổi bằng so sánh tham chiếu. Push vào mảng cũ thì tham chiếu không đổi nên React có thể bỏ qua cập nhật. Tôi luôn tạo mảng/object mới bằng spread, map, filter.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "What is \"lifting state up\"?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Storing state in the browser."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Moving shared state to the nearest common parent so siblings stay in sync."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Using Redux always."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Putting state in the root only."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"When two siblings need the same data — like a filter box and a list — I move the state to their closest common parent, pass the value down to both and a setter to the one that changes it.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Khi hai component anh em cần cùng dữ liệu — vd ô lọc và danh sách — tôi chuyển state lên cha chung gần nhất, truyền giá trị xuống cả hai và hàm đặt cho cái cần thay đổi.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "What are PropTypes good for, and what replaced them in many projects?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Runtime security."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Development-time warnings documenting a component's props; TypeScript types now give the same at compile time."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Faster rendering."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Server validation."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"PropTypes document and check props at runtime in development only. Many teams moved to TypeScript, which catches the same mistakes in the editor before the code runs. Neither replaces validating user input.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"PropTypes mô tả và kiểm props lúc chạy, chỉ ở development. Nhiều nhóm chuyển sang TypeScript, bắt cùng loại lỗi ngay trong editor trước khi chạy. Cả hai đều không thay thế việc kiểm dữ liệu người dùng nhập.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "How do you decide where to split a component?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every 10 lines."
+              },
+              {
+                "ma": "b",
+                "noiDung": "By responsibility: a part that is reused, has its own state/logic, or makes the parent hard to read becomes its own component."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never split."
+              },
+              {
+                "ma": "d",
+                "noiDung": "One component per HTML tag."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I split by responsibility. If a piece is repeated, has its own logic, or the parent is getting long, I extract it and give it the smallest props it needs. Small components are easier to test and reuse.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi tách theo trách nhiệm. Phần lặp lại, có logic riêng, hoặc làm component cha quá dài thì tách ra và cho nó props tối thiểu. Component nhỏ dễ kiểm và dễ tái sử dụng.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

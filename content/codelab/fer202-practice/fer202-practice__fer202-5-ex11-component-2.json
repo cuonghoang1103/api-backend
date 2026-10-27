@@ -1,0 +1,836 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-ex11-component-2",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-ex11-component-2"
+  },
+  "exercises": [
+    {
+      "title": "To-do list: add and delete by id",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "array state",
+        "spread to add",
+        "filter to delete",
+        "key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "lists",
+        "exercise-11"
+      ],
+      "problemHtml": "<p>The first app of Exercise 11. Keep the to-dos in an array state; add with spread, delete with <code>filter</code> by a stable <b>id</b> — never by index.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>form#todo-form</code> with <code>#todo-input</code> (submit adds; trimmed; empty ignored; input cleared; page never reloads).</li>\n  <li><code>ul#todos</code> → <code>li.todo</code> with text and a <code>.btn-delete</code>; <code>#remaining</code> \"N tasks\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng dụng đầu của Exercise 11. Giữ to-do trong state mảng; thêm bằng spread, xoá bằng <code>filter</code> theo <b>id</b> ổn định — không theo index.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>form#todo-form</code> có <code>#todo-input</code> (gửi để thêm; bỏ khoảng trắng; rỗng thì bỏ qua; xoá ô; trang không tải lại).</li>\n  <li><code>ul#todos</code> → <code>li.todo</code> có chữ và nút <code>.btn-delete</code>; <code>#remaining</code> \"N tasks\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add \"Read chapter 5\", add \"Exercise 11\", delete the first",
+          "output": "Exercise 11 · 1 tasks",
+          "explanation": "setTodos(todos.filter((t) => t.id !== id))|||setTodos(todos.filter((t) => t.id !== id))"
+        }
+      ],
+      "hintsJson": [
+        "setTodos((list) => [...list, { id: Date.now(), text }]) — hoặc bộ đếm id tăng dần.",
+        "onSubmit={(e) => { e.preventDefault(); … }} để Enter cũng thêm được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [todos, setTodos] = useState([]);\n  return (\n    <form id=\"todo-form\">\n      <input id=\"todo-input\" />\n      <button>Add</button>\n      <ul id=\"todos\">{todos.map((t, i) => <li key={i} className=\"todo\">{t}</li>)}</ul>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — thêm bằng spread, xoá bằng filter theo id; form không tải lại trang\nimport { useState } from 'react';\n\nlet nextId = 1;\n\nexport default function App() {\n  const [todos, setTodos] = useState([]);\n  const [text, setText] = useState('');\n\n  const add = (e) => {\n    e.preventDefault();\n    const value = text.trim();\n    if (!value) return;\n    setTodos((list) => [...list, { id: nextId++, text: value }]);\n    setText('');\n  };\n  const remove = (id) => setTodos((list) => list.filter((t) => t.id !== id));\n\n  return (\n    <div>\n      <form id=\"todo-form\" onSubmit={add}>\n        <input id=\"todo-input\" value={text} onChange={(e) => setText(e.target.value)} placeholder=\"What needs to be done?\" />\n        <button type=\"submit\">Add</button>\n      </form>\n      <ul id=\"todos\">\n        {todos.map((t) => (\n          <li key={t.id} className=\"todo\">\n            <span className=\"todo-text\">{t.text}</span>\n            <button type=\"button\" className=\"btn-delete\" onClick={() => remove(t.id)}>✕</button>\n          </li>\n        ))}\n      </ul>\n      <p id=\"remaining\">{todos.length} tasks</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thêm: tạo mảng mới có phần tử cuối mới. Xoá: tạo mảng mới không có phần tử đó. Id ổn định giúp key đúng và xoá đúng phần tử dù danh sách thay đổi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Adding two to-dos",
+            "kiem": "danh-sach-text",
+            "selector": ".todo-text",
+            "mongDoi": [
+              "Read chapter 5",
+              "Exercise 11"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "Read chapter 5"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "  Exercise 11 "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Delete removes exactly that one",
+            "kiem": "danh-sach-text",
+            "selector": ".todo-text",
+            "mongDoi": [
+              "Exercise 11"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "Read chapter 5"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "Exercise 11"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".todo:first-child .btn-delete",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Submitting does not reload; input cleared",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#todo-input",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "X"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Empty text ignored",
+            "kiem": "text",
+            "selector": "#remaining",
+            "giaTri": "0 tasks",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No reload on submit",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "X"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá theo index (<code>splice(i, 1)</code>) ⇒ sửa mảng state và sai khi danh sách đổi thứ tự."
+        },
+        {
+          "loi": "Thiếu <code>preventDefault</code> ⇒ trang tải lại, mất hết to-do."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "to-do",
+          "vi": "việc cần làm"
+        }
+      ]
+    },
+    {
+      "title": "Calculator with a division-by-zero guard",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "controlled inputs",
+        "Number()",
+        "switch",
+        "error state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "forms",
+        "exercise-11"
+      ],
+      "problemHtml": "<p>Second app of Exercise 11: two number inputs, an operator select (+, −, ×, ÷) and a \"Calculate\" button. Show the result, or an error for empty inputs and division by zero.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#a</code>, <code>#b</code> (type number), <code>#op</code> (values <code>+ - * /</code>), <code>#calc</code>; result in <code>#result</code> \"Result: 7.5\".</li>\n  <li>Errors in <code>#error</code>: \"Please enter two numbers\" / \"Cannot divide by zero\". Results rounded to 4 decimals.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng dụng thứ hai của Exercise 11: hai ô số, select phép tính (+, −, ×, ÷) và nút \"Calculate\". Hiện kết quả, hoặc báo lỗi khi ô trống và khi chia cho 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#a</code>, <code>#b</code> (type number), <code>#op</code> (giá trị <code>+ - * /</code>), <code>#calc</code>; kết quả trong <code>#result</code> \"Result: 7.5\".</li>\n  <li>Lỗi trong <code>#error</code>: \"Please enter two numbers\" / \"Cannot divide by zero\". Kết quả làm tròn 4 chữ số thập phân.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "10 / 4",
+          "output": "Result: 2.5",
+          "explanation": "Input values are strings — convert with Number().|||Giá trị ô nhập là chuỗi — đổi bằng Number()."
+        }
+      ],
+      "hintsJson": [
+        "Giữ a, b là chuỗi trong state; khi bấm mới Number(a), Number(b).",
+        "Làm tròn: Math.round(x * 10000) / 10000."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [a, setA] = useState('');\n  const [b, setB] = useState('');\n  const [result, setResult] = useState('');\n  return (\n    <div>\n      <input id=\"a\" type=\"number\" value={a} onChange={(e) => setA(e.target.value)} />\n      <select id=\"op\"><option value=\"+\">+</option><option value=\"-\">−</option><option value=\"*\">×</option><option value=\"/\">÷</option></select>\n      <input id=\"b\" type=\"number\" value={b} onChange={(e) => setB(e.target.value)} />\n      <button id=\"calc\" onClick={() => setResult(a + b)}>Calculate</button>\n      <p id=\"result\">Result: {result}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — đổi chuỗi → số đúng lúc tính; kiểm lỗi TRƯỚC khi tính\nimport { useState } from 'react';\n\nfunction compute(x, op, y) {\n  switch (op) {\n    case '+': return x + y;\n    case '-': return x - y;\n    case '*': return x * y;\n    case '/': return x / y;\n    default: return NaN;\n  }\n}\n\nexport default function App() {\n  const [a, setA] = useState('');\n  const [b, setB] = useState('');\n  const [op, setOp] = useState('+');\n  const [result, setResult] = useState(null);\n  const [error, setError] = useState('');\n\n  const calculate = () => {\n    if (a.trim() === '' || b.trim() === '') return (setError('Please enter two numbers'), setResult(null));\n    if (op === '/' && Number(b) === 0) return (setError('Cannot divide by zero'), setResult(null));\n    setError('');\n    setResult(Math.round(compute(Number(a), op, Number(b)) * 10000) / 10000);\n  };\n\n  return (\n    <div>\n      <input id=\"a\" type=\"number\" value={a} onChange={(e) => setA(e.target.value)} />\n      <select id=\"op\" value={op} onChange={(e) => setOp(e.target.value)}>\n        <option value=\"+\">+</option>\n        <option value=\"-\">−</option>\n        <option value=\"*\">×</option>\n        <option value=\"/\">÷</option>\n      </select>\n      <input id=\"b\" type=\"number\" value={b} onChange={(e) => setB(e.target.value)} />\n      <button id=\"calc\" type=\"button\" onClick={calculate}>Calculate</button>\n      {error && <p id=\"error\">{error}</p>}\n      {result !== null && <p id=\"result\">Result: {result}</p>}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ô nhập luôn trả chuỗi; đổi sang số đúng lúc tính. Kiểm điều kiện lỗi TRƯỚC khi tính, và giữ kết quả/lỗi trong state để giao diện chỉ hiện một trong hai.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "2.5 × 3 = 7.5",
+            "kiem": "text",
+            "selector": "#result",
+            "giaTri": "Result: 7.5",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#a",
+                "giaTri": "2.5"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#op",
+                "giaTri": "*"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#b",
+                "giaTri": "3"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#calc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "10 / 0 ⇒ error",
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Cannot divide by zero",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#a",
+                "giaTri": "10"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#op",
+                "giaTri": "/"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#b",
+                "giaTri": "0"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#calc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Numbers are added, not concatenated",
+            "kiem": "text",
+            "selector": "#result",
+            "giaTri": "Result: 5",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#a",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#b",
+                "giaTri": "3"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#calc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Empty input ⇒ error, no result",
+            "kiem": "so-luong",
+            "selector": "#error, #result",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#a",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#calc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "1 / 3 rounded to 4 decimals",
+            "kiem": "text",
+            "selector": "#result",
+            "giaTri": "Result: 0.3333",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#a",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#op",
+                "giaTri": "/"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#b",
+                "giaTri": "3"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#calc",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>a + b</code> với chuỗi ⇒ \"2\" + \"3\" = \"23\"."
+        },
+        {
+          "loi": "Kiểm chia 0 sau khi đã chia ⇒ hiện Infinity."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "operand / operator",
+          "vi": "toán hạng / toán tử"
+        }
+      ]
+    },
+    {
+      "title": "Search filter: derive the shown list",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "derived list",
+        "controlled input",
+        "case-insensitive"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "derived",
+        "exercise-11"
+      ],
+      "problemHtml": "<p>Third app of Exercise 11: a search box filters a list of students live. Store only the query; the visible list is <b>computed</b> during render from the items prop and the query — never stored in its own state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SearchList({ items })</code>: <code>#q</code> input; <code>ul#results li</code>; match name OR student code, case-insensitive, ignoring surrounding spaces.</li>\n  <li>No match ⇒ <code>#no-match</code> \"No student matches “…”\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Ứng dụng thứ ba của Exercise 11: ô tìm lọc danh sách sinh viên ngay khi gõ. Chỉ lưu từ khoá; danh sách hiển thị được <b>tính</b> khi render từ prop items và từ khoá — không lưu thành state riêng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SearchList({ items })</code>: ô <code>#q</code>; <code>ul#results li</code>; khớp tên HOẶC mã SV, không phân biệt hoa/thường, bỏ khoảng trắng hai đầu.</li>\n  <li>Không khớp ⇒ <code>#no-match</code> \"No student matches “…”\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "q = \"  se17 \"",
+          "output": "students whose code contains SE17",
+          "explanation": "Trim + lower-case both sides before comparing.|||Trim + chữ thường cả hai vế trước khi so."
+        }
+      ],
+      "hintsJson": [
+        "const q = query.trim().toLowerCase(); const shown = items.filter((s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));",
+        "Đừng tạo useState(shown)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst STUDENTS = [\n  { id: 1, code: 'SE170001', name: 'Nguyen Van An' },\n  { id: 2, code: 'SE170245', name: 'Tran Thi Binh' },\n  { id: 3, code: 'SS180010', name: 'Le Hoang Cuong' },\n  { id: 4, code: 'SE180777', name: 'Pham Ngoc Anh' },\n];\n\nfunction SearchList({ items }) {\n  const [shown, setShown] = useState(items);\n  return (\n    <div>\n      <input id=\"q\" onChange={(e) => setShown(items.filter((s) => s.name.includes(e.target.value)))} />\n      <ul id=\"results\">{shown.map((s) => <li key={s.id}>{s.code} — {s.name}</li>)}</ul>\n    </div>\n  );\n}\n\nexport default function App() {\n  return <SearchList items={STUDENTS} />;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — chỉ lưu từ khoá; danh sách hiển thị TÍNH khi render\nimport { useState } from 'react';\n\nconst STUDENTS = [\n  { id: 1, code: 'SE170001', name: 'Nguyen Van An' },\n  { id: 2, code: 'SE170245', name: 'Tran Thi Binh' },\n  { id: 3, code: 'SS180010', name: 'Le Hoang Cuong' },\n  { id: 4, code: 'SE180777', name: 'Pham Ngoc Anh' },\n];\n\nfunction SearchList({ items }) {\n  const [query, setQuery] = useState('');\n  const q = query.trim().toLowerCase();\n  const shown = items.filter((s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));\n  return (\n    <div>\n      <input id=\"q\" value={query} onChange={(e) => setQuery(e.target.value)} placeholder=\"Search name or code...\" />\n      {shown.length === 0 ? (\n        <p id=\"no-match\">No student matches “{query.trim()}”</p>\n      ) : (\n        <ul id=\"results\">{shown.map((s) => <li key={s.id}>{s.code} — {s.name}</li>)}</ul>\n      )}\n    </div>\n  );\n}\n\nexport default function App() {\n  return <SearchList items={STUDENTS} />;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Danh sách lọc phụ thuộc hoàn toàn vào <code>items</code> + <code>query</code>, nên tính khi render là đủ — luôn đúng, không bao giờ \"cũ\". Nếu danh sách rất lớn mới cần <code>useMemo</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "All four at first",
+            "kiem": "so-luong",
+            "selector": "#results li",
+            "giaTri": 4
+          },
+          {
+            "moTa": "\"anh\" matches by name (case-insensitive)",
+            "kiem": "danh-sach-text",
+            "selector": "#results li",
+            "mongDoi": [
+              "SE180777 — Pham Ngoc Anh"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "ANH"
+              }
+            ]
+          },
+          {
+            "moTa": "\"  se17 \" matches by code with spaces",
+            "kiem": "so-luong",
+            "selector": "#results li",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "  se17 "
+              }
+            ]
+          },
+          {
+            "moTa": "No match message",
+            "kiem": "text",
+            "selector": "#no-match",
+            "giaTri": "No student matches “xyz”",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "xyz"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "The shown list is not stored in state",
+            "kiem": "ma-nguon",
+            "khop": "useState\\(\\s*items\\s*\\)",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>shown</code> trong state và cập nhật trong onChange ⇒ khi items đổi thì danh sách cũ (stale)."
+        },
+        {
+          "loi": "Quên trim ⇒ gõ thừa dấu cách là không ra kết quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stale state",
+          "vi": "state cũ không còn khớp dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "To-do pro: toggle, filter tabs and counters",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "map toggle",
+        "filter view",
+        "derived counts",
+        "conditional class"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "lists",
+        "exercise-11"
+      ],
+      "problemHtml": "<p>Extend the to-do list like a real app: mark items done, switch between <b>All / Active / Done</b>, see counters, and \"Clear done\". Only the items array and the current filter are state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Starts with 4 given to-dos. <code>.todo</code> has a checkbox <code>.toggle</code>; done items get class <code>done</code>.</li>\n  <li>Filter buttons <code>#f-all</code>, <code>#f-active</code>, <code>#f-done</code> (selected has class <code>selected</code>); <code>#counts</code> \"2 active · 2 done\"; <code>#clear-done</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mở rộng to-do như ứng dụng thật: đánh dấu xong, chuyển giữa <b>All / Active / Done</b>, xem bộ đếm và \"Clear done\". Chỉ mảng to-do và bộ lọc hiện tại là state.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bắt đầu với 4 to-do cho sẵn. <code>.todo</code> có checkbox <code>.toggle</code>; việc xong có class <code>done</code>.</li>\n  <li>Nút lọc <code>#f-all</code>, <code>#f-active</code>, <code>#f-done</code> (nút đang chọn có class <code>selected</code>); <code>#counts</code> \"2 active · 2 done\"; <code>#clear-done</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tick \"Buy milk\", choose Active",
+          "output": "only the not-done items",
+          "explanation": "const visible = todos.filter(FILTERS[filter])|||const visible = todos.filter(FILTERS[filter])"
+        }
+      ],
+      "hintsJson": [
+        "const FILTERS = { all: () => true, active: (t) => !t.done, done: (t) => t.done };",
+        "Toggle: setTodos(ts => ts.map(t => t.id === id ? { ...t, done: !t.done } : t))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [todos, setTodos] = useState([\n    { id: 1, text: 'Buy milk', done: false },\n    { id: 2, text: 'Read chapter 5', done: true },\n    { id: 3, text: 'Exercise 11', done: false },\n    { id: 4, text: 'Push to GitHub', done: true },\n  ]);\n  // TODO: toggle, bộ lọc All/Active/Done, #counts, #clear-done\n  return <ul>{todos.map((t) => <li key={t.id} className=\"todo\">{t.text}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state: todos + filter; danh sách hiển thị và số đếm đều SUY RA\nimport { useState } from 'react';\n\nconst FILTERS = { all: () => true, active: (t) => !t.done, done: (t) => t.done };\n\nexport default function App() {\n  const [todos, setTodos] = useState([\n    { id: 1, text: 'Buy milk', done: false },\n    { id: 2, text: 'Read chapter 5', done: true },\n    { id: 3, text: 'Exercise 11', done: false },\n    { id: 4, text: 'Push to GitHub', done: true },\n  ]);\n  const [filter, setFilter] = useState('all');\n\n  const toggle = (id) => setTodos((ts) => ts.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));\n  const clearDone = () => setTodos((ts) => ts.filter((t) => !t.done));\n\n  const visible = todos.filter(FILTERS[filter]);\n  const doneCount = todos.filter((t) => t.done).length;\n\n  return (\n    <div>\n      <div className=\"filters\">\n        {['all', 'active', 'done'].map((f) => (\n          <button key={f} id={`f-${f}`} type=\"button\" className={filter === f ? 'selected' : ''} onClick={() => setFilter(f)}>\n            {f[0].toUpperCase() + f.slice(1)}\n          </button>\n        ))}\n      </div>\n      <ul id=\"todos\">\n        {visible.map((t) => (\n          <li key={t.id} className={t.done ? 'todo done' : 'todo'}>\n            <label><input type=\"checkbox\" className=\"toggle\" checked={t.done} onChange={() => toggle(t.id)} /> {t.text}</label>\n          </li>\n        ))}\n      </ul>\n      <p id=\"counts\">{todos.length - doneCount} active · {doneCount} done</p>\n      <button id=\"clear-done\" type=\"button\" disabled={doneCount === 0} onClick={clearDone}>Clear done</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bộ lọc chỉ đổi CÁCH NHÌN, không đổi dữ liệu: <code>visible = todos.filter(FILTERS[filter])</code>. Số đếm, trạng thái nút \"Clear done\" đều suy ra từ <code>todos</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Initial counts",
+            "kiem": "text",
+            "selector": "#counts",
+            "giaTri": "2 active · 2 done"
+          },
+          {
+            "moTa": "Active filter after ticking \"Buy milk\"",
+            "kiem": "danh-sach-text",
+            "selector": ".todo",
+            "mongDoi": [
+              "Exercise 11"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": ".todo:first-child .toggle"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#f-active",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Selected filter button is marked",
+            "kiem": "ton-tai",
+            "selector": "#f-done.selected",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#f-done",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Clear done keeps active items",
+            "kiem": "danh-sach-text",
+            "selector": ".todo",
+            "mongDoi": [
+              "Buy milk",
+              "Exercise 11"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#clear-done",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Back to All shows everything again",
+            "kiem": "so-luong",
+            "selector": ".todo",
+            "giaTri": 4,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#f-done",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#f-all",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Done items have class done",
+            "kiem": "so-luong",
+            "selector": ".todo.done",
+            "giaTri": 2
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lọc bằng cách xoá phần tử khỏi state ⇒ chuyển về All là mất việc."
+        },
+        {
+          "loi": "Lưu các số đếm trong state ⇒ lệch sau khi toggle/clear."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "view filter",
+          "vi": "bộ lọc hiển thị (không đổi dữ liệu)"
+        }
+      ]
+    },
+    {
+      "title": "Search with highlighted matches",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "string split",
+        "mark element",
+        "escaping RegExp",
+        "keys for fragments"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "strings",
+        "exercise-11"
+      ],
+      "problemHtml": "<p>Make the search filter friendlier: matched parts of each name are wrapped in <code>&lt;mark&gt;</code>. Build the parts safely — the query can contain special characters like <code>(</code> or <code>+</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Highlight({ text, query })</code> returns the text with every case-insensitive match in <code>mark</code>; empty query ⇒ plain text.</li>\n  <li>List <code>li.course</code> shows only matching courses; query <code>c++</code> must not crash.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm ô tìm thân thiện hơn: phần khớp trong mỗi tên được bọc <code>&lt;mark&gt;</code>. Dựng các phần một cách an toàn — từ khoá có thể chứa ký tự đặc biệt như <code>(</code> hay <code>+</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Highlight({ text, query })</code> trả chữ với mọi đoạn khớp (không phân biệt hoa/thường) bọc trong <code>mark</code>; từ khoá rỗng ⇒ chữ thường.</li>\n  <li>Danh sách <code>li.course</code> chỉ hiện khoá khớp; từ khoá <code>c++</code> không được làm lỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "query \"re\" on \"React Redux\"",
+          "output": "<mark>Re</mark>act <mark>Re</mark>dux",
+          "explanation": "Keep the original letter case inside the mark.|||Giữ nguyên chữ hoa/thường gốc bên trong mark."
+        }
+      ],
+      "hintsJson": [
+        "Escape: const safe = query.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'); rồi text.split(new RegExp(`(${safe})`, 'gi')).",
+        "split với nhóm ( ) giữ lại phần khớp; phần lẻ là khớp: parts.map((p, i) => i % 2 ? <mark key={i}>{p}</mark> : p)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst COURSES = ['React Redux', 'Advanced React', 'C++ Basics', 'Node.js API', 'Redis for Beginners'];\n\nexport default function App() {\n  const [query, setQuery] = useState('');\n  const shown = COURSES.filter((c) => new RegExp(query, 'i').test(c)); // ⚠ c++ làm lỗi\n  return (\n    <div>\n      <input id=\"q\" value={query} onChange={(e) => setQuery(e.target.value)} />\n      <ul>{shown.map((c) => <li key={c} className=\"course\">{c}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — escape từ khoá rồi split theo nhóm bắt giữ; phần tử lẻ là đoạn khớp\nimport { useState } from 'react';\n\nconst COURSES = ['React Redux', 'Advanced React', 'C++ Basics', 'Node.js API', 'Redis for Beginners'];\nconst escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n\nfunction Highlight({ text, query }) {\n  const q = query.trim();\n  if (!q) return text;\n  const parts = text.split(new RegExp(`(${escapeRegExp(q)})`, 'gi'));\n  return parts.map((part, i) => (i % 2 === 1 ? <mark key={i}>{part}</mark> : part));\n}\n\nexport default function App() {\n  const [query, setQuery] = useState('');\n  const q = query.trim().toLowerCase();\n  const shown = COURSES.filter((c) => c.toLowerCase().includes(q));\n  return (\n    <div>\n      <input id=\"q\" value={query} onChange={(e) => setQuery(e.target.value)} placeholder=\"Search courses...\" />\n      <ul>\n        {shown.map((c) => (\n          <li key={c} className=\"course\"><Highlight text={c} query={query} /></li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>split</code> với một nhóm bắt giữ trả về [không khớp, khớp, không khớp, …] — phần tử ở vị trí lẻ là đoạn khớp. Escape từ khoá trước khi tạo RegExp để ký tự như <code>+</code> được hiểu là chữ thường.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "\"re\" highlights every match",
+            "kiem": "danh-sach-text",
+            "selector": ".course mark",
+            "mongDoi": [
+              "Re",
+              "Re",
+              "Re",
+              "Re"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "re"
+              }
+            ]
+          },
+          {
+            "moTa": "Only matching courses are listed",
+            "kiem": "danh-sach-text",
+            "selector": ".course",
+            "mongDoi": [
+              "React Redux",
+              "Advanced React",
+              "Redis for Beginners"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "re"
+              }
+            ]
+          },
+          {
+            "moTa": "\"c++\" does not crash and finds C++",
+            "kiem": "danh-sach-text",
+            "selector": ".course mark",
+            "mongDoi": [
+              "C++"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "c++"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No JS error with special characters",
+            "kiem": "khong-loi-js",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "(node"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Empty query ⇒ no marks",
+            "kiem": "so-luong",
+            "selector": "mark",
+            "giaTri": 0
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>new RegExp(query)</code> không escape ⇒ \"c++\" ném SyntaxError: Nothing to repeat."
+        },
+        {
+          "loi": "Dựng HTML bằng chuỗi rồi <code>dangerouslySetInnerHTML</code> ⇒ lỗ XSS."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "escape (regex)",
+          "vi": "thoát ký tự đặc biệt của biểu thức chính quy"
+        },
+        {
+          "en": "highlight",
+          "vi": "tô sáng"
+        }
+      ]
+    }
+  ]
+}

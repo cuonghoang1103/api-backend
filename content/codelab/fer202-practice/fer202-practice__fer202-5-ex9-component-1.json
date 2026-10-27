@@ -1,0 +1,409 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-ex9-component-1",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-ex9-component-1"
+  },
+  "exercises": [
+    {
+      "title": "About-me component from props",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "props",
+        "component"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "exercise-9"
+      ],
+      "problemHtml": "<p>Step 1 of Exercise 9: a component that displays your name and a short message about yourself. Make it reusable — the data comes from props.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>AboutMe({ name, message })</code> ⇒ <code>div.about</code> with <code>h2</code> name and <code>p</code> message.</li>\n  <li>App renders it twice (you and a friend).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước 1 của Exercise 9: component hiển thị tên bạn và một lời giới thiệu ngắn. Làm cho nó dùng lại được — dữ liệu đến từ props.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>AboutMe({ name, message })</code> ⇒ <code>div.about</code> gồm <code>h2</code> tên và <code>p</code> lời giới thiệu.</li>\n  <li>App vẽ nó hai lần (bạn và một người bạn).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<AboutMe name=\"Cuong\" message=\"I love React.\" />",
+          "output": "<div class=\"about\"><h2>Cuong</h2><p>I love React.</p></div>",
+          "explanation": "Same component, different props.|||Cùng component, khác props."
+        }
+      ],
+      "hintsJson": [
+        "function AboutMe({ name, message }) { return (<div className=\"about\">…</div>); }",
+        "App: <AboutMe name=\"Cuong\" message=\"…\" /> và một lần nữa với tên khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  // TODO: component AboutMe dùng hai lần\n  return <h1>About</h1>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một component, dữ liệu qua props\nfunction AboutMe({ name, message }) {\n  return (\n    <div className=\"about\">\n      <h2>{name}</h2>\n      <p>{message}</p>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <AboutMe name=\"Cuong\" message=\"I am learning React at FPT University.\" />\n      <AboutMe name=\"Lan\" message=\"I build UIs with React-Bootstrap.\" />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Component nhận dữ liệu qua props nên một định nghĩa phục vụ nhiều người. Đây là bước \"props-down\" đầu tiên của Exercise 9.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Two .about blocks",
+            "kiem": "so-luong",
+            "selector": ".about",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Each has a name and a message",
+            "kiem": "so-luong",
+            "selector": ".about > h2 + p",
+            "giaTri": 2
+          },
+          {
+            "moTa": "AboutMe takes name and message props",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+AboutMe\\s*\\(\\s*\\{\\s*name\\s*,\\s*message\\s*\\}"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết cứng tên trong component ⇒ không dùng lại được."
+        },
+        {
+          "loi": "Trả về hai thẻ ngang hàng không có thẻ bọc ⇒ lỗi JSX."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "props",
+          "vi": "tham số truyền vào component"
+        }
+      ]
+    },
+    {
+      "title": "Hello, World! as a component tree",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "component tree",
+        "nesting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "exercise-9"
+      ],
+      "problemHtml": "<p>Step 2: render <b>Hello, World!</b> — but as a small tree: <code>App</code> → <code>Greeting</code> → <code>Hello</code> + <code>World</code>, so you see how components nest.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>h1#greeting</code> containing <code>span.hello</code> \"Hello,\" and <code>span.world</code> \"World!\" (rendered by two components).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước 2: hiển thị <b>Hello, World!</b> — nhưng dưới dạng cây nhỏ: <code>App</code> → <code>Greeting</code> → <code>Hello</code> + <code>World</code>, để thấy component lồng nhau thế nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>h1#greeting</code> chứa <code>span.hello</code> \"Hello,\" và <code>span.world</code> \"World!\" (do hai component vẽ).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Greeting />",
+          "output": "<h1 id=\"greeting\"><span class=\"hello\">Hello,</span> <span class=\"world\">World!</span></h1>",
+          "explanation": "A component can render other components.|||Component có thể vẽ component khác."
+        }
+      ],
+      "hintsJson": [
+        "const Hello = () => <span className=\"hello\">Hello,</span>;",
+        "function Greeting() { return <h1 id=\"greeting\"><Hello /> <World /></h1>; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return <h1>Hello, World!</h1>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — cây nhỏ: App → Greeting → Hello + World (khai báo ở cấp module)\nconst Hello = () => <span className=\"hello\">Hello,</span>;\nconst World = () => <span className=\"world\">World!</span>;\n\nfunction Greeting() {\n  return (\n    <h1 id=\"greeting\">\n      <Hello /> <World />\n    </h1>\n  );\n}\n\nexport default function App() {\n  return <Greeting />;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ứng dụng React là một cây component; mỗi component vẽ con của nó. Khai báo component ở cấp module, không lồng định nghĩa trong hàm khác.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Greeting text",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Hello, World!"
+          },
+          {
+            "moTa": "Built from .hello and .world spans",
+            "kiem": "so-luong",
+            "selector": "#greeting > span.hello, #greeting > span.world",
+            "giaTri": 2
+          },
+          {
+            "an": true,
+            "moTa": "Hello and World are components",
+            "kiem": "ma-nguon",
+            "khop": "<Hello\\s*/>[\\s\\S]*<World\\s*/>"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Khai báo component BÊN TRONG component khác ⇒ mỗi lần render tạo component mới (mất state, chậm)."
+        },
+        {
+          "loi": "Thiếu khoảng trắng giữa hai span ⇒ \"Hello,World!\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "component tree",
+          "vi": "cây component"
+        }
+      ]
+    },
+    {
+      "title": "Counter with increment and decrement",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "useState",
+        "onClick"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "exercise-9"
+      ],
+      "problemHtml": "<p>Step 3: a counter with <b>+</b> and <b>−</b> buttons using <code>useState</code>. The colour of the number shows its sign: positive green, negative red, zero gray (class names).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#count</code> with class <code>positive</code>/<code>negative</code>/<code>zero</code>; <code>#inc</code>, <code>#dec</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước 3: bộ đếm có nút <b>+</b> và <b>−</b> dùng <code>useState</code>. Màu số cho biết dấu: dương xanh, âm đỏ, bằng 0 xám (theo class).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#count</code> có class <code>positive</code>/<code>negative</code>/<code>zero</code>; <code>#inc</code>, <code>#dec</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click − twice",
+          "output": "-2 (class negative)",
+          "explanation": "The class is derived from the count.|||Class suy ra từ số đếm."
+        }
+      ],
+      "hintsJson": [
+        "const [count, setCount] = useState(0);",
+        "const tone = count > 0 ? 'positive' : count < 0 ? 'negative' : 'zero';"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return (\n    <div>\n      <button id=\"dec\">−</button>\n      <span id=\"count\">0</span>\n      <button id=\"inc\">+</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state cho số, class màu là giá trị suy ra\nimport { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  const tone = count > 0 ? 'positive' : count < 0 ? 'negative' : 'zero';\n  return (\n    <div>\n      <button id=\"dec\" type=\"button\" onClick={() => setCount((c) => c - 1)}>−</button>\n      <span id=\"count\" className={tone}>{count}</span>\n      <button id=\"inc\" type=\"button\" onClick={() => setCount((c) => c + 1)}>+</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>State giữ số; class màu là giá trị suy ra nên không cần state thứ hai.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Starts at 0 (zero)",
+            "kiem": "text",
+            "selector": "#count.zero",
+            "giaTri": "0"
+          },
+          {
+            "moTa": "+ three times ⇒ 3 positive",
+            "kiem": "text",
+            "selector": "#count.positive",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "− twice ⇒ -2 negative",
+            "kiem": "text",
+            "selector": "#count.negative",
+            "giaTri": "-2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#dec",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu màu vào state riêng ⇒ dễ lệch với số."
+        },
+        {
+          "loi": "Dùng biến thường thay cho state ⇒ không vẽ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "increment / decrement",
+          "vi": "tăng / giảm"
+        }
+      ]
+    },
+    {
+      "title": "SimpleCard composed from leaf components",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "leaf components",
+        "composition",
+        "props design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "exercise-9"
+      ],
+      "problemHtml": "<p>Step 4 (the main task of Exercise 9): build the classic social card from the <b>leaves up</b> — <code>Title</code>, <code>Description</code>, <code>Image</code> — then compose them in <code>SimpleCard({ item })</code>, and render a feed of cards from an array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Title({ text })</code> ⇒ <code>h3.card-title</code>; <code>Description({ text })</code> ⇒ <code>p.card-desc</code>; <code>Image({ url, alt })</code> ⇒ <code>img.card-img</code> width 120.</li>\n  <li><code>SimpleCard({ item })</code> ⇒ <code>div.simple-card</code> with Image, Title, Description in that order; App maps <code>POSTS</code> to cards.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bước 4 (bài chính của Exercise 9): dựng thẻ mạng xã hội từ <b>lá lên gốc</b> — <code>Title</code>, <code>Description</code>, <code>Image</code> — rồi ghép trong <code>SimpleCard({ item })</code>, và vẽ một bảng tin nhiều thẻ từ mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Title({ text })</code> ⇒ <code>h3.card-title</code>; <code>Description({ text })</code> ⇒ <code>p.card-desc</code>; <code>Image({ url, alt })</code> ⇒ <code>img.card-img</code> rộng 120.</li>\n  <li><code>SimpleCard({ item })</code> ⇒ <code>div.simple-card</code> gồm Image, Title, Description theo thứ tự; App map <code>POSTS</code> thành các thẻ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ id: 1, title: 'My first post', description: 'Hello!', imageUrl: '…' }",
+          "output": "<div class=\"simple-card\"><img class=\"card-img\"…><h3 class=\"card-title\">My first post</h3><p class=\"card-desc\">Hello!</p></div>",
+          "explanation": "Decide each component’s props first, then build bottom-up.|||Quyết định props của từng component trước, rồi dựng từ dưới lên."
+        }
+      ],
+      "hintsJson": [
+        "Lá trước: function Title({ text }) { return <h3 className=\"card-title\">{text}</h3>; }",
+        "SimpleCard: <Image url={item.imageUrl} alt={item.title} /><Title text={item.title} /><Description text={item.description} />"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst POSTS = [\n  { id: 1, title: 'My first post', description: 'Hello React world!', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p1' },\n  { id: 2, title: 'Learning props', description: 'Data goes down, events go up.', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p2' },\n  { id: 3, title: 'Exam soon', description: 'PE in week 9!', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p3' },\n];\n\nexport default function App() {\n  // TODO: Title, Description, Image → SimpleCard → map POSTS\n  return <div id=\"feed\">{POSTS.length} posts</div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — dựng từ LÁ (Title, Description, Image) lên GỐC (SimpleCard), rồi map dữ liệu\nconst POSTS = [\n  { id: 1, title: 'My first post', description: 'Hello React world!', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p1' },\n  { id: 2, title: 'Learning props', description: 'Data goes down, events go up.', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p2' },\n  { id: 3, title: 'Exam soon', description: 'PE in week 9!', imageUrl: 'https://api.dicebear.com/9.x/shapes/svg?seed=p3' },\n];\n\nfunction Title({ text }) {\n  return <h3 className=\"card-title\">{text}</h3>;\n}\nfunction Description({ text }) {\n  return <p className=\"card-desc\">{text}</p>;\n}\nfunction Image({ url, alt }) {\n  return <img className=\"card-img\" src={url} alt={alt} width={120} />;\n}\n\nfunction SimpleCard({ item }) {\n  return (\n    <div className=\"simple-card\">\n      <Image url={item.imageUrl} alt={item.title} />\n      <Title text={item.title} />\n      <Description text={item.description} />\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div id=\"feed\">\n      {POSTS.map((p) => <SimpleCard key={p.id} item={p} />)}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lá nhận đúng thứ nó cần (<code>text</code>, <code>url</code>) nên dùng được ở bất kỳ đâu; <code>SimpleCard</code> làm nhiệm vụ \"ánh xạ\" dữ liệu bài viết sang props của lá. Đây là tư duy props-down mà Exercise 9 muốn luyện.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Three cards in the feed",
+            "kiem": "so-luong",
+            "selector": "#feed > .simple-card",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Card parts in order: img, title, description",
+            "kiem": "so-luong",
+            "selector": ".simple-card > img.card-img:first-child + h3.card-title + p.card-desc",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Titles from data",
+            "kiem": "danh-sach-text",
+            "selector": ".card-title",
+            "mongDoi": [
+              "My first post",
+              "Learning props",
+              "Exam soon"
+            ]
+          },
+          {
+            "moTa": "Leaf components take minimal props",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+Title\\s*\\(\\s*\\{\\s*text\\s*\\}"
+          },
+          {
+            "an": true,
+            "moTa": "Image alt is the title",
+            "kiem": "thuoc-tinh",
+            "selector": ".simple-card:first-child img",
+            "thuocTinh": "alt",
+            "giaTri": "My first post"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truyền cả <code>item</code> xuống <code>Title</code> ⇒ lá phụ thuộc vào hình dạng dữ liệu."
+        },
+        {
+          "loi": "Thiếu <code>key</code> khi map POSTS."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "leaf component",
+          "vi": "component lá (không chứa component khác)"
+        },
+        {
+          "en": "bottom-up",
+          "vi": "dựng từ dưới lên"
+        }
+      ]
+    }
+  ]
+}

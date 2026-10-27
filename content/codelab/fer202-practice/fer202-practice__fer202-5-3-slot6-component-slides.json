@@ -1,0 +1,352 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-3-slot6-component-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-3-slot6-component-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: components, props and state",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "components",
+        "props",
+        "state",
+        "class vs function"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 6: what components are, props vs state, class vs function components and their lifecycle.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 6: component là gì, props và state, class và function component cùng vòng đời.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Props: cha đưa xuống, con chỉ đọc. State: dữ liệu riêng của component, đổi qua hàm đặt.",
+        "Class: this.state + this.setState; function: useState."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: components, props and state\n\nAnswer in the panel on the left (no code needed).\n\n1. A React component name must…\n2. Inside a child component, props are…\n3. Which is TRUE about state?\n4. In a class component, state is updated with…\n5. Which class method runs once after the component appears on screen?\n6. Which are advantages of function components with hooks? (choose all)\n7. props.children contains…\n8. Lifting state up means…\n9. After const [n, setN] = useState(0), which correctly increments?\n10. A pure component (in the React sense)…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: components, props and state — answer key\n\n1. A React component name must…\n   Answer: b) start with a capital letter\n   Lower-case JSX tags are treated as HTML elements. / Thẻ JSX viết thường bị coi là thẻ HTML.\n\n2. Inside a child component, props are…\n   Answer: a) read-only\n   A component must never modify its own props — ask the parent through a callback. / Component không được sửa props của chính nó — nhờ cha qua callback.\n\n3. Which is TRUE about state?\n   Answer: b) Changing it with its setter re-renders the component.\n   State is local to each instance; setting it schedules a re-render. / State riêng cho từng instance; gọi hàm đặt sẽ lên lịch vẽ lại.\n\n4. In a class component, state is updated with…\n   Answer: b) this.setState({ x: 1 })\n   this.setState merges the change and re-renders. / this.setState trộn thay đổi và vẽ lại.\n\n5. Which class method runs once after the component appears on screen?\n   Answer: b) componentDidMount\n   componentDidMount ≈ useEffect(fn, []) in function components. / componentDidMount ≈ useEffect(fn, []) ở function component.\n\n6. Which are advantages of function components with hooks? (choose all)\n   Answer: a) Less boilerplate (no this, no binding) + b) Logic can be reused with custom hooks + d) Recommended style for new React code\n   Class components still have state; hooks are just simpler and reusable. / Class vẫn có state; hooks chỉ gọn và dễ tái sử dụng hơn.\n\n7. props.children contains…\n   Answer: b) whatever is written between the opening and closing tags\n   Anything nested inside <Comp>…</Comp>: text, elements, components. / Mọi thứ lồng trong …: chữ, phần tử, component.\n\n8. Lifting state up means…\n   Answer: a) moving state to the closest common parent of the components that need it\n   The common parent owns the data and passes it down with callbacks to change it. / Cha chung giữ dữ liệu, truyền xuống kèm callback để thay đổi.\n\n9. After const [n, setN] = useState(0), which correctly increments?\n   Answer: b) setN(n + 1) or setN((c) => c + 1)\n   Always go through the setter; the updater form is safest when chaining. / Luôn qua hàm đặt; dạng hàm cập nhật an toàn nhất khi gọi liên tiếp.\n\n10. A pure component (in the React sense)…\n   Answer: a) renders the same output for the same props and state\n   Rendering must not have side effects — same inputs, same JSX. / Render không được có tác dụng phụ — cùng đầu vào, cùng JSX.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "A React component name must…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "be all lower-case"
+              },
+              {
+                "ma": "b",
+                "noiDung": "start with a capital letter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "end with \"Component\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "be unique in the whole app"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Lower-case JSX tags are treated as HTML elements.</p><p><i>🇻🇳 Thẻ JSX viết thường bị coi là thẻ HTML.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Inside a child component, props are…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "read-only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "writable but not recommended"
+              },
+              {
+                "ma": "c",
+                "noiDung": "copied into state automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "global variables"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A component must never modify its own props — ask the parent through a callback.</p><p><i>🇻🇳 Component không được sửa props của chính nó — nhờ cha qua callback.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Which is TRUE about state?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is passed from the parent."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Changing it with its setter re-renders the component."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is shared by all instances."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It can only hold numbers."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>State is local to each instance; setting it schedules a re-render.</p><p><i>🇻🇳 State riêng cho từng instance; gọi hàm đặt sẽ lên lịch vẽ lại.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "In a class component, state is updated with…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>this.state.x = 1</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>this.setState({ x: 1 })</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>setState(1)</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>this.update()</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><code>this.setState</code> merges the change and re-renders.</p><p><i>🇻🇳 this.setState trộn thay đổi và vẽ lại.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Which class method runs once after the component appears on screen?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>render</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>componentDidMount</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>componentWillUnmount</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>constructor</code> after render"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>componentDidMount ≈ <code>useEffect(fn, [])</code> in function components.</p><p><i>🇻🇳 componentDidMount ≈ useEffect(fn, []) ở function component.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Which are advantages of function components with hooks? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Less boilerplate (no <code>this</code>, no binding)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Logic can be reused with custom hooks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are the only way to use state"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Recommended style for new React code"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Class components still have state; hooks are just simpler and reusable.</p><p><i>🇻🇳 Class vẫn có state; hooks chỉ gọn và dễ tái sử dụng hơn.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q7",
+            "de": "<code>props.children</code> contains…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the child components' state"
+              },
+              {
+                "ma": "b",
+                "noiDung": "whatever is written between the opening and closing tags"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an array of DOM nodes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only text"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Anything nested inside <code>&lt;Comp&gt;…&lt;/Comp&gt;</code>: text, elements, components.</p><p><i>🇻🇳 Mọi thứ lồng trong <Comp>…</Comp>: chữ, phần tử, component.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Lifting state up means…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "moving state to the closest common parent of the components that need it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "using global variables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "putting state in localStorage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "moving state into the deepest child"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The common parent owns the data and passes it down with callbacks to change it.</p><p><i>🇻🇳 Cha chung giữ dữ liệu, truyền xuống kèm callback để thay đổi.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "After <code>const [n, setN] = useState(0)</code>, which correctly increments?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>n++</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>setN(n + 1)</code> or <code>setN((c) =&gt; c + 1)</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>useState(n + 1)</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>this.setN(n + 1)</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Always go through the setter; the updater form is safest when chaining.</p><p><i>🇻🇳 Luôn qua hàm đặt; dạng hàm cập nhật an toàn nhất khi gọi liên tiếp.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "A pure component (in the React sense)…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "renders the same output for the same props and state"
+              },
+              {
+                "ma": "b",
+                "noiDung": "never re-renders"
+              },
+              {
+                "ma": "c",
+                "noiDung": "has no props"
+              },
+              {
+                "ma": "d",
+                "noiDung": "uses only CSS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rendering must not have side effects — same inputs, same JSX.</p><p><i>🇻🇳 Render không được có tác dụng phụ — cùng đầu vào, cùng JSX.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ con được sửa props."
+        },
+        {
+          "loi": "Nhầm setState của class (trộn) với useState (thay thế)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lifecycle",
+          "vi": "vòng đời (mount, update, unmount)"
+        },
+        {
+          "en": "immutable props",
+          "vi": "props không đổi được từ bên trong"
+        }
+      ]
+    }
+  ]
+}

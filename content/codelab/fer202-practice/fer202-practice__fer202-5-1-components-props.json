@@ -1,0 +1,546 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-1-components-props",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "Your first component with props",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "function component",
+        "props",
+        "reuse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "props"
+      ],
+      "problemHtml": "<p>A component is a function that returns JSX; props are its arguments. Write <code>Welcome</code> and reuse it three times with different names.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Welcome</code> renders <code>&lt;h2 className=\"welcome\"&gt;Welcome, {name}!&lt;/h2&gt;</code>.</li>\n  <li><code>App</code> renders <code>Welcome</code> for An, Binh and Cuong. Component names start with a capital letter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component là hàm trả về JSX; props là tham số của nó. Viết <code>Welcome</code> và dùng lại ba lần với ba tên khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Welcome</code> vẽ <code>&lt;h2 className=\"welcome\"&gt;Welcome, {name}!&lt;/h2&gt;</code>.</li>\n  <li><code>App</code> vẽ <code>Welcome</code> cho An, Binh và Cuong. Tên component viết hoa chữ đầu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Welcome name=\"An\" />",
+          "output": "<h2 class=\"welcome\">Welcome, An!</h2>",
+          "explanation": "Props arrive as one object: { name: \"An\" }.|||Props đến dưới dạng một object: { name: \"An\" }."
+        }
+      ],
+      "hintsJson": [
+        "function Welcome(props) { return <h2 className=\"welcome\">Welcome, {props.name}!</h2>; }",
+        "Dùng: <Welcome name=\"An\" /> — thuộc tính JSX thành props."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: chữ lặp lại ba lần\nexport default function App() {\n  return (\n    <div>\n      <h2>Welcome, An!</h2>\n      <h2>Welcome, Binh!</h2>\n      <h2>Welcome, Cuong!</h2>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một component, ba lần dùng với props khác nhau\nfunction Welcome({ name }) {\n  return <h2 className=\"welcome\">Welcome, {name}!</h2>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Welcome name=\"An\" />\n      <Welcome name=\"Binh\" />\n      <Welcome name=\"Cuong\" />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>JSX viết hoa (<code>&lt;Welcome /&gt;</code>) là component; React gọi hàm đó với object props. Một component — nhiều chỗ dùng — mỗi chỗ một bộ props.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Three .welcome headings",
+            "kiem": "danh-sach-text",
+            "selector": ".welcome",
+            "mongDoi": [
+              "Welcome, An!",
+              "Welcome, Binh!",
+              "Welcome, Cuong!"
+            ]
+          },
+          {
+            "moTa": "A Welcome component is defined and used",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+Welcome\\s*\\([\\s\\S]*<Welcome\\s+name="
+          },
+          {
+            "an": true,
+            "moTa": "The text is not hard-coded three times",
+            "kiem": "ma-nguon",
+            "khop": "Welcome, (An|Binh|Cuong)!",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tên <code>welcome</code> (chữ thường) ⇒ React coi là thẻ HTML lạ <code>&lt;welcome&gt;</code>."
+        },
+        {
+          "loi": "Gọi như hàm <code>{Welcome(\"An\")}</code> thay vì dùng thẻ JSX."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reusable",
+          "vi": "tái sử dụng được"
+        }
+      ]
+    },
+    {
+      "title": "Destructured props with default values",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "destructuring props",
+        "default props",
+        "className composition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "props"
+      ],
+      "problemHtml": "<p><code>Tag</code> shows a coloured label. Destructure the props in the parameter list and give <code>color</code> a default of <code>'gray'</code> and <code>size</code> a default of <code>'md'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Render <code>&lt;span className=\"tag tag-{color} tag-{size}\"&gt;{label}&lt;/span&gt;</code>.</li>\n  <li>App (given) renders <code>React</code> (blue, lg), <code>Draft</code> (no color/size) and <code>Urgent</code> (red).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Tag</code> hiện một nhãn màu. Destructuring props ngay ở tham số, cho <code>color</code> mặc định <code>'gray'</code> và <code>size</code> mặc định <code>'md'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Vẽ <code>&lt;span className=\"tag tag-{color} tag-{size}\"&gt;{label}&lt;/span&gt;</code>.</li>\n  <li>App (đã cho) vẽ <code>React</code> (blue, lg), <code>Draft</code> (không color/size) và <code>Urgent</code> (red).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Tag label=\"Draft\" />",
+          "output": "<span class=\"tag tag-gray tag-md\">Draft</span>",
+          "explanation": "Defaults apply when the prop is not passed.|||Giá trị mặc định áp khi không truyền prop."
+        }
+      ],
+      "hintsJson": [
+        "function Tag({ label, color = 'gray', size = 'md' }) { … }",
+        "className={`tag tag-${color} tag-${size}`}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction Tag(props) {\n  return <span className=\"tag\">{props.label}</span>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Tag label=\"React\" color=\"blue\" size=\"lg\" />\n      <Tag label=\"Draft\" />\n      <Tag label=\"Urgent\" color=\"red\" />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — destructuring + giá trị mặc định ngay ở tham số\nfunction Tag({ label, color = 'gray', size = 'md' }) {\n  return <span className={`tag tag-${color} tag-${size}`}>{label}</span>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Tag label=\"React\" color=\"blue\" size=\"lg\" />\n      <Tag label=\"Draft\" />\n      <Tag label=\"Urgent\" color=\"red\" />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Destructuring ở tham số cho biết ngay component nhận những prop nào; giá trị mặc định thay thế <code>defaultProps</code> cho function component.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "React tag is blue and large",
+            "kiem": "text",
+            "selector": ".tag.tag-blue.tag-lg",
+            "giaTri": "React"
+          },
+          {
+            "moTa": "Draft uses both defaults",
+            "kiem": "text",
+            "selector": ".tag.tag-gray.tag-md",
+            "giaTri": "Draft"
+          },
+          {
+            "moTa": "Urgent is red, default size",
+            "kiem": "text",
+            "selector": ".tag.tag-red.tag-md",
+            "giaTri": "Urgent"
+          },
+          {
+            "an": true,
+            "moTa": "No defaultProps",
+            "kiem": "ma-nguon",
+            "khop": "defaultProps",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>Tag.defaultProps</code> trên function component — đã bị khuyến cáo bỏ (React 19 bỏ hẳn); dùng giá trị mặc định của tham số."
+        },
+        {
+          "loi": "Viết <code>className=\"tag tag-{color}\"</code> (chuỗi thường) ⇒ ra đúng chữ {color}."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "default value",
+          "vi": "giá trị mặc định"
+        }
+      ]
+    },
+    {
+      "title": "children: a reusable Panel",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "props.children",
+        "optional props",
+        "composition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "children"
+      ],
+      "problemHtml": "<p>Everything between <code>&lt;Panel&gt;</code> and <code>&lt;/Panel&gt;</code> arrives as <code>props.children</code>. Build a <code>Panel</code> with a title, any content, and an optional footer prop.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>section.panel</code> → <code>h3.panel-title</code>, <code>div.panel-body</code> (children), and <code>div.panel-footer</code> ONLY when <code>footer</code> is passed.</li>\n  <li>App (given) uses one Panel with a list and a footer button, and one without a footer.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi thứ giữa <code>&lt;Panel&gt;</code> và <code>&lt;/Panel&gt;</code> đến dưới dạng <code>props.children</code>. Dựng <code>Panel</code> có tiêu đề, nội dung bất kỳ và prop footer tuỳ chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>section.panel</code> → <code>h3.panel-title</code>, <code>div.panel-body</code> (children), và <code>div.panel-footer</code> CHỈ khi có prop <code>footer</code>.</li>\n  <li>App (đã cho) dùng một Panel có danh sách + nút ở footer, và một Panel không có footer.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Panel title=\"News\"><p>Hi</p></Panel>",
+          "output": "<section class=\"panel\"><h3 class=\"panel-title\">News</h3><div class=\"panel-body\"><p>Hi</p></div></section>",
+          "explanation": "No footer prop ⇒ no footer element.|||Không có prop footer ⇒ không có phần footer."
+        }
+      ],
+      "hintsJson": [
+        "function Panel({ title, children, footer }) { … }",
+        "{footer && <div className=\"panel-footer\">{footer}</div>} — footer cũng có thể là JSX."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction Panel({ title }) {\n  return (\n    <section className=\"panel\">\n      <h3 className=\"panel-title\">{title}</h3>\n    </section>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Panel title=\"Tasks\" footer={<button id=\"btn-add\">Add task</button>}>\n        <ul><li>Read chapter 5</li><li>Do Exercise 9</li></ul>\n      </Panel>\n      <Panel title=\"Notes\">\n        <p id=\"note\">Props are read-only.</p>\n      </Panel>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — children = phần lồng bên trong; footer là \"khe\" tuỳ chọn nhận JSX\nfunction Panel({ title, children, footer }) {\n  return (\n    <section className=\"panel\">\n      <h3 className=\"panel-title\">{title}</h3>\n      <div className=\"panel-body\">{children}</div>\n      {footer && <div className=\"panel-footer\">{footer}</div>}\n    </section>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Panel title=\"Tasks\" footer={<button id=\"btn-add\">Add task</button>}>\n        <ul><li>Read chapter 5</li><li>Do Exercise 9</li></ul>\n      </Panel>\n      <Panel title=\"Notes\">\n        <p id=\"note\">Props are read-only.</p>\n      </Panel>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>children</code> biến component thành \"khung\" dùng lại được: Panel không cần biết bên trong là gì. Prop cũng nhận JSX (như <code>footer</code>), nên có thể có nhiều \"khe\" nội dung.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Children rendered inside .panel-body",
+            "kiem": "so-luong",
+            "selector": ".panel-body li, .panel-body #note",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Footer only on the first panel",
+            "kiem": "so-luong",
+            "selector": ".panel-footer",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Footer contains the button",
+            "kiem": "ton-tai",
+            "selector": ".panel:first-child .panel-footer #btn-add"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên vẽ <code>{children}</code> ⇒ nội dung bên trong biến mất."
+        },
+        {
+          "loi": "Luôn vẽ <code>div.panel-footer</code> rỗng ⇒ thừa đường viền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "children",
+          "vi": "nội dung lồng bên trong thẻ component"
+        },
+        {
+          "en": "composition",
+          "vi": "ghép component lồng nhau"
+        }
+      ]
+    },
+    {
+      "title": "Callbacks: a child reports to its parent",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "callback props",
+        "one-way data flow",
+        "useState"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "props",
+        "events"
+      ],
+      "problemHtml": "<p>Data flows down, events flow up. <code>RatingStars</code> shows 5 star buttons; clicking one calls <code>onRate(n)</code>. The parent <code>App</code> owns the rating in state and shows a message.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>RatingStars({ value, onRate })</code>: 5 <code>button.star</code>; stars ≤ value have class <code>on</code> and show ★, others ☆.</li>\n  <li>App: <code>#result</code> \"No rating yet\" → \"You rated 4/5\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Dữ liệu đi xuống, sự kiện đi lên. <code>RatingStars</code> có 5 nút sao; bấm một nút gọi <code>onRate(n)</code>. <code>App</code> (cha) giữ điểm trong state và hiện thông báo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>RatingStars({ value, onRate })</code>: 5 <code>button.star</code>; sao ≤ value có class <code>on</code> và hiện ★, còn lại ☆.</li>\n  <li>App: <code>#result</code> \"No rating yet\" → \"You rated 4/5\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click the 4th star",
+          "output": "★★★★☆ · You rated 4/5",
+          "explanation": "The child never changes its own value — it asks the parent via onRate.|||Con không tự đổi value — nó nhờ cha qua onRate."
+        }
+      ],
+      "hintsJson": [
+        "[1, 2, 3, 4, 5].map((n) => <button key={n} className={n <= value ? \"star on\" : \"star\"} onClick={() => onRate(n)}>…</button>)",
+        "App: const [rating, setRating] = useState(0); <RatingStars value={rating} onRate={setRating} />"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction RatingStars({ value }) {\n  return <div>{[1, 2, 3, 4, 5].map((n) => <button key={n} className=\"star\">☆</button>)}</div>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <RatingStars value={0} />\n      <p id=\"result\">No rating yet</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — cha giữ state; con báo lên bằng callback onRate\nimport { useState } from 'react';\n\nfunction RatingStars({ value, onRate }) {\n  return (\n    <div className=\"stars\">\n      {[1, 2, 3, 4, 5].map((n) => (\n        <button key={n} type=\"button\" className={n <= value ? 'star on' : 'star'} onClick={() => onRate(n)} aria-label={`${n} stars`}>\n          {n <= value ? '★' : '☆'}\n        </button>\n      ))}\n    </div>\n  );\n}\n\nexport default function App() {\n  const [rating, setRating] = useState(0);\n  return (\n    <div>\n      <RatingStars value={rating} onRate={setRating} />\n      <p id=\"result\">{rating ? `You rated ${rating}/5` : 'No rating yet'}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Props chỉ đọc; con muốn thay đổi thì gọi hàm cha truyền xuống. Cha đổi state ⇒ vẽ lại ⇒ con nhận <code>value</code> mới. Đây là \"nâng state lên\" ở dạng nhỏ nhất.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Initial message",
+            "kiem": "text",
+            "selector": "#result",
+            "giaTri": "No rating yet"
+          },
+          {
+            "moTa": "Clicking star 4 rates 4",
+            "kiem": "danh-sach-text",
+            "selector": ".star",
+            "mongDoi": [
+              "★",
+              "★",
+              "★",
+              "★",
+              "☆"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".star:nth-child(4)"
+              }
+            ]
+          },
+          {
+            "moTa": "Parent shows the rating",
+            "kiem": "text",
+            "selector": "#result",
+            "giaTri": "You rated 4/5",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".star:nth-child(4)"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Re-rating lower works",
+            "kiem": "so-luong",
+            "selector": ".star.on",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".star:nth-child(5)"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".star:nth-child(2)"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Con tự <code>useState</code> riêng ⇒ cha không biết điểm, thông báo không cập nhật."
+        },
+        {
+          "loi": "<code>onClick={onRate(n)}</code> ⇒ gọi ngay lúc render (vòng lặp render vô hạn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "callback prop",
+          "vi": "prop là hàm để con gọi báo lên cha"
+        },
+        {
+          "en": "one-way data flow",
+          "vi": "dữ liệu chảy một chiều từ cha xuống con"
+        }
+      ]
+    },
+    {
+      "title": "Split a big component into small ones",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "component extraction",
+        "single responsibility",
+        "props design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "components",
+        "refactor"
+      ],
+      "problemHtml": "<p>The starter is one 40-line <code>ProductPage</code>. Refactor it into four components with clear props — <code>ProductImage</code>, <code>ProductInfo</code>, <code>PriceTag</code>, <code>StockBadge</code> — without changing what the page shows.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Output identical to the starter (same classes and texts).</li>\n  <li><code>PriceTag({ price, salePrice })</code>: shows old price struck through only when <code>salePrice</code> exists. <code>StockBadge({ stock })</code>: \"In stock\" / \"Only 3 left\" (≤ 3) / \"Sold out\".</li>\n  <li>App renders two products to prove the components are reusable.</li>\n</ul>",
+      "problemHtmlVi": "<p>Starter là một <code>ProductPage</code> dài 40 dòng. Tách thành bốn component với props rõ ràng — <code>ProductImage</code>, <code>ProductInfo</code>, <code>PriceTag</code>, <code>StockBadge</code> — mà không đổi những gì trang hiển thị.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kết quả giống hệt starter (cùng class và chữ).</li>\n  <li><code>PriceTag({ price, salePrice })</code>: chỉ gạch giá cũ khi có <code>salePrice</code>. <code>StockBadge({ stock })</code>: \"In stock\" / \"Only 3 left\" (≤ 3) / \"Sold out\".</li>\n  <li>App vẽ hai sản phẩm để chứng minh component dùng lại được.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<StockBadge stock={2} />",
+          "output": "<span class=\"stock low\">Only 2 left</span>",
+          "explanation": "Each component owns one small decision.|||Mỗi component lo một quyết định nhỏ."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ lá: PriceTag và StockBadge chỉ cần một–hai prop.",
+        "ProductPage chỉ còn ghép: <ProductImage …/><ProductInfo …><PriceTag …/><StockBadge …/></ProductInfo>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: một component quá lớn (hãy tách)\nconst PRODUCTS = [\n  { id: 1, name: 'Mechanical Keyboard', brand: 'KeyLab', price: 1200000, salePrice: 990000, stock: 2, img: 'https://api.dicebear.com/9.x/shapes/svg?seed=kb' },\n  { id: 2, name: 'USB-C Hub', brand: 'Linko', price: 450000, salePrice: null, stock: 0, img: 'https://api.dicebear.com/9.x/shapes/svg?seed=hub' },\n];\nconst fmt = (n) => n.toLocaleString('en-US');\n\nfunction ProductPage({ product }) {\n  return (\n    <article className=\"product\">\n      <img className=\"product-img\" src={product.img} alt={product.name} width=\"120\" />\n      <div className=\"product-info\">\n        <h3 className=\"product-name\">{product.name}</h3>\n        <p className=\"brand\">by {product.brand}</p>\n        <p className=\"price\">\n          {product.salePrice ? <><del className=\"old\">{fmt(product.price)}</del> <b className=\"now\">{fmt(product.salePrice)}</b></> : <b className=\"now\">{fmt(product.price)}</b>}\n        </p>\n        {product.stock === 0 ? <span className=\"stock out\">Sold out</span> : product.stock <= 3 ? <span className=\"stock low\">Only {product.stock} left</span> : <span className=\"stock\">In stock</span>}\n      </div>\n    </article>\n  );\n}\n\nexport default function App() {\n  return <div>{PRODUCTS.map((p) => <ProductPage key={p.id} product={p} />)}</div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mỗi component một trách nhiệm; ProductPage chỉ còn lắp ráp\nconst PRODUCTS = [\n  { id: 1, name: 'Mechanical Keyboard', brand: 'KeyLab', price: 1200000, salePrice: 990000, stock: 2, img: 'https://api.dicebear.com/9.x/shapes/svg?seed=kb' },\n  { id: 2, name: 'USB-C Hub', brand: 'Linko', price: 450000, salePrice: null, stock: 0, img: 'https://api.dicebear.com/9.x/shapes/svg?seed=hub' },\n];\nconst fmt = (n) => n.toLocaleString('en-US');\n\nfunction ProductImage({ src, alt }) {\n  return <img className=\"product-img\" src={src} alt={alt} width=\"120\" />;\n}\n\nfunction PriceTag({ price, salePrice }) {\n  if (!salePrice) return <p className=\"price\"><b className=\"now\">{fmt(price)}</b></p>;\n  return (\n    <p className=\"price\">\n      <del className=\"old\">{fmt(price)}</del> <b className=\"now\">{fmt(salePrice)}</b>\n    </p>\n  );\n}\n\nfunction StockBadge({ stock }) {\n  if (stock === 0) return <span className=\"stock out\">Sold out</span>;\n  if (stock <= 3) return <span className=\"stock low\">Only {stock} left</span>;\n  return <span className=\"stock\">In stock</span>;\n}\n\nfunction ProductInfo({ name, brand, children }) {\n  return (\n    <div className=\"product-info\">\n      <h3 className=\"product-name\">{name}</h3>\n      <p className=\"brand\">by {brand}</p>\n      {children}\n    </div>\n  );\n}\n\nfunction ProductPage({ product }) {\n  const { name, brand, price, salePrice, stock, img } = product;\n  return (\n    <article className=\"product\">\n      <ProductImage src={img} alt={name} />\n      <ProductInfo name={name} brand={brand}>\n        <PriceTag price={price} salePrice={salePrice} />\n        <StockBadge stock={stock} />\n      </ProductInfo>\n    </article>\n  );\n}\n\nexport default function App() {\n  return <div>{PRODUCTS.map((p) => <ProductPage key={p.id} product={p} />)}</div>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Component nhỏ, props tối thiểu dễ đọc, dễ dùng lại và dễ kiểm. <code>ProductPage</code> trở thành nơi \"lắp ráp\", logic hiển thị nằm trong các component lá.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Same output: names and prices",
+            "kiem": "danh-sach-text",
+            "selector": ".product-name, .price",
+            "mongDoi": [
+              "Mechanical Keyboard",
+              "1,200,000 990,000",
+              "USB-C Hub",
+              "450,000"
+            ]
+          },
+          {
+            "moTa": "Stock badges",
+            "kiem": "danh-sach-text",
+            "selector": ".stock",
+            "mongDoi": [
+              "Only 2 left",
+              "Sold out"
+            ]
+          },
+          {
+            "moTa": "The four components exist",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*(function|const)\\s+ProductImage\\b)(?=[\\s\\S]*(function|const)\\s+PriceTag\\b)(?=[\\s\\S]*(function|const)\\s+StockBadge\\b)(?=[\\s\\S]*(function|const)\\s+ProductInfo\\b)"
+          },
+          {
+            "moTa": "StockBadge receives only stock",
+            "kiem": "ma-nguon",
+            "khop": "function StockBadge\\(\\s*\\{\\s*stock\\s*\\}\\s*\\)"
+          },
+          {
+            "an": true,
+            "moTa": "PriceTag used with price/salePrice props",
+            "kiem": "ma-nguon",
+            "khop": "<PriceTag\\s+price=\\{[^}]+\\}\\s+salePrice="
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truyền cả object <code>product</code> xuống mọi con ⇒ con phụ thuộc vào hình dạng dữ liệu, khó dùng lại."
+        },
+        {
+          "loi": "Đổi class/cấu trúc khi tách ⇒ CSS và bài kiểm gãy (refactor không được đổi hành vi)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "refactor",
+          "vi": "cấu trúc lại mã, không đổi hành vi"
+        },
+        {
+          "en": "single responsibility",
+          "vi": "mỗi phần một trách nhiệm"
+        }
+      ]
+    }
+  ]
+}

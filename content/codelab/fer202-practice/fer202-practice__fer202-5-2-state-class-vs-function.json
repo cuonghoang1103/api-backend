@@ -1,0 +1,707 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-2-state-class-vs-function",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-2-state-class-vs-function"
+  },
+  "exercises": [
+    {
+      "title": "Counter with useState and a lower bound",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "useState",
+        "event handler",
+        "disabled"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "hooks"
+      ],
+      "problemHtml": "<p>A quantity picker: <code>−</code>, <code>+</code> and <code>Reset</code>. The quantity never goes below 1 or above 10; the buttons are disabled at the limits.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#qty</code> starts at 1; <code>#dec</code>, <code>#inc</code>, <code>#reset</code>.</li>\n  <li><code>#dec</code> disabled at 1, <code>#inc</code> disabled at 10.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ chọn số lượng: <code>−</code>, <code>+</code> và <code>Reset</code>. Số lượng không dưới 1 và không quá 10; nút bị vô hiệu ở giới hạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#qty</code> bắt đầu từ 1; <code>#dec</code>, <code>#inc</code>, <code>#reset</code>.</li>\n  <li><code>#dec</code> vô hiệu khi = 1, <code>#inc</code> vô hiệu khi = 10.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click + 3 times",
+          "output": "4",
+          "explanation": "setQty((q) => q + 1)|||setQty((q) => q + 1)"
+        }
+      ],
+      "hintsJson": [
+        "const [qty, setQty] = useState(1);",
+        "disabled={qty <= 1} và Math.min(10, q + 1) để chắc chắn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  let qty = 1;\n  return (\n    <div>\n      <button id=\"dec\" onClick={() => qty--}>−</button>\n      <span id=\"qty\">{qty}</span>\n      <button id=\"inc\" onClick={() => qty++}>+</button>\n      <button id=\"reset\">Reset</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state + giới hạn 1..10 (kẹp trong hàm cập nhật VÀ khoá nút)\nimport { useState } from 'react';\n\nconst MIN = 1;\nconst MAX = 10;\n\nexport default function App() {\n  const [qty, setQty] = useState(MIN);\n  return (\n    <div>\n      <button id=\"dec\" type=\"button\" disabled={qty <= MIN} onClick={() => setQty((q) => Math.max(MIN, q - 1))}>−</button>\n      <span id=\"qty\">{qty}</span>\n      <button id=\"inc\" type=\"button\" disabled={qty >= MAX} onClick={() => setQty((q) => Math.min(MAX, q + 1))}>+</button>\n      <button id=\"reset\" type=\"button\" onClick={() => setQty(MIN)}>Reset</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>useState</code> trả về giá trị hiện tại và hàm đặt; gọi hàm đặt làm React vẽ lại với giá trị mới. Kẹp giá trị trong hàm cập nhật để luật giới hạn luôn đúng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Starts at 1 with − disabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#dec",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "+ three times ⇒ 4",
+            "kiem": "text",
+            "selector": "#qty",
+            "giaTri": "4",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Stops at 10 and disables +",
+            "kiem": "danh-sach-text",
+            "selector": "#qty",
+            "mongDoi": [
+              "10"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 12
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Reset back to 1",
+            "kiem": "text",
+            "selector": "#qty",
+            "giaTri": "1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 5
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#reset",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến thường <code>let qty = 1; qty++</code> ⇒ giao diện không đổi (không có re-render)."
+        },
+        {
+          "loi": "Chỉ chặn bằng <code>disabled</code> mà không kẹp giá trị ⇒ vẫn vượt nếu gọi bằng phím/mã."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state",
+          "vi": "dữ liệu thay đổi theo thời gian của component"
+        },
+        {
+          "en": "bound",
+          "vi": "giới hạn"
+        }
+      ]
+    },
+    {
+      "title": "The same counter as a class component",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "class component",
+        "this.state",
+        "this.setState",
+        "arrow class fields"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "class"
+      ],
+      "problemHtml": "<p>Older code bases (and the FE exam) still use class components. Write <code>ClickCounter</code> as a class: state in <code>this.state</code>, changes through <code>this.setState</code>, handlers as arrow class fields so <code>this</code> works.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>class ClickCounter extends Component</code> with <code>state = { count: 0, step: 1 }</code>.</li>\n  <li><code>#add</code> adds <code>step</code>; <code>#step</code> (select 1/5/10) changes the step; <code>#count</code> shows the count.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã cũ (và đề FE) vẫn dùng class component. Viết <code>ClickCounter</code> bằng class: state trong <code>this.state</code>, đổi qua <code>this.setState</code>, handler là arrow class field để <code>this</code> đúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>class ClickCounter extends Component</code> với <code>state = { count: 0, step: 1 }</code>.</li>\n  <li><code>#add</code> cộng <code>step</code>; <code>#step</code> (select 1/5/10) đổi bước; <code>#count</code> hiện số đếm.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "step 5, click add twice",
+          "output": "10",
+          "explanation": "setState merges the object: { count } keeps step.|||setState TRỘN object: { count } giữ nguyên step."
+        }
+      ],
+      "hintsJson": [
+        "add = () => this.setState((s) => ({ count: s.count + s.step }));",
+        "setStep = (e) => this.setState({ step: Number(e.target.value) });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Component } from 'react';\n\nclass ClickCounter extends Component {\n  // TODO: state, add, setStep\n  render() {\n    return (\n      <div>\n        <select id=\"step\"><option>1</option><option>5</option><option>10</option></select>\n        <button id=\"add\">Add</button>\n        <span id=\"count\">0</span>\n      </div>\n    );\n  }\n}\n\nexport default function App() {\n  return <ClickCounter />;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — class component: this.state + this.setState (TRỘN object), handler là arrow field\nimport { Component } from 'react';\n\nclass ClickCounter extends Component {\n  state = { count: 0, step: 1 };\n\n  add = () => this.setState((s) => ({ count: s.count + s.step }));\n\n  setStep = (e) => this.setState({ step: Number(e.target.value) }); // value của select là chuỗi\n\n  render() {\n    const { count, step } = this.state;\n    return (\n      <div>\n        <select id=\"step\" value={step} onChange={this.setStep}>\n          <option value={1}>1</option>\n          <option value={5}>5</option>\n          <option value={10}>10</option>\n        </select>\n        <button id=\"add\" type=\"button\" onClick={this.add}>Add</button>\n        <span id=\"count\">{count}</span>\n      </div>\n    );\n  }\n}\n\nexport default function App() {\n  return <ClickCounter />;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Class component lưu state trong một object và <code>this.setState</code> TRỘN phần thay đổi vào (khác <code>useState</code> thay thế cả giá trị). Arrow class field giữ <code>this</code>; dạng hàm cập nhật <code>(s) =&gt; …</code> đọc state mới nhất.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Add with step 1",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#add",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Step 5 ⇒ +5 per click",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "10",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#step",
+                "giaTri": "5"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "It is a class using this.setState",
+            "kiem": "ma-nguon",
+            "khop": "class\\s+ClickCounter\\s+extends\\s+(React\\.)?Component[\\s\\S]*this\\.setState\\("
+          },
+          {
+            "an": true,
+            "moTa": "Mixed steps add up",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "11",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#step",
+                "giaTri": "10"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>this.state.count++</code> ⇒ không vẽ lại và sai nguyên tắc."
+        },
+        {
+          "loi": "Handler là method thường + <code>onClick={this.add}</code> ⇒ <code>this</code> undefined (phải bind hoặc dùng arrow)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "class field",
+          "vi": "thuộc tính khai báo trực tiếp trong class"
+        },
+        {
+          "en": "merge",
+          "vi": "trộn (setState của class chỉ đổi khoá được nêu)"
+        }
+      ]
+    },
+    {
+      "title": "Convert a class component to a function with hooks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "refactor",
+        "useState",
+        "class to hooks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "hooks",
+        "refactor"
+      ],
+      "problemHtml": "<p><code>LikeButton</code> is a class with <code>{ liked, count }</code>. Rewrite it as a function component with <code>useState</code> — same behaviour: clicking toggles liked and adds/removes one like, even when the user double-clicks very fast.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#like</code> shows <code>♡ Like</code> / <code>♥ Liked</code>; <code>#likes</code> shows <code>12 likes</code> (starts at <code>initialCount</code> prop = 12).</li>\n  <li>No <code>class</code> keyword left. <code>liked</code> and <code>count</code> change TOGETHER — keep them in one state object updated with a function so two fast clicks never read a stale value.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>LikeButton</code> là class với <code>{ liked, count }</code>. Viết lại thành function component dùng <code>useState</code> — hành vi giữ nguyên: bấm để thích/bỏ thích và cộng/trừ một lượt, kể cả khi người dùng bấm đúp thật nhanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#like</code> hiện <code>♡ Like</code> / <code>♥ Liked</code>; <code>#likes</code> hiện <code>12 likes</code> (bắt đầu từ prop <code>initialCount</code> = 12).</li>\n  <li>Không còn từ khoá <code>class</code>. <code>liked</code> và <code>count</code> đổi CÙNG NHAU — giữ chúng trong một object state, cập nhật bằng hàm để hai lần bấm nhanh không đọc giá trị cũ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click twice",
+          "output": "♡ Like · 12 likes",
+          "explanation": "Like then unlike returns to the start.|||Thích rồi bỏ thích thì về như cũ."
+        }
+      ],
+      "hintsJson": [
+        "const [like, setLike] = useState({ liked: false, count: initialCount });",
+        "Toggle: setLike((s) => ({ liked: !s.liked, count: s.count + (s.liked ? -1 : 1) })); — đọc s (mới nhất), không đọc biến của lần render."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: class cần chuyển sang function + hooks\nimport { Component } from 'react';\n\nclass LikeButton extends Component {\n  state = { liked: false, count: this.props.initialCount };\n\n  toggle = () =>\n    this.setState((s) => ({ liked: !s.liked, count: s.count + (s.liked ? -1 : 1) }));\n\n  render() {\n    return (\n      <div>\n        <button id=\"like\" type=\"button\" onClick={this.toggle}>{this.state.liked ? '♥ Liked' : '♡ Like'}</button>\n        <span id=\"likes\">{this.state.count} likes</span>\n      </div>\n    );\n  }\n}\n\nexport default function App() {\n  return <LikeButton initialCount={12} />;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — liked và count đổi CÙNG NHAU ⇒ một object state, cập nhật bằng HÀM (luôn đọc giá trị mới nhất)\nimport { useState } from 'react';\n\nfunction LikeButton({ initialCount }) {\n  const [like, setLike] = useState({ liked: false, count: initialCount });\n\n  const toggle = () =>\n    setLike((s) => ({ liked: !s.liked, count: s.count + (s.liked ? -1 : 1) }));\n\n  return (\n    <div>\n      <button id=\"like\" type=\"button\" onClick={toggle}>{like.liked ? '♥ Liked' : '♡ Like'}</button>\n      <span id=\"likes\">{like.count} likes</span>\n    </div>\n  );\n}\n\nexport default function App() {\n  return <LikeButton initialCount={12} />;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thường mỗi khoá của <code>this.state</code> thành một <code>useState</code>. Nhưng khi hai giá trị luôn đổi cùng nhau và phụ thuộc nhau (<code>count</code> tính theo <code>liked</code>), gộp chúng thành MỘT object và cập nhật bằng hàm <code>s =&gt; …</code>: mọi lần bấm đều đọc trạng thái mới nhất. Nhớ: hàm đặt của <code>useState</code> THAY THẾ giá trị — phải trả về object đầy đủ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Initial state",
+            "kiem": "danh-sach-text",
+            "selector": "#like, #likes",
+            "mongDoi": [
+              "♡ Like",
+              "12 likes"
+            ]
+          },
+          {
+            "moTa": "Click ⇒ liked and 13",
+            "kiem": "danh-sach-text",
+            "selector": "#like, #likes",
+            "mongDoi": [
+              "♥ Liked",
+              "13 likes"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#like",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Function component with useState (no class)",
+            "kiem": "ma-nguon",
+            "khop": "^(?![\\s\\S]*\\bclass\\s+\\w+\\s+extends)[\\s\\S]*useState\\("
+          },
+          {
+            "an": true,
+            "moTa": "Click twice ⇒ back to 12",
+            "kiem": "danh-sach-text",
+            "selector": "#like, #likes",
+            "mongDoi": [
+              "♡ Like",
+              "12 likes"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#like",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hai state riêng + <code>setCount(c =&gt; c + (liked ? -1 : 1))</code> đọc <code>liked</code> của lần render cũ ⇒ bấm đúp nhanh thành 14 thay vì 12."
+        },
+        {
+          "loi": "<code>setLike({ liked: true })</code> ⇒ MẤT count (useState thay thế, không trộn như this.setState)."
+        },
+        {
+          "loi": "Còn sót <code>this.</code> trong function component."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hook",
+          "vi": "hàm đặc biệt của React (use…) dùng trong function component"
+        }
+      ]
+    },
+    {
+      "title": "One state object, one change handler",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "state object",
+        "spread update",
+        "computed property name"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "forms"
+      ],
+      "problemHtml": "<p>A profile editor keeps <code>{ name, email, plan, newsletter }</code> in ONE state object. Write one <code>handleChange</code> for every input using <code>e.target.name</code> (and <code>checked</code> for the checkbox).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Inputs <code>#name</code>, <code>#email</code>, select <code>#plan</code> (free/pro), checkbox <code>#newsletter</code> — all controlled, each with a <code>name</code> attribute.</li>\n  <li><code>#preview</code> shows <code>JSON.stringify(profile)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trình sửa hồ sơ giữ <code>{ name, email, plan, newsletter }</code> trong MỘT object state. Viết một <code>handleChange</code> cho mọi ô dựa vào <code>e.target.name</code> (và <code>checked</code> cho checkbox).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ô <code>#name</code>, <code>#email</code>, select <code>#plan</code> (free/pro), checkbox <code>#newsletter</code> — đều controlled, mỗi ô có thuộc tính <code>name</code>.</li>\n  <li><code>#preview</code> hiện <code>JSON.stringify(profile)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"Lan\" in name",
+          "output": "{\"name\":\"Lan\",\"email\":\"\",\"plan\":\"free\",\"newsletter\":false}",
+          "explanation": "The other fields are kept thanks to the spread.|||Các trường khác được giữ nhờ spread."
+        }
+      ],
+      "hintsJson": [
+        "setProfile((p) => ({ ...p, [name]: type === \"checkbox\" ? checked : value }));",
+        "const { name, value, type, checked } = e.target;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [profile, setProfile] = useState({ name: '', email: '', plan: 'free', newsletter: false });\n  const handleChange = (e) => setProfile({ [e.target.name]: e.target.value }); // ⚠ mất các trường khác\n  return (\n    <form>\n      <input id=\"name\" name=\"name\" value={profile.name} onChange={handleChange} />\n      <input id=\"email\" name=\"email\" value={profile.email} onChange={handleChange} />\n      <select id=\"plan\" name=\"plan\" value={profile.plan} onChange={handleChange}>\n        <option value=\"free\">Free</option>\n        <option value=\"pro\">Pro</option>\n      </select>\n      <input id=\"newsletter\" name=\"newsletter\" type=\"checkbox\" checked={profile.newsletter} onChange={handleChange} />\n      <pre id=\"preview\">{JSON.stringify(profile)}</pre>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — MỘT handler cho mọi ô: spread phần cũ + [name] cho khoá đang đổi\nimport { useState } from 'react';\n\nexport default function App() {\n  const [profile, setProfile] = useState({ name: '', email: '', plan: 'free', newsletter: false });\n\n  const handleChange = (e) => {\n    const { name, value, type, checked } = e.target;\n    setProfile((p) => ({ ...p, [name]: type === 'checkbox' ? checked : value }));\n  };\n\n  return (\n    <form>\n      <input id=\"name\" name=\"name\" value={profile.name} onChange={handleChange} />\n      <input id=\"email\" name=\"email\" value={profile.email} onChange={handleChange} />\n      <select id=\"plan\" name=\"plan\" value={profile.plan} onChange={handleChange}>\n        <option value=\"free\">Free</option>\n        <option value=\"pro\">Pro</option>\n      </select>\n      <input id=\"newsletter\" name=\"newsletter\" type=\"checkbox\" checked={profile.newsletter} onChange={handleChange} />\n      <pre id=\"preview\">{JSON.stringify(profile)}</pre>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm đặt của <code>useState</code> thay thế cả giá trị, nên khi state là object phải spread phần cũ rồi ghi đè một khoá. <code>[name]</code> dùng thuộc tính <code>name</code> của ô để biết khoá nào.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Typing a name keeps the other fields",
+            "kiem": "text",
+            "selector": "#preview",
+            "giaTri": "{\"name\":\"Lan\",\"email\":\"\",\"plan\":\"free\",\"newsletter\":false}",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Lan"
+              }
+            ]
+          },
+          {
+            "moTa": "All fields together",
+            "kiem": "text",
+            "selector": "#preview",
+            "giaTri": "{\"name\":\"Lan\",\"email\":\"lan@fpt.vn\",\"plan\":\"pro\",\"newsletter\":true}",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@fpt.vn"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#plan",
+                "giaTri": "pro"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#newsletter"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Checkbox stored as boolean",
+            "kiem": "text",
+            "selector": "#preview",
+            "khop": "\"newsletter\":true",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#newsletter"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>setProfile({ [name]: value })</code> ⇒ mất mọi trường khác."
+        },
+        {
+          "loi": "Dùng <code>value</code> cho checkbox ⇒ luôn \"on\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "computed property name",
+          "vi": "tên thuộc tính tính từ biến: { [name]: value }"
+        }
+      ]
+    },
+    {
+      "title": "Shopping list: state vs derived values",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "minimal state",
+        "derived values",
+        "immutable updates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "state",
+        "derived"
+      ],
+      "problemHtml": "<p>A shopping list where items can be added, ticked and cleared. Keep the <b>minimal</b> state (the items array and the input text). Counts like \"2 of 5 bought\" are <b>derived</b> during render — never stored.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#new-item</code> + <code>#btn-add</code> (trimmed, no empty); list <code>li.item</code> with a checkbox <code>.toggle</code>; bought items get class <code>bought</code>.</li>\n  <li><code>#summary</code> <code>2 of 5 bought</code>; <code>#btn-clear</code> removes bought items (disabled when none).</li>\n</ul>",
+      "problemHtmlVi": "<p>Danh sách mua sắm: thêm món, đánh dấu đã mua, xoá món đã mua. Chỉ giữ state <b>tối thiểu</b> (mảng món và chữ trong ô). Các con số như \"2 of 5 bought\" là giá trị <b>suy ra</b> khi render — không lưu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#new-item</code> + <code>#btn-add</code> (bỏ khoảng trắng, không rỗng); danh sách <code>li.item</code> có checkbox <code>.toggle</code>; món đã mua có class <code>bought</code>.</li>\n  <li><code>#summary</code> <code>2 of 5 bought</code>; <code>#btn-clear</code> xoá món đã mua (vô hiệu khi không có).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "items 5, tick 2",
+          "output": "2 of 5 bought",
+          "explanation": "const bought = items.filter((i) => i.bought).length — computed, not stored.|||const bought = items.filter((i) => i.bought).length — tính, không lưu."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi món { id, name, bought }; id = Date.now() hoặc bộ đếm.",
+        "Đánh dấu: setItems(list => list.map(i => i.id === id ? { ...i, bought: !i.bought } : i))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [items, setItems] = useState([\n    { id: 1, name: 'Milk', bought: false },\n    { id: 2, name: 'Eggs', bought: true },\n    { id: 3, name: 'Bread', bought: false },\n  ]);\n  // TODO: thêm món, đánh dấu, #summary, xoá món đã mua\n  return <ul>{items.map((i) => <li key={i.id} className=\"item\">{i.name}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state tối thiểu (items + text); mọi con số là giá trị suy ra\nimport { useState } from 'react';\n\nexport default function App() {\n  const [items, setItems] = useState([\n    { id: 1, name: 'Milk', bought: false },\n    { id: 2, name: 'Eggs', bought: true },\n    { id: 3, name: 'Bread', bought: false },\n  ]);\n  const [text, setText] = useState('');\n\n  const add = () => {\n    const name = text.trim();\n    if (!name) return;\n    setItems((list) => [...list, { id: Math.max(0, ...list.map((i) => i.id)) + 1, name, bought: false }]);\n    setText('');\n  };\n  const toggle = (id) => setItems((list) => list.map((i) => (i.id === id ? { ...i, bought: !i.bought } : i)));\n  const clearBought = () => setItems((list) => list.filter((i) => !i.bought));\n\n  const bought = items.filter((i) => i.bought).length; // SUY RA — không phải state\n\n  return (\n    <div>\n      <input id=\"new-item\" value={text} onChange={(e) => setText(e.target.value)} placeholder=\"Add an item\" />\n      <button id=\"btn-add\" type=\"button\" onClick={add}>Add</button>\n      <ul>\n        {items.map((i) => (\n          <li key={i.id} className={i.bought ? 'item bought' : 'item'}>\n            <label>\n              <input type=\"checkbox\" className=\"toggle\" checked={i.bought} onChange={() => toggle(i.id)} /> {i.name}\n            </label>\n          </li>\n        ))}\n      </ul>\n      <p id=\"summary\">{bought} of {items.length} bought</p>\n      <button id=\"btn-clear\" type=\"button\" disabled={bought === 0} onClick={clearBought}>Clear bought</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hỏi mỗi dữ liệu: \"tính ra được từ cái khác không?\" — được thì không làm state. Nhờ vậy số đếm, trạng thái nút xoá luôn khớp với danh sách sau mọi thao tác.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Initial summary",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "1 of 3 bought"
+          },
+          {
+            "moTa": "Add two items and tick one",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "2 of 5 bought",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-item",
+                "giaTri": "Apples"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-item",
+                "giaTri": " Rice "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".item:nth-child(4) .toggle"
+              }
+            ]
+          },
+          {
+            "moTa": "Bought items have class bought",
+            "kiem": "so-luong",
+            "selector": ".item.bought",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": ".item:first-child .toggle"
+              }
+            ]
+          },
+          {
+            "moTa": "Clear bought removes them",
+            "kiem": "danh-sach-text",
+            "selector": ".item",
+            "mongDoi": [
+              "Milk",
+              "Bread"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-clear",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Clear is disabled when nothing is bought",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-clear",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-clear",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Empty input adds nothing",
+            "kiem": "so-luong",
+            "selector": ".item",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-item",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>boughtCount</code> trong state rồi quên cập nhật khi xoá ⇒ con số sai."
+        },
+        {
+          "loi": "Đánh dấu bằng <code>item.bought = true</code> ⇒ không vẽ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "minimal state",
+          "vi": "state tối thiểu — chỉ những gì không tính ra được"
+        }
+      ]
+    }
+  ]
+}

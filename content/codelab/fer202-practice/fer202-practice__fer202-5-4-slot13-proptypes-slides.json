@@ -1,0 +1,292 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-4-slot13-proptypes-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-4-slot13-proptypes-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: validating props with PropTypes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "PropTypes",
+        "isRequired",
+        "shape",
+        "oneOf",
+        "custom validator"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "proptypes",
+        "quiz"
+      ],
+      "problemHtml": "<p>Eight questions on Slot 13 — PropTypes validators, required props and default values.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám câu về Slot 13 — các validator PropTypes, prop bắt buộc và giá trị mặc định.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "PropTypes chỉ chạy ở development và chỉ cảnh báo.",
+        "Tên thuộc tính là propTypes (p thường); thư viện là PropTypes (P hoa)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: validating props with PropTypes\n\nAnswer in the panel on the left (no code needed).\n\n1. What happens when a prop fails its PropTypes check in development?\n2. Correct declaration?\n3. Validate an array of numbers:\n4. An object with known keys is validated with…\n5. Allow only \"primary\", \"secondary\" or \"danger\":\n6. Make a prop mandatory:\n7. A custom validator should…\n8. Modern way to give a function component a default prop value?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: validating props with PropTypes — answer key\n\n1. What happens when a prop fails its PropTypes check in development?\n   Answer: b) A warning is printed in the console; rendering continues\n   PropTypes only warns (and only in development builds). / PropTypes chỉ cảnh báo (và chỉ ở bản development).\n\n2. Correct declaration?\n   Answer: b) Card.propTypes = { title: PropTypes.string }\n   Static property propTypes, values from the PropTypes library. / Thuộc tính tĩnh propTypes, giá trị lấy từ thư viện PropTypes.\n\n3. Validate an array of numbers:\n   Answer: b) PropTypes.arrayOf(PropTypes.number)\n   arrayOf checks every element. / arrayOf kiểm từng phần tử.\n\n4. An object with known keys is validated with…\n   Answer: b) PropTypes.shape({ … })\n   shape describes each key; exact() also rejects extra keys. / shape mô tả từng khoá; exact() còn từ chối khoá thừa.\n\n5. Allow only \"primary\", \"secondary\" or \"danger\":\n   Answer: a) PropTypes.oneOf(['primary', 'secondary', 'danger'])\n   oneOf = one of these values; oneOfType = one of these types. / oneOf = một trong các giá trị; oneOfType = một trong các kiểu.\n\n6. Make a prop mandatory:\n   Answer: a) add .isRequired\n   e.g. PropTypes.string.isRequired. / vd PropTypes.string.isRequired.\n\n7. A custom validator should…\n   Answer: b) return an Error when invalid, null otherwise\n   Signature (props, propName, componentName) => Error | null. / Dạng (props, propName, componentName) => Error | null.\n\n8. Modern way to give a function component a default prop value?\n   Answer: b) Default value in the destructured parameter: ({ size = 'md' })\n   defaultProps on function components is deprecated (removed in React 19). / defaultProps cho function component đã bị khuyến cáo bỏ (React 19 bỏ hẳn).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "What happens when a prop fails its PropTypes check in development?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The app crashes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A warning is printed in the console; rendering continues"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The prop is removed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>PropTypes only warns (and only in development builds).</p><p><i>🇻🇳 PropTypes chỉ cảnh báo (và chỉ ở bản development).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Correct declaration?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>Card.PropTypes = {…}</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>Card.propTypes = { title: PropTypes.string }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>propTypes(Card, {…})</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>Card.types = {…}</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Static property <code>propTypes</code>, values from the <code>PropTypes</code> library.</p><p><i>🇻🇳 Thuộc tính tĩnh propTypes, giá trị lấy từ thư viện PropTypes.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Validate an array of numbers:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>PropTypes.array</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>PropTypes.arrayOf(PropTypes.number)</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>PropTypes.number[]</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>PropTypes.list(Number)</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>arrayOf checks every element.</p><p><i>🇻🇳 arrayOf kiểm từng phần tử.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "An object with known keys is validated with…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>PropTypes.object</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>PropTypes.shape({ … })</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>PropTypes.instanceOf(Object)</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>PropTypes.any</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>shape describes each key; exact() also rejects extra keys.</p><p><i>🇻🇳 shape mô tả từng khoá; exact() còn từ chối khoá thừa.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Allow only \"primary\", \"secondary\" or \"danger\":",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>PropTypes.oneOf(['primary', 'secondary', 'danger'])</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>PropTypes.string</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>PropTypes.enum</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>PropTypes.oneOfType([…])</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>oneOf = one of these values; oneOfType = one of these types.</p><p><i>🇻🇳 oneOf = một trong các giá trị; oneOfType = một trong các kiểu.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Make a prop mandatory:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "add <code>.isRequired</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "add <code>.required()</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "use <code>PropTypes.must</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is mandatory by default"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>e.g. <code>PropTypes.string.isRequired</code>.</p><p><i>🇻🇳 vd PropTypes.string.isRequired.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "A custom validator should…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "throw an Error"
+              },
+              {
+                "ma": "b",
+                "noiDung": "return an Error when invalid, null otherwise"
+              },
+              {
+                "ma": "c",
+                "noiDung": "return true/false"
+              },
+              {
+                "ma": "d",
+                "noiDung": "call console.error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Signature <code>(props, propName, componentName) =&gt; Error | null</code>.</p><p><i>🇻🇳 Dạng (props, propName, componentName) => Error | null.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Modern way to give a function component a default prop value?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>Comp.defaultProps</code> only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Default value in the destructured parameter: <code>({ size = 'md' })</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>PropTypes.default</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Not possible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>defaultProps on function components is deprecated (removed in React 19).</p><p><i>🇻🇳 defaultProps cho function component đã bị khuyến cáo bỏ (React 19 bỏ hẳn).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ PropTypes chặn app chạy khi sai kiểu."
+        },
+        {
+          "loi": "Nhầm <code>PropTypes.array</code> với <code>PropTypes.arrayOf(...)</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "warning",
+          "vi": "cảnh báo (không phải lỗi)"
+        }
+      ]
+    }
+  ]
+}

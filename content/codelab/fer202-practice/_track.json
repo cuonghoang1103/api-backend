@@ -200,6 +200,54 @@
       "name": "Interview corner — Bootstrap & responsive UI",
       "level": "BEGINNER",
       "description": "8 câu phỏng vấn: mobile-first, lưới flexbox, React-Bootstrap vs JS Bootstrap, controlled/uncontrolled, ghi đè CSS, a11y, Tailwind."
+    },
+    {
+      "slug": "fer202-5-1-components-props",
+      "name": "5.1 Components & props",
+      "level": "BEGINNER",
+      "description": "5 bài: component đầu tiên, destructuring + mặc định, children, callback con báo cha, tách component lớn."
+    },
+    {
+      "slug": "fer202-5-2-state-class-vs-function",
+      "name": "5.2 State: class vs function components",
+      "level": "BEGINNER",
+      "description": "5 bài: useState có giới hạn, class + this.setState, chuyển class sang hooks, state object một handler, state tối thiểu vs giá trị suy ra."
+    },
+    {
+      "slug": "fer202-5-3-slot6-component-slides",
+      "name": "5.3 Slide check — All about Components",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 6."
+    },
+    {
+      "slug": "fer202-5-ex9-component-1",
+      "name": "5.4 Exercise 9 — React Component 1",
+      "level": "BEGINNER",
+      "description": "4 bài theo đúng 4 bước Exercise 9: AboutMe, Hello World dạng cây, Counter, SimpleCard dựng từ lá."
+    },
+    {
+      "slug": "fer202-5-ex11-component-2",
+      "name": "5.5 Exercise 11 — To-do, calculator, search filter",
+      "level": "INTERMEDIATE",
+      "description": "5 bài theo Exercise 11 + nâng cao: to-do theo id, máy tính chặn chia 0, lọc tìm kiếm suy ra, to-do có bộ lọc/đếm, tô sáng từ khoá an toàn."
+    },
+    {
+      "slug": "fer202-5-4-slot13-proptypes-slides",
+      "name": "5.6 Slide check — PropTypes",
+      "level": "BEGINNER",
+      "description": "8 câu trắc nghiệm slide Slot 13 PropTypes."
+    },
+    {
+      "slug": "fer202-5-ex19-proptypes",
+      "name": "5.7 Exercise 19 — PropTypes",
+      "level": "INTERMEDIATE",
+      "description": "3 bài: Animal (Exercise 19) đủ PropTypes, oneOf/oneOfType + mặc định, validator tự viết (máy chấm JS)."
+    },
+    {
+      "slug": "fer202-5-interview-components",
+      "name": "Interview corner — components, props & state",
+      "level": "BEGINNER",
+      "description": "8 câu phỏng vấn kèm câu trả lời mẫu: props vs state, callback, state tối thiểu, class vs function, bất biến, nâng state, PropTypes vs TypeScript, tách component."
     }
   ]
 }

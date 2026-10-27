@@ -5371,7 +5371,7 @@ StudentList ..&gt; F : load: newBufferedReader(UTF-8)\\nsave: .tmp then Files.mo
         int no = 0;
         while ((line = br.readLine()) != null) {
             no++;
-            if (no == 1 &amp;&amp; line.startsWith("﻿")) line = line.substring(1);      // a BOM written by Notepad
+            if (no == 1 &amp;&amp; line.startsWith("\\uFEFF")) line = line.substring(1);      // a BOM written by Notepad
             if (no == 1 &amp;&amp; line.equalsIgnoreCase("code,name,gpa")) continue;      // the header line
             if (line.trim().isEmpty()) continue;
             String[] p = line.split(",");
@@ -5601,7 +5601,7 @@ StudentList ..&gt; F : load: newBufferedReader(UTF-8)\\nsave: .tmp then Files.mo
         int no = 0;
         while ((line = br.readLine()) != null) {
             no++;
-            if (no == 1 &amp;&amp; line.startsWith("﻿")) line = line.substring(1);      // BOM do Notepad ghi
+            if (no == 1 &amp;&amp; line.startsWith("\\uFEFF")) line = line.substring(1);      // BOM do Notepad ghi
             if (no == 1 &amp;&amp; line.equalsIgnoreCase("code,name,gpa")) continue;      // dòng tiêu đề
             if (line.trim().isEmpty()) continue;
             String[] p = line.split(",");
@@ -5752,7 +5752,7 @@ SE006,Đỗ Minh Khoa,8.75</div>
     try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(name), "UTF-8"))) {
         String s;
         while ((s = br.readLine()) != null) {
-            if (boBom &amp;&amp; lines.isEmpty() &amp;&amp; s.startsWith("﻿")) s = s.substring(1);   // Java does NOT remove the BOM for you
+            if (boBom &amp;&amp; lines.isEmpty() &amp;&amp; s.startsWith("\\uFEFF")) s = s.substring(1);   // Java does NOT remove the BOM for you
             if (!s.trim().isEmpty()) lines.add(s);
         }
     }
@@ -5794,7 +5794,7 @@ Lê &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
 Nguyễn &nbsp;&nbsp;3<br>
 Trần &nbsp;&nbsp;&nbsp;&nbsp;2</div>
 <ul>
-<li><strong>The BOM</strong> (byte-order mark, bytes <code>EF BB BF</code> = the invisible character U+FEFF) is the first "character" of the file. Java's UTF-8 reader keeps it, so the first name's family name became <code>﻿Nguyễn</code> — a different key from <code>Nguyễn</code>: attempt 1 counts 2 + 1 instead of 3. The same BOM makes <code>parseInt</code> fail on the first line of a numbers file. Remove it from the first line.</li>
+<li><strong>The BOM</strong> (byte-order mark, bytes <code>EF BB BF</code> = the invisible character U+FEFF) is the first "character" of the file. Java's UTF-8 reader keeps it, so the first name's family name became <code>⟨BOM⟩Nguyễn</code> — a different key from <code>Nguyễn</code>: attempt 1 counts 2 + 1 instead of 3. The same BOM makes <code>parseInt</code> fail on the first line of a numbers file. Remove it from the first line.</li>
 <li><strong>The order</strong>: <code>TreeMap&lt;String, …&gt;</code> sorts by character codes, so "Âu" (Â = U+00C2) and "Đỗ" (Đ = U+0110) land after "Trần". A <code>Collator</code> for Vietnamese (<code>new Locale("vi", "VN")</code>, available in JDK 8) gives the dictionary order: Âu, Đỗ, Lê, Nguyễn, Trần.</li>
 </ul>
 </details>
@@ -5807,7 +5807,7 @@ Trần &nbsp;&nbsp;&nbsp;&nbsp;2</div>
     try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(name), "UTF-8"))) {
         String s;
         while ((s = br.readLine()) != null) {
-            if (boBom &amp;&amp; lines.isEmpty() &amp;&amp; s.startsWith("﻿")) s = s.substring(1);   // Java KHÔNG tự bỏ BOM giúp bạn
+            if (boBom &amp;&amp; lines.isEmpty() &amp;&amp; s.startsWith("\\uFEFF")) s = s.substring(1);   // Java KHÔNG tự bỏ BOM giúp bạn
             if (!s.trim().isEmpty()) lines.add(s);
         }
     }
@@ -5849,7 +5849,7 @@ Lê &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
 Nguyễn &nbsp;&nbsp;3<br>
 Trần &nbsp;&nbsp;&nbsp;&nbsp;2</div>
 <ul>
-<li><strong>BOM</strong> (byte-order mark — dấu thứ tự byte, các byte <code>EF BB BF</code> = ký tự vô hình U+FEFF) là "ký tự" đầu tiên của file. Bộ đọc UTF-8 của Java giữ nguyên nó, nên họ của tên đầu tiên thành <code>﻿Nguyễn</code> — một khoá khác với <code>Nguyễn</code>: lần thử 1 đếm 2 + 1 thay vì 3. Cũng chính BOM đó làm <code>parseInt</code> hỏng ở dòng đầu của một file số. Hãy bỏ nó khỏi dòng đầu tiên.</li>
+<li><strong>BOM</strong> (byte-order mark — dấu thứ tự byte, các byte <code>EF BB BF</code> = ký tự vô hình U+FEFF) là "ký tự" đầu tiên của file. Bộ đọc UTF-8 của Java giữ nguyên nó, nên họ của tên đầu tiên thành <code>⟨BOM⟩Nguyễn</code> — một khoá khác với <code>Nguyễn</code>: lần thử 1 đếm 2 + 1 thay vì 3. Cũng chính BOM đó làm <code>parseInt</code> hỏng ở dòng đầu của một file số. Hãy bỏ nó khỏi dòng đầu tiên.</li>
 <li><strong>Thứ tự</strong>: <code>TreeMap&lt;String, …&gt;</code> sắp theo mã ký tự, nên "Âu" (Â = U+00C2) và "Đỗ" (Đ = U+0110) rơi xuống sau "Trần". Một <code>Collator</code> tiếng Việt (<code>new Locale("vi", "VN")</code>, có sẵn trên JDK 8) cho thứ tự như từ điển: Âu, Đỗ, Lê, Nguyễn, Trần.</li>
 </ul>
 </details>

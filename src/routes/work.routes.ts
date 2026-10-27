@@ -91,7 +91,8 @@ import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự á
 import ctwk3bRoutes from './work.ctwk3b.routes.js'; // CTW K-3b: đồng soạn thảo Docs + bình luận gắn đoạn văn
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
-import codeRoutes from './work.code.routes.js'; // CTW Code (18/10/2026): trang Code — hoạt động Git, nhánh, PR, mã nguồn
+import codeRoutes from './work.code.routes.js';
+import githubAppRoutes, { githubAppPublicRoutes } from './work.githubApp.routes.js'; // 27/10/2026: GitHub App // CTW Code (18/10/2026): trang Code — hoạt động Git, nhánh, PR, mã nguồn
 import uxbRoutes from './work.uxb.routes.js'; // UX-B: CFD, cycle time, throughput, aging WIP, release burnup, KPI, dashboard overview
 import uxcRoutes from './work.uxc.routes.js'; // UX-C: Team overview, mốc + baseline Timeline, kéo-thả WBS
 import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
@@ -207,6 +208,10 @@ router.use(uxdPublicRoutes);
 router.get('/invites/:token', asyncHandler(async (req, res) => {
   ok(res, await workspaces.previewInvite(String(req.params.token)));
 }));
+
+// 27/10/2026: GitHub App "CT Work by CuongThai" — webhook chung (/github/webhook/app, PHẢI đứng trước /github/webhook/:pid),
+// callback tạo app + sau khi cài (state HMAC). Tuyến cần đăng nhập của app mount sau authenticate (githubAppRoutes).
+router.use(githubAppPublicRoutes);
 
 // GitHub gọi vào đây — xác thực bằng chữ ký HMAC, không bằng phiên. Thân
 // request là Buffer (index.ts gắn express.raw cho đúng đường này).
@@ -2211,6 +2216,7 @@ router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 router.use(contribRoutes);
 // CTW Code (18/10/2026): hoạt động Git như GitHub + xem mã nguồn (proxy) + cài đặt token chỉ đọc / kênh chat (work.code.routes.ts).
 router.use(codeRoutes);
+router.use(githubAppRoutes); // 27/10/2026: GitHub App — trạng thái/manifest (site ADMIN), cài/chọn repo theo dự án
 // UX-B: báo cáo dòng chảy + KPI + dashboard "Project overview" (work.uxb.routes.ts — số liệu ở flowReports.service.ts).
 router.use(uxbRoutes);
 // UX-C: Team overview + mốc/baseline Timeline + kéo-thả WBS (work.uxc.routes.ts — số liệu ở uxc.service.ts).

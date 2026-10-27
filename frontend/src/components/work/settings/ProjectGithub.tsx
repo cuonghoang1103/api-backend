@@ -7,9 +7,16 @@
 
 import type { ProjectConfig } from '@/lib/work-api';
 import GitIntegration from './GitIntegration';
+import GithubAppCard from './GithubAppCard';
 
 export { CopyField, StatusSelect, Step } from './gitParts';
 
 export default function ProjectGithub({ config }: { config: ProjectConfig; slug: string }) {
-  return <GitIntegration config={config} provider="GITHUB" />;
+  // 27/10/2026: GitHub App là đường chính; token + webhook dán tay (GitIntegration) giữ làm dự phòng.
+  return (
+    <div className="space-y-6">
+      <GithubAppCard config={config} />
+      <GitIntegration config={config} provider="GITHUB" />
+    </div>
+  );
 }

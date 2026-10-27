@@ -11697,20 +11697,27 @@ model WorkEmailQueue {
 /// Kết nối GitHub của một dự án qua webhook. secret dùng để kiểm chữ ký
 /// HMAC nên phải giữ nguyên văn (không băm được).
 model WorkGithubConnection {
-  id           Int       @id @default(autoincrement())
-  projectId    Int       @unique(map: "uk_work_github_project") @map("project_id")
-  repoFullName String?   @map("repo_full_name") @db.VarChar(200)
-  secret       String    @db.VarChar(100)
+  id                Int       @id @default(autoincrement())
+  projectId         Int       @unique(map: "uk_work_github_project") @map("project_id")
+  repoFullName      String?   @map("repo_full_name") @db.VarChar(200)
+  secret            String    @db.VarChar(100)
   /// { prOpenedStatusId?, prMergedStatusId?, chatChannelId?, notify? }
-  config       Json      @default("{}")
+  config            Json      @default("{}")
   /// CTW Code: token CHỈ ĐỌC (fine-grained: Contents + Metadata: Read) để xem mã repo private. Mã hoá bằng
   /// sealToken (oauth/crypto.ts) — không bao giờ trả về client, không log.
-  readToken    String?   @map("read_token") @db.VarChar(1000)
-  lastEventAt  DateTime? @map("last_event_at")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  readToken         String?   @map("read_token") @db.VarChar(1000)
+  lastEventAt       DateTime? @map("last_event_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  /// 27/10/2026 — GitHub App "CT Work by CuongThai" (đường chính): bản cài + repo đã chọn. Có ⇒ đọc mã bằng token cài đặt
+  /// (githubApp.service), sự kiện tới qua webhook chung của app (định tuyến theo repo id). PAT/webhook dán tay vẫn là dự phòng.
+  appInstallationId BigInt?   @map("app_installation_id")
+  appRepoId         BigInt?   @map("app_repo_id")
+  appSuspendedAt    DateTime? @map("app_suspended_at")
+  appLinkedById     Int?      @map("app_linked_by_id")
 
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
+  @@index([appRepoId], map: "idx_work_github_app_repo")
   @@map("work_github_connections")
 }
 
@@ -14484,6 +14491,11 @@ model WorkGitPull {
   deletions    Int?
   changedFiles Int?      @map("changed_files")
   mergedBy     String?   @map("merged_by") @db.VarChar(100)
+  /// 27/10/2026: sha đầu nhánh + trạng thái CI gộp (check_suite/check_run qua GitHub App): success | failure | pending | neutral.
+  headSha      String?   @map("head_sha") @db.VarChar(64)
+  ciState      String?   @map("ci_state") @db.VarChar(16)
+  ciUrl        String?   @map("ci_url") @db.VarChar(500)
+  ciAt         DateTime? @map("ci_at")
   openedAt     DateTime  @map("opened_at")
   mergedAt     DateTime? @map("merged_at")
   closedAt     DateTime? @map("closed_at")

@@ -135,6 +135,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { label: 'AI knowledge', vi: 'Kho tri thức AI', href: '/admin/ai-knowledge', icon: Database, keywords: 'knowledge base rag tài liệu ai' },
       { label: 'Embed queue', vi: 'Hàng đợi embed', href: '/admin/embed-jobs', icon: Zap, keywords: 'embedding hàng đợi' },
       { label: 'Infrastructure', vi: 'Hạ tầng', href: '/admin/ha-tang', icon: Server, keywords: 'hạ tầng vps gpu máy nhà' },
+      { label: 'CT Work GitHub App', vi: 'GitHub App CT Work', href: '/admin/ctwork-github', icon: Server, keywords: 'github app ct work manifest cài đặt' },
       { label: 'Voice studio', vi: 'Xưởng giọng', href: '/admin/xuong-giong', icon: Mic, keywords: 'xưởng giọng thu âm train tts' },
       { label: 'System stats', vi: 'Thống kê hệ thống', href: '/admin/stats', icon: BarChart3, keywords: 'thống kê hệ thống' },
       { label: 'Account security', vi: 'Bảo mật tài khoản', href: '/admin/bao-mat-tai-khoan', icon: ShieldCheck, keywords: 'mfa 2fa totp xác thực 2 lớp hai lớp bảo mật authenticator mã khôi phục' },

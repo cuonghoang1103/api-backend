@@ -62,7 +62,7 @@ import { MoreHorizontal, Pin, PinOff, RotateCcw } from 'lucide-react';
 import { coreFor, isCustomized, matchesQuery, primaryOrder, togglePin } from './shell/sidebarNav';
 import { useNavPins } from './shell/navPins';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections', 'github-app']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections · 27/10/2026: + github-app (chọn repo sau khi cài app)
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage', 'setup', 'feed']); // 'feed': Bảng tin nhóm (21/10/2026) // 'ai-usage': CTW đợt 8B · 'setup': Create with CuongMini
 
 export function useWorkPath() {

@@ -428,7 +428,9 @@ async function target(projectId: number, provider?: Provider): Promise<src.RepoT
   const pick: Provider | null = provider ?? (gh?.repoFullName ? 'GITHUB' : gl?.repoPath ? 'GITLAB' : gh ? 'GITHUB' : gl ? 'GITLAB' : null);
   if (pick === 'GITHUB' && gh) {
     if (!gh.repoFullName) throw new AppError('The repository is not known yet — set it in Settings → GitHub, or wait for the first webhook', 409, 'WORK_GIT_NO_REPO');
-    return { provider: 'GITHUB', repo: gh.repoFullName, apiBase: 'https://api.github.com', webBase: 'https://github.com', token: src.openReadToken('GITHUB', projectId, gh.readToken), projectId };
+    // 27/10/2026: GitHub App (đường chính) ⇒ token cài đặt giới hạn đúng repo; không có / lỗi ⇒ token chỉ đọc (PAT) ⇒ ẩn danh.
+    const appToken = gh.appInstallationId && !gh.appSuspendedAt ? await import('./githubApp.service.js').then((m) => m.appTokenForProject(projectId)).catch(() => null) : null;
+    return { provider: 'GITHUB', repo: gh.repoFullName, apiBase: 'https://api.github.com', webBase: 'https://github.com', token: appToken ?? src.openReadToken('GITHUB', projectId, gh.readToken), projectId };
   }
   if (pick === 'GITLAB' && gl) {
     if (!gl.repoPath) throw new AppError('The repository is not known yet — set it in Settings → GitLab, or wait for the first webhook', 409, 'WORK_GIT_NO_REPO');

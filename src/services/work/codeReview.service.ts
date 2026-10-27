@@ -181,10 +181,10 @@ const inflight = new Map<string, Promise<CodeReviewOutcome>>();
 
 export interface CodeReviewOutcome {
   review: number; key: string; url: string; verdict: CodeReviewResult['verdict']; findings: number; blockers: number;
-  issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string; reused?: boolean;
+  issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string; reused?: boolean; githubReviewUrl?: string | null;
 }
 
-export async function runCodeReview(userId: number, projectId: number, input: { pr?: number | null; issue?: number | null; notify?: boolean }): Promise<CodeReviewOutcome> {
+export async function runCodeReview(userId: number, projectId: number, input: { pr?: number | null; issue?: number | null; notify?: boolean; postToGithub?: boolean }): Promise<CodeReviewOutcome> {
   await assertHumanActor(userId, 'request AI code reviews');
   const access = await requireProject(userId, projectId, 'project.view');
   if (access.role === 'CLIENT' || isClientScoped(access)) throw new AppError('Code reviews are only available to the project team', 403, 'WORK_CODE_FORBIDDEN');
@@ -206,7 +206,7 @@ export async function runCodeReview(userId: number, projectId: number, input: { 
   const flightKey = `${projectId}:${t.kind}:${t.prNumber ?? t.branch}:${t.issueNumber ?? ''}`;
   const flying = inflight.get(flightKey);
   if (flying) return flying;
-  const p = doReview(userId, access, project, t, issueRow, memberIds, input.notify === true);
+  const p = doReview(userId, access, project, t, issueRow, memberIds, input.notify === true, input.postToGithub !== false);
   inflight.set(flightKey, p);
   try {
     return await p;
@@ -217,7 +217,7 @@ export async function runCodeReview(userId: number, projectId: number, input: { 
 
 async function doReview(
   userId: number, access: ProjectAccess, project: { key: string; workspace: { slug: string } }, t: Target,
-  issueRow: { id: number; number: number; title: string; assigneeId: number | null } | null, memberIds: number[], notify: boolean,
+  issueRow: { id: number; number: number; title: string; assigneeId: number | null } | null, memberIds: number[], notify: boolean, postToGithub = true,
 ): Promise<CodeReviewOutcome> {
   const projectId = access.projectId;
   const key = project.key;
@@ -252,7 +252,9 @@ async function doReview(
     prUrl = pr.url;
     headSha = pr.headSha;
     workProduct = `PR #${pr.number} (${pr.headRef} → ${pr.baseRef})`;
-    prBody = `Pull request #${pr.number} [${pr.state}${pr.mergeable === false ? ', has merge conflicts' : ''}] "${pr.title}" — ${pr.headRef} → ${pr.baseRef}, by ${pr.author?.user ? `@${pr.author.user.username}` : pr.author?.label ?? '?'}\nDescription:\n${(pr.body ?? '(empty)').slice(0, PR_BODY_BUDGET)}`;
+    // 27/10/2026: trạng thái CI (check_suite qua GitHub App) — "CI đỏ" là bằng chứng quan trọng.
+    const ci = await prisma.workGitPull.findFirst({ where: { projectId, number: pr.number }, select: { ciState: true, ciUrl: true } });
+    prBody = `Pull request #${pr.number} [${pr.state}${pr.mergeable === false ? ', has merge conflicts' : ''}] "${pr.title}" — ${pr.headRef} → ${pr.baseRef}, by ${pr.author?.user ? `@${pr.author.user.username}` : pr.author?.label ?? '?'}${ci?.ciState ? `\nCI checks: ${ci.ciState.toUpperCase()}` : ''}\nDescription:\n${(pr.body ?? '(empty)').slice(0, PR_BODY_BUDGET)}`;
     files = pf.files;
     hostTruncated = pf.truncated;
     if (!issueNumber) issueNumber = Object.values(pr.issues)[0]?.number ?? null;
@@ -373,10 +375,24 @@ async function doReview(
   });
   emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
 
+  // ── Đăng lên PR GitHub (dự án dùng GitHub App): review COMMENT, inline chỉ dòng trong diff — không APPROVE, không merge ──
+  let githubReviewUrl: string | null = null;
+  if (postToGithub && t.kind === 'PR' && t.prNumber) {
+    try {
+      const { postPullReview } = await import('./githubApp.service.js');
+      githubReviewUrl = await postPullReview(projectId, {
+        prNumber: t.prNumber, headSha, findings: result.findings, files: index.filter((f) => f.shown),
+        body: `**CuongMini review** — ${vi ? 'gợi ý' : 'suggested'}: ${result.verdict} (${vi ? 'người review quyết định' : 'the reviewer decides'})\n\n${result.summary}`,
+      });
+    } catch (err) {
+      logger.warn('[work] code review: không đăng được lên PR GitHub', { projectId, pr: t.prNumber, err: (err as Error).message });
+    }
+  }
+
   // ── Gửi lại cho thành viên ──
   let commented = false;
   if (issue) {
-    const md = reviewComment({ language: vi ? 'vi' : 'en', target: title, reviewKey, reviewUrl: url, result, coverage: { filesRead: diff.included.length, filesTotal: files.length, omitted: diff.omitted } });
+    const md = `${reviewComment({ language: vi ? 'vi' : 'en', target: title, reviewKey, reviewUrl: url, result, coverage: { filesRead: diff.included.length, filesTotal: files.length, omitted: diff.omitted } })}${githubReviewUrl ? `\n\n${vi ? 'Đã đăng lên PR' : 'Posted on the PR'}: ${githubReviewUrl}` : ''}`;
     try {
       await addComment(userId, projectId, issue.number, markdownToTiptap(md).doc as never, 'AI');
       commented = true;
@@ -402,6 +418,6 @@ async function doReview(
   return {
     review: number, key: reviewKey, url, verdict: result.verdict, findings: result.findings.length,
     blockers: result.findings.filter((f) => f.severity === 'BLOCKER').length,
-    issue: issue ? `${key}-${issue.number}` : null, issueNumber: issue?.number ?? null, commented, notified, target: title,
+    issue: issue ? `${key}-${issue.number}` : null, issueNumber: issue?.number ?? null, commented, notified, target: title, githubReviewUrl,
   };
 }

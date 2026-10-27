@@ -74,9 +74,11 @@ export async function updateConnection(userId: number, projectId: number, input:
   const cfg = { ...(c.config as GithubConfig) };
   if (input.prOpenedStatusId !== undefined) cfg.prOpenedStatusId = input.prOpenedStatusId;
   if (input.prMergedStatusId !== undefined) cfg.prMergedStatusId = input.prMergedStatusId;
+  // 27/10/2026: đổi repo bằng tay khi đang nối qua GitHub App ⇒ bỏ liên kết app (repo id cũ không còn đúng).
+  const repoChanged = input.repoFullName !== undefined && (input.repoFullName || null) !== c.repoFullName;
   await prisma.workGithubConnection.update({
     where: { projectId },
-    data: { config: cfg as object, ...(input.repoFullName !== undefined ? { repoFullName: input.repoFullName || null } : {}) },
+    data: { config: cfg as object, ...(input.repoFullName !== undefined ? { repoFullName: input.repoFullName || null } : {}), ...(repoChanged ? { appInstallationId: null, appRepoId: null } : {}) },
   });
   return getConnection(userId, projectId);
 }
@@ -151,8 +153,23 @@ export async function handleWebhook(projectId: number, event: string | undefined
   if (!conn || conn.project.deletedAt || !verifySignature(conn.secret, raw, signature)) throw new UnauthorizedError('Invalid signature');
   let body: any;
   try { body = JSON.parse(raw.toString('utf8')); } catch { throw new BadRequestError('Invalid JSON payload', 'WORK_BAD_PAYLOAD'); }
+  return processGithubEvent(projectId, event, body);
+}
+
+/**
+ * Xử lý MỘT sự kiện GitHub đã xác thực (27/10/2026: tách ra để webhook dán tay theo dự án VÀ webhook chung của GitHub App
+ * — githubApp.service, định tuyến theo repo id — dùng chung).
+ */
+export async function processGithubEvent(projectId: number, event: string | undefined, body: any): Promise<{ ok: true; linked: number }> {
+  const conn = await prisma.workGithubConnection.findUnique({ where: { projectId }, include: { project: { select: { key: true, deletedAt: true } } } });
+  if (!conn || conn.project.deletedAt) throw new UnauthorizedError('Invalid signature');
   await prisma.workGithubConnection.update({ where: { projectId }, data: { lastEventAt: new Date(), ...(body?.repository?.full_name && !conn.repoFullName ? { repoFullName: String(body.repository.full_name).slice(0, 200) } : {}) } });
   if (!event || event === 'ping') return { ok: true, linked: 0 };
+  // 27/10/2026: CI (check_suite/check_run) + người review + sha đầu của PR — CuongMini dùng khi review ("CI đỏ").
+  if (['check_suite', 'check_run', 'pull_request', 'pull_request_review', 'pull_request_review_comment'].includes(event)) {
+    await (await import('./githubApp.service.js')).recordPullExtras(projectId, event, body);
+    if (event !== 'pull_request') return { ok: true, linked: 0 };
+  }
   // CTW Đóng góp (A26): giữ MỌI commit/PR (kể cả không nhắc mã thẻ) + số dòng khi payload có — không bao giờ ném.
   await recordDevContributions(projectId, conn.project.key, 'GITHUB', extractGithubContribs(event, body));
   // CTW Code (18/10/2026): dòng thời gian Git (mọi push/nhánh/PR, kể cả không nhắc mã thẻ) + thông báo — không bao giờ ném.

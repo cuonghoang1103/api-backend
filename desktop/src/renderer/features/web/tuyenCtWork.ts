@@ -27,6 +27,8 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   { mau: '/work/security', nap: () => import('@/app/work/security/page') },
   /* CTW đợt 8a (12/10/2026): kết nối Microsoft 365 / Google của tôi — tĩnh, TRƯỚC `/work/:ws`. */
   { mau: '/work/connections', nap: () => import('@/app/work/connections/page') },
+  /* 27/10/2026: chọn repo sau khi cài GitHub App CT Work — tĩnh, TRƯỚC `/work/:ws`. */
+  { mau: '/work/github-app/done', nap: () => import('@/app/work/github-app/done/page') },
   /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
   { mau: '/work/search', nap: () => import('@/app/work/search/page') },
   /* CTW đợt 5 (10/10/2026): hub giảng viên + lớp học — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "teaching" thành slug). */

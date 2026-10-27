@@ -780,6 +780,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/code\/review(\/.*)?$/],
   // 27/10/2026: "CuongMini hỏi nhanh" — gợi ý chuyển thẻ của CHÍNH người dùng (Có/Chưa) là của NGƯỜI.
   ['*', /^\/nudges(\/.*)?$/],
+  // 27/10/2026: GitHub App — cài/chọn repo/gỡ là cấu hình tích hợp ra ngoài (như /github).
+  ['*', /^\/github-app(\/.*)?$/],
   // CTW đợt 5: điểm rubric của sinh viên — agent không đọc, không chấm (teaching.service gradeGate cũng chặn).
   ['*', /^\/grades(\/.*)?$/],
   // CTW K-2: agent không ghi âm, không điểm danh/RSVP, không đổi cấu hình họp, không duyệt biên bản. Đọc transcript +

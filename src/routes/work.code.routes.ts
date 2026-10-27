@@ -121,7 +121,7 @@ router.get('/projects/:pid/code/source/compare', asyncHandler(async (req, res) =
 // 27/10/2026: CuongMini review code (PR số `pr`, hoặc thẻ `issue` ⇒ PR/nhánh của thẻ). Quyền + trần ở codeReview.service;
 // kết quả là phiên review (GET /reviews/:num như cũ) + bình luận nội bộ vào thẻ. Agent bị chặn ở AGENT_DENIED_ROUTES + service.
 router.post('/projects/:pid/code/review', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
+  const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional(), postToGithub: z.boolean().optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
   const { runCodeReview } = await import('../services/work/codeReview.service.js');
   ok(res, await runCodeReview(callerId(req), P(req, 'pid'), body), 201);
 }));

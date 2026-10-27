@@ -25,7 +25,11 @@ function maBenMayChu(): string[] {
 function maChinhHang(): string[] {
   const src = readFileSync(join(goc, '../src/services/agent/bangModel.ts'), 'utf8');
   /* 19/10/2026: Classic Sonic khai `model` bằng getter (`get model()`) — Sonnet mới nhất rambo có. */
-  const ma = [...src.matchAll(/^\s*id: '([a-z0-9-]+)', (?:get )?model/gm)].map((m) => m[1]!);
+  /* 27/10/2026: bảng 4 model khai một số mã qua hằng (`id: MA_DEFAULT`, `id: MA_SOLID`) ⇒ đọc cả hai dạng, hằng tra ngược `export const X = '…'`. */
+  const hang = new Map([...src.matchAll(/^export const ([A-Z_]+) = '([a-z0-9-]+)'/gm)].map((m) => [m[1]!, m[2]!]));
+  const ma = [...src.matchAll(/^\s*id: (?:'([a-z0-9-]+)'|([A-Z_]+)), (?:get )?model/gm)]
+    .map((m) => m[1] ?? hang.get(m[2]!))
+    .filter((m): m is string => !!m);
   expect(ma.length, 'không đọc được mã nào trong bangModel.ts — bảng đã đổi hình dạng?').toBeGreaterThanOrEqual(6);
   return [...new Set(ma)];
 }

@@ -85,7 +85,7 @@ export default {
     "swr302-6-2-ch17-inspection": { yt: "iwmoLMlR-Nw", credit: "Enfocus Solutions — Video 22 - Reviewing Requirements", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/15-tham-dinh-yeu-cau/17-inspection-tron-5bee5c3e.mp4' }, defaultVideoTrack: 'VI'},
     "swr302-6-3-ch17-review-tips": { yt: "MtOcFwWUEPc", credit: "ModernAnalyst.com — Software Requirements: 10 Traps to Avoid - 2016 11 17 Webinar", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/15-tham-dinh-yeu-cau/17-checklist-tron-44b80bf1.mp4' }, defaultVideoTrack: 'VI'},
     "swr302-6-4-ch17-testing-acceptance": { yt: "JDD5EEJgpHU", credit: "Modern Software Engineering — How to Write Acceptance Tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/15-tham-dinh-yeu-cau/17-testing-tron-f73a79c8.mp4' }, defaultVideoTrack: 'VI'},
-    "swr302-7-3-ch27-rm-process": { yt: "O-5CmKDtTfE", credit: "Enfocus Solutions — Video 30 - Requirements Management Good Practices" },
+    "swr302-7-3-ch27-rm-process": { yt: "O-5CmKDtTfE", credit: "Enfocus Solutions — Video 30 - Requirements Management Good Practices", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/16-quan-ly-yeu-cau/27-rm-process-tron-7548316e.mp4' }, defaultVideoTrack: 'VI'},
     "swr302-7-4-ch27-issues-agile": { yt: "-mZO9aASfQA", credit: "Scrum.org — Facilitating Product Backlog Refinement", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/16-quan-ly-yeu-cau/27-issues-tron-7077bf9d.mp4' }, defaultVideoTrack: 'VI'},
     "swr302-7-5-ch28-change-control": { yt: "yDkhu7VsX10", credit: "Enfocus Solutions — Video 32 - Change Control", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/16-quan-ly-yeu-cau/28-change-tron-d4a0c297.mp4' }, defaultVideoTrack: 'VI'},
     "swr302-7-6-ch28-impact-analysis": { yt: "uINO-vKPuTw", credit: "Bridging the Gap - Resources for Business Analysts — How to Manage Change Requests as a Business Analyst", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/16-quan-ly-yeu-cau/28-impact-tron-426d0f0b.mp4' }, defaultVideoTrack: 'VI'},
@@ -144,7 +144,7 @@ export default {
     'swr302-6u-2-ch6-product-champion': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/10-tieng-noi-nguoi-dung/10-02-product-champion-tron-6c8d031e.mp4' }, defaultVideoTrack: 'VI'},
     'swr302-3-6-ch7-done-missing': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/11-khai-thac-yeu-cau/11-06-biet-khi-nao-xong-tron-39825b2d.mp4' }, defaultVideoTrack: 'VI'},
     'swr302-18r-3-ch18-barriers-success': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/17-tai-dung-yeu-cau/18-reuse-3a-tron-491ec0c0.mp4' }, defaultVideoTrack: 'VI'},
-    'swr302-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/27-luyen-thi-thuc-hanh-pe/27-00-thi-pe-tong-quan-a7a795a5.mp4' }, defaultVideoTrack: 'VI' },
-    'swr302-final-exam-fe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-00-thi-fe-tong-quan-783b9012.mp4' }, defaultVideoTrack: 'VI' },
+    'swr302-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/27-luyen-thi-thuc-hanh-pe/27-00-thi-pe-tong-quan-a7a795a5.mp4' }, defaultVideoTrack: 'VI'},
+    'swr302-final-exam-fe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-00-thi-fe-tong-quan-783b9012.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

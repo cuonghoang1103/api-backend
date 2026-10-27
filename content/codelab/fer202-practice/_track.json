@@ -284,6 +284,30 @@
       "name": "Interview corner — events, forms & rendering",
       "level": "INTERMEDIATE",
       "description": "8 câu phỏng vấn kèm câu trả lời mẫu: controlled/uncontrolled, SyntheticEvent, snapshot, render vs commit, form nhiều ô, preventDefault vs stopPropagation, hiệu năng arrow, a11y."
+    },
+    {
+      "slug": "fer202-7-1-context",
+      "name": "7.1 Prop drilling & the Context API",
+      "level": "INTERMEDIATE",
+      "description": "5 bài: bỏ prop drilling, giá trị mặc định khi thiếu Provider, ThemeProvider + useTheme, Provider lồng tự sinh cấp tiêu đề, giỏ hàng dùng chung giữa hai anh em."
+    },
+    {
+      "slug": "fer202-7-2-render-props",
+      "name": "7.2 Reusable components: children & render props",
+      "level": "INTERMEDIATE",
+      "description": "4 bài: khe có tên (slots), render prop dùng lại logic đếm, children-là-hàm Disclosure có ARIA, HOC withLoading."
+    },
+    {
+      "slug": "fer202-7-3-slot8-props-context-slides",
+      "name": "7.3 Slide check — Props, State & Context",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 8."
+    },
+    {
+      "slug": "fer202-7-interview-context",
+      "name": "Interview corner — Context & reuse patterns",
+      "level": "INTERMEDIATE",
+      "description": "8 câu phỏng vấn kèm câu trả lời mẫu về Context, Redux, re-render, render props/HOC/hooks, composition, kiểm thử."
     }
   ]
 }

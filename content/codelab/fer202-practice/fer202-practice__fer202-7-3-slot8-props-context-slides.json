@@ -1,0 +1,349 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-7-3-slot8-props-context-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-7-3-slot8-props-context-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: props patterns and Context",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "Context",
+        "Provider",
+        "useContext",
+        "render props",
+        "HOC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "context",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 8 and Chapter 7: when to use Context, how Providers resolve, and the reuse patterns (children, render props, HOC).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 8 và Chương 7: khi nào dùng Context, Provider được tìm thế nào, và các mẫu tái sử dụng (children, render props, HOC).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "useContext tìm Provider GẦN NHẤT phía trên.",
+        "Context không thay thế mọi props — chỉ dữ liệu \"toàn cục\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: props patterns and Context\n\nAnswer in the panel on the left (no code needed).\n\n1. Prop drilling is…\n2. Create a context:\n3. When is the default value of a context used?\n4. Two Providers of the same context are nested. A deep consumer gets…\n5. What re-renders when a Provider's value changes?\n6. Good candidates for Context? (choose all)\n7. A render prop is…\n8. A higher-order component…\n9. A container component typically…\n10. Modern replacement for many HOCs and render props?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: props patterns and Context — answer key\n\n1. Prop drilling is…\n   Answer: a) passing props through components that do not use them\n   Context avoids it for data needed deep in the tree. / Context tránh được nó với dữ liệu cần ở tầng sâu.\n\n2. Create a context:\n   Answer: a) React.createContext(defaultValue)\n   Returns an object with Provider (and Consumer). / Trả về object có Provider (và Consumer).\n\n3. When is the default value of a context used?\n   Answer: b) Only when no matching Provider is above the component\n   A Provider with value={undefined} still wins. / Provider có value={undefined} vẫn được ưu tiên.\n\n4. Two Providers of the same context are nested. A deep consumer gets…\n   Answer: b) the nearest (inner) value\n   The closest Provider wins. / Provider gần nhất thắng.\n\n5. What re-renders when a Provider's value changes?\n   Answer: b) Every component that uses that context\n   That is why the value should be memoised and contexts kept focused. / Vì vậy nên memo value và giữ context gọn.\n\n6. Good candidates for Context? (choose all)\n   Answer: a) Theme + b) Current user + d) Language\n   Local form state belongs in the component. / State cục bộ của ô nhập thuộc về component.\n\n7. A render prop is…\n   Answer: a) a prop whose value is a function returning JSX\n   The name is free; children can also be that function. / Tên tuỳ ý; children cũng có thể là hàm đó.\n\n8. A higher-order component…\n   Answer: b) takes a component and returns a new component\n   e.g. connect() of react-redux. / vd connect() của react-redux.\n\n9. A container component typically…\n   Answer: b) handles data/logic and passes it to presentational components\n   Container vs presentational split separates logic from UI. / Tách container và presentational để tách logic khỏi giao diện.\n\n10. Modern replacement for many HOCs and render props?\n   Answer: b) Custom hooks\n   Custom hooks share logic without extra wrapper components. / Custom hook chia sẻ logic mà không thêm component bọc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Prop drilling is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "passing props through components that do not use them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a security bug"
+              },
+              {
+                "ma": "c",
+                "noiDung": "mutating props"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a React API"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Context avoids it for data needed deep in the tree.</p><p><i>🇻🇳 Context tránh được nó với dữ liệu cần ở tầng sâu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Create a context:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>React.createContext(defaultValue)</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>new Context()</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>useContext.create()</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>React.context()</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Returns an object with Provider (and Consumer).</p><p><i>🇻🇳 Trả về object có Provider (và Consumer).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "When is the default value of a context used?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only when no matching Provider is above the component"
+              },
+              {
+                "ma": "c",
+                "noiDung": "When the Provider value is undefined"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A Provider with value={undefined} still wins.</p><p><i>🇻🇳 Provider có value={undefined} vẫn được ưu tiên.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Two Providers of the same context are nested. A deep consumer gets…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the outer value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the nearest (inner) value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both merged"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The closest Provider wins.</p><p><i>🇻🇳 Provider gần nhất thắng.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "What re-renders when a Provider's value changes?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every component that uses that context"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the Provider"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The whole page reloads"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>That is why the value should be memoised and contexts kept focused.</p><p><i>🇻🇳 Vì vậy nên memo value và giữ context gọn.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Good candidates for Context? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Theme"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Current user"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The text of one input"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Language"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Local form state belongs in the component.</p><p><i>🇻🇳 State cục bộ của ô nhập thuộc về component.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q7",
+            "de": "A render prop is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a prop whose value is a function returning JSX"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a prop named render only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a CSS property"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a lifecycle method"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The name is free; children can also be that function.</p><p><i>🇻🇳 Tên tuỳ ý; children cũng có thể là hàm đó.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "A higher-order component…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is a component with many children"
+              },
+              {
+                "ma": "b",
+                "noiDung": "takes a component and returns a new component"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is a class component only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is rendered first"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>e.g. connect() of react-redux.</p><p><i>🇻🇳 vd connect() của react-redux.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "A container component typically…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only renders markup"
+              },
+              {
+                "ma": "b",
+                "noiDung": "handles data/logic and passes it to presentational components"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is a CSS container"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cannot have state"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Container vs presentational split separates logic from UI.</p><p><i>🇻🇳 Tách container và presentational để tách logic khỏi giao diện.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "Modern replacement for many HOCs and render props?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Mixins"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Custom hooks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "jQuery plugins"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Global variables"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Custom hooks share logic without extra wrapper components.</p><p><i>🇻🇳 Custom hook chia sẻ logic mà không thêm component bọc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng Context cho mọi thứ ⇒ khó lần theo dữ liệu, vẽ lại thừa."
+        },
+        {
+          "loi": "Đặt Provider bên dưới component cần đọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "consumer",
+          "vi": "nơi đọc context"
+        }
+      ]
+    }
+  ]
+}

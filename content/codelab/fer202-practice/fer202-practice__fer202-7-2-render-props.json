@@ -1,0 +1,461 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-7-2-render-props",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-7-2-render-props"
+  },
+  "exercises": [
+    {
+      "title": "Slots: a Card with header and footer props",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "children",
+        "named slots",
+        "JSX as props"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "composition"
+      ],
+      "problemHtml": "<p>Beyond <code>children</code>, any prop can hold JSX — \"named slots\". Build <code>Card({ header, footer, children })</code> where header and footer are optional.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>article.card</code> → <code>header.card-header</code> (if any), <code>div.card-content</code> (children), <code>footer.card-footer</code> (if any).</li>\n</ul>",
+      "problemHtmlVi": "<p>Ngoài <code>children</code>, prop nào cũng có thể chứa JSX — \"khe có tên\". Dựng <code>Card({ header, footer, children })</code> với header và footer tuỳ chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>article.card</code> → <code>header.card-header</code> (nếu có), <code>div.card-content</code> (children), <code>footer.card-footer</code> (nếu có).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Card header={<h3>Plan</h3>} footer={<button>Buy</button>}>…</Card>",
+          "output": "header · content · footer",
+          "explanation": "The Card decides WHERE, the caller decides WHAT.|||Card quyết định Ở ĐÂU, nơi dùng quyết định CÁI GÌ."
+        }
+      ],
+      "hintsJson": [
+        "{header && <header className=\"card-header\">{header}</header>}",
+        "Tương tự cho footer; children luôn nằm giữa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nfunction Card({ children }) {\n  return <article className=\"card\"><div className=\"card-content\">{children}</div></article>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Card header={<h3>Pro plan</h3>} footer={<button id=\"buy\">Buy</button>}><p>Unlimited projects</p></Card>\n      <Card><p id=\"plain\">Just content</p></Card>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — header/footer là \"khe có tên\" nhận JSX; children là khe mặc định\nfunction Card({ header, footer, children }) {\n  return (\n    <article className=\"card\">\n      {header && <header className=\"card-header\">{header}</header>}\n      <div className=\"card-content\">{children}</div>\n      {footer && <footer className=\"card-footer\">{footer}</footer>}\n    </article>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Card header={<h3>Pro plan</h3>} footer={<button id=\"buy\" type=\"button\">Buy</button>}><p>Unlimited projects</p></Card>\n      <Card><p id=\"plain\">Just content</p></Card>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prop nhận JSX giúp component bố cục (Card, Layout, Modal) linh hoạt mà không cần biết nội dung. <code>children</code> chỉ là khe mặc định.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "First card has header, content, footer in order",
+            "kiem": "ton-tai",
+            "selector": ".card:first-child > header.card-header + div.card-content + footer.card-footer #buy"
+          },
+          {
+            "moTa": "Second card has only content",
+            "kiem": "so-luong",
+            "selector": ".card:nth-child(2) > *",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Header text",
+            "kiem": "text",
+            "selector": ".card-header",
+            "giaTri": "Pro plan"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Luôn vẽ header/footer rỗng ⇒ thừa khung."
+        },
+        {
+          "loi": "Truyền chuỗi HTML cho header rồi dùng dangerouslySetInnerHTML."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "slot",
+          "vi": "khe chứa nội dung do nơi dùng truyền vào"
+        }
+      ]
+    },
+    {
+      "title": "Render prop: one counter logic, two looks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "render prop",
+        "logic reuse",
+        "inversion of control"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "render-props"
+      ],
+      "problemHtml": "<p><code>Counter</code> owns the counting logic (min 0, max <code>max</code>) and calls <code>render({ count, inc, dec })</code>. Use it twice with completely different UIs: plain buttons and a star rating.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#qty</code> UI: <code>#qty-dec</code>, <code>#qty-value</code>, <code>#qty-inc</code> (max 10).</li>\n  <li><code>#stars</code> UI: 5 stars text (★ for ≤ count) + <code>#stars-up</code> button (max 5).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Counter</code> giữ logic đếm (nhỏ nhất 0, lớn nhất <code>max</code>) và gọi <code>render({ count, inc, dec })</code>. Dùng nó hai lần với giao diện khác hẳn: nút bấm thường và đánh giá sao.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giao diện <code>#qty</code>: <code>#qty-dec</code>, <code>#qty-value</code>, <code>#qty-inc</code> (tối đa 10).</li>\n  <li>Giao diện <code>#stars</code>: chuỗi 5 sao (★ cho ≤ count) + nút <code>#stars-up</code> (tối đa 5).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Counter max={5} render={({ count, inc }) => …} />",
+          "output": "the caller draws, Counter counts",
+          "explanation": "Counter never decides the markup.|||Counter không bao giờ quyết định markup."
+        }
+      ],
+      "hintsJson": [
+        "function Counter({ max, render }) { const [count, setCount] = useState(0); const inc = () => setCount(c => Math.min(max, c + 1)); … return render({ count, inc, dec }); }",
+        "Sao: \"★\".repeat(count) + \"☆\".repeat(5 - count)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: logic đếm bị chép hai lần\nimport { useState } from 'react';\n\nfunction QuantityPicker() {\n  const [count, setCount] = useState(0);\n  return <div id=\"qty\"><button id=\"qty-dec\" onClick={() => setCount(count - 1)}>−</button><span id=\"qty-value\">{count}</span><button id=\"qty-inc\" onClick={() => setCount(count + 1)}>+</button></div>;\n}\n\nexport default function App() {\n  return <QuantityPicker />;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Counter giữ logic; render prop để nơi dùng tự quyết định giao diện\nimport { useState } from 'react';\n\nfunction Counter({ max, render }) {\n  const [count, setCount] = useState(0);\n  const inc = () => setCount((c) => Math.min(max, c + 1));\n  const dec = () => setCount((c) => Math.max(0, c - 1));\n  return render({ count, inc, dec });\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Counter\n        max={10}\n        render={({ count, inc, dec }) => (\n          <div id=\"qty\">\n            <button id=\"qty-dec\" type=\"button\" onClick={dec}>−</button>\n            <span id=\"qty-value\">{count}</span>\n            <button id=\"qty-inc\" type=\"button\" onClick={inc}>+</button>\n          </div>\n        )}\n      />\n      <Counter\n        max={5}\n        render={({ count, inc }) => (\n          <div id=\"stars\">\n            <span id=\"stars-text\">{'★'.repeat(count) + '☆'.repeat(5 - count)}</span>\n            <button id=\"stars-up\" type=\"button\" onClick={inc}>Rate up</button>\n          </div>\n        )}\n      />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Render prop tách \"logic\" khỏi \"giao diện\": Counter lo state và luật, nơi dùng nhận dữ liệu + hàm để tự vẽ. Ngày nay nhiều trường hợp dùng custom hook gọn hơn, nhưng mẫu này vẫn gặp trong thư viện (Formik, React Router cũ) và trong đề FE.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Quantity UI counts",
+            "kiem": "text",
+            "selector": "#qty-value",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#qty-inc",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#qty-dec",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Star UI shares the logic (max 5)",
+            "kiem": "text",
+            "selector": "#stars-text",
+            "giaTri": "★★★★★",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#stars-up",
+                "lan": 7
+              }
+            ]
+          },
+          {
+            "moTa": "Never below 0",
+            "kiem": "text",
+            "selector": "#qty-value",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#qty-dec",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Counter calls a render prop",
+            "kiem": "ma-nguon",
+            "khop": "return\\s+render\\(\\s*\\{"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>render</code> như component (<code>&lt;render /&gt;</code>) — nó là hàm, cứ gọi."
+        },
+        {
+          "loi": "Copy logic đếm vào hai component ⇒ sửa giới hạn phải sửa hai nơi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "render prop",
+          "vi": "prop là hàm trả về JSX"
+        },
+        {
+          "en": "inversion of control",
+          "vi": "đảo quyền điều khiển: nơi dùng quyết định cách vẽ"
+        }
+      ]
+    },
+    {
+      "title": "children as a function: an accessible Disclosure",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "function as children",
+        "aria-expanded",
+        "state ownership"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "render-props",
+        "a11y"
+      ],
+      "problemHtml": "<p><code>Disclosure</code> owns <code>open</code> state and calls <code>children({ open, toggle, buttonProps })</code>. <code>buttonProps</code> already contains <code>onClick</code> and the correct <code>aria-expanded</code>, so every usage is accessible for free.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Three FAQ items in <code>#faq</code>; each uses <code>&lt;Disclosure&gt;{({ open, buttonProps }) =&gt; …}&lt;/Disclosure&gt;</code> with <code>button.q {...buttonProps}</code> and <code>p.a</code> when open.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Disclosure</code> giữ state <code>open</code> và gọi <code>children({ open, toggle, buttonProps })</code>. <code>buttonProps</code> có sẵn <code>onClick</code> và <code>aria-expanded</code> đúng, nên mọi nơi dùng đều tự động dễ tiếp cận.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba mục FAQ trong <code>#faq</code>; mỗi mục dùng <code>&lt;Disclosure&gt;{({ open, buttonProps }) =&gt; …}&lt;/Disclosure&gt;</code> với <code>button.q {...buttonProps}</code> và <code>p.a</code> khi mở.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click a question",
+          "output": "aria-expanded=\"true\" and its answer visible",
+          "explanation": "The component hands out ready-made props (a \"prop getter\").|||Component phát sẵn props cho nút (mẫu \"prop getter\")."
+        }
+      ],
+      "hintsJson": [
+        "const buttonProps = { type: 'button', 'aria-expanded': open, onClick: toggle };",
+        "return children({ open, toggle, buttonProps });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst FAQ = [\n  { q: 'Is the PE open book?', a: 'Yes, but no internet.' },\n  { q: 'How long is the PE?', a: '85 minutes.' },\n  { q: 'Can I use React-Bootstrap?', a: 'Yes, or plain Bootstrap.' },\n];\n\nexport default function App() {\n  return <div id=\"faq\">{FAQ.map((f) => <div key={f.q}><button className=\"q\">{f.q}</button><p className=\"a\">{f.a}</p></div>)}</div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Disclosure giữ state, phát { open, toggle, buttonProps } cho children-hàm\nimport { useState } from 'react';\n\nconst FAQ = [\n  { q: 'Is the PE open book?', a: 'Yes, but no internet.' },\n  { q: 'How long is the PE?', a: '85 minutes.' },\n  { q: 'Can I use React-Bootstrap?', a: 'Yes, or plain Bootstrap.' },\n];\n\nfunction Disclosure({ children }) {\n  const [open, setOpen] = useState(false);\n  const toggle = () => setOpen((o) => !o);\n  const buttonProps = { type: 'button', 'aria-expanded': open, onClick: toggle };\n  return children({ open, toggle, buttonProps });\n}\n\nexport default function App() {\n  return (\n    <div id=\"faq\">\n      {FAQ.map((f) => (\n        <Disclosure key={f.q}>\n          {({ open, buttonProps }) => (\n            <div className=\"item\">\n              <button className=\"q\" {...buttonProps}>{f.q}</button>\n              {open && <p className=\"a\">{f.a}</p>}\n            </div>\n          )}\n        </Disclosure>\n      ))}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Children-là-hàm giống render prop nhưng đặt hàm ở vị trí children. Gói sẵn <code>buttonProps</code> giúp mọi nơi dùng đúng chuẩn truy cập mà không cần nhớ thuộc tính ARIA.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "All answers hidden at start",
+            "kiem": "so-luong",
+            "selector": ".a",
+            "giaTri": 0
+          },
+          {
+            "moTa": "Click shows only that answer",
+            "kiem": "danh-sach-text",
+            "selector": ".a",
+            "mongDoi": [
+              "85 minutes."
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".item:nth-child(2) .q",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "aria-expanded reflects the state",
+            "kiem": "thuoc-tinh",
+            "selector": ".item:nth-child(2) .q",
+            "thuocTinh": "aria-expanded",
+            "giaTri": "true",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".item:nth-child(2) .q",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Closed questions have aria-expanded=\"false\"",
+            "kiem": "thuoc-tinh",
+            "selector": ".item:first-child .q",
+            "thuocTinh": "aria-expanded",
+            "giaTri": "false"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>aria-expanded</code> ⇒ trình đọc màn hình không biết mục đang mở."
+        },
+        {
+          "loi": "Render <code>{children}</code> thay vì gọi <code>children(...)</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "disclosure",
+          "vi": "khối mở/đóng nội dung"
+        },
+        {
+          "en": "prop getter",
+          "vi": "đối tượng props dựng sẵn cho phần tử"
+        }
+      ]
+    },
+    {
+      "title": "Higher-order component: withLoading",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "HOC",
+        "props forwarding",
+        "displayName"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hoc",
+        "composition"
+      ],
+      "problemHtml": "<p>A higher-order component is a function that takes a component and returns a new one. Write <code>withLoading(Component)</code>: while <code>isLoading</code> is true it shows a spinner text; otherwise it renders the wrapped component with all other props.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>withLoading(Component)</code> returns <code>WithLoading({ isLoading, ...rest })</code>; loading ⇒ <code>p.loading</code> \"Loading…\"; else <code>&lt;Component {...rest} /&gt;</code> (do NOT pass <code>isLoading</code> down).</li>\n  <li>Set <code>displayName</code> to <code>withLoading(UserList)</code>. App toggles loading with <code>#btn-load</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Higher-order component là hàm nhận một component và trả về component mới. Viết <code>withLoading(Component)</code>: khi <code>isLoading</code> là true thì hiện chữ đang tải; ngược lại vẽ component được bọc với mọi prop còn lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>withLoading(Component)</code> trả về <code>WithLoading({ isLoading, ...rest })</code>; đang tải ⇒ <code>p.loading</code> \"Loading…\"; ngược lại <code>&lt;Component {...rest} /&gt;</code> (KHÔNG truyền <code>isLoading</code> xuống).</li>\n  <li>Đặt <code>displayName</code> là <code>withLoading(UserList)</code>. App đổi trạng thái tải bằng <code>#btn-load</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "const UserListWithLoading = withLoading(UserList)",
+          "output": "<UserListWithLoading isLoading={true} users={…} />  ⇒  Loading…",
+          "explanation": "The HOC adds behaviour without touching UserList.|||HOC thêm hành vi mà không sửa UserList."
+        }
+      ],
+      "hintsJson": [
+        "function withLoading(Component) { function WithLoading({ isLoading, ...rest }) { … } WithLoading.displayName = `withLoading(${Component.displayName || Component.name})`; return WithLoading; }",
+        "Gọi withLoading Ở CẤP MODULE, không gọi trong thân component."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction UserList({ users }) {\n  return <ul id=\"users\">{users.map((u) => <li key={u}>{u}</li>)}</ul>;\n}\n\n// TODO: function withLoading(Component) { … }\n\nexport default function App() {\n  const [loading, setLoading] = useState(true);\n  return (\n    <div>\n      <button id=\"btn-load\" onClick={() => setLoading(!loading)}>Toggle loading</button>\n      <UserList users={['An', 'Binh', 'Cuong']} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — HOC: nhận component, trả component mới có thêm hành vi \"đang tải\"\nimport { useState } from 'react';\n\nfunction UserList({ users }) {\n  return <ul id=\"users\">{users.map((u) => <li key={u}>{u}</li>)}</ul>;\n}\n\nfunction withLoading(Component) {\n  function WithLoading({ isLoading, ...rest }) {\n    if (isLoading) return <p className=\"loading\">Loading…</p>;\n    return <Component {...rest} />; // isLoading không bị truyền xuống\n  }\n  WithLoading.displayName = `withLoading(${Component.displayName || Component.name})`;\n  return WithLoading;\n}\n\n// gọi HOC ở CẤP MODULE (một lần), không phải trong render\nconst UserListWithLoading = withLoading(UserList);\n\nexport default function App() {\n  const [loading, setLoading] = useState(true);\n  return (\n    <div>\n      <button id=\"btn-load\" type=\"button\" onClick={() => setLoading((l) => !l)}>Toggle loading</button>\n      <UserListWithLoading isLoading={loading} users={['An', 'Binh', 'Cuong']} />\n      <p id=\"display-name\">{UserListWithLoading.displayName}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>HOC là mẫu cũ hơn hooks/render props để dùng lại hành vi (vd <code>connect</code> của react-redux, <code>withRouter</code>). Ngày nay thường thay bằng custom hook, nhưng FE hay hỏi khái niệm này.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Loading at first",
+            "kiem": "text",
+            "selector": ".loading",
+            "giaTri": "Loading…"
+          },
+          {
+            "moTa": "After toggling, the wrapped list renders with its props",
+            "kiem": "danh-sach-text",
+            "selector": "#users li",
+            "mongDoi": [
+              "An",
+              "Binh",
+              "Cuong"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-load",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "displayName",
+            "kiem": "text",
+            "selector": "#display-name",
+            "giaTri": "withLoading(UserList)"
+          },
+          {
+            "an": true,
+            "moTa": "HOC created at module level",
+            "kiem": "ma-nguon",
+            "khop": "(^|\\n)const\\s+\\w+\\s*=\\s*withLoading\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>withLoading(UserList)</code> bên trong render ⇒ mỗi lần render một component mới ⇒ mất state, nháy."
+        },
+        {
+          "loi": "Không spread <code>...rest</code> ⇒ component bọc mất props."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "higher-order component (HOC)",
+          "vi": "hàm nhận component, trả component mới có thêm hành vi"
+        },
+        {
+          "en": "cross-cutting concern",
+          "vi": "mối quan tâm dùng chung nhiều nơi (tải, quyền…)"
+        }
+      ]
+    }
+  ]
+}

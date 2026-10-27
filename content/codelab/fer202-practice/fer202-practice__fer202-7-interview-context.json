@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-7-interview-context",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-7-1-context"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — Context & reuse patterns (Chapter 7)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "Context & reuse patterns"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>Context & reuse patterns</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>Context & reuse patterns</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Context & reuse patterns (Chapter 7)\n\nAnswer in the panel on the left (no code needed).\n\n1. When would you use Context instead of props?\n2. Is Context a state-management library like Redux?\n3. How do you avoid unnecessary re-renders with Context?\n4. Render props vs HOC vs custom hooks?\n5. What happens if you call useContext outside its Provider?\n6. Explain composition with children vs inheritance.\n7. Where would you put the Provider for an authenticated user?\n8. How would you test a component that uses a context?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Context & reuse patterns (Chapter 7) — answer key\n\n1. When would you use Context instead of props?\n   Answer: b) For data many components at different depths need (theme, user, locale) — not to avoid one or two levels of props.\n   Model answer: \"Props are explicit and easy to trace, so I start with them. When the same data is needed by many components at different depths — theme, authenticated user, language — passing it through every level becomes noise, and that's when I use Context.\" / Trả lời mẫu: \"Props rõ ràng, dễ lần theo nên tôi bắt đầu bằng props. Khi cùng dữ liệu cần ở nhiều component, nhiều tầng — theme, người dùng, ngôn ngữ — chuyền qua mọi tầng thành rối, lúc đó tôi dùng Context.\"\n\n2. Is Context a state-management library like Redux?\n   Answer: b) No — it is a transport mechanism; the state still lives in useState/useReducer of the provider. Redux adds a store, middleware, devtools and selective subscriptions.\n   Model answer: \"Context only delivers a value down the tree. I combine it with useState or useReducer for state. For large apps with frequent updates, Redux or Zustand give selector-based subscriptions, middleware and devtools.\" / Trả lời mẫu: \"Context chỉ chuyển giá trị xuống cây. Tôi kết hợp với useState/useReducer để có state. App lớn, cập nhật thường xuyên thì Redux hay Zustand có selector, middleware, devtools.\"\n\n3. How do you avoid unnecessary re-renders with Context?\n   Answer: b) Memoise the value, split contexts by concern (state vs actions), and keep frequently changing data out of widely used contexts.\n   Model answer: \"Every consumer re-renders when the value changes, so I wrap the value in useMemo, split big contexts (for example ThemeContext and AuthContext separately, or state and dispatch separately), and keep fast-changing data local.\" / Trả lời mẫu: \"Mọi nơi dùng đều vẽ lại khi value đổi, nên tôi bọc value bằng useMemo, tách context lớn (vd ThemeContext riêng AuthContext, hoặc tách state và dispatch), và giữ dữ liệu đổi nhanh ở cục bộ.\"\n\n4. Render props vs HOC vs custom hooks?\n   Answer: b) All share logic; HOCs wrap components, render props invert rendering, custom hooks share stateful logic without extra components — usually the simplest today.\n   Model answer: \"All three reuse logic. HOCs add wrapper layers and can collide on prop names; render props are flexible but nest deeply. Custom hooks give the same reuse with plain function calls, so I default to hooks and still read the other patterns in older libraries.\" / Trả lời mẫu: \"Cả ba để dùng lại logic. HOC thêm lớp bọc và dễ trùng tên prop; render props linh hoạt nhưng lồng sâu. Custom hook cho cùng khả năng chỉ bằng lời gọi hàm, nên tôi mặc định dùng hook và vẫn đọc được hai mẫu kia trong thư viện cũ.\"\n\n5. What happens if you call useContext outside its Provider?\n   Answer: b) You receive the default value passed to createContext — which is why custom hooks often throw a helpful error when it is null.\n   Model answer: \"You get the default value. I often use null as default and wrap the context in a custom hook that throws 'useX must be used inside XProvider', so mistakes show up immediately.\" / Trả lời mẫu: \"Bạn nhận giá trị mặc định. Tôi hay để mặc định null và bọc context bằng custom hook ném lỗi 'useX phải dùng trong XProvider', để lỗi lộ ra ngay.\"\n\n6. Explain composition with children vs inheritance.\n   Answer: b) React prefers composition: components accept children/props (including JSX) to specialise behaviour; inheritance between components is almost never used.\n   Model answer: \"Instead of extending a base component, I build generic ones — Card, Modal, Layout — that accept children or JSX props. Specialisation is done by passing different content, which keeps components independent.\" / Trả lời mẫu: \"Thay vì kế thừa component gốc, tôi dựng component chung — Card, Modal, Layout — nhận children hoặc prop JSX. Muốn chuyên biệt thì truyền nội dung khác, các component vẫn độc lập.\"\n\n7. Where would you put the Provider for an authenticated user?\n   Answer: b) High in the tree (around the router) so every route can read it; login/logout update it.\n   Model answer: \"Near the root, wrapping the router, so guards and pages can read the user. The provider owns login/logout and may restore the session from storage on start.\" / Trả lời mẫu: \"Gần gốc, bọc router, để route bảo vệ và các trang đều đọc được. Provider giữ login/logout và có thể khôi phục phiên từ storage lúc khởi động.\"\n\n8. How would you test a component that uses a context?\n   Answer: b) Render it inside the Provider with a test value (or a custom render helper that wraps providers).\n   Model answer: \"With React Testing Library I render the component wrapped in the real Provider and a controlled value, often through a helper like renderWithProviders. That tests the real behaviour without mocking React.\" / Trả lời mẫu: \"Với React Testing Library tôi vẽ component bọc trong Provider thật với value kiểm soát được, thường qua hàm renderWithProviders. Như vậy kiểm hành vi thật mà không cần giả lập React.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "When would you use Context instead of props?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always."
+              },
+              {
+                "ma": "b",
+                "noiDung": "For data many components at different depths need (theme, user, locale) — not to avoid one or two levels of props."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for numbers."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Props are explicit and easy to trace, so I start with them. When the same data is needed by many components at different depths — theme, authenticated user, language — passing it through every level becomes noise, and that's when I use Context.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Props rõ ràng, dễ lần theo nên tôi bắt đầu bằng props. Khi cùng dữ liệu cần ở nhiều component, nhiều tầng — theme, người dùng, ngôn ngữ — chuyền qua mọi tầng thành rối, lúc đó tôi dùng Context.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Is Context a state-management library like Redux?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, identical."
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — it is a transport mechanism; the state still lives in useState/useReducer of the provider. Redux adds a store, middleware, devtools and selective subscriptions."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Context is faster than Redux always."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Redux is built into Context."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Context only delivers a value down the tree. I combine it with useState or useReducer for state. For large apps with frequent updates, Redux or Zustand give selector-based subscriptions, middleware and devtools.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Context chỉ chuyển giá trị xuống cây. Tôi kết hợp với useState/useReducer để có state. App lớn, cập nhật thường xuyên thì Redux hay Zustand có selector, middleware, devtools.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "How do you avoid unnecessary re-renders with Context?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "You cannot."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Memoise the value, split contexts by concern (state vs actions), and keep frequently changing data out of widely used contexts."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use more Providers at the root only."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable StrictMode."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Every consumer re-renders when the value changes, so I wrap the value in useMemo, split big contexts (for example ThemeContext and AuthContext separately, or state and dispatch separately), and keep fast-changing data local.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Mọi nơi dùng đều vẽ lại khi value đổi, nên tôi bọc value bằng useMemo, tách context lớn (vd ThemeContext riêng AuthContext, hoặc tách state và dispatch), và giữ dữ liệu đổi nhanh ở cục bộ.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Render props vs HOC vs custom hooks?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are unrelated."
+              },
+              {
+                "ma": "b",
+                "noiDung": "All share logic; HOCs wrap components, render props invert rendering, custom hooks share stateful logic without extra components — usually the simplest today."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hooks replaced components."
+              },
+              {
+                "ma": "d",
+                "noiDung": "HOCs are required for Redux."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"All three reuse logic. HOCs add wrapper layers and can collide on prop names; render props are flexible but nest deeply. Custom hooks give the same reuse with plain function calls, so I default to hooks and still read the other patterns in older libraries.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Cả ba để dùng lại logic. HOC thêm lớp bọc và dễ trùng tên prop; render props linh hoạt nhưng lồng sâu. Custom hook cho cùng khả năng chỉ bằng lời gọi hàm, nên tôi mặc định dùng hook và vẫn đọc được hai mẫu kia trong thư viện cũ.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "What happens if you call useContext outside its Provider?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An error always."
+              },
+              {
+                "ma": "b",
+                "noiDung": "You receive the default value passed to createContext — which is why custom hooks often throw a helpful error when it is null."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The app reloads."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It returns undefined always."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"You get the default value. I often use null as default and wrap the context in a custom hook that throws 'useX must be used inside XProvider', so mistakes show up immediately.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Bạn nhận giá trị mặc định. Tôi hay để mặc định null và bọc context bằng custom hook ném lỗi 'useX phải dùng trong XProvider', để lỗi lộ ra ngay.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Explain composition with children vs inheritance.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "React prefers inheritance."
+              },
+              {
+                "ma": "b",
+                "noiDung": "React prefers composition: components accept children/props (including JSX) to specialise behaviour; inheritance between components is almost never used."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both are forbidden."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Children cannot be components."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Instead of extending a base component, I build generic ones — Card, Modal, Layout — that accept children or JSX props. Specialisation is done by passing different content, which keeps components independent.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Thay vì kế thừa component gốc, tôi dựng component chung — Card, Modal, Layout — nhận children hoặc prop JSX. Muốn chuyên biệt thì truyền nội dung khác, các component vẫn độc lập.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Where would you put the Provider for an authenticated user?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In every page."
+              },
+              {
+                "ma": "b",
+                "noiDung": "High in the tree (around the router) so every route can read it; login/logout update it."
+              },
+              {
+                "ma": "c",
+                "noiDung": "In localStorage only."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inside the login form."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Near the root, wrapping the router, so guards and pages can read the user. The provider owns login/logout and may restore the session from storage on start.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Gần gốc, bọc router, để route bảo vệ và các trang đều đọc được. Provider giữ login/logout và có thể khôi phục phiên từ storage lúc khởi động.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "How would you test a component that uses a context?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "You cannot test it."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Render it inside the Provider with a test value (or a custom render helper that wraps providers)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mock React."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete the context in tests."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"With React Testing Library I render the component wrapped in the real Provider and a controlled value, often through a helper like <code>renderWithProviders</code>. That tests the real behaviour without mocking React.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Với React Testing Library tôi vẽ component bọc trong Provider thật với value kiểm soát được, thường qua hàm renderWithProviders. Như vậy kiểm hành vi thật mà không cần giả lập React.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

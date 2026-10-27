@@ -357,10 +357,11 @@ model User {
   snippetCommentReactions SnippetCommentReaction[]
 
   // ─── Code Lab — authored exercises + personal practice progress ──
-  codeExercises CodeExercise[]
-  codeProgress  CodeProgress[]
+  codeExercises   CodeExercise[]
+  codeProgress    CodeProgress[]
+  codeSubmissions CodeSubmission[]
   // Phòng Lab: một phòng luyện có mục tiêu LOC, do chính người dùng lập.
-  labRooms      CodeLabRoom[]
+  labRooms        CodeLabRoom[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
@@ -8379,6 +8380,23 @@ model CodeExercise {
   viewCount                 Int       @default(0) @map("view_count")
   solveCount                Int       @default(0) @map("solve_count")
 
+  // ─── Máy chấm + bộ luyện (đợt Academy 28/10/2026) ───────────────
+  // Bộ kiểm của máy chấm (lược đồ: content/codelab/README.md). Ẩn với người học trừ
+  // phần kiểm mẫu (không `an`) — API chỉ trả đủ khi Nộp.
+  testsJson    Json?   @map("tests_json")
+  // dom | js | console | module | react | choice | order | table | python | java | tsql | bash | text-ai | manual
+  gradeKind    String? @map("grade_kind") @db.VarChar(20)
+  // practice | lab | deep-lab | pe | project — xếp chỗ trên lộ trình chương.
+  kind         String  @default("practice") @db.VarChar(20)
+  // "Lỗi hay gặp": [{ loi, viDu?, cachSua? }].
+  mistakesJson Json?   @map("mistakes_json")
+  // Đoạn video bài giảng để xem lại: { courseSlug, lessonSlug, giay? }.
+  videoRef     Json?   @map("video_ref")
+  // Bảng thuật ngữ EN → VI cho đề tiếng Anh: [{ en, vi, giaiThich? }].
+  glossaryJson Json?   @map("glossary_json")
+  // Đề lớn: trang demo chạy được (HTML tự chứa) — "▶ Live demo" mở trong iframe sandbox.
+  demoHtml     String? @map("demo_html") @db.Text
+
   authorId Int? @map("author_id")
 
   // Full-text search vector over title + problem + concepts (config 'simple').
@@ -8394,6 +8412,7 @@ model CodeExercise {
   author       User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull)
   progress     CodeProgress[]
   tutorAsks    CodeExerciseTutorAsk[]
+  submissions  CodeSubmission[]
   labRoomItems CodeLabRoomItem[]
 
   @@index([moduleId, sortOrder], name: "idx_code_exercise_module_order")
@@ -8403,7 +8422,38 @@ model CodeExercise {
   @@index([language], name: "idx_code_exercise_language")
   @@index([slug], name: "idx_code_exercise_slug")
   @@index([authorId], name: "idx_code_exercise_author")
+  @@index([kind], name: "idx_code_exercise_kind")
   @@map("code_exercises")
+}
+
+/// Một lượt Chạy thử / Nộp của người học (đợt Academy 28/10/2026). Máy chấm chạy TRONG TRÌNH DUYỆT
+/// (không chạy code người học trên VPS) ⇒ kết quả do client báo — chỉ dùng cho tiến độ cá nhân,
+/// không dùng cho bảng xếp hạng. Máy chủ chỉ kiểm hình dạng (total khớp số kiểm của đề…).
+model CodeSubmission {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  exerciseId Int      @map("exercise_id")
+  // run (Chạy thử — kiểm mẫu) | submit (Nộp — toàn bộ kiểm)
+  mode       String   @default("submit") @db.VarChar(10)
+  gradeKind  String?  @map("grade_kind") @db.VarChar(20)
+  // Bài làm: [{ name, language, code }] — hoặc đáp án trắc nghiệm/bảng.
+  code       Json?
+  // Kết quả từng kiểm: [{ i, dat, an?, moTa?, thay?, ms?, nhom? }].
+  results    Json?
+  passed     Int      @default(0)
+  total      Int      @default(0)
+  score      Float?
+  maxScore   Float?   @map("max_score")
+  accepted   Boolean  @default(false)
+  ms         Int?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise CodeExercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([userId, exerciseId, createdAt], name: "idx_code_submission_user_exercise")
+  @@index([exerciseId], name: "idx_code_submission_exercise")
+  @@map("code_submissions")
 }
 
 /// Một lượt hỏi gia sư AI của một bài Code Lab, LƯU LẠI để người sau đọc được.

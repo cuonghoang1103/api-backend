@@ -1,0 +1,813 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-static-reviews",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-static-reviews"
+  },
+  "exercises": [
+    {
+      "title": "Reviews 1 — Order the five activities of the review process",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "review process"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>ISTQB CTFL 2018 describes the work-product review process as five activities, from planning the review to reporting its results. Put them in the order in which they happen (SWT3 slide 24).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ISTQB CTFL 2018 mô tả quy trình review sản phẩm gồm năm hoạt động, từ lập kế hoạch review tới báo cáo kết quả. Sắp chúng theo đúng thứ tự diễn ra (SWT3 slide 24).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không thể review khi chưa ai nhận tài liệu (initiate).",
+        "Họp bàn lỗi diễn ra SAU khi mỗi người đã tự đọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 1 — Order the five activities of the review process\n\nAnswer in the answer panel (no code needed).\n\n1. Review process — first to lastQuy trình review — từ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 1 — Order the five activities of the review process — answer key\n\n1. Review process — first to lastQuy trình review — từ đầu tới cuối\n   Answer: a) Planning  →  b) Initiate review  →  c) Individual review  →  d) Issue communication and analysis  →  e) Fixing and reporting\n   Planning → Initiate review (kick-off) → Individual review (preparation) → Issue communication and analysis → Fixing and reporting.VI: Lập kế hoạch → Khởi động review (kick-off) → Review cá nhân (chuẩn bị) → Trao đổi và phân tích vấn đề → Sửa và báo cáo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Planning → Initiate review → Individual review → Issue communication and analysis → Fixing and reporting.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Review process — first to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy trình review — từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "Individual review"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Fixing and reporting"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Planning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Issue communication and analysis"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Initiate review"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Planning → Initiate review (kick-off) → Individual review (preparation) → Issue communication and analysis → Fixing and reporting.</p><p><i>VI: Lập kế hoạch → Khởi động review (kick-off) → Review cá nhân (chuẩn bị) → Trao đổi và phân tích vấn đề → Sửa và báo cáo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"Individual review\" trước \"Initiate review\"."
+        },
+        {
+          "loi": "Gộp \"Fixing and reporting\" vào buổi họp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "kick-off",
+          "vi": "buổi khởi động — phát tài liệu, giải thích mục tiêu"
+        },
+        {
+          "en": "entry / exit criteria",
+          "vi": "tiêu chí vào / ra"
+        }
+      ]
+    },
+    {
+      "title": "Reviews 2 — In which activity does each task happen?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "review process"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The exam’s favourite shape: “task X happens in which activity?”. Map every task to its activity of the CTFL 2018 review process.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dạng câu đề thi thích nhất: “việc X diễn ra ở hoạt động nào?”. Ghép mỗi việc vào hoạt động của quy trình review CTFL 2018.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tiêu chí VÀO kiểm ở Planning; tiêu chí RA đánh giá ở Issue communication and analysis, chấp nhận ở Fixing and reporting.",
+        "\"Ghi nhận lỗi tiềm năng\" là việc cá nhân; \"phân tích, giao chủ\" là việc chung."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 2 — In which activity does each task happen?\n\nAnswer in the answer panel (no code needed).\n\n1. Activity of each taskHoạt động của từng việc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 2 — In which activity does each task happen? — answer key\n\n1. Activity of each taskHoạt động của từng việc\n   - r0.a: Planning\n   - r1.a: Planning\n   - r2.a: Planning\n   - r3.a: Initiate review\n   - r4.a: Initiate review\n   - r5.a: Individual review\n   - r6.a: Issue communication and analysis\n   - r7.a: Issue communication and analysis\n   - r8.a: Issue communication and analysis\n   - r9.a: Fixing and reporting\n   - r10.a: Fixing and reporting\n   - r11.a: Fixing and reporting\n   Planning: scope, effort, roles, entry check. Initiate: distribute and explain. Individual review: read and note. Issue communication and analysis: communicate, analyse, own, evaluate vs exit criteria. Fixing and reporting: defect reports, fixing, metrics, acceptance.VI: Lập kế hoạch: phạm vi, công sức, vai trò, kiểm tiêu chí vào. Khởi động: phát và giải thích. Review cá nhân: đọc và ghi chú. Trao đổi & phân tích: báo, phân tích, giao chủ, so tiêu chí ra. Sửa & báo cáo: báo cáo lỗi, sửa, số liệu, chấp nhận.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Planning ×3 · Initiate ×2 · Individual ×1 · Issue communication and analysis ×3 · Fixing and reporting ×3.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Activity of each task</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động của từng việc</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Task"
+              },
+              {
+                "ma": "a",
+                "ten": "Activity",
+                "luaChon": [
+                  "Planning",
+                  "Initiate review",
+                  "Individual review",
+                  "Issue communication and analysis",
+                  "Fixing and reporting"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Defining the scope, purpose and the work products to review"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Estimating effort and timeframe; selecting people and allocating roles"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Checking entry criteria (for more formal review types)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Distributing the work product and other material"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Explaining the scope, objectives, process and roles to the participants"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Reviewing all or part of the work product; noting potential defects, recommendations and questions"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Communicating identified potential defects (e.g. in a review meeting)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Analysing potential defects, assigning ownership and status to them"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "t": "Evaluating the review findings against the exit criteria to make a review decision"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "t": "Creating defect reports for findings that require changes"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "t": "Fixing defects in the work product (typically by the author)"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "t": "Gathering metrics and accepting the work product when the exit criteria are reached"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.a": "Planning",
+              "r1.a": "Planning",
+              "r2.a": "Planning",
+              "r3.a": "Initiate review",
+              "r4.a": "Initiate review",
+              "r5.a": "Individual review",
+              "r6.a": "Issue communication and analysis",
+              "r7.a": "Issue communication and analysis",
+              "r8.a": "Issue communication and analysis",
+              "r9.a": "Fixing and reporting",
+              "r10.a": "Fixing and reporting",
+              "r11.a": "Fixing and reporting"
+            },
+            "giaiThich": "<p>Planning: scope, effort, roles, entry check. Initiate: distribute and explain. Individual review: read and note. Issue communication and analysis: communicate, analyse, own, evaluate vs exit criteria. Fixing and reporting: defect reports, fixing, metrics, acceptance.</p><p><i>VI: Lập kế hoạch: phạm vi, công sức, vai trò, kiểm tiêu chí vào. Khởi động: phát và giải thích. Review cá nhân: đọc và ghi chú. Trao đổi & phân tích: báo, phân tích, giao chủ, so tiêu chí ra. Sửa & báo cáo: báo cáo lỗi, sửa, số liệu, chấp nhận.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"kiểm tra tiêu chí vào\" ở Initiate review."
+        },
+        {
+          "loi": "Đặt \"viết defect report\" ở Individual review."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "review meeting",
+          "vi": "buổi họp review"
+        }
+      ]
+    },
+    {
+      "title": "Reviews 3 — Who is responsible? The six roles of a formal review",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "review roles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>A formal review has six roles. Match each responsibility to its role (one role can have several responsibilities).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Review chính thức có sáu vai trò. Ghép mỗi trách nhiệm với vai trò (một vai có thể nhiều trách nhiệm).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Điều phối buổi họp, hoà giải\" = facilitator; \"quyết định ai tham gia, khi nào, ở đâu\" = review leader.",
+        "Scribe vừa tổng hợp lỗi từ review cá nhân vừa ghi biên bản họp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 3 — Who is responsible? The six roles of a formal review\n\nAnswer in the answer panel (no code needed).\n\n1. Role of each responsibilityVai trò của từng trách nhiệm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 3 — Who is responsible? The six roles of a formal review — answer key\n\n1. Role of each responsibilityVai trò của từng trách nhiệm\n   - r0.r: Author\n   - r1.r: Management\n   - r2.r: Management\n   - r3.r: Facilitator (moderator)\n   - r4.r: Review leader\n   - r5.r: Reviewer\n   - r6.r: Scribe (recorder)\n   - r7.r: Scribe (recorder)\n   Author creates and fixes; management funds and monitors; facilitator runs the meeting (success often depends on them); review leader is overall responsible and organises; reviewers find defects; scribe collates and records.VI: Tác giả tạo và sửa; quản lý cấp nguồn lực và giám sát; facilitator điều phối buổi họp (thành bại thường phụ thuộc họ); review leader chịu trách nhiệm chung và tổ chức; reviewer tìm lỗi; scribe tổng hợp và ghi chép.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Author · Management · Management · Facilitator · Review leader · Reviewer · Scribe · Scribe.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Role of each responsibility</p><p style=\"opacity:.75;font-size:.92em\"><i>Vai trò của từng trách nhiệm</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Responsibility"
+              },
+              {
+                "ma": "r",
+                "ten": "Role",
+                "luaChon": [
+                  "Author",
+                  "Management",
+                  "Facilitator (moderator)",
+                  "Review leader",
+                  "Reviewer",
+                  "Scribe (recorder)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Creates the work product under review and fixes its defects"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Decides on the execution of reviews; allocates staff, budget and time"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Monitors the ongoing cost-effectiveness of reviews and makes control decisions"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Ensures review meetings run effectively; mediates between viewpoints"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Takes overall responsibility; decides who is involved and organises when and where"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Identifies potential defects in the work product from their own perspective"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Collates potential defects found during individual review"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Records new defects, open points and decisions during the review meeting"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.r": "Author",
+              "r1.r": "Management",
+              "r2.r": "Management",
+              "r3.r": "Facilitator (moderator)",
+              "r4.r": "Review leader",
+              "r5.r": "Reviewer",
+              "r6.r": "Scribe (recorder)",
+              "r7.r": "Scribe (recorder)"
+            },
+            "giaiThich": "<p>Author creates and fixes; management funds and monitors; facilitator runs the meeting (success often depends on them); review leader is overall responsible and organises; reviewers find defects; scribe collates and records.</p><p><i>VI: Tác giả tạo và sửa; quản lý cấp nguồn lực và giám sát; facilitator điều phối buổi họp (thành bại thường phụ thuộc họ); review leader chịu trách nhiệm chung và tổ chức; reviewer tìm lỗi; scribe tổng hợp và ghi chép.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm facilitator với review leader."
+        },
+        {
+          "loi": "Cho rằng author ghi biên bản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "facilitator (moderator)",
+          "vi": "người điều phối buổi review"
+        },
+        {
+          "en": "scribe (recorder)",
+          "vi": "thư ký ghi biên bản"
+        }
+      ]
+    },
+    {
+      "title": "Reviews 4 — Process and roles, exam style",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "review process",
+        "review roles"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five ISTQB-style questions mixing the process and the roles — including the classic traps (“which activity checks the exit criteria?”, “can the author be the scribe?”).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu ISTQB trộn quy trình và vai trò — gồm các bẫy kinh điển (“hoạt động nào kiểm tiêu chí ra?”, “tác giả làm scribe được không?”).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tiêu chí ra: ĐÁNH GIÁ ở issue communication and analysis; CHẤP NHẬN ở fixing and reporting.",
+        "Facilitator ≠ tác giả trong inspection."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 4 — Process and roles, exam style\n\nAnswer in the answer panel (no code needed).\n\n1. In which activity are the review findings evaluated against the exit criteria to make a review decision?Ở hoạt động nào các phát hiện review được so với tiêu chí ra để quyết định?\n2. Which role is usually responsible for fixing the defects found in the work product?Vai trò nào thường sửa các lỗi tìm thấy trong sản phẩm?\n3. In an inspection, who must NOT act as the facilitator (moderator)?Trong inspection, ai KHÔNG được làm facilitator?\n4. What is done during the initiate-review activity?Hoạt động initiate review làm gì?\n5. According to the slides, the success of a review often depends most on…Theo slide, thành công của buổi review thường phụ thuộc nhiều nhất vào…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reviews 4 — Process and roles, exam style — answer key\n\n1. In which activity are the review findings evaluated against the exit criteria to make a review decision?Ở hoạt động nào các phát hiện review được so với tiêu chí ra để quyết định?\n   Answer: c) Issue communication and analysis\n   Evaluating findings vs exit criteria is part of issue communication and analysis; checking that exit criteria are MET and accepting the product happen in fixing and reporting.VI: So phát hiện với tiêu chí ra thuộc trao đổi & phân tích; kiểm tiêu chí ra đã ĐẠT và chấp nhận sản phẩm nằm ở sửa & báo cáo.\n\n2. Which role is usually responsible for fixing the defects found in the work product?Vai trò nào thường sửa các lỗi tìm thấy trong sản phẩm?\n   Answer: b) Author\n   The author owns the work product and does the rework.VI: Tác giả sở hữu sản phẩm và làm lại phần sửa.\n\n3. In an inspection, who must NOT act as the facilitator (moderator)?Trong inspection, ai KHÔNG được làm facilitator?\n   Answer: b) The author\n   Inspections are led by a trained facilitator who is not the author, so the process stays objective.VI: Inspection do facilitator được đào tạo dẫn và không phải tác giả, để quy trình khách quan.\n\n4. What is done during the initiate-review activity?Hoạt động initiate review làm gì?\n   Answer: b) Distributing the work product and explaining the scope, objectives, process, roles and work products; answering questions\n   Initiate review = the kick-off: material out, purpose explained, questions answered.VI: Initiate review = buổi kick-off: phát tài liệu, giải thích mục đích, trả lời câu hỏi.\n\n5. According to the slides, the success of a review often depends most on…Theo slide, thành công của buổi review thường phụ thuộc nhiều nhất vào…\n   Answer: b) the facilitator (moderator)\n   The syllabus: “the success of the review often depends on the facilitator”.VI: Syllabus: “thành công của review thường phụ thuộc vào facilitator”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In which activity are the review findings evaluated against the exit criteria to make a review decision?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở hoạt động nào các phát hiện review được so với tiêu chí ra để quyết định?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Planning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Individual review"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Issue communication and analysis"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fixing and reporting"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Evaluating findings vs exit criteria is part of issue communication and analysis; checking that exit criteria are MET and accepting the product happen in fixing and reporting.</p><p><i>VI: So phát hiện với tiêu chí ra thuộc trao đổi & phân tích; kiểm tiêu chí ra đã ĐẠT và chấp nhận sản phẩm nằm ở sửa & báo cáo.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which role is usually responsible for fixing the defects found in the work product?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vai trò nào thường sửa các lỗi tìm thấy trong sản phẩm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reviewer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Author"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Scribe"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Management"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The author owns the work product and does the rework.</p><p><i>VI: Tác giả sở hữu sản phẩm và làm lại phần sửa.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>In an inspection, who must NOT act as the facilitator (moderator)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong inspection, ai KHÔNG được làm facilitator?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A trained moderator"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The author"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A senior tester"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A quality engineer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inspections are led by a trained facilitator who is not the author, so the process stays objective.</p><p><i>VI: Inspection do facilitator được đào tạo dẫn và không phải tác giả, để quy trình khách quan.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What is done during the initiate-review activity?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hoạt động initiate review làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fixing defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Distributing the work product and explaining the scope, objectives, process, roles and work products; answering questions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Writing the review report"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Defining entry criteria"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Initiate review = the kick-off: material out, purpose explained, questions answered.</p><p><i>VI: Initiate review = buổi kick-off: phát tài liệu, giải thích mục đích, trả lời câu hỏi.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>According to the slides, the success of a review often depends most on…</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo slide, thành công của buổi review thường phụ thuộc nhiều nhất vào…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the scribe"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the facilitator (moderator)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of pages"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the review tool"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The syllabus: “the success of the review often depends on the facilitator”.</p><p><i>VI: Syllabus: “thành công của review thường phụ thuộc vào facilitator”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn Planning cho câu tiêu chí ra."
+        },
+        {
+          "loi": "Cho rằng reviewer sửa lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inspection",
+          "vi": "thanh tra — loại review chính quy nhất"
+        }
+      ]
+    },
+    {
+      "title": "Reviews 5 — Review the LabBook requirements and log the issues",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "review",
+        "requirements review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>You are a reviewer in the individual-review activity of a LabBook requirements review. Read the 12 requirements and log every potential defect: the requirement number, its type, a description and a suggested fix. Two requirements are fine — logging them is a false positive.</p><pre> 1  R1   The system shall let a student book a seat in a lab.\n 2  R2   A booking lasts between 1 and 3 hours.\n 3  R3   Bookings must be made at least 1 hour and at most 2 weeks in advance.\n 4  R4   The system shall respond quickly.\n 5  R5   When a lab is full, the student is added to the waitlist.\n 6  R6   When a confirmed booking is cancelled, the waitlist is promoted.\n 7  R7   A student may book at most 6 hours per calendar week.\n 8  R8   Students can cancel their bookings.\n 9  R9   Bookings are confirmed by e-mail.\n10  R10  A lab can be closed by the administrator.\n11  R11  Closed labs cannot be booked, except by staff.\n12  R12  The booking date must be after today.</pre><p>Types: <code>AMBIGUOUS</code> · <code>INCOMPLETE</code> · <code>INCONSISTENT</code> · <code>UNTESTABLE</code> · <code>INCORRECT</code> · <code>REDUNDANT</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ISSUES = [{ line: 4, type: \"UNTESTABLE\", description, fix }]</code> — <code>line</code> = requirement number; for a conflict between two requirements give both, e.g. <code>\"3,12\"</code>.</li>\n  <li>Find at least 6 real issues, including the three critical ones; every issue with a concrete fix.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn là reviewer trong bước review cá nhân của buổi review yêu cầu LabBook. Đọc 12 yêu cầu và ghi mọi lỗi tiềm năng: số hiệu yêu cầu, loại, mô tả và gợi ý sửa. Có hai yêu cầu không có lỗi — ghi chúng là báo nhầm.</p><pre> 1  R1   The system shall let a student book a seat in a lab.\n 2  R2   A booking lasts between 1 and 3 hours.\n 3  R3   Bookings must be made at least 1 hour and at most 2 weeks in advance.\n 4  R4   The system shall respond quickly.\n 5  R5   When a lab is full, the student is added to the waitlist.\n 6  R6   When a confirmed booking is cancelled, the waitlist is promoted.\n 7  R7   A student may book at most 6 hours per calendar week.\n 8  R8   Students can cancel their bookings.\n 9  R9   Bookings are confirmed by e-mail.\n10  R10  A lab can be closed by the administrator.\n11  R11  Closed labs cannot be booked, except by staff.\n12  R12  The booking date must be after today.</pre><p>Loại: <code>AMBIGUOUS</code> · <code>INCOMPLETE</code> · <code>INCONSISTENT</code> · <code>UNTESTABLE</code> · <code>INCORRECT</code> · <code>REDUNDANT</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ISSUES = [{ line: 4, type: \"UNTESTABLE\", description, fix }]</code> — <code>line</code> = số hiệu yêu cầu; mâu thuẫn giữa hai yêu cầu thì ghi cả hai, vd <code>\"3,12\"</code>.</li>\n  <li>Tìm ít nhất 6 lỗi thật, gồm ba lỗi nghiêm trọng; mỗi lỗi có cách sửa cụ thể.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ line: 4, type: \"UNTESTABLE\", description: \"“quickly” is not measurable\" }",
+          "output": "counts as the critical issue on R4",
+          "explanation": "Fix: “95% of booking requests answer within 2 seconds with 200 concurrent users”.|||Sửa: “95% yêu cầu đặt chỗ trả lời trong 2 giây với 200 người dùng đồng thời”."
+        }
+      ],
+      "hintsJson": [
+        "Đọc từng câu với câu hỏi: đo được không? đủ chưa (ai, khi nào, bao nhiêu)? có câu nào khác nói ngược lại không?",
+        "R3 cho phép đặt trong ngày (trước 1 giờ) nhưng R12 cấm ngày hôm nay — mâu thuẫn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// One object per potential defect. line = requirement number (\"3,12\" for a conflict).\n// type: AMBIGUOUS | INCOMPLETE | INCONSISTENT | UNTESTABLE | INCORRECT | REDUNDANT\nconst ISSUES = [\n  { line: 4, type: 'UNTESTABLE', description: '“quickly” cannot be measured.', fix: 'State a measurable target, e.g. 95% of requests within 2 s.' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Review log — 8 issues; R1 and R7 are fine.\nconst ISSUES = [\n  { line: 4, type: 'UNTESTABLE', description: '“Respond quickly” has no measurable criterion.', fix: '95% of booking requests answered within 2 s with 200 concurrent users.' },\n  { line: 6, type: 'INCOMPLETE', description: 'How is the waitlist promoted — first come first served? Several people at once? Are they notified?', fix: 'Promote waiting bookings of that lab and day first come first served while seats are free; e-mail each promoted student.' },\n  { line: '3,12', type: 'INCONSISTENT', description: 'R3 allows a booking today (1 hour ahead) but R12 forbids today.', fix: 'Delete R12 or change it to “the booking start must be at least 1 hour after now”.' },\n  { line: 2, type: 'AMBIGUOUS', description: 'Can a booking last 1.5 hours? Whole hours only? Must it end before closing time?', fix: 'A booking lasts 1, 2 or 3 whole hours and must end by 21:00.' },\n  { line: 5, type: 'INCOMPLETE', description: '“Full” is not defined (seats per lab? per hour?) and the waitlist has no limit or status.', fix: 'A lab is full for an hour when the CONFIRMED bookings covering it equal its seats; the new booking gets status PENDING.' },\n  { line: '10,11', type: 'INCONSISTENT', description: 'R10 says the administrator closes labs, R11 mentions “staff” — who are they, and may they book closed labs?', fix: 'Define the roles (Manager closes labs) and remove the exception or define it precisely.' },\n  { line: 9, type: 'INCOMPLETE', description: 'Which events send an e-mail (confirmed, waitlisted, promoted, cancelled)?', fix: 'List the e-mail events and their subjects.' },\n  { line: 8, type: 'INCOMPLETE', description: 'No cancellation deadline: can a booking be cancelled after it started?', fix: 'A booking can be cancelled until 2 hours before its start.' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>R4 untestable (“quickly”); R6 incomplete (order of promotion? FIFO?); R3/R12 inconsistent (same-day booking); R2 ambiguous (whole hours?); R5 incomplete (when is a lab “full”: seats per hour?); R10/R11 inconsistent/ambiguous (administrator vs “staff”, undefined); R9 incomplete (which events send e-mails?); R8 incomplete (cancellation deadline?).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "At least 2 distinct real issues with the right line and type",
+              "vi": "Ít nhất 2 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 2 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 2. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 4 distinct real issues with the right line and type",
+              "vi": "Ít nhất 4 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 4 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 4. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 6 distinct real issues with the right line and type",
+              "vi": "Ít nhất 6 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 6 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 6. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: R4 “respond quickly” is not measurable",
+              "vi": "Tìm ra lỗi nghiêm trọng: R4 “phản hồi nhanh” không đo được"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K1\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 4)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: R6 does not say how the waitlist is promoted",
+              "vi": "Tìm ra lỗi nghiêm trọng: R6 không nói nâng hạng danh sách chờ thế nào"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K2\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 6)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: R3 and R12 contradict each other about same-day bookings",
+              "vi": "Tìm ra lỗi nghiêm trọng: R3 và R12 mâu thuẫn về đặt trong ngày"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K3\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 3/12)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "No false claims (legal code reported as an error)",
+              "vi": "Không khẳng định sai (báo lỗi cho mã hợp lệ)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var s = __SAI.filter(function (k) { return __I.some(function (i) { return __hop(i, k); }); });\n    return s.length ? 'false claim: ' + s.map(function (k) { return k.ten; }).join('; ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every issue has a concrete fix suggestion",
+              "vi": "Mỗi lỗi có gợi ý sửa cụ thể"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[4],\"loai\":[\"UNTESTABLE\",\"AMBIGUOUS\"],\"ten\":\"R4 “respond quickly” is not measurable\",\"tenVi\":\"R4 “phản hồi nhanh” không đo được\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[6],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R6 does not say how the waitlist is promoted\",\"tenVi\":\"R6 không nói nâng hạng danh sách chờ thế nào\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[3,12],\"loai\":[\"INCONSISTENT\",\"INCORRECT\"],\"ten\":\"R3 and R12 contradict each other about same-day bookings\",\"tenVi\":\"R3 và R12 mâu thuẫn về đặt trong ngày\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\"],\"ten\":\"R2 whole hours?\"},{\"ma\":\"K5\",\"dong\":[5],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R5 “full” undefined\"},{\"ma\":\"K6\",\"dong\":[10,11],\"loai\":[\"INCONSISTENT\",\"AMBIGUOUS\"],\"ten\":\"R10/R11 administrator vs staff\"},{\"ma\":\"K7\",\"dong\":[9],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R9 which e-mail events\"},{\"ma\":\"K8\",\"dong\":[8],\"loai\":[\"INCOMPLETE\",\"AMBIGUOUS\"],\"ten\":\"R8 no cancellation deadline\"}];\nconst __SAI = [{\"dong\":[1],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R1 is clear and testable\"},{\"dong\":[7],\"loai\":[\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"],\"ten\":\"R7 is clear and testable\"}];\nconst __LOAI = [\"AMBIGUOUS\",\"INCOMPLETE\",\"INCONSISTENT\",\"UNTESTABLE\",\"INCORRECT\",\"REDUNDANT\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var t = __I.filter(function (x) { return String(x.fix || '').trim().length < 6; });\n    return t.length ? (t.length + ' issue(s) without a real fix (e.g. line ' + __dongCua(t[0]).join('/') + ')') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Báo R1 và R7 có lỗi chỉ vì “chung chung” — chúng rõ và kiểm được."
+        },
+        {
+          "loi": "Ghi \"R4 sai\" mà không đề xuất con số đo được."
+        },
+        {
+          "loi": "Bỏ sót mâu thuẫn vì chỉ đọc từng câu riêng lẻ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ambiguous",
+          "vi": "mơ hồ — hiểu được nhiều cách"
+        },
+        {
+          "en": "untestable",
+          "vi": "không kiểm được — không có tiêu chí đo"
+        },
+        {
+          "en": "inconsistent",
+          "vi": "mâu thuẫn"
+        },
+        {
+          "en": "incomplete",
+          "vi": "thiếu thông tin"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,678 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-review-types-techniques",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-review-types-techniques"
+  },
+  "exercises": [
+    {
+      "title": "Review types 1 — Informal review, walkthrough, technical review or inspection?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "review types"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The four review types differ in purpose, leader, formality, preparation, scribe, checklists and documentation (the table examiners test, lesson 3.3). Match each characteristic to the type it describes best.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn loại review khác nhau ở mục đích, người dẫn, mức chính quy, chuẩn bị, thư ký, checklist và tài liệu (bảng đề thi hay hỏi, bài 3.3). Ghép mỗi đặc điểm với loại phù hợp nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Tác giả dẫn” chỉ có ở walkthrough.",
+        "“Checklist bắt buộc, số liệu, không phải tác giả dẫn” ⇒ inspection."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 1 — Informal review, walkthrough, technical review or inspection?\n\nAnswer in the answer panel (no code needed).\n\n1. Review type of each characteristicLoại review của từng đặc điểm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 1 — Informal review, walkthrough, technical review or inspection? — answer key\n\n1. Review type of each characteristicLoại review của từng đặc điểm\n   - r0.t: Informal review\n   - r1.t: Walkthrough\n   - r2.t: Walkthrough\n   - r3.t: Technical review\n   - r4.t: Technical review\n   - r5.t: Inspection\n   - r6.t: Inspection\n   - r7.t: Informal review\n   Informal: no process (buddy check, pairing). Walkthrough: led by the author, knowledge transfer, dry runs. Technical review: technical peers, consensus, alternatives, ideally a trained facilitator. Inspection: most formal — trained moderator (not the author), mandatory checklists, entry/exit criteria, metrics.VI: Informal: không quy trình (buddy check, pair). Walkthrough: tác giả dẫn, chuyển giao kiến thức, chạy thử. Technical review: đồng nghiệp kỹ thuật, đồng thuận, phương án, lý tưởng có facilitator được đào tạo. Inspection: chính quy nhất — moderator được đào tạo (không phải tác giả), checklist bắt buộc, tiêu chí vào/ra, số liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Informal · Walkthrough · Walkthrough · Technical review · Technical review · Inspection · Inspection · Informal.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Review type of each characteristic</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại review của từng đặc điểm</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Characteristic"
+              },
+              {
+                "ma": "t",
+                "ten": "Review type",
+                "luaChon": [
+                  "Informal review",
+                  "Walkthrough",
+                  "Technical review",
+                  "Inspection"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "c": "A colleague glances at your code before you push (“buddy check”); nothing is documented"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "Led by the author; may range from quite informal to very formal"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "Main purposes include training participants and exchanging ideas; dry runs and simulations are typical"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "Ideally led by a trained facilitator; aims to gain consensus and evaluate technical alternatives"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "Reviewers are technical peers of the author and experts in the same or other disciplines"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "Led by a trained moderator who is NOT the author; checklists are mandatory"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "c": "Defined entry and exit criteria; metrics are collected to improve the development process"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "c": "Pair programming in an Agile team"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Informal review",
+              "r1.t": "Walkthrough",
+              "r2.t": "Walkthrough",
+              "r3.t": "Technical review",
+              "r4.t": "Technical review",
+              "r5.t": "Inspection",
+              "r6.t": "Inspection",
+              "r7.t": "Informal review"
+            },
+            "giaiThich": "<p>Informal: no process (buddy check, pairing). Walkthrough: led by the author, knowledge transfer, dry runs. Technical review: technical peers, consensus, alternatives, ideally a trained facilitator. Inspection: most formal — trained moderator (not the author), mandatory checklists, entry/exit criteria, metrics.</p><p><i>VI: Informal: không quy trình (buddy check, pair). Walkthrough: tác giả dẫn, chuyển giao kiến thức, chạy thử. Technical review: đồng nghiệp kỹ thuật, đồng thuận, phương án, lý tưởng có facilitator được đào tạo. Inspection: chính quy nhất — moderator được đào tạo (không phải tác giả), checklist bắt buộc, tiêu chí vào/ra, số liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng technical review luôn do tác giả dẫn."
+        },
+        {
+          "loi": "Xếp pair programming vào walkthrough."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "walkthrough",
+          "vi": "buổi tác giả dẫn mọi người đi qua tài liệu"
+        },
+        {
+          "en": "technical review",
+          "vi": "review kỹ thuật giữa các chuyên gia"
+        },
+        {
+          "en": "inspection",
+          "vi": "thanh tra — review chính quy nhất"
+        },
+        {
+          "en": "buddy check",
+          "vi": "nhờ một đồng nghiệp xem nhanh"
+        }
+      ]
+    },
+    {
+      "title": "Review types 2 — Which review technique is the reviewer using?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "review techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>During individual review, a reviewer can use one of five techniques. Identify the technique in each situation from the LabBook requirements review.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong review cá nhân, reviewer có thể dùng một trong năm kỹ thuật. Xác định kỹ thuật trong mỗi tình huống của buổi review yêu cầu LabBook.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Persona người dùng ⇒ role-based; góc nhìn bên liên quan (tester/dev/BA) ⇒ perspective-based.",
+        "Đi từng bước một kịch bản ⇒ scenarios and dry runs."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 2 — Which review technique is the reviewer using?\n\nAnswer in the answer panel (no code needed).\n\n1. Review techniqueKỹ thuật review\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 2 — Which review technique is the reviewer using? — answer key\n\n1. Review techniqueKỹ thuật review\n   - r0.k: Ad hoc\n   - r1.k: Checklist-based\n   - r2.k: Scenarios and dry runs\n   - r3.k: Role-based\n   - r4.k: Perspective-based\n   - r5.k: Perspective-based\n   Role-based = types of end users / roles in the organisation (personas); perspective-based = stakeholder viewpoints (tester, developer, marketing…) and using the work product to produce what they would derive from it.VI: Role-based = loại người dùng / vai trò trong tổ chức (persona); perspective-based = góc nhìn các bên liên quan (tester, developer…) và dùng sản phẩm để tạo ra thứ họ sẽ suy ra từ nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ad hoc · Checklist-based · Scenarios and dry runs · Role-based · Perspective-based · Perspective-based.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Review technique</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật review</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "k",
+                "ten": "Technique",
+                "luaChon": [
+                  "Ad hoc",
+                  "Checklist-based",
+                  "Scenarios and dry runs",
+                  "Role-based",
+                  "Perspective-based"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Reviewers get no guidance; each reads the document sequentially and notes what they find"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Each reviewer answers the team’s list of 25 questions derived from past defects"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Reviewers follow the use case “cancel a booking” step by step as if executing it"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "One reviewer reads as a first-year student, another as an experienced lab manager"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "One reviewer reads as the tester who must design tests, another as the developer who must implement it"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "While reading, the reviewer tries to draft the acceptance tests the requirement will need"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Ad hoc",
+              "r1.k": "Checklist-based",
+              "r2.k": "Scenarios and dry runs",
+              "r3.k": "Role-based",
+              "r4.k": "Perspective-based",
+              "r5.k": "Perspective-based"
+            },
+            "giaiThich": "<p>Role-based = types of end users / roles in the organisation (personas); perspective-based = stakeholder viewpoints (tester, developer, marketing…) and using the work product to produce what they would derive from it.</p><p><i>VI: Role-based = loại người dùng / vai trò trong tổ chức (persona); perspective-based = góc nhìn các bên liên quan (tester, developer…) và dùng sản phẩm để tạo ra thứ họ sẽ suy ra từ nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm role-based với perspective-based."
+        },
+        {
+          "loi": "Cho rằng ad hoc là \"không review\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "perspective-based reading",
+          "vi": "đọc theo góc nhìn của từng bên liên quan"
+        },
+        {
+          "en": "dry run",
+          "vi": "chạy thử trên giấy"
+        }
+      ]
+    },
+    {
+      "title": "Review types 3 — What makes a review succeed? (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "review success factors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Organisational and people-related success factors of reviews, and the checking rate. Five questions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các yếu tố thành công của review về tổ chức và con người, và tốc độ kiểm tra. Năm câu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tổ chức = mục tiêu, thời gian, quản lý, loại review; con người = tin tưởng, đúng người, khách quan.",
+        "Đọc quá nhanh ⇒ bỏ sót lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 3 — What makes a review succeed? (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is an ORGANISATIONAL success factor for reviews?Đâu là yếu tố thành công về TỔ CHỨC của review?\n2. Which is a PEOPLE-related success factor?Đâu là yếu tố thành công về CON NGƯỜI?\n3. Why do inspections use a slow checking rate (around one page per hour on the slides)?Vì sao inspection dùng tốc độ kiểm tra chậm (khoảng một trang một giờ trên slide)?\n4. A team uses reviews to measure individual developer performance. What is the most likely effect?Nhóm dùng kết quả review để chấm điểm từng developer. Hệ quả có khả năng nhất?\n5. Which review type would you choose for a safety-critical module where metrics are needed to improve the process?Chọn loại review nào cho mô-đun an toàn-tới-hạn cần số liệu để cải tiến quy trình?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Review types 3 — What makes a review succeed? (K2) — answer key\n\n1. Which is an ORGANISATIONAL success factor for reviews?Đâu là yếu tố thành công về TỔ CHỨC của review?\n   Answer: b) Each review has clear objectives, defined during planning, used as measurable exit criteria\n   Clear objectives, suitable review type, adequate time, management support and limited-size work products are organisational; the other options are people-related.VI: Mục tiêu rõ, loại review phù hợp, đủ thời gian, quản lý ủng hộ, sản phẩm vừa cỡ là yếu tố tổ chức; các phương án còn lại là yếu tố con người.\n\n2. Which is a PEOPLE-related success factor?Đâu là yếu tố thành công về CON NGƯỜI?\n   Answer: b) The review is conducted in an atmosphere of trust; the outcome is not used to evaluate the participants\n   Trust, the right people, objectivity and well-managed meetings are people factors.VI: Tin tưởng, đúng người, khách quan và họp được điều phối tốt là yếu tố con người.\n\n3. Why do inspections use a slow checking rate (around one page per hour on the slides)?Vì sao inspection dùng tốc độ kiểm tra chậm (khoảng một trang một giờ trên slide)?\n   Answer: b) Because defect detection drops sharply when reviewers read too fast\n   Above the optimum checking rate, reviewers miss most defects; small work products reviewed carefully find more.VI: Đọc nhanh hơn tốc độ tối ưu thì bỏ sót phần lớn lỗi; sản phẩm nhỏ đọc kỹ tìm được nhiều hơn.\n\n4. A team uses reviews to measure individual developer performance. What is the most likely effect?Nhóm dùng kết quả review để chấm điểm từng developer. Hệ quả có khả năng nhất?\n   Answer: b) Authors become defensive and reviewers hold back findings — reviews lose effectiveness\n   The syllabus warns: review outcomes must not be used to evaluate participants.VI: Syllabus cảnh báo: không dùng kết quả review để đánh giá người tham gia.\n\n5. Which review type would you choose for a safety-critical module where metrics are needed to improve the process?Chọn loại review nào cho mô-đun an toàn-tới-hạn cần số liệu để cải tiến quy trình?\n   Answer: d) Inspection\n   Inspection: the most formal, metrics gathered, used for high-risk work products and process improvement.VI: Inspection: chính quy nhất, có số liệu, dùng cho sản phẩm rủi ro cao và cải tiến quy trình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is an ORGANISATIONAL success factor for reviews?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố thành công về TỔ CHỨC của review?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Defects found are acknowledged and handled objectively"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each review has clear objectives, defined during planning, used as measurable exit criteria"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Participants avoid body language that signals boredom"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Testers are valued reviewers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Clear objectives, suitable review type, adequate time, management support and limited-size work products are organisational; the other options are people-related.</p><p><i>VI: Mục tiêu rõ, loại review phù hợp, đủ thời gian, quản lý ủng hộ, sản phẩm vừa cỡ là yếu tố tổ chức; các phương án còn lại là yếu tố con người.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a PEOPLE-related success factor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là yếu tố thành công về CON NGƯỜI?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Management supports the review process"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The review is conducted in an atmosphere of trust; the outcome is not used to evaluate the participants"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Large documents are reviewed in one sitting"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reviews are scheduled with adequate notice"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Trust, the right people, objectivity and well-managed meetings are people factors.</p><p><i>VI: Tin tưởng, đúng người, khách quan và họp được điều phối tốt là yếu tố con người.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why do inspections use a slow checking rate (around one page per hour on the slides)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao inspection dùng tốc độ kiểm tra chậm (khoảng một trang một giờ trên slide)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To make reviews last longer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because defect detection drops sharply when reviewers read too fast"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because the rules forbid more than one page"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because scribes write slowly"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Above the optimum checking rate, reviewers miss most defects; small work products reviewed carefully find more.</p><p><i>VI: Đọc nhanh hơn tốc độ tối ưu thì bỏ sót phần lớn lỗi; sản phẩm nhỏ đọc kỹ tìm được nhiều hơn.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A team uses reviews to measure individual developer performance. What is the most likely effect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm dùng kết quả review để chấm điểm từng developer. Hệ quả có khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "More defects reported"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Authors become defensive and reviewers hold back findings — reviews lose effectiveness"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No effect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reviews become shorter but better"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The syllabus warns: review outcomes must not be used to evaluate participants.</p><p><i>VI: Syllabus cảnh báo: không dùng kết quả review để đánh giá người tham gia.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which review type would you choose for a safety-critical module where metrics are needed to improve the process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn loại review nào cho mô-đun an toàn-tới-hạn cần số liệu để cải tiến quy trình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Informal review"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Walkthrough"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Technical review"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inspection"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Inspection: the most formal, metrics gathered, used for high-risk work products and process improvement.</p><p><i>VI: Inspection: chính quy nhất, có số liệu, dùng cho sản phẩm rủi ro cao và cải tiến quy trình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm yếu tố tổ chức với con người."
+        },
+        {
+          "loi": "Cho rằng review dài hơn luôn tốt hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "checking rate",
+          "vi": "tốc độ kiểm tra (trang/giờ)"
+        }
+      ]
+    },
+    {
+      "title": "Review types 4 — Checklist-based code review of BookingDao",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "checklist-based review",
+        "code review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Apply a <b>checklist-based</b> review (LO-3.2.4, K3) to the LabBook data-access class below. For each issue give the line, the checklist item it violates, a description and a fix. One line looks suspicious but is correct.</p><pre> 1  public class BookingDao {\n 2      private static final String PASSWORD = \"Adm@1234\";\n 3  \n 4      public List&lt;Booking&gt; findByStudent(String email) throws SQLException {\n 5          Connection c = DriverManager.getConnection(URL, \"admin\", PASSWORD);\n 6          Statement st = c.createStatement();\n 7          ResultSet rs = st.executeQuery(\"SELECT * FROM bookings WHERE email = '\" + email + \"'\");\n 8          List&lt;Booking&gt; list = new ArrayList&lt;&gt;();\n 9          while (rs.next()) {\n10              list.add(map(rs));\n11          }\n12          return list;\n13      }\n14  \n15      public int countHours(List&lt;Booking&gt; bs) {\n16          int h = 0;\n17          for (int i = 0; i &lt;= bs.size() - 1; i++) {\n18              h = h + bs.get(i).getDuration();\n19          }\n20          return h;\n21      }\n22  \n23      public boolean overLimit(List&lt;Booking&gt; bs, int x) {\n24          try {\n25              return countHours(bs) + x &gt; 6;\n26          } catch (Exception e) {\n27          }\n28          return false;\n29      }\n30  \n31      private Booking map(ResultSet rs) throws SQLException {\n32          Booking b = new Booking();\n33          b.setCode(rs.getString(\"code\"));\n34          b.setDuration(rs.getInt(\"duration\"));\n35          int unused = rs.getInt(\"id\");\n36          return b;\n37      }\n38  }</pre><table><thead><tr><th>Item</th><th>Checklist question</th></tr></thead><tbody><tr><td>C1</td><td>Input validation: null, empty, range</td></tr><tr><td>C2</td><td>Boundaries and loop bounds</td></tr><tr><td>C3</td><td>Error and exception handling</td></tr><tr><td>C4</td><td>Resource management (connections, streams)</td></tr><tr><td>C5</td><td>Naming, constants, readability</td></tr><tr><td>C6</td><td>Dead or duplicated code</td></tr><tr><td>C7</td><td>Security (injection, secrets)</td></tr><tr><td>C8</td><td>Performance</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ISSUES = [{ line, type: \"C7\", description, fix }]</code> — <code>type</code> is the checklist item.</li>\n  <li>At least 8 real issues, including the three critical ones; no false positive.</li>\n</ul>",
+      "problemHtmlVi": "<p>Áp dụng review <b>theo checklist</b> (LO-3.2.4, K3) cho lớp truy cập dữ liệu LabBook dưới đây. Mỗi lỗi ghi dòng, mục checklist bị vi phạm, mô tả và cách sửa. Có một dòng trông đáng ngờ nhưng thực ra đúng.</p><pre> 1  public class BookingDao {\n 2      private static final String PASSWORD = \"Adm@1234\";\n 3  \n 4      public List&lt;Booking&gt; findByStudent(String email) throws SQLException {\n 5          Connection c = DriverManager.getConnection(URL, \"admin\", PASSWORD);\n 6          Statement st = c.createStatement();\n 7          ResultSet rs = st.executeQuery(\"SELECT * FROM bookings WHERE email = '\" + email + \"'\");\n 8          List&lt;Booking&gt; list = new ArrayList&lt;&gt;();\n 9          while (rs.next()) {\n10              list.add(map(rs));\n11          }\n12          return list;\n13      }\n14  \n15      public int countHours(List&lt;Booking&gt; bs) {\n16          int h = 0;\n17          for (int i = 0; i &lt;= bs.size() - 1; i++) {\n18              h = h + bs.get(i).getDuration();\n19          }\n20          return h;\n21      }\n22  \n23      public boolean overLimit(List&lt;Booking&gt; bs, int x) {\n24          try {\n25              return countHours(bs) + x &gt; 6;\n26          } catch (Exception e) {\n27          }\n28          return false;\n29      }\n30  \n31      private Booking map(ResultSet rs) throws SQLException {\n32          Booking b = new Booking();\n33          b.setCode(rs.getString(\"code\"));\n34          b.setDuration(rs.getInt(\"duration\"));\n35          int unused = rs.getInt(\"id\");\n36          return b;\n37      }\n38  }</pre><table><thead><tr><th>Mục</th><th>Câu hỏi checklist</th></tr></thead><tbody><tr><td>C1</td><td>Input validation: null, empty, range</td></tr><tr><td>C2</td><td>Boundaries and loop bounds</td></tr><tr><td>C3</td><td>Error and exception handling</td></tr><tr><td>C4</td><td>Resource management (connections, streams)</td></tr><tr><td>C5</td><td>Naming, constants, readability</td></tr><tr><td>C6</td><td>Dead or duplicated code</td></tr><tr><td>C7</td><td>Security (injection, secrets)</td></tr><tr><td>C8</td><td>Performance</td></tr></tbody></table>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ISSUES = [{ line, type: \"C7\", description, fix }]</code> — <code>type</code> là mục checklist.</li>\n  <li>Ít nhất 8 lỗi thật, gồm ba lỗi nghiêm trọng; không báo nhầm.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ line: 7, type: \"C7\", description: \"SQL built by concatenating the e-mail\" }",
+          "output": "the SQL-injection issue",
+          "explanation": "Fix: PreparedStatement with a ? parameter.|||Sửa: PreparedStatement với tham số ?."
+        }
+      ],
+      "hintsJson": [
+        "Đi qua checklist từng mục cho cả lớp: C7 (mật khẩu trong mã, nối chuỗi SQL), C4 (Connection/Statement/ResultSet không đóng), C3 (catch rỗng).",
+        "Dòng 17: i <= size − 1 tương đương i < size — không phải lỗi biên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// type = checklist item C1…C8\nconst ISSUES = [\n  { line: 7, type: 'C7', description: 'The e-mail is concatenated into the SQL string (SQL injection).', fix: 'Use a PreparedStatement with a ? parameter.' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Checklist-based review log of BookingDao — 11 issues; line 17 is correct (i <= size - 1 is i < size).\nconst ISSUES = [\n  { line: 7, type: 'C7', description: 'SQL built by concatenating user input: SQL injection.', fix: 'PreparedStatement \"SELECT code, duration FROM bookings WHERE email = ?\" and setString(1, email).' },\n  { line: 5, type: 'C4', description: 'Connection, Statement and ResultSet are never closed: connection leak.', fix: 'Open them in try-with-resources.' },\n  { line: 26, type: 'C3', description: 'Empty catch of Exception swallows every error and returns false silently.', fix: 'Remove the try/catch or log and rethrow a meaningful exception.' },\n  { line: 2, type: 'C7', description: 'Database password hard-coded in the source.', fix: 'Read credentials from configuration / environment (e.g. Spring properties, a vault).' },\n  { line: 4, type: 'C1', description: 'email is not checked for null/empty/format.', fix: 'Validate the e-mail and throw IllegalArgumentException when invalid.' },\n  { line: 15, type: 'C1', description: 'countHours does not handle a null list (NullPointerException).', fix: 'Return 0 or reject a null list explicitly.' },\n  { line: 23, type: 'C5', description: 'Cryptic names: bs, x, h.', fix: 'bookings, extraHours, totalHours.' },\n  { line: 25, type: 'C5', description: 'Magic number 6 (weekly limit).', fix: 'private static final int WEEKLY_LIMIT_HOURS = 6;' },\n  { line: 35, type: 'C6', description: 'Variable unused is read and never used (dead code).', fix: 'Remove the line or map the id into the Booking.' },\n  { line: 7, type: 'C8', description: 'SELECT * fetches every column although two are used.', fix: 'Select only code and duration.' },\n  { line: 28, type: 'C3', description: 'Returning false after an error hides the failure from the caller.', fix: 'Let the exception propagate instead of returning a misleading value.' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Critical: SQL injection (7, C7), resources never closed (5–7, C4 — use try-with-resources), empty catch (24–27, C3). Others: hard-coded password (2, C7), no null/format check of email (4, C1) and of the list (15, C1), cryptic names h/x/bs (15–23, C5), magic number 6 (25, C5), unused variable (35, C6), SELECT * (7, C8).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "At least 2 distinct real issues with the right line and type",
+              "vi": "Ít nhất 2 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 2 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 2. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 4 distinct real issues with the right line and type",
+              "vi": "Ít nhất 4 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 4 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 4. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 6 distinct real issues with the right line and type",
+              "vi": "Ít nhất 6 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 6 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 6. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At least 8 distinct real issues with the right line and type",
+              "vi": "Ít nhất 8 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 8 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 8. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: SQL injection on line 7",
+              "vi": "Tìm ra lỗi nghiêm trọng: SQL injection ở dòng 7"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K1\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 7)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: connection/statement/result set never closed",
+              "vi": "Tìm ra lỗi nghiêm trọng: không đóng connection/statement/result set"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K2\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 5/6/7/12)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: empty catch swallows exceptions",
+              "vi": "Tìm ra lỗi nghiêm trọng: catch rỗng nuốt lỗi"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K3\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 24/25/26/27)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "No false claims (legal code reported as an error)",
+              "vi": "Không khẳng định sai (báo lỗi cho mã hợp lệ)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var s = __SAI.filter(function (k) { return __I.some(function (i) { return __hop(i, k); }); });\n    return s.length ? 'false claim: ' + s.map(function (k) { return k.ten; }).join('; ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every issue has a concrete fix suggestion",
+              "vi": "Mỗi lỗi có gợi ý sửa cụ thể"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[7],\"loai\":[\"C7\"],\"ten\":\"SQL injection on line 7\",\"tenVi\":\"SQL injection ở dòng 7\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[5,6,7,12],\"loai\":[\"C4\"],\"ten\":\"connection/statement/result set never closed\",\"tenVi\":\"không đóng connection/statement/result set\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[24,25,26,27],\"loai\":[\"C3\"],\"ten\":\"empty catch swallows exceptions\",\"tenVi\":\"catch rỗng nuốt lỗi\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[2],\"loai\":[\"C7\"],\"ten\":\"hard-coded password\"},{\"ma\":\"K5\",\"dong\":[4,7],\"loai\":[\"C1\"],\"ten\":\"email not validated\"},{\"ma\":\"K6\",\"dong\":[15,17,18],\"loai\":[\"C1\"],\"ten\":\"null list not handled\"},{\"ma\":\"K7\",\"dong\":[15,16,23,25],\"loai\":[\"C5\"],\"ten\":\"cryptic names\"},{\"ma\":\"K8\",\"dong\":[25],\"loai\":[\"C5\"],\"ten\":\"magic number 6\"},{\"ma\":\"K9\",\"dong\":[35],\"loai\":[\"C6\"],\"ten\":\"unused variable\"},{\"ma\":\"K10\",\"dong\":[7],\"loai\":[\"C8\"],\"ten\":\"SELECT *\"},{\"ma\":\"K11\",\"dong\":[28,26],\"loai\":[\"C3\"],\"ten\":\"misleading false after an error\"}];\nconst __SAI = [{\"dong\":[17],\"loai\":[\"C2\"],\"ten\":\"line 17 is correct: i <= size − 1 is the same as i < size\"}];\nconst __LOAI = [\"C1\",\"C2\",\"C3\",\"C4\",\"C5\",\"C6\",\"C7\",\"C8\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var t = __I.filter(function (x) { return String(x.fix || '').trim().length < 6; });\n    return t.length ? (t.length + ' issue(s) without a real fix (e.g. line ' + __dongCua(t[0]).join('/') + ')') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Báo dòng 17 là off-by-one."
+        },
+        {
+          "loi": "Chỉ ghi \"code xấu\" mà không chỉ mục checklist và cách sửa."
+        },
+        {
+          "loi": "Bỏ sót biến không dùng ở dòng 35."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "checklist-based review",
+          "vi": "review theo checklist"
+        },
+        {
+          "en": "try-with-resources",
+          "vi": "cú pháp Java tự đóng tài nguyên"
+        },
+        {
+          "en": "PreparedStatement",
+          "vi": "câu lệnh SQL có tham số (chống injection)"
+        }
+      ]
+    }
+  ]
+}

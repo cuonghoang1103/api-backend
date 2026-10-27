@@ -10,6 +10,48 @@
   "description": "Bộ luyện môn SWT301 (Software Testing) theo ISTQB Foundation và slide trường — mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (viết test bị chấm bằng mutant, đo độ phủ statement/decision/MC/DC trên mã đã gắn đo, test case hộp đen chạy qua hệ thống tham chiếu), mỗi chương một Lab + Deep Lab dạng bản in, luyện Lab 2–4 của trường, PE luyện định dạng SU26 và dự án xuyên suốt LabBook.",
   "modules": [
     {
+      "slug": "swt301-static-testing-basics",
+      "name": "3.1 Static testing basics",
+      "level": "BEGINNER",
+      "description": "Kiểm thử tĩnh là gì, xem xét được sản phẩm nào, khác kiểm thử động ra sao; phân loại hoạt động (review / phân tích tĩnh / động) và loại lỗi tĩnh dễ tìm; giá trị và chi phí."
+    },
+    {
+      "slug": "swt301-static-reviews",
+      "name": "3.2 Review process & roles",
+      "level": "BEGINNER",
+      "description": "Quy trình review năm hoạt động (sắp thứ tự, ghép việc ↔ hoạt động), sáu vai trò, câu hỏi kiểu đề thi, và một buổi review cá nhân thật trên 12 yêu cầu LabBook (lỗi mơ hồ, thiếu, mâu thuẫn, không kiểm được; có bẫy báo nhầm)."
+    },
+    {
+      "slug": "swt301-review-types-techniques",
+      "name": "3.3 Review types, techniques & success factors",
+      "level": "BEGINNER",
+      "description": "Bốn loại review (informal, walkthrough, technical review, inspection), năm kỹ thuật review cá nhân, yếu tố thành công và tốc độ kiểm tra; review mã BookingDao theo checklist (SQL injection, rò kết nối, catch rỗng… và một bẫy báo nhầm)."
+    },
+    {
+      "slug": "swt301-static-analysis",
+      "name": "3.4 Static analysis by tools",
+      "level": "BEGINNER",
+      "description": "Phân tích tĩnh: bất thường luồng dữ liệu ur/dd/du, phát hiện luồng điều khiển (mã không tới được, vòng lặp vô hạn), V(G) ba cách (E − N + 2, quyết định + 1, số miền), công cụ và giới hạn (cảnh báo nhầm)."
+    },
+    {
+      "slug": "swt301-3-lab-review-static-booking-service",
+      "name": "Lab 3 — Review & Static Analysis (BookingService)",
+      "level": "ADVANCED",
+      "description": "Lab chương 3 (dạng Lab 1 trường + câu 1 PE): review BookingService theo đặc tả (≥ 10 lỗi, có bẫy), bất thường luồng dữ liệu, V(G) từng phương thức, tổ chức buổi inspection."
+    },
+    {
+      "slug": "swt301-3-deep-build-static-analyzer",
+      "name": "Deep Lab 3 — Build Your Own Static Analyzer",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 3 (vượt syllabus): tự cài bộ phân tích tĩnh mini — bất thường ur/dd/du, V(G) = E − N + 2P, tìm node không tới được, luật lint SQL nối chuỗi — chấm bằng ca kiểm hiện + ẩn."
+    },
+    {
+      "slug": "swt301-3-project-labbook-pr-review",
+      "name": "LabBook Project 3 — Review a Pull Request, then Fix It",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 3: review PR #42 cancelBooking theo hợp đồng API (NPE thay 404, thiếu kiểm chủ booking, == so chuỗi, nâng hạng sai…), rồi sửa PR bằng bản JS chạy với repository/mail giả; kèm góc phỏng vấn về review."
+    },
+    {
       "slug": "swt301-test-technique-categories",
       "name": "4.1 Categories of test techniques",
       "level": "BEGINNER",

@@ -1,0 +1,374 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-3-deep-build-static-analyzer",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-static-analysis"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 3 — Build Your Own Static Analyzer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "static analysis",
+        "data flow analysis",
+        "control flow analysis",
+        "cyclomatic complexity",
+        "lint rule"
+      ],
+      "prerequisites": [
+        "SWT301 3.4",
+        "JavaScript arrays/Set/Map"
+      ],
+      "tags": [
+        "swt301",
+        "deep-lab",
+        "static-analysis"
+      ],
+      "problemHtml": "<h1>Deep Lab 3 — Build Your Own Static Analyzer</h1>\n<p class=\"bi-phu\">Beyond the syllabus · data-flow anomalies · V(G) with components · reachability · a security lint rule · 10 marks</p>\n<h2>1. Overview</h2>\n<p>SonarLint, PMD and javac look like magic until you write a tiny one yourself. In this deep lab you implement four analyses in plain JavaScript — the same ideas, a fraction of the size. Each function is graded by visible and hidden test cases, like a real code challenge.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Data-flow anomalies (ur, dd, du) from an execution trace.</li>\n  <li>B. Cyclomatic complexity E − N + 2P for graphs with several routines.</li>\n  <li>C. Unreachable code = nodes not reachable from the entry.</li>\n  <li>D. A security lint rule: SQL built by concatenating strings.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Pure functions: no global state, inputs never modified. Return exactly the formats described.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n└── analyzer.js   ← dataFlowAnomalies(trace) · cyclomatic(nodes, edges) · unreachable(nodes, edges, entry) · sqlConcatLines(source)</pre>\n<h2>3. Data model</h2>\n<p><b>Inputs</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>trace</code></td><td>{ v: string, op: \"d\" | \"u\" }[]</td><td>events of one straight-line execution</td></tr><tr><td><code>nodes · edges · entry</code></td><td>number[] · [number, number][] · number</td><td>a control-flow graph</td></tr><tr><td><code>source</code></td><td>string</td><td>Java source, lines separated by \\n</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. dataFlowAnomalies <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>ur: a use while the variable was never defined · dd: a definition while the previous one was not used · du: a variable whose last definition is never used. Unique, sorted: <code>[\"s:dd\", \"s:du\", \"t:ur\"]</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">data-flow analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. cyclomatic <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>V(G) = E − N + 2P where P is the number of connected components (treat edges as undirected; a node without edges is a component).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">cyclomatic complexity</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. unreachable <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Breadth-first search from the entry along DIRECTED edges; return the other nodes, sorted ascending.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">control-flow analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. sqlConcatLines <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A line is reported when it contains a double-quoted literal with a whole-word SQL keyword (SELECT, INSERT, UPDATE, DELETE — any case) AND a <code>+</code> next to a quote. “selected” is not a keyword.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">security</span> <span class=\"bi-hook\">lint rule</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>dataFlowAnomalies · cyclomatic · unreachable · sqlConcatLines</code></td><td>answers/analyzer.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. dataFlowAnomalies</td><td>3</td></tr><tr><td>2</td><td>B. cyclomatic</td><td>2.5</td></tr><tr><td>3</td><td>C. unreachable</td><td>2</td></tr><tr><td>4</td><td>D. sqlConcatLines</td><td>2.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Counting a variable that was never defined but is only used as “du”.</li>\n  <li>Forgetting P > 1 in B — the formula is E − N + 2P.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 3 — Build Your Own Static Analyzer</h1>\n<p class=\"bi-phu\">Vượt syllabus · bất thường luồng dữ liệu · V(G) nhiều thành phần · khả năng tới được · một luật lint bảo mật · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>SonarLint, PMD hay javac trông như phép màu cho tới khi bạn tự viết một bản nhỏ. Trong deep lab này bạn cài bốn phép phân tích bằng JavaScript thuần — cùng ý tưởng, nhỏ hơn nhiều. Mỗi hàm được chấm bằng các ca kiểm hiện và ẩn, như một bài thi lập trình thật.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Bất thường luồng dữ liệu (ur, dd, du) từ vết thực thi.</li>\n  <li>B. Độ phức tạp E − N + 2P cho đồ thị có nhiều routine.</li>\n  <li>C. Mã không tới được = node không tới được từ điểm vào.</li>\n  <li>D. Một luật lint bảo mật: SQL ghép bằng nối chuỗi.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Hàm thuần: không trạng thái toàn cục, không sửa input. Trả đúng định dạng mô tả.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n└── analyzer.js   ← dataFlowAnomalies(trace) · cyclomatic(nodes, edges) · unreachable(nodes, edges, entry) · sqlConcatLines(source)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Inputs</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>trace</code></td><td>{ v: string, op: \"d\" | \"u\" }[]</td><td>các sự kiện của một lần chạy tuần tự</td></tr><tr><td><code>nodes · edges · entry</code></td><td>number[] · [number, number][] · number</td><td>một đồ thị luồng điều khiển</td></tr><tr><td><code>source</code></td><td>string</td><td>mã Java, các dòng cách nhau bởi \\n</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. dataFlowAnomalies <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>ur: dùng khi biến chưa từng được gán · dd: gán khi giá trị trước chưa được dùng · du: lần gán cuối không bao giờ được dùng. Không trùng, đã sắp xếp: <code>[\"s:dd\", \"s:du\", \"t:ur\"]</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">data-flow analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. cyclomatic <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>V(G) = E − N + 2P với P là số thành phần liên thông (coi cạnh vô hướng; node không có cạnh là một thành phần).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">cyclomatic complexity</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. unreachable <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Duyệt theo chiều rộng từ điểm vào theo cạnh CÓ HƯỚNG; trả các node còn lại, sắp tăng dần.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">control-flow analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. sqlConcatLines <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Báo một dòng khi nó có chuỗi nháy kép chứa từ khoá SQL nguyên từ (SELECT, INSERT, UPDATE, DELETE — mọi kiểu chữ) VÀ có <code>+</code> sát dấu nháy. “selected” không phải từ khoá.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">security</span> <span class=\"bi-hook\">lint rule</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>dataFlowAnomalies · cyclomatic · unreachable · sqlConcatLines</code></td><td>answers/analyzer.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. dataFlowAnomalies</td><td>3</td></tr><tr><td>2</td><td>B. cyclomatic</td><td>2.5</td></tr><tr><td>3</td><td>C. unreachable</td><td>2</td></tr><tr><td>4</td><td>D. sqlConcatLines</td><td>2.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Coi biến chưa từng được gán mà chỉ được dùng là “du”.</li>\n  <li>Quên P > 1 ở phần B — công thức là E − N + 2P.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Pure functions: no global state, inputs never modified. Return exactly the formats described.|||Hàm thuần: không trạng thái toàn cục, không sửa input. Trả đúng định dạng mô tả.",
+      "examplesJson": [
+        {
+          "input": "dataFlowAnomalies([{ v: 's', op: 'd' }, { v: 's', op: 'd' }, { v: 't', op: 'u' }])",
+          "output": "[\"s:dd\", \"s:du\", \"t:ur\"]",
+          "explanation": "s is defined twice and never used; t is used but never defined.|||s gán hai lần và không dùng; t dùng mà chưa gán."
+        }
+      ],
+      "hintsJson": [
+        "A: giữ trạng thái mỗi biến (chưa gán / đã gán chưa dùng / đã dùng); xét từng sự kiện; cuối vết, biến nào còn \"đã gán chưa dùng\" là du.",
+        "B: dùng union-find hoặc DFS vô hướng để đếm thành phần.",
+        "C: BFS từ entry theo cạnh có hướng; node chưa thăm là không tới được.",
+        "D: regex /\"[^\"]*\\b(select|insert|update|delete)\\b[^\"]*\"/i cho chuỗi SQL và /\"\\s*\\+|\\+\\s*\"/ cho phép nối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/analyzer.js",
+          "language": "javascript",
+          "code": "// ─── A. Data-flow anomalies ─────────────────────────────────────────────────\n// trace: the events of ONE straight-line execution, in order: { v: 'x', op: 'd' | 'u' }\n// Return the anomalies as sorted, unique strings 'variable:kind' with kind ur | dd | du.\nfunction dataFlowAnomalies(trace) {\n  return [];\n}\n\n// ─── B. Cyclomatic complexity ───────────────────────────────────────────────\n// nodes: ids · edges: [from, to] · V(G) = E − N + 2P (P = connected components, edges taken as undirected)\nfunction cyclomatic(nodes, edges) {\n  return 0;\n}\n\n// ─── C. Unreachable nodes ───────────────────────────────────────────────────\n// Directed edges. Return the sorted ids that cannot be reached from entry.\nfunction unreachable(nodes, edges, entry) {\n  return [];\n}\n\n// ─── D. Lint rule: SQL built by string concatenation ────────────────────────\n// Return the 1-based line numbers where a string literal containing SELECT, INSERT, UPDATE or DELETE\n// (as a whole word, any case) is joined with + on the same line.\nfunction sqlConcatLines(source) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/analyzer.js",
+          "language": "javascript",
+          "code": "// ─── A. Data-flow anomalies ─────────────────────────────────────────────────\n// State per variable: undefined (never defined) → 'defd' (defined, not used since) → 'used'.\nfunction dataFlowAnomalies(trace) {\n  const state = {};\n  const found = new Set();\n  for (const { v, op } of trace) {\n    if (op === 'u') {\n      if (!state[v]) found.add(v + ':ur');      // read before any definition\n      state[v] = 'used';\n    } else if (op === 'd') {\n      if (state[v] === 'defd') found.add(v + ':dd'); // redefined without a use in between\n      state[v] = 'defd';\n    }\n  }\n  for (const v of Object.keys(state)) if (state[v] === 'defd') found.add(v + ':du'); // last value never used\n  return [...found].sort();\n}\n\n// ─── B. Cyclomatic complexity ───────────────────────────────────────────────\nfunction cyclomatic(nodes, edges) {\n  const parent = new Map(nodes.map((n) => [n, n]));\n  const find = (x) => (parent.get(x) === x ? x : (parent.set(x, find(parent.get(x))), parent.get(x)));\n  for (const [a, b] of edges) parent.set(find(a), find(b));    // union-find, undirected\n  const components = new Set(nodes.map(find)).size;\n  return edges.length - nodes.length + 2 * components;\n}\n\n// ─── C. Unreachable nodes ───────────────────────────────────────────────────\nfunction unreachable(nodes, edges, entry) {\n  const next = new Map(nodes.map((n) => [n, []]));\n  for (const [a, b] of edges) next.get(a).push(b);\n  const seen = new Set([entry]);\n  const queue = [entry];\n  while (queue.length) for (const m of next.get(queue.shift()) || []) if (!seen.has(m)) { seen.add(m); queue.push(m); }\n  return nodes.filter((n) => !seen.has(n)).sort((a, b) => a - b);\n}\n\n// ─── D. Lint rule: SQL built by string concatenation ────────────────────────\nfunction sqlConcatLines(source) {\n  const sqlLiteral = /\"[^\"]*\\b(select|insert|update|delete)\\b[^\"]*\"/i;\n  return source.split('\\n')\n    .map((line, i) => (sqlLiteral.test(line) && /\"\\s*\\+|\\+\\s*\"/.test(line) ? i + 1 : 0))\n    .filter(Boolean);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A: one pass with a three-state machine per variable, then a final pass for du. B: union-find counts components; E − N + 2P. C: BFS. D: a line-based rule combining an SQL-literal regex with a concatenation regex — exactly how simple lint rules work (and why they produce false positives and negatives).</p>",
+      "solutionExplanationHtmlVi": "<p>A: một lượt với máy ba trạng thái mỗi biến, rồi một lượt cuối cho du. B: union-find đếm thành phần; E − N + 2P. C: BFS. D: luật theo dòng ghép regex chuỗi SQL với regex phép nối — đúng cách luật lint đơn giản vận hành (và vì sao chúng có cảnh báo nhầm/sót).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://pmd.github.io/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/analyzer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — empty trace has no anomaly",
+              "vi": "A — vết rỗng không có bất thường"
+            },
+            "goi": "dataFlowAnomalies([])",
+            "mongDoi": [],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — use before definition is ur",
+              "vi": "A — dùng trước khi gán là ur"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"x\",\"op\":\"u\"}])",
+            "mongDoi": [
+              "x:ur"
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — two definitions without a use is dd",
+              "vi": "A — gán hai lần không dùng là dd"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"x\",\"op\":\"d\"},{\"v\":\"x\",\"op\":\"d\"},{\"v\":\"x\",\"op\":\"u\"}])",
+            "mongDoi": [
+              "x:dd"
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — a definition never used is du",
+              "vi": "A — gán không bao giờ dùng là du"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"x\",\"op\":\"d\"}])",
+            "mongDoi": [
+              "x:du"
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — the LAST definition counts for du",
+              "vi": "A — lần gán CUỐI quyết định du"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"x\",\"op\":\"d\"},{\"v\":\"x\",\"op\":\"u\"},{\"v\":\"x\",\"op\":\"d\"}])",
+            "mongDoi": [
+              "x:du"
+            ],
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — several variables, sorted and unique",
+              "vi": "A — nhiều biến, sắp xếp và không trùng"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"s\",\"op\":\"d\"},{\"v\":\"s\",\"op\":\"d\"},{\"v\":\"t\",\"op\":\"u\"},{\"v\":\"t\",\"op\":\"u\"}])",
+            "mongDoi": [
+              "s:dd",
+              "s:du",
+              "t:ur"
+            ],
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A — ur then defined and used",
+              "vi": "A — ur rồi gán và dùng"
+            },
+            "goi": "dataFlowAnomalies([{\"v\":\"x\",\"op\":\"u\"},{\"v\":\"x\",\"op\":\"d\"},{\"v\":\"x\",\"op\":\"u\"}])",
+            "mongDoi": [
+              "x:ur"
+            ],
+            "nhom": "f1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — straight-line code: V(G) = 1",
+              "vi": "B — mã tuần tự: V(G) = 1"
+            },
+            "goi": "cyclomatic([1, 2, 3], [[1, 2], [2, 3]])",
+            "mongDoi": 1,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — one IF-ELSE: V(G) = 2",
+              "vi": "B — một IF-ELSE: V(G) = 2"
+            },
+            "goi": "cyclomatic([1, 2, 3, 4], [[1, 2], [1, 3], [2, 4], [3, 4]])",
+            "mongDoi": 2,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — the countPass graph: V(G) = 4",
+              "vi": "B — đồ thị countPass: V(G) = 4"
+            },
+            "goi": "cyclomatic([1, 2, 3, 4, 5, 6, 7, 8, 9], [[1, 2], [2, 3], [2, 8], [3, 4], [3, 5], [4, 9], [5, 6], [5, 7], [6, 7], [7, 2], [8, 9]])",
+            "mongDoi": 4,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — two routines in one graph: E − N + 2P",
+              "vi": "B — hai routine trong một đồ thị: E − N + 2P"
+            },
+            "goi": "cyclomatic([1, 2, 3, 4, 5, 6], [[1, 2], [1, 3], [2, 3], [4, 5], [4, 6], [5, 6]])",
+            "mongDoi": 4,
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "B — a node without edges is its own component",
+              "vi": "B — node không có cạnh là một thành phần riêng"
+            },
+            "goi": "cyclomatic([1, 2, 3], [[1, 2]])",
+            "mongDoi": 2,
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — everything reachable",
+              "vi": "C — mọi node tới được"
+            },
+            "goi": "unreachable([1, 2, 3], [[1, 2], [2, 3]], 1)",
+            "mongDoi": [],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — an isolated node",
+              "vi": "C — node bị cô lập"
+            },
+            "goi": "unreachable([1, 2, 3], [[1, 2]], 1)",
+            "mongDoi": [
+              3
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — the statement after while (true)",
+              "vi": "C — lệnh sau while (true)"
+            },
+            "goi": "unreachable([1, 2, 3, 4, 5, 6], [[1, 2], [2, 3], [3, 4], [3, 2], [2, 5]], 1)",
+            "mongDoi": [
+              6
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — edges point one way only",
+              "vi": "C — cạnh có hướng"
+            },
+            "goi": "unreachable([1, 2, 3, 4], [[2, 1], [1, 3], [4, 3]], 1)",
+            "mongDoi": [
+              2,
+              4
+            ],
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "C — an unreachable cycle",
+              "vi": "C — một chu trình không tới được"
+            },
+            "goi": "unreachable([1, 2, 3, 4, 5], [[1, 2], [3, 4], [4, 5], [5, 3]], 1)",
+            "mongDoi": [
+              3,
+              4,
+              5
+            ],
+            "nhom": "f3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — the injection in BookingDao (line 3)",
+              "vi": "D — lỗi injection trong BookingDao (dòng 3)"
+            },
+            "goi": "sqlConcatLines(\"Connection c = open();\\nStatement st = c.createStatement();\\nResultSet rs = st.executeQuery(\\\"SELECT * FROM bookings WHERE email = '\\\" + email + \\\"'\\\");\\nreturn rs;\")",
+            "mongDoi": [
+              3
+            ],
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — a prepared statement is fine",
+              "vi": "D — prepared statement thì ổn"
+            },
+            "goi": "sqlConcatLines(\"PreparedStatement ps = c.prepareStatement(\\\"SELECT code FROM bookings WHERE email = ?\\\");\\nps.setString(1, email);\")",
+            "mongDoi": [],
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — an UPDATE built with +",
+              "vi": "D — câu UPDATE ghép bằng +"
+            },
+            "goi": "sqlConcatLines(\"int n = 0;\\nString q = \\\"UPDATE labs SET status = '\\\" + s + \\\"' WHERE code = '\\\" + code + \\\"'\\\";\")",
+            "mongDoi": [
+              2
+            ],
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — words like “selected” are not SQL",
+              "vi": "D — chữ như “selected” không phải SQL"
+            },
+            "goi": "sqlConcatLines(\"log.info(\\\"selected \\\" + n + \\\" rows\\\");\")",
+            "mongDoi": [],
+            "nhom": "f4",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "D — keywords in lower case, several lines",
+              "vi": "D — từ khoá chữ thường, nhiều dòng"
+            },
+            "goi": "sqlConcatLines(\"q1 = \\\"delete from users where id = \\\" + id;\\nok();\\nq2 = \\\"insert into logs values(\\\" + v + \\\")\\\";\")",
+            "mongDoi": [
+              1,
+              3
+            ],
+            "nhom": "f4",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. dataFlowAnomalies",
+            "diem": 3
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. cyclomatic",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. unreachable",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. sqlConcatLines",
+            "diem": 2.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "A: báo ur nhiều lần cho cùng biến (phải không trùng)."
+        },
+        {
+          "loi": "C: coi cạnh là vô hướng — [2,1] không cho đi từ 1 tới 2."
+        },
+        {
+          "loi": "D: khớp \"selected\" vì thiếu \\b."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        },
+        {
+          "en": "trace",
+          "vi": "vết thực thi — chuỗi sự kiện theo thứ tự"
+        },
+        {
+          "en": "connected component",
+          "vi": "thành phần liên thông"
+        },
+        {
+          "en": "breadth-first search",
+          "vi": "duyệt theo chiều rộng (BFS)"
+        },
+        {
+          "en": "lint rule",
+          "vi": "luật kiểm tĩnh của công cụ lint"
+        }
+      ]
+    }
+  ]
+}

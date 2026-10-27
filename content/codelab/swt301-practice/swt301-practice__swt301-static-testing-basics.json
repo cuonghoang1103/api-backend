@@ -1,0 +1,722 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-static-testing-basics",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-static-testing-basics"
+  },
+  "exercises": [
+    {
+      "title": "Static testing 1 — What it is and what it can examine (K1–K2)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "static testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Static testing examines a work product <b>without executing code</b>, by people (reviews) or by tools (static analysis). Five questions on LO-3.1.1–3.1.3.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm thử tĩnh xem xét sản phẩm công việc <b>mà không chạy mã</b>, bằng người (review) hoặc bằng công cụ (phân tích tĩnh). Năm câu về LO-3.1.1–3.1.3.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tĩnh = không chạy; gồm review (người) và phân tích tĩnh (công cụ).",
+        "Tĩnh tìm defect; động tạo failure."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 1 — What it is and what it can examine (K1–K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which work product can NOT be examined by static testing?Sản phẩm nào KHÔNG thể xem xét bằng kiểm thử tĩnh?\n2. What is the main difference between static and dynamic testing?Khác biệt chính giữa kiểm thử tĩnh và động là gì?\n3. Which is a typical benefit of static testing?Đâu là lợi ích điển hình của kiểm thử tĩnh?\n4. Static analysis is…Phân tích tĩnh là…\n5. Which statement about static testing in Agile teams is TRUE?Phát biểu nào về kiểm thử tĩnh trong nhóm Agile là ĐÚNG?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 1 — What it is and what it can examine (K1–K2) — answer key\n\n1. Which work product can NOT be examined by static testing?Sản phẩm nào KHÔNG thể xem xét bằng kiểm thử tĩnh?\n   Answer: d) None — any work product that can be read and understood can be reviewed\n   Specifications, epics/user stories, code, testware, user guides, web pages, contracts, plans, budgets and models can all be examined.VI: Đặc tả, epic/user story, mã, testware, hướng dẫn sử dụng, trang web, hợp đồng, kế hoạch, ngân sách và mô hình đều xem xét được.\n\n2. What is the main difference between static and dynamic testing?Khác biệt chính giữa kiểm thử tĩnh và động là gì?\n   Answer: b) Static testing finds defects directly in work products; dynamic testing causes failures, whose defects must then be found by analysis\n   Both share objectives (assess quality, find defects early); static finds the defect itself, dynamic shows the failure first.VI: Cả hai cùng mục tiêu (đánh giá chất lượng, tìm lỗi sớm); tĩnh tìm thẳng defect, động thấy failure trước.\n\n3. Which is a typical benefit of static testing?Đâu là lợi ích điển hình của kiểm thử tĩnh?\n   Answer: b) Detecting defects early, before dynamic testing, when they are cheaper to remove\n   Early detection lowers rework cost; it also prevents defects and improves communication. It complements, never replaces, dynamic testing.VI: Phát hiện sớm giảm chi phí làm lại; còn ngăn lỗi và cải thiện giao tiếp. Nó bổ sung, không thay thế kiểm thử động.\n\n4. Static analysis is…Phân tích tĩnh là…\n   Answer: b) tool-driven evaluation of code or models without executing them\n   Reviews use people; static analysis uses tools (compilers, linters such as SonarLint, PMD).VI: Review dùng người; phân tích tĩnh dùng công cụ (trình biên dịch, linter như SonarLint, PMD).\n\n5. Which statement about static testing in Agile teams is TRUE?Phát biểu nào về kiểm thử tĩnh trong nhóm Agile là ĐÚNG?\n   Answer: b) Reviewing user stories and acceptance criteria early (e.g. in refinement) is a form of static testing\n   Story refinement and acceptance-criteria reviews find ambiguities before code exists.VI: Refinement user story và review tiêu chí chấp nhận tìm điểm mơ hồ trước khi có mã.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: d · b · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which work product can NOT be examined by static testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm nào KHÔNG thể xem xét bằng kiểm thử tĩnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A requirements specification"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Source code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A test plan and test cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None — any work product that can be read and understood can be reviewed"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Specifications, epics/user stories, code, testware, user guides, web pages, contracts, plans, budgets and models can all be examined.</p><p><i>VI: Đặc tả, epic/user story, mã, testware, hướng dẫn sử dụng, trang web, hợp đồng, kế hoạch, ngân sách và mô hình đều xem xét được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is the main difference between static and dynamic testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khác biệt chính giữa kiểm thử tĩnh và động là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Static testing has different objectives"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Static testing finds defects directly in work products; dynamic testing causes failures, whose defects must then be found by analysis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Dynamic testing can only be done by developers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Static testing is always done after dynamic testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both share objectives (assess quality, find defects early); static finds the defect itself, dynamic shows the failure first.</p><p><i>VI: Cả hai cùng mục tiêu (đánh giá chất lượng, tìm lỗi sớm); tĩnh tìm thẳng defect, động thấy failure trước.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which is a typical benefit of static testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu là lợi ích điển hình của kiểm thử tĩnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It measures response time under load"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Detecting defects early, before dynamic testing, when they are cheaper to remove"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It replaces the need for dynamic testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs no human effort"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Early detection lowers rework cost; it also prevents defects and improves communication. It complements, never replaces, dynamic testing.</p><p><i>VI: Phát hiện sớm giảm chi phí làm lại; còn ngăn lỗi và cải thiện giao tiếp. Nó bổ sung, không thay thế kiểm thử động.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Static analysis is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân tích tĩnh là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a review meeting led by a moderator"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tool-driven evaluation of code or models without executing them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "testing with a debugger"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a type of load test"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reviews use people; static analysis uses tools (compilers, linters such as SonarLint, PMD).</p><p><i>VI: Review dùng người; phân tích tĩnh dùng công cụ (trình biên dịch, linter như SonarLint, PMD).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which statement about static testing in Agile teams is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về kiểm thử tĩnh trong nhóm Agile là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is not used"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reviewing user stories and acceptance criteria early (e.g. in refinement) is a form of static testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only inspections are allowed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It must be done by an external team"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Story refinement and acceptance-criteria reviews find ambiguities before code exists.</p><p><i>VI: Refinement user story và review tiêu chí chấp nhận tìm điểm mơ hồ trước khi có mã.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ chỉ mã nguồn mới review được."
+        },
+        {
+          "loi": "Nghĩ kiểm thử tĩnh thay được kiểm thử động."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "static testing",
+          "vi": "kiểm thử tĩnh — xem xét sản phẩm mà không chạy"
+        },
+        {
+          "en": "dynamic testing",
+          "vi": "kiểm thử động — chạy phần mềm"
+        },
+        {
+          "en": "work product",
+          "vi": "sản phẩm công việc (tài liệu, mã, test…)"
+        },
+        {
+          "en": "static analysis",
+          "vi": "phân tích tĩnh bằng công cụ"
+        }
+      ]
+    },
+    {
+      "title": "Static testing 2 — Review, static analysis or dynamic testing?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "static testing",
+        "dynamic testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Classify each activity of a sprint of the LabBook team. Ask two questions: is anything executed? If not, is the work product read by people or parsed by a tool?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng hoạt động trong một sprint của nhóm LabBook. Hỏi hai câu: có chạy gì không? Nếu không, sản phẩm được người đọc hay công cụ phân tích?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có chạy phần mềm không? Có ⇒ dynamic.",
+        "Không chạy: người đọc ⇒ review; công cụ phân tích ⇒ static analysis."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 2 — Review, static analysis or dynamic testing?\n\nAnswer in the answer panel (no code needed).\n\n1. Kind of activityLoại hoạt động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 2 — Review, static analysis or dynamic testing? — answer key\n\n1. Kind of activityLoại hoạt động\n   - r0.k: Review\n   - r1.k: Static analysis\n   - r2.k: Dynamic testing\n   - r3.k: Static analysis\n   - r4.k: Review\n   - r5.k: Dynamic testing\n   - r6.k: Static analysis\n   - r7.k: Dynamic testing\n   Reading by people = review; tools parsing code (linters, compilers, metric tools) = static analysis; anything that runs the software (JUnit, Postman, JMeter) = dynamic testing.VI: Người đọc = review; công cụ phân tích mã (linter, trình biên dịch, công cụ đo) = phân tích tĩnh; mọi thứ chạy phần mềm (JUnit, Postman, JMeter) = kiểm thử động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Review · Static analysis · Dynamic · Static analysis · Review · Dynamic · Static analysis · Dynamic.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Kind of activity</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại hoạt động</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Activity"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Review",
+                  "Static analysis",
+                  "Dynamic testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "a": "Two developers read the SRS section on waitlists and note contradictions"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "SonarLint highlights an unused variable in BookingService"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "A JUnit test of reserveSeat fails on the boundary 6 hours"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "The compiler reports “unreachable statement” after a return"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "The tester walks the team through the acceptance criteria of a user story"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "Postman checks that POST /api/bookings returns 201"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "A tool computes the cyclomatic complexity of every method"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "a": "A JMeter run measures the response time of 200 parallel bookings"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Review",
+              "r1.k": "Static analysis",
+              "r2.k": "Dynamic testing",
+              "r3.k": "Static analysis",
+              "r4.k": "Review",
+              "r5.k": "Dynamic testing",
+              "r6.k": "Static analysis",
+              "r7.k": "Dynamic testing"
+            },
+            "giaiThich": "<p>Reading by people = review; tools parsing code (linters, compilers, metric tools) = static analysis; anything that runs the software (JUnit, Postman, JMeter) = dynamic testing.</p><p><i>VI: Người đọc = review; công cụ phân tích mã (linter, trình biên dịch, công cụ đo) = phân tích tĩnh; mọi thứ chạy phần mềm (JUnit, Postman, JMeter) = kiểm thử động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp lỗi biên dịch \"unreachable statement\" vào dynamic — trình biên dịch không chạy chương trình."
+        },
+        {
+          "loi": "Xếp walkthrough vào dynamic vì \"có buổi họp\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "linter",
+          "vi": "công cụ phân tích tĩnh mã nguồn"
+        }
+      ]
+    },
+    {
+      "title": "Static testing 3 — Which defects does static testing find more easily?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "static testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The syllabus lists defects that are easier and cheaper to find with static testing (requirement defects, design defects, coding defects, deviations from standards, interface specification defects, security vulnerabilities, gaps in test-basis coverage, maintainability defects). Others only show up when the software runs. Classify.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Syllabus liệt kê các lỗi dễ và rẻ hơn khi tìm bằng kiểm thử tĩnh (lỗi yêu cầu, lỗi thiết kế, lỗi mã, sai chuẩn, lỗi đặc tả giao diện, lỗ hổng bảo mật, thiếu phủ test basis, lỗi khả năng bảo trì). Số khác chỉ lộ khi phần mềm chạy. Hãy phân loại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lỗi nằm trong văn bản/mã nhìn thấy được ⇒ tĩnh.",
+        "Lỗi là hành vi theo thời gian/tải ⇒ động."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 3 — Which defects does static testing find more easily?\n\nAnswer in the answer panel (no code needed).\n\n1. Where is the defect found more easily?Lỗi nào dễ tìm hơn bằng cách nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 3 — Which defects does static testing find more easily? — answer key\n\n1. Where is the defect found more easily?Lỗi nào dễ tìm hơn bằng cách nào?\n   - r0.k: Easier with static testing\n   - r1.k: Easier with static testing\n   - r2.k: Easier with static testing\n   - r3.k: Needs dynamic testing\n   - r4.k: Easier with static testing\n   - r5.k: Needs dynamic testing\n   - r6.k: Easier with static testing\n   - r7.k: Easier with static testing\n   Contradictions, data-flow faults, interface-spec mismatches, maintainability, missing criteria and injection-prone patterns are visible in the work product itself. Performance and memory leaks are behaviours that need execution.VI: Mâu thuẫn, lỗi luồng dữ liệu, lệch đặc tả giao diện, khả năng bảo trì, thiếu tiêu chí và mẫu dễ bị injection đều nhìn thấy trong chính sản phẩm. Hiệu năng và rò bộ nhớ là hành vi cần chạy mới thấy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Static · Static · Static · Dynamic · Static · Dynamic · Static · Static.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Where is the defect found more easily?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi nào dễ tìm hơn bằng cách nào?</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Defect"
+              },
+              {
+                "ma": "k",
+                "ten": "Found",
+                "luaChon": [
+                  "Easier with static testing",
+                  "Needs dynamic testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "d": "Two requirements contradict each other (waitlist FIFO vs “priority to staff”)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "A variable is read before it is ever assigned"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "The API contract says “date” but the client sends “bookingDate”"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "The booking page becomes slow when 500 users book at 08:00"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "A method of 400 lines with cyclomatic complexity 38"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "A memory leak after the server runs for three days"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "A user story has no acceptance criterion for cancelling"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "d": "Login concatenates user input into an SQL string"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Easier with static testing",
+              "r1.k": "Easier with static testing",
+              "r2.k": "Easier with static testing",
+              "r3.k": "Needs dynamic testing",
+              "r4.k": "Easier with static testing",
+              "r5.k": "Needs dynamic testing",
+              "r6.k": "Easier with static testing",
+              "r7.k": "Easier with static testing"
+            },
+            "giaiThich": "<p>Contradictions, data-flow faults, interface-spec mismatches, maintainability, missing criteria and injection-prone patterns are visible in the work product itself. Performance and memory leaks are behaviours that need execution.</p><p><i>VI: Mâu thuẫn, lỗi luồng dữ liệu, lệch đặc tả giao diện, khả năng bảo trì, thiếu tiêu chí và mẫu dễ bị injection đều nhìn thấy trong chính sản phẩm. Hiệu năng và rò bộ nhớ là hành vi cần chạy mới thấy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng lỗ hổng bảo mật chỉ tìm được bằng pentest — mẫu SQL nối chuỗi lộ ngay khi review/phân tích tĩnh."
+        },
+        {
+          "loi": "Cho rằng thiếu tiêu chí chấp nhận là lỗi \"chạy mới thấy\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "maintainability",
+          "vi": "khả năng bảo trì"
+        },
+        {
+          "en": "SQL injection",
+          "vi": "tấn công chèn SQL qua dữ liệu người dùng"
+        }
+      ]
+    },
+    {
+      "title": "Static testing 4 — Value and cost of static testing (exam style)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "static testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Five exam-style questions about why static testing pays off, what it costs and how it fits the test process.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu kiểu đề thi về vì sao kiểm thử tĩnh có lợi, tốn gì và nằm ở đâu trong quy trình test.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chi phí sửa lỗi tăng theo thời gian phát hiện.",
+        "Tĩnh và động bổ sung cho nhau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 4 — Value and cost of static testing (exam style)\n\nAnswer in the answer panel (no code needed).\n\n1. Why is a defect found in the requirements cheaper to fix than the same defect found in system testing?Vì sao lỗi tìm thấy ở yêu cầu rẻ hơn lỗi tương tự tìm thấy khi system test?\n2. Which is NOT listed as a benefit of static testing?Đâu KHÔNG phải lợi ích của kiểm thử tĩnh theo syllabus?\n3. A team skips reviews to “save time”. What is the most likely consequence?Nhóm bỏ review để “tiết kiệm thời gian”. Hệ quả có khả năng nhất?\n4. Static testing and dynamic testing…Kiểm thử tĩnh và kiểm thử động…\n5. Who can perform static testing?Ai có thể làm kiểm thử tĩnh?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Static testing 4 — Value and cost of static testing (exam style) — answer key\n\n1. Why is a defect found in the requirements cheaper to fix than the same defect found in system testing?Vì sao lỗi tìm thấy ở yêu cầu rẻ hơn lỗi tương tự tìm thấy khi system test?\n   Answer: b) Because nothing has yet been built on top of it — no design, code or tests to rework\n   Cost of change grows with every work product built on the defect (the cost-of-defects curve of chapter 1).VI: Chi phí sửa tăng theo mỗi sản phẩm xây trên lỗi đó (đường chi phí lỗi ở chương 1).\n\n2. Which is NOT listed as a benefit of static testing?Đâu KHÔNG phải lợi ích của kiểm thử tĩnh theo syllabus?\n   Answer: d) Measuring the reliability of the system in production\n   Reliability in operation is measured dynamically.VI: Độ tin cậy khi vận hành được đo bằng kiểm thử động.\n\n3. A team skips reviews to “save time”. What is the most likely consequence?Nhóm bỏ review để “tiết kiệm thời gian”. Hệ quả có khả năng nhất?\n   Answer: a) Higher total cost, because defects are found later when rework is more expensive\n   Reviews cost effort up front but reduce total cost of quality.VI: Review tốn công lúc đầu nhưng giảm tổng chi phí chất lượng.\n\n4. Static testing and dynamic testing…Kiểm thử tĩnh và kiểm thử động…\n   Answer: b) complement each other: they find different kinds of defects\n   They share objectives but find different defect types; both are needed.VI: Chung mục tiêu nhưng tìm loại lỗi khác nhau; cần cả hai.\n\n5. Who can perform static testing?Ai có thể làm kiểm thử tĩnh?\n   Answer: b) Anyone with the right knowledge — developers, testers, business analysts, users\n   Reviews benefit from different perspectives; tools are run by developers and in CI.VI: Review được lợi từ nhiều góc nhìn; công cụ do developer chạy và chạy trong CI.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · d · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why is a defect found in the requirements cheaper to fix than the same defect found in system testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao lỗi tìm thấy ở yêu cầu rẻ hơn lỗi tương tự tìm thấy khi system test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because testers are paid less"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because nothing has yet been built on top of it — no design, code or tests to rework"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because requirements are shorter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is not cheaper"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Cost of change grows with every work product built on the defect (the cost-of-defects curve of chapter 1).</p><p><i>VI: Chi phí sửa tăng theo mỗi sản phẩm xây trên lỗi đó (đường chi phí lỗi ở chương 1).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is NOT listed as a benefit of static testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đâu KHÔNG phải lợi ích của kiểm thử tĩnh theo syllabus?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Improved communication between team members"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reduced development cost and time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Identifying defects that are not easily found by dynamic testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Measuring the reliability of the system in production"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Reliability in operation is measured dynamically.</p><p><i>VI: Độ tin cậy khi vận hành được đo bằng kiểm thử động.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A team skips reviews to “save time”. What is the most likely consequence?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm bỏ review để “tiết kiệm thời gian”. Hệ quả có khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Higher total cost, because defects are found later when rework is more expensive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fewer defects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Faster releases with the same quality"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No effect"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reviews cost effort up front but reduce total cost of quality.</p><p><i>VI: Review tốn công lúc đầu nhưng giảm tổng chi phí chất lượng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Static testing and dynamic testing…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm thử tĩnh và kiểm thử động…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "are alternatives — use one or the other"
+              },
+              {
+                "ma": "b",
+                "noiDung": "complement each other: they find different kinds of defects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "must be done by different companies"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cannot be combined in Agile"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They share objectives but find different defect types; both are needed.</p><p><i>VI: Chung mục tiêu nhưng tìm loại lỗi khác nhau; cần cả hai.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Who can perform static testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai có thể làm kiểm thử tĩnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only professional testers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Anyone with the right knowledge — developers, testers, business analysts, users"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the author"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only tools"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reviews benefit from different perspectives; tools are run by developers and in CI.</p><p><i>VI: Review được lợi từ nhiều góc nhìn; công cụ do developer chạy và chạy trong CI.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn \"đo độ tin cậy\" là lợi ích của tĩnh."
+        },
+        {
+          "loi": "Cho rằng chỉ tester mới review."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cost of quality",
+          "vi": "chi phí chất lượng (phòng ngừa + phát hiện + sửa lỗi)"
+        }
+      ]
+    }
+  ]
+}

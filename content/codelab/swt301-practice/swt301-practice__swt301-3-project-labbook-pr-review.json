@@ -1,0 +1,554 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-3-project-labbook-pr-review",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-review-types-techniques"
+  },
+  "exercises": [
+    {
+      "title": "LabBook Milestone 3 — Review PR #42 cancelBooking and Fix It",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 100,
+      "concepts": [
+        "code review",
+        "API contract",
+        "confirmation testing"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 3",
+        "LabBook API"
+      ],
+      "tags": [
+        "swt301",
+        "project",
+        "labbook",
+        "code-review"
+      ],
+      "problemHtml": "<h1>LabBook Project · Milestone 3 — Review a Pull Request, then Fix It</h1>\n<p class=\"bi-phu\">Running project · chapter 3 · code review against the API contract · executable fix · 10 marks</p>\n<h2>1. Overview</h2>\n<p>A teammate opened <b>PR #42 “Implement cancelBooking”</b> for LabBook. You are the reviewer. The contract says: unknown code → 404 <code>BOOKING_NOT_FOUND</code>; not the owner → 403 <code>NOT_OWNER</code>; already cancelled → 409 <code>ALREADY_CANCELLED</code>; less than 2 hours before the start → 409 <code>TOO_LATE</code>; error bodies are JSON <code>{ \"error\": \"…\" }</code>. Cancelling a <b>CONFIRMED</b> booking promotes the <b>first</b> pending booking of the same lab and date (if there is one) and e-mails that student “Booking confirmed”.</p><pre> 1  @DeleteMapping(\"/api/bookings/{code}\")\n 2  public ResponseEntity&lt;?&gt; cancel(@PathVariable String code, Principal user) {\n 3      Booking b = repo.findByCode(code);\n 4      if (b.getStatus() == \"CANCELLED\") {\n 5          return ResponseEntity.status(409).body(\"ALREADY_CANCELLED\");\n 6      }\n 7      if (Duration.between(LocalDateTime.now(), b.getStart()).toHours() &lt; 2) {\n 8          return ResponseEntity.status(409).body(\"TOO_LATE\");\n 9      }\n10      b.setStatus(\"CANCELLED\");\n11      repo.save(b);\n12      Booking next = repo.findFirstPending(b.getLab(), b.getDate());\n13      next.setStatus(\"CONFIRMED\");\n14      repo.save(next);\n15      mail.send(next.getEmail(), \"Booking confirmed\");\n16      return ResponseEntity.ok(b);\n17  }</pre><p>Issue types: <code>LOGIC</code> wrong condition/flow · <code>BOUNDARY</code> off-by-one, &gt; vs &gt;= · <code>CALCULATION</code> wrong formula/unit · <code>VALIDATION</code> missing input check · <code>EXCEPTION</code> crash risk (NPE, index, divide by 0) · <code>DATA_TYPE</code> wrong type, integer division, overflow, double for money · <code>COMPILE</code> does not compile · <code>TEST_DATA</code> demo/test data breaks the spec · <code>CONVENTION</code> magic number, naming, formatting · <code>PERFORMANCE</code> · <code>SECURITY</code> · <code>RESOURCE</code> unclosed stream/connection</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Review comments on the PR (line, type, severity, description, fix).</li>\n  <li>B. The corrected method (JavaScript twin), run against a fake repository and mail service.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Review against the contract, not against your own taste: every comment must point at a rule it breaks.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── review.js          ← const ISSUES = [ { line, type, severity, description, fix } ]\n└── cancel-booking.js  ← function cancelBooking(code, userEmail, repo, mail, now)</pre>\n<h2>3. Data model</h2>\n<p><b>Fakes given to cancelBooking</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>repo.findByCode(code)</code></td><td>Booking | null</td><td>booking { code, email, lab, date, start (ms), status, seq }</td></tr><tr><td><code>repo.findFirstPending(lab, date)</code></td><td>Booking | null</td><td>the earliest PENDING booking (lowest seq)</td></tr><tr><td><code>repo.save(b) · mail.send(to, subject)</code></td><td>void</td><td>persist a booking · send an e-mail</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Review comments <span class=\"bi-diem\">6 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>At least 6 real issues including the four critical ones; no false claim; each with a fix.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">code review</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Fix the PR <span class=\"bi-diem\">4 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Return <code>{ status, body }</code>; error bodies <code>{ error }</code>; the checks in the contract order; promotion only after a CONFIRMED booking and only if someone waits.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">confirmation testing</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>ISSUES</code></td><td>answers/review.js</td></tr><tr><td><code>cancelBooking(code, userEmail, repo, mail, now)</code></td><td>answers/cancel-booking.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Review comments</td><td>6</td></tr><tr><td>2</td><td>B. Fix the PR</td><td>4</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Calling line 7 a boundary bug — truncation gives exactly the contract’s behaviour.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>LabBook Project · Milestone 3 — Review a Pull Request, then Fix It</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · chương 3 · review mã theo hợp đồng API · sửa chạy thật · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Đồng đội mở <b>PR #42 “Implement cancelBooking”</b> cho LabBook. Bạn là người review. Hợp đồng: mã không tồn tại → 404 <code>BOOKING_NOT_FOUND</code>; không phải chủ → 403 <code>NOT_OWNER</code>; đã huỷ → 409 <code>ALREADY_CANCELLED</code>; còn chưa tới 2 giờ → 409 <code>TOO_LATE</code>; body lỗi là JSON <code>{ \"error\": \"…\" }</code>. Huỷ booking <b>CONFIRMED</b> thì nâng booking chờ <b>đầu tiên</b> cùng phòng, cùng ngày (nếu có) và gửi thư “Booking confirmed”.</p><pre> 1  @DeleteMapping(\"/api/bookings/{code}\")\n 2  public ResponseEntity&lt;?&gt; cancel(@PathVariable String code, Principal user) {\n 3      Booking b = repo.findByCode(code);\n 4      if (b.getStatus() == \"CANCELLED\") {\n 5          return ResponseEntity.status(409).body(\"ALREADY_CANCELLED\");\n 6      }\n 7      if (Duration.between(LocalDateTime.now(), b.getStart()).toHours() &lt; 2) {\n 8          return ResponseEntity.status(409).body(\"TOO_LATE\");\n 9      }\n10      b.setStatus(\"CANCELLED\");\n11      repo.save(b);\n12      Booking next = repo.findFirstPending(b.getLab(), b.getDate());\n13      next.setStatus(\"CONFIRMED\");\n14      repo.save(next);\n15      mail.send(next.getEmail(), \"Booking confirmed\");\n16      return ResponseEntity.ok(b);\n17  }</pre><p>Loại lỗi: <code>LOGIC</code> sai điều kiện/luồng · <code>BOUNDARY</code> lệch một, &gt; với &gt;= · <code>CALCULATION</code> sai công thức/đơn vị · <code>VALIDATION</code> thiếu kiểm đầu vào · <code>EXCEPTION</code> nguy cơ văng lỗi (NPE, chỉ số, chia 0) · <code>DATA_TYPE</code> sai kiểu, chia nguyên, tràn số, double cho tiền · <code>COMPILE</code> không biên dịch được · <code>TEST_DATA</code> dữ liệu demo/test trái đặc tả · <code>CONVENTION</code> số ma thuật, đặt tên, định dạng · <code>PERFORMANCE</code> hiệu năng · <code>SECURITY</code> bảo mật · <code>RESOURCE</code> không đóng stream/kết nối</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Nhận xét review trên PR (dòng, loại, mức độ, mô tả, cách sửa).</li>\n  <li>B. Phương thức đã sửa (bản JavaScript), chạy với repository và dịch vụ thư giả.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Review theo hợp đồng, không theo sở thích: mỗi nhận xét phải chỉ ra luật nó vi phạm.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── review.js          ← const ISSUES = [ { line, type, severity, description, fix } ]\n└── cancel-booking.js  ← function cancelBooking(code, userEmail, repo, mail, now)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Fakes given to cancelBooking</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>repo.findByCode(code)</code></td><td>Booking | null</td><td>booking { code, email, lab, date, start (ms), status, seq }</td></tr><tr><td><code>repo.findFirstPending(lab, date)</code></td><td>Booking | null</td><td>booking PENDING sớm nhất (seq nhỏ nhất)</td></tr><tr><td><code>repo.save(b) · mail.send(to, subject)</code></td><td>void</td><td>lưu booking · gửi thư</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Nhận xét review <span class=\"bi-diem\">6 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ít nhất 6 lỗi thật gồm bốn lỗi nghiêm trọng; không khẳng định sai; mỗi lỗi có cách sửa.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">code review</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Sửa PR <span class=\"bi-diem\">4 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Trả <code>{ status, body }</code>; body lỗi <code>{ error }</code>; các bước kiểm theo thứ tự hợp đồng; chỉ nâng hạng sau khi huỷ booking CONFIRMED và chỉ khi có người chờ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">confirmation testing</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>ISSUES</code></td><td>answers/review.js</td></tr><tr><td><code>cancelBooking(code, userEmail, repo, mail, now)</code></td><td>answers/cancel-booking.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Nhận xét review</td><td>6</td></tr><tr><td>2</td><td>B. Sửa PR</td><td>4</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Gọi dòng 7 là lỗi biên — việc cắt phần lẻ cho đúng hành vi của hợp đồng.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Review against the contract, not against your own taste: every comment must point at a rule it breaks.|||Review theo hợp đồng, không theo sở thích: mỗi nhận xét phải chỉ ra luật nó vi phạm.",
+      "examplesJson": [
+        {
+          "input": "cancelBooking(\"BK1\", \"binh@fpt.edu.vn\", …) where BK1 belongs to an@fpt.edu.vn",
+          "output": "{ status: 403, body: { error: \"NOT_OWNER\" } } — the PR cancels it",
+          "explanation": "The missing owner check: a security defect no happy-path test reveals.|||Thiếu kiểm chủ: lỗi bảo mật mà test đường thành công không lộ ra."
+        }
+      ],
+      "hintsJson": [
+        "A: đọc hợp đồng thành danh sách kiểm (404, 403, 409×2, JSON, nâng hạng có điều kiện) rồi soi từng dòng PR.",
+        "B: thêm kiểm null và chủ booking trước mọi thứ; nhớ trạng thái cũ trước khi đổi; nâng hạng chỉ khi trước đó là CONFIRMED và next khác null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/review.js",
+          "language": "javascript",
+          "code": "// type: LOGIC | BOUNDARY | CALCULATION | VALIDATION | EXCEPTION | DATA_TYPE | COMPILE | TEST_DATA | CONVENTION | PERFORMANCE | SECURITY | RESOURCE\nconst ISSUES = [\n  { line: 3, type: 'EXCEPTION', severity: 'High', description: 'Unknown code gives a NullPointerException.', fix: 'Return 404 BOOKING_NOT_FOUND.' },\n];\n"
+        },
+        {
+          "name": "answers/cancel-booking.js",
+          "language": "javascript",
+          "code": "// The PR as JavaScript (same defects; == on strings has no JS equivalent, it is fixed here).\n// Fix it so it follows the API contract. now = current time in ms; booking.start is in ms too.\nfunction cancelBooking(code, userEmail, repo, mail, now) {\n  const b = repo.findByCode(code);\n  if (b.status === 'CANCELLED') {\n    return { status: 409, body: 'ALREADY_CANCELLED' };\n  }\n  if (Math.trunc((b.start - now) / 3600000) < 2) {\n    return { status: 409, body: 'TOO_LATE' };\n  }\n  b.status = 'CANCELLED';\n  repo.save(b);\n  const next = repo.findFirstPending(b.lab, b.date);\n  next.status = 'CONFIRMED';\n  repo.save(next);\n  mail.send(next.email, 'Booking confirmed');\n  return { status: 200, body: b };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/review.js",
+          "language": "javascript",
+          "code": "// Review of PR #42 \"Implement cancelBooking\" — request changes.\nconst ISSUES = [\n  { line: 3, type: 'EXCEPTION', severity: 'High', description: 'findByCode returns null for an unknown code; line 4 throws NullPointerException (500) instead of 404 BOOKING_NOT_FOUND.', fix: 'if (b == null) return 404 { error: BOOKING_NOT_FOUND }.' },\n  { line: 2, type: 'SECURITY', severity: 'High', description: 'The owner is never compared with the logged-in user: any student can cancel another student’s booking.', fix: 'if (!b.getEmail().equals(user.getName())) return 403 { error: NOT_OWNER }.' },\n  { line: 4, type: 'LOGIC', severity: 'High', description: 'Strings compared with == (reference), so the check can fail for a status read from the database.', fix: '\"CANCELLED\".equals(b.getStatus()) — better: an enum.' },\n  { line: 13, type: 'EXCEPTION', severity: 'High', description: 'When nobody is waiting, findFirstPending returns null and next.setStatus throws.', fix: 'if (next != null) { … }' },\n  { line: 12, type: 'LOGIC', severity: 'Medium', description: 'A waitlisted (PENDING) booking frees no seat, yet the next student is promoted.', fix: 'Promote only when the cancelled booking was CONFIRMED.' },\n  { line: 14, type: 'LOGIC', severity: 'Medium', description: 'Two saves and an e-mail without a transaction: a failure in between leaves inconsistent data.', fix: 'Annotate the service method with @Transactional and send the e-mail after commit.' },\n  { line: 7, type: 'CONVENTION', severity: 'Low', description: 'LocalDateTime.now() is hard-wired, so the 2-hour rule cannot be tested at a fixed time.', fix: 'Inject a java.time.Clock.' },\n  { line: 5, type: 'LOGIC', severity: 'Medium', description: 'The body is a plain string; the API contract returns { \"error\": \"ALREADY_CANCELLED\" }.', fix: 'Return a JSON error object (same for TOO_LATE).' },\n];\n"
+        },
+        {
+          "name": "answers/cancel-booking.js",
+          "language": "javascript",
+          "code": "// Fixed cancelBooking — every rule of the contract, in the order the API checks them.\nconst HOUR = 3600000;\nconst err = (status, error) => ({ status, body: { error } });\n\nfunction cancelBooking(code, userEmail, repo, mail, now) {\n  const b = repo.findByCode(code);\n  if (!b) return err(404, 'BOOKING_NOT_FOUND');                    // K1: no NullPointerException\n  if (b.email !== userEmail) return err(403, 'NOT_OWNER');          // K2: only the owner\n  if (b.status === 'CANCELLED') return err(409, 'ALREADY_CANCELLED');\n  if (Math.trunc((b.start - now) / HOUR) < 2) return err(409, 'TOO_LATE');\n  const wasConfirmed = b.status === 'CONFIRMED';\n  b.status = 'CANCELLED';\n  repo.save(b);\n  if (wasConfirmed) {                                               // K5: only a CONFIRMED booking frees a seat\n    const next = repo.findFirstPending(b.lab, b.date);\n    if (next) {                                                     // K4: the waitlist may be empty\n      next.status = 'CONFIRMED';\n      repo.save(next);\n      mail.send(next.email, 'Booking confirmed');\n    }\n  }\n  return { status: 200, body: b };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Critical comments: null booking (404), missing owner check (security), == on strings, null waitlist. Medium: promotion after a PENDING cancellation, missing transaction, plain-string error bodies; low: hard-wired clock. The fix applies the contract in order and guards the promotion with “was CONFIRMED” and “someone waits”.</p>",
+      "solutionExplanationHtmlVi": "<p>Nhận xét nghiêm trọng: booking null (404), thiếu kiểm chủ (bảo mật), == so chuỗi, danh sách chờ rỗng. Trung bình: nâng hạng sau khi huỷ PENDING, thiếu transaction, body lỗi dạng chuỗi; thấp: đồng hồ cứng. Bản sửa áp hợp đồng theo thứ tự và chặn nâng hạng bằng “trước đó CONFIRMED” và “có người chờ”.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://google.github.io/eng-practices/review/reviewer/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/review.js",
+          "answers/cancel-booking.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "At least 2 distinct real issues with the right line and type",
+              "vi": "Ít nhất 2 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 2 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 2. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "At least 4 distinct real issues with the right line and type",
+              "vi": "Ít nhất 4 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 4 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 4. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "At least 6 distinct real issues with the right line and type",
+              "vi": "Ít nhất 6 lỗi thật khác nhau, đúng dòng và đúng loại"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return timRa.length >= 6 ? 'OK' : 'found ' + timRa.length + ' valid issue(s) — need 6. (An issue counts when its line AND type match a real defect.)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND",
+              "vi": "Tìm ra lỗi nghiêm trọng: mã không tồn tại → NullPointerException thay vì 404"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K1\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 3/4)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)",
+              "vi": "Tìm ra lỗi nghiêm trọng: không kiểm chủ booking — ai cũng huỷ được booking của người khác"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K2\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 2/3/4)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: String compared with == instead of equals",
+              "vi": "Tìm ra lỗi nghiêm trọng: so chuỗi bằng == thay vì equals"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K3\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 4)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Finds the critical defect: no pending booking → next is null → NullPointerException",
+              "vi": "Tìm ra lỗi nghiêm trọng: không có booking chờ → next null → NullPointerException"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    return __I.some(function (i) { return __hop(i, __K.filter(function (x) { return x.ma === \"K4\"; })[0]); }) ? 'OK' : 'missed a critical defect (check the line(s) 12/13)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "No false claims (legal code reported as an error)",
+              "vi": "Không khẳng định sai (báo lỗi cho mã hợp lệ)"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var s = __SAI.filter(function (k) { return __I.some(function (i) { return __hop(i, k); }); });\n    return s.length ? 'false claim: ' + s.map(function (k) { return k.ten; }).join('; ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Every issue has a concrete fix suggestion",
+              "vi": "Mỗi lỗi có gợi ý sửa cụ thể"
+            },
+            "chuanBi": "\nfunction __dongCua(x) { if (Array.isArray(x.lines)) return x.lines.map(Number); if (x.line != null) return String(x.line).split(/[^0-9]+/).filter(Boolean).map(Number); return []; }\nfunction __hop(i, k) { var d = __dongCua(i); var t = String(i.type || '').toUpperCase().trim(); return d.some(function (n) { return k.dong.indexOf(n) >= 0; }) && (!k.loai || k.loai.indexOf(t) >= 0); }\n// ghép cặp tối đa lỗi ↔ khoá: MỘT mục người học chỉ được tính cho MỘT lỗi thật\nfunction __ghep(I, K) {\n  var gan = {};\n  function thu(i, tham) {\n    for (var k = 0; k < K.length; k++) {\n      if (tham[k] || !__hop(I[i], K[k])) continue;\n      tham[k] = 1;\n      if (gan[k] === undefined || thu(gan[k], tham)) { gan[k] = i; return true; }\n    }\n    return false;\n  }\n  for (var i = 0; i < I.length; i++) thu(i, {});\n  return Object.keys(gan).map(function (k) { return K[k]; });\n}\n\nconst __K = [{\"ma\":\"K1\",\"dong\":[3,4],\"loai\":[\"EXCEPTION\",\"VALIDATION\"],\"ten\":\"unknown code → NullPointerException instead of 404 BOOKING_NOT_FOUND\",\"tenVi\":\"mã không tồn tại → NullPointerException thay vì 404\",\"nang\":true},{\"ma\":\"K2\",\"dong\":[2,3,4],\"loai\":[\"SECURITY\",\"VALIDATION\",\"LOGIC\"],\"ten\":\"the owner is never checked — anyone can cancel anyone’s booking (403 NOT_OWNER missing)\",\"tenVi\":\"không kiểm chủ booking — ai cũng huỷ được booking của người khác\",\"nang\":true},{\"ma\":\"K3\",\"dong\":[4],\"loai\":[\"LOGIC\"],\"ten\":\"String compared with == instead of equals\",\"tenVi\":\"so chuỗi bằng == thay vì equals\",\"nang\":true},{\"ma\":\"K4\",\"dong\":[12,13],\"loai\":[\"EXCEPTION\",\"LOGIC\"],\"ten\":\"no pending booking → next is null → NullPointerException\",\"tenVi\":\"không có booking chờ → next null → NullPointerException\",\"nang\":true},{\"ma\":\"K5\",\"dong\":[12],\"loai\":[\"LOGIC\"],\"ten\":\"promotes even when the cancelled booking was PENDING (no seat was freed)\"},{\"ma\":\"K6\",\"dong\":[10,11,14,15],\"loai\":[\"LOGIC\",\"EXCEPTION\",\"RESOURCE\"],\"ten\":\"no transaction: a failure after the first save leaves inconsistent data\"},{\"ma\":\"K7\",\"dong\":[7],\"loai\":[\"CONVENTION\"],\"ten\":\"LocalDateTime.now() is hard-wired — inject a Clock to make the rule testable\"},{\"ma\":\"K8\",\"dong\":[5,8],\"loai\":[\"LOGIC\",\"CONVENTION\"],\"ten\":\"error bodies are plain strings, the contract requires { \\\"error\\\": \\\"…\\\" } JSON\"}];\nconst __SAI = [{\"dong\":[7],\"loai\":[\"BOUNDARY\"],\"ten\":\"line 7 is correct: toHours() truncates, so 1 h 59 min is too late and 2 h is allowed\"}];\nconst __LOAI = [\"LOGIC\",\"BOUNDARY\",\"CALCULATION\",\"VALIDATION\",\"EXCEPTION\",\"DATA_TYPE\",\"COMPILE\",\"TEST_DATA\",\"CONVENTION\",\"PERFORMANCE\",\"SECURITY\",\"RESOURCE\"];\nconst __I = (typeof ISSUES !== 'undefined' && Array.isArray(ISSUES)) ? ISSUES : null;\nconst __KQ = (function () {\n  if (!__I) return 'ISSUES is missing — declare: const ISSUES = [ { line: 4, type: \"LOGIC\", severity: \"High\", description: \"…\", fix: \"…\" }, … ]';\n  var bad = __I.filter(function (x) { return !x || !__dongCua(x).length || !String(x.description || '').trim(); });\n  if (bad.length) return 'every issue needs a line number and a description';\n  if (__LOAI) { var lt = __I.filter(function (x) { return __LOAI.indexOf(String(x.type || '').toUpperCase().trim()) < 0; }); if (lt.length) return 'unknown type ' + JSON.stringify(lt[0].type) + ' — use one of ' + __LOAI.join(', '); }\n  var timRa = __ghep(__I, __K);\n  function viec(k) {\n\n    var t = __I.filter(function (x) { return String(x.fix || '').trim().length < 6; });\n    return t.length ? (t.length + ' issue(s) without a real fix (e.g. line ' + __dongCua(t[0]).join('/') + ')') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Unknown code → 404 BOOKING_NOT_FOUND",
+              "vi": "Mã không tồn tại → 404 BOOKING_NOT_FOUND"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 50)]); const m = mk(); const res = cancelBooking('BK9', 'an@fpt.edu.vn', r, m, NOW); return res; })()",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "BOOKING_NOT_FOUND"
+              }
+            },
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Another student’s booking → 403 NOT_OWNER and nothing changes",
+              "vi": "Booking của người khác → 403 NOT_OWNER và không gì thay đổi"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 50)]); const m = mk(); const res = cancelBooking('BK1', 'binh@fpt.edu.vn', r, m, NOW); return [res, r.db[0].status]; })()",
+            "mongDoi": [
+              {
+                "status": 403,
+                "body": {
+                  "error": "NOT_OWNER"
+                }
+              },
+              "CONFIRMED"
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Already cancelled → 409 with a JSON error body",
+              "vi": "Đã huỷ → 409 với body lỗi dạng JSON"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CANCELLED', 1, 50)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return res; })()",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "error": "ALREADY_CANCELLED"
+              }
+            },
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Less than 2 hours before the start → 409 TOO_LATE",
+              "vi": "Còn chưa tới 2 giờ → 409 TOO_LATE"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 1.5)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return res; })()",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "error": "TOO_LATE"
+              }
+            },
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly 2 hours before → allowed",
+              "vi": "Đúng 2 giờ trước → được phép"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 2)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return res.status; })()",
+            "mongDoi": 200,
+            "nhom": "f2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Cancelling a CONFIRMED booking promotes the FIRST pending one and e-mails it",
+              "vi": "Huỷ booking CONFIRMED thì nâng người chờ ĐẦU TIÊN và gửi thư"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 50), B('BK2', 'binh@fpt.edu.vn', 'PENDING', 2, 50), B('BK3', 'chi@fpt.edu.vn', 'PENDING', 3, 50)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return [res.status, r.db.map((x) => x.status), m.sent]; })()",
+            "mongDoi": [
+              200,
+              [
+                "CANCELLED",
+                "CONFIRMED",
+                "PENDING"
+              ],
+              [
+                "binh@fpt.edu.vn|Booking confirmed"
+              ]
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "No pending booking → no crash, no e-mail",
+              "vi": "Không có booking chờ → không lỗi, không thư"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'CONFIRMED', 1, 50)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return [res.status, r.db[0].status, m.sent.length]; })()",
+            "mongDoi": [
+              200,
+              "CANCELLED",
+              0
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Cancelling a PENDING booking promotes nobody",
+              "vi": "Huỷ booking PENDING thì không nâng ai"
+            },
+            "chuanBi": "const NOW = Date.UTC(2026, 10, 2, 8);\nconst H = 3600000;\nfunction fake(rows) {\n  const db = rows.map((x) => Object.assign({}, x));\n  return {\n    db,\n    findByCode: (c) => db.find((x) => x.code === c) || null,\n    findFirstPending: (lab, date) => db.filter((x) => x.lab === lab && x.date === date && x.status === 'PENDING').sort((a, b) => a.seq - b.seq)[0] || null,\n    save: (b) => { const i = db.findIndex((x) => x.code === b.code); if (i >= 0) db[i] = Object.assign({}, b); },\n  };\n}\nfunction mk() { const m = { sent: [] }; m.send = (to, s) => { m.sent.push(to + '|' + s); }; return m; }\nconst B = (code, email, status, seq, hoursAhead, lab) => ({ code, email, lab: lab || 'LAB02', date: '2026-11-04', start: NOW + hoursAhead * H, status, seq });",
+            "goi": "(() => { const r = fake([B('BK1', 'an@fpt.edu.vn', 'PENDING', 1, 50), B('BK2', 'binh@fpt.edu.vn', 'PENDING', 2, 50)]); const m = mk(); const res = cancelBooking('BK1', 'an@fpt.edu.vn', r, m, NOW); return [res.status, r.db.map((x) => x.status), m.sent.length]; })()",
+            "mongDoi": [
+              200,
+              [
+                "CANCELLED",
+                "PENDING"
+              ],
+              0
+            ],
+            "nhom": "f2",
+            "an": true
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Review comments",
+            "diem": 6
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Fix the PR",
+            "diem": 4
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ nhận xét đặt tên/định dạng mà bỏ sót kiểm chủ booking."
+        },
+        {
+          "loi": "Sửa nhưng vẫn nâng hạng khi huỷ booking PENDING."
+        },
+        {
+          "loi": "Trả body lỗi dạng chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "confirmation testing (re-testing)",
+          "vi": "kiểm thử xác nhận — chạy lại ca đã fail sau khi sửa"
+        },
+        {
+          "en": "pull request",
+          "vi": "yêu cầu gộp mã"
+        },
+        {
+          "en": "API contract",
+          "vi": "hợp đồng API — status và body phải trả"
+        },
+        {
+          "en": "transaction",
+          "vi": "giao dịch — nhóm thao tác cùng thành công hoặc cùng huỷ"
+        }
+      ]
+    },
+    {
+      "title": "LabBook Interview corner 3 — Talking about reviews and static analysis",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "code review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Questions about code reviews and static analysis that come up in QA and developer interviews — and in your first week in a team.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi về review mã và phân tích tĩnh hay gặp khi phỏng vấn QA lẫn developer — và ngay tuần đầu vào nhóm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu trả lời mạnh: cụ thể, có tác động, có ví dụ từ dự án.",
+        "Review (người) + phân tích tĩnh (công cụ) bổ sung nhau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LabBook Interview corner 3 — Talking about reviews and static analysis\n\nAnswer in the answer panel (no code needed).\n\n1. “How do you give review feedback on a teammate’s pull request?”“Bạn góp ý review cho pull request của đồng đội thế nào?”\n2. “What is the difference between a review and static analysis?”“Review và phân tích tĩnh khác nhau thế nào?”\n3. “SonarQube shows 120 code smells. What do you do?”“SonarQube báo 120 code smell. Bạn làm gì?”\n4. “Why review requirements if we will test the software anyway?”“Vì sao phải review yêu cầu khi đằng nào cũng test phần mềm?”\n5. “In your project, what did a review find that testing would have missed?”“Trong dự án của bạn, review tìm được gì mà test sẽ bỏ sót?”\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LabBook Interview corner 3 — Talking about reviews and static analysis — answer key\n\n1. “How do you give review feedback on a teammate’s pull request?”“Bạn góp ý review cho pull request của đồng đội thế nào?”\n   Answer: b) Point at the rule or requirement the code breaks, explain the impact, suggest a fix, and separate blocking issues from nice-to-haves\n   Objective, specific, actionable feedback — the people factors of review success.VI: Góp ý khách quan, cụ thể, làm theo được — chính là yếu tố con người của review thành công.\n\n2. “What is the difference between a review and static analysis?”“Review và phân tích tĩnh khác nhau thế nào?”\n   Answer: b) Both examine work products without executing them; reviews use people (who can judge intent, requirements, design), static analysis uses tools (fast, consistent, but only rule-based)\n   They complement each other: tools catch the mechanical issues so humans can focus on logic and requirements.VI: Chúng bổ sung nhau: công cụ bắt lỗi máy móc để người tập trung vào logic và yêu cầu.\n\n3. “SonarQube shows 120 code smells. What do you do?”“SonarQube báo 120 code smell. Bạn làm gì?”\n   Answer: b) Prioritise by severity (bugs, vulnerabilities first), fix new code first with a quality gate, and plan the technical debt\n   “Clean as you code”: gate new code, triage the legacy findings.VI: “Sạch khi viết”: chặn mã mới bằng quality gate, phân loại phát hiện cũ.\n\n4. “Why review requirements if we will test the software anyway?”“Vì sao phải review yêu cầu khi đằng nào cũng test phần mềm?”\n   Answer: b) A defect in a requirement is cheapest to fix before design and code exist, and some defects (contradictions, missing rules) are hard to reach with dynamic tests\n   Early defect detection and different defect types — the value of static testing (LO-3.1.2).VI: Phát hiện sớm và loại lỗi khác — giá trị của kiểm thử tĩnh (LO-3.1.2).\n\n5. “In your project, what did a review find that testing would have missed?”“Trong dự án của bạn, review tìm được gì mà test sẽ bỏ sót?”\n   Answer: b) A concrete example: “In LabBook’s cancel PR, the owner check was missing — every happy-path test passed because each student cancelled their own booking.”\n   Interviewers want a specific story with impact.VI: Người phỏng vấn muốn một câu chuyện cụ thể có tác động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>“How do you give review feedback on a teammate’s pull request?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Bạn góp ý review cho pull request của đồng đội thế nào?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“This code is bad, rewrite it.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Point at the rule or requirement the code breaks, explain the impact, suggest a fix, and separate blocking issues from nice-to-haves"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Approve everything to keep the team happy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fix it myself without telling them"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Objective, specific, actionable feedback — the people factors of review success.</p><p><i>VI: Góp ý khách quan, cụ thể, làm theo được — chính là yếu tố con người của review thành công.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>“What is the difference between a review and static analysis?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Review và phân tích tĩnh khác nhau thế nào?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "There is none"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both examine work products without executing them; reviews use people (who can judge intent, requirements, design), static analysis uses tools (fast, consistent, but only rule-based)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Static analysis runs the code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reviews are only for documents"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They complement each other: tools catch the mechanical issues so humans can focus on logic and requirements.</p><p><i>VI: Chúng bổ sung nhau: công cụ bắt lỗi máy móc để người tập trung vào logic và yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>“SonarQube shows 120 code smells. What do you do?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“SonarQube báo 120 code smell. Bạn làm gì?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignore them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prioritise by severity (bugs, vulnerabilities first), fix new code first with a quality gate, and plan the technical debt"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fix all of them before any new feature"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delete the rules"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>“Clean as you code”: gate new code, triage the legacy findings.</p><p><i>VI: “Sạch khi viết”: chặn mã mới bằng quality gate, phân loại phát hiện cũ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>“Why review requirements if we will test the software anyway?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Vì sao phải review yêu cầu khi đằng nào cũng test phần mềm?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "We should not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A defect in a requirement is cheapest to fix before design and code exist, and some defects (contradictions, missing rules) are hard to reach with dynamic tests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because tests cannot run without requirements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only for documentation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Early defect detection and different defect types — the value of static testing (LO-3.1.2).</p><p><i>VI: Phát hiện sớm và loại lỗi khác — giá trị của kiểm thử tĩnh (LO-3.1.2).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>“In your project, what did a review find that testing would have missed?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Trong dự án của bạn, review tìm được gì mà test sẽ bỏ sót?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "“Nothing, reviews never find anything.”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A concrete example: “In LabBook’s cancel PR, the owner check was missing — every happy-path test passed because each student cancelled their own booking.”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“I do not remember.”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "“Reviews are the developer’s job.”"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Interviewers want a specific story with impact.</p><p><i>VI: Người phỏng vấn muốn một câu chuyện cụ thể có tác động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời chung chung không có ví dụ."
+        },
+        {
+          "loi": "Cho rằng review là việc của riêng developer."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pull request (PR)",
+          "vi": "yêu cầu gộp mã — nơi diễn ra review"
+        },
+        {
+          "en": "code smell",
+          "vi": "dấu hiệu mã kém (khó bảo trì)"
+        },
+        {
+          "en": "technical debt",
+          "vi": "nợ kỹ thuật"
+        }
+      ]
+    }
+  ]
+}

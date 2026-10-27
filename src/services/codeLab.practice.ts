@@ -25,7 +25,37 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   // FER202 học ở /courses/front-end-web-development-with-react/learn (Academy dùng chung LearnPageClient).
   'front-end-web-development-with-react': 'fer202-practice',
   fer202: 'fer202-practice',
+  // Academy ôn thi kỳ này (28/10/2026) — track tạo khi bộ đề đầu tiên lên; trước đó thẻ dưới video ghi "đang soạn".
+  'software-testing': 'swt301-practice',
+  'software-requirements': 'swr302-practice',
 });
+
+/**
+ * Danh mục LỐI VÀO trang chủ Code Lab (đợt Academy 28/10/2026): "Môn học (Academy)" và
+ * "Khoá học (Courses)". Track không có ở đây ⇒ "Kho mở rộng" (kho đề AI cũ — không chắn lộ trình).
+ * Thứ tự = thứ tự hiện (FER202 → SWT301 → SWR302 → PRO192 + DBI202 → CSD201 → PRJ301 → OSG202 — KE-HOACH-CODELAB §8).
+ * Track chưa tạo ⇒ thẻ "Đang soạn" (người học thấy lộ trình sắp tới, không bấm được).
+ */
+export interface MucDanhMuc {
+  loai: 'academy' | 'course';
+  /** Mã môn trường (FER202…) — chỉ Academy. */
+  ma?: string;
+  ten: string;
+  courseSlug: string;
+  trackSlug: string;
+}
+export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
+  { loai: 'academy', ma: 'FER202', ten: 'Front-End Web Development with React', courseSlug: 'front-end-web-development-with-react', trackSlug: 'fer202-practice' },
+  { loai: 'academy', ma: 'SWT301', ten: 'Software Testing', courseSlug: 'software-testing', trackSlug: 'swt301-practice' },
+  { loai: 'academy', ma: 'SWR302', ten: 'Software Requirements', courseSlug: 'software-requirements', trackSlug: 'swr302-practice' },
+  { loai: 'academy', ma: 'PRO192', ten: 'Object-Oriented Programming (Java)', courseSlug: 'object-oriented-programming', trackSlug: 'pro192-practice' },
+  { loai: 'academy', ma: 'DBI202', ten: 'Database Systems', courseSlug: 'introduction-to-databases', trackSlug: 'dbi202-practice' },
+  { loai: 'academy', ma: 'LAB211', ten: 'OOP with Java Lab', courseSlug: 'oop-with-java-lab', trackSlug: 'lab211' },
+  { loai: 'academy', ma: 'CSD201', ten: 'Data Structures and Algorithms', courseSlug: 'data-structures-and-algorithms', trackSlug: 'csd201-practice' },
+  { loai: 'academy', ma: 'PRJ301', ten: 'Java Web Application Development', courseSlug: 'java-web-application-development', trackSlug: 'prj301-practice' },
+  { loai: 'academy', ma: 'OSG202', ten: 'Operating Systems', courseSlug: 'operating-systems', trackSlug: 'osg202-practice' },
+  { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
+] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */
 export function practiceTrackSlugFor(courseSlug: string): string {

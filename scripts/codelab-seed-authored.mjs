@@ -25,8 +25,11 @@
  *                      solutionExplanationHtml, diagramMermaid?,
  *                      problemHtmlVi?, solutionExplanationHtmlVi?, testsJson? }, ... ]
  *   }
- *   testsJson (bộ kiểm máy chấm DOM, xem content/codelab/web-foundations-practice/nguon/_luoc-do.mjs)
- *   CHƯA có cột trong CSDL ⇒ script này BỎ QUA nó; đợt 2 (cột tests_json) mới nạp.
+ *   + (đợt Academy 28/10/2026 — cột mới, lược đồ content/codelab/README.md):
+ *     testsJson (bộ kiểm máy chấm), gradeKind, kind (practice|lab|deep-lab|pe|project),
+ *     mistakesJson [{loi,viDu?,cachSua?}], videoRef {courseSlug,lessonSlug,giay?}, glossaryJson [{en,vi}],
+ *     demoHtml (đề lớn: trang demo tự chứa), briefPdfUrl/sourceUrl…
+ *   videoRef vắng ⇒ lấy từ `payload.lesson` { course, slug } (bộ luyện theo bài học).
  *
  * FLAGS
  *   --dir D      ingest every *.json in D (default /tmp/authored)
@@ -34,13 +37,15 @@
  *   --apply      actually write (default = dry preview)
  *   --replace    delete the module's existing exercises first (default: append,
  *                skipping any exercise whose title already exists there)
+ *   --update     đề TRÙNG TIÊU ĐỀ đã có ⇒ CẬP NHẬT tại chỗ (giữ id/slug/tiến độ/lượt nộp của người học),
+ *                đề mới ⇒ tạo. Dùng để nạp bộ kiểm/nội dung sửa lên prod mà không xoá tiến độ.
  *   --move-done  after a successful apply, rename the file to *.done
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 
-const { createExercise, deleteExercise } = await import('../dist/services/codeLab.service.js');
+const { createExercise, deleteExercise, updateExercise } = await import('../dist/services/codeLab.service.js');
 
 const prisma = new PrismaClient();
 const ADMIN = 1;
@@ -50,6 +55,7 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] :
 
 const APPLY = has('--apply');
 const REPLACE = has('--replace');
+const UPDATE = has('--update');
 const MOVE_DONE = has('--move-done');
 const DIR = val('--dir', '/tmp/authored');
 const FILE = val('--file', null);
@@ -72,6 +78,8 @@ function validate(ex, i) {
   const errs = [];
   for (const k of REQUIRED) if (!ex[k] || (Array.isArray(ex[k]) && !ex[k].length)) errs.push(`missing ${k}`);
   if (ex.difficulty && !['EASY', 'MEDIUM', 'HARD'].includes(ex.difficulty)) errs.push(`bad difficulty ${ex.difficulty}`);
+  if (ex.kind && !['practice', 'lab', 'deep-lab', 'pe', 'project'].includes(ex.kind)) errs.push(`bad kind ${ex.kind}`);
+  if (ex.testsJson && (typeof ex.testsJson !== 'object' || !ex.testsJson.loai)) errs.push('testsJson needs a "loai"');
   if (!Array.isArray(ex.hintsJson) || ex.hintsJson.length < 2) errs.push('needs >= 2 hints');
   if (!Array.isArray(ex.examplesJson) || ex.examplesJson.length < 1) errs.push('needs >= 1 example');
   if (String(ex.problemHtml || '').length < 300) errs.push('problemHtml too thin (<300 chars)');
@@ -87,9 +95,47 @@ function validate(ex, i) {
   return errs.length ? `#${i + 1} "${ex.title || '?'}": ${errs.join(', ')}` : null;
 }
 
+/** Các cột của một đề (dùng chung tạo mới + --update). */
+function duLieuDe(ex, track, videoRefMacDinh) {
+  return {
+    title: ex.title,
+    language: (ex.language || track.language || 'text').toLowerCase(),
+    difficulty: ex.difficulty || 'MEDIUM',
+    problemHtml: ex.problemHtml,
+    problemHtmlVi: ex.problemHtmlVi ?? null,
+    concepts: ex.concepts || [],
+    prerequisites: ex.prerequisites || [],
+    inputSpec: ex.inputSpec ?? null,
+    outputSpec: ex.outputSpec ?? null,
+    constraints: ex.constraints ?? null,
+    examplesJson: ex.examplesJson || [],
+    hintsJson: ex.hintsJson || [],
+    starterCodeJson: ex.starterCodeJson || [],
+    solutionCodeJson: ex.solutionCodeJson || [],
+    solutionExplanationHtml: ex.solutionExplanationHtml,
+    solutionExplanationHtmlVi: ex.solutionExplanationHtmlVi ?? null,
+    diagramMermaid: ex.diagramMermaid ?? null,
+    referenceUrl: ex.referenceUrl ?? null,
+    tags: ex.tags || [],
+    estimatedMinutes: ex.estimatedMinutes ?? null,
+    points: ex.points ?? 10,
+    // đợt Academy 28/10/2026
+    testsJson: ex.testsJson ?? null,
+    gradeKind: ex.gradeKind ?? ex.testsJson?.loai ?? null,
+    kind: ex.kind || 'practice',
+    mistakesJson: ex.mistakesJson ?? null,
+    videoRef: ex.videoRef ?? videoRefMacDinh,
+    glossaryJson: ex.glossaryJson ?? null,
+    // tệp đính kèm: chỉ ghi khi payload CÓ khai (--update không được xoá PDF đề LAB211 đã gắn tay)
+    ...(ex.demoHtml !== undefined ? { demoHtml: ex.demoHtml } : {}),
+    ...(ex.briefPdfUrl !== undefined ? { briefPdfUrl: ex.briefPdfUrl } : {}),
+    ...(ex.sourceUrl !== undefined ? { sourceUrl: ex.sourceUrl } : {}),
+  };
+}
+
 const files = FILE
   ? [FILE]
-  : (fs.existsSync(DIR) ? fs.readdirSync(DIR).filter((f) => f.endsWith('.json')).map((f) => path.join(DIR, f)).sort() : []);
+  : (fs.existsSync(DIR) ? fs.readdirSync(DIR).filter((f) => f.endsWith('.json') && !f.startsWith('_')).map((f) => path.join(DIR, f)).sort() : []); // _track.json là của create-track
 
 if (!files.length) { console.log(`[authored] no payload files (dir=${DIR})`); await prisma.$disconnect(); process.exit(0); }
 console.log(`[authored] ${files.length} payload file(s); mode=${APPLY ? 'APPLY' : 'DRY'}${REPLACE ? ' replace' : ' append'}`);
@@ -125,9 +171,25 @@ for (const f of files) {
   const haveTitles = new Set(existing.map((e) => e.title.trim().toLowerCase()));
   const fresh = REPLACE ? exercises : exercises.filter((e) => !haveTitles.has(e.title.trim().toLowerCase()));
   const dropped = exercises.length - fresh.length;
+  const videoRefMacDinh = payload.lesson?.course && payload.lesson?.slug
+    ? { courseSlug: payload.lesson.course, lessonSlug: payload.lesson.slug } : null;
 
-  console.log(`  · ${trackSlug}/${moduleSlug} (${mod.name}): have ${existing.length}, +${fresh.length}${dropped ? ` (${dropped} dup title skipped)` : ''}`);
-  if (!APPLY) { skipped += fresh.length; continue; }
+  console.log(`  · ${trackSlug}/${moduleSlug} (${mod.name}): have ${existing.length}, +${fresh.length}${dropped ? ` (${dropped} dup title ${UPDATE ? 'UPDATE' : 'skipped'})` : ''}`);
+  if (!APPLY) { skipped += fresh.length + (UPDATE ? dropped : 0); continue; }
+
+  // --update: đề trùng tiêu đề ⇒ ghi đè nội dung + cột mới TẠI CHỖ (giữ id ⇒ giữ tiến độ & lượt nộp)
+  if (UPDATE && !REPLACE && dropped) {
+    const byTitle = new Map(existing.map((e) => [e.title.trim().toLowerCase(), e]));
+    for (const [idx, ex] of exercises.entries()) {
+      const cu = byTitle.get(ex.title.trim().toLowerCase());
+      if (!cu) continue;
+      try {
+        await updateExercise(cu.id, { ...duLieuDe(ex, track, videoRefMacDinh), sortOrder: idx });
+        written++;
+        console.log(`      ↻ [${ex.difficulty || 'MEDIUM'}] ${ex.title}`);
+      } catch (e) { failed++; console.log(`      ✗ ${ex.title}: ${e.message}`); }
+    }
+  }
 
   if (REPLACE && existing.length) {
     for (const e of existing) await deleteExercise(e.id);
@@ -138,29 +200,9 @@ for (const f of files) {
     try {
       await createExercise({
         moduleId: mod.id,
-        title: ex.title,
-        language: (ex.language || track.language || 'text').toLowerCase(),
-        difficulty: ex.difficulty || 'MEDIUM',
         status: 'PUBLISHED',
         sortOrder: order++,
-        problemHtml: ex.problemHtml,
-        problemHtmlVi: ex.problemHtmlVi ?? null,
-        concepts: ex.concepts || [],
-        prerequisites: ex.prerequisites || [],
-        inputSpec: ex.inputSpec ?? null,
-        outputSpec: ex.outputSpec ?? null,
-        constraints: ex.constraints ?? null,
-        examplesJson: ex.examplesJson || [],
-        hintsJson: ex.hintsJson || [],
-        starterCodeJson: ex.starterCodeJson || [],
-        solutionCodeJson: ex.solutionCodeJson || [],
-        solutionExplanationHtml: ex.solutionExplanationHtml,
-        solutionExplanationHtmlVi: ex.solutionExplanationHtmlVi ?? null,
-        diagramMermaid: ex.diagramMermaid ?? null,
-        referenceUrl: ex.referenceUrl ?? null,
-        tags: ex.tags || [],
-        estimatedMinutes: ex.estimatedMinutes ?? null,
-        points: ex.points ?? 10,
+        ...duLieuDe(ex, track, videoRefMacDinh),
       }, ADMIN);
       written++;
       console.log(`      ✓ [${ex.difficulty || 'MEDIUM'}] ${ex.title}`);

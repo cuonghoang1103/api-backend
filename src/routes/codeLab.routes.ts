@@ -35,7 +35,9 @@ import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
 import { BadRequestError, AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import type { ApiResponse } from '../types/index.js';
+import rateLimit from 'express-rate-limit';
 import * as codeLab from '../services/codeLab.service.js';
+import * as luotNop from '../services/codeLab.submission.service.js';
 import { isSafeSlug } from '../services/codeLab.practice.js';
 import * as explainService from '../services/codeLab.explain.service.js';
 import * as coachService from '../services/codeLab.coach.service.js';
@@ -146,6 +148,41 @@ router.get('/practice/:courseSlug/:lessonSlug', optionalAuth, async (req, res: R
   } catch (e) { next(e); }
 });
 
+// GET /catalog — lối vào trang chủ: Môn học (Academy) + Khoá học (Courses), mỗi môn một track luyện tập
+// (chưa có ⇒ `track: null` = "Đang soạn"). Đăng nhập ⇒ kèm `mine` = tiến độ theo track (mọi track, kể cả kho mở rộng).
+router.get('/catalog', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const admin = isEditor(req);
+    const userId = req.user?.userId ?? null;
+    const [catalog, mine] = await Promise.all([
+      codeLab.getPracticeCatalog({ admin }),
+      userId ? luotNop.getMyTrackSummary(userId) : Promise.resolve(null),
+    ]);
+    res.set('Cache-Control', userId || admin ? 'private, no-store' : 'public, max-age=60, stale-while-revalidate=300');
+    res.json({ success: true, data: { catalog, mine } });
+  } catch (e) { next(e); }
+});
+
+// GET /exercises/:id/tests — bộ kiểm ĐỦ (cả kiểm ẩn) cho lúc NỘP. Trang bài chỉ mang kiểm mẫu
+// (Chạy thử). Lộ được qua Network — chấp nhận cho mục đích học (xem codeLab.cham.ts). Khách cũng
+// lấy được để Nộp thử (kết quả không lưu).
+router.get('/exercises/:id(\\d+)/tests', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await luotNop.getTestsForSubmit(Number(req.params.id), { admin: isEditor(req) });
+    res.set('Cache-Control', 'private, no-store');
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// GET /exercises/:id/demo — trang demo chạy được của đề lớn ("▶ Live demo"), HTML tự chứa.
+router.get('/exercises/:id(\\d+)/demo', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await luotNop.getDemo(Number(req.params.id), { admin: isEditor(req) });
+    res.set('Cache-Control', 'public, max-age=300');
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
 // GET /tracks/:slug — roadmap
 router.get('/tracks/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
@@ -193,6 +230,35 @@ router.post('/exercises/:id(\\d+)/progress', authenticate, async (req, res: Resp
     const id = parseInt(req.params.id);
     const { status, savedCode } = req.body as { status?: 'IN_PROGRESS' | 'SOLVED'; savedCode?: unknown };
     const data = await codeLab.upsertProgress(userId, id, { status, savedCode });
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// ─── Lượt nộp (máy chấm trình duyệt — đợt Academy 28/10/2026) ───
+// Trần riêng: mỗi lượt Nộp ghi một hàng; 40 lượt / 10 phút / người là quá đủ cho người thật.
+const nopLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 40,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req: Request): string => `codelab-nop:${req.user?.userId ?? req.ip ?? 'anon'}`,
+  message: { success: false, message: 'Nộp quá nhanh — nghỉ vài phút rồi nộp tiếp nhé.', code: 'CODELAB_NOP_QUA_NHANH' },
+});
+
+// POST /exercises/:id/submissions — lưu một lượt NỘP. Loại code: { code, results, ms } (kết quả trình duyệt,
+// máy chủ kiểm hình dạng). Loại choice/order/table: { answers } (máy chủ tự chấm). Đạt 100% ⇒ SOLVED.
+router.post('/exercises/:id(\\d+)/submissions', authenticate, nopLimiter, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await luotNop.createSubmission(req.user!.userId, Number(req.params.id), req.body ?? {});
+    res.status(201).json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// GET /exercises/:id/submissions — lịch sử nộp của chính mình (mới nhất trước).
+router.get('/exercises/:id(\\d+)/submissions', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await luotNop.listMySubmissions(req.user!.userId, Number(req.params.id), Number(req.query.limit) || 30);
+    res.set('Cache-Control', 'private, no-store');
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

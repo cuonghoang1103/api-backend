@@ -38,6 +38,11 @@ import { TrangWebTheoTuyen } from '../web/TrangWeb';
 if (typeof window !== 'undefined') {
   (globalThis as { __CT_HOP_CAT_WORKER__?: string }).__CT_HOP_CAT_WORKER__ =
     new URL('hop-cat-worker.js', window.location.href).href;
+  /* Máy chấm Code Lab (28/10/2026): trang người học (HTML/React) + Live demo chạy trong iframe. srcdoc
+     thừa kế CSP của app (cấm script nội tuyến) ⇒ trỏ iframe sang trang HỘP CÁT có CSP riêng
+     (public/hop-cat-khung.html, CSP_HOP_CAT_KHUNG trong src/main/security.ts) rồi gửi HTML vào. */
+  (globalThis as { __CT_HOP_CAT_KHUNG__?: string }).__CT_HOP_CAT_KHUNG__ =
+    new URL('hop-cat-khung.html', window.location.href).href;
 }
 
 export function CodeLabPage() {

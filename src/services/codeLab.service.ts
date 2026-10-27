@@ -22,11 +22,13 @@ import {
   estimateMinutes,
   fallbackTrackFor,
   isPracticeCourse,
+  PRACTICE_CATALOG,
   practiceTrackSlugFor,
   sortPracticeItems,
   withSolutionFlags,
   withoutSolution,
 } from './codeLab.practice.js';
+import { GRADE_KINDS, coMayChamTrinhDuyet, gradeKindOf, isExerciseKind, testsCongKhai } from './codeLab.cham.js';
 
 // ─── Slug helpers ───────────────────────────────────────────────
 
@@ -344,6 +346,9 @@ const EXERCISE_LIST_SELECT = {
   viewCount: true,
   solveCount: true,
   tags: true,
+  // đợt Academy 28/10: dạng bài (lộ trình chương: luyện / Lab / Deep Lab / PE) + loại chấm (nhãn "Tự chấm")
+  kind: true,
+  gradeKind: true,
 } satisfies Prisma.CodeExerciseSelect;
 
 /** Full roadmap for a track: modules (ordered) each with their exercises. */
@@ -459,6 +464,23 @@ export interface ExerciseInput {
   tags?: unknown;
   estimatedMinutes?: number | null;
   points?: number;
+  // đợt Academy 28/10/2026
+  testsJson?: unknown;
+  gradeKind?: string | null;
+  kind?: string;
+  mistakesJson?: unknown;
+  videoRef?: unknown;
+  glossaryJson?: unknown;
+  demoHtml?: string | null;
+}
+
+/** Json? của Prisma: null/undefined ⇒ DbNull (cột NULL), còn lại giữ nguyên. */
+function jsonHoacNull(v: unknown): Prisma.InputJsonValue | typeof Prisma.DbNull {
+  return v === null || v === undefined ? Prisma.DbNull : (v as Prisma.InputJsonValue);
+}
+
+function chuanGradeKind(v: unknown): string | null {
+  return typeof v === 'string' && (GRADE_KINDS as readonly string[]).includes(v) ? v : null;
 }
 
 function buildExerciseData(data: ExerciseInput, lang: string) {
@@ -492,6 +514,13 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     tags: strArray(data.tags, 20),
     estimatedMinutes: data.estimatedMinutes ?? null,
     points: data.points ?? 10,
+    testsJson: jsonHoacNull(data.testsJson),
+    gradeKind: chuanGradeKind(data.gradeKind) ?? gradeKindOf(data.testsJson),
+    kind: isExerciseKind(data.kind) ? data.kind : 'practice',
+    mistakesJson: jsonHoacNull(data.mistakesJson),
+    videoRef: jsonHoacNull(data.videoRef),
+    glossaryJson: jsonHoacNull(data.glossaryJson),
+    demoHtml: data.demoHtml ?? null,
   };
 }
 
@@ -571,6 +600,16 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.tags !== undefined) patch.tags = strArray(data.tags, 20);
   if (data.estimatedMinutes !== undefined) patch.estimatedMinutes = data.estimatedMinutes;
   if (data.points !== undefined) patch.points = data.points;
+  if (data.testsJson !== undefined) {
+    patch.testsJson = jsonHoacNull(data.testsJson);
+    if (data.gradeKind === undefined) patch.gradeKind = gradeKindOf(data.testsJson);
+  }
+  if (data.gradeKind !== undefined) patch.gradeKind = chuanGradeKind(data.gradeKind);
+  if (data.kind !== undefined && isExerciseKind(data.kind)) patch.kind = data.kind;
+  if (data.mistakesJson !== undefined) patch.mistakesJson = jsonHoacNull(data.mistakesJson);
+  if (data.videoRef !== undefined) patch.videoRef = jsonHoacNull(data.videoRef);
+  if (data.glossaryJson !== undefined) patch.glossaryJson = jsonHoacNull(data.glossaryJson);
+  if (data.demoHtml !== undefined) patch.demoHtml = data.demoHtml;
 
   return prisma.codeExercise.update({ where: { id }, data: patch });
 }
@@ -590,7 +629,24 @@ const EXERCISE_DETAIL_INCLUDE = {
 function stripSolutionFields<T extends Record<string, unknown>>(ex: T): Omit<T, (typeof SOLUTION_FIELDS)[number]> {
   const out: Record<string, unknown> = { ...ex };
   for (const f of SOLUTION_FIELDS) delete out[f];
+  // bộ kiểm (có kiểm ẩn) + trang demo: nặng và không thuộc về danh sách
+  delete out.testsJson;
+  delete out.demoHtml;
   return out as Omit<T, (typeof SOLUTION_FIELDS)[number]>;
+}
+
+/**
+ * Trang làm bài: bộ kiểm CÔNG KHAI (bỏ kiểm ẩn, băm đáp án — codeLab.cham.ts), không gửi
+ * `demoHtml` (nặng; lấy riêng qua `GET /exercises/:id/demo`) mà gửi cờ `hasDemo`.
+ */
+function choNguoiHoc<T extends { id: number; testsJson?: unknown; demoHtml?: string | null; gradeKind?: string | null }>(ex: T) {
+  const { demoHtml, testsJson, ...rest } = ex;
+  return {
+    ...rest,
+    testsJson: testsCongKhai(testsJson, ex.id),
+    gradeKind: gradeKindOf(testsJson, ex.gradeKind),
+    hasDemo: !!(demoHtml && demoHtml.trim()),
+  };
 }
 
 // ─── Sitemap feed ───────────────────────────────────────────────
@@ -676,7 +732,8 @@ export async function getExerciseBySlug(slug: string, opts: { admin?: boolean; s
   }
   // Best-effort view counter (don't block on it).
   prisma.codeExercise.update({ where: { id: exercise.id }, data: { viewCount: { increment: 1 } } }).catch(() => {});
-  return opts.admin || opts.signedIn ? withSolutionFlags(exercise) : withoutSolution(exercise);
+  const ex = choNguoiHoc(exercise);
+  return opts.admin || opts.signedIn ? withSolutionFlags(ex) : withoutSolution(ex);
 }
 
 /** Lời giải chính thức của một bài — chỉ gọi sau `authenticate`. Bài/track nháp ⇒ 404 (trừ admin). */
@@ -870,9 +927,15 @@ export async function upsertProgress(
   userId: number,
   exerciseId: number,
   data: { status?: 'IN_PROGRESS' | 'SOLVED'; savedCode?: unknown },
+  opts: { quaMayCham?: boolean } = {},
 ) {
-  const exercise = await prisma.codeExercise.findUnique({ where: { id: exerciseId }, select: { id: true } });
+  const exercise = await prisma.codeExercise.findUnique({ where: { id: exerciseId }, select: { id: true, testsJson: true, gradeKind: true } });
   if (!exercise) throw new NotFoundError('Exercise not found.');
+  // Đề có máy chấm trình duyệt: "Đã giải" chỉ đến từ một lượt NỘP đạt 100% (createSubmission).
+  // Đề tự đánh dấu (manual/không bộ kiểm) và loại chờ máy chấm máy chủ (java/tsql/bash) giữ nút cũ.
+  if (data.status === 'SOLVED' && !opts.quaMayCham && coMayChamTrinhDuyet(exercise.testsJson, exercise.gradeKind)) {
+    throw new BadRequestError('Bài này có máy chấm — bấm "Nộp" và đạt mọi kiểm để được tính là đã giải.');
+  }
 
   const prev = await prisma.codeProgress.findUnique({
     where: { uk_code_progress_user_exercise: { userId, exerciseId } },
@@ -1218,4 +1281,69 @@ export async function getPracticeSet(
     banNhap: !!track && track.status !== 'PUBLISHED' && trackVisible,
     goiY,
   };
+}
+
+// ─── Danh mục lối vào trang chủ (Academy / Courses) — đợt Academy 28/10/2026 ────────────
+
+export interface CatalogEntry {
+  loai: 'academy' | 'course';
+  ma: string | null;
+  ten: string;
+  courseSlug: string;
+  trackSlug: string;
+  /** null ⇒ track chưa có / chưa công khai ⇒ thẻ "Đang soạn". */
+  track: null | {
+    id: number; name: string; slug: string; color: string | null; language: string; description: string | null;
+    moduleCount: number; exerciseCount: number;
+    /** Đếm theo dạng bài: practice / lab / deep-lab / pe / project. */
+    byKind: Record<string, number>;
+    byDifficulty: Record<string, number>;
+    graded: number;
+  };
+}
+
+export async function getPracticeCatalog(opts: { admin?: boolean } = {}): Promise<CatalogEntry[]> {
+  const slugs = PRACTICE_CATALOG.map((c) => c.trackSlug);
+  const tracks = await prisma.codeTrack.findMany({
+    where: { slug: { in: slugs }, ...(opts.admin ? {} : { status: 'PUBLISHED' as CodeStatus }) },
+    select: { id: true, name: true, slug: true, color: true, language: true, description: true, _count: { select: { modules: true } } },
+  });
+  const ids = tracks.map((t) => t.id);
+  const groups = ids.length
+    ? await prisma.codeExercise.groupBy({
+        by: ['trackId', 'kind', 'difficulty'],
+        where: { trackId: { in: ids }, status: 'PUBLISHED' },
+        _count: true,
+      })
+    : [];
+  const graded = ids.length
+    ? await prisma.codeExercise.groupBy({
+        by: ['trackId'],
+        where: { trackId: { in: ids }, status: 'PUBLISHED', gradeKind: { not: null } },
+        _count: true,
+      })
+    : [];
+  const bySlug = new Map(tracks.map((t) => [t.slug, t]));
+  return PRACTICE_CATALOG.map((c) => {
+    const t = bySlug.get(c.trackSlug);
+    if (!t) return { ...c, ma: c.ma ?? null, track: null };
+    const rows = groups.filter((g) => g.trackId === t.id);
+    const byKind: Record<string, number> = {};
+    const byDifficulty: Record<string, number> = { EASY: 0, MEDIUM: 0, HARD: 0, EXPERT: 0 };
+    let exerciseCount = 0;
+    for (const g of rows) {
+      byKind[g.kind] = (byKind[g.kind] ?? 0) + g._count;
+      byDifficulty[g.difficulty] = (byDifficulty[g.difficulty] ?? 0) + g._count;
+      exerciseCount += g._count;
+    }
+    return {
+      ...c,
+      ma: c.ma ?? null,
+      track: {
+        id: t.id, name: t.name, slug: t.slug, color: t.color, language: t.language, description: t.description,
+        moduleCount: t._count.modules, exerciseCount, byKind, byDifficulty,
+        graded: graded.find((g) => g.trackId === t.id)?._count ?? 0,
+      },
+    };
+  });
 }

@@ -164,7 +164,8 @@ function contentSecurityPolicy(): string {
     `media-src 'self' ${APP_ORIGIN} ${MEDIA_ORIGIN} https: blob:`,
     `connect-src ${connect}`,
     // Nhúng CHỈ tệp đính kèm CT Work (PDF trong trình xem tệp, 20/10/2026): URL ký sẵn trên R2/media. Còn lại vẫn chặn.
-    `frame-src ${R2_UPLOAD_ORIGIN} ${MEDIA_ORIGIN}`,
+    // + khung hộp cát của máy chấm Code Lab (28/10/2026) — đúng MỘT đường dẫn, xem CSP_HOP_CAT_KHUNG.
+    `frame-src ${R2_UPLOAD_ORIGIN} ${MEDIA_ORIGIN} ${APP_ORIGIN}/hop-cat-khung.html${IS_DEV ? ` ${DEV_SERVER_URL}/hop-cat-khung.html` : ''}`,
     `object-src 'none'`,
     `base-uri 'none'`,
     `form-action 'none'`,
@@ -189,6 +190,32 @@ const CSP_HOP_CAT_WORKER = [
   "script-src 'unsafe-eval'",
   "connect-src 'none'",
 ].join('; ');
+
+/**
+ * Khung HỘP CÁT của máy chấm Code Lab (28/10/2026): trang của NGƯỜI HỌC (HTML/CSS/JS, React) chạy trong
+ * iframe sandbox gốc mờ. Được script nội tuyến/eval (mã người học + tác tử chấm) và React UMD từ
+ * cdn.jsdelivr.net; connect-src chỉ jsdelivr (CSS bootstrap tải bằng fetch). Không gì khác ra mạng.
+ */
+const CSP_HOP_CAT_KHUNG = [
+  "default-src 'none'",
+  "script-src 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+  "style-src 'unsafe-inline'",
+  'img-src data: blob: https:',
+  'font-src data:',
+  'connect-src https://cdn.jsdelivr.net',
+  "form-action 'none'",
+  "base-uri 'none'",
+].join('; ');
+
+function laHopCatKhung(rawUrl: string): boolean {
+  try {
+    const u = new URL(rawUrl);
+    return u.pathname === '/hop-cat-khung.html'
+      && (u.origin === APP_ORIGIN || (IS_DEV && u.origin === DEV_SERVER_URL));
+  } catch {
+    return false;
+  }
+}
 
 function laHopCatWorker(rawUrl: string): boolean {
   try {
@@ -237,7 +264,7 @@ export function applySessionPolicies(): void {
         ...details.responseHeaders,
         ...cors,
         'Content-Security-Policy': [
-          laHopCatWorker(details.url) ? CSP_HOP_CAT_WORKER : contentSecurityPolicy(),
+          laHopCatWorker(details.url) ? CSP_HOP_CAT_WORKER : laHopCatKhung(details.url) ? CSP_HOP_CAT_KHUNG : contentSecurityPolicy(),
         ],
         'X-Content-Type-Options': ['nosniff'],
       },

@@ -1,0 +1,25 @@
+<!doctype html>
+<!--
+  KHUNG HỘP CÁT cho máy chấm Code Lab (đợt Academy 28/10/2026) — bản iframe của hop-cat-worker.js.
+
+  Trang làm bài Code Lab dựng trang của người học (HTML/CSS/JS, React) trong một iframe
+  sandbox="allow-scripts allow-forms" để chấm + "Xem trang" + "Live demo". Trên web nó dùng srcdoc
+  (thừa kế CSP web, cho script nội tuyến). Trong app, CSP của renderer CẤM script nội tuyến ⇒ srcdoc
+  không chạy được gì. Tệp này được phục vụ với CSP RIÊNG (src/main/security.ts › CSP_HOP_CAT_KHUNG):
+  cho script nội tuyến + React UMD từ cdn.jsdelivr.net, KHÔNG ra mạng nào khác; là iframe gốc mờ ⇒
+  không chạm được window.cuongthai, cookie hay localStorage của app.
+
+  Tin nhắn đầu tiên từ trang mẹ mang HTML cần dựng (`__napTrang`); tài liệu được viết lại bằng
+  document.open/write — CSP của tệp này vẫn giữ cho tài liệu mới.
+-->
+<html><head><meta charset="utf-8"><title>Hộp cát</title></head><body>
+<script>
+  window.addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data || typeof e.data.__napTrang !== 'string') return;
+    var html = e.data.__napTrang;
+    document.open();
+    document.write(html);
+    document.close();
+  }, { once: true });
+</script>
+</body></html>

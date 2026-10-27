@@ -284,7 +284,12 @@ const nextConfig = {
               // dựng Docker sẽ mang thêm chừng ấy. Người dùng web thì vốn đang
               // online. (App desktop thì ngược lại — nó bọc sẵn để chạy offline.)
               // apis.google.com: Google Picker (CTW đợt 8a — chọn tệp Drive gắn vào thẻ; khung chọn nằm ở docs.google.com, đã có trong frame-src).
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net https://apis.google.com",
+              // blob: (Code Lab 28/10/2026): máy chấm trình duyệt nạp code người học vào Worker bằng
+              // importScripts(blob:) (script CỔ ĐIỂN dùng chung realm — `const f` của tệp gọi được từ kiểm) và
+              // chấm ES modules bằng import(blob:). Worker blob: thừa kế CSP trang ⇒ thiếu blob: ở script-src là
+              // cả hai bị chặn (worker-src chỉ cho TẠO worker). Rủi ro thêm ≈ 0: blob: chỉ do chính trang tạo, và
+              // script-src vốn đã có 'unsafe-inline' + 'unsafe-eval'.
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net https://apis.google.com",
               // fonts.googleapis.com: stylesheet @font-face của bộ sách /books
               // (Source Serif 4 / Source Sans 3 / JetBrains Mono). Cặp với
               // fonts.gstatic.com ở font-src. Thiếu → font rơi về hệ thống.

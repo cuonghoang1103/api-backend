@@ -9003,6 +9003,7 @@ temp+move : crash -&gt; safe.csv still has 3 lines (the .tmp is the broken one)<
 <li>⭐ Keep the next item number in the file (a second header line, or a small <code>meta.csv</code>) so that a deleted highest id is never given again after a restart.</li>
 <li>⭐⭐ A binary backup with <code>DataOutputStream</code> (Chapter 9.C): write the count, then each item field by field; read it back mirror-wise, and compare the sizes of the two files.</li>
 </ul>
+<div class="callout"><p><strong>Right after this chapter — 🎓 LAB211 in practice:</strong> the same rules on real LAB211 labs (the shared skeleton, P0011, P0021, P0056), each one the version corrected after a real review.</p></div>
 <div class="callout"><p><strong>Next — the final project, CT Library 1.0:</strong> all three files, a report exported to a file, and the review checklist of LAB211 from start to end. After that, the same <code>IBookRepository</code> gets a third implementation on PostgreSQL — with <code>Main</code>, once more, unchanged.</p></div>`,
     `<h2>8. Thử thách thêm và việc tiếp theo</h2>
 <ul>
@@ -9010,6 +9011,7 @@ temp+move : crash -&gt; safe.csv still has 3 lines (the .tmp is the broken one)<
 <li>⭐ Giữ số thứ tự kế tiếp trong tệp (một dòng tiêu đề thứ hai, hoặc một tệp nhỏ <code>meta.csv</code>) để mã lớn nhất đã xoá không bao giờ được cấp lại sau khi khởi động lại.</li>
 <li>⭐⭐ Bản sao lưu nhị phân bằng <code>DataOutputStream</code> (Chương 9.C): ghi số lượng, rồi từng tài liệu theo từng trường; đọc về soi gương, và so kích thước hai tệp.</li>
 </ul>
+<div class="callout"><p><strong>Ngay sau chương này — 🎓 LAB211 thực chiến:</strong> đúng các luật này trên bài LAB211 thật (khung chung, P0011, P0021, P0056), bài nào cũng là bản đã sửa sau một lần review thật.</p></div>
 <div class="callout"><p><strong>Tiếp theo — dự án cuối khoá CT Library 1.0:</strong> đủ cả ba tệp, một báo cáo xuất ra tệp, và checklist review LAB211 từ đầu tới cuối. Sau đó, cùng <code>IBookRepository</code> có bản cài thứ ba trên PostgreSQL — và <code>Main</code>, một lần nữa, không đổi.</p></div>`),
   ].join('\n'),
 };

@@ -224,3 +224,29 @@ export function haiCua(opts = {}) {
   s += `<line x1="524" y1="${h / 2}" x2="584" y2="${h / 2}" stroke="#444" stroke-width="3" marker-end="url(#mtl2)"/><defs><marker id="mtl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>`;
   return s + '</svg>';
 }
+
+/**
+ * (pro-lab211) Ngắt dòng mã dài hơn `max` ký tự cho vừa cột slide: ưu tiên sau ", ", rồi trước " && " / " || ", rồi trước
+ * ".", rồi dấu cách; dòng nối thụt thêm 8. Chỉ để HIỂN THỊ (mã thật trong dự án không đổi — dòng ≤ 100 ký tự theo checklist).
+ */
+export function boc(src, max = 64) {
+  const out = [];
+  for (const line of src.split('\n')) {
+    let rest = line;
+    const ind = line.match(/^ */)[0].length;
+    let first = true;
+    while (rest.length > max) {
+      const head = rest.slice(0, max);
+      let cut = head.lastIndexOf(', ') + 2;
+      if (cut < ind + 12) cut = Math.max(head.lastIndexOf(' && '), head.lastIndexOf(' || ')) + 1;
+      if (cut < ind + 12) cut = head.lastIndexOf('.');
+      if (cut < ind + 12) cut = head.lastIndexOf(' ') + 1;
+      if (cut < ind + 12) break;
+      out.push(rest.slice(0, cut).replace(/\s+$/, ''));
+      rest = ' '.repeat(ind + 8) + rest.slice(cut).replace(/^\s+/, '');
+      first = false;
+    }
+    out.push(rest);
+  }
+  return out.join('\n');
+}

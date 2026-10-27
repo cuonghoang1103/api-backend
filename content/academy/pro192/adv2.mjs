@@ -976,7 +976,7 @@ Note: Recompile with -Xlint:unchecked for details.<br>
 <tr><td>6</td><td>Balance and account number settable from outside</td><td>probe 3</td><td>public setters</td><td>step 1</td></tr>
 <tr><td>7</td><td>Money stored as <code>double</code></td><td>probe 4</td><td>binary floating point</td><td>step 1 (<code>long</code> VND)</td></tr>
 <tr><td>8</td><td>Transfer to the same account</td><td>probe 5</td><td>missing rule</td><td>step 4</td></tr>
-<tr><td>9</td><td>"Last access" shows the current login</td><td>probe 1</td><td>overwritten before printed</td><td>exercise 4</td></tr>
+<tr><td>9</td><td>"Last access" shows the current login</td><td>probe 1</td><td>overwritten before printed</td><td>open exercise 4</td></tr>
 <tr><td>10</td><td>Password change logged with amount = balance</td><td>probe 6</td><td>copy-paste argument</td><td>step 2</td></tr>
 <tr><td>11</td><td>Model builds JTable rows; GUI column "Post Bal" shows the description</td><td>probe 7</td><td>model shaped by the view</td><td>steps 2–3</td></tr>
 <tr><td>12</td><td>Nothing is saved; counters restart at 1001</td><td>session 2</td><td>no file layer</td><td>step 6</td></tr>
@@ -997,7 +997,7 @@ Note: Recompile with -Xlint:unchecked for details.<br>
 <tr><td>6</td><td>Số dư và số tài khoản đặt được từ bên ngoài</td><td>dò 3</td><td>setter public</td><td>bước 1</td></tr>
 <tr><td>7</td><td>Tiền lưu bằng <code>double</code></td><td>dò 4</td><td>số thực dấu phẩy động nhị phân</td><td>bước 1 (<code>long</code> đồng)</td></tr>
 <tr><td>8</td><td>Chuyển cho chính tài khoản mình</td><td>dò 5</td><td>thiếu luật</td><td>bước 4</td></tr>
-<tr><td>9</td><td>"Last access" hiện chính lần đăng nhập này</td><td>dò 1</td><td>bị ghi đè trước khi in</td><td>bài tập 4</td></tr>
+<tr><td>9</td><td>"Last access" hiện chính lần đăng nhập này</td><td>dò 1</td><td>bị ghi đè trước khi in</td><td>bài tập mở 4</td></tr>
 <tr><td>10</td><td>Đổi mật khẩu ghi nhật ký với số tiền = số dư</td><td>dò 6</td><td>chép-dán đối số</td><td>bước 2</td></tr>
 <tr><td>11</td><td>Model dựng dòng cho JTable; cột "Post Bal" của GUI hiện mô tả</td><td>dò 7</td><td>model bị nặn theo giao diện</td><td>bước 2–3</td></tr>
 <tr><td>12</td><td>Không lưu gì; bộ đếm quay về 1001</td><td>phiên 2</td><td>không có tầng file</td><td>bước 6</td></tr>
@@ -2898,7 +2898,8 @@ public class BankService {
     private final AccountRepository accounts;
     public BankService(AccountRepository accounts) { this.accounts = accounts; }   // injected by Spring
 
-    @Transactional                                        // both updates commit together, or neither
+    @Transactional(rollbackFor = BankException.class)    // both updates commit together, or neither
+    // rollbackFor: by default Spring rolls back only on RuntimeException; BankException is checked
     public void transfer(int fromNo, int toNo, long amount) throws BankException {
         Account from = accounts.findById(fromNo).orElseThrow(() -&gt; new AccountNotFoundException(fromNo));
         Account to = accounts.findById(toNo).orElseThrow(() -&gt; new AccountNotFoundException(toNo));
@@ -2937,7 +2938,8 @@ public class BankService {
     private final AccountRepository accounts;
     public BankService(AccountRepository accounts) { this.accounts = accounts; }   // Spring tự truyền vào
 
-    @Transactional                                        // hai cập nhật cùng được ghi, hoặc không cái nào
+    @Transactional(rollbackFor = BankException.class)    // hai cập nhật cùng được ghi, hoặc không cái nào
+    // rollbackFor: mặc định Spring chỉ rollback khi gặp RuntimeException; BankException là checked
     public void transfer(int fromNo, int toNo, long amount) throws BankException {
         Account from = accounts.findById(fromNo).orElseThrow(() -&gt; new AccountNotFoundException(fromNo));
         Account to = accounts.findById(toNo).orElseThrow(() -&gt; new AccountNotFoundException(toNo));
@@ -2974,7 +2976,7 @@ Cùng những ý đó, từng bước, trong PRJ301: <a href="/courses/java-web-
 <tr><td><strong>immutable</strong></td><td>bất biến</td><td>An object whose fields can never change after construction (all final, no setters).</td></tr>
 <tr><td><strong>static factory method</strong></td><td>phương thức factory tĩnh</td><td>A static method such as Account.open() that validates and creates an object instead of a public constructor.</td></tr>
 <tr><td><strong>dependency injection</strong></td><td>tiêm phụ thuộc</td><td>Giving an object what it needs (repository, clock) through its constructor instead of creating it inside.</td></tr>
-<tr><td><strong>hash</strong></td><td>mã băm</td><td>A fixed-length fingerprint of a password; the password cannot be read back from it.</td></tr>
+<tr><td><strong>hash</strong></td><td>mã băm</td><td>A fixed-length fingerprint of a password; the password cannot be read back from it, but a weak password can still be guessed by trying a dictionary — hence a salted, slow hash such as BCrypt.</td></tr>
 <tr><td><strong>database transaction</strong></td><td>giao dịch cơ sở dữ liệu</td><td>A group of updates that are saved all together or not at all.</td></tr>
 </tbody>
 </table>`,
@@ -2994,7 +2996,7 @@ Cùng những ý đó, từng bước, trong PRJ301: <a href="/courses/java-web-
 <tr><td><strong>immutable</strong></td><td>bất biến</td><td>Đối tượng mà các trường không bao giờ đổi sau khi tạo (đều final, không setter).</td></tr>
 <tr><td><strong>static factory method</strong></td><td>phương thức factory tĩnh</td><td>Phương thức static như Account.open() kiểm tra rồi tạo đối tượng thay cho constructor public.</td></tr>
 <tr><td><strong>dependency injection</strong></td><td>tiêm phụ thuộc</td><td>Đưa cho đối tượng thứ nó cần (repository, đồng hồ) qua constructor thay vì tự tạo bên trong.</td></tr>
-<tr><td><strong>hash</strong></td><td>mã băm</td><td>Dấu vân tay độ dài cố định của mật khẩu; không thể đọc ngược ra mật khẩu từ nó.</td></tr>
+<tr><td><strong>hash</strong></td><td>mã băm</td><td>Dấu vân tay độ dài cố định của mật khẩu; không thể đọc ngược ra mật khẩu từ nó, nhưng mật khẩu yếu vẫn đoán được bằng cách thử cả một từ điển — vì thế dùng hàm băm có muối và chậm như BCrypt.</td></tr>
 <tr><td><strong>database transaction</strong></td><td>giao dịch cơ sở dữ liệu</td><td>Một nhóm cập nhật được lưu cùng lúc tất cả hoặc không cái nào.</td></tr>
 </tbody>
 </table>`),

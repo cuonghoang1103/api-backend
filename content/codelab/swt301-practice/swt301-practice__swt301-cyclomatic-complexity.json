@@ -1,0 +1,763 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-cyclomatic-complexity",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-cyclomatic-complexity"
+  },
+  "exercises": [
+    {
+      "title": "Cyclomatic 1 — V(G), minimum statement and decision tests of four snippets",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "cyclomatic complexity",
+        "minimum test set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>For each snippet give V(G) (= number of binary decisions + 1), the minimum number of tests for 100% statement coverage and for 100% decision coverage. Inputs are free (any array, any values).</p>\n<p><b>A</b></p><pre>if (a &gt; 0) { x = 1; }\nelse if (a &lt; 0) { x = -1; }\nelse { x = 0; }</pre><p><b>B</b></p><pre>if (p) x++;\nif (q) x++;\nif (r) x++;</pre><p><b>C</b></p><pre>let max = 0, i = 0;\nwhile (i &lt; arr.length) {\n  if (arr[i] &gt; max) max = arr[i];\n  i++;\n}</pre><p><b>D</b></p><pre>for (const x of arr) {\n  if (x % 2 === 0) {\n    if (x % 3 === 0) c6++;\n    else c2++;\n  }\n}</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi đoạn mã cho V(G) (= số quyết định nhị phân + 1), số test tối thiểu cho 100% statement coverage và cho 100% decision coverage. Input tuỳ chọn (mảng nào, giá trị nào cũng được).</p>\n<p><b>A</b></p><pre>if (a &gt; 0) { x = 1; }\nelse if (a &lt; 0) { x = -1; }\nelse { x = 0; }</pre><p><b>B</b></p><pre>if (p) x++;\nif (q) x++;\nif (r) x++;</pre><p><b>C</b></p><pre>let max = 0, i = 0;\nwhile (i &lt; arr.length) {\n  if (arr[i] &gt; max) max = arr[i];\n  i++;\n}</pre><p><b>D</b></p><pre>for (const x of arr) {\n  if (x % 2 === 0) {\n    if (x % 3 === 0) c6++;\n    else c2++;\n  }\n}</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "V(G) = số hình thoi + 1 (vòng while/for cũng là một quyết định).",
+        "Quy tắc bài 5.2: lồng hoàn toàn ⇒ DC = V(G); nối tiếp ⇒ DC thường = 2; vòng lặp ⇒ một test làm được nhiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 1 — V(G), minimum statement and decision tests of four snippets\n\nAnswer in the answer panel (no code needed).\n\n1. V(G) · min SC · min DCV(G) · SC tối thiểu · DC tối thiểu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 1 — V(G), minimum statement and decision tests of four snippets — answer key\n\n1. V(G) · min SC · min DCV(G) · SC tối thiểu · DC tối thiểu\n   - A.v: 3\n   - A.sc: 3\n   - A.dc: 3\n   - B.v: 4\n   - B.sc: 1\n   - B.dc: 2\n   - C.v: 3\n   - C.sc: 1\n   - C.dc: 1\n   - D.v: 4\n   - D.sc: 1\n   - D.dc: 1\n   A: nested decisions — every test ends in a different leaf ⇒ SC = DC = V(G) = 3. B: sequential IFs — one all-True test runs every statement, all-True + all-False gives DC. C and D: a loop lets one call take every outcome (e.g. arr = [3, 1] for C; arr = [6, 2, 1] for D).VI: A: quyết định lồng — mỗi test kết thúc ở một lá khác ⇒ SC = DC = V(G) = 3. B: IF nối tiếp — một test toàn True chạy mọi câu lệnh, toàn True + toàn False cho DC. C, D: vòng lặp cho một lần gọi đi qua mọi kết quả (vd arr = [3, 1] cho C; arr = [6, 2, 1] cho D).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A 3/3/3 · B 4/1/2 · C 3/1/1 · D 4/1/1. Rule: min SC ≤ min DC ≤ V(G).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>V(G) · min SC · min DC</p><p style=\"opacity:.75;font-size:.92em\"><i>V(G) · SC tối thiểu · DC tối thiểu</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Snippet"
+              },
+              {
+                "ma": "v",
+                "ten": "V(G)"
+              },
+              {
+                "ma": "sc",
+                "ten": "Min tests 100% SC"
+              },
+              {
+                "ma": "dc",
+                "ten": "Min tests 100% DC"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "A",
+                "o": {
+                  "s": "A"
+                }
+              },
+              {
+                "ma": "B",
+                "o": {
+                  "s": "B"
+                }
+              },
+              {
+                "ma": "C",
+                "o": {
+                  "s": "C"
+                }
+              },
+              {
+                "ma": "D",
+                "o": {
+                  "s": "D"
+                }
+              }
+            ],
+            "dapAn": {
+              "A.v": "3",
+              "A.sc": "3",
+              "A.dc": "3",
+              "B.v": "4",
+              "B.sc": "1",
+              "B.dc": "2",
+              "C.v": "3",
+              "C.sc": "1",
+              "C.dc": "1",
+              "D.v": "4",
+              "D.sc": "1",
+              "D.dc": "1"
+            },
+            "giaiThich": "<p>A: nested decisions — every test ends in a different leaf ⇒ SC = DC = V(G) = 3. B: sequential IFs — one all-True test runs every statement, all-True + all-False gives DC. C and D: a loop lets one call take every outcome (e.g. arr = [3, 1] for C; arr = [6, 2, 1] for D).</p><p><i>VI: A: quyết định lồng — mỗi test kết thúc ở một lá khác ⇒ SC = DC = V(G) = 3. B: IF nối tiếp — một test toàn True chạy mọi câu lệnh, toàn True + toàn False cho DC. C, D: vòng lặp cho một lần gọi đi qua mọi kết quả (vd arr = [3, 1] cho C; arr = [6, 2, 1] cho D).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên tính điều kiện vòng lặp là một quyết định."
+        },
+        {
+          "loi": "Cho rằng min DC luôn bằng V(G)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        },
+        {
+          "en": "statement coverage",
+          "vi": "độ phủ câu lệnh (C0)"
+        },
+        {
+          "en": "decision (branch) coverage",
+          "vi": "độ phủ quyết định / nhánh (C1)"
+        }
+      ]
+    },
+    {
+      "title": "Cyclomatic 2 — Read the CFG: nodes, edges, V(G) and the minimum tests",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "control-flow graph",
+        "cyclomatic complexity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The control-flow graph of <code>countPass</code> is drawn below (node 9 is the exit). Answer from the graph and the code.</p><pre> 1  int countPass(int[] scores, int passMark) {\n 2      int pass = 0;\n 3      for (int i = 0; i &lt; scores.length; i++) {\n 4          if (scores[i] &lt; 0 || scores[i] &gt; 10) {\n 5              throw new IllegalArgumentException(\"score out of range\");\n 6          }\n 7          if (scores[i] &gt;= passMark) {\n 8              pass++;\n 9          }\n10      }\n11      return pass;\n12  }</pre><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 470\" width=\"100%\" style=\"max-width:560px;display:block;margin:8px auto\" role=\"img\" aria-label=\"CFG of countPass (node numbers are used in the answers)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"560\" height=\"470\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"280\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">CFG of countPass (node numbers are used in the answers)</text><path d=\"M200.0,67.0 L200.0,103.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M200.0,147.0 L200.0,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"156.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"168.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M176.5,138.4 L89.8,188.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125.9\" y=\"154.2\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"133.1\" y=\"166.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M270.0,205.0 L375.0,205.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"315.3\" y=\"196.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"322.5\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,227.0 L200.0,263.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"236.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"248.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M230.8,296.6 L315.0,328.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"265.7\" y=\"303.3\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"272.9\" y=\"315.8\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,307.0 L200.0,383.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"336.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"348.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M315.0,360.5 L240.0,386.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M240.0,400.0 L300,400 L300,125 L260.0,125.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M465.0,205.0 L500,205 L500,440 L76.0,440.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M60.0,222.0 L60.0,424.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125\" y=\"33\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">1  pass = 0; i = 0</text><polygon points=\"200,103 260,125 200,147 140,125\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"129.0\" text-anchor=\"middle\" fill=\"#111827\">2  i &lt; length</text><polygon points=\"200,183 270,205 200,227 130,205\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">3  out of range?</text><rect x=\"375\" y=\"188\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">4  throw</text><polygon points=\"200,263 265,285 200,307 135,285\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\">5  ≥ passMark?</text><rect x=\"315\" y=\"328\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"360\" y=\"349.0\" text-anchor=\"middle\" fill=\"#111827\">6  pass++</text><rect x=\"160\" y=\"383\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"404.0\" text-anchor=\"middle\" fill=\"#111827\">7  i++</text><rect x=\"20\" y=\"188\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"60\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">8  return</text><circle cx=\"60\" cy=\"440\" r=\"16\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><circle cx=\"60\" cy=\"440\" r=\"12\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.2\"/><text x=\"60\" y=\"444.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">9</text></svg>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị luồng điều khiển của <code>countPass</code> vẽ bên dưới (node 9 là điểm thoát). Trả lời theo đồ thị và mã.</p><pre> 1  int countPass(int[] scores, int passMark) {\n 2      int pass = 0;\n 3      for (int i = 0; i &lt; scores.length; i++) {\n 4          if (scores[i] &lt; 0 || scores[i] &gt; 10) {\n 5              throw new IllegalArgumentException(\"score out of range\");\n 6          }\n 7          if (scores[i] &gt;= passMark) {\n 8              pass++;\n 9          }\n10      }\n11      return pass;\n12  }</pre><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 470\" width=\"100%\" style=\"max-width:560px;display:block;margin:8px auto\" role=\"img\" aria-label=\"CFG of countPass (node numbers are used in the answers)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"560\" height=\"470\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"280\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">CFG of countPass (node numbers are used in the answers)</text><path d=\"M200.0,67.0 L200.0,103.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M200.0,147.0 L200.0,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"156.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"168.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M176.5,138.4 L89.8,188.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125.9\" y=\"154.2\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"133.1\" y=\"166.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M270.0,205.0 L375.0,205.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"315.3\" y=\"196.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"322.5\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,227.0 L200.0,263.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"236.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"248.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M230.8,296.6 L315.0,328.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"265.7\" y=\"303.3\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"272.9\" y=\"315.8\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,307.0 L200.0,383.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"336.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"348.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M315.0,360.5 L240.0,386.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M240.0,400.0 L300,400 L300,125 L260.0,125.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M465.0,205.0 L500,205 L500,440 L76.0,440.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M60.0,222.0 L60.0,424.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125\" y=\"33\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">1  pass = 0; i = 0</text><polygon points=\"200,103 260,125 200,147 140,125\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"129.0\" text-anchor=\"middle\" fill=\"#111827\">2  i &lt; length</text><polygon points=\"200,183 270,205 200,227 130,205\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">3  out of range?</text><rect x=\"375\" y=\"188\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">4  throw</text><polygon points=\"200,263 265,285 200,307 135,285\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\">5  ≥ passMark?</text><rect x=\"315\" y=\"328\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"360\" y=\"349.0\" text-anchor=\"middle\" fill=\"#111827\">6  pass++</text><rect x=\"160\" y=\"383\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"404.0\" text-anchor=\"middle\" fill=\"#111827\">7  i++</text><rect x=\"20\" y=\"188\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"60\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">8  return</text><circle cx=\"60\" cy=\"440\" r=\"16\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><circle cx=\"60\" cy=\"440\" r=\"12\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.2\"/><text x=\"60\" y=\"444.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">9</text></svg>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm cạnh theo mũi tên, kể cả cạnh quay lại 7 → 2 và hai cạnh vào node thoát 9.",
+        "Điều kiện ghép ở node 3 vẫn là MỘT quyết định khi đếm V(G) theo hình thoi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 2 — Read the CFG: nodes, edges, V(G) and the minimum tests\n\nAnswer in the answer panel (no code needed).\n\n1. Metrics of the CFGCác chỉ số của CFG\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 2 — Read the CFG: nodes, edges, V(G) and the minimum tests — answer key\n\n1. Metrics of the CFGCác chỉ số của CFG\n   - n.v: 9\n   - e.v: 11\n   - p.v: 3\n   - v1.v: 4\n   - v2.v: 4\n   - sc.v: 2\n   - dc.v: 2\n   11 − 9 + 2 = 4 = 3 + 1. The throw ends a call, so it needs its own test; one more call such as scores = [3, 8], passMark = 5 takes every remaining outcome (loop True/False, range False, ≥ True and False). Min SC = min DC = 2 VI: 11 − 9 + 2 = 4 = 3 + 1. Lệnh throw kết thúc lần gọi nên cần một test riêng; thêm một lần gọi như scores = [3, 8], passMark = 5 đi qua mọi kết quả còn lại. Min SC = min DC = 2\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>N 9 · E 11 · P 3 · V(G) 4 (both formulas) · min SC 2 · min DC 2.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Metrics of the CFG</p><p style=\"opacity:.75;font-size:.92em\"><i>Các chỉ số của CFG</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Metric"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "n",
+                "o": {
+                  "m": "Number of nodes N"
+                }
+              },
+              {
+                "ma": "e",
+                "o": {
+                  "m": "Number of edges E"
+                }
+              },
+              {
+                "ma": "p",
+                "o": {
+                  "m": "Number of decision (predicate) nodes P"
+                }
+              },
+              {
+                "ma": "v1",
+                "o": {
+                  "m": "V(G) = E − N + 2"
+                }
+              },
+              {
+                "ma": "v2",
+                "o": {
+                  "m": "V(G) = P + 1"
+                }
+              },
+              {
+                "ma": "sc",
+                "o": {
+                  "m": "Minimum tests for 100% statement coverage"
+                }
+              },
+              {
+                "ma": "dc",
+                "o": {
+                  "m": "Minimum tests for 100% decision coverage"
+                }
+              }
+            ],
+            "dapAn": {
+              "n.v": "9",
+              "e.v": "11",
+              "p.v": "3",
+              "v1.v": "4",
+              "v2.v": "4",
+              "sc.v": "2",
+              "dc.v": "2"
+            },
+            "giaiThich": "<p>11 − 9 + 2 = 4 = 3 + 1. The throw ends a call, so it needs its own test; one more call such as scores = [3, 8], passMark = 5 takes every remaining outcome (loop True/False, range False, ≥ True and False). Min SC = min DC = 2 < V(G) = 4.</p><p><i>VI: 11 − 9 + 2 = 4 = 3 + 1. Lệnh throw kết thúc lần gọi nên cần một test riêng; thêm một lần gọi như scores = [3, 8], passMark = 5 đi qua mọi kết quả còn lại. Min SC = min DC = 2 < V(G) = 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên cạnh 7 → 2 (vòng lặp) ⇒ E = 10."
+        },
+        {
+          "loi": "Cho rằng min DC = V(G) = 4 — vòng lặp cho phép một test đi nhiều nhánh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "control-flow graph (CFG)",
+          "vi": "đồ thị luồng điều khiển"
+        },
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        }
+      ]
+    },
+    {
+      "title": "Cyclomatic 3 — Write the basis (linearly independent) paths of countPass",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "basis path testing",
+        "cyclomatic complexity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>V(G) is also the number of <b>basis paths</b>. List V(G) paths of the CFG above (node numbers, from 1 to 9) using the baseline method: each new path must add at least one edge that no earlier path used, and together they must cover every edge.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 470\" width=\"100%\" style=\"max-width:560px;display:block;margin:8px auto\" role=\"img\" aria-label=\"CFG of countPass (node numbers are used in the answers)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"560\" height=\"470\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"280\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">CFG of countPass (node numbers are used in the answers)</text><path d=\"M200.0,67.0 L200.0,103.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M200.0,147.0 L200.0,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"156.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"168.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M176.5,138.4 L89.8,188.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125.9\" y=\"154.2\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"133.1\" y=\"166.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M270.0,205.0 L375.0,205.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"315.3\" y=\"196.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"322.5\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,227.0 L200.0,263.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"236.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"248.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M230.8,296.6 L315.0,328.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"265.7\" y=\"303.3\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"272.9\" y=\"315.8\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,307.0 L200.0,383.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"336.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"348.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M315.0,360.5 L240.0,386.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M240.0,400.0 L300,400 L300,125 L260.0,125.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M465.0,205.0 L500,205 L500,440 L76.0,440.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M60.0,222.0 L60.0,424.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125\" y=\"33\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">1  pass = 0; i = 0</text><polygon points=\"200,103 260,125 200,147 140,125\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"129.0\" text-anchor=\"middle\" fill=\"#111827\">2  i &lt; length</text><polygon points=\"200,183 270,205 200,227 130,205\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">3  out of range?</text><rect x=\"375\" y=\"188\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">4  throw</text><polygon points=\"200,263 265,285 200,307 135,285\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\">5  ≥ passMark?</text><rect x=\"315\" y=\"328\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"360\" y=\"349.0\" text-anchor=\"middle\" fill=\"#111827\">6  pass++</text><rect x=\"160\" y=\"383\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"404.0\" text-anchor=\"middle\" fill=\"#111827\">7  i++</text><rect x=\"20\" y=\"188\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"60\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">8  return</text><circle cx=\"60\" cy=\"440\" r=\"16\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><circle cx=\"60\" cy=\"440\" r=\"12\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.2\"/><text x=\"60\" y=\"444.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">9</text></svg><p>Edges: 1→2, 2→3, 2→8, 3→4, 3→5, 4→9, 5→6, 5→7, 6→7, 7→2, 8→9.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>PATHS = [[1, 2, 8, 9], …]</code> — exactly V(G) paths, each a valid walk from 1 to 9 (a loop may be taken).</li>\n</ul>",
+      "problemHtmlVi": "<p>V(G) cũng là số <b>đường cơ sở</b> (basis path). Liệt kê V(G) đường của CFG trên (số node, từ 1 tới 9) theo phương pháp baseline: mỗi đường mới phải thêm ít nhất một cạnh chưa đường nào trước đó dùng, và gộp lại phải phủ mọi cạnh.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 470\" width=\"100%\" style=\"max-width:560px;display:block;margin:8px auto\" role=\"img\" aria-label=\"CFG of countPass (node numbers are used in the answers)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"560\" height=\"470\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"280\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">CFG of countPass (node numbers are used in the answers)</text><path d=\"M200.0,67.0 L200.0,103.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M200.0,147.0 L200.0,183.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"156.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"168.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M176.5,138.4 L89.8,188.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125.9\" y=\"154.2\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"133.1\" y=\"166.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M270.0,205.0 L375.0,205.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"315.3\" y=\"196.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"322.5\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,227.0 L200.0,263.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"236.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"248.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M230.8,296.6 L315.0,328.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"265.7\" y=\"303.3\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"272.9\" y=\"315.8\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T</text><path d=\"M200.0,307.0 L200.0,383.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"192.8\" y=\"336.0\" width=\"14.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"200.0\" y=\"348.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">F</text><path d=\"M315.0,360.5 L240.0,386.3\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M240.0,400.0 L300,400 L300,125 L260.0,125.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M465.0,205.0 L500,205 L500,440 L76.0,440.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M60.0,222.0 L60.0,424.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"125\" y=\"33\" width=\"150\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">1  pass = 0; i = 0</text><polygon points=\"200,103 260,125 200,147 140,125\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"129.0\" text-anchor=\"middle\" fill=\"#111827\">2  i &lt; length</text><polygon points=\"200,183 270,205 200,227 130,205\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">3  out of range?</text><rect x=\"375\" y=\"188\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"420\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">4  throw</text><polygon points=\"200,263 265,285 200,307 135,285\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\">5  ≥ passMark?</text><rect x=\"315\" y=\"328\" width=\"90\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"360\" y=\"349.0\" text-anchor=\"middle\" fill=\"#111827\">6  pass++</text><rect x=\"160\" y=\"383\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"200\" y=\"404.0\" text-anchor=\"middle\" fill=\"#111827\">7  i++</text><rect x=\"20\" y=\"188\" width=\"80\" height=\"34\" rx=\"5\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"60\" y=\"209.0\" text-anchor=\"middle\" fill=\"#111827\">8  return</text><circle cx=\"60\" cy=\"440\" r=\"16\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><circle cx=\"60\" cy=\"440\" r=\"12\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.2\"/><text x=\"60\" y=\"444.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">9</text></svg><p>Các cạnh: 1→2, 2→3, 2→8, 3→4, 3→5, 4→9, 5→6, 5→7, 6→7, 7→2, 8→9.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>PATHS = [[1, 2, 8, 9], …]</code> — đúng V(G) đường, mỗi đường là một lối đi hợp lệ từ 1 tới 9 (được đi vòng).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "[1, 2, 3, 4, 9]",
+          "output": "a score out of range throws",
+          "explanation": "Adds edges 2→3, 3→4, 4→9.|||Thêm cạnh 2→3, 3→4, 4→9."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu bằng đường ngắn nhất (mảng rỗng): 1 → 2 → 8 → 9.",
+        "Mỗi đường sau đổi MỘT quyết định so với đường trước: ném lỗi; điểm dưới chuẩn (5 → 7 → 2); điểm đạt (5 → 6 → 7)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Node numbers from the CFG. Each path starts at 1 and ends at 9.\nconst PATHS = [\n  [1, 2, 8, 9],\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// V(G) = 4 basis paths; each adds at least one new edge.\nconst PATHS = [\n  [1, 2, 8, 9],                 // empty array\n  [1, 2, 3, 4, 9],              // a score out of range → throw\n  [1, 2, 3, 5, 7, 2, 8, 9],     // one score below passMark\n  [1, 2, 3, 5, 6, 7, 2, 8, 9],  // one passing score\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1-2-8-9 (empty array) · 1-2-3-4-9 (invalid score) · 1-2-3-5-7-2-8-9 (one failing score) · 1-2-3-5-6-7-2-8-9 (one passing score). Every edge is used and each path adds a new edge.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every path is a valid walk from 1 to 9",
+              "vi": "Mọi đường là lối đi hợp lệ từ 1 tới 9"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=[\"1>2\",\"2>3\",\"2>8\",\"3>4\",\"3>5\",\"4>9\",\"5>6\",\"5>7\",\"6>7\",\"7>2\",\"8>9\"];if(!Array.isArray(PATHS)||!PATHS.length)return\"PATHS must be an array of node arrays\";for(let n=0;n<PATHS.length;n++){const r=PATHS[n];if(!Array.isArray(r)||r[0]!==1||r[r.length-1]!==9)return\"path #\"+(n+1)+\" must start at 1 and end at 9\";for(let t=1;t<r.length;t++)if(e.indexOf(r[t-1]+\">\"+r[t])<0)return\"path #\"+(n+1)+\": there is no edge \"+r[t-1]+\"\\u2192\"+r[t]}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Exactly V(G) = 4 paths",
+              "vi": "Đúng V(G) = 4 đường"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=[\"1>2\",\"2>3\",\"2>8\",\"3>4\",\"3>5\",\"4>9\",\"5>6\",\"5>7\",\"6>7\",\"7>2\",\"8>9\"];if(!Array.isArray(PATHS)||!PATHS.length)return\"PATHS must be an array of node arrays\";for(let n=0;n<PATHS.length;n++){const t=PATHS[n];if(!Array.isArray(t)||t[0]!==1||t[t.length-1]!==9)return\"path #\"+(n+1)+\" must start at 1 and end at 9\";for(let r=1;r<t.length;r++)if(e.indexOf(t[r-1]+\">\"+t[r])<0)return\"path #\"+(n+1)+\": there is no edge \"+t[r-1]+\"\\u2192\"+t[r]}return PATHS.length===4?\"OK\":PATHS.length+\" paths \\u2014 V(G) = E \\u2212 N + 2 = 4\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Each path adds at least one new edge",
+              "vi": "Mỗi đường thêm ít nhất một cạnh mới"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const s=[\"1>2\",\"2>3\",\"2>8\",\"3>4\",\"3>5\",\"4>9\",\"5>6\",\"5>7\",\"6>7\",\"7>2\",\"8>9\"];if(!Array.isArray(PATHS)||!PATHS.length)return\"PATHS must be an array of node arrays\";for(let e=0;e<PATHS.length;e++){const t=PATHS[e];if(!Array.isArray(t)||t[0]!==1||t[t.length-1]!==9)return\"path #\"+(e+1)+\" must start at 1 and end at 9\";for(let n=1;n<t.length;n++)if(s.indexOf(t[n-1]+\">\"+t[n])<0)return\"path #\"+(e+1)+\": there is no edge \"+t[n-1]+\"\\u2192\"+t[n]}const a=new Set;for(let e=0;e<PATHS.length;e++){const t=PATHS[e];let n=!1;for(let r=1;r<t.length;r++){const o=t[r-1]+\">\"+t[r];a.has(o)||(n=!0,a.add(o))}if(!n)return\"path #\"+(e+1)+\" adds no new edge \\u2014 it is not independent\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Together the paths cover all 11 edges",
+              "vi": "Gộp lại các đường phủ đủ 11 cạnh"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const n=[\"1>2\",\"2>3\",\"2>8\",\"3>4\",\"3>5\",\"4>9\",\"5>6\",\"5>7\",\"6>7\",\"7>2\",\"8>9\"];if(!Array.isArray(PATHS)||!PATHS.length)return\"PATHS must be an array of node arrays\";for(let t=0;t<PATHS.length;t++){const e=PATHS[t];if(!Array.isArray(e)||e[0]!==1||e[e.length-1]!==9)return\"path #\"+(t+1)+\" must start at 1 and end at 9\";for(let r=1;r<e.length;r++)if(n.indexOf(e[r-1]+\">\"+e[r])<0)return\"path #\"+(t+1)+\": there is no edge \"+e[r-1]+\"\\u2192\"+e[r]}const a=new Set;PATHS.forEach(t=>{for(let e=1;e<t.length;e++)a.add(t[e-1]+\">\"+t[e])});const o=n.filter(t=>!a.has(t));return o.length?\"edges not covered: \"+o.map(t=>t.replace(\">\",\"\\u2192\")).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đường có hai node liền nhau không nối bằng cạnh (vd 5 → 9)."
+        },
+        {
+          "loi": "Viết 5 đường — số đường cơ sở đúng bằng V(G) = 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "control-flow graph (CFG)",
+          "vi": "đồ thị luồng điều khiển"
+        },
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        },
+        {
+          "en": "basis path",
+          "vi": "đường cơ sở — một trong V(G) đường độc lập tuyến tính phủ mọi cạnh"
+        }
+      ]
+    },
+    {
+      "title": "Cyclomatic 4 — The classic triangle: V(G) and the minimum test set",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "cyclomatic complexity",
+        "minimum test set"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>The classic exercise of every testing course. Sides must be positive (<code>INVALID</code>); they must satisfy the triangle inequality (<code>NOT_A_TRIANGLE</code>); then the triangle is <code>EQUILATERAL</code>, <code>ISOSCELES</code> or <code>SCALENE</code>. Give V(G) and the minimum tests for 100% statement AND decision coverage, with the expected result of each.</p><pre>1  function classifyTriangle(a, b, c) {\n2    if (a &lt;= 0 || b &lt;= 0 || c &lt;= 0) { return 'INVALID'; }\n3    if (a + b &lt;= c || a + c &lt;= b || b + c &lt;= a) { return 'NOT_A_TRIANGLE'; }\n4    if (a === b &amp;&amp; b === c) { return 'EQUILATERAL'; }\n5    if (a === b || b === c || a === c) { return 'ISOSCELES'; }\n6    return 'SCALENE';\n7  }</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>VG = …</code> and <code>TESTS = [{ id, input: { a, b, c }, expected }]</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài kinh điển của mọi khoá kiểm thử. Cạnh phải dương (<code>INVALID</code>); phải thoả bất đẳng thức tam giác (<code>NOT_A_TRIANGLE</code>); rồi tam giác là <code>EQUILATERAL</code>, <code>ISOSCELES</code> hoặc <code>SCALENE</code>. Cho V(G) và số test tối thiểu cho 100% statement VÀ decision coverage, kèm kết quả mong đợi.</p><pre>1  function classifyTriangle(a, b, c) {\n2    if (a &lt;= 0 || b &lt;= 0 || c &lt;= 0) { return 'INVALID'; }\n3    if (a + b &lt;= c || a + c &lt;= b || b + c &lt;= a) { return 'NOT_A_TRIANGLE'; }\n4    if (a === b &amp;&amp; b === c) { return 'EQUILATERAL'; }\n5    if (a === b || b === c || a === c) { return 'ISOSCELES'; }\n6    return 'SCALENE';\n7  }</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>VG = …</code> và <code>TESTS = [{ id, input: { a, b, c }, expected }]</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ a: 3, b: 4, c: 5 }",
+          "output": "'SCALENE'",
+          "explanation": "Every decision False.|||Mọi quyết định False."
+        }
+      ],
+      "hintsJson": [
+        "Năm câu return loại trừ nhau ⇒ statement coverage cần 5 test.",
+        "Chuỗi IF có return sớm cư xử như IF lồng: DC = V(G) = 4 quyết định + 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const VG = 0;\n\nconst TESTS = [\n  { id: 'T1', input: { a: 3, b: 4, c: 5 }, expected: 'SCALENE' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const VG = 5; // 4 decisions + 1\n\n// One test per return statement: SC = DC = V(G) = 5 (early returns behave like nested IFs).\nconst TESTS = [\n  { id: 'T1', input: { a: 0, b: 1, c: 1 }, expected: 'INVALID' },\n  { id: 'T2', input: { a: 1, b: 2, c: 3 }, expected: 'NOT_A_TRIANGLE' },\n  { id: 'T3', input: { a: 2, b: 2, c: 2 }, expected: 'EQUILATERAL' },\n  { id: 'T4', input: { a: 2, b: 2, c: 3 }, expected: 'ISOSCELES' },\n  { id: 'T5', input: { a: 3, b: 4, c: 5 }, expected: 'SCALENE' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>V(G) = 4 + 1 = 5; five tests, one per return: (0, 1, 1) INVALID · (1, 2, 3) NOT_A_TRIANGLE · (2, 2, 2) EQUILATERAL · (2, 2, 3) ISOSCELES · (3, 4, 5) SCALENE.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "V(G) is right",
+              "vi": "V(G) đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return VG===5?\"OK\":\"not right \\u2014 count the decisions (diamonds) and add 1\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "100% statement coverage",
+              "vi": "Phủ 100% câu lệnh (statement coverage)"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction classifyTriangle(a, b, c) {\n  $s('S1'); if ($d('D1', a <= 0 || b <= 0 || c <= 0)) { $s('S2'); return 'INVALID'; }\n  $s('S3'); if ($d('D2', a + b <= c || a + c <= b || b + c <= a)) { $s('S4'); return 'NOT_A_TRIANGLE'; }\n  $s('S5'); if ($d('D3', a === b && b === c)) { $s('S6'); return 'EQUILATERAL'; }\n  $s('S7'); if ($d('D4', a === b || b === c || a === c)) { $s('S8'); return 'ISOSCELES'; }\n  $s('S9'); return 'SCALENE';\n}\nconst __spec = classifyTriangle;\nconst __TS = [\"a\",\"b\",\"c\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(classifyTriangle, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":2,\"S3\":3,\"S4\":3,\"S5\":4,\"S6\":4,\"S7\":5,\"S8\":5,\"S9\":6}, DD = {\"D1\":2,\"D2\":3,\"D3\":4,\"D4\":5}, ND = {\"D1\":\"if (a <= 0 || b <= 0 || c <= 0) { return 'INVALID'; }\",\"D2\":\"if (a + b <= c || a + c <= b || b + c <= a) { return 'NOT_A_\",\"D3\":\"if (a === b && b === c) { return 'EQUILATERAL'; }\",\"D4\":\"if (a === b || b === c || a === c) { return 'ISOSCELES'; }\"};\n  function viec(k) {\n\n    var thieu = S.filter(function (s) { return !__C.s[s]; });\n    if (!thieu.length) return 'OK';\n    return 'statement coverage ' + Math.round(100 * (S.length - thieu.length) / S.length) + '% — never executed: line ' + thieu.map(function (s) { return DS[s]; }).join(', line ');\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "100% decision (branch) coverage — every decision both TRUE and FALSE",
+              "vi": "Phủ 100% quyết định (nhánh) — mọi quyết định đều nhận cả TRUE lẫn FALSE"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction classifyTriangle(a, b, c) {\n  $s('S1'); if ($d('D1', a <= 0 || b <= 0 || c <= 0)) { $s('S2'); return 'INVALID'; }\n  $s('S3'); if ($d('D2', a + b <= c || a + c <= b || b + c <= a)) { $s('S4'); return 'NOT_A_TRIANGLE'; }\n  $s('S5'); if ($d('D3', a === b && b === c)) { $s('S6'); return 'EQUILATERAL'; }\n  $s('S7'); if ($d('D4', a === b || b === c || a === c)) { $s('S8'); return 'ISOSCELES'; }\n  $s('S9'); return 'SCALENE';\n}\nconst __spec = classifyTriangle;\nconst __TS = [\"a\",\"b\",\"c\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(classifyTriangle, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":2,\"S3\":3,\"S4\":3,\"S5\":4,\"S6\":4,\"S7\":5,\"S8\":5,\"S9\":6}, DD = {\"D1\":2,\"D2\":3,\"D3\":4,\"D4\":5}, ND = {\"D1\":\"if (a <= 0 || b <= 0 || c <= 0) { return 'INVALID'; }\",\"D2\":\"if (a + b <= c || a + c <= b || b + c <= a) { return 'NOT_A_\",\"D3\":\"if (a === b && b === c) { return 'EQUILATERAL'; }\",\"D4\":\"if (a === b || b === c || a === c) { return 'ISOSCELES'; }\"};\n  function viec(k) {\n\n    var thieu = [];\n    D.forEach(function (x) { var o = __C.d[x] || { t: 0, f: 0 }; if (!o.t) thieu.push('line ' + DD[x] + ' (' + ND[x] + ') never TRUE'); if (!o.f) thieu.push('line ' + DD[x] + ' (' + ND[x] + ') never FALSE'); });\n    if (!thieu.length) return 'OK';\n    return 'decision coverage ' + Math.round(100 * (2 * D.length - thieu.length) / (2 * D.length)) + '% — ' + thieu.join('; ');\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Minimal set: exactly the minimum number of test cases (no redundant ones)",
+              "vi": "Bộ tối thiểu: đúng số ca tối thiểu (không ca thừa)"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction classifyTriangle(a, b, c) {\n  $s('S1'); if ($d('D1', a <= 0 || b <= 0 || c <= 0)) { $s('S2'); return 'INVALID'; }\n  $s('S3'); if ($d('D2', a + b <= c || a + c <= b || b + c <= a)) { $s('S4'); return 'NOT_A_TRIANGLE'; }\n  $s('S5'); if ($d('D3', a === b && b === c)) { $s('S6'); return 'EQUILATERAL'; }\n  $s('S7'); if ($d('D4', a === b || b === c || a === c)) { $s('S8'); return 'ISOSCELES'; }\n  $s('S9'); return 'SCALENE';\n}\nconst __spec = classifyTriangle;\nconst __TS = [\"a\",\"b\",\"c\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(classifyTriangle, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":2,\"S3\":3,\"S4\":3,\"S5\":4,\"S6\":4,\"S7\":5,\"S8\":5,\"S9\":6}, DD = {\"D1\":2,\"D2\":3,\"D3\":4,\"D4\":5}, ND = {\"D1\":\"if (a <= 0 || b <= 0 || c <= 0) { return 'INVALID'; }\",\"D2\":\"if (a + b <= c || a + c <= b || b + c <= a) { return 'NOT_A_\",\"D3\":\"if (a === b && b === c) { return 'EQUILATERAL'; }\",\"D4\":\"if (a === b || b === c || a === c) { return 'ISOSCELES'; }\"};\n  function viec(k) {\n\n    if (__T.length > 5) return __T.length + ' test cases — the target can be reached with fewer. Remove the redundant ones.';\n    if (__T.length < 5) return __T.length + ' test cases — not enough to satisfy every coverage criterion above.';\n    return 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every \"expected\" value comes from the SPECIFICATION",
+              "vi": "Mọi giá trị \"expected\" lấy từ ĐẶC TẢ"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction classifyTriangle(a, b, c) {\n  $s('S1'); if ($d('D1', a <= 0 || b <= 0 || c <= 0)) { $s('S2'); return 'INVALID'; }\n  $s('S3'); if ($d('D2', a + b <= c || a + c <= b || b + c <= a)) { $s('S4'); return 'NOT_A_TRIANGLE'; }\n  $s('S5'); if ($d('D3', a === b && b === c)) { $s('S6'); return 'EQUILATERAL'; }\n  $s('S7'); if ($d('D4', a === b || b === c || a === c)) { $s('S8'); return 'ISOSCELES'; }\n  $s('S9'); return 'SCALENE';\n}\nconst __spec = classifyTriangle;\nconst __TS = [\"a\",\"b\",\"c\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(classifyTriangle, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":2,\"S3\":3,\"S4\":3,\"S5\":4,\"S6\":4,\"S7\":5,\"S8\":5,\"S9\":6}, DD = {\"D1\":2,\"D2\":3,\"D3\":4,\"D4\":5}, ND = {\"D1\":\"if (a <= 0 || b <= 0 || c <= 0) { return 'INVALID'; }\",\"D2\":\"if (a + b <= c || a + c <= b || b + c <= a) { return 'NOT_A_\",\"D3\":\"if (a === b && b === c) { return 'EQUILATERAL'; }\",\"D4\":\"if (a === b || b === c || a === c) { return 'ISOSCELES'; }\"};\n  function viec(k) {\n\n    var sai = [];\n    __T.forEach(function (t, i) { var e = __goi(__spec, args[i]); if (!('expected' in t)) sai.push((t.id || '#' + (i + 1)) + ': missing \"expected\"'); else if (!__bang(t.expected, e)) sai.push((t.id || '#' + (i + 1)) + ': expected ' + __chuan(t.expected) + ' but the specification gives ' + __chuan(e)); });\n    return sai.length ? sai.slice(0, 3).join(' | ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm mỗi điều kiện con (a <= 0, b <= 0…) thành một quyết định ⇒ V(G) sai (bài này đếm theo hình thoi)."
+        },
+        {
+          "loi": "Chọn (1, 2, 3) cho SCALENE — 1 + 2 = 3 nên là NOT_A_TRIANGLE."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        },
+        {
+          "en": "statement coverage",
+          "vi": "độ phủ câu lệnh (C0)"
+        },
+        {
+          "en": "decision (branch) coverage",
+          "vi": "độ phủ quyết định / nhánh (C1)"
+        }
+      ]
+    },
+    {
+      "title": "Cyclomatic 5 — Questions on V(G) and minimum test sets",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "cyclomatic complexity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions in the style of SWT4 slides 98–99 and the PE: compute V(G), compare it with the minimum test sets and interpret it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu theo kiểu slide SWT4 98–99 và đề PE: tính V(G), so với bộ test tối thiểu và diễn giải ý nghĩa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "V(G) = E − N + 2 = P + 1.",
+        "min SC ≤ min DC ≤ V(G)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 5 — Questions on V(G) and minimum test sets\n\nAnswer in the answer panel (no code needed).\n\n1. A control-flow graph has 10 nodes and 12 edges. What is V(G)?CFG có 10 node và 12 cạnh. V(G) là bao nhiêu?\n2. Which relation always holds (when every basis path is feasible)?Quan hệ nào luôn đúng (khi mọi basis path đều khả thi)?\n3. Three fully nested IF-ELSE decisions. Minimum tests for 100% decision coverage?Ba quyết định IF-ELSE lồng hoàn toàn. Số test tối thiểu cho 100% decision coverage?\n4. What does V(G) count?V(G) đếm cái gì?\n5. A function has a loop with two IFs inside it (V(G) = 4). How few tests can reach 100% decision coverage?Hàm có một vòng lặp chứa hai IF (V(G) = 4). Ít nhất bao nhiêu test đạt 100% decision coverage?\n6. A method has V(G) = 23. What does this suggest?Một phương thức có V(G) = 23. Điều này gợi ý gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cyclomatic 5 — Questions on V(G) and minimum test sets — answer key\n\n1. A control-flow graph has 10 nodes and 12 edges. What is V(G)?CFG có 10 node và 12 cạnh. V(G) là bao nhiêu?\n   Answer: c) 4\n   12 − 10 + 2 = 4 (the quiz-scoring example of SWT3).VI: 12 − 10 + 2 = 4 (ví dụ chấm bài trắc nghiệm của SWT3).\n\n2. Which relation always holds (when every basis path is feasible)?Quan hệ nào luôn đúng (khi mọi basis path đều khả thi)?\n   Answer: b) min SC ≤ min DC ≤ V(G)\n   Decision coverage includes statement coverage, and the V(G) basis paths cover every edge.VI: Decision coverage bao hàm statement coverage, và V(G) đường cơ sở phủ mọi cạnh.\n\n3. Three fully nested IF-ELSE decisions. Minimum tests for 100% decision coverage?Ba quyết định IF-ELSE lồng hoàn toàn. Số test tối thiểu cho 100% decision coverage?\n   Answer: c) 4\n   Fully nested ⇒ every test ends in a different leaf: decisions + 1 = 4 = V(G).VI: Lồng hoàn toàn ⇒ mỗi test kết thúc ở một lá khác: số quyết định + 1 = 4 = V(G).\n\n4. What does V(G) count?V(G) đếm cái gì?\n   Answer: b) The number of linearly independent paths through the routine\n   McCabe’s cyclomatic number = size of a basis set of paths.VI: Số chu trình McCabe = số đường trong một tập đường cơ sở.\n\n5. A function has a loop with two IFs inside it (V(G) = 4). How few tests can reach 100% decision coverage?Hàm có một vòng lặp chứa hai IF (V(G) = 4). Ít nhất bao nhiêu test đạt 100% decision coverage?\n   Answer: a) 1\n   Successive iterations can take every outcome of both IFs, and the loop condition is True then False in the same call (countCharacters of FA23: V(G) = 5, one test).VI: Các lần lặp có thể đi mọi kết quả của cả hai IF, điều kiện lặp vừa True vừa False trong cùng một lần gọi (countCharacters đề FA23: V(G) = 5, một test).\n\n6. A method has V(G) = 23. What does this suggest?Một phương thức có V(G) = 23. Điều này gợi ý gì?\n   Answer: b) It is complex and hard to test thoroughly — a candidate for refactoring (McCabe’s usual threshold is 10)\n   High cyclomatic complexity predicts more defects and more test effort; static analysis tools flag methods above ~10.VI: Độ phức tạp chu trình cao báo trước nhiều lỗi và tốn công test; công cụ phân tích tĩnh cảnh báo phương thức trên ~10.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · c · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A control-flow graph has 10 nodes and 12 edges. What is V(G)?</p><p style=\"opacity:.75;font-size:.92em\"><i>CFG có 10 node và 12 cạnh. V(G) là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "22"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>12 − 10 + 2 = 4 (the quiz-scoring example of SWT3).</p><p><i>VI: 12 − 10 + 2 = 4 (ví dụ chấm bài trắc nghiệm của SWT3).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which relation always holds (when every basis path is feasible)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Quan hệ nào luôn đúng (khi mọi basis path đều khả thi)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "min SC ≥ min DC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "min SC ≤ min DC ≤ V(G)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "min DC = V(G)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "V(G) ≤ min SC"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Decision coverage includes statement coverage, and the V(G) basis paths cover every edge.</p><p><i>VI: Decision coverage bao hàm statement coverage, và V(G) đường cơ sở phủ mọi cạnh.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Three fully nested IF-ELSE decisions. Minimum tests for 100% decision coverage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba quyết định IF-ELSE lồng hoàn toàn. Số test tối thiểu cho 100% decision coverage?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Fully nested ⇒ every test ends in a different leaf: decisions + 1 = 4 = V(G).</p><p><i>VI: Lồng hoàn toàn ⇒ mỗi test kết thúc ở một lá khác: số quyết định + 1 = 4 = V(G).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What does V(G) count?</p><p style=\"opacity:.75;font-size:.92em\"><i>V(G) đếm cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The number of statements"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The number of linearly independent paths through the routine"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The number of all possible paths"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The number of defects"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>McCabe’s cyclomatic number = size of a basis set of paths.</p><p><i>VI: Số chu trình McCabe = số đường trong một tập đường cơ sở.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>A function has a loop with two IFs inside it (V(G) = 4). How few tests can reach 100% decision coverage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm có một vòng lặp chứa hai IF (V(G) = 4). Ít nhất bao nhiêu test đạt 100% decision coverage?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Successive iterations can take every outcome of both IFs, and the loop condition is True then False in the same call (countCharacters of FA23: V(G) = 5, one test).</p><p><i>VI: Các lần lặp có thể đi mọi kết quả của cả hai IF, điều kiện lặp vừa True vừa False trong cùng một lần gọi (countCharacters đề FA23: V(G) = 5, một test).</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>A method has V(G) = 23. What does this suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một phương thức có V(G) = 23. Điều này gợi ý gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It has 23 defects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is complex and hard to test thoroughly — a candidate for refactoring (McCabe’s usual threshold is 10)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs exactly 23 statements"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — V(G) has no practical meaning"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>High cyclomatic complexity predicts more defects and more test effort; static analysis tools flag methods above ~10.</p><p><i>VI: Độ phức tạp chu trình cao báo trước nhiều lỗi và tốn công test; công cụ phân tích tĩnh cảnh báo phương thức trên ~10.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng E + N."
+        },
+        {
+          "loi": "Cho rằng V(G) = số test luôn luôn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        }
+      ]
+    }
+  ]
+}

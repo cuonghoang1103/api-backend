@@ -1,0 +1,475 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-5-project-labbook-whitebox",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-cyclomatic-complexity"
+  },
+  "exercises": [
+    {
+      "title": "LabBook Milestone 5 — White-box Testing of the Seat-availability Algorithm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 100,
+      "concepts": [
+        "cyclomatic complexity",
+        "loop testing",
+        "decision coverage",
+        "MC/DC"
+      ],
+      "prerequisites": [
+        "SWT301 chapter 5",
+        "LabBook project 4"
+      ],
+      "tags": [
+        "swt301",
+        "project",
+        "labbook",
+        "white-box"
+      ],
+      "problemHtml": "<h1>LabBook Project · Milestone 5 — White-box Testing of the Seat-availability Algorithm</h1>\n<p class=\"bi-phu\">Running project · chapter 5 · nested loops · 4-condition decision · loop coverage · MC/DC · 10 marks</p>\n<h2>1. Overview</h2>\n<p>When a student books, LabBook decides CONFIRMED or PENDING with <code>isSeatFree</code>: for every booked hour it counts the CONFIRMED bookings of that lab and date that cover the hour; if they already fill every seat, there is no free seat. It is the heart of the waitlist — and a classic white-box target: two nested loops, a four-condition decision and an early exit.</p><pre> 1  function isSeatFree(bookings, seats, date, start, duration) {\n 2    for (let h = start; h &lt; start + duration; h++) {\n 3      let used = 0;\n 4      for (let k = 0; k &lt; bookings.length; k++) {\n 5        const b = bookings[k];\n 6        if (b.status === 'CONFIRMED' &amp;&amp; b.date === date &amp;&amp; b.startHour &lt;= h &amp;&amp; h &lt; b.startHour + b.duration) { used++; }\n 7      }\n 8      if (used &gt;= seats) { return false; }\n 9    }\n10    return true;\n11  }</pre>\n<h3>Main features</h3>\n<ul>\n  <li>A. Metrics: decisions, V(G), minimum DC, MC/DC vectors.</li>\n  <li>B. Loop coverage: zero / one / many iterations, early exit.</li>\n  <li>C. Decision coverage + MC/DC of the four-condition decision, measured on the code.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One test = one call: <code>{ id, input: { bookings, seats, date, start, duration }, expected: true | false }</code>. A booking is <code>{ status, date, startHour, duration }</code>.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── metrics.js   ← const METRICS = { decisions, vg, minDC, mcdcVectors }\n└── tests.js     ← const TESTS = [ { id, input: { bookings, seats, date, start, duration }, expected } ]</pre>\n<h2>3. Data model</h2>\n<p><b>booking (element of bookings)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>status</code></td><td>'CONFIRMED' | 'PENDING' | 'CANCELLED'</td><td>only CONFIRMED takes a seat</td></tr><tr><td><code>date</code></td><td>YYYY-MM-DD</td><td>must equal the requested date</td></tr><tr><td><code>startHour · duration</code></td><td>integers</td><td>covers hours startHour … startHour + duration − 1</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Metrics <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Two loop conditions + two IFs; the IF on line 6 has four conditions joined by &&.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">V(G)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Loop coverage <span class=\"bi-diem\">3 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Outer loop once and several times; inner loop zero times and several times; an early exit in a hour AFTER the first (e.g. the seat is free at 9:00 but taken at 10:00).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">loop testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Decision coverage + MC/DC <span class=\"bi-diem\">5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every statement, every decision outcome, and an independence pair for each of the four conditions of line 6 — a single call can provide many vectors (one per booking per hour). Expected results from the rule above.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">MC/DC</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>METRICS</code></td><td>answers/metrics.js</td></tr><tr><td><code>TESTS</code></td><td>answers/tests.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Metrics</td><td>2</td></tr><tr><td>2</td><td>B. Loop coverage</td><td>3</td></tr><tr><td>3</td><td>C. Decision coverage + MC/DC</td><td>5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Only testing an empty bookings list — the inner loop never runs and line 6 is never reached.</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>LabBook Project · Milestone 5 — White-box Testing of the Seat-availability Algorithm</h1>\n<p class=\"bi-phu\">Dự án xuyên suốt · chương 5 · vòng lặp lồng · quyết định bốn điều kiện · phủ vòng lặp · MC/DC · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Khi sinh viên đặt chỗ, LabBook quyết định CONFIRMED hay PENDING bằng <code>isSeatFree</code>: với mỗi giờ đặt, đếm các booking CONFIRMED của phòng và ngày đó phủ giờ ấy; nếu đã kín mọi chỗ thì không còn chỗ. Đây là tim của danh sách chờ — và là mục tiêu white-box kinh điển: hai vòng lặp lồng, một quyết định bốn điều kiện và một lối thoát sớm.</p><pre> 1  function isSeatFree(bookings, seats, date, start, duration) {\n 2    for (let h = start; h &lt; start + duration; h++) {\n 3      let used = 0;\n 4      for (let k = 0; k &lt; bookings.length; k++) {\n 5        const b = bookings[k];\n 6        if (b.status === 'CONFIRMED' &amp;&amp; b.date === date &amp;&amp; b.startHour &lt;= h &amp;&amp; h &lt; b.startHour + b.duration) { used++; }\n 7      }\n 8      if (used &gt;= seats) { return false; }\n 9    }\n10    return true;\n11  }</pre>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Chỉ số: số quyết định, V(G), DC tối thiểu, số vector MC/DC.</li>\n  <li>B. Phủ vòng lặp: không / một / nhiều lần lặp, thoát sớm.</li>\n  <li>C. Decision coverage + MC/DC cho quyết định bốn điều kiện, đo trên mã.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Một test = một lần gọi: <code>{ id, input: { bookings, seats, date, start, duration }, expected: true | false }</code>. Một booking là <code>{ status, date, startHour, duration }</code>.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── metrics.js   ← const METRICS = { decisions, vg, minDC, mcdcVectors }\n└── tests.js     ← const TESTS = [ { id, input: { bookings, seats, date, start, duration }, expected } ]</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>booking (element of bookings)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>status</code></td><td>'CONFIRMED' | 'PENDING' | 'CANCELLED'</td><td>chỉ CONFIRMED chiếm chỗ</td></tr><tr><td><code>date</code></td><td>YYYY-MM-DD</td><td>phải trùng ngày đang xét</td></tr><tr><td><code>startHour · duration</code></td><td>integers</td><td>phủ các giờ startHour … startHour + duration − 1</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Chỉ số <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hai điều kiện lặp + hai IF; IF dòng 6 có bốn điều kiện nối bằng &&.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">V(G)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Phủ vòng lặp <span class=\"bi-diem\">3 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Vòng ngoài một lần và nhiều lần; vòng trong không lần và nhiều lần; thoát sớm ở một giờ SAU giờ đầu (vd 9:00 còn chỗ nhưng 10:00 hết).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">loop testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Decision coverage + MC/DC <span class=\"bi-diem\">5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi câu lệnh, mọi kết quả quyết định, và một cặp độc lập cho mỗi điều kiện của dòng 6 — một lần gọi có thể cho nhiều vector (mỗi booking mỗi giờ một vector). Kết quả mong đợi theo luật ở trên.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">MC/DC</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>METRICS</code></td><td>answers/metrics.js</td></tr><tr><td><code>TESTS</code></td><td>answers/tests.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Chỉ số</td><td>2</td></tr><tr><td>2</td><td>B. Phủ vòng lặp</td><td>3</td></tr><tr><td>3</td><td>C. Decision coverage + MC/DC</td><td>5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Chỉ test danh sách booking rỗng — vòng trong không chạy, dòng 6 không bao giờ tới.</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One test = one call: <code>{ id, input: { bookings, seats, date, start, duration }, expected: true | false }</code>. A booking is <code>{ status, date, startHour, duration }</code>.|||Một test = một lần gọi: <code>{ id, input: { bookings, seats, date, start, duration }, expected: true | false }</code>. Một booking là <code>{ status, date, startHour, duration }</code>.",
+      "examplesJson": [
+        {
+          "input": "booking { status: 'PENDING', date: '2026-11-04', startHour: 9, duration: 2 } at hour 9",
+          "output": "line 6 vector (F, ·, ·, ·): a waitlisted booking takes no seat",
+          "explanation": "With &&, the other three conditions are not evaluated.|||Với &&, ba điều kiện còn lại không được đánh giá."
+        }
+      ],
+      "hintsJson": [
+        "A: D1 (vòng giờ), D2 (vòng booking), D3 (IF bốn vế), D4 (IF hết chỗ) ⇒ V(G) = 5. DC: một lần gọi trả true, một lần trả false ⇒ 2. MC/DC bốn điều kiện AND ⇒ 4 + 1 = 5 vector.",
+        "B: danh sách rỗng ⇒ vòng trong 0 lần. duration 1 ⇒ vòng ngoài 1 lần. Thoát sớm ở giờ sau: giờ đầu còn chỗ, giờ thứ hai hết chỗ.",
+        "C: MỘT lần gọi với năm booking khéo chọn cho đủ năm vector của dòng 6 (mỗi booking lệch đúng một điều kiện)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/metrics.js",
+          "language": "javascript",
+          "code": "const METRICS = { decisions: 0, vg: 0, minDC: 0, mcdcVectors: 0 };\n"
+        },
+        {
+          "name": "answers/tests.js",
+          "language": "javascript",
+          "code": "const TESTS = [\n  { id: 'T1', input: { bookings: [], seats: 1, date: '2026-11-04', start: 9, duration: 1 }, expected: true },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/metrics.js",
+          "language": "javascript",
+          "code": "// D1 outer loop, D2 inner loop, D3 four-condition IF, D4 seat check.\nconst METRICS = { decisions: 4, vg: 5, minDC: 2, mcdcVectors: 5 };\n"
+        },
+        {
+          "name": "answers/tests.js",
+          "language": "javascript",
+          "code": "// Line 5 vectors come from (booking × hour) pairs, so one call can carry many of them.\nconst TESTS = [\n  // free: two hours, no booking at all (inner loop 0 iterations), outer loop several times → true\n  { id: 'T1', input: { bookings: [], seats: 1, date: '2026-11-04', start: 9, duration: 2 }, expected: true },\n  // MC/DC: hour 9 sees every vector, but only booking 1 covers 9:00 → used 1 < 2 seats; at 10:00 two bookings cover → full → false (early exit in a later hour)\n  { id: 'T2', input: {\n    bookings: [\n      { status: 'CONFIRMED', date: '2026-11-04', startHour: 9, duration: 2 },   // (T,T,T,T) at 9 and 10\n      { status: 'PENDING', date: '2026-11-04', startHour: 9, duration: 2 },     // (F,·,·,·)\n      { status: 'CONFIRMED', date: '2026-11-05', startHour: 9, duration: 2 },   // (T,F,·,·)\n      { status: 'CONFIRMED', date: '2026-11-04', startHour: 10, duration: 1 },  // at 9: (T,T,F,·); at 10: (T,T,T,T)\n      { status: 'CONFIRMED', date: '2026-11-04', startHour: 7, duration: 2 },   // at 9: (T,T,T,F)\n    ],\n    seats: 2, date: '2026-11-04', start: 9, duration: 2 }, expected: false },\n  // one hour only (outer loop once), seat free → true\n  { id: 'T3', input: { bookings: [{ status: 'CONFIRMED', date: '2026-11-04', startHour: 9, duration: 1 }], seats: 2, date: '2026-11-04', start: 9, duration: 1 }, expected: true },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 decisions ⇒ V(G) = 5; min DC = 2; MC/DC of a 4-condition AND needs 5 vectors, which one call can provide because line 6 runs once per (booking, hour). T1 (empty list, 2 hours) covers inner-loop zero and outer-loop many; T2 provides all five vectors and exits early at 10:00; T3 runs the outer loop once.</p>",
+      "solutionExplanationHtmlVi": "<p>4 quyết định ⇒ V(G) = 5; DC tối thiểu 2; MC/DC của AND bốn vế cần 5 vector, một lần gọi cho đủ vì dòng 6 chạy một lần mỗi (booking, giờ).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.istqb.org/certifications/technical-test-analyst",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/metrics.js",
+          "answers/tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — number of decisions",
+              "vi": "A — số quyết định"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (METRICS.decisions); } catch (e) { return 'METRICS.decisions is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'METRICS.decisions is empty';\n  var chap = [4];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — V(G)",
+              "vi": "A — V(G)"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (METRICS.vg); } catch (e) { return 'METRICS.vg is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'METRICS.vg is empty';\n  var chap = [5];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — minimum tests for 100% decision coverage",
+              "vi": "A — số test tối thiểu cho 100% decision"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (METRICS.minDC); } catch (e) { return 'METRICS.minDC is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'METRICS.minDC is empty';\n  var chap = [2];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — minimum vectors for MC/DC of line 6",
+              "vi": "A — số vector tối thiểu cho MC/DC dòng 6"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = (METRICS.mcdcVectors); } catch (e) { return 'METRICS.mcdcVectors is not defined yet'; }\n  if (v === undefined || v === null || v === '') return 'METRICS.mcdcVectors is empty';\n  var chap = [5];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"so\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"so\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"so\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "B — outer loop: exactly one iteration (1-hour booking)",
+              "vi": "B — vòng ngoài: đúng một lần lặp (đặt 1 giờ)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const c=function(e){const{bookings:r,seats:f,date:l,start:a,duration:g}=e;let s=0;const u=[];for(let n=a;n<a+g;n++){s++;let i=0,o=0;for(;o<r.length;o++){const t=r[o];t.status===\"CONFIRMED\"&&t.date===l&&t.startHour<=n&&n<t.startHour+t.duration&&i++}if(u.push(o),i>=f)return{ngoai:s,trong:u,som:!0}}return{ngoai:s,trong:u,som:!1}};return Array.isArray(TESTS)?TESTS.some(e=>{try{return c(e.input).ngoai===1}catch{return!1}})?\"OK\":\"no test makes the outer loop run exactly once yet\":\"TESTS is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — outer loop: several iterations (multi-hour booking)",
+              "vi": "B — vòng ngoài: nhiều lần lặp (đặt nhiều giờ)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const c=function(e){const{bookings:r,seats:f,date:l,start:a,duration:m}=e;let o=0;const u=[];for(let n=a;n<a+m;n++){o++;let i=0,s=0;for(;s<r.length;s++){const t=r[s];t.status===\"CONFIRMED\"&&t.date===l&&t.startHour<=n&&n<t.startHour+t.duration&&i++}if(u.push(s),i>=f)return{ngoai:o,trong:u,som:!0}}return{ngoai:o,trong:u,som:!1}};return Array.isArray(TESTS)?TESTS.some(e=>{try{return c(e.input).ngoai>=2}catch{return!1}})?\"OK\":\"no test makes the outer loop run several times yet\":\"TESTS is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — inner loop: zero iterations (no booking yet)",
+              "vi": "B — vòng trong: không lần lặp nào (chưa có booking)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const f=function(s){const{bookings:r,seats:e,date:m,start:i,duration:g}=s;let u=0;const a=[];for(let n=i;n<i+g;n++){u++;let c=0,o=0;for(;o<r.length;o++){const t=r[o];t.status===\"CONFIRMED\"&&t.date===m&&t.startHour<=n&&n<t.startHour+t.duration&&c++}if(a.push(o),c>=e)return{ngoai:u,trong:a,som:!0}}return{ngoai:u,trong:a,som:!1}};return Array.isArray(TESTS)?TESTS.some(s=>{try{return f(s.input).trong.some(e=>e===0)}catch{return!1}})?\"OK\":\"no test makes the inner loop run zero times yet\":\"TESTS is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — inner loop: several iterations",
+              "vi": "B — vòng trong: nhiều lần lặp"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const f=function(e){const{bookings:r,seats:o,date:m,start:i,duration:l}=e;let u=0;const a=[];for(let n=i;n<i+l;n++){u++;let c=0,s=0;for(;s<r.length;s++){const t=r[s];t.status===\"CONFIRMED\"&&t.date===m&&t.startHour<=n&&n<t.startHour+t.duration&&c++}if(a.push(s),c>=o)return{ngoai:u,trong:a,som:!0}}return{ngoai:u,trong:a,som:!1}};return Array.isArray(TESTS)?TESTS.some(e=>{try{return f(e.input).trong.some(o=>o>=2)}catch{return!1}})?\"OK\":\"no test makes the inner loop run several times yet\":\"TESTS is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — early exit from the outer loop in a later hour (not the first)",
+              "vi": "B — thoát sớm vòng ngoài ở một giờ sau (không phải giờ đầu)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const c=function(e){const{bookings:t,seats:f,date:l,start:u,duration:m}=e;let s=0;const a=[];for(let o=u;o<u+m;o++){s++;let i=0,n=0;for(;n<t.length;n++){const r=t[n];r.status===\"CONFIRMED\"&&r.date===l&&r.startHour<=o&&o<r.startHour+r.duration&&i++}if(a.push(n),i>=f)return{ngoai:s,trong:a,som:!0}}return{ngoai:s,trong:a,som:!1}};return Array.isArray(TESTS)?TESTS.some(e=>{try{const t=c(e.input);return t.som&&t.ngoai>=2}catch{return!1}})?\"OK\":\"no test makes the outer loop exit early in a later hour yet\":\"TESTS is missing\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "100% statement coverage",
+              "vi": "Phủ 100% câu lệnh (statement coverage)"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction isSeatFree(bookings, seats, date, start, duration) {\n  $s('S1'); for (let h = start; $d('D1', h < start + duration); h++) {\n    $s('S2'); let used = 0;\n    $s('S3'); for (let k = 0; $d('D2', k < bookings.length); k++) {\n      $s('S4'); const b = bookings[k];\n      $s('S5'); if ($d('D3', $c('D3.A', b.status === 'CONFIRMED') && $c('D3.B', b.date === date) && $c('D3.C', b.startHour <= h) && $c('D3.D', h < b.startHour + b.duration))) { $s('S6'); used++; }\n    }\n    $s('S7'); if ($d('D4', used >= seats)) { $s('S8'); return false; }\n  }\n  $s('S9'); return true;\n}\nconst __spec = isSeatFree;\nconst __TS = [\"bookings\",\"seats\",\"date\",\"start\",\"duration\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(isSeatFree, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":3,\"S3\":4,\"S4\":5,\"S5\":6,\"S6\":6,\"S7\":8,\"S8\":8,\"S9\":10}, DD = {\"D1\":2,\"D2\":4,\"D3\":6,\"D4\":8}, ND = {\"D1\":\"for (let h = start; h < start + duration; h++) {\",\"D2\":\"for (let k = 0; k < bookings.length; k++) {\",\"D3\":\"if (b.status === 'CONFIRMED' && b.date === date && b.startHo\",\"D4\":\"if (used >= seats) { return false; }\"};\n  function viec(k) {\n\n    var thieu = S.filter(function (s) { return !__C.s[s]; });\n    if (!thieu.length) return 'OK';\n    return 'statement coverage ' + Math.round(100 * (S.length - thieu.length) / S.length) + '% — never executed: line ' + thieu.map(function (s) { return DS[s]; }).join(', line ');\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "100% decision (branch) coverage — every decision both TRUE and FALSE",
+              "vi": "Phủ 100% quyết định (nhánh) — mọi quyết định đều nhận cả TRUE lẫn FALSE"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction isSeatFree(bookings, seats, date, start, duration) {\n  $s('S1'); for (let h = start; $d('D1', h < start + duration); h++) {\n    $s('S2'); let used = 0;\n    $s('S3'); for (let k = 0; $d('D2', k < bookings.length); k++) {\n      $s('S4'); const b = bookings[k];\n      $s('S5'); if ($d('D3', $c('D3.A', b.status === 'CONFIRMED') && $c('D3.B', b.date === date) && $c('D3.C', b.startHour <= h) && $c('D3.D', h < b.startHour + b.duration))) { $s('S6'); used++; }\n    }\n    $s('S7'); if ($d('D4', used >= seats)) { $s('S8'); return false; }\n  }\n  $s('S9'); return true;\n}\nconst __spec = isSeatFree;\nconst __TS = [\"bookings\",\"seats\",\"date\",\"start\",\"duration\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(isSeatFree, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":3,\"S3\":4,\"S4\":5,\"S5\":6,\"S6\":6,\"S7\":8,\"S8\":8,\"S9\":10}, DD = {\"D1\":2,\"D2\":4,\"D3\":6,\"D4\":8}, ND = {\"D1\":\"for (let h = start; h < start + duration; h++) {\",\"D2\":\"for (let k = 0; k < bookings.length; k++) {\",\"D3\":\"if (b.status === 'CONFIRMED' && b.date === date && b.startHo\",\"D4\":\"if (used >= seats) { return false; }\"};\n  function viec(k) {\n\n    var thieu = [];\n    D.forEach(function (x) { var o = __C.d[x] || { t: 0, f: 0 }; if (!o.t) thieu.push('line ' + DD[x] + ' (' + ND[x] + ') never TRUE'); if (!o.f) thieu.push('line ' + DD[x] + ' (' + ND[x] + ') never FALSE'); });\n    if (!thieu.length) return 'OK';\n    return 'decision coverage ' + Math.round(100 * (2 * D.length - thieu.length) / (2 * D.length)) + '% — ' + thieu.join('; ');\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "MC/DC for the compound decision on line 6: each condition shown to independently affect the outcome",
+              "vi": "MC/DC cho quyết định ghép ở dòng 6: mỗi điều kiện được chứng minh tác động độc lập lên kết quả"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction isSeatFree(bookings, seats, date, start, duration) {\n  $s('S1'); for (let h = start; $d('D1', h < start + duration); h++) {\n    $s('S2'); let used = 0;\n    $s('S3'); for (let k = 0; $d('D2', k < bookings.length); k++) {\n      $s('S4'); const b = bookings[k];\n      $s('S5'); if ($d('D3', $c('D3.A', b.status === 'CONFIRMED') && $c('D3.B', b.date === date) && $c('D3.C', b.startHour <= h) && $c('D3.D', h < b.startHour + b.duration))) { $s('S6'); used++; }\n    }\n    $s('S7'); if ($d('D4', used >= seats)) { $s('S8'); return false; }\n  }\n  $s('S9'); return true;\n}\nconst __spec = isSeatFree;\nconst __TS = [\"bookings\",\"seats\",\"date\",\"start\",\"duration\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(isSeatFree, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":3,\"S3\":4,\"S4\":5,\"S5\":6,\"S6\":6,\"S7\":8,\"S8\":8,\"S9\":10}, DD = {\"D1\":2,\"D2\":4,\"D3\":6,\"D4\":8}, ND = {\"D1\":\"for (let h = start; h < start + duration; h++) {\",\"D2\":\"for (let k = 0; k < bookings.length; k++) {\",\"D3\":\"if (b.status === 'CONFIRMED' && b.date === date && b.startHo\",\"D4\":\"if (used >= seats) { return false; }\"};\n  function viec(k) {\n\n    var r = __mcdc(__C.rec[\"D3\"], [\"D3.A\",\"D3.B\",\"D3.C\",\"D3.D\"]);\n    var thieu = Object.keys(r).filter(function (c) { return !r[c]; });\n    return thieu.length ? 'no independence pair yet for condition ' + thieu.join(', ') + ' (need two tests that differ only in it — other conditions equal or not evaluated — and give different outcomes)' : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Every \"expected\" value comes from the SPECIFICATION",
+              "vi": "Mọi giá trị \"expected\" lấy từ ĐẶC TẢ"
+            },
+            "chuanBi": "\nvar __C = { s: {}, d: {}, c: {}, rec: {}, cur: {} };\nfunction $s(id) { __C.s[id] = (__C.s[id] || 0) + 1; }\nfunction $c(id, v) { v = !!v; var o = __C.c[id] || (__C.c[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++; __C.cur[id] = v; return v; }\nfunction $d(id, v) {\n  v = !!v; var o = __C.d[id] || (__C.d[id] = { t: 0, f: 0 }); o[v ? 't' : 'f']++;\n  var vec = {}; for (var k in __C.cur) if (k.split('.')[0] === id) { vec[k] = __C.cur[k]; delete __C.cur[k]; }\n  (__C.rec[id] || (__C.rec[id] = [])).push({ vec: vec, out: v }); return v;\n}\nfunction __mcdc(recs, conds) {\n  var res = {};\n  conds.forEach(function (c) {\n    res[c] = (recs || []).some(function (r1) { return recs.some(function (r2) {\n      if (r1.vec[c] === undefined || r2.vec[c] === undefined || r1.vec[c] === r2.vec[c] || r1.out === r2.out) return false;\n      return conds.every(function (o) { return o === c || r1.vec[o] === undefined || r2.vec[o] === undefined || r1.vec[o] === r2.vec[o]; });\n    }); });\n  });\n  return res;\n}\nfunction __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' \"' + v.message + '\"' : ''); return JSON.stringify(v); }\nfunction __bang(a, b) {\n  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)\n    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);\n  if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;\n  if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();\n  return JSON.stringify(a) === JSON.stringify(b);\n}\nfunction __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }\n\nfunction isSeatFree(bookings, seats, date, start, duration) {\n  $s('S1'); for (let h = start; $d('D1', h < start + duration); h++) {\n    $s('S2'); let used = 0;\n    $s('S3'); for (let k = 0; $d('D2', k < bookings.length); k++) {\n      $s('S4'); const b = bookings[k];\n      $s('S5'); if ($d('D3', $c('D3.A', b.status === 'CONFIRMED') && $c('D3.B', b.date === date) && $c('D3.C', b.startHour <= h) && $c('D3.D', h < b.startHour + b.duration))) { $s('S6'); used++; }\n    }\n    $s('S7'); if ($d('D4', used >= seats)) { $s('S8'); return false; }\n  }\n  $s('S9'); return true;\n}\nconst __spec = isSeatFree;\nconst __TS = [\"bookings\",\"seats\",\"date\",\"start\",\"duration\"];\nconst __T = (typeof TESTS !== 'undefined' && Array.isArray(TESTS)) ? TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'TESTS is missing — declare: const TESTS = [ { id: \"UTCID01\", input: { … }, expected: … }, … ]';\n  if (!__T.length) return 'TESTS is empty';\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i];\n    if (!t || typeof t !== 'object' || !t.input || typeof t.input !== 'object') return 'test #' + (i + 1) + ' needs an \"input\" object, e.g. { ' + __TS.map(function (p) { return p + ': …'; }).join(', ') + ' }';\n    for (var j = 0; j < __TS.length; j++) if (!(__TS[j] in t.input)) return (t.id || 'test #' + (i + 1)) + ': input has no \"' + __TS[j] + '\"';\n  }\n  var args = __T.map(function (t) { return __TS.map(function (p) { return t.input[p]; }); });\n  var thuc = args.map(function (a) { return __goi(isSeatFree, a); });\n  var S = [\"S1\",\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S7\",\"S8\",\"S9\"], D = [\"D1\",\"D2\",\"D3\",\"D4\"], DS = {\"S1\":2,\"S2\":3,\"S3\":4,\"S4\":5,\"S5\":6,\"S6\":6,\"S7\":8,\"S8\":8,\"S9\":10}, DD = {\"D1\":2,\"D2\":4,\"D3\":6,\"D4\":8}, ND = {\"D1\":\"for (let h = start; h < start + duration; h++) {\",\"D2\":\"for (let k = 0; k < bookings.length; k++) {\",\"D3\":\"if (b.status === 'CONFIRMED' && b.date === date && b.startHo\",\"D4\":\"if (used >= seats) { return false; }\"};\n  function viec(k) {\n\n    var sai = [];\n    __T.forEach(function (t, i) { var e = __goi(__spec, args[i]); if (!('expected' in t)) sai.push((t.id || '#' + (i + 1)) + ': missing \"expected\"'); else if (!__bang(t.expected, e)) sai.push((t.id || '#' + (i + 1)) + ': expected ' + __chuan(t.expected) + ' but the specification gives ' + __chuan(e)); });\n    return sai.length ? sai.slice(0, 3).join(' | ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Metrics",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Loop coverage",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Decision coverage + MC/DC",
+            "diem": 5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "project",
+      "mistakesJson": [
+        {
+          "loi": "Đặt mọi booking ở cùng giờ — điều kiện “giờ đã kết thúc” (D) không bao giờ False."
+        },
+        {
+          "loi": "Ghi expected theo cảm giác — đếm từng giờ: còn chỗ khi số CONFIRMED phủ giờ đó < seats."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cyclomatic complexity V(G)",
+          "vi": "độ phức tạp chu trình = E − N + 2 = số quyết định + 1"
+        },
+        {
+          "en": "decision (branch) coverage",
+          "vi": "độ phủ quyết định / nhánh (C1)"
+        },
+        {
+          "en": "MC/DC (modified condition/decision coverage)",
+          "vi": "phủ điều kiện/quyết định sửa đổi — mỗi điều kiện tác động ĐỘC LẬP lên kết quả"
+        },
+        {
+          "en": "short-circuit evaluation",
+          "vi": "đánh giá ngắn mạch — && / || dừng sớm khi đã biết kết quả"
+        },
+        {
+          "en": "loop testing",
+          "vi": "kiểm thử vòng lặp — 0, 1, nhiều lần lặp, thoát sớm"
+        }
+      ]
+    },
+    {
+      "title": "LabBook Interview corner 5 — Talking about code coverage",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "code coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Interview corner.</b> Coverage questions you will meet in QA and developer interviews — and in code reviews of your own pull requests.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Góc phỏng vấn.</b> Câu hỏi về coverage gặp trong phỏng vấn QA lẫn developer — và khi review pull request của chính bạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luôn phân biệt “đã chạy” và “đã kiểm”.",
+        "Có ví dụ cụ thể (IF không ELSE, vòng lặp 0/1/nhiều)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LabBook Interview corner 5 — Talking about code coverage\n\nAnswer in the answer panel (no code needed).\n\n1. “Our project has 95% line coverage. Is it well tested?”“Dự án có 95% line coverage. Vậy là test tốt chưa?”\n2. “What is the difference between line and branch coverage?”“Line coverage và branch coverage khác nhau thế nào?”\n3. “How do you test a loop?”“Bạn test một vòng lặp thế nào?”\n4. “Which tool would you use to measure coverage on a Spring Boot project?”“Bạn dùng công cụ gì đo coverage cho dự án Spring Boot?”\n5. “The team sets a rule: no merge below 80% branch coverage. Any risk?”“Nhóm đặt luật: không merge nếu branch coverage dưới 80%. Có rủi ro gì?”\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# LabBook Interview corner 5 — Talking about code coverage — answer key\n\n1. “Our project has 95% line coverage. Is it well tested?”“Dự án có 95% line coverage. Vậy là test tốt chưa?”\n   Answer: b) Not necessarily — coverage shows what was executed, not what was asserted; I would check branch coverage, the assertions, boundary cases and a mutation score\n   Executed ≠ verified. Mutation testing measures whether the tests would notice a change.VI: Đã chạy ≠ đã kiểm. Mutation testing đo xem test có nhận ra thay đổi hay không.\n\n2. “What is the difference between line and branch coverage?”“Line coverage và branch coverage khác nhau thế nào?”\n   Answer: b) Line (statement) coverage counts executed lines; branch (decision) coverage counts both outcomes of every decision — an IF without ELSE can be 100% line-covered with its False branch never taken\n   Give the IF-without-ELSE example: that is what the interviewer wants to hear.VI: Nêu ví dụ IF không ELSE: đó là điều người phỏng vấn muốn nghe.\n\n3. “How do you test a loop?”“Bạn test một vòng lặp thế nào?”\n   Answer: b) Zero, one and many iterations, plus the maximum if there is one, and any early exit (break/return) — e.g. LabBook’s seat check with no booking, one hour and three hours\n   Loop testing heuristics: skip, once, twice/typical, max − 1, max, early exit.VI: Kinh nghiệm test vòng lặp: bỏ qua, một lần, hai lần/điển hình, max − 1, max, thoát sớm.\n\n4. “Which tool would you use to measure coverage on a Spring Boot project?”“Bạn dùng công cụ gì đo coverage cho dự án Spring Boot?”\n   Answer: b) JaCoCo (with the Maven/Gradle plugin and its HTML report), optionally PIT for mutation testing\n   JaCoCo measures line and branch coverage of JUnit runs; PIT mutates bytecode and reports the mutation score.VI: JaCoCo đo line và branch coverage khi chạy JUnit; PIT đột biến bytecode và báo mutation score.\n\n5. “The team sets a rule: no merge below 80% branch coverage. Any risk?”“Nhóm đặt luật: không merge nếu branch coverage dưới 80%. Có rủi ro gì?”\n   Answer: b) People may write tests without real assertions just to reach the number; combine the gate with code review of the tests and, ideally, a mutation-score check\n   Goodhart’s law: when a measure becomes a target it stops being a good measure.VI: Định luật Goodhart: khi một chỉ số thành mục tiêu, nó không còn là chỉ số tốt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All answers: b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>“Our project has 95% line coverage. Is it well tested?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Dự án có 95% line coverage. Vậy là test tốt chưa?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, anything above 80% is well tested"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Not necessarily — coverage shows what was executed, not what was asserted; I would check branch coverage, the assertions, boundary cases and a mutation score"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No, only 100% counts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Coverage is meaningless"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Executed ≠ verified. Mutation testing measures whether the tests would notice a change.</p><p><i>VI: Đã chạy ≠ đã kiểm. Mutation testing đo xem test có nhận ra thay đổi hay không.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>“What is the difference between line and branch coverage?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Line coverage và branch coverage khác nhau thế nào?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "There is none"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Line (statement) coverage counts executed lines; branch (decision) coverage counts both outcomes of every decision — an IF without ELSE can be 100% line-covered with its False branch never taken"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Branch coverage counts Git branches"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Line coverage is stronger"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Give the IF-without-ELSE example: that is what the interviewer wants to hear.</p><p><i>VI: Nêu ví dụ IF không ELSE: đó là điều người phỏng vấn muốn nghe.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>“How do you test a loop?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Bạn test một vòng lặp thế nào?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Once with a typical value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Zero, one and many iterations, plus the maximum if there is one, and any early exit (break/return) — e.g. LabBook’s seat check with no booking, one hour and three hours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only with the maximum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Loops cannot be tested"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Loop testing heuristics: skip, once, twice/typical, max − 1, max, early exit.</p><p><i>VI: Kinh nghiệm test vòng lặp: bỏ qua, một lần, hai lần/điển hình, max − 1, max, thoát sớm.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>“Which tool would you use to measure coverage on a Spring Boot project?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Bạn dùng công cụ gì đo coverage cho dự án Spring Boot?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Postman"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JaCoCo (with the Maven/Gradle plugin and its HTML report), optionally PIT for mutation testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Selenium"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Jira"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>JaCoCo measures line and branch coverage of JUnit runs; PIT mutates bytecode and reports the mutation score.</p><p><i>VI: JaCoCo đo line và branch coverage khi chạy JUnit; PIT đột biến bytecode và báo mutation score.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>“The team sets a rule: no merge below 80% branch coverage. Any risk?”</p><p style=\"opacity:.75;font-size:.92em\"><i>“Nhóm đặt luật: không merge nếu branch coverage dưới 80%. Có rủi ro gì?”</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No risk at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "People may write tests without real assertions just to reach the number; combine the gate with code review of the tests and, ideally, a mutation-score check"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Coverage gates make tests slower"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It forbids black-box testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Goodhart’s law: when a measure becomes a target it stops being a good measure.</p><p><i>VI: Định luật Goodhart: khi một chỉ số thành mục tiêu, nó không còn là chỉ số tốt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời “80% là đủ” mà không giải thích."
+        },
+        {
+          "loi": "Không biết tên công cụ (JaCoCo, PIT)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "statement coverage",
+          "vi": "độ phủ câu lệnh (C0)"
+        },
+        {
+          "en": "decision (branch) coverage",
+          "vi": "độ phủ quyết định / nhánh (C1)"
+        },
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        }
+      ]
+    }
+  ]
+}

@@ -64,6 +64,36 @@
       "description": "Dự án xuyên suốt LabBook — mốc chương 4: thiết kế test hộp đen cho POST /api/bookings (BVA mọi trường, luật kết quả, vòng đời booking) chạy thật, bắt 4 bản lỗi; kèm góc phỏng vấn về thiết kế test."
     },
     {
+      "slug": "swt301-whitebox-coverage",
+      "name": "5.1 Statement & decision coverage",
+      "level": "BEGINNER",
+      "description": "Độ phủ câu lệnh và quyết định đo thật trên mã gắn đo: câu hỏi K2, bộ tối thiểu cho statement (IF không ELSE), decision với IF nối tiếp (2 test / 8 đường), tính % độ phủ, vòng lặp một test đủ, và bẫy coverage (100% DC vẫn sót lỗi biên — giết 5 mutant)."
+    },
+    {
+      "slug": "swt301-cyclomatic-complexity",
+      "name": "5.2 Cyclomatic complexity & the minimum test set",
+      "level": "BEGINNER",
+      "description": "Công thức 5 bước của bài 5.2: V(G) và số test tối thiểu SC/DC của bốn đoạn mã, đọc CFG (N, E, P, V(G)), viết basis path theo phương pháp baseline, bài tam giác kinh điển đo độ phủ thật, câu hỏi kiểu slide 98–99."
+    },
+    {
+      "slug": "swt301-5-lab-whitebox-loyalty-points",
+      "name": "Lab 5 — White-box Unit Testing (calcLoyaltyPoints)",
+      "level": "ADVANCED",
+      "description": "Lab chương 5 dạng bản in: calcLoyaltyPoints (vòng lặp, hai điều kiện ghép, chặn trần) — chỉ số CFG/V(G), bộ DC tối thiểu có P/F, bộ MC/DC tối thiểu (đo thật), script kiểu JUnit giết 6 mutant."
+    },
+    {
+      "slug": "swt301-5-deep-mcdc-mutation-score",
+      "name": "Deep Lab 5 — MC/DC, Multiple Conditions & Mutation Score",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 5 (vượt syllabus): condition vs decision coverage, multiple condition coverage, MC/DC có ngắn mạch đo thật trên (A || B) && C, phân tích đột biến (mutant tương đương, mutation score) và nâng bộ test yếu lên 100%."
+    },
+    {
+      "slug": "swt301-5-project-labbook-whitebox",
+      "name": "LabBook Project 5 — White-box Testing of isSeatFree",
+      "level": "INTERMEDIATE",
+      "description": "Dự án LabBook — mốc chương 5: white-box cho thuật toán còn-chỗ (hai vòng lặp lồng, quyết định bốn điều kiện): chỉ số, phủ vòng lặp 0/1/nhiều + thoát sớm, decision + MC/DC đo thật; kèm góc phỏng vấn về coverage."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
       "level": "ADVANCED",

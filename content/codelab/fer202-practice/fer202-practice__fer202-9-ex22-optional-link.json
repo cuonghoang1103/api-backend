@@ -1,0 +1,461 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-ex22-optional-link",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-ex22-optional-link"
+  },
+  "exercises": [
+    {
+      "title": "Link vs <a>, and NavLink with a className function",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Link",
+        "NavLink isActive",
+        "external links"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "NavLink",
+        "exercise-22"
+      ],
+      "problemHtml": "<p>Internal navigation must use <code>Link</code>/<code>NavLink</code> (no reload); links to OTHER sites stay plain <code>&lt;a&gt;</code>, opened in a new tab safely. Style the menu with a <code>className</code> <b>function</b> receiving <code>{ isActive }</code>, so the active item gets <code>nav-item current</code> instead of the default <code>active</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Menu: <code>#m-home</code> (<code>/</code>, end), <code>#m-docs</code> (<code>/docs</code>), <code>#m-faq</code> (<code>/faq</code>) — class <code>nav-item</code>, plus <code>current</code> when active. Pages: <code>h1</code> with Home/Docs/FAQ.</li>\n  <li>External <code>#m-github</code> → <code>https://github.com</code> with <code>target=\"_blank\"</code> and <code>rel=\"noopener noreferrer\"</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điều hướng nội bộ phải dùng <code>Link</code>/<code>NavLink</code> (không tải lại); link sang site KHÁC vẫn là <code>&lt;a&gt;</code> thường, mở tab mới an toàn. Tạo kiểu menu bằng <code>className</code> dạng <b>hàm</b> nhận <code>{ isActive }</code>, để mục đang mở có <code>nav-item current</code> thay vì <code>active</code> mặc định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Menu: <code>#m-home</code> (<code>/</code>, end), <code>#m-docs</code> (<code>/docs</code>), <code>#m-faq</code> (<code>/faq</code>) — class <code>nav-item</code>, thêm <code>current</code> khi đang mở. Trang: <code>h1</code> ghi Home/Docs/FAQ.</li>\n  <li>Link ngoài <code>#m-github</code> → <code>https://github.com</code> có <code>target=\"_blank\"</code> và <code>rel=\"noopener noreferrer\"</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "on /docs",
+          "output": "#m-docs class=\"nav-item current\"",
+          "explanation": "className={({ isActive }) => isActive ? \"nav-item current\" : \"nav-item\"}|||className={({ isActive }) => isActive ? \"nav-item current\" : \"nav-item\"}"
+        }
+      ],
+      "hintsJson": [
+        "const cls = ({ isActive }) => (isActive ? \"nav-item current\" : \"nav-item\");",
+        "<NavLink to=\"/docs\" id=\"m-docs\" className={cls}>Docs</NavLink>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes } from 'react-router-dom';\n\nexport default function App() {\n  return (\n    <div>\n      <nav>\n        <a href=\"/\" id=\"m-home\" className=\"nav-item\">Home</a>\n        <a href=\"/docs\" id=\"m-docs\" className=\"nav-item\">Docs</a>\n        <a href=\"/faq\" id=\"m-faq\" className=\"nav-item\">FAQ</a>\n        <a href=\"https://github.com\" id=\"m-github\">GitHub</a>\n      </nav>\n      <Routes>\n        <Route path=\"/\" element={<h1>Home</h1>} />\n        <Route path=\"/docs\" element={<h1>Docs</h1>} />\n        <Route path=\"/faq\" element={<h1>FAQ</h1>} />\n      </Routes>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — NavLink cho link nội bộ (className dạng hàm), <a> an toàn cho link ngoài\nimport { NavLink, Route, Routes } from 'react-router-dom';\n\nconst cls = ({ isActive }) => (isActive ? 'nav-item current' : 'nav-item');\n\nexport default function App() {\n  return (\n    <div>\n      <nav>\n        <NavLink to=\"/\" end id=\"m-home\" className={cls}>Home</NavLink>{' '}\n        <NavLink to=\"/docs\" id=\"m-docs\" className={cls}>Docs</NavLink>{' '}\n        <NavLink to=\"/faq\" id=\"m-faq\" className={cls}>FAQ</NavLink>{' '}\n        <a href=\"https://github.com\" id=\"m-github\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>\n      </nav>\n      <Routes>\n        <Route path=\"/\" element={<h1>Home</h1>} />\n        <Route path=\"/docs\" element={<h1>Docs</h1>} />\n        <Route path=\"/faq\" element={<h1>FAQ</h1>} />\n      </Routes>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>NavLink</code> nhận <code>className</code> (và <code>style</code>) dạng hàm, gọi với <code>{ isActive, isPending }</code> — tiện khi dùng CSS framework có tên class riêng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Click navigates without reload",
+            "kiem": "danh-sach-text",
+            "selector": "h1",
+            "mongDoi": [
+              "FAQ"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#m-faq",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Active item gets \"current\"",
+            "url": "/docs",
+            "kiem": "thuoc-tinh",
+            "selector": "#m-docs",
+            "thuocTinh": "class",
+            "giaTri": "nav-item current"
+          },
+          {
+            "moTa": "Home not current on /docs",
+            "url": "/docs",
+            "kiem": "thuoc-tinh",
+            "selector": "#m-home",
+            "thuocTinh": "class",
+            "giaTri": "nav-item"
+          },
+          {
+            "moTa": "External link is safe",
+            "kiem": "thuoc-tinh",
+            "selector": "#m-github",
+            "thuocTinh": "rel",
+            "khop": "noopener"
+          },
+          {
+            "an": true,
+            "moTa": "External link opens a new tab",
+            "kiem": "thuoc-tinh",
+            "selector": "#m-github",
+            "thuocTinh": "target",
+            "giaTri": "_blank"
+          },
+          {
+            "an": true,
+            "moTa": "No reload",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#m-docs",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>Link</code> cho site ngoài ⇒ Router coi là đường dẫn nội bộ, ra \"/https://github.com\"."
+        },
+        {
+          "loi": "<code>target=\"_blank\"</code> thiếu <code>rel=\"noopener\"</code> ⇒ trang mới truy cập được <code>window.opener</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "internal / external link",
+          "vi": "link trong app / link sang site khác"
+        }
+      ]
+    },
+    {
+      "title": "Optional segment: /courses/:lang?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "optional params",
+        "one route, two URLs",
+        "validating params"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "useParams",
+        "exercise-22"
+      ],
+      "problemHtml": "<p>React Router 6.5+ supports <b>optional segments</b>. One route <code>/courses/:lang?</code> serves both <code>/courses</code> (all courses) and <code>/courses/vi</code> or <code>/courses/en</code> (filtered). An unsupported language shows a message instead of an empty list.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One <code>&lt;Route path=\"/courses/:lang?\"&gt;</code>. Items <code>li.course</code>; heading <code>#heading</code>: <code>All courses</code> / <code>Courses in vi</code>.</li>\n  <li>Filter links <code>#f-all</code>, <code>#f-vi</code>, <code>#f-en</code> (NavLink, <code>end</code> on all). Unknown ⇒ <code>#bad-lang</code> <code>Language \"fr\" is not supported</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>React Router 6.5+ hỗ trợ <b>đoạn tuỳ chọn</b>. Một route <code>/courses/:lang?</code> phục vụ cả <code>/courses</code> (mọi khoá) lẫn <code>/courses/vi</code> hay <code>/courses/en</code> (đã lọc). Ngôn ngữ không hỗ trợ thì hiện thông báo thay vì danh sách rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một <code>&lt;Route path=\"/courses/:lang?\"&gt;</code>. Dòng <code>li.course</code>; tiêu đề <code>#heading</code>: <code>All courses</code> / <code>Courses in vi</code>.</li>\n  <li>Link lọc <code>#f-all</code>, <code>#f-vi</code>, <code>#f-en</code> (NavLink, <code>end</code> cho cả ba). Lạ ⇒ <code>#bad-lang</code> <code>Language \"fr\" is not supported</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/courses/en",
+          "output": "React Router in Depth, Testing React Apps",
+          "explanation": "lang is undefined on /courses.|||Trên /courses thì lang là undefined."
+        }
+      ],
+      "hintsJson": [
+        "<Route path=\"/courses/:lang?\" element={<Courses />} />",
+        "const { lang } = useParams(); if (lang && ![\"vi\", \"en\"].includes(lang)) …"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes } from 'react-router-dom';\n\nconst COURSES = [\n  { id: 1, title: 'React cơ bản', lang: 'vi' },\n  { id: 2, title: 'React Router in Depth', lang: 'en' },\n  { id: 3, title: 'Redux Toolkit thực chiến', lang: 'vi' },\n  { id: 4, title: 'Testing React Apps', lang: 'en' },\n  { id: 5, title: 'Hooks nâng cao', lang: 'vi' },\n];\n\nfunction Courses() {\n  return <ul>{COURSES.map((c) => <li key={c.id} className=\"course\">{c.title}</li>)}</ul>;\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/courses\" element={<Courses />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một route với đoạn tuỳ chọn :lang?\nimport { NavLink, Navigate, Route, Routes, useParams } from 'react-router-dom';\n\nconst COURSES = [\n  { id: 1, title: 'React cơ bản', lang: 'vi' },\n  { id: 2, title: 'React Router in Depth', lang: 'en' },\n  { id: 3, title: 'Redux Toolkit thực chiến', lang: 'vi' },\n  { id: 4, title: 'Testing React Apps', lang: 'en' },\n  { id: 5, title: 'Hooks nâng cao', lang: 'vi' },\n];\n\nconst SUPPORTED = ['vi', 'en'];\n\nfunction Courses() {\n  const { lang } = useParams();\n  const filters = (\n    <nav>\n      <NavLink to=\"/courses\" end id=\"f-all\">All</NavLink>{' '}\n      <NavLink to=\"/courses/vi\" end id=\"f-vi\">VI</NavLink>{' '}\n      <NavLink to=\"/courses/en\" end id=\"f-en\">EN</NavLink>\n    </nav>\n  );\n  if (lang && !SUPPORTED.includes(lang)) {\n    return (<div>{filters}<p id=\"bad-lang\">Language \"{lang}\" is not supported</p></div>);\n  }\n  const shown = lang ? COURSES.filter((c) => c.lang === lang) : COURSES;\n  return (\n    <div>\n      {filters}\n      <h1 id=\"heading\">{lang ? `Courses in ${lang}` : 'All courses'}</h1>\n      <ul>{shown.map((c) => <li key={c.id} className=\"course\">{c.title}</li>)}</ul>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/courses\" replace />} />\n      <Route path=\"/courses/:lang?\" element={<Courses />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dấu <code>?</code> sau tham số khiến đoạn đó không bắt buộc; <code>useParams()</code> trả <code>undefined</code> khi URL không có nó. Luôn kiểm giá trị tham số — URL là dữ liệu người dùng gõ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "All courses without the segment",
+            "url": "/courses",
+            "kiem": "danh-sach-text",
+            "selector": "#heading",
+            "mongDoi": [
+              "All courses"
+            ]
+          },
+          {
+            "moTa": "Filtered by lang",
+            "url": "/courses/en",
+            "kiem": "danh-sach-text",
+            "selector": "li.course",
+            "mongDoi": [
+              "React Router in Depth",
+              "Testing React Apps"
+            ]
+          },
+          {
+            "moTa": "Filter link navigates",
+            "url": "/courses",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/vi",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#f-vi",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Unsupported language",
+            "url": "/courses/fr",
+            "kiem": "text",
+            "selector": "#bad-lang",
+            "giaTri": "Language \"fr\" is not supported"
+          },
+          {
+            "an": true,
+            "moTa": "\"All\" not active while filtering",
+            "url": "/courses/vi",
+            "kiem": "khong-ton-tai",
+            "selector": "#f-all.active"
+          },
+          {
+            "an": true,
+            "moTa": "One route with an optional segment",
+            "kiem": "ma-nguon",
+            "khop": "path=[\"']/courses/:lang\\?[\"']"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Khai hai route <code>/courses</code> và <code>/courses/:lang</code> trỏ cùng component — chạy được nhưng thừa; đề yêu cầu một route."
+        },
+        {
+          "loi": "Quên <code>end</code> trên <code>#f-all</code> ⇒ \"All\" sáng cả khi đang lọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "optional segment",
+          "vi": "đoạn URL có thể có hoặc không (dấu ?)"
+        }
+      ]
+    },
+    {
+      "title": "Pagination with ?page= and Link",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "query params with Link",
+        "clamping input",
+        "disabled navigation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "useSearchParams",
+        "exercise-22"
+      ],
+      "problemHtml": "<p>Show 12 articles, <b>5 per page</b>. The page number lives in the URL (<code>/articles?page=2</code>) so it can be bookmarked. Pagination buttons are <code>Link</code>s built from the current page. Bad values (<code>page=abc</code>, <code>page=99</code>, <code>page=0</code>) are clamped to a valid page.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Articles titled <code>Article 1</code> … <code>Article 12</code> in <code>li.article</code>; <code>#page-info</code> <code>Page 2 of 3</code>.</li>\n  <li><code>#prev</code> / <code>#next</code> are Links to <code>?page=n±1</code>; on the first/last page render a <code>span</code> with the same id and class <code>disabled</code> instead. Number links <code>a.page-num</code> 1..3, current one has class <code>current</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiện 12 bài viết, <b>5 bài/trang</b>. Số trang nằm trên URL (<code>/articles?page=2</code>) để lưu dấu trang được. Nút phân trang là <code>Link</code> tạo từ trang hiện tại. Giá trị sai (<code>page=abc</code>, <code>page=99</code>, <code>page=0</code>) được kẹp về trang hợp lệ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bài <code>Article 1</code> … <code>Article 12</code> trong <code>li.article</code>; <code>#page-info</code> <code>Page 2 of 3</code>.</li>\n  <li><code>#prev</code> / <code>#next</code> là Link tới <code>?page=n±1</code>; ở trang đầu/cuối vẽ <code>span</code> cùng id với class <code>disabled</code>. Link số <code>a.page-num</code> 1..3, trang hiện tại có class <code>current</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/articles?page=3",
+          "output": "Article 11, Article 12 · Next disabled",
+          "explanation": "slice((page - 1) * 5, page * 5)|||slice((page - 1) * 5, page * 5)"
+        }
+      ],
+      "hintsJson": [
+        "const raw = Number(params.get(\"page\")); const page = Number.isInteger(raw) ? Math.min(Math.max(raw, 1), totalPages) : 1;",
+        "<Link id=\"next\" to={`?page=${page + 1}`}>Next</Link>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport { Navigate, Route, Routes } from 'react-router-dom';\n\nconst ARTICLES = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, title: 'Article ' + (i + 1) }));\n\nfunction Articles() {\n  const [page, setPage] = useState(1);\n  const shown = ARTICLES.slice((page - 1) * 5, page * 5);\n  return (\n    <div>\n      <ul>{shown.map((a) => <li key={a.id} className=\"article\">{a.title}</li>)}</ul>\n      <a id=\"next\" href={'?page=' + (page + 1)} onClick={() => setPage(page + 1)}>Next</a>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/articles\" replace />} />\n      <Route path=\"/articles\" element={<Articles />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — trang hiện tại suy ra từ ?page= (đã kẹp), nút phân trang là Link\nimport { Link, Navigate, Route, Routes, useSearchParams } from 'react-router-dom';\n\nconst ARTICLES = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, title: `Article ${i + 1}` }));\nconst PER_PAGE = 5;\nconst TOTAL_PAGES = Math.ceil(ARTICLES.length / PER_PAGE);\n\nfunction Articles() {\n  const [params] = useSearchParams();\n  const raw = Number(params.get('page'));\n  const page = Number.isInteger(raw) ? Math.min(Math.max(raw, 1), TOTAL_PAGES) : 1;\n  const shown = ARTICLES.slice((page - 1) * PER_PAGE, page * PER_PAGE);\n\n  return (\n    <div>\n      <ul>{shown.map((a) => <li key={a.id} className=\"article\">{a.title}</li>)}</ul>\n      <p id=\"page-info\">Page {page} of {TOTAL_PAGES}</p>\n      <nav>\n        {page > 1 ? <Link id=\"prev\" to={`?page=${page - 1}`}>Prev</Link> : <span id=\"prev\" className=\"disabled\">Prev</span>}{' '}\n        {Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).map((n) => (\n          <Link key={n} to={`?page=${n}`} className={n === page ? 'page-num current' : 'page-num'}>{n}</Link>\n        ))}{' '}\n        {page < TOTAL_PAGES ? <Link id=\"next\" to={`?page=${page + 1}`}>Next</Link> : <span id=\"next\" className=\"disabled\">Next</span>}\n      </nav>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/articles\" replace />} />\n      <Route path=\"/articles\" element={<Articles />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Link với <code>to=\"?page=2\"</code> là đường dẫn tương đối chỉ đổi query string. Trang hiện tại suy ra từ URL mỗi lần render, nên Back/Forward của trình duyệt và lưu dấu trang đều đúng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Page from the URL",
+            "url": "/articles?page=3",
+            "kiem": "danh-sach-text",
+            "selector": "li.article",
+            "mongDoi": [
+              "Article 11",
+              "Article 12"
+            ]
+          },
+          {
+            "moTa": "Next link goes to page 2",
+            "url": "/articles",
+            "kiem": "duong-dan",
+            "giaTri": "/articles?page=2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Page info",
+            "url": "/articles?page=2",
+            "kiem": "text",
+            "selector": "#page-info",
+            "giaTri": "Page 2 of 3"
+          },
+          {
+            "moTa": "Prev disabled on page 1",
+            "url": "/articles",
+            "kiem": "ton-tai",
+            "selector": "span#prev.disabled"
+          },
+          {
+            "an": true,
+            "moTa": "Too big ⇒ last page",
+            "url": "/articles?page=99",
+            "kiem": "text",
+            "selector": "#page-info",
+            "giaTri": "Page 3 of 3"
+          },
+          {
+            "an": true,
+            "moTa": "Garbage ⇒ first page",
+            "url": "/articles?page=abc",
+            "kiem": "text",
+            "selector": "#page-info",
+            "giaTri": "Page 1 of 3"
+          },
+          {
+            "an": true,
+            "moTa": "Current number highlighted",
+            "url": "/articles?page=2",
+            "kiem": "text",
+            "selector": "a.page-num.current",
+            "giaTri": "2"
+          },
+          {
+            "an": true,
+            "moTa": "No reload when paging",
+            "url": "/articles",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#next",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không kẹp ⇒ page=99 hiện danh sách trống, page=abc hiện \"Page NaN\"."
+        },
+        {
+          "loi": "Dùng <code>&lt;a href=\"?page=2\"&gt;</code> ⇒ tải lại toàn trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pagination",
+          "vi": "phân trang"
+        },
+        {
+          "en": "clamp",
+          "vi": "kẹp vào khoảng hợp lệ"
+        }
+      ]
+    }
+  ]
+}

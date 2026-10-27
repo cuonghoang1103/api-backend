@@ -1,0 +1,267 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-interview-router",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-1-router"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — React Router & SPA navigation (Chapter 9)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "React Router & SPA navigation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>React Router & SPA navigation</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>React Router & SPA navigation</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React Router & SPA navigation (Chapter 9)\n\nAnswer in the panel on the left (no code needed).\n\n1. How does client-side routing work?\n2. Why does refreshing /products/3 sometimes give a 404 in production?\n3. Path params vs query params — when to use which?\n4. How do you protect a route that needs login?\n5. What is a layout route and why use it?\n6. Link vs useNavigate?\n7. Your detail page shows stale data when going from /users/1 to /users/2. Why?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React Router & SPA navigation (Chapter 9) — answer key\n\n1. How does client-side routing work?\n   Answer: b) The app listens to URL changes (History API), matches the path against route definitions and renders the matching components without reloading.\n   Model answer: \"The server always returns the same index.html. React Router uses the History API — pushState and the popstate event — to change the URL without a request, then matches the path against my routes and renders the matching element tree.\" / Trả lời mẫu: \"Server luôn trả cùng index.html. React Router dùng History API — pushState và sự kiện popstate — để đổi URL mà không gửi request, rồi so đường dẫn với các route và vẽ cây phần tử khớp.\"\n\n2. Why does refreshing /products/3 sometimes give a 404 in production?\n   Answer: b) The web server looks for a real file at that path; it must be configured to fall back to index.html for unknown paths (try_files in nginx, rewrites on hosting).\n   Model answer: \"On refresh the browser asks the server for /products/3. With static hosting there is no such file, so it returns 404. I configure a fallback to index.html — try_files $uri /index.html in nginx — and the router takes over.\" / Trả lời mẫu: \"Khi refresh, trình duyệt hỏi server /products/3. Hosting tĩnh không có tệp đó nên trả 404. Tôi cấu hình lùi về index.html — try_files $uri /index.html trong nginx — rồi router xử lý tiếp.\"\n\n3. Path params vs query params — when to use which?\n   Answer: b) Path params identify a resource (/users/3); query params describe a view of it — filters, sort, page (?sort=price&page=2).\n   Model answer: \"If the value identifies WHICH thing — a user, a product — it goes in the path. Optional modifiers like filters, sorting or the page number go in the query string, read with useSearchParams, so the URL stays shareable.\" / Trả lời mẫu: \"Giá trị xác định CÁI GÌ — một user, một sản phẩm — thì nằm trong path. Các tuỳ chọn như lọc, sắp xếp, số trang thì nằm trong query string, đọc bằng useSearchParams, để URL chia sẻ được.\"\n\n4. How do you protect a route that needs login?\n   Answer: b) Wrap it in a guard component that checks auth and renders — and still protect the API on the server.\n   Model answer: \"A RequireAuth wrapper reads the user from context; if missing it redirects to login, remembering the original location so we can send the user back after login. That is UX only — the real protection is the server rejecting requests without a valid token.\" / Trả lời mẫu: \"Component RequireAuth đọc user từ context; chưa đăng nhập thì chuyển tới login, nhớ vị trí ban đầu để đăng nhập xong quay lại. Đó chỉ là trải nghiệm — bảo vệ thật là server từ chối request không có token hợp lệ.\"\n\n5. What is a layout route and why use it?\n   Answer: b) A parent route whose element renders shared UI and an for children, so header/sidebar persist while child pages change.\n   Model answer: \"I put shared chrome — navbar, sidebar, breadcrumbs — in a layout component, declare child routes under it, and render where the page goes. The layout is not remounted on navigation, which keeps its state.\" / Trả lời mẫu: \"Tôi đặt phần khung dùng chung — navbar, sidebar, breadcrumb — trong component layout, khai route con bên dưới, và vẽ ở chỗ trang con. Layout không bị mount lại khi điều hướng nên giữ được state.\"\n\n6. Link vs useNavigate?\n   Answer: b) Link renders an accessible anchor for user clicks (open in new tab works); useNavigate is for navigation after an action like a form submit or login.\n   Model answer: \"If the user clicks something to go somewhere, I use Link — it is a real anchor, so middle-click, copy link and screen readers work. After a side effect — saving, logging in — I call navigate, often with replace.\" / Trả lời mẫu: \"Người dùng bấm để đi đâu đó thì dùng Link — là thẻ a thật nên bấm chuột giữa, sao chép link, trình đọc màn hình đều chạy. Sau một việc — lưu, đăng nhập — thì gọi navigate, thường kèm replace.\"\n\n7. Your detail page shows stale data when going from /users/1 to /users/2. Why?\n   Answer: b) The same component instance stays mounted; the data-loading effect does not list id in its dependencies (or state is not reset).\n   Model answer: \"React Router reuses the component when only params change. If the effect has [] it never refetches. I add id to the dependency array — or give the component key={id} to force a fresh instance.\" / Trả lời mẫu: \"React Router dùng lại component khi chỉ tham số đổi. Effect có [] thì không tải lại. Tôi thêm id vào mảng phụ thuộc — hoặc đặt key={id} để buộc tạo instance mới.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "How does client-side routing work?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server renders every page."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The app listens to URL changes (History API), matches the path against route definitions and renders the matching components without reloading."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It uses iframes."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It reloads only the CSS."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"The server always returns the same index.html. React Router uses the History API — pushState and the popstate event — to change the URL without a request, then matches the path against my routes and renders the matching element tree.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Server luôn trả cùng index.html. React Router dùng History API — pushState và sự kiện popstate — để đổi URL mà không gửi request, rồi so đường dẫn với các route và vẽ cây phần tử khớp.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Why does refreshing /products/3 sometimes give a 404 in production?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "React Router bug."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The web server looks for a real file at that path; it must be configured to fall back to index.html for unknown paths (try_files in nginx, rewrites on hosting)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The id is wrong."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers block refresh."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"On refresh the browser asks the server for /products/3. With static hosting there is no such file, so it returns 404. I configure a fallback to index.html — try_files $uri /index.html in nginx — and the router takes over.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Khi refresh, trình duyệt hỏi server /products/3. Hosting tĩnh không có tệp đó nên trả 404. Tôi cấu hình lùi về index.html — try_files $uri /index.html trong nginx — rồi router xử lý tiếp.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "Path params vs query params — when to use which?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are interchangeable."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Path params identify a resource (/users/3); query params describe a view of it — filters, sort, page (?sort=price&page=2)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Query params are only for APIs."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Path params are deprecated."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"If the value identifies WHICH thing — a user, a product — it goes in the path. Optional modifiers like filters, sorting or the page number go in the query string, read with useSearchParams, so the URL stays shareable.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Giá trị xác định CÁI GÌ — một user, một sản phẩm — thì nằm trong path. Các tuỳ chọn như lọc, sắp xếp, số trang thì nằm trong query string, đọc bằng useSearchParams, để URL chia sẻ được.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "How do you protect a route that needs login?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hide the link only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Wrap it in a guard component that checks auth and renders <Navigate to=\"/login\" replace state={{ from: location }} /> — and still protect the API on the server."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use a CSS class."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable the URL bar."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"A RequireAuth wrapper reads the user from context; if missing it redirects to login, remembering the original location so we can send the user back after login. That is UX only — the real protection is the server rejecting requests without a valid token.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Component RequireAuth đọc user từ context; chưa đăng nhập thì chuyển tới login, nhớ vị trí ban đầu để đăng nhập xong quay lại. Đó chỉ là trải nghiệm — bảo vệ thật là server từ chối request không có token hợp lệ.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "What is a layout route and why use it?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A CSS grid."
+              },
+              {
+                "ma": "b",
+                "noiDung": "A parent route whose element renders shared UI and an <Outlet /> for children, so header/sidebar persist while child pages change."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A route for the homepage."
+              },
+              {
+                "ma": "d",
+                "noiDung": "A route without a path that is never rendered."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I put shared chrome — navbar, sidebar, breadcrumbs — in a layout component, declare child routes under it, and render <Outlet /> where the page goes. The layout is not remounted on navigation, which keeps its state.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi đặt phần khung dùng chung — navbar, sidebar, breadcrumb — trong component layout, khai route con bên dưới, và vẽ <Outlet /> ở chỗ trang con. Layout không bị mount lại khi điều hướng nên giữ được state.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Link vs useNavigate?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Same thing."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Link renders an accessible anchor for user clicks (open in new tab works); useNavigate is for navigation after an action like a form submit or login."
+              },
+              {
+                "ma": "c",
+                "noiDung": "useNavigate is deprecated."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Link reloads the page."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"If the user clicks something to go somewhere, I use Link — it is a real anchor, so middle-click, copy link and screen readers work. After a side effect — saving, logging in — I call navigate, often with replace.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Người dùng bấm để đi đâu đó thì dùng Link — là thẻ a thật nên bấm chuột giữa, sao chép link, trình đọc màn hình đều chạy. Sau một việc — lưu, đăng nhập — thì gọi navigate, thường kèm replace.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Your detail page shows stale data when going from /users/1 to /users/2. Why?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Browser cache."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The same component instance stays mounted; the data-loading effect does not list id in its dependencies (or state is not reset)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Router bug."
+              },
+              {
+                "ma": "d",
+                "noiDung": "JSON is cached by React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React Router reuses the component when only params change. If the effect has [] it never refetches. I add id to the dependency array — or give the component key={id} to force a fresh instance.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React Router dùng lại component khi chỉ tham số đổi. Effect có [] thì không tải lại. Tôi thêm id vào mảng phụ thuộc — hoặc đặt key={id} để buộc tạo instance mới.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

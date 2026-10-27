@@ -1,0 +1,834 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-1-router",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-1-router"
+  },
+  "exercises": [
+    {
+      "title": "Routes, NavLink and a 404 page",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Routes/Route",
+        "NavLink active",
+        "catch-all route"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "react-router"
+      ],
+      "problemHtml": "<p>A three-page site: Home (<code>/</code>), About (<code>/about</code>), Contact (<code>/contact</code>), plus a 404 page for any other URL. The starter uses <code>&lt;a href&gt;</code>, which reloads the whole app on every click — replace it with <code>NavLink</code> so the active link is highlighted and navigation stays client-side.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Headings <code>#page-home</code> (Home), <code>#page-about</code> (About us), <code>#page-contact</code> (Contact), <code>#page-404</code> (Page not found).</li>\n  <li>Nav links <code>#nav-home</code> (with <code>end</code>), <code>#nav-about</code>, <code>#nav-contact</code>; the active one has class <code>active</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Site ba trang: Home (<code>/</code>), About (<code>/about</code>), Contact (<code>/contact</code>), thêm trang 404 cho mọi URL khác. Starter dùng <code>&lt;a href&gt;</code>, mỗi lần bấm tải lại cả app — thay bằng <code>NavLink</code> để link đang mở được tô sáng và điều hướng chạy phía client.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tiêu đề <code>#page-home</code> (Home), <code>#page-about</code> (About us), <code>#page-contact</code> (Contact), <code>#page-404</code> (Page not found).</li>\n  <li>Link <code>#nav-home</code> (có <code>end</code>), <code>#nav-about</code>, <code>#nav-contact</code>; link đang mở có class <code>active</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "URL /abc",
+          "output": "Page not found",
+          "explanation": "<Route path=\"*\"> matches anything not matched before.|||<Route path=\"*\"> khớp mọi thứ chưa khớp route nào."
+        }
+      ],
+      "hintsJson": [
+        "<Routes><Route path=\"/\" element={<Home />} /> … <Route path=\"*\" element={<NotFound />} /></Routes>",
+        "<NavLink to=\"/\" end id=\"nav-home\">Home</NavLink> — thiếu end thì \"/\" luôn active."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return (\n    <div>\n      <nav>\n        <a href=\"/\" id=\"nav-home\">Home</a>\n        <a href=\"/about\" id=\"nav-about\">About</a>\n        <a href=\"/contact\" id=\"nav-contact\">Contact</a>\n      </nav>\n      <h1 id=\"page-home\">Home</h1>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Routes + NavLink + route 404\nimport { NavLink, Route, Routes } from 'react-router-dom';\n\nconst Home = () => <h1 id=\"page-home\">Home</h1>;\nconst About = () => <h1 id=\"page-about\">About us</h1>;\nconst Contact = () => <h1 id=\"page-contact\">Contact</h1>;\nconst NotFound = () => <h1 id=\"page-404\">Page not found</h1>;\n\nexport default function App() {\n  return (\n    <div>\n      <nav>\n        <NavLink to=\"/\" end id=\"nav-home\">Home</NavLink>{' '}\n        <NavLink to=\"/about\" id=\"nav-about\">About</NavLink>{' '}\n        <NavLink to=\"/contact\" id=\"nav-contact\">Contact</NavLink>\n      </nav>\n      <Routes>\n        <Route path=\"/\" element={<Home />} />\n        <Route path=\"/about\" element={<About />} />\n        <Route path=\"/contact\" element={<Contact />} />\n        <Route path=\"*\" element={<NotFound />} />\n      </Routes>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>BrowserRouter</code> (trong index.js) theo dõi URL; <code>Routes</code> chọn route khớp nhất; <code>NavLink</code> tự gắn class <code>active</code> khi đường dẫn khớp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "/about shows About",
+            "url": "/about",
+            "kiem": "text",
+            "selector": "#page-about",
+            "giaTri": "About us"
+          },
+          {
+            "moTa": "Unknown URL ⇒ 404",
+            "url": "/abc/xyz",
+            "kiem": "text",
+            "selector": "#page-404",
+            "giaTri": "Page not found"
+          },
+          {
+            "moTa": "Clicking a link navigates",
+            "kiem": "duong-dan",
+            "giaTri": "/contact",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-contact",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Active link highlighted",
+            "url": "/contact",
+            "kiem": "ton-tai",
+            "selector": "#nav-contact.active"
+          },
+          {
+            "an": true,
+            "moTa": "Home link not active on /about (end)",
+            "url": "/about",
+            "kiem": "khong-ton-tai",
+            "selector": "#nav-home.active"
+          },
+          {
+            "an": true,
+            "moTa": "No full reload on navigation",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-about",
+                "lan": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>&lt;a href&gt;</code> ⇒ tải lại trang, mất state."
+        },
+        {
+          "loi": "Quên <code>end</code> trên link \"/\" ⇒ Home sáng ở mọi trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "client-side routing",
+          "vi": "đổi trang bằng JavaScript, không tải lại từ server"
+        }
+      ]
+    },
+    {
+      "title": "Route parameters: product detail by id",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "useParams",
+        "string params",
+        "not-found state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "useParams"
+      ],
+      "problemHtml": "<p>A list at <code>/products</code> links to <code>/products/:id</code>. The detail page reads <code>id</code> with <code>useParams</code> — remember it is a <b>string</b> — and finds the product. An unknown id shows a friendly message with a link back.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>List: <code>a.product-link</code> per product (text = name). <code>/</code> redirects to <code>/products</code> (<code>&lt;Navigate replace&gt;</code>).</li>\n  <li>Detail: <code>#product-name</code>, <code>#product-price</code> <code>22,990,000 ₫</code>; not found ⇒ <code>#not-found</code> <code>Product #99 not found</code> + <code>#back</code> link to the list.</li>\n</ul>",
+      "problemHtmlVi": "<p>Danh sách ở <code>/products</code> link tới <code>/products/:id</code>. Trang chi tiết đọc <code>id</code> bằng <code>useParams</code> — nhớ nó là <b>chuỗi</b> — rồi tìm sản phẩm. Id không tồn tại hiện thông báo thân thiện kèm link quay lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Danh sách: mỗi sản phẩm một <code>a.product-link</code> (chữ = tên). <code>/</code> chuyển hướng tới <code>/products</code> (<code>&lt;Navigate replace&gt;</code>).</li>\n  <li>Chi tiết: <code>#product-name</code>, <code>#product-price</code> <code>22,990,000 ₫</code>; không có ⇒ <code>#not-found</code> <code>Product #99 not found</code> + link <code>#back</code> về danh sách.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/products/3",
+          "output": "MacBook Air M3 · 27,990,000 ₫",
+          "explanation": "PRODUCTS.find(p => p.id === Number(id))|||PRODUCTS.find(p => p.id === Number(id))"
+        }
+      ],
+      "hintsJson": [
+        "const { id } = useParams(); const product = PRODUCTS.find((p) => p.id === Number(id));",
+        "<Route path=\"/\" element={<Navigate to=\"/products\" replace />} />"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes, useParams } from 'react-router-dom';\n\nconst PRODUCTS = [\n  { id: 1, name: 'iPhone 15', category: 'phone', price: 22990000 },\n  { id: 2, name: 'Galaxy S24', category: 'phone', price: 19990000 },\n  { id: 3, name: 'MacBook Air M3', category: 'laptop', price: 27990000 },\n  { id: 4, name: 'ThinkPad X1', category: 'laptop', price: 32990000 },\n  { id: 5, name: 'AirPods Pro', category: 'audio', price: 5990000 },\n];\n\nfunction ProductDetail() {\n  const { id } = useParams();\n  const product = PRODUCTS.find((p) => p.id === id);\n  return <h1 id=\"product-name\">{product.name}</h1>;\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/products/:id\" element={<ProductDetail />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useParams (chuỗi ⇒ số), nhánh không tìm thấy, Navigate chuyển hướng\nimport { Link, Navigate, Route, Routes, useParams } from 'react-router-dom';\n\nconst PRODUCTS = [\n  { id: 1, name: 'iPhone 15', category: 'phone', price: 22990000 },\n  { id: 2, name: 'Galaxy S24', category: 'phone', price: 19990000 },\n  { id: 3, name: 'MacBook Air M3', category: 'laptop', price: 27990000 },\n  { id: 4, name: 'ThinkPad X1', category: 'laptop', price: 32990000 },\n  { id: 5, name: 'AirPods Pro', category: 'audio', price: 5990000 },\n];\n\nconst vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n\nfunction ProductList() {\n  return (\n    <ul>\n      {PRODUCTS.map((p) => (\n        <li key={p.id}><Link className=\"product-link\" to={`/products/${p.id}`}>{p.name}</Link></li>\n      ))}\n    </ul>\n  );\n}\n\nfunction ProductDetail() {\n  const { id } = useParams();\n  const product = PRODUCTS.find((p) => p.id === Number(id));\n  if (!product) {\n    return (\n      <div>\n        <p id=\"not-found\">Product #{id} not found</p>\n        <Link id=\"back\" to=\"/products\">Back to products</Link>\n      </div>\n    );\n  }\n  return (\n    <div>\n      <h1 id=\"product-name\">{product.name}</h1>\n      <p id=\"product-price\">{vnd(product.price)}</p>\n      <Link id=\"back\" to=\"/products\">Back to products</Link>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/products\" replace />} />\n      <Route path=\"/products\" element={<ProductList />} />\n      <Route path=\"/products/:id\" element={<ProductDetail />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi tham số URL đều là chuỗi. Đổi sang số trước khi so sánh, và luôn có nhánh \"không tìm thấy\" — người dùng có thể gõ URL bất kỳ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Detail by id",
+            "url": "/products/3",
+            "kiem": "danh-sach-text",
+            "selector": "#product-name, #product-price",
+            "mongDoi": [
+              "MacBook Air M3",
+              "27,990,000 ₫"
+            ]
+          },
+          {
+            "moTa": "Unknown id",
+            "url": "/products/99",
+            "kiem": "text",
+            "selector": "#not-found",
+            "giaTri": "Product #99 not found"
+          },
+          {
+            "moTa": "Clicking a product opens its page",
+            "url": "/products",
+            "kiem": "duong-dan",
+            "giaTri": "/products/2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li:nth-child(2) .product-link",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "/ redirects to /products",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".product-link",
+            "giaTri": 5
+          },
+          {
+            "an": true,
+            "moTa": "Back link returns to the list",
+            "url": "/products/99",
+            "kiem": "duong-dan",
+            "giaTri": "/products",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#back",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Redirect replaces the URL",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/products"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So sánh <code>p.id === id</code> (số với chuỗi) ⇒ luôn không tìm thấy."
+        },
+        {
+          "loi": "Không xử lý id lạ ⇒ đọc <code>product.name</code> của undefined, trắng trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route parameter",
+          "vi": "đoạn động trong URL, vd :id"
+        }
+      ]
+    },
+    {
+      "title": "Nested routes: a dashboard layout with Outlet",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "nested Route",
+        "Outlet",
+        "index route",
+        "relative links"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "Outlet"
+      ],
+      "problemHtml": "<p>A dashboard at <code>/dashboard</code> whose sidebar and title stay on screen while the content area changes: <b>Overview</b> (index route), <b>Orders</b> (<code>orders</code>) and <b>Settings</b> (<code>settings</code>). The layout renders <code>&lt;Outlet /&gt;</code> where the child page goes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Layout: <code>#dash-title</code> <code>Admin dashboard</code> + sidebar NavLinks <code>#side-overview</code> (end), <code>#side-orders</code>, <code>#side-settings</code> + <code>#content</code> wrapping the Outlet.</li>\n  <li>Children: <code>#overview</code> (Overview), <code>#orders</code> (Orders), <code>#settings</code> (Settings). Use relative paths in the child routes and links.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dashboard ở <code>/dashboard</code> có thanh bên và tiêu đề luôn hiện, chỉ vùng nội dung đổi: <b>Overview</b> (index route), <b>Orders</b> (<code>orders</code>) và <b>Settings</b> (<code>settings</code>). Layout vẽ <code>&lt;Outlet /&gt;</code> ở chỗ trang con xuất hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Layout: <code>#dash-title</code> <code>Admin dashboard</code> + NavLink thanh bên <code>#side-overview</code> (end), <code>#side-orders</code>, <code>#side-settings</code> + <code>#content</code> bọc Outlet.</li>\n  <li>Trang con: <code>#overview</code> (Overview), <code>#orders</code> (Orders), <code>#settings</code> (Settings). Dùng đường dẫn tương đối trong route con và link.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/dashboard/orders",
+          "output": "Admin dashboard + Orders",
+          "explanation": "The parent element renders, and the child appears in its Outlet.|||Phần tử cha được vẽ, phần tử con xuất hiện trong Outlet của cha."
+        }
+      ],
+      "hintsJson": [
+        "<Route path=\"/dashboard\" element={<DashboardLayout />}><Route index element={<Overview />} /><Route path=\"orders\" element={<Orders />} /> …</Route>",
+        "Trong layout: <NavLink to=\"orders\">, <NavLink to=\".\" end> cho Overview."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes } from 'react-router-dom';\n\nconst Overview = () => <h2 id=\"overview\">Overview</h2>;\nconst Orders = () => <h2 id=\"orders\">Orders</h2>;\nconst Settings = () => <h2 id=\"settings\">Settings</h2>;\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/dashboard\" element={<Overview />} />\n      <Route path=\"/dashboard/orders\" element={<Orders />} />\n      <Route path=\"/dashboard/settings\" element={<Settings />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — layout + Outlet, index route, đường dẫn tương đối\nimport { Navigate, NavLink, Outlet, Route, Routes } from 'react-router-dom';\n\nconst Overview = () => <h2 id=\"overview\">Overview</h2>;\nconst Orders = () => <h2 id=\"orders\">Orders</h2>;\nconst Settings = () => <h2 id=\"settings\">Settings</h2>;\n\nfunction DashboardLayout() {\n  return (\n    <div>\n      <h1 id=\"dash-title\">Admin dashboard</h1>\n      <aside>\n        <NavLink to=\".\" end id=\"side-overview\">Overview</NavLink>{' '}\n        <NavLink to=\"orders\" id=\"side-orders\">Orders</NavLink>{' '}\n        <NavLink to=\"settings\" id=\"side-settings\">Settings</NavLink>\n      </aside>\n      <section id=\"content\">\n        <Outlet />\n      </section>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/dashboard\" replace />} />\n      <Route path=\"/dashboard\" element={<DashboardLayout />}>\n        <Route index element={<Overview />} />\n        <Route path=\"orders\" element={<Orders />} />\n        <Route path=\"settings\" element={<Settings />} />\n      </Route>\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Route lồng ghép URL: <code>/dashboard</code> + <code>orders</code>. Layout cha luôn được vẽ, route con khớp được vẽ vào Outlet — đó là cách giữ thanh bên, header không bị dựng lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Index route inside the layout",
+            "url": "/dashboard",
+            "kiem": "danh-sach-text",
+            "selector": "#dash-title, #content h2",
+            "mongDoi": [
+              "Admin dashboard",
+              "Overview"
+            ]
+          },
+          {
+            "moTa": "Child route renders in the Outlet",
+            "url": "/dashboard/orders",
+            "kiem": "ton-tai",
+            "selector": "#content #orders"
+          },
+          {
+            "moTa": "Sidebar link navigates",
+            "url": "/dashboard",
+            "kiem": "duong-dan",
+            "giaTri": "/dashboard/settings",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#side-settings",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Layout stays while content changes",
+            "url": "/dashboard/settings",
+            "kiem": "text",
+            "selector": "#dash-title",
+            "giaTri": "Admin dashboard"
+          },
+          {
+            "an": true,
+            "moTa": "Overview link active only on the index",
+            "url": "/dashboard/orders",
+            "kiem": "khong-ton-tai",
+            "selector": "#side-overview.active"
+          },
+          {
+            "an": true,
+            "moTa": "Uses <Outlet />",
+            "kiem": "ma-nguon",
+            "khop": "<Outlet\\s*/>"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>&lt;Outlet /&gt;</code> ⇒ URL đổi nhưng nội dung con không hiện."
+        },
+        {
+          "loi": "Viết route con bắt đầu bằng \"/\" (<code>path=\"/orders\"</code>) ⇒ thành route tuyệt đối, lỗi lồng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index route",
+          "vi": "route con mặc định khi URL đúng bằng route cha"
+        },
+        {
+          "en": "Outlet",
+          "vi": "chỗ trống trong layout để vẽ route con"
+        }
+      ]
+    },
+    {
+      "title": "useNavigate: a checkout flow",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "useNavigate",
+        "navigate with replace",
+        "navigate(-1)",
+        "location state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "useNavigate"
+      ],
+      "problemHtml": "<p>Programmatic navigation. On <code>/checkout</code> the user fills a name and presses <b>Place order</b>; after validation, go to <code>/orders/1001</code> with <code>replace: true</code> (so Back does not return to a submitted form) and pass the customer name in <code>state</code>. The confirmation page has a <b>Continue shopping</b> button to <code>/</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Home <code>/</code>: <code>#shop</code> + <code>#go-checkout</code> (Link). Checkout: form <code>#checkout-form</code>, <code>#customer</code>, error <code>#error</code> <code>Please enter your name</code> when blank; <code>#cancel</code> calls <code>navigate(-1)</code>.</li>\n  <li>Confirmation <code>/orders/:orderId</code>: <code>#confirm</code> <code>Thank you, Lan! Order #1001 is confirmed.</code> (name from <code>location.state</code>; missing ⇒ <code>customer</code>); <code>#continue</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điều hướng bằng mã. Ở <code>/checkout</code> người dùng nhập tên rồi bấm <b>Place order</b>; hợp lệ thì sang <code>/orders/1001</code> với <code>replace: true</code> (để Back không quay lại form đã gửi) và truyền tên khách qua <code>state</code>. Trang xác nhận có nút <b>Continue shopping</b> về <code>/</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Home <code>/</code>: <code>#shop</code> + <code>#go-checkout</code> (Link). Checkout: form <code>#checkout-form</code>, <code>#customer</code>, lỗi <code>#error</code> <code>Please enter your name</code> khi trống; <code>#cancel</code> gọi <code>navigate(-1)</code>.</li>\n  <li>Xác nhận <code>/orders/:orderId</code>: <code>#confirm</code> <code>Thank you, Lan! Order #1001 is confirmed.</code> (tên lấy từ <code>location.state</code>; thiếu ⇒ <code>customer</code>); <code>#continue</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type Lan, Place order",
+          "output": "URL /orders/1001 · Thank you, Lan! …",
+          "explanation": "navigate(\"/orders/1001\", { replace: true, state: { name } })|||navigate(\"/orders/1001\", { replace: true, state: { name } })"
+        }
+      ],
+      "hintsJson": [
+        "const navigate = useNavigate(); … navigate(`/orders/1001`, { replace: true, state: { name } });",
+        "Trang xác nhận: const { orderId } = useParams(); const { state } = useLocation(); const name = state?.name ?? \"customer\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Link, Route, Routes } from 'react-router-dom';\n\nfunction Checkout() {\n  return (\n    <form id=\"checkout-form\" onSubmit={() => { window.location.href = '/orders/1001'; }}>\n      <input id=\"customer\" />\n      <button type=\"submit\">Place order</button>\n    </form>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<div id=\"shop\"><Link id=\"go-checkout\" to=\"/checkout\">Checkout</Link></div>} />\n      <Route path=\"/checkout\" element={<Checkout />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useNavigate sau khi gửi form (replace + state), navigate(-1) để huỷ\nimport { useState } from 'react';\nimport { Link, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';\n\nfunction Shop() {\n  return (\n    <div id=\"shop\">\n      <h1>Shop</h1>\n      <Link id=\"go-checkout\" to=\"/checkout\">Checkout</Link>\n    </div>\n  );\n}\n\nfunction Checkout() {\n  const navigate = useNavigate();\n  const [name, setName] = useState('');\n  const [error, setError] = useState('');\n\n  const submit = (e) => {\n    e.preventDefault();\n    if (!name.trim()) {\n      setError('Please enter your name');\n      return;\n    }\n    navigate('/orders/1001', { replace: true, state: { name: name.trim() } });\n  };\n\n  return (\n    <form id=\"checkout-form\" onSubmit={submit}>\n      <input id=\"customer\" value={name} onChange={(e) => setName(e.target.value)} />\n      {error && <p id=\"error\">{error}</p>}\n      <button type=\"submit\">Place order</button>\n      <button id=\"cancel\" type=\"button\" onClick={() => navigate(-1)}>Cancel</button>\n    </form>\n  );\n}\n\nfunction Confirmation() {\n  const { orderId } = useParams();\n  const { state } = useLocation();\n  const navigate = useNavigate();\n  const name = state?.name ?? 'customer';\n  return (\n    <div>\n      <p id=\"confirm\">Thank you, {name}! Order #{orderId} is confirmed.</p>\n      <button id=\"continue\" type=\"button\" onClick={() => navigate('/')}>Continue shopping</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Shop />} />\n      <Route path=\"/checkout\" element={<Checkout />} />\n      <Route path=\"/orders/:orderId\" element={<Confirmation />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>Link</code> cho điều hướng người dùng bấm; <code>useNavigate</code> cho điều hướng SAU một việc (gửi form, đăng nhập). <code>replace</code> thay mục lịch sử hiện tại thay vì thêm mới.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Valid order navigates to the confirmation",
+            "url": "/checkout",
+            "kiem": "duong-dan",
+            "giaTri": "/orders/1001",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Name passed in state",
+            "url": "/checkout",
+            "kiem": "text",
+            "selector": "#confirm",
+            "giaTri": "Thank you, Lan! Order #1001 is confirmed.",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Blank name ⇒ error, stays on checkout",
+            "url": "/checkout",
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Please enter your name",
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Direct visit without state",
+            "url": "/orders/2002",
+            "kiem": "text",
+            "selector": "#confirm",
+            "giaTri": "Thank you, customer! Order #2002 is confirmed."
+          },
+          {
+            "an": true,
+            "moTa": "Cancel goes back",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#go-checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cancel",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Continue shopping returns home",
+            "url": "/orders/1",
+            "kiem": "ton-tai",
+            "selector": "#shop",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#continue",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "replace: true is used",
+            "kiem": "ma-nguon",
+            "khop": "navigate\\([^)]*replace:\\s*true"
+          },
+          {
+            "an": true,
+            "moTa": "No full page reload",
+            "url": "/checkout",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>navigate()</code> ngay trong thân component (không trong sự kiện/effect) ⇒ React cảnh báo, vòng lặp."
+        },
+        {
+          "loi": "Dùng <code>window.location.href = …</code> ⇒ tải lại toàn trang, mất state."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "programmatic navigation",
+          "vi": "chuyển trang bằng code sau một hành động"
+        },
+        {
+          "en": "history entry",
+          "vi": "một mục trong lịch sử trình duyệt"
+        }
+      ]
+    },
+    {
+      "title": "useSearchParams: filters that live in the URL",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "useSearchParams",
+        "URL as state",
+        "default values",
+        "shareable links"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "useSearchParams"
+      ],
+      "problemHtml": "<p>Put the product filters in the <b>query string</b> instead of component state, so the link can be shared and survives a reload: <code>/products?category=laptop&amp;sort=price-desc</code>. Default values are NOT written into the URL (choosing \"all\" removes <code>category</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#category</code> select (all/phone/laptop/audio) and <code>#sort</code> select (<code>name</code> default, <code>price-asc</code>, <code>price-desc</code>), both controlled by the URL.</li>\n  <li>Rows <code>li.product</code> (text = name), <code>#count</code> <code>2 products</code>. Unknown category in the URL ⇒ 0 products, no crash.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đưa bộ lọc sản phẩm vào <b>query string</b> thay vì state của component, để link chia sẻ được và còn sau khi tải lại: <code>/products?category=laptop&amp;sort=price-desc</code>. Giá trị mặc định KHÔNG ghi vào URL (chọn \"all\" thì bỏ <code>category</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Select <code>#category</code> (all/phone/laptop/audio) và select <code>#sort</code> (<code>name</code> mặc định, <code>price-asc</code>, <code>price-desc</code>), cả hai lấy giá trị từ URL.</li>\n  <li>Dòng <code>li.product</code> (chữ = tên), <code>#count</code> <code>2 products</code>. Category lạ trên URL ⇒ 0 sản phẩm, không lỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "choose laptop, then price high → low",
+          "output": "URL ?category=laptop&sort=price-desc · ThinkPad X1, MacBook Air M3",
+          "explanation": "setSearchParams creates a new history entry; the list is derived from the URL.|||setSearchParams tạo mục lịch sử mới; danh sách tính từ URL."
+        }
+      ],
+      "hintsJson": [
+        "const [params, setParams] = useSearchParams(); const category = params.get(\"category\") ?? \"all\";",
+        "Đổi: const next = new URLSearchParams(params); value === \"all\" ? next.delete(\"category\") : next.set(\"category\", value); setParams(next);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport { Navigate, Route, Routes } from 'react-router-dom';\n\nconst PRODUCTS = [\n  { id: 1, name: 'iPhone 15', category: 'phone', price: 22990000 },\n  { id: 2, name: 'Galaxy S24', category: 'phone', price: 19990000 },\n  { id: 3, name: 'MacBook Air M3', category: 'laptop', price: 27990000 },\n  { id: 4, name: 'ThinkPad X1', category: 'laptop', price: 32990000 },\n  { id: 5, name: 'AirPods Pro', category: 'audio', price: 5990000 },\n];\n\nfunction Products() {\n  const [category, setCategory] = useState('all');\n  const shown = PRODUCTS.filter((p) => category === 'all' || p.category === category);\n  return (\n    <div>\n      <select id=\"category\" value={category} onChange={(e) => setCategory(e.target.value)}>\n        <option value=\"all\">All</option><option value=\"phone\">Phone</option><option value=\"laptop\">Laptop</option><option value=\"audio\">Audio</option>\n      </select>\n      <ul>{shown.map((p) => <li key={p.id} className=\"product\">{p.name}</li>)}</ul>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/products\" replace />} />\n      <Route path=\"/products\" element={<Products />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — bộ lọc sống trên URL (useSearchParams); danh sách suy ra từ URL\nimport { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';\n\nconst PRODUCTS = [\n  { id: 1, name: 'iPhone 15', category: 'phone', price: 22990000 },\n  { id: 2, name: 'Galaxy S24', category: 'phone', price: 19990000 },\n  { id: 3, name: 'MacBook Air M3', category: 'laptop', price: 27990000 },\n  { id: 4, name: 'ThinkPad X1', category: 'laptop', price: 32990000 },\n  { id: 5, name: 'AirPods Pro', category: 'audio', price: 5990000 },\n];\n\nconst SORTERS = {\n  name: (a, b) => a.name.localeCompare(b.name),\n  'price-asc': (a, b) => a.price - b.price,\n  'price-desc': (a, b) => b.price - a.price,\n};\n\nfunction Products() {\n  const [params, setParams] = useSearchParams();\n  const category = params.get('category') ?? 'all';\n  const sort = SORTERS[params.get('sort')] ? params.get('sort') : 'name';\n\n  const update = (key, value, defaultValue) => {\n    const next = new URLSearchParams(params);\n    if (value === defaultValue) next.delete(key);\n    else next.set(key, value);\n    setParams(next);\n  };\n\n  const shown = PRODUCTS\n    .filter((p) => category === 'all' || p.category === category)\n    .sort(SORTERS[sort]);\n\n  return (\n    <div>\n      <select id=\"category\" value={category} onChange={(e) => update('category', e.target.value, 'all')}>\n        <option value=\"all\">All</option>\n        <option value=\"phone\">Phone</option>\n        <option value=\"laptop\">Laptop</option>\n        <option value=\"audio\">Audio</option>\n      </select>\n      <select id=\"sort\" value={sort} onChange={(e) => update('sort', e.target.value, 'name')}>\n        <option value=\"name\">Name</option>\n        <option value=\"price-asc\">Price: low → high</option>\n        <option value=\"price-desc\">Price: high → low</option>\n      </select>\n      <p id=\"count\">{shown.length} products</p>\n      <ul>{shown.map((p) => <li key={p.id} className=\"product\">{p.name}</li>)}</ul>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Navigate to=\"/products\" replace />} />\n      <Route path=\"/products\" element={<Products />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi URL là nguồn sự thật, component chỉ ĐỌC từ URL và GHI vào URL; danh sách là dữ liệu suy ra. Nút Back của trình duyệt tự động thành \"huỷ bộ lọc vừa chọn\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Reads filters from the URL",
+            "url": "/products?category=laptop&sort=price-desc",
+            "kiem": "danh-sach-text",
+            "selector": "li.product",
+            "mongDoi": [
+              "ThinkPad X1",
+              "MacBook Air M3"
+            ]
+          },
+          {
+            "moTa": "Selecting writes to the URL",
+            "url": "/products",
+            "kiem": "duong-dan",
+            "giaTri": "/products?category=phone&sort=price-asc",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "phone"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#sort",
+                "giaTri": "price-asc"
+              }
+            ]
+          },
+          {
+            "moTa": "Count text",
+            "url": "/products?category=phone",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "2 products"
+          },
+          {
+            "moTa": "Default sort by name",
+            "url": "/products",
+            "kiem": "danh-sach-text",
+            "selector": "li.product",
+            "mongDoi": [
+              "AirPods Pro",
+              "Galaxy S24",
+              "iPhone 15",
+              "MacBook Air M3",
+              "ThinkPad X1"
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Choosing \"all\" removes the param but keeps sort",
+            "url": "/products?category=audio&sort=price-desc",
+            "kiem": "duong-dan",
+            "giaTri": "/products?sort=price-desc",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "all"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Survives a reload",
+            "url": "/products",
+            "kiem": "danh-sach-text",
+            "selector": "li.product",
+            "mongDoi": [
+              "AirPods Pro"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "audio"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Unknown category ⇒ 0, no crash",
+            "url": "/products?category=tv",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "0 products"
+          },
+          {
+            "an": true,
+            "moTa": "Unknown sort falls back to name",
+            "url": "/products?sort=weird",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#sort",
+            "thuocTinh": "value",
+            "giaTri": "name"
+          },
+          {
+            "an": true,
+            "moTa": "Uses useSearchParams",
+            "kiem": "ma-nguon",
+            "khop": "useSearchParams\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ bộ lọc trong useState ⇒ tải lại / chia sẻ link mất bộ lọc."
+        },
+        {
+          "loi": "Gọi <code>setSearchParams({ category })</code> ⇒ xoá mất <code>sort</code> đang có."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "query string",
+          "vi": "phần sau dấu ? của URL"
+        },
+        {
+          "en": "source of truth",
+          "vi": "nguồn sự thật duy nhất"
+        }
+      ]
+    }
+  ]
+}

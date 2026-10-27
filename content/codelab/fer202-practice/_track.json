@@ -356,6 +356,42 @@
       "name": "Interview corner — React Hooks",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về hooks kèm câu trả lời mẫu."
+    },
+    {
+      "slug": "fer202-9-1-router",
+      "name": "9.1 React Router",
+      "level": "MEDIUM",
+      "description": "Routes/NavLink/404, useParams, route lồng + Outlet, useNavigate (thanh toán), useSearchParams (bộ lọc trên URL)."
+    },
+    {
+      "slug": "fer202-9-ex20-decoupling-routes",
+      "name": "Exercise 20 — Decoupling routes",
+      "level": "MEDIUM",
+      "description": "Tách route ra routes.js (useRoutes) và theo từng tính năng, ghép trong App."
+    },
+    {
+      "slug": "fer202-9-ex21-resource-ids",
+      "name": "Exercise 21 — Resource ids",
+      "level": "MEDIUM",
+      "description": "Danh sách user ⇒ /users/:id (fetch theo id, 404), sửa /users/:id/edit bằng PATCH."
+    },
+    {
+      "slug": "fer202-9-ex22-optional-link",
+      "name": "Exercise 22 — Optional params & Link",
+      "level": "MEDIUM",
+      "description": "Link vs <a>, NavLink className dạng hàm, đoạn tuỳ chọn :lang?, phân trang ?page= bằng Link."
+    },
+    {
+      "slug": "fer202-9-2-slot14-router-slides",
+      "name": "9.2 Slide check — React Router",
+      "level": "EASY",
+      "description": "Trắc nghiệm Slot 14: SPA, cài đặt v6, route, params, Outlet, điều hướng."
+    },
+    {
+      "slug": "fer202-9-interview-router",
+      "name": "Interview corner — React Router",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về định tuyến SPA kèm câu trả lời mẫu."
     }
   ]
 }

@@ -133,13 +133,17 @@ export const NOP_BAI = {
 export function reactNho(o) {
   const { giai, dau, them = {}, themGiai = {}, themDau = {}, thuVien = [], url, jsonServer, fetchGia, khoCucBo, index: ix, kiem, ...rest } = o;
   const coIndex = !!ix;
+  // index có router/redux ⇒ tự nạp thư viện tương ứng cho máy chấm
+  const tv = [...thuVien];
+  if (ix?.router && !tv.includes('react-router-dom')) tv.push('react-router-dom');
+  if (ix?.redux) for (const t of ['@reduxjs/toolkit', 'react-redux']) if (!tv.includes(t)) tv.push(t);
   const tepIndex = coIndex ? { 'src/index.js': index(ix) } : {};
   return {
     ...rest,
     tests: {
       loai: 'react', phienBan: 1,
       ...(coIndex ? { tepChinh: 'src/index.js' } : { renderTu: 'src/App.js' }),
-      ...(thuVien.length ? { thuVien } : {}),
+      ...(tv.length ? { thuVien: tv } : {}),
       ...(url ? { url } : {}), ...(jsonServer ? { jsonServer } : {}), ...(fetchGia ? { fetchGia } : {}), ...(khoCucBo ? { khoCucBo } : {}),
       kiem,
     },

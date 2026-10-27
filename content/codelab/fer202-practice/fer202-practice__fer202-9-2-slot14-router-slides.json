@@ -1,0 +1,402 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-2-slot14-router-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-2-slot14-router-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: SPA routing with react-router-dom v6",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 14,
+      "points": 10,
+      "concepts": [
+        "SPA",
+        "BrowserRouter",
+        "Routes",
+        "params",
+        "Outlet",
+        "useNavigate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "quiz"
+      ],
+      "problemHtml": "<p>Twelve questions on Slot 14: client vs server routing, setting up react-router-dom v6, declaring routes, nested routes with Outlet, params, optional params and navigation hooks.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười hai câu về Slot 14: định tuyến phía client và server, cài react-router-dom v6, khai báo route, route lồng với Outlet, tham số, tham số tuỳ chọn và hook điều hướng.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "v6: Routes thay Switch, element thay component, useNavigate thay useHistory.",
+        "Tham số URL luôn là chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: SPA routing with react-router-dom v6\n\nAnswer in the panel on the left (no code needed).\n\n1. In a single-page application, changing the URL…\n2. Install command for the web router?\n3. Where is <BrowserRouter> usually placed?\n4. v6 replaced <Switch> with…\n5. Which path matches every URL not matched by other routes?\n6. Read :id from /products/:id:\n7. What renders the matching child route inside a parent layout?\n8. An index route…\n9. Navigate to /login after logout (in an event handler):\n10. /users/:id? means…\n11. Advantages of NavLink over Link? (choose all)\n12. Why split routes into separate files per feature?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: SPA routing with react-router-dom v6 — answer key\n\n1. In a single-page application, changing the URL…\n   Answer: b) is handled in the browser by the router, which swaps components without a full reload\n   The server sends index.html once; the router maps URLs to components. / Server gửi index.html một lần; router ánh xạ URL sang component.\n\n2. Install command for the web router?\n   Answer: b) npm i react-router-dom\n   react-router-dom includes the DOM bindings (BrowserRouter, Link…). / react-router-dom có phần cho DOM (BrowserRouter, Link…).\n\n3. Where is <BrowserRouter> usually placed?\n   Answer: b) Once, around the whole app (index.js)\n   Everything using router hooks must be inside it. / Mọi thứ dùng hook của router phải nằm bên trong nó.\n\n4. v6 replaced <Switch> with…\n   Answer: a) <Routes>\n   And component={X} became element={}. / Và component={X} thành element={}.\n\n5. Which path matches every URL not matched by other routes?\n   Answer: b) *\n   Use it for a Not Found page. / Dùng cho trang Not Found.\n\n6. Read :id from /products/:id:\n   Answer: a) useParams()\n   const { id } = useParams(); — a string. / const { id } = useParams(); — là chuỗi.\n\n7. What renders the matching child route inside a parent layout?\n   Answer: a) <Outlet />\n   Nested routes render into the parent's Outlet. / Route lồng vẽ vào Outlet của cha.\n\n8. An index route…\n   Answer: a) renders when the URL exactly matches the parent path\n   } /> / } />\n\n9. Navigate to /login after logout (in an event handler):\n   Answer: a) const navigate = useNavigate(); navigate(\"/login\")\n   useHistory is v5; window.location reloads the whole app. / useHistory là v5; window.location tải lại cả app.\n\n10. /users/:id? means…\n   Answer: b) the id segment is optional (v6.5+)\n   Both /users and /users/3 match. / Cả /users lẫn /users/3 đều khớp.\n\n11. Advantages of NavLink over Link? (choose all)\n   Answer: a) Adds an active class/state when its path matches + b) Accepts className/style functions with { isActive } + d) Supports end to match exactly\n   Otherwise it is a Link. / Ngoài ra nó giống hệt Link.\n\n12. Why split routes into separate files per feature?\n   Answer: b) Each feature owns its routes, App only composes them — easier to maintain large apps\n   Exercise 20: decoupling routes. / Exercise 20: tách route.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "In a single-page application, changing the URL…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always downloads a new HTML page from the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is handled in the browser by the router, which swaps components without a full reload"
+              },
+              {
+                "ma": "c",
+                "noiDung": "restarts React"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is impossible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The server sends index.html once; the router maps URLs to components.</p><p><i>🇻🇳 Server gửi index.html một lần; router ánh xạ URL sang component.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Install command for the web router?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>npm i react-router</code> only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>npm i react-router-dom</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>npm i router</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>npm i @react/router</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>react-router-dom includes the DOM bindings (BrowserRouter, Link…).</p><p><i>🇻🇳 react-router-dom có phần cho DOM (BrowserRouter, Link…).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Where is <code>&lt;BrowserRouter&gt;</code> usually placed?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Around each page"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Once, around the whole app (index.js)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Inside every Link"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the public folder"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Everything using router hooks must be inside it.</p><p><i>🇻🇳 Mọi thứ dùng hook của router phải nằm bên trong nó.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "v6 replaced <code>&lt;Switch&gt;</code> with…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>&lt;Routes&gt;</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>&lt;Router&gt;</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>&lt;Case&gt;</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>&lt;Pages&gt;</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>And component={X} became element={<X />}.</p><p><i>🇻🇳 Và component={X} thành element={<X />}.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Which path matches every URL not matched by other routes?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>/</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>*</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>404</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>/all</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Use it for a Not Found page.</p><p><i>🇻🇳 Dùng cho trang Not Found.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Read <code>:id</code> from <code>/products/:id</code>:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>useParams()</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>useLocation().id</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>props.id</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>useSearchParams()</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>const { id } = useParams(); — a string.</p><p><i>🇻🇳 const { id } = useParams(); — là chuỗi.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "What renders the matching child route inside a parent layout?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>&lt;Outlet /&gt;</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>&lt;Children /&gt;</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>&lt;Slot /&gt;</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>props.children</code> only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Nested routes render into the parent's Outlet.</p><p><i>🇻🇳 Route lồng vẽ vào Outlet của cha.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "An index route…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "renders when the URL exactly matches the parent path"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is the 404 page"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is the first route in the file"
+              },
+              {
+                "ma": "d",
+                "noiDung": "must be called /index"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p><Route index element={<Overview />} /></p><p><i>🇻🇳 <Route index element={<Overview />} /></i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "Navigate to /login after logout (in an event handler):",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>const navigate = useNavigate(); navigate(\"/login\")</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>window.location = \"/login\"</code> (recommended)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>useHistory().push(\"/login\")</code> in v6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>&lt;Link to=\"/login\" /&gt;</code> inside the handler"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>useHistory is v5; window.location reloads the whole app.</p><p><i>🇻🇳 useHistory là v5; window.location tải lại cả app.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "<code>/users/:id?</code> means…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "id is required"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the id segment is optional (v6.5+)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a query string"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a regular expression"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both /users and /users/3 match.</p><p><i>🇻🇳 Cả /users lẫn /users/3 đều khớp.</i></p>"
+          },
+          {
+            "ma": "q11",
+            "de": "Advantages of NavLink over Link? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Adds an active class/state when its path matches"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accepts className/style functions with { isActive }"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Makes requests to the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Supports <code>end</code> to match exactly"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Otherwise it is a Link.</p><p><i>🇻🇳 Ngoài ra nó giống hệt Link.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q12",
+            "de": "Why split routes into separate files per feature?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is required by React"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each feature owns its routes, App only composes them — easier to maintain large apps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It makes the bundle bigger"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Routes cannot live in App.js"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Exercise 20: decoupling routes.</p><p><i>🇻🇳 Exercise 20: tách route.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả lời theo cú pháp v5 (Switch, exact, component=)."
+        },
+        {
+          "loi": "Nhầm Link (người dùng bấm) với useNavigate (điều hướng bằng mã)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SPA",
+          "vi": "ứng dụng một trang: tải một lần, đổi nội dung bằng JavaScript"
+        }
+      ]
+    }
+  ]
+}

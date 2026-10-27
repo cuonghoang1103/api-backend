@@ -1,0 +1,391 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-ex20-decoupling-routes",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-ex20-decoupling-routes"
+  },
+  "exercises": [
+    {
+      "title": "Route config in routes.js + useRoutes",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "route objects",
+        "useRoutes",
+        "layout route",
+        "nested children"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "exercise-20"
+      ],
+      "problemHtml": "<p>The starter declares every route inside <code>App.js</code>. Move them to <code>src/routes.js</code> as an array of route objects (<code>path</code>, <code>element</code>, <code>children</code>, <code>index</code>) and render them with <code>useRoutes(routes)</code>. A <code>MainLayout</code> (header + <code>&lt;Outlet /&gt;</code>) wraps every page.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Routes: <code>/</code> Home, <code>/blog</code> list, <code>/blog/:slug</code> post, <code>*</code> 404 — all inside <code>MainLayout</code> (<code>#site-header</code>, <code>#nav-home</code>, <code>#nav-blog</code>, <code>#main</code>).</li>\n  <li><code>App.js</code> contains no <code>&lt;Route&gt;</code> — only <code>useRoutes(routes)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Starter khai báo mọi route trong <code>App.js</code>. Chuyển chúng sang <code>src/routes.js</code> thành mảng object route (<code>path</code>, <code>element</code>, <code>children</code>, <code>index</code>) và vẽ bằng <code>useRoutes(routes)</code>. <code>MainLayout</code> (header + <code>&lt;Outlet /&gt;</code>) bọc mọi trang.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Route: <code>/</code> Home, <code>/blog</code> danh sách, <code>/blog/:slug</code> bài viết, <code>*</code> 404 — tất cả nằm trong <code>MainLayout</code> (<code>#site-header</code>, <code>#nav-home</code>, <code>#nav-blog</code>, <code>#main</code>).</li>\n  <li><code>App.js</code> không còn <code>&lt;Route&gt;</code> nào — chỉ <code>useRoutes(routes)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/blog/routing-101",
+          "output": "header + \"Routing 101\"",
+          "explanation": "children of the layout route render inside its Outlet.|||children của route layout vẽ trong Outlet của nó."
+        }
+      ],
+      "hintsJson": [
+        "export const routes = [{ path: \"/\", element: <MainLayout />, children: [{ index: true, element: <Home /> }, { path: \"blog\", children: [...] }, { path: \"*\", element: <NotFound /> }] }];",
+        "App: export default function App() { return useRoutes(routes); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mọi route viết tay ở đây\nimport { Route, Routes } from 'react-router-dom';\nimport Home from './pages/Home';\nimport BlogList from './pages/BlogList';\nimport BlogPost from './pages/BlogPost';\nimport NotFound from './pages/NotFound';\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<Home />} />\n      <Route path=\"/blog\" element={<BlogList />} />\n      <Route path=\"/blog/:slug\" element={<BlogPost />} />\n      <Route path=\"*\" element={<NotFound />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js (cho sẵn)\nexport default function Home() {\n  return <h1 id=\"page-home\">Home</h1>;\n}\n"
+        },
+        {
+          "name": "src/pages/BlogList.js",
+          "language": "javascript",
+          "code": "// src/pages/BlogList.js (cho sẵn)\nimport { Link } from 'react-router-dom';\n\nexport const POSTS = [\n  { slug: 'hello-react', title: 'Hello React' },\n  { slug: 'routing-101', title: 'Routing 101' },\n];\n\nexport default function BlogList() {\n  return (\n    <ul id=\"blog-list\">\n      {POSTS.map((p) => <li key={p.slug}><Link className=\"post-link\" to={p.slug}>{p.title}</Link></li>)}\n    </ul>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/BlogPost.js",
+          "language": "javascript",
+          "code": "// src/pages/BlogPost.js (cho sẵn)\nimport { useParams } from 'react-router-dom';\nimport { POSTS } from './BlogList';\n\nexport default function BlogPost() {\n  const { slug } = useParams();\n  const post = POSTS.find((p) => p.slug === slug);\n  return post ? <h2 id=\"post-title\">{post.title}</h2> : <p id=\"post-missing\">Post not found</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/NotFound.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFound.js (cho sẵn)\nexport default function NotFound() {\n  return <h1 id=\"page-404\">Page not found</h1>;\n}\n"
+        },
+        {
+          "name": "src/routes.js",
+          "language": "javascript",
+          "code": "// src/routes.js — STARTER: chuyển các route trong App.js sang đây (mảng object)\nexport const routes = [];\n"
+        },
+        {
+          "name": "src/layouts/MainLayout.js",
+          "language": "javascript",
+          "code": "// src/layouts/MainLayout.js — STARTER: header + <Outlet />\nexport default function MainLayout() {\n  return <header id=\"site-header\">Header</header>;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — chỉ còn một dòng: vẽ mảng route\nimport { useRoutes } from 'react-router-dom';\nimport { routes } from './routes';\n\nexport default function App() {\n  return useRoutes(routes);\n}\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js (cho sẵn)\nexport default function Home() {\n  return <h1 id=\"page-home\">Home</h1>;\n}\n"
+        },
+        {
+          "name": "src/pages/BlogList.js",
+          "language": "javascript",
+          "code": "// src/pages/BlogList.js (cho sẵn)\nimport { Link } from 'react-router-dom';\n\nexport const POSTS = [\n  { slug: 'hello-react', title: 'Hello React' },\n  { slug: 'routing-101', title: 'Routing 101' },\n];\n\nexport default function BlogList() {\n  return (\n    <ul id=\"blog-list\">\n      {POSTS.map((p) => <li key={p.slug}><Link className=\"post-link\" to={p.slug}>{p.title}</Link></li>)}\n    </ul>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/BlogPost.js",
+          "language": "javascript",
+          "code": "// src/pages/BlogPost.js (cho sẵn)\nimport { useParams } from 'react-router-dom';\nimport { POSTS } from './BlogList';\n\nexport default function BlogPost() {\n  const { slug } = useParams();\n  const post = POSTS.find((p) => p.slug === slug);\n  return post ? <h2 id=\"post-title\">{post.title}</h2> : <p id=\"post-missing\">Post not found</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/NotFound.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFound.js (cho sẵn)\nexport default function NotFound() {\n  return <h1 id=\"page-404\">Page not found</h1>;\n}\n"
+        },
+        {
+          "name": "src/routes.js",
+          "language": "javascript",
+          "code": "// src/routes.js — MỌI route khai báo ở một chỗ, dạng mảng object\nimport MainLayout from './layouts/MainLayout';\nimport Home from './pages/Home';\nimport BlogList from './pages/BlogList';\nimport BlogPost from './pages/BlogPost';\nimport NotFound from './pages/NotFound';\n\nexport const routes = [\n  {\n    path: '/',\n    element: <MainLayout />,\n    children: [\n      { index: true, element: <Home /> },\n      {\n        path: 'blog',\n        children: [\n          { index: true, element: <BlogList /> },\n          { path: ':slug', element: <BlogPost /> },\n        ],\n      },\n      { path: '*', element: <NotFound /> },\n    ],\n  },\n];\n"
+        },
+        {
+          "name": "src/layouts/MainLayout.js",
+          "language": "javascript",
+          "code": "// src/layouts/MainLayout.js — header + nav dùng chung, trang con vẽ vào <Outlet />\nimport { NavLink, Outlet } from 'react-router-dom';\n\nexport default function MainLayout() {\n  return (\n    <div>\n      <header id=\"site-header\">\n        <NavLink to=\"/\" end id=\"nav-home\">Home</NavLink>{' '}\n        <NavLink to=\"/blog\" id=\"nav-blog\">Blog</NavLink>\n      </header>\n      <main id=\"main\">\n        <Outlet />\n      </main>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Route dạng dữ liệu nằm ở một tệp dễ đọc như \"bản đồ\" của app, dễ thêm/xoá và dùng lại (vd tạo menu từ cùng mảng). <code>useRoutes</code> làm đúng việc của <code>&lt;Routes&gt;</code> nhưng nhận mảng object.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Home inside the layout",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": "#site-header, #main h1",
+            "mongDoi": [
+              "Home Blog",
+              "Home"
+            ]
+          },
+          {
+            "moTa": "Blog post route",
+            "url": "/blog/routing-101",
+            "kiem": "text",
+            "selector": "#main #post-title",
+            "giaTri": "Routing 101"
+          },
+          {
+            "moTa": "Relative link from the list",
+            "url": "/blog",
+            "kiem": "duong-dan",
+            "giaTri": "/blog/hello-react",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li:nth-child(1) .post-link"
+              }
+            ]
+          },
+          {
+            "moTa": "404 also inside the layout",
+            "url": "/nope",
+            "kiem": "ton-tai",
+            "selector": "#main #page-404"
+          },
+          {
+            "an": true,
+            "moTa": "App uses useRoutes",
+            "kiem": "ma-nguon",
+            "khop": "useRoutes\\(\\s*routes\\s*\\)"
+          },
+          {
+            "an": true,
+            "moTa": "Route objects with children and index",
+            "kiem": "ma-nguon",
+            "khop": "children\\s*:[\\s\\S]*index\\s*:\\s*true"
+          },
+          {
+            "an": true,
+            "moTa": "Blog link active on a post",
+            "url": "/blog/hello-react",
+            "kiem": "ton-tai",
+            "selector": "#nav-blog.active"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>path: \"/blog\"</code> (có /) trong children ⇒ thành đường dẫn tuyệt đối, dễ sai lồng."
+        },
+        {
+          "loi": "Gọi <code>useRoutes</code> bên ngoài <code>BrowserRouter</code> ⇒ lỗi \"useRoutes() may be used only in the context of a &lt;Router&gt;\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route config",
+          "vi": "cấu hình route dạng dữ liệu (mảng object)"
+        },
+        {
+          "en": "decoupling",
+          "vi": "tách rời để mỗi phần độc lập"
+        }
+      ]
+    },
+    {
+      "title": "Feature route modules composed in App",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "feature folders",
+        "Route elements as values",
+        "composition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "router",
+        "exercise-20"
+      ],
+      "problemHtml": "<p>In a bigger app each feature owns its routes. <code>shopRoutes.js</code> exports a fragment of <code>&lt;Route&gt;</code>s for <code>/</code> and <code>/cart</code>; <code>adminRoutes.js</code> exports a nested <code>/admin</code> route with its own layout. <code>App.js</code> only composes them and adds the 404.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Shop: <code>/</code> ⇒ <code>#shop-home</code>, <code>/cart</code> ⇒ <code>#cart</code>.</li>\n  <li>Admin (layout <code>AdminLayout</code> given): index ⇒ <code>#admin-home</code>, <code>products</code>, <code>orders</code>. Unknown ⇒ <code>#page-404</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>App lớn thì mỗi tính năng tự giữ route của mình. <code>shopRoutes.js</code> export một fragment các <code>&lt;Route&gt;</code> cho <code>/</code> và <code>/cart</code>; <code>adminRoutes.js</code> export route lồng <code>/admin</code> có layout riêng. <code>App.js</code> chỉ ghép chúng lại và thêm 404.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Shop: <code>/</code> ⇒ <code>#shop-home</code>, <code>/cart</code> ⇒ <code>#cart</code>.</li>\n  <li>Admin (đã có <code>AdminLayout</code>): index ⇒ <code>#admin-home</code>, <code>products</code>, <code>orders</code>. Lạ ⇒ <code>#page-404</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "/admin/orders",
+          "output": "Admin + Manage orders",
+          "explanation": "App: <Routes>{shopRoutes}{adminRoutes}<Route path=\"*\" … /></Routes>|||App: <Routes>{shopRoutes}{adminRoutes}<Route path=\"*\" … /></Routes>"
+        }
+      ],
+      "hintsJson": [
+        "export const shopRoutes = (<><Route path=\"/\" element={<ShopHome />} /><Route path=\"/cart\" element={<Cart />} /></>);",
+        "Routes chấp nhận Route nằm trong Fragment."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes } from 'react-router-dom';\nimport { shopRoutes } from './features/shop/shopRoutes';\nimport { adminRoutes } from './features/admin/adminRoutes';\n\nexport default function App() {\n  return (\n    <Routes>\n      {shopRoutes}\n      {adminRoutes}\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/shop/pages.js",
+          "language": "javascript",
+          "code": "// src/features/shop/pages.js (cho sẵn)\nexport const ShopHome = () => <h1 id=\"shop-home\">Shop</h1>;\nexport const Cart = () => <h1 id=\"cart\">Your cart</h1>;\n"
+        },
+        {
+          "name": "src/features/admin/pages.js",
+          "language": "javascript",
+          "code": "// src/features/admin/pages.js (cho sẵn)\nimport { NavLink, Outlet } from 'react-router-dom';\n\nexport function AdminLayout() {\n  return (\n    <div id=\"admin\">\n      <h1 id=\"admin-title\">Admin</h1>\n      <NavLink to=\"products\" id=\"admin-products\">Products</NavLink>{' '}\n      <NavLink to=\"orders\" id=\"admin-orders\">Orders</NavLink>\n      <Outlet />\n    </div>\n  );\n}\nexport const AdminHome = () => <p id=\"admin-home\">Choose a section</p>;\nexport const AdminProducts = () => <p id=\"admin-products-page\">Manage products</p>;\nexport const AdminOrders = () => <p id=\"admin-orders-page\">Manage orders</p>;\n"
+        },
+        {
+          "name": "src/features/shop/shopRoutes.js",
+          "language": "javascript",
+          "code": "// src/features/shop/shopRoutes.js — STARTER: export const shopRoutes = (<>…</>);\nexport const shopRoutes = null;\n"
+        },
+        {
+          "name": "src/features/admin/adminRoutes.js",
+          "language": "javascript",
+          "code": "// src/features/admin/adminRoutes.js — STARTER: export const adminRoutes = (<Route path=\"/admin\" …>…</Route>);\nexport const adminRoutes = null;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — chỉ ghép route của các tính năng + 404\nimport { Route, Routes } from 'react-router-dom';\nimport { shopRoutes } from './features/shop/shopRoutes';\nimport { adminRoutes } from './features/admin/adminRoutes';\n\nconst NotFound = () => <h1 id=\"page-404\">Page not found</h1>;\n\nexport default function App() {\n  return (\n    <Routes>\n      {shopRoutes}\n      {adminRoutes}\n      <Route path=\"*\" element={<NotFound />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/shop/pages.js",
+          "language": "javascript",
+          "code": "// src/features/shop/pages.js (cho sẵn)\nexport const ShopHome = () => <h1 id=\"shop-home\">Shop</h1>;\nexport const Cart = () => <h1 id=\"cart\">Your cart</h1>;\n"
+        },
+        {
+          "name": "src/features/admin/pages.js",
+          "language": "javascript",
+          "code": "// src/features/admin/pages.js (cho sẵn)\nimport { NavLink, Outlet } from 'react-router-dom';\n\nexport function AdminLayout() {\n  return (\n    <div id=\"admin\">\n      <h1 id=\"admin-title\">Admin</h1>\n      <NavLink to=\"products\" id=\"admin-products\">Products</NavLink>{' '}\n      <NavLink to=\"orders\" id=\"admin-orders\">Orders</NavLink>\n      <Outlet />\n    </div>\n  );\n}\nexport const AdminHome = () => <p id=\"admin-home\">Choose a section</p>;\nexport const AdminProducts = () => <p id=\"admin-products-page\">Manage products</p>;\nexport const AdminOrders = () => <p id=\"admin-orders-page\">Manage orders</p>;\n"
+        },
+        {
+          "name": "src/features/shop/shopRoutes.js",
+          "language": "javascript",
+          "code": "// src/features/shop/shopRoutes.js — route của tính năng Shop\nimport { Route } from 'react-router-dom';\nimport { Cart, ShopHome } from './pages';\n\nexport const shopRoutes = (\n  <>\n    <Route path=\"/\" element={<ShopHome />} />\n    <Route path=\"/cart\" element={<Cart />} />\n  </>\n);\n"
+        },
+        {
+          "name": "src/features/admin/adminRoutes.js",
+          "language": "javascript",
+          "code": "// src/features/admin/adminRoutes.js — route của tính năng Admin (lồng, có layout riêng)\nimport { Route } from 'react-router-dom';\nimport { AdminHome, AdminLayout, AdminOrders, AdminProducts } from './pages';\n\nexport const adminRoutes = (\n  <Route path=\"/admin\" element={<AdminLayout />}>\n    <Route index element={<AdminHome />} />\n    <Route path=\"products\" element={<AdminProducts />} />\n    <Route path=\"orders\" element={<AdminOrders />} />\n  </Route>\n);\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>&lt;Routes&gt; chỉ nhận trực tiếp &lt;Route&gt; (hoặc Fragment chứa Route). Vì vậy tính năng export một GIÁ TRỊ JSX (<code>shopRoutes</code>), không phải component — App chèn giá trị đó như mọi biểu thức JSX khác.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Shop home",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": "#shop-home"
+          },
+          {
+            "moTa": "Cart route",
+            "url": "/cart",
+            "kiem": "text",
+            "selector": "#cart",
+            "giaTri": "Your cart"
+          },
+          {
+            "moTa": "Admin index inside the admin layout",
+            "url": "/admin",
+            "kiem": "danh-sach-text",
+            "selector": "#admin-title, #admin-home",
+            "mongDoi": [
+              "Admin",
+              "Choose a section"
+            ]
+          },
+          {
+            "moTa": "Admin child via sidebar",
+            "url": "/admin",
+            "kiem": "ton-tai",
+            "selector": "#admin #admin-orders-page",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#admin-orders"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "404",
+            "url": "/nothing",
+            "kiem": "ton-tai",
+            "selector": "#page-404"
+          },
+          {
+            "an": true,
+            "moTa": "adminRoutes is a JSX value",
+            "kiem": "ma-nguon",
+            "khop": "export\\s+const\\s+adminRoutes\\s*=\\s*\\(?\\s*<Route"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Export một COMPONENT <code>ShopRoutes</code> rồi đặt <code>&lt;ShopRoutes /&gt;</code> trong <code>&lt;Routes&gt;</code> ⇒ lỗi \"[ShopRoutes] is not a &lt;Route&gt; component\" — phải export phần tử JSX, không phải component."
+        },
+        {
+          "loi": "Quên import <code>Route</code> trong tệp route của tính năng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "feature module",
+          "vi": "thư mục gom mọi thứ của một tính năng"
+        }
+      ]
+    }
+  ]
+}

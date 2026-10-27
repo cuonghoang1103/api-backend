@@ -174,4 +174,30 @@ const codeReviewAsk = defineTool({
   },
 });
 
-export const CODE_COMMANDS: ToolDef[] = [devActivity, codeRead, codeReviewAsk];
+/**
+ * 27/10/2026 — "thẻ nào chờ tôi review?": CuongMini xét các thẻ ở cột Review (reviewHangLoat.service) — CHỈ đường Ask, chỉ
+ * người được review (askCommandsFor). Lệnh ĐỌC (chạy khi người được review hỏi — đúng ý chủ app: hỏi là làm); trần lượt/ngày
+ * + đệm 15 phút ở service. Trả gói kết quả để trợ lý ĐỀ XUẤT update_issue + add_comment cho từng thẻ (người bấm Apply).
+ */
+const reviewQueueAsk = defineTool({
+  name: 'review_queue', title: 'Review the issues waiting in Review', group: 'issues',
+  description: 'Reviews the issues in the Review column (or `numbers`) for the lead: per issue a decision DONE / BACK (to In Progress) / KEEP, acceptance criteria, code findings and a drafted comment. Costs AI credit; only for the project admin, lead, team lead or lecturer.',
+  write: false, personOnly: true, surfaces: { mcp: false, builtin: false },
+  input: z.object({ project: projectArg, numbers: z.array(z.number().int().positive()).max(10).optional() }),
+  run: async (ctx, a) => {
+    const p = await projectFor(ctx, a.project, [['POST', '/code/review/queue']]);
+    const { reviewQueue } = await import('../reviewHangLoat.service.js');
+    const r = await reviewQueue(ctx.userId, p.id, { numbers: a.numbers, max: 3 });
+    if (!r.items.length) return r.reviewColumn ? 'No issue is waiting in the Review column.' : 'This project has no Review column.';
+    const items = r.items.map((x) => ({
+      issue: x.issue.key, number: x.issue.number, title: x.issue.title, assignee: x.issue.assignee ? `@${x.issue.assignee.username}` : null,
+      from: x.from.name, decision: x.decision, to: x.to?.name ?? null, summary: x.summary,
+      unmet: x.acceptance.filter((c) => c.met !== 'yes').map((c) => `${c.criterion} — ${c.met}`),
+      findings: x.findings.filter((f) => f.severity !== 'NIT').slice(0, 4).map((f) => `[${f.severity}] ${f.file}${f.line ? `:${f.line}` : ''} ${f.message}`),
+      code: x.code ? `${x.code.label} — read ${x.code.filesRead}/${x.code.filesTotal} files` : 'no code', comment: x.comment,
+    }));
+    return `${r.items.length} issue(s) reviewed${r.remaining ? ` (${r.remaining} more waiting — ask again)` : ''}. Give the user ONE short table-free list (issue — decision — why). Then propose, for every DONE/BACK item: {"type":"update_issue","number":N,"status":"<to>"} and {"type":"add_comment","number":N,"text":"<comment, starting with the assignee @username>"}; for KEEP only the comment. The user unticks what they disagree with and applies the rest.\n${untrusted('review of issues in Review', JSON.stringify(items))}`;
+  },
+});
+
+export const CODE_COMMANDS: ToolDef[] = [devActivity, codeRead, codeReviewAsk, reviewQueueAsk];

@@ -477,12 +477,12 @@ async function askCommandsFor(access: ProjectAccess, userId?: number) {
   const all = r.askCommands();
   const hasReadIssue = all.some((t) => t.name === 'read_issue');
   // 27/10/2026: đề xuất review code chỉ cho người được review (ADMIN / trưởng dự án / trưởng bộ phận / giảng viên).
-  const reviewer = all.some((t) => t.name === 'code_review') ? await canReviewCode(access, userId) : false;
+  const reviewer = all.some((t) => t.name === 'code_review' || t.name === 'review_queue') ? await canReviewCode(access, userId) : false;
   return all.filter((t) => {
     if (DOC_READ.has(t.name)) return docs.read;
     if (t.name.startsWith('docs_')) return docs.write;
     if (t.name === 'get_issue' && hasReadIssue) return false;
-    if (t.name === 'code_review') return reviewer;
+    if (t.name === 'code_review' || t.name === 'review_queue') return reviewer;
     return !t.write || canEdit;
   });
 }
@@ -512,7 +512,7 @@ async function codeDocFor(access: ProjectAccess, userId: number): Promise<string
   return `CODE (a GitHub/GitLab repo is linked — you CAN read it):
 - To check or review someone's work on an issue: dev_activity(issue) finds its branches/PRs ⇒ code_read pr + pr_files (or compare head=<branch>) reads the REAL diff ⇒ compare it with the issue's acceptance criteria ("Xong khi"/Done when) and the project's Definition of Done. Cite file:line from the diff.
 - "What did <member> push / change / this week": code_read activity(member, since e.g. 7d) ⇒ code_read commit(sha) for the commits that matter ⇒ summarise per file.
-- Say exactly which files you read and which you did not. Never judge code you have not read.${(await canReviewCode(access, userId)) ? '\n- A formal review that saves findings and comments to the member: propose the code_review command (the user applies it).' : ''}`;
+- Say exactly which files you read and which you did not. Never judge code you have not read.${(await canReviewCode(access, userId)) ? '\n- A formal review that saves findings and comments to the member: propose the code_review command (the user applies it).\n- "Which issues wait for my review / review them": read review_queue — it reviews the Review column and drafts decisions + comments; then propose them.' : ''}`;
 }
 
 /**

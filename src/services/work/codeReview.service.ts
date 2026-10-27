@@ -108,6 +108,47 @@ async function resolveTarget(projectId: number, key: string, input: { pr?: numbe
   throw new NotFoundError(`No pull request or branch mentions ${key}-${n} yet — ask the member to put "${key}-${n}" in the branch name, a commit message or the PR title`);
 }
 
+/**
+ * 27/10/2026 (review hàng loạt): diff thật của PR/nhánh của MỘT thẻ, gọn theo ngân sách — null khi thẻ chưa có PR/nhánh
+ * nào. Quyền đọc mã nguồn kiểm ở code.service (codeGate source).
+ */
+export async function gatherCodeForIssue(userId: number, projectId: number, key: string, issueNumber: number, budget: number): Promise<{
+  label: string; url: string | null; prNumber: number | null; prState: string | null; merged: boolean; text: string; index: DiffIndexFile[]; filesRead: number; filesTotal: number;
+} | null> {
+  let t: Target;
+  try {
+    t = await resolveTarget(projectId, key, { issue: issueNumber });
+  } catch (err) {
+    if (err instanceof NotFoundError) return null;
+    throw err;
+  }
+  let files: Array<{ filename: string; previous: string | null; status: string; additions: number; deletions: number; patch: string | null; truncated: boolean }>;
+  let label: string;
+  let url: string | null;
+  let head = '';
+  let prState: string | null = null;
+  if (t.kind === 'PR') {
+    const [pr, pf] = await Promise.all([code.sourcePull(userId, projectId, t.prNumber), code.sourcePullFiles(userId, projectId, t.prNumber)]);
+    label = `PR #${pr.number} "${pr.title}" [${pr.state}] ${pr.headRef} → ${pr.baseRef}`;
+    url = pr.url;
+    prState = pr.state;
+    head = `${label}\nDescription:\n${(pr.body ?? '(empty)').slice(0, 2000)}`;
+    files = pf.files;
+  } else {
+    const cmp = await code.sourceCompare(userId, projectId, { head: t.branch! });
+    label = `branch ${t.branch} vs ${cmp.base} (no pull request yet)`;
+    url = cmp.url;
+    head = label;
+    files = cmp.files;
+  }
+  const diff = diffText(files, budget);
+  return {
+    label, url, prNumber: t.prNumber, prState, merged: prState === 'merged', text: `${head}\n\n${diff.text}`,
+    index: files.map((f) => ({ filename: f.filename, patch: f.patch, shown: diff.included.includes(f.filename) })),
+    filesRead: diff.included.length, filesTotal: files.length,
+  };
+}
+
 // ─── Model ────────────────────────────────────────────────────────
 
 /** CHỈ cho test: thay lời gọi model (trả chuỗi JSON, hoặc ném lỗi). */

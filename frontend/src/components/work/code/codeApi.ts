@@ -71,6 +71,22 @@ export interface AiReviewResult {
   issue: string | null; issueNumber: number | null; commented: boolean; notified: boolean; target: string;
 }
 
+/** 27/10/2026: CuongMini làm thay trưởng nhóm — review cột Review (gói đề xuất) + chế độ tự động. */
+export type CardDecision = 'DONE' | 'BACK' | 'KEEP';
+export interface QueueItem {
+  issue: { number: number; key: string; title: string; assignee: { id: number; username: string } | null };
+  from: { id: number; name: string }; decision: CardDecision; to: { id: number; name: string } | null;
+  summary: string; comment: string;
+  acceptance: Array<{ criterion: string; met: 'yes' | 'no' | 'unknown'; evidence: string | null }>;
+  findings: Array<{ file: string; line: number | null; severity: string; category: string; message: string; suggestion: string | null }>;
+  code: { label: string; url: string | null; merged: boolean; filesRead: number; filesTotal: number } | null;
+  autoDone: boolean; autoBack: boolean;
+}
+export interface AutoReviewState {
+  settings: { enabled: boolean; actingUserId: number | null; maxPerRun: number }; canConfigure: boolean;
+  recent: Array<{ id: number; decision: CardDecision; issue: { number: number; key: string; title: string } | null; from: string | null; to: string | null; summary: string | null; at: string; undoneAt: string | null; canUndo: boolean }>;
+}
+
 export interface ConnStats { hasReadToken?: boolean; events24h?: number; lastEvent?: { kind: string; title: string | null; ref: string | null; actorLogin: string | null; actorName: string | null; prNumber: number | null; commitCount: number; createdAt: string } | null }
 export interface TestSendResult { bellSent: boolean; chat: { posted: boolean; channel: string | null }; notifyEnabled: boolean; recipientsOnPush: Array<{ id: number; name: string }>; note: string }
 
@@ -92,6 +108,13 @@ export const codeApi = {
   commits: (pid: number, q: { ref?: string; path?: string; provider?: GitProvider }) => d<{ ref: string; items: SourceCommit[] }>(api.get(`${P(pid)}/code/source/commits${qs(q)}`)),
   commit: (pid: number, sha: string, provider?: GitProvider) => d<CommitDetail>(api.get(`${P(pid)}/code/source/commit/${encodeURIComponent(sha)}${qs({ provider })}`)),
   aiReview: (pid: number, body: { pr?: number; issue?: number; notify?: boolean }) => d<AiReviewResult>(api.post(`${P(pid)}/code/review`, body, { timeout: 240_000 })),
+  reviewQueue: (pid: number, body: { numbers?: number[]; max?: number } = {}) =>
+    d<{ items: QueueItem[]; remaining: number; reviewColumn: boolean }>(api.post(`${P(pid)}/code/review/queue`, body, { timeout: 280_000 })),
+  reviewQueueApply: (pid: number, items: Array<{ number: number; decision: CardDecision; comment?: string | null }>) =>
+    d<{ results: Array<{ number: number; ok: boolean; moved?: string; error?: string }> }>(api.post(`${P(pid)}/code/review/queue/apply`, { items })),
+  autoReview: (pid: number) => d<AutoReviewState>(api.get(`${P(pid)}/code/review/auto`)),
+  setAutoReview: (pid: number, enabled: boolean) => d<AutoReviewState['settings']>(api.put(`${P(pid)}/code/review/auto`, { enabled })),
+  undoAutoReview: (pid: number, id: number) => d<{ undone: number; number: number }>(api.post(`${P(pid)}/code/review/auto/${id}/undo`, {})),
   // Cài đặt (ADMIN) — token gửi đi một chiều, không bao giờ đọc lại được.
   setReadToken: (pid: number, provider: GitProvider, token: string | null) =>
     d<{ hasReadToken: boolean; verified: boolean | null }>(api.put(`${P(pid)}/${host(provider)}/read-token`, { token })),

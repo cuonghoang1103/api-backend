@@ -18,6 +18,7 @@ import { EmptyState, PageLoading } from '@/components/work/ui';
 import ReviewList from '@/components/work/quality/ReviewList';
 import ReviewDetail from '@/components/work/quality/ReviewDetail';
 import BaselinesTab from '@/components/work/quality/BaselinesTab';
+import CuongMiniReviewQueue from '@/components/work/code/CuongMiniReviewQueue';
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -63,6 +64,8 @@ function ReviewsView({ config, pid }: { config: ProjectConfig; pid: number }) {
       </div>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
         <div className="mx-auto w-full max-w-[1400px] p-4">
+          {/* 27/10/2026: CuongMini làm thay trưởng nhóm — review cột Review + chế độ tự động (chỉ người được review). */}
+          {tab === 'reviews' && !review && config.permissions.aiCodeReview && <CuongMiniReviewQueue config={config} onOpenIssue={openIssue} />}
           {tab === 'reviews' && (review
             ? <ReviewDetail key={review} config={config} pid={pid} num={review} onBack={() => setParam({ review: null }, true)} onOpenIssue={openIssue} />
             : <ReviewList config={config} pid={pid} onOpen={(n) => setParam({ review: String(n) }, true)} />)}

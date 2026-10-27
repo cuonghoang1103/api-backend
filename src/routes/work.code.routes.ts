@@ -13,6 +13,7 @@
  *   GET  /projects/:pid/code/source/commit/:sha
  *   GET  /projects/:pid/code/source/pull/:n | pull/:n/files | compare?base&head   (27/10/2026)
  *   POST /projects/:pid/code/review                         { pr | issue, notify? } — CuongMini review (codeReview.service)
+ *   POST /projects/:pid/code/review/queue(/apply) · GET|PUT /code/review/auto · POST /code/review/auto/:rid/undo — làm thay trưởng nhóm
  *   GET  /me/nudges · GET /projects/:pid/nudges · POST /projects/:pid/nudges/:num/apply|snooze — CuongMini hỏi nhanh
  *   PUT  /projects/:pid/(github|gitlab)/read-token            { token|null } — ADMIN; token không bao giờ trả về
  *   PUT  /projects/:pid/(github|gitlab)/activity              { chatChannelId?, notify? } — ADMIN
@@ -123,6 +124,33 @@ router.post('/projects/:pid/code/review', asyncHandler(async (req, res) => {
   const body = parse(z.object({ pr: id.optional(), issue: id.optional(), notify: z.boolean().optional() }).refine((b) => b.pr || b.issue, 'Pick a pull request or an issue'), req.body ?? {});
   const { runCodeReview } = await import('../services/work/codeReview.service.js');
   ok(res, await runCodeReview(callerId(req), P(req, 'pid'), body), 201);
+}));
+
+// ─── CuongMini làm thay trưởng nhóm (27/10/2026, reviewHangLoat.service): review các thẻ ở cột Review ──
+// (A) theo yêu cầu: gói đề xuất ⇒ người bấm chọn dòng ⇒ apply dưới quyền người bấm. (B) tự động: cờ dự án, mặc định tắt.
+const decision = z.enum(['DONE', 'BACK', 'KEEP']);
+router.post('/projects/:pid/code/review/queue', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ numbers: z.array(id).max(20).optional(), max: z.number().int().min(1).max(10).optional() }), req.body ?? {});
+  const m = await import('../services/work/reviewHangLoat.service.js');
+  ok(res, await m.reviewQueue(callerId(req), P(req, 'pid'), body));
+}));
+router.post('/projects/:pid/code/review/queue/apply', asyncHandler(async (req, res) => {
+  const { items } = parse(z.object({ items: z.array(z.object({ number: id, decision, comment: z.string().max(6000).nullable().optional() })).min(1).max(20) }), req.body ?? {});
+  const m = await import('../services/work/reviewHangLoat.service.js');
+  ok(res, await m.applyQueue(callerId(req), P(req, 'pid'), items));
+}));
+router.get('/projects/:pid/code/review/auto', asyncHandler(async (req, res) => {
+  const m = await import('../services/work/reviewHangLoat.service.js');
+  ok(res, await m.autoReviewStatus(callerId(req), P(req, 'pid')));
+}));
+router.put('/projects/:pid/code/review/auto', asyncHandler(async (req, res) => {
+  const { enabled } = parse(z.object({ enabled: z.boolean() }), req.body ?? {});
+  const m = await import('../services/work/reviewHangLoat.service.js');
+  ok(res, await m.setAutoReview(callerId(req), P(req, 'pid'), enabled));
+}));
+router.post('/projects/:pid/code/review/auto/:rid/undo', asyncHandler(async (req, res) => {
+  const m = await import('../services/work/reviewHangLoat.service.js');
+  ok(res, await m.undoAutoReview(callerId(req), P(req, 'pid'), P(req, 'rid')));
 }));
 
 // ─── CuongMini "hỏi nhanh": gợi ý chuyển trạng thái thẻ của CHÍNH mình (27/10/2026, goiYChuyenThe.service) ──

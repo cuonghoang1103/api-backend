@@ -762,10 +762,11 @@ const reviews = defineTool({
 
 const reviewManage = defineTool({
   name: 'review_manage', title: 'Create / run a review', group: 'tests',
-  description: 'action create (title, kind DOC/CODE, method, checklistKey, page or PR, participants {username, role}) | update (title, method, work product, PR, size, meeting time/minutes, rework minutes, criteria, notes) | participants (REPLACES list) | items (record checklist results by item id: OK/NG/NA + line/note/severity, or add questions) | transition (status) | defect (log a defect issue from an NG item) | ai_code_review (CuongMini reads PR `pr` or the PR/branch of `issue`, saves a CODE review with findings and comments on the issue; project admin, lead, team lead or lecturer; costs AI credit). The review DECISION (accept / reinspect) is the moderator\'s — set it on the web.',
+  description: 'action create (title, kind DOC/CODE, method, checklistKey, page or PR, participants {username, role}) | update (title, method, work product, PR, size, meeting time/minutes, rework minutes, criteria, notes) | participants (REPLACES list) | items (record checklist results by item id: OK/NG/NA + line/note/severity, or add questions) | transition (status) | defect (log a defect issue from an NG item) | ai_code_review (CuongMini reads PR `pr` or the PR/branch of `issue`, saves a CODE review with findings and comments on the issue; project admin, lead, team lead or lecturer; costs AI credit) | ai_review_queue (CuongMini reviews the issues in the Review column: per issue DONE / BACK / KEEP + drafted comment — apply them with transition + comment). The review DECISION (accept / reinspect) is the moderator\'s — set it on the web.',
   write: true, personOnly: true,
   input: z.object({
-    project: projectArg, action: z.enum(['create', 'update', 'participants', 'items', 'transition', 'defect', 'ai_code_review']), number: z.number().int().positive().optional(),
+    project: projectArg, action: z.enum(['create', 'update', 'participants', 'items', 'transition', 'defect', 'ai_code_review', 'ai_review_queue']), number: z.number().int().positive().optional(),
+    numbers: z.array(z.number().int().positive()).max(10).optional().describe('ai_review_queue: only these issues'),
     pr: z.number().int().positive().optional().describe('ai_code_review: pull request number'), issue: issueArg.optional().describe('ai_code_review: issue whose PR/branch to review'),
     notify: z.boolean().optional().describe('ai_code_review: also ping the member'),
     title: z.string().min(1).max(200).optional(), kind: z.enum(REVIEW_KINDS).optional(), method: z.enum(REVIEW_METHODS).optional(), checklistKey: z.string().max(40).optional(),
@@ -782,6 +783,11 @@ const reviewManage = defineTool({
     W(ctx);
     const p0 = await projectFor(ctx, a.project, []);
     const people = async () => Promise.all((a.participants ?? []).map(async (x) => ({ userId: (await assigneeIdOf(ctx, p0, x.user))!, role: x.role, prepMinutes: x.prepMinutes ?? null })));
+    if (a.action === 'ai_review_queue') {
+      const p = await projectFor(ctx, a.project, [['POST', '/code/review/queue']]);
+      const { reviewQueue } = await import('../reviewHangLoat.service.js');
+      return untrusted('review of issues in Review', json(await reviewQueue(ctx.userId, p.id, { numbers: a.numbers, max: 10 })));
+    }
     if (a.action === 'ai_code_review') {
       if (!a.pr && a.issue === undefined) throw new BadRequestError('ai_code_review needs pr or issue', 'VALIDATION_ERROR');
       const p = await projectFor(ctx, a.project, [['POST', '/code/review']]);

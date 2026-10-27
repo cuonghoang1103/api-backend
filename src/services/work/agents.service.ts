@@ -688,6 +688,17 @@ export function startAgentJobs(): void {
       .catch((err) => logger.warn('[work] agent timesheet lỗi', { err: (err as Error).message }))
       .finally(() => { timesheeting = false; });
   }, 60 * 60_000).unref();
+  // 27/10/2026: CuongMini tự review thẻ ở cột Review — chỉ dự án đã BẬT (mặc định tắt), 10 phút một lượt.
+  let autoReviewing = false;
+  setInterval(() => {
+    if (autoReviewing) return;
+    autoReviewing = true;
+    void import('./reviewHangLoat.service.js')
+      .then((m) => m.autoReviewSweep())
+      .then((n) => { if (n) logger.info('[work] CuongMini review tự động', { n }); })
+      .catch((err) => logger.warn('[work] CuongMini review tự động lỗi', { err: (err as Error).message }))
+      .finally(() => { autoReviewing = false; });
+  }, 10 * 60_000).unref();
   setInterval(() => {
     void import('./webhooks.service.js')
       .then((m) => m.dispatchWebhooks())

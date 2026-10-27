@@ -14048,6 +14048,28 @@ model WorkStatusNudge {
   @@map("work_status_nudges")
 }
 
+/// 27/10/2026 — CuongMini TỰ review thẻ ở cột Review (chế độ tự động, mặc định TẮT; reviewHangLoat.service). Mỗi dòng = một
+/// lần CuongMini xét một thẻ (thay mặt actingUserId = trưởng nhóm đã bật): DONE / BACK (trả về In Progress) / KEEP (để
+/// người xem). fromStatusId/toStatusId để HOÀN TÁC; issueUpdatedAt = mốc đã xét (thẻ đổi sau mốc ⇒ xét lại). Không FK.
+model WorkAiAutoReview {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  issueId        Int       @map("issue_id")
+  actingUserId   Int       @map("acting_user_id")
+  decision       String    @db.VarChar(8)
+  fromStatusId   Int?      @map("from_status_id")
+  toStatusId     Int?      @map("to_status_id")
+  summary        String?   @db.Text
+  issueUpdatedAt DateTime  @map("issue_updated_at")
+  undoneAt       DateTime? @map("undone_at")
+  undoneById     Int?      @map("undone_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt], map: "idx_work_ai_auto_review_project")
+  @@index([issueId], map: "idx_work_ai_auto_review_issue")
+  @@map("work_ai_auto_reviews")
+}
+
 /// Baseline bộ yêu cầu/tài liệu (Wiegers Ch27 · bài 7.1): ảnh chụp REQ/UC/BR/Docs + hash. status DRAFT → PENDING →
 /// APPROVED (đóng băng, `locked`) | REJECTED; APPROVED cũ ⇒ SUPERSEDED khi baseline mới được duyệt.
 model WorkBaseline {

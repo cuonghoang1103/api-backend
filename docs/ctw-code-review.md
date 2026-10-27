@@ -74,3 +74,45 @@ Ask AI đề xuất lệnh `code_review` (chỉ ở Ask, người bấm Apply); 
 npx tsx --test src/services/work/codeReview.test.ts src/services/work/permissions.test.ts src/services/work/toolRegistry/registry.test.ts
 WORK_DB_TEST=1 npx tsx --test src/routes/work.codeReview.db.test.ts
 ```
+
+## 3. CuongMini hỏi nhanh — gợi ý chuyển thẻ (`goiYChuyenThe.service.ts`)
+
+Thẻ CỦA NGƯỜI DÙNG chưa Done có tín hiệu: PR nhắc KEY-n đã merge · commit nhắc KEY-n lên `main/master/develop/dev` ·
+checklist trong mô tả tích đủ · thẻ con xong hết · thẻ "cơ bản" (cài đặt/setup/đọc/tìm hiểu…) nằm im ≥ 2 ngày (câu HỎI,
+không khẳng định). Đích theo workflow thật (`chonDich`): cấu hình "PR merged ⇒ trạng thái" của dự án ⇒ cột Review ⇒ Done;
+checklist/thẻ con/cơ bản ⇒ Done; thẻ đã ở cột Review ⇒ không hỏi người làm (việc của người review); đích không chuyển tới
+được theo luật transition ⇒ không gợi ý.
+
+- Web: thẻ "CuongMini hỏi nhanh" (≤ 3) ở Việc của tôi + đầu Board/Backlog. **Có** ⇒ `updateIssueAs` (quyền người đó,
+  luật Done/DoD) + bình luận NỘI BỘ isAi kèm bằng chứng (link PR/commit, checklist) + ghi chú/ảnh tuỳ chọn. **Chưa** ⇒ hoãn 3
+  ngày. Mỗi thẻ hiện một cửa sổ 24 giờ, rồi tối đa một lần / 3 ngày (`work_status_nudges`).
+- REST: `GET /me/nudges`, `GET /projects/:pid/nudges`, `POST /projects/:pid/nudges/:num/apply|snooze`.
+- MCP: `issue_extras` action `status_suggestions` / `status_suggestion_apply` / `status_suggestion_snooze`.
+- Ask: người nói "xong rồi" ⇒ trợ lý đề xuất update_issue (trạng thái kế) + add_comment bằng chứng.
+- Quyền: `issue.transition` (ADMIN/MEMBER); VIEWER/CLIENT/giảng viên không; agent cấm (`/nudges` ∈ AGENT_DENIED_ROUTES).
+
+## 4. CuongMini làm thay trưởng nhóm — review cột Review (`reviewHangLoat.service.ts`)
+
+**(A) Theo yêu cầu** — người được review (như §2) bấm "Review cùng CuongMini" (trang Reviews) hoặc hỏi "thẻ nào chờ tôi
+review" (Ask: lệnh đọc `review_queue`, chỉ Ask, chỉ người được review; MCP: `review_manage` action `ai_review_queue`).
+CuongMini xét ≤ 6 thẻ (Ask: 3) ở cột Review, 3 thẻ song song: thẻ (mô tả, "Xong khi", DoD, bình luận bằng chứng), chữ của
+tệp đính kèm (ảnh: chỉ biết tên — model không nhìn ảnh), diff thật của PR/nhánh ⇒ mỗi thẻ DONE / BACK / KEEP + tiêu chí +
+phát hiện + bình luận soạn sẵn. Còn BLOCKER/MAJOR hoặc tiêu chí "no" ⇒ không bao giờ DONE. Kết quả đệm 15 phút theo
+`updatedAt` của thẻ (hỏi lại không tốn tiền). Người bấm bỏ chọn / sửa bình luận ⇒ `POST /code/review/queue/apply` chạy dưới
+DANH TÍNH NGƯỜI BẤM (`updateIssueAs` via AI ⇒ applyIssueChange) + bình luận isAi có @nhắc người làm.
+
+**(B) Tự động** — `settings.cuongMiniAutoReview` (mặc định TẮT; chỉ ADMIN dự án / trưởng dự án bật, audit
+`review.ai_auto_on/off`; người bật = danh tính hành động; mất quyền ⇒ tự tắt). Quét 10 phút (`startAgentJobs`), ≤ 3 thẻ/lượt
+(`maxPerRun`), thẻ đã xét chỉ xét lại khi thẻ đổi. Tự Done CHỈ khi `autoDoneOk`: mọi tiêu chí `yes` có bằng chứng, không
+BLOCKER/MAJOR, PR đã merge nếu thẻ có code. Tự trả về In Progress chỉ khi `autoBackOk` (tiêu chí "no" / BLOCKER/MAJOR). Còn
+lại: chỉ bình luận, để người xem. Mỗi lần: bình luận "CuongMini (thay mặt trưởng nhóm) …", chuông tóm tắt cho người bật,
+nhật ký `work_ai_auto_reviews` + nút Hoàn tác (`POST /code/review/auto/:id/undo`, chỉ khi thẻ còn ở trạng thái CuongMini đặt).
+Không bao giờ: merge PR, chấm điểm, quyết định Approvals, xoá.
+
+Trần: chung với §2 — mỗi thẻ xét = một lượt (`review.ai_card`) trong `WORK_AI_CODE_REVIEW_PER_DAY`; theo người ×3 của
+`WORK_AI_CODE_REVIEW_PER_USER_DAY`.
+
+```bash
+npx tsx --test src/services/work/goiYChuyenThe.test.ts src/services/work/reviewHangLoat.test.ts
+WORK_DB_TEST=1 npx tsx --test src/routes/work.nudges.db.test.ts src/routes/work.reviewQueue.db.test.ts
+```

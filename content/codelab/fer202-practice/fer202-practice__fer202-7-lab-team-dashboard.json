@@ -1,0 +1,634 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-7-lab-team-dashboard",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-7-1-context"
+  },
+  "exercises": [
+    {
+      "title": "Lab 7 — Team Dashboard (theme · i18n · auth contexts · render props)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 100,
+      "points": 100,
+      "concepts": [
+        "Context API",
+        "custom hooks",
+        "prop drilling",
+        "Provider composition",
+        "useMemo for context value",
+        "render props",
+        "children as a function",
+        "i18n fallback"
+      ],
+      "prerequisites": [
+        "props & children",
+        "useState / useEffect"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "context",
+        "render-props"
+      ],
+      "problemHtml": "<h1>LAB 7: Team Dashboard — Context API &amp; reusable component patterns</h1>\n<p class=\"bi-phu\">FER202 · Chapter 7 — Props patterns & Context · Suggested time: 100 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>A team dashboard needs three pieces of <b>global</b> data — theme, language and the signed-in user — that many components deep in the tree must read. Instead of passing props through every level (<i>prop drilling</i>), create three <b>Contexts</b> with custom hooks, persist the preferences, translate the UI with a small <code>t()</code> function, guard an admin section by role, and practise two reuse patterns: <b>render props</b> and <b>children as a function</b>.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Theme · language · auth contexts, role guard, member list (render props), FAQ (children as function).</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Each Context in its own file under <code>src/context/</code> with a Provider and a custom hook (<code>useTheme</code>, <code>useLanguage</code>, <code>useAuth</code>) that throws when used outside its provider.</li>\n  <li>Memoize every context <code>value</code> with <code>useMemo</code>.</li>\n  <li><code>Header</code> takes <b>no props</b>; its children read what they need from Context.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── context/\n│   ├── ThemeContext.js      # ThemeProvider · useTheme\n│   ├── LanguageContext.js   # LanguageProvider · useLanguage { lang, setLang, t }\n│   ├── AuthContext.js       # AuthProvider · useAuth · RequireRole\n│   └── AppProviders.js      # Theme &gt; Language &gt; Auth\n├── components/\n│   ├── Header.js            # title + Toolbar (language, theme, UserMenu)\n│   ├── UserMenu.js          # login buttons / badge / logout\n│   ├── DataList.js          # render props\n│   └── Toggle.js            # children as a function\n├── data.js                  # MEMBERS, FAQ, USERS, DICTIONARY (given)\n├── App.js\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------------+\n| Team Dashboard        [English v] [🌙] [Login as admin] [Login as viewer]  |\n| Hello, Guest!                                                              |\n| +- Members ---------------------------------------------------------+     |\n| | [Search members...      ]                                         |     |\n| | Nguyen Van An — Developer                                         |     |\n| | Tran Thi Binh — Designer   ...                                    |     |\n| +-------------------------------------------------------------------+     |\n| +- Admin panel ----------+  +- FAQ ------------------------------+        |\n| | Admins only            |  | ▸ What is Context?                 |        |\n| +------------------------+  | ▾ When should I use it?            |        |\n|                             |   For global data: theme, ...      |        |\n|                             +------------------------------------+        |\n| Made with React Context                                                    |\n+----------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Context values</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>ThemeContext</code></td><td>{ theme: 'light' | 'dark', toggleTheme }</td><td>localStorage \"theme\"</td></tr><tr><td><code>LanguageContext</code></td><td>{ lang: 'en' | 'vi', setLang, t(key) }</td><td>localStorage \"lang\"; t: current ⇒ en ⇒ key</td></tr><tr><td><code>AuthContext</code></td><td>{ user: { name, role } | null, login(user), logout() }</td><td>not persisted</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Theme context <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Root <code>.app.theme-light</code> / <code>.app.theme-dark</code>; <code>#theme-toggle</code> switches; saved in localStorage <code>theme</code> and restored on load.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">createContext</span> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Local Storage key:</b> <code>theme</code></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Language context (i18n) <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#lang-select</code> (<code>en</code>/<code>vi</code>); every visible text goes through <code>t(key)</code> from <code>DICTIONARY</code>: <code>#title</code>, <code>#greeting</code> (<code>Hello, Guest!</code>), headings, placeholder, messages.</li>\n  <li>Missing in the current language ⇒ English; missing everywhere ⇒ the key itself. Saved in localStorage <code>lang</code>.</li>\n</ul>\n<p><b>Local Storage key:</b> <code>lang</code></p>\n<p><b>Example:</b></p>\n<pre>vi ⇒ \"Xin chào, Khách!\" · footer (no vi entry) ⇒ \"Made with React Context\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Auth context &amp; role guard <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#login-admin</code> / <code>#login-viewer</code> sign in as <code>USERS.admin</code> / <code>USERS.viewer</code>; then <code>#user-badge</code> <code>Signed in as Cuong (admin)</code> and <code>#logout</code>.</li>\n  <li><code>&lt;RequireRole role=\"admin\"&gt;</code> renders its children (<code>#admin-panel</code>) only for admins, otherwise <code>#no-access</code> (<code>t('adminsOnly')</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Render props: DataList <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;DataList items renderItem renderEmpty getKey /&gt;</code> renders a <code>ul.data-list</code>; the dashboard decides the item markup (<code>.member</code> <code>Name — Role</code>) and the empty state (<code>#empty</code>). <code>#member-search</code> filters by name.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Children as a function: Toggle <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>&lt;Toggle&gt;{({ on, toggle }) =&gt; …}&lt;/Toggle&gt;</code> owns the open/closed state; each FAQ <code>.faq-item</code> has a <code>.faq-q</code> button and shows <code>.faq-a</code> only when open.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. No prop drilling <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Header()</code> has no parameters; <code>UserMenu</code> (3 levels deep) calls <code>useAuth()</code> itself. Hooks throw outside their provider.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Provider composition &amp; memo <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>AppProviders</code> nests Theme &gt; Language &gt; Auth (Auth uses <code>t</code>); context values wrapped in <code>useMemo</code>.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>.app.theme-light / .theme-dark · #theme-toggle · #lang-select</code></td><td>preferences</td></tr><tr><td><code>#title · #greeting · #footer</code></td><td>translated texts</td></tr><tr><td><code>#login-admin · #login-viewer · #user-badge · #logout · #admin-panel · #no-access</code></td><td>auth</td></tr><tr><td><code>#member-search · .data-list · .member · #empty</code></td><td>members</td></tr><tr><td><code>.faq-item · .faq-q · .faq-a</code></td><td>FAQ</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Theme context</td><td>1.5</td></tr><tr><td>2</td><td>Language context (i18n)</td><td>2</td></tr><tr><td>3</td><td>Auth context &amp; role guard</td><td>2</td></tr><tr><td>4</td><td>Render props: DataList</td><td>1.5</td></tr><tr><td>5</td><td>Children as a function: Toggle</td><td>1</td></tr><tr><td>6</td><td>No prop drilling</td><td>1</td></tr><tr><td>7</td><td>Provider composition &amp; memo</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Passing <code>theme</code>, <code>t</code> and <code>user</code> down as props through Header → Toolbar → UserMenu.</li>\n  <li>One giant context for everything — every change re-renders every consumer.</li>\n  <li>Hard-coded English strings left in components.</li>\n  <li><code>value={{ … }}</code> created inline without <code>useMemo</code>.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 7: Bảng điều khiển nhóm — Context API &amp; mẫu component tái sử dụng</h1>\n<p class=\"bi-phu\">FER202 · Chương 7 — Mẫu props & Context · Thời gian gợi ý: 100 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Bảng điều khiển nhóm cần ba dữ liệu <b>toàn cục</b> — giao diện, ngôn ngữ và người đang đăng nhập — mà nhiều component nằm sâu phải đọc. Thay vì truyền props qua mọi tầng (<i>prop drilling</i>), hãy tạo ba <b>Context</b> có custom hook, lưu lựa chọn, dịch giao diện bằng hàm <code>t()</code> nhỏ, chặn khu quản trị theo vai trò, và luyện hai mẫu tái sử dụng: <b>render props</b> và <b>children là hàm</b>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Context theme · ngôn ngữ · đăng nhập, chặn theo vai trò, danh sách thành viên (render props), FAQ (children là hàm).</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi Context một tệp trong <code>src/context/</code>, có Provider và custom hook (<code>useTheme</code>, <code>useLanguage</code>, <code>useAuth</code>) báo lỗi khi dùng ngoài Provider.</li>\n  <li>Ghi nhớ mọi <code>value</code> của Context bằng <code>useMemo</code>.</li>\n  <li><code>Header</code> <b>không nhận props</b>; các con tự đọc thứ mình cần từ Context.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── context/\n│   ├── ThemeContext.js      # ThemeProvider · useTheme\n│   ├── LanguageContext.js   # LanguageProvider · useLanguage { lang, setLang, t }\n│   ├── AuthContext.js       # AuthProvider · useAuth · RequireRole\n│   └── AppProviders.js      # Theme &gt; Language &gt; Auth\n├── components/\n│   ├── Header.js            # title + Toolbar (language, theme, UserMenu)\n│   ├── UserMenu.js          # login buttons / badge / logout\n│   ├── DataList.js          # render props\n│   └── Toggle.js            # children as a function\n├── data.js                  # MEMBERS, FAQ, USERS, DICTIONARY (given)\n├── App.js\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+----------------------------------------------------------------------------+\n| Team Dashboard        [English v] [🌙] [Login as admin] [Login as viewer]  |\n| Hello, Guest!                                                              |\n| +- Members ---------------------------------------------------------+     |\n| | [Search members...      ]                                         |     |\n| | Nguyen Van An — Developer                                         |     |\n| | Tran Thi Binh — Designer   ...                                    |     |\n| +-------------------------------------------------------------------+     |\n| +- Admin panel ----------+  +- FAQ ------------------------------+        |\n| | Admins only            |  | ▸ What is Context?                 |        |\n| +------------------------+  | ▾ When should I use it?            |        |\n|                             |   For global data: theme, ...      |        |\n|                             +------------------------------------+        |\n| Made with React Context                                                    |\n+----------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Context values</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>ThemeContext</code></td><td>{ theme: 'light' | 'dark', toggleTheme }</td><td>localStorage \"theme\"</td></tr><tr><td><code>LanguageContext</code></td><td>{ lang: 'en' | 'vi', setLang, t(key) }</td><td>localStorage \"lang\"; t: ngôn ngữ hiện tại ⇒ en ⇒ key</td></tr><tr><td><code>AuthContext</code></td><td>{ user: { name, role } | null, login(user), logout() }</td><td>không lưu bền</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Context giao diện <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Gốc <code>.app.theme-light</code> / <code>.app.theme-dark</code>; <code>#theme-toggle</code> đổi; lưu localStorage <code>theme</code> và khôi phục khi mở lại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">createContext</span> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Khoá Local Storage:</b> <code>theme</code></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Context ngôn ngữ (i18n) <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#lang-select</code> (<code>en</code>/<code>vi</code>); mọi chữ hiển thị đi qua <code>t(key)</code> từ <code>DICTIONARY</code>: <code>#title</code>, <code>#greeting</code> (<code>Hello, Guest!</code>), tiêu đề, placeholder, thông báo.</li>\n  <li>Thiếu ở ngôn ngữ hiện tại ⇒ tiếng Anh; thiếu ở mọi nơi ⇒ chính key. Lưu localStorage <code>lang</code>.</li>\n</ul>\n<p><b>Khoá Local Storage:</b> <code>lang</code></p>\n<p><b>Ví dụ:</b></p>\n<pre>vi ⇒ \"Xin chào, Khách!\" · footer (không có bản vi) ⇒ \"Made with React Context\"</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Context đăng nhập &amp; chặn vai trò <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#login-admin</code> / <code>#login-viewer</code> đăng nhập bằng <code>USERS.admin</code> / <code>USERS.viewer</code>; sau đó <code>#user-badge</code> <code>Signed in as Cuong (admin)</code> và <code>#logout</code>.</li>\n  <li><code>&lt;RequireRole role=\"admin\"&gt;</code> chỉ vẽ children (<code>#admin-panel</code>) cho admin, còn lại <code>#no-access</code> (<code>t('adminsOnly')</code>).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Render props: DataList <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;DataList items renderItem renderEmpty getKey /&gt;</code> vẽ <code>ul.data-list</code>; dashboard quyết định cách vẽ mục (<code>.member</code> <code>Tên — Vai trò</code>) và trạng thái rỗng (<code>#empty</code>). <code>#member-search</code> lọc theo tên.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Children là hàm: Toggle <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>&lt;Toggle&gt;{({ on, toggle }) =&gt; …}&lt;/Toggle&gt;</code> giữ state mở/đóng; mỗi FAQ <code>.faq-item</code> có nút <code>.faq-q</code> và chỉ hiện <code>.faq-a</code> khi mở.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Không prop drilling <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Header()</code> không có tham số; <code>UserMenu</code> (sâu 3 tầng) tự gọi <code>useAuth()</code>. Hook báo lỗi khi dùng ngoài Provider.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Ghép Provider &amp; ghi nhớ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>AppProviders</code> lồng Theme &gt; Language &gt; Auth (Auth dùng <code>t</code>); value của Context bọc <code>useMemo</code>.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>.app.theme-light / .theme-dark · #theme-toggle · #lang-select</code></td><td>tuỳ chọn</td></tr><tr><td><code>#title · #greeting · #footer</code></td><td>chữ được dịch</td></tr><tr><td><code>#login-admin · #login-viewer · #user-badge · #logout · #admin-panel · #no-access</code></td><td>đăng nhập</td></tr><tr><td><code>#member-search · .data-list · .member · #empty</code></td><td>thành viên</td></tr><tr><td><code>.faq-item · .faq-q · .faq-a</code></td><td>hỏi đáp</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Context giao diện</td><td>1.5</td></tr><tr><td>2</td><td>Context ngôn ngữ (i18n)</td><td>2</td></tr><tr><td>3</td><td>Context đăng nhập &amp; chặn vai trò</td><td>2</td></tr><tr><td>4</td><td>Render props: DataList</td><td>1.5</td></tr><tr><td>5</td><td>Children là hàm: Toggle</td><td>1</td></tr><tr><td>6</td><td>Không prop drilling</td><td>1</td></tr><tr><td>7</td><td>Ghép Provider &amp; ghi nhớ</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Truyền <code>theme</code>, <code>t</code>, <code>user</code> qua props Header → Toolbar → UserMenu.</li>\n  <li>Một Context khổng lồ chứa mọi thứ — đổi gì cũng vẽ lại mọi nơi dùng.</li>\n  <li>Còn chữ tiếng Anh viết cứng trong component.</li>\n  <li><code>value={{ … }}</code> tạo mới mỗi lần render, không <code>useMemo</code>.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Each Context in its own file under <code>src/context/</code> with a Provider and a custom hook (<code>useTheme</code>, <code>useLanguage</code>, <code>useAuth</code>) that throws when used outside its provider.|||Mỗi Context một tệp trong <code>src/context/</code>, có Provider và custom hook (<code>useTheme</code>, <code>useLanguage</code>, <code>useAuth</code>) báo lỗi khi dùng ngoài Provider.\nMemoize every context <code>value</code> with <code>useMemo</code>.|||Ghi nhớ mọi <code>value</code> của Context bằng <code>useMemo</code>.\n<code>Header</code> takes <b>no props</b>; its children read what they need from Context.|||<code>Header</code> <b>không nhận props</b>; các con tự đọc thứ mình cần từ Context.",
+      "examplesJson": [
+        {
+          "input": "Language context (i18n)|||Context ngôn ngữ (i18n)",
+          "output": "vi ⇒ \"Xin chào, Khách!\" · footer (no vi entry) ⇒ \"Made with React Context\"|||vi ⇒ \"Xin chào, Khách!\" · footer (không có bản vi) ⇒ \"Made with React Context\"",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi Context: const X = createContext(null); Provider giữ state + value = useMemo(...); hook useX() { const c = useContext(X); if (!c) throw …; return c; }.",
+        "t = useCallback(key => DICTIONARY[lang]?.[key] ?? DICTIONARY.en[key] ?? key, [lang]).",
+        "RequireRole: const { user } = useAuth(); return user?.role === role ? children : <p id=\"no-access\">{t(\"adminsOnly\")}</p>.",
+        "DataList: if (!items.length) return renderEmpty(); return <ul className=\"data-list\">{items.map(i => <li key={getKey(i)}>{renderItem(i)}</li>)}</ul>. Toggle: return children({ on, toggle })."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mọi thứ truyền bằng props qua nhiều tầng (prop drilling) và chưa làm gì\nimport { FAQ, MEMBERS } from './data';\n\nexport default function App() {\n  // TODO: AppProviders (Theme, Language, Auth) + Dashboard đọc Context; DataList (render props); Toggle (children là hàm)\n  return (\n    <div className=\"app theme-light\">\n      <h1 id=\"title\">Team Dashboard</h1>\n      <p id=\"greeting\">Hello, Guest!</p>\n      <ul>{MEMBERS.map((m) => <li key={m.id} className=\"member\">{m.name}</li>)}</ul>\n      <section id=\"faq\">{FAQ.map((f) => <p key={f.id} className=\"faq-q\">{f.q}</p>)}</section>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/context/ThemeContext.js",
+          "language": "javascript",
+          "code": "// src/context/ThemeContext.js — STARTER\n// TODO: ThemeProvider + useTheme (theme lưu localStorage \"theme\")\nexport function ThemeProvider({ children }) {\n  return children;\n}\nexport const useTheme = () => ({ theme: 'light', toggleTheme: () => {} });\n"
+        },
+        {
+          "name": "src/context/LanguageContext.js",
+          "language": "javascript",
+          "code": "// src/context/LanguageContext.js — STARTER\n// TODO: LanguageProvider + useLanguage: { lang, setLang, t } (t lùi về tiếng Anh, rồi về key)\nexport function LanguageProvider({ children }) {\n  return children;\n}\nexport const useLanguage = () => ({ lang: 'en', setLang: () => {}, t: (k) => k });\n"
+        },
+        {
+          "name": "src/context/AuthContext.js",
+          "language": "javascript",
+          "code": "// src/context/AuthContext.js — STARTER\n// TODO: AuthProvider + useAuth + RequireRole\nexport function AuthProvider({ children }) {\n  return children;\n}\nexport const useAuth = () => ({ user: null, login: () => {}, logout: () => {} });\nexport function RequireRole({ children }) {\n  return children;\n}\n"
+        },
+        {
+          "name": "src/context/AppProviders.js",
+          "language": "javascript",
+          "code": "// src/context/AppProviders.js — STARTER\n// TODO: bọc ThemeProvider > LanguageProvider > AuthProvider\nexport default function AppProviders({ children }) {\n  return children;\n}\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js — STARTER\n// TODO: #title + Toolbar (#lang-select, #theme-toggle, UserMenu)\nexport default function Header() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/UserMenu.js",
+          "language": "javascript",
+          "code": "// src/components/UserMenu.js — STARTER\n// TODO: #login-admin / #login-viewer / #user-badge / #logout\nexport default function UserMenu() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/DataList.js",
+          "language": "javascript",
+          "code": "// src/components/DataList.js — STARTER\n// TODO: render props: items, renderItem, renderEmpty, getKey\nexport default function DataList() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/Toggle.js",
+          "language": "javascript",
+          "code": "// src/components/Toggle.js — STARTER\n// TODO: children là HÀM nhận { on, toggle }\nexport default function Toggle() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; }\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\n.header, .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }\n.header h1 { margin: 0 auto 0 0; font-size: 22px; }\n.card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; margin: 14px 0; }\n.theme-dark .card { border-color: #334155; }\nbutton, select, input { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; }\n.member { padding: 6px 0; border-bottom: 1px dashed #cbd5e1; }\n.faq-q { cursor: pointer; font-weight: 600; background: none; border: 0; padding: 4px 0; color: inherit; }\n"
+        },
+        {
+          "name": "src/data.js",
+          "language": "javascript",
+          "code": "// src/data.js — đã cho\nexport const MEMBERS = [\n  { id: 1, name: 'Nguyen Van An', role: 'Developer' },\n  { id: 2, name: 'Tran Thi Binh', role: 'Designer' },\n  { id: 3, name: 'Le Hoang Cuong', role: 'Developer' },\n  { id: 4, name: 'Pham Minh Duc', role: 'Tester' },\n  { id: 5, name: 'Vo Lan', role: 'Designer' },\n];\n\nexport const FAQ = [\n  { id: 1, q: 'What is Context?', a: 'A way to pass data through the tree without props.' },\n  { id: 2, q: 'When should I use it?', a: 'For global data: theme, language, current user.' },\n  { id: 3, q: 'Does it replace Redux?', a: 'Not always — Redux adds tooling and middleware.' },\n];\n\nexport const USERS = {\n  admin: { name: 'Cuong', role: 'admin' },\n  viewer: { name: 'Lan', role: 'viewer' },\n};\n\nexport const DICTIONARY = {\n  en: {\n    title: 'Team Dashboard', greeting: 'Hello', guest: 'Guest', members: 'Members', search: 'Search members...',\n    empty: 'No members found', admin: 'Admin panel', adminsOnly: 'Admins only', faq: 'FAQ', signedInAs: 'Signed in as',\n    logout: 'Log out', footer: 'Made with React Context',\n  },\n  vi: {\n    title: 'Bảng điều khiển nhóm', greeting: 'Xin chào', guest: 'Khách', members: 'Thành viên', search: 'Tìm thành viên...',\n    empty: 'Không tìm thấy thành viên', admin: 'Khu quản trị', adminsOnly: 'Chỉ dành cho quản trị viên', faq: 'Hỏi đáp',\n    signedInAs: 'Đăng nhập với', logout: 'Đăng xuất',\n  },\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js\nimport { useState } from 'react';\nimport AppProviders from './context/AppProviders';\nimport { useTheme } from './context/ThemeContext';\nimport { useLanguage } from './context/LanguageContext';\nimport { RequireRole, useAuth } from './context/AuthContext';\nimport Header from './components/Header';\nimport DataList from './components/DataList';\nimport Toggle from './components/Toggle';\nimport { FAQ, MEMBERS } from './data';\n\nfunction Dashboard() {\n  const { theme } = useTheme();\n  const { t } = useLanguage();\n  const { user } = useAuth();\n  const [q, setQ] = useState('');\n  const members = MEMBERS.filter((m) => m.name.toLowerCase().includes(q.trim().toLowerCase()));\n\n  return (\n    <div className={`app theme-${theme}`}>\n      <Header />\n      <p id=\"greeting\">{t('greeting')}, {user ? user.name : t('guest')}!</p>\n\n      <section className=\"card\">\n        <h2>{t('members')}</h2>\n        <input id=\"member-search\" placeholder={t('search')} value={q} onChange={(e) => setQ(e.target.value)} />\n        <DataList\n          items={members}\n          renderItem={(m) => <div className=\"member\">{m.name} — <i>{m.role}</i></div>}\n          renderEmpty={() => <p id=\"empty\">{t('empty')}</p>}\n        />\n      </section>\n\n      <section className=\"card\">\n        <h2>{t('admin')}</h2>\n        <RequireRole role=\"admin\">\n          <div id=\"admin-panel\">You can manage {MEMBERS.length} members here.</div>\n        </RequireRole>\n      </section>\n\n      <section className=\"card\" id=\"faq\">\n        <h2>{t('faq')}</h2>\n        {FAQ.map((f) => (\n          <Toggle key={f.id}>\n            {({ on, toggle }) => (\n              <div className=\"faq-item\">\n                <button type=\"button\" className=\"faq-q\" aria-expanded={on} onClick={toggle}>{on ? '▾' : '▸'} {f.q}</button>\n                {on && <p className=\"faq-a\">{f.a}</p>}\n              </div>\n            )}\n          </Toggle>\n        ))}\n      </section>\n\n      <footer id=\"footer\">{t('footer')}</footer>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <AppProviders>\n      <Dashboard />\n    </AppProviders>\n  );\n}\n"
+        },
+        {
+          "name": "src/context/ThemeContext.js",
+          "language": "javascript",
+          "code": "// src/context/ThemeContext.js — Context + Provider + custom hook; value ghi nhớ bằng useMemo\nimport { createContext, useContext, useEffect, useMemo, useState } from 'react';\n\nconst ThemeContext = createContext(null);\n\nexport function ThemeProvider({ children }) {\n  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');\n  useEffect(() => localStorage.setItem('theme', theme), [theme]);\n  // useMemo: object value chỉ tạo mới khi theme đổi ⇒ component dùng context không render thừa\n  const value = useMemo(() => ({ theme, toggleTheme: () => setTheme((t) => (t === 'light' ? 'dark' : 'light')) }), [theme]);\n  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;\n}\n\nexport function useTheme() {\n  const ctx = useContext(ThemeContext);\n  if (!ctx) throw new Error('useTheme must be used inside <ThemeProvider>');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/context/LanguageContext.js",
+          "language": "javascript",
+          "code": "// src/context/LanguageContext.js — i18n tối giản: t(key) tra từ điển, thiếu thì lùi về tiếng Anh, thiếu nữa thì trả key\nimport { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';\nimport { DICTIONARY } from '../data';\n\nconst LanguageContext = createContext(null);\n\nexport function LanguageProvider({ children }) {\n  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'en');\n  useEffect(() => localStorage.setItem('lang', lang), [lang]);\n  const t = useCallback((key) => DICTIONARY[lang]?.[key] ?? DICTIONARY.en[key] ?? key, [lang]);\n  const value = useMemo(() => ({ lang, setLang, t }), [lang, t]);\n  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;\n}\n\nexport function useLanguage() {\n  const ctx = useContext(LanguageContext);\n  if (!ctx) throw new Error('useLanguage must be used inside <LanguageProvider>');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/context/AuthContext.js",
+          "language": "javascript",
+          "code": "// src/context/AuthContext.js — người dùng hiện tại + component bọc chặn theo vai trò\nimport { createContext, useContext, useMemo, useState } from 'react';\nimport { useLanguage } from './LanguageContext';\n\nconst AuthContext = createContext(null);\n\nexport function AuthProvider({ children }) {\n  const [user, setUser] = useState(null);\n  const value = useMemo(() => ({ user, login: setUser, logout: () => setUser(null) }), [user]);\n  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;\n}\n\nexport function useAuth() {\n  const ctx = useContext(AuthContext);\n  if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>');\n  return ctx;\n}\n\n// Chỉ vẽ children khi đúng vai trò — tái dùng được ở mọi chỗ (thay vì if rải rác)\nexport function RequireRole({ role, children }) {\n  const { user } = useAuth();\n  const { t } = useLanguage();\n  if (user?.role !== role) return <p id=\"no-access\">{t('adminsOnly')}</p>;\n  return children;\n}\n"
+        },
+        {
+          "name": "src/context/AppProviders.js",
+          "language": "javascript",
+          "code": "// src/context/AppProviders.js — gom các Provider về MỘT chỗ (thứ tự: Auth cần Language nên nằm trong)\nimport { ThemeProvider } from './ThemeContext';\nimport { LanguageProvider } from './LanguageContext';\nimport { AuthProvider } from './AuthContext';\n\nexport default function AppProviders({ children }) {\n  return (\n    <ThemeProvider>\n      <LanguageProvider>\n        <AuthProvider>{children}</AuthProvider>\n      </LanguageProvider>\n    </ThemeProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js — KHÔNG nhận props về theme/ngôn ngữ/người dùng: mỗi con tự lấy từ Context\nimport { useLanguage } from '../context/LanguageContext';\nimport { useTheme } from '../context/ThemeContext';\nimport UserMenu from './UserMenu';\n\nfunction Toolbar() {\n  const { theme, toggleTheme } = useTheme();\n  const { lang, setLang } = useLanguage();\n  return (\n    <div className=\"toolbar\">\n      <select id=\"lang-select\" value={lang} onChange={(e) => setLang(e.target.value)}>\n        <option value=\"en\">English</option>\n        <option value=\"vi\">Tiếng Việt</option>\n      </select>\n      <button type=\"button\" id=\"theme-toggle\" onClick={toggleTheme}>{theme === 'light' ? '🌙' : '☀️'}</button>\n      <UserMenu />\n    </div>\n  );\n}\n\nexport default function Header() {\n  const { t } = useLanguage();\n  return (\n    <header className=\"header\">\n      <h1 id=\"title\">{t('title')}</h1>\n      <Toolbar />\n    </header>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/UserMenu.js",
+          "language": "javascript",
+          "code": "// src/components/UserMenu.js — nằm SÂU trong cây (App → Header → Toolbar → UserMenu) nhưng đọc thẳng Context\nimport { useAuth } from '../context/AuthContext';\nimport { useLanguage } from '../context/LanguageContext';\nimport { USERS } from '../data';\n\nexport default function UserMenu() {\n  const { user, login, logout } = useAuth();\n  const { t } = useLanguage();\n  if (!user) {\n    return (\n      <>\n        <button type=\"button\" id=\"login-admin\" onClick={() => login(USERS.admin)}>Login as admin</button>\n        <button type=\"button\" id=\"login-viewer\" onClick={() => login(USERS.viewer)}>Login as viewer</button>\n      </>\n    );\n  }\n  return (\n    <>\n      <span id=\"user-badge\">{t('signedInAs')} {user.name} ({user.role})</span>\n      <button type=\"button\" id=\"logout\" onClick={logout}>{t('logout')}</button>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/DataList.js",
+          "language": "javascript",
+          "code": "// src/components/DataList.js — RENDER PROPS: DataList lo lọc/khoá/rỗng, NƠI DÙNG quyết định vẽ mỗi mục ra sao\nexport default function DataList({ items, getKey = (x) => x.id, renderItem, renderEmpty }) {\n  if (items.length === 0) return renderEmpty ? renderEmpty() : null;\n  return <ul className=\"data-list\">{items.map((item) => <li key={getKey(item)}>{renderItem(item)}</li>)}</ul>;\n}\n"
+        },
+        {
+          "name": "src/components/Toggle.js",
+          "language": "javascript",
+          "code": "// src/components/Toggle.js — CHILDREN LÀ HÀM: Toggle giữ state, children nhận { on, toggle } để tự vẽ\nimport { useState } from 'react';\n\nexport default function Toggle({ initial = false, children }) {\n  const [on, setOn] = useState(initial);\n  return children({ on, toggle: () => setOn((v) => !v) });\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; }\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\n.header, .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }\n.header h1 { margin: 0 auto 0 0; font-size: 22px; }\n.card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; margin: 14px 0; }\n.theme-dark .card { border-color: #334155; }\nbutton, select, input { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; }\n.member { padding: 6px 0; border-bottom: 1px dashed #cbd5e1; }\n.faq-q { cursor: pointer; font-weight: 600; background: none; border: 0; padding: 4px 0; color: inherit; }\n"
+        },
+        {
+          "name": "src/data.js",
+          "language": "javascript",
+          "code": "// src/data.js — đã cho\nexport const MEMBERS = [\n  { id: 1, name: 'Nguyen Van An', role: 'Developer' },\n  { id: 2, name: 'Tran Thi Binh', role: 'Designer' },\n  { id: 3, name: 'Le Hoang Cuong', role: 'Developer' },\n  { id: 4, name: 'Pham Minh Duc', role: 'Tester' },\n  { id: 5, name: 'Vo Lan', role: 'Designer' },\n];\n\nexport const FAQ = [\n  { id: 1, q: 'What is Context?', a: 'A way to pass data through the tree without props.' },\n  { id: 2, q: 'When should I use it?', a: 'For global data: theme, language, current user.' },\n  { id: 3, q: 'Does it replace Redux?', a: 'Not always — Redux adds tooling and middleware.' },\n];\n\nexport const USERS = {\n  admin: { name: 'Cuong', role: 'admin' },\n  viewer: { name: 'Lan', role: 'viewer' },\n};\n\nexport const DICTIONARY = {\n  en: {\n    title: 'Team Dashboard', greeting: 'Hello', guest: 'Guest', members: 'Members', search: 'Search members...',\n    empty: 'No members found', admin: 'Admin panel', adminsOnly: 'Admins only', faq: 'FAQ', signedInAs: 'Signed in as',\n    logout: 'Log out', footer: 'Made with React Context',\n  },\n  vi: {\n    title: 'Bảng điều khiển nhóm', greeting: 'Xin chào', guest: 'Khách', members: 'Thành viên', search: 'Tìm thành viên...',\n    empty: 'Không tìm thấy thành viên', admin: 'Khu quản trị', adminsOnly: 'Chỉ dành cho quản trị viên', faq: 'Hỏi đáp',\n    signedInAs: 'Đăng nhập với', logout: 'Đăng xuất',\n  },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba mối quan tâm toàn cục được tách thành ba Context nhỏ — đổi ngôn ngữ không làm vẽ lại phần chỉ dùng theme. Mỗi Context có custom hook kiểm Provider và value được <code>useMemo</code>. <code>t()</code> tra theo thứ tự ngôn ngữ hiện tại → tiếng Anh → chính key. <code>RequireRole</code> đóng gói luật phân quyền thành component bọc dùng lại được. <code>DataList</code> (render props) giữ phần chung (rỗng, key, khung danh sách) còn nơi dùng quyết định cách vẽ; <code>Toggle</code> giữ state mở/đóng và giao cho children-hàm cách hiển thị.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/passing-data-deeply-with-context",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Starts in light mode (.app.theme-light)",
+            "kiem": "ton-tai",
+            "selector": ".app.theme-light"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "#theme-toggle switches to dark",
+            "kiem": "ton-tai",
+            "selector": ".app.theme-dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#theme-toggle"
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Theme is saved and restored after reload",
+            "kiem": "ton-tai",
+            "selector": ".app.theme-dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#theme-toggle"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Saved under localStorage \"theme\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "theme",
+            "khop": "^dark$",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#theme-toggle"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "English by default",
+            "kiem": "danh-sach-text",
+            "selector": "#title, #greeting",
+            "mongDoi": [
+              "Team Dashboard",
+              "Hello, Guest!"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Switching to vi translates the whole page",
+            "kiem": "danh-sach-text",
+            "selector": "#title, #greeting",
+            "mongDoi": [
+              "Bảng điều khiển nhóm",
+              "Xin chào, Khách!"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Missing Vietnamese text falls back to English",
+            "kiem": "text",
+            "selector": "#footer",
+            "giaTri": "Made with React Context",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Language survives a reload (localStorage \"lang\")",
+            "kiem": "text",
+            "selector": "#title",
+            "giaTri": "Bảng điều khiển nhóm",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Placeholder is translated too",
+            "kiem": "thuoc-tinh",
+            "selector": "#member-search",
+            "thuocTinh": "placeholder",
+            "giaTri": "Tìm thành viên...",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Unknown key is shown as the key itself",
+            "kiem": "ma-nguon",
+            "tep": "src/context/LanguageContext.js",
+            "khop": "\\?\\?\\s*key|\\|\\|\\s*key"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Login as admin shows the badge",
+            "kiem": "text",
+            "selector": "#user-badge",
+            "giaTri": "Signed in as Cuong (admin)",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#login-admin"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Admin sees #admin-panel",
+            "kiem": "ton-tai",
+            "selector": "#admin-panel",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#login-admin"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Viewer sees #no-access instead",
+            "kiem": "danh-sach-text",
+            "selector": "#admin-panel, #no-access",
+            "mongDoi": [
+              "Admins only"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#login-viewer"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Greeting uses the user name",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Hello, Lan!",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#login-viewer"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Logout hides the admin panel again",
+            "kiem": "khong-ton-tai",
+            "selector": "#admin-panel",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#login-admin"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#logout"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Badge is translated (vi)",
+            "kiem": "text",
+            "selector": "#user-badge",
+            "giaTri": "Đăng nhập với Cuong (admin)",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#login-admin"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "DataList renders 5 .member items",
+            "kiem": "so-luong",
+            "selector": ".data-list .member",
+            "giaTri": 5
+          },
+          {
+            "nhom": "f4",
+            "moTa": "renderItem decides the markup",
+            "kiem": "text",
+            "selector": ".member",
+            "khop": "^Nguyen Van An — Developer$",
+            "tatCa": false
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Search filters; nothing left ⇒ renderEmpty",
+            "kiem": "text",
+            "selector": "#empty",
+            "giaTri": "No members found",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#member-search",
+                "giaTri": "zzz"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "DataList takes renderItem / renderEmpty props",
+            "kiem": "ma-nguon",
+            "tep": "src/components/DataList.js",
+            "khop": "renderItem\\([\\s\\S]*renderEmpty|renderEmpty[\\s\\S]*renderItem\\("
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Empty message follows the language",
+            "kiem": "text",
+            "selector": "#empty",
+            "giaTri": "Không tìm thấy thành viên",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#lang-select",
+                "giaTri": "vi"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#member-search",
+                "giaTri": "zzz"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Answers hidden at first",
+            "kiem": "so-luong",
+            "selector": ".faq-a",
+            "giaTri": 0
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Clicking a question shows only its answer",
+            "kiem": "danh-sach-text",
+            "selector": ".faq-a",
+            "mongDoi": [
+              "For global data: theme, language, current user."
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".faq-item:nth-child(3) .faq-q"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Toggle calls children as a function",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Toggle.js",
+            "khop": "children\\(\\s*\\{"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "UserMenu reads the user from context",
+            "kiem": "ma-nguon",
+            "tep": "src/components/UserMenu.js",
+            "khop": "useAuth\\(\\)"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Header receives no theme/lang/user props",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Header.js",
+            "khop": "function Header\\(\\s*\\)"
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Hooks throw outside their provider",
+            "kiem": "ma-nguon",
+            "tep": "src/context/AuthContext.js",
+            "khop": "throw new Error"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "AppProviders composes the three providers",
+            "kiem": "ma-nguon",
+            "tep": "src/context/AppProviders.js",
+            "khop": "ThemeProvider[\\s\\S]*LanguageProvider[\\s\\S]*AuthProvider"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Context values are memoized",
+            "kiem": "ma-nguon",
+            "tep": "src/context/ThemeContext.js",
+            "khop": "useMemo\\("
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Language value memoized too",
+            "kiem": "ma-nguon",
+            "tep": "src/context/LanguageContext.js",
+            "khop": "useMemo\\("
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Theme context",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Language context (i18n)",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Auth context & role guard",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Render props: DataList",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Children as a function: Toggle",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. No prop drilling",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Provider composition & memo",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<code>useContext(ThemeContext)</code> ở component KHÔNG nằm trong Provider ⇒ nhận giá trị mặc định (null) ⇒ lỗi \"cannot read properties of null\"."
+        },
+        {
+          "loi": "Đặt AuthProvider NGOÀI LanguageProvider trong khi RequireRole dùng <code>t</code> ⇒ hook ngôn ngữ báo lỗi."
+        },
+        {
+          "loi": "Truyền <code>value={{ theme, toggleTheme }}</code> tạo object mới mỗi lần render ⇒ mọi consumer vẽ lại."
+        },
+        {
+          "loi": "Render props gọi <code>renderItem</code> nhưng quên <code>key</code> cho phần tử bọc ngoài."
+        },
+        {
+          "loi": "Toggle viết <code>return &lt;&gt;{children}&lt;/&gt;</code> trong khi children là HÀM ⇒ React báo \"Functions are not valid as a React child\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prop drilling",
+          "vi": "truyền props xuyên nhiều tầng chỉ để chuyền tay"
+        },
+        {
+          "en": "provider / consumer",
+          "vi": "nơi cung cấp / nơi đọc giá trị Context"
+        },
+        {
+          "en": "render props",
+          "vi": "truyền HÀM vẽ qua props để component dùng lại logic"
+        },
+        {
+          "en": "children as a function",
+          "vi": "children là một hàm nhận dữ liệu và trả JSX"
+        },
+        {
+          "en": "i18n (internationalization)",
+          "vi": "đa ngôn ngữ hoá"
+        },
+        {
+          "en": "fallback",
+          "vi": "giá trị dự phòng khi thiếu"
+        },
+        {
+          "en": "role-based access",
+          "vi": "phân quyền theo vai trò"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 7 — Team Dashboard (theme · i18n · auth contexts · render props) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js\\nvar _react = require('react');\\nvar _AppProviders = require('./context/AppProviders'); var _AppProviders2 = _interopRequireDefault(_AppProviders);\\nvar _ThemeContext = require('./context/ThemeContext');\\nvar _LanguageContext = require('./context/LanguageContext');\\nvar _AuthContext = require('./context/AuthContext');\\nvar _Header = require('./components/Header'); var _Header2 = _interopRequireDefault(_Header);\\nvar _DataList = require('./components/DataList'); var _DataList2 = _interopRequireDefault(_DataList);\\nvar _Toggle = require('./components/Toggle'); var _Toggle2 = _interopRequireDefault(_Toggle);\\nvar _data = require('./data');\\n\\nfunction Dashboard() {\\n  const { theme } = _ThemeContext.useTheme.call(void 0, );\\n  const { t } = _LanguageContext.useLanguage.call(void 0, );\\n  const { user } = _AuthContext.useAuth.call(void 0, );\\n  const [q, setQ] = _react.useState.call(void 0, '');\\n  const members = _data.MEMBERS.filter((m) => m.name.toLowerCase().includes(q.trim().toLowerCase()));\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: `app theme-${theme}`, children: [\\n      _jsxruntime.jsx.call(void 0, _Header2.default, {} )\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"greeting\\\", children: [t('greeting'), \\\", \\\" , user ? user.name : t('guest'), \\\"!\\\"]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"card\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: t('members')})\\n        , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"member-search\\\", placeholder: t('search'), value: q, onChange: (e) => setQ(e.target.value),} )\\n        , _jsxruntime.jsx.call(void 0, _DataList2.default, {\\n          items: members,\\n          renderItem: (m) => _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"member\\\", children: [m.name, \\\" — \\\"  , _jsxruntime.jsx.call(void 0, 'i', { children: m.role})]}),\\n          renderEmpty: () => _jsxruntime.jsx.call(void 0, 'p', { id: \\\"empty\\\", children: t('empty')}),}\\n        )\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"card\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: t('admin')})\\n        , _jsxruntime.jsx.call(void 0, _AuthContext.RequireRole, { role: \\\"admin\\\", children: \\n          _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"admin-panel\\\", children: [\\\"You can manage \\\"   , _data.MEMBERS.length, \\\" members here.\\\"  ]})\\n        })\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"card\\\", id: \\\"faq\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: t('faq')})\\n        , _data.FAQ.map((f) => (\\n          _jsxruntime.jsx.call(void 0, _Toggle2.default, { children: \\n            ({ on, toggle }) => (\\n              _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"faq-item\\\", children: [\\n                _jsxruntime.jsxs.call(void 0, 'button', { type: \\\"button\\\", className: \\\"faq-q\\\", 'aria-expanded': on, onClick: toggle, children: [on ? '▾' : '▸', \\\" \\\" , f.q]})\\n                , on && _jsxruntime.jsx.call(void 0, 'p', { className: \\\"faq-a\\\", children: f.a})\\n              ]})\\n            )\\n          }, f.id)\\n        ))\\n      ]})\\n\\n      , _jsxruntime.jsx.call(void 0, 'footer', { id: \\\"footer\\\", children: t('footer')})\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _AppProviders2.default, { children: \\n      _jsxruntime.jsx.call(void 0, Dashboard, {} )\\n    })\\n  );\\n} exports.default = App;\\n\",\"src/context/ThemeContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/ThemeContext.js — Context + Provider + custom hook; value ghi nhớ bằng useMemo\\nvar _react = require('react');\\n\\nconst ThemeContext = _react.createContext.call(void 0, null);\\n\\n function ThemeProvider({ children }) {\\n  const [theme, setTheme] = _react.useState.call(void 0, () => localStorage.getItem('theme') || 'light');\\n  _react.useEffect.call(void 0, () => localStorage.setItem('theme', theme), [theme]);\\n  // useMemo: object value chỉ tạo mới khi theme đổi ⇒ component dùng context không render thừa\\n  const value = _react.useMemo.call(void 0, () => ({ theme, toggleTheme: () => setTheme((t) => (t === 'light' ? 'dark' : 'light')) }), [theme]);\\n  return _jsxruntime.jsx.call(void 0, ThemeContext.Provider, { value: value, children: children});\\n} exports.ThemeProvider = ThemeProvider;\\n\\n function useTheme() {\\n  const ctx = _react.useContext.call(void 0, ThemeContext);\\n  if (!ctx) throw new Error('useTheme must be used inside \\u003cThemeProvider>');\\n  return ctx;\\n} exports.useTheme = useTheme;\\n\",\"src/context/LanguageContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/context/LanguageContext.js — i18n tối giản: t(key) tra từ điển, thiếu thì lùi về tiếng Anh, thiếu nữa thì trả key\\nvar _react = require('react');\\nvar _data = require('../data');\\n\\nconst LanguageContext = _react.createContext.call(void 0, null);\\n\\n function LanguageProvider({ children }) {\\n  const [lang, setLang] = _react.useState.call(void 0, () => localStorage.getItem('lang') || 'en');\\n  _react.useEffect.call(void 0, () => localStorage.setItem('lang', lang), [lang]);\\n  const t = _react.useCallback.call(void 0, (key) => _nullishCoalesce(_nullishCoalesce(_optionalChain([_data.DICTIONARY, 'access', _ => _[lang], 'optionalAccess', _2 => _2[key]]), () => ( _data.DICTIONARY.en[key])), () => ( key)), [lang]);\\n  const value = _react.useMemo.call(void 0, () => ({ lang, setLang, t }), [lang, t]);\\n  return _jsxruntime.jsx.call(void 0, LanguageContext.Provider, { value: value, children: children});\\n} exports.LanguageProvider = LanguageProvider;\\n\\n function useLanguage() {\\n  const ctx = _react.useContext.call(void 0, LanguageContext);\\n  if (!ctx) throw new Error('useLanguage must be used inside \\u003cLanguageProvider>');\\n  return ctx;\\n} exports.useLanguage = useLanguage;\\n\",\"src/context/AuthContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/context/AuthContext.js — người dùng hiện tại + component bọc chặn theo vai trò\\nvar _react = require('react');\\nvar _LanguageContext = require('./LanguageContext');\\n\\nconst AuthContext = _react.createContext.call(void 0, null);\\n\\n function AuthProvider({ children }) {\\n  const [user, setUser] = _react.useState.call(void 0, null);\\n  const value = _react.useMemo.call(void 0, () => ({ user, login: setUser, logout: () => setUser(null) }), [user]);\\n  return _jsxruntime.jsx.call(void 0, AuthContext.Provider, { value: value, children: children});\\n} exports.AuthProvider = AuthProvider;\\n\\n function useAuth() {\\n  const ctx = _react.useContext.call(void 0, AuthContext);\\n  if (!ctx) throw new Error('useAuth must be used inside \\u003cAuthProvider>');\\n  return ctx;\\n} exports.useAuth = useAuth;\\n\\n// Chỉ vẽ children khi đúng vai trò — tái dùng được ở mọi chỗ (thay vì if rải rác)\\n function RequireRole({ role, children }) {\\n  const { user } = useAuth();\\n  const { t } = _LanguageContext.useLanguage.call(void 0, );\\n  if (_optionalChain([user, 'optionalAccess', _ => _.role]) !== role) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"no-access\\\", children: t('adminsOnly')});\\n  return children;\\n} exports.RequireRole = RequireRole;\\n\",\"src/context/AppProviders.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/context/AppProviders.js — gom các Provider về MỘT chỗ (thứ tự: Auth cần Language nên nằm trong)\\nvar _ThemeContext = require('./ThemeContext');\\nvar _LanguageContext = require('./LanguageContext');\\nvar _AuthContext = require('./AuthContext');\\n\\n function AppProviders({ children }) {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _ThemeContext.ThemeProvider, { children: \\n      _jsxruntime.jsx.call(void 0, _LanguageContext.LanguageProvider, { children: \\n        _jsxruntime.jsx.call(void 0, _AuthContext.AuthProvider, { children: children})\\n      })\\n    })\\n  );\\n} exports.default = AppProviders;\\n\",\"src/components/Header.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Header.js — KHÔNG nhận props về theme/ngôn ngữ/người dùng: mỗi con tự lấy từ Context\\nvar _LanguageContext = require('../context/LanguageContext');\\nvar _ThemeContext = require('../context/ThemeContext');\\nvar _UserMenu = require('./UserMenu'); var _UserMenu2 = _interopRequireDefault(_UserMenu);\\n\\nfunction Toolbar() {\\n  const { theme, toggleTheme } = _ThemeContext.useTheme.call(void 0, );\\n  const { lang, setLang } = _LanguageContext.useLanguage.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"lang-select\\\", value: lang, onChange: (e) => setLang(e.target.value), children: [\\n        _jsxruntime.jsx.call(void 0, 'option', { value: \\\"en\\\", children: \\\"English\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"vi\\\", children: \\\"Tiếng Việt\\\" })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"theme-toggle\\\", onClick: toggleTheme, children: theme === 'light' ? '🌙' : '☀️'})\\n      , _jsxruntime.jsx.call(void 0, _UserMenu2.default, {} )\\n    ]})\\n  );\\n}\\n\\n function Header() {\\n  const { t } = _LanguageContext.useLanguage.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'header', { className: \\\"header\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"title\\\", children: t('title')})\\n      , _jsxruntime.jsx.call(void 0, Toolbar, {} )\\n    ]})\\n  );\\n} exports.default = Header;\\n\",\"src/components/UserMenu.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/UserMenu.js — nằm SÂU trong cây (App → Header → Toolbar → UserMenu) nhưng đọc thẳng Context\\nvar _AuthContext = require('../context/AuthContext');\\nvar _LanguageContext = require('../context/LanguageContext');\\nvar _data = require('../data');\\n\\n function UserMenu() {\\n  const { user, login, logout } = _AuthContext.useAuth.call(void 0, );\\n  const { t } = _LanguageContext.useLanguage.call(void 0, );\\n  if (!user) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n        _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"login-admin\\\", onClick: () => login(_data.USERS.admin), children: \\\"Login as admin\\\"  })\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"login-viewer\\\", onClick: () => login(_data.USERS.viewer), children: \\\"Login as viewer\\\"  })\\n      ]})\\n    );\\n  }\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"user-badge\\\", children: [t('signedInAs'), \\\" \\\" , user.name, \\\" (\\\" , user.role, \\\")\\\"]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"logout\\\", onClick: logout, children: t('logout')})\\n    ]})\\n  );\\n} exports.default = UserMenu;\\n\",\"src/components/DataList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/DataList.js — RENDER PROPS: DataList lo lọc/khoá/rỗng, NƠI DÙNG quyết định vẽ mỗi mục ra sao\\n function DataList({ items, getKey = (x) => x.id, renderItem, renderEmpty }) {\\n  if (items.length === 0) return renderEmpty ? renderEmpty() : null;\\n  return _jsxruntime.jsx.call(void 0, 'ul', { className: \\\"data-list\\\", children: items.map((item) => _jsxruntime.jsx.call(void 0, 'li', { children: renderItem(item)}, getKey(item)))});\\n} exports.default = DataList;\\n\",\"src/components/Toggle.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/Toggle.js — CHILDREN LÀ HÀM: Toggle giữ state, children nhận { on, toggle } để tự vẽ\\nvar _react = require('react');\\n\\n function Toggle({ initial = false, children }) {\\n  const [on, setOn] = _react.useState.call(void 0, initial);\\n  return children({ on, toggle: () => setOn((v) => !v) });\\n} exports.default = Toggle;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data.js — đã cho\\n const MEMBERS = [\\n  { id: 1, name: 'Nguyen Van An', role: 'Developer' },\\n  { id: 2, name: 'Tran Thi Binh', role: 'Designer' },\\n  { id: 3, name: 'Le Hoang Cuong', role: 'Developer' },\\n  { id: 4, name: 'Pham Minh Duc', role: 'Tester' },\\n  { id: 5, name: 'Vo Lan', role: 'Designer' },\\n]; exports.MEMBERS = MEMBERS;\\n\\n const FAQ = [\\n  { id: 1, q: 'What is Context?', a: 'A way to pass data through the tree without props.' },\\n  { id: 2, q: 'When should I use it?', a: 'For global data: theme, language, current user.' },\\n  { id: 3, q: 'Does it replace Redux?', a: 'Not always — Redux adds tooling and middleware.' },\\n]; exports.FAQ = FAQ;\\n\\n const USERS = {\\n  admin: { name: 'Cuong', role: 'admin' },\\n  viewer: { name: 'Lan', role: 'viewer' },\\n}; exports.USERS = USERS;\\n\\n const DICTIONARY = {\\n  en: {\\n    title: 'Team Dashboard', greeting: 'Hello', guest: 'Guest', members: 'Members', search: 'Search members...',\\n    empty: 'No members found', admin: 'Admin panel', adminsOnly: 'Admins only', faq: 'FAQ', signedInAs: 'Signed in as',\\n    logout: 'Log out', footer: 'Made with React Context',\\n  },\\n  vi: {\\n    title: 'Bảng điều khiển nhóm', greeting: 'Xin chào', guest: 'Khách', members: 'Thành viên', search: 'Tìm thành viên...',\\n    empty: 'Không tìm thấy thành viên', admin: 'Khu quản trị', adminsOnly: 'Chỉ dành cho quản trị viên', faq: 'Hỏi đáp',\\n    signedInAs: 'Đăng nhập với', logout: 'Đăng xuất',\\n  },\\n}; exports.DICTIONARY = DICTIONARY;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; }\\n.app { min-height: 100vh; padding: 20px; background: #f8fafc; color: #0f172a; }\\n.app.theme-dark { background: #0f172a; color: #e2e8f0; }\\n.header, .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }\\n.header h1 { margin: 0 auto 0 0; font-size: 22px; }\\n.card { border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; margin: 14px 0; }\\n.theme-dark .card { border-color: #334155; }\\nbutton, select, input { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; }\\n.member { padding: 6px 0; border-bottom: 1px dashed #cbd5e1; }\\n.faq-q { cursor: pointer; font-weight: 600; background: none; border: 0; padding: 4px 0; color: inherit; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

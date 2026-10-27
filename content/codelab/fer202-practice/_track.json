@@ -62,6 +62,18 @@
       "name": "Lab 12 — Book Store with Redux Toolkit",
       "level": "ADVANCED",
       "description": "Lab chương 12: cửa hàng sách Redux Toolkit — 5 slice, createAsyncThunk (tải + thanh toán), createSelector, middleware logger + lưu giỏ, preloadedState, addMatcher. Thang 10."
+    },
+    {
+      "slug": "fer202-7-lab-team-dashboard",
+      "name": "Lab 7 — Team Dashboard (Context · render props)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 7: ba Context (theme, ngôn ngữ có dự phòng, đăng nhập + chặn vai trò), custom hook, ghép Provider + useMemo, render props và children-as-function. Thang 10."
+    },
+    {
+      "slug": "fer202-3-lab-report-card",
+      "name": "Lab 3 — Class Report Card (JSX rendering)",
+      "level": "BEGINNER",
+      "description": "Lab chương 3: bảng điểm lớp chỉ bằng render — biểu thức JSX, danh sách + key, render có điều kiện, Fragment, map/filter/reduce/sort, style object, chữ an toàn. Thang 10."
     }
   ]
 }

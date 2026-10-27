@@ -10,6 +10,24 @@
   "description": "Bộ luyện môn SWT301 (Software Testing) theo ISTQB Foundation và slide trường — mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (viết test bị chấm bằng mutant, đo độ phủ statement/decision/MC/DC trên mã đã gắn đo, test case hộp đen chạy qua hệ thống tham chiếu), mỗi chương một Lab + Deep Lab dạng bản in, luyện Lab 2–4 của trường, PE luyện định dạng SU26 và dự án xuyên suốt LabBook.",
   "modules": [
     {
+      "slug": "swt301-10-lab2-unit-test-report51",
+      "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện Lab 2 trường: lưới UTCID white-box (đo C0/C1/độ phủ điều kiện thật trên mã gắn đo), lưới black-box từ Detail Design với tỉ lệ Normal<20% · Abnormal>60% · Boundary>20%, script unit test kiểu JUnit phải giết 10 mutant, sheet Test Report 5.1."
+    },
+    {
+      "slug": "swt301-10-lab3-integration-report52",
+      "name": "Lab 3 Practice — Integration Test Report 5.2 (LabBook)",
+      "level": "ADVANCED",
+      "description": "Luyện Lab 3 trường: test case Report 5.2 chạy thật trên hệ thống LabBook (bộ lọc bảo mật ↔ controller ↔ service ↔ CSDL ↔ dịch vụ thư), đo phủ theo điểm tích hợp, bắt 9 lỗi giao tiếp, điền sheet Test Statistics (trừ N/A)."
+    },
+    {
+      "slug": "swt301-10-lab4-system-report53",
+      "name": "Lab 4 Practice — System Test Report 5.3 (LabBook)",
+      "level": "ADVANCED",
+      "description": "Luyện Lab 4 trường: bốn sheet workflow (StudentBooking, Waitlist, LabClosure, AccountSecurity) với ba vai trò, mọi luật nghiệp vụ hai phía biên, bắt 8 lỗi mức hệ thống, thống kê Report 5.3 theo round mới nhất."
+    },
+    {
       "slug": "swt301-11-pe-1-grade-parking-library",
       "name": "PE Practice 1 — GradeCalculator · calcParkingFee · Library Fine",
       "level": "ADVANCED",

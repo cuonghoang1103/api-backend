@@ -39,6 +39,13 @@ for (const f of fs.readdirSync(NGUON).filter((x) => x.endsWith('.mjs') && !x.sta
     const tj = de.tests;
     if (!tj || !['js', 'console'].includes(tj.loai)) continue;
     const giai = Object.fromEntries(Object.entries(de.loiGiai || {}).map(([k, v]) => [k, String(v)]));
+    // Bộ yếu chỉ có nghĩa khi LỜI GIẢI đạt hết (nếu không, "trượt" có thể do bộ kiểm hỏng chứ không do bộ yếu).
+    const truotGiai = tj.kiem.map((k) => ({ k, r: chamKiemJs(tj, k, giai) })).filter((x) => !x.r.dat);
+    if (truotGiai.length) {
+      hong++; soBien++;
+      console.log(`✗ [${m.slug}] lời giải trượt ${truotGiai.length} kiểm — sửa đề trước khi xét bộ yếu: ${String(L(truotGiai[0].k.moTa)).slice(0, 70)} — ${String(truotGiai[0].r.thay).slice(0, 120)}`);
+      continue;
+    }
     for (const b of de.boYeu) {
       soBien++;
       const files = { ...giai, ...b.tep };

@@ -23,9 +23,22 @@
  *
  * Dấu thay trong chuỗi code (doiDau): ´ ⇒ dấu huyền (backtick), @{ ⇒ ${.
  */
+import { transformSync } from 'esbuild';
 import { doiDau } from '../../web-foundations-practice/nguon/_luoc-do.mjs';
 
 export { doiDau };
+
+/**
+ * Thu gọn một BIỂU THỨC HÀM tự chứa (function/arrow, không dùng biến ngoài) trước khi nhúng vào bộ kiểm:
+ * mỗi kiểm mang một bản ⇒ hệ thống tham chiếu lặp hàng chục lần trong testsJson. esbuild minify (đổi cả tên biến
+ * cục bộ) — an toàn vì hàm tự chứa. Trả chuỗi biểu thức (không có dấu ; cuối).
+ */
+export function gon(fn) {
+  const src = typeof fn === 'function' ? fn.toString() : String(fn);
+  const out = transformSync(`__gon__=(${src})`, { minify: true, loader: 'js', target: 'es2019' }).code.trim().replace(/;$/, '');
+  if (!out.startsWith('__gon__=') || out.length < 20) throw new Error('gon(): esbuild trả kết quả lạ');
+  return `(${out.slice('__gon__='.length)})`;
+}
 export const KHOA = 'software-testing';
 
 /* ═══════════════════════════════════════ TESTKIT (Jest-like) ═══════════════════════════════════════
@@ -315,14 +328,15 @@ function __mcdc(recs, conds) {
   });
   return res;
 }
-function __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws; return JSON.stringify(v); }
+function __chuan(v) { if (v && typeof v === 'object' && 'throws' in v) return 'throws ' + v.throws + (v.message ? ' "' + v.message + '"' : ''); return JSON.stringify(v); }
 function __bang(a, b) {
-  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws);
+  if (a && typeof a === 'object' && 'throws' in a) return !!(b && typeof b === 'object' && 'throws' in b) && String(a.throws) === String(b.throws)
+    && (a.message === undefined || String(b.message || '').toLowerCase().indexOf(String(a.message).toLowerCase()) >= 0);
   if (typeof a === 'number' && typeof b === 'number') return Math.abs(a - b) < 1e-9;
   if (typeof a === 'string' && typeof b === 'string') return a.trim().toLowerCase() === b.trim().toLowerCase();
   return JSON.stringify(a) === JSON.stringify(b);
 }
-function __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error' }; } }
+function __goi(f, args) { try { return f.apply(null, args); } catch (e) { return { throws: e && e.name ? e.name : 'Error', message: e && e.message !== undefined ? String(e.message) : '' }; } }
 `;
 
 /**
@@ -350,7 +364,7 @@ export function kiemPhu(o) {
   const AN = (k) => !!(o.an && o.an[k]);
   const dau = `${COV_LIB}
 ${code}
-const __spec = ${o.spec || ham};
+const __spec = ${o.spec ? gon(o.spec) : ham};
 const __TS = ${JSON.stringify(thamSo)};
 const __T = (typeof ${bien} !== 'undefined' && Array.isArray(${bien})) ? ${bien} : null;
 const __KQ = (function () {
@@ -413,6 +427,25 @@ const __KQ = (function () {
     var sai = [];
     __T.forEach(function (t, i) { var ok = __loai(t.input); if (ok.indexOf(String(t.type || '').toUpperCase()) < 0) sai.push((t.id || '#' + (i + 1)) + ': type ' + JSON.stringify(t.type) + ' — should be ' + ok.join(' or ')); });
     return sai.length ? sai.slice(0, 3).join(' | ') : 'OK';`);
+  if (d.tiLe) them('tiLe', { en: 'Case mix by Type: Normal < 20%, Abnormal > 60%, Boundary > 20% (Lab 2 black-box rule)', vi: 'Tỉ lệ theo Type: Normal < 20%, Abnormal > 60%, Boundary > 20% (luật Lab 2 black-box)' }, `
+    var dem = { N: 0, A: 0, B: 0 }; __T.forEach(function (t) { var k = String(t.type || '').toUpperCase(); if (k in dem) dem[k]++; });
+    var n = __T.length, p = function (x) { return Math.round(1000 * x / n) / 10; };
+    var ok = dem.N * 100 < 20 * n && dem.A * 100 > 60 * n && dem.B * 100 > 20 * n;
+    return ok ? 'OK' : 'N ' + p(dem.N) + '% · A ' + p(dem.A) + '% · B ' + p(dem.B) + '% — need N < 20%, A > 60%, B > 20%';`);
+  if (o.phuNhan) {
+    for (const c of o.phuNhan.can) {
+      kiem.push({
+        moTa: { en: `${o.phuNhan.tieuDe?.en || 'Covers'} — ${c.ten}`, vi: `${o.phuNhan.tieuDe?.vi || 'Phủ'} — ${c.tenVi || c.ten}` },
+        chuanBi: `${dau}
+    var __NH = ${o.phuNhan.nhan};
+    var phu = {};
+    __T.forEach(function (t, i) { var e = __goi(__spec, args[i]); if ('expected' in t && __bang(t.expected, e)) (__NH(t.input, e) || []).forEach(function (x) { phu[x] = 1; }); });
+    return phu[${JSON.stringify(c.ma)}] ? 'OK' : 'not covered yet: ${c.ten.replace(/'/g, "\\'")} (a case whose input hits it AND whose expected value is right)';${cuoi}`,
+        goi: `typeof __KQ === 'string' ? __KQ : __KQ()`, mongDoi: 'OK',
+        ...((c.nhom || o.phuNhan.nhom) ? { nhom: c.nhom || o.phuNhan.nhom } : {}), ...(c.an ? { an: true } : {}),
+      });
+    }
+  }
   if (d.trangThai) them('trangThai', { en: 'Passed/Failed column matches what the CODE really returns versus the expected value', vi: 'Cột Passed/Failed khớp với kết quả THẬT của mã so với mong đợi' }, `
     var sai = [];
     __T.forEach(function (t, i) { var e = __goi(__spec, args[i]); var p = __bang(thuc[i], e) ? 'P' : 'F'; if (String(t.status || '').toUpperCase() !== p) sai.push((t.id || '#' + (i + 1)) + ': status ' + JSON.stringify(t.status) + ' — the code returns ' + __chuan(thuc[i]) + ', so it is ' + p); });
@@ -437,8 +470,8 @@ function __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\s,.
 export function kiemTestCase(o) {
   const { bien = 'TEST_CASES', heThong, nhan, truongData = [], khoi = [], toiDa = 60 } = o;
   const dau = `${TC_LIB}
-const __HT = ${heThong};
-const __NHAN = ${nhan || 'function () { return []; }'};
+const __HT = ${gon(heThong)};
+const __NHAN = ${gon(nhan || 'function () { return []; }')};
 const __TRUONG = ${JSON.stringify(truongData)};
 const __T = (typeof ${bien} !== 'undefined' && Array.isArray(${bien})) ? ${bien} : null;
 const __KQ = (function () {
@@ -725,6 +758,38 @@ export function svg({ w, h, nut = [], canh = [], chu: chuRoi = [], tieuDe = '' }
   return out.join('');
 }
 
+/**
+ * Sơ đồ tuần tự (sequence diagram) SVG.
+ * svgTuanTu({ tieuDe, ben:['Client','API',…], tin:[{ tu:0, den:1, nhan:'POST /api/bookings', tra?:true (nét đứt), ghiChu? }], rong? })
+ */
+export function svgTuanTu({ tieuDe = '', ben, tin, rong = 150 }) {
+  const w = ben.length * rong + 40, top = tieuDe ? 52 : 30, buoc = 34, h = top + 40 + tin.length * buoc + 20;
+  const x = (i) => 20 + rong / 2 + i * rong;
+  const out = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="100%" style="max-width:${w}px;display:block;margin:8px auto" role="img" aria-label="${escX(tieuDe || 'sequence diagram')}" font-family="Arial, Helvetica, sans-serif" font-size="11.5">`];
+  out.push(`<defs><marker id="mtt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/></marker></defs>`);
+  out.push(`<rect x="0" y="0" width="${w}" height="${h}" rx="10" fill="#ffffff" stroke="#d1d5db"/>`);
+  if (tieuDe) out.push(`<text x="${w / 2}" y="20" text-anchor="middle" font-weight="700" fill="#111827" font-size="12.5">${escX(tieuDe)}</text>`);
+  ben.forEach((b, i) => {
+    const bw = Math.min(rong - 14, String(b).length * 7.2 + 18);
+    out.push(`<rect x="${x(i) - bw / 2}" y="${top - 14}" width="${bw}" height="26" rx="5" fill="#eef2ff" stroke="#1f2937"/>`);
+    out.push(`<text x="${x(i)}" y="${top + 3}" text-anchor="middle" font-weight="700" fill="#111827">${escX(b)}</text>`);
+    out.push(`<line x1="${x(i)}" y1="${top + 12}" x2="${x(i)}" y2="${h - 12}" stroke="#6b7280" stroke-dasharray="4 4"/>`);
+  });
+  tin.forEach((m, k) => {
+    const y = top + 40 + k * buoc;
+    if (m.tu === m.den) {
+      out.push(`<path d="M${x(m.tu)},${y - 6} h26 v12 h-26" fill="none" stroke="#1f2937" marker-end="url(#mtt)"/>`);
+      out.push(`<text x="${x(m.tu) + 32}" y="${y + 4}" fill="#7c2d12">${escX(m.nhan)}</text>`);
+      return;
+    }
+    const x1 = x(m.tu), x2 = x(m.den);
+    out.push(`<line x1="${x1}" y1="${y}" x2="${x2 + (x2 > x1 ? -2 : 2)}" y2="${y}" stroke="#1f2937" stroke-width="1.3"${m.tra ? ' stroke-dasharray="5 4"' : ''} marker-end="url(#mtt)"/>`);
+    out.push(`<text x="${(x1 + x2) / 2}" y="${y - 6}" text-anchor="middle" fill="${m.tra ? '#065f46' : '#7c2d12'}">${escX(m.nhan)}</text>`);
+  });
+  out.push('</svg>');
+  return out.join('');
+}
+
 /** Bảng HTML nhanh: bangHtml(['A','B'], [['1','2'], …]) */
 export function bangHtml(cot, hang) {
   return `<table><thead><tr>${cot.map((c) => `<th>${c}</th>`).join('')}</tr></thead><tbody>${hang.map((h) => `<tr>${h.map((o) => `<td>${o}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
@@ -792,3 +857,22 @@ export const NOP_BAI = {
   en: 'Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.',
   vi: 'Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.',
 };
+
+/** Giá trị JS ⇒ mã nguồn dễ đọc (khoá không nháy khi hợp lệ, chuỗi nháy đơn, object ngắn trên một dòng). */
+export function jsLit(v, thut = '') {
+  const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n')}'`;
+  const k = (s) => (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(s) ? s : q(s));
+  if (v === null) return 'null';
+  if (typeof v === 'string') return q(v);
+  if (typeof v !== 'object') return String(v);
+  const ngan = (x) => { const s = jsLit(x, ''); return s.length <= 110 && !s.includes('\n') ? s : null; };
+  if (Array.isArray(v)) {
+    const mot = v.map(ngan);
+    if (mot.every((x) => x !== null) && mot.join(', ').length <= 110) return `[${mot.join(', ')}]`;
+    return `[\n${v.map((x) => `${thut}  ${jsLit(x, `${thut}  `)},`).join('\n')}\n${thut}]`;
+  }
+  const ds = Object.entries(v).filter(([, x]) => x !== undefined);
+  const mot = ds.map(([a, x]) => { const s = ngan(x); return s === null ? null : `${k(a)}: ${s}`; });
+  if (mot.every((x) => x !== null) && mot.join(', ').length <= 110) return `{ ${mot.join(', ')} }`;
+  return `{\n${ds.map(([a, x]) => `${thut}  ${k(a)}: ${jsLit(x, `${thut}  `)},`).join('\n')}\n${thut}}`;
+}

@@ -112,7 +112,6 @@
   --a-ease: cubic-bezier(0.32, 0.72, 0, 1);
 
   background: var(--a-gradient);
-  background-attachment: fixed;
   color: var(--a-text);
   font-family: var(--font-admin), var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
   font-size: 15px;
@@ -419,12 +418,9 @@
 }
 
 /* Khung nội dung: kính tối trên nền chuyển màu xanh (thẻ "Gói máy gợi ý" của aidev). */
-.admin-root .a-frame {
-  background: var(--a-frame);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-}
-@supports not (backdrop-filter: blur(1px)) { .admin-root .a-frame { background: var(--a-float); } }
+/* 27/10/2026: KHÔNG backdrop-filter ở đây — trên iPad (WebKit) blur một khung chứa cả vùng cuộn dài bắt giữ lớp đồ hoạ
+   khổng lồ ⇒ tab sập "Đã có sự cố xảy ra liên tục" ở /admin/commerce. Nền sau là dải màu trơn nên blur vốn không thấy. */
+.admin-root .a-frame { background: var(--a-frame); }
 /* Lớp nổi (menu, hộp thoại) phải ĐẶC để chữ bên dưới không lẫn vào. */
 .admin-root .fixed .bg-darkcard,
 .admin-root .absolute.bg-darkcard,

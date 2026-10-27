@@ -50,6 +50,18 @@
       "name": "Lab 9 — Online Course Portal (React Router)",
       "level": "INTERMEDIATE",
       "description": "Lab chương 9: cổng khoá học 8 chức năng — bảng route tách module + useRoutes, query params, route lồng + Outlet, điều hướng bằng mã, tham số tuỳ chọn, route bảo vệ quay lại trang cũ, 404. Thang 10."
+    },
+    {
+      "slug": "fer202-11-lab-contact-manager",
+      "name": "Lab 11 — Contact Manager (axios + json-server)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 11: danh bạ trên json-server — tầng service axios, đang tải/lỗi/thử lại, Promise.all + nối bảng, CRUD đủ động từ, kiểm trùng email trên máy chủ, cập nhật lạc quan có hoàn tác. Thang 10."
+    },
+    {
+      "slug": "fer202-12-lab-redux-bookstore",
+      "name": "Lab 12 — Book Store with Redux Toolkit",
+      "level": "ADVANCED",
+      "description": "Lab chương 12: cửa hàng sách Redux Toolkit — 5 slice, createAsyncThunk (tải + thanh toán), createSelector, middleware logger + lưu giỏ, preloadedState, addMatcher. Thang 10."
     }
   ]
 }

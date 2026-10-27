@@ -98,7 +98,7 @@ Khung chấm: localStorage/sessionStorage GIẢ (bắt đầu rỗng, hoặc `kh
   Kiểm **`duong-dan` {giaTri | khop}** so URL hiện tại (pathname + search) — vd sau khi lưu phải về `/sneakers`.
 - **json-server GIẢ có trạng thái**: `tests.jsonServer = { base: 'http://localhost:9999', db: { subjects: […], … } }` ⇒
   GET/POST/PUT/PATCH/DELETE như json-server 0.17 (lọc `?field=v`, `_sort/_order`, `_limit/_page`, `q`, `_like/_gte/_lte/_ne`,
-  `_expand/_embed`, id mới = max+1). POST rồi GET thấy bản ghi mới; dữ liệu sống qua `tai-lai`. `fetchGia` (nếu khớp) thắng.
+  `_expand/_embed`, id mới = max+1). POST rồi GET thấy bản ghi mới; dữ liệu sống qua `tai-lai`. `fetchGia` (nếu khớp) thắng. `treMs` (≤ 2000) = độ trễ giả để kiểm "đang tải"; danh sách có header `X-Total-Count` (axios giả trả `headers`). Kiểm có thể khai `jsonServer` riêng (vd db thiếu bảng ⇒ 404 để kiểm trạng thái lỗi).
   Kiểm **`du-lieu-server` {bang, doDai | chua:{…} | khongChua:{…}}** soi dữ liệu máy chủ; **`goi-fetch` thêm `than:{…}`** (body JSON chứa các trường đó). Cả hai so giá trị nguyên thuỷ LỎNG kiểu (3 khớp "3"); thêm `chat: true` để bắt đúng kiểu (số phải là số).
 - **`.env`** trong bài ⇒ `process.env.REACT_APP_*` (CRA) và `import.meta.env.VITE_*` (Vite) đọc được.
 - **Thư viện**: `thuVien` thêm `@reduxjs/toolkit` (1.9.7 UMD — `redux` trỏ cùng) · `react-redux` (8.1.3); `redux-thunk` có sẵn.

@@ -114,9 +114,11 @@ export const AGENT_SRC = String.raw`
   //    PATCH/DELETE trên bảng của db như json-server 0.17 (lọc ?field=v, _sort/_order, _limit/_page, q, _like,
   //    _gte/_lte/_ne, _expand/_embed). Dữ liệu sống suốt khung (kể cả 'tai-lai' — như máy chủ thật).
   //    ⚠ Bản sao trong content/codelab/_chung/deLon.mjs (demo) — sửa thì sửa cả hai.
-  var jsDb = null, jsBase = null;
+  var jsDb = null, jsBase = null, jsTre = 10;
   if (CFG.jsonServer && CFG.jsonServer.db) {
     jsBase = String(CFG.jsonServer.base || 'http://localhost:9999').replace(/\/+$/, '');
+    // treMs: độ trễ GIẢ của máy chủ (mặc định 10ms, tối đa 2s) — để kiểm trạng thái "đang tải"
+    jsTre = Math.max(0, Math.min(2000, Number(CFG.jsonServer.treMs) || 10));
     try { jsDb = JSON.parse(JSON.stringify(CFG.jsonServer.db)); } catch (e) { jsDb = {}; }
   }
   W.__clDb = function () { return jsDb; };
@@ -219,7 +221,7 @@ export const AGENT_SRC = String.raw`
         _st(function () {
           if (s.indexOf(jsBase + '/') !== 0) return res(new Response('Not Found', { status: 404, headers: { 'content-type': 'text/plain' } }));
           try { res(jsXuLy(method, s, init.body)); } catch (e) { res(jsTraLoi(500, { error: String(e) })); }
-        }, 10);
+        }, jsTre);
       });
     };
   }
@@ -503,7 +505,8 @@ export const AGENT_SRC = String.raw`
       return W.fetch(u, init).then(function (res) {
         return res.text().then(function (t) {
           var d; try { d = JSON.parse(t); } catch (e) { d = t; }
-          var out = { data: d, status: res.status, statusText: res.statusText, headers: {}, config: cfg };
+          var hd = {}; try { res.headers.forEach(function (v, k) { hd[k.toLowerCase()] = v; }); } catch (e) { /* bỏ qua */ }
+          var out = { data: d, status: res.status, statusText: res.statusText, headers: hd, config: cfg };
           if (res.status >= 200 && res.status < 300) return out;
           var err = new Error('Request failed with status code ' + res.status); err.response = out; err.name = 'AxiosError';
           throw err;

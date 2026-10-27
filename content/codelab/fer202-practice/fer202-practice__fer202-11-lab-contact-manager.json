@@ -1,0 +1,1323 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-11-lab-contact-manager",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-11-2-axios-json-server"
+  },
+  "exercises": [
+    {
+      "title": "Lab 11 — Contact Manager (service layer · loading/error · CRUD · optimistic update)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 110,
+      "points": 100,
+      "concepts": [
+        "axios",
+        "axios.create",
+        "REST verbs",
+        "Promise.all",
+        "loading/error states",
+        "optimistic update",
+        "json-server filters"
+      ],
+      "prerequisites": [
+        "useEffect",
+        "async/await",
+        "controlled form"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "axios",
+        "json-server",
+        "async"
+      ],
+      "problemHtml": "<h1>LAB 11: Contact Manager — axios, json-server &amp; async UI states</h1>\n<p class=\"bi-phu\">FER202 · Chapter 11 — Client-Server Communication · Suggested time: 110 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build a contact manager on top of a json-server REST API (<code>contacts</code>, <code>groups</code>). Real network code is more than \"fetch and show\": you will build a <b>service layer</b>, handle <b>loading / error / retry</b>, load two resources in <b>parallel</b>, use all four verbs (<b>GET · POST · PUT · PATCH · DELETE</b>), validate against the server (duplicate email) and implement an <b>optimistic update</b> that rolls back when the server fails.</p>\n<h3>Main features</h3>\n<ul>\n  <li>List + search + group filter; add, edit, delete; favourite star.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>All HTTP calls live in <code>src/services/contactService.js</code> (axios instance, <code>baseURL</code> from <code>.env</code>).</li>\n  <li>Every async handler has <code>try/catch</code> — no unhandled promise rejection.</li>\n  <li>After add / edit / delete, update local state from the server response — do not reload the page.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>database.json                 # contacts (6), groups (3)\n.env                          # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── services/\n│   └── contactService.js     # axios instance + 7 functions\n├── components/\n│   └── ContactForm.js        # add + edit form, validateContact\n├── App.js                    # load, states, CRUD, optimistic favourite\n├── index.css                 # given\n└── index.js                  # given</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------+\n| Contacts                                                                |\n| [Search name or email...          ] [All groups v] [Refresh]           |\n| 6 of 6 contacts                                                         |\n| ★ | Name            | Email            | Phone      | Group   | Actions |\n| ★ | Do Gia Huy      | huy@example.com  | 0901000006 | Work    | Edit Delete\n| ☆ | Le Hoang Cuong  | cuong@example.com| 0901000003 | Family  | Edit Delete\n| +- Add contact ------------------+                                      |\n| | [Full name ] [Email ] [Phone ] |                                      |\n| | [-- Group -- v]       [Add]    |                                      |\n| +--------------------------------+                                      |\n+-------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>contacts · groups</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>contacts.id</code></td><td>number</td><td></td></tr><tr><td><code>contacts.name / email / phone</code></td><td>string</td><td>email unique (lower-case); phone = 0 + 9 digits</td></tr><tr><td><code>contacts.groupId</code></td><td>number</td><td>FK to groups.id</td></tr><tr><td><code>contacts.favorite</code></td><td>boolean</td><td></td></tr><tr><td><code>groups.id / name</code></td><td>number / string</td><td></td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Service layer <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>axios.create({ baseURL: process.env.REACT_APP_API_URL })</code>; export <code>getContacts</code>, <code>getGroups</code>, <code>findByEmail</code>, <code>createContact</code>, <code>updateContact</code>, <code>patchContact</code>, <code>deleteContact</code>. No URL inside components.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">axios.create</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Loading, error &amp; retry <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Load <code>/contacts</code> and <code>/groups</code> with <code>Promise.all</code>. While pending show <code>#loading</code> (<code>Loading contacts...</code>).</li>\n  <li>On failure show <code>#error</code> and a <code>#btn-retry</code> button that loads again.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useCallback</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Table, search &amp; group filter <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#contact-table</code>, rows <code>#contact-row-{id}</code> sorted by name: <code>.btn-fav</code>, <code>.c-name</code>, <code>.c-email</code>, <code>.c-phone</code>, <code>.c-group</code> (group <b>name</b>), <code>.btn-edit</code>, <code>.btn-delete</code>.</li>\n  <li><code>#search</code> (name or email, case-insensitive), <code>#group-filter</code> (value = group id), <code>#contact-count</code> <code>X of Y contacts</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>Group \"Work\" ⇒ 3 of 6 contacts · search \"em@\" ⇒ Vo Thu Em</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Add a contact <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form <code>#contact-form</code> (<code>#name</code>, <code>#email</code>, <code>#phone</code>, <code>#groupId</code>, <code>#btn-save</code>), title <code>#form-title</code> <code>Add contact</code>, message <code>#form-error</code>.</li>\n  <li>Rules: <code>Name is required</code> · <code>Invalid email</code> · <code>Phone must have 10 digits</code> · <code>Choose a group</code>; then ask the server <code>GET /contacts?email=…</code> ⇒ <code>This email already exists</code>.</li>\n  <li><code>POST /contacts</code> (<code>groupId</code> number, <code>favorite: false</code>); append the saved record.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Edit a contact <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-edit</code> switches the SAME form to edit mode (<code>Edit contact</code>, pre-filled, <code>#btn-cancel</code>).</li>\n  <li>Same rules (its own email is not a duplicate); <code>PUT /contacts/:id</code>; replace the row; back to add mode.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useEffect (sync form with editing)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Delete <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>window.confirm</code> ⇒ <code>DELETE /contacts/:id</code> ⇒ remove the row from state (no refetch).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Optimistic favourite <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-fav</code> flips ☆/★ <b>immediately</b>, then <code>PATCH /contacts/:id { favorite }</code>.</li>\n  <li>If the request fails: flip back and show <code>#toast</code> <code>Could not update favorite</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Refresh <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#btn-refresh</code> reloads both resources (same function as the first load) and keeps the search text.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#loading · #error · #btn-retry · #toast</code></td><td>async states</td></tr><tr><td><code>#search · #group-filter · #btn-refresh · #contact-count</code></td><td>toolbar</td></tr><tr><td><code>#contact-table · #contact-row-{id} · .btn-fav · .c-name · .c-email · .c-phone · .c-group · .btn-edit · .btn-delete</code></td><td>table</td></tr><tr><td><code>#contact-form · #form-title · #name · #email · #phone · #groupId · #btn-save · #btn-cancel · #form-error</code></td><td>form</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Service layer</td><td>1</td></tr><tr><td>2</td><td>Loading, error &amp; retry</td><td>1.5</td></tr><tr><td>3</td><td>Table, search &amp; group filter</td><td>1</td></tr><tr><td>4</td><td>Add a contact</td><td>1.5</td></tr><tr><td>5</td><td>Edit a contact</td><td>1.5</td></tr><tr><td>6</td><td>Delete</td><td>1</td></tr><tr><td>7</td><td>Optimistic favourite</td><td>1</td></tr><tr><td>8</td><td>Refresh</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>9.5</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li><code>async</code> inside <code>useEffect(async () => …)</code> directly — the effect must not return a promise.</li>\n  <li>No loading/error state: blank screen when json-server is down.</li>\n  <li>Two <code>await</code> in a row for independent requests (slower than <code>Promise.all</code>).</li>\n  <li>Reloading the whole list (or the page) after every change.</li>\n  <li>Optimistic update without rollback — the UI lies when the server fails.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 11: Quản lý danh bạ — axios, json-server &amp; trạng thái bất đồng bộ</h1>\n<p class=\"bi-phu\">FER202 · Chương 11 — Giao tiếp client-server · Thời gian gợi ý: 110 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm ứng dụng danh bạ trên API REST của json-server (<code>contacts</code>, <code>groups</code>). Mã mạng thật không chỉ \"lấy rồi hiện\": bạn sẽ dựng <b>tầng service</b>, xử lý <b>đang tải / lỗi / thử lại</b>, tải hai tài nguyên <b>song song</b>, dùng đủ các động từ (<b>GET · POST · PUT · PATCH · DELETE</b>), kiểm với máy chủ (trùng email) và làm <b>cập nhật lạc quan</b> có hoàn tác khi máy chủ lỗi.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Danh sách + tìm + lọc nhóm; thêm, sửa, xoá; đánh dấu sao.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mọi lời gọi HTTP nằm trong <code>src/services/contactService.js</code> (axios instance, <code>baseURL</code> lấy từ <code>.env</code>).</li>\n  <li>Mọi handler bất đồng bộ có <code>try/catch</code> — không để promise bị reject mà không bắt.</li>\n  <li>Sau thêm / sửa / xoá, cập nhật state từ phản hồi máy chủ — không tải lại trang.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>database.json                 # contacts (6), groups (3)\n.env                          # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── services/\n│   └── contactService.js     # axios instance + 7 functions\n├── components/\n│   └── ContactForm.js        # add + edit form, validateContact\n├── App.js                    # load, states, CRUD, optimistic favourite\n├── index.css                 # given\n└── index.js                  # given</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------+\n| Contacts                                                                |\n| [Search name or email...          ] [All groups v] [Refresh]           |\n| 6 of 6 contacts                                                         |\n| ★ | Name            | Email            | Phone      | Group   | Actions |\n| ★ | Do Gia Huy      | huy@example.com  | 0901000006 | Work    | Edit Delete\n| ☆ | Le Hoang Cuong  | cuong@example.com| 0901000003 | Family  | Edit Delete\n| +- Add contact ------------------+                                      |\n| | [Full name ] [Email ] [Phone ] |                                      |\n| | [-- Group -- v]       [Add]    |                                      |\n| +--------------------------------+                                      |\n+-------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>contacts · groups</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>contacts.id</code></td><td>number</td><td></td></tr><tr><td><code>contacts.name / email / phone</code></td><td>string</td><td>email duy nhất (chữ thường); phone = 0 + 9 chữ số</td></tr><tr><td><code>contacts.groupId</code></td><td>number</td><td>khoá ngoại tới groups.id</td></tr><tr><td><code>contacts.favorite</code></td><td>boolean</td><td></td></tr><tr><td><code>groups.id / name</code></td><td>number / string</td><td></td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Tầng service <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>axios.create({ baseURL: process.env.REACT_APP_API_URL })</code>; xuất <code>getContacts</code>, <code>getGroups</code>, <code>findByEmail</code>, <code>createContact</code>, <code>updateContact</code>, <code>patchContact</code>, <code>deleteContact</code>. Không có URL trong component.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">axios.create</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Đang tải, lỗi &amp; thử lại <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tải <code>/contacts</code> và <code>/groups</code> bằng <code>Promise.all</code>. Đang chờ thì hiện <code>#loading</code> (<code>Loading contacts...</code>).</li>\n  <li>Lỗi thì hiện <code>#error</code> và nút <code>#btn-retry</code> để tải lại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useCallback</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Bảng, tìm &amp; lọc nhóm <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#contact-table</code>, hàng <code>#contact-row-{id}</code> sắp theo tên: <code>.btn-fav</code>, <code>.c-name</code>, <code>.c-email</code>, <code>.c-phone</code>, <code>.c-group</code> (<b>tên</b> nhóm), <code>.btn-edit</code>, <code>.btn-delete</code>.</li>\n  <li><code>#search</code> (tên hoặc email, không phân biệt hoa/thường), <code>#group-filter</code> (value = id nhóm), <code>#contact-count</code> <code>X of Y contacts</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>Nhóm \"Work\" ⇒ 3 of 6 contacts · tìm \"em@\" ⇒ Vo Thu Em</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Thêm liên hệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Form <code>#contact-form</code> (<code>#name</code>, <code>#email</code>, <code>#phone</code>, <code>#groupId</code>, <code>#btn-save</code>), tiêu đề <code>#form-title</code> <code>Add contact</code>, câu lỗi <code>#form-error</code>.</li>\n  <li>Luật: <code>Name is required</code> · <code>Invalid email</code> · <code>Phone must have 10 digits</code> · <code>Choose a group</code>; rồi hỏi máy chủ <code>GET /contacts?email=…</code> ⇒ <code>This email already exists</code>.</li>\n  <li><code>POST /contacts</code> (<code>groupId</code> là số, <code>favorite: false</code>); thêm bản ghi máy chủ trả về.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Sửa liên hệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-edit</code> chuyển CÙNG form sang chế độ sửa (<code>Edit contact</code>, điền sẵn, <code>#btn-cancel</code>).</li>\n  <li>Cùng luật (email của chính nó không tính là trùng); <code>PUT /contacts/:id</code>; thay hàng; trở lại chế độ thêm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useEffect (sync form with editing)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Xoá <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>window.confirm</code> ⇒ <code>DELETE /contacts/:id</code> ⇒ bỏ hàng khỏi state (không tải lại).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Đánh dấu sao lạc quan <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-fav</code> đổi ☆/★ <b>ngay lập tức</b>, rồi <code>PATCH /contacts/:id { favorite }</code>.</li>\n  <li>Nếu request lỗi: đổi lại như cũ và hiện <code>#toast</code> <code>Could not update favorite</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>8. Làm mới <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#btn-refresh</code> tải lại cả hai tài nguyên (cùng hàm với lần tải đầu) và giữ nguyên chữ tìm kiếm.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#loading · #error · #btn-retry · #toast</code></td><td>trạng thái bất đồng bộ</td></tr><tr><td><code>#search · #group-filter · #btn-refresh · #contact-count</code></td><td>thanh công cụ</td></tr><tr><td><code>#contact-table · #contact-row-{id} · .btn-fav · .c-name · .c-email · .c-phone · .c-group · .btn-edit · .btn-delete</code></td><td>bảng</td></tr><tr><td><code>#contact-form · #form-title · #name · #email · #phone · #groupId · #btn-save · #btn-cancel · #form-error</code></td><td>form</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Tầng service</td><td>1</td></tr><tr><td>2</td><td>Đang tải, lỗi &amp; thử lại</td><td>1.5</td></tr><tr><td>3</td><td>Bảng, tìm &amp; lọc nhóm</td><td>1</td></tr><tr><td>4</td><td>Thêm liên hệ</td><td>1.5</td></tr><tr><td>5</td><td>Sửa liên hệ</td><td>1.5</td></tr><tr><td>6</td><td>Xoá</td><td>1</td></tr><tr><td>7</td><td>Đánh dấu sao lạc quan</td><td>1</td></tr><tr><td>8</td><td>Làm mới</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>9.5</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li><code>useEffect(async () => …)</code> — effect không được trả về promise.</li>\n  <li>Không có trạng thái tải/lỗi: màn hình trống khi json-server tắt.</li>\n  <li>Hai <code>await</code> nối tiếp cho hai request độc lập (chậm hơn <code>Promise.all</code>).</li>\n  <li>Tải lại cả danh sách (hoặc cả trang) sau mỗi thay đổi.</li>\n  <li>Cập nhật lạc quan mà không hoàn tác — giao diện \"nói dối\" khi máy chủ lỗi.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "All HTTP calls live in <code>src/services/contactService.js</code> (axios instance, <code>baseURL</code> from <code>.env</code>).|||Mọi lời gọi HTTP nằm trong <code>src/services/contactService.js</code> (axios instance, <code>baseURL</code> lấy từ <code>.env</code>).\nEvery async handler has <code>try/catch</code> — no unhandled promise rejection.|||Mọi handler bất đồng bộ có <code>try/catch</code> — không để promise bị reject mà không bắt.\nAfter add / edit / delete, update local state from the server response — do not reload the page.|||Sau thêm / sửa / xoá, cập nhật state từ phản hồi máy chủ — không tải lại trang.",
+      "examplesJson": [
+        {
+          "input": "Table, search & group filter|||Bảng, tìm & lọc nhóm",
+          "output": "Group \"Work\" ⇒ 3 of 6 contacts · search \"em@\" ⇒ Vo Thu Em|||Nhóm \"Work\" ⇒ 3 of 6 contacts · tìm \"em@\" ⇒ Vo Thu Em",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "contactService.js: const api = axios.create({ baseURL: process.env.REACT_APP_API_URL }); mỗi hàm trả về r.data.",
+        "load = useCallback(async () => { setStatus(\"loading\"); try { const [c, g] = await Promise.all([...]); …; setStatus(\"ready\"); } catch { setStatus(\"error\"); } }, []); useEffect(() => { load(); }, [load]).",
+        "Form dùng chung: prop editing (object hoặc null) + useEffect([editing]) để điền sẵn / làm trống.",
+        "Lạc quan: flip(!c.favorite) TRƯỚC khi await patch; catch ⇒ flip(c.favorite) + setToast(...)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: chỉ tải danh sách, chưa có trạng thái tải/lỗi, chưa CRUD\nimport { useEffect, useState } from 'react';\nimport { getContacts } from './services/contactService';\n\nexport default function App() {\n  const [contacts, setContacts] = useState([]);\n  useEffect(() => {\n    getContacts().then(setContacts);\n  }, []);\n  return (\n    <main className=\"page\">\n      <h1>Contacts</h1>\n      <ul>\n        {contacts.map((c) => <li key={c.id}>{c.name}</li>)}\n      </ul>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/ContactForm.js",
+          "language": "javascript",
+          "code": "// src/components/ContactForm.js — STARTER\nexport function validateContact(c) {\n  // TODO: 'Name is required' · 'Invalid email' · 'Phone must have 10 digits' · 'Choose a group'\n  return '';\n}\n\nexport default function ContactForm({ groups, editing, onSave, onCancel }) {\n  // TODO: form #contact-form (#name #email #phone #groupId, #btn-save, #btn-cancel khi sửa), #form-title, #form-error\n  return null;\n}\n"
+        },
+        {
+          "name": "src/services/contactService.js",
+          "language": "javascript",
+          "code": "// src/services/contactService.js — STARTER\nimport axios from 'axios';\n\n// TODO: axios.create({ baseURL: process.env.REACT_APP_API_URL }) và các hàm getContacts, getGroups,\n//       findByEmail(email), createContact, updateContact, patchContact, deleteContact\nexport const getContacts = () => axios.get('http://localhost:9999/contacts').then((r) => r.data);\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; gap: 8px; margin-bottom: 10px; }\n.toolbar input { flex: 1; }\ninput, select { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\nbutton { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; font: inherit; }\ntable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }\nth, td { text-align: left; padding: 8px; border-bottom: 1px solid #e2e8f0; }\n.btn-fav { border: 0; font-size: 18px; color: #f59e0b; background: transparent; }\n.panel { display: grid; gap: 8px; max-width: 420px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; }\n.error { color: #dc2626; }\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"groups\": [\n    {\n      \"id\": 1,\n      \"name\": \"Family\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Work\"\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Friends\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"id\": 1,\n      \"name\": \"Nguyen Van An\",\n      \"email\": \"an@example.com\",\n      \"phone\": \"0901000001\",\n      \"groupId\": 2,\n      \"favorite\": false\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Tran Thi Binh\",\n      \"email\": \"binh@example.com\",\n      \"phone\": \"0901000002\",\n      \"groupId\": 3,\n      \"favorite\": true\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Le Hoang Cuong\",\n      \"email\": \"cuong@example.com\",\n      \"phone\": \"0901000003\",\n      \"groupId\": 1,\n      \"favorite\": false\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Pham Minh Duc\",\n      \"email\": \"duc@example.com\",\n      \"phone\": \"0901000004\",\n      \"groupId\": 2,\n      \"favorite\": false\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Vo Thu Em\",\n      \"email\": \"em@example.com\",\n      \"phone\": \"0901000005\",\n      \"groupId\": 3,\n      \"favorite\": false\n    },\n    {\n      \"id\": 6,\n      \"name\": \"Do Gia Huy\",\n      \"email\": \"huy@example.com\",\n      \"phone\": \"0901000006\",\n      \"groupId\": 2,\n      \"favorite\": true\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — tải song song, trạng thái tải/lỗi/thử lại, CRUD, cập nhật lạc quan\nimport { useCallback, useEffect, useMemo, useState } from 'react';\nimport ContactForm from './components/ContactForm';\nimport * as service from './services/contactService';\n\nexport default function App() {\n  const [contacts, setContacts] = useState([]);\n  const [groups, setGroups] = useState([]);\n  const [status, setStatus] = useState('loading'); // 'loading' | 'error' | 'ready'\n  const [search, setSearch] = useState('');\n  const [groupFilter, setGroupFilter] = useState('all');\n  const [editing, setEditing] = useState(null);\n  const [toast, setToast] = useState('');\n\n  const load = useCallback(async () => {\n    setStatus('loading');\n    try {\n      // hai request ĐỘC LẬP ⇒ chạy song song; một cái hỏng là cả Promise.all hỏng\n      const [c, g] = await Promise.all([service.getContacts(), service.getGroups()]);\n      setContacts(c);\n      setGroups(g);\n      setStatus('ready');\n    } catch {\n      setStatus('error');\n    }\n  }, []);\n\n  useEffect(() => {\n    load();\n  }, [load]);\n\n  const groupName = useMemo(() => new Map(groups.map((g) => [String(g.id), g.name])), [groups]);\n\n  const visible = useMemo(() => {\n    const q = search.trim().toLowerCase();\n    return contacts\n      .filter((c) => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q))\n      .filter((c) => groupFilter === 'all' || String(c.groupId) === groupFilter)\n      .sort((a, b) => a.name.localeCompare(b.name));\n  }, [contacts, search, groupFilter]);\n\n  // THÊM / SỬA — kiểm trùng email TRÊN MÁY CHỦ (GET /contacts?email=) rồi POST hoặc PUT\n  const save = async (data) => {\n    const same = await service.findByEmail(data.email);\n    if (same.some((c) => !editing || c.id !== editing.id)) throw new Error('This email already exists');\n    if (editing) {\n      const saved = await service.updateContact(editing.id, { ...data, favorite: editing.favorite });\n      setContacts((list) => list.map((c) => (c.id === saved.id ? saved : c)));\n      setEditing(null);\n    } else {\n      const saved = await service.createContact({ ...data, favorite: false });\n      setContacts((list) => [...list, saved]);\n    }\n  };\n\n  const remove = async (c) => {\n    if (!window.confirm(`Delete ${c.name}?`)) return;\n    await service.deleteContact(c.id);\n    setContacts((list) => list.filter((x) => x.id !== c.id)); // không cần tải lại cả danh sách\n  };\n\n  // LẠC QUAN: đổi giao diện NGAY, gọi máy chủ sau; máy chủ lỗi ⇒ trả lại như cũ + báo\n  const toggleFavorite = async (c) => {\n    const flip = (v) => setContacts((list) => list.map((x) => (x.id === c.id ? { ...x, favorite: v } : x)));\n    flip(!c.favorite);\n    try {\n      await service.patchContact(c.id, { favorite: !c.favorite });\n    } catch {\n      flip(c.favorite);\n      setToast('Could not update favorite');\n    }\n  };\n\n  if (status === 'loading') return <p id=\"loading\" className=\"page\">Loading contacts...</p>;\n  if (status === 'error') {\n    return (\n      <div className=\"page\">\n        <p id=\"error\" className=\"error\">Failed to load contacts.</p>\n        <button type=\"button\" id=\"btn-retry\" onClick={load}>Retry</button>\n      </div>\n    );\n  }\n\n  return (\n    <main className=\"page\">\n      <h1>Contacts</h1>\n      {toast && <p id=\"toast\" className=\"error\">{toast}</p>}\n      <div className=\"toolbar\">\n        <input id=\"search\" placeholder=\"Search name or email...\" value={search} onChange={(e) => setSearch(e.target.value)} />\n        <select id=\"group-filter\" value={groupFilter} onChange={(e) => setGroupFilter(e.target.value)}>\n          <option value=\"all\">All groups</option>\n          {groups.map((g) => <option key={g.id} value={String(g.id)}>{g.name}</option>)}\n        </select>\n        <button type=\"button\" id=\"btn-refresh\" onClick={load}>Refresh</button>\n      </div>\n      <p id=\"contact-count\">{visible.length} of {contacts.length} contacts</p>\n      <table id=\"contact-table\">\n        <thead>\n          <tr><th>★</th><th>Name</th><th>Email</th><th>Phone</th><th>Group</th><th>Actions</th></tr>\n        </thead>\n        <tbody>\n          {visible.map((c) => (\n            <tr key={c.id} id={`contact-row-${c.id}`}>\n              <td><button type=\"button\" className=\"btn-fav\" aria-pressed={c.favorite} onClick={() => toggleFavorite(c)}>{c.favorite ? '★' : '☆'}</button></td>\n              <td className=\"c-name\">{c.name}</td>\n              <td className=\"c-email\">{c.email}</td>\n              <td className=\"c-phone\">{c.phone}</td>\n              <td className=\"c-group\">{groupName.get(String(c.groupId)) ?? '—'}</td>\n              <td>\n                <button type=\"button\" className=\"btn-edit\" onClick={() => setEditing(c)}>Edit</button>{' '}\n                <button type=\"button\" className=\"btn-delete\" onClick={() => remove(c)}>Delete</button>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n      <ContactForm groups={groups} editing={editing} onSave={save} onCancel={() => setEditing(null)} />\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/ContactForm.js",
+          "language": "javascript",
+          "code": "// src/components/ContactForm.js — một form cho cả THÊM và SỬA (editing = contact đang sửa hoặc null)\nimport { useEffect, useState } from 'react';\n\nconst EMPTY = { name: '', email: '', phone: '', groupId: '' };\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport function validateContact(c) {\n  if (!c.name.trim()) return 'Name is required';\n  if (!EMAIL_RE.test(c.email.trim())) return 'Invalid email';\n  if (!/^0\\d{9}$/.test(c.phone.trim())) return 'Phone must have 10 digits';\n  if (!c.groupId) return 'Choose a group';\n  return '';\n}\n\nexport default function ContactForm({ groups, editing, onSave, onCancel }) {\n  const [form, setForm] = useState(EMPTY);\n  const [error, setError] = useState('');\n\n  // bấm Sửa ⇒ điền sẵn; huỷ/lưu xong (editing = null) ⇒ trống lại\n  useEffect(() => {\n    setForm(editing ? { name: editing.name, email: editing.email, phone: editing.phone, groupId: String(editing.groupId) } : EMPTY);\n    setError('');\n  }, [editing]);\n\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    const msg = validateContact(form);\n    if (msg) return setError(msg);\n    try {\n      await onSave({ name: form.name.trim(), email: form.email.trim().toLowerCase(), phone: form.phone.trim(), groupId: Number(form.groupId) });\n      setForm(EMPTY);\n      setError('');\n    } catch (err) {\n      setError(err.message); // vd \"This email already exists\"\n    }\n  };\n\n  return (\n    <form id=\"contact-form\" onSubmit={handleSubmit} noValidate className=\"panel\">\n      <h3 id=\"form-title\">{editing ? 'Edit contact' : 'Add contact'}</h3>\n      <input id=\"name\" name=\"name\" placeholder=\"Full name\" value={form.name} onChange={update} />\n      <input id=\"email\" name=\"email\" placeholder=\"Email\" value={form.email} onChange={update} />\n      <input id=\"phone\" name=\"phone\" placeholder=\"Phone\" value={form.phone} onChange={update} />\n      <select id=\"groupId\" name=\"groupId\" value={form.groupId} onChange={update}>\n        <option value=\"\">-- Group --</option>\n        {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}\n      </select>\n      {error && <p id=\"form-error\" className=\"error\">{error}</p>}\n      <button type=\"submit\" id=\"btn-save\">{editing ? 'Update' : 'Add'}</button>\n      {editing && <button type=\"button\" id=\"btn-cancel\" onClick={onCancel}>Cancel</button>}\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/services/contactService.js",
+          "language": "javascript",
+          "code": "// src/services/contactService.js — TẦNG SERVICE: component không biết URL, chỉ gọi hàm\nimport axios from 'axios';\n\nconst api = axios.create({ baseURL: process.env.REACT_APP_API_URL });\n\n// axios trả { data, status, headers } và TỰ ném lỗi khi status ngoài 2xx\nexport const getContacts = () => api.get('/contacts').then((r) => r.data);\nexport const getGroups = () => api.get('/groups').then((r) => r.data);\nexport const findByEmail = (email) => api.get('/contacts', { params: { email } }).then((r) => r.data);\nexport const createContact = (c) => api.post('/contacts', c).then((r) => r.data);\nexport const updateContact = (id, c) => api.put(`/contacts/${id}`, c).then((r) => r.data);\nexport const patchContact = (id, part) => api.patch(`/contacts/${id}`, part).then((r) => r.data);\nexport const deleteContact = (id) => api.delete(`/contacts/${id}`);\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; gap: 8px; margin-bottom: 10px; }\n.toolbar input { flex: 1; }\ninput, select { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\nbutton { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; font: inherit; }\ntable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }\nth, td { text-align: left; padding: 8px; border-bottom: 1px solid #e2e8f0; }\n.btn-fav { border: 0; font-size: 18px; color: #f59e0b; background: transparent; }\n.panel { display: grid; gap: 8px; max-width: 420px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; }\n.error { color: #dc2626; }\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"groups\": [\n    {\n      \"id\": 1,\n      \"name\": \"Family\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Work\"\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Friends\"\n    }\n  ],\n  \"contacts\": [\n    {\n      \"id\": 1,\n      \"name\": \"Nguyen Van An\",\n      \"email\": \"an@example.com\",\n      \"phone\": \"0901000001\",\n      \"groupId\": 2,\n      \"favorite\": false\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Tran Thi Binh\",\n      \"email\": \"binh@example.com\",\n      \"phone\": \"0901000002\",\n      \"groupId\": 3,\n      \"favorite\": true\n    },\n    {\n      \"id\": 3,\n      \"name\": \"Le Hoang Cuong\",\n      \"email\": \"cuong@example.com\",\n      \"phone\": \"0901000003\",\n      \"groupId\": 1,\n      \"favorite\": false\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Pham Minh Duc\",\n      \"email\": \"duc@example.com\",\n      \"phone\": \"0901000004\",\n      \"groupId\": 2,\n      \"favorite\": false\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Vo Thu Em\",\n      \"email\": \"em@example.com\",\n      \"phone\": \"0901000005\",\n      \"groupId\": 3,\n      \"favorite\": false\n    },\n    {\n      \"id\": 6,\n      \"name\": \"Do Gia Huy\",\n      \"email\": \"huy@example.com\",\n      \"phone\": \"0901000006\",\n      \"groupId\": 2,\n      \"favorite\": true\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi URL nằm trong <code>contactService.js</code>, component chỉ gọi hàm. <code>load</code> (bọc <code>useCallback</code>) chạy hai request song song bằng <code>Promise.all</code> và đặt <code>status</code> loading/error/ready — cùng hàm dùng cho lần đầu, nút Retry và Refresh. Form thêm/sửa dùng chung, đồng bộ với <code>editing</code> qua <code>useEffect</code>; trước khi lưu hỏi máy chủ <code>?email=</code> để chặn trùng (bỏ qua chính nó khi sửa). Sau mỗi thay đổi, state cập nhật từ phản hồi máy chủ (thêm vào cuối, thay một hàng, lọc bỏ một hàng). Ngôi sao dùng cập nhật lạc quan: đổi giao diện trước, lỗi thì đổi lại và báo.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://axios-http.com/docs/instance",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "groups": [
+              {
+                "id": 1,
+                "name": "Family"
+              },
+              {
+                "id": 2,
+                "name": "Work"
+              },
+              {
+                "id": 3,
+                "name": "Friends"
+              }
+            ],
+            "contacts": [
+              {
+                "id": 1,
+                "name": "Nguyen Van An",
+                "email": "an@example.com",
+                "phone": "0901000001",
+                "groupId": 2,
+                "favorite": false
+              },
+              {
+                "id": 2,
+                "name": "Tran Thi Binh",
+                "email": "binh@example.com",
+                "phone": "0901000002",
+                "groupId": 3,
+                "favorite": true
+              },
+              {
+                "id": 3,
+                "name": "Le Hoang Cuong",
+                "email": "cuong@example.com",
+                "phone": "0901000003",
+                "groupId": 1,
+                "favorite": false
+              },
+              {
+                "id": 4,
+                "name": "Pham Minh Duc",
+                "email": "duc@example.com",
+                "phone": "0901000004",
+                "groupId": 2,
+                "favorite": false
+              },
+              {
+                "id": 5,
+                "name": "Vo Thu Em",
+                "email": "em@example.com",
+                "phone": "0901000005",
+                "groupId": 3,
+                "favorite": false
+              },
+              {
+                "id": 6,
+                "name": "Do Gia Huy",
+                "email": "huy@example.com",
+                "phone": "0901000006",
+                "groupId": 2,
+                "favorite": true
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "axios instance with baseURL from .env",
+            "kiem": "ma-nguon",
+            "tep": "src/services/contactService.js",
+            "khop": "axios\\.create\\(\\s*\\{\\s*baseURL:\\s*process\\.env\\.REACT_APP_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "App does not contain the API URL",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "localhost:9999",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Service exports the CRUD functions",
+            "kiem": "ma-nguon",
+            "tep": "src/services/contactService.js",
+            "khop": "export const (createContact|updateContact|deleteContact)[\\s\\S]*export const (createContact|updateContact|deleteContact)[\\s\\S]*export const (createContact|updateContact|deleteContact)"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "#loading shows while the request is pending",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "groups": [
+                  {
+                    "id": 1,
+                    "name": "Family"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Work"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Friends"
+                  }
+                ],
+                "contacts": [
+                  {
+                    "id": 1,
+                    "name": "Nguyen Van An",
+                    "email": "an@example.com",
+                    "phone": "0901000001",
+                    "groupId": 2,
+                    "favorite": false
+                  },
+                  {
+                    "id": 2,
+                    "name": "Tran Thi Binh",
+                    "email": "binh@example.com",
+                    "phone": "0901000002",
+                    "groupId": 3,
+                    "favorite": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "Le Hoang Cuong",
+                    "email": "cuong@example.com",
+                    "phone": "0901000003",
+                    "groupId": 1,
+                    "favorite": false
+                  },
+                  {
+                    "id": 4,
+                    "name": "Pham Minh Duc",
+                    "email": "duc@example.com",
+                    "phone": "0901000004",
+                    "groupId": 2,
+                    "favorite": false
+                  },
+                  {
+                    "id": 5,
+                    "name": "Vo Thu Em",
+                    "email": "em@example.com",
+                    "phone": "0901000005",
+                    "groupId": 3,
+                    "favorite": false
+                  },
+                  {
+                    "id": 6,
+                    "name": "Do Gia Huy",
+                    "email": "huy@example.com",
+                    "phone": "0901000006",
+                    "groupId": 2,
+                    "favorite": true
+                  }
+                ]
+              },
+              "treMs": 1500
+            },
+            "kiem": "text",
+            "selector": "#loading",
+            "khop": "Loading"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Data loaded ⇒ 6 rows",
+            "kiem": "so-luong",
+            "selector": "#contact-table tbody tr",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Server error ⇒ #error + #btn-retry",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "groups": [
+                  {
+                    "id": 1,
+                    "name": "Family"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Work"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Friends"
+                  }
+                ]
+              }
+            },
+            "kiem": "so-luong",
+            "selector": "#error, #btn-retry",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Retry sends the request again",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "groups": [
+                  {
+                    "id": 1,
+                    "name": "Family"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Work"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Friends"
+                  }
+                ]
+              }
+            },
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/contacts$",
+            "min": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-retry"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Contacts and groups are requested in parallel (Promise.all)",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "Promise\\.all\\("
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Rows sorted by name with the group name joined",
+            "kiem": "danh-sach-text",
+            "selector": ".c-name",
+            "mongDoi": [
+              "Do Gia Huy",
+              "Le Hoang Cuong",
+              "Nguyen Van An",
+              "Pham Minh Duc",
+              "Tran Thi Binh",
+              "Vo Thu Em"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Group column shows names (not ids)",
+            "kiem": "danh-sach-text",
+            "selector": "#contact-row-3 .c-group, #contact-row-1 .c-group",
+            "mongDoi": [
+              "Family",
+              "Work"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Search matches name OR email",
+            "kiem": "danh-sach-text",
+            "selector": ".c-name",
+            "mongDoi": [
+              "Vo Thu Em"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "em@"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Group filter \"Work\"",
+            "kiem": "text",
+            "selector": "#contact-count",
+            "giaTri": "3 of 6 contacts",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#group-filter",
+                "giaTri": "2"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Valid contact is POSTed and listed",
+            "kiem": "du-lieu-server",
+            "bang": "contacts",
+            "chua": {
+              "name": "Bui Lan Khanh",
+              "email": "khanh@example.com",
+              "groupId": 1,
+              "favorite": false
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "khanh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0901000007"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "New row appears without reloading the page",
+            "kiem": "text",
+            "selector": "#contact-count",
+            "giaTri": "7 of 7 contacts",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "khanh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0901000007"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Empty form ⇒ \"Name is required\"",
+            "kiem": "text",
+            "selector": "#form-error",
+            "giaTri": "Name is required",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": ""
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": ""
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": ""
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Existing email ⇒ \"This email already exists\"",
+            "kiem": "text",
+            "selector": "#form-error",
+            "giaTri": "This email already exists",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "binh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0901000007"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Duplicate check asks the server (?email=)",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/contacts\\?email=",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "khanh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0901000007"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Bad phone and missing group messages",
+            "kiem": "text",
+            "selector": "#form-error",
+            "giaTri": "Phone must have 10 digits",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "khanh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "12345"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "groupId is sent as a number",
+            "kiem": "goi-fetch",
+            "khop": "^POST http://localhost:9999/contacts$",
+            "than": {
+              "groupId": 1
+            },
+            "chat": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Bui Lan Khanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "khanh@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0901000007"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#groupId",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Edit pre-fills the form (\"Edit contact\")",
+            "kiem": "danh-sach-text",
+            "selector": "#form-title",
+            "mongDoi": [
+              "Edit contact"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Pre-filled name",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#name",
+            "thuocTinh": "value",
+            "giaTri": "Nguyen Van An",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Update ⇒ PUT /contacts/1 and the row changes",
+            "kiem": "text",
+            "selector": "#contact-row-1 .c-phone",
+            "giaTri": "0988777666",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0988777666"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Server keeps the new phone (and the same email is not a duplicate of itself)",
+            "kiem": "du-lieu-server",
+            "bang": "contacts",
+            "chua": {
+              "id": 1,
+              "phone": "0988777666",
+              "email": "an@example.com"
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0988777666"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "After saving, the form is back to \"Add contact\"",
+            "kiem": "text",
+            "selector": "#form-title",
+            "giaTri": "Add contact",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0988777666"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#contact-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Cancel leaves edit mode",
+            "kiem": "text",
+            "selector": "#form-title",
+            "giaTri": "Add contact",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-cancel"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Delete (confirmed) removes the row and the record",
+            "kiem": "du-lieu-server",
+            "bang": "contacts",
+            "khongChua": {
+              "id": 4
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-4 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Row disappears without a full reload",
+            "kiem": "so-luong",
+            "selector": "#contact-row-4",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-4 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Cancel ⇒ no DELETE request",
+            "confirm": false,
+            "kiem": "goi-fetch",
+            "khop": "^DELETE",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-4 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "☆ ⇒ ★ and PATCH { favorite: true }",
+            "kiem": "du-lieu-server",
+            "bang": "contacts",
+            "chua": {
+              "id": 1,
+              "favorite": true
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-fav"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "The star changes immediately (optimistic)",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "groups": [
+                  {
+                    "id": 1,
+                    "name": "Family"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Work"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Friends"
+                  }
+                ],
+                "contacts": [
+                  {
+                    "id": 1,
+                    "name": "Nguyen Van An",
+                    "email": "an@example.com",
+                    "phone": "0901000001",
+                    "groupId": 2,
+                    "favorite": false
+                  },
+                  {
+                    "id": 2,
+                    "name": "Tran Thi Binh",
+                    "email": "binh@example.com",
+                    "phone": "0901000002",
+                    "groupId": 3,
+                    "favorite": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "Le Hoang Cuong",
+                    "email": "cuong@example.com",
+                    "phone": "0901000003",
+                    "groupId": 1,
+                    "favorite": false
+                  },
+                  {
+                    "id": 4,
+                    "name": "Pham Minh Duc",
+                    "email": "duc@example.com",
+                    "phone": "0901000004",
+                    "groupId": 2,
+                    "favorite": false
+                  },
+                  {
+                    "id": 5,
+                    "name": "Vo Thu Em",
+                    "email": "em@example.com",
+                    "phone": "0901000005",
+                    "groupId": 3,
+                    "favorite": false
+                  },
+                  {
+                    "id": 6,
+                    "name": "Do Gia Huy",
+                    "email": "huy@example.com",
+                    "phone": "0901000006",
+                    "groupId": 2,
+                    "favorite": true
+                  }
+                ]
+              },
+              "treMs": 1500
+            },
+            "kiem": "text",
+            "selector": "#contact-row-1 .btn-fav",
+            "giaTri": "★",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 3300
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-fav"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Server error ⇒ star reverts + #toast",
+            "fetchGia": {
+              "PATCH http://localhost:9999/contacts/1": {
+                "status": 500,
+                "json": {}
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#toast, #contact-row-1 .btn-fav",
+            "mongDoi": [
+              "Could not update favorite",
+              "☆"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-fav"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "#btn-refresh reloads both resources",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/(contacts|groups)$",
+            "min": 4,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-refresh"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Refresh keeps the search text",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#search",
+            "thuocTinh": "value",
+            "giaTri": "an",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "an"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-refresh"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Async functions use try/catch (no unhandled rejection)",
+            "kiem": "khong-loi-js",
+            "fetchGia": {
+              "PATCH http://localhost:9999/contacts/1": {
+                "status": 500,
+                "json": {}
+              }
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#contact-row-1 .btn-fav"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Service layer",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Loading, error & retry",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Table, search & group filter",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Add a contact",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Edit a contact",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Delete",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Optimistic favourite",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Refresh",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<code>useEffect(async () =&gt; {…}, [])</code> — React cảnh báo vì effect trả Promise; viết hàm async bên trong rồi gọi."
+        },
+        {
+          "loi": "Quên bắt lỗi ⇒ json-server tắt là màn hình trắng + \"Uncaught (in promise)\"."
+        },
+        {
+          "loi": "Kiểm trùng email bằng danh sách đang hiện (đã lọc) thay vì hỏi máy chủ ⇒ lọt bản trùng."
+        },
+        {
+          "loi": "Sửa nhưng gửi POST ⇒ tạo bản ghi mới thay vì cập nhật."
+        },
+        {
+          "loi": "Giữ <code>groupId</code> là chuỗi từ <code>&lt;select&gt;</code> ⇒ so <code>groupId === 2</code> sai và dữ liệu lẫn kiểu."
+        },
+        {
+          "loi": "Cập nhật lạc quan nhưng không hoàn tác ⇒ ngôi sao sáng dù máy chủ báo lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "service layer",
+          "vi": "tầng service — gom mọi lời gọi API về một chỗ"
+        },
+        {
+          "en": "optimistic update",
+          "vi": "cập nhật lạc quan: đổi giao diện trước, gọi máy chủ sau"
+        },
+        {
+          "en": "rollback",
+          "vi": "hoàn tác về trạng thái cũ khi thất bại"
+        },
+        {
+          "en": "retry",
+          "vi": "thử lại"
+        },
+        {
+          "en": "unhandled rejection",
+          "vi": "promise bị reject mà không ai bắt (catch)"
+        },
+        {
+          "en": "in parallel",
+          "vi": "song song (cùng lúc)"
+        },
+        {
+          "en": "endpoint",
+          "vi": "địa chỉ API (method + URL)"
+        },
+        {
+          "en": "payload / request body",
+          "vi": "dữ liệu gửi kèm request"
+        },
+        {
+          "en": "side effect",
+          "vi": "tác dụng phụ (gọi API, hẹn giờ, đụng DOM…) — đặt trong useEffect"
+        },
+        {
+          "en": "confirmation prompt",
+          "vi": "hộp hỏi xác nhận (window.confirm)"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 11 — Contact Manager (service layer · loading/error · CRUD · optimistic update) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } }// src/App.js — tải song song, trạng thái tải/lỗi/thử lại, CRUD, cập nhật lạc quan\\nvar _react = require('react');\\nvar _ContactForm = require('./components/ContactForm'); var _ContactForm2 = _interopRequireDefault(_ContactForm);\\nvar _contactService = require('./services/contactService'); var service = _interopRequireWildcard(_contactService);\\n\\n function App() {\\n  const [contacts, setContacts] = _react.useState.call(void 0, []);\\n  const [groups, setGroups] = _react.useState.call(void 0, []);\\n  const [status, setStatus] = _react.useState.call(void 0, 'loading'); // 'loading' | 'error' | 'ready'\\n  const [search, setSearch] = _react.useState.call(void 0, '');\\n  const [groupFilter, setGroupFilter] = _react.useState.call(void 0, 'all');\\n  const [editing, setEditing] = _react.useState.call(void 0, null);\\n  const [toast, setToast] = _react.useState.call(void 0, '');\\n\\n  const load = _react.useCallback.call(void 0, async () => {\\n    setStatus('loading');\\n    try {\\n      // hai request ĐỘC LẬP ⇒ chạy song song; một cái hỏng là cả Promise.all hỏng\\n      const [c, g] = await Promise.all([service.getContacts(), service.getGroups()]);\\n      setContacts(c);\\n      setGroups(g);\\n      setStatus('ready');\\n    } catch (e2) {\\n      setStatus('error');\\n    }\\n  }, []);\\n\\n  _react.useEffect.call(void 0, () => {\\n    load();\\n  }, [load]);\\n\\n  const groupName = _react.useMemo.call(void 0, () => new Map(groups.map((g) => [String(g.id), g.name])), [groups]);\\n\\n  const visible = _react.useMemo.call(void 0, () => {\\n    const q = search.trim().toLowerCase();\\n    return contacts\\n      .filter((c) => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q))\\n      .filter((c) => groupFilter === 'all' || String(c.groupId) === groupFilter)\\n      .sort((a, b) => a.name.localeCompare(b.name));\\n  }, [contacts, search, groupFilter]);\\n\\n  // THÊM / SỬA — kiểm trùng email TRÊN MÁY CHỦ (GET /contacts?email=) rồi POST hoặc PUT\\n  const save = async (data) => {\\n    const same = await service.findByEmail(data.email);\\n    if (same.some((c) => !editing || c.id !== editing.id)) throw new Error('This email already exists');\\n    if (editing) {\\n      const saved = await service.updateContact(editing.id, { ...data, favorite: editing.favorite });\\n      setContacts((list) => list.map((c) => (c.id === saved.id ? saved : c)));\\n      setEditing(null);\\n    } else {\\n      const saved = await service.createContact({ ...data, favorite: false });\\n      setContacts((list) => [...list, saved]);\\n    }\\n  };\\n\\n  const remove = async (c) => {\\n    if (!window.confirm(`Delete ${c.name}?`)) return;\\n    await service.deleteContact(c.id);\\n    setContacts((list) => list.filter((x) => x.id !== c.id)); // không cần tải lại cả danh sách\\n  };\\n\\n  // LẠC QUAN: đổi giao diện NGAY, gọi máy chủ sau; máy chủ lỗi ⇒ trả lại như cũ + báo\\n  const toggleFavorite = async (c) => {\\n    const flip = (v) => setContacts((list) => list.map((x) => (x.id === c.id ? { ...x, favorite: v } : x)));\\n    flip(!c.favorite);\\n    try {\\n      await service.patchContact(c.id, { favorite: !c.favorite });\\n    } catch (e3) {\\n      flip(c.favorite);\\n      setToast('Could not update favorite');\\n    }\\n  };\\n\\n  if (status === 'loading') return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"loading\\\", className: \\\"page\\\", children: \\\"Loading contacts...\\\" });\\n  if (status === 'error') {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"page\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'p', { id: \\\"error\\\", className: \\\"error\\\", children: \\\"Failed to load contacts.\\\"   })\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-retry\\\", onClick: load, children: \\\"Retry\\\"})\\n      ]})\\n    );\\n  }\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { className: \\\"page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Contacts\\\"})\\n      , toast && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"toast\\\", className: \\\"error\\\", children: toast})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"search\\\", placeholder: \\\"Search name or email...\\\"   , value: search, onChange: (e) => setSearch(e.target.value),} )\\n        , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"group-filter\\\", value: groupFilter, onChange: (e) => setGroupFilter(e.target.value), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"all\\\", children: \\\"All groups\\\" })\\n          , groups.map((g) => _jsxruntime.jsx.call(void 0, 'option', { value: String(g.id), children: g.name}, g.id))\\n        ]})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-refresh\\\", onClick: load, children: \\\"Refresh\\\"})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"contact-count\\\", children: [visible.length, \\\" of \\\"  , contacts.length, \\\" contacts\\\" ]})\\n      , _jsxruntime.jsxs.call(void 0, 'table', { id: \\\"contact-table\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'thead', { children: \\n          _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'th', { children: \\\"★\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Name\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Email\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Phone\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Group\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Actions\\\"})]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n          visible.map((c) => (\\n            _jsxruntime.jsxs.call(void 0, 'tr', { id: `contact-row-${c.id}`, children: [\\n              _jsxruntime.jsx.call(void 0, 'td', { children: _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-fav\\\", 'aria-pressed': c.favorite, onClick: () => toggleFavorite(c), children: c.favorite ? '★' : '☆'})})\\n              , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"c-name\\\", children: c.name})\\n              , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"c-email\\\", children: c.email})\\n              , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"c-phone\\\", children: c.phone})\\n              , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"c-group\\\", children: _nullishCoalesce(groupName.get(String(c.groupId)), () => ( '—'))})\\n              , _jsxruntime.jsxs.call(void 0, 'td', { children: [\\n                _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-edit\\\", onClick: () => setEditing(c), children: \\\"Edit\\\"}), ' '\\n                , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-delete\\\", onClick: () => remove(c), children: \\\"Delete\\\"})\\n              ]})\\n            ]}, c.id)\\n          ))\\n        })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _ContactForm2.default, { groups: groups, editing: editing, onSave: save, onCancel: () => setEditing(null),} )\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/ContactForm.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/ContactForm.js — một form cho cả THÊM và SỬA (editing = contact đang sửa hoặc null)\\nvar _react = require('react');\\n\\nconst EMPTY = { name: '', email: '', phone: '', groupId: '' };\\nconst EMAIL_RE = /^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$/;\\n\\n function validateContact(c) {\\n  if (!c.name.trim()) return 'Name is required';\\n  if (!EMAIL_RE.test(c.email.trim())) return 'Invalid email';\\n  if (!/^0\\\\d{9}$/.test(c.phone.trim())) return 'Phone must have 10 digits';\\n  if (!c.groupId) return 'Choose a group';\\n  return '';\\n} exports.validateContact = validateContact;\\n\\n function ContactForm({ groups, editing, onSave, onCancel }) {\\n  const [form, setForm] = _react.useState.call(void 0, EMPTY);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n\\n  // bấm Sửa ⇒ điền sẵn; huỷ/lưu xong (editing = null) ⇒ trống lại\\n  _react.useEffect.call(void 0, () => {\\n    setForm(editing ? { name: editing.name, email: editing.email, phone: editing.phone, groupId: String(editing.groupId) } : EMPTY);\\n    setError('');\\n  }, [editing]);\\n\\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\\n\\n  const handleSubmit = async (e) => {\\n    e.preventDefault();\\n    const msg = validateContact(form);\\n    if (msg) return setError(msg);\\n    try {\\n      await onSave({ name: form.name.trim(), email: form.email.trim().toLowerCase(), phone: form.phone.trim(), groupId: Number(form.groupId) });\\n      setForm(EMPTY);\\n      setError('');\\n    } catch (err) {\\n      setError(err.message); // vd \\\"This email already exists\\\"\\n    }\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"contact-form\\\", onSubmit: handleSubmit, noValidate: true, className: \\\"panel\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h3', { id: \\\"form-title\\\", children: editing ? 'Edit contact' : 'Add contact'})\\n      , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"name\\\", name: \\\"name\\\", placeholder: \\\"Full name\\\" , value: form.name, onChange: update,} )\\n      , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"email\\\", name: \\\"email\\\", placeholder: \\\"Email\\\", value: form.email, onChange: update,} )\\n      , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"phone\\\", name: \\\"phone\\\", placeholder: \\\"Phone\\\", value: form.phone, onChange: update,} )\\n      , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"groupId\\\", name: \\\"groupId\\\", value: form.groupId, onChange: update, children: [\\n        _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"-- Group --\\\"  })\\n        , groups.map((g) => _jsxruntime.jsx.call(void 0, 'option', { value: g.id, children: g.name}, g.id))\\n      ]})\\n      , error && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"form-error\\\", className: \\\"error\\\", children: error})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", id: \\\"btn-save\\\", children: editing ? 'Update' : 'Add'})\\n      , editing && _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-cancel\\\", onClick: onCancel, children: \\\"Cancel\\\"})\\n    ]})\\n  );\\n} exports.default = ContactForm;\\n\",\"src/services/contactService.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/services/contactService.js — TẦNG SERVICE: component không biết URL, chỉ gọi hàm\\nvar _axios = require('axios'); var _axios2 = _interopRequireDefault(_axios);\\n\\nconst api = _axios2.default.create({ baseURL: process.env.REACT_APP_API_URL });\\n\\n// axios trả { data, status, headers } và TỰ ném lỗi khi status ngoài 2xx\\n const getContacts = () => api.get('/contacts').then((r) => r.data); exports.getContacts = getContacts;\\n const getGroups = () => api.get('/groups').then((r) => r.data); exports.getGroups = getGroups;\\n const findByEmail = (email) => api.get('/contacts', { params: { email } }).then((r) => r.data); exports.findByEmail = findByEmail;\\n const createContact = (c) => api.post('/contacts', c).then((r) => r.data); exports.createContact = createContact;\\n const updateContact = (id, c) => api.put(`/contacts/${id}`, c).then((r) => r.data); exports.updateContact = updateContact;\\n const patchContact = (id, part) => api.patch(`/contacts/${id}`, part).then((r) => r.data); exports.patchContact = patchContact;\\n const deleteContact = (id) => api.delete(`/contacts/${id}`); exports.deleteContact = deleteContact;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"database.json\":\"{\\n  \\\"groups\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"name\\\": \\\"Family\\\"\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"name\\\": \\\"Work\\\"\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"name\\\": \\\"Friends\\\"\\n    }\\n  ],\\n  \\\"contacts\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"name\\\": \\\"Nguyen Van An\\\",\\n      \\\"email\\\": \\\"an@example.com\\\",\\n      \\\"phone\\\": \\\"0901000001\\\",\\n      \\\"groupId\\\": 2,\\n      \\\"favorite\\\": false\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"name\\\": \\\"Tran Thi Binh\\\",\\n      \\\"email\\\": \\\"binh@example.com\\\",\\n      \\\"phone\\\": \\\"0901000002\\\",\\n      \\\"groupId\\\": 3,\\n      \\\"favorite\\\": true\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"name\\\": \\\"Le Hoang Cuong\\\",\\n      \\\"email\\\": \\\"cuong@example.com\\\",\\n      \\\"phone\\\": \\\"0901000003\\\",\\n      \\\"groupId\\\": 1,\\n      \\\"favorite\\\": false\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"name\\\": \\\"Pham Minh Duc\\\",\\n      \\\"email\\\": \\\"duc@example.com\\\",\\n      \\\"phone\\\": \\\"0901000004\\\",\\n      \\\"groupId\\\": 2,\\n      \\\"favorite\\\": false\\n    },\\n    {\\n      \\\"id\\\": 5,\\n      \\\"name\\\": \\\"Vo Thu Em\\\",\\n      \\\"email\\\": \\\"em@example.com\\\",\\n      \\\"phone\\\": \\\"0901000005\\\",\\n      \\\"groupId\\\": 3,\\n      \\\"favorite\\\": false\\n    },\\n    {\\n      \\\"id\\\": 6,\\n      \\\"name\\\": \\\"Do Gia Huy\\\",\\n      \\\"email\\\": \\\"huy@example.com\\\",\\n      \\\"phone\\\": \\\"0901000006\\\",\\n      \\\"groupId\\\": 2,\\n      \\\"favorite\\\": true\\n    }\\n  ]\\n}\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; color: #0f172a; }\\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\\n.toolbar { display: flex; gap: 8px; margin-bottom: 10px; }\\n.toolbar input { flex: 1; }\\ninput, select { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\\nbutton { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; font: inherit; }\\ntable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }\\nth, td { text-align: left; padding: 8px; border-bottom: 1px solid #e2e8f0; }\\n.btn-fav { border: 0; font-size: 18px; color: #f59e0b; background: transparent; }\\n.panel { display: grid; gap: 8px; max-width: 420px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; }\\n.error { color: #dc2626; }\\n\"};var DB={\"groups\":[{\"id\":1,\"name\":\"Family\"},{\"id\":2,\"name\":\"Work\"},{\"id\":3,\"name\":\"Friends\"}],\"contacts\":[{\"id\":1,\"name\":\"Nguyen Van An\",\"email\":\"an@example.com\",\"phone\":\"0901000001\",\"groupId\":2,\"favorite\":false},{\"id\":2,\"name\":\"Tran Thi Binh\",\"email\":\"binh@example.com\",\"phone\":\"0901000002\",\"groupId\":3,\"favorite\":true},{\"id\":3,\"name\":\"Le Hoang Cuong\",\"email\":\"cuong@example.com\",\"phone\":\"0901000003\",\"groupId\":1,\"favorite\":false},{\"id\":4,\"name\":\"Pham Minh Duc\",\"email\":\"duc@example.com\",\"phone\":\"0901000004\",\"groupId\":2,\"favorite\":false},{\"id\":5,\"name\":\"Vo Thu Em\",\"email\":\"em@example.com\",\"phone\":\"0901000005\",\"groupId\":3,\"favorite\":false},{\"id\":6,\"name\":\"Do Gia Huy\",\"email\":\"huy@example.com\",\"phone\":\"0901000006\",\"groupId\":2,\"favorite\":true}]};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

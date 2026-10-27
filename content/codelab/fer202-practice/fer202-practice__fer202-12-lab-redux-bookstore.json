@@ -1,0 +1,1075 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-lab-redux-bookstore",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-1-redux-toolkit"
+  },
+  "exercises": [
+    {
+      "title": "Lab 12 — Book Store with Redux Toolkit (slices · async thunks · selectors · middleware)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 100,
+      "concepts": [
+        "configureStore",
+        "createSlice",
+        "createAsyncThunk",
+        "extraReducers",
+        "createSelector",
+        "middleware",
+        "preloadedState",
+        "addMatcher",
+        "useSelector",
+        "useDispatch"
+      ],
+      "prerequisites": [
+        "useEffect",
+        "axios",
+        "immutable update"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "redux",
+        "redux-toolkit"
+      ],
+      "problemHtml": "<h1>LAB 12: Book Store with Redux Toolkit</h1>\n<p class=\"bi-phu\">FER202 · Chapter 12 — Flux & Redux · Suggested time: 120 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Rebuild a small book shop with <b>Redux Toolkit</b>. Server data comes in through <code>createAsyncThunk</code>; UI state (filters), the cart, orders and an action history are separate <b>slices</b>; derived data is read through <b>memoized selectors</b>; two <b>custom middlewares</b> log every action and save the cart; a <b>thunk</b> reads the state, posts the order and dispatches another slice's action.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Book list with search + category, cart with limits, checkout, recent-action history.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Redux Toolkit (<code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>, <code>createSelector</code>) + <code>react-redux</code> hooks. No component state for data that lives in the store.</li>\n  <li>Action types must match exactly: <code>books/fetchBooks</code>, <code>cart/addToCart</code>, <code>cart/increment</code>, <code>cart/decrement</code>, <code>cart/removeFromCart</code>, <code>cart/clearCart</code>, <code>orders/checkout</code>.</li>\n  <li><code>App.js</code> is given: it uses the selectors and actions exported by your slices.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>database.json                    # books (8), orders []\nsrc/\n├── app/\n│   ├── store.js                 # configureStore + preloadedState + middleware\n│   └── middleware.js            # logger · persistCart · loadCart\n├── features/\n│   ├── books/booksSlice.js      # fetchBooks thunk · selectBooks · selectCategories\n│   ├── filters/filtersSlice.js  # setSearch · setCategory · selectVisibleBooks\n│   ├── cart/cartSlice.js        # 5 reducers · selectCartCount · selectCartTotal\n│   ├── orders/ordersSlice.js    # checkout thunk\n│   └── history/historySlice.js  # addMatcher on cart/*\n├── api.js                       # axios instance (given)\n├── App.js                       # given — UI wired to the store\n└── index.js                     # &lt;Provider store={store}&gt; (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------+\n| Redux Book Store  (2)                                                   |\n| [Title or author...     ] [All categories v]      +- Cart ------------+ |\n| Showing 8 of 8 books                               | Eloquent JS [-]1[+][x]\n| Clean Architecture — Robert C. Martin · $34.99 [Add]| You Don't..[-]1[+][x]\n| Don't Make Me Think — Steve Krug · $32.00     [Add]| Total: $54.49     | |\n| The Lean Startup — Eric Ries · $18.50  [Out of stock]| [Checkout]       | |\n| ...                                                | Order #1 placed   | |\n|                                                    +-------------------+ |\n| Recent cart actions: 1. cart/removeFromCart 2. cart/addToCart ...       |\n+-------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Redux state</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>books</code></td><td>{ items: Book[], status: 'idle'|'loading'|'succeeded'|'failed', error }</td><td></td></tr><tr><td><code>filters</code></td><td>{ search: string, category: 'All' | string }</td><td></td></tr><tr><td><code>cart</code></td><td>{ items: { id, title, price, stock, quantity }[] }</td><td>saved in localStorage \"cart\"</td></tr><tr><td><code>orders</code></td><td>{ status, lastOrder, error }</td><td></td></tr><tr><td><code>history</code></td><td>string[] (≤ 5, newest first)</td><td></td></tr><tr><td><code>Book (API)</code></td><td>{ id, title, author, category, price (USD), stock }</td><td></td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Store &amp; slices <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>configureStore</code> with reducers <code>books</code>, <code>filters</code>, <code>cart</code>, <code>orders</code>, <code>history</code>; each slice made with <code>createSlice</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">configureStore</span> <span class=\"bi-hook\">createSlice</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Async thunk: load books <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>fetchBooks = createAsyncThunk('books/fetchBooks', …)</code> (<code>GET /books</code>); <code>extraReducers</code> handle pending / fulfilled / rejected (<code>status</code>, <code>items</code>, <code>error</code>).</li>\n  <li>UI (given): <code>#status</code> while loading, <code>#error</code> on failure.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">createAsyncThunk</span> <span class=\"bi-hook\">extraReducers</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Filters &amp; memoized selectors <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>setSearch</code>, <code>setCategory</code>; <code>selectCategories</code> (unique, A → Z) and <code>selectVisibleBooks</code> (title OR author contains, category, sorted by title) built with <code>createSelector</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">createSelector</span> <span class=\"bi-hook\">useSelector</span></p>\n<p><b>Example:</b></p>\n<pre>search \"martin\" ⇒ Clean Architecture · category Design ⇒ Showing 2 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Cart slice <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>addToCart(book)</code>, <code>increment(id)</code>, <code>decrement(id)</code> (0 ⇒ remove), <code>removeFromCart(id)</code>, <code>clearCart()</code>. Quantity never exceeds <code>stock</code>; stock 0 cannot be added.</li>\n  <li><code>selectCartCount</code> and <code>selectCartTotal</code> (rounded to 2 decimals).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Immer (mutating syntax)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Persist the cart <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Middleware <code>persistCart</code> writes <code>state.cart</code> to localStorage <code>cart</code> after every <code>cart/*</code> action; <code>loadCart()</code> feeds <code>preloadedState</code> (invalid JSON ⇒ ignore).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">middleware</span> <span class=\"bi-hook\">preloadedState</span></p>\n<p><b>Local Storage key:</b> <code>cart</code></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Checkout thunk <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>checkout = createAsyncThunk('orders/checkout', async (_, { getState, dispatch }) => …)</code>: POST <code>{ items: [{ bookId, title, price, quantity }], total, createdAt }</code> to <code>/orders</code>, then <code>dispatch(clearCart())</code>.</li>\n  <li><code>orders</code> slice: <code>status</code>, <code>lastOrder</code> (⇒ <code>Order #id placed</code>), error <code>Checkout failed</code> (cart kept).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">thunkAPI.getState</span> <span class=\"bi-hook\">thunkAPI.dispatch</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Action history (matcher) <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>history</code> slice keeps the types of the last 5 <code>cart/*</code> actions, newest first, using <code>builder.addMatcher</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">addMatcher</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Logger middleware <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>logger</code> prints <code>console.log('[redux]', action.type)</code> for every action; add both middlewares with <code>getDefaultMiddleware().concat(…)</code> (keeps thunk).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">store =&gt; next =&gt; action</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#status · #error · #search · #category · #book-count · #book-{id}.book-item · .book-title · .btn-add</code></td><td>book list (given App.js)</td></tr><tr><td><code>#cart-count · #cart · #line-{id}.cart-line · .line-qty · .btn-inc · .btn-dec · .btn-remove · #cart-total</code></td><td>cart</td></tr><tr><td><code>#btn-checkout · #order-success · #checkout-error · #history</code></td><td>checkout + history</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Store &amp; slices</td><td>1</td></tr><tr><td>2</td><td>Async thunk: load books</td><td>1.5</td></tr><tr><td>3</td><td>Filters &amp; memoized selectors</td><td>1.5</td></tr><tr><td>4</td><td>Cart slice</td><td>1.5</td></tr><tr><td>5</td><td>Persist the cart</td><td>1</td></tr><tr><td>6</td><td>Checkout thunk</td><td>1.5</td></tr><tr><td>7</td><td>Action history (matcher)</td><td>1</td></tr><tr><td>8</td><td>Logger middleware</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Replacing <code>middleware</code> with <code>[logger]</code> only — thunk disappears and <code>dispatch(fetchBooks())</code> throws.</li>\n  <li>Calling the API inside a reducer (reducers must be pure).</li>\n  <li>Selector that builds a new array without <code>createSelector</code> — every store change re-renders the list.</li>\n  <li>Clearing the cart before the POST succeeds — the order is lost on error.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 12: Cửa hàng sách với Redux Toolkit</h1>\n<p class=\"bi-phu\">FER202 · Chương 12 — Flux & Redux · Thời gian gợi ý: 120 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm lại một cửa hàng sách nhỏ bằng <b>Redux Toolkit</b>. Dữ liệu máy chủ vào qua <code>createAsyncThunk</code>; trạng thái giao diện (bộ lọc), giỏ, đơn hàng và lịch sử action là các <b>slice</b> riêng; dữ liệu suy ra đọc qua <b>selector có ghi nhớ</b>; hai <b>middleware tự viết</b> in mọi action và lưu giỏ; một <b>thunk</b> đọc state, gửi đơn và dispatch action của slice khác.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Danh sách sách có tìm + thể loại, giỏ có giới hạn, thanh toán, lịch sử action gần đây.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Redux Toolkit (<code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>, <code>createSelector</code>) + hook của <code>react-redux</code>. Không giữ trong component state những dữ liệu đã nằm trong store.</li>\n  <li>Tên action phải khớp chính xác: <code>books/fetchBooks</code>, <code>cart/addToCart</code>, <code>cart/increment</code>, <code>cart/decrement</code>, <code>cart/removeFromCart</code>, <code>cart/clearCart</code>, <code>orders/checkout</code>.</li>\n  <li><code>App.js</code> đã cho: nó dùng selector và action do các slice của bạn xuất ra.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>database.json                    # books (8), orders []\nsrc/\n├── app/\n│   ├── store.js                 # configureStore + preloadedState + middleware\n│   └── middleware.js            # logger · persistCart · loadCart\n├── features/\n│   ├── books/booksSlice.js      # fetchBooks thunk · selectBooks · selectCategories\n│   ├── filters/filtersSlice.js  # setSearch · setCategory · selectVisibleBooks\n│   ├── cart/cartSlice.js        # 5 reducers · selectCartCount · selectCartTotal\n│   ├── orders/ordersSlice.js    # checkout thunk\n│   └── history/historySlice.js  # addMatcher on cart/*\n├── api.js                       # axios instance (given)\n├── App.js                       # given — UI wired to the store\n└── index.js                     # &lt;Provider store={store}&gt; (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------+\n| Redux Book Store  (2)                                                   |\n| [Title or author...     ] [All categories v]      +- Cart ------------+ |\n| Showing 8 of 8 books                               | Eloquent JS [-]1[+][x]\n| Clean Architecture — Robert C. Martin · $34.99 [Add]| You Don't..[-]1[+][x]\n| Don't Make Me Think — Steve Krug · $32.00     [Add]| Total: $54.49     | |\n| The Lean Startup — Eric Ries · $18.50  [Out of stock]| [Checkout]       | |\n| ...                                                | Order #1 placed   | |\n|                                                    +-------------------+ |\n| Recent cart actions: 1. cart/removeFromCart 2. cart/addToCart ...       |\n+-------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Redux state</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>books</code></td><td>{ items: Book[], status: 'idle'|'loading'|'succeeded'|'failed', error }</td><td></td></tr><tr><td><code>filters</code></td><td>{ search: string, category: 'All' | string }</td><td></td></tr><tr><td><code>cart</code></td><td>{ items: { id, title, price, stock, quantity }[] }</td><td>lưu ở localStorage \"cart\"</td></tr><tr><td><code>orders</code></td><td>{ status, lastOrder, error }</td><td></td></tr><tr><td><code>history</code></td><td>string[] (≤ 5, newest first)</td><td></td></tr><tr><td><code>Book (API)</code></td><td>{ id, title, author, category, price (USD), stock }</td><td></td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Store &amp; slice <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>configureStore</code> với reducer <code>books</code>, <code>filters</code>, <code>cart</code>, <code>orders</code>, <code>history</code>; mỗi slice tạo bằng <code>createSlice</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">configureStore</span> <span class=\"bi-hook\">createSlice</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Thunk bất đồng bộ: tải sách <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>fetchBooks = createAsyncThunk('books/fetchBooks', …)</code> (<code>GET /books</code>); <code>extraReducers</code> xử lý pending / fulfilled / rejected (<code>status</code>, <code>items</code>, <code>error</code>).</li>\n  <li>Giao diện (đã cho): <code>#status</code> khi đang tải, <code>#error</code> khi lỗi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">createAsyncThunk</span> <span class=\"bi-hook\">extraReducers</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Bộ lọc &amp; selector ghi nhớ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>setSearch</code>, <code>setCategory</code>; <code>selectCategories</code> (không trùng, A → Z) và <code>selectVisibleBooks</code> (tên HOẶC tác giả chứa, thể loại, sắp theo tên) dựng bằng <code>createSelector</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">createSelector</span> <span class=\"bi-hook\">useSelector</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>tìm \"martin\" ⇒ Clean Architecture · thể loại Design ⇒ Showing 2 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Slice giỏ hàng <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>addToCart(book)</code>, <code>increment(id)</code>, <code>decrement(id)</code> (về 0 ⇒ bỏ), <code>removeFromCart(id)</code>, <code>clearCart()</code>. Số lượng không vượt <code>stock</code>; stock 0 không thêm được.</li>\n  <li><code>selectCartCount</code> và <code>selectCartTotal</code> (làm tròn 2 chữ số).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Immer (mutating syntax)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Lưu bền giỏ <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Middleware <code>persistCart</code> ghi <code>state.cart</code> vào localStorage <code>cart</code> sau mỗi action <code>cart/*</code>; <code>loadCart()</code> cấp <code>preloadedState</code> (JSON hỏng ⇒ bỏ qua).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">middleware</span> <span class=\"bi-hook\">preloadedState</span></p>\n<p><b>Khoá Local Storage:</b> <code>cart</code></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Thunk thanh toán <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>checkout = createAsyncThunk('orders/checkout', async (_, { getState, dispatch }) => …)</code>: POST <code>{ items: [{ bookId, title, price, quantity }], total, createdAt }</code> tới <code>/orders</code>, rồi <code>dispatch(clearCart())</code>.</li>\n  <li>Slice <code>orders</code>: <code>status</code>, <code>lastOrder</code> (⇒ <code>Order #id placed</code>), lỗi <code>Checkout failed</code> (giữ giỏ).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">thunkAPI.getState</span> <span class=\"bi-hook\">thunkAPI.dispatch</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Lịch sử action (matcher) <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Slice <code>history</code> giữ tên 5 action <code>cart/*</code> gần nhất, mới nhất trước, dùng <code>builder.addMatcher</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">addMatcher</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Middleware ghi log <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>logger</code> in <code>console.log('[redux]', action.type)</code> cho mọi action; thêm hai middleware bằng <code>getDefaultMiddleware().concat(…)</code> (giữ thunk).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">store =&gt; next =&gt; action</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#status · #error · #search · #category · #book-count · #book-{id}.book-item · .book-title · .btn-add</code></td><td>danh sách sách (App.js đã cho)</td></tr><tr><td><code>#cart-count · #cart · #line-{id}.cart-line · .line-qty · .btn-inc · .btn-dec · .btn-remove · #cart-total</code></td><td>giỏ</td></tr><tr><td><code>#btn-checkout · #order-success · #checkout-error · #history</code></td><td>thanh toán + lịch sử</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Store &amp; slice</td><td>1</td></tr><tr><td>2</td><td>Thunk bất đồng bộ: tải sách</td><td>1.5</td></tr><tr><td>3</td><td>Bộ lọc &amp; selector ghi nhớ</td><td>1.5</td></tr><tr><td>4</td><td>Slice giỏ hàng</td><td>1.5</td></tr><tr><td>5</td><td>Lưu bền giỏ</td><td>1</td></tr><tr><td>6</td><td>Thunk thanh toán</td><td>1.5</td></tr><tr><td>7</td><td>Lịch sử action (matcher)</td><td>1</td></tr><tr><td>8</td><td>Middleware ghi log</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Gán <code>middleware: [logger]</code> — mất thunk, <code>dispatch(fetchBooks())</code> báo lỗi.</li>\n  <li>Gọi API trong reducer (reducer phải thuần).</li>\n  <li>Selector tạo mảng mới mà không dùng <code>createSelector</code> — mỗi lần store đổi danh sách lại vẽ lại.</li>\n  <li>Xoá giỏ trước khi POST thành công — lỗi là mất đơn.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Redux Toolkit (<code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>, <code>createSelector</code>) + <code>react-redux</code> hooks. No component state for data that lives in the store.|||Redux Toolkit (<code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>, <code>createSelector</code>) + hook của <code>react-redux</code>. Không giữ trong component state những dữ liệu đã nằm trong store.\nAction types must match exactly: <code>books/fetchBooks</code>, <code>cart/addToCart</code>, <code>cart/increment</code>, <code>cart/decrement</code>, <code>cart/removeFromCart</code>, <code>cart/clearCart</code>, <code>orders/checkout</code>.|||Tên action phải khớp chính xác: <code>books/fetchBooks</code>, <code>cart/addToCart</code>, <code>cart/increment</code>, <code>cart/decrement</code>, <code>cart/removeFromCart</code>, <code>cart/clearCart</code>, <code>orders/checkout</code>.\n<code>App.js</code> is given: it uses the selectors and actions exported by your slices.|||<code>App.js</code> đã cho: nó dùng selector và action do các slice của bạn xuất ra.",
+      "examplesJson": [
+        {
+          "input": "Filters & memoized selectors|||Bộ lọc & selector ghi nhớ",
+          "output": "search \"martin\" ⇒ Clean Architecture · category Design ⇒ Showing 2 of 8 books|||tìm \"martin\" ⇒ Clean Architecture · thể loại Design ⇒ Showing 2 of 8 books",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "App.js đã cho: đọc nó để biết mỗi slice phải XUẤT ra gì (selectBooks, setSearch, addToCart, checkout…).",
+        "fetchBooks: createAsyncThunk(\"books/fetchBooks\", async () => (await api.get(\"/books\")).data); extraReducers: builder.addCase(fetchBooks.pending, …).addCase(…fulfilled…).addCase(…rejected…).",
+        "Cart dùng Immer: line.quantity += 1 trong reducer là hợp lệ. Tổng: Math.round(sum * 100) / 100.",
+        "Store: preloadedState: saved ? { cart: saved } : undefined; middleware: (gDM) => gDM().concat(logger, persistCart). History: builder.addMatcher(a => a.type.startsWith(\"cart/\"), (s, a) => [a.type, ...s].slice(0, 5))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — component chỉ ĐỌC store bằng useSelector và GỬI lệnh bằng useDispatch\nimport { useEffect } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchBooks, selectBooks, selectBooksStatus, selectCategories } from './features/books/booksSlice';\nimport { selectVisibleBooks, setCategory, setSearch } from './features/filters/filtersSlice';\nimport { addToCart, decrement, increment, removeFromCart, selectCartCount, selectCartItems, selectCartTotal } from './features/cart/cartSlice';\nimport { checkout } from './features/orders/ordersSlice';\n\nconst money = (n) => `$${n.toFixed(2)}`;\n\nfunction BookList() {\n  const dispatch = useDispatch();\n  const status = useSelector(selectBooksStatus);\n  const books = useSelector(selectVisibleBooks);\n  const all = useSelector(selectBooks);\n  const categories = useSelector(selectCategories);\n  const { search, category } = useSelector((s) => s.filters);\n  const cart = useSelector(selectCartItems);\n  const qty = (id) => cart.find((i) => i.id === id)?.quantity ?? 0;\n\n  if (status === 'loading' || status === 'idle') return <p id=\"status\">Loading books...</p>;\n  if (status === 'failed') return <p id=\"error\" className=\"error\">Failed to load books</p>;\n\n  return (\n    <section>\n      <div className=\"toolbar\">\n        <input id=\"search\" placeholder=\"Title or author...\" value={search} onChange={(e) => dispatch(setSearch(e.target.value))} />\n        <select id=\"category\" value={category} onChange={(e) => dispatch(setCategory(e.target.value))}>\n          <option value=\"All\">All categories</option>\n          {categories.map((c) => <option key={c} value={c}>{c}</option>)}\n        </select>\n      </div>\n      <p id=\"book-count\">Showing {books.length} of {all.length} books</p>\n      <ul className=\"books\">\n        {books.map((b) => (\n          <li key={b.id} id={`book-${b.id}`} className=\"book-item\">\n            <b className=\"book-title\">{b.title}</b> — {b.author} · {money(b.price)}\n            <button type=\"button\" className=\"btn-add\" disabled={b.stock === 0 || qty(b.id) >= b.stock} onClick={() => dispatch(addToCart(b))}>\n              {b.stock === 0 ? 'Out of stock' : 'Add'}\n            </button>\n          </li>\n        ))}\n      </ul>\n    </section>\n  );\n}\n\nfunction CartPanel() {\n  const dispatch = useDispatch();\n  const items = useSelector(selectCartItems);\n  const total = useSelector(selectCartTotal);\n  const orders = useSelector((s) => s.orders);\n  return (\n    <aside id=\"cart\">\n      <h2>Cart</h2>\n      {items.map((i) => (\n        <div key={i.id} id={`line-${i.id}`} className=\"cart-line\">\n          {i.title}\n          <button type=\"button\" className=\"btn-dec\" onClick={() => dispatch(decrement(i.id))}>−</button>\n          <span className=\"line-qty\">{i.quantity}</span>\n          <button type=\"button\" className=\"btn-inc\" onClick={() => dispatch(increment(i.id))}>+</button>\n          <button type=\"button\" className=\"btn-remove\" onClick={() => dispatch(removeFromCart(i.id))}>✕</button>\n        </div>\n      ))}\n      <p id=\"cart-total\">Total: {money(total)}</p>\n      <button type=\"button\" id=\"btn-checkout\" disabled={items.length === 0 || orders.status === 'loading'} onClick={() => dispatch(checkout())}>\n        Checkout\n      </button>\n      {orders.status === 'succeeded' && orders.lastOrder && <p id=\"order-success\">Order #{orders.lastOrder.id} placed</p>}\n      {orders.status === 'failed' && <p id=\"checkout-error\" className=\"error\">{orders.error}</p>}\n    </aside>\n  );\n}\n\nfunction History() {\n  const history = useSelector((s) => s.history);\n  return (\n    <section>\n      <h3>Recent cart actions</h3>\n      <ol id=\"history\">\n        {history.map((t, i) => <li key={i}>{t}</li>)}\n      </ol>\n    </section>\n  );\n}\n\nexport default function App() {\n  const dispatch = useDispatch();\n  const count = useSelector(selectCartCount);\n\n  useEffect(() => {\n    dispatch(fetchBooks());\n  }, [dispatch]);\n\n  return (\n    <div className=\"app\">\n      <header className=\"header\">\n        <h1>Redux Book Store</h1>\n        <span id=\"cart-count\">{count}</span>\n      </header>\n      <div className=\"layout\">\n        <BookList />\n        <CartPanel />\n      </div>\n      <History />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER\nimport { configureStore } from '@reduxjs/toolkit';\nimport booksReducer from '../features/books/booksSlice';\n\n// TODO: thêm filters, cart, orders, history; preloadedState từ localStorage; middleware logger + persistCart\nexport const store = configureStore({\n  reducer: { books: booksReducer },\n});\n"
+        },
+        {
+          "name": "src/app/middleware.js",
+          "language": "javascript",
+          "code": "// src/app/middleware.js — STARTER\n// TODO: logger (console.log('[redux]', action.type)) · persistCart (ghi state.cart vào localStorage \"cart\") · loadCart()\nexport const logger = () => (next) => (action) => next(action);\nexport const persistCart = () => (next) => (action) => next(action);\nexport const loadCart = () => undefined;\n"
+        },
+        {
+          "name": "src/features/books/booksSlice.js",
+          "language": "javascript",
+          "code": "// src/features/books/booksSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\n// TODO: export const fetchBooks = createAsyncThunk('books/fetchBooks', …) + extraReducers pending/fulfilled/rejected\nconst booksSlice = createSlice({\n  name: 'books',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {},\n});\n\nexport const fetchBooks = () => ({ type: 'books/notImplemented' });\nexport default booksSlice.reducer;\nexport const selectBooks = (state) => state.books.items;\nexport const selectBooksStatus = (state) => state.books.status;\nexport const selectCategories = () => [];\n"
+        },
+        {
+          "name": "src/features/filters/filtersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/filters/filtersSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst filtersSlice = createSlice({ name: 'filters', initialState: { search: '', category: 'All' }, reducers: {} });\n// TODO: setSearch, setCategory + selectVisibleBooks (createSelector)\nexport const setSearch = () => ({ type: 'filters/todo' });\nexport const setCategory = () => ({ type: 'filters/todo' });\nexport const selectVisibleBooks = (state) => state.books.items;\nexport default filtersSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst cartSlice = createSlice({ name: 'cart', initialState: { items: [] }, reducers: {} });\n// TODO: addToCart · increment · decrement · removeFromCart · clearCart + selectCartCount / selectCartTotal\nexport const addToCart = () => ({ type: 'cart/todo' });\nexport const increment = addToCart;\nexport const decrement = addToCart;\nexport const removeFromCart = addToCart;\nexport const clearCart = addToCart;\nexport const selectCartItems = (state) => (state.cart ? state.cart.items : []);\nexport const selectCartCount = () => 0;\nexport const selectCartTotal = () => 0;\nexport default cartSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/orders/ordersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/orders/ordersSlice.js — STARTER\n// TODO: checkout = createAsyncThunk('orders/checkout', async (_, { getState, dispatch }) => …) + slice orders\nexport const checkout = () => ({ type: 'orders/todo' });\nexport default function ordersReducer(state = { status: 'idle', lastOrder: null, error: null }) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/features/history/historySlice.js",
+          "language": "javascript",
+          "code": "// src/features/history/historySlice.js — STARTER\n// TODO: slice \"history\" dùng addMatcher(action => action.type.startsWith('cart/'), …) giữ 5 action mới nhất\nexport default function historyReducer(state = []) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.app { max-width: 1000px; margin: 0 auto; padding: 20px; }\n.header { display: flex; align-items: center; gap: 12px; }\n#cart-count { background: #f59e0b; color: #fff; border-radius: 999px; padding: 2px 10px; font-weight: 700; }\n.layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }\n.toolbar { display: flex; gap: 8px; }\n.books { list-style: none; padding: 0; }\n.book-item { display: flex; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }\n.book-item button { margin-left: auto; }\n#cart { border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }\n.cart-line { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }\n.error { color: #dc2626; }\ninput, select, button { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js\nimport axios from 'axios';\n\nexport const api = axios.create({ baseURL: process.env.REACT_APP_API_URL });\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"books\": [\n    {\n      \"id\": 1,\n      \"title\": \"Eloquent JavaScript\",\n      \"author\": \"Marijn Haverbeke\",\n      \"category\": \"Programming\",\n      \"price\": 29.99,\n      \"stock\": 5\n    },\n    {\n      \"id\": 2,\n      \"title\": \"Refactoring UI\",\n      \"author\": \"Adam Wathan\",\n      \"category\": \"Design\",\n      \"price\": 79,\n      \"stock\": 2\n    },\n    {\n      \"id\": 3,\n      \"title\": \"The Lean Startup\",\n      \"author\": \"Eric Ries\",\n      \"category\": \"Business\",\n      \"price\": 18.5,\n      \"stock\": 0\n    },\n    {\n      \"id\": 4,\n      \"title\": \"You Don't Know JS Yet\",\n      \"author\": \"Kyle Simpson\",\n      \"category\": \"Programming\",\n      \"price\": 24.5,\n      \"stock\": 7\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Don't Make Me Think\",\n      \"author\": \"Steve Krug\",\n      \"category\": \"Design\",\n      \"price\": 32,\n      \"stock\": 4\n    },\n    {\n      \"id\": 6,\n      \"title\": \"Zero to One\",\n      \"author\": \"Peter Thiel\",\n      \"category\": \"Business\",\n      \"price\": 16.99,\n      \"stock\": 3\n    },\n    {\n      \"id\": 7,\n      \"title\": \"Clean Architecture\",\n      \"author\": \"Robert C. Martin\",\n      \"category\": \"Programming\",\n      \"price\": 34.99,\n      \"stock\": 1\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Hooked\",\n      \"author\": \"Nir Eyal\",\n      \"category\": \"Business\",\n      \"price\": 21,\n      \"stock\": 6\n    }\n  ],\n  \"orders\": []\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — component chỉ ĐỌC store bằng useSelector và GỬI lệnh bằng useDispatch\nimport { useEffect } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchBooks, selectBooks, selectBooksStatus, selectCategories } from './features/books/booksSlice';\nimport { selectVisibleBooks, setCategory, setSearch } from './features/filters/filtersSlice';\nimport { addToCart, decrement, increment, removeFromCart, selectCartCount, selectCartItems, selectCartTotal } from './features/cart/cartSlice';\nimport { checkout } from './features/orders/ordersSlice';\n\nconst money = (n) => `$${n.toFixed(2)}`;\n\nfunction BookList() {\n  const dispatch = useDispatch();\n  const status = useSelector(selectBooksStatus);\n  const books = useSelector(selectVisibleBooks);\n  const all = useSelector(selectBooks);\n  const categories = useSelector(selectCategories);\n  const { search, category } = useSelector((s) => s.filters);\n  const cart = useSelector(selectCartItems);\n  const qty = (id) => cart.find((i) => i.id === id)?.quantity ?? 0;\n\n  if (status === 'loading' || status === 'idle') return <p id=\"status\">Loading books...</p>;\n  if (status === 'failed') return <p id=\"error\" className=\"error\">Failed to load books</p>;\n\n  return (\n    <section>\n      <div className=\"toolbar\">\n        <input id=\"search\" placeholder=\"Title or author...\" value={search} onChange={(e) => dispatch(setSearch(e.target.value))} />\n        <select id=\"category\" value={category} onChange={(e) => dispatch(setCategory(e.target.value))}>\n          <option value=\"All\">All categories</option>\n          {categories.map((c) => <option key={c} value={c}>{c}</option>)}\n        </select>\n      </div>\n      <p id=\"book-count\">Showing {books.length} of {all.length} books</p>\n      <ul className=\"books\">\n        {books.map((b) => (\n          <li key={b.id} id={`book-${b.id}`} className=\"book-item\">\n            <b className=\"book-title\">{b.title}</b> — {b.author} · {money(b.price)}\n            <button type=\"button\" className=\"btn-add\" disabled={b.stock === 0 || qty(b.id) >= b.stock} onClick={() => dispatch(addToCart(b))}>\n              {b.stock === 0 ? 'Out of stock' : 'Add'}\n            </button>\n          </li>\n        ))}\n      </ul>\n    </section>\n  );\n}\n\nfunction CartPanel() {\n  const dispatch = useDispatch();\n  const items = useSelector(selectCartItems);\n  const total = useSelector(selectCartTotal);\n  const orders = useSelector((s) => s.orders);\n  return (\n    <aside id=\"cart\">\n      <h2>Cart</h2>\n      {items.map((i) => (\n        <div key={i.id} id={`line-${i.id}`} className=\"cart-line\">\n          {i.title}\n          <button type=\"button\" className=\"btn-dec\" onClick={() => dispatch(decrement(i.id))}>−</button>\n          <span className=\"line-qty\">{i.quantity}</span>\n          <button type=\"button\" className=\"btn-inc\" onClick={() => dispatch(increment(i.id))}>+</button>\n          <button type=\"button\" className=\"btn-remove\" onClick={() => dispatch(removeFromCart(i.id))}>✕</button>\n        </div>\n      ))}\n      <p id=\"cart-total\">Total: {money(total)}</p>\n      <button type=\"button\" id=\"btn-checkout\" disabled={items.length === 0 || orders.status === 'loading'} onClick={() => dispatch(checkout())}>\n        Checkout\n      </button>\n      {orders.status === 'succeeded' && orders.lastOrder && <p id=\"order-success\">Order #{orders.lastOrder.id} placed</p>}\n      {orders.status === 'failed' && <p id=\"checkout-error\" className=\"error\">{orders.error}</p>}\n    </aside>\n  );\n}\n\nfunction History() {\n  const history = useSelector((s) => s.history);\n  return (\n    <section>\n      <h3>Recent cart actions</h3>\n      <ol id=\"history\">\n        {history.map((t, i) => <li key={i}>{t}</li>)}\n      </ol>\n    </section>\n  );\n}\n\nexport default function App() {\n  const dispatch = useDispatch();\n  const count = useSelector(selectCartCount);\n\n  useEffect(() => {\n    dispatch(fetchBooks());\n  }, [dispatch]);\n\n  return (\n    <div className=\"app\">\n      <header className=\"header\">\n        <h1>Redux Book Store</h1>\n        <span id=\"cart-count\">{count}</span>\n      </header>\n      <div className=\"layout\">\n        <BookList />\n        <CartPanel />\n      </div>\n      <History />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — MỘT store cho cả app\nimport { configureStore } from '@reduxjs/toolkit';\nimport booksReducer from '../features/books/booksSlice';\nimport filtersReducer from '../features/filters/filtersSlice';\nimport cartReducer from '../features/cart/cartSlice';\nimport ordersReducer from '../features/orders/ordersSlice';\nimport historyReducer from '../features/history/historySlice';\nimport { loadCart, logger, persistCart } from './middleware';\n\nconst savedCart = loadCart();\n\nexport const store = configureStore({\n  reducer: { books: booksReducer, filters: filtersReducer, cart: cartReducer, orders: ordersReducer, history: historyReducer },\n  preloadedState: savedCart ? { cart: savedCart } : undefined,\n  // giữ middleware mặc định (có thunk) rồi nối thêm của mình\n  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger, persistCart),\n});\n"
+        },
+        {
+          "name": "src/app/middleware.js",
+          "language": "javascript",
+          "code": "// src/app/middleware.js — middleware = store => next => action => …\n// 1) logger: in mọi action (đúng định dạng đề yêu cầu)\nexport const logger = () => (next) => (action) => {\n  console.log('[redux]', action.type);\n  return next(action);\n};\n\n// 2) lưu giỏ: SAU khi reducer chạy (next), ghi state.cart vào localStorage\nexport const persistCart = (store) => (next) => (action) => {\n  const result = next(action);\n  if (action.type.startsWith('cart/')) localStorage.setItem('cart', JSON.stringify(store.getState().cart));\n  return result;\n};\n\n// đọc giỏ đã lưu cho preloadedState (hỏng/không có ⇒ undefined ⇒ dùng initialState của slice)\nexport function loadCart() {\n  try {\n    const raw = localStorage.getItem('cart');\n    return raw ? JSON.parse(raw) : undefined;\n  } catch {\n    return undefined;\n  }\n}\n"
+        },
+        {
+          "name": "src/features/books/booksSlice.js",
+          "language": "javascript",
+          "code": "// src/features/books/booksSlice.js — dữ liệu từ máy chủ: createAsyncThunk lo 3 trạng thái pending/fulfilled/rejected\nimport { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';\nimport { api } from '../../api';\n\nexport const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {\n  const res = await api.get('/books');\n  return res.data; // thành action.payload của books/fetchBooks/fulfilled\n});\n\nconst booksSlice = createSlice({\n  name: 'books',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {},\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchBooks.pending, (state) => {\n        state.status = 'loading'; // Immer: \"sửa\" state nháp ⇒ RTK tạo state mới bất biến\n      })\n      .addCase(fetchBooks.fulfilled, (state, action) => {\n        state.status = 'succeeded';\n        state.items = action.payload;\n      })\n      .addCase(fetchBooks.rejected, (state, action) => {\n        state.status = 'failed';\n        state.error = action.error.message;\n      });\n  },\n});\n\nexport default booksSlice.reducer;\n\n// ── selectors ──\nexport const selectBooks = (state) => state.books.items;\nexport const selectBooksStatus = (state) => state.books.status;\nexport const selectCategories = createSelector([selectBooks], (books) => [...new Set(books.map((b) => b.category))].sort());\n"
+        },
+        {
+          "name": "src/features/filters/filtersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/filters/filtersSlice.js — trạng thái giao diện dùng chung (tìm + thể loại)\nimport { createSelector, createSlice } from '@reduxjs/toolkit';\nimport { selectBooks } from '../books/booksSlice';\n\nconst filtersSlice = createSlice({\n  name: 'filters',\n  initialState: { search: '', category: 'All' },\n  reducers: {\n    setSearch(state, action) {\n      state.search = action.payload;\n    },\n    setCategory(state, action) {\n      state.category = action.payload;\n    },\n  },\n});\n\nexport const { setSearch, setCategory } = filtersSlice.actions;\nexport default filtersSlice.reducer;\n\n// createSelector GHI NHỚ: chỉ lọc/sắp lại khi books hoặc filters đổi (useSelector gọi selector mỗi lần store đổi)\nexport const selectVisibleBooks = createSelector([selectBooks, (state) => state.filters], (books, { search, category }) => {\n  const q = search.trim().toLowerCase();\n  return books\n    .filter((b) => (category === 'All' || b.category === category) && (b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)))\n    .sort((a, b) => a.title.localeCompare(b.title));\n});\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — giỏ hàng: reducer + selector tính tổng\nimport { createSelector, createSlice } from '@reduxjs/toolkit';\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { items: [] },\n  reducers: {\n    addToCart(state, action) {\n      const book = action.payload;\n      const line = state.items.find((i) => i.id === book.id);\n      if (line) {\n        if (line.quantity < line.stock) line.quantity += 1;\n      } else if (book.stock > 0) {\n        state.items.push({ id: book.id, title: book.title, price: book.price, stock: book.stock, quantity: 1 });\n      }\n    },\n    increment(state, action) {\n      const line = state.items.find((i) => i.id === action.payload);\n      if (line && line.quantity < line.stock) line.quantity += 1;\n    },\n    decrement(state, action) {\n      const line = state.items.find((i) => i.id === action.payload);\n      if (!line) return;\n      line.quantity -= 1;\n      if (line.quantity === 0) state.items = state.items.filter((i) => i.id !== action.payload);\n    },\n    removeFromCart(state, action) {\n      state.items = state.items.filter((i) => i.id !== action.payload);\n    },\n    clearCart(state) {\n      state.items = [];\n    },\n  },\n});\n\nexport const { addToCart, increment, decrement, removeFromCart, clearCart } = cartSlice.actions;\nexport default cartSlice.reducer;\n\nexport const selectCartItems = (state) => state.cart.items;\nexport const selectCartCount = createSelector([selectCartItems], (items) => items.reduce((n, i) => n + i.quantity, 0));\n// làm tròn 2 chữ số: 29.99 + 24.5 = 54.489999… trong số thực\nexport const selectCartTotal = createSelector([selectCartItems], (items) => Math.round(items.reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100);\n"
+        },
+        {
+          "name": "src/features/orders/ordersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/orders/ordersSlice.js — thunk ĐỌC state (getState) và DISPATCH action của slice khác\nimport { createAsyncThunk, createSlice } from '@reduxjs/toolkit';\nimport { api } from '../../api';\nimport { clearCart, selectCartItems, selectCartTotal } from '../cart/cartSlice';\n\nexport const checkout = createAsyncThunk('orders/checkout', async (_, { getState, dispatch }) => {\n  const state = getState();\n  const order = {\n    items: selectCartItems(state).map(({ id, title, price, quantity }) => ({ bookId: id, title, price, quantity })),\n    total: selectCartTotal(state),\n    createdAt: new Date().toISOString(),\n  };\n  const res = await api.post('/orders', order);\n  dispatch(clearCart()); // giỏ chỉ được xoá khi máy chủ đã nhận đơn\n  return res.data;\n});\n\nconst ordersSlice = createSlice({\n  name: 'orders',\n  initialState: { status: 'idle', lastOrder: null, error: null },\n  reducers: {},\n  extraReducers: (builder) => {\n    builder\n      .addCase(checkout.pending, (state) => {\n        state.status = 'loading';\n        state.error = null;\n      })\n      .addCase(checkout.fulfilled, (state, action) => {\n        state.status = 'succeeded';\n        state.lastOrder = action.payload;\n      })\n      .addCase(checkout.rejected, (state) => {\n        state.status = 'failed';\n        state.error = 'Checkout failed';\n      });\n  },\n});\n\nexport default ordersSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/history/historySlice.js",
+          "language": "javascript",
+          "code": "// src/features/history/historySlice.js — addMatcher: phản ứng với action của slice KHÁC theo điều kiện\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst historySlice = createSlice({\n  name: 'history',\n  initialState: [],\n  reducers: {},\n  extraReducers: (builder) => {\n    builder.addMatcher(\n      (action) => action.type.startsWith('cart/'),\n      (state, action) => [action.type, ...state].slice(0, 5), // trả về giá trị MỚI cũng được (thay vì sửa nháp)\n    );\n  },\n});\n\nexport default historySlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.app { max-width: 1000px; margin: 0 auto; padding: 20px; }\n.header { display: flex; align-items: center; gap: 12px; }\n#cart-count { background: #f59e0b; color: #fff; border-radius: 999px; padding: 2px 10px; font-weight: 700; }\n.layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }\n.toolbar { display: flex; gap: 8px; }\n.books { list-style: none; padding: 0; }\n.book-item { display: flex; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }\n.book-item button { margin-left: auto; }\n#cart { border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }\n.cart-line { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }\n.error { color: #dc2626; }\ninput, select, button { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js\nimport axios from 'axios';\n\nexport const api = axios.create({ baseURL: process.env.REACT_APP_API_URL });\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"books\": [\n    {\n      \"id\": 1,\n      \"title\": \"Eloquent JavaScript\",\n      \"author\": \"Marijn Haverbeke\",\n      \"category\": \"Programming\",\n      \"price\": 29.99,\n      \"stock\": 5\n    },\n    {\n      \"id\": 2,\n      \"title\": \"Refactoring UI\",\n      \"author\": \"Adam Wathan\",\n      \"category\": \"Design\",\n      \"price\": 79,\n      \"stock\": 2\n    },\n    {\n      \"id\": 3,\n      \"title\": \"The Lean Startup\",\n      \"author\": \"Eric Ries\",\n      \"category\": \"Business\",\n      \"price\": 18.5,\n      \"stock\": 0\n    },\n    {\n      \"id\": 4,\n      \"title\": \"You Don't Know JS Yet\",\n      \"author\": \"Kyle Simpson\",\n      \"category\": \"Programming\",\n      \"price\": 24.5,\n      \"stock\": 7\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Don't Make Me Think\",\n      \"author\": \"Steve Krug\",\n      \"category\": \"Design\",\n      \"price\": 32,\n      \"stock\": 4\n    },\n    {\n      \"id\": 6,\n      \"title\": \"Zero to One\",\n      \"author\": \"Peter Thiel\",\n      \"category\": \"Business\",\n      \"price\": 16.99,\n      \"stock\": 3\n    },\n    {\n      \"id\": 7,\n      \"title\": \"Clean Architecture\",\n      \"author\": \"Robert C. Martin\",\n      \"category\": \"Programming\",\n      \"price\": 34.99,\n      \"stock\": 1\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Hooked\",\n      \"author\": \"Nir Eyal\",\n      \"category\": \"Business\",\n      \"price\": 21,\n      \"stock\": 6\n    }\n  ],\n  \"orders\": []\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi phần state có slice riêng; dữ liệu máy chủ đi qua <code>createAsyncThunk</code> nên trạng thái loading/succeeded/failed là chuẩn và tách khỏi component. Dữ liệu suy ra (danh sách hiển thị, thể loại, số lượng, tổng) là selector <code>createSelector</code> — chỉ tính lại khi đầu vào đổi. Hai middleware nối sau middleware mặc định (để giữ thunk): <code>logger</code> in mọi action, <code>persistCart</code> ghi giỏ SAU khi reducer chạy; khi khởi động <code>loadCart</code> cấp <code>preloadedState</code>. Thunk <code>checkout</code> đọc state qua <code>getState</code>, POST đơn rồi mới <code>dispatch(clearCart())</code>; <code>history</code> dùng <code>addMatcher</code> để nghe mọi action <code>cart/*</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://redux-toolkit.js.org/api/createAsyncThunk",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "books": [
+              {
+                "id": 1,
+                "title": "Eloquent JavaScript",
+                "author": "Marijn Haverbeke",
+                "category": "Programming",
+                "price": 29.99,
+                "stock": 5
+              },
+              {
+                "id": 2,
+                "title": "Refactoring UI",
+                "author": "Adam Wathan",
+                "category": "Design",
+                "price": 79,
+                "stock": 2
+              },
+              {
+                "id": 3,
+                "title": "The Lean Startup",
+                "author": "Eric Ries",
+                "category": "Business",
+                "price": 18.5,
+                "stock": 0
+              },
+              {
+                "id": 4,
+                "title": "You Don't Know JS Yet",
+                "author": "Kyle Simpson",
+                "category": "Programming",
+                "price": 24.5,
+                "stock": 7
+              },
+              {
+                "id": 5,
+                "title": "Don't Make Me Think",
+                "author": "Steve Krug",
+                "category": "Design",
+                "price": 32,
+                "stock": 4
+              },
+              {
+                "id": 6,
+                "title": "Zero to One",
+                "author": "Peter Thiel",
+                "category": "Business",
+                "price": 16.99,
+                "stock": 3
+              },
+              {
+                "id": 7,
+                "title": "Clean Architecture",
+                "author": "Robert C. Martin",
+                "category": "Programming",
+                "price": 34.99,
+                "stock": 1
+              },
+              {
+                "id": 8,
+                "title": "Hooked",
+                "author": "Nir Eyal",
+                "category": "Business",
+                "price": 21,
+                "stock": 6
+              }
+            ],
+            "orders": []
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "configureStore with the five slices",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "configureStore\\([\\s\\S]*books[\\s\\S]*filters[\\s\\S]*cart[\\s\\S]*orders[\\s\\S]*history"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Slices are created with createSlice",
+            "kiem": "ma-nguon",
+            "tep": "src/features/cart/cartSlice.js",
+            "khop": "createSlice\\(\\s*\\{\\s*name:\\s*['\"]cart['\"]"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "App renders with the store (no JS error)",
+            "kiem": "khong-loi-js"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Pending ⇒ #status \"Loading books...\"",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "books": [
+                  {
+                    "id": 1,
+                    "title": "Eloquent JavaScript",
+                    "author": "Marijn Haverbeke",
+                    "category": "Programming",
+                    "price": 29.99,
+                    "stock": 5
+                  },
+                  {
+                    "id": 2,
+                    "title": "Refactoring UI",
+                    "author": "Adam Wathan",
+                    "category": "Design",
+                    "price": 79,
+                    "stock": 2
+                  },
+                  {
+                    "id": 3,
+                    "title": "The Lean Startup",
+                    "author": "Eric Ries",
+                    "category": "Business",
+                    "price": 18.5,
+                    "stock": 0
+                  },
+                  {
+                    "id": 4,
+                    "title": "You Don't Know JS Yet",
+                    "author": "Kyle Simpson",
+                    "category": "Programming",
+                    "price": 24.5,
+                    "stock": 7
+                  },
+                  {
+                    "id": 5,
+                    "title": "Don't Make Me Think",
+                    "author": "Steve Krug",
+                    "category": "Design",
+                    "price": 32,
+                    "stock": 4
+                  },
+                  {
+                    "id": 6,
+                    "title": "Zero to One",
+                    "author": "Peter Thiel",
+                    "category": "Business",
+                    "price": 16.99,
+                    "stock": 3
+                  },
+                  {
+                    "id": 7,
+                    "title": "Clean Architecture",
+                    "author": "Robert C. Martin",
+                    "category": "Programming",
+                    "price": 34.99,
+                    "stock": 1
+                  },
+                  {
+                    "id": 8,
+                    "title": "Hooked",
+                    "author": "Nir Eyal",
+                    "category": "Business",
+                    "price": 21,
+                    "stock": 6
+                  }
+                ],
+                "orders": []
+              },
+              "treMs": 1500
+            },
+            "kiem": "text",
+            "selector": "#status",
+            "giaTri": "Loading books..."
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Fulfilled ⇒ 8 books",
+            "kiem": "so-luong",
+            "selector": ".book-item",
+            "giaTri": 8
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Rejected ⇒ #error \"Failed to load books\"",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "orders": []
+              }
+            },
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Failed to load books"
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "fetchBooks is a createAsyncThunk",
+            "kiem": "ma-nguon",
+            "tep": "src/features/books/booksSlice.js",
+            "khop": "createAsyncThunk\\(\\s*['\"]books/fetchBooks['\"]"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Books sorted by title",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "Clean Architecture",
+              "Don't Make Me Think",
+              "Eloquent JavaScript",
+              "Hooked",
+              "Refactoring UI",
+              "The Lean Startup",
+              "You Don't Know JS Yet",
+              "Zero to One"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Category list comes from the data",
+            "kiem": "danh-sach-text",
+            "selector": "#category option",
+            "mongDoi": [
+              "All categories",
+              "Business",
+              "Design",
+              "Programming"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Search title OR author",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "Clean Architecture"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "martin"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Category \"Design\" ⇒ \"Showing 2 of 8 books\"",
+            "kiem": "text",
+            "selector": "#book-count",
+            "giaTri": "Showing 2 of 8 books",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Design"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "selectVisibleBooks uses createSelector",
+            "kiem": "ma-nguon",
+            "tep": "src/features/filters/filtersSlice.js",
+            "khop": "selectVisibleBooks\\s*=\\s*createSelector\\("
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Add ⇒ #cart-count 2 and a total of $54.49",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-count, #cart-total",
+            "mongDoi": [
+              "2",
+              "Total: $54.49"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "+ and − change the quantity",
+            "kiem": "text",
+            "selector": "#line-1 .line-qty",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-inc"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-inc"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-dec"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "✕ removes the line",
+            "kiem": "so-luong",
+            "selector": ".cart-line",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-4 .btn-remove"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Stock limit: Clean Architecture (stock 1) cannot be added twice",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "1",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-7 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-7 .btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Out of stock book is disabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#book-3 .btn-add",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "− at quantity 1 removes the line",
+            "kiem": "so-luong",
+            "selector": "#line-1",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-dec"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Cart saved to localStorage \"cart\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "cart",
+            "khop": "\"items\":\\[\\{\"id\":1",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Cart restored after reload (preloadedState)",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Corrupted saved cart does not crash the app",
+            "khoCucBo": {
+              "cart": "{oops"
+            },
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "0"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Checkout POSTs the order with the rounded total",
+            "kiem": "du-lieu-server",
+            "bang": "orders",
+            "chua": {
+              "total": 54.49
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-checkout"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Success message and empty cart",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-count, #order-success",
+            "mongDoi": [
+              "0",
+              "Order #1 placed"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-checkout"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Server error ⇒ #checkout-error, cart kept",
+            "fetchGia": {
+              "POST http://localhost:9999/orders": {
+                "status": 500,
+                "json": {}
+              }
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#cart-count, #checkout-error",
+            "mongDoi": [
+              "2",
+              "Checkout failed"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-checkout"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Order lines use bookId/title/price/quantity",
+            "kiem": "du-lieu-server",
+            "bang": "orders",
+            "chua": {
+              "items": [
+                {
+                  "bookId": 1,
+                  "title": "Eloquent JavaScript",
+                  "price": 29.99,
+                  "quantity": 1
+                },
+                {
+                  "bookId": 4,
+                  "title": "You Don't Know JS Yet",
+                  "price": 24.5,
+                  "quantity": 1
+                }
+              ]
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-checkout"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "checkout is a createAsyncThunk using getState",
+            "kiem": "ma-nguon",
+            "tep": "src/features/orders/ordersSlice.js",
+            "khop": "createAsyncThunk\\([\\s\\S]*getState"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "#history lists cart actions, newest first",
+            "kiem": "danh-sach-text",
+            "selector": "#history li",
+            "mongDoi": [
+              "cart/removeFromCart",
+              "cart/addToCart",
+              "cart/addToCart"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-remove"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Only cart actions are recorded",
+            "kiem": "so-luong",
+            "selector": "#history li",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "a"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "At most 5 entries",
+            "kiem": "so-luong",
+            "selector": "#history li",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-4 .btn-add"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-inc"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-inc"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-1 .btn-dec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#line-4 .btn-inc"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Uses builder.addMatcher",
+            "kiem": "ma-nguon",
+            "tep": "src/features/history/historySlice.js",
+            "khop": "addMatcher\\("
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Logger prints \"[redux] <type>\" for every action",
+            "kiem": "console",
+            "mongDoi": [
+              "[redux] books/fetchBooks/pending",
+              "[redux] books/fetchBooks/fulfilled",
+              "[redux] cart/addToCart"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#book-1 .btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Middleware is added with getDefaultMiddleware().concat",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "getDefaultMiddleware\\(\\)\\.concat\\("
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Middleware has the store => next => action shape",
+            "kiem": "ma-nguon",
+            "tep": "src/app/middleware.js",
+            "khop": "=>\\s*\\(?next\\)?\\s*=>\\s*\\(?action\\)?\\s*=>"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Store & slices",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Async thunk: load books",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Filters & memoized selectors",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Cart slice",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Persist the cart",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Checkout thunk",
+            "diem": 1.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Action history (matcher)",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Logger middleware",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<code>middleware: [logger]</code> ghi đè mặc định ⇒ mất redux-thunk ⇒ \"Actions must be plain objects\"."
+        },
+        {
+          "loi": "Vừa \"sửa\" nháp vừa <code>return</code> object mới trong cùng một reducer Immer ⇒ lỗi; chọn một trong hai."
+        },
+        {
+          "loi": "Gọi <code>api.get</code> trong reducer hoặc trong component rồi <code>dispatch(setBooks)</code> — mất trạng thái pending/rejected chuẩn."
+        },
+        {
+          "loi": "<code>useSelector(state =&gt; state.books.items.filter(…))</code> ⇒ mảng mới mỗi lần ⇒ render thừa (và cảnh báo của react-redux)."
+        },
+        {
+          "loi": "Tổng tiền in <code>54.489999999</code> — quên làm tròn số thực."
+        },
+        {
+          "loi": "Lưu cả store vào localStorage (kể cả books/status) thay vì chỉ <code>cart</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "store",
+          "vi": "kho trạng thái toàn cục duy nhất"
+        },
+        {
+          "en": "slice",
+          "vi": "một phần state + reducer + action của nó"
+        },
+        {
+          "en": "thunk",
+          "vi": "hàm dispatch được, chạy việc bất đồng bộ rồi dispatch tiếp"
+        },
+        {
+          "en": "selector / memoized",
+          "vi": "hàm đọc state / có ghi nhớ kết quả"
+        },
+        {
+          "en": "middleware",
+          "vi": "lớp chen giữa dispatch và reducer (log, lưu, gọi API…)"
+        },
+        {
+          "en": "matcher",
+          "vi": "điều kiện để một reducer bắt nhiều loại action"
+        },
+        {
+          "en": "pure function",
+          "vi": "hàm thuần — cùng đầu vào cùng kết quả, không tác dụng phụ"
+        },
+        {
+          "en": "side effect",
+          "vi": "tác dụng phụ (gọi API, hẹn giờ, đụng DOM…) — đặt trong useEffect"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        },
+        {
+          "en": "derived value",
+          "vi": "giá trị suy ra từ state/props — tính lại, không lưu state riêng"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 12 — Book Store with Redux Toolkit (slices · async thunks · selectors · middleware) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@reduxjs/toolkit@1.9.7/dist/redux-toolkit.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-redux@8.1.3/dist/react-redux.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/App.js — component chỉ ĐỌC store bằng useSelector và GỬI lệnh bằng useDispatch\\nvar _react = require('react');\\nvar _reactredux = require('react-redux');\\nvar _booksSlice = require('./features/books/booksSlice');\\nvar _filtersSlice = require('./features/filters/filtersSlice');\\nvar _cartSlice = require('./features/cart/cartSlice');\\nvar _ordersSlice = require('./features/orders/ordersSlice');\\n\\nconst money = (n) => `$${n.toFixed(2)}`;\\n\\nfunction BookList() {\\n  const dispatch = _reactredux.useDispatch.call(void 0, );\\n  const status = _reactredux.useSelector.call(void 0, _booksSlice.selectBooksStatus);\\n  const books = _reactredux.useSelector.call(void 0, _filtersSlice.selectVisibleBooks);\\n  const all = _reactredux.useSelector.call(void 0, _booksSlice.selectBooks);\\n  const categories = _reactredux.useSelector.call(void 0, _booksSlice.selectCategories);\\n  const { search, category } = _reactredux.useSelector.call(void 0, (s) => s.filters);\\n  const cart = _reactredux.useSelector.call(void 0, _cartSlice.selectCartItems);\\n  const qty = (id) => _nullishCoalesce(_optionalChain([cart, 'access', _ => _.find, 'call', _2 => _2((i) => i.id === id), 'optionalAccess', _3 => _3.quantity]), () => ( 0));\\n\\n  if (status === 'loading' || status === 'idle') return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"status\\\", children: \\\"Loading books...\\\" });\\n  if (status === 'failed') return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"error\\\", className: \\\"error\\\", children: \\\"Failed to load books\\\"   });\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"search\\\", placeholder: \\\"Title or author...\\\"  , value: search, onChange: (e) => dispatch(_filtersSlice.setSearch.call(void 0, e.target.value)),} )\\n        , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"category\\\", value: category, onChange: (e) => dispatch(_filtersSlice.setCategory.call(void 0, e.target.value)), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"All\\\", children: \\\"All categories\\\" })\\n          , categories.map((c) => _jsxruntime.jsx.call(void 0, 'option', { value: c, children: c}, c))\\n        ]})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"book-count\\\", children: [\\\"Showing \\\" , books.length, \\\" of \\\"  , all.length, \\\" books\\\" ]})\\n      , _jsxruntime.jsx.call(void 0, 'ul', { className: \\\"books\\\", children: \\n        books.map((b) => (\\n          _jsxruntime.jsxs.call(void 0, 'li', { id: `book-${b.id}`, className: \\\"book-item\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'b', { className: \\\"book-title\\\", children: b.title}), \\\" — \\\"  , b.author, \\\" · \\\"  , money(b.price)\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-add\\\", disabled: b.stock === 0 || qty(b.id) >= b.stock, onClick: () => dispatch(_cartSlice.addToCart.call(void 0, b)), children: \\n              b.stock === 0 ? 'Out of stock' : 'Add'\\n            })\\n          ]}, b.id)\\n        ))\\n      })\\n    ]})\\n  );\\n}\\n\\nfunction CartPanel() {\\n  const dispatch = _reactredux.useDispatch.call(void 0, );\\n  const items = _reactredux.useSelector.call(void 0, _cartSlice.selectCartItems);\\n  const total = _reactredux.useSelector.call(void 0, _cartSlice.selectCartTotal);\\n  const orders = _reactredux.useSelector.call(void 0, (s) => s.orders);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'aside', { id: \\\"cart\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Cart\\\"})\\n      , items.map((i) => (\\n        _jsxruntime.jsxs.call(void 0, 'div', { id: `line-${i.id}`, className: \\\"cart-line\\\", children: [\\n          i.title\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-dec\\\", onClick: () => dispatch(_cartSlice.decrement.call(void 0, i.id)), children: \\\"−\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"line-qty\\\", children: i.quantity})\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-inc\\\", onClick: () => dispatch(_cartSlice.increment.call(void 0, i.id)), children: \\\"+\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-remove\\\", onClick: () => dispatch(_cartSlice.removeFromCart.call(void 0, i.id)), children: \\\"✕\\\"})\\n        ]}, i.id)\\n      ))\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"cart-total\\\", children: [\\\"Total: \\\" , money(total)]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-checkout\\\", disabled: items.length === 0 || orders.status === 'loading', onClick: () => dispatch(_ordersSlice.checkout.call(void 0, )), children: \\\"Checkout\\\"\\n\\n      })\\n      , orders.status === 'succeeded' && orders.lastOrder && _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"order-success\\\", children: [\\\"Order #\\\" , orders.lastOrder.id, \\\" placed\\\" ]})\\n      , orders.status === 'failed' && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"checkout-error\\\", className: \\\"error\\\", children: orders.error})\\n    ]})\\n  );\\n}\\n\\nfunction History() {\\n  const history = _reactredux.useSelector.call(void 0, (s) => s.history);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h3', { children: \\\"Recent cart actions\\\"  })\\n      , _jsxruntime.jsx.call(void 0, 'ol', { id: \\\"history\\\", children: \\n        history.map((t, i) => _jsxruntime.jsx.call(void 0, 'li', { children: t}, i))\\n      })\\n    ]})\\n  );\\n}\\n\\n function App() {\\n  const dispatch = _reactredux.useDispatch.call(void 0, );\\n  const count = _reactredux.useSelector.call(void 0, _cartSlice.selectCartCount);\\n\\n  _react.useEffect.call(void 0, () => {\\n    dispatch(_booksSlice.fetchBooks.call(void 0, ));\\n  }, [dispatch]);\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"app\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'header', { className: \\\"header\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Redux Book Store\\\"  })\\n        , _jsxruntime.jsx.call(void 0, 'span', { id: \\\"cart-count\\\", children: count})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"layout\\\", children: [\\n        _jsxruntime.jsx.call(void 0, BookList, {} )\\n        , _jsxruntime.jsx.call(void 0, CartPanel, {} )\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, History, {} )\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/app/store.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/app/store.js — MỘT store cho cả app\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _booksSlice = require('../features/books/booksSlice'); var _booksSlice2 = _interopRequireDefault(_booksSlice);\\nvar _filtersSlice = require('../features/filters/filtersSlice'); var _filtersSlice2 = _interopRequireDefault(_filtersSlice);\\nvar _cartSlice = require('../features/cart/cartSlice'); var _cartSlice2 = _interopRequireDefault(_cartSlice);\\nvar _ordersSlice = require('../features/orders/ordersSlice'); var _ordersSlice2 = _interopRequireDefault(_ordersSlice);\\nvar _historySlice = require('../features/history/historySlice'); var _historySlice2 = _interopRequireDefault(_historySlice);\\nvar _middleware = require('./middleware');\\n\\nconst savedCart = _middleware.loadCart.call(void 0, );\\n\\n const store = _toolkit.configureStore.call(void 0, {\\n  reducer: { books: _booksSlice2.default, filters: _filtersSlice2.default, cart: _cartSlice2.default, orders: _ordersSlice2.default, history: _historySlice2.default },\\n  preloadedState: savedCart ? { cart: savedCart } : undefined,\\n  // giữ middleware mặc định (có thunk) rồi nối thêm của mình\\n  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(_middleware.logger, _middleware.persistCart),\\n}); exports.store = store;\\n\",\"src/app/middleware.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/app/middleware.js — middleware = store => next => action => …\\n// 1) logger: in mọi action (đúng định dạng đề yêu cầu)\\n const logger = () => (next) => (action) => {\\n  console.log('[redux]', action.type);\\n  return next(action);\\n}; exports.logger = logger;\\n\\n// 2) lưu giỏ: SAU khi reducer chạy (next), ghi state.cart vào localStorage\\n const persistCart = (store) => (next) => (action) => {\\n  const result = next(action);\\n  if (action.type.startsWith('cart/')) localStorage.setItem('cart', JSON.stringify(store.getState().cart));\\n  return result;\\n}; exports.persistCart = persistCart;\\n\\n// đọc giỏ đã lưu cho preloadedState (hỏng/không có ⇒ undefined ⇒ dùng initialState của slice)\\n function loadCart() {\\n  try {\\n    const raw = localStorage.getItem('cart');\\n    return raw ? JSON.parse(raw) : undefined;\\n  } catch (e) {\\n    return undefined;\\n  }\\n} exports.loadCart = loadCart;\\n\",\"src/features/books/booksSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/books/booksSlice.js — dữ liệu từ máy chủ: createAsyncThunk lo 3 trạng thái pending/fulfilled/rejected\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _api = require('../../api');\\n\\n const fetchBooks = _toolkit.createAsyncThunk.call(void 0, 'books/fetchBooks', async () => {\\n  const res = await _api.api.get('/books');\\n  return res.data; // thành action.payload của books/fetchBooks/fulfilled\\n}); exports.fetchBooks = fetchBooks;\\n\\nconst booksSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'books',\\n  initialState: { items: [], status: 'idle', error: null },\\n  reducers: {},\\n  extraReducers: (builder) => {\\n    builder\\n      .addCase(exports.fetchBooks.pending, (state) => {\\n        state.status = 'loading'; // Immer: \\\"sửa\\\" state nháp ⇒ RTK tạo state mới bất biến\\n      })\\n      .addCase(exports.fetchBooks.fulfilled, (state, action) => {\\n        state.status = 'succeeded';\\n        state.items = action.payload;\\n      })\\n      .addCase(exports.fetchBooks.rejected, (state, action) => {\\n        state.status = 'failed';\\n        state.error = action.error.message;\\n      });\\n  },\\n});\\n\\nexports. default = booksSlice.reducer;\\n\\n// ── selectors ──\\n const selectBooks = (state) => state.books.items; exports.selectBooks = selectBooks;\\n const selectBooksStatus = (state) => state.books.status; exports.selectBooksStatus = selectBooksStatus;\\n const selectCategories = _toolkit.createSelector.call(void 0, [exports.selectBooks], (books) => [...new Set(books.map((b) => b.category))].sort()); exports.selectCategories = selectCategories;\\n\",\"src/features/filters/filtersSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/filters/filtersSlice.js — trạng thái giao diện dùng chung (tìm + thể loại)\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _booksSlice = require('../books/booksSlice');\\n\\nconst filtersSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'filters',\\n  initialState: { search: '', category: 'All' },\\n  reducers: {\\n    setSearch(state, action) {\\n      state.search = action.payload;\\n    },\\n    setCategory(state, action) {\\n      state.category = action.payload;\\n    },\\n  },\\n});\\n\\n( { setSearch: exports.setSearch, setCategory: exports.setCategory } = filtersSlice.actions);\\nexports. default = filtersSlice.reducer;\\n\\n// createSelector GHI NHỚ: chỉ lọc/sắp lại khi books hoặc filters đổi (useSelector gọi selector mỗi lần store đổi)\\n const selectVisibleBooks = _toolkit.createSelector.call(void 0, [_booksSlice.selectBooks, (state) => state.filters], (books, { search, category }) => {\\n  const q = search.trim().toLowerCase();\\n  return books\\n    .filter((b) => (category === 'All' || b.category === category) && (b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)))\\n    .sort((a, b) => a.title.localeCompare(b.title));\\n}); exports.selectVisibleBooks = selectVisibleBooks;\\n\",\"src/features/cart/cartSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/cart/cartSlice.js — giỏ hàng: reducer + selector tính tổng\\nvar _toolkit = require('@reduxjs/toolkit');\\n\\nconst cartSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'cart',\\n  initialState: { items: [] },\\n  reducers: {\\n    addToCart(state, action) {\\n      const book = action.payload;\\n      const line = state.items.find((i) => i.id === book.id);\\n      if (line) {\\n        if (line.quantity \\u003c line.stock) line.quantity += 1;\\n      } else if (book.stock > 0) {\\n        state.items.push({ id: book.id, title: book.title, price: book.price, stock: book.stock, quantity: 1 });\\n      }\\n    },\\n    increment(state, action) {\\n      const line = state.items.find((i) => i.id === action.payload);\\n      if (line && line.quantity \\u003c line.stock) line.quantity += 1;\\n    },\\n    decrement(state, action) {\\n      const line = state.items.find((i) => i.id === action.payload);\\n      if (!line) return;\\n      line.quantity -= 1;\\n      if (line.quantity === 0) state.items = state.items.filter((i) => i.id !== action.payload);\\n    },\\n    removeFromCart(state, action) {\\n      state.items = state.items.filter((i) => i.id !== action.payload);\\n    },\\n    clearCart(state) {\\n      state.items = [];\\n    },\\n  },\\n});\\n\\n( { addToCart: exports.addToCart, increment: exports.increment, decrement: exports.decrement, removeFromCart: exports.removeFromCart, clearCart: exports.clearCart } = cartSlice.actions);\\nexports. default = cartSlice.reducer;\\n\\n const selectCartItems = (state) => state.cart.items; exports.selectCartItems = selectCartItems;\\n const selectCartCount = _toolkit.createSelector.call(void 0, [exports.selectCartItems], (items) => items.reduce((n, i) => n + i.quantity, 0)); exports.selectCartCount = selectCartCount;\\n// làm tròn 2 chữ số: 29.99 + 24.5 = 54.489999… trong số thực\\n const selectCartTotal = _toolkit.createSelector.call(void 0, [exports.selectCartItems], (items) => Math.round(items.reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100); exports.selectCartTotal = selectCartTotal;\\n\",\"src/features/orders/ordersSlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/orders/ordersSlice.js — thunk ĐỌC state (getState) và DISPATCH action của slice khác\\nvar _toolkit = require('@reduxjs/toolkit');\\nvar _api = require('../../api');\\nvar _cartSlice = require('../cart/cartSlice');\\n\\n const checkout = _toolkit.createAsyncThunk.call(void 0, 'orders/checkout', async (_, { getState, dispatch }) => {\\n  const state = getState();\\n  const order = {\\n    items: _cartSlice.selectCartItems.call(void 0, state).map(({ id, title, price, quantity }) => ({ bookId: id, title, price, quantity })),\\n    total: _cartSlice.selectCartTotal.call(void 0, state),\\n    createdAt: new Date().toISOString(),\\n  };\\n  const res = await _api.api.post('/orders', order);\\n  dispatch(_cartSlice.clearCart.call(void 0, )); // giỏ chỉ được xoá khi máy chủ đã nhận đơn\\n  return res.data;\\n}); exports.checkout = checkout;\\n\\nconst ordersSlice = _toolkit.createSlice.call(void 0, {\\n  name: 'orders',\\n  initialState: { status: 'idle', lastOrder: null, error: null },\\n  reducers: {},\\n  extraReducers: (builder) => {\\n    builder\\n      .addCase(exports.checkout.pending, (state) => {\\n        state.status = 'loading';\\n        state.error = null;\\n      })\\n      .addCase(exports.checkout.fulfilled, (state, action) => {\\n        state.status = 'succeeded';\\n        state.lastOrder = action.payload;\\n      })\\n      .addCase(exports.checkout.rejected, (state) => {\\n        state.status = 'failed';\\n        state.error = 'Checkout failed';\\n      });\\n  },\\n});\\n\\nexports. default = ordersSlice.reducer;\\n\",\"src/features/history/historySlice.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/features/history/historySlice.js — addMatcher: phản ứng với action của slice KHÁC theo điều kiện\\nvar _toolkit = require('@reduxjs/toolkit');\\n\\nconst historySlice = _toolkit.createSlice.call(void 0, {\\n  name: 'history',\\n  initialState: [],\\n  reducers: {},\\n  extraReducers: (builder) => {\\n    builder.addMatcher(\\n      (action) => action.type.startsWith('cart/'),\\n      (state, action) => [action.type, ...state].slice(0, 5), // trả về giá trị MỚI cũng được (thay vì sửa nháp)\\n    );\\n  },\\n});\\n\\nexports. default = historySlice.reducer;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nvar _reactredux = require('react-redux');\\nvar _store = require('./app/store');\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactredux.Provider, { store: _store.store, children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"src/api.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/api.js\\nvar _axios = require('axios'); var _axios2 = _interopRequireDefault(_axios);\\n\\n const api = _axios2.default.create({ baseURL: process.env.REACT_APP_API_URL }); exports.api = api;\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"database.json\":\"{\\n  \\\"books\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"title\\\": \\\"Eloquent JavaScript\\\",\\n      \\\"author\\\": \\\"Marijn Haverbeke\\\",\\n      \\\"category\\\": \\\"Programming\\\",\\n      \\\"price\\\": 29.99,\\n      \\\"stock\\\": 5\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"title\\\": \\\"Refactoring UI\\\",\\n      \\\"author\\\": \\\"Adam Wathan\\\",\\n      \\\"category\\\": \\\"Design\\\",\\n      \\\"price\\\": 79,\\n      \\\"stock\\\": 2\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"title\\\": \\\"The Lean Startup\\\",\\n      \\\"author\\\": \\\"Eric Ries\\\",\\n      \\\"category\\\": \\\"Business\\\",\\n      \\\"price\\\": 18.5,\\n      \\\"stock\\\": 0\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"title\\\": \\\"You Don't Know JS Yet\\\",\\n      \\\"author\\\": \\\"Kyle Simpson\\\",\\n      \\\"category\\\": \\\"Programming\\\",\\n      \\\"price\\\": 24.5,\\n      \\\"stock\\\": 7\\n    },\\n    {\\n      \\\"id\\\": 5,\\n      \\\"title\\\": \\\"Don't Make Me Think\\\",\\n      \\\"author\\\": \\\"Steve Krug\\\",\\n      \\\"category\\\": \\\"Design\\\",\\n      \\\"price\\\": 32,\\n      \\\"stock\\\": 4\\n    },\\n    {\\n      \\\"id\\\": 6,\\n      \\\"title\\\": \\\"Zero to One\\\",\\n      \\\"author\\\": \\\"Peter Thiel\\\",\\n      \\\"category\\\": \\\"Business\\\",\\n      \\\"price\\\": 16.99,\\n      \\\"stock\\\": 3\\n    },\\n    {\\n      \\\"id\\\": 7,\\n      \\\"title\\\": \\\"Clean Architecture\\\",\\n      \\\"author\\\": \\\"Robert C. Martin\\\",\\n      \\\"category\\\": \\\"Programming\\\",\\n      \\\"price\\\": 34.99,\\n      \\\"stock\\\": 1\\n    },\\n    {\\n      \\\"id\\\": 8,\\n      \\\"title\\\": \\\"Hooked\\\",\\n      \\\"author\\\": \\\"Nir Eyal\\\",\\n      \\\"category\\\": \\\"Business\\\",\\n      \\\"price\\\": 21,\\n      \\\"stock\\\": 6\\n    }\\n  ],\\n  \\\"orders\\\": []\\n}\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; color: #0f172a; }\\n.app { max-width: 1000px; margin: 0 auto; padding: 20px; }\\n.header { display: flex; align-items: center; gap: 12px; }\\n#cart-count { background: #f59e0b; color: #fff; border-radius: 999px; padding: 2px 10px; font-weight: 700; }\\n.layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }\\n.toolbar { display: flex; gap: 8px; }\\n.books { list-style: none; padding: 0; }\\n.book-item { display: flex; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }\\n.book-item button { margin-left: auto; }\\n#cart { border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }\\n.cart-line { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }\\n.error { color: #dc2626; }\\ninput, select, button { font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\\n\"};var DB={\"books\":[{\"id\":1,\"title\":\"Eloquent JavaScript\",\"author\":\"Marijn Haverbeke\",\"category\":\"Programming\",\"price\":29.99,\"stock\":5},{\"id\":2,\"title\":\"Refactoring UI\",\"author\":\"Adam Wathan\",\"category\":\"Design\",\"price\":79,\"stock\":2},{\"id\":3,\"title\":\"The Lean Startup\",\"author\":\"Eric Ries\",\"category\":\"Business\",\"price\":18.5,\"stock\":0},{\"id\":4,\"title\":\"You Don't Know JS Yet\",\"author\":\"Kyle Simpson\",\"category\":\"Programming\",\"price\":24.5,\"stock\":7},{\"id\":5,\"title\":\"Don't Make Me Think\",\"author\":\"Steve Krug\",\"category\":\"Design\",\"price\":32,\"stock\":4},{\"id\":6,\"title\":\"Zero to One\",\"author\":\"Peter Thiel\",\"category\":\"Business\",\"price\":16.99,\"stock\":3},{\"id\":7,\"title\":\"Clean Architecture\",\"author\":\"Robert C. Martin\",\"category\":\"Programming\",\"price\":34.99,\"stock\":1},{\"id\":8,\"title\":\"Hooked\",\"author\":\"Nir Eyal\",\"category\":\"Business\",\"price\":21,\"stock\":6}],\"orders\":[]};var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');var tong=ds.length;if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));var rr=tl(200,ds.map(mr));try{rr.headers.set('X-Total-Count',String(tong))}catch(e){}return rr}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var hd={};try{res.headers.forEach(function(v,k){hd[k.toLowerCase()]=v})}catch(e){}var out={data:d,status:res.status,statusText:res.statusText,headers:hd,config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

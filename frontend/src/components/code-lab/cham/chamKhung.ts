@@ -254,7 +254,10 @@ export async function chamKhung(tj: TestsJson, kiem: Kiem[], files: TepMap, onTu
   kiem.forEach((k, idx) => {
     if (k.kiem === 'ma-nguon') { xong(idx, kiemMaNguon(k, files)); return; }
     const w = Number(k.beRong) || (react ? 1280 : 1024);
-    const rieng = (Array.isArray(k.truoc) && k.truoc.length > 0) || k.kiem === 'hop-le';
+    // kiểm có môi trường RIÊNG (fetch giả, json-server, localStorage, confirm/prompt) cũng phải có khung riêng —
+    // khung dùng chung lấy cấu hình của kiểm ĐẦU nhóm
+    const moiTruongRieng = k.jsonServer != null || k.fetchGia != null || k.khoCucBo != null || k.confirm !== undefined || k.prompt !== undefined;
+    const rieng = (Array.isArray(k.truoc) && k.truoc.length > 0) || k.kiem === 'hop-le' || moiTruongRieng;
     // kiểm tĩnh dùng chung khung theo bề rộng + URL đầu của router (`url`)
     const khoa = rieng ? `r${idx}` : `w${w}|${String(k.url ?? '')}`;
     nhom.set(khoa, [...(nhom.get(khoa) ?? []), idx]);

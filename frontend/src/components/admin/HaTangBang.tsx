@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Activity, Cpu, HardDrive, Home, RefreshCw, Server, Thermometer, Zap } from 'lucide-react';
+import { Activity, Cloud, Cpu, HardDrive, Home, RefreshCw, Server, Thermometer, Zap } from 'lucide-react';
 import { api } from '@/lib/api';
 
 type Muc = 'mat' | 'binh-thuong' | 'am' | 'nong' | 'nguy' | 'khong-co';
@@ -362,6 +362,51 @@ function TheMay({ m, icon: Icon }: { m: May; icon: typeof Server }) {
   );
 }
 
+/** Máy thuê (27/10/2026): số liệu như máy nhà + việc đang làm + gói/hạn — để soát "có chạy hết công suất không". */
+interface MayThue extends May {
+  alias: string; tenHienThi: string; goi: string; hetHan: string;
+  viec?: { luongGiong: number; luongRender: number; giongHomNay: number; giong1Gio: number; renderXong: number; ganNhat: string[] };
+}
+
+function conLai(iso: string): string {
+  const ms = new Date(iso).getTime() - Date.now();
+  if (!Number.isFinite(ms)) return '—';
+  if (ms <= 0) return 'đã tới hạn';
+  const p = Math.round(ms / 60000);
+  return p >= 60 ? `còn ${Math.floor(p / 60)} giờ ${p % 60} phút` : `còn ${p} phút`;
+}
+
+function TheMayThue({ m }: { m: MayThue }) {
+  const g = m.gpu?.[0] as Record<string, number | string> | undefined;
+  const pt = typeof g?.phanTram === 'number' ? g.phanTram : null;
+  const v = m.viec;
+  // Đánh giá công suất: GPU ≥ 85% hoặc đủ luồng đang chạy = tốt; GPU thấp mà không có luồng = LÃNG PHÍ.
+  const danhGia = !m.online ? { chu: 'Mất liên lạc', mau: 'var(--a-red, #ff453a)' }
+    : pt !== null && pt >= 85 ? { chu: 'Đang chạy hết công suất', mau: 'var(--a-green, #30d158)' }
+    : v && v.luongGiong + v.luongRender > 0 ? { chu: 'Đang chạy (GPU nghỉ giữa tập)', mau: 'var(--a-yellow, #ffd60a)' }
+    : { chu: 'RẢNH — đang lãng phí', mau: 'var(--a-red, #ff453a)' };
+  return (
+    <div className="space-y-3">
+      <TheMay m={{ ...m, ten: m.tenHienThi }} icon={Cloud} />
+      <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <span className="text-[15px] font-bold" style={{ color: danhGia.mau }}>● {danhGia.chu}</span>
+          <span className="text-[13px]" style={{ color: 'var(--text-muted)' }}>Gói {m.goi} · {conLai(m.hetHan)}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Muc2 nhan="Luồng làm giọng" gt={String(v?.luongGiong ?? 0)} />
+          <Muc2 nhan="Luồng dựng video" gt={String(v?.luongRender ?? 0)} />
+          <Muc2 nhan="Tập giọng hôm nay" gt={String(v?.giongHomNay ?? 0)} />
+          <Muc2 nhan="Trong 1 giờ qua" gt={`${v?.giong1Gio ?? 0} tập`} />
+        </div>
+        {v?.ganNhat?.length ? (
+          <p className="mt-3 text-[13px]" style={{ color: 'var(--text-muted)' }}>Vừa xong: {v.ganNhat.join(' · ')}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 function Muc2({ nhan, gt }: { nhan: string; gt: string }) {
   return (
     <div>
@@ -381,6 +426,7 @@ export function HaTangBang() {
   const [tab, setTab] = useState<Tab>('tong-quan');
   const [vps, setVps] = useState<May | null>(null);
   const [nha, setNha] = useState<May | null>(null);
+  const [thue, setThue] = useState<MayThue[]>([]);
   const [lichSu, setLichSu] = useState<Array<Record<string, number | null>>>([]);
   const [ketQua, setKetQua] = useState<string>('');
   const [dangChay, setDangChay] = useState(false);
@@ -415,6 +461,7 @@ export function HaTangBang() {
       const res = await api.get('/admin/maker-lab/ha-tang');
       setVps(res.data?.data?.vps ?? null);
       setNha(res.data?.data?.nha ?? null);
+      setThue(Array.isArray(res.data?.data?.thue) ? res.data.data.thue : []);
     } catch {
       /* giữ nguyên số cũ — nháy "—" mỗi lần mạng chớp thì khó đọc hơn */
     } finally {
@@ -514,6 +561,14 @@ export function HaTangBang() {
         <div className="grid gap-4 lg:grid-cols-2">
           {vps && <TheMay m={vps} icon={Server} />}
           {nha && <TheMay m={nha} icon={Home} />}
+          {thue.length > 0 && (
+            <div className="lg:col-span-2 mt-2">
+              <h2 className="mb-3 text-[17px] font-bold" style={{ color: 'var(--text-primary)' }}>Máy thuê ({thue.length})</h2>
+              <div className="grid gap-4 lg:grid-cols-2">
+                {thue.map((m) => <TheMayThue key={m.alias} m={m} />)}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

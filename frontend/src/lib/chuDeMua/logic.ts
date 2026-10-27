@@ -30,6 +30,24 @@ export function parseChuDe(raw: unknown): ChuDe {
   return typeof raw === 'string' && (CAC_CHU_DE as readonly string[]).includes(raw) ? (raw as ChuDe) : 'macDinh';
 }
 
+/** 27/10/2026 — chủ đề ADMIN đặt cho cả web (GET /api/v1/giao-dien), lưu đệm ở localStorage dạng "<chuDe>" hoặc
+ *  "<chuDe>!" (dấu ! = admin ÉP cho mọi người, đè lựa chọn riêng). */
+export const KHOA_CHU_DE_WEB = 'chuDeMua.web';
+
+export function maHoaChuDeWeb(chuDe: ChuDe, epTatCa: boolean): string {
+  return chuDe + (epTatCa && chuDe !== 'macDinh' ? '!' : '');
+}
+
+/** ⭐ Chủ đề hiệu lực: admin ép ⇒ của admin; người dùng đã chọn (kể cả "Mặc định") ⇒ của người dùng; chưa chọn ⇒ của
+ *  admin; không có gì ⇒ 'macDinh'. Script chống nháy lặp lại đúng luật này. */
+export function chonChuDe(rawNguoi: string | null, rawWeb: string | null): ChuDe {
+  const ep = typeof rawWeb === 'string' && rawWeb.endsWith('!');
+  const web = parseChuDe(ep ? rawWeb!.slice(0, -1) : rawWeb);
+  if (ep) return web;
+  if (rawNguoi !== null && (CAC_CHU_DE as readonly string[]).includes(rawNguoi)) return rawNguoi as ChuDe;
+  return web;
+}
+
 /** ⭐ MỘT chỗ quyết tháng nào là mùa nào (theo cảm giác ở Việt Nam) — giống hệt `Mua.theoThang` bên iOS:
  *  Xuân 1–3 (Tết) · Hạ 4–7 · Thu 8–10 · Đông 11–12 (Noel). Đổi ở đây thì đổi cả script chống nháy bên dưới. */
 export function muaTheoThang(thang: number): Mua {
@@ -53,6 +71,7 @@ export function giaiMua(chuDe: ChuDe, ngay: Date = new Date()): Mua | null {
 /** Không gắn chủ đề mùa chút nào — trang có hệ theme riêng. */
 export const MAN_TAT: readonly string[] = [
   '/notes', // Notes: 3 theme riêng (light/dark/brown) qua `.notes-theme-root`
+  '/admin', // Admin: nền riêng do admin chọn (admin.css — nâu / xanh / theo mùa), tự vẽ lớp mùa của nó
 ];
 
 /** Giữ MÀU mùa nhưng không hạt, không trang trí, không nền loang (giống `.nenMuaYen()` bên iOS). */
@@ -109,7 +128,9 @@ export function trangThaiDom(chuDe: ChuDe, pathname: string, ngay: Date = new Da
  * chuỗi này trên DOM giả để hai bên không trôi nhau. Lựa chọn Mặc định ⇒ không đụng gì vào DOM.
  */
 export const CHU_DE_MUA_BOOT_SCRIPT =
-  "try{var c=localStorage.getItem('" + KHOA_CHU_DE + "'),m=null;" +
+  "try{var c=localStorage.getItem('" + KHOA_CHU_DE + "'),w=localStorage.getItem('" + KHOA_CHU_DE_WEB + "'),m=null," +
+  "L=['macDinh','tuDong','xuan','ha','thu','dong'];" +
+  "if(w&&w.slice(-1)==='!')c=w.slice(0,-1);else if(L.indexOf(c)<0)c=w;" +
   "if(c==='tuDong'){var th=new Date().getMonth()+1;m=th<=3?'xuan':th<=7?'ha':th<=10?'thu':'dong'}" +
   "else if(c==='xuan'||c==='ha'||c==='thu'||c==='dong')m=c;" +
   "if(m){var k=function(p,l){var s=p.split('/');for(var i=0;i<l.length;i++){var e=l[i].split('/'),o=e.length<=s.length;" +

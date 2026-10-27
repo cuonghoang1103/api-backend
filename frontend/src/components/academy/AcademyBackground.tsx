@@ -39,9 +39,52 @@ export default function AcademyBackground() {
     const STAR_COUNT = 150;
     const ORBIT_COUNT = 5;
 
+    // 27/10/2026 (đo: /academy đứng yên mà luồng vẽ bận ~60%): lớp TĨNH (nền, tinh vân, viền tối) vẽ MỘT lần vào
+    // canvas phụ khi đổi cỡ; ánh sao dùng ảnh mẫu vẽ sẵn cho mỗi màu (trước: ~160 createRadialGradient MỖI khung);
+    // trần 30 khung/giây. Hình ảnh y như cũ.
+    const nen = document.createElement('canvas');
+    const anhSao = new Map<string, HTMLCanvasElement>();
+    const saoMau = (mau: string) => {
+      let c = anhSao.get(mau);
+      if (!c) {
+        c = document.createElement('canvas'); c.width = c.height = 32;
+        const x = c.getContext('2d')!;
+        const g = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+        g.addColorStop(0, mau); g.addColorStop(1, 'transparent');
+        x.fillStyle = g; x.beginPath(); x.arc(16, 16, 16, 0, Math.PI * 2); x.fill();
+        anhSao.set(mau, c);
+      }
+      return c;
+    };
+    const veNen = () => {
+      const w = canvas.width, h = canvas.height;
+      nen.width = w; nen.height = h;
+      const c = nen.getContext('2d')!;
+      const bg = c.createRadialGradient(w * 0.3, h * 0.3, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.8);
+      bg.addColorStop(0, 'rgba(5, 3, 20, 0.97)');
+      bg.addColorStop(0.4, 'rgba(3, 2, 12, 0.99)');
+      bg.addColorStop(1, 'rgba(1, 1, 5, 1)');
+      c.fillStyle = bg; c.fillRect(0, 0, w, h);
+      c.save(); c.globalAlpha = 0.035;
+      const n1 = c.createRadialGradient(w * 0.2, h * 0.25, 0, w * 0.2, h * 0.25, 350);
+      n1.addColorStop(0, '#8b5cf6'); n1.addColorStop(1, 'transparent'); c.fillStyle = n1; c.fillRect(0, 0, w, h);
+      const n2 = c.createRadialGradient(w * 0.8, h * 0.65, 0, w * 0.8, h * 0.65, 280);
+      n2.addColorStop(0, '#22d3ee'); n2.addColorStop(1, 'transparent'); c.fillStyle = n2; c.fillRect(0, 0, w, h);
+      c.restore();
+    };
+    const vien = document.createElement('canvas');
+    const veVien = () => {
+      const w = canvas.width, h = canvas.height;
+      vien.width = w; vien.height = h;
+      const c = vien.getContext('2d')!;
+      const vig = c.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, Math.max(w, h) * 0.8);
+      vig.addColorStop(0, 'transparent'); vig.addColorStop(1, 'rgba(0,0,0,0.55)');
+      c.fillStyle = vig; c.fillRect(0, 0, w, h);
+    };
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      veNen(); veVien();
     };
 
     function init() {
@@ -73,55 +116,29 @@ export default function AcademyBackground() {
 
     let lastTime = 0;
     function draw(ts: number) {
-      const dt = Math.min(ts - lastTime, 50);
+      if (ts && ts - lastTime < 1000 / 30 - 2) { rafRef.current = requestAnimationFrame(draw); return; }
+      const dt = Math.min(ts - lastTime, 50) * 2; // bù nửa số khung ⇒ tốc độ chuyển động như cũ
       lastTime = ts;
-      timeRef.current += 0.004;
+      timeRef.current += 0.008;
 
       const w = canvas.width;
       const h = canvas.height;
 
       ctx.clearRect(0, 0, w, h);
-
-      // Deep space background
-      const bg = ctx.createRadialGradient(w * 0.3, h * 0.3, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.8);
-      bg.addColorStop(0, 'rgba(5, 3, 20, 0.97)');
-      bg.addColorStop(0.4, 'rgba(3, 2, 12, 0.99)');
-      bg.addColorStop(1, 'rgba(1, 1, 5, 1)');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, w, h);
-
-      // Nebula glows
-      ctx.save();
-      ctx.globalAlpha = 0.035;
-      const n1 = ctx.createRadialGradient(w * 0.2, h * 0.25, 0, w * 0.2, h * 0.25, 350);
-      n1.addColorStop(0, '#8b5cf6');
-      n1.addColorStop(1, 'transparent');
-      ctx.fillStyle = n1;
-      ctx.fillRect(0, 0, w, h);
-
-      const n2 = ctx.createRadialGradient(w * 0.8, h * 0.65, 0, w * 0.8, h * 0.65, 280);
-      n2.addColorStop(0, '#22d3ee');
-      n2.addColorStop(1, 'transparent');
-      ctx.fillStyle = n2;
-      ctx.fillRect(0, 0, w, h);
-      ctx.restore();
+      // Nền sâu + tinh vân: đã vẽ sẵn
+      ctx.drawImage(nen, 0, 0);
 
       // Stars
       for (const star of starsRef.current) {
-        star.twinklePhase += star.twinkleSpeed;
+        star.twinklePhase += star.twinkleSpeed * 2;
         const twinkle = (Math.sin(star.twinklePhase) + 1) / 2;
         const alpha = star.brightness * 0.3 + twinkle * star.brightness * 0.7;
 
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        const glowGrad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 4);
-        glowGrad.addColorStop(0, star.color);
-        glowGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = glowGrad;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size * 4, 0, Math.PI * 2);
-        ctx.fill();
+        const r4 = star.size * 4;
+        ctx.drawImage(saoMau(star.color), star.x - r4, star.y - r4, r4 * 2, r4 * 2);
 
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
@@ -129,7 +146,7 @@ export default function AcademyBackground() {
         ctx.fill();
         ctx.restore();
 
-        star.y += 0.04;
+        star.y += 0.08;
         if (star.y > h + 10) {
           star.y = -10;
           star.x = Math.random() * w;
@@ -197,12 +214,8 @@ export default function AcademyBackground() {
       }
       ctx.restore();
 
-      // Vignette
-      const vig = ctx.createRadialGradient(w / 2, h / 2, h * 0.3, w / 2, h / 2, Math.max(w, h) * 0.8);
-      vig.addColorStop(0, 'transparent');
-      vig.addColorStop(1, 'rgba(0,0,0,0.55)');
-      ctx.fillStyle = vig;
-      ctx.fillRect(0, 0, w, h);
+      // Vignette (vẽ sẵn)
+      ctx.drawImage(vien, 0, 0);
 
       rafRef.current = requestAnimationFrame(draw);
     }

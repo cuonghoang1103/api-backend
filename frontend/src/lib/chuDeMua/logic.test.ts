@@ -169,9 +169,22 @@ describe('tương phản WCAG mọi mùa × sáng/tối', () => {
     for (const s of boChon) {
       for (const phan of s.split(/,(?![^(]*\))/)) {
         const p = phan.trim();
-        assert.ok(/data-mua|\.xem-mua|\.nen-mua-canvas/.test(p), `bộ chọn chạm Mặc định: ${p}`);
+        assert.ok(/data-mua|\.xem-mua|\.nen-mua-canvas|\.nen-mua-quang|^@keyframes|^@media|^\d+%$|^(from|to)$/.test(p), `bộ chọn chạm Mặc định: ${p}`);
       }
     }
     assert.ok(!/\.dark(?![\w-])/.test(CSS.replace(/\/\*[\s\S]*?\*\//g, '')), 'không bao giờ dùng class .dark');
   });
+});
+
+// ── 27/10/2026: chủ đề admin đặt cho cả web ──
+import { chonChuDe, maHoaChuDeWeb } from './logic';
+it('chonChuDe: admin ép > người chọn > admin mặc định > macDinh', () => {
+  assert.equal(chonChuDe(null, null), 'macDinh');
+  assert.equal(chonChuDe(null, 'thu'), 'thu');
+  assert.equal(chonChuDe('xuan', 'thu'), 'xuan');
+  assert.equal(chonChuDe('macDinh', 'thu'), 'macDinh');
+  assert.equal(chonChuDe('xuan', 'dong!'), 'dong');
+  assert.equal(chonChuDe('rac', 'ha'), 'ha');
+  assert.equal(maHoaChuDeWeb('thu', true), 'thu!');
+  assert.equal(maHoaChuDeWeb('macDinh', true), 'macDinh');
 });

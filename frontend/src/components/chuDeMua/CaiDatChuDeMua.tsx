@@ -82,7 +82,7 @@ function TheXemTruoc({ chuDe, dangChon, chay, toi, onChon }: {
 }
 
 export default function CaiDatChuDeMua() {
-  const { chuDe, setChuDe, hieuUngDong, setHieuUngDong } = useChuDeMua();
+  const { chuDe, setChuDe, hieuUngDong, setHieuUngDong, epBoiAdmin } = useChuDeMua();
   const { toi, giamClass } = useDomChuDe();
   const giamHdh = useGiamChuyenDong();
   const [daMount, setDaMount] = useState(false);
@@ -108,6 +108,11 @@ export default function CaiDatChuDeMua() {
           />
         ))}
       </div>
+      {daMount && epBoiAdmin && (
+        <p className="mt-3 text-xs font-medium" style={{ color: 'var(--accent-color)' }}>
+          Quản trị viên đang đặt chủ đề này cho toàn bộ web — lựa chọn của bạn sẽ có hiệu lực lại khi họ bỏ đặt.
+        </p>
+      )}
       {daMount && chuDe === 'tuDong' && muaTuDong && (
         <p className="mt-3 text-xs" style={{ color: 'var(--text-muted)' }}>
           Đang là mùa {TEN_MUA[muaTuDong]}. Đông: tháng 11–12 · Xuân: 1–3 · Hạ: 4–7 · Thu: 8–10.
@@ -119,7 +124,9 @@ export default function CaiDatChuDeMua() {
           label="Hiệu ứng động"
           description={
             giamHdh || giamClass
-              ? 'Đang đứng yên vì bạn bật Giảm chuyển động. Trang trí vẫn hiện, chỉ không chuyển động.'
+              ? giamClass
+                ? 'Đang đứng yên vì bạn bật Giảm chuyển động của web. Trang trí vẫn hiện, chỉ không chuyển động.'
+                : 'Máy đang bật Giảm chuyển động (hệ điều hành) ⇒ hiệu ứng chạy chậm lại một nửa.'
               : 'Hoa rơi, tuyết rơi, sóng, đèn nháy. Tắt đi thì trang trí đứng yên. Màn đọc dài (bài học, đọc sách, làm bài thi, video, CT Work) luôn chỉ giữ màu để bạn tập trung.'
           }
           control={

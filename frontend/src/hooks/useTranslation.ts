@@ -103,7 +103,7 @@ export function useTranslation() {
     if (str) {
       if (params) {
         Object.entries(params).forEach(([k, v]) => {
-          str = str!.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
+          str = str!.replace(new RegExp(`\\{\\{${k}\\}\\}|\\{${k}\\}`, 'g'), String(v));
         });
       }
       return str;
@@ -114,7 +114,7 @@ export function useTranslation() {
       if (fb) {
         if (params) {
           Object.entries(params).forEach(([k, v]) => {
-            fb = fb!.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
+            fb = fb!.replace(new RegExp(`\\{\\{${k}\\}\\}|\\{${k}\\}`, 'g'), String(v));
           });
         }
         return fb;

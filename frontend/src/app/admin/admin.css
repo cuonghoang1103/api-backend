@@ -49,8 +49,14 @@
   --a-accent: #0c68e9;
   --a-accent-hover: #2b7ef5;
   --a-accent-text: #7cb3ff;
-  --a-accent-soft: rgba(12, 104, 233, 0.22);
+  --a-accent-rgb: 12, 104, 233;
+  --a-accent-soft: rgba(var(--a-accent-rgb), 0.22);
   --a-accent-border: rgba(80, 150, 255, 0.7);
+  --a-card: rgba(15, 33, 80, 0.72);       /* thẻ kính */
+  --a-float: #0d1d46;                      /* menu, hộp thoại (đặc) */
+  --a-frame: rgba(5, 13, 34, 0.66);        /* khung nội dung */
+  --a-topbar: #08132e;
+  --a-white-hover: #e6eeff;
   --a-navy: #021d6f;             /* chữ trên nút trắng */
   --a-gradient: linear-gradient(135deg, #141a21 0%, #021d6f 50%, #063ba7 100%);
 
@@ -120,7 +126,7 @@
 .admin-root table td,
 .admin-root table th { font-variant-numeric: tabular-nums; }
 
-.admin-root ::selection { background: rgba(12, 104, 233, 0.5); }
+.admin-root ::selection { background: rgba(var(--a-accent-rgb), 0.5); }
 
 /* Thanh cuộn mảnh, không giành chỗ của nội dung. */
 .admin-root * { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
@@ -226,7 +232,7 @@
 .admin-root [class^="bg-neon-indigo/"],
 .admin-root [class*=" bg-neon-indigo/"] { background-color: var(--a-accent-soft); }
 .admin-root [class*="hover:bg-neon-violet/"]:hover,
-.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(12, 104, 233, 0.32); }
+.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(var(--a-accent-rgb), 0.32); }
 .admin-root [class^="border-neon-violet"],
 .admin-root [class*=" border-neon-violet"],
 .admin-root [class^="border-neon-indigo"],
@@ -234,7 +240,7 @@
 .admin-root [class*="focus:border-neon-violet"]:focus,
 .admin-root [class*="focus:border-neon-indigo"]:focus,
 .admin-root [class*="focus-within:border-neon-violet"]:focus-within { border-color: var(--a-accent-border); }
-.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(12, 104, 233, 0.45); }
+.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(var(--a-accent-rgb), 0.45); }
 .admin-root [class*="hover:text-neon-violet"]:hover { color: var(--a-accent-text); }
 .admin-root [class*="hover:border-neon-violet"]:hover { border-color: var(--a-accent-border); }
 
@@ -293,7 +299,7 @@
   background: var(--a-accent);
   color: #fff;
   font-weight: 700;
-  box-shadow: 0 6px 18px -6px rgba(12, 104, 233, 0.7);
+  box-shadow: 0 6px 18px -6px rgba(var(--a-accent-rgb), 0.7);
 }
 .admin-root .a-tile {
   display: inline-flex; align-items: center; justify-content: center;
@@ -317,7 +323,7 @@
 .admin-root .a-btn-primary:hover { color: #fff; background: var(--a-accent-hover); }
 /* Nút trắng chữ xanh than — "Chọn GPU để thuê" của aidev */
 .admin-root .a-btn-white { color: var(--a-navy); background: #fff; border-color: transparent; }
-.admin-root .a-btn-white:hover { color: var(--a-navy); background: #e6eeff; }
+.admin-root .a-btn-white:hover { color: var(--a-navy); background: var(--a-white-hover); }
 .admin-root .a-icon-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px; border-radius: 10px; color: var(--a-text-3);
@@ -330,7 +336,7 @@
    thấy mờ mờ qua nó. Đây là chỗ DUY NHẤT trong admin còn dùng kính mờ —
    ở đây nó có nghĩa (báo rằng còn nội dung bên dưới), không phải trang trí. */
 .admin-root .a-topbar {
-  background: color-mix(in srgb, #08132e 70%, transparent);
+  background: color-mix(in srgb, var(--a-topbar) 70%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
@@ -365,7 +371,7 @@
    thay cho bóng đổ: mắt vẫn đọc được "đây là một mặt phẳng riêng" mà không
    quay lại kiểu thẻ nổi. */
 .admin-root main .bg-darkcard {
-  background-color: rgba(15, 33, 80, 0.72);
+  background-color: var(--a-card);
   background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 160px);
   border-color: rgba(255, 255, 255, 0.13);
 }
@@ -373,7 +379,7 @@
 /* Hàng bảng/danh sách: nền rê chuột ngả về màu nhấn thay vì trắng đục */
 .admin-root main tbody tr:hover,
 .admin-root main .divide-darkborder > *:hover {
-  background-color: rgba(12, 104, 233, 0.12);
+  background-color: rgba(var(--a-accent-rgb), 0.12);
 }
 /* Đầu bảng: nền ô thông số + chữ hoa nhỏ, dễ quét như bảng của aidev */
 .admin-root main thead { background-color: rgba(255, 255, 255, 0.06); }
@@ -385,7 +391,7 @@
 .admin-root main textarea:focus,
 .admin-root main select:focus {
   border-color: var(--a-accent-border);
-  box-shadow: 0 0 0 3px rgba(12, 104, 233, 0.3);
+  box-shadow: 0 0 0 3px rgba(var(--a-accent-rgb), 0.3);
 }
 
 /* Thanh tiến trình của trang cũ (h-1/h-1.5/h-2 + rounded-full) giữ màu thật
@@ -414,14 +420,57 @@
 
 /* Khung nội dung: kính tối trên nền chuyển màu xanh (thẻ "Gói máy gợi ý" của aidev). */
 .admin-root .a-frame {
-  background: rgba(5, 13, 34, 0.66);
+  background: var(--a-frame);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   backdrop-filter: blur(18px) saturate(140%);
 }
-@supports not (backdrop-filter: blur(1px)) { .admin-root .a-frame { background: #071330; } }
+@supports not (backdrop-filter: blur(1px)) { .admin-root .a-frame { background: var(--a-float); } }
 /* Lớp nổi (menu, hộp thoại) phải ĐẶC để chữ bên dưới không lẫn vào. */
 .admin-root .fixed .bg-darkcard,
 .admin-root .absolute.bg-darkcard,
 .admin-root [role="dialog"] .bg-darkcard,
 .admin-root [role="dialog"].bg-darkcard,
-.admin-root [role="menu"] { background-color: #0d1d46; }
+.admin-root [role="menu"] { background-color: var(--a-float); }
+
+/* ═══════════════ NỀN ADMIN do admin chọn (27/10/2026) — `.admin-root[data-nen]` ═══════════════
+   Gốc .admin-root ở trên = XANH (aidev). Mặc định giờ là NÂU dịu ("đen nâu dịu dịu" — chủ web), đặt ở /admin/giao-dien.
+   'mua' = bảng tối của mùa đang hiệu lực (data-mua-admin) + lớp hạt mùa vẽ phía sau khung kính. */
+.admin-root[data-nen="nau"] {
+  --a-bg: #140f0c;
+  --a-panel: #1a1310;
+  --a-raised: #231a15;
+  --a-raised-2: #2e221b;
+  --a-hover: rgba(255, 236, 220, 0.07);
+  --a-active: rgba(255, 236, 220, 0.12);
+  --a-border: rgba(255, 236, 220, 0.11);
+  --a-border-strong: rgba(255, 236, 220, 0.22);
+  --a-text: #fbf4ec;
+  --a-text-2: #dccbb9;
+  --a-text-3: #a99581;
+  --a-accent: #c4793c;
+  --a-accent-hover: #d68d50;
+  --a-accent-text: #f0b27e;
+  --a-accent-rgb: 196, 121, 60;
+  --a-accent-border: rgba(232, 160, 100, 0.7);
+  --a-navy: #2a1a10;
+  --a-gradient: linear-gradient(135deg, #0f0b09 0%, #1d1511 50%, #2b1d15 100%);
+  --a-card: rgba(42, 30, 23, 0.72);
+  --a-float: #261c16;
+  --a-frame: rgba(18, 13, 10, 0.62);
+  --a-topbar: #15100d;
+  --a-white-hover: #f6ece2;
+}
+.admin-root[data-nen="mua"][data-mua-admin="xuan"] { --a-bg: #170b0a; --a-panel: #1f0f0d; --a-raised: #2a1614; --a-raised-2: #3a201c; --a-accent: #d9443f; --a-accent-hover: #ef5350; --a-accent-text: #ff9a8f; --a-accent-rgb: 217, 68, 63; --a-accent-border: rgba(255, 130, 120, 0.7); --a-navy: #3a1210; --a-gradient: linear-gradient(135deg, #120807 0%, #3a1210 55%, #241307 100%); --a-card: rgba(48, 22, 19, 0.7); --a-float: #2a1614; --a-frame: rgba(23, 11, 10, 0.55); --a-topbar: #170b0a; --a-white-hover: #ffeeea; --a-text-2: #e3c7be; --a-text-3: #b69389; }
+.admin-root[data-nen="mua"][data-mua-admin="ha"] { --a-bg: #051320; --a-panel: #081a2b; --a-raised: #0e2233; --a-raised-2: #143049; --a-accent: #1f86c8; --a-accent-hover: #3393d0; --a-accent-text: #8fd0f5; --a-accent-rgb: 31, 134, 200; --a-accent-border: rgba(120, 200, 245, 0.7); --a-navy: #0b3350; --a-gradient: linear-gradient(135deg, #04101a 0%, #0b3350 55%, #14232a 100%); --a-card: rgba(14, 40, 62, 0.7); --a-float: #0e2233; --a-frame: rgba(5, 19, 32, 0.55); --a-topbar: #051320; --a-white-hover: #e6f6ff; --a-text-2: #b9d2e1; --a-text-3: #8ba7b9; }
+.admin-root[data-nen="mua"][data-mua-admin="thu"] { --a-bg: #160e09; --a-panel: #1e140d; --a-raised: #2a1c12; --a-raised-2: #3a2718; --a-accent: #d0652a; --a-accent-hover: #e27a3c; --a-accent-text: #f4ad7a; --a-accent-rgb: 208, 101, 42; --a-accent-border: rgba(240, 150, 90, 0.7); --a-navy: #3a1e0c; --a-gradient: linear-gradient(135deg, #100a06 0%, #3a1e0c 55%, #2a1410 100%); --a-card: rgba(48, 30, 18, 0.7); --a-float: #2a1c12; --a-frame: rgba(22, 14, 9, 0.55); --a-topbar: #160e09; --a-white-hover: #fff1e6; --a-text-2: #e3cdb8; --a-text-3: #b39a83; }
+.admin-root[data-nen="mua"][data-mua-admin="dong"] { --a-bg: #0a1018; --a-panel: #0e1622; --a-raised: #152030; --a-raised-2: #1e2c40; --a-accent: #4f8fd6; --a-accent-hover: #6aa4e6; --a-accent-text: #b5d4f7; --a-accent-rgb: 79, 143, 214; --a-accent-border: rgba(160, 200, 245, 0.7); --a-navy: #12243c; --a-gradient: linear-gradient(135deg, #070b12 0%, #12243c 55%, #1a2230 100%); --a-card: rgba(26, 38, 56, 0.7); --a-float: #152030; --a-frame: rgba(10, 16, 24, 0.55); --a-topbar: #0a1018; --a-white-hover: #eef5ff; --a-text-2: #c4d3e6; --a-text-3: #93a6bf; }
+/* Lớp mùa của admin nằm TRONG .admin-root (không portal ra body như trang ngoài): nền gradient → ánh sáng + hạt → khung. */
+.admin-root[data-nen="mua"] { isolation: isolate; }   /* z-index âm của lớp mùa vẽ TRÊN nền gốc, DƯỚI nội dung */
+.admin-root .nen-mua-admin { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.admin-root .nen-mua-admin .nen-mua-quang,
+.admin-root .nen-mua-admin .nen-mua-canvas { z-index: 0; }
+/* Màu ánh sáng loang cho lớp mùa trong admin (admin nằm trong MAN_TAT nên không có html[data-mua]). */
+.admin-root[data-mua-admin="xuan"] .nen-mua-admin { --mua-quang: rgba(255, 112, 67, 0.3); --accent-color: #ef5350; --mua-tren: #3a1210; }
+.admin-root[data-mua-admin="ha"] .nen-mua-admin { --mua-quang: rgba(255, 201, 74, 0.35); --accent-color: #3393d0; --mua-tren: #0b3350; }
+.admin-root[data-mua-admin="thu"] .nen-mua-admin { --mua-quang: rgba(255, 231, 176, 0.3); --accent-color: #dd6f35; --mua-tren: #351a0c; }
+.admin-root[data-mua-admin="dong"] .nen-mua-admin { --mua-quang: rgba(156, 199, 255, 0.22); --accent-color: #4d8fe3; --mua-tren: #0f2445; }

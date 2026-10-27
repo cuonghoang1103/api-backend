@@ -762,9 +762,9 @@ adminRouter.post('/maintenance', async (req, res: Response<ApiResponse>, next) =
  */
 adminRouter.get('/ha-tang', async (_req, res: Response<ApiResponse>, next) => {
   try {
-    const { soLieuVps, soLieuMayNha } = await import('../services/makerlab/haTang.js');
-    const [vps, nha] = await Promise.all([soLieuVps(), soLieuMayNha()]);
-    res.json({ success: true, data: { vps, nha, luc: Date.now() } });
+    const { soLieuVps, soLieuMayNha, soLieuMayThue } = await import('../services/makerlab/haTang.js');
+    const [vps, nha, thue] = await Promise.all([soLieuVps(), soLieuMayNha(), soLieuMayThue()]);
+    res.json({ success: true, data: { vps, nha, thue, luc: Date.now() } });
   } catch (e) {
     next(e);
   }

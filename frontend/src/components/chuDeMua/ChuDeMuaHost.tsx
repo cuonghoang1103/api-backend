@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import { apChuDeLenDom, useChuDeMua, useDomChuDe } from '@/lib/chuDeMua/useChuDeMua';
+import { apChuDeLenDom, napChuDeWeb, useChuDeMua, useDomChuDe } from '@/lib/chuDeMua/useChuDeMua';
 import type { Mua } from '@/lib/chuDeMua/logic';
 
 const NenMuaCanvas = dynamic(() => import('./NenMuaCanvas'), { ssr: false });
@@ -37,6 +37,8 @@ export default function ChuDeMuaHost() {
 
   // Đổi trang / đổi lựa chọn ⇒ gắn lại. Quay lại tab (có thể đã qua nửa đêm 31/10 → 1/11) ⇒ tính lại "Tự động".
   useEffect(() => { apChuDeLenDom(pathname); }, [pathname, chuDe]);
+  // Chủ đề mặc định do admin đặt (27/10/2026) — nạp lúc rảnh, không chặn lần vẽ đầu.
+  useEffect(() => { napChuDeWeb(); }, []);
   useEffect(() => {
     const f = () => { if (document.visibilityState === 'visible') apChuDeLenDom(window.location.pathname); };
     document.addEventListener('visibilitychange', f);
@@ -44,6 +46,8 @@ export default function ChuDeMuaHost() {
   }, []);
 
   if (!mua || yen) return null;
-  const chay = hieuUngDong && !giamHdh && !giamClass;
-  return <NenMuaCanvas mua={mua as Mua} toi={toi} chay={chay} />;
+  // 27/10/2026: "Giảm chuyển động" của HỆ ĐIỀU HÀNH (nhiều Mac bật sẵn để tiết kiệm pin) không còn làm đứng yên hẳn —
+  // chỉ chậm còn một nửa. Đứng yên khi người dùng tắt "Hiệu ứng động" hoặc bật Giảm chuyển động của CHÍNH web.
+  const chay = hieuUngDong && !giamClass;
+  return <NenMuaCanvas mua={mua as Mua} toi={toi} chay={chay} tocDo={giamHdh ? 0.5 : 1} />;
 }

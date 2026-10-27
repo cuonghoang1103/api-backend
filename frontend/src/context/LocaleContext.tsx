@@ -16,7 +16,7 @@ type Locale = 'vi' | 'en';
 interface LocaleContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
   isLoaded: boolean;
 }
 
@@ -94,12 +94,16 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new Event('locale-changed'));
   };
 
-  const t = (key: string): string => {
+  // 27/10/2026: nhận tham số — trước đây bỏ qua params nên admin hiện nguyên "{count} sản phẩm", "{start}–{end}".
+  // Câu dịch dùng cả {{x}} lẫn {x} ⇒ thay cả hai.
+  const dien = (s: string, params?: Record<string, string | number>) =>
+    params ? s.replace(/\{\{?(\w+)\}?\}/g, (m, k: string) => (k in params ? String(params[k]) : m)) : s;
+  const t = (key: string, params?: Record<string, string | number>): string => {
     const result = getNestedValue(translations[locale], key);
-    if (typeof result === 'string') return result;
+    if (typeof result === 'string') return dien(result, params);
     if (locale !== 'en') {
       const fallback = getNestedValue(translations['en'], key);
-      if (typeof fallback === 'string') return fallback;
+      if (typeof fallback === 'string') return dien(fallback, params);
     }
     return key;
   };
@@ -125,7 +129,7 @@ export function useTranslation() {
   if (context === undefined) {
     // Fallback when not in provider
     return {
-      t: (key: string): string => key,
+      t: (key: string, _params?: Record<string, string | number>): string => key,
       locale: 'en' as Locale,
       setLocale: () => {},
       isLoaded: false

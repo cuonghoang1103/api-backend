@@ -51,7 +51,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`rounded-[20px] border border-white/[0.13] bg-[rgba(15,33,80,0.72)] p-5 ${className}`}>
+    <section className={`rounded-[20px] border border-white/[0.13] bg-[var(--a-card)] p-5 ${className}`}>
       <div className="mb-3 flex min-h-9 items-center justify-between gap-2">
         <h2 className="flex items-center gap-2.5 text-[17px] font-bold text-white">
           {Icon && (
@@ -138,7 +138,7 @@ export function Metric({
 }) {
   const hintColor = up === undefined ? 'var(--a-text-3)' : up ? 'var(--a-green)' : 'var(--a-red)';
   return (
-    <div className="min-w-0 rounded-[20px] border border-white/[0.13] bg-[rgba(15,33,80,0.72)] px-5 py-4">
+    <div className="min-w-0 rounded-[20px] border border-white/[0.13] bg-[var(--a-card)] px-5 py-4">
       <p className="flex items-center gap-1.5 text-[13px] font-bold uppercase leading-4 tracking-[0.06em] text-[var(--a-accent-text)]">
         {tone && <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: tone }} />}
         {label}

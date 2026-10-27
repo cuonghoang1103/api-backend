@@ -27,6 +27,11 @@ import AdminSidebar from '@/components/admin/shell/AdminSidebar';
 import CommandPalette from '@/components/admin/shell/CommandPalette';
 import { ADMIN_NAV, activeHref } from '@/components/admin/shell/nav';
 import { useAdminT } from '@/components/admin/i18n';
+import dynamic from 'next/dynamic';
+import { useNenAdmin } from '@/components/admin/shell/useNenAdmin';
+
+// Lớp hoa/lá/tuyết rơi — chỉ tải khi admin chọn nền "Theo mùa".
+const NenMuaCanvas = dynamic(() => import('@/components/chuDeMua/NenMuaCanvas'), { ssr: false });
 
 const KHOA_SIDEBAR = 'admin.sidebar.hidden';
 
@@ -47,6 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [cmdOpen, setCmdOpen] = useState(false);
   const [inbox, setInbox] = useState(0);
   const { t, vi, setLocale } = useAdminT();
+  const { nen, mua } = useNenAdmin();
 
   // Kiểm quyền admin MỘT lần khi vào /admin, không kiểm lại mỗi lần đổi trang:
   // layout sống suốt các lần điều hướng con, và một phản hồi chập chờn giữa
@@ -117,7 +123,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!authChecked) {
     return (
-      <div className="admin-root flex h-dvh items-center justify-center">
+      <div className="admin-root flex h-dvh items-center justify-center" data-nen={nen} data-mua-admin={mua ?? undefined}>
         <div className="flex items-center gap-2.5 text-[13px] text-[var(--a-text-3)]">
           <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-[var(--a-text-3)] border-t-transparent" />
           {t('checkingAccess')}
@@ -135,7 +141,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <MotionConfig reducedMotion="always">
-      <div className="admin-root flex h-dvh overflow-hidden">
+      <div className="admin-root flex h-dvh overflow-hidden" data-nen={nen} data-mua-admin={mua ?? undefined}>
+        {nen === 'mua' && mua && <NenMuaCanvas mua={mua} toi chay tocDo={0.8} trongAdmin />}
         {/* Sidebar — desktop */}
         {!sidebarHidden && (
           <aside className="hidden w-[256px] shrink-0 md:block">

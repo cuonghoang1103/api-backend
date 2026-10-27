@@ -201,3 +201,25 @@ export function mucNhiet(
   if (doC < bang[3]) return 'nong';
   return 'nguy';
 }
+
+/** Một máy thuê (27/10/2026): số liệu như máy nhà + việc đang làm. Máy Mac thu qua ssh, máy nhà phục vụ /may-thue. */
+export interface SoLieuMayThue extends SoLieuMay {
+  alias: string;
+  tenHienThi: string;
+  goi: string;
+  hetHan: string;
+  viec?: { luongGiong: number; luongRender: number; giongHomNay: number; giong1Gio: number; renderXong: number; ganNhat: string[] };
+}
+
+export async function soLieuMayThue(): Promise<SoLieuMayThue[]> {
+  const goc = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
+  try {
+    const res = await fetch(`${goc}/may-thue`, { signal: AbortSignal.timeout(8_000) });
+    if (!res.ok) return [];
+    const d = (await res.json()) as { may?: SoLieuMayThue[] };
+    return Array.isArray(d.may) ? d.may : [];
+  } catch (e) {
+    logger.debug('Hạ tầng: không lấy được số liệu máy thuê', { error: e instanceof Error ? e.message : String(e) });
+    return [];
+  }
+}

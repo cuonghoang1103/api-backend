@@ -306,6 +306,37 @@ html[data-mua]:not([data-mua-yen]) .app-main [class*="chuongTrinh_goc"].min-h-sc
   contain: strict;
 }
 
+/* Ánh sáng loang trôi chậm SAU canvas (27/10/2026) — 3 đốm mờ lớn, chỉ animate transform/opacity ⇒ compositor (GPU),
+   luồng chính không làm gì. Màu lấy từ token mùa (--mua-quang / --accent-color / --mua-tren). */
+.nen-mua-quang {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.nen-mua-quang i {
+  position: absolute;
+  width: 62vmax;
+  height: 62vmax;
+  border-radius: 50%;
+  opacity: 0.55;
+  will-change: transform;
+  animation: nen-mua-troi 26s ease-in-out infinite alternate;
+}
+.nen-mua-quang i:nth-child(1) { left: -18vmax; top: -22vmax; background: radial-gradient(closest-side, var(--mua-quang), transparent); }
+.nen-mua-quang i:nth-child(2) { right: -22vmax; top: 18vh; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-color) 22%, transparent), transparent); animation-duration: 34s; animation-delay: -9s; }
+.nen-mua-quang i:nth-child(3) { left: 22vw; bottom: -30vmax; background: radial-gradient(closest-side, color-mix(in srgb, var(--mua-tren) 70%, transparent), transparent); animation-duration: 40s; animation-delay: -17s; }
+html.theme-dark .nen-mua-quang i { opacity: 0.42; }
+@keyframes nen-mua-troi {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(6vw, 4vh, 0) scale(1.12); }
+  100% { transform: translate3d(-4vw, 8vh, 0) scale(0.94); }
+}
+.nen-mua-quang[data-chay="0"] i { animation: none; }
+@media (prefers-reduced-motion: reduce) { .nen-mua-quang i { animation-duration: 70s; } }
+
 /* Thẻ xem trước ở Cài đặt → Giao diện: mỗi thẻ mang bảng của CHÍNH nó (data-xem), kể cả "Mặc định" (giá trị gốc
    của globals.css — để thẻ Mặc định vẫn đúng khi trang đang mang màu mùa khác). */
 .xem-mua[data-xem="macDinh"] {

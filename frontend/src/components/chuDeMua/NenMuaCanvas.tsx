@@ -66,7 +66,11 @@ function doChrome(w: number, h: number) {
   return { dinh, day: Math.max(0, h - thanhDay), tranhPhai, tranhTrai };
 }
 
-export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolean; chay: boolean }) {
+export default function NenMuaCanvas({ mua, toi, chay, tocDo = 1, trongAdmin = false }: {
+  mua: Mua; toi: boolean; chay: boolean; tocDo?: number;
+  /** Admin: vẽ TẠI CHỖ (trong .admin-root), không portal ra body, không né thanh điều hướng của site. */
+  trongAdmin?: boolean;
+}) {
   const ref = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
       h = window.innerHeight;
       cv.width = Math.round(w * dpr);
       cv.height = Math.round(h * dpr);
-      chrome = doChrome(w, h);
+      chrome = trongAdmin ? { dinh: 0, day: 0, tranhPhai: Infinity, tranhTrai: Infinity } : doChrome(w, h);
     };
     const ve = (t: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -97,7 +101,7 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
       raf = requestAnimationFrame(vongLap);
       if (bayGio - truoc < KHUNG_MS) return;
       truoc = bayGio;
-      ve(((bayGio - goc) / 1000) % 36_000);
+      ve((((bayGio - goc) / 1000) * tocDo) % 36_000);
     };
     const batDau = () => {
       cancelAnimationFrame(raf);
@@ -122,7 +126,7 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
     // Nút nổi xuất hiện / đổi chỗ sau khi trang hydrate (robot, trình nhạc mở…) ⇒ đo lại mỗi 1,5 s (≈70 lần
     // elementsFromPoint — rẻ); khác thì vẽ lại (cần cho chế độ đứng yên, vốn chỉ vẽ một khung).
     const doLai = setInterval(() => {
-      if (document.visibilityState === 'hidden') return;
+      if (document.visibilityState === 'hidden' || trongAdmin) return;
       const m = doChrome(w, h);
       if (m.dinh !== chrome.dinh || m.day !== chrome.day || m.tranhPhai !== chrome.tranhPhai || m.tranhTrai !== chrome.tranhTrai) {
         chrome = m;
@@ -138,7 +142,16 @@ export default function NenMuaCanvas({ mua, toi, chay }: { mua: Mua; toi: boolea
       window.removeEventListener('resize', onResize);
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [mua, toi, chay]);
+  }, [mua, toi, chay, tocDo, trongAdmin]);
 
-  return createPortal(<canvas ref={ref} className="nen-mua-canvas" aria-hidden="true" />, document.body);
+  // Lớp ánh sáng loang trôi chậm SAU canvas (27/10/2026, "động như iPad"): chỉ CSS transform/opacity ⇒ chạy trên
+  // compositor (GPU), không tốn luồng chính; đứng yên khi tắt hiệu ứng (data-chay="0").
+  const lop = (
+    <>
+      <div className="nen-mua-quang" data-chay={chay ? '1' : '0'} aria-hidden="true"><i /><i /><i /></div>
+      <canvas ref={ref} className="nen-mua-canvas" aria-hidden="true" />
+    </>
+  );
+  if (trongAdmin) return <div className="nen-mua-admin" aria-hidden="true">{lop}</div>;
+  return createPortal(lop, document.body);
 }

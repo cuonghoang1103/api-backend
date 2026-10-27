@@ -12,6 +12,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  Palette,
   Activity, AlertTriangle, BarChart3, BookOpen, Briefcase, Clapperboard, ClipboardList, Code2,
   CreditCard, Crown, Database, FileText, FlaskConical, FolderKanban, Gamepad2, Github,
   GraduationCap, Handshake, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, MonitorPlay,
@@ -128,6 +129,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     viLabel: 'Hệ thống',
     hue: 'var(--n-system)',
     items: [
+      { label: 'Appearance', vi: 'Giao diện & nền', href: '/admin/giao-dien', icon: Palette, keywords: 'giao diện nền background 4 mùa xuân hạ thu đông theme màu admin nâu' },
       { label: 'Traffic', vi: 'Lượt truy cập', href: '/admin/analytics', icon: Activity, keywords: 'lượt truy cập analytics' },
       { label: 'AI analytics', vi: 'Thống kê AI', href: '/admin/ai-analytics', icon: Sparkles, keywords: 'ai chat analytics thống kê' },
       { label: 'AI knowledge', vi: 'Kho tri thức AI', href: '/admin/ai-knowledge', icon: Database, keywords: 'knowledge base rag tài liệu ai' },

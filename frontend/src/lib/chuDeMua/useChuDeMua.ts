@@ -8,12 +8,13 @@
 
 import { useCallback, useSyncExternalStore } from 'react';
 import {
-  ATTR_MUA, ATTR_YEN, KHOA_CHU_DE, KHOA_HIEU_UNG,
-  parseChuDe, trangThaiDom, type ChuDe,
+  ATTR_MUA, ATTR_YEN, KHOA_CHU_DE, KHOA_CHU_DE_WEB, KHOA_HIEU_UNG,
+  chonChuDe, maHoaChuDeWeb, parseChuDe, trangThaiDom, type ChuDe,
 } from './logic';
 
 // Giá trị dự phòng khi localStorage bị chặn — vẫn đổi được trong phiên.
 let chuDeTam: ChuDe | null = null;
+let webTam: string | null = null;
 let dongTam: boolean | null = null;
 const nghe = new Set<() => void>();
 
@@ -26,7 +27,37 @@ function ghi(k: string, v: string) {
 
 export function docChuDe(): ChuDe {
   if (typeof window === 'undefined') return 'macDinh';
-  return chuDeTam ?? parseChuDe(doc(KHOA_CHU_DE));
+  return chonChuDe(chuDeTam ?? doc(KHOA_CHU_DE), webTam ?? doc(KHOA_CHU_DE_WEB));
+}
+/** Admin đang ÉP chủ đề cho mọi người (trang Cài đặt hiện chú thích, khoá lựa chọn). */
+export function docEpBoiAdmin(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (webTam ?? doc(KHOA_CHU_DE_WEB) ?? '').endsWith('!');
+}
+
+/** Nạp chủ đề admin đặt cho cả web — MỘT lần mỗi lần tải trang, sau khi trang đã vẽ (không chặn gì). Có thay đổi ⇒
+ *  ghi đệm (lần tải sau script chống nháy áp ngay từ khung đầu) + áp luôn bây giờ. */
+let daNapWeb = false;
+export function napChuDeWeb() {
+  if (daNapWeb || typeof window === 'undefined') return;
+  daNapWeb = true;
+  const chay = () => {
+    fetch('/api/v1/giao-dien', { credentials: 'omit' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        const d = j?.data;
+        if (!d) return;
+        const ma = maHoaChuDeWeb(parseChuDe(d.chuDeMacDinh), d.epTatCa === true);
+        if (ma === (webTam ?? doc(KHOA_CHU_DE_WEB))) return;
+        webTam = ma;
+        ghi(KHOA_CHU_DE_WEB, ma);
+        apChuDeLenDom();
+        bao();
+      })
+      .catch(() => { /* mạng hỏng ⇒ giữ đệm cũ */ });
+  };
+  const ric = (window as unknown as { requestIdleCallback?: (f: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
+  if (ric) ric(chay, { timeout: 4000 }); else setTimeout(chay, 1500);
 }
 export function docHieuUngDong(): boolean {
   if (typeof window === 'undefined') return true;
@@ -54,7 +85,7 @@ function dangKy(f: () => void) {
   if (!daNgheStorage && typeof window !== 'undefined') {
     daNgheStorage = true;
     window.addEventListener('storage', (e) => {
-      if (e.key === KHOA_CHU_DE || e.key === KHOA_HIEU_UNG) { apChuDeLenDom(); bao(); }
+      if (e.key === KHOA_CHU_DE || e.key === KHOA_HIEU_UNG || e.key === KHOA_CHU_DE_WEB) { webTam = null; apChuDeLenDom(); bao(); }
     });
   }
   return () => { nghe.delete(f); };
@@ -75,9 +106,10 @@ export function datHieuUngDong(v: boolean) {
 export function useChuDeMua() {
   const chuDe = useSyncExternalStore(dangKy, docChuDe, () => 'macDinh' as ChuDe);
   const hieuUngDong = useSyncExternalStore(dangKy, docHieuUngDong, () => true);
+  const epBoiAdmin = useSyncExternalStore(dangKy, docEpBoiAdmin, () => false);
   const setChuDe = useCallback((c: ChuDe) => datChuDe(c), []);
   const setHieuUngDong = useCallback((v: boolean) => datHieuUngDong(v), []);
-  return { chuDe, setChuDe, hieuUngDong, setHieuUngDong };
+  return { chuDe, setChuDe, hieuUngDong, setHieuUngDong, epBoiAdmin };
 }
 
 /** Theo dõi thuộc tính trên <html> (mùa đang vẽ, màn yên, class giảm chuyển động / sáng-tối). */

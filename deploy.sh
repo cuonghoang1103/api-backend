@@ -1043,6 +1043,7 @@ for route in \
     doi-khang/thong-ke \
     flying-pencil/tts/voices \
     landing/promos \
+    giao-dien \
     landing/stats \
     code-lab/groups \
     code-lab/lab-rooms \

@@ -255,7 +255,7 @@ export function veMua(c: Ctx, o: TuyChonVe) {
   const S = { c, w, h, t, mua, kieu, toi, chay, k, dinh, day, ds, nho, le, dayPhai, dayTrai };
 
   veSauHat(S);
-  veHat(S, o.hatCoSo ?? (nho ? 12 : 18));
+  veHat(S, o.hatCoSo ?? (nho ? 16 : 28));
   // Trang trí góc: trên màn nhỏ mờ hơn (nội dung chiếm gần hết bề ngang).
   c.save();
   c.globalAlpha = kieu === 'xemThu' ? 1 : nho ? 0.6 : 0.9;
@@ -288,9 +288,9 @@ function veHat(s: S, coSo: number) {
     const goc = t * (0.25 + r4 * 0.8) * (r5 > 0.5 ? 1 : -1) + r6 * 6.28;
     // Vùng giữa (nơi nội dung) mờ hẳn — hạt sống chủ yếu ở lề.
     const lechGiua = Math.abs(x / Math.max(w, 1) - 0.5) * 2;
-    const doMo = kieu === 'xemThu' ? 0.9 : (0.22 + 0.68 * tronTru(0.2, 0.85, lechGiua));
+    const doMo = kieu === 'xemThu' ? 0.9 : (0.32 + 0.63 * tronTru(0.2, 0.85, lechGiua));
     const m = ds[i % ds.length];
-    const sz = (7 + r2 * 9) * tiLe;
+    const sz = (8 + r2 * 11) * tiLe;
 
     switch (mua) {
       case 'xuan':
@@ -556,7 +556,8 @@ function veGoc(s0: S) {
 
 function canhHoaGoc(s: S, gx: number, gy: number, latNgang: boolean, mauHoa: string, mauNhuy: string, huongLen = false) {
   const { c, t, k, chay } = s;
-  const lac = chay ? Math.sin(t * 0.9) * 0.02 : 0;
+  // 27/10: biên độ lắc gấp ~2,5 lần (chủ web: "chưa thấy động") — cành đung đưa như bản iPad.
+  const lac = chay ? Math.sin(t * 0.9) * 0.05 + Math.sin(t * 2.3) * 0.012 : 0;
   cum(c, gx, gy, k, lac, () => {
     c.save();
     c.scale(latNgang ? -1 : 1, huongLen ? -1 : 1);
@@ -580,7 +581,7 @@ function canhHoaGoc(s: S, gx: number, gy: number, latNgang: boolean, mauHoa: str
 
 function denLong(s: S, nx: number, ny: number, day: number, pha: number) {
   const { c, t, k, chay } = s;
-  const xoay = chay ? Math.sin(t * 1.2 + pha) * 0.07 : 0.03;
+  const xoay = chay ? Math.sin(t * 1.2 + pha) * 0.12 : 0.03;
   cum(c, nx, ny, k, xoay, () => {
     const L = day / k;
     const soi = new Path2D(); soi.moveTo(0, 0); soi.lineTo(0, L);
@@ -681,7 +682,7 @@ function bongBien(s: S, x: number, y: number) {
 
 function denOngSao(s: S, nx: number, ny: number, day: number) {
   const { c, t, k, chay } = s;
-  const xoay = chay ? Math.sin(t * 1.1) * 0.08 : 0.04;
+  const xoay = chay ? Math.sin(t * 1.1) * 0.13 : 0.04;
   cum(c, nx, ny, k, xoay, () => {
     const L = day / k;
     const soi = new Path2D(); soi.moveTo(0, 0); soi.lineTo(0, L);
@@ -717,7 +718,7 @@ function dongLa(s: S, x: number, y: number) {
 
 function canhPhong(s: S, x: number, y: number) {
   const { c, t, k, chay } = s;
-  const lac = chay ? Math.sin(t * 0.9 + 1) * 0.03 : 0;
+  const lac = chay ? Math.sin(t * 0.9 + 1) * 0.065 + Math.sin(t * 2.1) * 0.012 : 0;
   cum(c, x, y, k, lac, () => {
     const than = new Path2D(); than.moveTo(10, 6); than.quadraticCurveTo(-6, -50, -40, -96);
     duong(c, than, '#6B4226', 3.5);

@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-2-interview-es6",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-2-2-destructuring-spread-modules"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — ES6 for React (Chapter 2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "ES6 for React"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>ES6 for React</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>ES6 for React</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — ES6 for React (Chapter 2)\n\nAnswer in the panel on the left (no code needed).\n\n1. Why do React codebases use const/let instead of var?\n2. Is const todos = [] immutable?\n3. Why do we render lists with map and not forEach?\n4. What is the risk of const copy = { ...user } when user.address is an object?\n5. Explain const [count, setCount] = useState(0).\n6. Default vs named export — when do you use each?\n7. What does async/await give you compared with .then()?\n8. When would ?? be correct and || a bug?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — ES6 for React (Chapter 2) — answer key\n\n1. Why do React codebases use const/let instead of var?\n   Answer: b) Block scope and no hoisting surprises; const signals \"not reassigned\".\n   Model answer: \"let and const are block-scoped, so a variable only lives inside its { } — no leaking out of loops and no hoisting bugs like the classic closure-in-a-loop. I use const by default because it tells the reader the binding never changes, and let only when I really reassign.\" / Trả lời mẫu: \"let/const có phạm vi khối nên biến chỉ sống trong { } — không rò ra ngoài vòng lặp, không lỗi hoisting như closure trong vòng for. Mặc định tôi dùng const vì nó báo cho người đọc biến không bị gán lại, chỉ dùng let khi thật sự gán lại.\"\n\n2. Is const todos = [] immutable?\n   Answer: b) No — the binding is fixed, but the array content can still be mutated; for state we create new arrays.\n   Model answer: \"const only prevents reassigning the variable. todos.push(x) still works. In React that is exactly the bug to avoid: I never mutate state, I create a new array with [...todos, x] so React sees a new reference and re-renders.\" / Trả lời mẫu: \"const chỉ cấm gán lại biến; todos.push(x) vẫn chạy. Trong React đó chính là lỗi cần tránh: tôi không sửa state mà tạo mảng mới [...todos, x] để React thấy tham chiếu mới và vẽ lại.\"\n\n3. Why do we render lists with map and not forEach?\n   Answer: b) map returns a new array of elements that JSX can render; forEach returns undefined.\n   Model answer: \"JSX needs a value to render. map transforms each item into an element and returns the new array; forEach returns nothing, so nothing is rendered. Each element also needs a stable key.\" / Trả lời mẫu: \"JSX cần một giá trị để vẽ. map biến mỗi phần tử thành element và trả mảng mới; forEach không trả gì nên không vẽ gì. Mỗi element còn cần key ổn định.\"\n\n4. What is the risk of const copy = { ...user } when user.address is an object?\n   Answer: b) It is a shallow copy: copy.address is the SAME object, so changing it also changes user.\n   Model answer: \"Spread copies one level. Nested objects are shared by reference. To update a nested field immutably I spread each level I change: { ...user, address: { ...user.address, city } }. For deep clones there is structuredClone, but in state updates I usually only copy the path I modify.\" / Trả lời mẫu: \"Spread chỉ sao một tầng, object lồng vẫn dùng chung. Muốn cập nhật trường lồng một cách bất biến tôi spread từng tầng thay đổi: { ...user, address: { ...user.address, city } }. Cần sao sâu thì có structuredClone, nhưng khi cập nhật state tôi thường chỉ sao đúng nhánh mình sửa.\"\n\n5. Explain const [count, setCount] = useState(0).\n   Answer: b) Array destructuring of the pair returned by useState: current value and setter.\n   Model answer: \"useState returns a two-element array. Array destructuring takes element 0 as count and element 1 as setCount; because it is positional I can name them anything — the convention is [thing, setThing].\" / Trả lời mẫu: \"useState trả về mảng hai phần tử. Destructuring mảng lấy phần tử 0 làm count, phần tử 1 làm setCount; vì theo vị trí nên đặt tên tuỳ ý — quy ước là [thing, setThing].\"\n\n6. Default vs named export — when do you use each?\n   Answer: b) Default for the main thing of a file (e.g. one component); named when a file shares several helpers/constants.\n   Model answer: \"A component file usually has one default export, the component. Utility files export several named functions so imports are explicit and tree-shaking works well. Named imports must match the exported name (or use as).\" / Trả lời mẫu: \"Tệp component thường có một default export là component. Tệp tiện ích export nhiều hàm có tên để import rõ ràng và tree-shaking tốt. Import có tên phải đúng tên export (hoặc dùng as).\"\n\n7. What does async/await give you compared with .then()?\n   Answer: b) The same Promises, written like synchronous code; errors handled with try/catch.\n   Model answer: \"async/await is syntax over Promises. It reads top-to-bottom and lets me use try/catch. It does NOT parallelise: two awaits in a row are sequential, so for independent requests I use await Promise.all([...]).\" / Trả lời mẫu: \"async/await là cú pháp trên Promise: đọc từ trên xuống, bắt lỗi bằng try/catch. Nó KHÔNG tự chạy song song: hai await liên tiếp là tuần tự, nên với request độc lập tôi dùng await Promise.all([...]).\"\n\n8. When would ?? be correct and || a bug?\n   Answer: b) When 0, empty string or false are valid values, e.g. quantity ?? 1.\n   Model answer: \"|| replaces every falsy value, so a real quantity 0 becomes the default. ?? only replaces null/undefined. I use ?? for defaults of numbers, strings and booleans coming from an API.\" / Trả lời mẫu: \"|| thay mọi giá trị falsy nên số lượng 0 thật bị thành mặc định. ?? chỉ thay null/undefined. Tôi dùng ?? cho giá trị mặc định của số, chuỗi, boolean từ API.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Why do React codebases use <code>const</code>/<code>let</code> instead of <code>var</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are faster at runtime."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Block scope and no hoisting surprises; <code>const</code> signals \"not reassigned\"."
+              },
+              {
+                "ma": "c",
+                "noiDung": "React does not support <code>var</code>."
+              },
+              {
+                "ma": "d",
+                "noiDung": "They make objects immutable."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"<code>let</code> and <code>const</code> are block-scoped, so a variable only lives inside its <code>{ }</code> — no leaking out of loops and no hoisting bugs like the classic closure-in-a-loop. I use <code>const</code> by default because it tells the reader the binding never changes, and <code>let</code> only when I really reassign.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"let/const có phạm vi khối nên biến chỉ sống trong { } — không rò ra ngoài vòng lặp, không lỗi hoisting như closure trong vòng for. Mặc định tôi dùng const vì nó báo cho người đọc biến không bị gán lại, chỉ dùng let khi thật sự gán lại.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Is <code>const todos = []</code> immutable?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, nothing can change it."
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — the binding is fixed, but the array content can still be mutated; for state we create new arrays."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in strict mode."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only after <code>Object.freeze</code> is called on <code>const</code>."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"<code>const</code> only prevents reassigning the variable. <code>todos.push(x)</code> still works. In React that is exactly the bug to avoid: I never mutate state, I create a new array with <code>[...todos, x]</code> so React sees a new reference and re-renders.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"const chỉ cấm gán lại biến; todos.push(x) vẫn chạy. Trong React đó chính là lỗi cần tránh: tôi không sửa state mà tạo mảng mới [...todos, x] để React thấy tham chiếu mới và vẽ lại.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "Why do we render lists with <code>map</code> and not <code>forEach</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>forEach</code> is deprecated."
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>map</code> returns a new array of elements that JSX can render; <code>forEach</code> returns <code>undefined</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>map</code> mutates the array so React notices."
+              },
+              {
+                "ma": "d",
+                "noiDung": "There is no difference."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"JSX needs a value to render. <code>map</code> transforms each item into an element and returns the new array; <code>forEach</code> returns nothing, so nothing is rendered. Each element also needs a stable <code>key</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"JSX cần một giá trị để vẽ. map biến mỗi phần tử thành element và trả mảng mới; forEach không trả gì nên không vẽ gì. Mỗi element còn cần key ổn định.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "What is the risk of <code>const copy = { ...user }</code> when <code>user.address</code> is an object?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None, spread is a deep copy."
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is a shallow copy: <code>copy.address</code> is the SAME object, so changing it also changes <code>user</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It throws for nested objects."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It drops nested objects."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Spread copies one level. Nested objects are shared by reference. To update a nested field immutably I spread each level I change: <code>{ ...user, address: { ...user.address, city } }</code>. For deep clones there is <code>structuredClone</code>, but in state updates I usually only copy the path I modify.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Spread chỉ sao một tầng, object lồng vẫn dùng chung. Muốn cập nhật trường lồng một cách bất biến tôi spread từng tầng thay đổi: { ...user, address: { ...user.address, city } }. Cần sao sâu thì có structuredClone, nhưng khi cập nhật state tôi thường chỉ sao đúng nhánh mình sửa.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "Explain <code>const [count, setCount] = useState(0)</code>.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It creates two global variables."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Array destructuring of the pair returned by <code>useState</code>: current value and setter."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Object destructuring of props."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It calls <code>setCount(0)</code>."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"<code>useState</code> returns a two-element array. Array destructuring takes element 0 as <code>count</code> and element 1 as <code>setCount</code>; because it is positional I can name them anything — the convention is <code>[thing, setThing]</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"useState trả về mảng hai phần tử. Destructuring mảng lấy phần tử 0 làm count, phần tử 1 làm setCount; vì theo vị trí nên đặt tên tuỳ ý — quy ước là [thing, setThing].\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Default vs named export — when do you use each?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always default."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Default for the main thing of a file (e.g. one component); named when a file shares several helpers/constants."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Named exports are only for TypeScript."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Default exports cannot be renamed."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"A component file usually has one default export, the component. Utility files export several named functions so imports are explicit and tree-shaking works well. Named imports must match the exported name (or use <code>as</code>).\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tệp component thường có một default export là component. Tệp tiện ích export nhiều hàm có tên để import rõ ràng và tree-shaking tốt. Import có tên phải đúng tên export (hoặc dùng as).\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "What does <code>async/await</code> give you compared with <code>.then()</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Faster network requests."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The same Promises, written like synchronous code; errors handled with <code>try/catch</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It makes code run in parallel automatically."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It removes the need for Promises."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"async/await is syntax over Promises. It reads top-to-bottom and lets me use try/catch. It does NOT parallelise: two awaits in a row are sequential, so for independent requests I use <code>await Promise.all([...])</code>.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"async/await là cú pháp trên Promise: đọc từ trên xuống, bắt lỗi bằng try/catch. Nó KHÔNG tự chạy song song: hai await liên tiếp là tuần tự, nên với request độc lập tôi dùng await Promise.all([...]).\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "When would <code>??</code> be correct and <code>||</code> a bug?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never."
+              },
+              {
+                "ma": "b",
+                "noiDung": "When 0, empty string or false are valid values, e.g. <code>quantity ?? 1</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only with booleans."
+              },
+              {
+                "ma": "d",
+                "noiDung": "When the value is a function."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"<code>||</code> replaces every falsy value, so a real quantity 0 becomes the default. <code>??</code> only replaces null/undefined. I use <code>??</code> for defaults of numbers, strings and booleans coming from an API.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"|| thay mọi giá trị falsy nên số lượng 0 thật bị thành mặc định. ?? chỉ thay null/undefined. Tôi dùng ?? cho giá trị mặc định của số, chuỗi, boolean từ API.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

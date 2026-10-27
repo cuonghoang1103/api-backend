@@ -92,6 +92,30 @@
       "name": "Lab 2 — Student Data Toolkit (ES6+)",
       "level": "BEGINNER",
       "description": "Lab chương 2: 13 hàm thuần ES6+ — destructuring/mặc định, map+spread bất biến, rest, groupBy bằng reduce, sort bản sao, gộp object, Promise.all/race/allSettled, ?. và ??. Thang 10."
+    },
+    {
+      "slug": "fer202-2-1-es6-basics",
+      "name": "2.1 let/const, arrow functions & template literals",
+      "level": "BEGINNER",
+      "description": "6 bài luyện (máy chấm JS): var → let trong vòng lặp, arrow trả về ngầm, template literal, this trong callback, tham số mặc định/rest, closure once/memoize."
+    },
+    {
+      "slug": "fer202-2-2-destructuring-spread-modules",
+      "name": "2.2 Destructuring, spread & modules",
+      "level": "BEGINNER",
+      "description": "6 bài luyện: destructuring mảng/object, cập nhật bất biến kiểu React, object rest (omit/pick), ES modules named/default, pipeline dữ liệu."
+    },
+    {
+      "slug": "fer202-2-3-slot2-es6-slides",
+      "name": "2.3 Slide check — ES6 for React",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm kiểm tra slide Slot 2–3: const, spread/rest, arrow, template literal, import/export, map, Promise.all, ??."
+    },
+    {
+      "slug": "fer202-2-interview-es6",
+      "name": "Interview corner — ES6 for React",
+      "level": "BEGINNER",
+      "description": "8 câu phỏng vấn React junior về ES6 kèm câu trả lời mẫu song ngữ để luyện nói."
     }
   ]
 }

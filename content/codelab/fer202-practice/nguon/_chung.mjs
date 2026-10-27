@@ -83,10 +83,18 @@ export function tinh(q) {
       const d = Array.isArray(c.dapAn) ? (Array.isArray(c.dapAn[0]) ? c.dapAn[0] : c.dapAn) : [c.dapAn];
       const muc = c.luaChon || c.muc || [];
       const ten = d.map((m) => `${m}) ${chu(muc.find((x) => x.ma === m)?.noiDung)}`).join(loai === 'order' ? '  →  ' : ' + ');
-      return `${i + 1}. ${chu(c.de)}\n   Answer: ${ten}\n   ${chu(c.giaiThich)}`;
+      return `${i + 1}. ${chu(c.de)}\n   Answer: ${ten}\n   ${chu(String(c.giaiThich || '').replace('|||', ' / '))}`;
     }).join('\n\n');
   }
-  const tests = loai === 'table' ? { loai, bang: q.bang } : { loai, cauHoi: q.cauHoi };
+  // giải thích từng câu: "EN|||VI" ⇒ hiện cả hai (khung trả lời hiển thị HTML thô, không tách ngôn ngữ)
+  const haiNgu = (g) => {
+    if (typeof g !== 'string' || !g.includes('|||')) return g;
+    const [en, vi] = g.split('|||');
+    return `<p>${en.trim()}</p><p><i>🇻🇳 ${vi.trim()}</i></p>`;
+  };
+  const tests = loai === 'table'
+    ? { loai, bang: q.bang.map((b) => ({ ...b, giaiThich: haiNgu(b.giaiThich) })) }
+    : { loai, cauHoi: q.cauHoi.map((c) => ({ ...c, giaiThich: haiNgu(c.giaiThich) })) };
   const { cauHoi: _c, bang: _b, loai: _l, ...rest } = q;
   return {
     ngonNgu: 'text',
@@ -110,3 +118,69 @@ export const NOP_BAI = {
   en: 'Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).',
   vi: 'Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).',
 };
+
+/**
+ * Bài nhỏ React: App.js là tệp chính (renderTu) — hoặc { index: {router…} } để có src/index.js (bài Router/Redux).
+ * o = { giai, dau, them?: {tệp chung}, themGiai?: {...}, themDau?: {...}, thuVien?, url?, jsonServer?, fetchGia?,
+ *       khoCucBo?, index?: { router, bootstrap, redux }, kiem, ...trường đề }
+ */
+export function reactNho(o) {
+  const { giai, dau, them = {}, themGiai = {}, themDau = {}, thuVien = [], url, jsonServer, fetchGia, khoCucBo, index: ix, kiem, ...rest } = o;
+  const coIndex = !!ix;
+  const tepIndex = coIndex ? { 'src/index.js': index(ix) } : {};
+  return {
+    ...rest,
+    tests: {
+      loai: 'react', phienBan: 1,
+      ...(coIndex ? { tepChinh: 'src/index.js' } : { renderTu: 'src/App.js' }),
+      ...(thuVien.length ? { thuVien } : {}),
+      ...(url ? { url } : {}), ...(jsonServer ? { jsonServer } : {}), ...(fetchGia ? { fetchGia } : {}), ...(khoCucBo ? { khoCucBo } : {}),
+      kiem,
+    },
+    khoiDau: { 'src/App.js': dau, ...them, ...themDau, ...tepIndex },
+    loiGiai: { 'src/App.js': giai, ...them, ...themGiai, ...tepIndex },
+  };
+}
+
+/** Bài nhỏ JS (máy chấm gọi hàm): một tệp main.js (hoặc tep), nạp như script thường. */
+export function jsNho(o) {
+  const { giai, dau, tep = 'main.js', tepNap, them = {}, kiem, loai = 'js', ...rest } = o;
+  return {
+    ...rest,
+    tests: { loai, phienBan: 1, tepChinh: tep, ...(tepNap ? { tepNap } : {}), kiem },
+    khoiDau: { [tep]: dau, ...them },
+    loiGiai: { [tep]: giai, ...them },
+  };
+}
+
+/** Bài ES module (máy chấm 'module' — chỉ web; app desktop báo "bỏ qua"). */
+export function moduleNho(o) {
+  const { giai, dau, tep = 'main.js', kiem, ...rest } = o;
+  return { ...rest, tests: { loai: 'module', phienBan: 1, tepChinh: tep, kiem }, khoiDau: dau, loiGiai: giai };
+}
+
+/** "Interview corner" của chương: trắc nghiệm, mỗi đáp án đúng kèm câu trả lời mẫu (giaiThich). */
+export function phongVan({ chuong, chuDe, cauHoi, baiHoc, slug }) {
+  return {
+    slug,
+    ten: `Interview corner — ${chuDe}`,
+    khoa: KHOA,
+    baiHoc,
+    de: [tinh({
+      tieuDe: `Interview corner — ${chuDe} (Chapter ${chuong})`,
+      doKho: 'MEDIUM',
+      phut: 15,
+      khaiNiem: ['interview', chuDe],
+      the: ['fer202', 'interview'],
+      moTa: {
+        en: `<p>Questions a junior React interviewer actually asks about <b>${chuDe}</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p>`,
+        vi: `<p>Câu hỏi phỏng vấn React junior thường gặp về <b>${chuDe}</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p>`,
+      },
+      goiY: ['Loại trừ đáp án nói "luôn luôn"/"không bao giờ" khi thực tế có ngoại lệ.', 'Đọc kỹ câu hỏi hỏi "vì sao" hay "khi nào" — đáp án đúng thường nêu được lý do.'],
+      loiHayGap: ['Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp "cho ví dụ".', 'Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích.'],
+      giaiThich: { en: '<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>', vi: '<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>' },
+      thuatNgu: [{ en: 'model answer', vi: 'câu trả lời mẫu' }, { en: 'trade-off', vi: 'đánh đổi (được cái này, mất cái kia)' }],
+      cauHoi,
+    })],
+  };
+}

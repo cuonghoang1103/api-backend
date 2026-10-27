@@ -1,0 +1,354 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-2-3-slot2-es6-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-2-3-slot2-es6-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: ES6 essentials for React",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "let/const",
+        "arrow",
+        "spread/rest",
+        "destructuring",
+        "modules",
+        "Promise"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "es6",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten quick questions on the ES6 features used on every page of a React app. Predict the output before you choose.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu nhanh về các tính năng ES6 xuất hiện trong mọi trang React. Hãy tự đoán kết quả trước khi chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi về kết quả: chạy thử trong đầu từng dòng, đừng đoán theo \"cảm giác\".",
+        "Spread/rest cùng dấu ... — ở VẾ PHẢI là trải ra, ở VẾ TRÁI/tham số là gom lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: ES6 essentials for React\n\nAnswer in the panel on the left (no code needed).\n\n1. Which declaration can NOT be reassigned? (Khai báo nào KHÔNG gán lại được?)\n2. Output of const a = [1, 2]; const b = [...a, 3]; a.push(9); console.log(b)?\n3. const { a, ...rest } = { a: 1, b: 2, c: 3 } — what is rest?\n4. Which statement about arrow functions is TRUE?\n5. What does `Total: ${2 * 3}` evaluate to?\n6. App.js has export default function App(). Which import is correct?\n7. Which are TRUE about named exports? (choose all)\n8. [1, 2, 3].map((x) => x * 2) returns…\n9. Promise.all([p1, p2]) when p2 rejects:\n10. 0 ?? 5 and 0 || 5 are…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: ES6 essentials for React — answer key\n\n1. Which declaration can NOT be reassigned? (Khai báo nào KHÔNG gán lại được?)\n   Answer: c) const\n   const forbids reassignment of the binding — the object/array it points to can still change. / const cấm gán lại biến — object/mảng nó trỏ tới vẫn thay đổi được.\n\n2. Output of const a = [1, 2]; const b = [...a, 3]; a.push(9); console.log(b)?\n   Answer: a) [1, 2, 3]\n   Spread copies the elements at that moment into a NEW array; later pushes to a do not affect b. / Spread chép các phần tử tại thời điểm đó vào mảng MỚI; push vào a sau đó không ảnh hưởng b.\n\n3. const { a, ...rest } = { a: 1, b: 2, c: 3 } — what is rest?\n   Answer: b) { b: 2, c: 3 }\n   Object rest collects the remaining properties into a new object. / Object rest gom các thuộc tính còn lại thành object mới.\n\n4. Which statement about arrow functions is TRUE?\n   Answer: b) They take this from the surrounding scope.\n   Arrows have no own this/arguments; a single-expression body returns implicitly. / Arrow không có this/arguments riêng; thân một biểu thức thì trả về ngầm.\n\n5. What does `Total: ${2 * 3}` evaluate to?\n   Answer: b) \"Total: 6\"\n   Inside back-ticks, ${…} is evaluated as a JavaScript expression. / Trong dấu huyền, ${…} được tính như biểu thức JavaScript.\n\n6. App.js has export default function App(). Which import is correct?\n   Answer: b) import App from './App'\n   A default export is imported without braces, under any name you choose. / Export mặc định được import không có ngoặc nhọn, tên tuỳ đặt.\n\n7. Which are TRUE about named exports? (choose all)\n   Answer: a) A file can have many named exports. + b) You can rename on import: import { sum as add }. + d) Named imports go inside { }.\n   Many named exports per file, imported in braces (renaming with as); at most ONE default export. / Một tệp có nhiều named export, import trong { } (đổi tên bằng as); tối đa MỘT default export.\n\n8. [1, 2, 3].map((x) => x * 2) returns…\n   Answer: b) [2, 4, 6]\n   map returns a NEW array of the callback results — that is why JSX lists use it (forEach returns undefined). / map trả về mảng MỚI chứa kết quả — vì vậy JSX dùng map (forEach trả undefined).\n\n9. Promise.all([p1, p2]) when p2 rejects:\n   Answer: b) Rejects with p2’s error.\n   All-or-nothing: the first rejection rejects the whole Promise.all. Use allSettled to keep partial results. / Tất cả hoặc không: lần reject đầu tiên làm cả Promise.all reject. Muốn giữ kết quả từng phần dùng allSettled.\n\n10. 0 ?? 5 and 0 || 5 are…\n   Answer: a) 0 and 5\n   ?? falls back only on null/undefined; || on every falsy value (0, '', false). / ?? chỉ thay khi null/undefined; || thay với mọi giá trị falsy (0, '', false).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi câu có giải thích ngắn sau khi nộp. Câu sai ⇒ xem lại đoạn tương ứng của bài 2.1–2.2.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Which declaration can NOT be reassigned? <i>(Khai báo nào KHÔNG gán lại được?)</i>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>var</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>let</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>const</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>function</code>"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p><code>const</code> forbids reassignment of the binding — the object/array it points to can still change.</p><p><i>🇻🇳 const cấm gán lại biến — object/mảng nó trỏ tới vẫn thay đổi được.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Output of <code>const a = [1, 2]; const b = [...a, 3]; a.push(9); console.log(b)</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>[1, 2, 3]</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>[1, 2, 9, 3]</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>[1, 2, 3, 9]</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>[[1, 2], 3]</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Spread copies the elements at that moment into a NEW array; later pushes to <code>a</code> do not affect <code>b</code>.</p><p><i>🇻🇳 Spread chép các phần tử tại thời điểm đó vào mảng MỚI; push vào a sau đó không ảnh hưởng b.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<code>const { a, ...rest } = { a: 1, b: 2, c: 3 }</code> — what is <code>rest</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>[2, 3]</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>{ b: 2, c: 3 }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>{ a: 1, b: 2, c: 3 }</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>undefined</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Object rest collects the remaining properties into a new object.</p><p><i>🇻🇳 Object rest gom các thuộc tính còn lại thành object mới.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Which statement about arrow functions is TRUE?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They have their own <code>this</code>."
+              },
+              {
+                "ma": "b",
+                "noiDung": "They take <code>this</code> from the surrounding scope."
+              },
+              {
+                "ma": "c",
+                "noiDung": "They can be used with <code>new</code>."
+              },
+              {
+                "ma": "d",
+                "noiDung": "They always need <code>return</code>."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Arrows have no own <code>this</code>/<code>arguments</code>; a single-expression body returns implicitly.</p><p><i>🇻🇳 Arrow không có this/arguments riêng; thân một biểu thức thì trả về ngầm.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "What does <code>`Total: ${2 * 3}`</code> evaluate to?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>\"Total: ${2 * 3}\"</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>\"Total: 6\"</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>\"Total: 2 * 3\"</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SyntaxError"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inside back-ticks, <code>${…}</code> is evaluated as a JavaScript expression.</p><p><i>🇻🇳 Trong dấu huyền, ${…} được tính như biểu thức JavaScript.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<code>App.js</code> has <code>export default function App()</code>. Which import is correct?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>import { App } from './App'</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>import App from './App'</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>import * from './App'</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>require App from './App'</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A default export is imported without braces, under any name you choose.</p><p><i>🇻🇳 Export mặc định được import không có ngoặc nhọn, tên tuỳ đặt.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "Which are TRUE about named exports? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A file can have many named exports."
+              },
+              {
+                "ma": "b",
+                "noiDung": "You can rename on import: <code>import { sum as add }</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A file can have many default exports."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Named imports go inside <code>{ }</code>."
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Many named exports per file, imported in braces (renaming with <code>as</code>); at most ONE default export.</p><p><i>🇻🇳 Một tệp có nhiều named export, import trong { } (đổi tên bằng as); tối đa MỘT default export.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q8",
+            "de": "<code>[1, 2, 3].map((x) =&gt; x * 2)</code> returns…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>undefined</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>[2, 4, 6]</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>12</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the same array, changed in place"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><code>map</code> returns a NEW array of the callback results — that is why JSX lists use it (forEach returns undefined).</p><p><i>🇻🇳 map trả về mảng MỚI chứa kết quả — vì vậy JSX dùng map (forEach trả undefined).</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "<code>Promise.all([p1, p2])</code> when <code>p2</code> rejects:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Resolves with <code>[value1, undefined]</code>."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rejects with <code>p2</code>’s error."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Waits forever."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ignores <code>p2</code>."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>All-or-nothing: the first rejection rejects the whole <code>Promise.all</code>. Use <code>allSettled</code> to keep partial results.</p><p><i>🇻🇳 Tất cả hoặc không: lần reject đầu tiên làm cả Promise.all reject. Muốn giữ kết quả từng phần dùng allSettled.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "<code>0 ?? 5</code> and <code>0 || 5</code> are…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>0</code> and <code>5</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>5</code> and <code>5</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>0</code> and <code>0</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>5</code> and <code>0</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p><code>??</code> falls back only on null/undefined; <code>||</code> on every falsy value (0, '', false).</p><p><i>🇻🇳 ?? chỉ thay khi null/undefined; || thay với mọi giá trị falsy (0, '', false).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ <code>const</code> làm mảng/object bất biến — chỉ là không gán lại biến."
+        },
+        {
+          "loi": "Nhầm export mặc định với export có tên khi viết import."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reassign",
+          "vi": "gán lại"
+        },
+        {
+          "en": "lexical this",
+          "vi": "this theo phạm vi bao ngoài"
+        }
+      ]
+    }
+  ]
+}

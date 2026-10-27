@@ -12,6 +12,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
+import { alertVi } from './alertVi.js';
 import { frontendUrl } from './common.js';
 import { renderWorkEmail, type WorkEmailParts } from './workEmail.js';
 
@@ -44,7 +45,7 @@ export function notifySubjectVi(type: WorkNotifyType, p: Record<string, unknown>
     case 'WORK_COMMENT': return p.reply ? `${who} trả lời bình luận của bạn trong ${onIssue}` : `${who} bình luận trong ${onIssue}`;
     case 'WORK_MENTION': return `${who} nhắc bạn trong ${onIssue}`;
     case 'WORK_ALERT': {
-      const msg = str(p.message) || title || 'Có việc cần bạn chú ý';
+      const msg = alertVi(str(p.message)) || str(p.message) || title || 'Có việc cần bạn chú ý';
       return key && !msg.includes(key) ? `${key}: ${msg}` : msg;
     }
   }
@@ -134,7 +135,10 @@ export function buildNotifyEmail(i: { type: WorkNotifyType; payload: Record<stri
       break;
     case 'WORK_ALERT':
     default: {
-      const msg = str(p.message).trim();
+      // 28/10: câu cảnh báo tiếng Anh của ~45 nơi gọi ⇒ dịch ở alertVi.ts; câu gốc xuống dòng phụ tiếng Anh cuối thư.
+      const goc = str(p.message).trim();
+      const viMsg = alertVi(goc);
+      const msg = viMsg ?? goc;
       parts = {
         heading: msg && msg.length <= 110 ? msg : key ? `Cập nhật trong ${key}` : 'Có việc cần bạn chú ý',
         person: i.sender ? { name: who, avatarUrl: i.sender.avatarUrl, caption: 'thông báo từ CT Work' } : null,
@@ -142,6 +146,7 @@ export function buildNotifyEmail(i: { type: WorkNotifyType; payload: Record<stri
         quote: excerpt ? { text: excerpt } : null,
         details,
         cta: url ? { label: 'Mở trong CT Work', url } : null,
+        ...(viMsg ? { secondary: [goc] } : {}),
         reason: 'Bạn nhận thư này vì có hoạt động liên quan tới bạn trên CT Work.',
       };
     }

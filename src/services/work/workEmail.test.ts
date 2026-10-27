@@ -184,7 +184,7 @@ describe('27/10/2026 thư thông báo CT Work tiếng Việt', () => {
     assert.ok(m.html.includes('@bạn xem &lt;giúp&gt;') && m.html.includes('Trả lời trong CT Work'));
     assert.equal(notifySubjectVi('WORK_COMMENT', { issueKey: 'NT-1', title: 'T', reply: true }, 'An'), 'An trả lời bình luận của bạn trong NT-1: T');
     assert.equal(notifySubjectVi('WORK_COMMENT', { issueKey: 'NT-1', title: 'T' }, 'An'), 'An bình luận trong NT-1: T');
-    assert.equal(notifySubjectVi('WORK_ALERT', { message: 'Grades published: Sprint 1' }), 'Grades published: Sprint 1');
+    assert.equal(notifySubjectVi('WORK_ALERT', { message: 'Grades published: Sprint 1' }), 'Đã công bố điểm: Sprint 1'); // 28/10: alertVi dịch
     assert.equal(notifySubjectVi('WORK_ALERT', { issueKey: 'NT-2', message: 'Bị chặn' }), 'NT-2: Bị chặn');
     const al = buildNotifyEmail({ type: 'WORK_ALERT', payload: { message: 'Hết hạn' } });
     assert.ok(!al.html.includes('undefined') && !al.subject.includes('undefined'));

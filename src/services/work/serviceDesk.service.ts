@@ -867,7 +867,15 @@ async function emailOnly(userId: number, subject: string, url: string, line: str
   const u = await prisma.user.findUnique({ where: { id: userId }, select: { email: true, enabled: true } });
   if (!u?.enabled || !u.email) return;
   const { frontendUrl, sendWorkEmail } = await import('./common.js');
-  await sendWorkEmail({ to: u.email, subject: `CT Work: ${subject}`.slice(0, 240), heading: subject, lines: [line], cta: { label: 'Open the service desk', url: frontendUrl(url) } });
+  // 28/10: thư tiếng Việt (câu gốc tiếng Anh xuống dòng phụ).
+  const { alertVi } = await import('./alertVi.js');
+  const [key, ...rest] = subject.split(': ');
+  const vi = alertVi(rest.join(': '));
+  const tieuDe = vi ? `${key}: ${vi}` : subject;
+  await sendWorkEmail({
+    to: u.email, lang: 'vi', subject: `CT Work: ${tieuDe}`.slice(0, 240), heading: tieuDe, lines: [line],
+    cta: { label: 'Mở bàn hỗ trợ', url: frontendUrl(url) }, ...(vi ? { secondary: [subject] } : {}),
+  });
 }
 
 /**

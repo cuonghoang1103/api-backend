@@ -582,14 +582,18 @@ export async function emailInvites(meetingId: number, senderId: number, ids: num
     const isClient = clients.has(uid);
     const people = isClient ? await clientPeopleIds(m.projectId, uid) : null;
     const ics = await buildIcs(meetingId, uid, { clientView: isClient, people });
-    const when = new Intl.DateTimeFormat('en-GB', { timeZone: m.timezone, dateStyle: 'full', timeStyle: 'short' }).format(m.startsAt);
+    // 28/10: thư mời tiếng Việt + một dòng tiếng Anh cuối thư (khách quốc tế vẫn hiểu).
+    const when = new Intl.DateTimeFormat('vi-VN', { timeZone: m.timezone, dateStyle: 'full', timeStyle: 'short' }).format(m.startsAt);
+    const whenEn = new Intl.DateTimeFormat('en-GB', { timeZone: m.timezone, dateStyle: 'full', timeStyle: 'short' }).format(m.startsAt);
     await sendWorkEmail({
       to: u.email,
-      subject: `${isClient ? `${m.project.name}: ` : 'CT Work: '}Invitation — ${m.title}`.slice(0, 240),
-      heading: `You are invited: ${m.title}`,
-      lines: [`${when} (${m.timezone})`, m.location ? `Where: ${m.location}` : '', m.meetingUrl ? `Join: ${m.meetingUrl}` : '', 'The calendar invitation (.ics) is attached — open it to add the meeting to your calendar.'].filter(Boolean),
-      cta: { label: 'Open meeting', url: ics.url },
-      ...(isClient ? { brand: `${m.project.name} · Client portal`, footer: 'You received this email because you are a client on this project.' } : {}),
+      lang: 'vi',
+      subject: `${isClient ? `${m.project.name}: ` : 'CT Work: '}Mời họp — ${m.title}`.slice(0, 240),
+      heading: `Bạn được mời họp: ${m.title}`,
+      lines: [`Thời gian: ${when} (${m.timezone})`, m.location ? `Địa điểm: ${m.location}` : '', m.meetingUrl ? `Link tham gia: ${m.meetingUrl}` : '', 'Thư có kèm tệp lịch (.ics) — mở tệp để thêm cuộc họp vào lịch của bạn.'].filter(Boolean),
+      cta: { label: 'Mở cuộc họp', url: ics.url },
+      secondary: [`You are invited: ${m.title} — ${whenEn} (${m.timezone}). The .ics calendar invitation is attached.`],
+      ...(isClient ? { brand: `${m.project.name} · Cổng khách hàng`, footer: 'Anh/chị nhận thư này vì là khách hàng của dự án.' } : {}),
       attachments: [{ filename: ics.filename, content: Buffer.from(ics.body, 'utf8').toString('base64'), contentType: 'text/calendar; charset=utf-8' }],
     });
     sent += 1;

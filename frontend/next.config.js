@@ -264,7 +264,9 @@ const nextConfig = {
             // - font-src: self + data: for next/font.
             // - object-src 'none': block <object>/<embed>.
             // - base-uri 'self': no <base> tag hijacking.
-            // - form-action 'self': no third-party form posts.
+            // - form-action 'self' https://github.com: no third-party form posts — TRỪ GitHub
+            //   (28/10/2026: trang admin "GitHub App CT Work" POST manifest sang github.com/settings/apps/new;
+            //   thiếu dòng này trình duyệt chặn im lặng, nút kẹt "Đang chuyển sang GitHub…").
             // - frame-ancestors 'self': same as X-Frame-Options.
             // - upgrade-insecure-requests: rewrite any leftover http://
             //   to https://.
@@ -341,7 +343,7 @@ const nextConfig = {
               "worker-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              "form-action 'self' https://github.com",
               "frame-ancestors 'self'",
               "upgrade-insecure-requests",
             ].join('; '),

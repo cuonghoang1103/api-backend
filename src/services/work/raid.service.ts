@@ -395,5 +395,12 @@ async function emailOnly(userId: number, subject: string, url: string) {
   const u = await prisma.user.findUnique({ where: { id: userId }, select: { email: true, enabled: true } });
   if (!u?.enabled || !u.email) return;
   const { frontendUrl, sendWorkEmail } = await import('./common.js');
-  await sendWorkEmail({ to: u.email, subject: `CT Work: ${subject}`.slice(0, 240), heading: subject, lines: ['A RAID item you own is due for review.'], cta: { label: 'Open the RAID log', url: frontendUrl(url) } });
+  // 28/10: thư tiếng Việt (câu gốc tiếng Anh xuống dòng phụ).
+  const { alertVi } = await import('./alertVi.js');
+  const tieuDe = alertVi(subject) ?? subject;
+  await sendWorkEmail({
+    to: u.email, lang: 'vi', subject: `CT Work: ${tieuDe}`.slice(0, 240), heading: tieuDe,
+    lines: ['Một mục RAID (rủi ro · giả định · vấn đề · phụ thuộc) bạn phụ trách đã đến ngày xem lại.'],
+    cta: { label: 'Mở sổ RAID', url: frontendUrl(url) }, secondary: [`${subject} — a RAID item you own is due for review.`],
+  });
 }

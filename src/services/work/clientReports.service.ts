@@ -358,6 +358,7 @@ async function emailClients(projectId: number, reportId: number, data: ReportDat
     const vi = data.language === 'vi'; // CTW-14
     await sendWorkEmail({
       to: u.email,
+      lang: vi ? 'vi' : 'en',
       subject: (vi ? `${p.name}: cập nhật tuần ${data.period.from} → ${data.period.to}` : `${p.name}: weekly update ${data.period.from} → ${data.period.to}`).slice(0, 240),
       heading: vi ? `Cập nhật hằng tuần — ${p.name}` : `Weekly update — ${p.name}`,
       lines: reportEmailLines(data),

@@ -66,11 +66,17 @@ export async function sendWorkEmail(opts: {
   attachments?: Array<{ filename: string; content: string; contentType?: string }>;
   /** UX-D: Reply-To (vd. email người mời). */
   replyTo?: string | null;
+  /** 28/10/2026: 'vi' ⇒ khung thư tiếng Việt (mặc định 'en' cho các nơi gọi cũ). */
+  lang?: 'vi' | 'en';
+  /** Dòng phụ ngôn ngữ thứ hai cuối thư (tiếng Anh dưới thư tiếng Việt). */
+  secondary?: string[];
 }): Promise<void> {
   // UX-D (09/10/2026): khung thư có thương hiệu (bảng, logo PNG, dark mode, chân thư đủ) — workEmail.ts.
+  const vi = opts.lang === 'vi';
   const { html, text } = renderWorkEmail({
-    lang: 'en', heading: opts.heading, lines: opts.lines, cta: opts.cta ?? null, brand: opts.brand,
-    preheader: opts.lines[0], reason: opts.footer ?? 'You received this email because of activity in CT Work.',
+    lang: vi ? 'vi' : 'en', heading: opts.heading, lines: opts.lines, cta: opts.cta ?? null, brand: opts.brand,
+    preheader: opts.lines[0], secondary: opts.secondary,
+    reason: opts.footer ?? (vi ? 'Bạn nhận thư này vì có hoạt động liên quan tới bạn trên CT Work.' : 'You received this email because of activity in CT Work.'),
   });
   await deliverWorkEmail({ to: opts.to, subject: opts.subject, html, text, replyTo: opts.replyTo, attachments: opts.attachments });
 }

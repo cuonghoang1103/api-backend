@@ -1,0 +1,1164 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-6-lab-registration-form",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-6-1-events-forms"
+  },
+  "exercises": [
+    {
+      "title": "Lab 6 — Workshop Registration Form (controlled inputs · keyboard events · validation)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 100,
+      "points": 100,
+      "concepts": [
+        "controlled components",
+        "synthetic events",
+        "onKeyDown",
+        "preventDefault",
+        "passing arguments to handlers",
+        "state as a snapshot",
+        "derived validation"
+      ],
+      "prerequisites": [
+        "useState",
+        "props & callbacks"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "events",
+        "forms"
+      ],
+      "problemHtml": "<h1>LAB 6: Workshop Registration Form — events &amp; controlled forms</h1>\n<p class=\"bi-phu\">FER202 · Chapter 6 — Event Handling · Suggested time: 100 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build the registration form of a coding workshop. Every input is a <b>controlled component</b>; one <code>handleChange</code> serves many inputs through their <code>name</code>; keyboard events drive a \"skills\" chip input; validation messages appear after the first submit and update live; a live preview shows what the user typed. You will also meet the classic <b>state-as-a-snapshot</b> trap.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Text, email, tel, select, radio, checkbox group and textarea — all controlled.</li>\n  <li>Keyboard-driven skill chips, live validation, submit without reload, reset.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Function components + <code>useState</code> only. No form library.</li>\n  <li>The whole form state is ONE object; one <code>handleChange</code> uses <code>e.target.name</code>.</li>\n  <li>Errors are derived from the form data (no separate error state needed).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── components/\n│   ├── RegistrationForm.js   # form + preview + guests\n│   └── SkillInput.js         # chip input (keyboard events)\n├── utils/\n│   └── validate.js           # rules → { field: message }\n├── data/\n│   └── options.js            # TRACKS, LEVELS, TOPICS (given)\n├── App.js                    # registrations list (given)\n├── index.css                 # given\n└── index.js                  # given</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------+-----------------------+\n| Register for the workshop                              | Hello, Nguyen Van An! |\n| Full name [Nguyen Van An              ]                | Track: Backend        |\n| Email     [an@example.com             ]                | Level: Advanced       |\n| Phone     [0912345678                 ]                | Topics: React, Testing|\n| Track     [Backend                  v]                 +-----------------------+\n| Level     (o) Beginner ( ) Intermediate ( ) Advanced   | Registered! ...       |\n| Topics    [x] React [ ] Node.js [x] Testing ...        | Registrations (1)     |\n| Skills    [Type a skill and press Enter]               | - Nguyen Van An —     |\n|           (React x) (Docker x)   2/5 skills            |   Backend (Advanced)  |\n| Short bio [                         ] 200 characters left                       |\n| Guests    [-1]  0  [+1] [+3]                           |                       |\n| [Register] [Reset]                                     |                       |\n+--------------------------------------------------------+-----------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Registration (form state)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>fullName / email / phone</code></td><td>string</td><td>text inputs</td></tr><tr><td><code>track</code></td><td>'' | 'Frontend' | 'Backend' | 'Mobile' | 'AI'</td><td>select, empty by default</td></tr><tr><td><code>level</code></td><td>'Beginner' | 'Intermediate' | 'Advanced'</td><td>radio, default Beginner</td></tr><tr><td><code>topics</code></td><td>string[] (topic ids)</td><td>checkbox group, kept in TOPICS order</td></tr><tr><td><code>skills</code></td><td>string[]</td><td>chips, ≤ 5, unique (case-insensitive)</td></tr><tr><td><code>bio</code></td><td>string</td><td>≤ 200 characters</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Controlled text inputs + live preview <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#fullName</code>, <code>#email</code>, <code>#phone</code> with <code>value</code> + <code>onChange</code>.</li>\n  <li><code>#preview-name</code> reads <code>Hello, {name}!</code> while typing (<code>Hello, guest!</code> when empty).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">onChange</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Select, radio &amp; checkbox group <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#track</code> (empty option first), radios <code>#level-{Level}</code> (<code>name=\"level\"</code>, default Beginner), checkboxes <code>#topic-{id}</code> stored as an array.</li>\n  <li>Preview: <code>#preview-track</code> <code>Track: X</code>, <code>#preview-level</code> <code>Level: X</code>, <code>#preview-topics</code> <code>Topics: React, Testing</code> (TOPICS order).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">checked + onChange</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Validation <span class=\"bi-diem\">2 marks</span></h3>\n<p>Nothing is shown before the first submit. After it, every error is shown in <code>#err-{field}.error</code> and disappears as soon as the field becomes valid.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>fullName ≥ 2 words ⇒ <code>Please enter your full name</code></li>\n  <li>email ⇒ <code>Invalid email address</code> · phone <code>0</code> + 9 digits ⇒ <code>Phone must be 10 digits starting with 0</code></li>\n  <li>track ⇒ <code>Please choose a track</code> · topics ≥ 1 ⇒ <code>Pick at least one topic</code></li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Skill chips (keyboard events) <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#skill-input</code>: <b>Enter</b> adds a <code>.tag</code> (trimmed, unique ignoring case, max 5) and clears the box — it must <b>not</b> submit the form.</li>\n  <li><b>Backspace</b> on an empty box removes the last chip; each chip has a <code>.tag-remove</code> (✕) button that removes that chip.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">onKeyDown</span> <span class=\"bi-hook\">e.key</span> <span class=\"bi-hook\">e.preventDefault()</span></p>\n<p><b>Example:</b></p>\n<pre>React + Enter, react + Enter, Docker + Enter  ⇒  (React ✕) (Docker ✕)  ·  Backspace on empty box  ⇒  (React ✕)</pre>\n</div>\n<div class=\"bi-cn\"><h3>5. Bio counter <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#bio</code> textarea, <code>maxLength</code> 200; <code>#bio-count</code> reads <code>N characters left</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Submit <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#reg-form</code> submit: <code>e.preventDefault()</code>; if valid, add the registration (App shows <code>#success</code> and a line <code>Name — Track (Level)</code> in <code>#registrations</code>), then reset the form.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">onSubmit</span> <span class=\"bi-hook\">callback props</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Guests (state as a snapshot) <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#guests</code> with <code>#minus-one</code> (not below 0), <code>#plus-one</code>, <code>#plus-three</code>. +3 must add three — use updater functions.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">setState(prev =&gt; …)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Reset button <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#btn-reset</code> (<code>type=\"button\"</code>) restores the initial form, hides errors and sets guests to 0 — without submitting.</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#reg-form · #fullName · #email · #phone · #track · #level-{Level} · #topic-{id} · #bio · #btn-submit · #btn-reset</code></td><td>form</td></tr><tr><td><code>#err-{field}.error</code></td><td>error messages</td></tr><tr><td><code>#skill-input · .tag · .tag-remove</code></td><td>skill chips</td></tr><tr><td><code>#bio-count · #guests · #minus-one · #plus-one · #plus-three</code></td><td>counters</td></tr><tr><td><code>#preview-name · #preview-track · #preview-level · #preview-topics · #success · #registrations</code></td><td>preview / result</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Controlled text inputs + live preview</td><td>1</td></tr><tr><td>2</td><td>Select, radio &amp; checkbox group</td><td>1.5</td></tr><tr><td>3</td><td>Validation</td><td>2</td></tr><tr><td>4</td><td>Skill chips (keyboard events)</td><td>1.5</td></tr><tr><td>5</td><td>Bio counter</td><td>1</td></tr><tr><td>6</td><td>Submit</td><td>1.5</td></tr><tr><td>7</td><td>Guests (state as a snapshot)</td><td>0.5</td></tr><tr><td>8</td><td>Reset button</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Enter in the skill box submits the whole form (missing <code>preventDefault</code> on keydown).</li>\n  <li><code>onClick={remove(skill)}</code> — the function runs during render and deletes everything.</li>\n  <li>Reset button without <code>type=\"button\"</code> — it submits the form.</li>\n  <li><code>setGuests(guests + 1)</code> three times adds only 1.</li>\n  <li>Pushing into <code>form.topics</code> directly — the checkbox does not update.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 6: Form đăng ký workshop — sự kiện &amp; form controlled</h1>\n<p class=\"bi-phu\">FER202 · Chương 6 — Xử lý sự kiện · Thời gian gợi ý: 100 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm form đăng ký một workshop lập trình. Mọi ô nhập là <b>controlled component</b>; một <code>handleChange</code> phục vụ nhiều ô qua thuộc tính <code>name</code>; sự kiện bàn phím điều khiển ô \"kỹ năng\" dạng chip; câu lỗi hiện sau lần gửi đầu và cập nhật trực tiếp; khung xem trước hiện ngay những gì người dùng gõ. Bạn cũng gặp bẫy kinh điển <b>state là ảnh chụp (snapshot)</b>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Text, email, tel, select, radio, nhóm checkbox và textarea — đều controlled.</li>\n  <li>Chip kỹ năng điều khiển bằng bàn phím, kiểm hợp lệ trực tiếp, gửi không tải lại, nút làm lại.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ function component + <code>useState</code>. Không dùng thư viện form.</li>\n  <li>Toàn bộ state form là MỘT object; một <code>handleChange</code> dùng <code>e.target.name</code>.</li>\n  <li>Lỗi là giá trị suy ra từ dữ liệu form (không cần state lỗi riêng).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── components/\n│   ├── RegistrationForm.js   # form + preview + guests\n│   └── SkillInput.js         # chip input (keyboard events)\n├── utils/\n│   └── validate.js           # rules → { field: message }\n├── data/\n│   └── options.js            # TRACKS, LEVELS, TOPICS (given)\n├── App.js                    # registrations list (given)\n├── index.css                 # given\n└── index.js                  # given</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------+-----------------------+\n| Register for the workshop                              | Hello, Nguyen Van An! |\n| Full name [Nguyen Van An              ]                | Track: Backend        |\n| Email     [an@example.com             ]                | Level: Advanced       |\n| Phone     [0912345678                 ]                | Topics: React, Testing|\n| Track     [Backend                  v]                 +-----------------------+\n| Level     (o) Beginner ( ) Intermediate ( ) Advanced   | Registered! ...       |\n| Topics    [x] React [ ] Node.js [x] Testing ...        | Registrations (1)     |\n| Skills    [Type a skill and press Enter]               | - Nguyen Van An —     |\n|           (React x) (Docker x)   2/5 skills            |   Backend (Advanced)  |\n| Short bio [                         ] 200 characters left                       |\n| Guests    [-1]  0  [+1] [+3]                           |                       |\n| [Register] [Reset]                                     |                       |\n+--------------------------------------------------------+-----------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Registration (form state)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>fullName / email / phone</code></td><td>string</td><td>ô chữ</td></tr><tr><td><code>track</code></td><td>'' | 'Frontend' | 'Backend' | 'Mobile' | 'AI'</td><td>select, mặc định rỗng</td></tr><tr><td><code>level</code></td><td>'Beginner' | 'Intermediate' | 'Advanced'</td><td>radio, mặc định Beginner</td></tr><tr><td><code>topics</code></td><td>string[] (topic ids)</td><td>nhóm checkbox, giữ thứ tự TOPICS</td></tr><tr><td><code>skills</code></td><td>string[]</td><td>chip, ≤ 5, không trùng (không phân biệt hoa/thường)</td></tr><tr><td><code>bio</code></td><td>string</td><td>≤ 200 ký tự</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Ô chữ controlled + xem trước <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#fullName</code>, <code>#email</code>, <code>#phone</code> có <code>value</code> + <code>onChange</code>.</li>\n  <li><code>#preview-name</code> ghi <code>Hello, {tên}!</code> ngay khi gõ (<code>Hello, guest!</code> khi trống).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">onChange</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Select, radio &amp; nhóm checkbox <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#track</code> (lựa chọn rỗng đầu tiên), radio <code>#level-{Level}</code> (<code>name=\"level\"</code>, mặc định Beginner), checkbox <code>#topic-{id}</code> lưu thành mảng.</li>\n  <li>Xem trước: <code>#preview-track</code> <code>Track: X</code>, <code>#preview-level</code> <code>Level: X</code>, <code>#preview-topics</code> <code>Topics: React, Testing</code> (thứ tự TOPICS).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">checked + onChange</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Kiểm hợp lệ <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Trước lần gửi đầu không hiện gì. Sau đó mọi lỗi hiện trong <code>#err-{ô}.error</code> và biến mất ngay khi ô hợp lệ.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>fullName ≥ 2 từ ⇒ <code>Please enter your full name</code></li>\n  <li>email ⇒ <code>Invalid email address</code> · phone <code>0</code> + 9 chữ số ⇒ <code>Phone must be 10 digits starting with 0</code></li>\n  <li>track ⇒ <code>Please choose a track</code> · topics ≥ 1 ⇒ <code>Pick at least one topic</code></li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Chip kỹ năng (sự kiện bàn phím) <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#skill-input</code>: <b>Enter</b> thêm một <code>.tag</code> (bỏ khoảng trắng, không trùng bất kể hoa/thường, tối đa 5) và xoá ô — <b>không</b> được gửi form.</li>\n  <li><b>Backspace</b> khi ô trống xoá chip cuối; mỗi chip có nút <code>.tag-remove</code> (✕) xoá đúng chip đó.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">onKeyDown</span> <span class=\"bi-hook\">e.key</span> <span class=\"bi-hook\">e.preventDefault()</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>React + Enter, react + Enter, Docker + Enter  ⇒  (React ✕) (Docker ✕)  ·  Backspace khi ô trống  ⇒  (React ✕)</pre>\n</div>\n<div class=\"bi-cn\"><h3>5. Đếm ký tự bio <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Textarea <code>#bio</code>, <code>maxLength</code> 200; <code>#bio-count</code> ghi <code>N characters left</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Gửi form <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Gửi <code>#reg-form</code>: <code>e.preventDefault()</code>; hợp lệ thì thêm đăng ký (App hiện <code>#success</code> và dòng <code>Tên — Track (Level)</code> trong <code>#registrations</code>), rồi làm trống form.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">onSubmit</span> <span class=\"bi-hook\">callback props</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Khách đi kèm (state là ảnh chụp) <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#guests</code> với <code>#minus-one</code> (không dưới 0), <code>#plus-one</code>, <code>#plus-three</code>. +3 phải cộng đủ ba — dùng hàm cập nhật.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">setState(prev =&gt; …)</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Nút làm lại <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#btn-reset</code> (<code>type=\"button\"</code>) trả form về ban đầu, ẩn lỗi và đặt khách về 0 — không gửi form.</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#reg-form · #fullName · #email · #phone · #track · #level-{Level} · #topic-{id} · #bio · #btn-submit · #btn-reset</code></td><td>form</td></tr><tr><td><code>#err-{field}.error</code></td><td>câu lỗi</td></tr><tr><td><code>#skill-input · .tag · .tag-remove</code></td><td>chip kỹ năng</td></tr><tr><td><code>#bio-count · #guests · #minus-one · #plus-one · #plus-three</code></td><td>bộ đếm</td></tr><tr><td><code>#preview-name · #preview-track · #preview-level · #preview-topics · #success · #registrations</code></td><td>xem trước / kết quả</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Ô chữ controlled + xem trước</td><td>1</td></tr><tr><td>2</td><td>Select, radio &amp; nhóm checkbox</td><td>1.5</td></tr><tr><td>3</td><td>Kiểm hợp lệ</td><td>2</td></tr><tr><td>4</td><td>Chip kỹ năng (sự kiện bàn phím)</td><td>1.5</td></tr><tr><td>5</td><td>Đếm ký tự bio</td><td>1</td></tr><tr><td>6</td><td>Gửi form</td><td>1.5</td></tr><tr><td>7</td><td>Khách đi kèm (state là ảnh chụp)</td><td>0.5</td></tr><tr><td>8</td><td>Nút làm lại</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Enter trong ô kỹ năng gửi luôn cả form (thiếu <code>preventDefault</code> ở keydown).</li>\n  <li><code>onClick={remove(skill)}</code> — hàm chạy ngay khi render và xoá sạch.</li>\n  <li>Nút Reset thiếu <code>type=\"button\"</code> — nó gửi form.</li>\n  <li><code>setGuests(guests + 1)</code> ba lần chỉ cộng 1.</li>\n  <li>Push thẳng vào <code>form.topics</code> — checkbox không cập nhật.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Function components + <code>useState</code> only. No form library.|||Chỉ function component + <code>useState</code>. Không dùng thư viện form.\nThe whole form state is ONE object; one <code>handleChange</code> uses <code>e.target.name</code>.|||Toàn bộ state form là MỘT object; một <code>handleChange</code> dùng <code>e.target.name</code>.\nErrors are derived from the form data (no separate error state needed).|||Lỗi là giá trị suy ra từ dữ liệu form (không cần state lỗi riêng).",
+      "examplesJson": [
+        {
+          "input": "Skill chips (keyboard events)|||Chip kỹ năng (sự kiện bàn phím)",
+          "output": "React + Enter, react + Enter, Docker + Enter  ⇒  (React ✕) (Docker ✕)  ·  Backspace on empty box  ⇒  (React ✕)|||React + Enter, react + Enter, Docker + Enter  ⇒  (React ✕) (Docker ✕)  ·  Backspace khi ô trống  ⇒  (React ✕)",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Một state form = { fullName, email, phone, track, level, topics: [], skills: [], bio: \"\" }; handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value })) dùng cho text/select/radio/textarea.",
+        "Checkbox nhóm: toggleTopic(id) tạo mảng mới (filter để bỏ, [...arr, id] để thêm). Lỗi = submitted ? validate(form) : {} — không cần state lỗi.",
+        "SkillInput: onKeyDown={e => { if (e.key === \"Enter\") { e.preventDefault(); … } }}; Backspace chỉ xoá khi ô đang trống.",
+        "+3: gọi setGuests(g => g + 1) ba lần. Nút Reset: type=\"button\" và đặt lại form, submitted, guests."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/components/RegistrationForm.js",
+          "language": "javascript",
+          "code": "// src/components/RegistrationForm.js — STARTER: ô nhập chưa nối state, chưa kiểm, chưa chặn gửi\nimport { LEVELS, TOPICS, TRACKS } from '../data/options';\n\nexport default function RegistrationForm({ onRegister }) {\n  // TODO: state form + handleChange, lỗi #err-<ô> sau lần gửi đầu, topics/skills/bio/guests, submit + reset\n  return (\n    <>\n      <form id=\"reg-form\">\n        <h2>Register for the workshop</h2>\n        <label className=\"field\">Full name <input id=\"fullName\" name=\"fullName\" type=\"text\" /></label>\n        <label className=\"field\">Email <input id=\"email\" name=\"email\" type=\"email\" /></label>\n        <label className=\"field\">Phone <input id=\"phone\" name=\"phone\" type=\"tel\" /></label>\n        <label className=\"field\">Track\n          <select id=\"track\" name=\"track\">\n            <option value=\"\">-- Choose a track --</option>\n            {TRACKS.map((t) => <option key={t} value={t}>{t}</option>)}\n          </select>\n        </label>\n        <div className=\"field\">Level\n          {LEVELS.map((lv) => <label key={lv}><input type=\"radio\" id={`level-${lv}`} name=\"level\" value={lv} /> {lv}</label>)}\n        </div>\n        <div className=\"field\">Topics\n          {TOPICS.map((t) => <label key={t.id}><input type=\"checkbox\" id={`topic-${t.id}`} /> {t.label}</label>)}\n        </div>\n        <button id=\"btn-submit\">Register</button>\n      </form>\n      <aside className=\"card\" id=\"preview\">\n        <h3 id=\"preview-name\">Hello, guest!</h3>\n      </aside>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/SkillInput.js",
+          "language": "javascript",
+          "code": "// src/components/SkillInput.js — STARTER\nexport default function SkillInput({ skills, onChange }) {\n  // TODO: Enter thêm chip .tag (không trùng, tối đa 5), Backspace khi ô trống xoá chip cuối, .tag-remove xoá chip đó\n  return <input id=\"skill-input\" type=\"text\" placeholder=\"Type a skill and press Enter\" />;\n}\n"
+        },
+        {
+          "name": "src/utils/validate.js",
+          "language": "javascript",
+          "code": "// src/utils/validate.js — STARTER\nexport default function validate(form) {\n  // TODO: fullName (≥ 2 từ) · email · phone (0 + 9 chữ số) · track · topics (≥ 1)\n  return {};\n}\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — giữ danh sách đăng ký; form báo lên qua onRegister\nimport { useState } from 'react';\nimport RegistrationForm from './components/RegistrationForm';\n\nexport default function App() {\n  const [registrations, setRegistrations] = useState([]);\n  const last = registrations[registrations.length - 1];\n\n  return (\n    <main className=\"page\">\n      <RegistrationForm onRegister={(r) => setRegistrations((list) => [...list, r])} />\n      <section>\n        {last && (\n          <div id=\"success\" className=\"card\">\n            <b>Registered!</b> {last.fullName} ({last.email}) joined the {last.track} track as {last.level}\n            {last.skills.length > 0 && <> — skills: {last.skills.join(', ')}</>}.\n          </div>\n        )}\n        <h3>Registrations ({registrations.length})</h3>\n        <ul id=\"registrations\">\n          {registrations.map((r) => (\n            <li key={r.email + r.fullName}>{r.fullName} — {r.track} ({r.level})</li>\n          ))}\n        </ul>\n      </section>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }\n.page { max-width: 980px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\n@media (max-width: 800px) { .page { grid-template-columns: 1fr; } }\nform, .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; }\n.field { display: grid; gap: 4px; margin-bottom: 12px; font-size: 14px; }\n.field input[type=text], .field input[type=email], .field input[type=tel], .field select, .field textarea {\n  padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\n.inline { display: flex; flex-wrap: wrap; gap: 12px; }\n.error { color: #dc2626; font-size: 12px; }\n.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }\n.tag { background: #e0f2fe; color: #075985; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 13px; }\n.tag-remove { border: 0; background: transparent; cursor: pointer; }\nbutton { cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font: inherit; }\nbutton[type=submit] { background: #2563eb; color: #fff; border-color: #2563eb; }\n.muted { color: #64748b; font-size: 12px; }\n#success { background: #ecfdf5; border-color: #6ee7b7; }\n"
+        },
+        {
+          "name": "src/data/options.js",
+          "language": "javascript",
+          "code": "// src/data/options.js — đã cho\nexport const TRACKS = ['Frontend', 'Backend', 'Mobile', 'AI'];\nexport const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];\nexport const TOPICS = [\n  { id: 'react', label: 'React' },\n  { id: 'nodejs', label: 'Node.js' },\n  { id: 'testing', label: 'Testing' },\n  { id: 'uiux', label: 'UI/UX' },\n  { id: 'devops', label: 'DevOps' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/components/RegistrationForm.js",
+          "language": "javascript",
+          "code": "// src/components/RegistrationForm.js — MỘT state object cho cả form + một handleChange dùng chung\nimport { useState } from 'react';\nimport SkillInput from './SkillInput';\nimport validate from '../utils/validate';\nimport { LEVELS, TOPICS, TRACKS } from '../data/options';\n\nexport const INITIAL = { fullName: '', email: '', phone: '', track: '', level: 'Beginner', topics: [], skills: [], bio: '' };\nconst BIO_MAX = 200;\n\nexport default function RegistrationForm({ onRegister }) {\n  const [form, setForm] = useState(INITIAL);\n  const [submitted, setSubmitted] = useState(false); // chỉ hiện lỗi SAU lần gửi đầu\n  const [guests, setGuests] = useState(0);\n\n  // lỗi là giá trị suy ra từ form ⇒ sửa ô nào là lỗi ô đó tự mất (không cần state lỗi riêng)\n  const errors = submitted ? validate(form) : {};\n\n  // text / email / tel / select / radio / textarea: cùng một handler nhờ thuộc tính name\n  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));\n\n  // nhóm checkbox ⇒ mảng: bật thì thêm, tắt thì bỏ; giữ thứ tự của TOPICS\n  const toggleTopic = (id) =>\n    setForm((f) => {\n      const on = f.topics.includes(id) ? f.topics.filter((t) => t !== id) : [...f.topics, id];\n      return { ...f, topics: TOPICS.map((t) => t.id).filter((t) => on.includes(t)) };\n    });\n\n  // \"state as a snapshot\": ba lần setGuests(guests + 1) chỉ +1. Dùng hàm cập nhật ⇒ +3 thật\n  const addThree = () => {\n    setGuests((g) => g + 1);\n    setGuests((g) => g + 1);\n    setGuests((g) => g + 1);\n  };\n\n  const reset = () => {\n    setForm(INITIAL);\n    setSubmitted(false);\n    setGuests(0);\n  };\n\n  const handleSubmit = (e) => {\n    e.preventDefault(); // không có dòng này trình duyệt tải lại trang\n    setSubmitted(true);\n    if (Object.keys(validate(form)).length > 0) return;\n    onRegister({ ...form, fullName: form.fullName.trim(), email: form.email.trim(), guests });\n    reset();\n  };\n\n  const err = (name) => errors[name] && <span id={`err-${name}`} className=\"error\">{errors[name]}</span>;\n  const topicLabels = TOPICS.filter((t) => form.topics.includes(t.id)).map((t) => t.label);\n\n  return (\n    <>\n      <form id=\"reg-form\" onSubmit={handleSubmit} noValidate>\n        <h2>Register for the workshop</h2>\n        <label className=\"field\">Full name\n          <input id=\"fullName\" name=\"fullName\" type=\"text\" value={form.fullName} onChange={handleChange} />\n          {err('fullName')}\n        </label>\n        <label className=\"field\">Email\n          <input id=\"email\" name=\"email\" type=\"email\" value={form.email} onChange={handleChange} />\n          {err('email')}\n        </label>\n        <label className=\"field\">Phone\n          <input id=\"phone\" name=\"phone\" type=\"tel\" value={form.phone} onChange={handleChange} />\n          {err('phone')}\n        </label>\n        <label className=\"field\">Track\n          <select id=\"track\" name=\"track\" value={form.track} onChange={handleChange}>\n            <option value=\"\">-- Choose a track --</option>\n            {TRACKS.map((t) => <option key={t} value={t}>{t}</option>)}\n          </select>\n          {err('track')}\n        </label>\n        <div className=\"field\">Level\n          <div className=\"inline\">\n            {LEVELS.map((lv) => (\n              <label key={lv}>\n                <input type=\"radio\" id={`level-${lv}`} name=\"level\" value={lv} checked={form.level === lv} onChange={handleChange} /> {lv}\n              </label>\n            ))}\n          </div>\n        </div>\n        <div className=\"field\">Topics\n          <div className=\"inline\">\n            {TOPICS.map((t) => (\n              <label key={t.id}>\n                <input type=\"checkbox\" id={`topic-${t.id}`} checked={form.topics.includes(t.id)} onChange={() => toggleTopic(t.id)} /> {t.label}\n              </label>\n            ))}\n          </div>\n          {err('topics')}\n        </div>\n        <div className=\"field\">Skills\n          <SkillInput skills={form.skills} onChange={(skills) => setForm((f) => ({ ...f, skills }))} />\n        </div>\n        <label className=\"field\">Short bio\n          <textarea id=\"bio\" name=\"bio\" rows={3} maxLength={BIO_MAX} value={form.bio} onChange={handleChange} />\n          <span id=\"bio-count\" className=\"muted\">{BIO_MAX - form.bio.length} characters left</span>\n        </label>\n        <div className=\"field\">Guests\n          <div className=\"inline\">\n            <button type=\"button\" id=\"minus-one\" onClick={() => setGuests((g) => Math.max(0, g - 1))}>−1</button>\n            <b id=\"guests\">{guests}</b>\n            <button type=\"button\" id=\"plus-one\" onClick={() => setGuests((g) => g + 1)}>+1</button>\n            <button type=\"button\" id=\"plus-three\" onClick={addThree}>+3</button>\n          </div>\n        </div>\n        <div className=\"inline\">\n          <button type=\"submit\" id=\"btn-submit\">Register</button>\n          {/* type=\"button\": nút trong form MẶC ĐỊNH là submit */}\n          <button type=\"button\" id=\"btn-reset\" onClick={reset}>Reset</button>\n        </div>\n      </form>\n\n      <aside className=\"card\" id=\"preview\">\n        <h3 id=\"preview-name\">Hello, {form.fullName.trim() || 'guest'}!</h3>\n        <p id=\"preview-track\">Track: {form.track || '—'}</p>\n        <p id=\"preview-level\">Level: {form.level}</p>\n        <p id=\"preview-topics\">Topics: {topicLabels.length ? topicLabels.join(', ') : '—'}</p>\n      </aside>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/SkillInput.js",
+          "language": "javascript",
+          "code": "// src/components/SkillInput.js — ô \"chip\": Enter thêm, Backspace (ô trống) xoá chip cuối, ✕ xoá đúng chip\nimport { useState } from 'react';\n\nconst MAX = 5;\n\nexport default function SkillInput({ skills, onChange }) {\n  const [text, setText] = useState('');\n\n  const handleKeyDown = (e) => {\n    if (e.key === 'Enter') {\n      e.preventDefault(); // Enter trong form mặc định = GỬI FORM — chặn lại\n      const skill = text.trim();\n      const exists = skills.some((s) => s.toLowerCase() === skill.toLowerCase());\n      if (skill && !exists && skills.length < MAX) onChange([...skills, skill]);\n      setText('');\n    } else if (e.key === 'Backspace' && text === '' && skills.length > 0) {\n      onChange(skills.slice(0, -1)); // bỏ chip cuối (mảng mới)\n    }\n  };\n\n  // truyền THAM SỐ cho handler: arrow function bọc lại, không gọi ngay khi render\n  const remove = (skill) => onChange(skills.filter((s) => s !== skill));\n\n  return (\n    <div>\n      <input\n        id=\"skill-input\"\n        type=\"text\"\n        placeholder=\"Type a skill and press Enter\"\n        value={text}\n        onChange={(e) => setText(e.target.value)}\n        onKeyDown={handleKeyDown}\n      />\n      <div className=\"tags\">\n        {skills.map((s) => (\n          <span key={s} className=\"tag\">\n            {s}\n            <button type=\"button\" className=\"tag-remove\" aria-label={`Remove ${s}`} onClick={() => remove(s)}>✕</button>\n          </span>\n        ))}\n      </div>\n      <span className=\"muted\">{skills.length}/{MAX} skills</span>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/validate.js",
+          "language": "javascript",
+          "code": "// src/utils/validate.js — luật kiểm thuần JS: nhận dữ liệu form, trả { tênÔ: câu lỗi }\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nconst PHONE_RE = /^0\\d{9}$/;\n\nexport default function validate(form) {\n  const errors = {};\n  if (form.fullName.trim().split(/\\s+/).filter(Boolean).length < 2) errors.fullName = 'Please enter your full name';\n  if (!EMAIL_RE.test(form.email.trim())) errors.email = 'Invalid email address';\n  if (!PHONE_RE.test(form.phone.trim())) errors.phone = 'Phone must be 10 digits starting with 0';\n  if (!form.track) errors.track = 'Please choose a track';\n  if (form.topics.length === 0) errors.topics = 'Pick at least one topic';\n  return errors;\n}\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — giữ danh sách đăng ký; form báo lên qua onRegister\nimport { useState } from 'react';\nimport RegistrationForm from './components/RegistrationForm';\n\nexport default function App() {\n  const [registrations, setRegistrations] = useState([]);\n  const last = registrations[registrations.length - 1];\n\n  return (\n    <main className=\"page\">\n      <RegistrationForm onRegister={(r) => setRegistrations((list) => [...list, r])} />\n      <section>\n        {last && (\n          <div id=\"success\" className=\"card\">\n            <b>Registered!</b> {last.fullName} ({last.email}) joined the {last.track} track as {last.level}\n            {last.skills.length > 0 && <> — skills: {last.skills.join(', ')}</>}.\n          </div>\n        )}\n        <h3>Registrations ({registrations.length})</h3>\n        <ul id=\"registrations\">\n          {registrations.map((r) => (\n            <li key={r.email + r.fullName}>{r.fullName} — {r.track} ({r.level})</li>\n          ))}\n        </ul>\n      </section>\n    </main>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }\n.page { max-width: 980px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\n@media (max-width: 800px) { .page { grid-template-columns: 1fr; } }\nform, .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; }\n.field { display: grid; gap: 4px; margin-bottom: 12px; font-size: 14px; }\n.field input[type=text], .field input[type=email], .field input[type=tel], .field select, .field textarea {\n  padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\n.inline { display: flex; flex-wrap: wrap; gap: 12px; }\n.error { color: #dc2626; font-size: 12px; }\n.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }\n.tag { background: #e0f2fe; color: #075985; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 13px; }\n.tag-remove { border: 0; background: transparent; cursor: pointer; }\nbutton { cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font: inherit; }\nbutton[type=submit] { background: #2563eb; color: #fff; border-color: #2563eb; }\n.muted { color: #64748b; font-size: 12px; }\n#success { background: #ecfdf5; border-color: #6ee7b7; }\n"
+        },
+        {
+          "name": "src/data/options.js",
+          "language": "javascript",
+          "code": "// src/data/options.js — đã cho\nexport const TRACKS = ['Frontend', 'Backend', 'Mobile', 'AI'];\nexport const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];\nexport const TOPICS = [\n  { id: 'react', label: 'React' },\n  { id: 'nodejs', label: 'Node.js' },\n  { id: 'testing', label: 'Testing' },\n  { id: 'uiux', label: 'UI/UX' },\n  { id: 'devops', label: 'DevOps' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một object state cho cả form + một <code>handleChange</code> dựa trên <code>e.target.name</code> giữ mã ngắn. Lỗi là giá trị suy ra: <code>submitted ? validate(form) : {}</code> — sửa ô nào, lần render sau lỗi ô đó tự mất. <code>SkillInput</code> xử lý <code>onKeyDown</code>: Enter thêm chip và <code>preventDefault</code> để không gửi form; Backspace trên ô trống xoá chip cuối; nút ✕ dùng arrow function để truyền tham số. Nút +3 minh hoạ \"state là ảnh chụp\": chỉ hàm cập nhật <code>g =&gt; g + 1</code> mới cộng dồn đúng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/responding-to-events",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Preview greets a guest at first",
+            "kiem": "text",
+            "selector": "#preview-name",
+            "giaTri": "Hello, guest!"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Preview updates while typing the name",
+            "kiem": "text",
+            "selector": "#preview-name",
+            "giaTri": "Hello, Nguyen Van An!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              }
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Inputs are controlled (value + onChange)",
+            "kiem": "ma-nguon",
+            "tep": "src/components/RegistrationForm.js",
+            "khop": "value=\\{form\\.fullName\\}|value=\\{fullName\\}"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Select #track updates the preview",
+            "kiem": "text",
+            "selector": "#preview-track",
+            "giaTri": "Track: Backend",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Level defaults to Beginner; radio changes it",
+            "kiem": "text",
+            "selector": "#preview-level",
+            "giaTri": "Level: Advanced",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Checked topics listed in TOPICS order",
+            "kiem": "text",
+            "selector": "#preview-topics",
+            "giaTri": "Topics: React, Testing",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Unchecking removes the topic",
+            "kiem": "text",
+            "selector": "#preview-topics",
+            "giaTri": "Topics: Testing",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react",
+                "giaTri": false
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "#level-Beginner is checked initially",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#level-Beginner",
+            "thuocTinh": "checked",
+            "giaTri": true
+          },
+          {
+            "nhom": "f3",
+            "moTa": "No error is shown before the first submit",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "abc"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Empty submit ⇒ 5 errors",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Exact messages for email and phone",
+            "kiem": "danh-sach-text",
+            "selector": "#err-email, #err-phone",
+            "mongDoi": [
+              "Invalid email address",
+              "Phone must be 10 digits starting with 0"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "12345"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "After submitting, fixing a field clears its error live",
+            "kiem": "khong-ton-tai",
+            "selector": "#err-fullName",
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Tran Binh"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "One-word name is rejected",
+            "kiem": "text",
+            "selector": "#err-fullName",
+            "giaTri": "Please enter your full name",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "An"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Track and topics messages",
+            "kiem": "danh-sach-text",
+            "selector": "#err-track, #err-topics",
+            "mongDoi": [
+              "Please choose a track",
+              "Pick at least one topic"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Phone starting with 1 is rejected",
+            "kiem": "ton-tai",
+            "selector": "#err-phone",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "1912345678"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Enter adds a skill chip",
+            "kiem": "danh-sach-text",
+            "selector": ".tag",
+            "mongDoi": [
+              "React✕",
+              "Docker✕"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "Docker"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Duplicates (any case) are ignored",
+            "kiem": "so-luong",
+            "selector": ".tag",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Enter is handled in onKeyDown with preventDefault (so it cannot submit the form)",
+            "kiem": "ma-nguon",
+            "tep": "src/components/SkillInput.js",
+            "khop": "key\\s*===\\s*['\"]Enter['\"][\\s\\S]{0,200}preventDefault\\(\\)"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "✕ removes exactly that chip",
+            "kiem": "danh-sach-text",
+            "selector": ".tag",
+            "mongDoi": [
+              "Docker✕"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "Docker"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".tag-remove"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Backspace on an empty box removes the last chip",
+            "kiem": "danh-sach-text",
+            "selector": ".tag",
+            "mongDoi": [
+              "React✕"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "Docker"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Backspace"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "At most 5 skills",
+            "kiem": "so-luong",
+            "selector": ".tag",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "A1"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "B2"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "C3"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "D4"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "E5"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "F6"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "The skill box is cleared after Enter",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#skill-input",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#bio-count starts at 200",
+            "kiem": "text",
+            "selector": "#bio-count",
+            "giaTri": "200 characters left"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Counter decreases while typing",
+            "kiem": "text",
+            "selector": "#bio-count",
+            "giaTri": "195 characters left",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#bio",
+                "giaTri": "Hello"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "#bio has maxLength 200",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#bio",
+            "thuocTinh": "maxLength",
+            "giaTri": 200
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Valid submit shows #success",
+            "kiem": "text",
+            "selector": "#success",
+            "khop": "Nguyen Van An[\\s\\S]*Backend[\\s\\S]*Advanced",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Registration is listed",
+            "kiem": "danh-sach-text",
+            "selector": "#registrations li",
+            "mongDoi": [
+              "Nguyen Van An — Backend (Advanced)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Form resets after a successful submit",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#fullName",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Submitting does not reload the page",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Skills are included in the success message",
+            "kiem": "text",
+            "selector": "#success",
+            "khop": "skills: React, Jest",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "React"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#skill-input",
+                "giaTri": "Jest"
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#skill-input",
+                "phim": "Enter"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "No error shown right after a successful reset",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Nguyen Van An"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "an@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#phone",
+                "giaTri": "0912345678"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#track",
+                "giaTri": "Backend"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#level-Advanced"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-react"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#topic-testing"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "+3 adds three (functional updates)",
+            "kiem": "text",
+            "selector": "#guests",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus-three"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "+3 twice ⇒ 6, −1 ⇒ 5, never below 0",
+            "kiem": "text",
+            "selector": "#guests",
+            "giaTri": "5",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus-three"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#plus-three"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#minus-one"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Guests never go below 0",
+            "kiem": "text",
+            "selector": "#guests",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#minus-one"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Reset clears the fields",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#fullName",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Le Hoa"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reset"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Reset is not a submit (no error, nothing registered)",
+            "kiem": "so-luong",
+            "selector": ".error, #registrations li",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#fullName",
+                "giaTri": "Le Hoa"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reset"
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Reset also hides errors shown after a failed submit",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#reg-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reset"
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Controlled text inputs + live preview",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Select, radio & checkbox group",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Validation",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Skill chips (keyboard events)",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Bio counter",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Submit",
+            "diem": 1.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Guests (state as a snapshot)",
+            "diem": 0.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Reset button",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Ô nhập có <code>value</code> mà thiếu <code>onChange</code> ⇒ gõ không được (React cảnh báo read-only)."
+        },
+        {
+          "loi": "Radio cùng nhóm nhưng khác <code>name</code> ⇒ chọn được nhiều nút một lúc."
+        },
+        {
+          "loi": "<code>onClick={remove(s)}</code> thay vì <code>onClick={() => remove(s)}</code> ⇒ gọi ngay lúc render."
+        },
+        {
+          "loi": "Enter trong ô chip làm gửi form ⇒ hiện cả loạt lỗi; phải <code>e.preventDefault()</code> trong onKeyDown."
+        },
+        {
+          "loi": "<code>setGuests(guests + 1)</code> nhiều lần trong cùng một handler ⇒ chỉ +1 vì guests là ảnh chụp của lần render."
+        },
+        {
+          "loi": "Hiện lỗi ngay khi trang vừa mở (chưa ai gõ gì) — người dùng thấy cả form đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "synthetic event",
+          "vi": "sự kiện React bọc sự kiện trình duyệt (e.target, e.key, e.preventDefault)"
+        },
+        {
+          "en": "event handler",
+          "vi": "hàm xử lý sự kiện"
+        },
+        {
+          "en": "updater function",
+          "vi": "hàm cập nhật setX(prev => …) — luôn nhận giá trị mới nhất"
+        },
+        {
+          "en": "snapshot",
+          "vi": "ảnh chụp: trong một lần render, state là hằng số"
+        },
+        {
+          "en": "chip / tag",
+          "vi": "nhãn nhỏ có nút xoá"
+        },
+        {
+          "en": "controlled input",
+          "vi": "ô nhập do state điều khiển (value + onChange)"
+        },
+        {
+          "en": "validate / validation",
+          "vi": "kiểm tra dữ liệu hợp lệ"
+        },
+        {
+          "en": "derived value",
+          "vi": "giá trị suy ra từ state/props — tính lại, không lưu state riêng"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 6 — Workshop Registration Form (controlled inputs · keyboard events · validation) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/components/RegistrationForm.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/RegistrationForm.js — MỘT state object cho cả form + một handleChange dùng chung\\nvar _react = require('react');\\nvar _SkillInput = require('./SkillInput'); var _SkillInput2 = _interopRequireDefault(_SkillInput);\\nvar _validate = require('../utils/validate'); var _validate2 = _interopRequireDefault(_validate);\\nvar _options = require('../data/options');\\n\\n const INITIAL = { fullName: '', email: '', phone: '', track: '', level: 'Beginner', topics: [], skills: [], bio: '' }; exports.INITIAL = INITIAL;\\nconst BIO_MAX = 200;\\n\\n function RegistrationForm({ onRegister }) {\\n  const [form, setForm] = _react.useState.call(void 0, exports.INITIAL);\\n  const [submitted, setSubmitted] = _react.useState.call(void 0, false); // chỉ hiện lỗi SAU lần gửi đầu\\n  const [guests, setGuests] = _react.useState.call(void 0, 0);\\n\\n  // lỗi là giá trị suy ra từ form ⇒ sửa ô nào là lỗi ô đó tự mất (không cần state lỗi riêng)\\n  const errors = submitted ? _validate2.default.call(void 0, form) : {};\\n\\n  // text / email / tel / select / radio / textarea: cùng một handler nhờ thuộc tính name\\n  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));\\n\\n  // nhóm checkbox ⇒ mảng: bật thì thêm, tắt thì bỏ; giữ thứ tự của TOPICS\\n  const toggleTopic = (id) =>\\n    setForm((f) => {\\n      const on = f.topics.includes(id) ? f.topics.filter((t) => t !== id) : [...f.topics, id];\\n      return { ...f, topics: _options.TOPICS.map((t) => t.id).filter((t) => on.includes(t)) };\\n    });\\n\\n  // \\\"state as a snapshot\\\": ba lần setGuests(guests + 1) chỉ +1. Dùng hàm cập nhật ⇒ +3 thật\\n  const addThree = () => {\\n    setGuests((g) => g + 1);\\n    setGuests((g) => g + 1);\\n    setGuests((g) => g + 1);\\n  };\\n\\n  const reset = () => {\\n    setForm(exports.INITIAL);\\n    setSubmitted(false);\\n    setGuests(0);\\n  };\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault(); // không có dòng này trình duyệt tải lại trang\\n    setSubmitted(true);\\n    if (Object.keys(_validate2.default.call(void 0, form)).length > 0) return;\\n    onRegister({ ...form, fullName: form.fullName.trim(), email: form.email.trim(), guests });\\n    reset();\\n  };\\n\\n  const err = (name) => errors[name] && _jsxruntime.jsx.call(void 0, 'span', { id: `err-${name}`, className: \\\"error\\\", children: errors[name]});\\n  const topicLabels = _options.TOPICS.filter((t) => form.topics.includes(t.id)).map((t) => t.label);\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"reg-form\\\", onSubmit: handleSubmit, noValidate: true, children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Register for the workshop\\\"   })\\n        , _jsxruntime.jsxs.call(void 0, 'label', { className: \\\"field\\\", children: [\\\"Full name\\\"\\n          , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"fullName\\\", name: \\\"fullName\\\", type: \\\"text\\\", value: form.fullName, onChange: handleChange,} )\\n          , err('fullName')\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { className: \\\"field\\\", children: [\\\"Email\\\"\\n          , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"email\\\", name: \\\"email\\\", type: \\\"email\\\", value: form.email, onChange: handleChange,} )\\n          , err('email')\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { className: \\\"field\\\", children: [\\\"Phone\\\"\\n          , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"phone\\\", name: \\\"phone\\\", type: \\\"tel\\\", value: form.phone, onChange: handleChange,} )\\n          , err('phone')\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { className: \\\"field\\\", children: [\\\"Track\\\"\\n          , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"track\\\", name: \\\"track\\\", value: form.track, onChange: handleChange, children: [\\n            _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"-- Choose a track --\\\"    })\\n            , _options.TRACKS.map((t) => _jsxruntime.jsx.call(void 0, 'option', { value: t, children: t}, t))\\n          ]})\\n          , err('track')\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"field\\\", children: [\\\"Level\\\"\\n          , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"inline\\\", children: \\n            _options.LEVELS.map((lv) => (\\n              _jsxruntime.jsxs.call(void 0, 'label', { children: [\\n                _jsxruntime.jsx.call(void 0, 'input', { type: \\\"radio\\\", id: `level-${lv}`, name: \\\"level\\\", value: lv, checked: form.level === lv, onChange: handleChange,} ), \\\" \\\" , lv\\n              ]}, lv)\\n            ))\\n          })\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"field\\\", children: [\\\"Topics\\\"\\n          , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"inline\\\", children: \\n            _options.TOPICS.map((t) => (\\n              _jsxruntime.jsxs.call(void 0, 'label', { children: [\\n                _jsxruntime.jsx.call(void 0, 'input', { type: \\\"checkbox\\\", id: `topic-${t.id}`, checked: form.topics.includes(t.id), onChange: () => toggleTopic(t.id),} ), \\\" \\\" , t.label\\n              ]}, t.id)\\n            ))\\n          })\\n          , err('topics')\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"field\\\", children: [\\\"Skills\\\"\\n          , _jsxruntime.jsx.call(void 0, _SkillInput2.default, { skills: form.skills, onChange: (skills) => setForm((f) => ({ ...f, skills })),} )\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'label', { className: \\\"field\\\", children: [\\\"Short bio\\\"\\n          , _jsxruntime.jsx.call(void 0, 'textarea', { id: \\\"bio\\\", name: \\\"bio\\\", rows: 3, maxLength: BIO_MAX, value: form.bio, onChange: handleChange,} )\\n          , _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"bio-count\\\", className: \\\"muted\\\", children: [BIO_MAX - form.bio.length, \\\" characters left\\\"  ]})\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"field\\\", children: [\\\"Guests\\\"\\n          , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"inline\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"minus-one\\\", onClick: () => setGuests((g) => Math.max(0, g - 1)), children: \\\"−1\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'b', { id: \\\"guests\\\", children: guests})\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"plus-one\\\", onClick: () => setGuests((g) => g + 1), children: \\\"+1\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"plus-three\\\", onClick: addThree, children: \\\"+3\\\"})\\n          ]})\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"inline\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", id: \\\"btn-submit\\\", children: \\\"Register\\\"})\\n          /* type=\\\"button\\\": nút trong form MẶC ĐỊNH là submit */\\n          , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-reset\\\", onClick: reset, children: \\\"Reset\\\"})\\n        ]})\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'aside', { className: \\\"card\\\", id: \\\"preview\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'h3', { id: \\\"preview-name\\\", children: [\\\"Hello, \\\" , form.fullName.trim() || 'guest', \\\"!\\\"]})\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"preview-track\\\", children: [\\\"Track: \\\" , form.track || '—']})\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"preview-level\\\", children: [\\\"Level: \\\" , form.level]})\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"preview-topics\\\", children: [\\\"Topics: \\\" , topicLabels.length ? topicLabels.join(', ') : '—']})\\n      ]})\\n    ]})\\n  );\\n} exports.default = RegistrationForm;\\n\",\"src/components/SkillInput.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/SkillInput.js — ô \\\"chip\\\": Enter thêm, Backspace (ô trống) xoá chip cuối, ✕ xoá đúng chip\\nvar _react = require('react');\\n\\nconst MAX = 5;\\n\\n function SkillInput({ skills, onChange }) {\\n  const [text, setText] = _react.useState.call(void 0, '');\\n\\n  const handleKeyDown = (e) => {\\n    if (e.key === 'Enter') {\\n      e.preventDefault(); // Enter trong form mặc định = GỬI FORM — chặn lại\\n      const skill = text.trim();\\n      const exists = skills.some((s) => s.toLowerCase() === skill.toLowerCase());\\n      if (skill && !exists && skills.length \\u003c MAX) onChange([...skills, skill]);\\n      setText('');\\n    } else if (e.key === 'Backspace' && text === '' && skills.length > 0) {\\n      onChange(skills.slice(0, -1)); // bỏ chip cuối (mảng mới)\\n    }\\n  };\\n\\n  // truyền THAM SỐ cho handler: arrow function bọc lại, không gọi ngay khi render\\n  const remove = (skill) => onChange(skills.filter((s) => s !== skill));\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n      _jsxruntime.jsx.call(void 0, 'input', {\\n        id: \\\"skill-input\\\",\\n        type: \\\"text\\\",\\n        placeholder: \\\"Type a skill and press Enter\\\"     ,\\n        value: text,\\n        onChange: (e) => setText(e.target.value),\\n        onKeyDown: handleKeyDown,}\\n      )\\n      , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"tags\\\", children: \\n        skills.map((s) => (\\n          _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"tag\\\", children: [\\n            s\\n            , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"tag-remove\\\", 'aria-label': `Remove ${s}`, onClick: () => remove(s), children: \\\"✕\\\"})\\n          ]}, s)\\n        ))\\n      })\\n      , _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"muted\\\", children: [skills.length, \\\"/\\\", MAX, \\\" skills\\\" ]})\\n    ]})\\n  );\\n} exports.default = SkillInput;\\n\",\"src/utils/validate.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/validate.js — luật kiểm thuần JS: nhận dữ liệu form, trả { tênÔ: câu lỗi }\\nconst EMAIL_RE = /^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$/;\\nconst PHONE_RE = /^0\\\\d{9}$/;\\n\\n function validate(form) {\\n  const errors = {};\\n  if (form.fullName.trim().split(/\\\\s+/).filter(Boolean).length \\u003c 2) errors.fullName = 'Please enter your full name';\\n  if (!EMAIL_RE.test(form.email.trim())) errors.email = 'Invalid email address';\\n  if (!PHONE_RE.test(form.phone.trim())) errors.phone = 'Phone must be 10 digits starting with 0';\\n  if (!form.track) errors.track = 'Please choose a track';\\n  if (form.topics.length === 0) errors.topics = 'Pick at least one topic';\\n  return errors;\\n} exports.default = validate;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — giữ danh sách đăng ký; form báo lên qua onRegister\\nvar _react = require('react');\\nvar _RegistrationForm = require('./components/RegistrationForm'); var _RegistrationForm2 = _interopRequireDefault(_RegistrationForm);\\n\\n function App() {\\n  const [registrations, setRegistrations] = _react.useState.call(void 0, []);\\n  const last = registrations[registrations.length - 1];\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'main', { className: \\\"page\\\", children: [\\n      _jsxruntime.jsx.call(void 0, _RegistrationForm2.default, { onRegister: (r) => setRegistrations((list) => [...list, r]),} )\\n      , _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n        last && (\\n          _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"success\\\", className: \\\"card\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'b', { children: \\\"Registered!\\\"}), \\\" \\\" , last.fullName, \\\" (\\\" , last.email, \\\") joined the \\\"   , last.track, \\\" track as \\\"   , last.level\\n            , last.skills.length > 0 && _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\\" — skills: \\\"   , last.skills.join(', ')]}), \\\".\\\"\\n          ]})\\n        )\\n        , _jsxruntime.jsxs.call(void 0, 'h3', { children: [\\\"Registrations (\\\" , registrations.length, \\\")\\\"]})\\n        , _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"registrations\\\", children: \\n          registrations.map((r) => (\\n            _jsxruntime.jsxs.call(void 0, 'li', { children: [r.fullName, \\\" — \\\"  , r.track, \\\" (\\\" , r.level, \\\")\\\"]}, r.email + r.fullName)\\n          ))\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/options.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/options.js — đã cho\\n const TRACKS = ['Frontend', 'Backend', 'Mobile', 'AI']; exports.TRACKS = TRACKS;\\n const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; exports.LEVELS = LEVELS;\\n const TOPICS = [\\n  { id: 'react', label: 'React' },\\n  { id: 'nodejs', label: 'Node.js' },\\n  { id: 'testing', label: 'Testing' },\\n  { id: 'uiux', label: 'UI/UX' },\\n  { id: 'devops', label: 'DevOps' },\\n]; exports.TOPICS = TOPICS;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\n* { box-sizing: border-box; }\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }\\n.page { max-width: 980px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }\\n@media (max-width: 800px) { .page { grid-template-columns: 1fr; } }\\nform, .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; }\\n.field { display: grid; gap: 4px; margin-bottom: 12px; font-size: 14px; }\\n.field input[type=text], .field input[type=email], .field input[type=tel], .field select, .field textarea {\\n  padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\\n.inline { display: flex; flex-wrap: wrap; gap: 12px; }\\n.error { color: #dc2626; font-size: 12px; }\\n.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }\\n.tag { background: #e0f2fe; color: #075985; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 13px; }\\n.tag-remove { border: 0; background: transparent; cursor: pointer; }\\nbutton { cursor: pointer; padding: 7px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; font: inherit; }\\nbutton[type=submit] { background: #2563eb; color: #fff; border-color: #2563eb; }\\n.muted { color: #64748b; font-size: 12px; }\\n#success { background: #ecfdf5; border-color: #6ee7b7; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

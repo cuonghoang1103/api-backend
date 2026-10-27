@@ -1,0 +1,738 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-5-lab-task-board",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-5-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5 — Kanban Task Board (components · props · state · PropTypes)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 100,
+      "points": 100,
+      "concepts": [
+        "component composition",
+        "props",
+        "lifting state up",
+        "immutable update",
+        "PropTypes",
+        "class component",
+        "children"
+      ],
+      "prerequisites": [
+        "JSX",
+        "map / filter",
+        "useState"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "components",
+        "props",
+        "state"
+      ],
+      "problemHtml": "<h1>LAB 5: Kanban Task Board — components, props &amp; state</h1>\n<p class=\"bi-phu\">FER202 · Chapter 5 — Components & State · Suggested time: 100 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build a small Kanban board (To Do · In Progress · Done) the React way: split the UI into <b>reusable components</b>, pass data down with <b>props</b>, keep the data in <b>one state</b> owned by <code>App</code> (lifting state up), validate props with <b>PropTypes</b>, write one <b>class component</b> with its own state, and a wrapper component that renders <b>children</b>.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Board → Column → TaskCard component tree; move, add, delete, search tasks.</li>\n  <li>Statistics as a class component; Panel wrapper with children.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One component per file in <code>src/components/</code>. Only <code>App</code> owns state about tasks.</li>\n  <li>Never mutate state: use <code>map</code>, <code>filter</code> and spread to create new arrays/objects.</li>\n  <li>Every list item has a stable <code>key</code> (the task id).</li>\n  <li>Keep the ids / classes of section 6 — the grader uses them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── components/\n│   ├── Board.js        # 3 columns built from STATUSES\n│   ├── Column.js       # title (count) + TaskCards\n│   ├── TaskCard.js     # presentational card + PropTypes\n│   ├── TaskStats.js    # CLASS component\n│   └── Panel.js        # wrapper: title + children\n├── data/\n│   └── tasks.js        # STATUSES + 8 sample tasks (given)\n├── App.js              # state: tasks, search, new-task inputs\n├── index.css           # given\n└── index.js            # given</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------------------------+\n| Kanban Task Board                                                        |\n| [Search tasks...      ] [New task title      ] [medium v] [Add task]     |\n| +- Board -------------------------------------------------------------+  |\n| | To Do (4)             | In Progress (2)         | Done (2)            |  |\n| | +-------------------+ | +---------------------+ | +-----------------+ |  |\n| | | Write the search  | | | Build the TaskCard  | | | Set up the      | |  |\n| | | filter            | | | component           | | | React project   | |  |\n| | | An                | | | Cuong               | | | An              | |  |\n| | | [→] [x]   medium  | | | [←] [→] [x]   high  | | | [←] [x]   high  | |  |\n| | +-------------------+ | +---------------------+ | +-----------------+ |  |\n| +---------------------------------------------------------------------+  |\n| +- Statistics --------------------------------------------------------+  |\n| | Done: 2/8 (25%)   [Show details]                                    |  |\n| +---------------------------------------------------------------------+  |\n+--------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Task</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>unique; new id = max(id) + 1</td></tr><tr><td><code>title</code></td><td>string</td><td>required, trimmed</td></tr><tr><td><code>status</code></td><td>'todo' | 'doing' | 'done'</td><td>order of STATUSES</td></tr><tr><td><code>priority</code></td><td>'high' | 'medium' | 'low'</td><td></td></tr><tr><td><code>assignee</code></td><td>string (optional)</td><td>missing ⇒ show \"Unassigned\"</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>To Do:        5 Write the search filter (medium, An) · 6 Show task statistics (low, Dung)\n              7 Fix the column counter (high, —) · 8 Deploy to Netlify (medium, Binh)\nIn Progress:  3 Build the TaskCard component (high, Cuong) · 4 Add PropTypes to components (low, —)\nDone:         1 Set up the React project (high, An) · 2 Design the board layout (medium, Binh)</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Component tree &amp; props <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Board</code> renders one <code>Column</code> per entry of <code>STATUSES</code>: <code>#col-{status}.column</code> with <code>.column-title</code> <code>To Do (4)</code>.</li>\n  <li><code>TaskCard</code>: <code>#task-{id}.task-card.priority-{priority}</code> with <code>.task-title</code>, <code>.task-assignee</code> and a priority badge; tasks keep data order.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">props</span> <span class=\"bi-hook\">map + key</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. PropTypes &amp; default value <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>TaskCard.propTypes</code> and <code>Column.propTypes</code>; <code>priority</code> uses <code>PropTypes.oneOf(['high', 'medium', 'low'])</code>.</li>\n  <li>A task without <code>assignee</code> shows <code>Unassigned</code> (default parameter value).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">prop-types</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Move between columns <span class=\"bi-diem\">2 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-next</code> (→) moves to the next status, <code>.btn-prev</code> (←) to the previous one. No → in Done, no ← in To Do.</li>\n  <li>State lives in <code>App</code>; children call a function received via props. Update immutably.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">lifting state up</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. Add a task <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#new-task</code> + <code>#new-priority</code> (high/medium/low, default medium) + <code>#btn-add</code> append a task to To Do with id = max + 1.</li>\n  <li>Trim the title; ignore blank titles; clear the input afterwards.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">controlled input</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Delete a task <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-delete</code> (✕) removes the task; counts and statistics update.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Search <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#search</code> filters the cards of every column by title (contains, case-insensitive); column counts show the filtered numbers.</li>\n  <li>Statistics keep counting <b>all</b> tasks.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>\"the\" ⇒ To Do (2) · In Progress (1) · Done (2)</pre>\n</div>\n<div class=\"bi-cn\"><h3>7. Statistics (class component) <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>class TaskStats extends Component</code>: <code>#stats</code> <code>Done: d/n (p%)</code> (rounded).</li>\n  <li>Own state <code>showDetails</code> toggled by <code>#toggle-stats</code> with <code>this.setState</code>; details <code>.stat-high</code> <code>.stat-medium</code> <code>.stat-low</code> (<code>High: 3</code>…).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">class component</span> <span class=\"bi-hook\">this.setState</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Panel with children <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>Panel</code> renders <code>section.panel</code> → <code>h2.panel-title</code> + <code>children</code>; App wraps the board (\"Board\") and the statistics (\"Statistics\").</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">props.children</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#search · #new-task · #new-priority · #btn-add</code></td><td>toolbar</td></tr><tr><td><code>.board · #col-{status}.column · .column-title</code></td><td>board and columns</td></tr><tr><td><code>#task-{id}.task-card.priority-{p} · .task-title · .task-assignee · .btn-prev · .btn-next · .btn-delete</code></td><td>task card</td></tr><tr><td><code>#stats · #toggle-stats · .stat-high · .stat-medium · .stat-low</code></td><td>statistics</td></tr><tr><td><code>.panel · .panel-title</code></td><td>wrapper</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Component tree &amp; props</td><td>1.5</td></tr><tr><td>2</td><td>PropTypes &amp; default value</td><td>1</td></tr><tr><td>3</td><td>Move between columns</td><td>2</td></tr><tr><td>4</td><td>Add a task</td><td>1.5</td></tr><tr><td>5</td><td>Delete a task</td><td>1</td></tr><tr><td>6</td><td>Search</td><td>1</td></tr><tr><td>7</td><td>Statistics (class component)</td><td>1</td></tr><tr><td>8</td><td>Panel with children</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Each Column keeps its own copy of the tasks in state — moving between columns becomes impossible.</li>\n  <li><code>task.status = next; setTasks(tasks)</code> — same array reference, no re-render.</li>\n  <li>Using the index as <code>key</code> — cards jump after delete/move.</li>\n  <li>Assigning <code>this.state.showDetails = …</code> in the class component.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 5: Bảng công việc Kanban — component, props &amp; state</h1>\n<p class=\"bi-phu\">FER202 · Chương 5 — Component & State · Thời gian gợi ý: 100 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm một bảng Kanban nhỏ (To Do · In Progress · Done) đúng cách React: chia giao diện thành <b>component tái sử dụng</b>, truyền dữ liệu xuống bằng <b>props</b>, giữ dữ liệu trong <b>một state</b> do <code>App</code> sở hữu (nâng state lên), kiểm props bằng <b>PropTypes</b>, viết một <b>class component</b> có state riêng, và một component bọc hiển thị <b>children</b>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Cây component Board → Column → TaskCard; chuyển cột, thêm, xoá, tìm công việc.</li>\n  <li>Thống kê là class component; khung Panel bọc nội dung bằng children.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi component một tệp trong <code>src/components/</code>. Chỉ <code>App</code> giữ state về công việc.</li>\n  <li>Không sửa state trực tiếp: dùng <code>map</code>, <code>filter</code> và spread để tạo mảng/object mới.</li>\n  <li>Mỗi phần tử danh sách có <code>key</code> ổn định (id công việc).</li>\n  <li>Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── components/\n│   ├── Board.js        # 3 columns built from STATUSES\n│   ├── Column.js       # title (count) + TaskCards\n│   ├── TaskCard.js     # presentational card + PropTypes\n│   ├── TaskStats.js    # CLASS component\n│   └── Panel.js        # wrapper: title + children\n├── data/\n│   └── tasks.js        # STATUSES + 8 sample tasks (given)\n├── App.js              # state: tasks, search, new-task inputs\n├── index.css           # given\n└── index.js            # given</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+--------------------------------------------------------------------------+\n| Kanban Task Board                                                        |\n| [Search tasks...      ] [New task title      ] [medium v] [Add task]     |\n| +- Board -------------------------------------------------------------+  |\n| | To Do (4)             | In Progress (2)         | Done (2)            |  |\n| | +-------------------+ | +---------------------+ | +-----------------+ |  |\n| | | Write the search  | | | Build the TaskCard  | | | Set up the      | |  |\n| | | filter            | | | component           | | | React project   | |  |\n| | | An                | | | Cuong               | | | An              | |  |\n| | | [→] [x]   medium  | | | [←] [→] [x]   high  | | | [←] [x]   high  | |  |\n| | +-------------------+ | +---------------------+ | +-----------------+ |  |\n| +---------------------------------------------------------------------+  |\n| +- Statistics --------------------------------------------------------+  |\n| | Done: 2/8 (25%)   [Show details]                                    |  |\n| +---------------------------------------------------------------------+  |\n+--------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Task</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>duy nhất; id mới = max(id) + 1</td></tr><tr><td><code>title</code></td><td>string</td><td>bắt buộc, bỏ khoảng trắng hai đầu</td></tr><tr><td><code>status</code></td><td>'todo' | 'doing' | 'done'</td><td>theo thứ tự STATUSES</td></tr><tr><td><code>priority</code></td><td>'high' | 'medium' | 'low'</td><td></td></tr><tr><td><code>assignee</code></td><td>string (optional)</td><td>không có ⇒ hiện \"Unassigned\"</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>To Do:        5 Write the search filter (medium, An) · 6 Show task statistics (low, Dung)\n              7 Fix the column counter (high, —) · 8 Deploy to Netlify (medium, Binh)\nIn Progress:  3 Build the TaskCard component (high, Cuong) · 4 Add PropTypes to components (low, —)\nDone:         1 Set up the React project (high, An) · 2 Design the board layout (medium, Binh)</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Cây component &amp; props <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Board</code> vẽ một <code>Column</code> cho mỗi phần tử <code>STATUSES</code>: <code>#col-{status}.column</code> có <code>.column-title</code> <code>To Do (4)</code>.</li>\n  <li><code>TaskCard</code>: <code>#task-{id}.task-card.priority-{priority}</code> có <code>.task-title</code>, <code>.task-assignee</code> và badge mức ưu tiên; giữ thứ tự dữ liệu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">props</span> <span class=\"bi-hook\">map + key</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. PropTypes &amp; giá trị mặc định <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>TaskCard.propTypes</code> và <code>Column.propTypes</code>; <code>priority</code> dùng <code>PropTypes.oneOf(['high', 'medium', 'low'])</code>.</li>\n  <li>Công việc không có <code>assignee</code> hiện <code>Unassigned</code> (giá trị mặc định của tham số).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">prop-types</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. Chuyển cột <span class=\"bi-diem\">2 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-next</code> (→) chuyển sang trạng thái sau, <code>.btn-prev</code> (←) về trạng thái trước. Cột Done không có →, To Do không có ←.</li>\n  <li>State nằm ở <code>App</code>; con gọi hàm nhận qua props. Cập nhật bất biến.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">lifting state up</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. Thêm công việc <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#new-task</code> + <code>#new-priority</code> (high/medium/low, mặc định medium) + <code>#btn-add</code> thêm vào cuối To Do với id = max + 1.</li>\n  <li>Bỏ khoảng trắng hai đầu; bỏ qua tiêu đề rỗng; xoá ô nhập sau khi thêm.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">controlled input</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Xoá công việc <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-delete</code> (✕) xoá công việc; số đếm và thống kê cập nhật.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Tìm kiếm <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#search</code> lọc thẻ ở mọi cột theo tiêu đề (chứa, không phân biệt hoa/thường); số đếm cột theo kết quả lọc.</li>\n  <li>Thống kê vẫn tính <b>mọi</b> công việc.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>\"the\" ⇒ To Do (2) · In Progress (1) · Done (2)</pre>\n</div>\n<div class=\"bi-cn\"><h3>7. Thống kê (class component) <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>class TaskStats extends Component</code>: <code>#stats</code> <code>Done: d/n (p%)</code> (làm tròn).</li>\n  <li>State riêng <code>showDetails</code> bật/tắt bằng <code>#toggle-stats</code> qua <code>this.setState</code>; chi tiết <code>.stat-high</code> <code>.stat-medium</code> <code>.stat-low</code> (<code>High: 3</code>…).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">class component</span> <span class=\"bi-hook\">this.setState</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Panel bọc children <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>Panel</code> vẽ <code>section.panel</code> → <code>h2.panel-title</code> + <code>children</code>; App bọc bảng (\"Board\") và thống kê (\"Statistics\").</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">props.children</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#search · #new-task · #new-priority · #btn-add</code></td><td>thanh công cụ</td></tr><tr><td><code>.board · #col-{status}.column · .column-title</code></td><td>bảng và cột</td></tr><tr><td><code>#task-{id}.task-card.priority-{p} · .task-title · .task-assignee · .btn-prev · .btn-next · .btn-delete</code></td><td>thẻ công việc</td></tr><tr><td><code>#stats · #toggle-stats · .stat-high · .stat-medium · .stat-low</code></td><td>thống kê</td></tr><tr><td><code>.panel · .panel-title</code></td><td>khung bọc</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Cây component &amp; props</td><td>1.5</td></tr><tr><td>2</td><td>PropTypes &amp; giá trị mặc định</td><td>1</td></tr><tr><td>3</td><td>Chuyển cột</td><td>2</td></tr><tr><td>4</td><td>Thêm công việc</td><td>1.5</td></tr><tr><td>5</td><td>Xoá công việc</td><td>1</td></tr><tr><td>6</td><td>Tìm kiếm</td><td>1</td></tr><tr><td>7</td><td>Thống kê (class component)</td><td>1</td></tr><tr><td>8</td><td>Panel bọc children</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Mỗi Column giữ bản sao tasks trong state riêng — không chuyển cột được.</li>\n  <li><code>task.status = next; setTasks(tasks)</code> — cùng tham chiếu mảng, không vẽ lại.</li>\n  <li>Dùng index làm <code>key</code> — thẻ nhảy lung tung sau khi xoá/chuyển.</li>\n  <li>Gán <code>this.state.showDetails = …</code> trong class component.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One component per file in <code>src/components/</code>. Only <code>App</code> owns state about tasks.|||Mỗi component một tệp trong <code>src/components/</code>. Chỉ <code>App</code> giữ state về công việc.\nNever mutate state: use <code>map</code>, <code>filter</code> and spread to create new arrays/objects.|||Không sửa state trực tiếp: dùng <code>map</code>, <code>filter</code> và spread để tạo mảng/object mới.\nEvery list item has a stable <code>key</code> (the task id).|||Mỗi phần tử danh sách có <code>key</code> ổn định (id công việc).\nKeep the ids / classes of section 6 — the grader uses them.|||Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.",
+      "examplesJson": [
+        {
+          "input": "Search|||Tìm kiếm",
+          "output": "\"the\" ⇒ To Do (2) · In Progress (1) · Done (2)",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Vẽ cây trước: App (state) → Panel → Board → Column → TaskCard. Dữ liệu đi xuống bằng props, sự kiện đi lên bằng hàm truyền xuống (onMove, onDelete).",
+        "Board không cần state: tasks.filter(t => t.status === s.id) cho từng cột ngay khi render.",
+        "Chuyển cột: ORDER = [\"todo\",\"doing\",\"done\"]; trạng thái mới = ORDER[ORDER.indexOf(t.status) + dir]; setTasks(list => list.map(…)).",
+        "Class component: state = { showDetails: false }; toggle = () => this.setState(p => ({ showDetails: !p.showDetails })); render() đọc this.props.tasks."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: mọi thứ đang dồn trong một component, chưa có state\nimport tasks from './data/tasks';\n\nexport default function App() {\n  // TODO: tách Board / Column / TaskCard / TaskStats / Panel; state tasks + search ở đây; thêm, chuyển cột, xoá\n  return (\n    <div className=\"app\">\n      <h1>Kanban Task Board</h1>\n      <ul>\n        {tasks.map((t) => (\n          <li key={t.id}>{t.title} — {t.status}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Board.js",
+          "language": "javascript",
+          "code": "// src/components/Board.js — STARTER\n// TODO: render 3 Column từ STATUSES (tasks lọc theo status)\nexport default function Board() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/Column.js",
+          "language": "javascript",
+          "code": "// src/components/Column.js — STARTER\n// TODO: #col-{status}.column, .column-title \"To Do (4)\", một TaskCard mỗi task\nexport default function Column() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/TaskCard.js",
+          "language": "javascript",
+          "code": "// src/components/TaskCard.js — STARTER\n// TODO: #task-{id}.task-card.priority-{priority}, .task-title, .task-assignee (mặc định \"Unassigned\"), .btn-prev/.btn-next/.btn-delete + PropTypes\nexport default function TaskCard() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/components/TaskStats.js",
+          "language": "javascript",
+          "code": "// src/components/TaskStats.js — STARTER (phải là CLASS component)\nimport { Component } from 'react';\n\nexport default class TaskStats extends Component {\n  // TODO: state showDetails, nút #toggle-stats, #stats \"Done: d/n (p%)\", .stat-high/.stat-medium/.stat-low\n  render() {\n    return null;\n  }\n}\n"
+        },
+        {
+          "name": "src/components/Panel.js",
+          "language": "javascript",
+          "code": "// src/components/Panel.js — STARTER\n// TODO: section.panel > h2.panel-title + children\nexport default function Panel() {\n  return null;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; background: #f1f5f9; color: #0f172a; }\n.app { max-width: 1100px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\n.toolbar input, .toolbar select { padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\n.toolbar input { flex: 1; min-width: 180px; }\nbutton { cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 5px 10px; font: inherit; }\n.panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 16px; }\n.panel-title { margin: 0 0 12px; font-size: 18px; }\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }\n@media (max-width: 760px) { .board { grid-template-columns: 1fr; } }\n.column { background: #f8fafc; border-radius: 12px; padding: 10px; min-height: 120px; }\n.column-title { margin: 0 0 8px; font-size: 15px; }\n.task-card { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; border-radius: 10px; padding: 10px; margin-bottom: 8px; }\n.task-card.priority-high { border-left-color: #ef4444; }\n.task-card.priority-medium { border-left-color: #f59e0b; }\n.task-card.priority-low { border-left-color: #22c55e; }\n.task-title { margin: 0 0 4px; font-size: 14px; }\n.task-assignee { margin: 0 0 6px; font-size: 12px; color: #64748b; }\n.task-actions { display: flex; gap: 6px; }\n.badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e2e8f0; margin-left: auto; }\n.stats-details { margin: 8px 0 0; padding-left: 18px; }\n"
+        },
+        {
+          "name": "src/data/tasks.js",
+          "language": "javascript",
+          "code": "// src/data/tasks.js — dữ liệu mẫu (đã cho)\nexport const STATUSES = [\n  { id: 'todo', title: 'To Do' },\n  { id: 'doing', title: 'In Progress' },\n  { id: 'done', title: 'Done' },\n];\n\nconst tasks = [\n  { id: 1, title: 'Set up the React project', status: 'done', priority: 'high', assignee: 'An' },\n  { id: 2, title: 'Design the board layout', status: 'done', priority: 'medium', assignee: 'Binh' },\n  { id: 3, title: 'Build the TaskCard component', status: 'doing', priority: 'high', assignee: 'Cuong' },\n  { id: 4, title: 'Add PropTypes to components', status: 'doing', priority: 'low' },\n  { id: 5, title: 'Write the search filter', status: 'todo', priority: 'medium', assignee: 'An' },\n  { id: 6, title: 'Show task statistics', status: 'todo', priority: 'low', assignee: 'Dung' },\n  { id: 7, title: 'Fix the column counter', status: 'todo', priority: 'high' },\n  { id: 8, title: 'Deploy to Netlify', status: 'todo', priority: 'medium', assignee: 'Binh' },\n];\n\nexport default tasks;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state ĐƯỢC NÂNG lên đây: App là nguồn sự thật, con chỉ nhận dữ liệu + hàm qua props\nimport { useState } from 'react';\nimport Board from './components/Board';\nimport Panel from './components/Panel';\nimport TaskStats from './components/TaskStats';\nimport initialTasks, { STATUSES } from './data/tasks';\n\nconst ORDER = STATUSES.map((s) => s.id); // ['todo', 'doing', 'done']\n\nexport default function App() {\n  const [tasks, setTasks] = useState(initialTasks);\n  const [search, setSearch] = useState('');\n  const [newTitle, setNewTitle] = useState('');\n  const [newPriority, setNewPriority] = useState('medium');\n\n  // Di chuyển: tạo mảng MỚI bằng map, chỉ thay đúng một task (không sửa object cũ)\n  const moveTask = (id, dir) =>\n    setTasks((list) =>\n      list.map((t) => {\n        if (t.id !== id) return t;\n        const next = ORDER[ORDER.indexOf(t.status) + dir];\n        return next ? { ...t, status: next } : t;\n      }),\n    );\n\n  const deleteTask = (id) => setTasks((list) => list.filter((t) => t.id !== id));\n\n  const addTask = () => {\n    const title = newTitle.trim();\n    if (!title) return; // bỏ qua chuỗi rỗng / toàn dấu cách\n    setTasks((list) => [...list, { id: Math.max(0, ...list.map((t) => t.id)) + 1, title, status: 'todo', priority: newPriority }]);\n    setNewTitle('');\n  };\n\n  // danh sách hiển thị SUY RA từ tasks + search (không lưu thành state thứ hai)\n  const q = search.trim().toLowerCase();\n  const visible = tasks.filter((t) => t.title.toLowerCase().includes(q));\n\n  return (\n    <div className=\"app\">\n      <h1>Kanban Task Board</h1>\n      <div className=\"toolbar\">\n        <input id=\"search\" placeholder=\"Search tasks...\" value={search} onChange={(e) => setSearch(e.target.value)} />\n        <input id=\"new-task\" placeholder=\"New task title\" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />\n        <select id=\"new-priority\" value={newPriority} onChange={(e) => setNewPriority(e.target.value)}>\n          <option value=\"high\">high</option>\n          <option value=\"medium\">medium</option>\n          <option value=\"low\">low</option>\n        </select>\n        <button type=\"button\" id=\"btn-add\" onClick={addTask}>Add task</button>\n      </div>\n      <Panel title=\"Board\">\n        <Board tasks={visible} onMove={moveTask} onDelete={deleteTask} />\n      </Panel>\n      <Panel title=\"Statistics\">\n        <TaskStats tasks={tasks} />\n      </Panel>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Board.js",
+          "language": "javascript",
+          "code": "// src/components/Board.js — dựng 3 cột từ STATUSES (không viết tay 3 lần)\nimport PropTypes from 'prop-types';\nimport Column from './Column';\nimport { STATUSES } from '../data/tasks';\n\nexport default function Board({ tasks, onMove, onDelete }) {\n  return (\n    <div className=\"board\">\n      {STATUSES.map((s, i) => (\n        <Column\n          key={s.id}\n          status={s.id}\n          title={s.title}\n          tasks={tasks.filter((t) => t.status === s.id)}\n          isFirst={i === 0}\n          isLast={i === STATUSES.length - 1}\n          onMove={onMove}\n          onDelete={onDelete}\n        />\n      ))}\n    </div>\n  );\n}\n\nBoard.propTypes = {\n  tasks: PropTypes.arrayOf(PropTypes.object).isRequired,\n  onMove: PropTypes.func.isRequired,\n  onDelete: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/Column.js",
+          "language": "javascript",
+          "code": "// src/components/Column.js — một cột: tiêu đề + đếm + các thẻ (dữ liệu và hàm đều đến từ props)\nimport PropTypes from 'prop-types';\nimport TaskCard from './TaskCard';\n\nexport default function Column({ status, title, tasks, isFirst, isLast, onMove, onDelete }) {\n  return (\n    <div id={`col-${status}`} className=\"column\">\n      <h3 className=\"column-title\">{title} ({tasks.length})</h3>\n      {tasks.map((t) => (\n        // key = id ổn định; {...t} trải các trường của task thành props\n        <TaskCard key={t.id} {...t} canPrev={!isFirst} canNext={!isLast} onMove={onMove} onDelete={onDelete} />\n      ))}\n    </div>\n  );\n}\n\nColumn.propTypes = {\n  status: PropTypes.string.isRequired,\n  title: PropTypes.string.isRequired,\n  tasks: PropTypes.arrayOf(PropTypes.object).isRequired,\n  isFirst: PropTypes.bool,\n  isLast: PropTypes.bool,\n  onMove: PropTypes.func.isRequired,\n  onDelete: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/TaskCard.js",
+          "language": "javascript",
+          "code": "// src/components/TaskCard.js — component TRÌNH BÀY: chỉ nhận props, không tự giữ dữ liệu\nimport PropTypes from 'prop-types';\n\n// assignee = 'Unassigned': giá trị MẶC ĐỊNH khi cha không truyền (cách hiện đại thay cho defaultProps)\nexport default function TaskCard({ id, title, priority, assignee = 'Unassigned', canPrev, canNext, onMove, onDelete }) {\n  return (\n    <article id={`task-${id}`} className={`task-card priority-${priority}`}>\n      <h4 className=\"task-title\">{title}</h4>\n      <p className=\"task-assignee\">{assignee}</p>\n      <div className=\"task-actions\">\n        {canPrev && <button type=\"button\" className=\"btn-prev\" onClick={() => onMove(id, -1)} aria-label=\"Move back\">←</button>}\n        {canNext && <button type=\"button\" className=\"btn-next\" onClick={() => onMove(id, 1)} aria-label=\"Move forward\">→</button>}\n        <button type=\"button\" className=\"btn-delete\" onClick={() => onDelete(id)} aria-label=\"Delete\">✕</button>\n        <span className=\"badge\">{priority}</span>\n      </div>\n    </article>\n  );\n}\n\nTaskCard.propTypes = {\n  id: PropTypes.number.isRequired,\n  title: PropTypes.string.isRequired,\n  priority: PropTypes.oneOf(['high', 'medium', 'low']).isRequired,\n  assignee: PropTypes.string,\n  canPrev: PropTypes.bool,\n  canNext: PropTypes.bool,\n  onMove: PropTypes.func.isRequired,\n  onDelete: PropTypes.func.isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/TaskStats.js",
+          "language": "javascript",
+          "code": "// src/components/TaskStats.js — CLASS component: props đọc qua this.props, state riêng qua this.state/setState\nimport { Component } from 'react';\nimport PropTypes from 'prop-types';\n\nexport default class TaskStats extends Component {\n  state = { showDetails: false };\n\n  // arrow function ⇒ \"this\" luôn trỏ đúng instance (không cần bind trong constructor)\n  toggle = () => {\n    this.setState((prev) => ({ showDetails: !prev.showDetails }));\n  };\n\n  render() {\n    const { tasks } = this.props;\n    const done = tasks.filter((t) => t.status === 'done').length;\n    const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;\n    const count = (p) => tasks.filter((t) => t.priority === p).length;\n    return (\n      <div>\n        <p id=\"stats\">Done: {done}/{tasks.length} ({percent}%)</p>\n        <button type=\"button\" id=\"toggle-stats\" onClick={this.toggle}>\n          {this.state.showDetails ? 'Hide details' : 'Show details'}\n        </button>\n        {this.state.showDetails && (\n          <ul className=\"stats-details\">\n            <li className=\"stat-high\">High: {count('high')}</li>\n            <li className=\"stat-medium\">Medium: {count('medium')}</li>\n            <li className=\"stat-low\">Low: {count('low')}</li>\n          </ul>\n        )}\n      </div>\n    );\n  }\n}\n\nTaskStats.propTypes = {\n  tasks: PropTypes.arrayOf(PropTypes.object).isRequired,\n};\n"
+        },
+        {
+          "name": "src/components/Panel.js",
+          "language": "javascript",
+          "code": "// src/components/Panel.js — thành phần BỌC: nội dung bên trong do nơi dùng quyết định (children)\nimport PropTypes from 'prop-types';\n\nexport default function Panel({ title, children }) {\n  return (\n    <section className=\"panel\">\n      <h2 className=\"panel-title\">{title}</h2>\n      {children}\n    </section>\n  );\n}\n\nPanel.propTypes = {\n  title: PropTypes.string.isRequired,\n  children: PropTypes.node,\n};\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; background: #f1f5f9; color: #0f172a; }\n.app { max-width: 1100px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\n.toolbar input, .toolbar select { padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\n.toolbar input { flex: 1; min-width: 180px; }\nbutton { cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 5px 10px; font: inherit; }\n.panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 16px; }\n.panel-title { margin: 0 0 12px; font-size: 18px; }\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }\n@media (max-width: 760px) { .board { grid-template-columns: 1fr; } }\n.column { background: #f8fafc; border-radius: 12px; padding: 10px; min-height: 120px; }\n.column-title { margin: 0 0 8px; font-size: 15px; }\n.task-card { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; border-radius: 10px; padding: 10px; margin-bottom: 8px; }\n.task-card.priority-high { border-left-color: #ef4444; }\n.task-card.priority-medium { border-left-color: #f59e0b; }\n.task-card.priority-low { border-left-color: #22c55e; }\n.task-title { margin: 0 0 4px; font-size: 14px; }\n.task-assignee { margin: 0 0 6px; font-size: 12px; color: #64748b; }\n.task-actions { display: flex; gap: 6px; }\n.badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e2e8f0; margin-left: auto; }\n.stats-details { margin: 8px 0 0; padding-left: 18px; }\n"
+        },
+        {
+          "name": "src/data/tasks.js",
+          "language": "javascript",
+          "code": "// src/data/tasks.js — dữ liệu mẫu (đã cho)\nexport const STATUSES = [\n  { id: 'todo', title: 'To Do' },\n  { id: 'doing', title: 'In Progress' },\n  { id: 'done', title: 'Done' },\n];\n\nconst tasks = [\n  { id: 1, title: 'Set up the React project', status: 'done', priority: 'high', assignee: 'An' },\n  { id: 2, title: 'Design the board layout', status: 'done', priority: 'medium', assignee: 'Binh' },\n  { id: 3, title: 'Build the TaskCard component', status: 'doing', priority: 'high', assignee: 'Cuong' },\n  { id: 4, title: 'Add PropTypes to components', status: 'doing', priority: 'low' },\n  { id: 5, title: 'Write the search filter', status: 'todo', priority: 'medium', assignee: 'An' },\n  { id: 6, title: 'Show task statistics', status: 'todo', priority: 'low', assignee: 'Dung' },\n  { id: 7, title: 'Fix the column counter', status: 'todo', priority: 'high' },\n  { id: 8, title: 'Deploy to Netlify', status: 'todo', priority: 'medium', assignee: 'Binh' },\n];\n\nexport default tasks;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>App</code> là nguồn sự thật duy nhất (<code>tasks</code>, <code>search</code>); mọi component dưới chỉ nhận props và gọi hàm của cha. Danh sách đang hiện và số đếm từng cột là giá trị <em>suy ra</em> khi render, nên thêm/xoá/chuyển/tìm luôn đồng bộ. Mọi cập nhật tạo mảng mới (<code>map</code>/<code>filter</code>/spread). <code>TaskCard</code> dùng giá trị mặc định của tham số cho <code>assignee</code> và khai <code>propTypes</code>; <code>TaskStats</code> là class component với state riêng đổi bằng <code>this.setState</code>; <code>Panel</code> minh hoạ composition bằng <code>children</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/sharing-state-between-components",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "prop-types"
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "3 columns are rendered",
+            "kiem": "so-luong",
+            "selector": ".column",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Column titles show their counts",
+            "kiem": "danh-sach-text",
+            "selector": ".column-title",
+            "mongDoi": [
+              "To Do (4)",
+              "In Progress (2)",
+              "Done (2)"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "#col-todo lists its tasks in data order",
+            "kiem": "danh-sach-text",
+            "selector": "#col-todo .task-title",
+            "mongDoi": [
+              "Write the search filter",
+              "Show task statistics",
+              "Fix the column counter",
+              "Deploy to Netlify"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Card shows assignee and has a priority class",
+            "kiem": "text",
+            "selector": "#task-1.priority-high .task-assignee",
+            "giaTri": "An"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "TaskCard lives in its own file",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TaskCard.js",
+            "khop": "export\\s+default\\s+function\\s+TaskCard|export\\s+default\\s+TaskCard"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Column component receives tasks via props",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Column.js",
+            "khop": "tasks\\.map\\("
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Missing assignee ⇒ \"Unassigned\"",
+            "kiem": "danh-sach-text",
+            "selector": "#task-4 .task-assignee, #task-7 .task-assignee",
+            "mongDoi": [
+              "Unassigned",
+              "Unassigned"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "TaskCard declares propTypes",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TaskCard.js",
+            "khop": "TaskCard\\.propTypes\\s*="
+          },
+          {
+            "nhom": "f2",
+            "moTa": "priority is validated with PropTypes.oneOf",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TaskCard.js",
+            "khop": "PropTypes\\.oneOf\\(\\s*\\[\\s*['\"]high['\"]"
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Column declares propTypes too",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Column.js",
+            "khop": "Column\\.propTypes\\s*="
+          },
+          {
+            "nhom": "f3",
+            "moTa": "→ moves a task to the next column",
+            "kiem": "danh-sach-text",
+            "selector": "#col-doing .task-title",
+            "mongDoi": [
+              "Build the TaskCard component",
+              "Add PropTypes to components",
+              "Write the search filter"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-5 .btn-next"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Counts update after moving",
+            "kiem": "danh-sach-text",
+            "selector": ".column-title",
+            "mongDoi": [
+              "To Do (3)",
+              "In Progress (3)",
+              "Done (2)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-5 .btn-next"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "← moves a task back",
+            "kiem": "ton-tai",
+            "selector": "#col-doing #task-1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-1 .btn-prev"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "No → in Done, no ← in To Do",
+            "kiem": "so-luong",
+            "selector": "#col-done .btn-next, #col-todo .btn-prev",
+            "giaTri": 0
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Moving keeps the other fields (assignee)",
+            "kiem": "text",
+            "selector": "#col-done #task-3 .task-assignee",
+            "giaTri": "Cuong",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-3 .btn-next"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "State is updated immutably (map / spread, no direct assignment)",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "\\.status\\s*=(?!=)",
+            "phuDinh": true
+          },
+          {
+            "nhom": "f4",
+            "moTa": "New task is added at the end of To Do",
+            "kiem": "danh-sach-text",
+            "selector": "#col-todo .task-title",
+            "mongDoi": [
+              "Write the search filter",
+              "Show task statistics",
+              "Fix the column counter",
+              "Deploy to Netlify",
+              "Write unit tests"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-task",
+                "giaTri": "Write unit tests"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#new-priority",
+                "giaTri": "high"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "It gets id 9, the chosen priority and \"Unassigned\"",
+            "kiem": "text",
+            "selector": "#task-9.priority-high .task-assignee",
+            "giaTri": "Unassigned",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-task",
+                "giaTri": "Write unit tests"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#new-priority",
+                "giaTri": "high"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "The input is cleared after adding",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#new-task",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-task",
+                "giaTri": "Write unit tests"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#new-priority",
+                "giaTri": "high"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Blank titles are ignored",
+            "kiem": "so-luong",
+            "selector": ".task-card",
+            "giaTri": 8,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-task",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Title is trimmed",
+            "kiem": "text",
+            "selector": "#task-9 .task-title",
+            "giaTri": "Review PR",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#new-task",
+                "giaTri": "  Review PR  "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "✕ deletes the task",
+            "kiem": "so-luong",
+            "selector": ".task-card",
+            "giaTri": 7,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-7 .btn-delete"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Column count updates after delete",
+            "kiem": "text",
+            "selector": "#col-todo .column-title",
+            "giaTri": "To Do (3)",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-7 .btn-delete"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Statistics follow the deletion",
+            "kiem": "text",
+            "selector": "#stats",
+            "giaTri": "Done: 2/7 (29%)",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-7 .btn-delete"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Search \"the\" filters every column",
+            "kiem": "danh-sach-text",
+            "selector": ".column-title",
+            "mongDoi": [
+              "To Do (2)",
+              "In Progress (1)",
+              "Done (2)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "the"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Search is case-insensitive",
+            "kiem": "danh-sach-text",
+            "selector": ".task-title",
+            "mongDoi": [
+              "Add PropTypes to components"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "PROPTYPES"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Statistics still count ALL tasks while searching",
+            "kiem": "text",
+            "selector": "#stats",
+            "giaTri": "Done: 2/8 (25%)",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "deploy"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "#stats reads \"Done: 2/8 (25%)\"",
+            "kiem": "text",
+            "selector": "#stats",
+            "giaTri": "Done: 2/8 (25%)"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "#toggle-stats shows the priority breakdown",
+            "kiem": "danh-sach-text",
+            "selector": ".stat-high, .stat-medium, .stat-low",
+            "mongDoi": [
+              "High: 3",
+              "Medium: 3",
+              "Low: 2"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-stats"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "TaskStats is a class component",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TaskStats.js",
+            "khop": "class\\s+TaskStats\\s+extends\\s+(React\\.)?(Pure)?Component"
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Percent is rounded: 3/8 ⇒ 38%",
+            "kiem": "text",
+            "selector": "#stats",
+            "giaTri": "Done: 3/8 (38%)",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#task-3 .btn-next"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Clicking twice hides the details",
+            "kiem": "so-luong",
+            "selector": ".stat-high",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-stats"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-stats"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Uses this.setState (not direct this.state assignment)",
+            "kiem": "ma-nguon",
+            "tep": "src/components/TaskStats.js",
+            "khop": "this\\.setState\\("
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Two .panel sections titled Board and Statistics",
+            "kiem": "danh-sach-text",
+            "selector": ".panel > .panel-title",
+            "mongDoi": [
+              "Board",
+              "Statistics"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "The board is passed into the panel as children",
+            "kiem": "ton-tai",
+            "selector": ".panel > .board"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Panel renders props.children",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Panel.js",
+            "khop": "\\{\\s*(props\\.)?children\\s*\\}"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Component tree & props",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. PropTypes & default value",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Move between columns",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Add a task",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Delete a task",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Search",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Statistics (class component)",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Panel with children",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Mỗi <code>Column</code> có <code>useState(tasks)</code> riêng — dữ liệu bị nhân bản, chuyển cột không cập nhật cột kia."
+        },
+        {
+          "loi": "Sửa trực tiếp <code>task.status = …</code> rồi <code>setTasks(tasks)</code> — React so tham chiếu, thấy \"không đổi\", không vẽ lại."
+        },
+        {
+          "loi": "Quên <code>key</code> hoặc dùng index — cảnh báo key và thẻ lẫn sau khi xoá."
+        },
+        {
+          "loi": "Class component quên <code>this</code> (<code>props.tasks</code>, <code>setState(…)</code>) hoặc dùng method thường làm onClick mà không bind ⇒ <code>this</code> undefined."
+        },
+        {
+          "loi": "Đếm số thẻ của cột bằng biến toàn cục / state riêng thay vì <code>tasks.length</code> của props."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lifting state up",
+          "vi": "nâng state lên component cha chung"
+        },
+        {
+          "en": "presentational component",
+          "vi": "component chỉ hiển thị (nhận props, không giữ dữ liệu)"
+        },
+        {
+          "en": "single source of truth",
+          "vi": "một nguồn sự thật duy nhất"
+        },
+        {
+          "en": "class component",
+          "vi": "component viết bằng class (render, this.state, this.setState)"
+        },
+        {
+          "en": "composition / children",
+          "vi": "ghép component; nội dung lồng bên trong thẻ"
+        },
+        {
+          "en": "component",
+          "vi": "thành phần giao diện (hàm trả về JSX)"
+        },
+        {
+          "en": "props",
+          "vi": "dữ liệu cha truyền xuống con (chỉ đọc)"
+        },
+        {
+          "en": "state",
+          "vi": "dữ liệu riêng của component, đổi ⇒ render lại"
+        },
+        {
+          "en": "key prop",
+          "vi": "khoá định danh ổn định cho từng phần tử của danh sách"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        },
+        {
+          "en": "mutate",
+          "vi": "sửa trực tiếp object/mảng (cấm với state)"
+        },
+        {
+          "en": "derived value",
+          "vi": "giá trị suy ra từ state/props — tính lại, không lưu state riêng"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 5 — Kanban Task Board (components · props · state · PropTypes) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — state ĐƯỢC NÂNG lên đây: App là nguồn sự thật, con chỉ nhận dữ liệu + hàm qua props\\nvar _react = require('react');\\nvar _Board = require('./components/Board'); var _Board2 = _interopRequireDefault(_Board);\\nvar _Panel = require('./components/Panel'); var _Panel2 = _interopRequireDefault(_Panel);\\nvar _TaskStats = require('./components/TaskStats'); var _TaskStats2 = _interopRequireDefault(_TaskStats);\\nvar _tasks = require('./data/tasks'); var _tasks2 = _interopRequireDefault(_tasks);\\n\\nconst ORDER = _tasks.STATUSES.map((s) => s.id); // ['todo', 'doing', 'done']\\n\\n function App() {\\n  const [tasks, setTasks] = _react.useState.call(void 0, _tasks2.default);\\n  const [search, setSearch] = _react.useState.call(void 0, '');\\n  const [newTitle, setNewTitle] = _react.useState.call(void 0, '');\\n  const [newPriority, setNewPriority] = _react.useState.call(void 0, 'medium');\\n\\n  // Di chuyển: tạo mảng MỚI bằng map, chỉ thay đúng một task (không sửa object cũ)\\n  const moveTask = (id, dir) =>\\n    setTasks((list) =>\\n      list.map((t) => {\\n        if (t.id !== id) return t;\\n        const next = ORDER[ORDER.indexOf(t.status) + dir];\\n        return next ? { ...t, status: next } : t;\\n      }),\\n    );\\n\\n  const deleteTask = (id) => setTasks((list) => list.filter((t) => t.id !== id));\\n\\n  const addTask = () => {\\n    const title = newTitle.trim();\\n    if (!title) return; // bỏ qua chuỗi rỗng / toàn dấu cách\\n    setTasks((list) => [...list, { id: Math.max(0, ...list.map((t) => t.id)) + 1, title, status: 'todo', priority: newPriority }]);\\n    setNewTitle('');\\n  };\\n\\n  // danh sách hiển thị SUY RA từ tasks + search (không lưu thành state thứ hai)\\n  const q = search.trim().toLowerCase();\\n  const visible = tasks.filter((t) => t.title.toLowerCase().includes(q));\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"app\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { children: \\\"Kanban Task Board\\\"  })\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'input', { id: \\\"search\\\", placeholder: \\\"Search tasks...\\\" , value: search, onChange: (e) => setSearch(e.target.value),} )\\n        , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"new-task\\\", placeholder: \\\"New task title\\\"  , value: newTitle, onChange: (e) => setNewTitle(e.target.value),} )\\n        , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"new-priority\\\", value: newPriority, onChange: (e) => setNewPriority(e.target.value), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"high\\\", children: \\\"high\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"medium\\\", children: \\\"medium\\\"})\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"low\\\", children: \\\"low\\\"})\\n        ]})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-add\\\", onClick: addTask, children: \\\"Add task\\\" })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, _Panel2.default, { title: \\\"Board\\\", children: \\n        _jsxruntime.jsx.call(void 0, _Board2.default, { tasks: visible, onMove: moveTask, onDelete: deleteTask,} )\\n      })\\n      , _jsxruntime.jsx.call(void 0, _Panel2.default, { title: \\\"Statistics\\\", children: \\n        _jsxruntime.jsx.call(void 0, _TaskStats2.default, { tasks: tasks,} )\\n      })\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/Board.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Board.js — dựng 3 cột từ STATUSES (không viết tay 3 lần)\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _Column = require('./Column'); var _Column2 = _interopRequireDefault(_Column);\\nvar _tasks = require('../data/tasks');\\n\\n function Board({ tasks, onMove, onDelete }) {\\n  return (\\n    _jsxruntime.jsx.call(void 0, 'div', { className: \\\"board\\\", children: \\n      _tasks.STATUSES.map((s, i) => (\\n        _jsxruntime.jsx.call(void 0, _Column2.default, {\\n\\n          status: s.id,\\n          title: s.title,\\n          tasks: tasks.filter((t) => t.status === s.id),\\n          isFirst: i === 0,\\n          isLast: i === _tasks.STATUSES.length - 1,\\n          onMove: onMove,\\n          onDelete: onDelete,}, s.id\\n        )\\n      ))\\n    })\\n  );\\n} exports.default = Board;\\n\\nBoard.propTypes = {\\n  tasks: _proptypes2.default.arrayOf(_proptypes2.default.object).isRequired,\\n  onMove: _proptypes2.default.func.isRequired,\\n  onDelete: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/components/Column.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Column.js — một cột: tiêu đề + đếm + các thẻ (dữ liệu và hàm đều đến từ props)\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\nvar _TaskCard = require('./TaskCard'); var _TaskCard2 = _interopRequireDefault(_TaskCard);\\n\\n function Column({ status, title, tasks, isFirst, isLast, onMove, onDelete }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { id: `col-${status}`, className: \\\"column\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'h3', { className: \\\"column-title\\\", children: [title, \\\" (\\\" , tasks.length, \\\")\\\"]})\\n      , tasks.map((t) => (\\n        // key = id ổn định; {...t} trải các trường của task thành props\\n        _jsxruntime.jsx.call(void 0, _TaskCard2.default, { ...t, canPrev: !isFirst, canNext: !isLast, onMove: onMove, onDelete: onDelete,}, t.id )\\n      ))\\n    ]})\\n  );\\n} exports.default = Column;\\n\\nColumn.propTypes = {\\n  status: _proptypes2.default.string.isRequired,\\n  title: _proptypes2.default.string.isRequired,\\n  tasks: _proptypes2.default.arrayOf(_proptypes2.default.object).isRequired,\\n  isFirst: _proptypes2.default.bool,\\n  isLast: _proptypes2.default.bool,\\n  onMove: _proptypes2.default.func.isRequired,\\n  onDelete: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/components/TaskCard.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/TaskCard.js — component TRÌNH BÀY: chỉ nhận props, không tự giữ dữ liệu\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n// assignee = 'Unassigned': giá trị MẶC ĐỊNH khi cha không truyền (cách hiện đại thay cho defaultProps)\\n function TaskCard({ id, title, priority, assignee = 'Unassigned', canPrev, canNext, onMove, onDelete }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'article', { id: `task-${id}`, className: `task-card priority-${priority}`, children: [\\n      _jsxruntime.jsx.call(void 0, 'h4', { className: \\\"task-title\\\", children: title})\\n      , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"task-assignee\\\", children: assignee})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"task-actions\\\", children: [\\n        canPrev && _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-prev\\\", onClick: () => onMove(id, -1), 'aria-label': \\\"Move back\\\" , children: \\\"←\\\"})\\n        , canNext && _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-next\\\", onClick: () => onMove(id, 1), 'aria-label': \\\"Move forward\\\" , children: \\\"→\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", className: \\\"btn-delete\\\", onClick: () => onDelete(id), 'aria-label': \\\"Delete\\\", children: \\\"✕\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"badge\\\", children: priority})\\n      ]})\\n    ]})\\n  );\\n} exports.default = TaskCard;\\n\\nTaskCard.propTypes = {\\n  id: _proptypes2.default.number.isRequired,\\n  title: _proptypes2.default.string.isRequired,\\n  priority: _proptypes2.default.oneOf(['high', 'medium', 'low']).isRequired,\\n  assignee: _proptypes2.default.string,\\n  canPrev: _proptypes2.default.bool,\\n  canNext: _proptypes2.default.bool,\\n  onMove: _proptypes2.default.func.isRequired,\\n  onDelete: _proptypes2.default.func.isRequired,\\n};\\n\",\"src/components/TaskStats.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/TaskStats.js — CLASS component: props đọc qua this.props, state riêng qua this.state/setState\\nvar _react = require('react');\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n class TaskStats extends _react.Component {constructor(...args) { super(...args); TaskStats.prototype.__init.call(this);TaskStats.prototype.__init2.call(this); }\\n  __init() {this.state = { showDetails: false }}\\n\\n  // arrow function ⇒ \\\"this\\\" luôn trỏ đúng instance (không cần bind trong constructor)\\n  __init2() {this.toggle = () => {\\n    this.setState((prev) => ({ showDetails: !prev.showDetails }));\\n  }}\\n\\n  render() {\\n    const { tasks } = this.props;\\n    const done = tasks.filter((t) => t.status === 'done').length;\\n    const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;\\n    const count = (p) => tasks.filter((t) => t.priority === p).length;\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { children: [\\n        _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"stats\\\", children: [\\\"Done: \\\" , done, \\\"/\\\", tasks.length, \\\" (\\\" , percent, \\\"%)\\\"]})\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"toggle-stats\\\", onClick: this.toggle, children: \\n          this.state.showDetails ? 'Hide details' : 'Show details'\\n        })\\n        , this.state.showDetails && (\\n          _jsxruntime.jsxs.call(void 0, 'ul', { className: \\\"stats-details\\\", children: [\\n            _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"stat-high\\\", children: [\\\"High: \\\" , count('high')]})\\n            , _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"stat-medium\\\", children: [\\\"Medium: \\\" , count('medium')]})\\n            , _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"stat-low\\\", children: [\\\"Low: \\\" , count('low')]})\\n          ]})\\n        )\\n      ]})\\n    );\\n  }\\n} exports.default = TaskStats;\\n\\nTaskStats.propTypes = {\\n  tasks: _proptypes2.default.arrayOf(_proptypes2.default.object).isRequired,\\n};\\n\",\"src/components/Panel.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/components/Panel.js — thành phần BỌC: nội dung bên trong do nơi dùng quyết định (children)\\nvar _proptypes = require('prop-types'); var _proptypes2 = _interopRequireDefault(_proptypes);\\n\\n function Panel({ title, children }) {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { className: \\\"panel\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { className: \\\"panel-title\\\", children: title})\\n      , children\\n    ]})\\n  );\\n} exports.default = Panel;\\n\\nPanel.propTypes = {\\n  title: _proptypes2.default.string.isRequired,\\n  children: _proptypes2.default.node,\\n};\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n  })\\n);\\n\",\"src/data/tasks.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/tasks.js — dữ liệu mẫu (đã cho)\\n const STATUSES = [\\n  { id: 'todo', title: 'To Do' },\\n  { id: 'doing', title: 'In Progress' },\\n  { id: 'done', title: 'Done' },\\n]; exports.STATUSES = STATUSES;\\n\\nconst tasks = [\\n  { id: 1, title: 'Set up the React project', status: 'done', priority: 'high', assignee: 'An' },\\n  { id: 2, title: 'Design the board layout', status: 'done', priority: 'medium', assignee: 'Binh' },\\n  { id: 3, title: 'Build the TaskCard component', status: 'doing', priority: 'high', assignee: 'Cuong' },\\n  { id: 4, title: 'Add PropTypes to components', status: 'doing', priority: 'low' },\\n  { id: 5, title: 'Write the search filter', status: 'todo', priority: 'medium', assignee: 'An' },\\n  { id: 6, title: 'Show task statistics', status: 'todo', priority: 'low', assignee: 'Dung' },\\n  { id: 7, title: 'Fix the column counter', status: 'todo', priority: 'high' },\\n  { id: 8, title: 'Deploy to Netlify', status: 'todo', priority: 'medium', assignee: 'Binh' },\\n];\\n\\nexports. default = tasks;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\n* { box-sizing: border-box; }\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; background: #f1f5f9; color: #0f172a; }\\n.app { max-width: 1100px; margin: 0 auto; padding: 20px; }\\n.toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }\\n.toolbar input, .toolbar select { padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; }\\n.toolbar input { flex: 1; min-width: 180px; }\\nbutton { cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 5px 10px; font: inherit; }\\n.panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 16px; }\\n.panel-title { margin: 0 0 12px; font-size: 18px; }\\n.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }\\n@media (max-width: 760px) { .board { grid-template-columns: 1fr; } }\\n.column { background: #f8fafc; border-radius: 12px; padding: 10px; min-height: 120px; }\\n.column-title { margin: 0 0 8px; font-size: 15px; }\\n.task-card { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #94a3b8; border-radius: 10px; padding: 10px; margin-bottom: 8px; }\\n.task-card.priority-high { border-left-color: #ef4444; }\\n.task-card.priority-medium { border-left-color: #f59e0b; }\\n.task-card.priority-low { border-left-color: #22c55e; }\\n.task-title { margin: 0 0 4px; font-size: 14px; }\\n.task-assignee { margin: 0 0 6px; font-size: 12px; color: #64748b; }\\n.task-actions { display: flex; gap: 6px; }\\n.badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e2e8f0; margin-left: auto; }\\n.stats-details { margin: 8px 0 0; padding-left: 18px; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=null;var THANH=false;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

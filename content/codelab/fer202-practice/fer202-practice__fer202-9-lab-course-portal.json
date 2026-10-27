@@ -1,0 +1,740 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-9-lab-course-portal",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-9-1-router"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9 — Online Course Portal (useRoutes · query params · nested routes · protected route)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 110,
+      "points": 100,
+      "concepts": [
+        "useRoutes",
+        "NavLink",
+        "useSearchParams",
+        "useParams",
+        "nested routes",
+        "Outlet",
+        "index route",
+        "optional segment",
+        "useNavigate",
+        "protected route",
+        "location.state"
+      ],
+      "prerequisites": [
+        "components & props",
+        "useState",
+        "Context (cơ bản)"
+      ],
+      "tags": [
+        "fer202",
+        "lab",
+        "react-router"
+      ],
+      "problemHtml": "<h1>LAB 9: Online Course Portal — React Router v6</h1>\n<p class=\"bi-phu\">FER202 · Chapter 9 — Routing · Suggested time: 110 minutes · Total: 10 marks</p>\n<h2>1. Overview</h2>\n<p>Build the navigation of an e-learning site with <b>React Router v6</b>: a route table kept in its own module (<code>useRoutes</code>), filters stored in the <b>query string</b>, a <b>nested</b> course layout with an <code>&lt;Outlet /&gt;</code>, lesson navigation by code, an <b>optional</b> route parameter, a <b>protected</b> page that sends you back where you wanted to go after logging in, and a 404 page.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Pages: Home, Courses, Course (overview + lessons), Instructors, Login, My courses, 404.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li><code>react-router-dom</code> v6; <code>index.js</code> already wraps the app in <code>BrowserRouter</code>.</li>\n  <li>Never use <code>&lt;a href&gt;</code> for internal links (full page reload) — use <code>Link</code>/<code>NavLink</code>/<code>navigate</code>.</li>\n  <li>Route parameters are strings — convert before comparing with numbers.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>src/\n├── routes.js            # the whole route table (array) — used by useRoutes\n├── auth.js              # AuthProvider · useAuth · RequireAuth\n├── components/\n│   └── NavBar.js\n├── pages/\n│   ├── Home.js            (given)\n│   ├── CourseList.js      /courses?level=&amp;sort=\n│   ├── CourseLayout.js    /courses/:courseId  (+ &lt;Outlet /&gt;)\n│   ├── CourseOverview.js  index route\n│   ├── LessonPage.js      lessons/:lessonId\n│   ├── Instructors.js     /instructors/:name?\n│   ├── Login.js           /login\n│   ├── MyCourses.js       /my-courses (protected)\n│   └── NotFound.js        *\n├── data/courses.js      # given\n├── App.js\n└── index.js             # BrowserRouter (given)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| CT Academy   Courses   Instructors   My courses                     Login   |\n+-----------------------------------------------------------------------------+\n| /courses?level=Beginner&amp;sort=title                                          |\n| [Beginner v] [Title (A → Z) v]     3 courses                                |\n|  CSS Layout with Flexbox &amp; Grid      Beginner · 3 lessons                   |\n|  Modern JavaScript (ES6+)            Beginner · 5 lessons                   |\n+-----------------------------------------------------------------------------+\n| /courses/react-basics/lessons/2                                             |\n| +- React Basics -------+  Lesson 2: JSX                                     |\n| | Beginner · An Nguyen |  [← Previous] [Next →]                             |\n| | 1. What is React?    |                                                    |\n| |[2. JSX]   (active)   |                                                    |\n| | 3. Components        |                                                    |\n| +----------------------+                                                    |\n+-----------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Course (src/data/courses.js)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>string (slug)</td><td>used in the URL: /courses/react-basics</td></tr><tr><td><code>title</code></td><td>string</td><td></td></tr><tr><td><code>level</code></td><td>'Beginner' | 'Intermediate' | 'Advanced'</td><td></td></tr><tr><td><code>instructor</code></td><td>string</td><td>URL uses slugify(name): \"An Nguyen\" ⇒ an-nguyen</td></tr><tr><td><code>lessons</code></td><td>string[]</td><td>lesson N = lessons[N - 1]</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Navbar, home &amp; 404 <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>NavLinks <code>#nav-home</code> (<code>end</code>), <code>#nav-courses</code>, <code>#nav-instructors</code>, <code>#nav-my</code>; logged out ⇒ <code>#nav-login</code>, logged in ⇒ <code>#btn-logout</code>.</li>\n  <li><code>/</code> shows <code>#home-title</code> <code>Welcome to CT Academy</code>; any unknown URL shows <code>#page-404</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">NavLink</span> <span class=\"bi-hook\">path=\"*\"</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Course list with query parameters <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#level</code> (All levels + 3 levels) and <code>#sort</code> (<code>default</code> · <code>title</code> A → Z · <code>lessons</code> most first) live in the URL: <code>/courses?level=Beginner&amp;sort=title</code>. Changing one keeps the other; the default value removes the parameter.</li>\n  <li>Each <code>.course-item</code> has a <code>.course-link</code> to <code>/courses/{id}</code>; <code>#course-count</code> reads <code>N courses</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useSearchParams</span></p>\n<p><b>Example:</b></p>\n<pre>/courses?level=Advanced&amp;sort=title  ⇒  Redux Toolkit, Testing React Apps  (2 courses)</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Course detail (route parameter) <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>/courses/:courseId</code>: <code>#course-title</code>, <code>#course-meta</code> <code>Level · Instructor</code>.</li>\n  <li>Unknown id ⇒ <code>#not-found</code> <code>Course not found</code> with a link back.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useParams</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. Nested routes &amp; Outlet <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>CourseLayout</code> renders the sidebar <code>#lesson-list</code> (NavLinks <code>.lesson-link</code> with <b>relative</b> paths <code>lessons/N</code>) and an <code>&lt;Outlet /&gt;</code>.</li>\n  <li>Index route ⇒ <code>#course-overview</code> <code>This course has N lessons.</code>; <code>lessons/:lessonId</code> ⇒ <code>#lesson-title</code> <code>Lesson 2: JSX</code>; unknown lesson ⇒ <code>#lesson-not-found</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Outlet</span> <span class=\"bi-hook\">index route</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Navigate by code <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#btn-start</code> opens lesson 1; <code>#prev-lesson</code>/<code>#next-lesson</code> move between lessons and are disabled at the ends.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Optional parameter <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>ONE route <code>/instructors/:name?</code>. Without a name: <code>.instructor-link</code> list (A → Z) linking to <code>/instructors/{slug}</code>.</li>\n  <li>With a name: <code>#instructor-name</code> + <code>#instructor-courses li</code>; unknown ⇒ <code>#instructor-not-found</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Protected route <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>/my-courses</code> is wrapped in <code>RequireAuth</code>: logged out ⇒ <code>&lt;Navigate to=\"/login\" replace state={{ from: location }} /&gt;</code>; the login page shows <code>#login-reason</code>.</li>\n  <li><code>#login-form</code> + <code>#username</code>: after login go back to <code>from</code> (or <code>/my-courses</code>), <code>#welcome</code> <code>Welcome, {user}!</code>. Logout goes home.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">Navigate</span> <span class=\"bi-hook\">useLocation</span> <span class=\"bi-hook\">location.state</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Decoupled route table <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>All routes in <code>src/routes.js</code> as an array (<code>children</code> + <code>index: true</code> for the nested ones); <code>App</code> renders <code>useRoutes(routes)</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useRoutes</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#nav-home · #nav-courses · #nav-instructors · #nav-my · #nav-login · #btn-logout</code></td><td>navbar</td></tr><tr><td><code>#home-title · #page-404</code></td><td>home / 404</td></tr><tr><td><code>#level · #sort · #course-count · .course-item · .course-link</code></td><td>course list</td></tr><tr><td><code>#course-title · #course-meta · #lesson-list · .lesson-link · #course-overview · #btn-start · #not-found</code></td><td>course layout</td></tr><tr><td><code>#lesson-title · #prev-lesson · #next-lesson · #lesson-not-found</code></td><td>lesson page</td></tr><tr><td><code>.instructor-link · #instructor-name · #instructor-courses · #instructor-not-found</code></td><td>instructors</td></tr><tr><td><code>#login-form · #username · #login-reason · #welcome</code></td><td>auth</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Navbar, home &amp; 404</td><td>1</td></tr><tr><td>2</td><td>Course list with query parameters</td><td>1.5</td></tr><tr><td>3</td><td>Course detail (route parameter)</td><td>1.5</td></tr><tr><td>4</td><td>Nested routes &amp; Outlet</td><td>1.5</td></tr><tr><td>5</td><td>Navigate by code</td><td>1</td></tr><tr><td>6</td><td>Optional parameter</td><td>1</td></tr><tr><td>7</td><td>Protected route</td><td>1.5</td></tr><tr><td>8</td><td>Decoupled route table</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Internal links with <code>&lt;a href&gt;</code> — the app reloads and loses the logged-in user.</li>\n  <li>Two separate routes <code>/instructors</code> and <code>/instructors/:name</code> instead of one optional parameter.</li>\n  <li>Filters kept in <code>useState</code> — the URL never changes and links cannot be shared.</li>\n  <li>Forgetting <code>&lt;Outlet /&gt;</code> — child routes never appear.</li>\n  <li>After login always going to <code>/</code> instead of the page the user wanted.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LAB 9: Cổng khoá học trực tuyến — React Router v6</h1>\n<p class=\"bi-phu\">FER202 · Chương 9 — Định tuyến · Thời gian gợi ý: 110 phút · Tổng: 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Làm phần điều hướng của một trang học trực tuyến bằng <b>React Router v6</b>: bảng route tách thành module riêng (<code>useRoutes</code>), bộ lọc lưu trên <b>query string</b>, khung khoá học <b>lồng</b> với <code>&lt;Outlet /&gt;</code>, chuyển bài bằng mã, tham số route <b>tuỳ chọn</b>, trang <b>bảo vệ</b> đưa bạn quay lại đúng chỗ sau khi đăng nhập, và trang 404.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Trang: Home, Courses, Course (tổng quan + bài học), Instructors, Login, My courses, 404.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li><code>react-router-dom</code> v6; <code>index.js</code> đã bọc app bằng <code>BrowserRouter</code>.</li>\n  <li>Không dùng <code>&lt;a href&gt;</code> cho link nội bộ (tải lại cả trang) — dùng <code>Link</code>/<code>NavLink</code>/<code>navigate</code>.</li>\n  <li>Tham số route là chuỗi — đổi kiểu trước khi so với số.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>src/\n├── routes.js            # the whole route table (array) — used by useRoutes\n├── auth.js              # AuthProvider · useAuth · RequireAuth\n├── components/\n│   └── NavBar.js\n├── pages/\n│   ├── Home.js            (given)\n│   ├── CourseList.js      /courses?level=&amp;sort=\n│   ├── CourseLayout.js    /courses/:courseId  (+ &lt;Outlet /&gt;)\n│   ├── CourseOverview.js  index route\n│   ├── LessonPage.js      lessons/:lessonId\n│   ├── Instructors.js     /instructors/:name?\n│   ├── Login.js           /login\n│   ├── MyCourses.js       /my-courses (protected)\n│   └── NotFound.js        *\n├── data/courses.js      # given\n├── App.js\n└── index.js             # BrowserRouter (given)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| CT Academy   Courses   Instructors   My courses                     Login   |\n+-----------------------------------------------------------------------------+\n| /courses?level=Beginner&amp;sort=title                                          |\n| [Beginner v] [Title (A → Z) v]     3 courses                                |\n|  CSS Layout with Flexbox &amp; Grid      Beginner · 3 lessons                   |\n|  Modern JavaScript (ES6+)            Beginner · 5 lessons                   |\n+-----------------------------------------------------------------------------+\n| /courses/react-basics/lessons/2                                             |\n| +- React Basics -------+  Lesson 2: JSX                                     |\n| | Beginner · An Nguyen |  [← Previous] [Next →]                             |\n| | 1. What is React?    |                                                    |\n| |[2. JSX]   (active)   |                                                    |\n| | 3. Components        |                                                    |\n| +----------------------+                                                    |\n+-----------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Course (src/data/courses.js)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>string (slug)</td><td>dùng trên URL: /courses/react-basics</td></tr><tr><td><code>title</code></td><td>string</td><td></td></tr><tr><td><code>level</code></td><td>'Beginner' | 'Intermediate' | 'Advanced'</td><td></td></tr><tr><td><code>instructor</code></td><td>string</td><td>URL dùng slugify(tên): \"An Nguyen\" ⇒ an-nguyen</td></tr><tr><td><code>lessons</code></td><td>string[]</td><td>bài N = lessons[N - 1]</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Navbar, trang chủ &amp; 404 <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>NavLink <code>#nav-home</code> (<code>end</code>), <code>#nav-courses</code>, <code>#nav-instructors</code>, <code>#nav-my</code>; chưa đăng nhập ⇒ <code>#nav-login</code>, đã đăng nhập ⇒ <code>#btn-logout</code>.</li>\n  <li><code>/</code> hiện <code>#home-title</code> <code>Welcome to CT Academy</code>; URL lạ hiện <code>#page-404</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">NavLink</span> <span class=\"bi-hook\">path=\"*\"</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Danh sách khoá với query parameter <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#level</code> (All levels + 3 mức) và <code>#sort</code> (<code>default</code> · <code>title</code> A → Z · <code>lessons</code> nhiều bài trước) nằm trên URL: <code>/courses?level=Beginner&amp;sort=title</code>. Đổi một cái giữ cái kia; chọn giá trị mặc định thì bỏ tham số.</li>\n  <li>Mỗi <code>.course-item</code> có <code>.course-link</code> tới <code>/courses/{id}</code>; <code>#course-count</code> ghi <code>N courses</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useSearchParams</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>/courses?level=Advanced&amp;sort=title  ⇒  Redux Toolkit, Testing React Apps  (2 courses)</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Chi tiết khoá (tham số route) <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>/courses/:courseId</code>: <code>#course-title</code>, <code>#course-meta</code> <code>Level · Instructor</code>.</li>\n  <li>Id lạ ⇒ <code>#not-found</code> <code>Course not found</code> kèm link quay lại.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useParams</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. Route lồng &amp; Outlet <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>CourseLayout</code> vẽ thanh bên <code>#lesson-list</code> (NavLink <code>.lesson-link</code> đường dẫn <b>tương đối</b> <code>lessons/N</code>) và <code>&lt;Outlet /&gt;</code>.</li>\n  <li>Route index ⇒ <code>#course-overview</code> <code>This course has N lessons.</code>; <code>lessons/:lessonId</code> ⇒ <code>#lesson-title</code> <code>Lesson 2: JSX</code>; bài lạ ⇒ <code>#lesson-not-found</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Outlet</span> <span class=\"bi-hook\">index route</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Điều hướng bằng mã <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#btn-start</code> mở bài 1; <code>#prev-lesson</code>/<code>#next-lesson</code> chuyển bài và bị vô hiệu ở hai đầu.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Tham số tuỳ chọn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>MỘT route <code>/instructors/:name?</code>. Không có tên: danh sách <code>.instructor-link</code> (A → Z) trỏ tới <code>/instructors/{slug}</code>.</li>\n  <li>Có tên: <code>#instructor-name</code> + <code>#instructor-courses li</code>; lạ ⇒ <code>#instructor-not-found</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>7. Route bảo vệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>/my-courses</code> được bọc bởi <code>RequireAuth</code>: chưa đăng nhập ⇒ <code>&lt;Navigate to=\"/login\" replace state={{ from: location }} /&gt;</code>; trang đăng nhập hiện <code>#login-reason</code>.</li>\n  <li><code>#login-form</code> + <code>#username</code>: đăng nhập xong quay lại <code>from</code> (hoặc <code>/my-courses</code>), <code>#welcome</code> <code>Welcome, {user}!</code>. Đăng xuất về trang chủ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">Navigate</span> <span class=\"bi-hook\">useLocation</span> <span class=\"bi-hook\">location.state</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Tách khai báo route <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi route nằm trong <code>src/routes.js</code> dạng mảng (<code>children</code> + <code>index: true</code> cho route lồng); <code>App</code> dùng <code>useRoutes(routes)</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useRoutes</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#nav-home · #nav-courses · #nav-instructors · #nav-my · #nav-login · #btn-logout</code></td><td>navbar</td></tr><tr><td><code>#home-title · #page-404</code></td><td>trang chủ / 404</td></tr><tr><td><code>#level · #sort · #course-count · .course-item · .course-link</code></td><td>danh sách khoá</td></tr><tr><td><code>#course-title · #course-meta · #lesson-list · .lesson-link · #course-overview · #btn-start · #not-found</code></td><td>khung khoá học</td></tr><tr><td><code>#lesson-title · #prev-lesson · #next-lesson · #lesson-not-found</code></td><td>trang bài học</td></tr><tr><td><code>.instructor-link · #instructor-name · #instructor-courses · #instructor-not-found</code></td><td>giảng viên</td></tr><tr><td><code>#login-form · #username · #login-reason · #welcome</code></td><td>đăng nhập</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Navbar, trang chủ &amp; 404</td><td>1</td></tr><tr><td>2</td><td>Danh sách khoá với query parameter</td><td>1.5</td></tr><tr><td>3</td><td>Chi tiết khoá (tham số route)</td><td>1.5</td></tr><tr><td>4</td><td>Route lồng &amp; Outlet</td><td>1.5</td></tr><tr><td>5</td><td>Điều hướng bằng mã</td><td>1</td></tr><tr><td>6</td><td>Tham số tuỳ chọn</td><td>1</td></tr><tr><td>7</td><td>Route bảo vệ</td><td>1.5</td></tr><tr><td>8</td><td>Tách khai báo route</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Link nội bộ bằng <code>&lt;a href&gt;</code> — app tải lại và mất người dùng đã đăng nhập.</li>\n  <li>Hai route riêng <code>/instructors</code> và <code>/instructors/:name</code> thay vì một tham số tuỳ chọn.</li>\n  <li>Bộ lọc để trong <code>useState</code> — URL không đổi, không chia sẻ link được.</li>\n  <li>Quên <code>&lt;Outlet /&gt;</code> — route con không bao giờ hiện.</li>\n  <li>Đăng nhập xong luôn về <code>/</code> thay vì trang người dùng muốn vào.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "<code>react-router-dom</code> v6; <code>index.js</code> already wraps the app in <code>BrowserRouter</code>.|||<code>react-router-dom</code> v6; <code>index.js</code> đã bọc app bằng <code>BrowserRouter</code>.\nNever use <code>&lt;a href&gt;</code> for internal links (full page reload) — use <code>Link</code>/<code>NavLink</code>/<code>navigate</code>.|||Không dùng <code>&lt;a href&gt;</code> cho link nội bộ (tải lại cả trang) — dùng <code>Link</code>/<code>NavLink</code>/<code>navigate</code>.\nRoute parameters are strings — convert before comparing with numbers.|||Tham số route là chuỗi — đổi kiểu trước khi so với số.",
+      "examplesJson": [
+        {
+          "input": "Course list with query parameters|||Danh sách khoá với query parameter",
+          "output": "/courses?level=Advanced&sort=title  ⇒  Redux Toolkit, Testing React Apps  (2 courses)",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Viết routes.js trước: mảng { path, element, children? }; App: function Pages() { return useRoutes(routes); }.",
+        "Query: const [params, setParams] = useSearchParams(); đổi một tham số bằng new URLSearchParams(params) rồi set/delete, cuối cùng setParams(next).",
+        "Route lồng: { path: \"/courses/:courseId\", element: <CourseLayout/>, children: [{ index: true, element: <CourseOverview/> }, { path: \"lessons/:lessonId\", element: <LessonPage/> }] } và CourseLayout có <Outlet />.",
+        "RequireAuth: if (!user) return <Navigate to=\"/login\" replace state={{ from: location }} />; Login: navigate(location.state?.from?.pathname ?? \"/my-courses\", { replace: true })."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/routes.js",
+          "language": "javascript",
+          "code": "// src/routes.js — STARTER: khai báo MỌI route ở đây (mảng cấu hình) rồi App dùng useRoutes(routes)\nimport Home from './pages/Home';\n\nexport const routes = [\n  { path: '/', element: <Home /> },\n  // TODO: /courses · /courses/:courseId (lồng: index + lessons/:lessonId) · /instructors/:name? · /login · /my-courses (bảo vệ) · *\n];\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Route, Routes } from 'react-router-dom';\nimport NavBar from './components/NavBar';\nimport { AuthProvider } from './auth';\nimport Home from './pages/Home';\n\nexport default function App() {\n  // TODO: thay <Routes> viết tay bằng useRoutes(routes) từ ./routes\n  return (\n    <AuthProvider>\n      <NavBar />\n      <main className=\"page\">\n        <Routes>\n          <Route path=\"/\" element={<Home />} />\n        </Routes>\n      </main>\n    </AuthProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/auth.js",
+          "language": "javascript",
+          "code": "// src/auth.js — STARTER\nimport { createContext, useContext, useState } from 'react';\n\nconst AuthContext = createContext(null);\n\nexport function AuthProvider({ children }) {\n  const [user, setUser] = useState(null);\n  return <AuthContext.Provider value={{ user, login: setUser, logout: () => setUser(null) }}>{children}</AuthContext.Provider>;\n}\n\nexport const useAuth = () => useContext(AuthContext);\n\nexport function RequireAuth({ children }) {\n  // TODO: chưa đăng nhập ⇒ <Navigate to=\"/login\" replace state={{ from: location }} />\n  return children;\n}\n"
+        },
+        {
+          "name": "src/components/NavBar.js",
+          "language": "javascript",
+          "code": "// src/components/NavBar.js — STARTER (dùng <a> ⇒ tải lại cả trang!)\nexport default function NavBar() {\n  // TODO: NavLink #nav-home (end) · #nav-courses · #nav-instructors · #nav-my · #nav-login / #btn-logout\n  return (\n    <nav className=\"nav\">\n      <a href=\"/\" id=\"nav-home\">CT Academy</a>\n      <a href=\"/courses\" id=\"nav-courses\">Courses</a>\n    </nav>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CourseList.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseList.js — STARTER\n// TODO: #level + #sort trên URL (?level=&sort=), .course-item > .course-link, #course-count\nexport default function CourseList() {\n  return <p>CourseList — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/CourseLayout.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseLayout.js — STARTER\n// TODO: #course-title, #course-meta, #lesson-list (NavLink .lesson-link), <Outlet />, #not-found\nexport default function CourseLayout() {\n  return <p>CourseLayout — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/CourseOverview.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseOverview.js — STARTER\n// TODO: #course-overview + #btn-start ⇒ lessons/1\nexport default function CourseOverview() {\n  return <p>CourseOverview — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/LessonPage.js",
+          "language": "javascript",
+          "code": "// src/pages/LessonPage.js — STARTER\n// TODO: #lesson-title \"Lesson 2: JSX\", #prev-lesson, #next-lesson, #lesson-not-found\nexport default function LessonPage() {\n  return <p>LessonPage — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/Instructors.js",
+          "language": "javascript",
+          "code": "// src/pages/Instructors.js — STARTER\n// TODO: /instructors ⇒ .instructor-link; /instructors/:name ⇒ #instructor-name + #instructor-courses\nexport default function Instructors() {\n  return <p>Instructors — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/Login.js",
+          "language": "javascript",
+          "code": "// src/pages/Login.js — STARTER\n// TODO: #login-form + #username; đăng nhập xong quay về location.state.from\nexport default function Login() {\n  return <p>Login — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/MyCourses.js",
+          "language": "javascript",
+          "code": "// src/pages/MyCourses.js — STARTER\n// TODO: #welcome \"Welcome, {user}!\"\nexport default function MyCourses() {\n  return <p>MyCourses — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/pages/NotFound.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFound.js — STARTER\n// TODO: #page-404\nexport default function NotFound() {\n  return <p>NotFound — not implemented</p>;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.nav { display: flex; gap: 14px; align-items: center; padding: 12px 20px; background: #0f172a; }\n.nav a { color: #cbd5e1; text-decoration: none; }\n.nav a.active { color: #fff; font-weight: 700; border-bottom: 2px solid #38bdf8; }\n.nav .spacer { flex: 1; }\n.nav button { background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 6px; padding: 4px 10px; cursor: pointer; }\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; gap: 10px; margin-bottom: 12px; }\n.toolbar select { padding: 6px 8px; border-radius: 8px; border: 1px solid #cbd5e1; }\n.course-item { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 8px; }\n.layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; }\n.lesson-link { display: block; padding: 6px 10px; border-radius: 8px; color: #334155; text-decoration: none; }\n.lesson-link.active { background: #e0f2fe; color: #0369a1; font-weight: 600; }\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/data/courses.js",
+          "language": "javascript",
+          "code": "// src/data/courses.js — đã cho\nconst courses = [\n  { id: 'react-basics', title: 'React Basics', level: 'Beginner', instructor: 'An Nguyen', lessons: ['What is React?', 'JSX', 'Components', 'Props'] },\n  { id: 'react-router', title: 'React Router in Depth', level: 'Intermediate', instructor: 'Binh Tran', lessons: ['Routes', 'Params', 'Nested routes'] },\n  { id: 'redux-toolkit', title: 'Redux Toolkit', level: 'Advanced', instructor: 'An Nguyen', lessons: ['Store', 'Slices', 'Thunks'] },\n  { id: 'js-es6', title: 'Modern JavaScript (ES6+)', level: 'Beginner', instructor: 'Chi Le', lessons: ['let & const', 'Arrow functions', 'Destructuring', 'Modules', 'Promises'] },\n  { id: 'testing-react', title: 'Testing React Apps', level: 'Advanced', instructor: 'Binh Tran', lessons: ['Jest basics', 'React Testing Library'] },\n  { id: 'css-layout', title: 'CSS Layout with Flexbox & Grid', level: 'Beginner', instructor: 'Chi Le', lessons: ['Flexbox', 'Grid', 'Responsive'] },\n];\n\nexport const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];\n// \"An Nguyen\" ⇒ \"an-nguyen\" (dùng trên URL)\nexport const slugify = (name) => name.toLowerCase().trim().replace(/\\s+/g, '-');\nexport default courses;\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js\nimport { Link } from 'react-router-dom';\n\nexport default function Home() {\n  return (\n    <section>\n      <h1 id=\"home-title\">Welcome to CT Academy</h1>\n      <p>Pick a course and start learning today.</p>\n      <Link to=\"/courses\" id=\"home-cta\">Browse courses →</Link>\n    </section>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/routes.js",
+          "language": "javascript",
+          "code": "// src/routes.js — KHAI BÁO ROUTE TÁCH RIÊNG (Exercise 20): một mảng cấu hình, App chỉ việc useRoutes(routes)\nimport Home from './pages/Home';\nimport CourseList from './pages/CourseList';\nimport CourseLayout from './pages/CourseLayout';\nimport CourseOverview from './pages/CourseOverview';\nimport LessonPage from './pages/LessonPage';\nimport Instructors from './pages/Instructors';\nimport Login from './pages/Login';\nimport MyCourses from './pages/MyCourses';\nimport NotFound from './pages/NotFound';\nimport { RequireAuth } from './auth';\n\nexport const routes = [\n  { path: '/', element: <Home /> },\n  { path: '/courses', element: <CourseList /> },\n  {\n    // route LỒNG: CourseLayout vẽ khung chung + <Outlet /> cho route con\n    path: '/courses/:courseId',\n    element: <CourseLayout />,\n    children: [\n      { index: true, element: <CourseOverview /> }, // /courses/:courseId\n      { path: 'lessons/:lessonId', element: <LessonPage /> }, // /courses/:courseId/lessons/:lessonId\n    ],\n  },\n  { path: '/instructors/:name?', element: <Instructors /> }, // :name? = tham số TUỲ CHỌN\n  { path: '/login', element: <Login /> },\n  { path: '/my-courses', element: <RequireAuth><MyCourses /></RequireAuth> },\n  { path: '*', element: <NotFound /> },\n];\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — dùng cấu hình route ở routes.js\nimport { useRoutes } from 'react-router-dom';\nimport NavBar from './components/NavBar';\nimport { AuthProvider } from './auth';\nimport { routes } from './routes';\n\nfunction Pages() {\n  return useRoutes(routes); // trả về phần tử của route khớp URL hiện tại\n}\n\nexport default function App() {\n  return (\n    <AuthProvider>\n      <NavBar />\n      <main className=\"page\">\n        <Pages />\n      </main>\n    </AuthProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/auth.js",
+          "language": "javascript",
+          "code": "// src/auth.js — trạng thái đăng nhập dùng chung (Context nhỏ) + route bảo vệ\nimport { createContext, useContext, useState } from 'react';\nimport { Navigate, useLocation } from 'react-router-dom';\n\nconst AuthContext = createContext(null);\n\nexport function AuthProvider({ children }) {\n  const [user, setUser] = useState(null);\n  return <AuthContext.Provider value={{ user, login: setUser, logout: () => setUser(null) }}>{children}</AuthContext.Provider>;\n}\n\nexport const useAuth = () => useContext(AuthContext);\n\n// Chưa đăng nhập ⇒ sang /login, NHỚ trang đang muốn vào (state.from) để quay lại sau khi đăng nhập\nexport function RequireAuth({ children }) {\n  const { user } = useAuth();\n  const location = useLocation();\n  if (!user) return <Navigate to=\"/login\" replace state={{ from: location }} />;\n  return children;\n}\n"
+        },
+        {
+          "name": "src/components/NavBar.js",
+          "language": "javascript",
+          "code": "// src/components/NavBar.js — NavLink tự thêm class \"active\"; \"end\" để \"/\" không sáng ở mọi trang\nimport { NavLink, useNavigate } from 'react-router-dom';\nimport { useAuth } from '../auth';\n\nexport default function NavBar() {\n  const { user, logout } = useAuth();\n  const navigate = useNavigate();\n  return (\n    <nav className=\"nav\">\n      <NavLink to=\"/\" end id=\"nav-home\">CT Academy</NavLink>\n      <NavLink to=\"/courses\" id=\"nav-courses\">Courses</NavLink>\n      <NavLink to=\"/instructors\" id=\"nav-instructors\">Instructors</NavLink>\n      <NavLink to=\"/my-courses\" id=\"nav-my\">My courses</NavLink>\n      <span className=\"spacer\" />\n      {user ? (\n        <button type=\"button\" id=\"btn-logout\" onClick={() => { logout(); navigate('/'); }}>Logout ({user})</button>\n      ) : (\n        <NavLink to=\"/login\" id=\"nav-login\">Login</NavLink>\n      )}\n    </nav>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CourseList.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseList.js — lọc + sắp xếp SỐNG TRÊN URL (?level=…&sort=…): chia sẻ link là thấy đúng\nimport { Link, useSearchParams } from 'react-router-dom';\nimport courses, { LEVELS } from '../data/courses';\n\nexport default function CourseList() {\n  const [params, setParams] = useSearchParams();\n  const level = params.get('level') || 'all';\n  const sort = params.get('sort') || 'default';\n\n  // đổi MỘT tham số, giữ nguyên tham số kia\n  const setParam = (key, value, macDinh) => {\n    const next = new URLSearchParams(params);\n    if (value === macDinh) next.delete(key);\n    else next.set(key, value);\n    setParams(next);\n  };\n\n  let list = courses.filter((c) => level === 'all' || c.level === level);\n  if (sort === 'title') list = [...list].sort((a, b) => a.title.localeCompare(b.title));\n  if (sort === 'lessons') list = [...list].sort((a, b) => b.lessons.length - a.lessons.length); // sort ổn định ⇒ bằng nhau giữ thứ tự\n\n  return (\n    <section>\n      <h2>Courses</h2>\n      <div className=\"toolbar\">\n        <select id=\"level\" value={level} onChange={(e) => setParam('level', e.target.value, 'all')}>\n          <option value=\"all\">All levels</option>\n          {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}\n        </select>\n        <select id=\"sort\" value={sort} onChange={(e) => setParam('sort', e.target.value, 'default')}>\n          <option value=\"default\">Default order</option>\n          <option value=\"title\">Title (A → Z)</option>\n          <option value=\"lessons\">Most lessons</option>\n        </select>\n      </div>\n      <p id=\"course-count\">{list.length} courses</p>\n      {list.map((c) => (\n        <div key={c.id} className=\"course-item\">\n          <Link className=\"course-link\" to={`/courses/${c.id}`}>{c.title}</Link>\n          <div className=\"course-meta\">{c.level} · {c.lessons.length} lessons</div>\n        </div>\n      ))}\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CourseLayout.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseLayout.js — khung chung của một khoá: tiêu đề + danh sách bài + <Outlet /> cho route con\nimport { Link, NavLink, Outlet, useParams } from 'react-router-dom';\nimport courses from '../data/courses';\n\nexport default function CourseLayout() {\n  const { courseId } = useParams();\n  const course = courses.find((c) => c.id === courseId);\n\n  if (!course) {\n    return (\n      <div id=\"not-found\">\n        <h2>Course not found</h2>\n        <Link to=\"/courses\">← Back to courses</Link>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"layout\">\n      <aside>\n        <h2 id=\"course-title\">{course.title}</h2>\n        <p id=\"course-meta\">{course.level} · {course.instructor}</p>\n        <nav id=\"lesson-list\">\n          {course.lessons.map((title, i) => (\n            // đường dẫn TƯƠNG ĐỐI: \"lessons/2\" nối sau /courses/:courseId\n            <NavLink key={title} to={`lessons/${i + 1}`} className=\"lesson-link\">{i + 1}. {title}</NavLink>\n          ))}\n        </nav>\n      </aside>\n      <section>\n        <Outlet />\n      </section>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CourseOverview.js",
+          "language": "javascript",
+          "code": "// src/pages/CourseOverview.js — route INDEX: /courses/:courseId\nimport { useNavigate, useParams } from 'react-router-dom';\nimport courses from '../data/courses';\n\nexport default function CourseOverview() {\n  const { courseId } = useParams(); // route con đọc được tham số của route cha\n  const navigate = useNavigate();\n  const course = courses.find((c) => c.id === courseId);\n  return (\n    <div id=\"course-overview\">\n      <p>This course has {course.lessons.length} lessons.</p>\n      <button type=\"button\" id=\"btn-start\" onClick={() => navigate('lessons/1')}>Start learning</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/LessonPage.js",
+          "language": "javascript",
+          "code": "// src/pages/LessonPage.js — /courses/:courseId/lessons/:lessonId + Prev/Next bằng useNavigate\nimport { useNavigate, useParams } from 'react-router-dom';\nimport courses from '../data/courses';\n\nexport default function LessonPage() {\n  const { courseId, lessonId } = useParams();\n  const navigate = useNavigate();\n  const course = courses.find((c) => c.id === courseId);\n  const n = Number(lessonId); // tham số route luôn là CHUỖI\n  const title = course.lessons[n - 1];\n\n  if (!Number.isInteger(n) || !title) return <p id=\"lesson-not-found\">Lesson not found</p>;\n\n  const go = (k) => navigate(`/courses/${courseId}/lessons/${k}`);\n  return (\n    <article>\n      <h3 id=\"lesson-title\">Lesson {n}: {title}</h3>\n      <div id=\"lesson-nav\">\n        <button type=\"button\" id=\"prev-lesson\" disabled={n === 1} onClick={() => go(n - 1)}>← Previous</button>{' '}\n        <button type=\"button\" id=\"next-lesson\" disabled={n === course.lessons.length} onClick={() => go(n + 1)}>Next →</button>\n      </div>\n    </article>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Instructors.js",
+          "language": "javascript",
+          "code": "// src/pages/Instructors.js — /instructors và /instructors/:name (tham số TUỲ CHỌN)\nimport { Link, useParams } from 'react-router-dom';\nimport courses, { slugify } from '../data/courses';\n\nexport default function Instructors() {\n  const { name } = useParams(); // undefined khi URL là /instructors\n  const all = [...new Set(courses.map((c) => c.instructor))].sort();\n\n  if (!name) {\n    return (\n      <section>\n        <h2>Instructors</h2>\n        <ul>\n          {all.map((i) => (\n            <li key={i}><Link className=\"instructor-link\" to={`/instructors/${slugify(i)}`}>{i}</Link></li>\n          ))}\n        </ul>\n      </section>\n    );\n  }\n\n  const real = all.find((i) => slugify(i) === name);\n  if (!real) return <p id=\"instructor-not-found\">Instructor not found</p>;\n  return (\n    <section>\n      <h2 id=\"instructor-name\">{real}</h2>\n      <ul id=\"instructor-courses\">\n        {courses.filter((c) => c.instructor === real).map((c) => (\n          <li key={c.id}><Link to={`/courses/${c.id}`}>{c.title}</Link></li>\n        ))}\n      </ul>\n      <Link to=\"/instructors\">← All instructors</Link>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/Login.js",
+          "language": "javascript",
+          "code": "// src/pages/Login.js — đăng nhập giả: xong thì QUAY LẠI trang bị chặn (location.state.from)\nimport { useState } from 'react';\nimport { useLocation, useNavigate } from 'react-router-dom';\nimport { useAuth } from '../auth';\n\nexport default function Login() {\n  const [username, setUsername] = useState('');\n  const { login } = useAuth();\n  const navigate = useNavigate();\n  const location = useLocation();\n  const from = location.state?.from;\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    if (!username.trim()) return;\n    login(username.trim());\n    // replace: nút Back không quay về trang đăng nhập nữa\n    navigate(from ? from.pathname + (from.search || '') : '/my-courses', { replace: true });\n  };\n\n  return (\n    <form id=\"login-form\" onSubmit={handleSubmit}>\n      <h2>Login</h2>\n      {from && <p id=\"login-reason\">Please log in to continue.</p>}\n      <input id=\"username\" placeholder=\"Username\" value={username} onChange={(e) => setUsername(e.target.value)} />{' '}\n      <button type=\"submit\">Login</button>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/MyCourses.js",
+          "language": "javascript",
+          "code": "// src/pages/MyCourses.js — chỉ vào được khi đã đăng nhập (bọc bởi RequireAuth trong routes.js)\nimport { Link } from 'react-router-dom';\nimport { useAuth } from '../auth';\nimport courses from '../data/courses';\n\nexport default function MyCourses() {\n  const { user } = useAuth();\n  return (\n    <section>\n      <h2 id=\"welcome\">Welcome, {user}!</h2>\n      <ul id=\"my-list\">\n        {courses.slice(0, 2).map((c) => (\n          <li key={c.id}><Link to={`/courses/${c.id}`}>{c.title}</Link></li>\n        ))}\n      </ul>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/NotFound.js",
+          "language": "javascript",
+          "code": "// src/pages/NotFound.js — route \"*\": mọi URL không khớp\nimport { Link } from 'react-router-dom';\n\nexport default function NotFound() {\n  return (\n    <section id=\"page-404\">\n      <h2>404 — Page not found</h2>\n      <Link to=\"/\">Go home</Link>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "src/index.css",
+          "language": "css",
+          "code": "/* src/index.css — đã cho */\n* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; color: #0f172a; }\n.nav { display: flex; gap: 14px; align-items: center; padding: 12px 20px; background: #0f172a; }\n.nav a { color: #cbd5e1; text-decoration: none; }\n.nav a.active { color: #fff; font-weight: 700; border-bottom: 2px solid #38bdf8; }\n.nav .spacer { flex: 1; }\n.nav button { background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 6px; padding: 4px 10px; cursor: pointer; }\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\n.toolbar { display: flex; gap: 10px; margin-bottom: 12px; }\n.toolbar select { padding: 6px 8px; border-radius: 8px; border: 1px solid #cbd5e1; }\n.course-item { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 8px; }\n.layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; }\n.lesson-link { display: block; padding: 6px 10px; border-radius: 8px; color: #334155; text-decoration: none; }\n.lesson-link.active { background: #e0f2fe; color: #0369a1; font-weight: 600; }\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\n"
+        },
+        {
+          "name": "src/data/courses.js",
+          "language": "javascript",
+          "code": "// src/data/courses.js — đã cho\nconst courses = [\n  { id: 'react-basics', title: 'React Basics', level: 'Beginner', instructor: 'An Nguyen', lessons: ['What is React?', 'JSX', 'Components', 'Props'] },\n  { id: 'react-router', title: 'React Router in Depth', level: 'Intermediate', instructor: 'Binh Tran', lessons: ['Routes', 'Params', 'Nested routes'] },\n  { id: 'redux-toolkit', title: 'Redux Toolkit', level: 'Advanced', instructor: 'An Nguyen', lessons: ['Store', 'Slices', 'Thunks'] },\n  { id: 'js-es6', title: 'Modern JavaScript (ES6+)', level: 'Beginner', instructor: 'Chi Le', lessons: ['let & const', 'Arrow functions', 'Destructuring', 'Modules', 'Promises'] },\n  { id: 'testing-react', title: 'Testing React Apps', level: 'Advanced', instructor: 'Binh Tran', lessons: ['Jest basics', 'React Testing Library'] },\n  { id: 'css-layout', title: 'CSS Layout with Flexbox & Grid', level: 'Beginner', instructor: 'Chi Le', lessons: ['Flexbox', 'Grid', 'Responsive'] },\n];\n\nexport const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];\n// \"An Nguyen\" ⇒ \"an-nguyen\" (dùng trên URL)\nexport const slugify = (name) => name.toLowerCase().trim().replace(/\\s+/g, '-');\nexport default courses;\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js\nimport { Link } from 'react-router-dom';\n\nexport default function Home() {\n  return (\n    <section>\n      <h1 id=\"home-title\">Welcome to CT Academy</h1>\n      <p>Pick a course and start learning today.</p>\n      <Link to=\"/courses\" id=\"home-cta\">Browse courses →</Link>\n    </section>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Toàn bộ bảng route nằm trong <code>routes.js</code> (Exercise 20) nên App chỉ còn <code>useRoutes(routes)</code>. Bộ lọc/sắp xếp sống trên URL nhờ <code>useSearchParams</code> — mở link là thấy đúng kết quả. <code>CourseLayout</code> là route khung: phần chung (tiêu đề, danh sách bài) vẽ một lần, <code>&lt;Outlet /&gt;</code> hiện route con (index = tổng quan, <code>lessons/:lessonId</code> = bài). <code>/instructors/:name?</code> phục vụ cả danh sách lẫn một người. <code>RequireAuth</code> chặn bằng <code>&lt;Navigate&gt;</code> và gửi kèm <code>state.from</code>; Login đọc nó để quay lại, dùng <code>replace</code> để nút Back không kẹt ở trang đăng nhập.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://reactrouter.com/en/6.26.2/hooks/use-routes",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "url": "/",
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "Home page at \"/\"",
+            "url": "/",
+            "kiem": "text",
+            "selector": "#home-title",
+            "giaTri": "Welcome to CT Academy"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Navbar uses NavLink: #nav-courses is active on /courses",
+            "url": "/courses",
+            "kiem": "ton-tai",
+            "selector": "#nav-courses.active"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "\"/\" link is not active on other pages (end)",
+            "url": "/courses",
+            "kiem": "khong-ton-tai",
+            "selector": "#nav-home.active"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Unknown URL ⇒ #page-404",
+            "url": "/abc/xyz",
+            "kiem": "ton-tai",
+            "selector": "#page-404"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Clicking a nav link changes route without reloading",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/courses",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-courses"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "/courses lists 6 courses",
+            "url": "/courses",
+            "kiem": "so-luong",
+            "selector": ".course-item",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f2",
+            "moTa": "#level writes ?level= to the URL",
+            "url": "/courses",
+            "kiem": "duong-dan",
+            "giaTri": "/courses?level=Beginner",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#level",
+                "giaTri": "Beginner"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "?level=Advanced&sort=title filters and sorts",
+            "url": "/courses?level=Advanced&sort=title",
+            "kiem": "danh-sach-text",
+            "selector": ".course-link",
+            "mongDoi": [
+              "Redux Toolkit",
+              "Testing React Apps"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "sort=lessons: most lessons first, ties keep data order",
+            "url": "/courses?sort=lessons",
+            "kiem": "danh-sach-text",
+            "selector": ".course-link",
+            "mongDoi": [
+              "Modern JavaScript (ES6+)",
+              "React Basics",
+              "React Router in Depth",
+              "Redux Toolkit",
+              "CSS Layout with Flexbox & Grid",
+              "Testing React Apps"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Changing sort keeps the level parameter",
+            "url": "/courses?level=Beginner",
+            "kiem": "duong-dan",
+            "khop": "^/courses\\?(level=Beginner&sort=title|sort=title&level=Beginner)$",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#sort",
+                "giaTri": "title"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Dropdowns are pre-selected from the URL",
+            "url": "/courses?level=Intermediate&sort=title",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#level",
+            "thuocTinh": "value",
+            "giaTri": "Intermediate"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Course link goes to /courses/:courseId",
+            "url": "/courses",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/redux-toolkit",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "a.course-link[href=\"/courses/redux-toolkit\"]"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Detail reads :courseId",
+            "url": "/courses/js-es6",
+            "kiem": "danh-sach-text",
+            "selector": "#course-title, #course-meta",
+            "mongDoi": [
+              "Modern JavaScript (ES6+)",
+              "Beginner · Chi Le"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Unknown course ⇒ #not-found",
+            "url": "/courses/vue-basics",
+            "kiem": "text",
+            "selector": "#not-found",
+            "khop": "Course not found"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Index route shows the overview",
+            "url": "/courses/react-basics",
+            "kiem": "text",
+            "selector": "#course-overview",
+            "khop": "This course has 4 lessons"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Child route renders inside the layout (Outlet)",
+            "url": "/courses/react-basics/lessons/2",
+            "kiem": "danh-sach-text",
+            "selector": "#course-title, #lesson-title",
+            "mongDoi": [
+              "React Basics",
+              "Lesson 2: JSX"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Sidebar links are relative and highlight the current lesson",
+            "url": "/courses/react-basics/lessons/3",
+            "kiem": "text",
+            "selector": ".lesson-link.active",
+            "giaTri": "3. Components"
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Clicking a sidebar lesson changes only the child route",
+            "url": "/courses/react-router",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/react-router/lessons/2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lesson-list .lesson-link:nth-child(2)"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Unknown lesson ⇒ #lesson-not-found",
+            "url": "/courses/react-basics/lessons/9",
+            "kiem": "ton-tai",
+            "selector": "#lesson-not-found"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#btn-start opens lesson 1",
+            "url": "/courses/redux-toolkit",
+            "kiem": "duong-dan",
+            "giaTri": "/courses/redux-toolkit/lessons/1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-start"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Next goes to the next lesson",
+            "url": "/courses/react-basics/lessons/2",
+            "kiem": "text",
+            "selector": "#lesson-title",
+            "giaTri": "Lesson 3: Components",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#next-lesson"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Previous is disabled on lesson 1, Next on the last",
+            "url": "/courses/testing-react/lessons/1",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#prev-lesson",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Next is disabled on the last lesson",
+            "url": "/courses/testing-react/lessons/2",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#next-lesson",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f6",
+            "moTa": "/instructors lists 3 instructors A → Z",
+            "url": "/instructors",
+            "kiem": "danh-sach-text",
+            "selector": ".instructor-link",
+            "mongDoi": [
+              "An Nguyen",
+              "Binh Tran",
+              "Chi Le"
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "/instructors/an-nguyen shows their courses",
+            "url": "/instructors/an-nguyen",
+            "kiem": "danh-sach-text",
+            "selector": "#instructor-name, #instructor-courses li",
+            "mongDoi": [
+              "An Nguyen",
+              "React Basics",
+              "Redux Toolkit"
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Route uses an OPTIONAL parameter",
+            "kiem": "ma-nguon",
+            "khop": "/instructors/:name\\?"
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Instructor link uses the slug",
+            "url": "/instructors",
+            "kiem": "duong-dan",
+            "giaTri": "/instructors/chi-le",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li:nth-child(3) .instructor-link"
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Unknown instructor message",
+            "url": "/instructors/zed",
+            "kiem": "ton-tai",
+            "selector": "#instructor-not-found"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "/my-courses redirects to /login when logged out",
+            "url": "/my-courses",
+            "kiem": "duong-dan",
+            "giaTri": "/login"
+          },
+          {
+            "nhom": "f7",
+            "moTa": "After login you are sent BACK to /my-courses",
+            "url": "/my-courses",
+            "kiem": "duong-dan",
+            "giaTri": "/my-courses",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "cuong"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Welcome message with the username",
+            "url": "/my-courses",
+            "kiem": "text",
+            "selector": "#welcome",
+            "giaTri": "Welcome, cuong!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "cuong"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Logout returns home and protects the page again",
+            "url": "/my-courses",
+            "kiem": "duong-dan",
+            "giaTri": "/login",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "cuong"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#login-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-logout"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-my"
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Login page explains why (from state)",
+            "url": "/my-courses",
+            "kiem": "ton-tai",
+            "selector": "#login-reason"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Routes are declared in src/routes.js",
+            "kiem": "ma-nguon",
+            "tep": "src/routes.js",
+            "khop": "export\\s+(const|default)[\\s\\S]*path:\\s*['\"]/courses"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "App renders them with useRoutes",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "useRoutes\\("
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Nested route config uses children + index",
+            "kiem": "ma-nguon",
+            "tep": "src/routes.js",
+            "khop": "children:[\\s\\S]*index:\\s*true"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Navbar, home & 404",
+            "diem": 1
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Course list with query parameters",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Course detail (route parameter)",
+            "diem": 1.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Nested routes & Outlet",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Navigate by code",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Optional parameter",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Protected route",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Decoupled route table",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>&lt;a href=\"/courses\"&gt;</code> ⇒ tải lại toàn trang: mất state đăng nhập, mất điểm \"không tải lại\"."
+        },
+        {
+          "loi": "NavLink \"/\" thiếu <code>end</code> ⇒ luôn sáng (vì mọi URL đều bắt đầu bằng \"/\")."
+        },
+        {
+          "loi": "Link bài học viết tuyệt đối sai (<code>to=\"/lessons/2\"</code>) thay vì tương đối <code>lessons/2</code> trong route lồng."
+        },
+        {
+          "loi": "So <code>lessonId === 2</code> (chuỗi so với số) ⇒ không bao giờ khớp."
+        },
+        {
+          "loi": "Đặt <code>useSearchParams</code> nhưng ghi đè cả object (<code>setParams({ sort })</code>) ⇒ mất <code>level</code>."
+        },
+        {
+          "loi": "Gọi <code>navigate()</code> ngay trong thân component (lúc render) thay vì dùng <code>&lt;Navigate /&gt;</code> hoặc trong handler/effect."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nested route / layout route",
+          "vi": "route lồng / route khung dùng chung"
+        },
+        {
+          "en": "index route",
+          "vi": "route con mặc định (đúng URL của cha)"
+        },
+        {
+          "en": "optional segment",
+          "vi": "đoạn URL tuỳ chọn (:name?)"
+        },
+        {
+          "en": "protected route",
+          "vi": "route chỉ vào được khi đã đăng nhập"
+        },
+        {
+          "en": "relative link",
+          "vi": "link tương đối (nối sau URL của route cha)"
+        },
+        {
+          "en": "slug",
+          "vi": "chuỗi thân thiện URL (chữ thường, gạch nối)"
+        },
+        {
+          "en": "route parameter",
+          "vi": "phần động của đường dẫn (vd :id trong /books/:id)"
+        },
+        {
+          "en": "query parameter",
+          "vi": "tham số sau dấu ? trên URL (vd ?status=ACTIVE)"
+        },
+        {
+          "en": "redirect / navigate",
+          "vi": "chuyển sang trang khác bằng mã"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>Lab 9 — Online Course Portal (useRoutes · query params · nested routes · protected route) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/routes.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/routes.js — KHAI BÁO ROUTE TÁCH RIÊNG (Exercise 20): một mảng cấu hình, App chỉ việc useRoutes(routes)\\nvar _Home = require('./pages/Home'); var _Home2 = _interopRequireDefault(_Home);\\nvar _CourseList = require('./pages/CourseList'); var _CourseList2 = _interopRequireDefault(_CourseList);\\nvar _CourseLayout = require('./pages/CourseLayout'); var _CourseLayout2 = _interopRequireDefault(_CourseLayout);\\nvar _CourseOverview = require('./pages/CourseOverview'); var _CourseOverview2 = _interopRequireDefault(_CourseOverview);\\nvar _LessonPage = require('./pages/LessonPage'); var _LessonPage2 = _interopRequireDefault(_LessonPage);\\nvar _Instructors = require('./pages/Instructors'); var _Instructors2 = _interopRequireDefault(_Instructors);\\nvar _Login = require('./pages/Login'); var _Login2 = _interopRequireDefault(_Login);\\nvar _MyCourses = require('./pages/MyCourses'); var _MyCourses2 = _interopRequireDefault(_MyCourses);\\nvar _NotFound = require('./pages/NotFound'); var _NotFound2 = _interopRequireDefault(_NotFound);\\nvar _auth = require('./auth');\\n\\n const routes = [\\n  { path: '/', element: _jsxruntime.jsx.call(void 0, _Home2.default, {} ) },\\n  { path: '/courses', element: _jsxruntime.jsx.call(void 0, _CourseList2.default, {} ) },\\n  {\\n    // route LỒNG: CourseLayout vẽ khung chung + \\u003cOutlet /> cho route con\\n    path: '/courses/:courseId',\\n    element: _jsxruntime.jsx.call(void 0, _CourseLayout2.default, {} ),\\n    children: [\\n      { index: true, element: _jsxruntime.jsx.call(void 0, _CourseOverview2.default, {} ) }, // /courses/:courseId\\n      { path: 'lessons/:lessonId', element: _jsxruntime.jsx.call(void 0, _LessonPage2.default, {} ) }, // /courses/:courseId/lessons/:lessonId\\n    ],\\n  },\\n  { path: '/instructors/:name?', element: _jsxruntime.jsx.call(void 0, _Instructors2.default, {} ) }, // :name? = tham số TUỲ CHỌN\\n  { path: '/login', element: _jsxruntime.jsx.call(void 0, _Login2.default, {} ) },\\n  { path: '/my-courses', element: _jsxruntime.jsx.call(void 0, _auth.RequireAuth, { children: _jsxruntime.jsx.call(void 0, _MyCourses2.default, {} )}) },\\n  { path: '*', element: _jsxruntime.jsx.call(void 0, _NotFound2.default, {} ) },\\n]; exports.routes = routes;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — dùng cấu hình route ở routes.js\\nvar _reactrouterdom = require('react-router-dom');\\nvar _NavBar = require('./components/NavBar'); var _NavBar2 = _interopRequireDefault(_NavBar);\\nvar _auth = require('./auth');\\nvar _routes = require('./routes');\\n\\nfunction Pages() {\\n  return _reactrouterdom.useRoutes.call(void 0, _routes.routes); // trả về phần tử của route khớp URL hiện tại\\n}\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _auth.AuthProvider, { children: [\\n      _jsxruntime.jsx.call(void 0, _NavBar2.default, {} )\\n      , _jsxruntime.jsx.call(void 0, 'main', { className: \\\"page\\\", children: \\n        _jsxruntime.jsx.call(void 0, Pages, {} )\\n      })\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/auth.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/auth.js — trạng thái đăng nhập dùng chung (Context nhỏ) + route bảo vệ\\nvar _react = require('react');\\nvar _reactrouterdom = require('react-router-dom');\\n\\nconst AuthContext = _react.createContext.call(void 0, null);\\n\\n function AuthProvider({ children }) {\\n  const [user, setUser] = _react.useState.call(void 0, null);\\n  return _jsxruntime.jsx.call(void 0, AuthContext.Provider, { value: { user, login: setUser, logout: () => setUser(null) }, children: children});\\n} exports.AuthProvider = AuthProvider;\\n\\n const useAuth = () => _react.useContext.call(void 0, AuthContext); exports.useAuth = useAuth;\\n\\n// Chưa đăng nhập ⇒ sang /login, NHỚ trang đang muốn vào (state.from) để quay lại sau khi đăng nhập\\n function RequireAuth({ children }) {\\n  const { user } = exports.useAuth.call(void 0, );\\n  const location = _reactrouterdom.useLocation.call(void 0, );\\n  if (!user) return _jsxruntime.jsx.call(void 0, _reactrouterdom.Navigate, { to: \\\"/login\\\", replace: true, state: { from: location },} );\\n  return children;\\n} exports.RequireAuth = RequireAuth;\\n\",\"src/components/NavBar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/NavBar.js — NavLink tự thêm class \\\"active\\\"; \\\"end\\\" để \\\"/\\\" không sáng ở mọi trang\\nvar _reactrouterdom = require('react-router-dom');\\nvar _auth = require('../auth');\\n\\n function NavBar() {\\n  const { user, logout } = _auth.useAuth.call(void 0, );\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'nav', { className: \\\"nav\\\", children: [\\n      _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/\\\", end: true, id: \\\"nav-home\\\", children: \\\"CT Academy\\\" })\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/courses\\\", id: \\\"nav-courses\\\", children: \\\"Courses\\\"})\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/instructors\\\", id: \\\"nav-instructors\\\", children: \\\"Instructors\\\"})\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/my-courses\\\", id: \\\"nav-my\\\", children: \\\"My courses\\\" })\\n      , _jsxruntime.jsx.call(void 0, 'span', { className: \\\"spacer\\\",} )\\n      , user ? (\\n        _jsxruntime.jsxs.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-logout\\\", onClick: () => { logout(); navigate('/'); }, children: [\\\"Logout (\\\" , user, \\\")\\\"]})\\n      ) : (\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.NavLink, { to: \\\"/login\\\", id: \\\"nav-login\\\", children: \\\"Login\\\"})\\n      )\\n    ]})\\n  );\\n} exports.default = NavBar;\\n\",\"src/pages/CourseList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/CourseList.js — lọc + sắp xếp SỐNG TRÊN URL (?level=…&sort=…): chia sẻ link là thấy đúng\\nvar _reactrouterdom = require('react-router-dom');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function CourseList() {\\n  const [params, setParams] = _reactrouterdom.useSearchParams.call(void 0, );\\n  const level = params.get('level') || 'all';\\n  const sort = params.get('sort') || 'default';\\n\\n  // đổi MỘT tham số, giữ nguyên tham số kia\\n  const setParam = (key, value, macDinh) => {\\n    const next = new URLSearchParams(params);\\n    if (value === macDinh) next.delete(key);\\n    else next.set(key, value);\\n    setParams(next);\\n  };\\n\\n  let list = _courses2.default.filter((c) => level === 'all' || c.level === level);\\n  if (sort === 'title') list = [...list].sort((a, b) => a.title.localeCompare(b.title));\\n  if (sort === 'lessons') list = [...list].sort((a, b) => b.lessons.length - a.lessons.length); // sort ổn định ⇒ bằng nhau giữ thứ tự\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Courses\\\"})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"toolbar\\\", children: [\\n        _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"level\\\", value: level, onChange: (e) => setParam('level', e.target.value, 'all'), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"all\\\", children: \\\"All levels\\\" })\\n          , _courses.LEVELS.map((l) => _jsxruntime.jsx.call(void 0, 'option', { value: l, children: l}, l))\\n        ]})\\n        , _jsxruntime.jsxs.call(void 0, 'select', { id: \\\"sort\\\", value: sort, onChange: (e) => setParam('sort', e.target.value, 'default'), children: [\\n          _jsxruntime.jsx.call(void 0, 'option', { value: \\\"default\\\", children: \\\"Default order\\\" })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"title\\\", children: \\\"Title (A → Z)\\\"   })\\n          , _jsxruntime.jsx.call(void 0, 'option', { value: \\\"lessons\\\", children: \\\"Most lessons\\\" })\\n        ]})\\n      ]})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"course-count\\\", children: [list.length, \\\" courses\\\" ]})\\n      , list.map((c) => (\\n        _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"course-item\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { className: \\\"course-link\\\", to: `/courses/${c.id}`, children: c.title})\\n          , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"course-meta\\\", children: [c.level, \\\" · \\\"  , c.lessons.length, \\\" lessons\\\" ]})\\n        ]}, c.id)\\n      ))\\n    ]})\\n  );\\n} exports.default = CourseList;\\n\",\"src/pages/CourseLayout.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/CourseLayout.js — khung chung của một khoá: tiêu đề + danh sách bài + \\u003cOutlet /> cho route con\\nvar _reactrouterdom = require('react-router-dom');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function CourseLayout() {\\n  const { courseId } = _reactrouterdom.useParams.call(void 0, );\\n  const course = _courses2.default.find((c) => c.id === courseId);\\n\\n  if (!course) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"not-found\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Course not found\\\"  })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/courses\\\", children: \\\"← Back to courses\\\"   })\\n      ]})\\n    );\\n  }\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"layout\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'aside', { children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { id: \\\"course-title\\\", children: course.title})\\n        , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"course-meta\\\", children: [course.level, \\\" · \\\"  , course.instructor]})\\n        , _jsxruntime.jsx.call(void 0, 'nav', { id: \\\"lesson-list\\\", children: \\n          course.lessons.map((title, i) => (\\n            // đường dẫn TƯƠNG ĐỐI: \\\"lessons/2\\\" nối sau /courses/:courseId\\n            _jsxruntime.jsxs.call(void 0, _reactrouterdom.NavLink, { to: `lessons/${i + 1}`, className: \\\"lesson-link\\\", children: [i + 1, \\\". \\\" , title]}, title)\\n          ))\\n        })\\n      ]})\\n      , _jsxruntime.jsx.call(void 0, 'section', { children: \\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Outlet, {} )\\n      })\\n    ]})\\n  );\\n} exports.default = CourseLayout;\\n\",\"src/pages/CourseOverview.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/CourseOverview.js — route INDEX: /courses/:courseId\\nvar _reactrouterdom = require('react-router-dom');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function CourseOverview() {\\n  const { courseId } = _reactrouterdom.useParams.call(void 0, ); // route con đọc được tham số của route cha\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const course = _courses2.default.find((c) => c.id === courseId);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"course-overview\\\", children: [\\n      _jsxruntime.jsxs.call(void 0, 'p', { children: [\\\"This course has \\\"   , course.lessons.length, \\\" lessons.\\\" ]})\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"btn-start\\\", onClick: () => navigate('lessons/1'), children: \\\"Start learning\\\" })\\n    ]})\\n  );\\n} exports.default = CourseOverview;\\n\",\"src/pages/LessonPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/LessonPage.js — /courses/:courseId/lessons/:lessonId + Prev/Next bằng useNavigate\\nvar _reactrouterdom = require('react-router-dom');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function LessonPage() {\\n  const { courseId, lessonId } = _reactrouterdom.useParams.call(void 0, );\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const course = _courses2.default.find((c) => c.id === courseId);\\n  const n = Number(lessonId); // tham số route luôn là CHUỖI\\n  const title = course.lessons[n - 1];\\n\\n  if (!Number.isInteger(n) || !title) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"lesson-not-found\\\", children: \\\"Lesson not found\\\"  });\\n\\n  const go = (k) => navigate(`/courses/${courseId}/lessons/${k}`);\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'article', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'h3', { id: \\\"lesson-title\\\", children: [\\\"Lesson \\\" , n, \\\": \\\" , title]})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"lesson-nav\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"prev-lesson\\\", disabled: n === 1, onClick: () => go(n - 1), children: \\\"← Previous\\\" }), ' '\\n        , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"button\\\", id: \\\"next-lesson\\\", disabled: n === course.lessons.length, onClick: () => go(n + 1), children: \\\"Next →\\\" })\\n      ]})\\n    ]})\\n  );\\n} exports.default = LessonPage;\\n\",\"src/pages/Instructors.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/Instructors.js — /instructors và /instructors/:name (tham số TUỲ CHỌN)\\nvar _reactrouterdom = require('react-router-dom');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function Instructors() {\\n  const { name } = _reactrouterdom.useParams.call(void 0, ); // undefined khi URL là /instructors\\n  const all = [...new Set(_courses2.default.map((c) => c.instructor))].sort();\\n\\n  if (!name) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Instructors\\\"})\\n        , _jsxruntime.jsx.call(void 0, 'ul', { children: \\n          all.map((i) => (\\n            _jsxruntime.jsx.call(void 0, 'li', { children: _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { className: \\\"instructor-link\\\", to: `/instructors/${_courses.slugify.call(void 0, i)}`, children: i})}, i)\\n          ))\\n        })\\n      ]})\\n    );\\n  }\\n\\n  const real = all.find((i) => _courses.slugify.call(void 0, i) === name);\\n  if (!real) return _jsxruntime.jsx.call(void 0, 'p', { id: \\\"instructor-not-found\\\", children: \\\"Instructor not found\\\"  });\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { id: \\\"instructor-name\\\", children: real})\\n      , _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"instructor-courses\\\", children: \\n        _courses2.default.filter((c) => c.instructor === real).map((c) => (\\n          _jsxruntime.jsx.call(void 0, 'li', { children: _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: `/courses/${c.id}`, children: c.title})}, c.id)\\n        ))\\n      })\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/instructors\\\", children: \\\"← All instructors\\\"  })\\n    ]})\\n  );\\n} exports.default = Instructors;\\n\",\"src/pages/Login.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/pages/Login.js — đăng nhập giả: xong thì QUAY LẠI trang bị chặn (location.state.from)\\nvar _react = require('react');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _auth = require('../auth');\\n\\n function Login() {\\n  const [username, setUsername] = _react.useState.call(void 0, '');\\n  const { login } = _auth.useAuth.call(void 0, );\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const location = _reactrouterdom.useLocation.call(void 0, );\\n  const from = _optionalChain([location, 'access', _ => _.state, 'optionalAccess', _2 => _2.from]);\\n\\n  const handleSubmit = (e) => {\\n    e.preventDefault();\\n    if (!username.trim()) return;\\n    login(username.trim());\\n    // replace: nút Back không quay về trang đăng nhập nữa\\n    navigate(from ? from.pathname + (from.search || '') : '/my-courses', { replace: true });\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'form', { id: \\\"login-form\\\", onSubmit: handleSubmit, children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Login\\\"})\\n      , from && _jsxruntime.jsx.call(void 0, 'p', { id: \\\"login-reason\\\", children: \\\"Please log in to continue.\\\"    })\\n      , _jsxruntime.jsx.call(void 0, 'input', { id: \\\"username\\\", placeholder: \\\"Username\\\", value: username, onChange: (e) => setUsername(e.target.value),} ), ' '\\n      , _jsxruntime.jsx.call(void 0, 'button', { type: \\\"submit\\\", children: \\\"Login\\\"})\\n    ]})\\n  );\\n} exports.default = Login;\\n\",\"src/pages/MyCourses.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/MyCourses.js — chỉ vào được khi đã đăng nhập (bọc bởi RequireAuth trong routes.js)\\nvar _reactrouterdom = require('react-router-dom');\\nvar _auth = require('../auth');\\nvar _courses = require('../data/courses'); var _courses2 = _interopRequireDefault(_courses);\\n\\n function MyCourses() {\\n  const { user } = _auth.useAuth.call(void 0, );\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsxs.call(void 0, 'h2', { id: \\\"welcome\\\", children: [\\\"Welcome, \\\" , user, \\\"!\\\"]})\\n      , _jsxruntime.jsx.call(void 0, 'ul', { id: \\\"my-list\\\", children: \\n        _courses2.default.slice(0, 2).map((c) => (\\n          _jsxruntime.jsx.call(void 0, 'li', { children: _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: `/courses/${c.id}`, children: c.title})}, c.id)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = MyCourses;\\n\",\"src/pages/NotFound.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/NotFound.js — route \\\"*\\\": mọi URL không khớp\\nvar _reactrouterdom = require('react-router-dom');\\n\\n function NotFound() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { id: \\\"page-404\\\", children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"404 — Page not found\\\"    })\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/\\\", children: \\\"Go home\\\" })\\n    ]})\\n  );\\n} exports.default = NotFound;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nvar _reactrouterdom = require('react-router-dom');\\nrequire('./index.css');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"src/data/courses.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/data/courses.js — đã cho\\nconst courses = [\\n  { id: 'react-basics', title: 'React Basics', level: 'Beginner', instructor: 'An Nguyen', lessons: ['What is React?', 'JSX', 'Components', 'Props'] },\\n  { id: 'react-router', title: 'React Router in Depth', level: 'Intermediate', instructor: 'Binh Tran', lessons: ['Routes', 'Params', 'Nested routes'] },\\n  { id: 'redux-toolkit', title: 'Redux Toolkit', level: 'Advanced', instructor: 'An Nguyen', lessons: ['Store', 'Slices', 'Thunks'] },\\n  { id: 'js-es6', title: 'Modern JavaScript (ES6+)', level: 'Beginner', instructor: 'Chi Le', lessons: ['let & const', 'Arrow functions', 'Destructuring', 'Modules', 'Promises'] },\\n  { id: 'testing-react', title: 'Testing React Apps', level: 'Advanced', instructor: 'Binh Tran', lessons: ['Jest basics', 'React Testing Library'] },\\n  { id: 'css-layout', title: 'CSS Layout with Flexbox & Grid', level: 'Beginner', instructor: 'Chi Le', lessons: ['Flexbox', 'Grid', 'Responsive'] },\\n];\\n\\n const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; exports.LEVELS = LEVELS;\\n// \\\"An Nguyen\\\" ⇒ \\\"an-nguyen\\\" (dùng trên URL)\\n const slugify = (name) => name.toLowerCase().trim().replace(/\\\\s+/g, '-'); exports.slugify = slugify;\\nexports. default = courses;\\n\",\"src/pages/Home.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/Home.js\\nvar _reactrouterdom = require('react-router-dom');\\n\\n function Home() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, 'section', { children: [\\n      _jsxruntime.jsx.call(void 0, 'h1', { id: \\\"home-title\\\", children: \\\"Welcome to CT Academy\\\"   })\\n      , _jsxruntime.jsx.call(void 0, 'p', { children: \\\"Pick a course and start learning today.\\\"      })\\n      , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/courses\\\", id: \\\"home-cta\\\", children: \\\"Browse courses →\\\"  })\\n    ]})\\n  );\\n} exports.default = Home;\\n\"};var CSS={\"src/index.css\":\"/* src/index.css — đã cho */\\n* { box-sizing: border-box; }\\nbody { margin: 0; font-family: system-ui, -apple-system, \\\"Segoe UI\\\", Roboto, sans-serif; color: #0f172a; }\\n.nav { display: flex; gap: 14px; align-items: center; padding: 12px 20px; background: #0f172a; }\\n.nav a { color: #cbd5e1; text-decoration: none; }\\n.nav a.active { color: #fff; font-weight: 700; border-bottom: 2px solid #38bdf8; }\\n.nav .spacer { flex: 1; }\\n.nav button { background: transparent; color: #cbd5e1; border: 1px solid #475569; border-radius: 6px; padding: 4px 10px; cursor: pointer; }\\n.page { max-width: 960px; margin: 0 auto; padding: 20px; }\\n.toolbar { display: flex; gap: 10px; margin-bottom: 12px; }\\n.toolbar select { padding: 6px 8px; border-radius: 8px; border: 1px solid #cbd5e1; }\\n.course-item { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 8px; }\\n.layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; }\\n.lesson-link { display: block; padding: 6px 10px; border-radius: 8px; color: #334155; text-decoration: none; }\\n.lesson-link.active { background: #e0f2fe; color: #0369a1; font-weight: 600; }\\nbutton { cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; }\\n\"};var DB=null;var BASE=\"http://localhost:9999\";var URL0=\"/courses\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

@@ -32,6 +32,24 @@
       "name": "PE Practice 3 — Event Ticketing System",
       "level": "ADVANCED",
       "description": "Đề luyện PE 85 phút dạng SP25 Shopping System: giỏ vé toàn cục Context + useReducer + localStorage, giới hạn vé, thanh toán POST/PATCH, lịch sử đơn tổng tính từ dòng."
+    },
+    {
+      "slug": "fer202-5-lab-task-board",
+      "name": "Lab 5 — Kanban Task Board (components, props, state)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 5 dạng đề trường: bảng Kanban 8 chức năng — tách component, props, nâng state, cập nhật bất biến, PropTypes, class component, children. Thang 10."
+    },
+    {
+      "slug": "fer202-6-lab-registration-form",
+      "name": "Lab 6 — Workshop Registration Form (events & forms)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 6: form đăng ký đủ loại ô controlled, chip kỹ năng bằng Enter/Backspace, kiểm hợp lệ trực tiếp sau lần gửi đầu, gửi không tải lại, bẫy state snapshot. Thang 10."
+    },
+    {
+      "slug": "fer202-9-lab-course-portal",
+      "name": "Lab 9 — Online Course Portal (React Router)",
+      "level": "INTERMEDIATE",
+      "description": "Lab chương 9: cổng khoá học 8 chức năng — bảng route tách module + useRoutes, query params, route lồng + Outlet, điều hướng bằng mã, tham số tuỳ chọn, route bảo vệ quay lại trang cũ, 404. Thang 10."
     }
   ]
 }

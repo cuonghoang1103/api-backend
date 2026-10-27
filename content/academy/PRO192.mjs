@@ -25,6 +25,7 @@ import pt2 from './pro192/pt2.mjs';
 import adv2 from './pro192/adv2.mjs';
 import fe from './pro192/fe.mjs';
 import cs from './pro192/chuyen-sau.mjs';
+import da from './pro192/du-an.mjs';
 
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
@@ -1700,6 +1701,12 @@ students.<span class="tok-function">stream</span>()
       title: "⭐ Advanced — Modern Java and Spring readiness: generics, lambdas, streams, Java 17–21, JVM, OO design, SOLID, patterns, threads|||⭐ Chuyên sâu — Java hiện đại & sẵn sàng Spring: generics, lambda, stream, Java 17–21, JVM, thiết kế OO, SOLID, mẫu, đa luồng",
       description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): đưa người học từ Java 8 của phòng thi tới Java 17/21 mà Spring Boot 4 dùng — generics & lambda, Stream API & Optional, record/sealed/pattern matching, equals/hashCode/bất biến, bên trong JVM & GC, thiết kế OO sẵn cho Spring (DI), Maven + JUnit đầu tiên và 40 câu phỏng vấn Java core, SOLID + sáu mẫu thiết kế GoF (Strategy, Factory, Singleton, Builder, Observer, Template Method) và đa luồng cơ bản (race condition đo thật, synchronized/Atomic, deadlock, ExecutorService, CompletableFuture). Mọi code chạy thật.",
       lessons: cs.lessons,
+    },
+    /* Section MỚI — 🏁 Dự án cuối khoá — CT Library 1.0 (đặc tả + làm mẫu + rubric; thi DA1 + DA-FE1) — ./pro192/du-an.mjs */
+    {
+      title: "🏁 Final project — CT Library 1.0|||🏁 Dự án cuối khoá — CT Library 1.0",
+      description: "Phần TỰ THÊM: dự án cuối khoá ghép 9 lab CT Library thành một ứng dụng thật — đặc tả như việc thật (user story, quy tắc nghiệp vụ: mượn tối đa 3/5, hạn 14/7/3 ngày, phạt theo ngày, khoá thẻ khi nợ > 50.000đ), dữ liệu mẫu tất định 200 tài liệu · 300 thành viên · 2.000 lượt mượn, ba báo cáo, kiến trúc theo chuẩn review LAB211 và sơ đồ lớp, làm mẫu phần khó, bộ chấm hai lần chạy, rubric 100 điểm; rồi bản thi có giờ 90 phút kiểu PE (PRO192-DA1) và trắc nghiệm tổng 50 câu (PRO192-DA-FE1) trong Phòng thi; chặng tiếp: PostgreSQL, CTDL tự viết, Spring Boot — cùng interface.",
+      lessons: da.lessons,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

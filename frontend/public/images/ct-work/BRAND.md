@@ -2,6 +2,11 @@
 
 Mọi tệp trong thư mục này do script sinh ra. **Không sửa tay.**
 
+> **27/10/2026 — logo MÀU đổi sang hình "cute"** (bảng ghi việc mặt cười + dấu tích xanh — icon app CT Work iOS/iPad), theo yêu cầu chủ app.
+> Nguồn: `frontend/scripts/ct-work-brand/ct-work-cute-1024.png` ⇒ `build.mts` sinh `cuteMark.ts` (base64 nhúng trong `CtWorkMark`, cắt squircle),
+> favicon/PWA/maskable/apple-touch/email/OG và icon app desktop CT Work (`desktop/build/icon-ctwork.png`, `desktop/src/renderer/public/icon-ctwork.png`).
+> Bản một màu (mono/glyph — in ấn, email một màu) GIỮ hình "Flow Check" bên dưới. Quay lại logo cũ: `CUTE = false` trong `ctWorkBrand.ts` rồi chạy lại script.
+
 - Hình: `frontend/src/components/work/brand/ctWorkBrand.ts`
 - Chữ "CT Work" dạng đường viền: `wordmark.ts`, sinh bởi `frontend/scripts/ct-work-brand/wordmark.mjs`
 - Dựng lại toàn bộ (chạy từ gốc repo): `npx tsx frontend/scripts/ct-work-brand/build.mts`

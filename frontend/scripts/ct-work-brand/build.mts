@@ -11,7 +11,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
-import { CTW_COLORS, logoSvg, markBody, markSvg, squirclePath } from '../../src/components/work/brand/ctWorkBrand';
+import { CTW_COLORS, CUTE, logoSvg, markBody, markSvg, squirclePath } from '../../src/components/work/brand/ctWorkBrand';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const FE = path.resolve(here, '../..');
@@ -72,7 +72,33 @@ function maskableSvg(): string {
     + `<svg x="9.6" y="9.6" width="44.8" height="44.8" viewBox="0 0 64 64">${markBody({ variant: 'glyph', monoColor: '#fff' })}</svg></svg>`;
 }
 
+/** 27/10/2026: logo "cute" (icon app iOS/iPad) — nguồn PNG 1024 nằm cạnh script. */
+const CUTE_SRC = path.join(here, 'ct-work-cute-1024.png');
+const DESKTOP = path.resolve(FE, '../desktop');
+
+/** Sinh lại cuteMark.ts (base64 64 px cho cỡ nhỏ, 256 px cho cỡ lớn) từ nguồn PNG. */
+async function cuteModule(): Promise<void> {
+  const b64 = async (px: number) => (await sharp(CUTE_SRC).resize(px, px, { kernel: 'lanczos3' })
+    .png({ compressionLevel: 9, palette: true, quality: 90 }).toBuffer()).toString('base64');
+  const out = path.join(FE, 'src/components/work/brand/cuteMark.ts');
+  writeFileSync(out, `/**\n * Logo CT Work "cute" (bảng ghi việc mặt cười + dấu tích xanh — icon app iOS/iPad, 27/10/2026) dạng base64.\n`
+    + ` * TỆP SINH TỰ ĐỘNG từ frontend/scripts/ct-work-brand/ct-work-cute-1024.png — chạy lại: npx tsx frontend/scripts/ct-work-brand/build.mts\n`
+    + ` * Ảnh nhúng (không đường dẫn) để chạy y hệt trên web lẫn app desktop (app://).\n */\n`
+    + `export const CUTE_MARK_64 = "data:image/png;base64,${await b64(64)}";\n`
+    + `export const CUTE_MARK_256 = "data:image/png;base64,${await b64(256)}";\n`);
+}
+
+/** Maskable (Android cắt tròn/bo): logo thu vào vùng an toàn 82%, viền ảnh kéo dài ra ngoài (không lộ đường nối). */
+async function cuteMaskable(px: number): Promise<Buffer> {
+  const inner = Math.round(px * 0.82);
+  const pad = Math.floor((px - inner) / 2);
+  return sharp(CUTE_SRC).resize(inner, inner, { kernel: 'lanczos3' })
+    .extend({ top: pad, bottom: px - inner - pad, left: pad, right: px - inner - pad, extendWith: 'copy' })
+    .png({ compressionLevel: 9 }).toBuffer();
+}
+
 async function main() {
+  if (CUTE) await cuteModule();
   // ── SVG: mark + logo, sáng/tối/một màu ──
   save('ct-work-mark.svg', markSvg({ theme: 'light', idPrefix: 'ctwm' }));
   save('ct-work-mark-dark.svg', markSvg({ theme: 'dark', idPrefix: 'ctwm' }));
@@ -103,11 +129,16 @@ async function main() {
   const mark = markSvg({ idPrefix: 'pw' });
   save('icon-192.png', await png(mark, 192));
   save('icon-512.png', await png(mark, 512));
-  save('icon-maskable-512.png', await png(maskableSvg(), 512, 64, { flatten: CTW_COLORS.indigo }));
+  save('icon-maskable-512.png', CUTE ? await cuteMaskable(512) : await png(maskableSvg(), 512, 64, { flatten: CTW_COLORS.indigo }));
 
   // ── App icon kiểu iOS (squircle + bóng, nền trong suốt) — dùng cho trang giới thiệu, slide, cửa hàng ──
   const app = appIconSvg();
   for (const px of [1024, 512, 192, 180]) save(`ct-work-app-icon-${px}.png`, await png(app, px, 1024));
+  // App desktop CT Work (electron-builder.ctwork.yml › icon; màn đăng nhập) — cùng icon dáng macOS (lề + bóng).
+  const desk = await png(app, 1024, 1024);
+  writeFileSync(path.join(DESKTOP, 'build/icon-ctwork.png'), desk);
+  writeFileSync(path.join(DESKTOP, 'src/renderer/public/icon-ctwork.png'), await sharp(desk).resize(512, 512).png({ compressionLevel: 9 }).toBuffer());
+  written.push('../../../../desktop/build/icon-ctwork.png', '../../../../desktop/src/renderer/public/icon-ctwork.png');
 
   // ── Email: nền ĐẶC (Outlook không bo góc, Gmail tối không đảo màu ảnh) ⇒ ô vuông tràn viền, bo bằng CSS ──
   save('ct-work-email-96.png', await png(bleed, 96, 64, { flatten: CTW_COLORS.indigo }));
@@ -138,10 +169,10 @@ async function main() {
     background_color: '#ffffff',
     theme_color: CTW_COLORS.indigo,
     icons: [
-      { src: '/images/ct-work/icon-192.png?v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/images/ct-work/icon-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
-      { src: '/images/ct-work/icon-maskable-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-      { src: '/images/ct-work/icon.svg?v=2', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+      { src: '/images/ct-work/icon-192.png?v=3', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/images/ct-work/icon-512.png?v=3', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/images/ct-work/icon-maskable-512.png?v=3', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/images/ct-work/icon.svg?v=3', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
     ],
   };
   save('work.webmanifest', `${JSON.stringify(manifest, null, 2)}\n`);

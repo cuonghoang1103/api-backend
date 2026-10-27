@@ -14,6 +14,7 @@
  * Đổi hình ở ĐÂY rồi chạy lại script — đừng sửa tay SVG/PNG trong public/images/ct-work.
  */
 import { WORDMARK } from './wordmark';
+import { CUTE_MARK_64, CUTE_MARK_256 } from './cuteMark';
 
 /** Màu thương hiệu. `indigo` = `--w-accent` (sáng) của CT Work. */
 export const CTW_COLORS = {
@@ -26,6 +27,9 @@ export const CTW_COLORS = {
   /** Bóng của glyph — chàm rất tối, không dùng đen thuần (đen làm gradient bẩn). */
   shade: '#15124d',
 } as const;
+
+/** 27/10/2026: logo màu = ảnh "cute" (cuteMark.ts). false ⇒ quay về mark vẽ "Flow Check". */
+export const CUTE = true;
 
 /** Lưới vẽ của mark: 64 × 64 đơn vị. */
 export const MARK_GRID = 64;
@@ -144,6 +148,14 @@ export function markBody(o: MarkSvgOptions = {}): string {
       + `<g mask="url(#${id}-m)" fill="${mono}">${shape}</g>`;
   }
 
+  // 27/10/2026: bản MÀU dùng logo "cute" của app iOS/iPad (chủ app chọn) — ảnh nhúng, cắt theo squircle (fullBleed ⇒ vuông
+  // tràn viền cho icon iOS/maskable). Bản mono/glyph (một màu, email/in) giữ hình "Flow Check" vì ảnh màu không đổi màu được.
+  if (CUTE) {
+    const src = small ? CUTE_MARK_64 : CUTE_MARK_256;
+    const clip = o.fullBleed ? '' : ` clip-path="url(#${id}-c)"`;
+    return (o.fullBleed ? '' : `<defs>${shapeDef}<clipPath id="${id}-c"><use href="#${id}-s"/></clipPath></defs>`)
+      + `<image href="${src}" x="0" y="0" width="64" height="64" preserveAspectRatio="xMidYMid slice"${clip}${o.animatable ? ' class="ctw-mark-img"' : ''}/>`;
+  }
   const rim = theme === 'dark' ? 0.26 : 0.14;
   const defs = `<defs>${shapeDef}`
     + `<linearGradient id="${id}-bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${CTW_COLORS.violet}"/><stop offset=".52" stop-color="${CTW_COLORS.indigo}"/><stop offset="1" stop-color="${CTW_COLORS.azure}"/></linearGradient>`

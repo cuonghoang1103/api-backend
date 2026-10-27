@@ -54,3 +54,11 @@ html.theme-dark .ctw-mark .ctw-mark-rim { stroke-opacity: .26; }
 @media (prefers-reduced-motion: reduce) {
   .ctw-mark, .ctw-mark * { animation: none !important; }
 }
+
+/* 27/10/2026 — logo màu là ẢNH "cute" (ctWorkBrand.ts › CUTE): không còn nét để vẽ ⇒ bật nhẹ khi gắn / rê chuột. */
+.ctw-mark .ctw-mark-img { transform-box: fill-box; transform-origin: center; }
+.ctw-mark--intro .ctw-mark-img,
+.ctw-mark-host:hover .ctw-mark--hover .ctw-mark-img,
+.ctw-mark--hover:hover .ctw-mark-img { animation: ctw-mark-img-in .42s cubic-bezier(.3, 1.5, .55, 1) both; }
+@keyframes ctw-mark-img-in { from { transform: scale(.82) rotate(-6deg); opacity: .4; } to { transform: scale(1) rotate(0); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ctw-mark .ctw-mark-img { animation: none !important; } }

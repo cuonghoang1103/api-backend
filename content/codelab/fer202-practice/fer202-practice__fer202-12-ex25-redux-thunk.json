@@ -1,0 +1,661 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-ex25-redux-thunk",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-ex25-redux-thunk"
+  },
+  "exercises": [
+    {
+      "title": "The journey of a dispatched thunk",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "middleware chain",
+        "thunk",
+        "reducer",
+        "subscribers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "order",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>A component calls <code>dispatch(fetchUsers())</code> where <code>fetchUsers</code> is a thunk that dispatches <code>users/loaded</code> after the request. The store uses <code>getDefaultMiddleware().concat(logger)</code>. Order what happens.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component gọi <code>dispatch(fetchUsers())</code> với <code>fetchUsers</code> là thunk dispatch <code>users/loaded</code> sau khi request xong. Store dùng <code>getDefaultMiddleware().concat(logger)</code>. Hãy xếp những gì xảy ra theo thứ tự.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Thunk middleware đứng trước logger.",
+        "Subscriber (react-redux) chạy sau khi reducer trả state mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The journey of a dispatched thunk\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The journey of a dispatched thunk — answer key\n\n1. Order the steps\n   Answer: a) The thunk middleware sees a FUNCTION and calls it with (dispatch, getState)  →  b) The thunk starts the HTTP request  →  c) The request finishes  →  d) The thunk dispatches { type: \"users/loaded\", payload }; the logger prints it  →  e) The users reducer returns the new state  →  f) react-redux notices the new state and re-renders components using that slice\n   Function → thunk calls it → request → plain action through logger → reducer → UI. / Hàm → thunk gọi nó → request → action thường qua logger → reducer → giao diện.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>dispatch(hàm) → thunk middleware gọi hàm → request → dispatch(object) → logger → reducer → react-redux vẽ lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "j1",
+            "de": "Order the steps",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "The thunk dispatches <code>{ type: \"users/loaded\", payload }</code>; the logger prints it"
+              },
+              {
+                "ma": "a",
+                "noiDung": "The thunk middleware sees a FUNCTION and calls it with (dispatch, getState)"
+              },
+              {
+                "ma": "f",
+                "noiDung": "react-redux notices the new state and re-renders components using that slice"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The request finishes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The thunk starts the HTTP request"
+              },
+              {
+                "ma": "e",
+                "noiDung": "The users reducer returns the new state"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Function → thunk calls it → request → plain action through logger → reducer → UI.</p><p><i>🇻🇳 Hàm → thunk gọi nó → request → action thường qua logger → reducer → giao diện.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ logger in ra cả hàm thunk."
+        },
+        {
+          "loi": "Nghĩ reducer chạy trước khi request xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware chain",
+          "vi": "chuỗi middleware nối nhau bằng next"
+        }
+      ]
+    },
+    {
+      "title": "Search with an async thunk that ignores stale responses",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "action.meta.requestId",
+        "action.meta.arg",
+        "race conditions in Redux",
+        "debounced dispatch"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "thunk",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>Search-as-you-type through Redux. Each keystroke (after a 300 ms debounce in the component) dispatches <code>searchProducts(query)</code>. Responses can arrive out of order, so the slice stores <code>currentRequestId</code> from <code>pending</code> and ignores <code>fulfilled</code>/<code>rejected</code> actions whose <code>meta.requestId</code> is not the latest.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#q</code> input; empty ⇒ dispatch <code>cleared()</code> instead. Results <code>li.result</code>; <code>#status</code>; <code>#summary</code> <code>2 results for \"router\"</code> (only when succeeded).</li>\n  <li>Debounce in the component with <code>setTimeout</code> + cleanup; fast typing ⇒ one request.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tìm khi gõ qua Redux. Mỗi lần gõ (sau debounce 300 ms trong component) dispatch <code>searchProducts(query)</code>. Phản hồi có thể về sai thứ tự, nên slice lưu <code>currentRequestId</code> lúc <code>pending</code> và bỏ qua <code>fulfilled</code>/<code>rejected</code> có <code>meta.requestId</code> không phải mới nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ô <code>#q</code>; rỗng ⇒ dispatch <code>cleared()</code>. Kết quả <code>li.result</code>; <code>#status</code>; <code>#summary</code> <code>2 results for \"router\"</code> (chỉ khi succeeded).</li>\n  <li>Debounce trong component bằng <code>setTimeout</code> + cleanup; gõ nhanh ⇒ một request.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"react\"",
+          "output": "React Handbook, React Router Guide",
+          "explanation": "json-server q search is case-insensitive.|||q của json-server không phân biệt hoa thường."
+        }
+      ],
+      "hintsJson": [
+        "pending: state.currentRequestId = action.meta.requestId; fulfilled: if (action.meta.requestId !== state.currentRequestId) return;",
+        "Component: useEffect(() => { if (!q.trim()) { dispatch(cleared()); return; } const id = setTimeout(() => dispatch(searchProducts(q.trim())), 300); return () => clearTimeout(id); }, [q, dispatch]);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useDispatch, useSelector } from 'react-redux';\nimport { searchProducts } from './features/search/searchSlice';\n\nexport default function App() {\n  const { results } = useSelector((s) => s.search);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      <input id=\"q\" onChange={(e) => dispatch(searchProducts(e.target.value))} />\n      <ul>{results.map((p) => <li key={p.id} className=\"result\">{p.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js (cho sẵn)\nimport { configureStore } from '@reduxjs/toolkit';\nimport searchReducer from '../features/search/searchSlice';\n\nexport const store = configureStore({ reducer: { search: searchReducer } });\n"
+        },
+        {
+          "name": "src/features/search/searchSlice.js",
+          "language": "javascript",
+          "code": "// src/features/search/searchSlice.js — STARTER\nimport { createAsyncThunk, createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nexport const searchProducts = createAsyncThunk('search/searchProducts', async (query) => {\n  const res = await axios.get('http://localhost:9999/products', { params: { q: query } });\n  return res.data;\n});\n\nconst searchSlice = createSlice({\n  name: 'search',\n  initialState: { query: '', results: [], status: 'idle', currentRequestId: null },\n  reducers: { cleared(state) { state.results = []; } },\n  extraReducers: (builder) => {\n    builder.addCase(searchProducts.fulfilled, (state, action) => {\n      state.results = action.payload;\n    });\n  },\n});\n\nexport const { cleared } = searchSlice.actions;\nexport default searchSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — debounce trong component, kết quả + trạng thái từ store\nimport { useEffect, useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { cleared, searchProducts } from './features/search/searchSlice';\n\nexport default function App() {\n  const { results, status, query } = useSelector((s) => s.search);\n  const dispatch = useDispatch();\n  const [q, setQ] = useState('');\n\n  useEffect(() => {\n    const text = q.trim();\n    if (!text) {\n      dispatch(cleared());\n      return undefined;\n    }\n    const id = setTimeout(() => dispatch(searchProducts(text)), 300);\n    return () => clearTimeout(id);\n  }, [q, dispatch]);\n\n  return (\n    <div>\n      <input id=\"q\" value={q} onChange={(e) => setQ(e.target.value)} placeholder=\"Search products\" />\n      <p id=\"status\">{status}</p>\n      {status === 'succeeded' && <p id=\"summary\">{results.length} results for \"{query}\"</p>}\n      <ul>{results.map((p) => <li key={p.id} className=\"result\">{p.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js (cho sẵn)\nimport { configureStore } from '@reduxjs/toolkit';\nimport searchReducer from '../features/search/searchSlice';\n\nexport const store = configureStore({ reducer: { search: searchReducer } });\n"
+        },
+        {
+          "name": "src/features/search/searchSlice.js",
+          "language": "javascript",
+          "code": "// src/features/search/searchSlice.js — chỉ nhận kết quả của request MỚI NHẤT (so meta.requestId)\nimport { createAsyncThunk, createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nexport const searchProducts = createAsyncThunk('search/searchProducts', async (query) => {\n  const res = await axios.get('http://localhost:9999/products', { params: { q: query } });\n  return res.data;\n});\n\nconst searchSlice = createSlice({\n  name: 'search',\n  initialState: { query: '', results: [], status: 'idle', currentRequestId: null },\n  reducers: {\n    cleared(state) {\n      state.query = '';\n      state.results = [];\n      state.status = 'idle';\n      state.currentRequestId = null;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(searchProducts.pending, (state, action) => {\n        state.query = action.meta.arg;\n        state.status = 'loading';\n        state.currentRequestId = action.meta.requestId;\n      })\n      .addCase(searchProducts.fulfilled, (state, action) => {\n        if (action.meta.requestId !== state.currentRequestId) return; // phản hồi cũ ⇒ bỏ\n        state.status = 'succeeded';\n        state.results = action.payload;\n      })\n      .addCase(searchProducts.rejected, (state, action) => {\n        if (action.meta.requestId !== state.currentRequestId) return;\n        state.status = 'failed';\n      });\n  },\n});\n\nexport const { cleared } = searchSlice.actions;\nexport default searchSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>createAsyncThunk gắn <code>meta.requestId</code> và <code>meta.arg</code> cho cả ba action vòng đời của một lần gọi. Lưu id của lần mới nhất lúc pending là cách gọn nhất để chỉ nhận phản hồi đúng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "axios",
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "products": [
+              {
+                "id": 1,
+                "name": "React Handbook"
+              },
+              {
+                "id": 2,
+                "name": "Redux Essentials"
+              },
+              {
+                "id": 3,
+                "name": "React Router Guide"
+              },
+              {
+                "id": 4,
+                "name": "Node.js Basics"
+              },
+              {
+                "id": 5,
+                "name": "TypeScript Deep Dive"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Search results",
+            "kiem": "danh-sach-text",
+            "selector": "li.result",
+            "mongDoi": [
+              "React Handbook",
+              "React Router Guide"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "moTa": "Summary text",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "2 results for \"react\"",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "moTa": "Debounced: one request for fast typing",
+            "kiem": "goi-fetch",
+            "khop": "/products\\?q=",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "r"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "re"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "red"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "redux"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "moTa": "Clearing empties results",
+            "kiem": "danh-sach-text",
+            "selector": "li.result, #status",
+            "mongDoi": [
+              "idle"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": ""
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Stale response is ignored while the newer one is pending",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "products": [
+                  {
+                    "id": 1,
+                    "name": "React Handbook"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Redux Essentials"
+                  },
+                  {
+                    "id": 3,
+                    "name": "React Router Guide"
+                  },
+                  {
+                    "id": 4,
+                    "name": "Node.js Basics"
+                  },
+                  {
+                    "id": 5,
+                    "name": "TypeScript Deep Dive"
+                  }
+                ]
+              },
+              "treMs": 500
+            },
+            "kiem": "so-luong",
+            "selector": "li.result",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 350
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "typescript"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 520
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Newest response wins",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "products": [
+                  {
+                    "id": 1,
+                    "name": "React Handbook"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Redux Essentials"
+                  },
+                  {
+                    "id": 3,
+                    "name": "React Router Guide"
+                  },
+                  {
+                    "id": 4,
+                    "name": "Node.js Basics"
+                  },
+                  {
+                    "id": 5,
+                    "name": "TypeScript Deep Dive"
+                  }
+                ]
+              },
+              "treMs": 500
+            },
+            "kiem": "danh-sach-text",
+            "selector": "li.result",
+            "mongDoi": [
+              "TypeScript Deep Dive"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "react"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 350
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#q",
+                "giaTri": "typescript"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Slice compares meta.requestId",
+            "kiem": "ma-nguon",
+            "tep": "src/features/search/searchSlice.js",
+            "khop": "meta\\.requestId[\\s\\S]*meta\\.requestId"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi kết quả ở mọi fulfilled ⇒ gõ \"re\" rồi \"react\", phản hồi chậm của \"re\" đè lên."
+        },
+        {
+          "loi": "Dispatch mỗi phím không debounce ⇒ hàng loạt request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "requestId",
+          "vi": "mã duy nhất createAsyncThunk gắn cho mỗi lần gọi"
+        }
+      ]
+    },
+    {
+      "title": "Reducer, thunk or middleware?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "pure reducers",
+        "async logic",
+        "cross-cutting concerns"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "quiz",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>Each piece of logic has one right home in a Redux app. Reducers compute the next state purely; thunks orchestrate async work for ONE feature; middleware handles concerns that apply to EVERY action. Choose the home for each case.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi mẩu logic có một chỗ đúng trong app Redux. Reducer tính state kế tiếp một cách thuần; thunk điều phối việc bất đồng bộ của MỘT tính năng; middleware lo các việc áp dụng cho MỌI action. Chọn chỗ cho từng trường hợp.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có gọi mạng / setTimeout ⇒ không phải reducer.",
+        "Áp dụng cho mọi action ⇒ middleware."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reducer, thunk or middleware?\n\nAnswer in the panel on the left (no code needed).\n\n1. Add an item to the cart array\n2. Load products from the API, then select the first one\n3. Print every action type in development\n4. Save the cart to localStorage after any cart/* action\n5. Compute the new score when an answer is selected\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reducer, thunk or middleware? — answer key\n\n1. Add an item to the cart array\n   Answer: a) Reducer\n   Pure state change. / Đổi state thuần.\n\n2. Load products from the API, then select the first one\n   Answer: b) Thunk\n   Async workflow for one feature. / Quy trình bất đồng bộ của một tính năng.\n\n3. Print every action type in development\n   Answer: c) Middleware\n   Applies to all actions. / Áp dụng cho mọi action.\n\n4. Save the cart to localStorage after any cart/* action\n   Answer: c) Middleware\n   A side effect reacting to many actions (or store.subscribe). / Tác dụng phụ phản ứng với nhiều action (hoặc store.subscribe).\n\n5. Compute the new score when an answer is selected\n   Answer: a) Reducer\n   Derived from state + action, synchronous. / Tính từ state + action, đồng bộ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reducer: thuần, đồng bộ. Thunk: quy trình bất đồng bộ của một tính năng. Middleware: log, lưu storage, báo lỗi, phân tích — cắt ngang mọi action.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Add an item to the cart array",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reducer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thunk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Middleware"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Pure state change.</p><p><i>🇻🇳 Đổi state thuần.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Load products from the API, then select the first one",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reducer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thunk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Middleware"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Async workflow for one feature.</p><p><i>🇻🇳 Quy trình bất đồng bộ của một tính năng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Print every action type in development",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reducer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thunk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Middleware"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Applies to all actions.</p><p><i>🇻🇳 Áp dụng cho mọi action.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Save the cart to localStorage after any cart/* action",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reducer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thunk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Middleware"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A side effect reacting to many actions (or store.subscribe).</p><p><i>🇻🇳 Tác dụng phụ phản ứng với nhiều action (hoặc store.subscribe).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Compute the new score when an answer is selected",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reducer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Thunk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Middleware"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Derived from state + action, synchronous.</p><p><i>🇻🇳 Tính từ state + action, đồng bộ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi API trong reducer."
+        },
+        {
+          "loi": "Viết middleware riêng cho một màn hình — thunk là đủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cross-cutting concern",
+          "vi": "việc cắt ngang nhiều phần (log, lưu, đo)"
+        }
+      ]
+    }
+  ]
+}

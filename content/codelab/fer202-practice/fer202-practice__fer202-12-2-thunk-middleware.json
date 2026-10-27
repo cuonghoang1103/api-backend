@@ -1,0 +1,960 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-2-thunk-middleware",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-2-thunk-middleware"
+  },
+  "exercises": [
+    {
+      "title": "A hand-written thunk: start, success, failure",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "thunk",
+        "redux-thunk",
+        "start/success/failure actions",
+        "status field"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "thunk",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>Reducers must be pure, so API calls go into a <b>thunk</b>: a function that returns <code>async (dispatch) =&gt; { … }</code>. <code>configureStore</code> already includes redux-thunk. Write <code>fetchUsers()</code> that dispatches <code>fetchStarted</code>, then <code>fetchSucceeded(users)</code> or <code>fetchFailed(message)</code>, and a slice that keeps <code>{ items, status, error }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Button <code>#load</code> dispatches <code>fetchUsers()</code>. <code>#status</code> shows the status text (<code>idle</code>/<code>loading</code>/<code>succeeded</code>/<code>failed</code>).</li>\n  <li>Users in <code>li.user</code>; error in <code>#error</code> (axios message).</li>\n</ul>",
+      "problemHtmlVi": "<p>Reducer phải thuần, nên lời gọi API nằm trong <b>thunk</b>: hàm trả về <code>async (dispatch) =&gt; { … }</code>. <code>configureStore</code> đã có sẵn redux-thunk. Viết <code>fetchUsers()</code> dispatch <code>fetchStarted</code>, rồi <code>fetchSucceeded(users)</code> hoặc <code>fetchFailed(message)</code>, và slice giữ <code>{ items, status, error }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nút <code>#load</code> dispatch <code>fetchUsers()</code>. <code>#status</code> hiện chuỗi trạng thái (<code>idle</code>/<code>loading</code>/<code>succeeded</code>/<code>failed</code>).</li>\n  <li>User trong <code>li.user</code>; lỗi trong <code>#error</code> (message của axios).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click Load",
+          "output": "idle → loading → succeeded · 3 users",
+          "explanation": "Three plain actions describe the life of one request.|||Ba action thường mô tả vòng đời một request."
+        }
+      ],
+      "hintsJson": [
+        "export const fetchUsers = () => async (dispatch) => { dispatch(fetchStarted()); try { const res = await axios.get(url); dispatch(fetchSucceeded(res.data)); } catch (e) { dispatch(fetchFailed(e.message)); } };",
+        "App: const { items, status, error } = useSelector((s) => s.users);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchUsers } from './features/users/usersSlice';\n\nexport default function App() {\n  const { items, status } = useSelector((s) => s.users);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      <button id=\"load\" onClick={() => dispatch(fetchUsers)}>Load users</button>\n      <p id=\"status\">{status}</p>\n      <ul>{items.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport usersReducer from '../features/users/usersSlice';\n\nexport const store = configureStore({ reducer: { users: usersReducer } });\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst usersSlice = createSlice({\n  name: 'users',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {},\n});\n\nexport const fetchUsers = () => ({ type: 'users/fetch' });\nexport default usersSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — dispatch thunk; giao diện chỉ đọc status/items/error từ store\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchUsers } from './features/users/usersSlice';\n\nexport default function App() {\n  const { items, status, error } = useSelector((s) => s.users);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      <button id=\"load\" type=\"button\" onClick={() => dispatch(fetchUsers())}>Load users</button>\n      <p id=\"status\">{status}</p>\n      {error && <p id=\"error\">{error}</p>}\n      <ul>{items.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport usersReducer from '../features/users/usersSlice';\n\nexport const store = configureStore({ reducer: { users: usersReducer } });\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — ba action đồng bộ + một thunk viết tay\nimport { createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nconst usersSlice = createSlice({\n  name: 'users',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {\n    fetchStarted(state) {\n      state.status = 'loading';\n      state.error = null;\n    },\n    fetchSucceeded(state, action) {\n      state.status = 'succeeded';\n      state.items = action.payload;\n    },\n    fetchFailed(state, action) {\n      state.status = 'failed';\n      state.error = action.payload;\n    },\n  },\n});\n\nexport const { fetchStarted, fetchSucceeded, fetchFailed } = usersSlice.actions;\n\n// thunk = hàm trả về HÀM nhận (dispatch, getState); redux-thunk (có sẵn trong configureStore) gọi nó\nexport const fetchUsers = () => async (dispatch) => {\n  dispatch(fetchStarted());\n  try {\n    const res = await axios.get('http://localhost:9999/users');\n    dispatch(fetchSucceeded(res.data));\n  } catch (err) {\n    dispatch(fetchFailed(err.message));\n  }\n};\n\nexport default usersSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>redux-thunk là middleware: nếu action là HÀM thì gọi nó với dispatch/getState thay vì chuyển tới reducer. Nhờ vậy logic bất đồng bộ sống cạnh slice mà reducer vẫn thuần.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "axios",
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "name": "Leanne Graham"
+              },
+              {
+                "id": 2,
+                "name": "Ervin Howell"
+              },
+              {
+                "id": 3,
+                "name": "Clementine Bauch"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Idle before loading",
+            "kiem": "text",
+            "selector": "#status",
+            "giaTri": "idle"
+          },
+          {
+            "moTa": "Loading while waiting",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "users": [
+                  {
+                    "id": 1,
+                    "name": "Leanne Graham"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Ervin Howell"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Clementine Bauch"
+                  }
+                ]
+              },
+              "treMs": 1200
+            },
+            "kiem": "text",
+            "selector": "#status",
+            "giaTri": "loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#load",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Users loaded",
+            "kiem": "danh-sach-text",
+            "selector": "li.user, #status",
+            "mongDoi": [
+              "succeeded",
+              "Leanne Graham",
+              "Ervin Howell",
+              "Clementine Bauch"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#load",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Failure path",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#status, #error",
+            "mongDoi": [
+              "failed",
+              "Request failed with status code 404"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#load",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Thunk returns a function using dispatch",
+            "kiem": "ma-nguon",
+            "tep": "src/features/users/usersSlice.js",
+            "khop": "fetchUsers\\s*=\\s*\\(\\)\\s*=>\\s*async\\s*\\(\\s*dispatch"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi axios bên trong reducer ⇒ reducer không thuần, Redux báo lỗi hoặc state không đổi."
+        },
+        {
+          "loi": "Quên <code>dispatch(fetchUsers())</code> (thiếu ngoặc) ⇒ thunk không chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thunk",
+          "vi": "hàm trì hoãn: dispatch một hàm thay vì object"
+        },
+        {
+          "en": "side effect",
+          "vi": "tác dụng phụ (gọi mạng, ghi storage…)"
+        }
+      ]
+    },
+    {
+      "title": "createAsyncThunk + extraReducers + condition",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "createAsyncThunk",
+        "pending/fulfilled/rejected",
+        "builder.addCase",
+        "condition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "thunk",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>Same feature, Redux Toolkit style. <code>createAsyncThunk(\"users/fetchUsers\", payloadCreator)</code> dispatches <code>pending</code>, <code>fulfilled</code> or <code>rejected</code> for you; handle them in <code>extraReducers</code> with <code>builder.addCase</code>. Add a <code>condition</code> option so the request is skipped when users are already loading or loaded.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Two components each dispatch <code>fetchUsers()</code> on mount: <code>UserList</code> (<code>li.user</code>) and <code>UserCount</code> (<code>#user-count</code> <code>3 users</code>). Only ONE request may be sent.</li>\n  <li><code>#status</code> shows the status; a <code>#retry</code> button appears when failed.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cùng tính năng, theo kiểu Redux Toolkit. <code>createAsyncThunk(\"users/fetchUsers\", payloadCreator)</code> tự dispatch <code>pending</code>, <code>fulfilled</code> hoặc <code>rejected</code>; xử lý chúng trong <code>extraReducers</code> bằng <code>builder.addCase</code>. Thêm tuỳ chọn <code>condition</code> để bỏ qua request khi user đang tải hoặc đã tải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai component đều dispatch <code>fetchUsers()</code> khi mount: <code>UserList</code> (<code>li.user</code>) và <code>UserCount</code> (<code>#user-count</code> <code>3 users</code>). Chỉ được gửi MỘT request.</li>\n  <li><code>#status</code> hiện trạng thái; nút <code>#retry</code> hiện khi lỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "app mounts",
+          "output": "GET /users once · 3 users",
+          "explanation": "condition returns false for the second dispatch, so nothing is sent.|||condition trả false ở lần dispatch thứ hai nên không gửi gì."
+        }
+      ],
+      "hintsJson": [
+        "createAsyncThunk(\"users/fetchUsers\", async () => (await axios.get(url)).data, { condition: (_, { getState }) => getState().users.status === \"idle\" })",
+        "extraReducers: (builder) => { builder.addCase(fetchUsers.pending, …).addCase(fetchUsers.fulfilled, …).addCase(fetchUsers.rejected, …); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchUsers } from './features/users/usersSlice';\n\nfunction UserList() {\n  const dispatch = useDispatch();\n  const { items } = useSelector((s) => s.users);\n  useEffect(() => { dispatch(fetchUsers()); }, [dispatch]);\n  return <ul>{items.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n\nexport default function App() {\n  return <UserList />;\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport usersReducer from '../features/users/usersSlice';\n\nexport const store = configureStore({ reducer: { users: usersReducer } });\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nconst usersSlice = createSlice({\n  name: 'users',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {\n    loaded(state, action) { state.items = action.payload; },\n  },\n});\n\nexport const fetchUsers = () => async (dispatch) => {\n  const res = await axios.get('http://localhost:9999/users');\n  dispatch(usersSlice.actions.loaded(res.data));\n};\nexport default usersSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — hai component cùng dispatch; condition chặn request thứ hai\nimport { useEffect } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { fetchUsers } from './features/users/usersSlice';\n\nfunction UserList() {\n  const dispatch = useDispatch();\n  const { items } = useSelector((s) => s.users);\n  useEffect(() => {\n    dispatch(fetchUsers());\n  }, [dispatch]);\n  return <ul>{items.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n\nfunction UserCount() {\n  const dispatch = useDispatch();\n  const count = useSelector((s) => s.users.items.length);\n  useEffect(() => {\n    dispatch(fetchUsers());\n  }, [dispatch]);\n  return <p id=\"user-count\">{count} users</p>;\n}\n\nfunction Status() {\n  const dispatch = useDispatch();\n  const { status } = useSelector((s) => s.users);\n  return (\n    <div>\n      <p id=\"status\">{status}</p>\n      {status === 'failed' && <button id=\"retry\" type=\"button\" onClick={() => dispatch(fetchUsers())}>Retry</button>}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Status />\n      <UserCount />\n      <UserList />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport usersReducer from '../features/users/usersSlice';\n\nexport const store = configureStore({ reducer: { users: usersReducer } });\n"
+        },
+        {
+          "name": "src/features/users/usersSlice.js",
+          "language": "javascript",
+          "code": "// src/features/users/usersSlice.js — createAsyncThunk sinh pending/fulfilled/rejected\nimport { createAsyncThunk, createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nexport const fetchUsers = createAsyncThunk(\n  'users/fetchUsers',\n  async () => {\n    const res = await axios.get('http://localhost:9999/users');\n    return res.data; // ⇒ action.payload của fulfilled\n  },\n  {\n    // đã tải hoặc đang tải ⇒ không gửi request nữa\n    condition: (_, { getState }) => getState().users.status === 'idle' || getState().users.status === 'failed',\n  },\n);\n\nconst usersSlice = createSlice({\n  name: 'users',\n  initialState: { items: [], status: 'idle', error: null },\n  reducers: {},\n  extraReducers: (builder) => {\n    builder\n      .addCase(fetchUsers.pending, (state) => {\n        state.status = 'loading';\n        state.error = null;\n      })\n      .addCase(fetchUsers.fulfilled, (state, action) => {\n        state.status = 'succeeded';\n        state.items = action.payload;\n      })\n      .addCase(fetchUsers.rejected, (state, action) => {\n        state.status = 'failed';\n        state.error = action.error.message;\n      });\n  },\n});\n\nexport default usersSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>createAsyncThunk chuẩn hoá ba action vòng đời và tên của chúng (<code>users/fetchUsers/pending</code>…). <code>condition</code> chạy trước — trả false thì thunk không làm gì, tránh gọi trùng khi nhiều component cùng cần dữ liệu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "axios",
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "name": "Leanne Graham"
+              },
+              {
+                "id": 2,
+                "name": "Ervin Howell"
+              },
+              {
+                "id": 3,
+                "name": "Clementine Bauch"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Users loaded",
+            "kiem": "danh-sach-text",
+            "selector": "li.user",
+            "mongDoi": [
+              "Leanne Graham",
+              "Ervin Howell",
+              "Clementine Bauch"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Count component",
+            "kiem": "text",
+            "selector": "#user-count",
+            "giaTri": "3 users",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Only one request",
+            "kiem": "goi-fetch",
+            "khop": "/users",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 400
+              }
+            ]
+          },
+          {
+            "moTa": "Status succeeded",
+            "kiem": "text",
+            "selector": "#status",
+            "giaTri": "succeeded",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Failure shows Retry",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#status, #retry",
+            "mongDoi": [
+              "failed",
+              "Retry"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "createAsyncThunk + extraReducers",
+            "kiem": "ma-nguon",
+            "tep": "src/features/users/usersSlice.js",
+            "khop": "^(?=[\\s\\S]*createAsyncThunk\\()(?=[\\s\\S]*extraReducers)(?=[\\s\\S]*addCase\\(\\s*fetchUsers\\.pending)"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt case pending/fulfilled trong <code>reducers</code> (không phải extraReducers) ⇒ chúng thành action MỚI tên khác, không bao giờ khớp."
+        },
+        {
+          "loi": "Lỗi của rejected nằm ở <code>action.error.message</code>, không phải <code>action.payload</code> (trừ khi dùng rejectWithValue)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lifecycle actions",
+          "vi": "ba action vòng đời: pending, fulfilled, rejected"
+        }
+      ]
+    },
+    {
+      "title": "Write a logger middleware",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "middleware signature",
+        "next(action)",
+        "getDefaultMiddleware",
+        "order of middleware"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "middleware",
+        "exercise-25"
+      ],
+      "problemHtml": "<p>Middleware sits between <code>dispatch</code> and the reducer. Write <code>logger</code> with the curried signature <code>store =&gt; next =&gt; action =&gt; …</code>: log <code>[action] &lt;type&gt;</code>, call <code>next(action)</code>, then log <code>[state] &lt;JSON of the whole state&gt;</code>. Add it with <code>getDefaultMiddleware().concat(logger)</code> so thunks still work.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>App: <code>#value</code>, <code>#inc</code> (<code>increment()</code>), <code>#later</code> (dispatches the given thunk <code>incrementLater()</code>).</li>\n  <li>Thunks (functions) pass through redux-thunk BEFORE your logger, so only plain actions are logged.</li>\n</ul>",
+      "problemHtmlVi": "<p>Middleware nằm giữa <code>dispatch</code> và reducer. Viết <code>logger</code> theo chữ ký lồng <code>store =&gt; next =&gt; action =&gt; …</code>: in <code>[action] &lt;type&gt;</code>, gọi <code>next(action)</code>, rồi in <code>[state] &lt;JSON toàn bộ state&gt;</code>. Thêm bằng <code>getDefaultMiddleware().concat(logger)</code> để thunk vẫn chạy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>App: <code>#value</code>, <code>#inc</code> (<code>increment()</code>), <code>#later</code> (dispatch thunk có sẵn <code>incrementLater()</code>).</li>\n  <li>Thunk (hàm) đi qua redux-thunk TRƯỚC logger, nên chỉ action thường được in.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click +",
+          "output": "[action] counter/increment · [state] {\"counter\":{\"value\":1}}",
+          "explanation": "The state is logged AFTER next(action) — the reducer has run.|||State in ra SAU next(action) — reducer đã chạy."
+        }
+      ],
+      "hintsJson": [
+        "export const logger = (store) => (next) => (action) => { console.log(`[action] ${action.type}`); const result = next(action); console.log(`[state] ${JSON.stringify(store.getState())}`); return result; };",
+        "middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useDispatch, useSelector } from 'react-redux';\nimport { increment, incrementLater } from './features/counter/counterSlice';\n\nexport default function App() {\n  const value = useSelector((s) => s.counter.value);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      <p id=\"value\">{value}</p>\n      <button id=\"inc\" onClick={() => dispatch(increment())}>+</button>\n      <button id=\"later\" onClick={() => dispatch(incrementLater())}>+10 later</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js (cho sẵn)\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) => { state.value += 1; },\n    addAsync: (state, action) => { state.value += action.payload; },\n  },\n});\n\nexport const { increment, addAsync } = counterSlice.actions;\n// thunk nhỏ để kiểm logger vẫn chạy cùng redux-thunk\nexport const incrementLater = () => (dispatch) => {\n  setTimeout(() => dispatch(addAsync(10)), 100);\n};\nexport default counterSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/logger.js",
+          "language": "javascript",
+          "code": "// src/app/logger.js — STARTER\nexport const logger = () => {};\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from '../features/counter/counterSlice';\n\nexport const store = configureStore({ reducer: { counter: counterReducer } });\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — giao diện không đổi; logger nằm trong store\nimport { useDispatch, useSelector } from 'react-redux';\nimport { increment, incrementLater } from './features/counter/counterSlice';\n\nexport default function App() {\n  const value = useSelector((s) => s.counter.value);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      <p id=\"value\">{value}</p>\n      <button id=\"inc\" type=\"button\" onClick={() => dispatch(increment())}>+</button>\n      <button id=\"later\" type=\"button\" onClick={() => dispatch(incrementLater())}>+10 later</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js (cho sẵn)\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) => { state.value += 1; },\n    addAsync: (state, action) => { state.value += action.payload; },\n  },\n});\n\nexport const { increment, addAsync } = counterSlice.actions;\n// thunk nhỏ để kiểm logger vẫn chạy cùng redux-thunk\nexport const incrementLater = () => (dispatch) => {\n  setTimeout(() => dispatch(addAsync(10)), 100);\n};\nexport default counterSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/logger.js",
+          "language": "javascript",
+          "code": "// src/app/logger.js — middleware: store => next => action\nexport const logger = (store) => (next) => (action) => {\n  console.log(`[action] ${action.type}`);\n  const result = next(action); // chuyển tiếp tới middleware sau / reducer\n  console.log(`[state] ${JSON.stringify(store.getState())}`);\n  return result;\n};\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — NỐI logger SAU middleware mặc định (giữ redux-thunk)\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from '../features/counter/counterSlice';\nimport { logger } from './logger';\n\nexport const store = configureStore({\n  reducer: { counter: counterReducer },\n  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),\n});\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi middleware nhận <code>next</code> (middleware kế tiếp). Thứ tự quan trọng: thunk đứng trước nên hàm bị chặn ở đó, chỉ object action tới được logger. Đây là chỗ đặt mọi thứ \"cắt ngang\": log, lưu storage, phân tích.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "kiem": [
+          {
+            "moTa": "Logs action then state",
+            "kiem": "console",
+            "mongDoi": [
+              "[action] counter/increment",
+              "[state] {\"counter\":{\"value\":1}}"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Reducer still runs",
+            "kiem": "text",
+            "selector": "#value",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Thunks still work (default middleware kept)",
+            "kiem": "text",
+            "selector": "#value",
+            "giaTri": "10",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#later",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Thunk itself is not logged, its plain action is",
+            "kiem": "console",
+            "mongDoi": [
+              "[action] counter/addAsync",
+              "[state] {\"counter\":{\"value\":10}}"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#later",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses getDefaultMiddleware().concat",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "getDefaultMiddleware\\(\\)\\s*\\.concat\\(\\s*logger"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>middleware: [logger]</code> ⇒ thay luôn mặc định, mất redux-thunk ⇒ \"Actions must be plain objects\"."
+        },
+        {
+          "loi": "Quên <code>return next(action)</code> ⇒ action không tới reducer, state đứng yên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware",
+          "vi": "lớp chen giữa dispatch và reducer"
+        },
+        {
+          "en": "currying",
+          "vi": "hàm nhận từng tham số một, trả về hàm"
+        }
+      ]
+    },
+    {
+      "title": "placeOrder thunk: getState, POST, rejectWithValue",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "thunkAPI.getState",
+        "rejectWithValue",
+        "clearing state on success",
+        "error payloads"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "thunk"
+      ],
+      "problemHtml": "<p>Checkout as an async thunk. <code>placeOrder(customer)</code> reads the cart with <code>getState()</code>, validates (empty cart, missing name) with <code>rejectWithValue(message)</code>, then <code>POST /orders</code> with <code>{ customer, lines, total }</code>. On success the cart is emptied and the new order id is shown; on failure a friendly message comes from <code>action.payload</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Products (given): Pen 15000, Notebook 32000 — <code>.btn-add</code>. <code>#customer</code>, <code>#checkout</code> (disabled while loading), <code>#lines-count</code>.</li>\n  <li><code>#order-ok</code> <code>Order #1 placed</code>; <code>#order-error</code> with the rejectWithValue message (<code>Your cart is empty</code>, <code>Customer name is required</code>, <code>Order failed (500)</code>).</li>\n</ul>",
+      "problemHtmlVi": "<p>Thanh toán bằng async thunk. <code>placeOrder(customer)</code> đọc giỏ bằng <code>getState()</code>, kiểm hợp lệ (giỏ rỗng, thiếu tên) bằng <code>rejectWithValue(message)</code>, rồi <code>POST /orders</code> với <code>{ customer, lines, total }</code>. Thành công thì làm rỗng giỏ và hiện id đơn mới; thất bại thì thông báo thân thiện lấy từ <code>action.payload</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sản phẩm (đã cho): Pen 15000, Notebook 32000 — <code>.btn-add</code>. <code>#customer</code>, <code>#checkout</code> (vô hiệu khi đang tải), <code>#lines-count</code>.</li>\n  <li><code>#order-ok</code> <code>Order #1 placed</code>; <code>#order-error</code> với thông điệp rejectWithValue (<code>Your cart is empty</code>, <code>Customer name is required</code>, <code>Order failed (500)</code>).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add Pen ×2, Notebook; customer Lan; checkout",
+          "output": "POST total 62000 · Order #1 placed · cart empty",
+          "explanation": "The thunk reads lines from the store, not from component props.|||Thunk đọc các dòng từ store, không lấy từ props của component."
+        }
+      ],
+      "hintsJson": [
+        "createAsyncThunk(\"cart/placeOrder\", async (customer, { getState, rejectWithValue }) => { const { lines } = getState().cart; if (!lines.length) return rejectWithValue(\"Your cart is empty\"); … })",
+        "rejected: state.error = action.payload ?? action.error.message;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { added, placeOrder } from './features/cart/cartSlice';\n\nconst PRODUCTS = [{ id: 1, name: 'Pen', price: 15000 }, { id: 2, name: 'Notebook', price: 32000 }];\n\nexport default function App() {\n  const { lines } = useSelector((s) => s.cart);\n  const dispatch = useDispatch();\n  const [customer, setCustomer] = useState('');\n  return (\n    <div>\n      {PRODUCTS.map((p) => <button key={p.id} className=\"btn-add\" onClick={() => dispatch(added(p))}>{p.name}</button>)}\n      <p id=\"lines-count\">{lines.length}</p>\n      <input id=\"customer\" value={customer} onChange={(e) => setCustomer(e.target.value)} />\n      <button id=\"checkout\" onClick={() => dispatch(placeOrder(customer))}>Checkout</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js (cho sẵn)\nimport { configureStore } from '@reduxjs/toolkit';\nimport cartReducer from '../features/cart/cartSlice';\n\nexport const store = configureStore({ reducer: { cart: cartReducer } });\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { lines: [], status: 'idle', error: null, lastOrderId: null },\n  reducers: {\n    added(state, action) { state.lines.push({ ...action.payload, qty: 1 }); },\n  },\n});\n\nexport const placeOrder = (customer) => async () => {\n  await axios.post('http://localhost:9999/orders', { customer });\n};\nexport const { added } = cartSlice.actions;\nexport default cartSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — dispatch thunk đặt hàng; hiện kết quả/lỗi từ store\nimport { useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { added, placeOrder } from './features/cart/cartSlice';\n\nconst PRODUCTS = [{ id: 1, name: 'Pen', price: 15000 }, { id: 2, name: 'Notebook', price: 32000 }];\n\nexport default function App() {\n  const { lines, status, error, lastOrderId } = useSelector((s) => s.cart);\n  const dispatch = useDispatch();\n  const [customer, setCustomer] = useState('');\n\n  return (\n    <div>\n      {PRODUCTS.map((p) => (\n        <button key={p.id} type=\"button\" className=\"btn-add\" onClick={() => dispatch(added(p))}>{p.name}</button>\n      ))}\n      <p id=\"lines-count\">{lines.length}</p>\n      <input id=\"customer\" value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder=\"Customer name\" />\n      <button id=\"checkout\" type=\"button\" disabled={status === 'loading'} onClick={() => dispatch(placeOrder(customer))}>Checkout</button>\n      {status === 'succeeded' && <p id=\"order-ok\">Order #{lastOrderId} placed</p>}\n      {status === 'failed' && <p id=\"order-error\">{error}</p>}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js (cho sẵn)\nimport { configureStore } from '@reduxjs/toolkit';\nimport cartReducer from '../features/cart/cartSlice';\n\nexport const store = configureStore({ reducer: { cart: cartReducer } });\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — giỏ + thunk đặt hàng đọc state bằng getState\nimport { createAsyncThunk, createSlice } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nexport const placeOrder = createAsyncThunk('cart/placeOrder', async (customer, { getState, rejectWithValue }) => {\n  const { lines } = getState().cart;\n  if (lines.length === 0) return rejectWithValue('Your cart is empty');\n  if (!customer.trim()) return rejectWithValue('Customer name is required');\n  const total = lines.reduce((s, l) => s + l.price * l.qty, 0);\n  try {\n    const res = await axios.post('http://localhost:9999/orders', { customer: customer.trim(), lines, total });\n    return res.data; // đơn vừa tạo (có id)\n  } catch (err) {\n    return rejectWithValue(`Order failed (${err.response ? err.response.status : 'network'})`);\n  }\n});\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { lines: [], status: 'idle', error: null, lastOrderId: null },\n  reducers: {\n    added(state, action) {\n      const p = action.payload;\n      const line = state.lines.find((l) => l.id === p.id);\n      if (line) line.qty += 1;\n      else state.lines.push({ ...p, qty: 1 });\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(placeOrder.pending, (state) => {\n        state.status = 'loading';\n        state.error = null;\n      })\n      .addCase(placeOrder.fulfilled, (state, action) => {\n        state.status = 'succeeded';\n        state.lastOrderId = action.payload.id;\n        state.lines = []; // đặt xong ⇒ làm rỗng giỏ\n      })\n      .addCase(placeOrder.rejected, (state, action) => {\n        state.status = 'failed';\n        state.error = action.payload ?? action.error.message;\n      });\n  },\n});\n\nexport const { added } = cartSlice.actions;\nexport default cartSlice.reducer;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thunk là nơi đúng cho quy trình nhiều bước có đọc state + gọi mạng. <code>rejectWithValue</code> biến lỗi nghiệp vụ thành payload có kiểm soát; reducer <code>fulfilled</code> chỉ xoá giỏ khi server đã xác nhận.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "axios",
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "orders": []
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Order POSTed with lines and total",
+            "kiem": "du-lieu-server",
+            "bang": "orders",
+            "chua": {
+              "customer": "Lan",
+              "total": 62000
+            },
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Success message and empty cart",
+            "kiem": "danh-sach-text",
+            "selector": "#lines-count, #order-ok",
+            "mongDoi": [
+              "0",
+              "Order #1 placed"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Empty cart ⇒ rejectWithValue message",
+            "kiem": "text",
+            "selector": "#order-error",
+            "giaTri": "Your cart is empty",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Missing name",
+            "kiem": "text",
+            "selector": "#order-error",
+            "giaTri": "Customer name is required",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Server error ⇒ friendly message, cart kept",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "danh-sach-text",
+            "selector": "#lines-count, #order-error",
+            "mongDoi": [
+              "1",
+              "Order failed (404)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No POST when validation fails",
+            "kiem": "goi-fetch",
+            "khop": "^POST",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Checkout disabled while loading",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "orders": []
+              },
+              "treMs": 1000
+            },
+            "kiem": "thuoc-tinh-js",
+            "selector": "#checkout",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customer",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#checkout",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses getState + rejectWithValue",
+            "kiem": "ma-nguon",
+            "tep": "src/features/cart/cartSlice.js",
+            "khop": "^(?=[\\s\\S]*getState\\(\\))(?=[\\s\\S]*rejectWithValue\\()"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>throw new Error(\"Your cart is empty\")</code> ⇒ được, nhưng thông điệp nằm ở action.error và bị chuẩn hoá; rejectWithValue cho payload tuỳ ý."
+        },
+        {
+          "loi": "Làm rỗng giỏ TRƯỚC khi POST xong ⇒ lỗi mạng làm mất giỏ của khách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thunkAPI",
+          "vi": "tham số thứ hai của payloadCreator: dispatch, getState, rejectWithValue…"
+        }
+      ]
+    }
+  ]
+}

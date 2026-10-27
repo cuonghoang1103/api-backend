@@ -1,0 +1,499 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-ex24-intro-redux",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-ex24-intro-redux"
+  },
+  "exercises": [
+    {
+      "title": "Order the steps to add Redux Toolkit to a React app",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "install",
+        "slice",
+        "store",
+        "Provider",
+        "hooks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "order",
+        "exercise-24"
+      ],
+      "problemHtml": "<p>Exercise 24 walks through adding Redux to an existing Vite/CRA app. Put the steps in the order you would actually do them — each step needs the previous one to exist.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Exercise 24 đi qua việc thêm Redux vào một app Vite/CRA sẵn có. Hãy xếp các bước theo đúng thứ tự bạn làm — mỗi bước cần bước trước đã có.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Store cần reducer của slice ⇒ slice trước store.",
+        "Hook chỉ chạy bên trong Provider."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the steps to add Redux Toolkit to a React app\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the steps to add Redux Toolkit to a React app — answer key\n\n1. Order the steps\n   Answer: a) Install: npm install @reduxjs/toolkit react-redux  →  b) Create counterSlice with createSlice  →  c) Create the store with configureStore({ reducer: { counter: counterReducer } })  →  d) Wrap <App /> in <Provider store={store}> in index.js  →  e) Read with useSelector and update with useDispatch in components\n   Install → slice → store → Provider → hooks. / Cài → slice → store → Provider → hook.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cài gói → tạo slice → configureStore → bọc Provider ở index.js → dùng useSelector/useDispatch trong component.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "Order the steps",
+            "muc": [
+              {
+                "ma": "d",
+                "noiDung": "Wrap <code>&lt;App /&gt;</code> in <code>&lt;Provider store={store}&gt;</code> in index.js"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Create <code>counterSlice</code> with <code>createSlice</code>"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Read with <code>useSelector</code> and update with <code>useDispatch</code> in components"
+              },
+              {
+                "ma": "a",
+                "noiDung": "Install: <code>npm install @reduxjs/toolkit react-redux</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Create the store with <code>configureStore({ reducer: { counter: counterReducer } })</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ],
+            "giaiThich": "<p>Install → slice → store → Provider → hooks.</p><p><i>🇻🇳 Cài → slice → store → Provider → hook.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng useSelector trước khi bọc Provider ⇒ lỗi \"could not find react-redux context value\"."
+        },
+        {
+          "loi": "Cài gói <code>redux</code> cũ thay vì <code>@reduxjs/toolkit</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Provider",
+          "vi": "component đưa store xuống cây React"
+        }
+      ]
+    },
+    {
+      "title": "One store, two slices: theme and counter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "combining slices",
+        "state shape",
+        "feature folders",
+        "components reading different slices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "redux-toolkit",
+        "exercise-24"
+      ],
+      "problemHtml": "<p>A real store has several slices. Add <code>themeSlice</code> (<code>{ mode: \"light\" }</code>, action <code>toggled</code>) next to <code>counterSlice</code> and combine them in <code>configureStore</code> as <code>theme</code> and <code>counter</code>. <code>Header</code> and <code>Counter</code> live in separate files and each reads only its own slice. A third component <code>Footer</code> (in App) shows both.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Header: <code>#header</code> with class = mode, <code>#mode</code> <code>Mode: dark</code>, <code>#toggle-theme</code>. Counter: <code>#value</code>, <code>#inc</code>.</li>\n  <li>Footer <code>#footer</code>: <code>dark · 2 clicks</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Store thật có nhiều slice. Thêm <code>themeSlice</code> (<code>{ mode: \"light\" }</code>, action <code>toggled</code>) cạnh <code>counterSlice</code> và ghép chúng trong <code>configureStore</code> với khoá <code>theme</code> và <code>counter</code>. <code>Header</code> và <code>Counter</code> nằm ở hai tệp riêng, mỗi cái chỉ đọc slice của mình. Component thứ ba <code>Footer</code> (trong App) hiện cả hai.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Header: <code>#header</code> có class = mode, <code>#mode</code> <code>Mode: dark</code>, <code>#toggle-theme</code>. Counter: <code>#value</code>, <code>#inc</code>.</li>\n  <li>Footer <code>#footer</code>: <code>dark · 2 clicks</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toggle, +1, +1",
+          "output": "Footer: dark · 2 clicks",
+          "explanation": "state = { theme: { mode }, counter: { value } }|||state = { theme: { mode }, counter: { value } }"
+        }
+      ],
+      "hintsJson": [
+        "configureStore({ reducer: { theme: themeReducer, counter: counterReducer } })",
+        "Footer: const mode = useSelector((s) => s.theme.mode); const value = useSelector((s) => s.counter.value);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport Header from './components/Header';\nimport Counter from './components/Counter';\n\nexport default function App() {\n  return (\n    <div>\n      <Header />\n      <Counter />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/theme/themeSlice.js",
+          "language": "javascript",
+          "code": "// src/features/theme/themeSlice.js — STARTER: viết themeSlice (name \"theme\", { mode: \"light\" }, toggled)\nexport default (state = { mode: 'light' }) => state;\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: { incremented(state) { state.value += 1; } },\n});\n\nexport const { incremented } = counterSlice.actions;\nexport default counterSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER: thêm reducer theme\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from '../features/counter/counterSlice';\n\nexport const store = configureStore({ reducer: { counter: counterReducer } });\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js — STARTER (theme đang là state cục bộ!)\nimport { useState } from 'react';\n\nexport default function Header() {\n  const [mode, setMode] = useState('light');\n  return (\n    <header id=\"header\" className={mode}>\n      <span id=\"mode\">Mode: {mode}</span>\n      <button id=\"toggle-theme\" onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>Toggle theme</button>\n    </header>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Counter.js",
+          "language": "javascript",
+          "code": "// src/components/Counter.js — STARTER\nexport default function Counter() {\n  return <p id=\"value\">0</p>;\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ghép các component; Footer đọc hai slice\nimport { useSelector } from 'react-redux';\nimport Header from './components/Header';\nimport Counter from './components/Counter';\n\nfunction Footer() {\n  const mode = useSelector((s) => s.theme.mode);\n  const value = useSelector((s) => s.counter.value);\n  return <footer id=\"footer\">{mode} · {value} clicks</footer>;\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Header />\n      <Counter />\n      <Footer />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/theme/themeSlice.js",
+          "language": "javascript",
+          "code": "// src/features/theme/themeSlice.js\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst themeSlice = createSlice({\n  name: 'theme',\n  initialState: { mode: 'light' },\n  reducers: {\n    toggled(state) {\n      state.mode = state.mode === 'light' ? 'dark' : 'light';\n    },\n  },\n});\n\nexport const { toggled } = themeSlice.actions;\nexport const selectMode = (state) => state.theme.mode;\nexport default themeSlice.reducer;\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    incremented(state) {\n      state.value += 1;\n    },\n  },\n});\n\nexport const { incremented } = counterSlice.actions;\nexport const selectValue = (state) => state.counter.value;\nexport default counterSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — mỗi slice một khoá trong state gốc\nimport { configureStore } from '@reduxjs/toolkit';\nimport themeReducer from '../features/theme/themeSlice';\nimport counterReducer from '../features/counter/counterSlice';\n\nexport const store = configureStore({\n  reducer: {\n    theme: themeReducer,\n    counter: counterReducer,\n  },\n});\n"
+        },
+        {
+          "name": "src/components/Header.js",
+          "language": "javascript",
+          "code": "// src/components/Header.js — chỉ đọc theme\nimport { useDispatch, useSelector } from 'react-redux';\nimport { selectMode, toggled } from '../features/theme/themeSlice';\n\nexport default function Header() {\n  const mode = useSelector(selectMode);\n  const dispatch = useDispatch();\n  return (\n    <header id=\"header\" className={mode}>\n      <span id=\"mode\">Mode: {mode}</span>\n      <button id=\"toggle-theme\" type=\"button\" onClick={() => dispatch(toggled())}>Toggle theme</button>\n    </header>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/Counter.js",
+          "language": "javascript",
+          "code": "// src/components/Counter.js — chỉ đọc counter\nimport { useDispatch, useSelector } from 'react-redux';\nimport { incremented, selectValue } from '../features/counter/counterSlice';\n\nexport default function Counter() {\n  const value = useSelector(selectValue);\n  const dispatch = useDispatch();\n  return (\n    <section>\n      <p id=\"value\">{value}</p>\n      <button id=\"inc\" type=\"button\" onClick={() => dispatch(incremented())}>+1</button>\n    </section>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi khoá trong <code>reducer</code> của configureStore là một nhánh của state gốc. Component chọn đúng nhánh mình cần bằng selector — đổi theme không làm Counter vẽ lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "kiem": [
+          {
+            "moTa": "Theme toggles via Redux",
+            "kiem": "danh-sach-text",
+            "selector": "#mode",
+            "mongDoi": [
+              "Mode: dark"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-theme",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Header class follows",
+            "kiem": "ton-tai",
+            "selector": "#header.dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-theme",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Counter works",
+            "kiem": "text",
+            "selector": "#value",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Footer reads both slices",
+            "kiem": "text",
+            "selector": "#footer",
+            "giaTri": "dark · 2 clicks",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle-theme",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Store combines theme and counter",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "reducer\\s*:\\s*\\{[\\s\\S]*theme\\s*:[\\s\\S]*counter\\s*:"
+          },
+          {
+            "an": true,
+            "moTa": "Header has no local theme state",
+            "kiem": "ma-nguon",
+            "tep": "src/components/Header.js",
+            "khop": "useState",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để theme trong useState của Header ⇒ Footer không biết theme."
+        },
+        {
+          "loi": "Đặt tên khoá store khác tên trong selector (<code>themes</code> vs <code>theme</code>) ⇒ selector trả undefined."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state shape",
+          "vi": "cấu trúc object state gốc"
+        }
+      ]
+    },
+    {
+      "title": "Redux state or local state?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "global vs local state",
+        "server cache",
+        "form state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "quiz",
+        "exercise-24"
+      ],
+      "problemHtml": "<p>Not everything belongs in Redux. For each piece of state choose where it should live. Ask: do several distant components need it? Must it survive navigation? Is it just UI detail of one component?</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Không phải mọi thứ đều thuộc về Redux. Với mỗi mẩu state, chọn nơi nên đặt. Hãy hỏi: nhiều component ở xa nhau có cần không? Có phải giữ qua khi chuyển trang? Hay chỉ là chi tiết giao diện của một component?</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dùng ở nhiều nơi + sống lâu ⇒ store.",
+        "Chỉ một component quan tâm ⇒ useState."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Redux state or local state?\n\nAnswer in the panel on the left (no code needed).\n\n1. The logged-in user (shown in navbar, used by guards and profile page)\n2. Whether one dropdown menu is open\n3. Shopping cart lines\n4. The text currently typed in a search box before submitting\n5. Light/dark theme chosen by the user\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Redux state or local state? — answer key\n\n1. The logged-in user (shown in navbar, used by guards and profile page)\n   Answer: a) Redux store\n   Many components, whole session. / Nhiều component, suốt phiên.\n\n2. Whether one dropdown menu is open\n   Answer: b) Local useState\n   Only that component cares. / Chỉ component đó quan tâm.\n\n3. Shopping cart lines\n   Answer: a) Redux store\n   Header badge, cart page and checkout all need them. / Badge ở header, trang giỏ và thanh toán đều cần.\n\n4. The text currently typed in a search box before submitting\n   Answer: b) Local useState\n   Put the SUBMITTED query in the store or URL if others need it. / Chuỗi ĐÃ GỬI mới cần đưa vào store hoặc URL nếu nơi khác cần.\n\n5. Light/dark theme chosen by the user\n   Answer: a) Redux store\n   Every component may style itself by it (Context also works). / Mọi component có thể dựa vào nó để tạo kiểu (Context cũng được).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Redux cho state dùng chung và lâu dài (người dùng đăng nhập, giỏ hàng, theme). State tạm của một component (đang mở dropdown, chữ đang gõ) để cục bộ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "The logged-in user (shown in navbar, used by guards and profile page)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local useState"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Many components, whole session.</p><p><i>🇻🇳 Nhiều component, suốt phiên.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Whether one dropdown menu is open",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local useState"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Only that component cares.</p><p><i>🇻🇳 Chỉ component đó quan tâm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Shopping cart lines",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local useState"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Header badge, cart page and checkout all need them.</p><p><i>🇻🇳 Badge ở header, trang giỏ và thanh toán đều cần.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "The text currently typed in a search box before submitting",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local useState"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Put the SUBMITTED query in the store or URL if others need it.</p><p><i>🇻🇳 Chuỗi ĐÃ GỬI mới cần đưa vào store hoặc URL nếu nơi khác cần.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Light/dark theme chosen by the user",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local useState"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every component may style itself by it (Context also works).</p><p><i>🇻🇳 Mọi component có thể dựa vào nó để tạo kiểu (Context cũng được).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đưa mọi ô nhập vào Redux ⇒ dispatch mỗi phím gõ, code dài."
+        },
+        {
+          "loi": "Giữ giỏ hàng trong state của một trang ⇒ đổi trang là mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "global state",
+          "vi": "state dùng chung toàn app"
+        },
+        {
+          "en": "local state",
+          "vi": "state riêng của một component"
+        }
+      ]
+    }
+  ]
+}

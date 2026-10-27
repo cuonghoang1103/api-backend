@@ -1,0 +1,413 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-3-slot16-redux-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-3-slot16-redux-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: Flux, Redux and Redux Toolkit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "MVC vs Flux",
+        "three principles",
+        "createSlice",
+        "configureStore",
+        "hooks",
+        "middleware",
+        "thunk"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "quiz"
+      ],
+      "problemHtml": "<p>Twelve questions on Slots 16–17: why Flux replaced two-way MVC data flow, the three principles of Redux, the Redux Toolkit API, react-redux hooks, middleware and Redux Thunk — the topics FE papers test most in the last chapter.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười hai câu về Slot 16–17: vì sao Flux thay luồng dữ liệu hai chiều kiểu MVC, ba nguyên tắc của Redux, API của Redux Toolkit, hook của react-redux, middleware và Redux Thunk — những chủ đề đề FE hỏi nhiều nhất ở chương cuối.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luồng một chiều: action → dispatcher/store → view.",
+        "createSlice = reducer + action creator; configureStore = store + middleware mặc định + DevTools."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: Flux, Redux and Redux Toolkit\n\nAnswer in the panel on the left (no code needed).\n\n1. Main problem Flux solves compared with two-way MVC bindings in large apps:\n2. The three principles of Redux: (choose all)\n3. An action is…\n4. A reducer must NOT… (choose all)\n5. createSlice generates…\n6. Why can RTK reducers write state.value += 1?\n7. configureStore adds by default… (choose all)\n8. Make the store available to components:\n9. useSelector(fn)…\n10. Middleware signature:\n11. A thunk is…\n12. createAsyncThunk(\"users/fetch\", fn) dispatches…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: Flux, Redux and Redux Toolkit — answer key\n\n1. Main problem Flux solves compared with two-way MVC bindings in large apps:\n   Answer: b) Hard-to-trace cascading updates; Flux enforces one-way data flow\n   Action → dispatcher → store → view, always in one direction. / Action → dispatcher → store → view, luôn một chiều.\n\n2. The three principles of Redux: (choose all)\n   Answer: a) Single source of truth + b) State is read-only (change it by dispatching actions) + c) Changes are made with pure functions (reducers)\n   One store for the whole app. / Một store cho cả app.\n\n3. An action is…\n   Answer: b) a plain object with a type describing what happened\n   Often with a payload. / Thường kèm payload.\n\n4. A reducer must NOT… (choose all)\n   Answer: a) call an API + b) mutate its arguments (without Immer) + c) use Math.random()/Date.now()\n   Same input ⇒ same output, no side effects. / Cùng đầu vào ⇒ cùng kết quả, không tác dụng phụ.\n\n5. createSlice generates…\n   Answer: b) a reducer and action creators from the reducers you write\n   Action types are \"/\". / Kiểu action là \"/\".\n\n6. Why can RTK reducers write state.value += 1?\n   Answer: b) Immer turns the \"mutations\" on a draft into a new immutable state\n   Either mutate the draft or return a new value, not both. / Hoặc sửa bản nháp, hoặc trả giá trị mới, không làm cả hai.\n\n7. configureStore adds by default… (choose all)\n   Answer: a) redux-thunk + b) Redux DevTools support + c) development checks for mutations/serializability\n   That is why middleware: [logger] alone removes thunk. / Vì vậy middleware: [logger] một mình sẽ làm mất thunk.\n\n8. Make the store available to components:\n   Answer: a) <Provider store={store}> around the app\n   From react-redux. / Của react-redux.\n\n9. useSelector(fn)…\n   Answer: b) reads a value from the store and re-renders when it changes\n   useDispatch returns dispatch. / useDispatch trả về hàm dispatch.\n\n10. Middleware signature:\n   Answer: b) store => next => action => …\n   Call next(action) to continue the chain. / Gọi next(action) để đi tiếp.\n\n11. A thunk is…\n   Answer: b) a function dispatched instead of an object; redux-thunk calls it with (dispatch, getState)\n   Used for async logic like API calls. / Dùng cho logic bất đồng bộ như gọi API.\n\n12. createAsyncThunk(\"users/fetch\", fn) dispatches…\n   Answer: b) users/fetch/pending, then users/fetch/fulfilled or users/fetch/rejected\n   Handle them in extraReducers. / Xử lý chúng trong extraReducers.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Main problem Flux solves compared with two-way MVC bindings in large apps:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Slow CSS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hard-to-trace cascading updates; Flux enforces one-way data flow"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Missing database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Too few components"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Action → dispatcher → store → view, always in one direction.</p><p><i>🇻🇳 Action → dispatcher → store → view, luôn một chiều.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "The three principles of Redux: (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Single source of truth"
+              },
+              {
+                "ma": "b",
+                "noiDung": "State is read-only (change it by dispatching actions)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Changes are made with pure functions (reducers)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every component has its own store"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>One store for the whole app.</p><p><i>🇻🇳 Một store cho cả app.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q3",
+            "de": "An action is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a function that changes state"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a plain object with a <code>type</code> describing what happened"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a React component"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a CSS class"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Often with a payload.</p><p><i>🇻🇳 Thường kèm payload.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "A reducer must NOT… (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "call an API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "mutate its arguments (without Immer)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "use Math.random()/Date.now()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "return a new state"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>Same input ⇒ same output, no side effects.</p><p><i>🇻🇳 Cùng đầu vào ⇒ cùng kết quả, không tác dụng phụ.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q5",
+            "de": "<code>createSlice</code> generates…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a reducer and action creators from the reducers you write"
+              },
+              {
+                "ma": "c",
+                "noiDung": "React components"
+              },
+              {
+                "ma": "d",
+                "noiDung": "middleware"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Action types are \"<name>/<reducerKey>\".</p><p><i>🇻🇳 Kiểu action là \"<name>/<khoá reducer>\".</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Why can RTK reducers write <code>state.value += 1</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redux allows mutation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Immer turns the \"mutations\" on a draft into a new immutable state"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a bug"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in development"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Either mutate the draft or return a new value, not both.</p><p><i>🇻🇳 Hoặc sửa bản nháp, hoặc trả giá trị mới, không làm cả hai.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "<code>configureStore</code> adds by default… (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "redux-thunk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redux DevTools support"
+              },
+              {
+                "ma": "c",
+                "noiDung": "development checks for mutations/serializability"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a REST client"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "c"
+              ]
+            ],
+            "giaiThich": "<p>That is why middleware: [logger] alone removes thunk.</p><p><i>🇻🇳 Vì vậy middleware: [logger] một mình sẽ làm mất thunk.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q8",
+            "de": "Make the store available to components:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>&lt;Provider store={store}&gt;</code> around the app"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Import the store in every component"
+              },
+              {
+                "ma": "c",
+                "noiDung": "window.store"
+              },
+              {
+                "ma": "d",
+                "noiDung": "useContext(store)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>From react-redux.</p><p><i>🇻🇳 Của react-redux.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "<code>useSelector(fn)</code>…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dispatches actions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reads a value from the store and re-renders when it changes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "creates a slice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "selects DOM elements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>useDispatch returns dispatch.</p><p><i>🇻🇳 useDispatch trả về hàm dispatch.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "Middleware signature:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>(state, action) =&gt; state</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>store =&gt; next =&gt; action =&gt; …</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>(props) =&gt; JSX</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>async () =&gt; {}</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Call next(action) to continue the chain.</p><p><i>🇻🇳 Gọi next(action) để đi tiếp.</i></p>"
+          },
+          {
+            "ma": "q11",
+            "de": "A thunk is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an action type"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a function dispatched instead of an object; redux-thunk calls it with (dispatch, getState)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a reducer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a selector"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Used for async logic like API calls.</p><p><i>🇻🇳 Dùng cho logic bất đồng bộ như gọi API.</i></p>"
+          },
+          {
+            "ma": "q12",
+            "de": "<code>createAsyncThunk(\"users/fetch\", fn)</code> dispatches…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only users/fetch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "users/fetch/pending, then users/fetch/fulfilled or users/fetch/rejected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing until you dispatch manually"
+              },
+              {
+                "ma": "d",
+                "noiDung": "START and END"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Handle them in extraReducers.</p><p><i>🇻🇳 Xử lý chúng trong extraReducers.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm useSelector (đọc) với useDispatch (gửi)."
+        },
+        {
+          "loi": "Nghĩ reducer được phép gọi API."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unidirectional data flow",
+          "vi": "luồng dữ liệu một chiều"
+        }
+      ]
+    }
+  ]
+}

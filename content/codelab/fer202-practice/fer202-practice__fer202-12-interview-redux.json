@@ -1,0 +1,267 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-interview-redux",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-1-redux-toolkit"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — Redux & Redux Toolkit (Chapter 12)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "Redux & Redux Toolkit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>Redux & Redux Toolkit</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>Redux & Redux Toolkit</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Redux & Redux Toolkit (Chapter 12)\n\nAnswer in the panel on the left (no code needed).\n\n1. When do you need Redux at all?\n2. Explain the Redux data flow.\n3. What problems does Redux Toolkit solve over classic Redux?\n4. Where do side effects go in Redux?\n5. Why use selectors, and when createSelector?\n6. How would you handle loading and errors for API data in Redux?\n7. Context vs Redux?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Redux & Redux Toolkit (Chapter 12) — answer key\n\n1. When do you need Redux at all?\n   Answer: b) When a lot of state is shared across distant parts of the app, updated from many places, and you benefit from predictable updates, devtools and middleware; small apps are fine with useState/Context.\n   Model answer: \"I reach for Redux when global client state — cart, auth, complex UI state — is read and changed from many places and I want a predictable, debuggable flow with time-travel devtools. For server data I prefer RTK Query or TanStack Query, and for small apps useState plus Context is enough.\" / Trả lời mẫu: \"Tôi dùng Redux khi state phía client toàn cục — giỏ hàng, đăng nhập, state giao diện phức tạp — được đọc và đổi từ nhiều nơi, và tôi muốn luồng dự đoán được, gỡ lỗi được bằng devtools. Dữ liệu server thì tôi thích RTK Query hoặc TanStack Query; app nhỏ thì useState với Context là đủ.\"\n\n2. Explain the Redux data flow.\n   Answer: b) UI dispatches an action → middleware → reducers compute the new state → store notifies subscribers → components re-render with selectors.\n   Model answer: \"An event dispatches an action describing what happened. It passes through middleware such as thunk or a logger, reaches the reducers which compute the next state purely, the store updates, and react-redux re-renders the components whose selected values changed.\" / Trả lời mẫu: \"Sự kiện dispatch một action mô tả chuyện đã xảy ra. Action đi qua middleware như thunk hay logger, tới reducer tính state kế tiếp một cách thuần, store cập nhật, và react-redux vẽ lại các component có giá trị đã chọn bị đổi.\"\n\n3. What problems does Redux Toolkit solve over classic Redux?\n   Answer: b) Less boilerplate: createSlice generates actions and reducers, Immer allows \"mutating\" syntax, configureStore sets up thunk and devtools, createAsyncThunk standardises async.\n   Model answer: \"Classic Redux needed action type constants, action creators, switch reducers with spread everywhere and manual store setup. RTK folds that into createSlice and configureStore, uses Immer so updates are readable, and gives createAsyncThunk and RTK Query for async data.\" / Trả lời mẫu: \"Redux cổ điển cần hằng kiểu action, action creator, reducer switch với spread khắp nơi và tự dựng store. RTK gộp lại thành createSlice và configureStore, dùng Immer cho cập nhật dễ đọc, và có createAsyncThunk, RTK Query cho dữ liệu bất đồng bộ.\"\n\n4. Where do side effects go in Redux?\n   Answer: b) Outside reducers: thunks (or listener middleware/sagas) for async flows, custom middleware or store.subscribe for cross-cutting effects like persistence.\n   Model answer: \"Reducers stay pure. API calls and multi-step workflows go into thunks; effects that react to many actions, like logging or saving to localStorage, go into middleware or a store subscription.\" / Trả lời mẫu: \"Reducer giữ thuần. Gọi API và quy trình nhiều bước nằm trong thunk; tác dụng phản ứng với nhiều action, như log hay lưu localStorage, nằm trong middleware hoặc subscribe của store.\"\n\n5. Why use selectors, and when createSelector?\n   Answer: b) Selectors keep components independent of the state shape and keep state minimal; createSelector memoizes derived data (filtered lists, totals) so it is recomputed only when inputs change.\n   Model answer: \"Selectors centralise how state is read, so renaming a field touches one file. For derived data that creates new arrays or objects I use createSelector, otherwise useSelector returns a new reference every time and the component re-renders needlessly.\" / Trả lời mẫu: \"Selector gom cách đọc state về một chỗ, đổi tên trường chỉ sửa một tệp. Dữ liệu suy ra tạo mảng/object mới thì tôi dùng createSelector, nếu không useSelector trả tham chiếu mới mỗi lần và component vẽ lại thừa.\"\n\n6. How would you handle loading and errors for API data in Redux?\n   Answer: b) Per-slice status (idle/loading/succeeded/failed) and error set by pending/fulfilled/rejected of createAsyncThunk; rejectWithValue for friendly messages; guard against duplicate or stale requests.\n   Model answer: \"Each slice tracks status and error, updated in extraReducers from the thunk's lifecycle actions. I use rejectWithValue for messages the UI can show, the condition option to avoid duplicate requests, and requestId checks so stale responses are ignored.\" / Trả lời mẫu: \"Mỗi slice giữ status và error, cập nhật trong extraReducers từ action vòng đời của thunk. Tôi dùng rejectWithValue cho thông báo hiển thị được, tuỳ chọn condition để tránh gọi trùng, và so requestId để bỏ phản hồi cũ.\"\n\n7. Context vs Redux?\n   Answer: b) Context passes values down; combined with useReducer it suits small/medium shared state. Redux adds a single store with middleware, devtools, selector-based subscriptions and patterns for large teams.\n   Model answer: \"Context is dependency injection for values. With useReducer it covers simple shared state like theme or auth. When updates are frequent and many components subscribe to different parts, Redux's selector subscriptions, middleware and devtools pay off.\" / Trả lời mẫu: \"Context là cách truyền giá trị xuống. Kết hợp useReducer đủ cho state dùng chung đơn giản như theme, đăng nhập. Khi cập nhật dày và nhiều component theo dõi các phần khác nhau, selector, middleware và devtools của Redux mới đáng giá.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "When do you need Redux at all?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every React app."
+              },
+              {
+                "ma": "b",
+                "noiDung": "When a lot of state is shared across distant parts of the app, updated from many places, and you benefit from predictable updates, devtools and middleware; small apps are fine with useState/Context."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only with class components."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never, hooks replaced it."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I reach for Redux when global client state — cart, auth, complex UI state — is read and changed from many places and I want a predictable, debuggable flow with time-travel devtools. For server data I prefer RTK Query or TanStack Query, and for small apps useState plus Context is enough.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi dùng Redux khi state phía client toàn cục — giỏ hàng, đăng nhập, state giao diện phức tạp — được đọc và đổi từ nhiều nơi, và tôi muốn luồng dự đoán được, gỡ lỗi được bằng devtools. Dữ liệu server thì tôi thích RTK Query hoặc TanStack Query; app nhỏ thì useState với Context là đủ.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Explain the Redux data flow.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Components write to the store directly."
+              },
+              {
+                "ma": "b",
+                "noiDung": "UI dispatches an action → middleware → reducers compute the new state → store notifies subscribers → components re-render with selectors."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The store calls the API."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Two-way binding."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"An event dispatches an action describing what happened. It passes through middleware such as thunk or a logger, reaches the reducers which compute the next state purely, the store updates, and react-redux re-renders the components whose selected values changed.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Sự kiện dispatch một action mô tả chuyện đã xảy ra. Action đi qua middleware như thunk hay logger, tới reducer tính state kế tiếp một cách thuần, store cập nhật, và react-redux vẽ lại các component có giá trị đã chọn bị đổi.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "What problems does Redux Toolkit solve over classic Redux?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Less boilerplate: createSlice generates actions and reducers, Immer allows \"mutating\" syntax, configureStore sets up thunk and devtools, createAsyncThunk standardises async."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It removes the store."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It replaces React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Classic Redux needed action type constants, action creators, switch reducers with spread everywhere and manual store setup. RTK folds that into createSlice and configureStore, uses Immer so updates are readable, and gives createAsyncThunk and RTK Query for async data.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Redux cổ điển cần hằng kiểu action, action creator, reducer switch với spread khắp nơi và tự dựng store. RTK gộp lại thành createSlice và configureStore, dùng Immer cho cập nhật dễ đọc, và có createAsyncThunk, RTK Query cho dữ liệu bất đồng bộ.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Where do side effects go in Redux?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In reducers."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Outside reducers: thunks (or listener middleware/sagas) for async flows, custom middleware or store.subscribe for cross-cutting effects like persistence."
+              },
+              {
+                "ma": "c",
+                "noiDung": "In action objects."
+              },
+              {
+                "ma": "d",
+                "noiDung": "In selectors."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Reducers stay pure. API calls and multi-step workflows go into thunks; effects that react to many actions, like logging or saving to localStorage, go into middleware or a store subscription.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Reducer giữ thuần. Gọi API và quy trình nhiều bước nằm trong thunk; tác dụng phản ứng với nhiều action, như log hay lưu localStorage, nằm trong middleware hoặc subscribe của store.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "Why use selectors, and when createSelector?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are required syntax."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Selectors keep components independent of the state shape and keep state minimal; createSelector memoizes derived data (filtered lists, totals) so it is recomputed only when inputs change."
+              },
+              {
+                "ma": "c",
+                "noiDung": "To dispatch actions."
+              },
+              {
+                "ma": "d",
+                "noiDung": "They replace reducers."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Selectors centralise how state is read, so renaming a field touches one file. For derived data that creates new arrays or objects I use createSelector, otherwise useSelector returns a new reference every time and the component re-renders needlessly.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Selector gom cách đọc state về một chỗ, đổi tên trường chỉ sửa một tệp. Dữ liệu suy ra tạo mảng/object mới thì tôi dùng createSelector, nếu không useSelector trả tham chiếu mới mỗi lần và component vẽ lại thừa.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "How would you handle loading and errors for API data in Redux?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Global boolean only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Per-slice status (idle/loading/succeeded/failed) and error set by pending/fulfilled/rejected of createAsyncThunk; rejectWithValue for friendly messages; guard against duplicate or stale requests."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ignore errors."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Throw inside reducers."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Each slice tracks status and error, updated in extraReducers from the thunk's lifecycle actions. I use rejectWithValue for messages the UI can show, the condition option to avoid duplicate requests, and requestId checks so stale responses are ignored.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Mỗi slice giữ status và error, cập nhật trong extraReducers từ action vòng đời của thunk. Tôi dùng rejectWithValue cho thông báo hiển thị được, tuỳ chọn condition để tránh gọi trùng, và so requestId để bỏ phản hồi cũ.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Context vs Redux?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Context is a state manager identical to Redux."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Context passes values down; combined with useReducer it suits small/medium shared state. Redux adds a single store with middleware, devtools, selector-based subscriptions and patterns for large teams."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redux is built on Context only for themes."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never use Context."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Context is dependency injection for values. With useReducer it covers simple shared state like theme or auth. When updates are frequent and many components subscribe to different parts, Redux's selector subscriptions, middleware and devtools pay off.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Context là cách truyền giá trị xuống. Kết hợp useReducer đủ cho state dùng chung đơn giản như theme, đăng nhập. Khi cập nhật dày và nhiều component theo dõi các phần khác nhau, selector, middleware và devtools của Redux mới đáng giá.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

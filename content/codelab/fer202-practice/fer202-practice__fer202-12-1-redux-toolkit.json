@@ -1,0 +1,932 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-12-1-redux-toolkit",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-12-1-redux-toolkit"
+  },
+  "exercises": [
+    {
+      "title": "Build a mini createStore (the three Redux principles)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "single source of truth",
+        "state is read-only",
+        "pure reducers",
+        "subscribe/unsubscribe"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "javascript"
+      ],
+      "problemHtml": "<p>Redux is small enough to write yourself — doing it once makes the three principles concrete. Implement <code>createStore(reducer, preloadedState)</code> returning <code>{ getState, dispatch, subscribe }</code>. On creation, dispatch <code>{ type: \"@@INIT\" }</code> so the reducer can provide its initial state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>dispatch(action)</code>: action must be a plain object with a <code>type</code> — otherwise throw <code>Error(\"Actions must be plain objects with a type\")</code>; computes the new state, calls every listener, returns the action.</li>\n  <li><code>subscribe(listener)</code> returns an <code>unsubscribe</code> function.</li>\n</ul>",
+      "problemHtmlVi": "<p>Redux đủ nhỏ để tự viết — làm một lần là hiểu ba nguyên tắc. Cài <code>createStore(reducer, preloadedState)</code> trả <code>{ getState, dispatch, subscribe }</code>. Khi tạo, dispatch <code>{ type: \"@@INIT\" }</code> để reducer cấp state ban đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>dispatch(action)</code>: action phải là object thường có <code>type</code> — nếu không ném <code>Error(\"Actions must be plain objects with a type\")</code>; tính state mới, gọi mọi listener, trả lại action.</li>\n  <li><code>subscribe(listener)</code> trả hàm <code>unsubscribe</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "createStore(counter).dispatch({ type: \"inc\" }); getState()",
+          "output": "1",
+          "explanation": "The reducer default parameter gives 0 on @@INIT.|||Tham số mặc định của reducer cho 0 lúc @@INIT."
+        }
+      ],
+      "hintsJson": [
+        "let state = preloadedState; const listeners = []; function dispatch(action) { … state = reducer(state, action); listeners.forEach((l) => l()); return action; } dispatch({ type: \"@@INIT\" });",
+        "subscribe: listeners.push(l); return () => { const i = listeners.indexOf(l); if (i >= 0) listeners.splice(i, 1); };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — STARTER\nfunction createStore(reducer, preloadedState) {\n  let state = preloadedState;\n  return {\n    getState: () => state,\n    dispatch: (action) => { state = reducer(state, action); },\n    subscribe: () => {},\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — Redux tối giản: một state, đổi qua dispatch, reducer thuần, listener\nfunction createStore(reducer, preloadedState) {\n  let state = preloadedState;\n  const listeners = [];\n\n  function getState() {\n    return state;\n  }\n\n  function dispatch(action) {\n    if (action === null || typeof action !== 'object' || Array.isArray(action) || typeof action.type !== 'string') {\n      throw new Error('Actions must be plain objects with a type');\n    }\n    state = reducer(state, action);\n    listeners.slice().forEach((listener) => listener()); // bản sao: unsubscribe trong lúc gọi vẫn an toàn\n    return action;\n  }\n\n  function subscribe(listener) {\n    listeners.push(listener);\n    return function unsubscribe() {\n      const i = listeners.indexOf(listener);\n      if (i >= 0) listeners.splice(i, 1);\n    };\n  }\n\n  dispatch({ type: '@@INIT' });\n  return { getState, dispatch, subscribe };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba nguyên tắc: (1) một store duy nhất, (2) chỉ đổi state bằng cách dispatch action, (3) đổi state bằng reducer thuần. createStore chỉ là vài dòng nối ba điều đó lại; react-redux dùng subscribe để biết khi nào vẽ lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Initial state from the reducer",
+            "chuanBi": "const counter = (s = 0, a) => (a.type === \"inc\" ? s + 1 : s);",
+            "goi": "createStore(counter).getState()",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "dispatch updates the state",
+            "chuanBi": "const counter = (s = 0, a) => (a.type === \"inc\" ? s + 1 : s); const st = createStore(counter); st.dispatch({ type: \"inc\" }); st.dispatch({ type: \"inc\" });",
+            "goi": "st.getState()",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "preloadedState wins over the default",
+            "chuanBi": "const counter = (s = 0, a) => (a.type === \"inc\" ? s + 1 : s); const st = createStore(counter, 10); st.dispatch({ type: \"inc\" });",
+            "goi": "st.getState()",
+            "mongDoi": 11
+          },
+          {
+            "moTa": "Listeners run after the state changes",
+            "chuanBi": "const counter = (s = 0, a) => (a.type === \"inc\" ? s + 1 : s); const st = createStore(counter); const seen = []; st.subscribe(() => seen.push(st.getState())); st.dispatch({ type: \"inc\" }); st.dispatch({ type: \"x\" });",
+            "goi": "seen",
+            "mongDoi": [
+              1,
+              1
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "unsubscribe stops notifications",
+            "chuanBi": "const st = createStore((s = 0, a) => s + 1); let n = 0; const un = st.subscribe(() => n++); st.dispatch({ type: \"a\" }); un(); st.dispatch({ type: \"b\" });",
+            "goi": "n",
+            "mongDoi": 1
+          },
+          {
+            "an": true,
+            "moTa": "Rejects actions without a type",
+            "chuanBi": "const st = createStore((s = 0) => s);",
+            "goi": "st.dispatch(() => {})",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Actions must be plain objects with a type$"
+            }
+          },
+          {
+            "an": true,
+            "moTa": "dispatch returns the action",
+            "chuanBi": "const st = createStore((s = 0) => s);",
+            "goi": "st.dispatch({ type: \"hello\", payload: 1 })",
+            "mongDoi": {
+              "type": "hello",
+              "payload": 1
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả về <code>state</code> rồi để nơi khác sửa trực tiếp ⇒ phá nguyên tắc \"state chỉ đọc\" (ở đây chấp nhận, Redux thật cũng không đóng băng)."
+        },
+        {
+          "loi": "Gọi listener TRƯỚC khi cập nhật state ⇒ listener đọc state cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "store",
+          "vi": "kho chứa state duy nhất của app"
+        },
+        {
+          "en": "listener",
+          "vi": "hàm được gọi sau mỗi lần dispatch"
+        }
+      ]
+    },
+    {
+      "title": "counterSlice + configureStore + useSelector/useDispatch",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "createSlice",
+        "configureStore",
+        "Provider",
+        "useSelector",
+        "useDispatch",
+        "payload"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "redux-toolkit",
+        "exercise-24"
+      ],
+      "problemHtml": "<p>The Exercise 24 setup. <code>counterSlice</code> (name <code>counter</code>, state <code>{ value: 0 }</code>) with <code>increment</code>, <code>decrement</code>, <code>incrementByAmount(n)</code>, <code>reset</code>, and a selector <code>selectCount</code>. <code>index.js</code> already wraps <code>&lt;App /&gt;</code> in <code>&lt;Provider store={store}&gt;</code>. Wire the UI with <code>useSelector</code> and <code>useDispatch</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#count</code>, <code>#inc</code>, <code>#dec</code>, <code>#amount</code> (number input, default 5) + <code>#add-amount</code>, <code>#reset</code>.</li>\n  <li>A second component <code>#double</code> (<code>Double: 10</code>) reads the SAME store value.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thiết lập của Exercise 24. <code>counterSlice</code> (name <code>counter</code>, state <code>{ value: 0 }</code>) có <code>increment</code>, <code>decrement</code>, <code>incrementByAmount(n)</code>, <code>reset</code>, và selector <code>selectCount</code>. <code>index.js</code> đã bọc <code>&lt;App /&gt;</code> trong <code>&lt;Provider store={store}&gt;</code>. Nối giao diện bằng <code>useSelector</code> và <code>useDispatch</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#count</code>, <code>#inc</code>, <code>#dec</code>, <code>#amount</code> (ô số, mặc định 5) + <code>#add-amount</code>, <code>#reset</code>.</li>\n  <li>Component thứ hai <code>#double</code> (<code>Double: 10</code>) đọc CÙNG giá trị trong store.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "amount 5, Add amount, +",
+          "output": "count 6 · Double: 12",
+          "explanation": "dispatch(incrementByAmount(Number(amount)))|||dispatch(incrementByAmount(Number(amount)))"
+        }
+      ],
+      "hintsJson": [
+        "const count = useSelector(selectCount); const dispatch = useDispatch();",
+        "onClick={() => dispatch(incrementByAmount(Number(amount) || 0))}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <button id=\"inc\" onClick={() => setCount(count + 1)}>+</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js — STARTER: viết bằng createSlice\nexport const increment = () => ({ type: 'counter/increment' });\nexport const selectCount = () => 0;\nexport default function counterReducer(state = { value: 0 }) {\n  return state;\n}\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from '../features/counter/counterSlice';\n\nexport const store = configureStore({ reducer: { counter: counterReducer } });\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — đọc bằng useSelector, đổi bằng dispatch(action creator)\nimport { useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { decrement, increment, incrementByAmount, reset, selectCount } from './features/counter/counterSlice';\n\nfunction DoubleView() {\n  const count = useSelector(selectCount);\n  return <p id=\"double\">Double: {count * 2}</p>;\n}\n\nexport default function App() {\n  const count = useSelector(selectCount);\n  const dispatch = useDispatch();\n  const [amount, setAmount] = useState('5');\n\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <button id=\"inc\" type=\"button\" onClick={() => dispatch(increment())}>+</button>\n      <button id=\"dec\" type=\"button\" onClick={() => dispatch(decrement())}>−</button>\n      <input id=\"amount\" type=\"number\" value={amount} onChange={(e) => setAmount(e.target.value)} />\n      <button id=\"add-amount\" type=\"button\" onClick={() => dispatch(incrementByAmount(Number(amount) || 0))}>Add amount</button>\n      <button id=\"reset\" type=\"button\" onClick={() => dispatch(reset())}>Reset</button>\n      <DoubleView />\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/counter/counterSlice.js",
+          "language": "javascript",
+          "code": "// src/features/counter/counterSlice.js — createSlice sinh action creator + reducer\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: (state) => {\n      state.value += 1; // Immer: \"sửa\" bản nháp, RTK tạo state mới\n    },\n    decrement: (state) => {\n      state.value -= 1;\n    },\n    incrementByAmount: (state, action) => {\n      state.value += action.payload;\n    },\n    reset: () => ({ value: 0 }),\n  },\n});\n\nexport const { increment, decrement, incrementByAmount, reset } = counterSlice.actions;\nexport const selectCount = (state) => state.counter.value;\nexport default counterSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — một store cho cả app\nimport { configureStore } from '@reduxjs/toolkit';\nimport counterReducer from '../features/counter/counterSlice';\n\nexport const store = configureStore({\n  reducer: {\n    counter: counterReducer,\n  },\n});\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>createSlice sinh <code>type</code> dạng <code>\"counter/increment\"</code> và action creator tương ứng. Nhờ Immer, reducer viết kiểu \"sửa trực tiếp\" mà vẫn bất biến. Mọi component dùng useSelector cùng một ô state sẽ vẽ lại khi nó đổi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "kiem": [
+          {
+            "moTa": "Increment and decrement",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#dec",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "incrementByAmount with a number payload",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "12",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#amount",
+                "giaTri": "12"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#add-amount",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Another component reads the same state",
+            "kiem": "text",
+            "selector": "#double",
+            "giaTri": "Double: 12",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#add-amount",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Reset",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#reset",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Slice made with createSlice",
+            "kiem": "ma-nguon",
+            "tep": "src/features/counter/counterSlice.js",
+            "khop": "createSlice\\(\\s*\\{[\\s\\S]*name:\\s*['\"]counter['\"]"
+          },
+          {
+            "an": true,
+            "moTa": "App uses useSelector + useDispatch (no local count state)",
+            "kiem": "ma-nguon",
+            "tep": "src/App.js",
+            "khop": "^(?=[\\s\\S]*useSelector\\()(?=[\\s\\S]*useDispatch\\()(?![\\s\\S]*\\[\\s*count\\s*,\\s*setCount\\s*\\])"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>dispatch(increment)</code> (thiếu ngoặc) ⇒ dispatch một hàm ⇒ thunk chạy nó, không có gì xảy ra."
+        },
+        {
+          "loi": "Truyền chuỗi \"5\" làm payload ⇒ 0 + \"5\" = \"05\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "slice",
+          "vi": "một phần state + reducer + action"
+        },
+        {
+          "en": "action creator",
+          "vi": "hàm tạo action: increment() ⇒ { type: \"counter/increment\" }"
+        }
+      ]
+    },
+    {
+      "title": "Todos slice with Immer and selectors",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "Immer drafts",
+        "prepare callback",
+        "nanoid",
+        "selectors",
+        "derived data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "redux-toolkit"
+      ],
+      "problemHtml": "<p>A todo app whose state lives in Redux. Reducers use Immer (\"mutate\" the draft); <code>todoAdded</code> uses a <b>prepare callback</b> to build the payload (<code>nanoid()</code> id, trimmed text) so components dispatch just the text. Visible items and the remaining count are <b>selectors</b>, not stored state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Form <code>#todo-form</code> + <code>#todo-text</code> (blank ignored). Rows <code>li.todo</code> (<code>.text</code>, checkbox <code>.toggle</code>, <code>.btn-remove</code>), class <code>done</code> when done.</li>\n  <li>Filter buttons <code>#f-all</code>, <code>#f-active</code>, <code>#f-done</code>; <code>#remaining</code> <code>2 items left</code>; <code>#clear-done</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>App việc cần làm, state nằm trong Redux. Reducer dùng Immer (\"sửa\" bản nháp); <code>todoAdded</code> dùng <b>prepare callback</b> để dựng payload (id <code>nanoid()</code>, chữ đã trim) nên component chỉ cần dispatch chuỗi. Danh sách hiển thị và số việc còn lại là <b>selector</b>, không lưu thành state.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Form <code>#todo-form</code> + <code>#todo-text</code> (rỗng bỏ qua). Dòng <code>li.todo</code> (<code>.text</code>, ô chọn <code>.toggle</code>, <code>.btn-remove</code>), có class <code>done</code> khi xong.</li>\n  <li>Nút lọc <code>#f-all</code>, <code>#f-active</code>, <code>#f-done</code>; <code>#remaining</code> <code>2 items left</code>; <code>#clear-done</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add A, B, C; toggle B; filter active",
+          "output": "A, C · 2 items left",
+          "explanation": "selectVisibleTodos derives the list from items + filter.|||selectVisibleTodos tính danh sách từ items + filter."
+        }
+      ],
+      "hintsJson": [
+        "todoAdded: { reducer(state, action) { state.items.push(action.payload); }, prepare(text) { return { payload: { id: nanoid(), text: text.trim(), done: false } }; } }",
+        "todoToggled(state, action) { const t = state.items.find((x) => x.id === action.payload); if (t) t.done = !t.done; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport { todoAdded, selectVisibleTodos } from './features/todos/todosSlice';\n\nexport default function App() {\n  const todos = useSelector(selectVisibleTodos);\n  const dispatch = useDispatch();\n  const [text, setText] = useState('');\n  return (\n    <form id=\"todo-form\" onSubmit={(e) => { e.preventDefault(); dispatch(todoAdded(text)); }}>\n      <input id=\"todo-text\" value={text} onChange={(e) => setText(e.target.value)} />\n      <ul>{todos.map((t) => <li key={t.id} className=\"todo\"><span className=\"text\">{t.text}</span></li>)}</ul>\n    </form>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/todos/todosSlice.js",
+          "language": "javascript",
+          "code": "// src/features/todos/todosSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst todosSlice = createSlice({\n  name: 'todos',\n  initialState: { items: [], filter: 'all' },\n  reducers: {\n    todoAdded(state, action) {\n      return state; // TODO\n    },\n  },\n});\n\nexport const { todoAdded } = todosSlice.actions;\nexport const todoToggled = () => ({ type: 'noop' });\nexport const todoRemoved = () => ({ type: 'noop' });\nexport const filterChanged = () => ({ type: 'noop' });\nexport const completedCleared = () => ({ type: 'noop' });\nexport const selectVisibleTodos = (state) => state.todos.items;\nexport const selectRemaining = () => 0;\nexport const selectFilter = (state) => state.todos.filter;\nexport default todosSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport todosReducer from '../features/todos/todosSlice';\n\nexport const store = configureStore({ reducer: { todos: todosReducer } });\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — component chỉ đọc selector và dispatch action\nimport { useState } from 'react';\nimport { useDispatch, useSelector } from 'react-redux';\nimport {\n  completedCleared, filterChanged, selectFilter, selectRemaining, selectVisibleTodos,\n  todoAdded, todoRemoved, todoToggled,\n} from './features/todos/todosSlice';\n\nconst FILTERS = [['all', 'All'], ['active', 'Active'], ['done', 'Done']];\n\nexport default function App() {\n  const todos = useSelector(selectVisibleTodos);\n  const remaining = useSelector(selectRemaining);\n  const filter = useSelector(selectFilter);\n  const dispatch = useDispatch();\n  const [text, setText] = useState('');\n\n  const submit = (e) => {\n    e.preventDefault();\n    if (!text.trim()) return;\n    dispatch(todoAdded(text));\n    setText('');\n  };\n\n  return (\n    <div>\n      <form id=\"todo-form\" onSubmit={submit}>\n        <input id=\"todo-text\" value={text} onChange={(e) => setText(e.target.value)} placeholder=\"What needs to be done?\" />\n      </form>\n      <ul>\n        {todos.map((t) => (\n          <li key={t.id} className={t.done ? 'todo done' : 'todo'}>\n            <input type=\"checkbox\" className=\"toggle\" checked={t.done} onChange={() => dispatch(todoToggled(t.id))} />\n            <span className=\"text\">{t.text}</span>\n            <button type=\"button\" className=\"btn-remove\" onClick={() => dispatch(todoRemoved(t.id))}>×</button>\n          </li>\n        ))}\n      </ul>\n      <p id=\"remaining\">{remaining} items left</p>\n      {FILTERS.map(([value, label]) => (\n        <button key={value} id={`f-${value}`} type=\"button\" className={filter === value ? 'active' : ''} onClick={() => dispatch(filterChanged(value))}>{label}</button>\n      ))}\n      <button id=\"clear-done\" type=\"button\" onClick={() => dispatch(completedCleared())}>Clear done</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/todos/todosSlice.js",
+          "language": "javascript",
+          "code": "// src/features/todos/todosSlice.js — reducer \"sửa\" bản nháp (Immer) + prepare callback tạo id\nimport { createSlice, nanoid } from '@reduxjs/toolkit';\n\nconst todosSlice = createSlice({\n  name: 'todos',\n  initialState: { items: [], filter: 'all' },\n  reducers: {\n    todoAdded: {\n      reducer(state, action) {\n        state.items.push(action.payload);\n      },\n      prepare(text) {\n        return { payload: { id: nanoid(), text: text.trim(), done: false } };\n      },\n    },\n    todoToggled(state, action) {\n      const todo = state.items.find((t) => t.id === action.payload);\n      if (todo) todo.done = !todo.done;\n    },\n    todoRemoved(state, action) {\n      state.items = state.items.filter((t) => t.id !== action.payload);\n    },\n    filterChanged(state, action) {\n      state.filter = action.payload;\n    },\n    completedCleared(state) {\n      state.items = state.items.filter((t) => !t.done);\n    },\n  },\n});\n\nexport const { todoAdded, todoToggled, todoRemoved, filterChanged, completedCleared } = todosSlice.actions;\n\nexport const selectFilter = (state) => state.todos.filter;\nexport const selectRemaining = (state) => state.todos.items.filter((t) => !t.done).length;\nexport const selectVisibleTodos = (state) => {\n  const { items, filter } = state.todos;\n  if (filter === 'active') return items.filter((t) => !t.done);\n  if (filter === 'done') return items.filter((t) => t.done);\n  return items;\n};\n\nexport default todosSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js\nimport { configureStore } from '@reduxjs/toolkit';\nimport todosReducer from '../features/todos/todosSlice';\n\nexport const store = configureStore({ reducer: { todos: todosReducer } });\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Immer ghi lại các thay đổi trên bản nháp rồi tạo state mới. Prepare callback giữ logic tạo dữ liệu trong slice (id, trim) thay vì rải ra component. Selector giữ state tối thiểu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "kiem": [
+          {
+            "moTa": "Adds trimmed todos",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo .text",
+            "mongDoi": [
+              "Learn Redux",
+              "Write slice"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "  Learn Redux "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "Write slice"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Toggle + remaining count",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo.done .text, #remaining",
+            "mongDoi": [
+              "B",
+              "2 items left"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "C"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.todo:nth-child(2) .toggle",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Active filter",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo .text",
+            "mongDoi": [
+              "A",
+              "C"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "C"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.todo:nth-child(2) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#f-active",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Clear done",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo .text",
+            "mongDoi": [
+              "A"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.todo:nth-child(2) .toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#clear-done",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Remove one",
+            "kiem": "so-luong",
+            "selector": "li.todo",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.todo:nth-child(1) .btn-remove",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Blank ignored",
+            "kiem": "so-luong",
+            "selector": "li.todo",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-text",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "prepare callback in the slice",
+            "kiem": "ma-nguon",
+            "tep": "src/features/todos/todosSlice.js",
+            "khop": "prepare\\s*\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vừa sửa nháp vừa <code>return</code> object mới trong cùng reducer ⇒ Immer báo lỗi."
+        },
+        {
+          "loi": "Lưu <code>visibleTodos</code> thành state riêng ⇒ quên cập nhật khi thêm/xoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "draft",
+          "vi": "bản nháp Immer cho phép \"sửa\" mà vẫn bất biến"
+        },
+        {
+          "en": "selector",
+          "vi": "hàm đọc/tính dữ liệu từ state"
+        }
+      ]
+    },
+    {
+      "title": "Cart: createSelector, preloadedState and persistence",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "createSelector (memoized)",
+        "preloadedState",
+        "store.subscribe",
+        "persisting part of the state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "redux",
+        "redux-toolkit"
+      ],
+      "problemHtml": "<p>A shopping cart in Redux that survives a reload. <code>selectCount</code> and <code>selectTotal</code> are memoized with <code>createSelector</code>. On startup <code>store.js</code> reads localStorage key <code>cart</code> (an array of lines) into <code>preloadedState</code>; afterwards it writes the lines back whenever they change (<code>store.subscribe</code>). Corrupted storage must not crash the app.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Products (given in App): Pen 15000, Notebook 32000, Bag 250000 — buttons <code>.btn-add</code>. Lines <code>li.line</code> (<code>.name</code>, <code>.qty</code> number input, <code>.subtotal</code>). Qty 0 removes the line.</li>\n  <li><code>#cart-count</code> (total quantity), <code>#cart-total</code> <code>Total: 62,000 ₫</code>, <code>#clear</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giỏ hàng Redux còn nguyên sau khi tải lại. <code>selectCount</code> và <code>selectTotal</code> có ghi nhớ bằng <code>createSelector</code>. Khi khởi động <code>store.js</code> đọc localStorage khoá <code>cart</code> (mảng dòng) vào <code>preloadedState</code>; sau đó ghi lại mỗi khi các dòng đổi (<code>store.subscribe</code>). Storage hỏng không được làm sập app.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sản phẩm (đã cho trong App): Pen 15000, Notebook 32000, Bag 250000 — nút <code>.btn-add</code>. Dòng <code>li.line</code> (<code>.name</code>, ô số <code>.qty</code>, <code>.subtotal</code>). Số lượng 0 thì bỏ dòng.</li>\n  <li><code>#cart-count</code> (tổng số lượng), <code>#cart-total</code> <code>Total: 62,000 ₫</code>, <code>#clear</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add Pen ×2, Notebook ×1, reload",
+          "output": "cart restored · Total: 62,000 ₫",
+          "explanation": "preloadedState: { cart: { lines } }|||preloadedState: { cart: { lines } }"
+        }
+      ],
+      "hintsJson": [
+        "export const selectTotal = createSelector([selectLines], (lines) => lines.reduce((s, l) => s + l.qty * l.price, 0));",
+        "configureStore({ reducer, preloadedState: loadCart() }); store.subscribe(() => localStorage.setItem(\"cart\", JSON.stringify(store.getState().cart.lines)));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useDispatch, useSelector } from 'react-redux';\nimport { added, selectCount, selectLines } from './features/cart/cartSlice';\n\nconst PRODUCTS = [\n  { id: 1, name: 'Pen', price: 15000 },\n  { id: 2, name: 'Notebook', price: 32000 },\n  { id: 3, name: 'Bag', price: 250000 },\n];\n\nexport default function App() {\n  const lines = useSelector(selectLines);\n  const count = useSelector(selectCount);\n  const dispatch = useDispatch();\n  return (\n    <div>\n      {PRODUCTS.map((p) => <button key={p.id} className=\"btn-add\" onClick={() => dispatch(added(p))}>{p.name}</button>)}\n      <span id=\"cart-count\">{count}</span>\n      <ul>{lines.map((l, i) => <li key={i} className=\"line\"><span className=\"name\">{l.name}</span></li>)}</ul>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — STARTER\nimport { createSlice } from '@reduxjs/toolkit';\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { lines: [] },\n  reducers: {\n    added(state, action) {\n      state.lines.push({ ...action.payload, qty: 1 });\n    },\n    qtyChanged() {},\n    cleared() {},\n  },\n});\n\nexport const { added, qtyChanged, cleared } = cartSlice.actions;\nexport const selectLines = (state) => state.cart.lines;\nexport const selectCount = (state) => state.cart.lines.length;\nexport const selectTotal = () => 0;\nexport default cartSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — STARTER\nimport { configureStore } from '@reduxjs/toolkit';\nimport cartReducer from '../features/cart/cartSlice';\n\nexport const store = configureStore({ reducer: { cart: cartReducer } });\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — đọc selector có ghi nhớ; sửa số lượng bằng qtyChanged\nimport { useDispatch, useSelector } from 'react-redux';\nimport { added, cleared, qtyChanged, selectCount, selectLines, selectTotal } from './features/cart/cartSlice';\n\nconst PRODUCTS = [\n  { id: 1, name: 'Pen', price: 15000 },\n  { id: 2, name: 'Notebook', price: 32000 },\n  { id: 3, name: 'Bag', price: 250000 },\n];\n\nconst vnd = (n) => n.toLocaleString('en-US') + ' ₫';\n\nexport default function App() {\n  const lines = useSelector(selectLines);\n  const count = useSelector(selectCount);\n  const total = useSelector(selectTotal);\n  const dispatch = useDispatch();\n\n  return (\n    <div>\n      <div>\n        {PRODUCTS.map((p) => (\n          <button key={p.id} type=\"button\" className=\"btn-add\" onClick={() => dispatch(added(p))}>{p.name}</button>\n        ))}\n      </div>\n      <p>Items: <span id=\"cart-count\">{count}</span></p>\n      <ul>\n        {lines.map((l) => (\n          <li key={l.id} className=\"line\">\n            <span className=\"name\">{l.name}</span>\n            <input className=\"qty\" type=\"number\" min=\"0\" value={l.qty} onChange={(e) => dispatch(qtyChanged({ id: l.id, qty: Number(e.target.value) }))} />\n            <span className=\"subtotal\">{vnd(l.qty * l.price)}</span>\n          </li>\n        ))}\n      </ul>\n      <p id=\"cart-total\">Total: {vnd(total)}</p>\n      <button id=\"clear\" type=\"button\" onClick={() => dispatch(cleared())}>Clear</button>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/features/cart/cartSlice.js",
+          "language": "javascript",
+          "code": "// src/features/cart/cartSlice.js — giỏ hàng + selector có ghi nhớ\nimport { createSelector, createSlice } from '@reduxjs/toolkit';\n\nconst cartSlice = createSlice({\n  name: 'cart',\n  initialState: { lines: [] },\n  reducers: {\n    added(state, action) {\n      const p = action.payload;\n      const line = state.lines.find((l) => l.id === p.id);\n      if (line) line.qty += 1;\n      else state.lines.push({ id: p.id, name: p.name, price: p.price, qty: 1 });\n    },\n    qtyChanged(state, action) {\n      const { id, qty } = action.payload;\n      if (qty <= 0) state.lines = state.lines.filter((l) => l.id !== id);\n      else {\n        const line = state.lines.find((l) => l.id === id);\n        if (line) line.qty = qty;\n      }\n    },\n    cleared(state) {\n      state.lines = [];\n    },\n  },\n});\n\nexport const { added, qtyChanged, cleared } = cartSlice.actions;\n\nconst selectLines = (state) => state.cart.lines;\nexport const selectCount = createSelector([selectLines], (lines) => lines.reduce((s, l) => s + l.qty, 0));\nexport const selectTotal = createSelector([selectLines], (lines) => lines.reduce((s, l) => s + l.qty * l.price, 0));\nexport { selectLines };\n\nexport default cartSlice.reducer;\n"
+        },
+        {
+          "name": "src/app/store.js",
+          "language": "javascript",
+          "code": "// src/app/store.js — khôi phục giỏ từ localStorage (preloadedState) và lưu lại sau mỗi thay đổi\nimport { configureStore } from '@reduxjs/toolkit';\nimport cartReducer from '../features/cart/cartSlice';\n\nconst KEY = 'cart';\n\nfunction loadCart() {\n  try {\n    const raw = localStorage.getItem(KEY);\n    if (!raw) return undefined;\n    const lines = JSON.parse(raw);\n    return Array.isArray(lines) ? { cart: { lines } } : undefined;\n  } catch {\n    return undefined; // dữ liệu hỏng ⇒ bỏ qua\n  }\n}\n\nexport const store = configureStore({\n  reducer: { cart: cartReducer },\n  preloadedState: loadCart(),\n});\n\nlet last = store.getState().cart.lines;\nstore.subscribe(() => {\n  const lines = store.getState().cart.lines;\n  if (lines !== last) {\n    last = lines;\n    localStorage.setItem(KEY, JSON.stringify(lines));\n  }\n});\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { Provider } from 'react-redux';\nimport { store } from './app/store';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <Provider store={store}>\n        <App />\n      </Provider>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reducer phải thuần nên việc lưu (tác dụng phụ) nằm NGOÀI: subscribe hoặc middleware. preloadedState chạy trước mọi reducer, nên giỏ đã có từ lần render đầu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "@reduxjs/toolkit",
+          "react-redux"
+        ],
+        "kiem": [
+          {
+            "moTa": "Same product merges, count and total",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-count, #cart-total",
+            "mongDoi": [
+              "3",
+              "Total: 62,000 ₫"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Changing qty updates the subtotal",
+            "kiem": "text",
+            "selector": "li.line:nth-child(1) .subtotal",
+            "giaTri": "75,000 ₫",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "li.line:nth-child(1) .qty",
+                "giaTri": "5"
+              }
+            ]
+          },
+          {
+            "moTa": "Qty 0 removes the line",
+            "kiem": "so-luong",
+            "selector": "li.line",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(3)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "li.line:nth-child(1) .qty",
+                "giaTri": "0"
+              }
+            ]
+          },
+          {
+            "moTa": "Cart survives a reload",
+            "kiem": "danh-sach-text",
+            "selector": "li.line .name, #cart-total",
+            "mongDoi": [
+              "Pen",
+              "Notebook",
+              "Total: 62,000 ₫"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Saved as an array of lines",
+            "kiem": "kho-cuc-bo",
+            "khoa": "cart",
+            "khop": "^\\[\\{\"id\":3,\"name\":\"Bag\",\"price\":250000,\"qty\":1\\}\\]$",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(3)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Corrupted storage ⇒ empty cart, no crash",
+            "khoCucBo": {
+              "cart": "{oops"
+            },
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "0"
+          },
+          {
+            "an": true,
+            "moTa": "Clear empties and persists",
+            "kiem": "kho-cuc-bo",
+            "khoa": "cart",
+            "khop": "^\\[\\]$",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#clear",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Memoized selectors",
+            "kiem": "ma-nguon",
+            "tep": "src/features/cart/cartSlice.js",
+            "khop": "createSelector\\("
+          },
+          {
+            "an": true,
+            "moTa": "preloadedState in configureStore",
+            "kiem": "ma-nguon",
+            "tep": "src/app/store.js",
+            "khop": "preloadedState"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu cả store (kể cả dữ liệu tải từ server) ⇒ dữ liệu cũ kẹt lại sau mỗi lần mở app."
+        },
+        {
+          "loi": "Ghi localStorage TRONG reducer ⇒ reducer không còn thuần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memoized selector",
+          "vi": "selector nhớ kết quả, chỉ tính lại khi đầu vào đổi"
+        },
+        {
+          "en": "hydrate",
+          "vi": "nạp lại state đã lưu khi khởi động"
+        }
+      ]
+    }
+  ]
+}

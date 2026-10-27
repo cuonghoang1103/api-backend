@@ -458,6 +458,42 @@
       "name": "Interview corner — HTTP & data fetching",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về REST, fetch/axios, xử lý lỗi và race condition."
+    },
+    {
+      "slug": "fer202-12-1-redux-toolkit",
+      "name": "12.1 Redux Toolkit",
+      "level": "MEDIUM",
+      "description": "Tự viết createStore, counterSlice + hooks, todos slice (Immer, prepare, selector), giỏ hàng createSelector + preloadedState + lưu localStorage."
+    },
+    {
+      "slug": "fer202-12-2-thunk-middleware",
+      "name": "12.2 Thunk & middleware",
+      "level": "HARD",
+      "description": "Thunk viết tay, createAsyncThunk + condition, logger middleware tự viết, thunk đặt hàng getState + rejectWithValue."
+    },
+    {
+      "slug": "fer202-12-ex24-intro-redux",
+      "name": "Exercise 24 — Intro to Redux",
+      "level": "EASY",
+      "description": "Các bước thêm Redux, store hai slice (theme + counter), Redux hay state cục bộ."
+    },
+    {
+      "slug": "fer202-12-ex25-redux-thunk",
+      "name": "Exercise 25 — Redux Thunk & middleware",
+      "level": "MEDIUM",
+      "description": "Hành trình của thunk qua middleware, tìm kiếm async thunk bỏ phản hồi cũ, reducer/thunk/middleware."
+    },
+    {
+      "slug": "fer202-12-3-slot16-redux-slides",
+      "name": "12.3 Slide check — Redux",
+      "level": "EASY",
+      "description": "Trắc nghiệm Slot 16–17: Flux, ba nguyên tắc, RTK, react-redux, middleware, thunk."
+    },
+    {
+      "slug": "fer202-12-interview-redux",
+      "name": "Interview corner — Redux",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về Redux/RTK kèm câu trả lời mẫu."
     }
   ]
 }

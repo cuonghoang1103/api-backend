@@ -1,6 +1,6 @@
 /**
  * PRO192 · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng Spring (slide tự dựng).
- * Deck TỰ DỰNG (không phải slide trường): cs1 (25 slide), cs2 (26 slide), cs3 (26 slide), cs4 (26 slide), cs5 (25 slide), cs6 (26 slide).
+ * Deck TỰ DỰNG (không phải slide trường): cs1 (25 slide), cs2 (26 slide), cs3 (26 slide), cs4 (26 slide), cs5 (25 slide), cs6 (26 slide), cs7 (26 slide), cs8 (25 slide).
  * Mỗi deck: bài 📑 theo slide → bài 🧪 bài tập → quiz.
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs — sửa nguồn rồi chạy lại, đừng sửa tay.
@@ -14,6 +14,8 @@ registerDeck('cs3', { code: '⭐ CS3', en: '⭐ Advanced 3 — Modern Java 17–
 registerDeck('cs4', { code: '⭐ CS4', en: '⭐ Advanced 4 — Object contracts and immutability', vi: '⭐ Chuyên sâu 4 — Hợp đồng đối tượng và bất biến', total: 26, w: 1280, h: 720 });
 registerDeck('cs5', { code: '⭐ CS5', en: '⭐ Advanced 5 — Inside the JVM', vi: '⭐ Chuyên sâu 5 — Bên trong JVM', total: 25, w: 1280, h: 720 });
 registerDeck('cs6', { code: '⭐ CS6', en: '⭐ Advanced 6 — Spring-ready OO design and interviews', vi: '⭐ Chuyên sâu 6 — Thiết kế OO sẵn sàng Spring và phỏng vấn', total: 26, w: 1280, h: 720 });
+registerDeck('cs7', { code: '⭐ CS7', en: '⭐ Advanced 7 — SOLID and design patterns', vi: '⭐ Chuyên sâu 7 — SOLID và mẫu thiết kế', total: 26, w: 1280, h: 720 });
+registerDeck('cs8', { code: '⭐ CS8', en: '⭐ Advanced 8 — Multithreading basics', vi: '⭐ Chuyên sâu 8 — Đa luồng cơ bản', total: 25, w: 1280, h: 720 });
 
 /* ───────── ⭐ CS.1 — 📑 Slide by slide · Generics: classes, methods, wildcards, PECS, erasure (slides 1–12) ───────── */
 const L_cs1_1 = {
@@ -20493,6 +20495,5090 @@ const QL_cs6 = {
   quiz: QUIZ_CS6,
 };
 
+/* ───────── ⭐ CS.7 — 📑 Slide by slide · SOLID (1): S, O, L, I, D on CT Library, in Spring, when it hurts (slides 1–12) ───────── */
+const L_cs7_1 = {
+  title: '⭐ CS.7 — 📑 Slide by slide · SOLID (1): S, O, L, I, D on CT Library, in Spring, when it hurts (slides 1–12)|||⭐ CS.7 — 📑 Học theo từng slide · SOLID (1): S, O, L, I, D trên CT Library, trong Spring, khi nào quá tay (slide 1–12)',
+  slug: 'pro192-slide-cs7-1',
+  type: 'VIDEO',
+  description: 'Phần đầu deck ⭐ Chuyên sâu 7 (slide 1–12, tự dựng — không có trong giáo trình trường): lớp LibraryManager làm bốn việc cho bốn người khác nhau, rồi từng chữ của SOLID đo trên CT Library bằng Java chạy thật — tách theo người yêu cầu thay đổi (SRP), thêm loại thành viên ALUMNI mà không sửa code cũ (bản switch ném IllegalArgumentException, bản interface ra 8000), EBook kế thừa Book rồi ném UnsupportedOperationException làm vòng lặp dừng giữa chừng và bẫy hình vuông diện tích 16 thay vì 20 (Liskov), interface béo ép viết hàm ném lỗi so với ba vai nhỏ (ISP), service sở hữu interface còn kho lưu cắm vào (DIP), SOLID trong một dự án Spring Boot, bốn dấu hiệu làm quá tay (YAGNI, KISS, luật ba lần) và câu trả lời phỏng vấn.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 7 · part 1 · added by this site · not on the PRO192 syllabus · not examined</span>
+<h2>SOLID, measured: five principles you can watch break and get fixed</h2>
+<p class="lead">⭐ This is a self-added ADVANCED section, not part of the school syllabus — it is not examined in PRO192 (the PE grades console output on JDK 8). But it is what an interviewer asks right after "what is polymorphism?", it is the vocabulary of every code review in a Java team, and it is exactly how the classes of a Spring Boot project (CT Library, LabFlow) are cut. N2.1 put SOLID on one page; here every letter gets a small, real program on CT Library: first the version that breaks — you see the crash, the wrong number, the method you are forced to edit — then the version that does not, then the Spring Boot form of the same idea.</p>
+<div class="callout"><strong>Everything below runs.</strong> Each example is a complete Java file compiled by this site's generator on JDK 21.0.9 with <code>--release 17</code> (records and <code>switch -&gt;</code> are used to keep the code short). The principles themselves are plain classes and interfaces — they work unchanged in the Java 8 of the exam room. Spring code on the slides is marked "illustration, not run here".</div>
+<table>
+<thead><tr><th>Slides</th><th>Idea</th><th>You should be able to</th></tr></thead>
+<tbody>
+<tr><td>1–3</td><td>map, the god class</td><td>name the four people who ask a LibraryManager for changes</td></tr>
+<tr><td>4–5</td><td>S and O</td><td>split a class by actor; add a member type without editing tested code</td></tr>
+<tr><td>6–7</td><td>L</td><td>spot an override that breaks callers, and fix the hierarchy instead</td></tr>
+<tr><td>8–9</td><td>I and D</td><td>split a fat interface into roles; let the service own the interface and plug storage in</td></tr>
+<tr><td>10–12</td><td>Spring, limits, interviews</td><td>map each letter to Spring Boot, recognise over-engineering, answer the five usual questions</td></tr>
+</tbody>
+</table>
+<p>Not repeated here: interfaces and abstract classes <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-2">5.A</a>; SOLID on one page <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-n2-1-solid">N2.1</a>; composition, programming to an interface and DI by hand ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1">CS.6</a>. The CT Library lab that already uses a strategy: <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-lab-5-truu-tuong-va-interface">Lab 5</a>.</p>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 7 · phần 1 · tự thêm · ngoài giáo trình PRO192 · không thi</span>
+<h2>SOLID có số đo: năm nguyên lý bạn nhìn thấy hỏng rồi được sửa</h2>
+<p class="lead">⭐ Đây là phần chuyên sâu TỰ THÊM, không có trong giáo trình trường — không thi PRO192 (PE chấm output console trên JDK 8). Nhưng đây là thứ người phỏng vấn hỏi ngay sau câu "đa hình là gì?", là từ vựng của mọi buổi review code trong một nhóm Java, và đúng là cách các lớp của một dự án Spring Boot (CT Library, LabFlow) được chia. N2.1 đã gói SOLID trong một trang; ở đây mỗi chữ cái có một chương trình nhỏ, chạy thật, trên CT Library: trước là bản hỏng — bạn thấy cú sập, con số sai, phương thức bị ép phải sửa — rồi bản không hỏng, rồi dạng Spring Boot của cùng ý đó.</p>
+<div class="callout"><strong>Mọi thứ bên dưới đều chạy thật.</strong> Mỗi ví dụ là một file Java hoàn chỉnh được generator của trang này biên dịch trên JDK 21.0.9 với <code>--release 17</code> (dùng record và <code>switch -&gt;</code> cho code ngắn). Bản thân các nguyên lý chỉ là lớp và interface thường — dùng nguyên vẹn được trong Java 8 của phòng thi. Code Spring trên slide được ghi "illustration, not run here" (minh hoạ, không chạy ở đây).</div>
+<table>
+<thead><tr><th>Slide</th><th>Ý chính</th><th>Bạn phải làm được</th></tr></thead>
+<tbody>
+<tr><td>1–3</td><td>bản đồ, lớp "thượng đế"</td><td>gọi tên bốn người đòi một LibraryManager thay đổi</td></tr>
+<tr><td>4–5</td><td>S và O</td><td>tách lớp theo người yêu cầu; thêm loại thành viên mà không sửa code đã test</td></tr>
+<tr><td>6–7</td><td>L</td><td>nhận ra một override làm hỏng người gọi, và sửa cây kế thừa thay vì vá</td></tr>
+<tr><td>8–9</td><td>I và D</td><td>tách interface béo thành các vai; để service sở hữu interface và kho lưu cắm vào</td></tr>
+<tr><td>10–12</td><td>Spring, giới hạn, phỏng vấn</td><td>nối mỗi chữ với Spring Boot, nhận ra làm quá tay, trả lời năm câu hay gặp</td></tr>
+</tbody>
+</table>
+<p>Không lặp lại ở đây: interface và lớp trừu tượng ở <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-2">5.A</a>; SOLID gói trong một trang ở <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-n2-1-solid">N2.1</a>; composition, lập trình theo interface và DI bằng tay ở ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1">CS.6</a>. Lab CT Library đã dùng sẵn một strategy: <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-lab-5-truu-tuong-va-interface">Lab 5</a>.</p>`),
+    walkHead('cs7', 1, 12),
+    walk('cs7', [
+      [1, 'SOLID and design patterns in plain Java',
+        `<p class="y-chinh">🎯 Cover: five design principles (SOLID) and six classic design patterns, all on CT Library, all measured — and for each one, the place where Spring Boot uses it.</p>
+<p>The deck has two halves. Slides 1–12 are the principles: what goes wrong in a class that does everything, and five rules — Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion — that keep a change from spreading through the code. Slides 13–26 are six patterns from the 1994 "Gang of Four" book: Strategy, Factory, Singleton, Builder, Observer and Template Method — the six you meet first in real Java code, because the JDK and Spring are built from them.</p>
+<p>Why learn names for things you can already write? Because in a team you do not explain "I made an interface with one method and passed different objects into the checkout so it could compute fees differently" — you say "fee strategy", and everyone pictures the same code. A pattern name is a compressed explanation.</p>
+<p class="meo">🧠 One sentence for the whole deck: <em>find what changes, put it behind an interface, and let the rest of the code not care</em>. Most principles and patterns are that sentence applied to a different kind of change.</p>`,
+        `<p class="y-chinh">🎯 Slide bìa: năm nguyên lý thiết kế (SOLID) và sáu mẫu thiết kế kinh điển, tất cả trên CT Library, tất cả có số đo — và với mỗi cái, chỗ Spring Boot dùng nó.</p>
+<p>Deck có hai nửa. Slide 1–12 là các nguyên lý: điều gì hỏng trong một lớp làm mọi thứ, và năm luật — đơn trách nhiệm (Single responsibility), mở/đóng (Open/closed), thay thế Liskov (Liskov substitution), tách interface (Interface segregation), đảo ngược phụ thuộc (Dependency inversion) — giữ cho một thay đổi không lan khắp code. Slide 13–26 là sáu mẫu từ cuốn sách "Gang of Four" (nhóm bốn tác giả) năm 1994: Strategy, Factory, Singleton, Builder, Observer và Template Method — sáu mẫu bạn gặp đầu tiên trong code Java thật, vì JDK và Spring được xây từ chúng.</p>
+<p>Vì sao phải học tên cho những thứ mình đã viết được? Vì trong một nhóm, bạn không giải thích "em tạo một interface một phương thức rồi truyền các đối tượng khác nhau vào quầy trả sách để nó tính phí khác nhau" — bạn nói "strategy tính phí", và cả nhóm hình dung cùng một đoạn code. Tên mẫu là một lời giải thích đã nén lại.</p>
+<p class="meo">🧠 Một câu cho cả deck: <em>tìm chỗ hay thay đổi, đặt nó sau một interface, và để phần còn lại của code không cần quan tâm</em>. Phần lớn nguyên lý và mẫu là câu đó áp vào một kiểu thay đổi khác nhau.</p>`],
+      [2, 'Where you are, where this deck goes',
+        `<p class="y-chinh">🎯 You have already used most of these ideas without names — Lab 5's fee policies, CS.1's comparators, CS.4's builder, CS.6's dependency injection. This deck names them, measures them, and adds the ones you have not met.</p>
+<p>Read the table as a map. Row 1: N2.1 gave you SOLID as five definitions; here each letter is a before/after program. Row 2: the <code>IFeePolicy</code> of Lab 5 and the <code>Comparator</code> of ⭐ CS.1 are the <strong>Strategy</strong> pattern — you will recognise your own code on slide 14. Row 3: the static factory and the builder of ⭐ CS.4 come back as patterns, inside the JDK and Spring. Row 4: CS.6 built objects by hand in <code>main</code>; now you meet the patterns that container uses — Singleton, Observer and Template Method.</p>
+<p>The two boxes set expectations. <strong>Exam room</strong>: principles and patterns need nothing newer than Java 8 — a class, an interface, a constructor. Only the spellings <code>record</code> and <code>switch -&gt;</code> in some examples are Java 16/14+. <strong>Why now</strong>: Spring Boot is a container of singleton beans created by factory methods, wired by constructor injection, talking through events, with template classes (<code>JdbcTemplate</code>) doing the repetitive work. After this deck, those words describe code you have written yourself.</p>
+<div class="callout">⚠️ <strong>Exam room PE (JDK 8)</strong>: none of this is graded, and the PE asks for given class shapes — do not "improve" an exam class with patterns the brief did not ask for. Use them in LAB211, PRJ301 and your graduation project.</div>`,
+        `<p class="y-chinh">🎯 Bạn đã dùng phần lớn những ý này mà chưa có tên — chính sách phí của Lab 5, comparator của CS.1, builder của CS.4, tiêm phụ thuộc của CS.6. Deck này đặt tên, đo chúng, và thêm những cái bạn chưa gặp.</p>
+<p>Đọc bảng như một tấm bản đồ. Dòng 1: N2.1 cho bạn SOLID dưới dạng năm định nghĩa; ở đây mỗi chữ là một chương trình trước/sau. Dòng 2: <code>IFeePolicy</code> của Lab 5 và <code>Comparator</code> của ⭐ CS.1 chính là mẫu <strong>Strategy</strong> — bạn sẽ nhận ra code của chính mình ở slide 14. Dòng 3: static factory và builder của ⭐ CS.4 quay lại dưới dạng mẫu, bên trong JDK và Spring. Dòng 4: CS.6 lắp đối tượng bằng tay trong <code>main</code>; giờ bạn gặp các mẫu mà bộ chứa (container) đó dùng — Singleton, Observer và Template Method.</p>
+<p>Hai ô bên dưới đặt kỳ vọng. <strong>Phòng thi</strong>: nguyên lý và mẫu không cần gì mới hơn Java 8 — một lớp, một interface, một constructor. Chỉ cách viết <code>record</code> và <code>switch -&gt;</code> ở vài ví dụ là của Java 16/14 trở lên. <strong>Vì sao học bây giờ</strong>: Spring Boot là một bộ chứa các bean singleton được tạo bằng factory method, lắp bằng tiêm qua constructor, nói chuyện qua sự kiện, với các lớp khuôn (<code>JdbcTemplate</code>) làm phần việc lặp đi lặp lại. Học xong deck này, những từ đó mô tả code bạn đã tự viết.</p>
+<div class="callout">⚠️ <strong>Phòng thi PE (JDK 8)</strong>: phần này không chấm, và đề PE cho sẵn hình dạng lớp — đừng "cải tiến" lớp của đề bằng những mẫu đề không yêu cầu. Dùng chúng ở LAB211, PRJ301 và đồ án tốt nghiệp.</div>`],
+      [3, 'One class, four jobs: LibraryManager',
+        `<p class="y-chinh">🎯 The first CT Library everyone writes has one <code>LibraryManager</code> that borrows, computes fees, formats receipts and writes the file. It works — and four different people will ask you to change it, for four unrelated reasons.</p>
+<pre class="trich"><code class="language-java">class LibraryManager {
+    private final Map&lt;String, String[]&gt; loans = new HashMap&lt;&gt;();   // itemId -&gt; {memberId, type, title}
+
+    void borrow(String memberId, String type, String itemId, String title) {   // job 1: the borrowing rule
+        if (loans.containsKey(itemId)) throw new IllegalStateException(itemId + " is out");
+        loans.put(itemId, new String[] { memberId, type, title });
+    }
+
+    int fee(String type, int daysLate) {                  // job 2: money (the treasurer decides)
+        if (type.equals("STUDENT")) return daysLate * 2000 / 2;
+        else if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        else return daysLate * 2000;
+    }
+
+    String returnBook(String itemId, int daysLate) {      // job 3: the receipt text (the front desk decides)
+        String[] l = loans.get(itemId);
+        return "RECEIPT " + itemId + " \\"" + l[2] + "\\" member " + l[0]
+            + " | late " + daysLate + " d | fee " + fee(l[1], daysLate) + " VND";
+    }
+
+    String saveLine(String itemId) {                      // job 4: the file format (the developer decides)
+        String[] l = loans.get(itemId);
+        return itemId + "," + l[0] + "," + l[1];
+    }
+}</code></pre>
+<div class="out">RECEIPT B001 "Clean Code" member M001 | late 5 d | fee 5000 VND<br>
+saved: B001,M001,STUDENT</div>
+<p>Read the four methods as four jobs. <code>borrow</code> holds the <em>borrowing rule</em> (an item that is out cannot be borrowed) — the librarian decides that. <code>fee</code> holds the <em>money rule</em> (students pay half, staff get two free days) — the treasurer decides that. <code>returnBook</code> builds the <em>receipt text</em> — the front desk decides what a receipt looks like. <code>saveLine</code> decides the <em>file format</em> — that is the developer's business. The output is correct: student, 5 days late, 5 × 2000 / 2 = 5000 VND.</p>
+<p>Nothing is broken today. The problem appears with change: the treasurer adds alumni, the front desk wants a shorter receipt, the developer moves from CSV to a database. Each request edits the same file, each edit risks breaking the other three jobs, and every change means re-testing all four. A class like this is often called a <em>god class</em> — it knows and does everything. The next slide splits it.</p>
+<div class="pitfall">Trap: "one class per feature" sounds tidy, but "the library feature" is four responsibilities. Count the <em>people who can ask for a change</em>, not the menu items.</div>
+<p class="meo">🧠 A quick test from code review: describe the class in one sentence without "and". "LibraryManager borrows <em>and</em> charges <em>and</em> prints <em>and</em> saves" fails four times.</p>`,
+        `<p class="y-chinh">🎯 CT Library đầu tiên ai cũng viết có một <code>LibraryManager</code> vừa cho mượn, vừa tính phí, vừa định dạng phiếu, vừa ghi tệp. Nó chạy được — và bốn người khác nhau sẽ đòi bạn sửa nó, vì bốn lý do chẳng liên quan gì nhau.</p>
+<pre class="trich"><code class="language-java">class LibraryManager {
+    private final Map&lt;String, String[]&gt; loans = new HashMap&lt;&gt;();   // itemId -&gt; {memberId, type, title}
+
+    void borrow(String memberId, String type, String itemId, String title) {   // việc 1: luật mượn
+        if (loans.containsKey(itemId)) throw new IllegalStateException(itemId + " is out");
+        loans.put(itemId, new String[] { memberId, type, title });
+    }
+
+    int fee(String type, int daysLate) {                  // việc 2: tiền (thủ quỹ quyết)
+        if (type.equals("STUDENT")) return daysLate * 2000 / 2;
+        else if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        else return daysLate * 2000;
+    }
+
+    String returnBook(String itemId, int daysLate) {      // việc 3: chữ trên phiếu (quầy quyết)
+        String[] l = loans.get(itemId);
+        return "RECEIPT " + itemId + " \\"" + l[2] + "\\" member " + l[0]
+            + " | late " + daysLate + " d | fee " + fee(l[1], daysLate) + " VND";
+    }
+
+    String saveLine(String itemId) {                      // việc 4: định dạng tệp (lập trình viên quyết)
+        String[] l = loans.get(itemId);
+        return itemId + "," + l[0] + "," + l[1];
+    }
+}</code></pre>
+<div class="out">RECEIPT B001 "Clean Code" member M001 | late 5 d | fee 5000 VND<br>
+saved: B001,M001,STUDENT</div>
+<p>Đọc bốn phương thức như bốn việc. <code>borrow</code> giữ <em>luật mượn</em> (tài liệu đang cho mượn thì không mượn được) — thủ thư quyết. <code>fee</code> giữ <em>luật tiền</em> (sinh viên trả một nửa, cán bộ được miễn hai ngày đầu) — thủ quỹ quyết. <code>returnBook</code> dựng <em>chữ trên phiếu</em> — quầy quyết phiếu trông thế nào. <code>saveLine</code> quyết <em>định dạng tệp</em> — việc của lập trình viên. Output đúng: sinh viên, trễ 5 ngày, 5 × 2000 / 2 = 5000 VND.</p>
+<p>Hôm nay chẳng có gì hỏng. Vấn đề hiện ra khi có thay đổi: thủ quỹ thêm cựu sinh viên, quầy muốn phiếu ngắn hơn, lập trình viên chuyển từ CSV sang CSDL. Mỗi yêu cầu sửa cùng một tệp, mỗi lần sửa có nguy cơ làm hỏng ba việc kia, và mỗi thay đổi nghĩa là test lại cả bốn. Lớp kiểu này hay được gọi là <em>god class</em> (lớp "thượng đế") — nó biết và làm mọi thứ. Slide sau tách nó ra.</p>
+<div class="pitfall">Bẫy: "mỗi tính năng một lớp" nghe gọn gàng, nhưng "tính năng thư viện" là bốn trách nhiệm. Hãy đếm <em>số người có thể đòi thay đổi</em>, đừng đếm mục menu.</div>
+<p class="meo">🧠 Một phép thử nhanh khi review code: mô tả lớp bằng một câu không có chữ "và". "LibraryManager cho mượn <em>và</em> tính tiền <em>và</em> in phiếu <em>và</em> lưu tệp" trượt bốn lần.</p>`],
+      [4, 'S — Single Responsibility: one actor each',
+        `<p class="y-chinh">🎯 Single Responsibility Principle: a class should have one reason to change — in Robert C. Martin's sharper wording (Clean Architecture, 2017), "a module should be responsible to one, and only one, actor".</p>
+<pre class="trich"><code class="language-java">record Loan(String memberId, String type, String itemId, String title) {}
+
+class LoanRepository {                         // reason to change: storage format
+    private final Map&lt;String, Loan&gt; byItem = new HashMap&lt;&gt;();
+    boolean isOut(String itemId) { return byItem.containsKey(itemId); }
+    void save(Loan l) { byItem.put(l.itemId(), l); }
+    Loan find(String itemId) { return byItem.get(itemId); }
+    String toCsv(Loan l) { return l.itemId() + "," + l.memberId() + "," + l.type(); }
+}
+
+class FeeCalculator {                          // reason to change: the treasurer's rules
+    int fee(String type, int daysLate) {
+        if (type.equals("STUDENT")) return daysLate * 2000 / 2;
+        if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        return daysLate * 2000;
+    }
+}
+
+class LoanService {                            // reason to change: the borrowing rules
+    private final LoanRepository repo;
+    private final FeeCalculator fees;
+    LoanService(LoanRepository repo, FeeCalculator fees) { this.repo = repo; this.fees = fees; }
+    void borrow(Loan l) {
+        if (repo.isOut(l.itemId())) throw new IllegalStateException(l.itemId() + " is out");
+        repo.save(l);
+    }
+    int lateFee(String itemId, int daysLate) { return fees.fee(repo.find(itemId).type(), daysLate); }
+}
+
+class ReceiptPrinter {                         // reason to change: the front desk's layout
+    String print(Loan l, int daysLate, int fee) {
+        return "RECEIPT " + l.itemId() + " \\"" + l.title() + "\\" member " + l.memberId()
+            + " | late " + daysLate + " d | fee " + fee + " VND";
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanRepository repo = new LoanRepository();
+LoanService service = new LoanService(repo, new FeeCalculator());
+service.borrow(new Loan("M001", "STUDENT", "B001", "Clean Code"));
+int fee = service.lateFee("B001", 5);
+Loan loan = repo.find("B001");
+System.out.println(new ReceiptPrinter().print(loan, 5, fee));        // front desk
+System.out.println(new ShortReceiptPrinter().print(loan, 5, fee));   // a new format: one NEW class
+System.out.println("saved: " + repo.toCsv(loan));                     // developer</code></pre>
+<div class="out">RECEIPT B001 "Clean Code" member M001 | late 5 d | fee 5000 VND<br>
+B001 5000d<br>
+saved: B001,M001,STUDENT</div>
+<p>The same behaviour, now in four classes, each serving one actor. <code>LoanService</code> keeps only the borrowing rule and <em>uses</em> the other two through its constructor — the DI habit of ⭐ CS.6. <code>FeeCalculator</code> is the treasurer's class, <code>ReceiptPrinter</code> the front desk's, <code>LoanRepository</code> the developer's. The first output line is identical to the god class, character for character: splitting by responsibility does not change what the program does, only where each decision lives.</p>
+<p>Then a change request arrives: "a short receipt for the SMS". It costs one new class, <code>ShortReceiptPrinter</code> (second line: <code>B001 5000d</code>); <code>LoanService</code>, <code>FeeCalculator</code> and <code>LoanRepository</code> are not opened, so they cannot break. That is the payoff of SRP: a change touches the class of the person who asked for it, and only that class.</p>
+<div class="pitfall">Trap: SRP is not "a class must have one method". <code>LoanRepository</code> has four methods and one responsibility — storage. Splitting it into four one-method classes would scatter one decision (the file format) across four files: the opposite of SRP.</div>
+<div class="callout">🧭 <strong>Spring Boot / LabFlow</strong>: the usual layers are SRP by actor — <code>@RestController</code> changes when the HTTP API changes, <code>@Service</code> when business rules change, <code>@Repository</code> when storage changes. LAB211's "controller / service / repository" rule is the same idea.</div>`,
+        `<p class="y-chinh">🎯 Nguyên lý đơn trách nhiệm (Single Responsibility Principle): một lớp chỉ nên có một lý do để thay đổi — theo cách nói sắc hơn của Robert C. Martin (Clean Architecture, 2017), "một module chỉ nên chịu trách nhiệm trước một, và chỉ một, actor (nhóm người yêu cầu)".</p>
+<pre class="trich"><code class="language-java">record Loan(String memberId, String type, String itemId, String title) {}
+
+class LoanRepository {                         // lý do đổi: cách lưu
+    private final Map&lt;String, Loan&gt; byItem = new HashMap&lt;&gt;();
+    boolean isOut(String itemId) { return byItem.containsKey(itemId); }
+    void save(Loan l) { byItem.put(l.itemId(), l); }
+    Loan find(String itemId) { return byItem.get(itemId); }
+    String toCsv(Loan l) { return l.itemId() + "," + l.memberId() + "," + l.type(); }
+}
+
+class FeeCalculator {                          // lý do đổi: luật của thủ quỹ
+    int fee(String type, int daysLate) {
+        if (type.equals("STUDENT")) return daysLate * 2000 / 2;
+        if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        return daysLate * 2000;
+    }
+}
+
+class LoanService {                            // lý do đổi: luật mượn
+    private final LoanRepository repo;
+    private final FeeCalculator fees;
+    LoanService(LoanRepository repo, FeeCalculator fees) { this.repo = repo; this.fees = fees; }
+    void borrow(Loan l) {
+        if (repo.isOut(l.itemId())) throw new IllegalStateException(l.itemId() + " is out");
+        repo.save(l);
+    }
+    int lateFee(String itemId, int daysLate) { return fees.fee(repo.find(itemId).type(), daysLate); }
+}
+
+class ReceiptPrinter {                         // lý do đổi: mẫu phiếu của quầy
+    String print(Loan l, int daysLate, int fee) {
+        return "RECEIPT " + l.itemId() + " \\"" + l.title() + "\\" member " + l.memberId()
+            + " | late " + daysLate + " d | fee " + fee + " VND";
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanRepository repo = new LoanRepository();
+LoanService service = new LoanService(repo, new FeeCalculator());
+service.borrow(new Loan("M001", "STUDENT", "B001", "Clean Code"));
+int fee = service.lateFee("B001", 5);
+Loan loan = repo.find("B001");
+System.out.println(new ReceiptPrinter().print(loan, 5, fee));        // quầy
+System.out.println(new ShortReceiptPrinter().print(loan, 5, fee));   // định dạng mới: một lớp MỚI
+System.out.println("saved: " + repo.toCsv(loan));                     // lập trình viên</code></pre>
+<div class="out">RECEIPT B001 "Clean Code" member M001 | late 5 d | fee 5000 VND<br>
+B001 5000d<br>
+saved: B001,M001,STUDENT</div>
+<p>Cùng hành vi, giờ ở bốn lớp, mỗi lớp phục vụ một actor. <code>LoanService</code> chỉ giữ luật mượn và <em>dùng</em> hai lớp kia qua constructor — thói quen DI của ⭐ CS.6. <code>FeeCalculator</code> là lớp của thủ quỹ, <code>ReceiptPrinter</code> của quầy, <code>LoanRepository</code> của lập trình viên. Dòng output đầu giống hệt god class, từng ký tự: tách theo trách nhiệm không đổi việc chương trình làm, chỉ đổi chỗ mỗi quyết định nằm.</p>
+<p>Rồi một yêu cầu thay đổi tới: "phiếu ngắn để gửi SMS". Nó tốn đúng một lớp mới, <code>ShortReceiptPrinter</code> (dòng hai: <code>B001 5000d</code>); <code>LoanService</code>, <code>FeeCalculator</code> và <code>LoanRepository</code> không bị mở ra, nên không thể hỏng. Đó là phần thưởng của SRP: một thay đổi chỉ chạm lớp của người đã yêu cầu nó, và chỉ lớp đó.</p>
+<div class="pitfall">Bẫy: SRP không phải "mỗi lớp chỉ một phương thức". <code>LoanRepository</code> có bốn phương thức và một trách nhiệm — lưu trữ. Tách nó thành bốn lớp một phương thức sẽ rải một quyết định (định dạng tệp) ra bốn tệp: ngược hẳn SRP.</div>
+<div class="callout">🧭 <strong>Spring Boot / LabFlow</strong>: các tầng quen thuộc chính là SRP theo actor — <code>@RestController</code> đổi khi API HTTP đổi, <code>@Service</code> khi luật nghiệp vụ đổi, <code>@Repository</code> khi cách lưu đổi. Luật "controller / service / repository" của LAB211 cũng cùng ý đó.</div>`],
+      [5, 'O — Open/Closed: extend, don’t edit',
+        `<p class="y-chinh">🎯 Open/Closed Principle (Bertrand Meyer, 1988): code should be open for extension and closed for modification — a new member type should be a new class, not a new branch inside a method that already works.</p>
+<pre class="trich"><code class="language-java">class OldFees {                                     // every new type = edit THIS method
+    static int fee(String type, int daysLate) {
+        switch (type) {
+            case "STUDENT": return daysLate * 2000 / 2;
+            case "STAFF":   return Math.max(0, daysLate - 2) * 2000;
+            case "GUEST":   return daysLate * 2000;
+            default: throw new IllegalArgumentException("unknown member type: " + type);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 2000 / 2; } }
+class StaffFee   implements IFeePolicy { public int fee(int d) { return Math.max(0, d - 2) * 2000; } }
+class GuestFee   implements IFeePolicy { public int fee(int d) { return d * 2000; } }
+class AlumniFee  implements IFeePolicy { public int fee(int d) { return d * 2000 * 80 / 100; } }   // NEW: one class
+
+class Fees {
+    private static final Map&lt;String, IFeePolicy&gt; BY_TYPE = Map.of(
+        "STUDENT", new StudentFee(), "STAFF", new StaffFee(),
+        "GUEST", new GuestFee(), "ALUMNI", new AlumniFee());   // + one line to register
+    static IFeePolicy of(String type) { return BY_TYPE.get(type); }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (String type : List.of("STUDENT", "STAFF", "GUEST", "ALUMNI")) {
+    String v1;
+    try { v1 = String.valueOf(OldFees.fee(type, 5)); }
+    catch (IllegalArgumentException e) { v1 = "IllegalArgumentException: " + e.getMessage(); }
+    System.out.printf("%-7s | new: %-5d | old: %s%n", type, Fees.of(type).fee(5), v1);
+}</code></pre>
+<div class="out">STUDENT | new: 5000 &nbsp;| old: 5000<br>
+STAFF &nbsp;&nbsp;| new: 6000 &nbsp;| old: 6000<br>
+GUEST &nbsp;&nbsp;| new: 10000 | old: 10000<br>
+ALUMNI &nbsp;| new: 8000 &nbsp;| old: IllegalArgumentException: unknown member type: ALUMNI</div>
+<p>The left version is the <code>switch</code> you write first. It works for the three known types — and the moment the treasurer adds ALUMNI, the only way to support it is to <em>edit</em> <code>OldFees.fee</code>, a tested method that also serves students and staff. Until someone does, the output's last line shows what happens: <code>IllegalArgumentException: unknown member type: ALUMNI</code>. And this <code>switch</code> is rarely alone: the same <code>if (type.equals(…))</code> chain tends to appear again in the report, the receipt and the limit on books per member.</p>
+<p>The right version puts the varying part — the fee rule — behind <code>IFeePolicy</code>. ALUMNI is one new class (<code>AlumniFee</code>, 20% off: 8000) plus one registration line in the map; the existing policies and every caller of <code>Fees.of(type).fee(days)</code> are untouched. "Closed" does not mean "never edited": the map still gets a line. It means the <em>rules that already work</em> are not reopened.</p>
+<div class="pitfall">Trap: OCP is about the <em>likely</em> change. Member types change every semester at a club library; the number of days in a week does not. Do not hide every <code>if</code> behind an interface — slide 11.</div>
+<p class="meo">🧠 Smell to remember: the same <code>switch</code> on a type code in several places. One <code>switch</code> in a factory (slide 16) is fine; five copies are an OCP violation.</p>`,
+        `<p class="y-chinh">🎯 Nguyên lý mở/đóng (Open/Closed, Bertrand Meyer, 1988): code nên mở để mở rộng và đóng với sửa đổi — một loại thành viên mới nên là một lớp mới, không phải một nhánh mới trong một phương thức đang chạy tốt.</p>
+<pre class="trich"><code class="language-java">class OldFees {                                     // mỗi loại mới = sửa CHÍNH hàm này
+    static int fee(String type, int daysLate) {
+        switch (type) {
+            case "STUDENT": return daysLate * 2000 / 2;
+            case "STAFF":   return Math.max(0, daysLate - 2) * 2000;
+            case "GUEST":   return daysLate * 2000;
+            default: throw new IllegalArgumentException("unknown member type: " + type);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 2000 / 2; } }
+class StaffFee   implements IFeePolicy { public int fee(int d) { return Math.max(0, d - 2) * 2000; } }
+class GuestFee   implements IFeePolicy { public int fee(int d) { return d * 2000; } }
+class AlumniFee  implements IFeePolicy { public int fee(int d) { return d * 2000 * 80 / 100; } }   // MỚI: một lớp
+
+class Fees {
+    private static final Map&lt;String, IFeePolicy&gt; BY_TYPE = Map.of(
+        "STUDENT", new StudentFee(), "STAFF", new StaffFee(),
+        "GUEST", new GuestFee(), "ALUMNI", new AlumniFee());   // + một dòng đăng ký
+    static IFeePolicy of(String type) { return BY_TYPE.get(type); }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (String type : List.of("STUDENT", "STAFF", "GUEST", "ALUMNI")) {
+    String v1;
+    try { v1 = String.valueOf(OldFees.fee(type, 5)); }
+    catch (IllegalArgumentException e) { v1 = "IllegalArgumentException: " + e.getMessage(); }
+    System.out.printf("%-7s | new: %-5d | old: %s%n", type, Fees.of(type).fee(5), v1);
+}</code></pre>
+<div class="out">STUDENT | new: 5000 &nbsp;| old: 5000<br>
+STAFF &nbsp;&nbsp;| new: 6000 &nbsp;| old: 6000<br>
+GUEST &nbsp;&nbsp;| new: 10000 | old: 10000<br>
+ALUMNI &nbsp;| new: 8000 &nbsp;| old: IllegalArgumentException: unknown member type: ALUMNI</div>
+<p>Bản bên trái là cái <code>switch</code> bạn viết đầu tiên. Nó chạy với ba loại đã biết — và ngay khi thủ quỹ thêm ALUMNI (cựu sinh viên), cách duy nhất để hỗ trợ là <em>sửa</em> <code>OldFees.fee</code>, một phương thức đã test và đang phục vụ cả sinh viên lẫn cán bộ. Trước khi ai đó sửa, dòng cuối của output cho thấy chuyện gì xảy ra: <code>IllegalArgumentException: unknown member type: ALUMNI</code>. Và cái <code>switch</code> này hiếm khi đứng một mình: cùng chuỗi <code>if (type.equals(…))</code> thường lặp lại ở báo cáo, ở phiếu, ở giới hạn số sách mỗi thành viên.</p>
+<p>Bản bên phải đặt phần hay đổi — luật tính phí — sau <code>IFeePolicy</code>. ALUMNI là một lớp mới (<code>AlumniFee</code>, giảm 20%: 8000) cộng một dòng đăng ký trong map; các chính sách cũ và mọi người gọi <code>Fees.of(type).fee(days)</code> không bị đụng tới. "Đóng" không có nghĩa "không bao giờ sửa": map vẫn thêm một dòng. Nó nghĩa là <em>các luật đang chạy đúng</em> không bị mở lại.</p>
+<div class="pitfall">Bẫy: OCP nói về thay đổi <em>có khả năng xảy ra</em>. Loại thành viên đổi mỗi học kỳ ở thư viện câu lạc bộ; số ngày trong tuần thì không. Đừng giấu mọi <code>if</code> sau interface — slide 11.</div>
+<p class="meo">🧠 Mùi code cần nhớ: cùng một <code>switch</code> theo mã loại xuất hiện ở nhiều chỗ. Một <code>switch</code> trong factory (slide 16) thì ổn; năm bản sao là vi phạm OCP.</p>`],
+      [6, 'L — Liskov: keep the parent’s promises',
+        `<p class="y-chinh">🎯 Liskov Substitution Principle (Barbara Liskov, 1987): wherever code expects a <code>Book</code>, any subtype must work without surprises. <code>EBook extends Book</code> compiles — and its <code>borrow</code> throws, so a loop written for books stops half-way.</p>
+<pre class="trich"><code class="language-java">class Book {
+    final String id;
+    private String borrower;
+    Book(String id) { this.id = id; }
+    void borrow(String memberId) {          // promise: afterwards isOut() is true
+        if (borrower != null) throw new IllegalStateException(id + " is out");
+        borrower = memberId;
+    }
+    boolean isOut() { return borrower != null; }
+}
+
+class EBook extends Book {
+    EBook(String id) { super(id); }
+    @Override void borrow(String memberId) {   // breaks the promise of the parent
+        throw new UnsupportedOperationException("an e-book is downloaded, not borrowed");
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">static int borrowAll(List&lt;Book&gt; books, String memberId) {   // written and tested against Book
+    int n = 0;
+    for (Book b : books) { b.borrow(memberId); n++; }
+    return n;
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;Book&gt; cart = List.of(new Book("B001"), new EBook("E010"), new Book("B002"));
+try {
+    System.out.println("borrowed " + borrowAll(cart, "M001"));
+} catch (UnsupportedOperationException e) {
+    System.out.println("crash: " + e);
+}
+for (Book b : cart) System.out.println(b.id + " out=" + b.isOut());</code></pre>
+<div class="out">crash: java.lang.UnsupportedOperationException: an e-book is downloaded, not borrowed<br>
+B001 out=true<br>
+E010 out=false<br>
+B002 out=false<br>
+List.of(...).add -&gt; UnsupportedOperationException</div>
+<p><code>Book.borrow</code> makes a promise, written in the comment: afterwards <code>isOut()</code> is true. <code>borrowAll</code> was written and tested against that promise. Then someone added e-books "because an e-book is a book", and overrode <code>borrow</code> to throw. javac accepts it — the method signature is identical. At run time the cart B001, E010, B002 crashes on the second item: B001 is out, E010 and B002 are not, and the caller gets an exception it never knew could happen. A half-finished operation is worse than a clean failure.</p>
+<p>The JDK has the same shape in the open: <code>List.of(…)</code> returns a <code>List</code> whose <code>add</code> throws <code>UnsupportedOperationException</code> (last line). The JDK documents <code>add</code> as an "optional operation", so it is a documented exception, not a hidden one — but it is the reason a method that takes <code>List</code> and calls <code>add</code> can fail with some lists and not others. In your own classes, do not copy that; split the types instead (next slide).</p>
+<div class="pitfall">Trap: "IS-A in real life" is not the test. The test is behavioural: can every caller of the parent use the child unchanged? An e-book is a book for a reader, but not for <code>borrowAll</code>.</div>
+<p class="meo">🧠 Liskov and Wing (1994) state it formally: properties provable about objects of the parent type must also hold for objects of the subtype. In practice: same inputs accepted, same promises kept, no new exceptions.</p>`,
+        `<p class="y-chinh">🎯 Nguyên lý thay thế Liskov (Barbara Liskov, 1987): ở bất cứ đâu code mong một <code>Book</code>, mọi kiểu con phải chạy được mà không gây bất ngờ. <code>EBook extends Book</code> biên dịch được — và <code>borrow</code> của nó ném lỗi, nên vòng lặp viết cho sách dừng giữa chừng.</p>
+<pre class="trich"><code class="language-java">class Book {
+    final String id;
+    private String borrower;
+    Book(String id) { this.id = id; }
+    void borrow(String memberId) {          // lời hứa: sau đó isOut() là true
+        if (borrower != null) throw new IllegalStateException(id + " is out");
+        borrower = memberId;
+    }
+    boolean isOut() { return borrower != null; }
+}
+
+class EBook extends Book {
+    EBook(String id) { super(id); }
+    @Override void borrow(String memberId) {   // phá lời hứa của lớp cha
+        throw new UnsupportedOperationException("an e-book is downloaded, not borrowed");
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">static int borrowAll(List&lt;Book&gt; books, String memberId) {   // viết và test với Book
+    int n = 0;
+    for (Book b : books) { b.borrow(memberId); n++; }
+    return n;
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;Book&gt; cart = List.of(new Book("B001"), new EBook("E010"), new Book("B002"));
+try {
+    System.out.println("borrowed " + borrowAll(cart, "M001"));
+} catch (UnsupportedOperationException e) {
+    System.out.println("crash: " + e);
+}
+for (Book b : cart) System.out.println(b.id + " out=" + b.isOut());</code></pre>
+<div class="out">crash: java.lang.UnsupportedOperationException: an e-book is downloaded, not borrowed<br>
+B001 out=true<br>
+E010 out=false<br>
+B002 out=false<br>
+List.of(...).add -&gt; UnsupportedOperationException</div>
+<p><code>Book.borrow</code> đưa ra một lời hứa, ghi trong chú thích: sau khi gọi thì <code>isOut()</code> là true. <code>borrowAll</code> được viết và test dựa trên lời hứa đó. Rồi ai đó thêm e-book "vì e-book cũng là sách", và ghi đè <code>borrow</code> để ném lỗi. javac chấp nhận — chữ ký phương thức y hệt. Lúc chạy, giỏ B001, E010, B002 sập ở món thứ hai: B001 đã cho mượn, E010 và B002 thì không, còn người gọi nhận một exception nó chưa từng biết là có thể xảy ra. Một thao tác làm dở dang còn tệ hơn một lần hỏng gọn gàng.</p>
+<p>JDK có đúng hình dạng này ngay trước mắt: <code>List.of(…)</code> trả một <code>List</code> mà <code>add</code> ném <code>UnsupportedOperationException</code> (dòng cuối). JDK ghi rõ <code>add</code> là "optional operation" (thao tác tuỳ chọn), nên đó là exception đã được báo trước, không phải giấu — nhưng chính nó là lý do một phương thức nhận <code>List</code> và gọi <code>add</code> có thể hỏng với list này mà không hỏng với list khác. Trong lớp của bạn, đừng chép kiểu đó; hãy tách kiểu ra (slide sau).</p>
+<div class="pitfall">Bẫy: "LÀ-MỘT ngoài đời" không phải phép thử. Phép thử là hành vi: mọi người gọi lớp cha có dùng được lớp con mà không đổi gì không? E-book là sách với người đọc, nhưng không phải với <code>borrowAll</code>.</div>
+<p class="meo">🧠 Liskov và Wing (1994) phát biểu chặt: những tính chất chứng minh được về đối tượng kiểu cha cũng phải đúng với đối tượng kiểu con. Trong thực tế: nhận cùng đầu vào, giữ cùng lời hứa, không có exception mới.</p>`],
+      [7, 'L — the Square trap and a safe design',
+        `<p class="y-chinh">🎯 The classic interview example: in maths a square is a rectangle, but a <code>Square</code> that extends a mutable <code>Rect</code> breaks every caller that sets width and height separately — area 16 where the caller expected 20. The fix is to model abilities, not real-world categories.</p>
+<pre class="trich"><code class="language-java">class Rect {
+    protected int w, h;
+    void setWidth(int w) { this.w = w; }
+    void setHeight(int h) { this.h = h; }
+    int area() { return w * h; }
+}
+
+class Square extends Rect {                   // "a square IS-A rectangle" — in maths
+    @Override void setWidth(int w) { this.w = w; this.h = w; }
+    @Override void setHeight(int h) { this.w = h; this.h = h; }
+}</code></pre>
+<pre class="trich"><code class="language-java">static String resize(Rect r) {             // a client of Rect: its test passed for years
+    r.setWidth(5);
+    r.setHeight(4);
+    return r.getClass().getSimpleName() + ": expected 20, got " + r.area();
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IBorrowable { String borrow(String memberId); }
+interface IDownloadable { String downloadLink(String memberId); }
+
+class PaperBook implements IBorrowable {
+    private final String id;
+    PaperBook(String id) { this.id = id; }
+    public String borrow(String m) { return id + " borrowed by " + m + ", due in 14 days"; }
+}
+class Dvd implements IBorrowable {
+    private final String id;
+    Dvd(String id) { this.id = id; }
+    public String borrow(String m) { return id + " borrowed by " + m + ", due in 3 days"; }
+}
+class EBook2 implements IDownloadable {
+    private final String id;
+    EBook2(String id) { this.id = id; }
+    public String downloadLink(String m) { return id + " link for " + m + ": /ebooks/" + id + "?token=..."; }
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;IBorrowable&gt; desk = List.of(new PaperBook("B001"), new Dvd("D006"));
+List&lt;IDownloadable&gt; online = List.of(new EBook2("E010"));
+for (IBorrowable b : desk) System.out.println(b.borrow("M001"));
+for (IDownloadable d : online) System.out.println(d.downloadLink("M001"));</code></pre>
+<div class="out">Rect: expected 20, got 20<br>
+Square: expected 20, got 16<br>
+B001 borrowed by M001, due in 14 days<br>
+D006 borrowed by M001, due in 3 days<br>
+E010 link for M001: /ebooks/E010?token=...</div>
+<p><code>resize</code> sets width 5 then height 4 and expects 20. With a <code>Rect</code> it gets 20. With a <code>Square</code>, <code>setHeight(4)</code> also changes the width (to keep it square), so the area is 4 × 4 = 16. Both classes are "correct" on their own; the subtype simply does not keep the parent's promise that width and height are independent. The table on the slide gives the rule: a subtype may accept more and promise more, but must not demand more, promise less, or throw new kinds of exceptions.</p>
+<p>The safe design for CT Library splits by what an item can <em>do</em>: <code>IBorrowable</code> for things that go out of the building (paper books 14 days, DVDs 3 days) and <code>IDownloadable</code> for e-books. Nobody can put an e-book into a list of borrowables any more — the compiler refuses, which is much better than a crash in the middle of a loop. (For shapes, the usual fix is the same idea: immutable shapes, or no inheritance between Square and Rect.)</p>
+<div class="pitfall">Trap: patching the caller with <code>if (b instanceof EBook) continue;</code> "fixes" the crash and breaks OCP: every new special subtype adds another <code>instanceof</code> somewhere. An <code>instanceof</code> check against a subclass in client code is a classic LSP smell.</div>`,
+        `<p class="y-chinh">🎯 Ví dụ phỏng vấn kinh điển: trong toán, hình vuông là hình chữ nhật, nhưng một <code>Square</code> kế thừa <code>Rect</code> có thể sửa được sẽ làm hỏng mọi người gọi đặt chiều rộng và chiều cao riêng — diện tích 16 trong khi người gọi chờ 20. Cách sửa là mô hình hoá khả năng, không phải phân loại ngoài đời.</p>
+<pre class="trich"><code class="language-java">class Rect {
+    protected int w, h;
+    void setWidth(int w) { this.w = w; }
+    void setHeight(int h) { this.h = h; }
+    int area() { return w * h; }
+}
+
+class Square extends Rect {                   // "hình vuông LÀ hình chữ nhật" — trong toán
+    @Override void setWidth(int w) { this.w = w; this.h = w; }
+    @Override void setHeight(int h) { this.w = h; this.h = h; }
+}</code></pre>
+<pre class="trich"><code class="language-java">static String resize(Rect r) {             // khách của Rect: test của nó xanh nhiều năm
+    r.setWidth(5);
+    r.setHeight(4);
+    return r.getClass().getSimpleName() + ": expected 20, got " + r.area();
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IBorrowable { String borrow(String memberId); }
+interface IDownloadable { String downloadLink(String memberId); }
+
+class PaperBook implements IBorrowable {
+    private final String id;
+    PaperBook(String id) { this.id = id; }
+    public String borrow(String m) { return id + " borrowed by " + m + ", due in 14 days"; }
+}
+class Dvd implements IBorrowable {
+    private final String id;
+    Dvd(String id) { this.id = id; }
+    public String borrow(String m) { return id + " borrowed by " + m + ", due in 3 days"; }
+}
+class EBook2 implements IDownloadable {
+    private final String id;
+    EBook2(String id) { this.id = id; }
+    public String downloadLink(String m) { return id + " link for " + m + ": /ebooks/" + id + "?token=..."; }
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;IBorrowable&gt; desk = List.of(new PaperBook("B001"), new Dvd("D006"));
+List&lt;IDownloadable&gt; online = List.of(new EBook2("E010"));
+for (IBorrowable b : desk) System.out.println(b.borrow("M001"));
+for (IDownloadable d : online) System.out.println(d.downloadLink("M001"));</code></pre>
+<div class="out">Rect: expected 20, got 20<br>
+Square: expected 20, got 16<br>
+B001 borrowed by M001, due in 14 days<br>
+D006 borrowed by M001, due in 3 days<br>
+E010 link for M001: /ebooks/E010?token=...</div>
+<p><code>resize</code> đặt chiều rộng 5 rồi chiều cao 4 và chờ 20. Với <code>Rect</code> nó được 20. Với <code>Square</code>, <code>setHeight(4)</code> đổi luôn chiều rộng (để giữ hình vuông), nên diện tích là 4 × 4 = 16. Từng lớp riêng đều "đúng"; chỉ là kiểu con không giữ lời hứa của lớp cha rằng rộng và cao độc lập với nhau. Bảng trên slide cho luật: kiểu con được nhận nhiều hơn và hứa nhiều hơn, nhưng không được đòi nhiều hơn (điều kiện trước chặt hơn), hứa ít hơn (điều kiện sau lỏng hơn), hay ném loại exception mới.</p>
+<p>Thiết kế an toàn cho CT Library tách theo việc một tài liệu <em>làm được</em>: <code>IBorrowable</code> cho thứ được mang ra khỏi thư viện (sách giấy 14 ngày, DVD 3 ngày) và <code>IDownloadable</code> cho e-book. Không ai bỏ được e-book vào danh sách thứ cho mượn nữa — trình biên dịch từ chối, tốt hơn nhiều so với một cú sập giữa vòng lặp. (Với hình học, cách sửa thường dùng cũng cùng ý: hình bất biến, hoặc không cho Square kế thừa Rect.)</p>
+<div class="pitfall">Bẫy: vá phía người gọi bằng <code>if (b instanceof EBook) continue;</code> thì "chữa" được cú sập nhưng phá OCP: mỗi kiểu con đặc biệt mới lại thêm một <code>instanceof</code> ở đâu đó. Kiểm <code>instanceof</code> một lớp con trong code người dùng là mùi LSP kinh điển.</div>`],
+      [8, 'I — Interface Segregation: small roles',
+        `<p class="y-chinh">🎯 Interface Segregation Principle: no class should be forced to implement methods it cannot honour, and no client should depend on methods it does not use. One fat <code>ILibraryItem</code> forces an e-book to "repair" and "borrow"; three small roles do not.</p>
+<pre class="trich"><code class="language-java">interface ILibraryItem {                     // one interface for every kind of item
+    String borrow(String memberId);
+    String download(String memberId);
+    void repair();
+}
+class FatEBook implements ILibraryItem {
+    public String borrow(String m) { throw new UnsupportedOperationException("cannot borrow an e-book"); }
+    public String download(String m) { return "link for " + m; }
+    public void repair() { throw new UnsupportedOperationException("nothing to repair in a file"); }
+}</code></pre>
+<pre class="trich"><code class="language-java">ILibraryItem e = new FatEBook();
+System.out.println("FatEBook.download -&gt; " + e.download("M001"));
+try { e.repair(); }
+catch (UnsupportedOperationException ex) { System.out.println("FatEBook.repair  -&gt; " + ex.getMessage()); }</code></pre>
+<pre class="trich"><code class="language-java">interface IBorrowable { String borrow(String memberId); }
+interface IDownloadable { String download(String memberId); }
+interface IRepairable { void repair(); }
+
+class SlimBook implements IBorrowable, IRepairable {
+    private final String id;
+    SlimBook(String id) { this.id = id; }
+    public String borrow(String m) { return id + " -&gt; " + m; }
+    public void repair() { System.out.println("repair " + id + ": new cover"); }
+}
+class SlimDvd implements IBorrowable, IRepairable {
+    private final String id;
+    SlimDvd(String id) { this.id = id; }
+    public String borrow(String m) { return id + " -&gt; " + m; }
+    public void repair() { System.out.println("repair " + id + ": polish the disc"); }
+}
+class SlimEBook implements IDownloadable {
+    private final String id;
+    SlimEBook(String id) { this.id = id; }
+    public String download(String m) { return id + " link for " + m; }
+}
+class RepairDesk {                           // depends only on the role it needs
+    void fix(IRepairable item) { item.repair(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Object[] items = { new SlimBook("B001"), new SlimEBook("E010"), new SlimDvd("D006") };
+for (Object o : items) {
+    List&lt;String&gt; roles = new ArrayList&lt;&gt;();
+    for (Class&lt;?&gt; c : o.getClass().getInterfaces()) roles.add(c.getSimpleName());
+    System.out.printf("%-9s implements %s%n", o.getClass().getSimpleName(), roles);
+}
+RepairDesk desk = new RepairDesk();
+desk.fix(new SlimBook("B001"));
+desk.fix(new SlimDvd("D006"));
+// desk.fix(new SlimEBook("E010"));   // does not compile: an e-book is not IRepairable</code></pre>
+<div class="out">FatEBook.download -&gt; link for M001<br>
+FatEBook.repair &nbsp;-&gt; nothing to repair in a file<br>
+SlimBook &nbsp;implements [IBorrowable, IRepairable]<br>
+SlimEBook implements [IDownloadable]<br>
+SlimDvd &nbsp;&nbsp;implements [IBorrowable, IRepairable]<br>
+repair B001: new cover<br>
+repair D006: polish the disc</div>
+<p>Left: <code>ILibraryItem</code> lists everything any item could do. <code>FatEBook</code> must implement all three methods, so two of them become stubs that throw — exactly the LSP violation of slide 6, created by the interface itself. Every client that receives an <code>ILibraryItem</code> must now guess which methods are real.</p>
+<p>Right: three roles, each one a capability — <code>IBorrowable</code>, <code>IDownloadable</code>, <code>IRepairable</code>. A class implements only what it can do; the reflection loop in the output lists them: a book and a DVD are borrowable and repairable, an e-book only downloadable. <code>RepairDesk.fix</code> asks for <code>IRepairable</code>, so passing an e-book is a compile error (the commented line in <code>main</code>) instead of a run-time surprise. A small interface also means a small fake in tests.</p>
+<div class="callout">🧭 <strong>Spring Data</strong> uses role interfaces on purpose: <code>CrudRepository</code> (save, find, delete), <code>PagingAndSortingRepository</code> (pages, sorting), <code>JpaRepository</code> (JPA extras). A read-only repository extends only <code>Repository</code> and declares the finder methods it needs.</div>
+<p class="meo">🧠 Java's own <code>Comparable</code>, <code>Runnable</code>, <code>AutoCloseable</code> have one method each — the ultimate segregated interfaces, and the reason a lambda can stand in for them.</p>`,
+        `<p class="y-chinh">🎯 Nguyên lý tách interface (Interface Segregation): không lớp nào bị ép cài đặt phương thức nó không làm được, và không người dùng nào phụ thuộc vào phương thức nó không dùng. Một <code>ILibraryItem</code> béo ép e-book phải "sửa chữa" và "cho mượn"; ba vai nhỏ thì không.</p>
+<pre class="trich"><code class="language-java">interface ILibraryItem {                     // một interface cho mọi loại tài liệu
+    String borrow(String memberId);
+    String download(String memberId);
+    void repair();
+}
+class FatEBook implements ILibraryItem {
+    public String borrow(String m) { throw new UnsupportedOperationException("cannot borrow an e-book"); }
+    public String download(String m) { return "link for " + m; }
+    public void repair() { throw new UnsupportedOperationException("nothing to repair in a file"); }
+}</code></pre>
+<pre class="trich"><code class="language-java">ILibraryItem e = new FatEBook();
+System.out.println("FatEBook.download -&gt; " + e.download("M001"));
+try { e.repair(); }
+catch (UnsupportedOperationException ex) { System.out.println("FatEBook.repair  -&gt; " + ex.getMessage()); }</code></pre>
+<pre class="trich"><code class="language-java">interface IBorrowable { String borrow(String memberId); }
+interface IDownloadable { String download(String memberId); }
+interface IRepairable { void repair(); }
+
+class SlimBook implements IBorrowable, IRepairable {
+    private final String id;
+    SlimBook(String id) { this.id = id; }
+    public String borrow(String m) { return id + " -&gt; " + m; }
+    public void repair() { System.out.println("repair " + id + ": new cover"); }
+}
+class SlimDvd implements IBorrowable, IRepairable {
+    private final String id;
+    SlimDvd(String id) { this.id = id; }
+    public String borrow(String m) { return id + " -&gt; " + m; }
+    public void repair() { System.out.println("repair " + id + ": polish the disc"); }
+}
+class SlimEBook implements IDownloadable {
+    private final String id;
+    SlimEBook(String id) { this.id = id; }
+    public String download(String m) { return id + " link for " + m; }
+}
+class RepairDesk {                           // chỉ phụ thuộc vai nó cần
+    void fix(IRepairable item) { item.repair(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Object[] items = { new SlimBook("B001"), new SlimEBook("E010"), new SlimDvd("D006") };
+for (Object o : items) {
+    List&lt;String&gt; roles = new ArrayList&lt;&gt;();
+    for (Class&lt;?&gt; c : o.getClass().getInterfaces()) roles.add(c.getSimpleName());
+    System.out.printf("%-9s implements %s%n", o.getClass().getSimpleName(), roles);
+}
+RepairDesk desk = new RepairDesk();
+desk.fix(new SlimBook("B001"));
+desk.fix(new SlimDvd("D006"));
+// không biên dịch: e-book không phải IRepairable</code></pre>
+<div class="out">FatEBook.download -&gt; link for M001<br>
+FatEBook.repair &nbsp;-&gt; nothing to repair in a file<br>
+SlimBook &nbsp;implements [IBorrowable, IRepairable]<br>
+SlimEBook implements [IDownloadable]<br>
+SlimDvd &nbsp;&nbsp;implements [IBorrowable, IRepairable]<br>
+repair B001: new cover<br>
+repair D006: polish the disc</div>
+<p>Bên trái: <code>ILibraryItem</code> liệt kê mọi thứ một tài liệu có thể làm. <code>FatEBook</code> phải cài cả ba phương thức, nên hai cái thành hàm rỗng ném lỗi — đúng vi phạm LSP của slide 6, do chính interface tạo ra. Mọi người dùng nhận một <code>ILibraryItem</code> giờ phải đoán phương thức nào là thật.</p>
+<p>Bên phải: ba vai, mỗi vai là một khả năng — <code>IBorrowable</code>, <code>IDownloadable</code>, <code>IRepairable</code>. Một lớp chỉ cài những gì nó làm được; vòng lặp reflection trong output liệt kê chúng: sách và DVD cho mượn được và sửa được, e-book chỉ tải về được. <code>RepairDesk.fix</code> đòi <code>IRepairable</code>, nên truyền một e-book là lỗi biên dịch (dòng đã comment trong <code>main</code>) thay vì một bất ngờ lúc chạy. Interface nhỏ còn nghĩa là đồ giả nhỏ khi test.</p>
+<div class="callout">🧭 <strong>Spring Data</strong> cố ý dùng interface theo vai: <code>CrudRepository</code> (lưu, tìm, xoá), <code>PagingAndSortingRepository</code> (phân trang, sắp xếp), <code>JpaRepository</code> (phần thêm của JPA). Một repository chỉ đọc chỉ kế thừa <code>Repository</code> và tự khai các phương thức tìm nó cần.</div>
+<p class="meo">🧠 <code>Comparable</code>, <code>Runnable</code>, <code>AutoCloseable</code> của chính Java đều chỉ có một phương thức — interface được tách tới mức tối đa, và cũng là lý do một lambda thay được cho chúng.</p>`],
+      [9, 'D — Dependency Inversion: own the interface',
+        `<p class="y-chinh">🎯 Dependency Inversion Principle: high-level policy (the loan rules) must not depend on low-level details (a CSV file); both depend on an abstraction — and the abstraction belongs to the high level, written in its words.</p>
+<pre class="trich"><code class="language-java">interface ILoanRepository {                   // defined by what the SERVICE needs
+    boolean isOut(String itemId);
+    void save(String memberId, String itemId);
+    int count();
+}
+
+class LoanService {                            // high level: knows only the interface
+    private final ILoanRepository repo;
+    LoanService(ILoanRepository repo) { this.repo = Objects.requireNonNull(repo); }
+    void borrow(String memberId, String itemId) {
+        if (repo.isOut(itemId)) throw new IllegalStateException(itemId + " is out");
+        repo.save(memberId, itemId);
+    }
+    String tryBorrow(String memberId, String itemId) {
+        try { borrow(memberId, itemId); return "ok"; }
+        catch (IllegalStateException e) { return "refused: " + e.getMessage(); }
+    }
+    int countOut() { return repo.count(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">class InMemoryLoanRepository implements ILoanRepository {   // low level detail #1
+    private final Map&lt;String, String&gt; m = new HashMap&lt;&gt;();
+    public boolean isOut(String itemId) { return m.containsKey(itemId); }
+    public void save(String memberId, String itemId) { m.put(itemId, memberId); }
+    public int count() { return m.size(); }
+}
+
+class CsvLoanRepository implements ILoanRepository {        // low level detail #2 (a "file" in memory)
+    private final StringBuilder file = new StringBuilder("itemId,memberId\\n");
+    public boolean isOut(String itemId) { return file.indexOf("\\n" + itemId + ",") &gt;= 0; }
+    public void save(String memberId, String itemId) { file.append(itemId).append(',').append(memberId).append('\\n'); }
+    public int count() { return (int) file.chars().filter(c -&gt; c == '\\n').count() - 1; }
+    String fileContent() { return file.toString(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (ILoanRepository repo : List.of(new InMemoryLoanRepository(), new CsvLoanRepository())) {
+    LoanService s = new LoanService(repo);
+    s.borrow("M001", "B001");
+    s.borrow("M002", "B002");
+    String second = s.tryBorrow("M003", "B001");
+    System.out.println(repo.getClass().getSimpleName() + ": " + s.countOut() + " out | " + second);
+}
+System.out.println("CSV file content:");
+CsvLoanRepository csv = new CsvLoanRepository();
+new LoanService(csv).borrow("M001", "B001");
+System.out.print(csv.fileContent());</code></pre>
+<div class="out">InMemoryLoanRepository: 2 out | refused: B001 is out<br>
+CsvLoanRepository: 2 out | refused: B001 is out<br>
+CSV file content:<br>
+itemId,memberId<br>
+B001,M001</div>
+<p>Look at the diagram first. Before: <code>LoanService</code> calls <code>new FileLoanRepository()</code>, so the arrow of dependency runs from the rules down to the file. Every test of a loan rule needs a real file, and moving to PostgreSQL means editing the service. After: <code>LoanService</code> declares <code>ILoanRepository</code> with exactly the three operations it needs — <code>isOut</code>, <code>save</code>, <code>count</code> — and the two stores implement it. The arrow from the detail now points <em>up</em>, to the interface owned by the rules: that reversal is the "inversion".</p>
+<p>The output proves the rules do not care: with the in-memory store and with the CSV store the same service lends two items and refuses the second B001 with the same message. The CSV content shows the detail is real. Note who designed the interface: not "everything a CSV file can do", but "what a loan service needs to ask" — that is why the in-memory fake is six lines.</p>
+<div class="callout">Three words that interviewers mix up: <strong>DIP</strong> is the principle (depend on abstractions), <strong>DI</strong> the technique (receive dependencies from outside, ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1">CS.6</a>), <strong>IoC</strong> the framework that does DI for you (Spring's ApplicationContext).</div>`,
+        `<p class="y-chinh">🎯 Nguyên lý đảo ngược phụ thuộc (Dependency Inversion): chính sách tầng cao (luật mượn) không được phụ thuộc chi tiết tầng thấp (một tệp CSV); cả hai phụ thuộc vào một trừu tượng — và trừu tượng đó thuộc về tầng cao, viết bằng ngôn ngữ của tầng cao.</p>
+<pre class="trich"><code class="language-java">interface ILoanRepository {                   // định nghĩa theo thứ SERVICE cần
+    boolean isOut(String itemId);
+    void save(String memberId, String itemId);
+    int count();
+}
+
+class LoanService {                            // tầng cao: chỉ biết interface
+    private final ILoanRepository repo;
+    LoanService(ILoanRepository repo) { this.repo = Objects.requireNonNull(repo); }
+    void borrow(String memberId, String itemId) {
+        if (repo.isOut(itemId)) throw new IllegalStateException(itemId + " is out");
+        repo.save(memberId, itemId);
+    }
+    String tryBorrow(String memberId, String itemId) {
+        try { borrow(memberId, itemId); return "ok"; }
+        catch (IllegalStateException e) { return "refused: " + e.getMessage(); }
+    }
+    int countOut() { return repo.count(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">class InMemoryLoanRepository implements ILoanRepository {   // chi tiết tầng thấp #1
+    private final Map&lt;String, String&gt; m = new HashMap&lt;&gt;();
+    public boolean isOut(String itemId) { return m.containsKey(itemId); }
+    public void save(String memberId, String itemId) { m.put(itemId, memberId); }
+    public int count() { return m.size(); }
+}
+
+class CsvLoanRepository implements ILoanRepository {        // chi tiết tầng thấp #2 ("tệp" trong bộ nhớ)
+    private final StringBuilder file = new StringBuilder("itemId,memberId\\n");
+    public boolean isOut(String itemId) { return file.indexOf("\\n" + itemId + ",") &gt;= 0; }
+    public void save(String memberId, String itemId) { file.append(itemId).append(',').append(memberId).append('\\n'); }
+    public int count() { return (int) file.chars().filter(c -&gt; c == '\\n').count() - 1; }
+    String fileContent() { return file.toString(); }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (ILoanRepository repo : List.of(new InMemoryLoanRepository(), new CsvLoanRepository())) {
+    LoanService s = new LoanService(repo);
+    s.borrow("M001", "B001");
+    s.borrow("M002", "B002");
+    String second = s.tryBorrow("M003", "B001");
+    System.out.println(repo.getClass().getSimpleName() + ": " + s.countOut() + " out | " + second);
+}
+System.out.println("CSV file content:");
+CsvLoanRepository csv = new CsvLoanRepository();
+new LoanService(csv).borrow("M001", "B001");
+System.out.print(csv.fileContent());</code></pre>
+<div class="out">InMemoryLoanRepository: 2 out | refused: B001 is out<br>
+CsvLoanRepository: 2 out | refused: B001 is out<br>
+CSV file content:<br>
+itemId,memberId<br>
+B001,M001</div>
+<p>Nhìn hình trước. Trước: <code>LoanService</code> gọi <code>new FileLoanRepository()</code>, nên mũi tên phụ thuộc chạy từ luật xuống tệp. Mọi test một luật mượn đều cần tệp thật, và chuyển sang PostgreSQL nghĩa là sửa service. Sau: <code>LoanService</code> khai <code>ILoanRepository</code> với đúng ba thao tác nó cần — <code>isOut</code>, <code>save</code>, <code>count</code> — và hai kho cài interface đó. Mũi tên từ chi tiết giờ chỉ <em>lên trên</em>, tới interface do tầng luật sở hữu: chính cú đảo chiều đó là chữ "inversion".</p>
+<p>Output chứng minh luật không quan tâm: với kho trong bộ nhớ và với kho CSV, cùng một service cho mượn hai tài liệu và từ chối B001 lần hai với cùng câu báo. Nội dung CSV cho thấy chi tiết là thật. Để ý ai thiết kế interface: không phải "mọi thứ một tệp CSV làm được", mà "những gì service mượn cần hỏi" — vì thế đồ giả trong bộ nhớ chỉ sáu dòng.</p>
+<div class="callout">Ba chữ người phỏng vấn hay đánh đố: <strong>DIP</strong> là nguyên lý (phụ thuộc vào trừu tượng), <strong>DI</strong> là kỹ thuật (nhận phụ thuộc từ bên ngoài, ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1">CS.6</a>), <strong>IoC</strong> là framework làm DI giúp bạn (ApplicationContext của Spring).</div>`],
+      [10, 'SOLID inside a Spring Boot project',
+        `<p class="y-chinh">🎯 Each letter has a concrete Spring Boot form: layered beans (S), one bean per variant collected into a list (O), interchangeable repositories (L), role interfaces in Spring Data (I), constructor injection of interfaces (D).</p>
+<pre><code class="language-java">@Service
+public class LoanService {
+    private final ILoanRepository loans;  // interface
+    private final List&lt;IFeePolicy&gt; fees;  // all beans of the type
+
+    public LoanService(ILoanRepository loans, List&lt;IFeePolicy&gt; fees) {
+        this.loans = loans;
+        this.fees = fees;
+    }
+}
+
+@Component
+class AlumniFee implements IFeePolicy { /* ... */ }  // O: just add</code></pre>
+<p>The code is an illustration (Spring is not run on this page). Spring sees one constructor, so it injects without <code>@Autowired</code>. For <code>ILoanRepository</code> it finds the one bean of that type — a JPA repository in production, a fake in a test slice. For <code>List&lt;IFeePolicy&gt;</code> it injects <em>every</em> bean that implements the interface: add <code>AlumniFee</code> with <code>@Component</code> and the list has one more element, with no edit anywhere else. That is OCP done by the container.</p>
+<p>Read the table row by row and match each to a slide: S — controllers, services and repositories change for different reasons (slide 4); O — new behaviour as a new bean (slide 5); L — Spring Data hands you a <code>JpaRepository</code> wherever a <code>CrudRepository</code> is expected, and it keeps the contract (slide 6); I — pick the smallest repository interface that has the methods you need (slide 8); D — services declare interfaces in their constructors and Spring is the composition root (slide 9).</p>
+<div class="callout">🧭 <strong>Go further</strong>: PRJ301 ⭐ Spring Boot shows the real application context, and SWD392 covers coupling and cohesion at the architecture level.</div>`,
+        `<p class="y-chinh">🎯 Mỗi chữ có một dạng Spring Boot cụ thể: bean chia tầng (S), mỗi biến thể một bean gom vào một list (O), repository thay thế cho nhau được (L), interface theo vai trong Spring Data (I), tiêm interface qua constructor (D).</p>
+<pre><code class="language-java">@Service
+public class LoanService {
+    private final ILoanRepository loans;  // interface
+    private final List&lt;IFeePolicy&gt; fees;  // all beans of the type
+
+    public LoanService(ILoanRepository loans, List&lt;IFeePolicy&gt; fees) {
+        this.loans = loans;
+        this.fees = fees;
+    }
+}
+
+@Component
+class AlumniFee implements IFeePolicy { /* ... */ }  // O: just add</code></pre>
+<p>Code là minh hoạ (trang này không chạy Spring). Spring thấy một constructor duy nhất, nên tiêm mà không cần <code>@Autowired</code>. Với <code>ILoanRepository</code> nó tìm đúng một bean kiểu đó — một JPA repository khi chạy thật, một đồ giả trong test. Với <code>List&lt;IFeePolicy&gt;</code> nó tiêm <em>mọi</em> bean cài interface đó: thêm <code>AlumniFee</code> có <code>@Component</code> là list có thêm một phần tử, không sửa chỗ nào khác. Đó là OCP do bộ chứa làm hộ.</p>
+<p>Đọc bảng từng dòng và ghép với từng slide: S — controller, service và repository đổi vì những lý do khác nhau (slide 4); O — hành vi mới là một bean mới (slide 5); L — Spring Data đưa bạn một <code>JpaRepository</code> ở mọi chỗ mong <code>CrudRepository</code>, và nó giữ đúng hợp đồng (slide 6); I — chọn interface repository nhỏ nhất có đủ phương thức bạn cần (slide 8); D — service khai interface trong constructor và Spring là nơi lắp ráp (slide 9).</p>
+<div class="callout">🧭 <strong>Đi tiếp</strong>: PRJ301 ⭐ Spring Boot cho thấy application context thật, còn SWD392 bàn về coupling và cohesion ở mức kiến trúc.</div>`],
+      [11, 'When SOLID hurts: over-engineering',
+        `<p class="y-chinh">🎯 Principles have a cost — more classes, more files, more indirection. Four signs that you paid it for nothing: an interface per class, a family of classes for a rule that never changes, extension points for "maybe", and logic you cannot find without opening six files.</p>
+<p><strong>An interface per class.</strong> <code>IBookService</code> with exactly one implementation and no fake in any test buys nothing; your IDE can extract the interface in two seconds on the day a second implementation (or a test double) appears. <strong>Seven classes for a ten-line rule.</strong> A strategy family is right for fee policies that change every semester, wrong for a rule that has never changed — the "rule of three" says to refactor when the third variant arrives, not before.</p>
+<p><strong>Designing for "maybe".</strong> YAGNI — "You Aren't Gonna Need It", from Extreme Programming — reminds you that unused flexibility is still code to read, test and keep compiling. <strong>Indirection everywhere.</strong> KISS — "Keep It Simple" — the simplest design that passes the tests is usually the easiest to change, because a reader can see it all.</p>
+<p>The box gives a practical test: name the change the principle protects you from. "A new member type next semester" — likely, apply OCP. "We might switch from Java to Kotlin" — not a design decision for one class. If you cannot name a likely change, keep the simple version, but keep it easy to split later: small methods, no static state, dependencies passed in.</p>
+<p class="meo">🧠 Interview answer to "Can SOLID be harmful?": "Yes, applied blindly it adds layers without benefit; I apply a principle when I can point to the change it protects against."</p>`,
+        `<p class="y-chinh">🎯 Nguyên lý có giá — thêm lớp, thêm tệp, thêm tầng trung gian. Bốn dấu hiệu bạn trả giá mà không được gì: mỗi lớp một interface, cả một họ lớp cho một luật không bao giờ đổi, chỗ mở rộng cho chuyện "biết đâu", và logic không tìm thấy nếu không mở sáu tệp.</p>
+<p><strong>Mỗi lớp một interface.</strong> <code>IBookService</code> chỉ có đúng một bản cài đặt và không có đồ giả trong test nào thì chẳng được gì; IDE tách interface trong hai giây vào ngày bản cài đặt thứ hai (hay đồ giả cho test) xuất hiện. <strong>Bảy lớp cho một luật mười dòng.</strong> Họ strategy đúng chỗ với chính sách phí đổi mỗi học kỳ, sai chỗ với một luật chưa từng đổi — "luật ba lần" (rule of three) bảo hãy tái cấu trúc khi biến thể thứ ba tới, không phải trước đó.</p>
+<p><strong>Thiết kế cho chuyện "biết đâu".</strong> YAGNI — "You Aren't Gonna Need It" (bạn sẽ không cần nó đâu), từ Extreme Programming — nhắc rằng sự linh hoạt không dùng tới vẫn là code phải đọc, test và giữ cho biên dịch được. <strong>Tầng trung gian khắp nơi.</strong> KISS — "Keep It Simple" (giữ cho đơn giản) — thiết kế đơn giản nhất qua được test thường là cái dễ sửa nhất, vì người đọc nhìn thấy trọn nó.</p>
+<p>Ô cuối cho một phép thử thực tế: gọi tên thay đổi mà nguyên lý bảo vệ bạn. "Học kỳ sau có loại thành viên mới" — có khả năng, áp OCP. "Biết đâu chuyển từ Java sang Kotlin" — không phải quyết định thiết kế cho một lớp. Không gọi tên được thay đổi nào có khả năng thì giữ bản đơn giản, nhưng giữ cho dễ tách về sau: phương thức nhỏ, không trạng thái static, phụ thuộc truyền vào.</p>
+<p class="meo">🧠 Trả lời câu "SOLID có thể gây hại không?": "Có, áp máy móc thì thêm tầng mà không lợi gì; em áp một nguyên lý khi chỉ ra được thay đổi mà nó bảo vệ."</p>`],
+      [12, 'Code smells, principles, interview answers',
+        `<p class="y-chinh">🎯 In a real code review nobody says "this violates the ISP"; they point at a smell. Learn the five smells that map to the five letters — and the five questions interviewers ask about SOLID, with short answers.</p>
+<p>Left, smells: a "Manager" or "Util" class that grows every sprint (S — split by actor); the same <code>if (type.equals(…))</code> in several methods (O — one strategy per type); an override that throws <code>UnsupportedOperationException</code> or does nothing (L — split the hierarchy by ability); classes full of stubs to satisfy an interface (I — smaller interfaces); <code>new FileRepository()</code> or <code>LocalDate.now()</code> inside a service (D — inject an interface, as in CS.6).</p>
+<p>Right, interview answers, each in one breath. <strong>What is SOLID?</strong> Five principles collected by Robert C. Martin around 2000 (the acronym came later, from Michael Feathers) so that one change touches few classes. <strong>SRP?</strong> One actor per class — fee rules and receipt layout change for different people. <strong>An LSP example?</strong> Square/Rectangle: the same calls give area 16 instead of 20; or a subclass that throws where the parent did not. <strong>DIP vs DI?</strong> Principle vs technique; Spring is the IoC container. <strong>Downside?</strong> Over-engineering — add the abstraction when the change is real.</p>
+<p class="meo">🧠 The strongest interview answers end with your own example: "In my CT Library project, the fee rule was a switch; when we added alumni I moved it behind IFeePolicy…" — a measured story beats a recited definition.</p>
+<div class="callout">🧭 Practice: the 🧪 exercises of this deck include a refactoring of a real god class and an LSP bug hunt; ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2">CS.6</a> has 40 more Java core interview questions.</div>`,
+        `<p class="y-chinh">🎯 Trong buổi review code thật, chẳng ai nói "chỗ này vi phạm ISP"; người ta chỉ vào một "mùi code" (code smell). Hãy học năm mùi ứng với năm chữ — và năm câu người phỏng vấn hay hỏi về SOLID, kèm câu trả lời ngắn.</p>
+<p>Bên trái, các mùi: một lớp "Manager" hay "Util" phình ra mỗi sprint (S — tách theo actor); cùng một <code>if (type.equals(…))</code> ở nhiều phương thức (O — mỗi loại một strategy); một override ném <code>UnsupportedOperationException</code> hoặc không làm gì (L — tách cây kế thừa theo khả năng); lớp đầy hàm rỗng chỉ để thoả một interface (I — interface nhỏ hơn); <code>new FileRepository()</code> hay <code>LocalDate.now()</code> bên trong service (D — tiêm interface, như CS.6).</p>
+<p>Bên phải, câu trả lời phỏng vấn, mỗi câu một hơi. <strong>SOLID là gì?</strong> Năm nguyên lý do Robert C. Martin gom lại khoảng năm 2000 (chữ viết tắt có sau, do Michael Feathers đặt) để một thay đổi chỉ chạm ít lớp. <strong>SRP?</strong> Mỗi lớp một actor — luật phí và mẫu phiếu đổi vì những người khác nhau. <strong>Ví dụ LSP?</strong> Hình vuông/chữ nhật: cùng lời gọi mà diện tích 16 thay vì 20; hoặc lớp con ném lỗi ở chỗ lớp cha không ném. <strong>DIP khác DI?</strong> Nguyên lý so với kỹ thuật; Spring là bộ chứa IoC. <strong>Mặt trái?</strong> Làm quá tay — thêm trừu tượng khi thay đổi là thật.</p>
+<p class="meo">🧠 Câu trả lời phỏng vấn mạnh nhất kết thúc bằng ví dụ của chính bạn: "Trong dự án CT Library, luật phí là một switch; khi thêm cựu sinh viên em chuyển nó ra sau IFeePolicy…" — một câu chuyện có số đo thắng một định nghĩa học thuộc.</p>
+<div class="callout">🧭 Luyện tập: bài 🧪 của deck này có tái cấu trúc một god class thật và một bài săn lỗi LSP; ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2">CS.6</a> có thêm 40 câu phỏng vấn Java core.</div>`],
+    ]),
+    bi(`<h2>📌 What to take away from slides 1–12</h2>
+<ul>
+<li>A god class serves several actors; every change to one job risks the others. Count the people who can ask for a change.</li>
+<li><strong>S</strong>: one actor per class — the god class split into service, fee calculator, printer and repository, same output, a new receipt = one new class.</li>
+<li><strong>O</strong>: a new variant is a new class, not a new branch — ALUMNI crashed the switch and cost one class with an interface.</li>
+<li><strong>L</strong>: a subtype keeps the parent's promises — EBook threw half-way through a loop, Square gave 16 instead of 20; split by ability instead.</li>
+<li><strong>I</strong>: small role interfaces; no stubs that throw; the compiler then rejects wrong combinations.</li>
+<li><strong>D</strong>: the rules own the interface, details plug in; DIP is the principle, DI the technique, Spring the IoC container.</li>
+<li>Apply a principle when you can name the change it protects you from; otherwise keep it simple (YAGNI, KISS, rule of three).</li>
+</ul>`,
+    `<h2>📌 Cần mang theo gì từ slide 1–12</h2>
+<ul>
+<li>God class phục vụ nhiều actor; mỗi thay đổi ở một việc đe doạ các việc khác. Hãy đếm số người có thể đòi thay đổi.</li>
+<li><strong>S</strong>: mỗi lớp một actor — god class tách thành service, bộ tính phí, bộ in phiếu và repository, output y nguyên, phiếu mới = một lớp mới.</li>
+<li><strong>O</strong>: biến thể mới là lớp mới, không phải nhánh mới — ALUMNI làm switch sập và chỉ tốn một lớp khi có interface.</li>
+<li><strong>L</strong>: kiểu con giữ lời hứa của lớp cha — EBook ném lỗi giữa vòng lặp, Square cho 16 thay vì 20; hãy tách theo khả năng.</li>
+<li><strong>I</strong>: interface theo vai, nhỏ; không có hàm rỗng ném lỗi; trình biên dịch từ chối tổ hợp sai.</li>
+<li><strong>D</strong>: tầng luật sở hữu interface, chi tiết cắm vào; DIP là nguyên lý, DI là kỹ thuật, Spring là bộ chứa IoC.</li>
+<li>Áp một nguyên lý khi gọi tên được thay đổi nó bảo vệ bạn; còn không thì giữ đơn giản (YAGNI, KISS, luật ba lần).</li>
+</ul>`),
+    books([
+      ['apiDocs', 'java.util.List.of ("Unmodifiable Lists"), java.util.Collection.add ("optional operation", UnsupportedOperationException), java.lang.Class.getInterfaces, java.util.Objects.requireNonNull', 'java.util.List.of ("Unmodifiable Lists"), java.util.Collection.add ("optional operation", UnsupportedOperationException), java.lang.Class.getInterfaces, java.util.Objects.requireNonNull'],
+      ['horstmann1', "Ch. 5 \"Inheritance\" (design hints for inheritance: \"use inheritance to model the is-a relationship\", \"don't use inheritance unless all inherited methods make sense\") and Ch. 6 \"Interfaces\"", 'Chương 5 "Inheritance" (gợi ý thiết kế cho kế thừa: "dùng kế thừa để mô hình quan hệ là-một", "đừng kế thừa trừ khi mọi phương thức thừa hưởng đều có nghĩa") và Chương 6 "Interfaces"'],
+      ['devJava', 'the "Learn" tutorials on interfaces and inheritance', 'các bài "Learn" về interface và kế thừa'],
+    ]),
+  ].join('\n'),
+};
+
+/* ───────── ⭐ CS.7 — 📑 Slide by slide · Design patterns (2): Strategy, Factory, Singleton, Builder, Observer, Template (slides 13–26) ───────── */
+const L_cs7_2 = {
+  title: '⭐ CS.7 — 📑 Slide by slide · Design patterns (2): Strategy, Factory, Singleton, Builder, Observer, Template (slides 13–26)|||⭐ CS.7 — 📑 Học theo từng slide · Mẫu thiết kế (2): Strategy, Factory, Singleton, Builder, Observer, Template (slide 13–26)',
+  slug: 'pro192-slide-cs7-2',
+  type: 'VIDEO',
+  description: 'Phần hai deck ⭐ Chuyên sâu 7 (slide 13–26, tự dựng): bản đồ 23 mẫu GoF (1994) chia ba nhóm, rồi sáu mẫu gặp đầu tiên trong code Java thật, mỗi mẫu có chương trình chạy thật trên CT Library và chỗ Spring Boot dùng nó — Strategy (Comparator và chính sách phí, lambda và sổ đăng ký theo khoá, Map các bean), Factory (factory đơn, static factory, Factory Method; List.of ra List12/ListN, Integer.valueOf có cache), Singleton (eager, holder, enum; bản lười hai luồng tạo hai đối tượng mọi lần chạy; reflection phá constructor private; singleton của Spring là một bean mỗi container và phải không trạng thái), Builder (bước có tên, kiểm một lần ở build), Observer (listener chạy đồng bộ theo thứ tự, một exception chặn listener sau; ApplicationEventPublisher và @EventListener), Template Method (lớp cha final cố định bước, móc tuỳ chọn; AbstractList và JdbcTemplate kiểu callback), cách chọn mẫu và trả lời phỏng vấn.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 7 · part 2 · added by this site · not examined</span>
+<h2>Six design patterns you will meet in every Java codebase</h2>
+<p class="lead">⭐ Self-added advanced section — not examined in PRO192. Part 1 gave you principles; part 2 gives you their most common shapes. A design pattern is a named, reusable solution to a problem that keeps coming back — the name lets a team say in two words what would otherwise take a paragraph. Each of the six patterns below is shown on CT Library with a real program, then inside the JDK, then in Spring Boot, where all six are used every day.</p>
+<div class="callout"><strong>How the examples were run.</strong> JDK 21.0.9, <code>--release 17</code> (the JDK factory example uses <code>--release 21</code> for <code>Locale.of</code>). The singleton race on slide 19 uses a <code>CyclicBarrier</code> so that both threads pass the <code>null</code> check every time — the bug is real, the timing is forced so you can see it on every run. Spring code is marked "illustration, not run here".</div>
+<table>
+<thead><tr><th>Slides</th><th>Idea</th><th>You should be able to</th></tr></thead>
+<tbody>
+<tr><td>13</td><td>the GoF map</td><td>name the three groups and place the six patterns</td></tr>
+<tr><td>14–15</td><td>Strategy</td><td>replace an if-chain by an interface (or a lambda) and a registry; inject a map of beans</td></tr>
+<tr><td>16–17</td><td>Factory</td><td>centralise "which class to create"; tell simple factory, static factory and Factory Method apart</td></tr>
+<tr><td>18–20</td><td>Singleton</td><td>write three correct singletons, show why the lazy one fails with two threads, and keep Spring beans stateless</td></tr>
+<tr><td>21</td><td>Builder</td><td>build an object with many optional parts and one validation point</td></tr>
+<tr><td>22–23</td><td>Observer</td><td>announce events to subscribers; know they run synchronously in order, in plain Java and in Spring</td></tr>
+<tr><td>24–25</td><td>Template Method</td><td>fix the steps in a final method; recognise the callback form in JdbcTemplate</td></tr>
+<tr><td>26</td><td>choosing</td><td>pick a pattern from the problem, and answer in three beats</td></tr>
+</tbody>
+</table>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 7 · phần 2 · tự thêm · không thi</span>
+<h2>Sáu mẫu thiết kế bạn sẽ gặp trong mọi codebase Java</h2>
+<p class="lead">⭐ Phần chuyên sâu tự thêm — không thi PRO192. Phần 1 cho bạn nguyên lý; phần 2 cho bạn những hình dạng hay gặp nhất của chúng. Mẫu thiết kế (design pattern) là một lời giải có tên, dùng lại được, cho một vấn đề cứ lặp lại — cái tên giúp cả nhóm nói bằng hai chữ điều lẽ ra mất cả đoạn văn. Mỗi mẫu trong sáu mẫu dưới đây được trình bày trên CT Library bằng một chương trình chạy thật, rồi bên trong JDK, rồi trong Spring Boot, nơi cả sáu được dùng hằng ngày.</p>
+<div class="callout"><strong>Các ví dụ chạy thế nào.</strong> JDK 21.0.9, <code>--release 17</code> (ví dụ factory của JDK dùng <code>--release 21</code> vì <code>Locale.of</code>). Cuộc đua singleton ở slide 19 dùng một <code>CyclicBarrier</code> để cả hai luồng đều qua phép kiểm <code>null</code> ở mọi lần chạy — lỗi là thật, chỉ có thời điểm bị ép để bạn thấy nó mỗi lần. Code Spring được ghi "illustration, not run here".</div>
+<table>
+<thead><tr><th>Slide</th><th>Ý chính</th><th>Bạn phải làm được</th></tr></thead>
+<tbody>
+<tr><td>13</td><td>bản đồ GoF</td><td>gọi tên ba nhóm và đặt sáu mẫu vào đúng chỗ</td></tr>
+<tr><td>14–15</td><td>Strategy</td><td>thay chuỗi if bằng interface (hoặc lambda) và một sổ đăng ký; tiêm một map các bean</td></tr>
+<tr><td>16–17</td><td>Factory</td><td>gom "tạo lớp nào" về một chỗ; phân biệt simple factory, static factory và Factory Method</td></tr>
+<tr><td>18–20</td><td>Singleton</td><td>viết ba singleton đúng, chỉ ra vì sao bản lười hỏng với hai luồng, và giữ bean Spring không trạng thái</td></tr>
+<tr><td>21</td><td>Builder</td><td>dựng đối tượng nhiều phần tuỳ chọn với một chỗ kiểm duy nhất</td></tr>
+<tr><td>22–23</td><td>Observer</td><td>thông báo sự kiện cho người đăng ký; biết chúng chạy đồng bộ theo thứ tự, ở Java thuần và ở Spring</td></tr>
+<tr><td>24–25</td><td>Template Method</td><td>cố định các bước trong một phương thức final; nhận ra dạng callback trong JdbcTemplate</td></tr>
+<tr><td>26</td><td>chọn mẫu</td><td>chọn mẫu từ vấn đề, và trả lời theo ba nhịp</td></tr>
+</tbody>
+</table>`),
+    walkHead('cs7', 13, 26),
+    walk('cs7', [
+      [13, 'Design patterns: the GoF map',
+        `<p class="y-chinh">🎯 In 1994 Gamma, Helm, Johnson and Vlissides — the "Gang of Four" — published <em>Design Patterns</em>: 23 patterns in three groups. Creational patterns decide how objects are made, structural ones how they are combined, behavioural ones how they talk.</p>
+<p>A pattern in the book always has the same four parts: a <strong>name</strong>, the <strong>problem</strong> (when to use it), the <strong>solution</strong> (classes and how they cooperate — not finished code) and the <strong>consequences</strong> (what you pay). That last part matters: every pattern adds classes and indirection, so it is worth it only when its problem is really present.</p>
+<p>The map shows where the six patterns of this deck sit (filled boxes): Factory Method, Builder and Singleton in the creational group; Strategy, Observer and Template Method in the behavioural group. The dashed boxes are patterns you have already used: <strong>Iterator</strong> (every <code>for-each</code> over a collection, Chapter 8), <strong>Decorator</strong> (the counting set that wraps another set, ⭐ CS.6) and <strong>Proxy</strong> (what Spring puts around a bean to add <code>@Transactional</code>). Simple factory and static factory method (slide 17) are not in the 23 — they are later, smaller idioms.</p>
+<p class="meo">🧠 Do not memorise 23 patterns. Learn six well, recognise the rest by name, and look them up when the problem appears. The book itself says patterns are discovered in existing code, not invented on a whiteboard.</p>`,
+        `<p class="y-chinh">🎯 Năm 1994, Gamma, Helm, Johnson và Vlissides — "Gang of Four" (nhóm bốn người, GoF) — xuất bản <em>Design Patterns</em>: 23 mẫu chia ba nhóm. Mẫu khởi tạo (creational) quyết định đối tượng được tạo thế nào, mẫu cấu trúc (structural) quyết định chúng ghép với nhau thế nào, mẫu hành vi (behavioral) quyết định chúng nói chuyện thế nào.</p>
+<p>Mỗi mẫu trong sách luôn có bốn phần: <strong>tên</strong>, <strong>vấn đề</strong> (khi nào dùng), <strong>lời giải</strong> (các lớp và cách chúng phối hợp — không phải code làm sẵn) và <strong>hệ quả</strong> (cái giá phải trả). Phần cuối quan trọng: mẫu nào cũng thêm lớp và tầng trung gian, nên chỉ đáng dùng khi vấn đề của nó thật sự có mặt.</p>
+<p>Bản đồ cho thấy sáu mẫu của deck nằm ở đâu (ô tô đậm): Factory Method, Builder và Singleton ở nhóm khởi tạo; Strategy, Observer và Template Method ở nhóm hành vi. Ô nét đứt là các mẫu bạn đã dùng: <strong>Iterator</strong> (mọi vòng <code>for-each</code> trên collection, Chương 8), <strong>Decorator</strong> (set đếm bọc một set khác, ⭐ CS.6) và <strong>Proxy</strong> (thứ Spring bọc quanh một bean để thêm <code>@Transactional</code>). Simple factory và static factory method (slide 17) không nằm trong 23 mẫu — chúng là những thành ngữ nhỏ hơn, có sau.</p>
+<p class="meo">🧠 Đừng học thuộc 23 mẫu. Học kỹ sáu mẫu, nhận ra các mẫu còn lại qua tên, và tra cứu khi vấn đề xuất hiện. Chính cuốn sách nói mẫu được phát hiện trong code có sẵn, không phải được nghĩ ra trên bảng trắng.</p>`],
+      [14, 'Strategy: pass the "how" as an object',
+        `<p class="y-chinh">🎯 Strategy: define a family of interchangeable algorithms behind one interface, and let the code that uses them (the <em>context</em>) receive one from outside — so the "how" can change without touching the context.</p>
+<pre class="trich"><code class="language-java">static void sortOld(List&lt;Book&gt; books, String by) {          // every new order = one more branch
+    if (by.equals("title")) books.sort((a, b) -&gt; a.title().compareTo(b.title()));
+    else if (by.equals("year")) books.sort((a, b) -&gt; Integer.compare(a.year(), b.year()));
+    else throw new IllegalArgumentException("unknown order: " + by);
+}</code></pre>
+<pre class="trich"><code class="language-java">Comparator&lt;Book&gt; byTitle = Comparator.comparing(Book::title);
+Comparator&lt;Book&gt; mostBorrowed = Comparator.comparingInt(Book::loans).reversed()
+                                          .thenComparing(Book::title);
+for (Comparator&lt;Book&gt; order : List.of(byTitle, mostBorrowed)) {
+    shelf.sort(order);                                     // List.sort does not know HOW — the strategy does
+    System.out.println(shelf.stream().map(Book::id).toList());
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 1000; } }
+class HolidayFee implements IFeePolicy { public int fee(int d) { return 0; } }
+
+class Checkout {                               // the context: uses a strategy, never asks which one
+    private IFeePolicy policy;
+    Checkout(IFeePolicy policy) { this.policy = policy; }
+    void setPolicy(IFeePolicy policy) { this.policy = policy; }
+    int charge(int daysLate) { return policy.fee(daysLate); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Checkout desk = new Checkout(new StudentFee());            // strategy chosen at run time
+System.out.println("student, 5 days: " + desk.charge(5));
+desk.setPolicy(new HolidayFee());                          // swapped without touching Checkout
+System.out.println("holiday, 5 days: " + desk.charge(5));</code></pre>
+<div class="out">[B004, B001, B002, B003]<br>
+[B004, B002, B001, B003]<br>
+student, 5 days: 5000<br>
+holiday, 5 days: 0<br>
+old way: unknown order: loans</div>
+<p>Start with the problem: <code>sortOld</code> chooses the sort order with an <code>if</code> chain on a string. Every new order is a new branch, and an unknown one fails at run time (last output line: <code>old way: unknown order: loans</code>). You have already solved this without knowing the name: <code>List.sort</code> takes a <code>Comparator</code> — a strategy — and has no idea whether it sorts by title or by "most borrowed, then title". The first two output lines are the same shelf in two orders, chosen by passing a different object.</p>
+<p>The fee part shows all three roles of the pattern. <code>IFeePolicy</code> is the <em>strategy</em> interface; <code>StudentFee</code> and <code>HolidayFee</code> are <em>concrete strategies</em>; <code>Checkout</code> is the <em>context</em>: it holds a policy and calls it, never asking which one it is. The policy is chosen at run time and even swapped (<code>setPolicy</code>): 5000 for a student, 0 during a holiday week, with no edit to <code>Checkout</code>. This is exactly the <code>IFeePolicy</code> of CT Library Lab 5.</p>
+<div class="pitfall">Trap: a strategy that needs to know which context called it (<code>if (context instanceof …)</code>) is not a strategy any more. Pass what it needs as parameters.</div>`,
+        `<p class="y-chinh">🎯 Strategy: định nghĩa một họ thuật toán thay thế được cho nhau sau một interface, và để đoạn code dùng chúng (gọi là <em>ngữ cảnh</em>, context) nhận một cái từ bên ngoài — nhờ đó "cách làm" đổi được mà không đụng tới ngữ cảnh.</p>
+<pre class="trich"><code class="language-java">static void sortOld(List&lt;Book&gt; books, String by) {          // mỗi thứ tự mới = thêm một nhánh
+    if (by.equals("title")) books.sort((a, b) -&gt; a.title().compareTo(b.title()));
+    else if (by.equals("year")) books.sort((a, b) -&gt; Integer.compare(a.year(), b.year()));
+    else throw new IllegalArgumentException("unknown order: " + by);
+}</code></pre>
+<pre class="trich"><code class="language-java">Comparator&lt;Book&gt; byTitle = Comparator.comparing(Book::title);
+Comparator&lt;Book&gt; mostBorrowed = Comparator.comparingInt(Book::loans).reversed()
+                                          .thenComparing(Book::title);
+for (Comparator&lt;Book&gt; order : List.of(byTitle, mostBorrowed)) {
+    shelf.sort(order);                                     // List.sort không biết CÁCH — strategy biết
+    System.out.println(shelf.stream().map(Book::id).toList());
+}</code></pre>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 1000; } }
+class HolidayFee implements IFeePolicy { public int fee(int d) { return 0; } }
+
+class Checkout {                               // ngữ cảnh: dùng strategy, không hỏi là loại nào
+    private IFeePolicy policy;
+    Checkout(IFeePolicy policy) { this.policy = policy; }
+    void setPolicy(IFeePolicy policy) { this.policy = policy; }
+    int charge(int daysLate) { return policy.fee(daysLate); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Checkout desk = new Checkout(new StudentFee());            // strategy chọn lúc chạy
+System.out.println("student, 5 days: " + desk.charge(5));
+desk.setPolicy(new HolidayFee());                          // đổi mà không sửa Checkout
+System.out.println("holiday, 5 days: " + desk.charge(5));</code></pre>
+<div class="out">[B004, B001, B002, B003]<br>
+[B004, B002, B001, B003]<br>
+student, 5 days: 5000<br>
+holiday, 5 days: 0<br>
+old way: unknown order: loans</div>
+<p>Bắt đầu từ vấn đề: <code>sortOld</code> chọn thứ tự sắp xếp bằng chuỗi <code>if</code> trên một chuỗi ký tự. Mỗi thứ tự mới là một nhánh mới, và thứ tự lạ thì hỏng lúc chạy (dòng output cuối: <code>old way: unknown order: loans</code>). Bạn đã giải bài này mà chưa biết tên: <code>List.sort</code> nhận một <code>Comparator</code> — một strategy — và hoàn toàn không biết nó sắp theo tên hay theo "mượn nhiều nhất, rồi tới tên". Hai dòng output đầu là cùng một kệ sách theo hai thứ tự, chọn bằng cách truyền một đối tượng khác.</p>
+<p>Phần tính phí cho thấy đủ ba vai của mẫu. <code>IFeePolicy</code> là interface <em>strategy</em>; <code>StudentFee</code> và <code>HolidayFee</code> là <em>strategy cụ thể</em>; <code>Checkout</code> là <em>ngữ cảnh</em>: nó giữ một chính sách và gọi nó, không bao giờ hỏi đó là loại nào. Chính sách được chọn lúc chạy và còn đổi được (<code>setPolicy</code>): 5000 với sinh viên, 0 trong tuần nghỉ lễ, không sửa gì ở <code>Checkout</code>. Đây đúng là <code>IFeePolicy</code> của Lab 5 CT Library.</p>
+<div class="pitfall">Bẫy: một strategy phải biết ngữ cảnh nào gọi nó (<code>if (context instanceof …)</code>) thì không còn là strategy. Truyền những gì nó cần qua tham số.</div>`],
+      [15, 'Strategy with lambdas — and in Spring',
+        `<p class="y-chinh">🎯 When a strategy has one method and no state, it is a functional interface — a lambda is enough. Keep the strategies in a map by key and "which one" becomes a lookup, not an <code>if</code>; in Spring the container builds that map from beans.</p>
+<pre class="trich"><code class="language-java">Map&lt;String, IFeePolicy&gt; policies = new LinkedHashMap&lt;&gt;();
+policies.put("STUDENT", d -&gt; d * 2000 / 2);
+policies.put("STAFF",   d -&gt; Math.max(0, d - 2) * 2000);
+policies.put("GUEST",   d -&gt; d * 2000);
+policies.put("ALUMNI",  d -&gt; d * 2000 * 80 / 100);       // a new type = a new line
+
+for (var e : policies.entrySet())
+    System.out.printf("%-7s 5 days -&gt; %,d VND%n", e.getKey(), e.getValue().fee(5));
+
+IFeePolicy policy = policies.getOrDefault("VIP", policies.get("GUEST"));   // unknown key: a default, not an if
+System.out.println("VIP (unknown) -&gt; " + policy.fee(5));</code></pre>
+<pre class="trich"><code class="language-java">UnaryOperator&lt;String&gt; upper = String::toUpperCase;        // JDK strategies you already pass around
+Predicate&lt;String&gt; isCode = s -&gt; s.matches("[A-Z]{3}\\\\d{3}");
+System.out.println(upper.apply("pro192") + " " + isCode.test(upper.apply("pro192")));</code></pre>
+<div class="out">STUDENT 5 days -&gt; 5,000 VND<br>
+STAFF &nbsp;&nbsp;5 days -&gt; 6,000 VND<br>
+GUEST &nbsp;&nbsp;5 days -&gt; 10,000 VND<br>
+ALUMNI &nbsp;5 days -&gt; 8,000 VND<br>
+VIP (unknown) -&gt; 10000<br>
+PRO192 true</div>
+<p><code>IFeePolicy</code> is marked <code>@FunctionalInterface</code> (one abstract method), so each policy is a one-line lambda. The <code>LinkedHashMap</code> is a <em>registry</em>: key = member type, value = strategy, in insertion order so the printout is stable. Adding ALUMNI is adding a line. An unknown key is handled by <code>getOrDefault</code> with the guest policy — a decision written once, instead of an <code>else</code> in every method. The <code>%,d</code> format prints 10,000 with a separator; the last line prints the raw <code>int</code>.</p>
+<p>The JDK is full of one-method strategies you already pass around: <code>UnaryOperator</code>, <code>Predicate</code>, <code>Comparator</code>, <code>Runnable</code>. On the right, the Spring form: each policy is a <code>@Component</code> with a name, and a constructor that asks for <code>Map&lt;String, IFeePolicy&gt;</code> receives every such bean, keyed by bean name. Choose a lambda for one stateless method; choose a class (a bean) when the strategy has several methods or its own dependencies — say, a policy that reads discounts from the database.</p>
+<div class="pitfall">Trap: a <code>HashMap</code> registry printed in a loop has no reliable order. Use <code>LinkedHashMap</code> (insertion order) or <code>TreeMap</code> (sorted) whenever order is visible.</div>
+<div class="callout">⚠️ <strong>Exam room PE (JDK 8)</strong>: lambdas and <code>LinkedHashMap</code> are Java 8 — fine. <code>var</code> in the loop is Java 10; write <code>Map.Entry&lt;String, IFeePolicy&gt;</code> instead.</div>`,
+        `<p class="y-chinh">🎯 Khi strategy chỉ có một phương thức và không có trạng thái, nó là một functional interface (interface hàm) — một lambda là đủ. Cất các strategy trong một map theo khoá thì "chọn cái nào" thành một lần tra, không phải một <code>if</code>; trong Spring, bộ chứa dựng sẵn map đó từ các bean.</p>
+<pre class="trich"><code class="language-java">Map&lt;String, IFeePolicy&gt; policies = new LinkedHashMap&lt;&gt;();
+policies.put("STUDENT", d -&gt; d * 2000 / 2);
+policies.put("STAFF",   d -&gt; Math.max(0, d - 2) * 2000);
+policies.put("GUEST",   d -&gt; d * 2000);
+policies.put("ALUMNI",  d -&gt; d * 2000 * 80 / 100);       // loại mới = một dòng mới
+
+for (var e : policies.entrySet())
+    System.out.printf("%-7s 5 days -&gt; %,d VND%n", e.getKey(), e.getValue().fee(5));
+
+IFeePolicy policy = policies.getOrDefault("VIP", policies.get("GUEST"));   // khoá lạ: mặc định, không if
+System.out.println("VIP (unknown) -&gt; " + policy.fee(5));</code></pre>
+<pre class="trich"><code class="language-java">UnaryOperator&lt;String&gt; upper = String::toUpperCase;        // strategy của JDK bạn vẫn truyền
+Predicate&lt;String&gt; isCode = s -&gt; s.matches("[A-Z]{3}\\\\d{3}");
+System.out.println(upper.apply("pro192") + " " + isCode.test(upper.apply("pro192")));</code></pre>
+<div class="out">STUDENT 5 days -&gt; 5,000 VND<br>
+STAFF &nbsp;&nbsp;5 days -&gt; 6,000 VND<br>
+GUEST &nbsp;&nbsp;5 days -&gt; 10,000 VND<br>
+ALUMNI &nbsp;5 days -&gt; 8,000 VND<br>
+VIP (unknown) -&gt; 10000<br>
+PRO192 true</div>
+<p><code>IFeePolicy</code> được đánh dấu <code>@FunctionalInterface</code> (một phương thức trừu tượng), nên mỗi chính sách là một lambda một dòng. <code>LinkedHashMap</code> là một <em>sổ đăng ký</em> (registry): khoá = loại thành viên, giá trị = strategy, giữ thứ tự thêm vào nên bản in ổn định. Thêm ALUMNI là thêm một dòng. Khoá lạ được xử lý bằng <code>getOrDefault</code> với chính sách khách — một quyết định viết một lần, thay vì một <code>else</code> ở mọi phương thức. Định dạng <code>%,d</code> in 10,000 có dấu phân cách; dòng cuối in <code>int</code> thô.</p>
+<p>JDK đầy strategy một phương thức mà bạn vẫn truyền qua lại: <code>UnaryOperator</code>, <code>Predicate</code>, <code>Comparator</code>, <code>Runnable</code>. Bên phải là dạng Spring: mỗi chính sách là một <code>@Component</code> có tên, và một constructor xin <code>Map&lt;String, IFeePolicy&gt;</code> sẽ nhận mọi bean như thế, khoá là tên bean. Chọn lambda cho một phương thức không trạng thái; chọn lớp (một bean) khi strategy có nhiều phương thức hoặc phụ thuộc riêng — ví dụ chính sách đọc mức giảm từ CSDL.</p>
+<div class="pitfall">Bẫy: sổ đăng ký bằng <code>HashMap</code> in ra trong vòng lặp không có thứ tự tin được. Dùng <code>LinkedHashMap</code> (thứ tự thêm) hoặc <code>TreeMap</code> (sắp xếp) mỗi khi thứ tự hiện ra ngoài.</div>
+<div class="callout">⚠️ <strong>Phòng thi PE (JDK 8)</strong>: lambda và <code>LinkedHashMap</code> là Java 8 — dùng được. <code>var</code> trong vòng lặp là Java 10; viết <code>Map.Entry&lt;String, IFeePolicy&gt;</code> thay vào.</div>`],
+      [16, 'Factory: one place decides what to create',
+        `<p class="y-chinh">🎯 Factory: put the decision "which concrete class do I <code>new</code>?" in one place. Callers ask for what they mean ("a fee policy for this member type") and never name a concrete class; the factory cleans the input, rejects nonsense and may reuse objects.</p>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 2000 / 2; } }
+class StaffFee   implements IFeePolicy { public int fee(int d) { return Math.max(0, d - 2) * 2000; } }
+class GuestFee   implements IFeePolicy { public int fee(int d) { return d * 2000; } }
+
+final class FeePolicyFactory {
+    private static final IFeePolicy GUEST = new GuestFee();     // stateless ⇒ can be shared
+    private FeePolicyFactory() {}
+    static IFeePolicy create(String memberType) {
+        String t = memberType.trim().toUpperCase();              // clean the input once, here
+        return switch (t) {
+            case "STUDENT" -&gt; new StudentFee();
+            case "STAFF"   -&gt; new StaffFee();
+            case "GUEST"   -&gt; GUEST;
+            default -&gt; throw new IllegalArgumentException("no fee policy for member type " + t);
+        };
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (String code : List.of("student", " STAFF ", "guest", "vip")) {
+    try {
+        IFeePolicy p = FeePolicyFactory.create(code);
+        System.out.println("'" + code + "' -&gt; " + p.getClass().getSimpleName() + ", 5 days = " + p.fee(5));
+    } catch (IllegalArgumentException e) {
+        System.out.println("'" + code + "' -&gt; " + e.getMessage());
+    }
+}
+System.out.println("same object each time: " + (FeePolicyFactory.create("GUEST") == FeePolicyFactory.create("guest")));</code></pre>
+<div class="out">'student' -&gt; StudentFee, 5 days = 5000<br>
+' STAFF ' -&gt; StaffFee, 5 days = 6000<br>
+'guest' -&gt; GuestFee, 5 days = 10000<br>
+'vip' -&gt; no fee policy for member type VIP<br>
+same object each time: true</div>
+<p>Read <code>FeePolicyFactory.create</code> from the top. The class is <code>final</code> with a private constructor — it is a holder of a static method, never instantiated. The input is cleaned once (<code>trim().toUpperCase()</code>), which is why <code>" STAFF "</code> with spaces still works. The <code>switch</code> picks the class; an unknown type becomes one clear message (<code>no fee policy for member type VIP</code>) instead of a <code>NullPointerException</code> three calls later. The guest policy has no state, so the factory returns the same shared object every time — the last output line confirms it.</p>
+<p>Notice that the factory <em>contains</em> a <code>switch</code> on the type — slide 5 said that was a smell. The difference: here it is the <strong>only</strong> one. Every other class asks the factory, so adding a type touches one method, not five. In Spring, a <code>@Bean</code> method in a <code>@Configuration</code> class plays exactly this role: it is where the decision "which implementation" lives.</p>
+<p class="meo">🧠 The creational patterns all answer one question: who is allowed to call <code>new</code> on a concrete class? The fewer places, the cheaper a change.</p>`,
+        `<p class="y-chinh">🎯 Factory (nhà máy): đặt quyết định "<code>new</code> lớp cụ thể nào?" ở một chỗ. Người gọi xin thứ họ muốn ("một chính sách phí cho loại thành viên này") và không bao giờ ghi tên lớp cụ thể; factory làm sạch dữ liệu vào, từ chối thứ vô nghĩa và có thể dùng lại đối tượng.</p>
+<pre class="trich"><code class="language-java">interface IFeePolicy { int fee(int daysLate); }
+class StudentFee implements IFeePolicy { public int fee(int d) { return d * 2000 / 2; } }
+class StaffFee   implements IFeePolicy { public int fee(int d) { return Math.max(0, d - 2) * 2000; } }
+class GuestFee   implements IFeePolicy { public int fee(int d) { return d * 2000; } }
+
+final class FeePolicyFactory {
+    private static final IFeePolicy GUEST = new GuestFee();     // không trạng thái ⇒ dùng chung được
+    private FeePolicyFactory() {}
+    static IFeePolicy create(String memberType) {
+        String t = memberType.trim().toUpperCase();              // làm sạch dữ liệu vào một lần, ở đây
+        return switch (t) {
+            case "STUDENT" -&gt; new StudentFee();
+            case "STAFF"   -&gt; new StaffFee();
+            case "GUEST"   -&gt; GUEST;
+            default -&gt; throw new IllegalArgumentException("no fee policy for member type " + t);
+        };
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (String code : List.of("student", " STAFF ", "guest", "vip")) {
+    try {
+        IFeePolicy p = FeePolicyFactory.create(code);
+        System.out.println("'" + code + "' -&gt; " + p.getClass().getSimpleName() + ", 5 days = " + p.fee(5));
+    } catch (IllegalArgumentException e) {
+        System.out.println("'" + code + "' -&gt; " + e.getMessage());
+    }
+}
+System.out.println("same object each time: " + (FeePolicyFactory.create("GUEST") == FeePolicyFactory.create("guest")));</code></pre>
+<div class="out">'student' -&gt; StudentFee, 5 days = 5000<br>
+' STAFF ' -&gt; StaffFee, 5 days = 6000<br>
+'guest' -&gt; GuestFee, 5 days = 10000<br>
+'vip' -&gt; no fee policy for member type VIP<br>
+same object each time: true</div>
+<p>Đọc <code>FeePolicyFactory.create</code> từ trên xuống. Lớp là <code>final</code> với constructor private — nó chỉ chứa một phương thức static, không bao giờ được tạo đối tượng. Dữ liệu vào được làm sạch một lần (<code>trim().toUpperCase()</code>), vì thế <code>" STAFF "</code> có dấu cách vẫn chạy. <code>switch</code> chọn lớp; loại lạ thành một câu báo rõ ràng (<code>no fee policy for member type VIP</code>) thay vì một <code>NullPointerException</code> ba lời gọi sau. Chính sách khách không có trạng thái, nên factory trả về cùng một đối tượng dùng chung mỗi lần — dòng output cuối xác nhận.</p>
+<p>Để ý factory <em>chứa</em> một <code>switch</code> theo loại — slide 5 nói đó là mùi code. Khác biệt: ở đây nó là cái <strong>duy nhất</strong>. Mọi lớp khác hỏi factory, nên thêm một loại chỉ chạm một phương thức, không phải năm. Trong Spring, một phương thức <code>@Bean</code> trong lớp <code>@Configuration</code> đóng đúng vai này: đó là chỗ quyết định "dùng bản cài đặt nào".</p>
+<p class="meo">🧠 Các mẫu khởi tạo đều trả lời một câu hỏi: ai được phép gọi <code>new</code> trên lớp cụ thể? Càng ít chỗ, thay đổi càng rẻ.</p>`],
+      [17, 'Three kinds of "factory" — and the JDK’s',
+        `<p class="y-chinh">🎯 Three different things are called "factory": a simple factory (one method with a switch), a static factory method (a named static method instead of a constructor, ⭐ CS.4) and the GoF Factory Method (an overridable method whose subclass decides what to create). The JDK uses all three.</p>
+<pre><code class="language-java">// release: 21
+// Slide 17: factories inside the JDK — the caller never names the class it gets
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.*;
+
+public class FactoryJdk {
+    public static void main(String[] args) throws Exception {
+        System.out.println("List.of(1, 2)      -&gt; " + List.of(1, 2).getClass().getName());
+        System.out.println("List.of(1, 2, 3)   -&gt; " + List.of(1, 2, 3).getClass().getName());
+        System.out.println("Integer.valueOf(127) == Integer.valueOf(127): " + (Integer.valueOf(127) == Integer.valueOf(127)));
+        System.out.println("Integer.valueOf(128) == Integer.valueOf(128): " + (Integer.valueOf(128) == Integer.valueOf(128)));
+        NumberFormat vnd = NumberFormat.getCurrencyInstance(Locale.of("vi", "VN"));
+        System.out.println("getCurrencyInstance -&gt; " + vnd.getClass().getSimpleName() + ", " + vnd.format(5000));
+        System.out.println("LocalDate.of(2026, 10, 27) -&gt; " + LocalDate.of(2026, 10, 27).getDayOfWeek());
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        System.out.println("newFixedThreadPool -&gt; " + pool.getClass().getSimpleName());
+        pool.shutdown();
+    }
+}</code></pre>
+<div class="out">List.of(1, 2) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; java.util.ImmutableCollections$List12<br>
+List.of(1, 2, 3) &nbsp;&nbsp;-&gt; java.util.ImmutableCollections$ListN<br>
+Integer.valueOf(127) == Integer.valueOf(127): true<br>
+Integer.valueOf(128) == Integer.valueOf(128): false<br>
+getCurrencyInstance -&gt; DecimalFormat, 5.000 ₫<br>
+LocalDate.of(2026, 10, 27) -&gt; TUESDAY<br>
+newFixedThreadPool -&gt; ThreadPoolExecutor</div>
+<p><strong>Static factory methods</strong> in the output: <code>List.of(1, 2)</code> and <code>List.of(1, 2, 3)</code> return <em>different private classes</em> — <code>ImmutableCollections$List12</code> for one or two elements, <code>$ListN</code> for more. You asked for "a List" and the factory chose the cheapest implementation; a constructor could never return a different class. <code>Integer.valueOf</code> returns cached objects from −128 to 127, so <code>==</code> is true for 127 and false for 128 (the full story is ⭐ CS.4). <code>NumberFormat.getCurrencyInstance</code> returns a <code>DecimalFormat</code> set up for Vietnamese dong (<code>5.000 ₫</code>); <code>Executors.newFixedThreadPool</code> returns a <code>ThreadPoolExecutor</code> — ⭐ CS.8 opens it.</p>
+<p><strong>Factory Method</strong> (GoF) is the inheritance form: a parent declares a method that creates something, subclasses override it. Every collection's <code>iterator()</code> is one — <code>ArrayList</code> creates its own iterator class, <code>HashSet</code> another — and code written against <code>Collection</code> never knows which. In Spring, every <code>@Bean</code> method is a factory method, and the <code>BeanFactory</code> interface is literally the factory of all beans.</p>
+<div class="callout">⚠️ <strong>Exam room PE (JDK 8)</strong>: <code>List.of</code> is Java 9 and <code>Locale.of</code> Java 19; on JDK 8 use <code>Arrays.asList</code> and <code>new Locale("vi", "VN")</code>.</div>`,
+        `<p class="y-chinh">🎯 Ba thứ khác nhau cùng được gọi là "factory": simple factory (một phương thức có switch), static factory method (một phương thức static có tên thay cho constructor, ⭐ CS.4) và Factory Method của GoF (một phương thức ghi đè được, lớp con quyết định tạo gì). JDK dùng cả ba.</p>
+<pre><code class="language-java">// release: 21
+// Slide 17: factory trong JDK — người gọi không bao giờ ghi tên lớp mình nhận
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.*;
+
+public class FactoryJdk {
+    public static void main(String[] args) throws Exception {
+        System.out.println("List.of(1, 2)      -&gt; " + List.of(1, 2).getClass().getName());
+        System.out.println("List.of(1, 2, 3)   -&gt; " + List.of(1, 2, 3).getClass().getName());
+        System.out.println("Integer.valueOf(127) == Integer.valueOf(127): " + (Integer.valueOf(127) == Integer.valueOf(127)));
+        System.out.println("Integer.valueOf(128) == Integer.valueOf(128): " + (Integer.valueOf(128) == Integer.valueOf(128)));
+        NumberFormat vnd = NumberFormat.getCurrencyInstance(Locale.of("vi", "VN"));
+        System.out.println("getCurrencyInstance -&gt; " + vnd.getClass().getSimpleName() + ", " + vnd.format(5000));
+        System.out.println("LocalDate.of(2026, 10, 27) -&gt; " + LocalDate.of(2026, 10, 27).getDayOfWeek());
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        System.out.println("newFixedThreadPool -&gt; " + pool.getClass().getSimpleName());
+        pool.shutdown();
+    }
+}</code></pre>
+<div class="out">List.of(1, 2) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; java.util.ImmutableCollections$List12<br>
+List.of(1, 2, 3) &nbsp;&nbsp;-&gt; java.util.ImmutableCollections$ListN<br>
+Integer.valueOf(127) == Integer.valueOf(127): true<br>
+Integer.valueOf(128) == Integer.valueOf(128): false<br>
+getCurrencyInstance -&gt; DecimalFormat, 5.000 ₫<br>
+LocalDate.of(2026, 10, 27) -&gt; TUESDAY<br>
+newFixedThreadPool -&gt; ThreadPoolExecutor</div>
+<p><strong>Static factory method</strong> trong output: <code>List.of(1, 2)</code> và <code>List.of(1, 2, 3)</code> trả về <em>hai lớp private khác nhau</em> — <code>ImmutableCollections$List12</code> cho một hoặc hai phần tử, <code>$ListN</code> cho nhiều hơn. Bạn xin "một List" và factory chọn bản cài đặt rẻ nhất; một constructor không bao giờ trả về được lớp khác. <code>Integer.valueOf</code> trả đối tượng có sẵn trong cache từ −128 tới 127, nên <code>==</code> đúng với 127 và sai với 128 (chuyện đầy đủ ở ⭐ CS.4). <code>NumberFormat.getCurrencyInstance</code> trả một <code>DecimalFormat</code> đã chỉnh cho đồng Việt Nam (<code>5.000 ₫</code>); <code>Executors.newFixedThreadPool</code> trả một <code>ThreadPoolExecutor</code> — ⭐ CS.8 sẽ mở nó ra.</p>
+<p><strong>Factory Method</strong> (GoF) là dạng kế thừa: lớp cha khai một phương thức tạo ra thứ gì đó, lớp con ghi đè nó. <code>iterator()</code> của mọi collection là một ví dụ — <code>ArrayList</code> tạo lớp iterator riêng của nó, <code>HashSet</code> tạo lớp khác — còn code viết theo <code>Collection</code> không bao giờ biết là lớp nào. Trong Spring, mọi phương thức <code>@Bean</code> là một factory method, và interface <code>BeanFactory</code> đúng nghĩa đen là nhà máy của mọi bean.</p>
+<div class="callout">⚠️ <strong>Phòng thi PE (JDK 8)</strong>: <code>List.of</code> là Java 9 và <code>Locale.of</code> là Java 19; trên JDK 8 dùng <code>Arrays.asList</code> và <code>new Locale("vi", "VN")</code>.</div>`],
+      [18, 'Singleton: three correct ways',
+        `<p class="y-chinh">🎯 Singleton: a class that has exactly one instance and a global way to reach it. Three spellings are correct even with many threads — eager, holder, enum — because each one lets the JVM's class initialisation do the work, which the JVM guarantees to run once.</p>
+<pre class="trich"><code class="language-java">class EagerConfig {                                    // 1. eager: created when the class is initialised
+    private static final EagerConfig INSTANCE = new EagerConfig();
+    private EagerConfig() { System.out.println("  EagerConfig created"); }
+    static EagerConfig getInstance() { return INSTANCE; }
+}
+
+class HolderConfig {                                   // 2. holder: created on the first getInstance()
+    private HolderConfig() { System.out.println("  HolderConfig created"); }
+    private static class Holder { static final HolderConfig INSTANCE = new HolderConfig(); }
+    static HolderConfig getInstance() { return Holder.INSTANCE; }
+}
+
+enum EnumConfig {                                      // 3. enum: the JVM guarantees one
+    INSTANCE;
+    EnumConfig() { System.out.println("  EnumConfig created"); }
+    int finePerDay() { return 2000; }
+}</code></pre>
+<pre class="trich"><code class="language-java">System.out.println("main starts");
+System.out.println(EagerConfig.class.getSimpleName() + " class referenced");
+EagerConfig a = EagerConfig.getInstance();
+System.out.println("eager same: " + (a == EagerConfig.getInstance()));
+System.out.println("before HolderConfig.getInstance()");
+HolderConfig h = HolderConfig.getInstance();
+System.out.println("holder same: " + (h == HolderConfig.getInstance()));
+System.out.println("enum same: " + (EnumConfig.INSTANCE == EnumConfig.valueOf("INSTANCE"))
+    + ", fine per day = " + EnumConfig.INSTANCE.finePerDay());</code></pre>
+<div class="out">main starts<br>
+EagerConfig class referenced<br>
+&nbsp;&nbsp;EagerConfig created<br>
+eager same: true<br>
+before HolderConfig.getInstance()<br>
+&nbsp;&nbsp;HolderConfig created<br>
+holder same: true<br>
+&nbsp;&nbsp;EnumConfig created<br>
+enum same: true, fine per day = 2000</div>
+<p>Follow the output line by line. <code>EagerConfig.class.getSimpleName()</code> prints "EagerConfig class referenced" <em>before</em> "EagerConfig created": naming a class literal does not initialise the class. The first <code>getInstance()</code> does — the static field runs <code>new EagerConfig()</code> once, and the second call returns the same object (<code>eager same: true</code>). <strong>Holder</strong>: the instance lives in a nested class that is initialised only when <code>getInstance()</code> first touches <code>Holder.INSTANCE</code> — "before HolderConfig.getInstance()" prints first, then "HolderConfig created". Lazy, with no locks. <strong>Enum</strong>: one constant is one instance; the constructor ran at the first use of the enum.</p>
+<p>Why are these thread-safe? The Java Language Specification makes class initialisation happen once, with a lock the JVM holds for you; a second thread that asks during initialisation waits. All three borrow that guarantee. Effective Java (Item 3) calls the single-element enum "often the best way to implement a singleton": it is also immune to reflection and serialization tricks (next slide).</p>
+<div class="pitfall">Trap: a singleton is global state. Any class can reach it, so tests cannot replace it and hidden dependencies grow. Prefer passing one shared object through constructors (DI) — slide 20.</div>`,
+        `<p class="y-chinh">🎯 Singleton: một lớp chỉ có đúng một đối tượng và một lối vào toàn cục tới nó. Ba cách viết đúng ngay cả khi có nhiều luồng — eager (sớm), holder, enum — vì cả ba để quá trình khởi tạo lớp của JVM làm việc, thứ JVM bảo đảm chỉ chạy một lần.</p>
+<pre class="trich"><code class="language-java">class EagerConfig {                                    // 1. sớm: tạo khi lớp được khởi tạo
+    private static final EagerConfig INSTANCE = new EagerConfig();
+    private EagerConfig() { System.out.println("  EagerConfig created"); }
+    static EagerConfig getInstance() { return INSTANCE; }
+}
+
+class HolderConfig {                                   // 2. holder: tạo ở lần getInstance() đầu
+    private HolderConfig() { System.out.println("  HolderConfig created"); }
+    private static class Holder { static final HolderConfig INSTANCE = new HolderConfig(); }
+    static HolderConfig getInstance() { return Holder.INSTANCE; }
+}
+
+enum EnumConfig {                                      // 3. enum: JVM bảo đảm chỉ một
+    INSTANCE;
+    EnumConfig() { System.out.println("  EnumConfig created"); }
+    int finePerDay() { return 2000; }
+}</code></pre>
+<pre class="trich"><code class="language-java">System.out.println("main starts");
+System.out.println(EagerConfig.class.getSimpleName() + " class referenced");
+EagerConfig a = EagerConfig.getInstance();
+System.out.println("eager same: " + (a == EagerConfig.getInstance()));
+System.out.println("before HolderConfig.getInstance()");
+HolderConfig h = HolderConfig.getInstance();
+System.out.println("holder same: " + (h == HolderConfig.getInstance()));
+System.out.println("enum same: " + (EnumConfig.INSTANCE == EnumConfig.valueOf("INSTANCE"))
+    + ", fine per day = " + EnumConfig.INSTANCE.finePerDay());</code></pre>
+<div class="out">main starts<br>
+EagerConfig class referenced<br>
+&nbsp;&nbsp;EagerConfig created<br>
+eager same: true<br>
+before HolderConfig.getInstance()<br>
+&nbsp;&nbsp;HolderConfig created<br>
+holder same: true<br>
+&nbsp;&nbsp;EnumConfig created<br>
+enum same: true, fine per day = 2000</div>
+<p>Đi theo output từng dòng. <code>EagerConfig.class.getSimpleName()</code> in "EagerConfig class referenced" <em>trước</em> "EagerConfig created": nhắc tới class literal không khởi tạo lớp. <code>getInstance()</code> đầu tiên mới làm — field static chạy <code>new EagerConfig()</code> một lần, và lần gọi thứ hai trả cùng đối tượng (<code>eager same: true</code>). <strong>Holder</strong>: đối tượng nằm trong một lớp lồng chỉ được khởi tạo khi <code>getInstance()</code> lần đầu chạm <code>Holder.INSTANCE</code> — "before HolderConfig.getInstance()" in trước, rồi mới "HolderConfig created". Lười, mà không cần khoá. <strong>Enum</strong>: một hằng là một đối tượng; constructor chạy ở lần đầu dùng enum.</p>
+<p>Vì sao chúng an toàn luồng? Đặc tả ngôn ngữ Java (JLS) quy định khởi tạo lớp xảy ra một lần, với một khoá JVM giữ hộ bạn; luồng thứ hai hỏi tới trong lúc khởi tạo sẽ chờ. Cả ba mượn bảo đảm đó. Effective Java (Item 3) gọi enum một phần tử là "thường là cách tốt nhất để cài singleton": nó còn miễn nhiễm với mẹo reflection và tuần tự hoá (slide sau).</p>
+<div class="pitfall">Bẫy: singleton là trạng thái toàn cục. Lớp nào cũng chạm được nó, nên test không thay được và phụ thuộc ẩn cứ thế lớn lên. Ưu tiên truyền một đối tượng dùng chung qua constructor (DI) — slide 20.</div>`],
+      [19, 'Lazy singleton: two threads, two objects',
+        `<p class="y-chinh">🎯 The "lazy" singleton most people write first — check for <code>null</code>, then create — is not thread-safe: two threads can both see <code>null</code> and both create an object. With the timing forced, it happens on every run: the constructor ran 2 times.</p>
+<pre class="trich"><code class="language-java">class LazyConfig {
+    private static LazyConfig instance;
+    static final AtomicInteger created = new AtomicInteger();
+    private LazyConfig() { created.incrementAndGet(); }
+
+    static LazyConfig getInstance() {
+        if (instance == null) {          // both threads can pass this check...
+            Demo.bothCheckedNull();      // (demo only: wait here until the other thread has checked too)
+            instance = new LazyConfig(); // ...and both create one
+        }
+        return instance;
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">Set&lt;LazyConfig&gt; seen = ConcurrentHashMap.newKeySet();
+Thread t1 = new Thread(() -&gt; seen.add(LazyConfig.getInstance()), "request-1");
+Thread t2 = new Thread(() -&gt; seen.add(LazyConfig.getInstance()), "request-2");
+t1.start(); t2.start();
+t1.join(); t2.join();
+System.out.println("constructor ran " + LazyConfig.created + " times, distinct objects: " + seen.size());</code></pre>
+<pre class="trich"><code class="language-java">Constructor&lt;LazyConfig&gt; c = LazyConfig.class.getDeclaredConstructor();
+c.setAccessible(true);                                  // reflection ignores "private"
+System.out.println("reflection made another: " + (c.newInstance() != LazyConfig.getInstance()));
+try {
+    Constructor&lt;EnumOnly&gt; e = EnumOnly.class.getDeclaredConstructor(String.class, int.class);
+    e.setAccessible(true);
+    e.newInstance("SECOND", 1);
+} catch (IllegalArgumentException ex) {
+    System.out.println("enum: " + ex.getMessage());
+}</code></pre>
+<div class="out">constructor ran 2 times, distinct objects: 2<br>
+reflection made another: true<br>
+enum: Cannot reflectively create enum objects</div>
+<p>Follow the timeline on the slide. request-1 checks <code>instance == null</code> → yes. Before it assigns, request-2 checks → still yes. Both run <code>new LazyConfig()</code>; the second assignment overwrites the first. The output counts it: <code>constructor ran 2 times, distinct objects: 2</code> — two "singletons" were handed out, and any state the first one held is lost. The line <code>Demo.bothCheckedNull()</code> is the only artificial part: a <code>CyclicBarrier</code> holds each thread right after its check until the other has checked too, so the bad interleaving is not luck. In production nothing forces it, so it happens rarely — under load, on one server, once a week — which is worse: the bug is real and hard to reproduce.</p>
+<p>The second block breaks the singleton without threads: reflection can call a private constructor after <code>setAccessible(true)</code> (<code>reflection made another: true</code>). The JVM refuses to do that for enums: <code>Cannot reflectively create enum objects</code>. The fixes for the race — <code>synchronized</code>, <code>volatile</code> with double-checked locking, or simply the holder idiom — are measured in ⭐ CS.8, where we look at why <code>if (x == null) x = …</code> is a race in general.</p>
+<div class="pitfall">Trap: "it worked when I tested it" proves nothing for code shared between threads. A race needs the wrong interleaving, and a single-user test never produces it.</div>`,
+        `<p class="y-chinh">🎯 Singleton "lười" mà hầu hết mọi người viết đầu tiên — kiểm <code>null</code> rồi tạo — không an toàn luồng: hai luồng có thể cùng thấy <code>null</code> và cùng tạo một đối tượng. Khi ép thời điểm, chuyện đó xảy ra ở mọi lần chạy: constructor chạy 2 lần.</p>
+<pre class="trich"><code class="language-java">class LazyConfig {
+    private static LazyConfig instance;
+    static final AtomicInteger created = new AtomicInteger();
+    private LazyConfig() { created.incrementAndGet(); }
+
+    static LazyConfig getInstance() {
+        if (instance == null) {          // cả hai luồng có thể qua phép kiểm này...
+            Demo.bothCheckedNull();      // (chỉ để minh hoạ: chờ ở đây tới khi luồng kia cũng đã kiểm)
+            instance = new LazyConfig(); // ...và cả hai cùng tạo
+        }
+        return instance;
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">Set&lt;LazyConfig&gt; seen = ConcurrentHashMap.newKeySet();
+Thread t1 = new Thread(() -&gt; seen.add(LazyConfig.getInstance()), "request-1");
+Thread t2 = new Thread(() -&gt; seen.add(LazyConfig.getInstance()), "request-2");
+t1.start(); t2.start();
+t1.join(); t2.join();
+System.out.println("constructor ran " + LazyConfig.created + " times, distinct objects: " + seen.size());</code></pre>
+<pre class="trich"><code class="language-java">Constructor&lt;LazyConfig&gt; c = LazyConfig.class.getDeclaredConstructor();
+c.setAccessible(true);                                  // phản chiếu bỏ qua "private"
+System.out.println("reflection made another: " + (c.newInstance() != LazyConfig.getInstance()));
+try {
+    Constructor&lt;EnumOnly&gt; e = EnumOnly.class.getDeclaredConstructor(String.class, int.class);
+    e.setAccessible(true);
+    e.newInstance("SECOND", 1);
+} catch (IllegalArgumentException ex) {
+    System.out.println("enum: " + ex.getMessage());
+}</code></pre>
+<div class="out">constructor ran 2 times, distinct objects: 2<br>
+reflection made another: true<br>
+enum: Cannot reflectively create enum objects</div>
+<p>Đi theo dòng thời gian trên slide. request-1 kiểm <code>instance == null</code> → đúng. Trước khi nó gán, request-2 kiểm → vẫn đúng. Cả hai chạy <code>new LazyConfig()</code>; lần gán thứ hai đè lên lần đầu. Output đếm được: <code>constructor ran 2 times, distinct objects: 2</code> — hai "singleton" đã được phát ra, và mọi trạng thái cái đầu giữ đều mất. Dòng <code>Demo.bothCheckedNull()</code> là phần nhân tạo duy nhất: một <code>CyclicBarrier</code> giữ mỗi luồng ngay sau phép kiểm cho tới khi luồng kia cũng kiểm xong, nên cách xen kẽ xấu không phải do may rủi. Ở môi trường thật không gì ép nó, nên nó hiếm khi xảy ra — lúc tải cao, trên một máy chủ, mỗi tuần một lần — mà như thế còn tệ hơn: lỗi là thật và khó tái hiện.</p>
+<p>Khối thứ hai phá singleton mà không cần luồng: reflection gọi được constructor private sau <code>setAccessible(true)</code> (<code>reflection made another: true</code>). JVM từ chối làm thế với enum: <code>Cannot reflectively create enum objects</code>. Các cách sửa cuộc đua — <code>synchronized</code>, <code>volatile</code> với khoá kiểm hai lần (double-checked locking), hay đơn giản là cách holder — được đo ở ⭐ CS.8, nơi ta xem vì sao <code>if (x == null) x = …</code> nói chung là một cuộc đua.</p>
+<div class="pitfall">Bẫy: "em test thì chạy đúng" chẳng chứng minh gì với code dùng chung giữa các luồng. Cuộc đua cần đúng cách xen kẽ sai, và test một người dùng không bao giờ tạo ra nó.</div>`],
+      [20, 'Spring’s singleton: one bean, stateless',
+        `<p class="y-chinh">🎯 In Spring, "singleton" is a scope, not the GoF pattern: one instance per bean definition per container. Every request thread uses that one object at the same time — so a singleton bean must keep only dependencies in its fields, never data of one request.</p>
+<pre class="trich"><code class="language-java">class StatefulReceiptService {          // ✗ keeps one request's data in a field
+    private String currentMember;
+    void start(String memberId) { currentMember = memberId; }
+    String finish(String itemId) { return itemId + " for " + currentMember; }
+}
+
+class StatelessReceiptService {         // ✓ request data travels in parameters
+    String receipt(String memberId, String itemId) { return itemId + " for " + memberId; }
+}</code></pre>
+<pre class="trich"><code class="language-java">StatefulReceiptService bad = new StatefulReceiptService();   // like a Spring singleton bean
+bad.start("M001");               // request 1 starts
+bad.start("M002");               // request 2 starts on another thread, same object
+System.out.println("request 1 got: " + bad.finish("B001"));
+System.out.println("request 2 got: " + bad.finish("B007"));
+
+StatelessReceiptService good = new StatelessReceiptService();
+System.out.println("request 1 got: " + good.receipt("M001", "B001"));
+System.out.println("request 2 got: " + good.receipt("M002", "B007"));</code></pre>
+<div class="out">request 1 got: B001 for M002<br>
+request 2 got: B007 for M002<br>
+request 1 got: B001 for M001<br>
+request 2 got: B007 for M002</div>
+<p>The Spring reference says it plainly: Spring's singleton "differs from the singleton pattern as defined in the Gang of Four (GoF) patterns book" — the GoF one is one per class loader, enforced by a private constructor; Spring's is "per-container and per-bean". Nothing stops you from writing <code>new ReceiptService()</code> in a test, and two <code>@Bean</code> methods for the same class give two instances. The default scope of every <code>@Component</code>/<code>@Service</code> is singleton; <code>@Scope("prototype")</code> gives a new object per injection.</p>
+<p>The program simulates two requests sharing one service object, as they do in Spring. <code>StatefulReceiptService</code> stores the member in a field between <code>start</code> and <code>finish</code>; request 2 starts in between, overwrites the field, and request 1 receives <code>B001 for M002</code> — another member's name on its receipt. Here the interleaving is written in order on one thread, so it is visible every time; with real threads it happens whenever two requests overlap. The stateless version passes everything as parameters (they live on each thread's own stack) and is correct with any number of threads.</p>
+<div class="callout">🧭 <strong>Spring Boot / LabFlow</strong>: fields of a <code>@Service</code> are <code>private final</code> dependencies set in the constructor. Per-request data goes in method parameters, local variables or a request-scoped bean. Why parallel requests break shared fields — and how locks fix shared counters — is ⭐ CS.8.</div>`,
+        `<p class="y-chinh">🎯 Trong Spring, "singleton" là một phạm vi (scope), không phải mẫu GoF: một đối tượng cho mỗi định nghĩa bean trong mỗi bộ chứa. Mọi luồng request dùng chung đối tượng đó cùng lúc — nên bean singleton chỉ được giữ phụ thuộc trong field, không bao giờ giữ dữ liệu của một request.</p>
+<pre class="trich"><code class="language-java">class StatefulReceiptService {          // ✗ giữ dữ liệu của một request trong field
+    private String currentMember;
+    void start(String memberId) { currentMember = memberId; }
+    String finish(String itemId) { return itemId + " for " + currentMember; }
+}
+
+class StatelessReceiptService {         // ✓ dữ liệu request đi theo tham số
+    String receipt(String memberId, String itemId) { return itemId + " for " + memberId; }
+}</code></pre>
+<pre class="trich"><code class="language-java">StatefulReceiptService bad = new StatefulReceiptService();   // như một bean singleton của Spring
+bad.start("M001");               // request 1 bắt đầu
+bad.start("M002");               // request 2 bắt đầu ở luồng khác, cùng đối tượng
+System.out.println("request 1 got: " + bad.finish("B001"));
+System.out.println("request 2 got: " + bad.finish("B007"));
+
+StatelessReceiptService good = new StatelessReceiptService();
+System.out.println("request 1 got: " + good.receipt("M001", "B001"));
+System.out.println("request 2 got: " + good.receipt("M002", "B007"));</code></pre>
+<div class="out">request 1 got: B001 for M002<br>
+request 2 got: B007 for M002<br>
+request 1 got: B001 for M001<br>
+request 2 got: B007 for M002</div>
+<p>Tài liệu Spring nói thẳng: singleton của Spring "khác với mẫu singleton định nghĩa trong sách Gang of Four (GoF)" — bản GoF là một cái cho mỗi class loader, ép bằng constructor private; bản của Spring là "theo từng container và từng bean" (per-container and per-bean). Không gì cấm bạn viết <code>new ReceiptService()</code> trong test, và hai phương thức <code>@Bean</code> cho cùng một lớp cho ra hai đối tượng. Phạm vi mặc định của mọi <code>@Component</code>/<code>@Service</code> là singleton; <code>@Scope("prototype")</code> cho một đối tượng mới mỗi lần tiêm.</p>
+<p>Chương trình mô phỏng hai request dùng chung một đối tượng service, đúng như trong Spring. <code>StatefulReceiptService</code> cất thành viên vào một field giữa <code>start</code> và <code>finish</code>; request 2 bắt đầu ở giữa, ghi đè field, và request 1 nhận <code>B001 for M002</code> — tên thành viên khác trên phiếu của mình. Ở đây cách xen kẽ được viết tuần tự trên một luồng nên lần nào cũng thấy; với luồng thật nó xảy ra mỗi khi hai request chồng lên nhau. Bản không trạng thái truyền mọi thứ qua tham số (chúng nằm trên stack riêng của từng luồng) và đúng với bất kỳ số luồng nào.</p>
+<div class="callout">🧭 <strong>Spring Boot / LabFlow</strong>: field của một <code>@Service</code> là các phụ thuộc <code>private final</code> gán trong constructor. Dữ liệu của từng request đi qua tham số phương thức, biến cục bộ hoặc một bean phạm vi request. Vì sao request song song làm hỏng field dùng chung — và khoá sửa bộ đếm dùng chung thế nào — ở ⭐ CS.8.</div>`],
+      [21, 'Builder: optional parts, one check',
+        `<p class="y-chinh">🎯 Builder: when an object has a few required parts and many optional ones, build it step by step with named methods, check the whole thing once in <code>build()</code>, and get an immutable result — instead of a constructor with seven positional arguments.</p>
+<pre class="trich"><code class="language-java">// new LoanReceipt("M001", "B001", LocalDate.of(2026, 10, 20), 14, null, "handle with care", false)
+// — which argument is the note? which one is the deposit?</code></pre>
+<pre class="trich"><code class="language-java">final class LoanReceipt {
+    private final String memberId, itemId, note;
+    private final LocalDate borrowedOn;
+    private final int days;
+
+    private LoanReceipt(Builder b) {
+        memberId = b.memberId; itemId = b.itemId; note = b.note;
+        borrowedOn = b.borrowedOn; days = b.days;
+    }
+    static Builder builder(String memberId, String itemId) { return new Builder(memberId, itemId); }
+
+    @Override public String toString() {
+        return "Receipt[" + memberId + " " + itemId + ", " + borrowedOn + " -&gt; " + borrowedOn.plusDays(days)
+            + (note.isEmpty() ? "" : ", note=" + note) + "]";
+    }
+
+    static final class Builder {
+        private final String memberId, itemId;            // required: in the constructor
+        private LocalDate borrowedOn = LocalDate.of(2026, 10, 27);
+        private int days = 14;                            // optional: defaults
+        private String note = "";
+        private Builder(String memberId, String itemId) { this.memberId = memberId; this.itemId = itemId; }
+        Builder borrowedOn(LocalDate d) { borrowedOn = d; return this; }   // return this ⇒ chained calls
+        Builder days(int d) { days = d; return this; }
+        Builder note(String n) { note = n; return this; }
+        LoanReceipt build() {                             // one place checks the whole object
+            if (days &lt; 1 || days &gt; 30) throw new IllegalStateException("days must be 1..30, was " + days);
+            return new LoanReceipt(this);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanReceipt r = LoanReceipt.builder("M001", "B001")
+    .borrowedOn(LocalDate.of(2026, 10, 20))
+    .days(14)
+    .note("handle with care")
+    .build();
+System.out.println(r);
+
+LoanReceipt quick = LoanReceipt.builder("M002", "D006").build();   // defaults for the rest
+System.out.println(quick);
+
+try {
+    LoanReceipt.builder("M003", "B002").days(60).build();
+} catch (IllegalStateException e) {
+    System.out.println("build refused: " + e.getMessage());
+}</code></pre>
+<div class="out">Receipt[M001 B001, 2026-10-20 -&gt; 2026-11-03, note=handle with care]<br>
+Receipt[M002 D006, 2026-10-27 -&gt; 2026-11-10]<br>
+build refused: days must be 1..30, was 60</div>
+<p>The commented constructor call shows the problem: seven arguments, two of them <code>null</code> or <code>false</code>, and no way to tell from the call which one is the note. The builder version reads like a sentence. Required parts (member and item) go into <code>builder(…)</code>, so they cannot be forgotten; optional parts have defaults (14 days, today's date in this demo, empty note); each setter-like method returns <code>this</code>, which is what allows the chain. <code>build()</code> is the single place that checks the combination — 60 days is refused with <code>days must be 1..30, was 60</code> before any object exists.</p>
+<p>The result has only <code>final</code> fields and a private constructor that takes the builder, so a <code>LoanReceipt</code> can never be half-built or changed later. The class-level details (defensive copies, why <code>final</code>) are in ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs4-2">CS.4</a>. You will use builders far more than you write them: Lombok's <code>@Builder</code> generates this class; Spring's <code>ResponseEntity.status(201).body(dto)</code>, <code>UriComponentsBuilder</code> and Java's <code>HttpRequest.newBuilder()</code> are builders.</p>
+<div class="pitfall">Trap: <code>StringBuilder</code> is named after the idea but is just a mutable string — there is no separate product and no <code>build()</code> check. Do not cite it as "the Builder pattern" in an interview.</div>`,
+        `<p class="y-chinh">🎯 Builder: khi một đối tượng có vài phần bắt buộc và nhiều phần tuỳ chọn, hãy dựng nó từng bước bằng các phương thức có tên, kiểm cả đối tượng một lần ở <code>build()</code>, và nhận một kết quả bất biến — thay vì một constructor bảy tham số theo vị trí.</p>
+<pre class="trich"><code class="language-java">// new LoanReceipt("M001", "B001", LocalDate.of(2026, 10, 20), 14, null, "handle with care", false)
+// — tham số nào là ghi chú? cái nào là tiền cọc?</code></pre>
+<pre class="trich"><code class="language-java">final class LoanReceipt {
+    private final String memberId, itemId, note;
+    private final LocalDate borrowedOn;
+    private final int days;
+
+    private LoanReceipt(Builder b) {
+        memberId = b.memberId; itemId = b.itemId; note = b.note;
+        borrowedOn = b.borrowedOn; days = b.days;
+    }
+    static Builder builder(String memberId, String itemId) { return new Builder(memberId, itemId); }
+
+    @Override public String toString() {
+        return "Receipt[" + memberId + " " + itemId + ", " + borrowedOn + " -&gt; " + borrowedOn.plusDays(days)
+            + (note.isEmpty() ? "" : ", note=" + note) + "]";
+    }
+
+    static final class Builder {
+        private final String memberId, itemId;            // bắt buộc: ở constructor
+        private LocalDate borrowedOn = LocalDate.of(2026, 10, 27);
+        private int days = 14;                            // tuỳ chọn: có mặc định
+        private String note = "";
+        private Builder(String memberId, String itemId) { this.memberId = memberId; this.itemId = itemId; }
+        Builder borrowedOn(LocalDate d) { borrowedOn = d; return this; }   // trả this ⇒ gọi nối
+        Builder days(int d) { days = d; return this; }
+        Builder note(String n) { note = n; return this; }
+        LoanReceipt build() {                             // một chỗ kiểm cả đối tượng
+            if (days &lt; 1 || days &gt; 30) throw new IllegalStateException("days must be 1..30, was " + days);
+            return new LoanReceipt(this);
+        }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanReceipt r = LoanReceipt.builder("M001", "B001")
+    .borrowedOn(LocalDate.of(2026, 10, 20))
+    .days(14)
+    .note("handle with care")
+    .build();
+System.out.println(r);
+
+LoanReceipt quick = LoanReceipt.builder("M002", "D006").build();   // phần còn lại lấy mặc định
+System.out.println(quick);
+
+try {
+    LoanReceipt.builder("M003", "B002").days(60).build();
+} catch (IllegalStateException e) {
+    System.out.println("build refused: " + e.getMessage());
+}</code></pre>
+<div class="out">Receipt[M001 B001, 2026-10-20 -&gt; 2026-11-03, note=handle with care]<br>
+Receipt[M002 D006, 2026-10-27 -&gt; 2026-11-10]<br>
+build refused: days must be 1..30, was 60</div>
+<p>Lời gọi constructor trong chú thích cho thấy vấn đề: bảy tham số, hai cái là <code>null</code> hoặc <code>false</code>, và nhìn lời gọi không biết cái nào là ghi chú. Bản builder đọc như một câu. Phần bắt buộc (thành viên và tài liệu) đi vào <code>builder(…)</code>, nên không thể quên; phần tuỳ chọn có mặc định (14 ngày, ngày hôm nay trong bản minh hoạ, ghi chú rỗng); mỗi phương thức kiểu setter trả về <code>this</code>, nhờ đó gọi nối được. <code>build()</code> là chỗ duy nhất kiểm tổ hợp — 60 ngày bị từ chối với <code>days must be 1..30, was 60</code> trước khi có đối tượng nào.</p>
+<p>Kết quả chỉ có field <code>final</code> và một constructor private nhận builder, nên một <code>LoanReceipt</code> không bao giờ dựng dở hay bị sửa về sau. Chi tiết ở mức lớp (sao chép phòng vệ, vì sao <code>final</code>) nằm ở ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs4-2">CS.4</a>. Bạn sẽ dùng builder nhiều hơn là tự viết: <code>@Builder</code> của Lombok sinh ra đúng lớp này; <code>ResponseEntity.status(201).body(dto)</code>, <code>UriComponentsBuilder</code> của Spring và <code>HttpRequest.newBuilder()</code> của Java đều là builder.</p>
+<div class="pitfall">Bẫy: <code>StringBuilder</code> mang tên ý tưởng này nhưng chỉ là một chuỗi sửa được — không có sản phẩm riêng, không có bước kiểm ở <code>build()</code>. Đừng lấy nó làm ví dụ "mẫu Builder" khi phỏng vấn.</div>`],
+      [22, 'Observer: announce, let others react',
+        `<p class="y-chinh">🎯 Observer: an object (the <em>subject</em>) keeps a list of listeners and calls them when something happens. The subject knows only the listener interface, so new reactions — log, email, a wait list — are added without touching it.</p>
+<pre class="trich"><code class="language-java">record ReturnedEvent(String memberId, String itemId) {}
+
+interface IReturnListener { void onReturned(ReturnedEvent e); }
+
+class LoanDesk {                                      // the subject: knows only the interface
+    private final List&lt;IReturnListener&gt; listeners = new ArrayList&lt;&gt;();
+    void subscribe(IReturnListener l) { listeners.add(l); }
+    void unsubscribe(IReturnListener l) { listeners.remove(l); }
+    void giveBack(String memberId, String itemId) {
+        System.out.println(itemId + " returned by " + memberId);   // the real work
+        ReturnedEvent e = new ReturnedEvent(memberId, itemId);
+        for (IReturnListener l : listeners) l.onReturned(e);        // then announce
+    }
+}
+
+class WaitList implements IReturnListener {           // a listener with its own state
+    private final Map&lt;String, String&gt; next;
+    WaitList(Map&lt;String, String&gt; next) { this.next = next; }
+    public void onReturned(ReturnedEvent e) {
+        String m = next.get(e.itemId());
+        if (m != null) System.out.println("  [wait]  " + e.itemId() + " is free: notify " + m);
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanDesk desk = new LoanDesk();
+WaitList wait = new WaitList(Map.of("B001", "M007"));
+desk.subscribe(e -&gt; System.out.println("  [log]   " + e));
+desk.subscribe(e -&gt; System.out.println("  [email] thank you " + e.memberId()));
+desk.subscribe(wait);
+
+desk.giveBack("M001", "B001");
+desk.unsubscribe(wait);                       // the wait list leaves
+desk.giveBack("M002", "B001");</code></pre>
+<div class="out">B001 returned by M001<br>
+&nbsp;&nbsp;[log] &nbsp;&nbsp;ReturnedEvent[memberId=M001, itemId=B001]<br>
+&nbsp;&nbsp;[email] thank you M001<br>
+&nbsp;&nbsp;[wait] &nbsp;B001 is free: notify M007<br>
+B001 returned by M002<br>
+&nbsp;&nbsp;[log] &nbsp;&nbsp;ReturnedEvent[memberId=M002, itemId=B001]<br>
+&nbsp;&nbsp;[email] thank you M002</div>
+<p><code>LoanDesk.giveBack</code> does its real work (here: print the return), then builds a <code>ReturnedEvent</code> record and calls <code>onReturned</code> on every subscribed listener, in the order they subscribed. Three listeners react: a log line (a lambda — the listener interface has one method), a thank-you email (another lambda), and <code>WaitList</code>, a class with its own state that knows M007 is waiting for B001. After <code>unsubscribe(wait)</code>, the second return of B001 triggers only the log and the email — the wait list is gone without the desk changing.</p>
+<p>Without Observer, <code>giveBack</code> would call <code>logger.log(…)</code>, <code>mailer.send(…)</code> and <code>waitList.check(…)</code> directly: every new reaction (SMS, statistics, a dashboard) edits the loan desk. With it, the desk depends on one interface and the reactions plug in — OCP again. You use this pattern every time you write a listener in Swing or JavaFX, or an event handler in JavaScript.</p>
+<div class="pitfall">Trap: a listener that subscribes and is never removed keeps its object alive for as long as the subject lives — the "listener leak" measured in ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs5-2">CS.5</a>. Unsubscribe when the listener's job ends.</div>`,
+        `<p class="y-chinh">🎯 Observer: một đối tượng (gọi là <em>chủ thể</em>, subject) giữ danh sách listener (người lắng nghe) và gọi chúng khi có chuyện xảy ra. Chủ thể chỉ biết interface listener, nên phản ứng mới — ghi log, gửi email, danh sách chờ — được thêm vào mà không đụng tới nó.</p>
+<pre class="trich"><code class="language-java">record ReturnedEvent(String memberId, String itemId) {}
+
+interface IReturnListener { void onReturned(ReturnedEvent e); }
+
+class LoanDesk {                                      // chủ thể: chỉ biết interface
+    private final List&lt;IReturnListener&gt; listeners = new ArrayList&lt;&gt;();
+    void subscribe(IReturnListener l) { listeners.add(l); }
+    void unsubscribe(IReturnListener l) { listeners.remove(l); }
+    void giveBack(String memberId, String itemId) {
+        System.out.println(itemId + " returned by " + memberId);   // việc chính
+        ReturnedEvent e = new ReturnedEvent(memberId, itemId);
+        for (IReturnListener l : listeners) l.onReturned(e);        // rồi thông báo
+    }
+}
+
+class WaitList implements IReturnListener {           // listener có trạng thái riêng
+    private final Map&lt;String, String&gt; next;
+    WaitList(Map&lt;String, String&gt; next) { this.next = next; }
+    public void onReturned(ReturnedEvent e) {
+        String m = next.get(e.itemId());
+        if (m != null) System.out.println("  [wait]  " + e.itemId() + " is free: notify " + m);
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">LoanDesk desk = new LoanDesk();
+WaitList wait = new WaitList(Map.of("B001", "M007"));
+desk.subscribe(e -&gt; System.out.println("  [log]   " + e));
+desk.subscribe(e -&gt; System.out.println("  [email] thank you " + e.memberId()));
+desk.subscribe(wait);
+
+desk.giveBack("M001", "B001");
+desk.unsubscribe(wait);                       // danh sách chờ rời đi
+desk.giveBack("M002", "B001");</code></pre>
+<div class="out">B001 returned by M001<br>
+&nbsp;&nbsp;[log] &nbsp;&nbsp;ReturnedEvent[memberId=M001, itemId=B001]<br>
+&nbsp;&nbsp;[email] thank you M001<br>
+&nbsp;&nbsp;[wait] &nbsp;B001 is free: notify M007<br>
+B001 returned by M002<br>
+&nbsp;&nbsp;[log] &nbsp;&nbsp;ReturnedEvent[memberId=M002, itemId=B001]<br>
+&nbsp;&nbsp;[email] thank you M002</div>
+<p><code>LoanDesk.giveBack</code> làm việc chính của nó (ở đây: in lần trả), rồi dựng một record <code>ReturnedEvent</code> và gọi <code>onReturned</code> trên mọi listener đã đăng ký, theo thứ tự đăng ký. Ba listener phản ứng: một dòng log (một lambda — interface listener chỉ có một phương thức), một email cảm ơn (lambda khác), và <code>WaitList</code>, một lớp có trạng thái riêng, biết M007 đang chờ B001. Sau <code>unsubscribe(wait)</code>, lần trả B001 thứ hai chỉ kích hoạt log và email — danh sách chờ đã rời đi mà quầy không đổi gì.</p>
+<p>Không có Observer, <code>giveBack</code> sẽ gọi thẳng <code>logger.log(…)</code>, <code>mailer.send(…)</code> và <code>waitList.check(…)</code>: mỗi phản ứng mới (SMS, thống kê, bảng điều khiển) lại sửa quầy mượn trả. Có nó, quầy phụ thuộc một interface và các phản ứng cắm vào — lại là OCP. Bạn dùng mẫu này mỗi khi viết một listener trong Swing hay JavaFX, hoặc một hàm xử lý sự kiện trong JavaScript.</p>
+<div class="pitfall">Bẫy: listener đăng ký mà không bao giờ gỡ sẽ giữ đối tượng của nó sống chừng nào chủ thể còn sống — "rò rỉ listener" đã đo ở ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs5-2">CS.5</a>. Gỡ đăng ký khi việc của listener kết thúc.</div>`],
+      [23, 'Observer for real — and in Spring',
+        `<p class="y-chinh">🎯 Two facts about Observer that bite in real projects: listeners run on the caller's thread, one after another, so one exception aborts the operation and skips the remaining listeners; and the JDK's own <code>java.util.Observable</code> has been deprecated since Java 9. Spring's events are the modern form — and synchronous by default too.</p>
+<pre class="trich"><code class="language-java">List&lt;Consumer&lt;String&gt;&gt; listeners = List.of(
+    id -&gt; System.out.println("  1 log " + id + " on " + Thread.currentThread().getName()),
+    id -&gt; { throw new IllegalStateException("mail server down"); },
+    id -&gt; System.out.println("  3 notify wait list for " + id));
+
+System.out.println("naive publish:");
+try {
+    for (Consumer&lt;String&gt; l : listeners) l.accept("B001");
+} catch (IllegalStateException e) {
+    System.out.println("  return FAILED: " + e.getMessage() + " (listener 3 never ran)");
+}
+
+System.out.println("isolated publish:");
+for (Consumer&lt;String&gt; l : listeners) {
+    try { l.accept("B001"); }
+    catch (RuntimeException e) { System.out.println("  listener failed, logged: " + e.getMessage()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Deprecated d = java.util.Observable.class.getAnnotation(Deprecated.class);
+System.out.println("java.util.Observable: @Deprecated(since=\\"" + d.since() + "\\")");</code></pre>
+<div class="out">naive publish:<br>
+&nbsp;&nbsp;1 log B001 on main<br>
+&nbsp;&nbsp;return FAILED: mail server down (listener 3 never ran)<br>
+isolated publish:<br>
+&nbsp;&nbsp;1 log B001 on main<br>
+&nbsp;&nbsp;listener failed, logged: mail server down<br>
+&nbsp;&nbsp;3 notify wait list for B001<br>
+java.util.Observable: @Deprecated(since="9")</div>
+<p>Naive publish: listener 1 logs (on thread <code>main</code> — the caller's), listener 2 throws "mail server down", the exception travels out of the loop and out of the return operation. The book was returned in the database, but the caller is told the return FAILED, and listener 3 — the wait list — never ran. Isolated publish wraps each call in its own <code>try/catch</code>: the failure is logged and the wait list is still notified. Which behaviour you want is a design decision; the default (one failure stops everything) is rarely it.</p>
+<p>The JDK's <code>Observable</code>/<code>Observer</code> pair is <code>@Deprecated(since="9")</code> — read from the annotation at run time in the last line — because its events carried no type and its notification order was unspecified; write your own small listener interface, or use <code>PropertyChangeListener</code>. In Spring, publish any object with <code>ApplicationEventPublisher.publishEvent</code> and receive it with an <code>@EventListener</code> method (since Spring 4.2). Listeners run synchronously on the publisher's thread unless you add <code>@Async</code>; <code>@TransactionalEventListener</code> waits until the database transaction commits, so an email is not sent for a return that was rolled back.</p>
+<div class="pitfall">Trap: events make the flow invisible — reading <code>giveBack</code>, you no longer see who reacts. Keep event names explicit (<code>BookReturned</code>), and do not chain events into events.</div>`,
+        `<p class="y-chinh">🎯 Hai sự thật về Observer hay cắn ở dự án thật: listener chạy trên luồng của người gọi, lần lượt từng cái, nên một exception làm hỏng cả thao tác và bỏ qua các listener còn lại; và <code>java.util.Observable</code> của chính JDK đã bị đánh dấu lỗi thời từ Java 9. Sự kiện của Spring là dạng hiện đại — và mặc định cũng đồng bộ.</p>
+<pre class="trich"><code class="language-java">List&lt;Consumer&lt;String&gt;&gt; listeners = List.of(
+    id -&gt; System.out.println("  1 log " + id + " on " + Thread.currentThread().getName()),
+    id -&gt; { throw new IllegalStateException("mail server down"); },
+    id -&gt; System.out.println("  3 notify wait list for " + id));
+
+System.out.println("naive publish:");
+try {
+    for (Consumer&lt;String&gt; l : listeners) l.accept("B001");
+} catch (IllegalStateException e) {
+    System.out.println("  return FAILED: " + e.getMessage() + " (listener 3 never ran)");
+}
+
+System.out.println("isolated publish:");
+for (Consumer&lt;String&gt; l : listeners) {
+    try { l.accept("B001"); }
+    catch (RuntimeException e) { System.out.println("  listener failed, logged: " + e.getMessage()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Deprecated d = java.util.Observable.class.getAnnotation(Deprecated.class);
+System.out.println("java.util.Observable: @Deprecated(since=\\"" + d.since() + "\\")");</code></pre>
+<div class="out">naive publish:<br>
+&nbsp;&nbsp;1 log B001 on main<br>
+&nbsp;&nbsp;return FAILED: mail server down (listener 3 never ran)<br>
+isolated publish:<br>
+&nbsp;&nbsp;1 log B001 on main<br>
+&nbsp;&nbsp;listener failed, logged: mail server down<br>
+&nbsp;&nbsp;3 notify wait list for B001<br>
+java.util.Observable: @Deprecated(since="9")</div>
+<p>Phát kiểu ngây thơ: listener 1 ghi log (trên luồng <code>main</code> — luồng của người gọi), listener 2 ném "mail server down", exception đi ra khỏi vòng lặp và ra khỏi thao tác trả sách. Sách đã được trả trong CSDL, nhưng người gọi được báo trả sách THẤT BẠI, và listener 3 — danh sách chờ — không bao giờ chạy. Phát kiểu cách ly bọc mỗi lời gọi trong <code>try/catch</code> riêng: lỗi được ghi lại và danh sách chờ vẫn được báo. Muốn hành vi nào là quyết định thiết kế; mặc định (một lỗi chặn tất cả) hiếm khi là cái bạn muốn.</p>
+<p>Cặp <code>Observable</code>/<code>Observer</code> của JDK mang <code>@Deprecated(since="9")</code> — đọc từ annotation lúc chạy ở dòng cuối — vì sự kiện của nó không có kiểu và thứ tự báo không được quy định; hãy tự viết một interface listener nhỏ, hoặc dùng <code>PropertyChangeListener</code>. Trong Spring, phát bất kỳ đối tượng nào bằng <code>ApplicationEventPublisher.publishEvent</code> và nhận nó bằng một phương thức <code>@EventListener</code> (từ Spring 4.2). Listener chạy đồng bộ trên luồng của người phát trừ khi bạn thêm <code>@Async</code>; <code>@TransactionalEventListener</code> chờ tới khi giao dịch CSDL commit, nên không gửi email cho một lần trả đã bị rollback.</p>
+<div class="pitfall">Bẫy: sự kiện làm luồng xử lý trở nên vô hình — đọc <code>giveBack</code>, bạn không còn thấy ai phản ứng. Đặt tên sự kiện rõ ràng (<code>BookReturned</code>), và đừng xâu sự kiện này sinh ra sự kiện kia.</div>`],
+      [24, 'Template Method: fixed steps, blanks to fill',
+        `<p class="y-chinh">🎯 Template Method: a parent class fixes the order of the steps in one <code>final</code> method and leaves some steps <code>abstract</code> for subclasses to fill — plus optional <em>hooks</em> with defaults. Every report has a header, lines and maybe a total; only their look changes.</p>
+<pre class="trich"><code class="language-java">abstract class ReportExporter {
+    // the template method: final, so the order of steps cannot be changed
+    final String export(List&lt;TemplateBaoCao.Row&gt; rows) {
+        StringBuilder out = new StringBuilder();
+        out.append(header());
+        for (TemplateBaoCao.Row r : rows) out.append(line(r));
+        if (wantsTotal()) out.append(total(rows.stream().mapToInt(TemplateBaoCao.Row::loans).sum()));
+        return out.toString();
+    }
+    protected abstract String header();                  // a step every subclass MUST write
+    protected abstract String line(TemplateBaoCao.Row r);
+    protected boolean wantsTotal() { return false; }     // a hook: optional, has a default
+    protected String total(int sum) { return ""; }
+}
+
+class CsvExporter extends ReportExporter {
+    protected String header() { return "id,title,loans\\n"; }
+    protected String line(TemplateBaoCao.Row r) { return r.id() + "," + r.title() + "," + r.loans() + "\\n"; }
+}
+
+class TextExporter extends ReportExporter {
+    protected String header() { return "== TOP BOOKS ==\\n"; }
+    protected String line(TemplateBaoCao.Row r) { return String.format("%-4s %-15s %3d%n", r.id(), r.title(), r.loans()); }
+    @Override protected boolean wantsTotal() { return true; }
+    @Override protected String total(int sum) { return "total loans: " + sum + "\\n"; }
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;Row&gt; rows = List.of(new Row("B002", "Effective Java", 30), new Row("B001", "Clean Code", 12));
+System.out.print(new CsvExporter().export(rows));
+System.out.print(new TextExporter().export(rows));</code></pre>
+<div class="out">id,title,loans<br>
+B002,Effective Java,30<br>
+B001,Clean Code,12<br>
+== TOP BOOKS ==<br>
+B002 Effective Java &nbsp;&nbsp;30<br>
+B001 Clean Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12<br>
+total loans: 42</div>
+<p><code>export</code> is the template method: header, then one line per row, then — only if <code>wantsTotal()</code> says so — a total. It is <code>final</code>, so no subclass can reorder the steps or forget one. <code>header</code> and <code>line</code> are <code>abstract</code>: steps every subclass must write. <code>wantsTotal</code> and <code>total</code> are <em>hooks</em>: they have defaults (no total), and a subclass overrides them only if it wants to. <code>CsvExporter</code> writes two methods; <code>TextExporter</code> writes two and turns the hook on. The output shows the same algorithm in two dresses, with <code>total loans: 42</code> only in the text report.</p>
+<p>The pattern has a well-known slogan, the "Hollywood principle": <em>don't call us, we'll call you</em>. The subclass never calls <code>export</code>'s steps in order — the parent calls the subclass. That inversion is also how frameworks work: Spring calls your <code>@Controller</code> method, JUnit calls your <code>@Test</code> method.</p>
+<div class="pitfall">Trap: Template Method uses inheritance, so a class can have only one template parent, and a change of the parent reaches every subclass (⭐ CS.6, fragile base class). When the varying steps are few and simple, the callback form on the next slide is often lighter.</div>`,
+        `<p class="y-chinh">🎯 Template Method (phương thức khuôn): lớp cha cố định thứ tự các bước trong một phương thức <code>final</code> và để một số bước <code>abstract</code> cho lớp con điền — cộng thêm các <em>móc</em> (hook) tuỳ chọn có mặc định. Báo cáo nào cũng có tiêu đề, các dòng và có thể một dòng tổng; chỉ khác vẻ ngoài.</p>
+<pre class="trich"><code class="language-java">abstract class ReportExporter {
+    // phương thức khuôn: final, không ai đổi được thứ tự bước
+    final String export(List&lt;TemplateBaoCao.Row&gt; rows) {
+        StringBuilder out = new StringBuilder();
+        out.append(header());
+        for (TemplateBaoCao.Row r : rows) out.append(line(r));
+        if (wantsTotal()) out.append(total(rows.stream().mapToInt(TemplateBaoCao.Row::loans).sum()));
+        return out.toString();
+    }
+    protected abstract String header();                  // bước lớp con BẮT BUỘC viết
+    protected abstract String line(TemplateBaoCao.Row r);
+    protected boolean wantsTotal() { return false; }     // móc: tuỳ chọn, có mặc định
+    protected String total(int sum) { return ""; }
+}
+
+class CsvExporter extends ReportExporter {
+    protected String header() { return "id,title,loans\\n"; }
+    protected String line(TemplateBaoCao.Row r) { return r.id() + "," + r.title() + "," + r.loans() + "\\n"; }
+}
+
+class TextExporter extends ReportExporter {
+    protected String header() { return "== TOP BOOKS ==\\n"; }
+    protected String line(TemplateBaoCao.Row r) { return String.format("%-4s %-15s %3d%n", r.id(), r.title(), r.loans()); }
+    @Override protected boolean wantsTotal() { return true; }
+    @Override protected String total(int sum) { return "total loans: " + sum + "\\n"; }
+}</code></pre>
+<pre class="trich"><code class="language-java">List&lt;Row&gt; rows = List.of(new Row("B002", "Effective Java", 30), new Row("B001", "Clean Code", 12));
+System.out.print(new CsvExporter().export(rows));
+System.out.print(new TextExporter().export(rows));</code></pre>
+<div class="out">id,title,loans<br>
+B002,Effective Java,30<br>
+B001,Clean Code,12<br>
+== TOP BOOKS ==<br>
+B002 Effective Java &nbsp;&nbsp;30<br>
+B001 Clean Code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12<br>
+total loans: 42</div>
+<p><code>export</code> là phương thức khuôn: tiêu đề, rồi mỗi hàng một dòng, rồi — chỉ khi <code>wantsTotal()</code> bảo thế — một dòng tổng. Nó là <code>final</code>, nên không lớp con nào đổi thứ tự hay bỏ sót bước. <code>header</code> và <code>line</code> là <code>abstract</code>: bước lớp con nào cũng phải viết. <code>wantsTotal</code> và <code>total</code> là <em>móc</em>: có mặc định (không có tổng), lớp con chỉ ghi đè nếu muốn. <code>CsvExporter</code> viết hai phương thức; <code>TextExporter</code> viết hai và bật móc lên. Output cho thấy cùng một thuật toán trong hai bộ áo, với <code>total loans: 42</code> chỉ ở báo cáo chữ.</p>
+<p>Mẫu này có một khẩu hiệu nổi tiếng, "nguyên lý Hollywood": <em>đừng gọi chúng tôi, chúng tôi sẽ gọi bạn</em>. Lớp con không bao giờ tự gọi các bước của <code>export</code> theo thứ tự — lớp cha gọi lớp con. Cú đảo đó cũng là cách framework làm việc: Spring gọi phương thức <code>@Controller</code> của bạn, JUnit gọi phương thức <code>@Test</code> của bạn.</p>
+<div class="pitfall">Bẫy: Template Method dùng kế thừa, nên một lớp chỉ có được một lớp cha khuôn, và mỗi thay đổi ở lớp cha lan tới mọi lớp con (⭐ CS.6, lớp cha mong manh). Khi bước thay đổi ít và đơn giản, dạng callback ở slide sau thường nhẹ hơn.</div>`],
+      [25, 'Template by callback: JdbcTemplate',
+        `<p class="y-chinh">🎯 The template idea has two faces. By inheritance: <code>AbstractList</code> — write <code>get</code> and <code>size</code>, inherit the rest. By callback: <code>JdbcTemplate</code> — it opens the connection, runs the SQL, loops and <em>always</em> closes; you pass only a lambda that turns one row into an object.</p>
+<pre class="trich"><code class="language-java">List&lt;String&gt; days = new AbstractList&lt;&gt;() {            // write get + size...
+    private final String[] d = { "MON", "TUE", "WED" };
+    public String get(int i) { return d[i]; }
+    public int size() { return d.length; }
+};
+System.out.println(days + " contains TUE: " + days.contains("TUE"));   // ...get the rest free
+System.out.println("indexOf WED: " + days.indexOf("WED")
+    + ", equals List.of: " + days.equals(List.of("MON", "TUE", "WED")));</code></pre>
+<pre class="trich"><code class="language-java">interface RowMapper&lt;T&gt; { T mapRow(Map&lt;String, String&gt; row); }   // the only part YOU write
+
+class MiniJdbcTemplate {
+    &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; mapper) {
+        System.out.println("open connection; run: " + sql);       // fixed steps the template owns
+        List&lt;T&gt; out = new ArrayList&lt;&gt;();
+        try {
+            for (var row : fakeRows()) out.add(mapper.mapRow(row));
+        } finally {
+            System.out.println("close result set + connection");    // always, even on an exception
+        }
+        return out;
+    }
+    private List&lt;Map&lt;String, String&gt;&gt; fakeRows() {
+        return List.of(Map.of("title", "Clean Code"), Map.of("title", "Effective Java"));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">MiniJdbcTemplate jdbc = new MiniJdbcTemplate();
+List&lt;String&gt; titles = jdbc.query("SELECT title FROM book", rs -&gt; rs.get("title").toUpperCase());
+System.out.println(titles);</code></pre>
+<div class="out">[MON, TUE, WED] contains TUE: true<br>
+indexOf WED: 2, equals List.of: true<br>
+open connection; run: SELECT title FROM book<br>
+close result set + connection<br>
+[CLEAN CODE, EFFECTIVE JAVA]</div>
+<p>First, the JDK's own template by inheritance. The <code>AbstractList</code> javadoc says it: to make an unmodifiable list "the programmer needs only to extend this class and provide implementations for the <code>get(int)</code> and <code>size()</code> methods". Our three-day list wrote two methods and got <code>toString</code>, <code>contains</code>, <code>indexOf</code>, iteration and even <code>equals</code> with <code>List.of</code> — all template methods in <code>AbstractList</code> that call our two steps.</p>
+<p>Then the callback form, in a mini version of Spring's <code>JdbcTemplate</code>. <code>query</code> owns the fixed steps — "open connection; run", loop over rows, and in <code>finally</code> "close result set + connection" — and asks the caller for the one varying step, a <code>RowMapper</code>. The caller's lambda only upper-cases a title. The real <code>JdbcTemplate</code> javadoc describes the same split: it "executes core JDBC workflow, leaving application code to provide SQL and extract results". Before it, every JDBC method in PRJ301 repeated twenty lines of open/try/close and forgot to close on the error path.</p>
+<div class="callout">🧭 <strong>Spring</strong>: <code>JdbcTemplate</code>, <code>TransactionTemplate</code>, <code>RestTemplate</code> (and its newer sibling <code>RestClient</code>) all follow this shape. The RowMapper lambda is a strategy; the template that calls it is a template method — patterns combine.</div>`,
+        `<p class="y-chinh">🎯 Ý tưởng khuôn có hai gương mặt. Bằng kế thừa: <code>AbstractList</code> — viết <code>get</code> và <code>size</code>, thừa hưởng phần còn lại. Bằng callback: <code>JdbcTemplate</code> — nó mở kết nối, chạy SQL, lặp và <em>luôn luôn</em> đóng; bạn chỉ truyền một lambda biến một hàng thành một đối tượng.</p>
+<pre class="trich"><code class="language-java">List&lt;String&gt; days = new AbstractList&lt;&gt;() {            // viết get + size...
+    private final String[] d = { "MON", "TUE", "WED" };
+    public String get(int i) { return d[i]; }
+    public int size() { return d.length; }
+};
+System.out.println(days + " contains TUE: " + days.contains("TUE"));   // ...phần còn lại có sẵn
+System.out.println("indexOf WED: " + days.indexOf("WED")
+    + ", equals List.of: " + days.equals(List.of("MON", "TUE", "WED")));</code></pre>
+<pre class="trich"><code class="language-java">interface RowMapper&lt;T&gt; { T mapRow(Map&lt;String, String&gt; row); }   // phần duy nhất BẠN viết
+
+class MiniJdbcTemplate {
+    &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; mapper) {
+        System.out.println("open connection; run: " + sql);       // các bước cố định khuôn giữ
+        List&lt;T&gt; out = new ArrayList&lt;&gt;();
+        try {
+            for (var row : fakeRows()) out.add(mapper.mapRow(row));
+        } finally {
+            System.out.println("close result set + connection");    // luôn chạy, kể cả khi có exception
+        }
+        return out;
+    }
+    private List&lt;Map&lt;String, String&gt;&gt; fakeRows() {
+        return List.of(Map.of("title", "Clean Code"), Map.of("title", "Effective Java"));
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">MiniJdbcTemplate jdbc = new MiniJdbcTemplate();
+List&lt;String&gt; titles = jdbc.query("SELECT title FROM book", rs -&gt; rs.get("title").toUpperCase());
+System.out.println(titles);</code></pre>
+<div class="out">[MON, TUE, WED] contains TUE: true<br>
+indexOf WED: 2, equals List.of: true<br>
+open connection; run: SELECT title FROM book<br>
+close result set + connection<br>
+[CLEAN CODE, EFFECTIVE JAVA]</div>
+<p>Trước hết là khuôn bằng kế thừa của chính JDK. Javadoc của <code>AbstractList</code> viết rõ: để có một list không sửa được "lập trình viên chỉ cần kế thừa lớp này và cài các phương thức <code>get(int)</code> và <code>size()</code>". List ba ngày của ta viết hai phương thức và có luôn <code>toString</code>, <code>contains</code>, <code>indexOf</code>, duyệt lặp và cả <code>equals</code> với <code>List.of</code> — đều là phương thức khuôn trong <code>AbstractList</code> gọi tới hai bước của ta.</p>
+<p>Rồi tới dạng callback, trong một bản thu nhỏ của <code>JdbcTemplate</code> của Spring. <code>query</code> giữ các bước cố định — "open connection; run", lặp qua các hàng, và trong <code>finally</code> "close result set + connection" — và chỉ xin người gọi đúng một bước thay đổi, một <code>RowMapper</code>. Lambda của người gọi chỉ viết hoa tên sách. Javadoc của <code>JdbcTemplate</code> thật mô tả đúng cách chia này: nó "chạy quy trình JDBC cốt lõi, để code ứng dụng chỉ cung cấp SQL và lấy kết quả". Trước khi có nó, mỗi phương thức JDBC ở PRJ301 lặp lại hai mươi dòng mở/try/đóng và quên đóng ở nhánh lỗi.</p>
+<div class="callout">🧭 <strong>Spring</strong>: <code>JdbcTemplate</code>, <code>TransactionTemplate</code>, <code>RestTemplate</code> (và người anh em mới hơn <code>RestClient</code>) đều theo hình dạng này. Lambda RowMapper là một strategy; khuôn gọi nó là một template method — các mẫu kết hợp với nhau.</div>`],
+      [26, 'Choosing a pattern, answering interviews',
+        `<p class="y-chinh">🎯 Choose a pattern from the problem, never the other way round — and in an interview, answer in three beats: the problem it solves, a real example, and what it costs.</p>
+<p>The table is the whole deck in six rows. Many interchangeable ways to do one step, chosen at run time → <strong>Strategy</strong> (a <code>Comparator</code>, a list of policy beans; cost: a class or lambda per variant). Which class to create depends on input → <strong>Factory</strong> (<code>List.of</code>, <code>@Bean</code>; cost: one more indirection). One shared object for the whole app → <strong>Singleton</strong> (a bean scope or an <code>enum</code>; cost: global state, hard to test). An object with many optional parts → <strong>Builder</strong> (Lombok <code>@Builder</code>; cost: a second class). Others must react to an event → <strong>Observer</strong> (<code>@EventListener</code>; cost: a hidden flow, order and error handling). Same algorithm, a few steps differ → <strong>Template Method</strong> (<code>JdbcTemplate</code>; cost: inheritance is rigid).</p>
+<p>The three-beat answer, for example on Strategy: "It replaces an if-chain on a type by an interface with one class per variant. In my CT Library the fee rule is an <code>IFeePolicy</code>, and Spring injects all policies as a list. The cost is more small classes, so I use it when variants really change." The classic trap question — "Is Singleton an anti-pattern?" — deserves a nuanced answer: the hand-written GoF singleton is global mutable state and hides dependencies; one shared instance handed out by DI, as Spring does, keeps the benefit without the cost.</p>
+<div class="callout">🧭 <strong>Go further</strong>: SWD392 covers the GoF patterns at the architecture level; PRJ301 ⭐ Spring Boot shows these patterns inside a running application. Practise with the 🧪 exercises of this deck.</div>`,
+        `<p class="y-chinh">🎯 Chọn mẫu từ vấn đề, không bao giờ ngược lại — và khi phỏng vấn, trả lời theo ba nhịp: vấn đề nó giải, một ví dụ thật, và cái giá của nó.</p>
+<p>Bảng là cả deck gói trong sáu dòng. Nhiều cách thay thế nhau cho một bước, chọn lúc chạy → <strong>Strategy</strong> (một <code>Comparator</code>, một list bean chính sách; giá: mỗi biến thể một lớp hoặc lambda). Tạo lớp nào tuỳ dữ liệu vào → <strong>Factory</strong> (<code>List.of</code>, <code>@Bean</code>; giá: thêm một tầng trung gian). Một đối tượng dùng chung cho cả ứng dụng → <strong>Singleton</strong> (scope của bean hoặc một <code>enum</code>; giá: trạng thái toàn cục, khó test). Một đối tượng nhiều phần tuỳ chọn → <strong>Builder</strong> (<code>@Builder</code> của Lombok; giá: thêm một lớp). Nơi khác phải phản ứng với một sự kiện → <strong>Observer</strong> (<code>@EventListener</code>; giá: luồng xử lý bị ẩn, thứ tự và xử lý lỗi). Cùng thuật toán, vài bước khác nhau → <strong>Template Method</strong> (<code>JdbcTemplate</code>; giá: kế thừa thì cứng).</p>
+<p>Câu trả lời ba nhịp, ví dụ với Strategy: "Nó thay chuỗi if theo loại bằng một interface với mỗi biến thể một lớp. Trong CT Library của em, luật phí là một <code>IFeePolicy</code>, và Spring tiêm mọi chính sách dưới dạng một list. Giá phải trả là nhiều lớp nhỏ hơn, nên em dùng khi các biến thể thật sự thay đổi." Câu bẫy kinh điển — "Singleton có phải anti-pattern không?" — cần câu trả lời có sắc thái: singleton GoF tự viết là trạng thái toàn cục có thể sửa và che giấu phụ thuộc; một đối tượng dùng chung được phát qua DI, như Spring làm, giữ được lợi ích mà không chịu cái giá đó.</p>
+<div class="callout">🧭 <strong>Đi tiếp</strong>: SWD392 bàn các mẫu GoF ở mức kiến trúc; PRJ301 ⭐ Spring Boot cho thấy các mẫu này bên trong một ứng dụng đang chạy. Luyện bằng các bài 🧪 của deck này.</div>`],
+    ]),
+    bi(`<h2>📌 What to take away from slides 13–26</h2>
+<ul>
+<li>A pattern is a name + problem + solution + cost; GoF (1994) has 23 in three groups. Learn six well: Strategy, Factory, Singleton, Builder, Observer, Template Method.</li>
+<li><strong>Strategy</strong>: the varying algorithm behind an interface, chosen at run time; one-method strategies are lambdas; a registry map replaces the if-chain; Spring injects lists and maps of beans.</li>
+<li><strong>Factory</strong>: one place calls <code>new</code> on concrete classes; the JDK's static factories return hidden subclasses and cached objects.</li>
+<li><strong>Singleton</strong>: eager, holder or enum are thread-safe; the lazy null-check is a race (2 objects, every forced run); Spring's singleton is one bean per container — keep it stateless.</li>
+<li><strong>Builder</strong>: required parts in <code>builder(…)</code>, named optional steps, one check in <code>build()</code>, an immutable result.</li>
+<li><strong>Observer</strong>: the subject knows only the listener interface; listeners run synchronously in order — isolate failures; Spring has <code>@EventListener</code>.</li>
+<li><strong>Template Method</strong>: a <code>final</code> method fixes the steps, subclasses fill <code>abstract</code> ones, hooks are optional; the callback form is <code>JdbcTemplate</code>.</li>
+</ul>`,
+    `<h2>📌 Cần mang theo gì từ slide 13–26</h2>
+<ul>
+<li>Một mẫu = tên + vấn đề + lời giải + cái giá; GoF (1994) có 23 mẫu chia ba nhóm. Học kỹ sáu mẫu: Strategy, Factory, Singleton, Builder, Observer, Template Method.</li>
+<li><strong>Strategy</strong>: thuật toán hay đổi nằm sau một interface, chọn lúc chạy; strategy một phương thức là lambda; một map sổ đăng ký thay chuỗi if; Spring tiêm list và map các bean.</li>
+<li><strong>Factory</strong>: một chỗ duy nhất gọi <code>new</code> trên lớp cụ thể; static factory của JDK trả lớp con ẩn và đối tượng có sẵn trong cache.</li>
+<li><strong>Singleton</strong>: eager, holder hay enum đều an toàn luồng; kiểm null kiểu lười là một cuộc đua (2 đối tượng, mọi lần chạy bị ép); singleton của Spring là một bean mỗi container — giữ nó không trạng thái.</li>
+<li><strong>Builder</strong>: phần bắt buộc ở <code>builder(…)</code>, bước tuỳ chọn có tên, kiểm một lần ở <code>build()</code>, kết quả bất biến.</li>
+<li><strong>Observer</strong>: chủ thể chỉ biết interface listener; listener chạy đồng bộ theo thứ tự — cách ly lỗi; Spring có <code>@EventListener</code>.</li>
+<li><strong>Template Method</strong>: một phương thức <code>final</code> cố định các bước, lớp con điền bước <code>abstract</code>, móc là tuỳ chọn; dạng callback là <code>JdbcTemplate</code>.</li>
+</ul>`),
+    books([
+      ['apiDocs', 'java.util.AbstractList ("the programmer needs only to extend this class and provide implementations for the get(int) and size() methods"), java.util.List.of, java.lang.Integer.valueOf (cache −128..127), java.text.NumberFormat.getCurrencyInstance, java.util.Observable (@Deprecated(since="9")), java.util.concurrent.CyclicBarrier, java.lang.reflect.Constructor.newInstance ("Cannot reflectively create enum objects")', 'java.util.AbstractList ("the programmer needs only to extend this class and provide implementations for the get(int) and size() methods"), java.util.List.of, java.lang.Integer.valueOf (cache −128..127), java.text.NumberFormat.getCurrencyInstance, java.util.Observable (@Deprecated(since="9")), java.util.concurrent.CyclicBarrier, java.lang.reflect.Constructor.newInstance ("Cannot reflectively create enum objects")'],
+      ['horstmann1', 'Ch. 6 "Interfaces, Lambda Expressions, and Inner Classes" (callbacks, functional interfaces, comparators) and Ch. 9 "Collections" (the abstract collection classes)', 'Chương 6 "Interfaces, Lambda Expressions, and Inner Classes" (callback, functional interface, comparator) và Chương 9 "Collections" (các lớp collection trừu tượng)'],
+      ['jls8', '§12.4 "Initialization of Classes and Interfaces" (when a class is initialised; the initialization lock that makes eager, holder and enum singletons thread-safe), §8.9 (enum types)', '§12.4 "Initialization of Classes and Interfaces" (khi nào lớp được khởi tạo; khoá khởi tạo làm singleton eager, holder và enum an toàn luồng), §8.9 (kiểu enum)'],
+      ['devJava', 'the "Learn" tutorials on interfaces, lambdas and records', 'các bài "Learn" về interface, lambda và record'],
+    ]),
+  ].join('\n'),
+};
+
+/* ───────── ⭐ CS.7 — 🧪 Exercises · split a report, a policy registry, Stack vs Vector, a builder, a self-removing listener, an import template ───────── */
+const L_x_cs7_on = {
+  title: '⭐ CS.7 — 🧪 Exercises · split a report, a policy registry, Stack vs Vector, a builder, a self-removing listener, an import template|||⭐ CS.7 — 🧪 Bài tập · tách báo cáo, sổ chính sách, Stack và Vector, builder, listener tự gỡ, khuôn nhập liệu',
+  slug: 'pro192-cs7-on',
+  type: 'VIDEO',
+  description: '6 bài tập ôn deck ⭐ Chuyên sâu 7 (SOLID + mẫu thiết kế), mỗi lời giải là chương trình Java chạy thật với output thật: tách một báo cáo quá hạn ba việc theo người yêu cầu mà output không đổi một ký tự, sổ đăng ký chính sách phí thêm VIP và HOLIDAY không sửa code cũ, săn lỗi Liskov của chính JDK (java.util.Stack kế thừa Vector) và một lớp bọc chỉ biết làm ngăn xếp, builder thành viên báo mọi lỗi một lần, listener tự gỡ đăng ký làm vòng lặp ném ConcurrentModificationException và hai cách sửa, khuôn nhập liệu Template Method cho hai định dạng tệp — cộng bài chọn mẫu, 14 thuật ngữ Anh–Việt và tóm tắt.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 7 · Exercises · added by this site · not examined in PRO192</span>
+<h2>SOLID and patterns — 6 exercises, every answer is a program that really ran</h2>
+<p class="lead">⭐ Self-added advanced section — not examined in PRO192, but these are the refactorings a code reviewer asks for and the patterns an interviewer expects you to recognise. Exercises 1, 3 and 6 are plain Java 8 (they ran on a real JDK 8 too, identical output), so they double as exam-room practice of clean class design; exercises 2, 4 and 5 use Java 17.</p>
+<div class="callout"><strong>How to use this page.</strong>
+<ol>
+<li>Read the task, and before coding write one sentence: <em>which change should become cheap?</em> That sentence picks the principle or pattern.</li>
+<li>Write your version, run it, and only then open the solution. For the "what happens" parts, write your prediction first.</li>
+<li>Compare the output line by line, then the design: where did you put the decision that varies?</li>
+</ol></div>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 7 · Bài tập · tự thêm · không thi PRO192</span>
+<h2>SOLID và mẫu thiết kế — 6 bài tập, mọi đáp án là một chương trình đã chạy thật</h2>
+<p class="lead">⭐ Phần chuyên sâu tự thêm — không thi PRO192, nhưng đây là những lần tái cấu trúc người review code yêu cầu và những mẫu người phỏng vấn mong bạn nhận ra. Bài 1, 3 và 6 là Java 8 thuần (đã chạy cả trên JDK 8 thật, output giống hệt), nên dùng luôn để luyện thiết kế lớp gọn gàng cho phòng thi; bài 2, 4 và 5 dùng Java 17.</p>
+<div class="callout"><strong>Cách dùng trang này.</strong>
+<ol>
+<li>Đọc đề, và trước khi code hãy viết một câu: <em>thay đổi nào cần trở nên rẻ?</em> Câu đó chọn giúp bạn nguyên lý hay mẫu.</li>
+<li>Tự viết bản của mình, chạy, rồi mới mở lời giải. Với phần "chuyện gì xảy ra", ghi dự đoán trước.</li>
+<li>So output từng dòng, rồi so thiết kế: bạn đặt quyết định hay thay đổi ở đâu?</li>
+</ol></div>`),
+    bi(`<h3>🧪 Exercise 1 — Split an overdue report by actor, without changing one character of output</h3>
+<p class="nhan">Task</p>
+<p>The class below computes fees, decides who is overdue and formats the report — three jobs for the treasurer, the librarian and the front desk. Split it into <code>FeeRule</code>, <code>OverdueFinder</code> and <code>TextLayout</code> (plus a small <code>Overdue</code> data class) so that the output is <em>identical</em>; then show that a CSV layout costs one new class and no edit.</p>
+<pre class="trich"><code class="language-java">class OverdueReportOld {                       // rules + money + layout in one method
+    String build(List&lt;Loan&gt; loans) {
+        StringBuilder sb = new StringBuilder("OVERDUE REPORT\\n");
+        int total = 0;
+        for (Loan l : loans) {
+            int fee;
+            if (l.type.equals("STUDENT")) fee = l.daysLate * 1000;
+            else if (l.type.equals("STAFF")) fee = Math.max(0, l.daysLate - 2) * 2000;
+            else fee = l.daysLate * 2000;
+            if (fee == 0) continue;               // staff inside 2 free days: not overdue
+            sb.append(String.format("%-5s %-5s %2d d %,7d%n", l.memberId, l.itemId, l.daysLate, fee));
+            total += fee;
+        }
+        return sb.append(String.format("TOTAL %,19d%n", total)).toString();
+    }
+}</code></pre>
+<p class="nhan">Solution</p>
+<pre class="trich"><code class="language-java">class Overdue {                                 // the data passed between the pieces
+    final Loan loan; final int fee;
+    Overdue(Loan loan, int fee) { this.loan = loan; this.fee = fee; }
+}
+
+class FeeRule {                                 // the treasurer
+    int fee(String type, int daysLate) {
+        if (type.equals("STUDENT")) return daysLate * 1000;
+        if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        return daysLate * 2000;
+    }
+}
+
+class OverdueFinder {                           // the librarian: who is overdue
+    private final FeeRule rule;
+    OverdueFinder(FeeRule rule) { this.rule = rule; }
+    List&lt;Overdue&gt; find(List&lt;Loan&gt; loans) {
+        List&lt;Overdue&gt; out = new ArrayList&lt;Overdue&gt;();
+        for (Loan l : loans) {
+            int fee = rule.fee(l.type, l.daysLate);
+            if (fee &gt; 0) out.add(new Overdue(l, fee));
+        }
+        return out;
+    }
+}
+
+class TextLayout {                              // the front desk: how it looks
+    String render(List&lt;Overdue&gt; rows) {
+        StringBuilder sb = new StringBuilder("OVERDUE REPORT\\n");
+        int total = 0;
+        for (Overdue o : rows) {
+            sb.append(String.format("%-5s %-5s %2d d %,7d%n", o.loan.memberId, o.loan.itemId, o.loan.daysLate, o.fee));
+            total += o.fee;
+        }
+        return sb.append(String.format("TOTAL %,19d%n", total)).toString();
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">class CsvLayout {
+    String render(List&lt;Overdue&gt; rows) {
+        StringBuilder sb = new StringBuilder("memberId,itemId,daysLate,fee\\n");
+        for (Overdue o : rows) sb.append(o.loan.memberId + "," + o.loan.itemId + "," + o.loan.daysLate + "," + o.fee + "\\n");
+        return sb.toString();
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">OverdueFinder finder = new OverdueFinder(new FeeRule());
+List&lt;Overdue&gt; rows = finder.find(loans);
+System.out.println("-- after: text --");
+System.out.print(new TextLayout().render(rows));
+System.out.println("-- after: csv (one new class) --");
+System.out.print(new CsvLayout().render(rows));</code></pre>
+<div class="out">-- before --<br>
+OVERDUE REPORT<br>
+M001 &nbsp;B001 &nbsp;&nbsp;5 d &nbsp;&nbsp;5,000<br>
+M003 &nbsp;D006 &nbsp;&nbsp;3 d &nbsp;&nbsp;6,000<br>
+M004 &nbsp;B007 &nbsp;&nbsp;6 d &nbsp;&nbsp;8,000<br>
+TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19,000<br>
+-- after: text --<br>
+OVERDUE REPORT<br>
+M001 &nbsp;B001 &nbsp;&nbsp;5 d &nbsp;&nbsp;5,000<br>
+M003 &nbsp;D006 &nbsp;&nbsp;3 d &nbsp;&nbsp;6,000<br>
+M004 &nbsp;B007 &nbsp;&nbsp;6 d &nbsp;&nbsp;8,000<br>
+TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19,000<br>
+-- after: csv (one new class) --<br>
+memberId,itemId,daysLate,fee<br>
+M001,B001,5,5000<br>
+M003,D006,3,6000<br>
+M004,B007,6,8000</div>
+<p>The two text reports match character for character — that is the first rule of refactoring: change structure, keep behaviour, and prove it with the same output. Each new class has one reason to change: <code>FeeRule</code> when the treasurer changes prices, <code>OverdueFinder</code> when the definition of "overdue" changes (here: a fee above zero, so staff inside their two free days are not listed), <code>TextLayout</code> when the front desk wants another look. The CSV layout is a new class reading the same <code>Overdue</code> rows; nothing else was opened.</p>
+<p class="meo">🧠 A good sign you split well: each piece can be tested alone. <code>FeeRule</code> needs no list, <code>TextLayout</code> needs no fee rule — give it two ready-made rows.</p>
+<div class="callout">✅ <strong>Exam room PE (JDK 8)</strong>: <code>// release: 8</code>, identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 1 — Tách báo cáo quá hạn theo actor, không đổi một ký tự output</h3>
+<p class="nhan">Đề</p>
+<p>Lớp dưới đây tính phí, quyết định ai quá hạn và định dạng báo cáo — ba việc của thủ quỹ, thủ thư và quầy. Tách nó thành <code>FeeRule</code>, <code>OverdueFinder</code> và <code>TextLayout</code> (cộng một lớp dữ liệu nhỏ <code>Overdue</code>) sao cho output <em>giống hệt</em>; rồi cho thấy mẫu CSV chỉ tốn một lớp mới và không sửa gì.</p>
+<pre class="trich"><code class="language-java">class OverdueReportOld {                       // luật + tiền + trình bày trong một hàm
+    String build(List&lt;Loan&gt; loans) {
+        StringBuilder sb = new StringBuilder("OVERDUE REPORT\\n");
+        int total = 0;
+        for (Loan l : loans) {
+            int fee;
+            if (l.type.equals("STUDENT")) fee = l.daysLate * 1000;
+            else if (l.type.equals("STAFF")) fee = Math.max(0, l.daysLate - 2) * 2000;
+            else fee = l.daysLate * 2000;
+            if (fee == 0) continue;               // cán bộ trong 2 ngày miễn: không tính
+            sb.append(String.format("%-5s %-5s %2d d %,7d%n", l.memberId, l.itemId, l.daysLate, fee));
+            total += fee;
+        }
+        return sb.append(String.format("TOTAL %,19d%n", total)).toString();
+    }
+}</code></pre>
+<p class="nhan">Lời giải</p>
+<pre class="trich"><code class="language-java">class Overdue {                                 // dữ liệu đi giữa các mảnh
+    final Loan loan; final int fee;
+    Overdue(Loan loan, int fee) { this.loan = loan; this.fee = fee; }
+}
+
+class FeeRule {                                 // thủ quỹ
+    int fee(String type, int daysLate) {
+        if (type.equals("STUDENT")) return daysLate * 1000;
+        if (type.equals("STAFF")) return Math.max(0, daysLate - 2) * 2000;
+        return daysLate * 2000;
+    }
+}
+
+class OverdueFinder {                           // thủ thư: ai quá hạn
+    private final FeeRule rule;
+    OverdueFinder(FeeRule rule) { this.rule = rule; }
+    List&lt;Overdue&gt; find(List&lt;Loan&gt; loans) {
+        List&lt;Overdue&gt; out = new ArrayList&lt;Overdue&gt;();
+        for (Loan l : loans) {
+            int fee = rule.fee(l.type, l.daysLate);
+            if (fee &gt; 0) out.add(new Overdue(l, fee));
+        }
+        return out;
+    }
+}
+
+class TextLayout {                              // quầy: trông thế nào
+    String render(List&lt;Overdue&gt; rows) {
+        StringBuilder sb = new StringBuilder("OVERDUE REPORT\\n");
+        int total = 0;
+        for (Overdue o : rows) {
+            sb.append(String.format("%-5s %-5s %2d d %,7d%n", o.loan.memberId, o.loan.itemId, o.loan.daysLate, o.fee));
+            total += o.fee;
+        }
+        return sb.append(String.format("TOTAL %,19d%n", total)).toString();
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">class CsvLayout {
+    String render(List&lt;Overdue&gt; rows) {
+        StringBuilder sb = new StringBuilder("memberId,itemId,daysLate,fee\\n");
+        for (Overdue o : rows) sb.append(o.loan.memberId + "," + o.loan.itemId + "," + o.loan.daysLate + "," + o.fee + "\\n");
+        return sb.toString();
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">OverdueFinder finder = new OverdueFinder(new FeeRule());
+List&lt;Overdue&gt; rows = finder.find(loans);
+System.out.println("-- after: text --");
+System.out.print(new TextLayout().render(rows));
+System.out.println("-- after: csv (one new class) --");
+System.out.print(new CsvLayout().render(rows));</code></pre>
+<div class="out">-- before --<br>
+OVERDUE REPORT<br>
+M001 &nbsp;B001 &nbsp;&nbsp;5 d &nbsp;&nbsp;5,000<br>
+M003 &nbsp;D006 &nbsp;&nbsp;3 d &nbsp;&nbsp;6,000<br>
+M004 &nbsp;B007 &nbsp;&nbsp;6 d &nbsp;&nbsp;8,000<br>
+TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19,000<br>
+-- after: text --<br>
+OVERDUE REPORT<br>
+M001 &nbsp;B001 &nbsp;&nbsp;5 d &nbsp;&nbsp;5,000<br>
+M003 &nbsp;D006 &nbsp;&nbsp;3 d &nbsp;&nbsp;6,000<br>
+M004 &nbsp;B007 &nbsp;&nbsp;6 d &nbsp;&nbsp;8,000<br>
+TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19,000<br>
+-- after: csv (one new class) --<br>
+memberId,itemId,daysLate,fee<br>
+M001,B001,5,5000<br>
+M003,D006,3,6000<br>
+M004,B007,6,8000</div>
+<p>Hai báo cáo chữ trùng từng ký tự — đó là luật đầu tiên của tái cấu trúc: đổi cấu trúc, giữ hành vi, và chứng minh bằng cùng một output. Mỗi lớp mới có một lý do thay đổi: <code>FeeRule</code> khi thủ quỹ đổi giá, <code>OverdueFinder</code> khi định nghĩa "quá hạn" đổi (ở đây: phí lớn hơn không, nên cán bộ còn trong hai ngày miễn không bị liệt kê), <code>TextLayout</code> khi quầy muốn kiểu khác. Mẫu CSV là một lớp mới đọc cùng các hàng <code>Overdue</code>; không mở lớp nào khác.</p>
+<p class="meo">🧠 Dấu hiệu bạn tách tốt: mỗi mảnh test riêng được. <code>FeeRule</code> không cần list, <code>TextLayout</code> không cần luật phí — đưa nó hai hàng làm sẵn là đủ.</p>
+<div class="callout">✅ <strong>Phòng thi PE (JDK 8)</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 2 — A fee-policy registry: add VIP and HOLIDAY without touching old code</h3>
+<p class="nhan">Task</p>
+<p>Build a <code>PolicyRegistry</code> (Strategy + a small factory): <code>register(type, policy)</code> and <code>find(type)</code>. Register the three old policies as lambdas, then add <strong>VIP</strong> (a class with a parameter: first 3 days free, then 1000 a day) and <strong>HOLIDAY</strong> (always 0) without editing anything that exists. An unknown type must not crash: charge it as GUEST and remember it for a warning. Registering a type twice must be refused. Print a fee table for 1, 4 and 9 days.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 17
+// CS7 exercise 2: VIP and HOLIDAY policies without touching old code — strategies + a factory with a registry
+import java.util.*;
+
+public class Bt2DangKyChinhSach {
+    public static void main(String[] args) {
+        PolicyRegistry reg = new PolicyRegistry();
+        reg.register("STUDENT", d -&gt; d * 1000);
+        reg.register("STAFF", d -&gt; Math.max(0, d - 2) * 2000);
+        reg.register("GUEST", d -&gt; d * 2000);
+        reg.register("VIP", new VipFee(3));                  // NEW: a class with its own setting
+        reg.register("HOLIDAY", d -&gt; 0);                     // NEW: one line
+        System.out.println("type     1 day  4 days  9 days");
+        for (String t : List.of("STUDENT", "STAFF", "GUEST", "VIP", "HOLIDAY", "ALIEN")) {
+            IFeePolicy p = reg.find(t);
+            System.out.printf("%-8s %5d %7d %7d%n", t, p.fee(1), p.fee(4), p.fee(9));
+        }
+        System.out.println(reg.warnings());
+        try { reg.register("GUEST", d -&gt; 1); }
+        catch (IllegalStateException e) { System.out.println(e.getMessage()); }
+    }
+}
+
+@FunctionalInterface
+interface IFeePolicy { int fee(int daysLate); }
+
+class VipFee implements IFeePolicy {                    // first N days free, then half price
+    private final int freeDays;
+    VipFee(int freeDays) { this.freeDays = freeDays; }
+    public int fee(int d) { return Math.max(0, d - freeDays) * 1000; }
+}
+
+class PolicyRegistry {
+    private final Map&lt;String, IFeePolicy&gt; byType = new LinkedHashMap&lt;&gt;();
+    private final List&lt;String&gt; unknown = new ArrayList&lt;&gt;();
+    void register(String type, IFeePolicy p) {
+        if (byType.putIfAbsent(type, p) != null) throw new IllegalStateException("policy already registered: " + type);
+    }
+    IFeePolicy find(String type) {
+        IFeePolicy p = byType.get(type);
+        if (p != null) return p;
+        unknown.add(type);                              // remember, do not crash
+        return byType.get("GUEST");
+    }
+    String warnings() { return "unknown types charged as GUEST: " + unknown; }
+}</code></pre>
+<div class="out">type &nbsp;&nbsp;&nbsp;&nbsp;1 day &nbsp;4 days &nbsp;9 days<br>
+STUDENT &nbsp;&nbsp;1000 &nbsp;&nbsp;&nbsp;4000 &nbsp;&nbsp;&nbsp;9000<br>
+STAFF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;4000 &nbsp;&nbsp;14000<br>
+GUEST &nbsp;&nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;&nbsp;8000 &nbsp;&nbsp;18000<br>
+VIP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;&nbsp;6000<br>
+HOLIDAY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+ALIEN &nbsp;&nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;&nbsp;8000 &nbsp;&nbsp;18000<br>
+unknown types charged as GUEST: [ALIEN]<br>
+policy already registered: GUEST</div>
+<p><code>putIfAbsent</code> returns the previous value, so one call both registers and detects a duplicate — the last line. <code>LinkedHashMap</code> keeps registration order (the table would be in hash order with a <code>HashMap</code>). VIP shows when a strategy deserves a class: it carries its own setting (<code>freeDays</code>), and you could register <code>new VipFee(5)</code> for another tier. HOLIDAY shows when a lambda is enough. ALIEN is charged as GUEST and listed in the warning instead of throwing in the middle of a report.</p>
+<div class="pitfall">Trap: "unknown type ⇒ silently use a default" hides typos forever. Keep the default (the report must finish), but record it somewhere a person will read — a warning line here, a log line in Spring.</div>`,
+    `<h3>🧪 Bài tập 2 — Sổ đăng ký chính sách phí: thêm VIP và HOLIDAY không sửa code cũ</h3>
+<p class="nhan">Đề</p>
+<p>Dựng một <code>PolicyRegistry</code> (Strategy + một factory nhỏ): <code>register(type, policy)</code> và <code>find(type)</code>. Đăng ký ba chính sách cũ bằng lambda, rồi thêm <strong>VIP</strong> (một lớp có tham số: 3 ngày đầu miễn, sau đó 1000 mỗi ngày) và <strong>HOLIDAY</strong> (luôn 0) mà không sửa thứ gì đã có. Loại lạ không được làm sập: tính như GUEST và ghi lại để cảnh báo. Đăng ký một loại hai lần phải bị từ chối. In bảng phí cho 1, 4 và 9 ngày.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 17
+// CS7 bài 2: thêm chính sách VIP và HOLIDAY không sửa code cũ — strategy + factory có sổ đăng ký
+import java.util.*;
+
+public class Bt2DangKyChinhSach {
+    public static void main(String[] args) {
+        PolicyRegistry reg = new PolicyRegistry();
+        reg.register("STUDENT", d -&gt; d * 1000);
+        reg.register("STAFF", d -&gt; Math.max(0, d - 2) * 2000);
+        reg.register("GUEST", d -&gt; d * 2000);
+        reg.register("VIP", new VipFee(3));                  // MỚI: lớp có tham số riêng
+        reg.register("HOLIDAY", d -&gt; 0);                     // MỚI: một dòng
+        System.out.println("type     1 day  4 days  9 days");
+        for (String t : List.of("STUDENT", "STAFF", "GUEST", "VIP", "HOLIDAY", "ALIEN")) {
+            IFeePolicy p = reg.find(t);
+            System.out.printf("%-8s %5d %7d %7d%n", t, p.fee(1), p.fee(4), p.fee(9));
+        }
+        System.out.println(reg.warnings());
+        try { reg.register("GUEST", d -&gt; 1); }
+        catch (IllegalStateException e) { System.out.println(e.getMessage()); }
+    }
+}
+
+@FunctionalInterface
+interface IFeePolicy { int fee(int daysLate); }
+
+class VipFee implements IFeePolicy {                    // N ngày đầu miễn, sau đó nửa giá
+    private final int freeDays;
+    VipFee(int freeDays) { this.freeDays = freeDays; }
+    public int fee(int d) { return Math.max(0, d - freeDays) * 1000; }
+}
+
+class PolicyRegistry {
+    private final Map&lt;String, IFeePolicy&gt; byType = new LinkedHashMap&lt;&gt;();
+    private final List&lt;String&gt; unknown = new ArrayList&lt;&gt;();
+    void register(String type, IFeePolicy p) {
+        if (byType.putIfAbsent(type, p) != null) throw new IllegalStateException("policy already registered: " + type);
+    }
+    IFeePolicy find(String type) {
+        IFeePolicy p = byType.get(type);
+        if (p != null) return p;
+        unknown.add(type);                              // ghi lại, không sập
+        return byType.get("GUEST");
+    }
+    String warnings() { return "unknown types charged as GUEST: " + unknown; }
+}</code></pre>
+<div class="out">type &nbsp;&nbsp;&nbsp;&nbsp;1 day &nbsp;4 days &nbsp;9 days<br>
+STUDENT &nbsp;&nbsp;1000 &nbsp;&nbsp;&nbsp;4000 &nbsp;&nbsp;&nbsp;9000<br>
+STAFF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;4000 &nbsp;&nbsp;14000<br>
+GUEST &nbsp;&nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;&nbsp;8000 &nbsp;&nbsp;18000<br>
+VIP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;&nbsp;6000<br>
+HOLIDAY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+ALIEN &nbsp;&nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;&nbsp;8000 &nbsp;&nbsp;18000<br>
+unknown types charged as GUEST: [ALIEN]<br>
+policy already registered: GUEST</div>
+<p><code>putIfAbsent</code> trả về giá trị cũ, nên một lời gọi vừa đăng ký vừa phát hiện trùng — dòng cuối. <code>LinkedHashMap</code> giữ thứ tự đăng ký (với <code>HashMap</code> bảng sẽ theo thứ tự băm). VIP cho thấy lúc nào strategy đáng thành một lớp: nó mang tham số riêng (<code>freeDays</code>), và bạn có thể đăng ký <code>new VipFee(5)</code> cho một hạng khác. HOLIDAY cho thấy lúc nào lambda là đủ. ALIEN được tính như GUEST và ghi vào cảnh báo thay vì ném lỗi giữa báo cáo.</p>
+<div class="pitfall">Bẫy: "loại lạ ⇒ lặng lẽ dùng mặc định" sẽ che lỗi gõ nhầm mãi mãi. Giữ mặc định (báo cáo phải chạy xong), nhưng ghi lại ở chỗ có người đọc — một dòng cảnh báo ở đây, một dòng log trong Spring.</div>`),
+    bi(`<h3>🧪 Exercise 3 — Liskov bug hunt in the JDK: java.util.Stack extends Vector</h3>
+<p class="nhan">Task</p>
+<p>A pile of returned books should be a stack: push, pop, peek — newest on top. Use <code>java.util.Stack</code>, push B001, B002, B003, then call two methods it inherited from <code>Vector</code>: <code>add(0, "B999")</code> and <code>remove("B002")</code>. <em>Predict</em> the contents and <code>peek()</code>. Explain which principle the JDK's design breaks, then write <code>ReturnPile</code> that cannot be misused.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 8
+// CS7 exercise 3: the JDK's own Liskov smell — java.util.Stack extends Vector — and a wrapper that only stacks
+import java.util.*;
+
+public class Bt3StackVector {
+    public static void main(String[] args) {
+        Stack&lt;String&gt; returns = new Stack&lt;String&gt;();     // books returned, newest on top
+        returns.push("B001");
+        returns.push("B002");
+        returns.push("B003");
+        returns.add(0, "B999");                          // inherited from Vector: inserts at the BOTTOM
+        returns.remove("B002");                          // inherited: removes from the middle
+        System.out.println("Stack after add(0,…) and remove(…): " + returns + ", peek = " + returns.peek());
+        System.out.println("Stack is a Vector: " + (returns instanceof Vector) + ", get(0) = " + returns.get(0));
+        ReturnPile pile = new ReturnPile();
+        pile.push("B001");
+        pile.push("B002");
+        pile.push("B003");
+        System.out.println("ReturnPile pop = " + pile.pop() + ", then peek = " + pile.peek() + ", size = " + pile.size());
+        // pile.add(0, "B999");   // does not compile: ReturnPile has no add(int, E)
+    }
+}
+
+class ReturnPile {                                       // HAS-A deque, exposes only stack operations
+    private final Deque&lt;String&gt; items = new ArrayDeque&lt;String&gt;();
+    void push(String itemId) { items.push(itemId); }
+    String pop() { return items.pop(); }
+    String peek() { return items.peek(); }
+    int size() { return items.size(); }
+}</code></pre>
+<div class="out">Stack after add(0,…) and remove(…): [B999, B001, B003], peek = B003<br>
+Stack is a Vector: true, get(0) = B999<br>
+ReturnPile pop = B003, then peek = B002, size = 2</div>
+<p>Both calls compile and run: B999 lands at the <em>bottom</em> and B002 disappears from the middle. Since Java 1.0 <code>Stack extends Vector</code>, so a stack <em>is a</em> list with indexes, and every list operation is available on it. That is inheritance used to reuse code, not to model "is a": a stack's promise (only the top is reachable) is broken by its own parent's methods. The JDK documentation itself now recommends <code>Deque</code> (for example <code>ArrayDeque</code>) for stacks.</p>
+<p><code>ReturnPile</code> uses composition: it <em>has</em> an <code>ArrayDeque</code> and exposes only <code>push</code>, <code>pop</code>, <code>peek</code>, <code>size</code>. Misuse is now a compile error (the commented line) instead of a quiet corruption. This is the same move as ⭐ CS.6's wrapper — and the reason interviewers love this example: "name a design mistake in the JDK".</p>
+<div class="callout">✅ <strong>Exam room PE (JDK 8)</strong>: <code>ArrayDeque</code> exists since Java 6; identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 3 — Săn lỗi Liskov trong JDK: java.util.Stack extends Vector</h3>
+<p class="nhan">Đề</p>
+<p>Một chồng sách trả về phải là ngăn xếp: push, pop, peek — mới nhất ở đỉnh. Dùng <code>java.util.Stack</code>, push B001, B002, B003, rồi gọi hai phương thức nó thừa hưởng từ <code>Vector</code>: <code>add(0, "B999")</code> và <code>remove("B002")</code>. <em>Đoán</em> nội dung và <code>peek()</code>. Giải thích thiết kế của JDK phá nguyên lý nào, rồi viết <code>ReturnPile</code> không thể dùng sai.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 8
+// CS7 bài 3: mùi Liskov của chính JDK — java.util.Stack extends Vector — và một lớp bọc chỉ biết làm ngăn xếp
+import java.util.*;
+
+public class Bt3StackVector {
+    public static void main(String[] args) {
+        Stack&lt;String&gt; returns = new Stack&lt;String&gt;();     // sách trả về, mới nhất ở đỉnh
+        returns.push("B001");
+        returns.push("B002");
+        returns.push("B003");
+        returns.add(0, "B999");                          // thừa từ Vector: chèn xuống ĐÁY
+        returns.remove("B002");                          // thừa: xoá ở giữa
+        System.out.println("Stack after add(0,…) and remove(…): " + returns + ", peek = " + returns.peek());
+        System.out.println("Stack is a Vector: " + (returns instanceof Vector) + ", get(0) = " + returns.get(0));
+        ReturnPile pile = new ReturnPile();
+        pile.push("B001");
+        pile.push("B002");
+        pile.push("B003");
+        System.out.println("ReturnPile pop = " + pile.pop() + ", then peek = " + pile.peek() + ", size = " + pile.size());
+        // không biên dịch: ReturnPile không có add(int, E)
+    }
+}
+
+class ReturnPile {                                       // CÓ-MỘT deque, chỉ mở thao tác ngăn xếp
+    private final Deque&lt;String&gt; items = new ArrayDeque&lt;String&gt;();
+    void push(String itemId) { items.push(itemId); }
+    String pop() { return items.pop(); }
+    String peek() { return items.peek(); }
+    int size() { return items.size(); }
+}</code></pre>
+<div class="out">Stack after add(0,…) and remove(…): [B999, B001, B003], peek = B003<br>
+Stack is a Vector: true, get(0) = B999<br>
+ReturnPile pop = B003, then peek = B002, size = 2</div>
+<p>Cả hai lời gọi biên dịch và chạy: B999 nằm ở <em>đáy</em> còn B002 biến mất khỏi giữa chồng. Từ Java 1.0, <code>Stack extends Vector</code>, nên ngăn xếp <em>là một</em> list có chỉ số, và mọi thao tác list đều dùng được trên nó. Đó là kế thừa để dùng lại code, không phải để mô hình "là một": lời hứa của ngăn xếp (chỉ chạm được đỉnh) bị chính các phương thức của lớp cha phá. Tài liệu JDK giờ cũng khuyên dùng <code>Deque</code> (ví dụ <code>ArrayDeque</code>) cho ngăn xếp.</p>
+<p><code>ReturnPile</code> dùng composition: nó <em>có</em> một <code>ArrayDeque</code> và chỉ mở <code>push</code>, <code>pop</code>, <code>peek</code>, <code>size</code>. Dùng sai giờ là lỗi biên dịch (dòng đã comment) thay vì hỏng dữ liệu lặng lẽ. Đây cùng một nước đi với lớp bọc của ⭐ CS.6 — và là lý do người phỏng vấn thích ví dụ này: "kể một lỗi thiết kế trong JDK".</p>
+<div class="callout">✅ <strong>Phòng thi PE (JDK 8)</strong>: <code>ArrayDeque</code> có từ Java 6; output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 4 — A Member builder that reports every problem at once</h3>
+<p class="nhan">Task</p>
+<p>Write <code>Member.builder(id, name)</code> with optional <code>type</code> (default GUEST), <code>studentCode</code> and <code>email</code>. <code>build()</code> must check: the name is not blank, the type is STUDENT, STAFF or GUEST, a STUDENT has a student code, and an email (if given) looks like one. If several rules fail, the message lists <em>all</em> of them — a person filling a form wants every error at once.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 17
+// CS7 exercise 4: a Member builder — required parts, defaults, and every rule checked once in build()
+import java.util.*;
+
+public class Bt4BuilderThanhVien {
+    public static void main(String[] args) {
+        System.out.println(Member.builder("M010", "An Nguyen").type("STUDENT").studentCode("SE170001")
+            .email("an@fpt.edu.vn").build());
+        System.out.println(Member.builder("M011", "Binh Tran").build());     // defaults: GUEST, no email
+        List&lt;Member.Builder&gt; bad = List.of(
+            Member.builder("M012", "Chi Le").type("STUDENT"),                   // student without a student code
+            Member.builder("M013", "Dung Pham").email("dung-at-gmail"),
+            Member.builder("M014", " ").type("ROBOT"));
+        for (Member.Builder b : bad) {
+            try { b.build(); }
+            catch (IllegalStateException e) { System.out.println("refused: " + e.getMessage()); }
+        }
+    }
+}
+
+final class Member {
+    private final String id, name, type, studentCode, email;
+    private Member(Builder b) { id = b.id; name = b.name; type = b.type; studentCode = b.studentCode; email = b.email; }
+    static Builder builder(String id, String name) { return new Builder(id, name); }
+    @Override public String toString() {
+        return "Member[" + id + " " + name + ", " + type + (studentCode == null ? "" : " " + studentCode)
+            + (email == null ? "" : ", " + email) + "]";
+    }
+
+    static final class Builder {
+        private final String id, name;
+        private String type = "GUEST", studentCode, email;
+        private Builder(String id, String name) { this.id = id; this.name = name; }
+        Builder type(String t) { type = t; return this; }
+        Builder studentCode(String c) { studentCode = c; return this; }
+        Builder email(String e) { email = e; return this; }
+        Member build() {
+            List&lt;String&gt; errors = new ArrayList&lt;&gt;();          // report ALL problems at once
+            if (name.isBlank()) errors.add("name is empty");
+            if (!List.of("STUDENT", "STAFF", "GUEST").contains(type)) errors.add("unknown type " + type);
+            if (type.equals("STUDENT") &amp;&amp; studentCode == null) errors.add("a STUDENT needs a student code");
+            if (email != null &amp;&amp; !email.matches("[^@\\\\s]+@[^@\\\\s]+\\\\.[a-z]{2,}")) errors.add("bad email " + email);
+            if (!errors.isEmpty()) throw new IllegalStateException(id + ": " + String.join("; ", errors));
+            return new Member(this);
+        }
+    }
+}</code></pre>
+<div class="out">Member[M010 An Nguyen, STUDENT SE170001, an@fpt.edu.vn]<br>
+Member[M011 Binh Tran, GUEST]<br>
+refused: M012: a STUDENT needs a student code<br>
+refused: M013: bad email dung-at-gmail<br>
+refused: M014: name is empty; unknown type ROBOT</div>
+<p>Required parts are in <code>builder(…)</code>; each optional step returns <code>this</code>; <code>build()</code> collects errors into a list and throws once with all of them — M014 fails two rules and both appear. Because the constructor is private and takes the builder, no code path can create a <code>Member</code> that skipped validation. The rules live in one method, which is also the one place to test them.</p>
+<div class="pitfall">Trap: validating in each setter (<code>type("ROBOT")</code> throws immediately) cannot check combinations — "STUDENT needs a student code" depends on two fields set in any order. Validate the whole object in <code>build()</code>.</div>
+<div class="callout">⚠️ <strong>Exam room PE (JDK 8)</strong>: <code>isBlank</code> and <code>List.of</code> are Java 11/9 — use <code>trim().isEmpty()</code> and <code>Arrays.asList</code>.</div>`,
+    `<h3>🧪 Bài tập 4 — Builder thành viên báo mọi lỗi trong một lần</h3>
+<p class="nhan">Đề</p>
+<p>Viết <code>Member.builder(id, name)</code> với các phần tuỳ chọn <code>type</code> (mặc định GUEST), <code>studentCode</code> và <code>email</code>. <code>build()</code> phải kiểm: tên không rỗng, loại là STUDENT, STAFF hoặc GUEST, STUDENT phải có mã sinh viên, và email (nếu có) trông đúng dạng. Nếu nhiều luật sai, thông báo liệt kê <em>tất cả</em> — người điền biểu mẫu muốn thấy mọi lỗi một lần.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 17
+// CS7 bài 4: builder cho Member — phần bắt buộc, mặc định, và mọi luật kiểm một lần ở build()
+import java.util.*;
+
+public class Bt4BuilderThanhVien {
+    public static void main(String[] args) {
+        System.out.println(Member.builder("M010", "An Nguyen").type("STUDENT").studentCode("SE170001")
+            .email("an@fpt.edu.vn").build());
+        System.out.println(Member.builder("M011", "Binh Tran").build());     // mặc định: GUEST, không email
+        List&lt;Member.Builder&gt; bad = List.of(
+            Member.builder("M012", "Chi Le").type("STUDENT"),                   // sinh viên thiếu mã SV
+            Member.builder("M013", "Dung Pham").email("dung-at-gmail"),
+            Member.builder("M014", " ").type("ROBOT"));
+        for (Member.Builder b : bad) {
+            try { b.build(); }
+            catch (IllegalStateException e) { System.out.println("refused: " + e.getMessage()); }
+        }
+    }
+}
+
+final class Member {
+    private final String id, name, type, studentCode, email;
+    private Member(Builder b) { id = b.id; name = b.name; type = b.type; studentCode = b.studentCode; email = b.email; }
+    static Builder builder(String id, String name) { return new Builder(id, name); }
+    @Override public String toString() {
+        return "Member[" + id + " " + name + ", " + type + (studentCode == null ? "" : " " + studentCode)
+            + (email == null ? "" : ", " + email) + "]";
+    }
+
+    static final class Builder {
+        private final String id, name;
+        private String type = "GUEST", studentCode, email;
+        private Builder(String id, String name) { this.id = id; this.name = name; }
+        Builder type(String t) { type = t; return this; }
+        Builder studentCode(String c) { studentCode = c; return this; }
+        Builder email(String e) { email = e; return this; }
+        Member build() {
+            List&lt;String&gt; errors = new ArrayList&lt;&gt;();          // báo MỌI lỗi một lần
+            if (name.isBlank()) errors.add("name is empty");
+            if (!List.of("STUDENT", "STAFF", "GUEST").contains(type)) errors.add("unknown type " + type);
+            if (type.equals("STUDENT") &amp;&amp; studentCode == null) errors.add("a STUDENT needs a student code");
+            if (email != null &amp;&amp; !email.matches("[^@\\\\s]+@[^@\\\\s]+\\\\.[a-z]{2,}")) errors.add("bad email " + email);
+            if (!errors.isEmpty()) throw new IllegalStateException(id + ": " + String.join("; ", errors));
+            return new Member(this);
+        }
+    }
+}</code></pre>
+<div class="out">Member[M010 An Nguyen, STUDENT SE170001, an@fpt.edu.vn]<br>
+Member[M011 Binh Tran, GUEST]<br>
+refused: M012: a STUDENT needs a student code<br>
+refused: M013: bad email dung-at-gmail<br>
+refused: M014: name is empty; unknown type ROBOT</div>
+<p>Phần bắt buộc ở <code>builder(…)</code>; mỗi bước tuỳ chọn trả về <code>this</code>; <code>build()</code> gom lỗi vào một list và ném một lần với tất cả — M014 sai hai luật và cả hai đều hiện. Vì constructor là private và nhận builder, không đường code nào tạo được một <code>Member</code> bỏ qua bước kiểm. Các luật nằm trong một phương thức, cũng là chỗ duy nhất cần test chúng.</p>
+<div class="pitfall">Bẫy: kiểm trong từng setter (<code>type("ROBOT")</code> ném ngay) không kiểm được tổ hợp — "STUDENT cần mã sinh viên" phụ thuộc hai field đặt theo thứ tự bất kỳ. Kiểm cả đối tượng ở <code>build()</code>.</div>
+<div class="callout">⚠️ <strong>Phòng thi PE (JDK 8)</strong>: <code>isBlank</code> và <code>List.of</code> là Java 11/9 — dùng <code>trim().isEmpty()</code> và <code>Arrays.asList</code>.</div>`),
+    bi(`<h3>🧪 Exercise 5 — A listener that unsubscribes itself while being notified</h3>
+<p class="nhan">Task</p>
+<p>A one-shot listener ("tell M007 when B001 comes back, then stop") calls <code>desk.unsubscribe(this)</code> inside <code>onReturned</code>. With three listeners in an <code>ArrayList</code>, <em>predict</em> what happens when two books are returned. Then fix the subject in two ways: iterate over a copy, or use <code>CopyOnWriteArrayList</code>.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 17
+// CS7 exercise 5: a one-shot listener unsubscribes itself during notification — ConcurrentModificationException, then two fixes
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class Bt5ObserverGoDangKy {
+    public static void main(String[] args) {
+        for (String kind : List.of("ArrayList", "copy before loop", "CopyOnWriteArrayList")) {
+            Desk desk = new Desk(kind);
+            desk.subscribe(new OneShot(desk, "M007 waits for B001"));    // removes itself after the first event
+            desk.subscribe(id -&gt; System.out.println("    log: " + id + " returned"));
+            desk.subscribe(id -&gt; System.out.println("    stats: +1 return"));
+            System.out.println(kind + ":");
+            try {
+                desk.returned("B001");
+                desk.returned("B002");
+            } catch (ConcurrentModificationException e) {
+                System.out.println("    " + e.getClass().getSimpleName() + " — log and stats never ran, B002 never processed");
+            }
+        }
+    }
+}
+
+interface IReturnListener { void onReturned(String itemId); }
+
+class Desk {
+    private final List&lt;IReturnListener&gt; listeners;
+    private final boolean copy;
+    Desk(String kind) {
+        listeners = kind.equals("CopyOnWriteArrayList") ? new CopyOnWriteArrayList&lt;&gt;() : new ArrayList&lt;&gt;();
+        copy = kind.equals("copy before loop");
+    }
+    void subscribe(IReturnListener l) { listeners.add(l); }
+    void unsubscribe(IReturnListener l) { listeners.remove(l); }
+    void returned(String itemId) {
+        List&lt;IReturnListener&gt; snapshot = copy ? new ArrayList&lt;&gt;(listeners) : listeners;
+        for (IReturnListener l : snapshot) l.onReturned(itemId);
+    }
+}
+
+class OneShot implements IReturnListener {
+    private final Desk desk; private final String note;
+    OneShot(Desk desk, String note) { this.desk = desk; this.note = note; }
+    public void onReturned(String itemId) {
+        System.out.println("    one-shot: " + note + " -&gt; notified, unsubscribing");
+        desk.unsubscribe(this);                         // changes the list we are iterating over
+    }
+}</code></pre>
+<div class="out">ArrayList:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ConcurrentModificationException — log and stats never ran, B002 never processed<br>
+copy before loop:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B001 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B002 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+CopyOnWriteArrayList:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B001 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B002 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return</div>
+<p>With a plain <code>ArrayList</code>, the for-each loop's iterator notices that the list changed under it and throws <code>ConcurrentModificationException</code> on the next step: the log and the statistics never ran, and the exception escaped the whole return, so B002 was never processed. Both fixes give the full, correct sequence: the copy freezes the list for this round; <code>CopyOnWriteArrayList</code> does the copy for you on every change, which is cheap when listeners are added rarely and events are frequent — exactly the observer situation.</p>
+<p class="meo">🧠 Measured by hand, not printed: with only <em>two</em> listeners the same code does <strong>not</strong> throw — removing element 0 makes the size 1, the iterator's cursor is already 1, <code>hasNext()</code> answers false and the loop ends quietly, skipping the log listener. A silent skip is worse than an exception. (⭐ CS.6 measured the same quirk with "the second-to-last element".)</p>`,
+    `<h3>🧪 Bài tập 5 — Listener tự gỡ đăng ký ngay trong lúc được báo</h3>
+<p class="nhan">Đề</p>
+<p>Một listener một-lần ("báo M007 khi B001 về, rồi thôi") gọi <code>desk.unsubscribe(this)</code> bên trong <code>onReturned</code>. Với ba listener trong một <code>ArrayList</code>, <em>đoán</em> chuyện gì xảy ra khi trả hai cuốn sách. Rồi sửa chủ thể theo hai cách: duyệt trên một bản sao, hoặc dùng <code>CopyOnWriteArrayList</code>.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 17
+// CS7 bài 5: listener một-lần tự gỡ đăng ký trong lúc đang báo — ConcurrentModificationException, rồi hai cách sửa
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class Bt5ObserverGoDangKy {
+    public static void main(String[] args) {
+        for (String kind : List.of("ArrayList", "copy before loop", "CopyOnWriteArrayList")) {
+            Desk desk = new Desk(kind);
+            desk.subscribe(new OneShot(desk, "M007 waits for B001"));    // tự gỡ sau sự kiện đầu
+            desk.subscribe(id -&gt; System.out.println("    log: " + id + " returned"));
+            desk.subscribe(id -&gt; System.out.println("    stats: +1 return"));
+            System.out.println(kind + ":");
+            try {
+                desk.returned("B001");
+                desk.returned("B002");
+            } catch (ConcurrentModificationException e) {
+                System.out.println("    " + e.getClass().getSimpleName() + " — log and stats never ran, B002 never processed");
+            }
+        }
+    }
+}
+
+interface IReturnListener { void onReturned(String itemId); }
+
+class Desk {
+    private final List&lt;IReturnListener&gt; listeners;
+    private final boolean copy;
+    Desk(String kind) {
+        listeners = kind.equals("CopyOnWriteArrayList") ? new CopyOnWriteArrayList&lt;&gt;() : new ArrayList&lt;&gt;();
+        copy = kind.equals("copy before loop");
+    }
+    void subscribe(IReturnListener l) { listeners.add(l); }
+    void unsubscribe(IReturnListener l) { listeners.remove(l); }
+    void returned(String itemId) {
+        List&lt;IReturnListener&gt; snapshot = copy ? new ArrayList&lt;&gt;(listeners) : listeners;
+        for (IReturnListener l : snapshot) l.onReturned(itemId);
+    }
+}
+
+class OneShot implements IReturnListener {
+    private final Desk desk; private final String note;
+    OneShot(Desk desk, String note) { this.desk = desk; this.note = note; }
+    public void onReturned(String itemId) {
+        System.out.println("    one-shot: " + note + " -&gt; notified, unsubscribing");
+        desk.unsubscribe(this);                         // sửa đúng list đang duyệt
+    }
+}</code></pre>
+<div class="out">ArrayList:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ConcurrentModificationException — log and stats never ran, B002 never processed<br>
+copy before loop:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B001 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B002 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+CopyOnWriteArrayList:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-shot: M007 waits for B001 -&gt; notified, unsubscribing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B001 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log: B002 returned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stats: +1 return</div>
+<p>Với <code>ArrayList</code> thường, iterator của vòng for-each nhận ra list bị đổi dưới chân nó và ném <code>ConcurrentModificationException</code> ở bước kế: log và thống kê không chạy, và exception thoát ra khỏi cả thao tác trả sách, nên B002 không bao giờ được xử lý. Cả hai cách sửa cho chuỗi đầy đủ, đúng: bản sao đóng băng list cho lượt báo này; <code>CopyOnWriteArrayList</code> tự sao chép giúp bạn ở mỗi lần thay đổi, rẻ khi listener ít khi thêm còn sự kiện thì nhiều — đúng tình huống của observer.</p>
+<p class="meo">🧠 Đo tay, không in ra trang: chỉ với <em>hai</em> listener, cùng đoạn code <strong>không</strong> ném lỗi — xoá phần tử 0 làm size thành 1, con trỏ của iterator đã là 1, <code>hasNext()</code> trả false và vòng lặp kết thúc lặng lẽ, bỏ qua listener log. Bỏ sót lặng lẽ còn tệ hơn một exception. (⭐ CS.6 đã đo cùng hiện tượng với "phần tử áp chót".)</p>`),
+    bi(`<h3>🧪 Exercise 6 — Template Method: one import job, two file formats</h3>
+<p class="nhan">Task</p>
+<p>Members arrive as CSV (with a header line) and as pipe-separated text (no header). Write an abstract <code>ImportJob</code> whose <code>final run(lines)</code> fixes the steps — skip the header if needed, split, validate, count — and let <code>CsvImport</code> and <code>PipeImport</code> supply only the name, the split and (CSV) a hook to skip the header. Validation must be the same for every format and impossible to weaken in a subclass.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 8
+// CS7 exercise 6: Template Method for importing members from two file formats, with a hook to skip a header
+import java.util.*;
+
+public class Bt6KhuonNhap {
+    public static void main(String[] args) {
+        List&lt;String&gt; csv = Arrays.asList("id,name,type", "M001,An Nguyen,STUDENT", "M002,,STAFF", "M003,Chi Le,GUEST");
+        List&lt;String&gt; pipe = Arrays.asList("M004|Dung Pham|STAFF", "M005|Em Vo|ROBOT");
+        System.out.print(new CsvImport().run(csv));
+        System.out.print(new PipeImport().run(pipe));
+    }
+}
+
+abstract class ImportJob {
+    final String run(List&lt;String&gt; lines) {               // the template: fixed order, cannot be overridden
+        StringBuilder log = new StringBuilder(name() + ":\\n");
+        int ok = 0, bad = 0;
+        for (int i = skipHeader() ? 1 : 0; i &lt; lines.size(); i++) {
+            String[] f = split(lines.get(i));               // step 1: format-specific
+            String error = validate(f);                     // step 2: shared rule
+            if (error == null) { ok++; log.append("  + ").append(f[0]).append(' ').append(f[1]).append('\\n'); }
+            else { bad++; log.append("  ! line ").append(i + 1).append(": ").append(error).append('\\n'); }
+        }
+        return log.append("  ").append(ok).append(" imported, ").append(bad).append(" rejected\\n").toString();
+    }
+    protected abstract String name();
+    protected abstract String[] split(String line);
+    protected boolean skipHeader() { return false; }       // hook
+    private String validate(String[] f) {                   // private: subclasses cannot weaken it
+        if (f.length != 3) return "expected 3 fields, got " + f.length;
+        if (f[1].trim().isEmpty()) return "empty name";
+        if (!Arrays.asList("STUDENT", "STAFF", "GUEST").contains(f[2])) return "unknown type " + f[2];
+        return null;
+    }
+}
+
+class CsvImport extends ImportJob {
+    protected String name() { return "CSV"; }
+    protected String[] split(String line) { return line.split(",", -1); }
+    @Override protected boolean skipHeader() { return true; }
+}
+
+class PipeImport extends ImportJob {
+    protected String name() { return "PIPE"; }
+    protected String[] split(String line) { return line.split("\\\\|", -1); }
+}</code></pre>
+<div class="out">CSV:<br>
+&nbsp;&nbsp;+ M001 An Nguyen<br>
+&nbsp;&nbsp;! line 3: empty name<br>
+&nbsp;&nbsp;+ M003 Chi Le<br>
+&nbsp;&nbsp;2 imported, 1 rejected<br>
+PIPE:<br>
+&nbsp;&nbsp;+ M004 Dung Pham<br>
+&nbsp;&nbsp;! line 2: unknown type ROBOT<br>
+&nbsp;&nbsp;1 imported, 1 rejected</div>
+<p><code>run</code> is <code>final</code>: no subclass can reorder the steps or forget to validate. <code>validate</code> is <code>private</code>: a subclass cannot even override it, so the rules ("3 fields", "name not empty", "known type") are the same for both formats — a deliberate use of access modifiers as design. <code>skipHeader</code> is the hook, false by default, turned on by CSV only; that is why CSV reports "line 3" for the empty name (line numbers count the header). <code>split(…, -1)</code> keeps empty fields, so <code>M002,,STAFF</code> has three fields and fails on the name rather than on the count.</p>
+<div class="callout">✅ <strong>Exam room PE (JDK 8)</strong>: <code>// release: 8</code>, identical output on a real JDK 8. The same shape is how LAB211 importers and Spring Batch's readers are organised.</div>`,
+    `<h3>🧪 Bài tập 6 — Template Method: một công việc nhập, hai định dạng tệp</h3>
+<p class="nhan">Đề</p>
+<p>Thành viên tới dưới dạng CSV (có dòng tiêu đề) và chữ ngăn bằng dấu sổ đứng (không tiêu đề). Viết lớp trừu tượng <code>ImportJob</code> có <code>final run(lines)</code> cố định các bước — bỏ tiêu đề nếu cần, tách, kiểm, đếm — và để <code>CsvImport</code>, <code>PipeImport</code> chỉ cung cấp tên, cách tách và (CSV) một móc bỏ tiêu đề. Phần kiểm phải giống nhau với mọi định dạng và lớp con không nới lỏng được.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 8
+// CS7 bài 6: Template Method nhập thành viên từ hai định dạng tệp, có móc bỏ dòng tiêu đề
+import java.util.*;
+
+public class Bt6KhuonNhap {
+    public static void main(String[] args) {
+        List&lt;String&gt; csv = Arrays.asList("id,name,type", "M001,An Nguyen,STUDENT", "M002,,STAFF", "M003,Chi Le,GUEST");
+        List&lt;String&gt; pipe = Arrays.asList("M004|Dung Pham|STAFF", "M005|Em Vo|ROBOT");
+        System.out.print(new CsvImport().run(csv));
+        System.out.print(new PipeImport().run(pipe));
+    }
+}
+
+abstract class ImportJob {
+    final String run(List&lt;String&gt; lines) {               // khuôn: thứ tự cố định, không ghi đè được
+        StringBuilder log = new StringBuilder(name() + ":\\n");
+        int ok = 0, bad = 0;
+        for (int i = skipHeader() ? 1 : 0; i &lt; lines.size(); i++) {
+            String[] f = split(lines.get(i));               // bước 1: tuỳ định dạng
+            String error = validate(f);                     // bước 2: luật chung
+            if (error == null) { ok++; log.append("  + ").append(f[0]).append(' ').append(f[1]).append('\\n'); }
+            else { bad++; log.append("  ! line ").append(i + 1).append(": ").append(error).append('\\n'); }
+        }
+        return log.append("  ").append(ok).append(" imported, ").append(bad).append(" rejected\\n").toString();
+    }
+    protected abstract String name();
+    protected abstract String[] split(String line);
+    protected boolean skipHeader() { return false; }       // móc
+    private String validate(String[] f) {                   // private: lớp con không nới được
+        if (f.length != 3) return "expected 3 fields, got " + f.length;
+        if (f[1].trim().isEmpty()) return "empty name";
+        if (!Arrays.asList("STUDENT", "STAFF", "GUEST").contains(f[2])) return "unknown type " + f[2];
+        return null;
+    }
+}
+
+class CsvImport extends ImportJob {
+    protected String name() { return "CSV"; }
+    protected String[] split(String line) { return line.split(",", -1); }
+    @Override protected boolean skipHeader() { return true; }
+}
+
+class PipeImport extends ImportJob {
+    protected String name() { return "PIPE"; }
+    protected String[] split(String line) { return line.split("\\\\|", -1); }
+}</code></pre>
+<div class="out">CSV:<br>
+&nbsp;&nbsp;+ M001 An Nguyen<br>
+&nbsp;&nbsp;! line 3: empty name<br>
+&nbsp;&nbsp;+ M003 Chi Le<br>
+&nbsp;&nbsp;2 imported, 1 rejected<br>
+PIPE:<br>
+&nbsp;&nbsp;+ M004 Dung Pham<br>
+&nbsp;&nbsp;! line 2: unknown type ROBOT<br>
+&nbsp;&nbsp;1 imported, 1 rejected</div>
+<p><code>run</code> là <code>final</code>: không lớp con nào đổi thứ tự bước hay quên kiểm. <code>validate</code> là <code>private</code>: lớp con thậm chí không ghi đè được, nên các luật ("3 trường", "tên không rỗng", "loại hợp lệ") giống nhau cho cả hai định dạng — dùng phạm vi truy cập như một quyết định thiết kế. <code>skipHeader</code> là móc, mặc định false, chỉ CSV bật lên; vì thế CSV báo "line 3" cho tên rỗng (số dòng tính cả dòng tiêu đề). <code>split(…, -1)</code> giữ trường rỗng, nên <code>M002,,STAFF</code> có ba trường và hỏng ở luật tên chứ không ở luật số trường.</p>
+<div class="callout">✅ <strong>Phòng thi PE (JDK 8)</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật. Cùng hình dạng này là cách các bộ nhập liệu LAB211 và reader của Spring Batch được tổ chức.</div>`),
+    bi(`<h3>🧪 Exercise 7 — Which principle, which pattern? (no code)</h3>
+<p>For each situation, name the principle or pattern and say in one sentence why. Then open the answers.</p>
+<ol>
+<li>The receipt layout changes every month, the fee rules every year — both are in <code>LoanService</code>.</li>
+<li>The app must send a notification by email, SMS or Zalo, chosen by the member's preference.</li>
+<li>A <code>Report</code> object has 2 required and 9 optional settings.</li>
+<li>After a book is returned: update statistics, notify the wait list, write an audit log — more reactions are planned.</li>
+<li>Three exporters (PDF, Excel, CSV) all do: query, header, rows, footer, save.</li>
+<li><code>ReadOnlyBook extends Book</code> overrides <code>setTitle</code> to throw.</li>
+<li>A <code>LoanService</code> creates <code>new MySqlLoanRepository()</code> in its constructor.</li>
+<li>Code everywhere does <code>if (type.equals("PDF")) new PdfExporter() else if …</code>.</li>
+</ol>
+<details><summary>Answers</summary>
+<ol>
+<li><strong>SRP</strong>: two actors (front desk, treasurer) ⇒ two classes.</li>
+<li><strong>Strategy</strong> (one <code>INotifier</code> per channel), chosen at run time; in Spring a map of beans.</li>
+<li><strong>Builder</strong>: named optional steps, one check in <code>build()</code>.</li>
+<li><strong>Observer</strong>: the return publishes an event; reactions subscribe (Spring <code>@EventListener</code>).</li>
+<li><strong>Template Method</strong>: a final <code>export()</code> with abstract steps.</li>
+<li><strong>LSP</strong> violation: split by ability (a read-only interface), do not inherit.</li>
+<li><strong>DIP</strong>: depend on <code>ILoanRepository</code>, inject it (DI).</li>
+<li><strong>Factory</strong> (and OCP): one place maps the type to the class.</li>
+</ol></details>`,
+    `<h3>🧪 Bài tập 7 — Nguyên lý nào, mẫu nào? (không code)</h3>
+<p>Với mỗi tình huống, gọi tên nguyên lý hoặc mẫu và nói một câu vì sao. Rồi mới mở đáp án.</p>
+<ol>
+<li>Mẫu phiếu đổi mỗi tháng, luật phí đổi mỗi năm — cả hai đều nằm trong <code>LoanService</code>.</li>
+<li>Ứng dụng phải gửi thông báo qua email, SMS hoặc Zalo, chọn theo sở thích của thành viên.</li>
+<li>Một đối tượng <code>Report</code> có 2 thiết lập bắt buộc và 9 thiết lập tuỳ chọn.</li>
+<li>Sau khi trả sách: cập nhật thống kê, báo danh sách chờ, ghi nhật ký kiểm tra — và còn dự định thêm phản ứng khác.</li>
+<li>Ba bộ xuất (PDF, Excel, CSV) đều làm: truy vấn, tiêu đề, các hàng, chân trang, lưu.</li>
+<li><code>ReadOnlyBook extends Book</code> ghi đè <code>setTitle</code> để ném lỗi.</li>
+<li>Một <code>LoanService</code> tự tạo <code>new MySqlLoanRepository()</code> trong constructor.</li>
+<li>Khắp nơi trong code có <code>if (type.equals("PDF")) new PdfExporter() else if …</code>.</li>
+</ol>
+<details><summary>Đáp án</summary>
+<ol>
+<li><strong>SRP</strong>: hai actor (quầy, thủ quỹ) ⇒ hai lớp.</li>
+<li><strong>Strategy</strong> (mỗi kênh một <code>INotifier</code>), chọn lúc chạy; trong Spring là một map các bean.</li>
+<li><strong>Builder</strong>: bước tuỳ chọn có tên, kiểm một lần ở <code>build()</code>.</li>
+<li><strong>Observer</strong>: lần trả phát một sự kiện; các phản ứng đăng ký nhận (Spring <code>@EventListener</code>).</li>
+<li><strong>Template Method</strong>: một <code>export()</code> final với các bước abstract.</li>
+<li>Vi phạm <strong>LSP</strong>: tách theo khả năng (một interface chỉ đọc), đừng kế thừa.</li>
+<li><strong>DIP</strong>: phụ thuộc <code>ILoanRepository</code>, tiêm nó vào (DI).</li>
+<li><strong>Factory</strong> (và OCP): một chỗ duy nhất ánh xạ loại sang lớp.</li>
+</ol></details>`),
+    bi(`<h2>🗂 Glossary — English → Vietnamese</h2>
+<p>Every term of the chapter with its Vietnamese name and a one-sentence explanation. Cover the right-hand columns and test yourself.</p>
+<table>
+<thead><tr><th>Term (EN)</th><th>Vietnamese</th><th>In one sentence</th></tr></thead>
+<tbody>
+<tr><td><strong>SOLID</strong></td><td>SOLID</td><td>Five design principles — single responsibility, open/closed, Liskov substitution, interface segregation, dependency inversion.</td></tr>
+<tr><td><strong>actor</strong></td><td>actor (nhóm người yêu cầu)</td><td>A group of people who request changes to a part of the software; SRP gives each class one actor.</td></tr>
+<tr><td><strong>god class</strong></td><td>lớp "thượng đế"</td><td>A class that knows and does too much, serving many actors at once.</td></tr>
+<tr><td><strong>open/closed</strong></td><td>mở/đóng</td><td>Open for extension (new classes), closed for modification (tested code is not edited).</td></tr>
+<tr><td><strong>Liskov substitution</strong></td><td>thay thế Liskov</td><td>Any subtype can replace its parent without breaking callers: no stronger preconditions, no weaker promises, no new exceptions.</td></tr>
+<tr><td><strong>interface segregation</strong></td><td>tách interface</td><td>Prefer small role interfaces so no class implements methods it cannot honour.</td></tr>
+<tr><td><strong>dependency inversion</strong></td><td>đảo ngược phụ thuộc</td><td>High-level rules and low-level details both depend on an abstraction owned by the high level.</td></tr>
+<tr><td><strong>design pattern</strong></td><td>mẫu thiết kế</td><td>A named, reusable solution to a recurring design problem, with known trade-offs.</td></tr>
+<tr><td><strong>strategy</strong></td><td>strategy (chiến lược)</td><td>An interchangeable algorithm behind an interface, chosen at run time by the context.</td></tr>
+<tr><td><strong>factory</strong></td><td>factory (nhà máy)</td><td>A method or class that decides which concrete class to create.</td></tr>
+<tr><td><strong>singleton</strong></td><td>singleton</td><td>A class with exactly one instance and a global access point; in Spring, a scope (one bean per container).</td></tr>
+<tr><td><strong>builder</strong></td><td>builder</td><td>A helper that collects the parts of an object step by step and creates it, validated, in build().</td></tr>
+<tr><td><strong>observer / listener</strong></td><td>observer / listener</td><td>An object notified by a subject when an event happens; subjects know only the listener interface.</td></tr>
+<tr><td><strong>template method / hook</strong></td><td>phương thức khuôn / móc</td><td>A final method that fixes the steps and calls abstract steps and optional hooks filled by subclasses.</td></tr>
+<tr><td><strong>YAGNI / KISS</strong></td><td>YAGNI / KISS</td><td>"You Aren't Gonna Need It", "Keep It Simple": do not add abstraction for changes that are not coming.</td></tr>
+</tbody>
+</table>`,
+    `<h2>🗂 Thuật ngữ — Anh → Việt</h2>
+<p>Mọi thuật ngữ của chương, kèm nghĩa tiếng Việt và một câu giải thích. Che hai cột bên phải lại để tự kiểm tra.</p>
+<table>
+<thead><tr><th>Thuật ngữ (EN)</th><th>Nghĩa tiếng Việt</th><th>Giải thích một câu</th></tr></thead>
+<tbody>
+<tr><td><strong>SOLID</strong></td><td>SOLID</td><td>Năm nguyên lý thiết kế — đơn trách nhiệm, mở/đóng, thay thế Liskov, tách interface, đảo ngược phụ thuộc.</td></tr>
+<tr><td><strong>actor</strong></td><td>actor (nhóm người yêu cầu)</td><td>Một nhóm người đòi thay đổi một phần phần mềm; SRP cho mỗi lớp một actor.</td></tr>
+<tr><td><strong>god class</strong></td><td>lớp "thượng đế"</td><td>Lớp biết và làm quá nhiều, phục vụ nhiều actor cùng lúc.</td></tr>
+<tr><td><strong>open/closed</strong></td><td>mở/đóng</td><td>Mở để mở rộng (lớp mới), đóng với sửa đổi (code đã test không bị sửa).</td></tr>
+<tr><td><strong>Liskov substitution</strong></td><td>thay thế Liskov</td><td>Mọi kiểu con thay được lớp cha mà không làm hỏng người gọi: không đòi hơn, không hứa kém, không exception mới.</td></tr>
+<tr><td><strong>interface segregation</strong></td><td>tách interface</td><td>Ưu tiên interface theo vai, nhỏ, để không lớp nào cài phương thức nó không làm được.</td></tr>
+<tr><td><strong>dependency inversion</strong></td><td>đảo ngược phụ thuộc</td><td>Luật tầng cao và chi tiết tầng thấp cùng phụ thuộc một trừu tượng do tầng cao sở hữu.</td></tr>
+<tr><td><strong>design pattern</strong></td><td>mẫu thiết kế</td><td>Lời giải có tên, dùng lại được, cho một vấn đề thiết kế hay lặp lại, với cái giá đã biết.</td></tr>
+<tr><td><strong>strategy</strong></td><td>strategy (chiến lược)</td><td>Một thuật toán thay thế được sau một interface, do ngữ cảnh chọn lúc chạy.</td></tr>
+<tr><td><strong>factory</strong></td><td>factory (nhà máy)</td><td>Phương thức hay lớp quyết định tạo lớp cụ thể nào.</td></tr>
+<tr><td><strong>singleton</strong></td><td>singleton</td><td>Lớp chỉ có đúng một đối tượng và một lối vào toàn cục; trong Spring là một scope (một bean mỗi container).</td></tr>
+<tr><td><strong>builder</strong></td><td>builder</td><td>Lớp phụ gom từng phần của một đối tượng rồi tạo nó, đã kiểm, ở build().</td></tr>
+<tr><td><strong>observer / listener</strong></td><td>observer / listener</td><td>Đối tượng được chủ thể báo khi có sự kiện; chủ thể chỉ biết interface listener.</td></tr>
+<tr><td><strong>template method / hook</strong></td><td>phương thức khuôn / móc</td><td>Phương thức final cố định các bước, gọi các bước abstract và móc tuỳ chọn do lớp con điền.</td></tr>
+<tr><td><strong>YAGNI / KISS</strong></td><td>YAGNI / KISS</td><td>"Bạn sẽ không cần nó đâu", "Giữ cho đơn giản": đừng thêm trừu tượng cho thay đổi không tới.</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>📌 Summary — SOLID and patterns in 7 points</h2>
+<ol>
+<li><strong>Find what changes and who asks</strong>: one actor per class (SRP); a refactor keeps the output identical.</li>
+<li><strong>New variant = new class</strong> (OCP): a registry of strategies instead of a switch in five places; unknown keys get a recorded default.</li>
+<li><strong>Subtypes keep promises</strong> (LSP): <code>Stack extends Vector</code>, <code>EBook</code> that throws, Square 16 instead of 20 — wrap or split instead of inheriting.</li>
+<li><strong>Small roles, owned abstractions</strong> (ISP, DIP): interfaces sized to their clients, owned by the rules, injected.</li>
+<li><strong>Six patterns</strong>: Strategy (pass the how), Factory (one place calls new), Singleton (holder/enum, stateless in Spring), Builder (check once in build), Observer (isolate listeners, beware self-removal), Template Method (final steps, hooks).</li>
+<li><strong>Spring is made of them</strong>: singleton beans, <code>@Bean</code> factories, lists of strategy beans, <code>@EventListener</code>, <code>JdbcTemplate</code>.</li>
+<li><strong>Do not over-apply</strong>: name the change you protect against; otherwise keep it simple.</li>
+</ol>`,
+    `<h2>📌 Tóm tắt — SOLID và mẫu thiết kế trong 7 ý</h2>
+<ol>
+<li><strong>Tìm chỗ hay đổi và ai đòi đổi</strong>: mỗi lớp một actor (SRP); tái cấu trúc giữ output giống hệt.</li>
+<li><strong>Biến thể mới = lớp mới</strong> (OCP): sổ đăng ký strategy thay cho switch ở năm chỗ; khoá lạ nhận mặc định có ghi lại.</li>
+<li><strong>Kiểu con giữ lời hứa</strong> (LSP): <code>Stack extends Vector</code>, <code>EBook</code> ném lỗi, hình vuông ra 16 thay vì 20 — bọc hoặc tách thay vì kế thừa.</li>
+<li><strong>Vai nhỏ, trừu tượng có chủ</strong> (ISP, DIP): interface vừa với người dùng nó, do tầng luật sở hữu, được tiêm vào.</li>
+<li><strong>Sáu mẫu</strong>: Strategy (truyền cách làm), Factory (một chỗ gọi new), Singleton (holder/enum, không trạng thái trong Spring), Builder (kiểm một lần ở build), Observer (cách ly listener, coi chừng tự gỡ), Template Method (bước final, có móc).</li>
+<li><strong>Spring được làm từ chúng</strong>: bean singleton, factory <code>@Bean</code>, list các bean strategy, <code>@EventListener</code>, <code>JdbcTemplate</code>.</li>
+<li><strong>Đừng áp quá tay</strong>: gọi tên thay đổi bạn phòng; không thì giữ đơn giản.</li>
+</ol>`),
+  ].join('\n'),
+};
+
+/* ───────── Quiz (pro192-quiz-cs7) — 10 câu ───────── */
+const QUIZ_CS7 = {
+  timeLimitSeconds: 900,
+  questions: [
+    { id: 'q1',
+      question: 'CT Library adds a new member type ALUMNI. Which design satisfies the Open/Closed Principle?|||CT Library thêm loại thành viên ALUMNI. Thiết kế nào thoả nguyên lý Mở/Đóng?',
+      options: ['Add a case "ALUMNI" to the switch in the fee method|||Thêm case "ALUMNI" vào switch trong phương thức tính phí', 'Add a boolean isAlumni field to Member and check it in every service|||Thêm field boolean isAlumni vào Member và kiểm nó ở mọi service', 'Add a class AlumniFee implements IFeePolicy and register it|||Thêm lớp AlumniFee implements IFeePolicy và đăng ký nó', 'Copy the fee method into a new class FeeV2 with the extra case|||Chép phương thức tính phí sang lớp mới FeeV2 có thêm case'],
+      correctIndex: 2,
+      points: 1,
+      explanation: 'OCP: extend with new code, do not modify tested code. A new strategy class plus one registration line leaves the existing policies and every caller untouched (OcpPhi: 8000 for ALUMNI). A edits a tested method — and the old switch threw "unknown member type: ALUMNI" until someone did. B spreads a new if into every service. D duplicates the rule, so the next change must be made twice.|||OCP: mở rộng bằng code mới, không sửa code đã test. Một lớp strategy mới cộng một dòng đăng ký để nguyên các chính sách cũ và mọi người gọi (OcpPhi: ALUMNI 8000). A sửa một phương thức đã test — và switch cũ ném "unknown member type: ALUMNI" cho tới khi có người sửa. B rải một if mới vào mọi service. D nhân đôi luật, nên lần thay đổi sau phải sửa hai chỗ.' },
+    { id: 'q2',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `static class Rect {
+    int w, h;
+    void setW(int w) { this.w = w; }
+    void setH(int h) { this.h = h; }
+    int area() { return w * h; }
+}
+static class Square extends Rect {
+    void setW(int w) { this.w = w; this.h = w; }
+    void setH(int h) { this.w = h; this.h = h; }
+}
+public static void main(String[] args) {
+    Rect r = new Square();
+    r.setW(3);
+    r.setH(5);
+    System.out.println(r.area());
+}`,
+      codeLang: 'java',
+      options: ['15|||15', '25|||25', '9|||9', '0|||0'],
+      correctIndex: 1,
+      points: 1,
+      explanation: 'r is declared Rect but the object is a Square, so the overridden setters run. setW(3) makes w = h = 3; setH(5) then makes w = h = 5; area = 25. A caller written for Rect expects 3 × 5 = 15 (A) — that broken expectation is the Liskov violation. 9 (C) would need the second setter to be ignored.|||r khai kiểu Rect nhưng đối tượng là Square, nên các setter đã ghi đè chạy. setW(3) làm w = h = 3; setH(5) rồi làm w = h = 5; diện tích = 25. Người gọi viết cho Rect chờ 3 × 5 = 15 (A) — kỳ vọng bị phá đó chính là vi phạm Liskov. 9 (C) chỉ xảy ra nếu setter thứ hai bị bỏ qua.' },
+    { id: 'q3',
+      question: 'EBook extends Book and overrides borrow() to throw UnsupportedOperationException. A loop that borrows every Book in a cart now crashes half-way. Which principle is violated?|||EBook extends Book và ghi đè borrow() để ném UnsupportedOperationException. Vòng lặp mượn mọi Book trong giỏ giờ sập giữa chừng. Nguyên lý nào bị vi phạm?',
+      options: ['Liskov Substitution — the subtype breaks a promise callers rely on|||Thay thế Liskov — kiểu con phá một lời hứa người gọi dựa vào', 'Single Responsibility — Book has too many methods|||Đơn trách nhiệm — Book có quá nhiều phương thức', 'Dependency Inversion — the loop depends on a concrete class|||Đảo ngược phụ thuộc — vòng lặp phụ thuộc một lớp cụ thể', 'Nothing is violated, because the code compiles|||Không vi phạm gì, vì code biên dịch được'],
+      correctIndex: 0,
+      points: 1,
+      explanation: 'Code written for Book must work with any subtype: same inputs accepted, same promises kept, no new exceptions. EBook compiles (same signature) but throws, so LspEBook printed the crash with B001 already out and B002 not — a half-finished operation. Compiling (D) says nothing about behaviour. The fix is to split by ability (IBorrowable / IDownloadable), not to add instanceof checks in the loop.|||Code viết cho Book phải chạy với mọi kiểu con: nhận cùng đầu vào, giữ cùng lời hứa, không exception mới. EBook biên dịch được (cùng chữ ký) nhưng ném lỗi, nên LspEBook in cú sập khi B001 đã cho mượn còn B002 thì chưa — một thao tác làm dở. Biên dịch được (D) không nói gì về hành vi. Cách sửa là tách theo khả năng (IBorrowable / IDownloadable), không phải thêm kiểm instanceof trong vòng lặp.' },
+    { id: 'q4',
+      question: 'An interface ILibraryItem has borrow(), download() and repair(). FatEBook must implement all three and makes two of them throw. What is the best fix?|||Interface ILibraryItem có borrow(), download() và repair(). FatEBook phải cài cả ba và cho hai cái ném lỗi. Cách sửa tốt nhất là gì?',
+      options: ['Make the two methods return null instead of throwing|||Cho hai phương thức trả null thay vì ném lỗi', 'Add a canRepair() method so callers can check first|||Thêm phương thức canRepair() để người gọi kiểm trước', 'Make ILibraryItem an abstract class with empty default bodies|||Biến ILibraryItem thành lớp trừu tượng với thân rỗng mặc định', 'Split it into small role interfaces such as IBorrowable, IDownloadable, IRepairable|||Tách thành các interface theo vai nhỏ như IBorrowable, IDownloadable, IRepairable'],
+      correctIndex: 3,
+      points: 1,
+      explanation: 'Interface Segregation: no class should implement what it cannot do. With roles, an e-book implements only IDownloadable, and RepairDesk.fix(IRepairable) rejects an e-book at compile time (IspTach). A and C hide the problem — callers still receive objects that pretend to support an operation. B moves the check to every caller at run time, which is what the type system can do for free.|||Tách interface: không lớp nào phải cài thứ nó không làm được. Với các vai, e-book chỉ cài IDownloadable, và RepairDesk.fix(IRepairable) từ chối e-book ngay lúc biên dịch (IspTach). A và C che vấn đề — người gọi vẫn nhận đối tượng giả vờ hỗ trợ một thao tác. B dời phép kiểm sang mọi người gọi lúc chạy, trong khi hệ thống kiểu làm việc đó miễn phí.' },
+    { id: 'q5',
+      question: 'According to the Dependency Inversion Principle, who should define the interface ILoanRepository?|||Theo nguyên lý Đảo ngược phụ thuộc, ai nên định nghĩa interface ILoanRepository?',
+      options: ['The high-level LoanService side, in terms of what the loan rules need|||Phía tầng cao LoanService, theo những gì luật mượn cần', 'The database vendor, so every driver matches it|||Hãng CSDL, để mọi driver khớp với nó', 'The CSV repository, listing everything a file can do|||Repository CSV, liệt kê mọi thứ một tệp làm được', 'Spring, because it creates the beans|||Spring, vì nó tạo các bean'],
+      correctIndex: 0,
+      points: 1,
+      explanation: 'DIP: high-level policy and low-level details both depend on an abstraction, and the abstraction belongs to the high level. In DipDaoChieu the interface has exactly the three operations the service needs (isOut, save, count), which is why the in-memory fake is six lines. An interface shaped by the storage (C) drags storage details into the rules. Spring (D) wires the beans — DI/IoC — but does not decide your abstractions.|||DIP: chính sách tầng cao và chi tiết tầng thấp cùng phụ thuộc một trừu tượng, và trừu tượng thuộc về tầng cao. Trong DipDaoChieu interface có đúng ba thao tác service cần (isOut, save, count), vì thế đồ giả trong bộ nhớ chỉ sáu dòng. Interface theo hình dạng kho lưu (C) kéo chi tiết lưu trữ vào luật. Spring (D) lắp các bean — DI/IoC — nhưng không quyết định trừu tượng của bạn.' },
+    { id: 'q6',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `record Book(String id, int loans) {}
+public static void main(String[] args) {
+    List<Book> b = new ArrayList<>(List.of(new Book("B3", 7), new Book("B1", 9), new Book("B2", 7)));
+    Comparator<Book> order = Comparator.comparingInt(Book::loans).reversed()
+                                       .thenComparing(Book::id);
+    b.sort(order);
+    System.out.println(b.stream().map(Book::id).toList());
+}`,
+      codeLang: 'java',
+      options: ['[B3, B1, B2]|||[B3, B1, B2]', '[B2, B3, B1]|||[B2, B3, B1]', '[B1, B2, B3]|||[B1, B2, B3]', '[B1, B3, B2]|||[B1, B3, B2]'],
+      correctIndex: 2,
+      points: 1,
+      explanation: 'The comparator is a strategy built from pieces: most loans first (reversed), then by id. B1 has 9 loans and comes first; B3 and B2 tie at 7, so thenComparing(Book::id) puts B2 before B3: [B1, B2, B3]. D keeps the original order of the tie, which is what a stable sort without the second key would give. List.sort never knows the rule — the Comparator object carries it.|||Comparator là một strategy ghép từ các mảnh: mượn nhiều nhất trước (reversed), rồi theo id. B1 có 9 lượt nên đứng đầu; B3 và B2 hoà ở 7, nên thenComparing(Book::id) đặt B2 trước B3: [B1, B2, B3]. D giữ thứ tự ban đầu của cặp hoà, là kết quả của sắp xếp ổn định khi không có khoá thứ hai. List.sort không bao giờ biết luật — đối tượng Comparator mang nó.' },
+    { id: 'q7',
+      question: 'Which is NOT an advantage of a static factory method such as List.of or Integer.valueOf over a public constructor?|||Điều nào KHÔNG phải ưu điểm của static factory method như List.of hay Integer.valueOf so với constructor public?',
+      options: ['It has a name that can describe what it returns|||Nó có tên mô tả được thứ nó trả về', 'It can return a cached object instead of a new one|||Nó có thể trả một đối tượng có sẵn thay vì tạo mới', 'It can return a hidden subclass chosen at run time|||Nó có thể trả một lớp con ẩn chọn lúc chạy', 'It guarantees that == between two results is always true|||Nó bảo đảm == giữa hai kết quả luôn là true'],
+      correctIndex: 3,
+      points: 1,
+      explanation: 'FactoryJdk measured A, B and C: List.of(1, 2) returned ImmutableCollections$List12 and List.of(1, 2, 3) $ListN (hidden subclasses); Integer.valueOf(127) == Integer.valueOf(127) was true (cached) — but Integer.valueOf(128) == Integer.valueOf(128) was false. A factory MAY cache; it never promises identity, so compare values with equals.|||FactoryJdk đã đo A, B và C: List.of(1, 2) trả ImmutableCollections$List12 và List.of(1, 2, 3) trả $ListN (lớp con ẩn); Integer.valueOf(127) == Integer.valueOf(127) là true (có cache) — nhưng Integer.valueOf(128) == Integer.valueOf(128) là false. Factory CÓ THỂ dùng cache; nó không hứa cùng đối tượng, nên so giá trị bằng equals.' },
+    { id: 'q8',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `static class Config {
+    private Config() { System.out.print("C "); }
+    private static class Holder { static final Config I = new Config(); }
+    static Config get() { return Holder.I; }
+}
+public static void main(String[] args) {
+    System.out.print("start ");
+    Config a = Config.get();
+    Config b = Config.get();
+    System.out.println(a == b);
+}`,
+      codeLang: 'java',
+      options: ['C start true|||C start true', 'start C true|||start C true', 'start C C false|||start C C false', 'C start false|||C start false'],
+      correctIndex: 1,
+      points: 1,
+      explanation: 'The holder idiom creates the instance when Holder.I is first touched, inside the first get() — after "start" has been printed. Class initialisation runs once (the JVM guarantees it, with a lock), so the second get() returns the same object: true. A would be an eager singleton initialised before main; C would be the broken lazy version with two threads. In Spring you rarely write this: a bean with the default singleton scope is one instance per container.|||Cách holder tạo đối tượng khi Holder.I được chạm lần đầu, bên trong get() đầu tiên — sau khi "start" đã in. Khởi tạo lớp chỉ chạy một lần (JVM bảo đảm, có khoá), nên get() thứ hai trả cùng đối tượng: true. A là singleton eager khởi tạo trước main; C là bản lười hỏng với hai luồng. Trong Spring bạn hiếm khi tự viết thế này: một bean phạm vi singleton mặc định là một đối tượng mỗi container.' },
+    { id: 'q9',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `interface Listener { void on(String id); }
+public static void main(String[] args) {
+    List<Listener> ls = new ArrayList<Listener>();
+    ls.add(id -> System.out.print("A "));
+    ls.add(id -> { throw new IllegalStateException("x"); });
+    ls.add(id -> System.out.print("C "));
+    try {
+        for (Listener l : ls) l.on("B001");
+        System.out.print("done");
+    } catch (IllegalStateException e) {
+        System.out.print("failed");
+    }
+    System.out.println();
+}`,
+      codeLang: 'java',
+      options: ['A failed|||A failed', 'A C done|||A C done', 'A C failed|||A C failed', 'failed|||failed'],
+      correctIndex: 0,
+      points: 1,
+      explanation: "Observers in a plain loop run synchronously, in order, on the caller's thread. Listener A prints, listener 2 throws, the exception leaves the loop, so C never runs and \"done\" is skipped: \"A failed\". That is ObserverDongBo's naive publish. Wrapping each call in its own try/catch would give \"A C done\" (B). Spring's @EventListener is also synchronous by default.|||Observer trong vòng lặp thường chạy đồng bộ, theo thứ tự, trên luồng người gọi. Listener A in, listener 2 ném, exception thoát khỏi vòng lặp, nên C không chạy và \"done\" bị bỏ qua: \"A failed\". Đó là kiểu phát ngây thơ của ObserverDongBo. Bọc mỗi lời gọi trong try/catch riêng sẽ cho \"A C done\" (B). @EventListener của Spring mặc định cũng đồng bộ." },
+    { id: 'q10',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `static abstract class Report {
+    final String make() { return head() + "|" + body() + (footer() ? "|end" : ""); }
+    abstract String head();
+    String body() { return "rows"; }
+    boolean footer() { return false; }
+}
+static class Daily extends Report {
+    String head() { return "D"; }
+    boolean footer() { return true; }
+}
+static class Weekly extends Report {
+    String head() { return "W"; }
+    String body() { return "sum"; }
+}
+public static void main(String[] args) {
+    System.out.println(new Daily().make() + " " + new Weekly().make());
+}`,
+      codeLang: 'java',
+      options: ['D|rows W|sum|end|||D|rows W|sum|end', 'D|rows|end W|rows|||D|rows|end W|rows', 'D|rows|end W|sum|||D|rows|end W|sum', 'D|sum|end W|sum|||D|sum|end W|sum'],
+      correctIndex: 2,
+      points: 1,
+      explanation: 'make() is the final template: head, body, then "|end" only if the hook footer() says so. Daily writes head "D", keeps the default body "rows" and turns the hook on: D|rows|end. Weekly writes head "W", overrides body to "sum" and keeps the default hook (false): W|sum. Each subclass fills only the steps it cares about; the order is fixed by the parent.|||make() là khuôn final: head, body, rồi "|end" chỉ khi móc footer() cho phép. Daily viết head "D", giữ body mặc định "rows" và bật móc: D|rows|end. Weekly viết head "W", ghi đè body thành "sum" và giữ móc mặc định (false): W|sum. Mỗi lớp con chỉ điền những bước nó quan tâm; thứ tự do lớp cha cố định.' },
+  ],
+};
+
+const QL_cs7 = {
+  title: '⭐ Quiz CS.7 — SOLID and design patterns|||⭐ Quiz CS.7 — SOLID và mẫu thiết kế',
+  slug: 'pro192-quiz-cs7',
+  type: 'QUIZ',
+  description: '10 câu ôn deck ⭐ Chuyên sâu 7, mỗi câu có giải thích song ngữ; câu "in ra gì" đã chạy thật: thêm loại thành viên mà không sửa code cũ, hình vuông kế thừa hình chữ nhật cho diện tích bất ngờ, override ném lỗi phá nguyên lý nào, interface béo, ai sở hữu interface theo DIP, chuỗi Comparator làm strategy, lợi ích của static factory, singleton kiểu holder tạo lúc nào, listener ném lỗi trong vòng lặp phát sự kiện, và phương thức khuôn có móc.',
+  quiz: QUIZ_CS7,
+};
+
+/* ───────── ⭐ CS.8 — 📑 Slide by slide · Threads (1): states, a measured race, synchronized, Atomic, volatile, deadlock (slides 1–14) ───────── */
+const L_cs8_1 = {
+  title: '⭐ CS.8 — 📑 Slide by slide · Threads (1): states, a measured race, synchronized, Atomic, volatile, deadlock (slides 1–14)|||⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)',
+  slug: 'pro192-slide-cs8-1',
+  type: 'VIDEO',
+  description: 'Phần đầu deck ⭐ Chuyên sâu 8 (slide 1–14, tự dựng — không có trong giáo trình trường): vì sao cần luồng (ba lần chờ 300 ms chồng lên nhau), mỗi luồng một stack và mọi luồng chung một heap, ba cách khởi động luồng và vì sao run() không tạo luồng, trạng thái NEW → TIMED_WAITING → WAITING → BLOCKED → TERMINATED nhìn tận mắt, interrupt là lời đề nghị (cờ bị xoá khi bắt InterruptedException), race condition trên count++ ĐO THẬT (2 luồng × 1.000.000 chỉ còn khoảng một nửa, số đổi mỗi lần chạy), javap cho thấy đọc–cộng–ghi, mất cập nhật ép lặp lại bằng CyclicBarrier, sửa bằng synchronized và AtomicInteger/LongAdder/compare-and-set, cờ dừng phải volatile, deadlock do lấy hai khoá ngược thứ tự và cách JVM tìm ra nó.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 8 · part 1 · added by this site · not on the PRO192 syllabus · not examined</span>
+<h2>Multithreading from zero — with races you can actually see</h2>
+<p class="lead">⭐ This is a self-added ADVANCED section, not part of the school syllabus — threads are not examined in PRO192. But every Spring Boot server runs each request on its own thread, so the moment two requests touch the same object, the bugs of this deck appear — and they are among the hardest bugs to find, because they depend on timing. This deck builds the basics in plain Java: how to start threads, what states they go through, and above all <em>why</em> shared data breaks — measured on a real machine, then forced to happen on every run so you can study it, then fixed three ways.</p>
+<div class="callout"><strong>Real runs, two kinds of numbers.</strong> Each <code>{{…}}</code> example is a complete Java program compiled by this site's generator on JDK 21.0.9 and its output is real — but a generator must print the same thing every time, so those programs print only what is <em>always</em> true ("never above 2,000,000: true"), and force bad timings with a <code>CyclicBarrier</code> or a <code>CountDownLatch</code> when a slide needs to show one. The race numbers themselves change on every run; they appear in tables marked <strong>measured by hand</strong> (10-core Mac, JDK 21.0.9, 27/10/2026). Run the programs on your machine: your numbers will differ, the conclusions will not.</div>
+<table>
+<thead><tr><th>Slides</th><th>Idea</th><th>You should be able to</th></tr></thead>
+<tbody>
+<tr><td>1–4</td><td>why threads, stack vs heap</td><td>say what concurrency buys, and which data threads share</td></tr>
+<tr><td>5–7</td><td>create, states, interrupt</td><td>start a thread correctly, read its state, stop it politely</td></tr>
+<tr><td>8–10</td><td>the race</td><td>measure lost updates on count++, explain them with javap, and reproduce one on purpose</td></tr>
+<tr><td>11–13</td><td>fixes and visibility</td><td>fix with synchronized or an atomic class, and know when volatile is enough</td></tr>
+<tr><td>14</td><td>deadlock</td><td>recognise the lock-order cycle, find it with the JVM, and break it</td></tr>
+</tbody>
+</table>
+<p>Already covered, not repeated: virtual threads ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-2">CS.3</a>; the four concurrency interview questions ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2">CS.6</a>; the lazy singleton race ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs7-2">CS.7</a>; stack and heap <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1">2.A</a>.</p>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 8 · phần 1 · tự thêm · ngoài giáo trình PRO192 · không thi</span>
+<h2>Đa luồng từ số 0 — với những cuộc đua bạn nhìn thấy được</h2>
+<p class="lead">⭐ Đây là phần chuyên sâu TỰ THÊM, không có trong giáo trình trường — PRO192 không thi phần luồng. Nhưng mọi server Spring Boot chạy mỗi request trên một luồng riêng, nên ngay khi hai request chạm cùng một đối tượng, các lỗi của deck này xuất hiện — và chúng thuộc loại khó tìm nhất, vì phụ thuộc vào thời điểm. Deck này dựng phần nền bằng Java thuần: khởi động luồng thế nào, luồng đi qua những trạng thái nào, và trên hết là <em>vì sao</em> dữ liệu dùng chung bị hỏng — đo trên máy thật, rồi ép cho xảy ra ở mọi lần chạy để bạn mổ xẻ, rồi sửa theo ba cách.</p>
+<div class="callout"><strong>Chạy thật, hai loại con số.</strong> Mỗi ví dụ <code>{{…}}</code> là một chương trình Java hoàn chỉnh được generator của trang biên dịch trên JDK 21.0.9 và output là thật — nhưng generator phải in ra cùng một thứ mỗi lần, nên các chương trình đó chỉ in điều <em>luôn luôn</em> đúng ("never above 2,000,000: true"), và ép thời điểm xấu bằng <code>CyclicBarrier</code> hay <code>CountDownLatch</code> khi slide cần cho thấy nó. Bản thân con số của cuộc đua đổi ở mỗi lần chạy; chúng nằm trong các bảng ghi <strong>đo tay</strong> (Mac 10 lõi, JDK 21.0.9, 27/10/2026). Chạy chương trình trên máy bạn: số của bạn sẽ khác, kết luận thì không.</div>
+<table>
+<thead><tr><th>Slide</th><th>Ý chính</th><th>Bạn phải làm được</th></tr></thead>
+<tbody>
+<tr><td>1–4</td><td>vì sao cần luồng, stack và heap</td><td>nói được đa luồng mang lại gì, và luồng dùng chung dữ liệu nào</td></tr>
+<tr><td>5–7</td><td>tạo, trạng thái, interrupt</td><td>khởi động luồng đúng cách, đọc trạng thái, dừng nó một cách lịch sự</td></tr>
+<tr><td>8–10</td><td>cuộc đua</td><td>đo cập nhật bị mất trên count++, giải thích bằng javap, và tái tạo một lần mất có chủ đích</td></tr>
+<tr><td>11–13</td><td>cách sửa và tính nhìn thấy</td><td>sửa bằng synchronized hay lớp atomic, và biết khi nào volatile là đủ</td></tr>
+<tr><td>14</td><td>deadlock</td><td>nhận ra vòng thứ tự khoá, tìm nó bằng JVM, và phá nó</td></tr>
+</tbody>
+</table>
+<p>Đã có, không lặp lại: luồng ảo ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-2">CS.3</a>; bốn câu phỏng vấn concurrency ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2">CS.6</a>; cuộc đua của singleton lười ⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs7-2">CS.7</a>; stack và heap <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1">2.A</a>.</p>`),
+    walkHead('cs8', 1, 14),
+    walk('cs8', [
+      [1, 'Multithreading basics — races you can measure',
+        `<p class="y-chinh">🎯 Cover: threads from zero — how to start and stop them, why two threads updating one variable lose updates (measured), three ways to fix it, deadlock, then the tools a real project uses: thread pools, futures, CompletableFuture, and what all this means inside Spring Boot.</p>
+<p>A <em>thread</em> is one sequence of instructions running inside a program. Every Java program starts with one — the <code>main</code> thread — and can start more. They run <em>concurrently</em>: on a multi-core machine truly at the same time, on one core by taking turns many times per second. That is how a server answers 200 students at once, and how an app can load three things from the network without waiting for each in turn.</p>
+<p>The price is shared memory. Threads of one program see the same objects, and when two of them change the same object at the same moment, the result can be wrong in ways that appear once in a thousand runs. The deck's plan: measure that happening, understand it at the bytecode level, make it happen on purpose, then fix it — and learn the higher-level tools that avoid most of it.</p>
+<p class="meo">🧠 One sentence for the whole deck: <em>shared + mutable + no rule = bug</em>. Remove any one of the three — don't share, don't mutate, or add a rule (a lock, an atomic) — and the bug is gone.</p>`,
+        `<p class="y-chinh">🎯 Slide bìa: luồng từ số 0 — khởi động và dừng chúng thế nào, vì sao hai luồng cùng cập nhật một biến lại làm mất cập nhật (đo thật), ba cách sửa, deadlock, rồi các công cụ dự án thật dùng: bể luồng, future, CompletableFuture, và mọi thứ đó có nghĩa gì bên trong Spring Boot.</p>
+<p><em>Luồng</em> (thread) là một chuỗi lệnh đang chạy bên trong một chương trình. Mọi chương trình Java bắt đầu với một luồng — luồng <code>main</code> — và có thể khởi động thêm. Chúng chạy <em>đồng thời</em>: trên máy nhiều lõi thì thật sự cùng lúc, trên một lõi thì thay phiên nhau nhiều lần mỗi giây. Đó là cách một server trả lời 200 sinh viên cùng lúc, và cách một ứng dụng tải ba thứ qua mạng mà không phải chờ lần lượt từng cái.</p>
+<p>Cái giá là bộ nhớ dùng chung. Các luồng của một chương trình nhìn thấy cùng những đối tượng, và khi hai luồng cùng đổi một đối tượng vào cùng một khoảnh khắc, kết quả có thể sai theo kiểu nghìn lần chạy mới thấy một lần. Kế hoạch của deck: đo chuyện đó xảy ra, hiểu nó ở mức bytecode, cố ý làm nó xảy ra, rồi sửa — và học các công cụ cấp cao giúp tránh phần lớn chuyện này.</p>
+<p class="meo">🧠 Một câu cho cả deck: <em>dùng chung + sửa được + không có luật = lỗi</em>. Bỏ một trong ba — không dùng chung, không sửa, hoặc thêm luật (khoá, atomic) — là hết lỗi.</p>`],
+      [2, 'Where threads already met you',
+        `<p class="y-chinh">🎯 You have touched threads four times already in this course without studying them; this deck connects those dots and goes deeper. Threads are not in the PRO192 PE, but they are in every Spring Boot server you will build.</p>
+<p>⭐ CS.6 asked two interview questions — <code>start()</code> versus <code>run()</code>, and why <code>count++</code> is unsafe — and answered them in one program; here you <em>measure</em> the race (slide 8), see the three bytecode steps (slide 9) and compare three fixes. ⭐ CS.3 ran 10,000 jobs on virtual threads; here you learn the <code>ExecutorService</code> API they plug into (slides 15–21). ⭐ CS.7 showed a lazy singleton creating two objects under two threads; slide 23 measures three fixes. And CS.7 warned that a Spring bean is one shared object; slide 22 shows the request threads that share it.</p>
+<p>Why care now? Spring Boot's embedded Tomcat runs each HTTP request on a thread from a pool of up to 200 by default (<code>server.tomcat.threads.max</code>). Your <code>@Service</code> is one object used by all of them at once. If it keeps anything mutable in a field, the bugs of this deck will appear in production, under load, never on your laptop.</p>
+<div class="callout">⚠️ <strong>Exam room PE (JDK 8)</strong>: no thread questions in the PE. Everything in this deck except virtual threads (slide 21) exists in Java 8 — <code>CompletableFuture</code> arrived exactly in Java 8.</div>`,
+        `<p class="y-chinh">🎯 Bạn đã chạm vào luồng bốn lần trong khoá này mà chưa học kỹ; deck này nối các điểm đó lại và đi sâu hơn. Luồng không có trong đề PE PRO192, nhưng có trong mọi server Spring Boot bạn sẽ xây.</p>
+<p>⭐ CS.6 hỏi hai câu phỏng vấn — <code>start()</code> so với <code>run()</code>, và vì sao <code>count++</code> không an toàn — và trả lời trong một chương trình; ở đây bạn <em>đo</em> cuộc đua (slide 8), thấy ba bước bytecode (slide 9) và so ba cách sửa. ⭐ CS.3 chạy 10.000 việc trên luồng ảo; ở đây bạn học API <code>ExecutorService</code> mà chúng cắm vào (slide 15–21). ⭐ CS.7 cho thấy singleton lười tạo hai đối tượng dưới hai luồng; slide 23 đo ba cách sửa. Và CS.7 đã cảnh báo bean Spring là một đối tượng dùng chung; slide 22 cho thấy các luồng request dùng chung nó.</p>
+<p>Vì sao cần quan tâm ngay? Tomcat nhúng của Spring Boot chạy mỗi request HTTP trên một luồng lấy từ bể tối đa 200 luồng mặc định (<code>server.tomcat.threads.max</code>). <code>@Service</code> của bạn là một đối tượng được tất cả các luồng đó dùng cùng lúc. Nếu nó giữ thứ gì sửa được trong field, các lỗi của deck này sẽ xuất hiện ở môi trường thật, lúc tải cao, không bao giờ trên laptop của bạn.</p>
+<div class="callout">⚠️ <strong>Phòng thi PE (JDK 8)</strong>: đề PE không có câu về luồng. Mọi thứ trong deck trừ luồng ảo (slide 21) đều có trong Java 8 — <code>CompletableFuture</code> ra đời đúng ở Java 8.</div>`],
+      [3, 'Why threads: waiting in parallel',
+        `<p class="y-chinh">🎯 The first win of threads is overlapping <em>waiting</em>: three lookups that each wait 300 ms take at least 900 ms one after another, and about 300 ms on three threads.</p>
+<pre class="trich"><code class="language-java">static String lookup(String what) {                     // pretend: a database or HTTP call
+    try { Thread.sleep(300); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    return what + " ok";
+}</code></pre>
+<pre class="trich"><code class="language-java">String[] results = new String[jobs.length];
+Thread[] threads = new Thread[jobs.length];
+long t1 = System.nanoTime();
+for (int i = 0; i &lt; jobs.length; i++) {
+    final int k = i;
+    threads[k] = new Thread(() -&gt; results[k] = lookup(jobs[k]));   // each thread fills its own slot
+    threads[k].start();
+}
+for (Thread t : threads) t.join();                               // wait for all three
+long par = (System.nanoTime() - t1) / 1_000_000;
+for (String r : results) System.out.println("  " + r);</code></pre>
+<div class="out">&nbsp;&nbsp;book B001 ok<br>
+&nbsp;&nbsp;member M001 ok<br>
+&nbsp;&nbsp;fee rules ok<br>
+&nbsp;&nbsp;book B001 ok<br>
+&nbsp;&nbsp;member M001 ok<br>
+&nbsp;&nbsp;fee rules ok<br>
+one after another took &gt;= 900 ms: true<br>
+three threads took &lt; 600 ms: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true</div>
+<p><code>lookup</code> pretends to be a database or HTTP call: it sleeps 300 ms. The first loop calls it three times on the main thread — each call waits for the previous one, so the total is at least 900 ms. The second version starts three threads, one per job, then calls <code>join()</code> on each: "wait until this thread has finished". All three sleeps overlap, so the whole thing takes about 300 ms. Each thread writes into <em>its own</em> slot of <code>results</code>, which is why no locking is needed here — remember that design; it is the safest kind.</p>
+<p>The output prints the comparisons rather than the milliseconds, because exact times change from machine to machine — but "at least 900" and "under 600" hold everywhere. Two words to keep apart: <strong>concurrency</strong> means several tasks are in progress at once (they may take turns on one core); <strong>parallelism</strong> means they execute at the same instant on several cores. Waiting tasks gain from concurrency alone; CPU-heavy tasks need real parallelism.</p>
+<div class="pitfall">Trap: calling <code>join()</code> right after each <code>start()</code> inside the first loop would wait for each thread before starting the next — 900 ms again. Start them all, then join them all.</div>`,
+        `<p class="y-chinh">🎯 Lợi ích đầu tiên của luồng là cho các lần <em>chờ</em> chồng lên nhau: ba lần tra cứu mỗi lần chờ 300 ms thì làm lần lượt mất ít nhất 900 ms, còn trên ba luồng chỉ khoảng 300 ms.</p>
+<pre class="trich"><code class="language-java">static String lookup(String what) {                     // giả lập: một lời gọi CSDL hay HTTP
+    try { Thread.sleep(300); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    return what + " ok";
+}</code></pre>
+<pre class="trich"><code class="language-java">String[] results = new String[jobs.length];
+Thread[] threads = new Thread[jobs.length];
+long t1 = System.nanoTime();
+for (int i = 0; i &lt; jobs.length; i++) {
+    final int k = i;
+    threads[k] = new Thread(() -&gt; results[k] = lookup(jobs[k]));   // mỗi luồng điền ô của mình
+    threads[k].start();
+}
+for (Thread t : threads) t.join();                               // chờ đủ ba
+long par = (System.nanoTime() - t1) / 1_000_000;
+for (String r : results) System.out.println("  " + r);</code></pre>
+<div class="out">&nbsp;&nbsp;book B001 ok<br>
+&nbsp;&nbsp;member M001 ok<br>
+&nbsp;&nbsp;fee rules ok<br>
+&nbsp;&nbsp;book B001 ok<br>
+&nbsp;&nbsp;member M001 ok<br>
+&nbsp;&nbsp;fee rules ok<br>
+one after another took &gt;= 900 ms: true<br>
+three threads took &lt; 600 ms: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true</div>
+<p><code>lookup</code> giả làm một lời gọi CSDL hay HTTP: nó ngủ 300 ms. Vòng lặp đầu gọi nó ba lần trên luồng main — mỗi lần chờ lần trước xong, nên tổng ít nhất 900 ms. Bản thứ hai khởi động ba luồng, mỗi việc một luồng, rồi gọi <code>join()</code> trên từng luồng: "chờ tới khi luồng này xong". Ba lần ngủ chồng lên nhau, nên cả việc chỉ khoảng 300 ms. Mỗi luồng ghi vào ô <em>riêng của nó</em> trong <code>results</code>, vì thế ở đây không cần khoá — hãy nhớ kiểu thiết kế đó; nó là loại an toàn nhất.</p>
+<p>Output in ra phép so sánh thay vì số mili giây, vì thời gian chính xác đổi theo máy — nhưng "ít nhất 900" và "dưới 600" đúng ở mọi nơi. Hai từ cần phân biệt: <strong>đồng thời</strong> (concurrency) là nhiều việc cùng đang dở dang (có thể thay phiên trên một lõi); <strong>song song</strong> (parallelism) là chúng thực thi cùng một khoảnh khắc trên nhiều lõi. Việc chờ chỉ cần đồng thời là đã lợi; việc nặng CPU mới cần song song thật.</p>
+<div class="pitfall">Bẫy: gọi <code>join()</code> ngay sau mỗi <code>start()</code> trong vòng lặp đầu sẽ chờ từng luồng xong mới khởi động luồng sau — lại 900 ms. Khởi động hết, rồi mới join hết.</div>`],
+      [4, 'One process, many threads, one heap',
+        `<p class="y-chinh">🎯 Every thread has its own stack, so local variables are private and always safe; all threads of a program share one heap, so objects and static fields are shared and every write to them needs a rule.</p>
+<pre class="trich"><code class="language-java">Tally shared = new Tally();                         // ONE object, two threads see it
+int[] mine = new int[2];                            // where each thread reports its local count
+Thread[] ts = new Thread[2];
+for (int k = 0; k &lt; 2; k++) {
+    final int id = k;
+    ts[k] = new Thread(() -&gt; {
+        int local = 0;                              // on THIS thread's stack
+        for (int i = 0; i &lt; 100_000; i++) { local++; shared.total++; }
+        mine[id] = local;
+    }, "worker-" + k);
+    ts[k].start();
+}
+for (Thread t : ts) t.join();
+System.out.println("worker-0 local = " + mine[0] + ", worker-1 local = " + mine[1]);
+System.out.println("shared.total never above 200000: " + (shared.total &lt;= 200_000));</code></pre>
+<div class="out">worker-0 local = 100000, worker-1 local = 100000<br>
+shared.total never above 200000: true</div>
+<p>Two workers each run the same loop 100,000 times. <code>local</code> is declared inside the lambda, so each thread gets its own copy in its own stack frame — the diagram's two boxes. Each reports exactly 100,000, every run. <code>shared</code> points to one <code>Tally</code> object on the heap; both threads do <code>shared.total++</code> on the same field. The program can only promise that it never goes <em>above</em> 200,000; how far below it lands changes every run — that is the race of slide 8, already hiding in this small program.</p>
+<p>This is the same stack/heap picture as Chapter 2 (<a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1">2.A</a>), now with more than one stack. A <em>process</em> is a running program with its own memory; its threads share that memory. That is what makes threads cheap to communicate — they just read the same object — and dangerous for the same reason.</p>
+<div class="callout">🧭 <strong>Spring Boot</strong>: a request's data in method parameters and local variables lives on that request thread's stack — safe. A field of a singleton <code>@Service</code> lives on the heap — shared by all request threads.</div>
+<p class="meo">🧠 The lambda can read <code>shared</code> and <code>mine</code> because they are effectively final references (⭐ CS.1) — the reference cannot change, but the object it points to can. "Final" does not mean "thread-safe".</p>`,
+        `<p class="y-chinh">🎯 Mỗi luồng có stack riêng, nên biến cục bộ là riêng tư và luôn an toàn; mọi luồng của một chương trình dùng chung một heap, nên đối tượng và field static là dùng chung, và mọi lần ghi vào chúng đều cần một luật.</p>
+<pre class="trich"><code class="language-java">Tally shared = new Tally();                         // MỘT đối tượng, hai luồng cùng thấy
+int[] mine = new int[2];                            // chỗ mỗi luồng báo bộ đếm cục bộ
+Thread[] ts = new Thread[2];
+for (int k = 0; k &lt; 2; k++) {
+    final int id = k;
+    ts[k] = new Thread(() -&gt; {
+        int local = 0;                              // trên stack của CHÍNH luồng này
+        for (int i = 0; i &lt; 100_000; i++) { local++; shared.total++; }
+        mine[id] = local;
+    }, "worker-" + k);
+    ts[k].start();
+}
+for (Thread t : ts) t.join();
+System.out.println("worker-0 local = " + mine[0] + ", worker-1 local = " + mine[1]);
+System.out.println("shared.total never above 200000: " + (shared.total &lt;= 200_000));</code></pre>
+<div class="out">worker-0 local = 100000, worker-1 local = 100000<br>
+shared.total never above 200000: true</div>
+<p>Hai luồng thợ cùng chạy một vòng lặp 100.000 lần. <code>local</code> được khai bên trong lambda, nên mỗi luồng có bản riêng trong khung stack của mình — hai ô trong hình. Mỗi luồng báo đúng 100.000, mọi lần chạy. <code>shared</code> trỏ tới một đối tượng <code>Tally</code> trên heap; cả hai luồng làm <code>shared.total++</code> trên cùng một field. Chương trình chỉ hứa được là nó không bao giờ <em>vượt</em> 200.000; nó hụt bao nhiêu thì đổi mỗi lần chạy — đó là cuộc đua của slide 8, đã nấp sẵn trong chương trình nhỏ này.</p>
+<p>Đây cùng bức tranh stack/heap của Chương 2 (<a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1">2.A</a>), giờ có nhiều hơn một stack. <em>Tiến trình</em> (process) là một chương trình đang chạy với bộ nhớ riêng; các luồng của nó dùng chung bộ nhớ đó. Chính điều đó làm luồng trao đổi với nhau rẻ — chỉ cần đọc cùng một đối tượng — và nguy hiểm cũng vì lý do ấy.</p>
+<div class="callout">🧭 <strong>Spring Boot</strong>: dữ liệu của một request nằm trong tham số phương thức và biến cục bộ thì sống trên stack của luồng request đó — an toàn. Field của một <code>@Service</code> singleton thì sống trên heap — mọi luồng request dùng chung.</div>
+<p class="meo">🧠 Lambda đọc được <code>shared</code> và <code>mine</code> vì chúng là tham chiếu effectively final (⭐ CS.1) — tham chiếu không đổi được, nhưng đối tượng nó trỏ tới thì đổi được. "Final" không có nghĩa "an toàn luồng".</p>`],
+      [5, 'Three ways to start a thread — and run()',
+        `<p class="y-chinh">🎯 A thread starts with <code>start()</code>: extend <code>Thread</code>, pass a <code>Runnable</code>, or pass a lambda. Calling <code>run()</code> yourself is just a method call on the current thread, and a thread can be started only once.</p>
+<pre class="trich"><code class="language-java">static class Printer extends Thread {                       // 1. extend Thread
+    Printer() { super("printer"); }
+    @Override public void run() { System.out.println("  1 extends Thread  on " + Thread.currentThread().getName()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">static class Mailer implements Runnable {                   // 2. implement Runnable (the job is separate from the thread)
+    public void run() { System.out.println("  2 Runnable        on " + Thread.currentThread().getName()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Thread a = new Printer();
+Thread b = new Thread(new Mailer(), "mailer");
+Thread c = new Thread(() -&gt; System.out.println("  3 lambda          on " + Thread.currentThread().getName()), "logger");
+for (Thread t : new Thread[] { a, b, c }) { t.start(); t.join(); }   // join: wait, so the lines stay in order
+
+Thread d = new Thread(() -&gt; System.out.println("  run() executes on " + Thread.currentThread().getName()), "never-started");
+d.run();                                                // a plain method call: no new thread
+System.out.println("  d alive after run(): " + d.isAlive() + ", state " + d.getState());
+try { a.start(); }                                      // a thread can be started only once
+catch (IllegalThreadStateException e) { System.out.println("  start() twice -&gt; IllegalThreadStateException"); }</code></pre>
+<div class="out">&nbsp;&nbsp;1 extends Thread &nbsp;on printer<br>
+&nbsp;&nbsp;2 Runnable &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on mailer<br>
+&nbsp;&nbsp;3 lambda &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on logger<br>
+&nbsp;&nbsp;run() executes on main<br>
+&nbsp;&nbsp;d alive after run(): false, state NEW<br>
+&nbsp;&nbsp;start() twice -&gt; IllegalThreadStateException</div>
+<p>The three ways produce the same thing — a <code>Thread</code> object whose <code>run()</code> holds the job — and each line reports the name of the thread it ran on: <code>printer</code>, <code>mailer</code>, <code>logger</code>. The program joins each thread before starting the next only so that the three lines print in a fixed order; normally you would start them all first. Prefer a <code>Runnable</code> or a lambda: the <em>job</em> stays separate from the <em>thread</em>, so the same job can later be handed to a thread pool (slide 15), and your class keeps its one superclass.</p>
+<p>The last block shows the two classic mistakes. <code>d.run()</code> prints "run() executes on main": no new thread was created, the job ran on the caller, and <code>d</code> is still <code>NEW</code> and not alive. And calling <code>start()</code> a second time on a finished thread throws <code>IllegalThreadStateException</code> — a <code>Thread</code> object is single-use; to run the job again, create a new thread or use a pool.</p>
+<div class="pitfall">Trap (FE-style question): "What does <code>t.run()</code> do?" — it executes the job synchronously on the current thread. Only <code>start()</code> asks the JVM for a new thread, which then calls <code>run()</code>.</div>`,
+        `<p class="y-chinh">🎯 Một luồng bắt đầu bằng <code>start()</code>: kế thừa <code>Thread</code>, truyền một <code>Runnable</code>, hoặc truyền một lambda. Tự gọi <code>run()</code> chỉ là một lời gọi phương thức trên luồng hiện tại, và mỗi luồng chỉ start được một lần.</p>
+<pre class="trich"><code class="language-java">static class Printer extends Thread {                       // 1. kế thừa Thread
+    Printer() { super("printer"); }
+    @Override public void run() { System.out.println("  1 extends Thread  on " + Thread.currentThread().getName()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">static class Mailer implements Runnable {                   // 2. cài Runnable (việc tách khỏi luồng)
+    public void run() { System.out.println("  2 Runnable        on " + Thread.currentThread().getName()); }
+}</code></pre>
+<pre class="trich"><code class="language-java">Thread a = new Printer();
+Thread b = new Thread(new Mailer(), "mailer");
+Thread c = new Thread(() -&gt; System.out.println("  3 lambda          on " + Thread.currentThread().getName()), "logger");
+for (Thread t : new Thread[] { a, b, c }) { t.start(); t.join(); }   // join: chờ, để các dòng giữ thứ tự
+
+Thread d = new Thread(() -&gt; System.out.println("  run() executes on " + Thread.currentThread().getName()), "never-started");
+d.run();                                                // một lời gọi thường: không có luồng mới
+System.out.println("  d alive after run(): " + d.isAlive() + ", state " + d.getState());
+try { a.start(); }                                      // luồng chỉ start được một lần
+catch (IllegalThreadStateException e) { System.out.println("  start() twice -&gt; IllegalThreadStateException"); }</code></pre>
+<div class="out">&nbsp;&nbsp;1 extends Thread &nbsp;on printer<br>
+&nbsp;&nbsp;2 Runnable &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on mailer<br>
+&nbsp;&nbsp;3 lambda &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on logger<br>
+&nbsp;&nbsp;run() executes on main<br>
+&nbsp;&nbsp;d alive after run(): false, state NEW<br>
+&nbsp;&nbsp;start() twice -&gt; IllegalThreadStateException</div>
+<p>Ba cách cho ra cùng một thứ — một đối tượng <code>Thread</code> mà <code>run()</code> chứa công việc — và mỗi dòng báo tên luồng nó chạy trên: <code>printer</code>, <code>mailer</code>, <code>logger</code>. Chương trình join từng luồng trước khi khởi động luồng sau chỉ để ba dòng in theo thứ tự cố định; bình thường bạn sẽ khởi động hết trước. Nên dùng <code>Runnable</code> hoặc lambda: <em>công việc</em> tách khỏi <em>luồng</em>, nên cùng một việc về sau giao được cho bể luồng (slide 15), và lớp của bạn giữ được suất lớp cha duy nhất.</p>
+<p>Khối cuối cho thấy hai lỗi kinh điển. <code>d.run()</code> in "run() executes on main": không có luồng mới nào được tạo, việc chạy trên chính người gọi, và <code>d</code> vẫn ở trạng thái <code>NEW</code>, không sống. Còn gọi <code>start()</code> lần thứ hai trên một luồng đã xong sẽ ném <code>IllegalThreadStateException</code> — đối tượng <code>Thread</code> chỉ dùng một lần; muốn chạy lại việc thì tạo luồng mới hoặc dùng bể luồng.</p>
+<div class="pitfall">Bẫy (dạng câu FE): "<code>t.run()</code> làm gì?" — nó thực thi công việc đồng bộ trên luồng hiện tại. Chỉ <code>start()</code> mới xin JVM một luồng mới, rồi luồng đó gọi <code>run()</code>.</div>`],
+      [6, 'Thread states, watched live',
+        `<p class="y-chinh">🎯 <code>Thread.getState()</code> tells you where a thread is: NEW, RUNNABLE, BLOCKED (waiting for a lock), WAITING (waiting without a time limit), TIMED_WAITING (waiting with one) or TERMINATED. The program walks one thread through five of them.</p>
+<pre class="trich"><code class="language-java">CountDownLatch go = new CountDownLatch(1);
+Thread worker = new Thread(() -&gt; {
+    try {
+        Thread.sleep(300);                 // TIMED_WAITING: waits with a time limit
+        go.await();                        // WAITING: waits until someone signals
+    } catch (InterruptedException e) { return; }
+    synchronized (LOCK) { }                // BLOCKED while main holds LOCK
+}, "worker");
+
+System.out.println("before start(): " + worker.getState());
+worker.start();
+System.out.println("sleeping:       " + waitFor(worker, Thread.State.TIMED_WAITING));
+synchronized (LOCK) {                      // main takes the lock first
+    System.out.println("on the latch:   " + waitFor(worker, Thread.State.WAITING));
+    go.countDown();                        // let it go on — straight into the locked door
+    System.out.println("at the lock:    " + waitFor(worker, Thread.State.BLOCKED));
+}                                          // main releases LOCK here
+worker.join();                             // wait until it ends
+System.out.println("after join():   " + worker.getState());</code></pre>
+<div class="out">before start(): NEW<br>
+sleeping: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIMED_WAITING<br>
+on the latch: &nbsp;&nbsp;WAITING<br>
+at the lock: &nbsp;&nbsp;&nbsp;BLOCKED<br>
+after join(): &nbsp;&nbsp;TERMINATED</div>
+<p>Before <code>start()</code> the thread is <strong>NEW</strong>. The worker first sleeps 300 ms: <strong>TIMED_WAITING</strong> — waiting, but with a time limit (<code>sleep(ms)</code>, <code>join(ms)</code>). Then it waits on a <code>CountDownLatch</code> until someone counts it down: <strong>WAITING</strong> — no time limit (<code>join()</code>, <code>await()</code>, <code>wait()</code>). Meanwhile <code>main</code> has taken <code>LOCK</code>; when it releases the latch, the worker runs into <code>synchronized (LOCK)</code> and must wait for the lock: <strong>BLOCKED</strong>. When main leaves its block, the worker gets the lock, finishes, and after <code>join()</code> it is <strong>TERMINATED</strong>. The helper <code>waitFor</code> polls every millisecond so the program prints each state once it has been reached — that is what makes the output repeatable.</p>
+<p>The missing one, <strong>RUNNABLE</strong>, is the state between those waits. Java does not distinguish "running on a core right now" from "ready, waiting for a core" — both are RUNNABLE — which is why a busy loop and a thread waiting for a CPU look the same in a thread dump.</p>
+<div class="callout">🧭 <strong>In real life</strong>: <code>jstack &lt;pid&gt;</code> (or a thread dump from IntelliJ, or Spring Boot Actuator's <code>/actuator/threaddump</code>) lists every thread with exactly these state names — the first thing to read when a server "hangs".</div>`,
+        `<p class="y-chinh">🎯 <code>Thread.getState()</code> cho biết luồng đang ở đâu: NEW, RUNNABLE, BLOCKED (chờ khoá), WAITING (chờ không hạn giờ), TIMED_WAITING (chờ có hạn giờ) hoặc TERMINATED. Chương trình dắt một luồng đi qua năm trạng thái.</p>
+<pre class="trich"><code class="language-java">CountDownLatch go = new CountDownLatch(1);
+Thread worker = new Thread(() -&gt; {
+    try {
+        Thread.sleep(300);                 // chờ có hạn giờ
+        go.await();                        // chờ tới khi có người báo
+    } catch (InterruptedException e) { return; }
+    synchronized (LOCK) { }                // bị chặn khi main đang giữ LOCK
+}, "worker");
+
+System.out.println("before start(): " + worker.getState());
+worker.start();
+System.out.println("sleeping:       " + waitFor(worker, Thread.State.TIMED_WAITING));
+synchronized (LOCK) {                      // main lấy khoá trước
+    System.out.println("on the latch:   " + waitFor(worker, Thread.State.WAITING));
+    go.countDown();                        // cho đi tiếp — đâm vào cửa đang khoá
+    System.out.println("at the lock:    " + waitFor(worker, Thread.State.BLOCKED));
+}                                          // main nhả LOCK ở đây
+worker.join();                             // chờ tới khi nó kết thúc
+System.out.println("after join():   " + worker.getState());</code></pre>
+<div class="out">before start(): NEW<br>
+sleeping: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIMED_WAITING<br>
+on the latch: &nbsp;&nbsp;WAITING<br>
+at the lock: &nbsp;&nbsp;&nbsp;BLOCKED<br>
+after join(): &nbsp;&nbsp;TERMINATED</div>
+<p>Trước <code>start()</code> luồng ở <strong>NEW</strong>. Luồng thợ ngủ 300 ms trước: <strong>TIMED_WAITING</strong> — đang chờ nhưng có hạn giờ (<code>sleep(ms)</code>, <code>join(ms)</code>). Rồi nó chờ trên một <code>CountDownLatch</code> tới khi có người đếm lùi: <strong>WAITING</strong> — không hạn giờ (<code>join()</code>, <code>await()</code>, <code>wait()</code>). Trong lúc đó <code>main</code> đã lấy <code>LOCK</code>; khi main thả latch, luồng thợ chạy vào <code>synchronized (LOCK)</code> và phải chờ khoá: <strong>BLOCKED</strong>. Khi main rời khối của mình, luồng thợ lấy được khoá, chạy xong, và sau <code>join()</code> thì là <strong>TERMINATED</strong>. Hàm phụ <code>waitFor</code> hỏi mỗi mili giây để chương trình in mỗi trạng thái khi đã tới — đó là thứ làm output lặp lại được.</p>
+<p>Trạng thái còn thiếu, <strong>RUNNABLE</strong>, là trạng thái giữa các lần chờ đó. Java không phân biệt "đang chạy trên một lõi" với "sẵn sàng, đang chờ lõi" — cả hai đều là RUNNABLE — vì thế một vòng lặp bận và một luồng đang chờ CPU trông giống hệt nhau trong thread dump.</p>
+<div class="callout">🧭 <strong>Ngoài đời</strong>: <code>jstack &lt;pid&gt;</code> (hoặc thread dump của IntelliJ, hay <code>/actuator/threaddump</code> của Spring Boot Actuator) liệt kê mọi luồng với đúng những tên trạng thái này — thứ đầu tiên cần đọc khi server "treo".</div>`],
+      [7, 'interrupt(): a polite request to stop',
+        `<p class="y-chinh">🎯 Java has no safe way to kill a thread. <code>interrupt()</code> only sets a flag: a thread blocked in <code>sleep</code>/<code>wait</code>/<code>join</code> wakes with <code>InterruptedException</code> (and the flag is cleared), a busy thread must check <code>isInterrupted()</code> itself.</p>
+<pre class="trich"><code class="language-java">Thread sleeper = new Thread(() -&gt; {
+    try {
+        Thread.sleep(10_000);                                 // a long nap
+        log.add("sleeper: woke up normally");
+    } catch (InterruptedException e) {
+        log.add("sleeper: InterruptedException, flag now " + Thread.currentThread().isInterrupted());
+        Thread.currentThread().interrupt();                   // restore the flag for callers
+        log.add("sleeper: flag restored -&gt; " + Thread.currentThread().isInterrupted());
+    }
+}, "sleeper");</code></pre>
+<pre class="trich"><code class="language-java">Thread busy = new Thread(() -&gt; {
+    long scanned = 0;
+    while (!Thread.currentThread().isInterrupted()) scanned++;   // checks the flag itself
+    log.add("busy: saw the flag and stopped, scanned &gt; 0: " + (scanned &gt; 0));
+}, "busy");</code></pre>
+<pre class="trich"><code class="language-java">sleeper.start(); busy.start();
+Thread.sleep(200);
+sleeper.interrupt();
+sleeper.join();
+busy.interrupt();
+busy.join();
+log.forEach(System.out::println);
+System.out.println("both finished: " + (!sleeper.isAlive() &amp;&amp; !busy.isAlive()));</code></pre>
+<div class="out">sleeper: InterruptedException, flag now false<br>
+sleeper: flag restored -&gt; true<br>
+busy: saw the flag and stopped, scanned &gt; 0: true<br>
+both finished: true</div>
+<p>The sleeper is in a 10-second nap when <code>main</code> interrupts it. It wakes immediately with <code>InterruptedException</code> — and the first output line shows the surprise: inside the <code>catch</code>, <code>isInterrupted()</code> is already <code>false</code>. Throwing the exception <em>cleared</em> the flag. If the code that catches it cannot stop right there (a library method, a step deep inside a job), it must <em>restore</em> the flag with <code>Thread.currentThread().interrupt()</code> so that callers higher up still know a stop was requested — second line: true again.</p>
+<p>The busy thread never blocks, so no exception will ever reach it. It loops on <code>!Thread.currentThread().isInterrupted()</code> and stops on its own when the flag goes up. The program collects messages in a synchronized list and prints them from <code>main</code> after both <code>join()</code>s, so the order is fixed. Slide 24 measures what happens to a pool when a job swallows the exception instead: it cannot be stopped.</p>
+<div class="pitfall">Never: <code>Thread.stop()</code>. It was deprecated in Java 1.2 because it killed a thread in the middle of whatever it was doing, leaving objects half-updated; since JDK 20 it simply throws <code>UnsupportedOperationException</code> (checked on JDK 21).</div>`,
+        `<p class="y-chinh">🎯 Java không có cách an toàn để giết một luồng. <code>interrupt()</code> chỉ bật một cờ: luồng đang bị chặn trong <code>sleep</code>/<code>wait</code>/<code>join</code> sẽ thức dậy với <code>InterruptedException</code> (và cờ bị xoá), còn luồng đang bận phải tự kiểm <code>isInterrupted()</code>.</p>
+<pre class="trich"><code class="language-java">Thread sleeper = new Thread(() -&gt; {
+    try {
+        Thread.sleep(10_000);                                 // ngủ lâu
+        log.add("sleeper: woke up normally");
+    } catch (InterruptedException e) {
+        log.add("sleeper: InterruptedException, flag now " + Thread.currentThread().isInterrupted());
+        Thread.currentThread().interrupt();                   // đặt lại cờ cho người gọi phía trên
+        log.add("sleeper: flag restored -&gt; " + Thread.currentThread().isInterrupted());
+    }
+}, "sleeper");</code></pre>
+<pre class="trich"><code class="language-java">Thread busy = new Thread(() -&gt; {
+    long scanned = 0;
+    while (!Thread.currentThread().isInterrupted()) scanned++;   // tự kiểm cờ
+    log.add("busy: saw the flag and stopped, scanned &gt; 0: " + (scanned &gt; 0));
+}, "busy");</code></pre>
+<pre class="trich"><code class="language-java">sleeper.start(); busy.start();
+Thread.sleep(200);
+sleeper.interrupt();
+sleeper.join();
+busy.interrupt();
+busy.join();
+log.forEach(System.out::println);
+System.out.println("both finished: " + (!sleeper.isAlive() &amp;&amp; !busy.isAlive()));</code></pre>
+<div class="out">sleeper: InterruptedException, flag now false<br>
+sleeper: flag restored -&gt; true<br>
+busy: saw the flag and stopped, scanned &gt; 0: true<br>
+both finished: true</div>
+<p>Luồng ngủ đang trong giấc 10 giây thì <code>main</code> ngắt nó. Nó dậy ngay với <code>InterruptedException</code> — và dòng output đầu cho thấy điều bất ngờ: trong <code>catch</code>, <code>isInterrupted()</code> đã là <code>false</code>. Việc ném exception đã <em>xoá</em> cờ. Nếu đoạn code bắt exception không dừng được ngay tại đó (một phương thức thư viện, một bước sâu trong công việc), nó phải <em>đặt lại</em> cờ bằng <code>Thread.currentThread().interrupt()</code> để người gọi phía trên vẫn biết có yêu cầu dừng — dòng hai: lại true.</p>
+<p>Luồng bận không bao giờ bị chặn, nên không exception nào tới được nó. Nó lặp trên <code>!Thread.currentThread().isInterrupted()</code> và tự dừng khi cờ bật lên. Chương trình gom thông điệp vào một list đồng bộ và in từ <code>main</code> sau cả hai <code>join()</code>, nên thứ tự cố định. Slide 24 đo chuyện xảy ra với một bể luồng khi công việc nuốt exception thay vào đó: không dừng nó được.</p>
+<div class="pitfall">Không bao giờ: <code>Thread.stop()</code>. Nó bị đánh dấu lỗi thời từ Java 1.2 vì giết luồng giữa chừng việc đang làm, để lại đối tượng sửa dở; từ JDK 20 nó chỉ còn ném <code>UnsupportedOperationException</code> (đã kiểm trên JDK 21).</div>`],
+      [8, 'A race condition, measured: count++',
+        `<p class="y-chinh">🎯 Two threads each add 1 to a shared <code>int</code> a million times. The answer should be 2,000,000. Measured by hand on a 10-core machine, it was about 1,000,000 — half of the updates vanished — and the exact number changed on every run.</p>
+<pre class="trich"><code class="language-java">static int count = 0;                                   // shared: a static field on the heap
+static final Runnable WORK = () -&gt; {
+    for (int i = 0; i &lt; 1_000_000; i++) count++;        // read, add 1, write back
+};</code></pre>
+<pre class="trich"><code class="language-java">count = 0;
+WORK.run(); WORK.run();                             // one thread, twice, one after another
+System.out.println("one thread, twice:   " + count);
+
+boolean neverAbove = true;
+for (int round = 1; round &lt;= 5; round++) {
+    count = 0;
+    Thread t1 = new Thread(WORK), t2 = new Thread(WORK);
+    t1.start(); t2.start();                         // two threads AT THE SAME TIME
+    t1.join(); t2.join();
+    neverAbove &amp;= count &lt;= 2_000_000;
+}
+System.out.println("two threads at once: never above 2000000 in 5 rounds: " + neverAbove);
+System.out.println("(the exact numbers change on every run — see the measured table)");</code></pre>
+<div class="out">one thread, twice: &nbsp;&nbsp;2000000<br>
+two threads at once: never above 2000000 in 5 rounds: true<br>
+(the exact numbers change on every run — see the measured table)</div>
+<table>
+<thead><tr><th>run</th><th>2 threads × 1,000,000 (expected 2,000,000)</th><th>2 threads × 100,000 (expected 200,000)</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>1,000,068</td><td>104,533</td></tr>
+<tr><td>2</td><td>1,010,984</td><td>200,000</td></tr>
+<tr><td>3</td><td>1,004,129</td><td>100,000</td></tr>
+<tr><td>4</td><td>1,008,324</td><td>200,000</td></tr>
+<tr><td>5</td><td>1,018,989</td><td>200,000</td></tr>
+</tbody>
+</table>
+<p>The table is <strong>measured by hand</strong> (Mac with 10 cores, JDK 21.0.9, 27/10/2026); your numbers will differ, which is the point. The program itself prints only what is always true: one thread doing the work twice gets exactly 2,000,000, and two threads never get <em>more</em> than 2,000,000. This bug is a <strong>race condition</strong>: the result depends on how the two threads' steps happen to interleave.</p>
+<p>Read the second column carefully. With only 100,000 increments, three runs out of five were <em>exactly</em> right: the first thread finished before the second one even started, so they never overlapped. Two runs lost about half. A tester who runs this twice and sees 200,000 will call it correct. That is why concurrency bugs survive into production — they need the wrong timing, and light tests rarely produce it. Even with the JIT compiler switched off (<code>-Xint</code>) the 1,000,000 version lost about half, so this is not a compiler trick: two cores really were adding at the same time.</p>
+<div class="pitfall">Trap: "I tested it and it worked" proves nothing for shared mutable state. A race can only be ruled out by reasoning (every access under one rule), never by a few green runs.</div>`,
+        `<p class="y-chinh">🎯 Hai luồng, mỗi luồng cộng 1 vào một <code>int</code> dùng chung một triệu lần. Đáp số phải là 2.000.000. Đo tay trên máy 10 lõi, nó ra khoảng 1.000.000 — một nửa số lần cập nhật biến mất — và con số chính xác đổi ở mỗi lần chạy.</p>
+<pre class="trich"><code class="language-java">static int count = 0;                                   // dùng chung: field static
+static final Runnable WORK = () -&gt; {
+    for (int i = 0; i &lt; 1_000_000; i++) count++;        // đọc, cộng 1, ghi lại
+};</code></pre>
+<pre class="trich"><code class="language-java">count = 0;
+WORK.run(); WORK.run();                             // một luồng, hai lần, lần lượt
+System.out.println("one thread, twice:   " + count);
+
+boolean neverAbove = true;
+for (int round = 1; round &lt;= 5; round++) {
+    count = 0;
+    Thread t1 = new Thread(WORK), t2 = new Thread(WORK);
+    t1.start(); t2.start();                         // hai luồng CÙNG LÚC
+    t1.join(); t2.join();
+    neverAbove &amp;= count &lt;= 2_000_000;
+}
+System.out.println("two threads at once: never above 2000000 in 5 rounds: " + neverAbove);
+System.out.println("(the exact numbers change on every run — see the measured table)");</code></pre>
+<div class="out">one thread, twice: &nbsp;&nbsp;2000000<br>
+two threads at once: never above 2000000 in 5 rounds: true<br>
+(the exact numbers change on every run — see the measured table)</div>
+<table>
+<thead><tr><th>lần chạy</th><th>2 luồng × 1.000.000 (đúng phải là 2.000.000)</th><th>2 luồng × 100.000 (đúng phải là 200.000)</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>1.000.068</td><td>104.533</td></tr>
+<tr><td>2</td><td>1.010.984</td><td>200.000</td></tr>
+<tr><td>3</td><td>1.004.129</td><td>100.000</td></tr>
+<tr><td>4</td><td>1.008.324</td><td>200.000</td></tr>
+<tr><td>5</td><td>1.018.989</td><td>200.000</td></tr>
+</tbody>
+</table>
+<p>Bảng là <strong>đo tay</strong> (Mac 10 lõi, JDK 21.0.9, 27/10/2026); số của bạn sẽ khác, và đó chính là vấn đề. Bản thân chương trình chỉ in điều luôn đúng: một luồng làm việc hai lần thì được đúng 2.000.000, và hai luồng không bao giờ được <em>nhiều hơn</em> 2.000.000. Lỗi này là một <strong>race condition</strong> (điều kiện tranh đua): kết quả phụ thuộc vào cách các bước của hai luồng tình cờ xen kẽ nhau.</p>
+<p>Đọc kỹ cột thứ hai. Chỉ với 100.000 lần cộng, ba trên năm lần chạy đúng <em>chính xác</em>: luồng đầu xong trước khi luồng sau kịp khởi động, nên chúng không bao giờ chồng lên nhau. Hai lần còn lại mất khoảng một nửa. Người kiểm thử chạy hai lần thấy 200.000 sẽ kết luận là đúng. Đó là lý do lỗi đồng thời lọt ra môi trường thật — chúng cần đúng thời điểm sai, và test nhẹ hiếm khi tạo ra nó. Ngay cả khi tắt trình biên dịch JIT (<code>-Xint</code>), bản 1.000.000 vẫn mất khoảng một nửa, nên đây không phải mẹo của trình biên dịch: hai lõi thật sự đang cộng cùng lúc.</p>
+<div class="pitfall">Bẫy: "em test thì chạy đúng" chẳng chứng minh gì với trạng thái dùng chung sửa được. Chỉ có lập luận (mọi lần truy cập đều theo một luật) mới loại được race, không bao giờ là vài lần chạy xanh.</div>`],
+      [9, 'Why: count++ is read, add, write',
+        `<p class="y-chinh">🎯 <code>count++</code> is one character in Java but three bytecode instructions: <code>getstatic</code> (read), <code>iadd</code> (add, in the thread's own operand stack), <code>putstatic</code> (write). Between the read and the write, another thread can do the same — and one update is lost.</p>
+<pre class="trich"><code class="language-java">viet("Counter.java",
+    "public class Counter {\\n" +
+    "    static int count;\\n" +
+    "    static void inc() { count++; }\\n" +
+    "}\\n");
+lenh("javac", "Counter.java");
+lenhLoc("static void inc|getstatic|iconst_1|iadd|putstatic|8: return", "javap", "-c", "Counter");</code></pre>
+<div class="out">&gt; javac Counter.java<br>
+&gt; javap -c Counter | grep -E "static void inc|getstatic|iconst_1|iadd|putstatic|8: return"<br>
+&nbsp;&nbsp;static void inc();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0: getstatic &nbsp;&nbsp;&nbsp;&nbsp;#7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Field count:I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3: iconst_1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4: iadd<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5: putstatic &nbsp;&nbsp;&nbsp;&nbsp;#7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Field count:I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8: return</div>
+<p>The console session compiles a one-method class and runs <code>javap -c</code>, the disassembler you met in ⭐ CS.5. <code>inc()</code> is four instructions: <code>getstatic</code> copies the current value of <code>count</code> onto this thread's operand stack, <code>iconst_1</code> pushes 1, <code>iadd</code> adds them — still only on this thread's stack — and <code>putstatic</code> writes the result back to the field. Nothing in between stops another thread.</p>
+<p>The timeline on the slide shows the losing interleaving: count is 41; thread A reads 41; thread B reads 41; both add 1 in their own stacks and get 42; A writes 42; B writes 42. Two increments happened and the field moved by one. B's write was based on a <strong>stale read</strong>, so it erased A's update. Repeat that hundreds of thousands of times on two cores and you get the table of slide 8.</p>
+<p class="meo">🧠 The pattern to look for in any language: <em>read-modify-write</em> on shared data (<code>x++</code>, <code>balance -= fee</code>, <code>list.add</code> on an <code>ArrayList</code>) and <em>check-then-act</em> (<code>if (x == null) x = …</code>, <code>if (!map.containsKey(k)) map.put(k, v)</code>). Both are several steps pretending to be one.</p>`,
+        `<p class="y-chinh">🎯 <code>count++</code> chỉ là một ký hiệu trong Java nhưng là ba lệnh bytecode: <code>getstatic</code> (đọc), <code>iadd</code> (cộng, trong ngăn xếp toán hạng riêng của luồng), <code>putstatic</code> (ghi). Giữa lúc đọc và lúc ghi, một luồng khác có thể làm y như vậy — và một lần cập nhật bị mất.</p>
+<pre class="trich"><code class="language-java">viet("Counter.java",
+    "public class Counter {\\n" +
+    "    static int count;\\n" +
+    "    static void inc() { count++; }\\n" +
+    "}\\n");
+lenh("javac", "Counter.java");
+lenhLoc("static void inc|getstatic|iconst_1|iadd|putstatic|8: return", "javap", "-c", "Counter");</code></pre>
+<div class="out">&gt; javac Counter.java<br>
+&gt; javap -c Counter | grep -E "static void inc|getstatic|iconst_1|iadd|putstatic|8: return"<br>
+&nbsp;&nbsp;static void inc();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0: getstatic &nbsp;&nbsp;&nbsp;&nbsp;#7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Field count:I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3: iconst_1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4: iadd<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5: putstatic &nbsp;&nbsp;&nbsp;&nbsp;#7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Field count:I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8: return</div>
+<p>Phiên console biên dịch một lớp một phương thức rồi chạy <code>javap -c</code>, trình dịch ngược bạn đã gặp ở ⭐ CS.5. <code>inc()</code> là bốn lệnh: <code>getstatic</code> chép giá trị hiện tại của <code>count</code> lên ngăn xếp toán hạng của luồng này, <code>iconst_1</code> đẩy số 1, <code>iadd</code> cộng chúng — vẫn chỉ trên ngăn xếp của luồng này — và <code>putstatic</code> ghi kết quả về field. Không có gì ở giữa chặn luồng khác lại.</p>
+<p>Dòng thời gian trên slide cho thấy cách xen kẽ làm mất: count là 41; luồng A đọc 41; luồng B đọc 41; cả hai cộng 1 trong stack riêng và được 42; A ghi 42; B ghi 42. Hai lần cộng đã xảy ra mà field chỉ tăng một. Lần ghi của B dựa trên một <strong>giá trị đọc đã cũ</strong> (stale read), nên nó xoá mất cập nhật của A. Lặp chuyện đó hàng trăm nghìn lần trên hai lõi là ra bảng của slide 8.</p>
+<p class="meo">🧠 Mẫu cần soi ở mọi ngôn ngữ: <em>đọc-sửa-ghi</em> trên dữ liệu dùng chung (<code>x++</code>, <code>balance -= fee</code>, <code>list.add</code> trên <code>ArrayList</code>) và <em>kiểm-rồi-làm</em> (<code>if (x == null) x = …</code>, <code>if (!map.containsKey(k)) map.put(k, v)</code>). Cả hai đều là nhiều bước giả làm một bước.</p>`],
+      [10, 'A lost update, made repeatable',
+        `<p class="y-chinh">🎯 To study a race you need it to happen every time. A <code>CyclicBarrier</code> holds each thread right after its read until the other has read too — the losing interleaving of slide 9, forced: two increments, count = 1, on every run.</p>
+<pre class="trich"><code class="language-java">for (int round = 1; round &lt;= 3; round++) {
+    count = 0;
+    CyclicBarrier bothHaveRead = new CyclicBarrier(2);
+    int[] seen = new int[2];
+    Thread[] ts = new Thread[2];
+    for (int k = 0; k &lt; 2; k++) {
+        final int id = k;
+        ts[k] = new Thread(() -&gt; {
+            int value = count;                           // 1. read
+            seen[id] = value;
+            await(bothHaveRead);                         // (demo: wait until the other has read too)
+            count = value + 1;                           // 2. add, 3. write
+        });
+        ts[k].start();
+    }
+    for (Thread t : ts) t.join();
+    System.out.println("round " + round + ": A read " + seen[0] + ", B read " + seen[1]
+        + ", both wrote 1 -&gt; count = " + count + " (two increments, expected 2)");
+}</code></pre>
+<div class="out">round 1: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)<br>
+round 2: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)<br>
+round 3: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)</div>
+<p>Each thread does the three steps of <code>count++</code> by hand: read <code>count</code> into a local <code>value</code>, then add 1 and write <code>value + 1</code>. Between them it calls <code>await(bothHaveRead)</code>: a <code>CyclicBarrier(2)</code> lets nobody through until two threads have arrived. So both reads happen before either write — A reads 0, B reads 0, both write 1. Three rounds, three times the same wrong answer. The barrier does not create the bug; it only removes the luck that usually hides it.</p>
+<p>This technique — force the bad interleaving with a latch or barrier — is how real concurrency bugs are reproduced in tests, and how CS.7's singleton race printed "2 objects" every time. The general shapes to remember are on the slide: <strong>check-then-act</strong> and <strong>read-modify-write</strong> on shared data are races unless one thread at a time performs the whole step. The next three slides are three ways to get "one at a time".</p>
+<div class="callout">🧭 <strong>In a real project</strong>: a library's "available copies" being decremented by two simultaneous borrow requests, a bank balance updated by two transfers, a seat booked twice — all the same lost update. In a database the fix moves into the database (a transaction, <code>UPDATE … SET copies = copies - 1</code>, a row lock) — the PostgreSQL course covers it.</div>`,
+        `<p class="y-chinh">🎯 Muốn mổ xẻ một cuộc đua thì cần nó xảy ra mỗi lần. Một <code>CyclicBarrier</code> giữ mỗi luồng ngay sau lúc đọc tới khi luồng kia cũng đọc xong — cách xen kẽ làm mất của slide 9, bị ép: hai lần cộng, count = 1, ở mọi lần chạy.</p>
+<pre class="trich"><code class="language-java">for (int round = 1; round &lt;= 3; round++) {
+    count = 0;
+    CyclicBarrier bothHaveRead = new CyclicBarrier(2);
+    int[] seen = new int[2];
+    Thread[] ts = new Thread[2];
+    for (int k = 0; k &lt; 2; k++) {
+        final int id = k;
+        ts[k] = new Thread(() -&gt; {
+            int value = count;                           // 1. đọc
+            seen[id] = value;
+            await(bothHaveRead);                         // (minh hoạ: chờ luồng kia cũng đọc xong)
+            count = value + 1;                           // 2. cộng, 3. ghi
+        });
+        ts[k].start();
+    }
+    for (Thread t : ts) t.join();
+    System.out.println("round " + round + ": A read " + seen[0] + ", B read " + seen[1]
+        + ", both wrote 1 -&gt; count = " + count + " (two increments, expected 2)");
+}</code></pre>
+<div class="out">round 1: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)<br>
+round 2: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)<br>
+round 3: A read 0, B read 0, both wrote 1 -&gt; count = 1 (two increments, expected 2)</div>
+<p>Mỗi luồng tự làm bằng tay ba bước của <code>count++</code>: đọc <code>count</code> vào biến cục bộ <code>value</code>, rồi cộng 1 và ghi <code>value + 1</code>. Ở giữa nó gọi <code>await(bothHaveRead)</code>: một <code>CyclicBarrier(2)</code> không cho ai qua cho tới khi đủ hai luồng tới. Nên cả hai lần đọc xảy ra trước bất kỳ lần ghi nào — A đọc 0, B đọc 0, cả hai ghi 1. Ba lượt, ba lần cùng một đáp số sai. Barrier không tạo ra lỗi; nó chỉ lấy đi sự may mắn thường che lỗi.</p>
+<p>Kỹ thuật này — ép cách xen kẽ xấu bằng latch hay barrier — là cách các lỗi đồng thời thật được tái tạo trong test, và là cách cuộc đua singleton của CS.7 in "2 đối tượng" mỗi lần. Các hình dạng chung cần nhớ nằm trên slide: <strong>kiểm-rồi-làm</strong> và <strong>đọc-sửa-ghi</strong> trên dữ liệu dùng chung là cuộc đua, trừ khi mỗi lúc chỉ một luồng làm trọn bước đó. Ba slide sau là ba cách để có "mỗi lúc một luồng".</p>
+<div class="callout">🧭 <strong>Trong dự án thật</strong>: "số bản còn lại" của thư viện bị hai yêu cầu mượn đồng thời trừ, số dư ngân hàng bị hai lệnh chuyển cập nhật, một ghế bị đặt hai lần — đều là cùng một kiểu mất cập nhật. Với CSDL, cách sửa chuyển vào CSDL (giao dịch, <code>UPDATE … SET copies = copies - 1</code>, khoá dòng) — khoá PostgreSQL có bàn kỹ.</div>`],
+      [11, 'Fix 1: synchronized — one thread at a time',
+        `<p class="y-chinh">🎯 <code>synchronized</code> gives each object a lock (a <em>monitor</em>): only one thread at a time runs code synchronized on the same object, and what it wrote is visible to the next thread that takes the lock. Result: exactly 2,000,000, every round.</p>
+<pre class="trich"><code class="language-java">static class Counter {
+    private int count = 0;
+    synchronized void inc() { count++; }                 // the lock is "this"
+    synchronized int get() { return count; }             // reads use the same lock
+}
+static class Tally {
+    private final Object lock = new Object();            // a private lock object
+    private int count = 0;
+    void inc() { synchronized (lock) { count++; } }      // a block: lock only what must be locked
+    int get() { synchronized (lock) { return count; } }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (int round = 1; round &lt;= 3; round++) {
+    Counter c = new Counter();
+    Tally t = new Tally();
+    Runnable work = () -&gt; { for (int i = 0; i &lt; 1_000_000; i++) { c.inc(); t.inc(); } };
+    Thread t1 = new Thread(work), t2 = new Thread(work);
+    t1.start(); t2.start(); t1.join(); t2.join();
+    System.out.println("round " + round + ": synchronized method " + c.get() + ", synchronized block " + t.get());
+}</code></pre>
+<div class="out">round 1: synchronized method 2000000, synchronized block 2000000<br>
+round 2: synchronized method 2000000, synchronized block 2000000<br>
+round 3: synchronized method 2000000, synchronized block 2000000</div>
+<p>Two spellings. A <code>synchronized</code> method locks <code>this</code> (for a static method, the <code>Class</code> object). A <code>synchronized (lock) { … }</code> block locks the object you name — here a private <code>Object</code> that no outside code can reach, so nobody else can accidentally hold it — and lets you lock only the lines that need it. Note that <code>get()</code> is synchronized too: reading under the same lock is what guarantees you see the latest value.</p>
+<p>The guarantee has two parts. <strong>Mutual exclusion</strong>: while a thread is inside, others trying to enter wait in the BLOCKED state (slide 6) — so read-add-write runs as one step. <strong>Visibility</strong>: the Java Memory Model (JLS chapter 17) says that releasing a lock <em>happens-before</em> the next acquisition of the same lock, so the next thread sees every write made before. The cost: threads wait for each other, so a heavily contended lock makes code slower — measure before worrying.</p>
+<table>
+<thead><tr><th>measured by hand</th><th>each thread locks a DIFFERENT object (expected 2,000,000)</th></tr></thead>
+<tbody>
+<tr><td>run 1</td><td>1,981,297</td></tr>
+<tr><td>run 2</td><td>1,970,926</td></tr>
+<tr><td>run 3</td><td>1,819,864</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Trap (measured above): if thread A synchronizes on <code>lockA</code> and thread B on <code>lockB</code>, nothing is excluded — updates are lost again. Every access to the shared field must use the <strong>same</strong> lock.</div>`,
+        `<p class="y-chinh">🎯 <code>synchronized</code> cho mỗi đối tượng một cái khoá (gọi là <em>monitor</em>): mỗi lúc chỉ một luồng chạy đoạn code synchronized trên cùng đối tượng, và những gì nó đã ghi sẽ hiện ra với luồng kế tiếp lấy khoá. Kết quả: đúng 2.000.000, mọi lượt.</p>
+<pre class="trich"><code class="language-java">static class Counter {
+    private int count = 0;
+    synchronized void inc() { count++; }                 // khoá là "this"
+    synchronized int get() { return count; }             // đọc cũng dùng cùng khoá
+}
+static class Tally {
+    private final Object lock = new Object();            // đối tượng khoá riêng
+    private int count = 0;
+    void inc() { synchronized (lock) { count++; } }      // khối: chỉ khoá đúng phần cần khoá
+    int get() { synchronized (lock) { return count; } }
+}</code></pre>
+<pre class="trich"><code class="language-java">for (int round = 1; round &lt;= 3; round++) {
+    Counter c = new Counter();
+    Tally t = new Tally();
+    Runnable work = () -&gt; { for (int i = 0; i &lt; 1_000_000; i++) { c.inc(); t.inc(); } };
+    Thread t1 = new Thread(work), t2 = new Thread(work);
+    t1.start(); t2.start(); t1.join(); t2.join();
+    System.out.println("round " + round + ": synchronized method " + c.get() + ", synchronized block " + t.get());
+}</code></pre>
+<div class="out">round 1: synchronized method 2000000, synchronized block 2000000<br>
+round 2: synchronized method 2000000, synchronized block 2000000<br>
+round 3: synchronized method 2000000, synchronized block 2000000</div>
+<p>Hai cách viết. Phương thức <code>synchronized</code> khoá <code>this</code> (với phương thức static thì khoá đối tượng <code>Class</code>). Khối <code>synchronized (lock) { … }</code> khoá đối tượng bạn chỉ định — ở đây là một <code>Object</code> private mà code bên ngoài không chạm được, nên không ai vô tình giữ nó — và cho phép chỉ khoá đúng những dòng cần khoá. Để ý <code>get()</code> cũng synchronized: đọc dưới cùng khoá mới bảo đảm bạn thấy giá trị mới nhất.</p>
+<p>Bảo đảm có hai phần. <strong>Loại trừ lẫn nhau</strong> (mutual exclusion): khi một luồng ở bên trong, các luồng khác muốn vào phải chờ ở trạng thái BLOCKED (slide 6) — nên đọc-cộng-ghi chạy như một bước. <strong>Tính nhìn thấy</strong> (visibility): mô hình bộ nhớ Java (JLS chương 17) nói việc nhả khoá <em>xảy ra trước</em> (happens-before) lần lấy cùng khoá kế tiếp, nên luồng sau thấy mọi lần ghi trước đó. Cái giá: các luồng chờ nhau, nên một khoá bị tranh nhiều sẽ làm code chậm hơn — hãy đo trước khi lo.</p>
+<table>
+<thead><tr><th>đo tay</th><th>mỗi luồng khoá một đối tượng KHÁC nhau (đúng phải là 2.000.000)</th></tr></thead>
+<tbody>
+<tr><td>lần 1</td><td>1.981.297</td></tr>
+<tr><td>lần 2</td><td>1.970.926</td></tr>
+<tr><td>lần 3</td><td>1.819.864</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Bẫy (đo ở bảng trên): nếu luồng A synchronized trên <code>lockA</code> còn luồng B trên <code>lockB</code> thì chẳng loại trừ gì — cập nhật lại bị mất. Mọi lần truy cập field dùng chung phải dùng <strong>cùng</strong> một khoá.</div>`],
+      [12, 'Fix 2: AtomicInteger, LongAdder, CAS',
+        `<p class="y-chinh">🎯 For a single counter or value you do not need a lock: <code>AtomicInteger.incrementAndGet()</code> does read-add-write as one indivisible step using the CPU's compare-and-set instruction; <code>LongAdder</code> spreads a hot counter over several cells. Both give exactly 2,000,000.</p>
+<pre class="trich"><code class="language-java">AtomicInteger atomic = new AtomicInteger();
+LongAdder adder = new LongAdder();
+Runnable work = () -&gt; {
+    for (int i = 0; i &lt; 1_000_000; i++) {
+        atomic.incrementAndGet();                      // one indivisible step
+        adder.increment();                             // many cells, summed on read
+    }
+};
+Thread t1 = new Thread(work), t2 = new Thread(work);
+t1.start(); t2.start(); t1.join(); t2.join();
+System.out.println("AtomicInteger " + atomic.get() + ", LongAdder " + adder.sum());</code></pre>
+<pre class="trich"><code class="language-java">AtomicInteger stock = new AtomicInteger(5);
+boolean first = stock.compareAndSet(5, 4);             // "if it is still 5, make it 4"
+boolean second = stock.compareAndSet(5, 4);            // someone already changed it
+System.out.println("CAS(5-&gt;4): " + first + ", CAS(5-&gt;4) again: " + second + ", stock = " + stock.get());
+int seen, next;
+do {                                                   // the retry loop incrementAndGet runs for you
+    seen = stock.get();
+    next = seen - 1;
+} while (!stock.compareAndSet(seen, next));
+System.out.println("after the retry loop: stock = " + stock.get());</code></pre>
+<div class="out">AtomicInteger 2000000, LongAdder 2000000<br>
+CAS(5-&gt;4): true, CAS(5-&gt;4) again: false, stock = 4<br>
+after the retry loop: stock = 3</div>
+<p>The second block opens the mechanism. <code>compareAndSet(5, 4)</code> means "if the value is <em>still</em> 5, make it 4, and tell me whether you did" — the CPU does the comparison and the write as one step. The first call succeeds; the second fails because the value is no longer 5 (someone — here, the first call — changed it). A failed CAS means "you lost a race; read again and retry", and the <code>do … while</code> loop is exactly that retry. <code>incrementAndGet()</code> runs this loop for you. No thread ever blocks, which is why these are called <em>lock-free</em>.</p>
+<p>When many threads hammer one <code>AtomicInteger</code>, they keep failing each other's CAS and retrying. <code>LongAdder</code> (Java 8) avoids that by giving threads separate cells and summing them only when you call <code>sum()</code> — ideal for statistics counters, worse when you need the exact value at every moment. The table on the slide is the rule of thumb: one value ⇒ atomic, several fields that must change together ⇒ <code>synchronized</code>.</p>
+<table>
+<thead><tr><th>measured by hand</th><th>volatile int count++, 2 threads × 1,000,000 (expected 2,000,000)</th></tr></thead>
+<tbody>
+<tr><td>run 1</td><td>1,120,302</td></tr>
+<tr><td>run 2</td><td>1,173,288</td></tr>
+<tr><td>run 3</td><td>1,077,785</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Trap (measured above): <code>volatile</code> does <strong>not</strong> make <code>count++</code> atomic. It makes each read and write visible (next slide), but read-add-write is still three steps.</div>`,
+        `<p class="y-chinh">🎯 Với một bộ đếm hay một giá trị đơn lẻ thì không cần khoá: <code>AtomicInteger.incrementAndGet()</code> làm đọc-cộng-ghi thành một bước không thể chia nhờ lệnh compare-and-set (so sánh rồi gán) của CPU; <code>LongAdder</code> rải một bộ đếm "nóng" ra nhiều ô. Cả hai cho đúng 2.000.000.</p>
+<pre class="trich"><code class="language-java">AtomicInteger atomic = new AtomicInteger();
+LongAdder adder = new LongAdder();
+Runnable work = () -&gt; {
+    for (int i = 0; i &lt; 1_000_000; i++) {
+        atomic.incrementAndGet();                      // một bước không thể chia
+        adder.increment();                             // nhiều ô, cộng lại khi đọc
+    }
+};
+Thread t1 = new Thread(work), t2 = new Thread(work);
+t1.start(); t2.start(); t1.join(); t2.join();
+System.out.println("AtomicInteger " + atomic.get() + ", LongAdder " + adder.sum());</code></pre>
+<pre class="trich"><code class="language-java">AtomicInteger stock = new AtomicInteger(5);
+boolean first = stock.compareAndSet(5, 4);             // "nếu vẫn là 5 thì đổi thành 4"
+boolean second = stock.compareAndSet(5, 4);            // đã có người đổi rồi
+System.out.println("CAS(5-&gt;4): " + first + ", CAS(5-&gt;4) again: " + second + ", stock = " + stock.get());
+int seen, next;
+do {                                                   // vòng thử lại incrementAndGet chạy giúp bạn
+    seen = stock.get();
+    next = seen - 1;
+} while (!stock.compareAndSet(seen, next));
+System.out.println("after the retry loop: stock = " + stock.get());</code></pre>
+<div class="out">AtomicInteger 2000000, LongAdder 2000000<br>
+CAS(5-&gt;4): true, CAS(5-&gt;4) again: false, stock = 4<br>
+after the retry loop: stock = 3</div>
+<p>Khối thứ hai mở cơ chế ra. <code>compareAndSet(5, 4)</code> nghĩa là "nếu giá trị <em>vẫn</em> là 5 thì đổi thành 4, và báo tôi có làm được không" — CPU làm phép so sánh và lần ghi như một bước. Lần gọi đầu thành công; lần thứ hai thất bại vì giá trị không còn là 5 (đã có người — ở đây là lần gọi đầu — đổi nó). CAS thất bại nghĩa là "bạn thua cuộc đua; đọc lại rồi thử lại", và vòng <code>do … while</code> chính là lần thử lại đó. <code>incrementAndGet()</code> chạy vòng này giúp bạn. Không luồng nào bị chặn, vì thế chúng được gọi là <em>lock-free</em> (không khoá).</p>
+<p>Khi nhiều luồng dồn vào một <code>AtomicInteger</code>, chúng liên tục làm hỏng CAS của nhau và thử lại. <code>LongAdder</code> (Java 8) tránh điều đó bằng cách cho các luồng những ô riêng và chỉ cộng lại khi bạn gọi <code>sum()</code> — hợp cho bộ đếm thống kê, kém hơn khi bạn cần giá trị chính xác ở mọi khoảnh khắc. Bảng trên slide là quy tắc nhanh: một giá trị ⇒ atomic, nhiều field phải đổi cùng nhau ⇒ <code>synchronized</code>.</p>
+<table>
+<thead><tr><th>đo tay</th><th>volatile int count++, 2 luồng × 1.000.000 (đúng phải là 2.000.000)</th></tr></thead>
+<tbody>
+<tr><td>lần 1</td><td>1.120.302</td></tr>
+<tr><td>lần 2</td><td>1.173.288</td></tr>
+<tr><td>lần 3</td><td>1.077.785</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Bẫy (đo ở bảng trên): <code>volatile</code> <strong>không</strong> làm <code>count++</code> thành nguyên tử. Nó làm mỗi lần đọc và ghi đều nhìn thấy được (slide sau), nhưng đọc-cộng-ghi vẫn là ba bước.</div>`],
+      [13, 'Visibility: a stop flag needs volatile',
+        `<p class="y-chinh">🎯 Races are not the only problem: without a rule, one thread may never <em>see</em> another thread's write. A worker looping on a plain <code>boolean stop</code> kept running 2 s after <code>main</code> set it to true (measured 3 of 3 runs); with <code>volatile</code> it stops.</p>
+<pre class="trich"><code class="language-java">static volatile boolean stop = false;                  // every read goes to main memory</code></pre>
+<pre class="trich"><code class="language-java">long[] scanned = new long[1];
+Thread worker = new Thread(() -&gt; {
+    long n = 0;
+    while (!stop) n++;                              // busy loop reading the flag
+    scanned[0] = n;
+}, "scanner");
+worker.setDaemon(true);                            // never keeps the JVM alive
+worker.start();
+Thread.sleep(200);
+stop = true;                                       // main writes the flag
+worker.join(2000);
+System.out.println("worker stopped within 2 s: " + !worker.isAlive() + ", did some work: " + (scanned[0] &gt; 0));</code></pre>
+<div class="out">worker stopped within 2 s: true, did some work: true</div>
+<p>The real run uses <code>volatile</code>: main sets <code>stop = true</code> after 200 ms and the scanner leaves its loop well within the 2 seconds main is willing to wait. The same program with a plain field (left box on the slide, measured by hand, 3 runs out of 3): the worker was still alive 2 seconds after the write, and only died because it was a daemon thread when the JVM exited. Nothing was "wrong" with the CPU: the Java Memory Model allows the JIT compiler to read a non-volatile field <em>once</em>, keep it in a register, and turn <code>while (!stop) n++;</code> into an endless loop — there is no happens-before link between main's write and the worker's reads.</p>
+<p><code>volatile</code> creates that link: a write to a volatile field happens-before every later read of it, and the compiler may not cache it. Use it for simple flags and for publishing a reference once (the double-checked singleton of slide 23). It does <em>not</em> make compound actions atomic (<code>count++</code>, measured on the previous slide). <code>synchronized</code> and atomic classes give visibility <em>and</em> atomicity.</p>
+<div class="pitfall">Trap: "add a <code>System.out.println</code> in the loop and it works" — printing happens to take a lock and blocks the optimisation, which hides the bug until the print is removed. Fix the rule, not the symptom.</div>`,
+        `<p class="y-chinh">🎯 Cuộc đua không phải vấn đề duy nhất: không có luật thì một luồng có thể không bao giờ <em>thấy</em> lần ghi của luồng khác. Luồng thợ lặp trên một <code>boolean stop</code> thường vẫn chạy 2 s sau khi <code>main</code> đặt nó thành true (đo 3/3 lần); với <code>volatile</code> thì nó dừng.</p>
+<pre class="trich"><code class="language-java">static volatile boolean stop = false;                  // mọi lần đọc đều thấy giá trị mới nhất</code></pre>
+<pre class="trich"><code class="language-java">long[] scanned = new long[1];
+Thread worker = new Thread(() -&gt; {
+    long n = 0;
+    while (!stop) n++;                              // vòng bận đọc cờ
+    scanned[0] = n;
+}, "scanner");
+worker.setDaemon(true);                            // không giữ JVM sống
+worker.start();
+Thread.sleep(200);
+stop = true;                                       // main ghi cờ
+worker.join(2000);
+System.out.println("worker stopped within 2 s: " + !worker.isAlive() + ", did some work: " + (scanned[0] &gt; 0));</code></pre>
+<div class="out">worker stopped within 2 s: true, did some work: true</div>
+<p>Lần chạy thật dùng <code>volatile</code>: main đặt <code>stop = true</code> sau 200 ms và luồng quét rời vòng lặp rất nhanh, trong 2 giây main sẵn lòng chờ. Cùng chương trình với field thường (ô trái trên slide, đo tay, 3 trên 3 lần): luồng thợ vẫn sống 2 giây sau lần ghi, và chỉ chết vì là luồng daemon khi JVM thoát. CPU không "sai" gì cả: mô hình bộ nhớ Java cho phép trình biên dịch JIT đọc một field không volatile <em>một lần</em>, giữ trong thanh ghi, và biến <code>while (!stop) n++;</code> thành vòng lặp vô tận — không có mối happens-before nào giữa lần ghi của main và các lần đọc của luồng thợ.</p>
+<p><code>volatile</code> tạo ra mối nối đó: một lần ghi vào field volatile xảy ra trước mọi lần đọc nó về sau, và trình biên dịch không được cache nó. Dùng nó cho cờ đơn giản và để công bố một tham chiếu một lần (singleton kiểm hai lần ở slide 23). Nó <em>không</em> làm thao tác ghép thành nguyên tử (<code>count++</code>, đo ở slide trước). <code>synchronized</code> và các lớp atomic cho cả tính nhìn thấy <em>lẫn</em> tính nguyên tử.</p>
+<div class="pitfall">Bẫy: "thêm một <code>System.out.println</code> vào vòng lặp là chạy được" — lệnh in tình cờ lấy một khoá và chặn mất tối ưu, nên che lỗi cho tới ngày dòng in bị xoá. Hãy sửa luật, đừng sửa triệu chứng.</div>`],
+      [14, 'Deadlock: two locks, opposite order',
+        `<p class="y-chinh">🎯 Deadlock: thread A holds lock 1 and waits for lock 2, thread B holds lock 2 and waits for lock 1 — a cycle of waits, so neither can ever move. The program forces it, the JVM finds it, and taking the locks in one global order fixes it.</p>
+<pre class="trich"><code class="language-java">CountDownLatch bothHoldOne = new CountDownLatch(2);
+Thread borrow = daemon("borrow-desk", () -&gt; {
+    synchronized (BOOK_B001) {                        // lock the book first
+        arrive(bothHoldOne);
+        synchronized (MEMBER_M001) { System.out.println("borrow done"); }
+    }
+});
+Thread renew = daemon("renew-desk", () -&gt; {
+    synchronized (MEMBER_M001) {                      // lock the member first — opposite order
+        arrive(bothHoldOne);
+        synchronized (BOOK_B001) { System.out.println("renew done"); }
+    }
+});
+borrow.start(); renew.start();
+borrow.join(1000); renew.join(1000);
+ThreadMXBean jvm = ManagementFactory.getThreadMXBean();
+long[] ids = jvm.findDeadlockedThreads();              // what jstack reports as "Found one Java-level deadlock"
+List&lt;String&gt; lines = new ArrayList&lt;&gt;();
+for (ThreadInfo i : jvm.getThreadInfo(ids)) lines.add(i.getThreadName() + " " + i.getThreadState() + ", waits for a lock held by " + i.getLockOwnerName());
+Collections.sort(lines);
+System.out.println("deadlocked threads: " + ids.length);
+lines.forEach(l -&gt; System.out.println("  " + l));</code></pre>
+<pre class="trich"><code class="language-java">Object book = new Object(), member = new Object();      // fresh locks: the two above are held forever
+CountDownLatch together = new CountDownLatch(2);
+Thread b2 = daemon("borrow-desk-2", () -&gt; both(book, member, "borrow", together));
+Thread r2 = daemon("renew-desk-2", () -&gt; both(book, member, "renew", together));   // SAME order: book, then member
+b2.start(); r2.start(); b2.join(2000); r2.join(2000);
+System.out.println("fixed order, both finished: " + (!b2.isAlive() &amp;&amp; !r2.isAlive()));</code></pre>
+<div class="out">deadlocked threads: 2<br>
+&nbsp;&nbsp;borrow-desk BLOCKED, waits for a lock held by renew-desk<br>
+&nbsp;&nbsp;renew-desk BLOCKED, waits for a lock held by borrow-desk<br>
+fixed order, both finished: true</div>
+<p>The borrow desk locks the book, then the member; the renew desk locks the member, then the book — the opposite order. A <code>CountDownLatch</code> makes each desk wait, after taking its first lock, until both have one, so the deadlock happens on every run instead of once a month. Both threads are now BLOCKED forever (they are daemon threads so the JVM can still exit). <code>ThreadMXBean.findDeadlockedThreads()</code> — the same check behind <code>jstack</code>'s "Found one Java-level deadlock" — reports two threads, each waiting for a lock held by the other: the cycle in the diagram.</p>
+<p>The fix is a rule, not a timing tweak: every thread that needs both locks takes them in the <strong>same order</strong> (book, then member). Then whoever gets the book first also gets the member, and the other waits at the first door instead of holding the second — no cycle can form. With fresh locks and the same simultaneous start, both desks finish. Other fixes: hold only one lock at a time, or use <code>ReentrantLock.tryLock(timeout)</code> and back off when it fails.</p>
+<div class="callout">🧭 <strong>Databases deadlock too</strong>: two transactions updating rows in opposite order. PostgreSQL detects it and aborts one with "deadlock detected" — the same cycle, the same fix (a consistent order).</div>`,
+        `<p class="y-chinh">🎯 Deadlock (khoá chết): luồng A giữ khoá 1 và chờ khoá 2, luồng B giữ khoá 2 và chờ khoá 1 — một vòng chờ, nên không bên nào nhúc nhích được nữa. Chương trình ép nó xảy ra, JVM tìm ra nó, và lấy khoá theo một thứ tự chung thì sửa được.</p>
+<pre class="trich"><code class="language-java">CountDownLatch bothHoldOne = new CountDownLatch(2);
+Thread borrow = daemon("borrow-desk", () -&gt; {
+    synchronized (BOOK_B001) {                        // khoá sách trước
+        arrive(bothHoldOne);
+        synchronized (MEMBER_M001) { System.out.println("borrow done"); }
+    }
+});
+Thread renew = daemon("renew-desk", () -&gt; {
+    synchronized (MEMBER_M001) {                      // khoá thành viên trước — ngược thứ tự
+        arrive(bothHoldOne);
+        synchronized (BOOK_B001) { System.out.println("renew done"); }
+    }
+});
+borrow.start(); renew.start();
+borrow.join(1000); renew.join(1000);
+ThreadMXBean jvm = ManagementFactory.getThreadMXBean();
+long[] ids = jvm.findDeadlockedThreads();              // thứ jstack báo "Found one Java-level deadlock"
+List&lt;String&gt; lines = new ArrayList&lt;&gt;();
+for (ThreadInfo i : jvm.getThreadInfo(ids)) lines.add(i.getThreadName() + " " + i.getThreadState() + ", waits for a lock held by " + i.getLockOwnerName());
+Collections.sort(lines);
+System.out.println("deadlocked threads: " + ids.length);
+lines.forEach(l -&gt; System.out.println("  " + l));</code></pre>
+<pre class="trich"><code class="language-java">Object book = new Object(), member = new Object();      // khoá mới: hai khoá trên bị giữ mãi mãi
+CountDownLatch together = new CountDownLatch(2);
+Thread b2 = daemon("borrow-desk-2", () -&gt; both(book, member, "borrow", together));
+Thread r2 = daemon("renew-desk-2", () -&gt; both(book, member, "renew", together));   // CÙNG thứ tự: sách, rồi thành viên
+b2.start(); r2.start(); b2.join(2000); r2.join(2000);
+System.out.println("fixed order, both finished: " + (!b2.isAlive() &amp;&amp; !r2.isAlive()));</code></pre>
+<div class="out">deadlocked threads: 2<br>
+&nbsp;&nbsp;borrow-desk BLOCKED, waits for a lock held by renew-desk<br>
+&nbsp;&nbsp;renew-desk BLOCKED, waits for a lock held by borrow-desk<br>
+fixed order, both finished: true</div>
+<p>Quầy mượn khoá sách rồi tới thành viên; quầy gia hạn khoá thành viên rồi tới sách — ngược thứ tự. Một <code>CountDownLatch</code> bắt mỗi quầy, sau khi lấy khoá đầu tiên, chờ tới khi cả hai đều có một khoá, nên deadlock xảy ra ở mọi lần chạy thay vì mỗi tháng một lần. Cả hai luồng giờ BLOCKED vĩnh viễn (chúng là luồng daemon để JVM vẫn thoát được). <code>ThreadMXBean.findDeadlockedThreads()</code> — cùng phép kiểm đứng sau dòng "Found one Java-level deadlock" của <code>jstack</code> — báo hai luồng, mỗi luồng chờ một khoá luồng kia đang giữ: đúng vòng trong hình.</p>
+<p>Cách sửa là một luật, không phải chỉnh thời điểm: mọi luồng cần cả hai khoá đều lấy theo <strong>cùng thứ tự</strong> (sách, rồi thành viên). Khi đó ai lấy được sách trước thì cũng lấy được thành viên, còn bên kia chờ ở cửa thứ nhất thay vì giữ cửa thứ hai — không thể có vòng. Với khoá mới và cùng kiểu xuất phát đồng thời, cả hai quầy đều xong. Cách khác: mỗi lúc chỉ giữ một khoá, hoặc dùng <code>ReentrantLock.tryLock(timeout)</code> rồi lùi lại khi không lấy được.</p>
+<div class="callout">🧭 <strong>CSDL cũng deadlock</strong>: hai giao dịch cập nhật các dòng theo thứ tự ngược nhau. PostgreSQL phát hiện và huỷ một bên với "deadlock detected" — cùng một vòng, cùng một cách sửa (thứ tự nhất quán).</div>`],
+    ]),
+    bi(`<h2>📌 What to take away from slides 1–14</h2>
+<ul>
+<li>Threads overlap waiting (three 300 ms calls ≈ 300 ms). Locals live on each thread's stack (safe); objects and static fields live on the shared heap.</li>
+<li>Start with <code>start()</code>, never <code>run()</code>; a Thread starts once; prefer a Runnable or lambda. States: NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED.</li>
+<li><code>interrupt()</code> is a request: blocked threads get InterruptedException with the flag cleared — restore it or stop; busy threads check <code>isInterrupted()</code>.</li>
+<li><code>count++</code> = getstatic, iadd, putstatic; two threads × 1,000,000 lost about half (measured, different every run; sometimes exact with 100,000).</li>
+<li>Check-then-act and read-modify-write on shared data are races; force them with a barrier to reproduce.</li>
+<li>Fixes: <code>synchronized</code> on the SAME lock (exclusion + visibility), <code>AtomicInteger</code>/<code>LongAdder</code> (CAS, lock-free), <code>volatile</code> for flags only.</li>
+<li>Deadlock = a cycle of lock waits; one global lock order breaks it; <code>jstack</code> finds it.</li>
+</ul>`,
+    `<h2>📌 Cần mang theo gì từ slide 1–14</h2>
+<ul>
+<li>Luồng cho các lần chờ chồng lên nhau (ba lời gọi 300 ms ≈ 300 ms). Biến cục bộ ở stack riêng của từng luồng (an toàn); đối tượng và field static ở heap dùng chung.</li>
+<li>Khởi động bằng <code>start()</code>, không bao giờ <code>run()</code>; một Thread chỉ start một lần; ưu tiên Runnable hay lambda. Trạng thái: NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED.</li>
+<li><code>interrupt()</code> là lời đề nghị: luồng bị chặn nhận InterruptedException kèm cờ bị xoá — đặt lại hoặc dừng; luồng bận tự kiểm <code>isInterrupted()</code>.</li>
+<li><code>count++</code> = getstatic, iadd, putstatic; hai luồng × 1.000.000 mất khoảng một nửa (đo thật, mỗi lần mỗi khác; với 100.000 đôi khi đúng chính xác).</li>
+<li>Kiểm-rồi-làm và đọc-sửa-ghi trên dữ liệu dùng chung là cuộc đua; ép bằng barrier để tái tạo.</li>
+<li>Cách sửa: <code>synchronized</code> trên CÙNG một khoá (loại trừ + nhìn thấy), <code>AtomicInteger</code>/<code>LongAdder</code> (CAS, không khoá), <code>volatile</code> chỉ cho cờ.</li>
+<li>Deadlock = vòng chờ khoá; một thứ tự khoá chung phá được nó; <code>jstack</code> tìm ra nó.</li>
+</ul>`),
+    books([
+      ['apiDocs', 'java.lang.Thread (start, run, join, interrupt, isInterrupted, getState; stop: deprecated, throws UnsupportedOperationException), java.lang.Thread.State, java.util.concurrent.CyclicBarrier, java.util.concurrent.CountDownLatch, java.util.concurrent.atomic.AtomicInteger (compareAndSet), java.util.concurrent.atomic.LongAdder, java.lang.management.ThreadMXBean (findDeadlockedThreads)', 'java.lang.Thread (start, run, join, interrupt, isInterrupted, getState; stop: lỗi thời, ném UnsupportedOperationException), java.lang.Thread.State, java.util.concurrent.CyclicBarrier, java.util.concurrent.CountDownLatch, java.util.concurrent.atomic.AtomicInteger (compareAndSet), java.util.concurrent.atomic.LongAdder, java.lang.management.ThreadMXBean (findDeadlockedThreads)'],
+      ['jls8', 'Chapter 17 "Threads and Locks": §17.1 synchronization, §17.4 the memory model (happens-before; volatile fields), §17.5 final field semantics', 'Chương 17 "Threads and Locks": §17.1 đồng bộ hoá, §17.4 mô hình bộ nhớ (happens-before; field volatile), §17.5 ngữ nghĩa field final'],
+      ['jvms8', '§6.5 the instructions getstatic, putstatic, iadd, iconst_1', '§6.5 các lệnh getstatic, putstatic, iadd, iconst_1'],
+      ['horstmann1', 'Ch. 12 "Concurrency" (running threads, thread states, interrupting threads, synchronization, volatile fields, atomics, deadlocks)', 'Chương 12 "Concurrency" (chạy luồng, trạng thái luồng, ngắt luồng, đồng bộ hoá, field volatile, atomic, deadlock)'],
+    ]),
+  ].join('\n'),
+};
+
+/* ───────── ⭐ CS.8 — 📑 Slide by slide · Threads (2): executors, Future, CompletableFuture, virtual threads, Spring (slides 15–25) ───────── */
+const L_cs8_2 = {
+  title: '⭐ CS.8 — 📑 Slide by slide · Threads (2): executors, Future, CompletableFuture, virtual threads, Spring (slides 15–25)|||⭐ CS.8 — 📑 Học theo từng slide · Luồng (2): executor, Future, CompletableFuture, luồng ảo, Spring (slide 15–25)',
+  slug: 'pro192-slide-cs8-2',
+  type: 'VIDEO',
+  description: 'Phần hai deck ⭐ Chuyên sâu 8 (slide 15–25, tự dựng): bể luồng ExecutorService (6 việc trên 2 luồng dùng lại, shutdown, awaitTermination, RejectedExecutionException), Callable và Future (get chờ, exception bị bọc trong ExecutionException, get có hạn giờ, cancel), chia việc bằng invokeAll (tổng 1..10.000.000 trên 4 luồng khớp công thức), collection dùng chung giữa các luồng (ConcurrentHashMap.merge đúng 120.000 trong khi HashMap đo tay chỉ còn 61.000–75.000), CompletableFuture ba lời gọi cùng lúc ghép bằng thenCombine, lỗi với exceptionally/handle, allOf và thenCompose, cùng API trên luồng ảo Java 21, luồng request trong Spring Boot (bean singleton dùng chung, ThreadLocal), singleton của CS.7 sửa an toàn luồng (synchronized, double-checked + volatile, holder), các bẫy đo thật (bể không shutdown giữ JVM sống, nuốt interrupt không dừng được, SimpleDateFormat dùng chung) và câu hỏi phỏng vấn.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 8 · part 2 · added by this site · not examined</span>
+<h2>The tools real Java code uses: executors, futures, CompletableFuture — and Spring's threads</h2>
+<p class="lead">⭐ Self-added advanced section — not examined in PRO192. Part 1 used raw <code>Thread</code> objects to understand what goes wrong. Real projects almost never create threads by hand: they submit jobs to an <code>ExecutorService</code>, get results through a <code>Future</code> or a <code>CompletableFuture</code>, share data through concurrent collections, and — in Spring Boot — let the framework own the threads. This part covers those tools, each with a real program, then connects them to Spring and closes with the traps measured on a real machine and the interview questions.</p>
+<div class="callout"><strong>How the examples were run.</strong> JDK 21.0.9, <code>--release 17</code> (virtual threads: <code>--release 21</code>). As in part 1, programs print only what is always true; numbers that change between runs (plain <code>HashMap</code> shared by four threads, a shared <code>SimpleDateFormat</code>) are in tables marked <strong>measured by hand</strong>. Spring snippets are explanations, not runs.</div>
+<table>
+<thead><tr><th>Slides</th><th>Idea</th><th>You should be able to</th></tr></thead>
+<tbody>
+<tr><td>15–17</td><td>ExecutorService, Callable, Future, invokeAll</td><td>run jobs on a pool, get results and errors, split one big job, shut the pool down</td></tr>
+<tr><td>18</td><td>concurrent collections</td><td>pick ConcurrentHashMap, a synchronized list or CopyOnWriteArrayList</td></tr>
+<tr><td>19–20</td><td>CompletableFuture</td><td>run calls at once, combine them, handle errors, wait for many</td></tr>
+<tr><td>21</td><td>virtual threads</td><td>use the same API with one virtual thread per job</td></tr>
+<tr><td>22–23</td><td>Spring and the singleton</td><td>keep beans stateless, use ThreadLocal correctly, write a thread-safe lazy singleton</td></tr>
+<tr><td>24–25</td><td>traps, interviews, summary</td><td>avoid five measured traps and answer six classic questions</td></tr>
+</tbody>
+</table>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 8 · phần 2 · tự thêm · không thi</span>
+<h2>Công cụ mà code Java thật dùng: executor, future, CompletableFuture — và các luồng của Spring</h2>
+<p class="lead">⭐ Phần chuyên sâu tự thêm — không thi PRO192. Phần 1 dùng đối tượng <code>Thread</code> thô để hiểu chuyện gì hỏng. Dự án thật hầu như không tự tạo luồng bằng tay: chúng gửi công việc cho một <code>ExecutorService</code>, nhận kết quả qua <code>Future</code> hay <code>CompletableFuture</code>, chia sẻ dữ liệu qua collection đồng thời, và — trong Spring Boot — để framework sở hữu các luồng. Phần này đi qua các công cụ đó, mỗi cái có một chương trình chạy thật, rồi nối chúng với Spring và khép lại bằng các bẫy đo trên máy thật cùng câu hỏi phỏng vấn.</p>
+<div class="callout"><strong>Các ví dụ chạy thế nào.</strong> JDK 21.0.9, <code>--release 17</code> (luồng ảo: <code>--release 21</code>). Như phần 1, chương trình chỉ in điều luôn đúng; những con số đổi giữa các lần chạy (<code>HashMap</code> thường dùng chung bởi bốn luồng, một <code>SimpleDateFormat</code> dùng chung) nằm trong các bảng ghi <strong>đo tay</strong>. Đoạn Spring là giải thích, không phải lần chạy.</div>
+<table>
+<thead><tr><th>Slide</th><th>Ý chính</th><th>Bạn phải làm được</th></tr></thead>
+<tbody>
+<tr><td>15–17</td><td>ExecutorService, Callable, Future, invokeAll</td><td>chạy việc trên bể luồng, nhận kết quả và lỗi, chia một việc lớn, tắt bể</td></tr>
+<tr><td>18</td><td>collection đồng thời</td><td>chọn ConcurrentHashMap, list đồng bộ hay CopyOnWriteArrayList</td></tr>
+<tr><td>19–20</td><td>CompletableFuture</td><td>chạy nhiều lời gọi cùng lúc, ghép chúng, xử lý lỗi, chờ nhiều cái</td></tr>
+<tr><td>21</td><td>luồng ảo</td><td>dùng cùng API với mỗi việc một luồng ảo</td></tr>
+<tr><td>22–23</td><td>Spring và singleton</td><td>giữ bean không trạng thái, dùng ThreadLocal đúng, viết singleton lười an toàn luồng</td></tr>
+<tr><td>24–25</td><td>bẫy, phỏng vấn, tóm tắt</td><td>tránh năm bẫy đã đo và trả lời sáu câu kinh điển</td></tr>
+</tbody>
+</table>`),
+    walkHead('cs8', 15, 25),
+    walk('cs8', [
+      [15, 'Thread pools: ExecutorService',
+        `<p class="y-chinh">🎯 Instead of one new thread per job, submit jobs to an <code>ExecutorService</code>: a fixed pool keeps N threads and a queue. Six jobs ran on exactly two threads, reused; <code>shutdown()</code> stops new work and lets the queue drain.</p>
+<pre class="trich"><code class="language-java">ExecutorService pool = Executors.newFixedThreadPool(2);     // 2 worker threads + a queue
+Set&lt;String&gt; workers = new ConcurrentSkipListSet&lt;&gt;();         // a sorted, thread-safe set
+AtomicInteger done = new AtomicInteger();
+for (int i = 1; i &lt;= 6; i++) {
+    pool.submit(() -&gt; {                                      // a Runnable job
+        workers.add(Thread.currentThread().getName());
+        sleep(50);                                           // pretend to send one overdue email
+        done.incrementAndGet();
+    });
+}
+pool.shutdown();                                             // no new jobs; finish the queued ones
+boolean finished = pool.awaitTermination(5, TimeUnit.SECONDS);
+System.out.println("jobs done: " + done.get() + ", threads used: " + workers);
+System.out.println("terminated: " + finished + " " + pool.isTerminated());
+try { pool.submit(() -&gt; {}); }
+catch (RejectedExecutionException e) { System.out.println("submit after shutdown -&gt; RejectedExecutionException"); }</code></pre>
+<div class="out">jobs done: 6, threads used: [pool-1-thread-1, pool-1-thread-2]<br>
+terminated: true true<br>
+submit after shutdown -&gt; RejectedExecutionException</div>
+<p><code>Executors.newFixedThreadPool(2)</code> is a factory (⭐ CS.7) that returns a <code>ThreadPoolExecutor</code> with two worker threads and an unbounded queue. Each <code>submit</code> hands over a <code>Runnable</code>; the first two start at once, the other four wait in the queue, and a worker that finishes takes the next. The sorted set of thread names proves it: <code>[pool-1-thread-1, pool-1-thread-2]</code> — six jobs, two threads. The counter is an <code>AtomicInteger</code> because the jobs update it from two threads (slide 12); the name set is a <code>ConcurrentSkipListSet</code> for the same reason (slide 18).</p>
+<p>Then the lifecycle. <code>shutdown()</code> refuses new jobs but finishes the queued ones; <code>awaitTermination</code> waits (with a limit) until they are done — <code>terminated: true true</code>. Submitting after that throws <code>RejectedExecutionException</code>. Why pools at all? A platform thread is an operating-system thread with its own stack (around a megabyte reserved); creating one per job is slow, and creating one per incoming request lets a traffic spike exhaust the machine. A pool bounds the number of threads and reuses them.</p>
+<div class="callout">🧭 <strong>Spring Boot</strong>: you rarely create pools yourself. Tomcat owns the request pool; <code>@Async</code> methods run on a <code>ThreadPoolTaskExecutor</code> configured with <code>spring.task.execution.pool.*</code>. Since Java 19 an <code>ExecutorService</code> is <code>AutoCloseable</code>, so <code>try (var pool = …) { … }</code> shuts it down for you (slide 21).</div>`,
+        `<p class="y-chinh">🎯 Thay vì mỗi việc một luồng mới, hãy gửi việc cho một <code>ExecutorService</code>: bể cố định giữ N luồng và một hàng đợi. Sáu việc chạy trên đúng hai luồng, được dùng lại; <code>shutdown()</code> ngừng nhận việc mới và để hàng đợi chạy hết.</p>
+<pre class="trich"><code class="language-java">ExecutorService pool = Executors.newFixedThreadPool(2);     // 2 luồng thợ + một hàng đợi
+Set&lt;String&gt; workers = new ConcurrentSkipListSet&lt;&gt;();         // set có thứ tự, an toàn luồng
+AtomicInteger done = new AtomicInteger();
+for (int i = 1; i &lt;= 6; i++) {
+    pool.submit(() -&gt; {                                      // một việc Runnable
+        workers.add(Thread.currentThread().getName());
+        sleep(50);                                           // giả lập gửi một email quá hạn
+        done.incrementAndGet();
+    });
+}
+pool.shutdown();                                             // không nhận việc mới; làm xong việc đang xếp
+boolean finished = pool.awaitTermination(5, TimeUnit.SECONDS);
+System.out.println("jobs done: " + done.get() + ", threads used: " + workers);
+System.out.println("terminated: " + finished + " " + pool.isTerminated());
+try { pool.submit(() -&gt; {}); }
+catch (RejectedExecutionException e) { System.out.println("submit after shutdown -&gt; RejectedExecutionException"); }</code></pre>
+<div class="out">jobs done: 6, threads used: [pool-1-thread-1, pool-1-thread-2]<br>
+terminated: true true<br>
+submit after shutdown -&gt; RejectedExecutionException</div>
+<p><code>Executors.newFixedThreadPool(2)</code> là một factory (⭐ CS.7) trả về một <code>ThreadPoolExecutor</code> có hai luồng thợ và một hàng đợi không giới hạn. Mỗi lần <code>submit</code> giao một <code>Runnable</code>; hai việc đầu chạy ngay, bốn việc kia chờ trong hàng đợi, và luồng thợ nào xong thì lấy việc kế. Tập tên luồng đã sắp xếp chứng minh điều đó: <code>[pool-1-thread-1, pool-1-thread-2]</code> — sáu việc, hai luồng. Bộ đếm là <code>AtomicInteger</code> vì các việc cập nhật nó từ hai luồng (slide 12); tập tên là <code>ConcurrentSkipListSet</code> cũng vì lý do đó (slide 18).</p>
+<p>Rồi tới vòng đời. <code>shutdown()</code> từ chối việc mới nhưng làm xong việc đang xếp hàng; <code>awaitTermination</code> chờ (có hạn) tới khi chúng xong — <code>terminated: true true</code>. Gửi việc sau đó ném <code>RejectedExecutionException</code>. Vì sao cần bể luồng? Một luồng nền tảng là một luồng của hệ điều hành với stack riêng (giữ chỗ cỡ một megabyte); tạo mỗi việc một luồng thì chậm, còn tạo mỗi request tới một luồng thì một đợt truy cập dồn dập có thể vắt cạn máy. Bể luồng giới hạn số luồng và dùng lại chúng.</p>
+<div class="callout">🧭 <strong>Spring Boot</strong>: bạn hiếm khi tự tạo bể luồng. Tomcat sở hữu bể request; phương thức <code>@Async</code> chạy trên một <code>ThreadPoolTaskExecutor</code> cấu hình bằng <code>spring.task.execution.pool.*</code>. Từ Java 19, <code>ExecutorService</code> là <code>AutoCloseable</code>, nên <code>try (var pool = …) { … }</code> tắt nó giúp bạn (slide 21).</div>`],
+      [16, 'Callable and Future: results and errors',
+        `<p class="y-chinh">🎯 A <code>Callable&lt;T&gt;</code> is a job that returns a value and may throw. <code>submit</code> gives back a <code>Future&lt;T&gt;</code>: <code>get()</code> waits for the value, an exception inside the job comes back wrapped in <code>ExecutionException</code>, and <code>get(timeout)</code> refuses to wait forever.</p>
+<pre class="trich"><code class="language-java">Callable&lt;Integer&gt; feeJob = () -&gt; 5 * 2000;                   // a job that RETURNS a value
+Future&lt;Integer&gt; fee = pool.submit(feeJob);
+System.out.println("fee.get() = " + fee.get() + ", isDone = " + fee.isDone());   // get() waits</code></pre>
+<pre class="trich"><code class="language-java">Future&lt;Integer&gt; broken = pool.submit(() -&gt; { throw new IllegalStateException("member M404 not found"); });
+try {
+    broken.get();
+} catch (ExecutionException e) {                            // the job's exception, wrapped
+    System.out.println("ExecutionException, cause = " + e.getCause());
+}</code></pre>
+<pre class="trich"><code class="language-java">Future&lt;String&gt; slow = pool.submit(() -&gt; { Thread.sleep(5_000); return "report"; });
+try {
+    slow.get(200, TimeUnit.MILLISECONDS);                   // do not wait forever
+} catch (TimeoutException e) {
+    System.out.println("TimeoutException after 200 ms; cancel -&gt; " + slow.cancel(true) + ", isCancelled = " + slow.isCancelled());
+}</code></pre>
+<div class="out">fee.get() = 10000, isDone = true<br>
+ExecutionException, cause = java.lang.IllegalStateException: member M404 not found<br>
+TimeoutException after 200 ms; cancel -&gt; true, isCancelled = true<br>
+pool terminated: true</div>
+<p>Three cases, three output lines. The fee job returns 10,000; <code>fee.get()</code> blocks the main thread until it is available, and <code>isDone()</code> is then true. The broken job throws <code>IllegalStateException</code> on a pool thread — the exception cannot jump to <code>main</code> by itself, so the <code>Future</code> stores it and <code>get()</code> rethrows it wrapped in <code>ExecutionException</code>; the original is in <code>getCause()</code>. The slow job would take 5 seconds; <code>get(200, MILLISECONDS)</code> gives up with <code>TimeoutException</code>, and <code>cancel(true)</code> interrupts the worker (slide 7) — <code>isCancelled</code> is true.</p>
+<p>The table on the slide compares the two job types: <code>Runnable.run()</code> returns nothing and cannot throw checked exceptions; <code>Callable.call()</code> returns a value and may throw any exception. Both can be submitted; a <code>Runnable</code> gives a <code>Future&lt;?&gt;</code> whose <code>get()</code> returns <code>null</code>.</p>
+<div class="pitfall">Trap: a <code>Future</code> nobody calls <code>get()</code> on hides its exception forever — the job failed and nothing was printed. Either call <code>get()</code>, or handle errors inside the job.</div>`,
+        `<p class="y-chinh">🎯 <code>Callable&lt;T&gt;</code> là một công việc trả về giá trị và được phép ném lỗi. <code>submit</code> trả lại một <code>Future&lt;T&gt;</code>: <code>get()</code> chờ giá trị, exception bên trong công việc quay về được bọc trong <code>ExecutionException</code>, và <code>get(timeout)</code> từ chối chờ mãi.</p>
+<pre class="trich"><code class="language-java">Callable&lt;Integer&gt; feeJob = () -&gt; 5 * 2000;                   // việc TRẢ VỀ giá trị
+Future&lt;Integer&gt; fee = pool.submit(feeJob);
+System.out.println("fee.get() = " + fee.get() + ", isDone = " + fee.isDone());   // get() chờ</code></pre>
+<pre class="trich"><code class="language-java">Future&lt;Integer&gt; broken = pool.submit(() -&gt; { throw new IllegalStateException("member M404 not found"); });
+try {
+    broken.get();
+} catch (ExecutionException e) {                            // exception của việc, bị bọc
+    System.out.println("ExecutionException, cause = " + e.getCause());
+}</code></pre>
+<pre class="trich"><code class="language-java">Future&lt;String&gt; slow = pool.submit(() -&gt; { Thread.sleep(5_000); return "report"; });
+try {
+    slow.get(200, TimeUnit.MILLISECONDS);                   // đừng chờ mãi
+} catch (TimeoutException e) {
+    System.out.println("TimeoutException after 200 ms; cancel -&gt; " + slow.cancel(true) + ", isCancelled = " + slow.isCancelled());
+}</code></pre>
+<div class="out">fee.get() = 10000, isDone = true<br>
+ExecutionException, cause = java.lang.IllegalStateException: member M404 not found<br>
+TimeoutException after 200 ms; cancel -&gt; true, isCancelled = true<br>
+pool terminated: true</div>
+<p>Ba trường hợp, ba dòng output. Việc tính phí trả 10.000; <code>fee.get()</code> chặn luồng main tới khi có giá trị, và sau đó <code>isDone()</code> là true. Việc hỏng ném <code>IllegalStateException</code> trên một luồng của bể — exception không thể tự nhảy sang <code>main</code>, nên <code>Future</code> cất nó lại và <code>get()</code> ném lại nó, bọc trong <code>ExecutionException</code>; bản gốc nằm trong <code>getCause()</code>. Việc chậm sẽ mất 5 giây; <code>get(200, MILLISECONDS)</code> bỏ cuộc với <code>TimeoutException</code>, và <code>cancel(true)</code> ngắt luồng thợ (slide 7) — <code>isCancelled</code> là true.</p>
+<p>Bảng trên slide so hai loại công việc: <code>Runnable.run()</code> không trả gì và không ném được exception checked; <code>Callable.call()</code> trả giá trị và được ném mọi exception. Cả hai đều submit được; một <code>Runnable</code> cho ra <code>Future&lt;?&gt;</code> mà <code>get()</code> trả <code>null</code>.</p>
+<div class="pitfall">Bẫy: một <code>Future</code> không ai gọi <code>get()</code> sẽ giấu exception của nó mãi mãi — công việc đã hỏng mà chẳng có gì được in ra. Hoặc gọi <code>get()</code>, hoặc xử lý lỗi ngay trong công việc.</div>`],
+      [17, 'Split the work: invokeAll',
+        `<p class="y-chinh">🎯 To speed up one big computation, split it into independent parts, run them with <code>invokeAll</code>, and combine the results in one place. Summing 1..10,000,000 in four parts gives exactly the formula's 50,000,005,000,000 — with no lock at all.</p>
+<pre><code class="language-java">// release: 17
+// Slide 17: split one big job into parts, run them with invokeAll, combine the results
+import java.util.*;
+import java.util.concurrent.*;
+
+public class ChiaViec {
+    public static void main(String[] args) throws Exception {
+        final long N = 10_000_000L;
+        int parts = 4;
+        List&lt;Callable&lt;Long&gt;&gt; jobs = new ArrayList&lt;&gt;();
+        for (int p = 0; p &lt; parts; p++) {
+            long from = p * N / parts + 1, to = (p + 1) * N / parts;   // 1..2.5M, 2.5M+1..5M, …
+            jobs.add(() -&gt; {
+                long s = 0;
+                for (long i = from; i &lt;= to; i++) s += i;               // each part touches only its own range
+                return s;
+            });
+        }
+        ExecutorService pool = Executors.newFixedThreadPool(parts);
+        long total = 0;
+        for (Future&lt;Long&gt; f : pool.invokeAll(jobs)) total += f.get();  // invokeAll waits for every part
+        pool.shutdown();
+        System.out.println("sum of 1.." + N + " on " + parts + " threads = " + total);
+        System.out.println("formula n(n+1)/2               = " + N * (N + 1) / 2);
+    }
+}</code></pre>
+<div class="out">sum of 1..10000000 on 4 threads = 50000005000000<br>
+formula n(n+1)/2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 50000005000000</div>
+<p>The range is cut into four non-overlapping pieces: 1–2,500,000, 2,500,001–5,000,000, and so on. Each <code>Callable</code> loops over its own piece and keeps its own local sum <code>s</code> — nothing shared, nothing to lock. <code>invokeAll</code> submits all four and waits until every one is done, returning their futures in the same order; the only shared step, adding four numbers, happens in <code>main</code> afterwards. The second line computes n(n+1)/2 to check the answer.</p>
+<p>That is the safest design for parallel work: <strong>divide, compute independently, combine</strong>. It is also what <code>parallelStream()</code> does for you on the common Fork/Join pool (⭐ CS.2). Whether it is faster depends on the size of the job and the number of cores — four threads summing ten million numbers is still a few milliseconds of work, so measure before splitting small jobs.</p>
+<div class="pitfall">Trap: letting all four parts add into one shared <code>long total</code> brings back the race of slide 8. Return a value from each part; combine at the end.</div>`,
+        `<p class="y-chinh">🎯 Muốn tăng tốc một phép tính lớn, hãy chia nó thành các phần độc lập, chạy chúng bằng <code>invokeAll</code>, và gộp kết quả ở một chỗ. Cộng 1..10.000.000 thành bốn phần cho đúng con số của công thức 50.000.005.000.000 — không cần một cái khoá nào.</p>
+<pre><code class="language-java">// release: 17
+// Slide 17: chia một việc lớn thành phần, chạy bằng invokeAll, gộp kết quả
+import java.util.*;
+import java.util.concurrent.*;
+
+public class ChiaViec {
+    public static void main(String[] args) throws Exception {
+        final long N = 10_000_000L;
+        int parts = 4;
+        List&lt;Callable&lt;Long&gt;&gt; jobs = new ArrayList&lt;&gt;();
+        for (int p = 0; p &lt; parts; p++) {
+            long from = p * N / parts + 1, to = (p + 1) * N / parts;   // bốn đoạn không chồng nhau
+            jobs.add(() -&gt; {
+                long s = 0;
+                for (long i = from; i &lt;= to; i++) s += i;               // mỗi phần chỉ chạm đoạn của nó
+                return s;
+            });
+        }
+        ExecutorService pool = Executors.newFixedThreadPool(parts);
+        long total = 0;
+        for (Future&lt;Long&gt; f : pool.invokeAll(jobs)) total += f.get();  // invokeAll chờ mọi phần
+        pool.shutdown();
+        System.out.println("sum of 1.." + N + " on " + parts + " threads = " + total);
+        System.out.println("formula n(n+1)/2               = " + N * (N + 1) / 2);
+    }
+}</code></pre>
+<div class="out">sum of 1..10000000 on 4 threads = 50000005000000<br>
+formula n(n+1)/2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 50000005000000</div>
+<p>Khoảng số được cắt thành bốn đoạn không chồng nhau: 1–2.500.000, 2.500.001–5.000.000, v.v. Mỗi <code>Callable</code> lặp trên đoạn của mình và giữ tổng cục bộ <code>s</code> riêng — không dùng chung gì, không có gì phải khoá. <code>invokeAll</code> gửi cả bốn và chờ tới khi mọi phần xong, trả về các future theo đúng thứ tự; bước dùng chung duy nhất, cộng bốn con số, xảy ra trong <code>main</code> sau đó. Dòng thứ hai tính n(n+1)/2 để kiểm đáp số.</p>
+<p>Đó là thiết kế an toàn nhất cho việc song song: <strong>chia, tính độc lập, gộp</strong>. Đó cũng là thứ <code>parallelStream()</code> làm giúp bạn trên Fork/Join pool chung (⭐ CS.2). Nhanh hơn hay không tuỳ cỡ việc và số lõi — bốn luồng cộng mười triệu số vẫn chỉ là vài mili giây, nên hãy đo trước khi chia những việc nhỏ.</p>
+<div class="pitfall">Bẫy: cho cả bốn phần cộng vào một <code>long total</code> dùng chung là mang cuộc đua của slide 8 quay lại. Mỗi phần trả về một giá trị; gộp ở cuối.</div>`],
+      [18, 'Collections shared between threads',
+        `<p class="y-chinh">🎯 <code>HashMap</code> and <code>ArrayList</code> are not thread-safe: four threads counting 120,000 loans got totals between 61,000 and 75,000 (measured). <code>ConcurrentHashMap.merge</code> and <code>Collections.synchronizedList</code> give exactly 120,000.</p>
+<pre class="trich"><code class="language-java">Map&lt;String, Integer&gt; loansPerBook = new ConcurrentHashMap&lt;&gt;();
+List&lt;String&gt; audit = Collections.synchronizedList(new ArrayList&lt;&gt;());
+String[] books = { "B001", "B002", "B003" };
+ExecutorService pool = Executors.newFixedThreadPool(4);
+for (int t = 0; t &lt; 4; t++) {
+    pool.submit(() -&gt; {
+        for (int i = 0; i &lt; 30_000; i++) {
+            String id = books[i % 3];
+            loansPerBook.merge(id, 1, Integer::sum);   // read-add-write as ONE atomic step
+            audit.add(id);
+        }
+    });
+}
+pool.shutdown();
+pool.awaitTermination(10, TimeUnit.SECONDS);
+System.out.println("loans per book: " + new TreeMap&lt;&gt;(loansPerBook) + ", audit size: " + audit.size());</code></pre>
+<pre class="trich"><code class="language-java">List&lt;String&gt; listeners = new CopyOnWriteArrayList&lt;&gt;(List.of("log", "mail"));
+for (String l : listeners) {
+    if (l.equals("log")) listeners.add("stats");          // allowed: the loop walks a snapshot
+}
+System.out.println("CopyOnWriteArrayList after the loop: " + listeners);
+List&lt;String&gt; plain = new ArrayList&lt;&gt;(List.of("log", "mail"));
+try {
+    for (String l : plain) if (l.equals("log")) plain.add("stats");
+} catch (ConcurrentModificationException e) { System.out.println("ArrayList in the same loop: ConcurrentModificationException"); }</code></pre>
+<div class="out">loans per book: {B001=40000, B002=40000, B003=40000}, audit size: 120000<br>
+CopyOnWriteArrayList after the loop: [log, mail, stats]<br>
+ArrayList in the same loop: ConcurrentModificationException</div>
+<table>
+<thead><tr><th>measured by hand (same job, plain collections)</th><th>HashMap.merge total (expected 120,000)</th><th>ArrayList.add size (expected 120,000)</th></tr></thead>
+<tbody>
+<tr><td>run 1</td><td>74,901</td><td>58,962</td></tr>
+<tr><td>run 2</td><td>61,171</td><td>71,279</td></tr>
+<tr><td>run 3</td><td>62,794</td><td>63,979</td></tr>
+</tbody>
+</table>
+<p>Four pool threads each record 30,000 loans spread over three books. <code>merge(id, 1, Integer::sum)</code> on a <code>ConcurrentHashMap</code> performs read-add-write for one key as a single atomic step, so every book gets exactly 40,000. With a plain <code>HashMap</code> the same code loses about half the counts (and can even corrupt the table's internal structure), and a plain <code>ArrayList</code> loses elements — <code>add</code> is "write at <code>size</code>, then <code>size++</code>", a read-modify-write.</p>
+<p>The second block shows <code>CopyOnWriteArrayList</code>, built for listener lists (⭐ CS.7): every write copies the array, so a loop walks a snapshot and may add to the list while iterating — the new element <code>stats</code> appears after the loop. The same loop on an <code>ArrayList</code> throws <code>ConcurrentModificationException</code>, even with one thread. The slide's table is the choice: a shared map ⇒ <code>ConcurrentHashMap</code>; a shared list with many writes ⇒ a synchronized list; rare writes and many reads ⇒ copy-on-write; one thread produces, another consumes ⇒ a <code>BlockingQueue</code> (🧪 exercise 5).</p>
+<div class="pitfall">Trap: <code>if (!map.containsKey(k)) map.put(k, v);</code> on a <code>ConcurrentHashMap</code> is still a check-then-act race between two calls. Use the atomic methods: <code>putIfAbsent</code>, <code>computeIfAbsent</code>, <code>merge</code>.</div>`,
+        `<p class="y-chinh">🎯 <code>HashMap</code> và <code>ArrayList</code> không an toàn luồng: bốn luồng đếm 120.000 lượt mượn chỉ được tổng từ 61.000 tới 75.000 (đo tay). <code>ConcurrentHashMap.merge</code> và <code>Collections.synchronizedList</code> cho đúng 120.000.</p>
+<pre class="trich"><code class="language-java">Map&lt;String, Integer&gt; loansPerBook = new ConcurrentHashMap&lt;&gt;();
+List&lt;String&gt; audit = Collections.synchronizedList(new ArrayList&lt;&gt;());
+String[] books = { "B001", "B002", "B003" };
+ExecutorService pool = Executors.newFixedThreadPool(4);
+for (int t = 0; t &lt; 4; t++) {
+    pool.submit(() -&gt; {
+        for (int i = 0; i &lt; 30_000; i++) {
+            String id = books[i % 3];
+            loansPerBook.merge(id, 1, Integer::sum);   // đọc-cộng-ghi thành MỘT bước nguyên tử
+            audit.add(id);
+        }
+    });
+}
+pool.shutdown();
+pool.awaitTermination(10, TimeUnit.SECONDS);
+System.out.println("loans per book: " + new TreeMap&lt;&gt;(loansPerBook) + ", audit size: " + audit.size());</code></pre>
+<pre class="trich"><code class="language-java">List&lt;String&gt; listeners = new CopyOnWriteArrayList&lt;&gt;(List.of("log", "mail"));
+for (String l : listeners) {
+    if (l.equals("log")) listeners.add("stats");          // được: vòng lặp duyệt một bản chụp
+}
+System.out.println("CopyOnWriteArrayList after the loop: " + listeners);
+List&lt;String&gt; plain = new ArrayList&lt;&gt;(List.of("log", "mail"));
+try {
+    for (String l : plain) if (l.equals("log")) plain.add("stats");
+} catch (ConcurrentModificationException e) { System.out.println("ArrayList in the same loop: ConcurrentModificationException"); }</code></pre>
+<div class="out">loans per book: {B001=40000, B002=40000, B003=40000}, audit size: 120000<br>
+CopyOnWriteArrayList after the loop: [log, mail, stats]<br>
+ArrayList in the same loop: ConcurrentModificationException</div>
+<table>
+<thead><tr><th>đo tay (cùng việc, collection thường)</th><th>tổng HashMap.merge (đúng là 120.000)</th><th>cỡ ArrayList.add (đúng là 120.000)</th></tr></thead>
+<tbody>
+<tr><td>lần 1</td><td>74.901</td><td>58.962</td></tr>
+<tr><td>lần 2</td><td>61.171</td><td>71.279</td></tr>
+<tr><td>lần 3</td><td>62.794</td><td>63.979</td></tr>
+</tbody>
+</table>
+<p>Bốn luồng của bể, mỗi luồng ghi 30.000 lượt mượn rải đều ba cuốn sách. <code>merge(id, 1, Integer::sum)</code> trên <code>ConcurrentHashMap</code> làm đọc-cộng-ghi cho một khoá thành một bước nguyên tử, nên mỗi cuốn được đúng 40.000. Với <code>HashMap</code> thường, cùng đoạn code mất khoảng một nửa số đếm (và còn có thể làm hỏng cấu trúc bên trong của bảng), còn <code>ArrayList</code> thường thì mất phần tử — <code>add</code> là "ghi ở vị trí <code>size</code>, rồi <code>size++</code>", một thao tác đọc-sửa-ghi.</p>
+<p>Khối thứ hai cho thấy <code>CopyOnWriteArrayList</code>, sinh ra cho danh sách listener (⭐ CS.7): mỗi lần ghi là chép cả mảng, nên vòng lặp duyệt một bản chụp và được phép thêm vào list trong lúc duyệt — phần tử mới <code>stats</code> xuất hiện sau vòng lặp. Cùng vòng lặp trên <code>ArrayList</code> ném <code>ConcurrentModificationException</code>, kể cả chỉ với một luồng. Bảng trên slide là cách chọn: map dùng chung ⇒ <code>ConcurrentHashMap</code>; list dùng chung ghi nhiều ⇒ list đồng bộ; ít ghi, đọc nhiều ⇒ copy-on-write; một luồng sản xuất, luồng khác tiêu thụ ⇒ <code>BlockingQueue</code> (🧪 bài 5).</p>
+<div class="pitfall">Bẫy: <code>if (!map.containsKey(k)) map.put(k, v);</code> trên <code>ConcurrentHashMap</code> vẫn là cuộc đua kiểm-rồi-làm giữa hai lời gọi. Hãy dùng các phương thức nguyên tử: <code>putIfAbsent</code>, <code>computeIfAbsent</code>, <code>merge</code>.</div>`],
+      [19, 'CompletableFuture: three calls at once',
+        `<p class="y-chinh">🎯 <code>CompletableFuture</code> (Java 8) lets you describe <em>what depends on what</em> instead of managing threads: start three 300 ms lookups with <code>supplyAsync</code>, combine the results with <code>thenCombine</code>, and wait once with <code>join()</code> — about 300 ms instead of 900.</p>
+<pre class="trich"><code class="language-java">long t0 = System.nanoTime();
+CompletableFuture&lt;String&gt; book = CompletableFuture.supplyAsync(() -&gt; slow("Clean Code"));
+CompletableFuture&lt;String&gt; member = CompletableFuture.supplyAsync(() -&gt; slow("An Nguyen"));
+CompletableFuture&lt;Integer&gt; days = CompletableFuture.supplyAsync(() -&gt; Integer.parseInt(slow("5")));
+
+CompletableFuture&lt;String&gt; receipt = book
+    .thenCombine(member, (b, m) -&gt; "\\"" + b + "\\" for " + m)           // when BOTH are ready
+    .thenCombine(days.thenApply(d -&gt; d * 1000), (s, fee) -&gt; s + ", fee " + fee + " VND");
+System.out.println(receipt.join());                                    // wait once, at the end
+long ms = (System.nanoTime() - t0) / 1_000_000;
+System.out.println("three 300 ms calls finished in &lt; 600 ms: " + (ms &lt; 600));</code></pre>
+<div class="out">"Clean Code" for An Nguyen, fee 5000 VND<br>
+three 300 ms calls finished in &lt; 600 ms: true</div>
+<p>Each <code>supplyAsync</code> starts a lookup immediately on another thread and returns at once with a future. <code>thenApply(d -&gt; d * 1000)</code> says "when the days arrive, turn them into a fee". <code>book.thenCombine(member, …)</code> says "when <em>both</em> the book and the member are ready, build the text"; the second <code>thenCombine</code> adds the fee. Nothing waits until <code>receipt.join()</code> on the last line — and by then all three lookups have been running at the same time, which is why the whole thing finishes in under 600 ms.</p>
+<p>The diagram is the program: three independent calls, two joins, one result. Compared with <code>Future.get()</code>, you never block a thread in the middle; you build a pipeline of steps and the library runs each step when its inputs are ready. <code>join()</code> is like <code>get()</code> but throws an unchecked <code>CompletionException</code> instead of the checked <code>ExecutionException</code>, which is why it can be called without a <code>try</code>.</p>
+<div class="callout">⚠️ Where do these run? <code>supplyAsync</code> without an executor uses <code>ForkJoinPool.commonPool()</code>, which has (cores − 1) threads. On a 2-core server that is one thread — the three lookups would run one after another. For I/O calls, pass your own executor: <code>supplyAsync(() -&gt; …, pool)</code>.</div>`,
+        `<p class="y-chinh">🎯 <code>CompletableFuture</code> (Java 8) cho bạn mô tả <em>cái gì phụ thuộc cái gì</em> thay vì tự quản luồng: khởi động ba lần tra 300 ms bằng <code>supplyAsync</code>, ghép kết quả bằng <code>thenCombine</code>, và chờ một lần bằng <code>join()</code> — khoảng 300 ms thay vì 900.</p>
+<pre class="trich"><code class="language-java">long t0 = System.nanoTime();
+CompletableFuture&lt;String&gt; book = CompletableFuture.supplyAsync(() -&gt; slow("Clean Code"));
+CompletableFuture&lt;String&gt; member = CompletableFuture.supplyAsync(() -&gt; slow("An Nguyen"));
+CompletableFuture&lt;Integer&gt; days = CompletableFuture.supplyAsync(() -&gt; Integer.parseInt(slow("5")));
+
+CompletableFuture&lt;String&gt; receipt = book
+    .thenCombine(member, (b, m) -&gt; "\\"" + b + "\\" for " + m)           // khi CẢ HAI đã xong
+    .thenCombine(days.thenApply(d -&gt; d * 1000), (s, fee) -&gt; s + ", fee " + fee + " VND");
+System.out.println(receipt.join());                                    // chờ một lần, ở cuối
+long ms = (System.nanoTime() - t0) / 1_000_000;
+System.out.println("three 300 ms calls finished in &lt; 600 ms: " + (ms &lt; 600));</code></pre>
+<div class="out">"Clean Code" for An Nguyen, fee 5000 VND<br>
+three 300 ms calls finished in &lt; 600 ms: true</div>
+<p>Mỗi <code>supplyAsync</code> bắt đầu một lần tra ngay lập tức trên luồng khác và trả về ngay với một future. <code>thenApply(d -&gt; d * 1000)</code> nói "khi số ngày tới, đổi nó thành tiền phí". <code>book.thenCombine(member, …)</code> nói "khi <em>cả</em> sách lẫn thành viên đã sẵn sàng, dựng dòng chữ"; <code>thenCombine</code> thứ hai thêm tiền phí. Không có gì chờ cho tới <code>receipt.join()</code> ở dòng cuối — và lúc đó cả ba lần tra đã chạy cùng lúc, vì thế cả việc xong dưới 600 ms.</p>
+<p>Hình vẽ chính là chương trình: ba lời gọi độc lập, hai lần ghép, một kết quả. So với <code>Future.get()</code>, bạn không bao giờ chặn một luồng ở giữa; bạn dựng một chuỗi bước và thư viện chạy mỗi bước khi đầu vào của nó sẵn sàng. <code>join()</code> giống <code>get()</code> nhưng ném <code>CompletionException</code> unchecked thay vì <code>ExecutionException</code> checked, vì thế gọi được mà không cần <code>try</code>.</p>
+<div class="callout">⚠️ Chúng chạy ở đâu? <code>supplyAsync</code> không truyền executor sẽ dùng <code>ForkJoinPool.commonPool()</code>, có (số lõi − 1) luồng. Trên server 2 lõi đó là một luồng — ba lần tra sẽ chạy lần lượt. Với lời gọi I/O, hãy truyền executor của bạn: <code>supplyAsync(() -&gt; …, pool)</code>.</div>`],
+      [20, 'CompletableFuture: errors, allOf, thenCompose',
+        `<p class="y-chinh">🎯 A failed stage makes <code>join()</code> throw <code>CompletionException</code>; <code>exceptionally</code> supplies a fallback, <code>handle</code> sees the value or the error; <code>allOf</code> waits for many futures; <code>thenCompose</code> starts a call that needs the previous result.</p>
+<pre class="trich"><code class="language-java">CompletableFuture&lt;Integer&gt; rating = CompletableFuture.supplyAsync(() -&gt; {
+    throw new IllegalStateException("rating service down");
+});
+try { rating.join(); }
+catch (CompletionException e) { System.out.println("join() -&gt; CompletionException, cause: " + e.getCause().getMessage()); }
+
+int shown = rating.exceptionally(ex -&gt; -1).join();                       // a fallback value
+System.out.println("exceptionally -&gt; " + shown);
+String text = rating.handle((v, ex) -&gt; ex == null ? "rating " + v : "no rating (" + ex.getCause().getMessage() + ")").join();
+System.out.println("handle -&gt; " + text);</code></pre>
+<pre class="trich"><code class="language-java">List&lt;String&gt; ids = List.of("B001", "B002", "B003");
+List&lt;CompletableFuture&lt;String&gt;&gt; calls = new ArrayList&lt;&gt;();
+for (String id : ids) calls.add(CompletableFuture.supplyAsync(() -&gt; id + ":ok"));
+CompletableFuture.allOf(calls.toArray(new CompletableFuture[0])).join();   // wait for all
+List&lt;String&gt; all = new ArrayList&lt;&gt;();
+for (CompletableFuture&lt;String&gt; c : calls) all.add(c.join());              // already done: no waiting
+System.out.println("allOf -&gt; " + all);</code></pre>
+<pre class="trich"><code class="language-java">CompletableFuture&lt;String&gt; memberOfLoan = CompletableFuture.supplyAsync(() -&gt; "M001")
+    .thenCompose(mid -&gt; CompletableFuture.supplyAsync(() -&gt; mid + " = An Nguyen"));   // a call that needs the first result
+System.out.println("thenCompose -&gt; " + memberOfLoan.join());</code></pre>
+<div class="out">join() -&gt; CompletionException, cause: rating service down<br>
+exceptionally -&gt; -1<br>
+handle -&gt; no rating (rating service down)<br>
+allOf -&gt; [B001:ok, B002:ok, B003:ok]<br>
+thenCompose -&gt; M001 = An Nguyen</div>
+<p>The rating service is down: its stage completes <em>exceptionally</em>. <code>join()</code> rethrows the error wrapped in <code>CompletionException</code> (cause: "rating service down"). <code>exceptionally(ex -&gt; -1)</code> turns the failure into a normal value, so a dashboard can show "no rating" instead of failing completely; <code>handle((v, ex) -&gt; …)</code> receives both arguments (one of them is <code>null</code>) and can build either text. These are the asynchronous versions of <code>catch</code>.</p>
+<p><code>allOf</code> takes many futures and completes when all of them have — it returns <code>CompletableFuture&lt;Void&gt;</code>, so you collect the values afterwards with <code>join()</code>, which no longer waits. <code>thenCompose</code> is for a <em>dependent</em> call: first fetch the member id of a loan, then fetch that member; using <code>thenApply</code> here would give a future of a future. The table on the slide is the cheat sheet: apply ⇒ transform, compose ⇒ chain a call, combine ⇒ join two, allOf ⇒ wait for many, exceptionally/handle ⇒ errors.</p>
+<div class="callout">🧭 <strong>Spring / LabFlow</strong>: an <code>@Async</code> method may return <code>CompletableFuture&lt;T&gt;</code>; a controller can call three such services and combine them exactly as on slide 19. Spring's <code>WebClient</code> and <code>RestClient</code> have the same "describe the steps" style.</div>`,
+        `<p class="y-chinh">🎯 Một bước hỏng làm <code>join()</code> ném <code>CompletionException</code>; <code>exceptionally</code> cho một giá trị dự phòng, <code>handle</code> thấy cả giá trị lẫn lỗi; <code>allOf</code> chờ nhiều future; <code>thenCompose</code> khởi động một lời gọi cần kết quả trước đó.</p>
+<pre class="trich"><code class="language-java">CompletableFuture&lt;Integer&gt; rating = CompletableFuture.supplyAsync(() -&gt; {
+    throw new IllegalStateException("rating service down");
+});
+try { rating.join(); }
+catch (CompletionException e) { System.out.println("join() -&gt; CompletionException, cause: " + e.getCause().getMessage()); }
+
+int shown = rating.exceptionally(ex -&gt; -1).join();                       // giá trị dự phòng
+System.out.println("exceptionally -&gt; " + shown);
+String text = rating.handle((v, ex) -&gt; ex == null ? "rating " + v : "no rating (" + ex.getCause().getMessage() + ")").join();
+System.out.println("handle -&gt; " + text);</code></pre>
+<pre class="trich"><code class="language-java">List&lt;String&gt; ids = List.of("B001", "B002", "B003");
+List&lt;CompletableFuture&lt;String&gt;&gt; calls = new ArrayList&lt;&gt;();
+for (String id : ids) calls.add(CompletableFuture.supplyAsync(() -&gt; id + ":ok"));
+CompletableFuture.allOf(calls.toArray(new CompletableFuture[0])).join();   // chờ tất cả
+List&lt;String&gt; all = new ArrayList&lt;&gt;();
+for (CompletableFuture&lt;String&gt; c : calls) all.add(c.join());              // đã xong: không chờ
+System.out.println("allOf -&gt; " + all);</code></pre>
+<pre class="trich"><code class="language-java">CompletableFuture&lt;String&gt; memberOfLoan = CompletableFuture.supplyAsync(() -&gt; "M001")
+    .thenCompose(mid -&gt; CompletableFuture.supplyAsync(() -&gt; mid + " = An Nguyen"));   // lời gọi cần kết quả trước
+System.out.println("thenCompose -&gt; " + memberOfLoan.join());</code></pre>
+<div class="out">join() -&gt; CompletionException, cause: rating service down<br>
+exceptionally -&gt; -1<br>
+handle -&gt; no rating (rating service down)<br>
+allOf -&gt; [B001:ok, B002:ok, B003:ok]<br>
+thenCompose -&gt; M001 = An Nguyen</div>
+<p>Dịch vụ đánh giá bị sập: bước của nó hoàn tất <em>với lỗi</em>. <code>join()</code> ném lại lỗi được bọc trong <code>CompletionException</code> (nguyên nhân: "rating service down"). <code>exceptionally(ex -&gt; -1)</code> biến thất bại thành một giá trị bình thường, để bảng điều khiển hiện "chưa có đánh giá" thay vì hỏng toàn bộ; <code>handle((v, ex) -&gt; …)</code> nhận cả hai tham số (một trong hai là <code>null</code>) và dựng được chữ cho cả hai trường hợp. Đây là phiên bản bất đồng bộ của <code>catch</code>.</p>
+<p><code>allOf</code> nhận nhiều future và hoàn tất khi tất cả đã xong — nó trả về <code>CompletableFuture&lt;Void&gt;</code>, nên bạn gom giá trị sau đó bằng <code>join()</code>, lúc này không còn phải chờ. <code>thenCompose</code> dành cho lời gọi <em>phụ thuộc</em>: trước lấy mã thành viên của một lượt mượn, rồi mới lấy thông tin thành viên đó; dùng <code>thenApply</code> ở đây sẽ ra một future lồng trong future. Bảng trên slide là bảng tra nhanh: apply ⇒ biến đổi, compose ⇒ nối một lời gọi, combine ⇒ ghép hai, allOf ⇒ chờ nhiều, exceptionally/handle ⇒ xử lý lỗi.</p>
+<div class="callout">🧭 <strong>Spring / LabFlow</strong>: một phương thức <code>@Async</code> có thể trả về <code>CompletableFuture&lt;T&gt;</code>; một controller gọi ba service như thế và ghép lại y như slide 19. <code>WebClient</code> và <code>RestClient</code> của Spring cũng theo phong cách "mô tả các bước" đó.</div>`],
+      [21, 'The same API on virtual threads (Java 21)',
+        `<p class="y-chinh">🎯 Virtual threads (Java 21) plug into the same <code>ExecutorService</code> API: <code>newVirtualThreadPerTaskExecutor()</code> gives every job its own virtual thread. 10,000 jobs that each wait 50 ms all finished, on virtual threads, in under 2 seconds.</p>
+<pre><code class="language-java">// release: 21
+// Slide 21: the same ExecutorService API on virtual threads — 10,000 waiting jobs
+import java.util.*;
+import java.util.concurrent.*;
+
+public class LuongAoNhanh {
+    public static void main(String[] args) throws Exception {
+        List&lt;Callable&lt;Boolean&gt;&gt; jobs = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; 10_000; i++) jobs.add(() -&gt; { Thread.sleep(50); return Thread.currentThread().isVirtual(); });
+        long t0 = System.nanoTime();
+        int virtual = 0;
+        try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) {   // one new virtual thread per job
+            for (Future&lt;Boolean&gt; f : pool.invokeAll(jobs)) if (f.get()) virtual++;
+        }                                                                            // close() waits for all
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        System.out.println("jobs done on virtual threads: " + virtual);
+        System.out.println("10000 x 50 ms of waiting took &lt; 2 s: " + (ms &lt; 2000));
+    }
+}</code></pre>
+<div class="out">jobs done on virtual threads: 10000<br>
+10000 x 50 ms of waiting took &lt; 2 s: true</div>
+<p>Only the factory line differs from slide 15: the jobs are ordinary <code>Callable</code>s, the results ordinary <code>Future</code>s from <code>invokeAll</code>. Each job reports <code>Thread.currentThread().isVirtual()</code>, and all 10,000 said true. A virtual thread is a small JVM object mounted on a few carrier threads; while it sleeps or waits for I/O it is unmounted, so 10,000 waiting jobs do not need 10,000 operating-system threads. <code>try (pool)</code> uses <code>AutoCloseable</code> (Java 19+): <code>close()</code> waits for every job, then shuts down.</p>
+<p>⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-2">CS.3</a> measured the difference with a fixed pool of 100 platform threads (more than 20× slower for this kind of work) and listed the rules: never pool virtual threads, they do not make CPU work faster, and on JDK 21 a virtual thread blocking inside <code>synchronized</code> pins its carrier (JDK 24's JEP 491 mostly removed that). Everything else in this deck — races, locks, atomics, deadlocks — applies to virtual threads exactly as to platform threads.</p>
+<div class="callout">🧭 <strong>Spring Boot 3.2+ on Java 21</strong>: <code>spring.threads.virtual.enabled=true</code> runs Tomcat's request handling, <code>@Async</code> and <code>@Scheduled</code> on virtual threads with no code change. ⚠️ <strong>Exam room PE (JDK 8)</strong>: not available.</div>`,
+        `<p class="y-chinh">🎯 Luồng ảo (Java 21) cắm vào đúng API <code>ExecutorService</code>: <code>newVirtualThreadPerTaskExecutor()</code> cho mỗi việc một luồng ảo riêng. 10.000 việc mỗi việc chờ 50 ms đều xong, trên luồng ảo, dưới 2 giây.</p>
+<pre><code class="language-java">// release: 21
+// Slide 21: cùng API ExecutorService trên luồng ảo — 10.000 việc đang chờ
+import java.util.*;
+import java.util.concurrent.*;
+
+public class LuongAoNhanh {
+    public static void main(String[] args) throws Exception {
+        List&lt;Callable&lt;Boolean&gt;&gt; jobs = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; 10_000; i++) jobs.add(() -&gt; { Thread.sleep(50); return Thread.currentThread().isVirtual(); });
+        long t0 = System.nanoTime();
+        int virtual = 0;
+        try (ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor()) {   // mỗi việc một luồng ảo mới
+            for (Future&lt;Boolean&gt; f : pool.invokeAll(jobs)) if (f.get()) virtual++;
+        }                                                                            // close() chờ tất cả
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        System.out.println("jobs done on virtual threads: " + virtual);
+        System.out.println("10000 x 50 ms of waiting took &lt; 2 s: " + (ms &lt; 2000));
+    }
+}</code></pre>
+<div class="out">jobs done on virtual threads: 10000<br>
+10000 x 50 ms of waiting took &lt; 2 s: true</div>
+<p>Chỉ dòng factory khác slide 15: các việc là <code>Callable</code> bình thường, kết quả là <code>Future</code> bình thường từ <code>invokeAll</code>. Mỗi việc báo <code>Thread.currentThread().isVirtual()</code>, và cả 10.000 đều nói true. Luồng ảo là một đối tượng nhỏ của JVM gắn lên vài luồng carrier; trong lúc nó ngủ hay chờ I/O thì được tháo ra, nên 10.000 việc đang chờ không cần 10.000 luồng hệ điều hành. <code>try (pool)</code> dùng <code>AutoCloseable</code> (Java 19+): <code>close()</code> chờ mọi việc xong rồi tắt bể.</p>
+<p>⭐ <a href="/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-2">CS.3</a> đã đo khác biệt so với bể cố định 100 luồng nền tảng (chậm hơn trên 20 lần với kiểu việc này) và liệt kê các luật: không bao giờ pool luồng ảo, chúng không làm việc CPU nhanh hơn, và trên JDK 21 luồng ảo bị chặn bên trong <code>synchronized</code> sẽ ghim carrier (JEP 491 của JDK 24 đã gỡ phần lớn chuyện đó). Mọi thứ khác trong deck này — cuộc đua, khoá, atomic, deadlock — áp dụng cho luồng ảo y hệt luồng nền tảng.</p>
+<div class="callout">🧭 <strong>Spring Boot 3.2+ trên Java 21</strong>: <code>spring.threads.virtual.enabled=true</code> chạy phần xử lý request của Tomcat, <code>@Async</code> và <code>@Scheduled</code> trên luồng ảo mà không đổi code. ⚠️ <strong>Phòng thi PE (JDK 8)</strong>: không có.</div>`],
+      [22, 'Threads inside Spring Boot',
+        `<p class="y-chinh">🎯 In Spring Boot every request runs on its own thread, and all of them call the same singleton beans at the same time. A request field in a bean mixes requests up; parameters, locals and (carefully) <code>ThreadLocal</code> keep them apart.</p>
+<pre class="trich"><code class="language-java">static class StatefulService {                         // ✗ like a @Service with a request field
+    private String member;
+    String receipt(String memberId, String itemId, CyclicBarrier pause) {
+        member = memberId;
+        await(pause);                                  // (demo: both requests are between the two lines)
+        return itemId + " for " + member;
+    }
+}
+static class ThreadLocalService {                      // each thread its own copy (what SecurityContextHolder does)
+    private final ThreadLocal&lt;String&gt; member = new ThreadLocal&lt;&gt;();
+    String receipt(String memberId, String itemId, CyclicBarrier pause) {
+        member.set(memberId);
+        try { await(pause); return itemId + " for " + member.get(); }
+        finally { member.remove(); }                   // pooled threads are reused: always clean up
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">StatefulService bad = new StatefulService();
+ThreadLocalService good = new ThreadLocalService();
+for (String kind : List.of("field", "ThreadLocal")) {
+    CyclicBarrier pause = new CyclicBarrier(2);
+    ExecutorService requests = Executors.newFixedThreadPool(2);     // like Tomcat's request threads
+    Future&lt;String&gt; r1 = requests.submit(() -&gt; kind.equals("field") ? bad.receipt("M001", "B001", pause) : good.receipt("M001", "B001", pause));
+    Future&lt;String&gt; r2 = requests.submit(() -&gt; kind.equals("field") ? bad.receipt("M002", "B007", pause) : good.receipt("M002", "B007", pause));
+    String a = r1.get(), b = r2.get();
+    requests.shutdown();
+    boolean ok = a.equals("B001 for M001") &amp;&amp; b.equals("B007 for M002");
+    System.out.println(kind + ": both receipts correct = " + ok + (ok ? "" : " (one member's name is on both)"));
+}</code></pre>
+<div class="out">field: both receipts correct = false (one member's name is on both)<br>
+ThreadLocal: both receipts correct = true</div>
+<p>The program plays two request threads from a pool (like Tomcat's <code>http-nio-8080-exec-N</code> threads) calling one service object. In <code>StatefulService</code> both requests write the shared field <code>member</code> and then — forced by the barrier — both read it: whoever wrote last wins, and both receipts carry the same member's name. CS.7 slide 20 showed this one step at a time on one thread; here it happens with real threads. <code>ThreadLocalService</code> gives each thread its own copy of <code>member</code>, so both receipts are correct.</p>
+<p>The table maps the rule into Spring. Singleton beans: only <code>final</code> dependencies in fields. Request data: parameters, locals, or a request-scoped bean. <code>SecurityContextHolder</code> keeps the logged-in user in a <code>ThreadLocal</code>, which is how a service deep in the call can ask "who is calling?" without a parameter; <code>@Transactional</code> binds the database connection to the current thread the same way. <code>@Async</code> moves a method to another thread — so the ThreadLocal values of the caller (the user, the transaction) are <em>not</em> there.</p>
+<div class="pitfall">Trap: pool threads are reused. A <code>ThreadLocal</code> set and never removed is still there when the same thread serves the next request — the next user may see the previous user's data. Always <code>remove()</code> in <code>finally</code>, as the program does.</div>`,
+        `<p class="y-chinh">🎯 Trong Spring Boot mỗi request chạy trên luồng riêng, và tất cả cùng gọi những bean singleton giống nhau vào cùng lúc. Một field chứa dữ liệu request trong bean làm lẫn các request; tham số, biến cục bộ và (cẩn thận) <code>ThreadLocal</code> giữ chúng tách biệt.</p>
+<pre class="trich"><code class="language-java">static class StatefulService {                         // ✗ như @Service có field của request
+    private String member;
+    String receipt(String memberId, String itemId, CyclicBarrier pause) {
+        member = memberId;
+        await(pause);                                  // (minh hoạ: cả hai request ở giữa hai dòng)
+        return itemId + " for " + member;
+    }
+}
+static class ThreadLocalService {                      // mỗi luồng một bản riêng
+    private final ThreadLocal&lt;String&gt; member = new ThreadLocal&lt;&gt;();
+    String receipt(String memberId, String itemId, CyclicBarrier pause) {
+        member.set(memberId);
+        try { await(pause); return itemId + " for " + member.get(); }
+        finally { member.remove(); }                   // luồng trong bể được dùng lại: luôn dọn
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">StatefulService bad = new StatefulService();
+ThreadLocalService good = new ThreadLocalService();
+for (String kind : List.of("field", "ThreadLocal")) {
+    CyclicBarrier pause = new CyclicBarrier(2);
+    ExecutorService requests = Executors.newFixedThreadPool(2);     // như luồng request của Tomcat
+    Future&lt;String&gt; r1 = requests.submit(() -&gt; kind.equals("field") ? bad.receipt("M001", "B001", pause) : good.receipt("M001", "B001", pause));
+    Future&lt;String&gt; r2 = requests.submit(() -&gt; kind.equals("field") ? bad.receipt("M002", "B007", pause) : good.receipt("M002", "B007", pause));
+    String a = r1.get(), b = r2.get();
+    requests.shutdown();
+    boolean ok = a.equals("B001 for M001") &amp;&amp; b.equals("B007 for M002");
+    System.out.println(kind + ": both receipts correct = " + ok + (ok ? "" : " (one member's name is on both)"));
+}</code></pre>
+<div class="out">field: both receipts correct = false (one member's name is on both)<br>
+ThreadLocal: both receipts correct = true</div>
+<p>Chương trình đóng vai hai luồng request lấy từ một bể (như các luồng <code>http-nio-8080-exec-N</code> của Tomcat) cùng gọi một đối tượng service. Trong <code>StatefulService</code>, cả hai request ghi field dùng chung <code>member</code> rồi — bị barrier ép — cùng đọc nó: ai ghi sau thì thắng, và cả hai phiếu mang tên cùng một thành viên. Slide 20 của CS.7 cho thấy chuyện này từng bước trên một luồng; ở đây nó xảy ra với luồng thật. <code>ThreadLocalService</code> cho mỗi luồng một bản <code>member</code> riêng, nên cả hai phiếu đều đúng.</p>
+<p>Bảng đưa luật vào Spring. Bean singleton: field chỉ chứa phụ thuộc <code>final</code>. Dữ liệu request: tham số, biến cục bộ, hoặc bean phạm vi request. <code>SecurityContextHolder</code> giữ người dùng đang đăng nhập trong một <code>ThreadLocal</code>, đó là cách một service nằm sâu trong chuỗi gọi hỏi được "ai đang gọi?" mà không cần tham số; <code>@Transactional</code> gắn kết nối CSDL vào luồng hiện tại theo cùng cách. <code>@Async</code> chuyển một phương thức sang luồng khác — nên các giá trị ThreadLocal của người gọi (người dùng, giao dịch) <em>không</em> có ở đó.</p>
+<div class="pitfall">Bẫy: luồng trong bể được dùng lại. Một <code>ThreadLocal</code> được đặt mà không bao giờ gỡ vẫn còn đó khi chính luồng ấy phục vụ request kế tiếp — người dùng sau có thể thấy dữ liệu của người dùng trước. Luôn <code>remove()</code> trong <code>finally</code>, như chương trình làm.</div>`],
+      [23, 'The CS.7 singleton, made thread-safe',
+        `<p class="y-chinh">🎯 The lazy singleton of CS.7 created 2 objects under two threads. Three thread-safe versions, each hit by 8 threads released at the same instant, create exactly 1: a <code>synchronized</code> getter, double-checked locking with <code>volatile</code>, and the holder idiom.</p>
+<pre class="trich"><code class="language-java">static class SyncConfig {                                  // 1. synchronized method: simple, a lock on every call
+    static final AtomicInteger made = new AtomicInteger();
+    private static SyncConfig instance;
+    private SyncConfig() { made.incrementAndGet(); }
+    static synchronized SyncConfig get() {
+        if (instance == null) instance = new SyncConfig();
+        return instance;
+    }
+}
+static class DclConfig {                                   // 2. double-checked locking: volatile is REQUIRED
+    static final AtomicInteger made = new AtomicInteger();
+    private static volatile DclConfig instance;
+    private DclConfig() { made.incrementAndGet(); }
+    static DclConfig get() {
+        DclConfig c = instance;
+        if (c == null) {                                   // fast path: no lock once created
+            synchronized (DclConfig.class) {
+                c = instance;
+                if (c == null) instance = c = new DclConfig();
+            }
+        }
+        return c;
+    }
+}
+static class HolderConfig {                                // 3. holder: the JVM's class-init lock does it
+    static final AtomicInteger made = new AtomicInteger();
+    private HolderConfig() { made.incrementAndGet(); }
+    private static class H { static final HolderConfig I = new HolderConfig(); }
+    static HolderConfig get() { return H.I; }
+}</code></pre>
+<pre class="trich"><code class="language-java">System.out.println("lazy (CS.7), 2 threads:    objects = " + race(LazyConfig::get, LazyConfig.made, 2));
+System.out.println("synchronized, 8 threads:   objects = " + race(SyncConfig::get, SyncConfig.made, 8));
+System.out.println("double-checked, 8 threads: objects = " + race(DclConfig::get, DclConfig.made, 8));
+System.out.println("holder, 8 threads:         objects = " + race(HolderConfig::get, HolderConfig.made, 8));</code></pre>
+<div class="out">lazy (CS.7), 2 threads: &nbsp;&nbsp;&nbsp;objects = 2<br>
+synchronized, 8 threads: &nbsp;&nbsp;objects = 1<br>
+double-checked, 8 threads: objects = 1<br>
+holder, 8 threads: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objects = 1</div>
+<p><strong>synchronized get()</strong>: the check-then-act becomes one step under the class lock — correct and simple, but every call takes the lock, even after the object exists. <strong>Double-checked locking</strong>: check without the lock (fast path, the usual case once created), and only if <code>null</code> take the lock and check again. The field <em>must</em> be <code>volatile</code>: without it, the Java Memory Model allows another thread to see the reference before it sees the constructor's writes — a half-built object. <strong>Holder idiom</strong>: no lock in your code at all; the JVM's class-initialisation lock (JLS §12.4.2) guarantees <code>H.I</code> is created once, when first touched.</p>
+<p>The test harness releases 8 threads with one <code>CountDownLatch</code> so they call <code>get()</code> together; the broken version, with CS.7's forced pause, still produces 2 objects. In practice: prefer the holder idiom or an <code>enum</code> (⭐ CS.7), and in Spring prefer neither — let the container create one bean.</p>
+<div class="pitfall">Trap: double-checked locking <em>without</em> <code>volatile</code> usually passes tests and fails rarely on real hardware. It is the textbook example of a concurrency bug you cannot test your way out of — reason about the memory model instead.</div>`,
+        `<p class="y-chinh">🎯 Singleton lười của CS.7 tạo 2 đối tượng dưới hai luồng. Ba bản an toàn luồng, mỗi bản bị 8 luồng thả ra cùng lúc đánh vào, chỉ tạo đúng 1: getter <code>synchronized</code>, khoá kiểm hai lần với <code>volatile</code>, và cách holder.</p>
+<pre class="trich"><code class="language-java">static class SyncConfig {                                  // 1. phương thức synchronized: đơn giản, khoá mỗi lần gọi
+    static final AtomicInteger made = new AtomicInteger();
+    private static SyncConfig instance;
+    private SyncConfig() { made.incrementAndGet(); }
+    static synchronized SyncConfig get() {
+        if (instance == null) instance = new SyncConfig();
+        return instance;
+    }
+}
+static class DclConfig {                                   // 2. khoá kiểm hai lần: BẮT BUỘC volatile
+    static final AtomicInteger made = new AtomicInteger();
+    private static volatile DclConfig instance;
+    private DclConfig() { made.incrementAndGet(); }
+    static DclConfig get() {
+        DclConfig c = instance;
+        if (c == null) {                                   // đường nhanh: không khoá khi đã tạo
+            synchronized (DclConfig.class) {
+                c = instance;
+                if (c == null) instance = c = new DclConfig();
+            }
+        }
+        return c;
+    }
+}
+static class HolderConfig {                                // 3. holder: khoá khởi tạo lớp của JVM lo
+    static final AtomicInteger made = new AtomicInteger();
+    private HolderConfig() { made.incrementAndGet(); }
+    private static class H { static final HolderConfig I = new HolderConfig(); }
+    static HolderConfig get() { return H.I; }
+}</code></pre>
+<pre class="trich"><code class="language-java">System.out.println("lazy (CS.7), 2 threads:    objects = " + race(LazyConfig::get, LazyConfig.made, 2));
+System.out.println("synchronized, 8 threads:   objects = " + race(SyncConfig::get, SyncConfig.made, 8));
+System.out.println("double-checked, 8 threads: objects = " + race(DclConfig::get, DclConfig.made, 8));
+System.out.println("holder, 8 threads:         objects = " + race(HolderConfig::get, HolderConfig.made, 8));</code></pre>
+<div class="out">lazy (CS.7), 2 threads: &nbsp;&nbsp;&nbsp;objects = 2<br>
+synchronized, 8 threads: &nbsp;&nbsp;objects = 1<br>
+double-checked, 8 threads: objects = 1<br>
+holder, 8 threads: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objects = 1</div>
+<p><strong>synchronized get()</strong>: kiểm-rồi-làm thành một bước dưới khoá của lớp — đúng và đơn giản, nhưng mọi lần gọi đều lấy khoá, kể cả khi đối tượng đã có. <strong>Khoá kiểm hai lần</strong> (double-checked locking): kiểm không khoá (đường nhanh, trường hợp thường gặp khi đã tạo), chỉ khi <code>null</code> mới lấy khoá và kiểm lại. Field <em>bắt buộc</em> là <code>volatile</code>: thiếu nó, mô hình bộ nhớ Java cho phép luồng khác thấy tham chiếu trước khi thấy các lần ghi của constructor — một đối tượng dựng dở. <strong>Cách holder</strong>: không có khoá nào trong code của bạn; khoá khởi tạo lớp của JVM (JLS §12.4.2) bảo đảm <code>H.I</code> được tạo một lần, khi lần đầu bị chạm tới.</p>
+<p>Bộ thử thả 8 luồng bằng một <code>CountDownLatch</code> để chúng gọi <code>get()</code> cùng lúc; bản hỏng, với chỗ dừng ép của CS.7, vẫn ra 2 đối tượng. Thực tế: ưu tiên cách holder hoặc một <code>enum</code> (⭐ CS.7), và trong Spring thì không dùng cái nào — để bộ chứa tạo một bean.</p>
+<div class="pitfall">Bẫy: khoá kiểm hai lần <em>thiếu</em> <code>volatile</code> thường qua được test và chỉ hỏng thỉnh thoảng trên phần cứng thật. Đó là ví dụ sách giáo khoa về lỗi đồng thời mà không thể test để thoát — hãy lập luận theo mô hình bộ nhớ.</div>`],
+      [24, 'Traps and interview questions',
+        `<p class="y-chinh">🎯 Five traps, measured: <code>run()</code> instead of <code>start()</code>, a pool never shut down (the JVM does not exit), a swallowed interrupt (the job cannot be stopped), a shared <code>SimpleDateFormat</code> (wrong dates), <code>parallelStream</code> for I/O. Then six questions every Java interview asks.</p>
+<pre class="trich"><code class="language-java">Path dir = Files.createTempDirectory("cs8-");
+Path src = dir.resolve("Report.java");
+Files.writeString(src, String.join("\\n",
+    "import java.util.concurrent.*;",
+    "public class Report {",
+    "    public static void main(String[] a) {",
+    "        ExecutorService pool = Executors.newFixedThreadPool(2);",
+    "        pool.submit(() -&gt; System.out.println(\\"report sent\\"));",
+    "        System.out.println(\\"main ends\\");",
+    "        // no pool.shutdown()",
+    "    }",
+    "}"));
+String java = Paths.get(System.getProperty("java.home"), "bin", "java").toString();
+ProcessBuilder pb = new ProcessBuilder(java, src.toString()).redirectErrorStream(true);
+pb.environment().remove("JAVA_TOOL_OPTIONS");
+Process p = pb.start();
+boolean exited = p.waitFor(3, TimeUnit.SECONDS);
+System.out.println("&gt; java Report.java   (a pool, no shutdown)");
+System.out.println("  JVM exited within 3 s: " + exited + " (pool threads still alive)");
+p.destroyForcibly().waitFor();
+Files.delete(src); Files.delete(dir);</code></pre>
+<pre class="trich"><code class="language-java">for (boolean restore : new boolean[] { false, true }) {
+    ExecutorService pool = Executors.newSingleThreadExecutor(r -&gt; { Thread t = new Thread(r); t.setDaemon(true); return t; });
+    pool.submit(() -&gt; {
+        while (!Thread.currentThread().isInterrupted()) {
+            try { Thread.sleep(50); }                              // one step of a long job
+            catch (InterruptedException e) {
+                if (restore) Thread.currentThread().interrupt();  // ✓ keep the request
+                // else: ✗ swallowed — the loop goes on
+            }
+        }
+    });
+    Thread.sleep(100);
+    pool.shutdownNow();                                           // interrupts the worker
+    System.out.println((restore ? "restores the flag:  " : "swallows the flag:  ") + "stopped within 1 s = " + pool.awaitTermination(1, TimeUnit.SECONDS));
+}</code></pre>
+<div class="out">&gt; java Report.java &nbsp;&nbsp;(a pool, no shutdown)<br>
+&nbsp;&nbsp;JVM exited within 3 s: false (pool threads still alive)<br>
+swallows the flag: &nbsp;stopped within 1 s = false<br>
+restores the flag: &nbsp;stopped within 1 s = true</div>
+<p>The program writes a tiny <code>Report.java</code> that creates a pool, submits one job and ends <code>main</code> without <code>shutdown()</code>, then runs it in a separate JVM: three seconds later that JVM has still not exited — pool threads are non-daemon threads waiting for more work, and a JVM exits only when no non-daemon thread is left. Second block: a job that swallows <code>InterruptedException</code> ignores <code>shutdownNow()</code> and is still running a second later; the job that restores the flag stops at once (slide 7).</p>
+<table>
+<thead><tr><th>measured by hand</th><th>SimpleDateFormat shared by 4 threads × 10,000 parses</th><th>DateTimeFormatter shared</th></tr></thead>
+<tbody>
+<tr><td>run 1</td><td>15,465 wrong dates + 313 exceptions</td><td>0 wrong</td></tr>
+<tr><td>run 2</td><td>14,752 wrong dates + 294 exceptions</td><td>0 wrong</td></tr>
+<tr><td>run 3</td><td>10,917 wrong dates + 59 exceptions</td><td>0 wrong</td></tr>
+</tbody>
+</table>
+<p><code>SimpleDateFormat</code> keeps parsing state in fields (its javadoc: "Date formats are not synchronized"), so sharing one between threads silently returns <em>wrong dates</em>; <code>java.time.DateTimeFormatter</code> is immutable and thread-safe. And <code>parallelStream()</code> runs on the shared common pool: blocking I/O there starves every other parallel stream in the JVM — use your own executor. The interview answers on the slide summarise the deck; say each with its example: <em>count++ lost half of 2,000,000; a bean field mixed two receipts</em>.</p>`,
+        `<p class="y-chinh">🎯 Năm cái bẫy, có đo: <code>run()</code> thay vì <code>start()</code>, bể luồng không bao giờ shutdown (JVM không thoát), nuốt interrupt (không dừng được việc), <code>SimpleDateFormat</code> dùng chung (ngày sai), <code>parallelStream</code> cho I/O. Rồi sáu câu mọi buổi phỏng vấn Java đều hỏi.</p>
+<pre class="trich"><code class="language-java">Path dir = Files.createTempDirectory("cs8-");
+Path src = dir.resolve("Report.java");
+Files.writeString(src, String.join("\\n",
+    "import java.util.concurrent.*;",
+    "public class Report {",
+    "    public static void main(String[] a) {",
+    "        ExecutorService pool = Executors.newFixedThreadPool(2);",
+    "        pool.submit(() -&gt; System.out.println(\\"report sent\\"));",
+    "        System.out.println(\\"main ends\\");",
+    "        // no pool.shutdown()",
+    "    }",
+    "}"));
+String java = Paths.get(System.getProperty("java.home"), "bin", "java").toString();
+ProcessBuilder pb = new ProcessBuilder(java, src.toString()).redirectErrorStream(true);
+pb.environment().remove("JAVA_TOOL_OPTIONS");
+Process p = pb.start();
+boolean exited = p.waitFor(3, TimeUnit.SECONDS);
+System.out.println("&gt; java Report.java   (a pool, no shutdown)");
+System.out.println("  JVM exited within 3 s: " + exited + " (pool threads still alive)");
+p.destroyForcibly().waitFor();
+Files.delete(src); Files.delete(dir);</code></pre>
+<pre class="trich"><code class="language-java">for (boolean restore : new boolean[] { false, true }) {
+    ExecutorService pool = Executors.newSingleThreadExecutor(r -&gt; { Thread t = new Thread(r); t.setDaemon(true); return t; });
+    pool.submit(() -&gt; {
+        while (!Thread.currentThread().isInterrupted()) {
+            try { Thread.sleep(50); }                              // một bước của việc dài
+            catch (InterruptedException e) {
+                if (restore) Thread.currentThread().interrupt();  // ✓ giữ lại lời yêu cầu
+                // ✗ nuốt mất — vòng lặp chạy tiếp
+            }
+        }
+    });
+    Thread.sleep(100);
+    pool.shutdownNow();                                           // ngắt luồng thợ
+    System.out.println((restore ? "restores the flag:  " : "swallows the flag:  ") + "stopped within 1 s = " + pool.awaitTermination(1, TimeUnit.SECONDS));
+}</code></pre>
+<div class="out">&gt; java Report.java &nbsp;&nbsp;(a pool, no shutdown)<br>
+&nbsp;&nbsp;JVM exited within 3 s: false (pool threads still alive)<br>
+swallows the flag: &nbsp;stopped within 1 s = false<br>
+restores the flag: &nbsp;stopped within 1 s = true</div>
+<p>Chương trình ghi một tệp <code>Report.java</code> nhỏ tạo bể luồng, gửi một việc và kết thúc <code>main</code> mà không <code>shutdown()</code>, rồi chạy nó trong một JVM riêng: ba giây sau JVM đó vẫn chưa thoát — các luồng của bể là luồng không-daemon đang chờ thêm việc, mà JVM chỉ thoát khi không còn luồng không-daemon nào. Khối hai: công việc nuốt <code>InterruptedException</code> phớt lờ <code>shutdownNow()</code> và một giây sau vẫn chạy; công việc đặt lại cờ thì dừng ngay (slide 7).</p>
+<table>
+<thead><tr><th>đo tay</th><th>SimpleDateFormat dùng chung, 4 luồng × 10.000 lần parse</th><th>DateTimeFormatter dùng chung</th></tr></thead>
+<tbody>
+<tr><td>lần 1</td><td>15.465 ngày sai + 313 exception</td><td>0 sai</td></tr>
+<tr><td>lần 2</td><td>14.752 ngày sai + 294 exception</td><td>0 sai</td></tr>
+<tr><td>lần 3</td><td>10.917 ngày sai + 59 exception</td><td>0 sai</td></tr>
+</tbody>
+</table>
+<p><code>SimpleDateFormat</code> giữ trạng thái parse trong field (javadoc của nó: "Date formats are not synchronized" — định dạng ngày không được đồng bộ), nên dùng chung một cái giữa các luồng sẽ lặng lẽ trả <em>ngày sai</em>; <code>java.time.DateTimeFormatter</code> bất biến và an toàn luồng. Còn <code>parallelStream()</code> chạy trên bể chung: chặn vì I/O ở đó làm đói mọi parallel stream khác trong JVM — hãy dùng executor riêng. Các câu trả lời phỏng vấn trên slide tóm tắt cả deck; nói mỗi câu kèm ví dụ: <em>count++ mất một nửa của 2.000.000; một field của bean làm lẫn hai phiếu</em>.</p>`],
+      [25, 'Summary: threads without fear',
+        `<p class="y-chinh">🎯 Six boxes for the whole deck — threads, races, fixes, deadlock, executors, CompletableFuture — and one rule above them: the safest shared mutable state is the one you do not have.</p>
+<p><strong>Threads</strong>: start, never run; states; join; interrupt is a request. <strong>Races</strong>: shared + mutable + no rule = lost updates — about half of them in our measurement, different every run, sometimes hidden. <strong>Fixes</strong>: <code>synchronized</code> on one lock for compound state, <code>AtomicInteger</code>/<code>LongAdder</code> for single values, <code>volatile</code> only for flags and safe publication. <strong>Deadlock</strong>: two locks taken in opposite orders; one global order prevents it. <strong>Executors</strong>: a pool and a queue, <code>Callable</code>/<code>Future</code>, <code>invokeAll</code>, and always <code>shutdown()</code>. <strong>CompletableFuture</strong>: start calls with <code>supplyAsync</code>, combine, handle errors, wait once.</p>
+<p>The box at the bottom is the habit that prevents most of this deck's bugs: do not share mutable state. Keep data in locals and parameters, make shared objects immutable (⭐ CS.4), give each object one owning thread, keep Spring beans stateless — and only then reach for locks and atomics, for the little shared state that remains.</p>
+<div class="callout">🧭 <strong>Go further</strong>: Brian Goetz et al., <em>Java Concurrency in Practice</em> (2006) is still the reference book; the PostgreSQL course covers the same problems one level down (transactions, isolation, row locks, deadlock detection). Practise with the 🧪 exercises of this deck.</div>`,
+        `<p class="y-chinh">🎯 Sáu ô cho cả deck — luồng, cuộc đua, cách sửa, deadlock, executor, CompletableFuture — và một luật đứng trên tất cả: trạng thái dùng chung sửa được an toàn nhất là thứ bạn không có.</p>
+<p><strong>Luồng</strong>: start, không bao giờ run; trạng thái; join; interrupt là lời đề nghị. <strong>Cuộc đua</strong>: dùng chung + sửa được + không luật = mất cập nhật — khoảng một nửa trong lần đo của ta, mỗi lần một khác, đôi khi ẩn mình. <strong>Cách sửa</strong>: <code>synchronized</code> trên một khoá cho trạng thái nhiều phần, <code>AtomicInteger</code>/<code>LongAdder</code> cho một giá trị, <code>volatile</code> chỉ cho cờ và công bố an toàn. <strong>Deadlock</strong>: hai khoá lấy theo thứ tự ngược nhau; một thứ tự chung ngăn được nó. <strong>Executor</strong>: một bể và một hàng đợi, <code>Callable</code>/<code>Future</code>, <code>invokeAll</code>, và luôn <code>shutdown()</code>. <strong>CompletableFuture</strong>: khởi động lời gọi bằng <code>supplyAsync</code>, ghép, xử lý lỗi, chờ một lần.</p>
+<p>Ô cuối là thói quen ngăn được phần lớn lỗi của deck: đừng dùng chung trạng thái sửa được. Giữ dữ liệu trong biến cục bộ và tham số, làm đối tượng dùng chung thành bất biến (⭐ CS.4), cho mỗi đối tượng một luồng chủ, giữ bean Spring không trạng thái — rồi mới dùng tới khoá và atomic cho phần trạng thái dùng chung ít ỏi còn lại.</p>
+<div class="callout">🧭 <strong>Đi tiếp</strong>: cuốn <em>Java Concurrency in Practice</em> của Brian Goetz và cộng sự (2006) vẫn là sách tham khảo chuẩn; khoá PostgreSQL bàn đúng những vấn đề này ở tầng dưới (giao dịch, mức cô lập, khoá dòng, phát hiện deadlock). Luyện bằng các bài 🧪 của deck này.</div>`],
+    ]),
+    bi(`<h2>📌 What to take away from slides 15–25</h2>
+<ul>
+<li>Submit jobs to an <code>ExecutorService</code> (pool + queue, threads reused) and always <code>shutdown()</code> — otherwise the JVM never exits (measured).</li>
+<li><code>Callable</code> returns a value; <code>Future.get()</code> blocks, wraps the job's exception in <code>ExecutionException</code>; use <code>get(timeout)</code> for remote calls.</li>
+<li>Split big work into independent parts with <code>invokeAll</code>; combine in one place; no shared accumulator.</li>
+<li>Shared map ⇒ <code>ConcurrentHashMap</code> + atomic methods (<code>merge</code>, <code>computeIfAbsent</code>); plain HashMap/ArrayList lost about half (measured).</li>
+<li><code>CompletableFuture</code>: <code>supplyAsync</code>, <code>thenApply</code>, <code>thenCombine</code>, <code>thenCompose</code>, <code>allOf</code>, <code>exceptionally</code>/<code>handle</code>; pass an executor for I/O.</li>
+<li>Virtual threads: the same API, one per job; races and locks behave the same.</li>
+<li>Spring: request threads share singleton beans — stateless beans, ThreadLocal with <code>remove()</code>; thread-safe lazy singletons: holder, enum, or DCL with <code>volatile</code>.</li>
+</ul>`,
+    `<h2>📌 Cần mang theo gì từ slide 15–25</h2>
+<ul>
+<li>Gửi việc cho một <code>ExecutorService</code> (bể + hàng đợi, luồng được dùng lại) và luôn <code>shutdown()</code> — không thì JVM không bao giờ thoát (đã đo).</li>
+<li><code>Callable</code> trả về giá trị; <code>Future.get()</code> chặn, bọc exception của công việc trong <code>ExecutionException</code>; dùng <code>get(timeout)</code> cho lời gọi xa.</li>
+<li>Chia việc lớn thành phần độc lập với <code>invokeAll</code>; gộp ở một chỗ; không có biến cộng dồn dùng chung.</li>
+<li>Map dùng chung ⇒ <code>ConcurrentHashMap</code> + phương thức nguyên tử (<code>merge</code>, <code>computeIfAbsent</code>); HashMap/ArrayList thường mất khoảng một nửa (đã đo).</li>
+<li><code>CompletableFuture</code>: <code>supplyAsync</code>, <code>thenApply</code>, <code>thenCombine</code>, <code>thenCompose</code>, <code>allOf</code>, <code>exceptionally</code>/<code>handle</code>; truyền executor cho I/O.</li>
+<li>Luồng ảo: cùng API, mỗi việc một luồng; cuộc đua và khoá cư xử y như cũ.</li>
+<li>Spring: luồng request dùng chung bean singleton — bean không trạng thái, ThreadLocal phải <code>remove()</code>; singleton lười an toàn luồng: holder, enum, hoặc DCL có <code>volatile</code>.</li>
+</ul>`),
+    books([
+      ['apiDocs', 'java.util.concurrent.ExecutorService (submit, invokeAll, shutdown, shutdownNow, awaitTermination, close), java.util.concurrent.Executors, java.util.concurrent.Future (get, cancel), java.util.concurrent.CompletableFuture (supplyAsync, thenApply, thenCombine, thenCompose, allOf, exceptionally, handle, join), java.util.concurrent.ConcurrentHashMap (merge), java.util.concurrent.CopyOnWriteArrayList, java.lang.ThreadLocal, java.text.SimpleDateFormat ("Date formats are not synchronized"), java.time.format.DateTimeFormatter ("immutable and thread-safe")', 'java.util.concurrent.ExecutorService (submit, invokeAll, shutdown, shutdownNow, awaitTermination, close), java.util.concurrent.Executors, java.util.concurrent.Future (get, cancel), java.util.concurrent.CompletableFuture (supplyAsync, thenApply, thenCombine, thenCompose, allOf, exceptionally, handle, join), java.util.concurrent.ConcurrentHashMap (merge), java.util.concurrent.CopyOnWriteArrayList, java.lang.ThreadLocal, java.text.SimpleDateFormat ("Date formats are not synchronized"), java.time.format.DateTimeFormatter ("immutable and thread-safe")'],
+      ['horstmann1', 'Ch. 12 "Concurrency" (thread-safe collections, tasks and thread pools, asynchronous computations with CompletableFuture)', 'Chương 12 "Concurrency" (collection an toàn luồng, task và thread pool, tính toán bất đồng bộ với CompletableFuture)'],
+      ['jls8', '§17.4 (happens-before, volatile) and §12.4.2 (detailed initialization procedure — the lock behind the holder idiom)', '§17.4 (happens-before, volatile) và §12.4.2 (thủ tục khởi tạo chi tiết — khoá đứng sau cách holder)'],
+      ['devJava', 'the "Learn" tutorials on concurrency and virtual threads', 'các bài "Learn" về concurrency và virtual threads'],
+    ]),
+  ].join('\n'),
+};
+
+/* ───────── ⭐ CS.8 — 🧪 Exercises · fines race, transfer deadlock, parallel scan, a dashboard, producer–consumer, what does it print ───────── */
+const L_x_cs8_on = {
+  title: '⭐ CS.8 — 🧪 Exercises · fines race, transfer deadlock, parallel scan, a dashboard, producer–consumer, what does it print|||⭐ CS.8 — 🧪 Bài tập · đua tiền phạt, deadlock chuyển tiền, quét song song, bảng điều khiển, sản xuất–tiêu thụ, in ra gì',
+  slug: 'pro192-cs8-on',
+  type: 'VIDEO',
+  description: '6 bài tập ôn deck ⭐ Chuyên sâu 8 (đa luồng cơ bản), mỗi lời giải là chương trình Java chạy thật với output thật: hai quầy thu tiền phạt cùng lúc làm mất một khoản rồi sửa bằng synchronized và AtomicLong, chuyển tiền hai chiều bị deadlock và sửa bằng thứ tự khoá theo id, quét 1.000.000 lượt mượn trên 4 luồng bằng invokeAll cho đúng đáp số một luồng, bảng điều khiển từ ba dịch vụ bằng CompletableFuture với một dịch vụ hỏng và một dịch vụ quá chậm, sản xuất–tiêu thụ qua BlockingQueue với viên thuốc độc, và sáu đoạn "in ra gì" kiểu phỏng vấn — cộng 14 thuật ngữ Anh–Việt và tóm tắt.',
+  content: [
+    bi(`<span class="eyebrow">⭐ Advanced 8 · Exercises · added by this site · not examined in PRO192</span>
+<h2>Multithreading — 6 exercises, every answer is a program that really ran</h2>
+<p class="lead">⭐ Self-added advanced section — not examined in PRO192 (no threads in the PE), but these are the situations a backend developer meets in the first months: money updated by two requests, two locks taken in the wrong order, a slow job split across cores, a page built from several services, a queue between two workers. Exercises 1, 2, 3 and 5 are plain Java 8 (they also ran on a real JDK 8 with identical output); 4 and 6 use Java 17.</p>
+<div class="callout"><strong>How to use this page.</strong>
+<ol>
+<li>Before coding, answer two questions: <em>what is shared between the threads?</em> and <em>what rule protects it?</em> Most answers below follow from those two lines.</li>
+<li>Write and run your version, ideally several times — a concurrency bug that appears once in ten runs is still a bug.</li>
+<li>Then open the solution. Its output prints only what is always true; where the real numbers change between runs, the text says so.</li>
+</ol></div>`,
+    `<span class="eyebrow">⭐ Chuyên sâu 8 · Bài tập · tự thêm · không thi PRO192</span>
+<h2>Đa luồng — 6 bài tập, mọi đáp án là một chương trình đã chạy thật</h2>
+<p class="lead">⭐ Phần chuyên sâu tự thêm — không thi PRO192 (đề PE không có luồng), nhưng đây là những tình huống lập trình viên backend gặp trong vài tháng đầu: tiền bị hai request cùng cập nhật, hai khoá lấy sai thứ tự, một việc chậm chia ra nhiều lõi, một trang dựng từ nhiều dịch vụ, một hàng đợi giữa hai người làm. Bài 1, 2, 3 và 5 là Java 8 thuần (đã chạy cả trên JDK 8 thật, output giống hệt); bài 4 và 6 dùng Java 17.</p>
+<div class="callout"><strong>Cách dùng trang này.</strong>
+<ol>
+<li>Trước khi code, trả lời hai câu: <em>các luồng dùng chung thứ gì?</em> và <em>luật nào bảo vệ nó?</em> Phần lớn đáp án bên dưới suy ra từ hai dòng đó.</li>
+<li>Viết và chạy bản của bạn, tốt nhất là nhiều lần — một lỗi đồng thời mười lần chạy mới hiện một lần vẫn là lỗi.</li>
+<li>Rồi mới mở lời giải. Output của nó chỉ in điều luôn đúng; chỗ nào con số thật đổi giữa các lần chạy, lời giải nói rõ.</li>
+</ol></div>`),
+    bi(`<h3>🧪 Exercise 1 — Two desks collect fines into one account</h3>
+<p class="nhan">Task</p>
+<p>The library's <code>FineAccount</code> adds each fine with <code>balance = balance + amount</code>. Desk A collects 5,000 and desk B 8,000 at the same moment. Make the lost update happen on every run (hint: a <code>CyclicBarrier</code> between the read and the write), then write two correct accounts — one with <code>synchronized</code>, one with <code>AtomicLong</code> — and check them with 4 threads × 100,000 fines of 1,000.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 8
+// CS8 exercise 1: two desks collect fines into one account at the same moment — a lost update, then two fixes
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class Bt1TienPhat {
+    static class FineAccount {                           // ✗ read, add, write
+        private long balance;
+        void collect(long amount, CyclicBarrier pause) {
+            long now = balance;
+            Demo.await(pause);                           // (demo: both desks have read)
+            balance = now + amount;
+        }
+        long balance() { return balance; }
+    }
+    static class SafeAccount {                           // ✓ the whole step under one lock
+        private long balance;
+        synchronized void collect(long amount) { balance = balance + amount; }
+        synchronized long balance() { return balance; }
+    }
+    static class AtomicAccount {                         // ✓ one atomic add
+        private final AtomicLong balance = new AtomicLong();
+        void collect(long amount) { balance.addAndGet(amount); }
+        long balance() { return balance.get(); }
+    }
+
+    public static void main(String[] args) throws Exception {
+        FineAccount bad = new FineAccount();
+        CyclicBarrier pause = new CyclicBarrier(2);
+        Thread a = new Thread(() -&gt; bad.collect(5000, pause), "desk-A");
+        Thread b = new Thread(() -&gt; bad.collect(8000, pause), "desk-B");
+        a.start(); b.start(); a.join(); b.join();
+        long got = bad.balance();                          // 5000 or 8000 — whichever desk wrote last
+        System.out.println("unsafe:       balance is 5000 or 8000, not 13000: " + (got == 5000 || got == 8000));
+
+        SafeAccount safe = new SafeAccount();
+        AtomicAccount atomic = new AtomicAccount();
+        ExecutorService desks = Executors.newFixedThreadPool(4);
+        for (int i = 0; i &lt; 4; i++) {
+            desks.submit(() -&gt; {
+                for (int k = 0; k &lt; 100_000; k++) { safe.collect(1000); atomic.collect(1000); }
+            });
+        }
+        desks.shutdown();
+        desks.awaitTermination(10, TimeUnit.SECONDS);
+        System.out.println("synchronized: balance = " + safe.balance() + " (expected 400000000)");
+        System.out.println("AtomicLong:   balance = " + atomic.balance() + " (expected 400000000)");
+    }
+}
+
+class Demo {
+    static void await(CyclicBarrier b) {
+        try { b.await(2, TimeUnit.SECONDS); } catch (Exception e) { throw new RuntimeException(e); }
+    }
+}</code></pre>
+<div class="out">unsafe: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance is 5000 or 8000, not 13000: true<br>
+synchronized: balance = 400000000 (expected 400000000)<br>
+AtomicLong: &nbsp;&nbsp;balance = 400000000 (expected 400000000)</div>
+<p>In the unsafe account both desks read 0 before either writes, so the final balance is the amount of <em>whichever desk wrote last</em>: 5,000 or 8,000, never 13,000 — which one depends on timing, so the program prints only that fact. The two safe accounts reach exactly 400,000,000. <code>synchronized</code> makes the read-add-write one step (and its getter is synchronized too, for visibility); <code>AtomicLong.addAndGet</code> does the same with compare-and-set, no lock. A real library would keep money in a database and let a transaction or <code>UPDATE … SET balance = balance + ?</code> do this — the same rule one level down.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 1 — Hai quầy thu tiền phạt vào một tài khoản</h3>
+<p class="nhan">Đề</p>
+<p><code>FineAccount</code> của thư viện cộng mỗi khoản phạt bằng <code>balance = balance + amount</code>. Quầy A thu 5.000 và quầy B thu 8.000 cùng lúc. Hãy làm cho lần mất cập nhật xảy ra ở mọi lần chạy (gợi ý: một <code>CyclicBarrier</code> giữa lúc đọc và lúc ghi), rồi viết hai tài khoản đúng — một dùng <code>synchronized</code>, một dùng <code>AtomicLong</code> — và kiểm bằng 4 luồng × 100.000 khoản phạt 1.000.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 8
+// CS8 bài 1: hai quầy thu tiền phạt vào một tài khoản cùng lúc — mất cập nhật, rồi hai cách sửa
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class Bt1TienPhat {
+    static class FineAccount {                           // ✗ đọc, cộng, ghi
+        private long balance;
+        void collect(long amount, CyclicBarrier pause) {
+            long now = balance;
+            Demo.await(pause);                           // (minh hoạ: cả hai quầy đã đọc)
+            balance = now + amount;
+        }
+        long balance() { return balance; }
+    }
+    static class SafeAccount {                           // ✓ cả bước dưới một khoá
+        private long balance;
+        synchronized void collect(long amount) { balance = balance + amount; }
+        synchronized long balance() { return balance; }
+    }
+    static class AtomicAccount {                         // ✓ một phép cộng nguyên tử
+        private final AtomicLong balance = new AtomicLong();
+        void collect(long amount) { balance.addAndGet(amount); }
+        long balance() { return balance.get(); }
+    }
+
+    public static void main(String[] args) throws Exception {
+        FineAccount bad = new FineAccount();
+        CyclicBarrier pause = new CyclicBarrier(2);
+        Thread a = new Thread(() -&gt; bad.collect(5000, pause), "desk-A");
+        Thread b = new Thread(() -&gt; bad.collect(8000, pause), "desk-B");
+        a.start(); b.start(); a.join(); b.join();
+        long got = bad.balance();                          // 5000 hoặc 8000 — quầy nào ghi sau
+        System.out.println("unsafe:       balance is 5000 or 8000, not 13000: " + (got == 5000 || got == 8000));
+
+        SafeAccount safe = new SafeAccount();
+        AtomicAccount atomic = new AtomicAccount();
+        ExecutorService desks = Executors.newFixedThreadPool(4);
+        for (int i = 0; i &lt; 4; i++) {
+            desks.submit(() -&gt; {
+                for (int k = 0; k &lt; 100_000; k++) { safe.collect(1000); atomic.collect(1000); }
+            });
+        }
+        desks.shutdown();
+        desks.awaitTermination(10, TimeUnit.SECONDS);
+        System.out.println("synchronized: balance = " + safe.balance() + " (expected 400000000)");
+        System.out.println("AtomicLong:   balance = " + atomic.balance() + " (expected 400000000)");
+    }
+}
+
+class Demo {
+    static void await(CyclicBarrier b) {
+        try { b.await(2, TimeUnit.SECONDS); } catch (Exception e) { throw new RuntimeException(e); }
+    }
+}</code></pre>
+<div class="out">unsafe: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;balance is 5000 or 8000, not 13000: true<br>
+synchronized: balance = 400000000 (expected 400000000)<br>
+AtomicLong: &nbsp;&nbsp;balance = 400000000 (expected 400000000)</div>
+<p>Ở tài khoản không an toàn, cả hai quầy đọc 0 trước khi bất kỳ quầy nào ghi, nên số dư cuối là số tiền của <em>quầy nào ghi sau</em>: 5.000 hoặc 8.000, không bao giờ 13.000 — cái nào thì tuỳ thời điểm, nên chương trình chỉ in sự thật đó. Hai tài khoản an toàn đạt đúng 400.000.000. <code>synchronized</code> biến đọc-cộng-ghi thành một bước (và getter cũng synchronized, để nhìn thấy được); <code>AtomicLong.addAndGet</code> làm điều tương tự bằng compare-and-set, không khoá. Thư viện thật sẽ giữ tiền trong CSDL và để một giao dịch hay <code>UPDATE … SET balance = balance + ?</code> làm việc này — cùng một luật, ở tầng dưới.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 2 — A transfer that deadlocks, and a lock order that does not</h3>
+<p class="nhan">Task</p>
+<p><code>transferNaive(from, to, amount)</code> locks the source account, then the target. Run "library pays club" and "club refunds library" at the same moment and show — with <code>ThreadMXBean.findDeadlockedThreads()</code> — that both threads are stuck. Then write <code>transferOrdered</code> that always locks the account with the smaller id first, run 50,000 transfers in each direction, and check the total is unchanged.</p>
+<p class="nhan">Solution</p>
+<pre class="trich"><code class="language-java">static void transferNaive(Account from, Account to, long amount, CountDownLatch bothHoldOne) {
+    synchronized (from) {                                  // lock the SOURCE first
+        arrive(bothHoldOne);
+        synchronized (to) { from.balance -= amount; to.balance += amount; }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">static void transferOrdered(Account from, Account to, long amount) {
+    Account first = from.id.compareTo(to.id) &lt; 0 ? from : to;    // a global order: smaller id first
+    Account second = first == from ? to : from;
+    synchronized (first) {
+        synchronized (second) { from.balance -= amount; to.balance += amount; }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">Account lib = new Account("A1-library", 1_000_000), club = new Account("A2-club", 1_000_000);
+CountDownLatch latch = new CountDownLatch(2);
+Thread t1 = daemon(() -&gt; transferNaive(lib, club, 100, latch), "pay-club");
+Thread t2 = daemon(() -&gt; transferNaive(club, lib, 200, latch), "refund-library");
+t1.start(); t2.start();
+t1.join(1000); t2.join(1000);
+long[] stuck = ManagementFactory.getThreadMXBean().findDeadlockedThreads();
+System.out.println("naive: deadlocked threads = " + (stuck == null ? 0 : stuck.length));
+
+Account a = new Account("A1-library", 1_000_000), b = new Account("A2-club", 1_000_000);
+ExecutorService pool = Executors.newFixedThreadPool(2);
+pool.submit(() -&gt; { for (int i = 0; i &lt; 50_000; i++) transferOrdered(a, b, 1); });
+pool.submit(() -&gt; { for (int i = 0; i &lt; 50_000; i++) transferOrdered(b, a, 1); });
+pool.shutdown();
+System.out.println("ordered: finished = " + pool.awaitTermination(10, TimeUnit.SECONDS)
+    + ", balances " + a.balance + " + " + b.balance + " = " + (a.balance + b.balance));</code></pre>
+<div class="out">naive: deadlocked threads = 2<br>
+ordered: finished = true, balances 1000000 + 1000000 = 2000000</div>
+<p>"Lock the source first" sounds like a rule, but it gives opposite orders for opposite transfers: one thread holds the library and waits for the club, the other holds the club and waits for the library — two deadlocked threads. The fix replaces "source first" by an order that does not depend on the direction: the smaller id first. Both directions now lock A1 then A2, so whoever gets A1 also gets A2, and 100,000 transfers finish with the total still 2,000,000 — money moved, none created or lost.</p>
+<p class="meo">🧠 Ordering by id is the textbook answer to "how do you avoid deadlock in a bank transfer?" — and databases need the same idea when one transaction updates several rows.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 2 — Lệnh chuyển tiền bị deadlock, và thứ tự khoá không bị</h3>
+<p class="nhan">Đề</p>
+<p><code>transferNaive(from, to, amount)</code> khoá tài khoản nguồn rồi tới tài khoản đích. Chạy "thư viện trả câu lạc bộ" và "câu lạc bộ hoàn tiền thư viện" cùng lúc và chứng minh — bằng <code>ThreadMXBean.findDeadlockedThreads()</code> — rằng cả hai luồng kẹt. Rồi viết <code>transferOrdered</code> luôn khoá tài khoản có id nhỏ hơn trước, chạy 50.000 lệnh mỗi chiều, và kiểm tổng tiền không đổi.</p>
+<p class="nhan">Lời giải</p>
+<pre class="trich"><code class="language-java">static void transferNaive(Account from, Account to, long amount, CountDownLatch bothHoldOne) {
+    synchronized (from) {                                  // khoá tài khoản NGUỒN trước
+        arrive(bothHoldOne);
+        synchronized (to) { from.balance -= amount; to.balance += amount; }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">static void transferOrdered(Account from, Account to, long amount) {
+    Account first = from.id.compareTo(to.id) &lt; 0 ? from : to;    // thứ tự chung: id nhỏ trước
+    Account second = first == from ? to : from;
+    synchronized (first) {
+        synchronized (second) { from.balance -= amount; to.balance += amount; }
+    }
+}</code></pre>
+<pre class="trich"><code class="language-java">Account lib = new Account("A1-library", 1_000_000), club = new Account("A2-club", 1_000_000);
+CountDownLatch latch = new CountDownLatch(2);
+Thread t1 = daemon(() -&gt; transferNaive(lib, club, 100, latch), "pay-club");
+Thread t2 = daemon(() -&gt; transferNaive(club, lib, 200, latch), "refund-library");
+t1.start(); t2.start();
+t1.join(1000); t2.join(1000);
+long[] stuck = ManagementFactory.getThreadMXBean().findDeadlockedThreads();
+System.out.println("naive: deadlocked threads = " + (stuck == null ? 0 : stuck.length));
+
+Account a = new Account("A1-library", 1_000_000), b = new Account("A2-club", 1_000_000);
+ExecutorService pool = Executors.newFixedThreadPool(2);
+pool.submit(() -&gt; { for (int i = 0; i &lt; 50_000; i++) transferOrdered(a, b, 1); });
+pool.submit(() -&gt; { for (int i = 0; i &lt; 50_000; i++) transferOrdered(b, a, 1); });
+pool.shutdown();
+System.out.println("ordered: finished = " + pool.awaitTermination(10, TimeUnit.SECONDS)
+    + ", balances " + a.balance + " + " + b.balance + " = " + (a.balance + b.balance));</code></pre>
+<div class="out">naive: deadlocked threads = 2<br>
+ordered: finished = true, balances 1000000 + 1000000 = 2000000</div>
+<p>"Khoá nguồn trước" nghe như một luật, nhưng nó cho thứ tự ngược nhau với hai lệnh ngược chiều: một luồng giữ thư viện và chờ câu lạc bộ, luồng kia giữ câu lạc bộ và chờ thư viện — hai luồng deadlock. Cách sửa thay "nguồn trước" bằng một thứ tự không phụ thuộc chiều: id nhỏ trước. Cả hai chiều giờ khoá A1 rồi A2, nên ai lấy được A1 thì cũng lấy được A2, và 100.000 lệnh chạy xong với tổng vẫn 2.000.000 — tiền đã chuyển, không sinh ra cũng không mất đi.</p>
+<p class="meo">🧠 Sắp thứ tự theo id là câu trả lời sách giáo khoa cho "làm sao tránh deadlock khi chuyển tiền?" — và CSDL cũng cần đúng ý này khi một giao dịch cập nhật nhiều dòng.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 3 — Scan a million loans on four threads</h3>
+<p class="nhan">Task</p>
+<p>A loan is overdue after 14 days; each extra day costs 2,000. Generate 1,000,000 loans with a fixed pattern (loan <em>i</em> has been out <code>(i·37) mod 30</code> days), count the overdue ones and total the fees on one thread, then split the work into 4 <code>Callable</code>s with <code>invokeAll</code>. The two answers must be identical.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 8
+// CS8 exercise 3: scan 1,000,000 loans for overdue fees on 4 threads with invokeAll — same answer as one thread
+import java.util.*;
+import java.util.concurrent.*;
+
+public class Bt3QuetQuaHan {
+    static final int N = 1_000_000;
+    static int daysOut(int i) { return (int) ((i * 37L) % 30); }       // a fixed pseudo-random pattern: 0..29 days
+
+    static long[] scan(int from, int to) {                              // returns {overdueCount, totalFee}
+        long count = 0, fee = 0;
+        for (int i = from; i &lt; to; i++) {
+            int late = daysOut(i) - 14;                                 // 14 days allowed
+            if (late &gt; 0) { count++; fee += late * 2000L; }
+        }
+        return new long[] { count, fee };
+    }
+
+    public static void main(String[] args) throws Exception {
+        long[] one = scan(0, N);
+        System.out.println("one thread:  overdue " + one[0] + ", fees " + one[1]);
+
+        int parts = 4;
+        List&lt;Callable&lt;long[]&gt;&gt; jobs = new ArrayList&lt;Callable&lt;long[]&gt;&gt;();
+        for (int p = 0; p &lt; parts; p++) {
+            final int from = p * N / parts, to = (p + 1) * N / parts;
+            jobs.add(() -&gt; scan(from, to));
+        }
+        ExecutorService pool = Executors.newFixedThreadPool(parts);
+        long count = 0, fee = 0;
+        for (Future&lt;long[]&gt; f : pool.invokeAll(jobs)) { count += f.get()[0]; fee += f.get()[1]; }
+        pool.shutdown();
+        System.out.println("4 threads:   overdue " + count + ", fees " + fee);
+        System.out.println("same answer: " + (count == one[0] &amp;&amp; fee == one[1]));
+    }
+}</code></pre>
+<div class="out">one thread: &nbsp;overdue 499999, fees 7999996000<br>
+4 threads: &nbsp;&nbsp;overdue 499999, fees 7999996000<br>
+same answer: true</div>
+<p>Each part scans its own quarter of the indices and returns its own <code>{count, fee}</code> pair — no shared counter, no lock (slide 17's rule). <code>main</code> adds the four pairs after <code>invokeAll</code> has returned. The fixed pattern makes the data reproducible, so "same answer: true" is a real check, not a hope: 499,999 overdue loans, 7,999,996,000 VND. Using <code>2000L</code> keeps the fee arithmetic in <code>long</code>; with an <code>int</code> the total would overflow — a bug that has nothing to do with threads but shows up in exactly this kind of report.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 3 — Quét một triệu lượt mượn trên bốn luồng</h3>
+<p class="nhan">Đề</p>
+<p>Một lượt mượn quá hạn sau 14 ngày; mỗi ngày trễ tốn 2.000. Sinh 1.000.000 lượt mượn theo mẫu cố định (lượt <em>i</em> đã mượn <code>(i·37) mod 30</code> ngày), đếm số quá hạn và cộng tổng phí trên một luồng, rồi chia việc thành 4 <code>Callable</code> với <code>invokeAll</code>. Hai đáp số phải giống hệt.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 8
+// CS8 bài 3: quét 1.000.000 lượt mượn tìm phí quá hạn trên 4 luồng bằng invokeAll — cùng đáp số với một luồng
+import java.util.*;
+import java.util.concurrent.*;
+
+public class Bt3QuetQuaHan {
+    static final int N = 1_000_000;
+    static int daysOut(int i) { return (int) ((i * 37L) % 30); }       // mẫu giả ngẫu nhiên cố định: 0..29 ngày
+
+    static long[] scan(int from, int to) {                              // trả {số quá hạn, tổng phí}
+        long count = 0, fee = 0;
+        for (int i = from; i &lt; to; i++) {
+            int late = daysOut(i) - 14;                                 // được mượn 14 ngày
+            if (late &gt; 0) { count++; fee += late * 2000L; }
+        }
+        return new long[] { count, fee };
+    }
+
+    public static void main(String[] args) throws Exception {
+        long[] one = scan(0, N);
+        System.out.println("one thread:  overdue " + one[0] + ", fees " + one[1]);
+
+        int parts = 4;
+        List&lt;Callable&lt;long[]&gt;&gt; jobs = new ArrayList&lt;Callable&lt;long[]&gt;&gt;();
+        for (int p = 0; p &lt; parts; p++) {
+            final int from = p * N / parts, to = (p + 1) * N / parts;
+            jobs.add(() -&gt; scan(from, to));
+        }
+        ExecutorService pool = Executors.newFixedThreadPool(parts);
+        long count = 0, fee = 0;
+        for (Future&lt;long[]&gt; f : pool.invokeAll(jobs)) { count += f.get()[0]; fee += f.get()[1]; }
+        pool.shutdown();
+        System.out.println("4 threads:   overdue " + count + ", fees " + fee);
+        System.out.println("same answer: " + (count == one[0] &amp;&amp; fee == one[1]));
+    }
+}</code></pre>
+<div class="out">one thread: &nbsp;overdue 499999, fees 7999996000<br>
+4 threads: &nbsp;&nbsp;overdue 499999, fees 7999996000<br>
+same answer: true</div>
+<p>Mỗi phần quét một phần tư chỉ số của riêng nó và trả về cặp <code>{count, fee}</code> của riêng nó — không bộ đếm dùng chung, không khoá (luật của slide 17). <code>main</code> cộng bốn cặp sau khi <code>invokeAll</code> trả về. Mẫu cố định làm dữ liệu tái tạo được, nên "same answer: true" là một phép kiểm thật chứ không phải hy vọng: 499.999 lượt quá hạn, 7.999.996.000 đồng. Dùng <code>2000L</code> giữ phép tính phí ở kiểu <code>long</code>; với <code>int</code> thì tổng sẽ tràn số — một lỗi chẳng liên quan gì tới luồng nhưng hay hiện ra đúng ở loại báo cáo này.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 4 — A dashboard from three services: one fails, one is too slow</h3>
+<p class="nhan">Task</p>
+<p>The librarian's home page shows the number of books (200 ms), the number of overdue loans (200 ms), the average rating (the rating service is down) and a news line (that service takes 5 seconds). Build it with <code>CompletableFuture</code> on your own pool of 3 threads so that the page appears in under one second, with "n/a" for the rating and a placeholder for the news.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 17
+// CS8 exercise 4: a librarian dashboard from three services at once — one fails, one is too slow, the page still renders
+import java.util.concurrent.*;
+
+public class Bt4BangDieuKhien {
+    static &lt;T&gt; T slow(long ms, T value) {
+        try { Thread.sleep(ms); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        return value;
+    }
+
+    public static void main(String[] args) {
+        ExecutorService io = Executors.newFixedThreadPool(3);                  // our own pool for I/O calls
+        long t0 = System.nanoTime();
+        CompletableFuture&lt;Integer&gt; books = CompletableFuture.supplyAsync(() -&gt; slow(200, 1240), io);
+        CompletableFuture&lt;Integer&gt; overdue = CompletableFuture.supplyAsync(() -&gt; slow(200, 37), io);
+        CompletableFuture&lt;String&gt; rating = CompletableFuture
+            .supplyAsync(() -&gt; slow(100, (String) null), io)
+            .thenApply(r -&gt; { if (r == null) throw new IllegalStateException("rating service down"); return r; })
+            .exceptionally(ex -&gt; "n/a");                                         // a failed part becomes a fallback
+        CompletableFuture&lt;String&gt; news = CompletableFuture
+            .supplyAsync(() -&gt; slow(5_000, "5 new books"), io)
+            .completeOnTimeout("(news not loaded)", 300, TimeUnit.MILLISECONDS);   // Java 9+
+
+        String page = books.thenCombine(overdue, (b, o) -&gt; "books " + b + " | overdue " + o)
+            .thenCombine(rating, (s, r) -&gt; s + " | rating " + r)
+            .thenCombine(news, (s, n) -&gt; s + " | " + n)
+            .join();
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        System.out.println(page);
+        System.out.println("rendered in &lt; 1 s although one call takes 5 s: " + (ms &lt; 1000));
+        io.shutdownNow();                                                        // stop the 5 s call too
+    }
+}</code></pre>
+<div class="out">books 1240 | overdue 37 | rating n/a | (news not loaded)<br>
+rendered in &lt; 1 s although one call takes 5 s: true</div>
+<p>The four calls start immediately on the <code>io</code> pool (not the common pool — slide 19). The rating stage throws, and <code>exceptionally(ex -&gt; "n/a")</code> turns that into a value. The news stage would take 5 seconds; <code>completeOnTimeout(…, 300, MILLISECONDS)</code> (Java 9+) completes it with a placeholder if it is not done in 300 ms. The three <code>thenCombine</code> calls build the line, and the single <code>join()</code> returns after about 300 ms. <code>shutdownNow()</code> interrupts the still-sleeping news call so the program can end.</p>
+<div class="pitfall">Trap: without the timeout the page waits for the slowest service — one slow dependency makes the whole page slow. Every remote call in a dashboard needs a timeout and a fallback.</div>`,
+    `<h3>🧪 Bài tập 4 — Bảng điều khiển từ ba dịch vụ: một hỏng, một quá chậm</h3>
+<p class="nhan">Đề</p>
+<p>Trang chủ của thủ thư hiện số sách (200 ms), số lượt quá hạn (200 ms), điểm đánh giá trung bình (dịch vụ đánh giá đang sập) và một dòng tin (dịch vụ đó mất 5 giây). Dựng trang bằng <code>CompletableFuture</code> trên bể riêng 3 luồng sao cho trang hiện trong dưới một giây, với "n/a" cho điểm đánh giá và một dòng giữ chỗ cho tin.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 17
+// CS8 bài 4: bảng điều khiển thủ thư từ ba dịch vụ cùng lúc — một hỏng, một quá chậm, trang vẫn hiện
+import java.util.concurrent.*;
+
+public class Bt4BangDieuKhien {
+    static &lt;T&gt; T slow(long ms, T value) {
+        try { Thread.sleep(ms); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        return value;
+    }
+
+    public static void main(String[] args) {
+        ExecutorService io = Executors.newFixedThreadPool(3);                  // bể riêng cho lời gọi I/O
+        long t0 = System.nanoTime();
+        CompletableFuture&lt;Integer&gt; books = CompletableFuture.supplyAsync(() -&gt; slow(200, 1240), io);
+        CompletableFuture&lt;Integer&gt; overdue = CompletableFuture.supplyAsync(() -&gt; slow(200, 37), io);
+        CompletableFuture&lt;String&gt; rating = CompletableFuture
+            .supplyAsync(() -&gt; slow(100, (String) null), io)
+            .thenApply(r -&gt; { if (r == null) throw new IllegalStateException("rating service down"); return r; })
+            .exceptionally(ex -&gt; "n/a");                                         // phần hỏng thành giá trị dự phòng
+        CompletableFuture&lt;String&gt; news = CompletableFuture
+            .supplyAsync(() -&gt; slow(5_000, "5 new books"), io)
+            .completeOnTimeout("(news not loaded)", 300, TimeUnit.MILLISECONDS);   // Java 9 trở lên
+
+        String page = books.thenCombine(overdue, (b, o) -&gt; "books " + b + " | overdue " + o)
+            .thenCombine(rating, (s, r) -&gt; s + " | rating " + r)
+            .thenCombine(news, (s, n) -&gt; s + " | " + n)
+            .join();
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        System.out.println(page);
+        System.out.println("rendered in &lt; 1 s although one call takes 5 s: " + (ms &lt; 1000));
+        io.shutdownNow();                                                        // dừng cả lời gọi 5 s
+    }
+}</code></pre>
+<div class="out">books 1240 | overdue 37 | rating n/a | (news not loaded)<br>
+rendered in &lt; 1 s although one call takes 5 s: true</div>
+<p>Bốn lời gọi bắt đầu ngay trên bể <code>io</code> (không phải bể chung — slide 19). Bước đánh giá ném lỗi, và <code>exceptionally(ex -&gt; "n/a")</code> biến nó thành một giá trị. Bước tin tức lẽ ra mất 5 giây; <code>completeOnTimeout(…, 300, MILLISECONDS)</code> (Java 9+) hoàn tất nó bằng dòng giữ chỗ nếu sau 300 ms chưa xong. Ba lần <code>thenCombine</code> dựng dòng chữ, và lần <code>join()</code> duy nhất trả về sau khoảng 300 ms. <code>shutdownNow()</code> ngắt lời gọi tin tức còn đang ngủ để chương trình kết thúc được.</p>
+<div class="pitfall">Bẫy: không có hạn giờ thì trang chờ dịch vụ chậm nhất — một phụ thuộc chậm làm cả trang chậm. Mọi lời gọi xa trên một bảng điều khiển đều cần hạn giờ và giá trị dự phòng.</div>`),
+    bi(`<h3>🧪 Exercise 5 — Producer and consumer through a BlockingQueue</h3>
+<p class="nhan">Task</p>
+<p>The return desk receives six books and puts them on a cart that holds two; a shelver takes books from the cart and shelves them, slowly (30 ms each). Use an <code>ArrayBlockingQueue</code> of capacity 2: <code>put</code> waits when the cart is full, <code>take</code> waits when it is empty. End the shelver with a special "STOP" value (a <em>poison pill</em>). Show that the books are shelved in order and that the desk had to wait.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 8
+// CS8 exercise 5: producer and consumer through a BlockingQueue — the return desk produces, the shelver consumes, a poison pill ends it
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Bt5HangDoi {
+    static final String STOP = "STOP";                                  // the poison pill
+
+    public static void main(String[] args) throws Exception {
+        BlockingQueue&lt;String&gt; cart = new ArrayBlockingQueue&lt;String&gt;(2);  // a cart holds 2 books
+        AtomicInteger producerWaited = new AtomicInteger();
+        Thread desk = new Thread(() -&gt; {
+            try {
+                for (String id : Arrays.asList("B001", "B007", "D006", "B002", "T005", "B004")) {
+                    if (!cart.offer(id)) { producerWaited.incrementAndGet(); cart.put(id); }   // full ⇒ wait
+                }
+                cart.put(STOP);
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }, "return-desk");
+        Thread shelver = new Thread(() -&gt; {
+            try {
+                int n = 0;
+                for (String id = cart.take(); !id.equals(STOP); id = cart.take()) {          // empty ⇒ wait
+                    Thread.sleep(30);                                     // shelving is slow
+                    System.out.println("  shelved " + id + " (" + (++n) + ")");
+                }
+                System.out.println("  shelver: got STOP, " + n + " books shelved");
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }, "shelver");
+        desk.start(); shelver.start();
+        desk.join(); shelver.join();
+        System.out.println("the desk had to wait for space: " + (producerWaited.get() &gt; 0));
+    }
+}</code></pre>
+<div class="out">&nbsp;&nbsp;shelved B001 (1)<br>
+&nbsp;&nbsp;shelved B007 (2)<br>
+&nbsp;&nbsp;shelved D006 (3)<br>
+&nbsp;&nbsp;shelved B002 (4)<br>
+&nbsp;&nbsp;shelved T005 (5)<br>
+&nbsp;&nbsp;shelved B004 (6)<br>
+&nbsp;&nbsp;shelver: got STOP, 6 books shelved<br>
+the desk had to wait for space: true</div>
+<p>The queue is the only shared object, and it is thread-safe by design: no <code>synchronized</code> in our code. When the cart is full, <code>offer</code> returns false (we count it) and <code>put</code> blocks until the shelver takes a book; when it is empty, <code>take</code> blocks until the desk adds one. A queue is first-in-first-out, so the shelving order is the arrival order on every run. The poison pill is put <em>after</em> the last book, so the shelver finishes all six before it stops. This pattern — producers, consumers, a bounded queue between them — is how print queues, email senders and job workers are built; a bounded queue also stops a fast producer from filling memory.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, identical output on a real JDK 8.</div>`,
+    `<h3>🧪 Bài tập 5 — Sản xuất và tiêu thụ qua BlockingQueue</h3>
+<p class="nhan">Đề</p>
+<p>Quầy trả sách nhận sáu cuốn và đặt lên một xe đẩy chứa được hai cuốn; người xếp kệ lấy sách từ xe và xếp lên kệ, chậm (30 ms mỗi cuốn). Dùng <code>ArrayBlockingQueue</code> sức chứa 2: <code>put</code> chờ khi xe đầy, <code>take</code> chờ khi xe rỗng. Kết thúc người xếp kệ bằng một giá trị đặc biệt "STOP" (gọi là <em>viên thuốc độc</em>, poison pill). Cho thấy sách được xếp đúng thứ tự và quầy đã phải chờ.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 8
+// CS8 bài 5: sản xuất – tiêu thụ qua BlockingQueue
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Bt5HangDoi {
+    static final String STOP = "STOP";                                  // "viên thuốc độc" báo hết
+
+    public static void main(String[] args) throws Exception {
+        BlockingQueue&lt;String&gt; cart = new ArrayBlockingQueue&lt;String&gt;(2);  // xe đẩy chứa 2 cuốn
+        AtomicInteger producerWaited = new AtomicInteger();
+        Thread desk = new Thread(() -&gt; {
+            try {
+                for (String id : Arrays.asList("B001", "B007", "D006", "B002", "T005", "B004")) {
+                    if (!cart.offer(id)) { producerWaited.incrementAndGet(); cart.put(id); }   // đầy ⇒ chờ
+                }
+                cart.put(STOP);
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }, "return-desk");
+        Thread shelver = new Thread(() -&gt; {
+            try {
+                int n = 0;
+                for (String id = cart.take(); !id.equals(STOP); id = cart.take()) {          // rỗng ⇒ chờ
+                    Thread.sleep(30);                                     // xếp lên kệ thì chậm
+                    System.out.println("  shelved " + id + " (" + (++n) + ")");
+                }
+                System.out.println("  shelver: got STOP, " + n + " books shelved");
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }, "shelver");
+        desk.start(); shelver.start();
+        desk.join(); shelver.join();
+        System.out.println("the desk had to wait for space: " + (producerWaited.get() &gt; 0));
+    }
+}</code></pre>
+<div class="out">&nbsp;&nbsp;shelved B001 (1)<br>
+&nbsp;&nbsp;shelved B007 (2)<br>
+&nbsp;&nbsp;shelved D006 (3)<br>
+&nbsp;&nbsp;shelved B002 (4)<br>
+&nbsp;&nbsp;shelved T005 (5)<br>
+&nbsp;&nbsp;shelved B004 (6)<br>
+&nbsp;&nbsp;shelver: got STOP, 6 books shelved<br>
+the desk had to wait for space: true</div>
+<p>Hàng đợi là đối tượng dùng chung duy nhất, và nó an toàn luồng theo thiết kế: code của ta không có <code>synchronized</code> nào. Khi xe đầy, <code>offer</code> trả false (ta đếm lại) và <code>put</code> chặn tới khi người xếp kệ lấy một cuốn; khi xe rỗng, <code>take</code> chặn tới khi quầy thêm một cuốn. Hàng đợi là vào-trước-ra-trước, nên thứ tự xếp kệ là thứ tự sách tới ở mọi lần chạy. Viên thuốc độc được đặt <em>sau</em> cuốn cuối, nên người xếp kệ làm xong cả sáu cuốn rồi mới dừng. Mẫu này — người sản xuất, người tiêu thụ, một hàng đợi có giới hạn ở giữa — là cách dựng hàng đợi in, bộ gửi email, worker xử lý việc; hàng đợi có giới hạn còn ngăn người sản xuất nhanh làm đầy bộ nhớ.</p>
+<div class="callout">✅ <strong>Java 8</strong>: <code>// release: 8</code>, output giống hệt trên JDK 8 thật.</div>`),
+    bi(`<h3>🧪 Exercise 6 — Six "what does it print" snippets</h3>
+<p class="nhan">Task</p>
+<p>Predict each line before you run it: (a) <code>run()</code>, then <code>start()</code> and <code>join()</code>, then the state; (b) a thread appends "X", <code>main</code> appends "M" after <code>join()</code>; (c) <code>getAndIncrement</code> vs <code>incrementAndGet</code> on 5; (d) <code>Future.get()</code> of a job that parses "12a"; (e) a <code>CompletableFuture</code> chain that divides by zero, then <code>exceptionally</code>; (f) two <code>merge</code> calls and a <code>putIfAbsent</code> on a <code>ConcurrentHashMap</code>.</p>
+<p class="nhan">Solution</p>
+<pre><code class="language-java">// release: 17
+// CS8 exercise 6: six "what does it print" snippets about threads
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Bt6DoanOutput {
+    public static void main(String[] args) throws Exception {
+        Thread t = new Thread(() -&gt; System.out.print(Thread.currentThread().getName() + " "), "worker");
+        t.run();
+        t.start(); t.join();
+        System.out.println(t.getState());
+        StringBuffer sb = new StringBuffer();
+        Thread x = new Thread(() -&gt; sb.append("X"));
+        x.start(); x.join();
+        sb.append("M");
+        System.out.println(sb);
+        AtomicInteger n = new AtomicInteger(5);
+        System.out.println(n.getAndIncrement() + " " + n.incrementAndGet() + " " + n.get());
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future&lt;Integer&gt; f = pool.submit(() -&gt; Integer.parseInt("12a"));
+        try { f.get(); } catch (ExecutionException e) { System.out.println(e.getCause().getClass().getSimpleName()); }
+        pool.shutdown();
+        String r = CompletableFuture.supplyAsync(() -&gt; 10)
+            .thenApply(v -&gt; v / 0)
+            .thenApply(v -&gt; "ok " + v)
+            .exceptionally(ex -&gt; "fallback")
+            .join();
+        System.out.println(r);
+        Map&lt;String, Integer&gt; m = new ConcurrentHashMap&lt;&gt;();
+        m.merge("B001", 1, Integer::sum);
+        m.merge("B001", 1, Integer::sum);
+        m.putIfAbsent("B001", 100);
+        System.out.println(m);
+    }
+}</code></pre>
+<div class="out">main worker TERMINATED<br>
+XM<br>
+5 7 7<br>
+NumberFormatException<br>
+fallback<br>
+{B001=2}</div>
+<p>(a) <code>run()</code> prints <code>main</code> (no new thread), <code>start()</code> prints <code>worker</code>, and after <code>join()</code> the state is <code>TERMINATED</code>. (b) <code>join()</code> guarantees X happened before M: <code>XM</code> on every run — without the join, "MX" would also be possible. (c) <code>getAndIncrement()</code> returns the old value 5 (then 6), <code>incrementAndGet()</code> returns the new value 7, <code>get()</code> 7. (d) The job's <code>NumberFormatException</code> comes back as the cause of <code>ExecutionException</code>. (e) The division throws in the second stage, the third <code>thenApply</code> is skipped, <code>exceptionally</code> supplies "fallback". (f) merge 1, merge again 2, and <code>putIfAbsent</code> does nothing because the key exists: <code>{B001=2}</code>.</p>`,
+    `<h3>🧪 Bài tập 6 — Sáu đoạn "in ra gì"</h3>
+<p class="nhan">Đề</p>
+<p>Đoán từng dòng trước khi chạy: (a) <code>run()</code>, rồi <code>start()</code> và <code>join()</code>, rồi trạng thái; (b) một luồng nối "X", <code>main</code> nối "M" sau <code>join()</code>; (c) <code>getAndIncrement</code> và <code>incrementAndGet</code> trên số 5; (d) <code>Future.get()</code> của một việc parse "12a"; (e) một chuỗi <code>CompletableFuture</code> chia cho không, rồi <code>exceptionally</code>; (f) hai lần <code>merge</code> và một <code>putIfAbsent</code> trên <code>ConcurrentHashMap</code>.</p>
+<p class="nhan">Lời giải</p>
+<pre><code class="language-java">// release: 17
+// CS8 bài 6: sáu đoạn "in ra gì" về luồng
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Bt6DoanOutput {
+    public static void main(String[] args) throws Exception {
+        Thread t = new Thread(() -&gt; System.out.print(Thread.currentThread().getName() + " "), "worker");
+        t.run();
+        t.start(); t.join();
+        System.out.println(t.getState());
+        StringBuffer sb = new StringBuffer();
+        Thread x = new Thread(() -&gt; sb.append("X"));
+        x.start(); x.join();
+        sb.append("M");
+        System.out.println(sb);
+        AtomicInteger n = new AtomicInteger(5);
+        System.out.println(n.getAndIncrement() + " " + n.incrementAndGet() + " " + n.get());
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future&lt;Integer&gt; f = pool.submit(() -&gt; Integer.parseInt("12a"));
+        try { f.get(); } catch (ExecutionException e) { System.out.println(e.getCause().getClass().getSimpleName()); }
+        pool.shutdown();
+        String r = CompletableFuture.supplyAsync(() -&gt; 10)
+            .thenApply(v -&gt; v / 0)
+            .thenApply(v -&gt; "ok " + v)
+            .exceptionally(ex -&gt; "fallback")
+            .join();
+        System.out.println(r);
+        Map&lt;String, Integer&gt; m = new ConcurrentHashMap&lt;&gt;();
+        m.merge("B001", 1, Integer::sum);
+        m.merge("B001", 1, Integer::sum);
+        m.putIfAbsent("B001", 100);
+        System.out.println(m);
+    }
+}</code></pre>
+<div class="out">main worker TERMINATED<br>
+XM<br>
+5 7 7<br>
+NumberFormatException<br>
+fallback<br>
+{B001=2}</div>
+<p>(a) <code>run()</code> in <code>main</code> (không có luồng mới), <code>start()</code> in <code>worker</code>, và sau <code>join()</code> trạng thái là <code>TERMINATED</code>. (b) <code>join()</code> bảo đảm X xảy ra trước M: <code>XM</code> ở mọi lần chạy — không có join thì "MX" cũng có thể xảy ra. (c) <code>getAndIncrement()</code> trả giá trị cũ 5 (rồi thành 6), <code>incrementAndGet()</code> trả giá trị mới 7, <code>get()</code> là 7. (d) <code>NumberFormatException</code> của công việc quay về dưới dạng nguyên nhân của <code>ExecutionException</code>. (e) Phép chia ném lỗi ở bước hai, <code>thenApply</code> thứ ba bị bỏ qua, <code>exceptionally</code> cho "fallback". (f) merge được 1, merge lần nữa được 2, và <code>putIfAbsent</code> không làm gì vì khoá đã có: <code>{B001=2}</code>.</p>`),
+    bi(`<h2>🗂 Glossary — English → Vietnamese</h2>
+<p>Every term of the chapter with its Vietnamese name and a one-sentence explanation. Cover the right-hand columns and test yourself.</p>
+<table>
+<thead><tr><th>Term (EN)</th><th>Vietnamese</th><th>In one sentence</th></tr></thead>
+<tbody>
+<tr><td><strong>thread</strong></td><td>luồng</td><td>One sequence of instructions running inside a program; threads of a program share its heap.</td></tr>
+<tr><td><strong>concurrency / parallelism</strong></td><td>đồng thời / song song</td><td>Several tasks in progress at once / executing at the same instant on several cores.</td></tr>
+<tr><td><strong>race condition</strong></td><td>điều kiện tranh đua</td><td>A result that depends on how threads' steps interleave, such as lost updates on count++.</td></tr>
+<tr><td><strong>lost update</strong></td><td>mất cập nhật</td><td>A write based on a stale read erases another thread's write.</td></tr>
+<tr><td><strong>critical section</strong></td><td>đoạn găng</td><td>Code that must be run by one thread at a time because it touches shared state.</td></tr>
+<tr><td><strong>monitor / intrinsic lock</strong></td><td>khoá nội tại</td><td>The lock every Java object has, taken by synchronized.</td></tr>
+<tr><td><strong>atomic / compare-and-set</strong></td><td>nguyên tử / so sánh rồi gán</td><td>An operation that cannot be split; CAS writes only if the value is still the expected one.</td></tr>
+<tr><td><strong>visibility / volatile</strong></td><td>tính nhìn thấy / volatile</td><td>Whether one thread sees another's write; a volatile field's writes are always seen by later reads.</td></tr>
+<tr><td><strong>happens-before</strong></td><td>xảy ra trước</td><td>The Java Memory Model's guarantee that one action's effects are visible to another (unlock → lock, volatile write → read, start, join).</td></tr>
+<tr><td><strong>deadlock</strong></td><td>khoá chết</td><td>Threads waiting in a cycle for locks held by each other, so none can proceed.</td></tr>
+<tr><td><strong>thread pool / executor</strong></td><td>bể luồng / executor</td><td>A fixed set of reused worker threads plus a queue of jobs.</td></tr>
+<tr><td><strong>Future / CompletableFuture</strong></td><td>Future / CompletableFuture</td><td>A handle to a result that will exist later; CompletableFuture also chains and combines steps.</td></tr>
+<tr><td><strong>BlockingQueue / poison pill</strong></td><td>hàng đợi chặn / viên thuốc độc</td><td>A thread-safe queue whose put/take wait when full/empty; a special value that tells a consumer to stop.</td></tr>
+<tr><td><strong>ThreadLocal</strong></td><td>biến cục bộ theo luồng</td><td>A variable with one independent value per thread; must be removed on pooled threads.</td></tr>
+</tbody>
+</table>`,
+    `<h2>🗂 Thuật ngữ — Anh → Việt</h2>
+<p>Mọi thuật ngữ của chương, kèm nghĩa tiếng Việt và một câu giải thích. Che hai cột bên phải lại để tự kiểm tra.</p>
+<table>
+<thead><tr><th>Thuật ngữ (EN)</th><th>Nghĩa tiếng Việt</th><th>Giải thích một câu</th></tr></thead>
+<tbody>
+<tr><td><strong>thread</strong></td><td>luồng</td><td>Một chuỗi lệnh đang chạy bên trong chương trình; các luồng của một chương trình dùng chung heap.</td></tr>
+<tr><td><strong>concurrency / parallelism</strong></td><td>đồng thời / song song</td><td>Nhiều việc cùng đang dở dang / thực thi cùng một khoảnh khắc trên nhiều lõi.</td></tr>
+<tr><td><strong>race condition</strong></td><td>điều kiện tranh đua</td><td>Kết quả phụ thuộc cách các bước của các luồng xen kẽ, như mất cập nhật khi count++.</td></tr>
+<tr><td><strong>lost update</strong></td><td>mất cập nhật</td><td>Một lần ghi dựa trên giá trị đọc đã cũ xoá mất lần ghi của luồng khác.</td></tr>
+<tr><td><strong>critical section</strong></td><td>đoạn găng</td><td>Đoạn code chỉ được một luồng chạy mỗi lúc vì nó chạm trạng thái dùng chung.</td></tr>
+<tr><td><strong>monitor / intrinsic lock</strong></td><td>khoá nội tại</td><td>Cái khoá mà mọi đối tượng Java đều có, được synchronized lấy.</td></tr>
+<tr><td><strong>atomic / compare-and-set</strong></td><td>nguyên tử / so sánh rồi gán</td><td>Thao tác không thể chia; CAS chỉ ghi khi giá trị vẫn là giá trị mong đợi.</td></tr>
+<tr><td><strong>visibility / volatile</strong></td><td>tính nhìn thấy / volatile</td><td>Một luồng có thấy lần ghi của luồng khác không; lần ghi vào field volatile luôn được các lần đọc sau thấy.</td></tr>
+<tr><td><strong>happens-before</strong></td><td>xảy ra trước</td><td>Bảo đảm của mô hình bộ nhớ Java rằng tác động của một hành động được hành động kia thấy (nhả khoá → lấy khoá, ghi volatile → đọc, start, join).</td></tr>
+<tr><td><strong>deadlock</strong></td><td>khoá chết</td><td>Các luồng chờ nhau theo vòng tròn những khoá bên kia đang giữ, nên không ai đi tiếp được.</td></tr>
+<tr><td><strong>thread pool / executor</strong></td><td>bể luồng / executor</td><td>Một nhóm luồng thợ dùng lại cộng một hàng đợi công việc.</td></tr>
+<tr><td><strong>Future / CompletableFuture</strong></td><td>Future / CompletableFuture</td><td>Một tay nắm tới kết quả sẽ có sau; CompletableFuture còn nối và ghép được các bước.</td></tr>
+<tr><td><strong>BlockingQueue / poison pill</strong></td><td>hàng đợi chặn / viên thuốc độc</td><td>Hàng đợi an toàn luồng mà put/take chờ khi đầy/rỗng; một giá trị đặc biệt báo người tiêu thụ dừng.</td></tr>
+<tr><td><strong>ThreadLocal</strong></td><td>biến cục bộ theo luồng</td><td>Biến có một giá trị độc lập cho mỗi luồng; phải gỡ khi dùng với luồng trong bể.</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>📌 Summary — multithreading in 7 points</h2>
+<ol>
+<li><strong>Start, join, interrupt</strong>: <code>start()</code> creates the thread; <code>join()</code> waits and orders effects; interrupt is a request — restore the flag.</li>
+<li><strong>Shared + mutable + no rule = lost updates</strong>: read-add-write and check-then-act are races; force the bad timing with a barrier to reproduce it.</li>
+<li><strong>Fix with one rule per shared state</strong>: <code>synchronized</code> on one lock, an atomic class for one value, a thread-safe collection with its atomic methods.</li>
+<li><strong>Lock order</strong>: take several locks in one global order (smaller id first) — no cycle, no deadlock.</li>
+<li><strong>Split, do not share</strong>: independent parts with their own results, combined at the end (<code>invokeAll</code>).</li>
+<li><strong>Executors and futures</strong>: pools with <code>shutdown()</code>; <code>CompletableFuture</code> with your own executor, timeouts and fallbacks; queues between producers and consumers.</li>
+<li><strong>In Spring</strong>: request threads share singleton beans — keep them stateless.</li>
+</ol>`,
+    `<h2>📌 Tóm tắt — đa luồng trong 7 ý</h2>
+<ol>
+<li><strong>Start, join, interrupt</strong>: <code>start()</code> tạo luồng; <code>join()</code> chờ và sắp thứ tự tác động; interrupt là lời đề nghị — đặt lại cờ.</li>
+<li><strong>Dùng chung + sửa được + không luật = mất cập nhật</strong>: đọc-cộng-ghi và kiểm-rồi-làm là cuộc đua; ép thời điểm xấu bằng barrier để tái tạo.</li>
+<li><strong>Mỗi trạng thái dùng chung một luật</strong>: <code>synchronized</code> trên một khoá, lớp atomic cho một giá trị, collection an toàn luồng với phương thức nguyên tử của nó.</li>
+<li><strong>Thứ tự khoá</strong>: lấy nhiều khoá theo một thứ tự chung (id nhỏ trước) — không vòng, không deadlock.</li>
+<li><strong>Chia, đừng chung</strong>: các phần độc lập có kết quả riêng, gộp ở cuối (<code>invokeAll</code>).</li>
+<li><strong>Executor và future</strong>: bể luồng có <code>shutdown()</code>; <code>CompletableFuture</code> với executor riêng, hạn giờ và giá trị dự phòng; hàng đợi giữa người sản xuất và người tiêu thụ.</li>
+<li><strong>Trong Spring</strong>: luồng request dùng chung bean singleton — giữ chúng không trạng thái.</li>
+</ol>`),
+  ].join('\n'),
+};
+
+/* ───────── Quiz (pro192-quiz-cs8) — 10 câu ───────── */
+const QUIZ_CS8 = {
+  timeLimitSeconds: 900,
+  questions: [
+    { id: 'q1',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> System.out.print(Thread.currentThread().getName() + " "), "T1");
+    t.run();
+    t.start();
+    t.join();
+    System.out.println(t.isAlive());
+}`,
+      codeLang: 'java',
+      options: ['T1 T1 false|||T1 T1 false', 'main T1 false|||main T1 false', 'main T1 true|||main T1 true', 'T1 main false|||T1 main false'],
+      correctIndex: 1,
+      points: 1,
+      explanation: 't.run() is an ordinary method call: the lambda runs on the calling thread, so it prints "main". t.start() creates the new thread named T1, which prints "T1". After join() the thread has finished, so isAlive() is false. A treats run() as if it started a thread; C forgets that join() waits until the end.|||t.run() là một lời gọi phương thức bình thường: lambda chạy trên luồng gọi nó, nên in "main". t.start() tạo luồng mới tên T1, luồng đó in "T1". Sau join() luồng đã xong, nên isAlive() là false. A coi run() như thể nó khởi động luồng; C quên rằng join() chờ tới khi kết thúc.' },
+    { id: 'q2',
+      question: 'Two threads each run count++ one million times on a shared static int. Why is the result usually less than 2,000,000?|||Hai luồng, mỗi luồng chạy count++ một triệu lần trên một static int dùng chung. Vì sao kết quả thường nhỏ hơn 2.000.000?',
+      options: ["count++ is a read, an add and a write; a write based on a stale read erases the other thread's update|||count++ là đọc, cộng và ghi; một lần ghi dựa trên giá trị đọc đã cũ xoá mất cập nhật của luồng kia", 'int overflows above 1,000,000 when two threads write it|||int tràn số trên 1.000.000 khi hai luồng cùng ghi', 'The JVM runs only one thread at a time, so half of the loop is skipped|||JVM chỉ chạy một luồng mỗi lúc, nên một nửa vòng lặp bị bỏ qua', 'The second thread starts only after the first one has finished|||Luồng thứ hai chỉ khởi động sau khi luồng đầu xong'],
+      correctIndex: 0,
+      points: 1,
+      explanation: 'javap shows getstatic, iadd, putstatic: three steps. If both threads read the same value before either writes, two increments move the field by one. Measured by hand: about 1,000,000 of the 2,000,000 updates were lost, differently on every run. An int holds up to about 2.1 billion (B). Threads do run at the same time on several cores (C). D would actually give the correct result — and is exactly why short tests sometimes hide the race.|||javap cho thấy getstatic, iadd, putstatic: ba bước. Nếu cả hai luồng đọc cùng một giá trị trước khi bên nào ghi, hai lần cộng chỉ làm field tăng một. Đo tay: khoảng 1.000.000 trong 2.000.000 lần cập nhật bị mất, mỗi lần chạy một khác. int chứa được tới khoảng 2,1 tỉ (B sai). Các luồng thật sự chạy cùng lúc trên nhiều lõi (C sai). D thật ra sẽ cho kết quả đúng — và chính là lý do test ngắn đôi khi che mất cuộc đua.' },
+    { id: 'q3',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `static int count = 0;
+static synchronized void inc() { count++; }
+public static void main(String[] args) throws InterruptedException {
+    Runnable r = () -> { for (int i = 0; i < 50000; i++) inc(); };
+    Thread a = new Thread(r), b = new Thread(r);
+    a.start(); b.start();
+    a.join(); b.join();
+    System.out.println(count);
+}`,
+      codeLang: 'java',
+      options: ['A number between 50000 and 100000 that changes every run|||Một số từ 50000 tới 100000, đổi mỗi lần chạy', '50000|||50000', '100000|||100000', 'Nothing — the two threads deadlock on the class lock|||Không in gì — hai luồng deadlock trên khoá của lớp'],
+      correctIndex: 2,
+      points: 1,
+      explanation: 'inc() is static synchronized, so both threads lock the same Class object: only one increments at a time, and the lock also makes each write visible to the next holder. 2 × 50,000 = 100000 on every run. A describes the unsynchronized version. One lock taken and released each time cannot deadlock (D) — deadlock needs two locks taken in opposite orders.|||inc() là static synchronized, nên cả hai luồng khoá cùng một đối tượng Class: mỗi lúc chỉ một luồng cộng, và khoá còn làm mỗi lần ghi nhìn thấy được với người giữ khoá kế tiếp. 2 × 50.000 = 100000 ở mọi lần chạy. A mô tả bản không synchronized. Một khoá lấy rồi nhả mỗi lần không thể deadlock (D) — deadlock cần hai khoá lấy theo thứ tự ngược nhau.' },
+    { id: 'q4',
+      question: 'Which statement about volatile is correct?|||Phát biểu nào về volatile là đúng?',
+      options: ['volatile makes count++ atomic|||volatile làm count++ thành nguyên tử', 'volatile is the same as synchronized but faster|||volatile giống synchronized nhưng nhanh hơn', 'volatile can only be used on static fields|||volatile chỉ dùng được cho field static', 'volatile guarantees that a write by one thread is seen by later reads in other threads, e.g. a stop flag|||volatile bảo đảm lần ghi của một luồng được các lần đọc sau ở luồng khác thấy, ví dụ một cờ dừng'],
+      correctIndex: 3,
+      points: 1,
+      explanation: 'The measured stop flag: with a plain boolean the worker was still running 2 s after stop = true (3 of 3 runs); with volatile it stopped. But volatile int count++ still lost updates (measured about 1.1 million of 2 million), so A is false. B is false because volatile gives visibility but no mutual exclusion. Instance fields can be volatile too (C).|||Cờ dừng đã đo: với boolean thường luồng thợ vẫn chạy 2 s sau stop = true (3 trên 3 lần); với volatile thì nó dừng. Nhưng volatile int count++ vẫn mất cập nhật (đo được khoảng 1,1 triệu trên 2 triệu), nên A sai. B sai vì volatile cho tính nhìn thấy nhưng không loại trừ lẫn nhau. Field của đối tượng cũng được khai volatile (C sai).' },
+    { id: 'q5',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `public static void main(String[] args) {
+    AtomicInteger a = new AtomicInteger(10);
+    int x = a.getAndIncrement();
+    int y = a.incrementAndGet();
+    boolean ok = a.compareAndSet(11, 99);
+    System.out.println(x + " " + y + " " + ok + " " + a.get());
+}`,
+      codeLang: 'java',
+      options: ['11 12 true 99|||11 12 true 99', '10 12 false 12|||10 12 false 12', '10 11 true 99|||10 11 true 99', '10 12 true 99|||10 12 true 99'],
+      correctIndex: 1,
+      points: 1,
+      explanation: 'getAndIncrement returns the OLD value (10) and leaves 11. incrementAndGet changes 11 to 12 and returns the NEW value (12). compareAndSet(11, 99) means "only if it is still 11" — it is 12, so it fails and returns false, and the value stays 12. That failed CAS is exactly what makes atomics safe: a thread that read a stale value cannot overwrite a newer one.|||getAndIncrement trả giá trị CŨ (10) và để lại 11. incrementAndGet đổi 11 thành 12 và trả giá trị MỚI (12). compareAndSet(11, 99) nghĩa là "chỉ khi vẫn còn là 11" — giá trị là 12, nên thất bại và trả false, giá trị vẫn là 12. Chính lần CAS thất bại đó làm atomic an toàn: một luồng đọc phải giá trị cũ không thể ghi đè lên giá trị mới hơn.' },
+    { id: 'q6',
+      question: 'Thread A locks BOOK then MEMBER; thread B locks MEMBER then BOOK. They sometimes freeze forever. What is the standard fix?|||Luồng A khoá BOOK rồi MEMBER; luồng B khoá MEMBER rồi BOOK. Thỉnh thoảng chúng đứng hình mãi mãi. Cách sửa chuẩn là gì?',
+      options: ['Add Thread.sleep() before the second lock|||Thêm Thread.sleep() trước khoá thứ hai', 'Make both lock fields volatile|||Cho cả hai field khoá là volatile', 'Make every thread take the locks in the same global order|||Cho mọi luồng lấy khoá theo cùng một thứ tự chung', 'Catch the DeadlockException and retry|||Bắt DeadlockException rồi thử lại'],
+      correctIndex: 2,
+      points: 1,
+      explanation: 'A deadlock is a cycle of waits; if every thread takes BOOK before MEMBER, no thread can hold MEMBER while waiting for BOOK, so no cycle can form (KhoaChet: fixed order, both finished). A sleep only changes the odds (A). volatile is about visibility, not locking (B). Java has no DeadlockException — deadlocked threads simply stay BLOCKED; ThreadMXBean or jstack can find them (D).|||Deadlock là một vòng chờ; nếu mọi luồng lấy BOOK trước MEMBER thì không luồng nào giữ MEMBER trong lúc chờ BOOK, nên không thể có vòng (KhoaChet: thứ tự cố định, cả hai đều xong). Sleep chỉ đổi xác suất (A). volatile nói về tính nhìn thấy, không phải khoá (B). Java không có DeadlockException — luồng deadlock chỉ đứng mãi ở BLOCKED; ThreadMXBean hoặc jstack tìm ra chúng (D).' },
+    { id: 'q7',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `public static void main(String[] args) throws InterruptedException {
+    ExecutorService pool = Executors.newFixedThreadPool(1);
+    Future<Integer> f = pool.submit(() -> 10 / 0);
+    try {
+        System.out.println(f.get());
+    } catch (ExecutionException e) {
+        System.out.println("EE " + e.getCause().getClass().getSimpleName());
+    }
+    pool.shutdown();
+}`,
+      codeLang: 'java',
+      options: ['0|||0', 'Infinity|||Infinity', 'An ArithmeticException stack trace from the pool thread, then nothing|||Stack trace ArithmeticException từ luồng của bể, rồi không gì nữa', 'EE ArithmeticException|||EE ArithmeticException'],
+      correctIndex: 3,
+      points: 1,
+      explanation: "10 / 0 on ints throws ArithmeticException inside the job, on the pool thread. The Future keeps it; f.get() rethrows it wrapped in ExecutionException, so the catch prints \"EE\" and the cause's class name. Integer division by zero never gives Infinity (that is double, B). Nothing is printed by the pool thread itself (C) — which is also why an unchecked Future can hide errors.|||10 / 0 trên int ném ArithmeticException bên trong công việc, trên luồng của bể. Future giữ nó lại; f.get() ném lại, bọc trong ExecutionException, nên khối catch in \"EE\" và tên lớp của nguyên nhân. Chia nguyên cho không không bao giờ ra Infinity (đó là double, B sai). Luồng của bể không tự in gì (C sai) — đó cũng là lý do một Future không ai kiểm có thể giấu lỗi." },
+    { id: 'q8',
+      question: 'A program creates Executors.newFixedThreadPool(2), submits one job and returns from main without calling shutdown(). What happens?|||Một chương trình tạo Executors.newFixedThreadPool(2), gửi một việc rồi thoát khỏi main mà không gọi shutdown(). Chuyện gì xảy ra?',
+      options: ["The job runs, but the JVM does not exit, because the pool's non-daemon threads keep waiting for work|||Công việc chạy, nhưng JVM không thoát, vì các luồng không-daemon của bể cứ chờ thêm việc", 'The JVM exits immediately and the job may not run at all|||JVM thoát ngay và công việc có thể không chạy', 'The JVM throws IllegalStateException when main returns|||JVM ném IllegalStateException khi main kết thúc', 'The pool shuts itself down after 60 seconds|||Bể tự tắt sau 60 giây'],
+      correctIndex: 0,
+      points: 1,
+      explanation: "BayHayGap ran exactly this in a separate JVM: \"main ends\", the job printed, and 3 seconds later the JVM had still not exited. A JVM exits only when no non-daemon thread is left, and pool threads are non-daemon. Nothing is thrown (C). A fixed pool's core threads do not time out by default (D). Call shutdown() — or use try-with-resources on an ExecutorService (Java 19+).|||BayHayGap đã chạy đúng việc này trong một JVM riêng: \"main ends\", công việc in ra, và 3 giây sau JVM vẫn chưa thoát. JVM chỉ thoát khi không còn luồng không-daemon nào, mà luồng của bể là không-daemon. Không có exception nào (C). Luồng lõi của bể cố định mặc định không tự hết hạn (D). Hãy gọi shutdown() — hoặc dùng try-with-resources với ExecutorService (Java 19+)." },
+    { id: 'q9',
+      question: 'What is printed?|||Chương trình in ra gì?',
+      code: `public static void main(String[] args) {
+    String s = CompletableFuture.supplyAsync(() -> "B001")
+        .thenApply(id -> id.length())
+        .thenApply(n -> n * 10)
+        .exceptionally(ex -> -1)
+        .thenApply(v -> "v=" + v)
+        .join();
+    System.out.println(s);
+}`,
+      codeLang: 'java',
+      options: ['v=-1|||v=-1', '40|||40', 'v=40|||v=40', 'v=B001|||v=B001'],
+      correctIndex: 2,
+      points: 1,
+      explanation: "\"B001\".length() is 4, times 10 is 40. No stage failed, so exceptionally is skipped and passes 40 through; the last thenApply makes \"v=40\". A would need an exception before exceptionally. B forgets the last thenApply. join() returns the final stage's value, not the first one (D).|||\"B001\".length() là 4, nhân 10 được 40. Không bước nào hỏng, nên exceptionally bị bỏ qua và chuyền 40 đi tiếp; thenApply cuối biến nó thành \"v=40\". A chỉ xảy ra nếu có exception trước exceptionally. B quên thenApply cuối. join() trả giá trị của bước cuối, không phải bước đầu (D)." },
+    { id: 'q10',
+      question: 'A Spring @Service (default singleton scope) stores the current member in a private field during a request. What goes wrong under load?|||Một @Service của Spring (phạm vi singleton mặc định) cất thành viên hiện tại vào một field private trong lúc xử lý request. Khi tải cao thì hỏng gì?',
+      options: ['Spring creates a new service object for every request, so the field is always empty|||Spring tạo một đối tượng service mới cho mỗi request, nên field luôn rỗng', "Concurrent requests share the one object, so one request can read another request's member|||Các request đồng thời dùng chung một đối tượng, nên request này có thể đọc thành viên của request khác", 'Nothing, because each request runs in its own JVM|||Không gì cả, vì mỗi request chạy trong một JVM riêng', 'The application fails at start-up because singletons cannot have fields|||Ứng dụng hỏng ngay lúc khởi động vì singleton không được có field'],
+      correctIndex: 1,
+      points: 1,
+      explanation: 'Tomcat runs each request on its own thread, and all of them call the same singleton bean. BeanDaLuong forced two request threads through such a field: both receipts carried the same member. A describes prototype scope. All requests share one JVM (C). Singleton beans may have fields — final dependencies are fine (D); per-request data belongs in parameters, locals, a request-scoped bean or a ThreadLocal that is removed.|||Tomcat chạy mỗi request trên một luồng riêng, và tất cả cùng gọi một bean singleton. BeanDaLuong ép hai luồng request đi qua một field như vậy: cả hai phiếu mang tên cùng một thành viên. A mô tả phạm vi prototype. Mọi request dùng chung một JVM (C sai). Bean singleton được có field — phụ thuộc final thì ổn (D sai); dữ liệu của từng request thuộc về tham số, biến cục bộ, bean phạm vi request hoặc một ThreadLocal có gỡ bỏ.' },
+  ],
+};
+
+const QL_cs8 = {
+  title: '⭐ Quiz CS.8 — Multithreading basics|||⭐ Quiz CS.8 — Đa luồng cơ bản',
+  slug: 'pro192-quiz-cs8',
+  type: 'QUIZ',
+  description: '10 câu ôn deck ⭐ Chuyên sâu 8, mỗi câu có giải thích song ngữ; câu "in ra gì" đã chạy thật: run() và start(), vì sao count++ mất cập nhật, bộ đếm synchronized, volatile làm được gì và không làm được gì, getAndIncrement và compareAndSet, cách tránh deadlock, exception bên trong Future, bể luồng không shutdown, chuỗi CompletableFuture, và bean singleton của Spring dưới nhiều request.',
+  quiz: QUIZ_CS8,
+};
+
 export default {
-  lessons: [L_cs1_1, L_cs1_2, L_x_cs1_on, QL_cs1, L_cs2_1, L_cs2_2, L_x_cs2_on, QL_cs2, L_cs3_1, L_cs3_2, L_x_cs3_on, QL_cs3, L_cs4_1, L_cs4_2, L_x_cs4_on, QL_cs4, L_cs5_1, L_cs5_2, L_x_cs5_on, QL_cs5, L_cs6_1, L_cs6_2, L_x_cs6_on, QL_cs6],
+  lessons: [L_cs1_1, L_cs1_2, L_x_cs1_on, QL_cs1, L_cs2_1, L_cs2_2, L_x_cs2_on, QL_cs2, L_cs3_1, L_cs3_2, L_x_cs3_on, QL_cs3, L_cs4_1, L_cs4_2, L_x_cs4_on, QL_cs4, L_cs5_1, L_cs5_2, L_x_cs5_on, QL_cs5, L_cs6_1, L_cs6_2, L_x_cs6_on, QL_cs6, L_cs7_1, L_cs7_2, L_x_cs7_on, QL_cs7, L_cs8_1, L_cs8_2, L_x_cs8_on, QL_cs8],
 };

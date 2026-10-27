@@ -1,0 +1,1865 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-13-pe-2-gadget-store",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-pe17-su26-chua-tron-de"
+  },
+  "exercises": [
+    {
+      "title": "PE Practice 2 — Gadget Store Management (Vite .env · axios · CRUD)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 85,
+      "points": 100,
+      "concepts": [
+        "axios",
+        "Vite env",
+        "CRUD",
+        "form validation",
+        "React-Bootstrap Form",
+        "useParams",
+        "useNavigate",
+        "window.confirm"
+      ],
+      "prerequisites": [
+        "React Router",
+        "controlled form",
+        "async/await"
+      ],
+      "tags": [
+        "fer202",
+        "pe",
+        "axios",
+        "crud",
+        "validation"
+      ],
+      "problemHtml": "<h1>PE PRACTICE 2 — Gadget Store Management</h1>\n<p class=\"bi-phu\">FER202 · Practical Exam practice (PE 20060701 format) · Duration: 85 minutes · Total: 10 marks · Vite + axios + React-Bootstrap</p>\n<h2>1. Overview</h2>\n<p>Build the front-end of a gadget shop. The data resource <code>gadgets</code> is served by json-server (in the real exam it may be <b>mockapi.io</b> — the code is the same) at the URL stored in <code>.env</code>. Your roll number for this paper is <b><code>se123456</code></b>: <b>every route starts with <code>/se123456</code></b>.</p><p>Task 1 shows the collection as cards; Task 2 is an admin table with delete; Task 3 is one form used for both adding and editing a gadget, with full validation.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Task 1 (3 marks) — <code>/se123456/gadgets</code>: card grid, price sort, VND format, labels, filters.</li>\n  <li>Task 2 (2.5 marks) — <code>/se123456/manage</code>: table, 70×70 thumbnails, edit/delete, add button.</li>\n  <li>Task 3 (4.5 marks) — <code>/se123456/add</code> and <code>/se123456/edit/:id</code>: one form, validation, POST / PUT.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>The API URL lives in <code>.env</code> as <code>VITE_API_URL</code> and is read with <code>import.meta.env.VITE_API_URL</code> — hard-coding it = 0 for the whole paper.</li>\n  <li>Use <b>axios</b> for HTTP and <b>React-Bootstrap</b> (or Bootstrap classes) for the UI.</li>\n  <li>Formik/Yup are optional in the real exam; in Code Lab write the validation by hand (they are not installed here).</li>\n  <li>Send numbers as numbers (<code>priceK</code>, <code>stock</code>) and the switch as a boolean.</li>\n  <li>Keep the ids / classes of section 6 — the auto-grader relies on them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>database.json                  # given (json-server --port 9999)\n.env                           # VITE_API_URL=http://localhost:9999\nsrc/\n├── config.js                  # API_URL (from .env) · ROLL · CATEGORIES\n├── services/\n│   └── gadgetApi.js           # axios: getAll · getOne · create · update · delete\n├── utils/\n│   ├── format.js              # formatVnd\n│   └── validateGadget.js      # validation rules → { field: message }\n├── components/\n│   └── AppNavbar.js\n├── pages/\n│   ├── GadgetCollection.js    # Task 1\n│   ├── GadgetManagement.js    # Task 2\n│   └── GadgetForm.js          # Task 3 (add + edit)\n├── App.js\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+------------------------------------------------------------------------------+\n| Gadget Store   Gadget Collection   Gadget Management                         |\n+------------------------------------------------------------------------------+\n| Gadget Collection                                                            |\n| [All][Audio][Laptop][Phone][Tablet][Wearable]   (o) Best sellers only  10 gadgets\n| +---------------+ +---------------+ +---------------+ +---------------+      |\n| |   [ image ]   | |   [ image ]   | |   [ image ]   | |   [ image ]   |      |\n| | Legion 5      | | iPhone 16 Pro | | MacBook Air M4| | Galaxy S25    |      |\n| | Lenovo Group  | | Apple Inc ·   | | Apple Inc ·   | | Samsung ...   |      |\n| | 32,990,000 VND| | 28,990,000 VND| | 27,490,000 VND| | 22,990,000 VND|      |\n| |               | | [Best Seller] | |               | | [Best Seller] |      |\n| |               | |               | |               | | [Sold out]    |      |\n| +---------------+ +---------------+ +---------------+ +---------------+      |\n+------------------------------------------------------------------------------+\n| Gadget Management                                         [+ Add Gadget]    |\n| ID | Name          | Brand      | Category | Image   | Actions               |\n| 1  | iPhone 16 Pro | Apple Inc  | Phone    | [70x70] | [Edit] [Delete]       |\n+------------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>gadgets</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>generated by the server</td></tr><tr><td><code>gadgetName</code></td><td>string</td><td>≥ 3 characters</td></tr><tr><td><code>brandName</code></td><td>string</td><td>≥ 2 words (e.g. \"Apple Inc\")</td></tr><tr><td><code>category</code></td><td>'Phone' | 'Laptop' | 'Tablet' | 'Audio' | 'Wearable'</td><td></td></tr><tr><td><code>imageUrl</code></td><td>string (URL)</td><td>http(s) URL</td></tr><tr><td><code>priceK</code></td><td>number</td><td>price in THOUSANDS of VND; positive integer ≤ 5 digits</td></tr><tr><td><code>isBestSeller</code></td><td>boolean</td><td></td></tr><tr><td><code>stock</code></td><td>number</td><td>integer ≥ 0; 0 ⇒ \"Sold out\"</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>{ \"id\": 7, \"gadgetName\": \"Legion 5\", \"brandName\": \"Lenovo Group\", \"category\": \"Laptop\",\n  \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=legion5\", \"priceK\": 32990,\n  \"isBestSeller\": false, \"stock\": 2 }\n... 10 records — see database.json</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. T1 · Collection page <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Navbar links <code>#nav-collection</code> and <code>#nav-management</code>; <code>/</code> redirects to <code>/se123456/gadgets</code>.</li>\n  <li>Fetch all gadgets; show them as cards <code>#gadget-{id}.gadget-card</code>, <b>4 per row</b> on large screens.</li>\n  <li>Sort by <code>priceK</code> <b>descending</b> (same price ⇒ name A → Z).</li>\n  <li>Each card: image (<code>alt</code> = name), <code>.gadget-name</code>, brand · category, <code>.gadget-price</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">axios.get</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. T1 · Price format &amp; labels <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>priceK</code> is in thousands: <code>32990</code> ⇒ <code>32,990,000 VND</code>.</li>\n  <li><code>isBestSeller</code> ⇒ badge <code>.best-seller</code> \"Best Seller\"; <code>stock</code> 0 ⇒ badge <code>.sold-out</code> \"Sold out\".</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. T1 · Filters <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Buttons <code>.cat-btn</code> with id <code>cat-{Category}</code>: <code>All</code> + categories from the data, A → Z; the selected one has class <code>active</code>.</li>\n  <li>Switch <code>#only-best</code> \"Best sellers only\". Both filters combine; <code>#gadget-count</code> reads <code>N gadgets</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">useState</span></p>\n<p><b>Example:</b></p>\n<pre>Audio + Best sellers only ⇒ WH-1000XM6, AirPods Pro 3 (2 gadgets)</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. T2 · Management table <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Route <code>/se123456/manage</code>. Table <code>#gadget-table</code>: <code>ID | Name | Brand | Category | Image | Actions</code>, rows <code>#gadget-row-{id}</code> sorted by id <b>ascending</b>, name cell <code>.g-name</code>.</li>\n  <li>Image as a <b>70 × 70 px</b> thumbnail <code>img.thumb</code>.</li>\n  <li>Each row: <code>.btn-edit</code> (→ <code>/se123456/edit/{id}</code>) and <code>.btn-delete</code>. Link <code>#btn-add</code> → <code>/se123456/add</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useCallback</span> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. T2 · Delete <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Ask with <code>window.confirm</code> first; Cancel ⇒ nothing happens.</li>\n  <li><code>DELETE /gadgets/:id</code>, notify the user (alert/toast), then <b>reload the list</b> from the API.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. T3 · Form page <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form <code>#gadget-form</code> with <code>#gadgetName</code>, <code>#brandName</code>, <code>#imageUrl</code>, <code>#priceK</code>, <code>#category</code>, <code>#stock</code> (default 0), switch <code>#isBestSeller</code> (React-Bootstrap <code>type=\"switch\"</code>, default off), submit <code>#btn-save</code>.</li>\n  <li><code>#category</code> starts on an empty option (value \"\") followed by Phone, Laptop, Tablet, Audio, Wearable.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">controlled form</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. T3 · Validation <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>Validate <b>all</b> fields on submit; mark each invalid field with <code>is-invalid</code> and show its message in <code>#err-{field}</code>.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>name ≥ 3 chars ⇒ <code>Name must be at least 3 characters</code></li>\n  <li>brand ≥ 2 words ⇒ <code>Brand must contain at least 2 words</code></li>\n  <li>http(s) URL ⇒ <code>Image URL must be a valid URL</code></li>\n  <li>positive integer, at most 5 digits ⇒ <code>Price must be a positive integer (max 5 digits)</code></li>\n  <li>one of the 5 categories ⇒ <code>Please choose a category</code></li>\n  <li>stock integer ≥ 0 ⇒ <code>Stock must be a whole number (0 or more)</code></li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">e.preventDefault()</span> <span class=\"bi-hook\">isInvalid + Form.Control.Feedback</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. T3 · Add <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>POST /gadgets</code> (numbers as numbers), alert <code>Added successfully</code>, navigate to the management page — the new row is visible.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. T3 · Edit <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>/se123456/edit/:id</code> pre-fills the form from <code>GET /gadgets/:id</code> (same component as Add).</li>\n  <li>Same validation; <code>PUT /gadgets/:id</code>; alert <code>Updated successfully</code>; the table shows the new data.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useParams</span> <span class=\"bi-hook\">useEffect</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#nav-collection · #nav-management</code></td><td>navbar</td></tr><tr><td><code>#gadget-{id}.gadget-card · .gadget-name · .gadget-price · .best-seller · .sold-out</code></td><td>collection cards</td></tr><tr><td><code>.cat-btn#cat-{Category} · #only-best · #gadget-count</code></td><td>filters</td></tr><tr><td><code>#gadget-table · #gadget-row-{id} · .g-name · img.thumb · .btn-edit · .btn-delete · #btn-add</code></td><td>management page</td></tr><tr><td><code>#gadget-form · #gadgetName · #brandName · #imageUrl · #priceK · #category · #stock · #isBestSeller · #btn-save · #err-{field}</code></td><td>add / edit form</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>T1 · Collection page</td><td>1.5</td></tr><tr><td>2</td><td>T1 · Price format &amp; labels</td><td>0.5</td></tr><tr><td>3</td><td>T1 · Filters</td><td>1</td></tr><tr><td>4</td><td>T2 · Management table</td><td>1.5</td></tr><tr><td>5</td><td>T2 · Delete</td><td>1</td></tr><tr><td>6</td><td>T3 · Form page</td><td>1</td></tr><tr><td>7</td><td>T3 · Validation</td><td>1.5</td></tr><tr><td>8</td><td>T3 · Add</td><td>1</td></tr><tr><td>9</td><td>T3 · Edit</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Route without the roll number (e.g. <code>/gadgets</code>) — that task is 0.</li>\n  <li><code>priceK</code> sent as a string <code>\"19990\"</code> — later sorting by price breaks.</li>\n  <li>Two separate forms for add and edit with different rules — duplicate code, lost marks for \"same validation\".</li>\n  <li>Deleting without confirmation, or not reloading the list afterwards.</li>\n  <li>Sorting the state array in place (<code>gadgets.sort(…)</code>) inside render.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LUYỆN PE 2 — Quản lý cửa hàng thiết bị</h1>\n<p class=\"bi-phu\">FER202 · Luyện thi thực hành (dạng PE 20060701) · Thời gian: 85 phút · Tổng: 10 điểm · Vite + axios + React-Bootstrap</p>\n<h2>1. Tổng quan</h2>\n<p>Làm giao diện cho một cửa hàng thiết bị. Tài nguyên <code>gadgets</code> do json-server phục vụ (thi thật có thể là <b>mockapi.io</b> — mã như nhau) ở địa chỉ lưu trong <code>.env</code>. Mã sinh viên của đề này là <b><code>se123456</code></b>: <b>mọi route bắt đầu bằng <code>/se123456</code></b>.</p><p>Câu 1 hiện bộ sưu tập dạng thẻ; Câu 2 là bảng quản trị có xoá; Câu 3 là MỘT form dùng cho cả thêm và sửa, kiểm hợp lệ đầy đủ.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Câu 1 (3 điểm) — <code>/se123456/gadgets</code>: lưới thẻ, sắp theo giá, định dạng VND, nhãn, bộ lọc.</li>\n  <li>Câu 2 (2,5 điểm) — <code>/se123456/manage</code>: bảng, ảnh 70×70, sửa/xoá, nút thêm.</li>\n  <li>Câu 3 (4,5 điểm) — <code>/se123456/add</code> và <code>/se123456/edit/:id</code>: một form, kiểm hợp lệ, POST / PUT.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Địa chỉ API nằm trong <code>.env</code> tên <code>VITE_API_URL</code>, đọc bằng <code>import.meta.env.VITE_API_URL</code> — viết cứng = 0 điểm cả bài.</li>\n  <li>Dùng <b>axios</b> cho HTTP và <b>React-Bootstrap</b> (hoặc class Bootstrap) cho giao diện.</li>\n  <li>Formik/Yup là tuỳ chọn khi thi thật; trong Code Lab hãy tự viết phần kiểm (ở đây không cài hai thư viện đó).</li>\n  <li>Gửi số đúng kiểu số (<code>priceK</code>, <code>stock</code>) và công tắc là boolean.</li>\n  <li>Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>database.json                  # given (json-server --port 9999)\n.env                           # VITE_API_URL=http://localhost:9999\nsrc/\n├── config.js                  # API_URL (from .env) · ROLL · CATEGORIES\n├── services/\n│   └── gadgetApi.js           # axios: getAll · getOne · create · update · delete\n├── utils/\n│   ├── format.js              # formatVnd\n│   └── validateGadget.js      # validation rules → { field: message }\n├── components/\n│   └── AppNavbar.js\n├── pages/\n│   ├── GadgetCollection.js    # Task 1\n│   ├── GadgetManagement.js    # Task 2\n│   └── GadgetForm.js          # Task 3 (add + edit)\n├── App.js\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+------------------------------------------------------------------------------+\n| Gadget Store   Gadget Collection   Gadget Management                         |\n+------------------------------------------------------------------------------+\n| Gadget Collection                                                            |\n| [All][Audio][Laptop][Phone][Tablet][Wearable]   (o) Best sellers only  10 gadgets\n| +---------------+ +---------------+ +---------------+ +---------------+      |\n| |   [ image ]   | |   [ image ]   | |   [ image ]   | |   [ image ]   |      |\n| | Legion 5      | | iPhone 16 Pro | | MacBook Air M4| | Galaxy S25    |      |\n| | Lenovo Group  | | Apple Inc ·   | | Apple Inc ·   | | Samsung ...   |      |\n| | 32,990,000 VND| | 28,990,000 VND| | 27,490,000 VND| | 22,990,000 VND|      |\n| |               | | [Best Seller] | |               | | [Best Seller] |      |\n| |               | |               | |               | | [Sold out]    |      |\n| +---------------+ +---------------+ +---------------+ +---------------+      |\n+------------------------------------------------------------------------------+\n| Gadget Management                                         [+ Add Gadget]    |\n| ID | Name          | Brand      | Category | Image   | Actions               |\n| 1  | iPhone 16 Pro | Apple Inc  | Phone    | [70x70] | [Edit] [Delete]       |\n+------------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>gadgets</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>number</td><td>máy chủ tự sinh</td></tr><tr><td><code>gadgetName</code></td><td>string</td><td>≥ 3 ký tự</td></tr><tr><td><code>brandName</code></td><td>string</td><td>≥ 2 từ (vd \"Apple Inc\")</td></tr><tr><td><code>category</code></td><td>'Phone' | 'Laptop' | 'Tablet' | 'Audio' | 'Wearable'</td><td></td></tr><tr><td><code>imageUrl</code></td><td>string (URL)</td><td>URL http(s)</td></tr><tr><td><code>priceK</code></td><td>number</td><td>giá theo NGHÌN đồng; số nguyên dương ≤ 5 chữ số</td></tr><tr><td><code>isBestSeller</code></td><td>boolean</td><td></td></tr><tr><td><code>stock</code></td><td>number</td><td>số nguyên ≥ 0; 0 ⇒ \"Sold out\"</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>{ \"id\": 7, \"gadgetName\": \"Legion 5\", \"brandName\": \"Lenovo Group\", \"category\": \"Laptop\",\n  \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=legion5\", \"priceK\": 32990,\n  \"isBestSeller\": false, \"stock\": 2 }\n... 10 records — see database.json</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. C1 · Trang bộ sưu tập <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Navbar có <code>#nav-collection</code> và <code>#nav-management</code>; <code>/</code> chuyển tới <code>/se123456/gadgets</code>.</li>\n  <li>Tải mọi gadget; hiện dạng thẻ <code>#gadget-{id}.gadget-card</code>, <b>4 thẻ một hàng</b> ở màn hình lớn.</li>\n  <li>Sắp theo <code>priceK</code> <b>giảm dần</b> (cùng giá ⇒ tên A → Z).</li>\n  <li>Mỗi thẻ: ảnh (<code>alt</code> = tên), <code>.gadget-name</code>, hãng · loại, <code>.gadget-price</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">axios.get</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. C1 · Định dạng giá &amp; nhãn <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>priceK</code> tính theo nghìn: <code>32990</code> ⇒ <code>32,990,000 VND</code>.</li>\n  <li><code>isBestSeller</code> ⇒ badge <code>.best-seller</code> \"Best Seller\"; <code>stock</code> = 0 ⇒ badge <code>.sold-out</code> \"Sold out\".</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. C1 · Bộ lọc <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Nút <code>.cat-btn</code> id <code>cat-{Category}</code>: <code>All</code> + các loại lấy từ dữ liệu, A → Z; nút đang chọn có class <code>active</code>.</li>\n  <li>Công tắc <code>#only-best</code> \"Best sellers only\". Hai bộ lọc kết hợp; <code>#gadget-count</code> ghi <code>N gadgets</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">useState</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>Audio + Best sellers only ⇒ WH-1000XM6, AirPods Pro 3 (2 gadgets)</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. C2 · Bảng quản lý <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Route <code>/se123456/manage</code>. Bảng <code>#gadget-table</code>: <code>ID | Name | Brand | Category | Image | Actions</code>, hàng <code>#gadget-row-{id}</code> theo id <b>tăng dần</b>, ô tên <code>.g-name</code>.</li>\n  <li>Ảnh là ảnh nhỏ <b>70 × 70 px</b> <code>img.thumb</code>.</li>\n  <li>Mỗi hàng: <code>.btn-edit</code> (→ <code>/se123456/edit/{id}</code>) và <code>.btn-delete</code>. Link <code>#btn-add</code> → <code>/se123456/add</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useCallback</span> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C2 · Xoá <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hỏi bằng <code>window.confirm</code> trước; bấm Cancel ⇒ không làm gì.</li>\n  <li><code>DELETE /gadgets/:id</code>, báo người dùng (alert/toast), rồi <b>tải lại danh sách</b> từ API.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. C3 · Trang form <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Form <code>#gadget-form</code> gồm <code>#gadgetName</code>, <code>#brandName</code>, <code>#imageUrl</code>, <code>#priceK</code>, <code>#category</code>, <code>#stock</code> (mặc định 0), công tắc <code>#isBestSeller</code> (React-Bootstrap <code>type=\"switch\"</code>, mặc định tắt), nút gửi <code>#btn-save</code>.</li>\n  <li><code>#category</code> bắt đầu ở lựa chọn rỗng (value \"\") rồi Phone, Laptop, Tablet, Audio, Wearable.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">controlled form</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. C3 · Kiểm hợp lệ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Kiểm <b>mọi</b> ô khi gửi; ô sai có class <code>is-invalid</code> và câu lỗi nằm trong <code>#err-{tên ô}</code>.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>tên ≥ 3 ký tự ⇒ <code>Name must be at least 3 characters</code></li>\n  <li>hãng ≥ 2 từ ⇒ <code>Brand must contain at least 2 words</code></li>\n  <li>URL http(s) ⇒ <code>Image URL must be a valid URL</code></li>\n  <li>số nguyên dương, tối đa 5 chữ số ⇒ <code>Price must be a positive integer (max 5 digits)</code></li>\n  <li>một trong 5 loại ⇒ <code>Please choose a category</code></li>\n  <li>tồn kho nguyên ≥ 0 ⇒ <code>Stock must be a whole number (0 or more)</code></li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">e.preventDefault()</span> <span class=\"bi-hook\">isInvalid + Form.Control.Feedback</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. C3 · Thêm <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>POST /gadgets</code> (số đúng kiểu số), alert <code>Added successfully</code>, về trang quản lý — thấy hàng mới.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. C3 · Sửa <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>/se123456/edit/:id</code> điền sẵn form từ <code>GET /gadgets/:id</code> (cùng component với Thêm).</li>\n  <li>Cùng luật kiểm; <code>PUT /gadgets/:id</code>; alert <code>Updated successfully</code>; bảng hiện dữ liệu mới.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useParams</span> <span class=\"bi-hook\">useEffect</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#nav-collection · #nav-management</code></td><td>navbar</td></tr><tr><td><code>#gadget-{id}.gadget-card · .gadget-name · .gadget-price · .best-seller · .sold-out</code></td><td>thẻ bộ sưu tập</td></tr><tr><td><code>.cat-btn#cat-{Category} · #only-best · #gadget-count</code></td><td>bộ lọc</td></tr><tr><td><code>#gadget-table · #gadget-row-{id} · .g-name · img.thumb · .btn-edit · .btn-delete · #btn-add</code></td><td>trang quản lý</td></tr><tr><td><code>#gadget-form · #gadgetName · #brandName · #imageUrl · #priceK · #category · #stock · #isBestSeller · #btn-save · #err-{field}</code></td><td>form thêm / sửa</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>C1 · Trang bộ sưu tập</td><td>1.5</td></tr><tr><td>2</td><td>C1 · Định dạng giá &amp; nhãn</td><td>0.5</td></tr><tr><td>3</td><td>C1 · Bộ lọc</td><td>1</td></tr><tr><td>4</td><td>C2 · Bảng quản lý</td><td>1.5</td></tr><tr><td>5</td><td>C2 · Xoá</td><td>1</td></tr><tr><td>6</td><td>C3 · Trang form</td><td>1</td></tr><tr><td>7</td><td>C3 · Kiểm hợp lệ</td><td>1.5</td></tr><tr><td>8</td><td>C3 · Thêm</td><td>1</td></tr><tr><td>9</td><td>C3 · Sửa</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Route thiếu mã sinh viên (vd <code>/gadgets</code>) — câu đó 0 điểm.</li>\n  <li>Gửi <code>priceK</code> dạng chuỗi <code>\"19990\"</code> — sau đó sắp theo giá bị sai.</li>\n  <li>Hai form riêng cho thêm và sửa với luật khác nhau — trùng mã, mất điểm \"cùng luật kiểm\".</li>\n  <li>Xoá không hỏi xác nhận, hoặc xoá xong không tải lại danh sách.</li>\n  <li>Sắp xếp tại chỗ mảng state (<code>gadgets.sort(…)</code>) ngay trong render.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "The API URL lives in <code>.env</code> as <code>VITE_API_URL</code> and is read with <code>import.meta.env.VITE_API_URL</code> — hard-coding it = 0 for the whole paper.|||Địa chỉ API nằm trong <code>.env</code> tên <code>VITE_API_URL</code>, đọc bằng <code>import.meta.env.VITE_API_URL</code> — viết cứng = 0 điểm cả bài.\nUse <b>axios</b> for HTTP and <b>React-Bootstrap</b> (or Bootstrap classes) for the UI.|||Dùng <b>axios</b> cho HTTP và <b>React-Bootstrap</b> (hoặc class Bootstrap) cho giao diện.\nFormik/Yup are optional in the real exam; in Code Lab write the validation by hand (they are not installed here).|||Formik/Yup là tuỳ chọn khi thi thật; trong Code Lab hãy tự viết phần kiểm (ở đây không cài hai thư viện đó).\nSend numbers as numbers (<code>priceK</code>, <code>stock</code>) and the switch as a boolean.|||Gửi số đúng kiểu số (<code>priceK</code>, <code>stock</code>) và công tắc là boolean.\nKeep the ids / classes of section 6 — the auto-grader relies on them.|||Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.",
+      "examplesJson": [
+        {
+          "input": "T1 · Filters|||C1 · Bộ lọc",
+          "output": "Audio + Best sellers only ⇒ WH-1000XM6, AirPods Pro 3 (2 gadgets)",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Viết config.js (đọc import.meta.env.VITE_API_URL + ROLL) và gadgetApi.js trước — ba câu đều dùng.",
+        "Câu 1: sort trên bản sao ([...gadgets] hoặc sau filter); định dạng tiền = (priceK * 1000).toLocaleString(\"en-US\") + \" VND\".",
+        "Câu 2: tách hàm load() bằng useCallback để gọi lúc mount và sau khi xoá; confirm trả false ⇒ return ngay.",
+        "Câu 3: một component GadgetForm — const { id } = useParams(); isEdit = id !== undefined. validateGadget(form) trả object lỗi; rỗng mới gửi. Nhớ Number(priceK), Number(stock)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/pages/GadgetCollection.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetCollection.js — STARTER (Câu 1)\nimport { useEffect, useState } from 'react';\nimport { Container } from 'react-bootstrap';\nimport { getAllGadgets } from '../services/gadgetApi';\n\nexport default function GadgetCollection() {\n  const [gadgets, setGadgets] = useState([]);\n  useEffect(() => {\n    getAllGadgets().then(setGadgets);\n  }, []);\n  // TODO: lưới thẻ .gadget-card (4 thẻ/hàng), sắp giá giảm dần, formatVnd, Best Seller / Sold out, lọc .cat-btn + #only-best\n  return (\n    <Container>\n      <h2>Gadget Collection</h2>\n      <ul>\n        {gadgets.map((g) => <li key={g.id}>{g.gadgetName}</li>)}\n      </ul>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/GadgetManagement.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetManagement.js — STARTER (Câu 2)\nimport { Container } from 'react-bootstrap';\n\nexport default function GadgetManagement() {\n  // TODO: bảng #gadget-table (id tăng dần), ảnh .thumb 70×70, .btn-edit, .btn-delete (confirm), #btn-add\n  return (\n    <Container>\n      <h2>Gadget Management</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/GadgetForm.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetForm.js — STARTER (Câu 3): dùng cho cả /add và /edit/:id\nimport { Container } from 'react-bootstrap';\n\nexport default function GadgetForm() {\n  // TODO: form #gadget-form, ô #gadgetName #brandName #imageUrl #priceK #category #stock + công tắc #isBestSeller,\n  //       lỗi trong #err-<tên ô>, POST (thêm) / PUT (sửa), alert rồi về /se123456/manage\n  return (\n    <Container>\n      <h2>Gadget form</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/services/gadgetApi.js",
+          "language": "javascript",
+          "code": "// src/services/gadgetApi.js — STARTER\nimport axios from 'axios';\nimport { API_URL } from '../config';\n\nexport const getAllGadgets = async () => (await axios.get(`${API_URL}/gadgets`)).data;\n// TODO: getGadget(id) · createGadget(g) · updateGadget(id, g) · deleteGadget(id)\nexport const getGadget = async () => null;\nexport const createGadget = async () => null;\nexport const updateGadget = async () => null;\nexport const deleteGadget = async () => null;\n"
+        },
+        {
+          "name": "src/utils/validateGadget.js",
+          "language": "javascript",
+          "code": "// src/utils/validateGadget.js — STARTER\nexport default function validateGadget(form) {\n  // TODO: trả về { gadgetName?: '...', brandName?: '...', imageUrl?: '...', priceK?: '...', category?: '...', stock?: '...' }\n  return {};\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js — STARTER\nexport function formatVnd(priceK) {\n  // TODO: 28990 ⇒ \"28,990,000 VND\"\n  return String(priceK);\n}\n"
+        },
+        {
+          "name": "src/config.js",
+          "language": "javascript",
+          "code": "// src/config.js — STARTER\n// TODO: đọc từ .env (import.meta.env.VITE_API_URL). Viết cứng URL ở đây = 0 điểm cả bài.\nexport const API_URL = 'http://localhost:9999';\nexport const ROLL = 'se123456';\nexport const CATEGORIES = ['Phone', 'Laptop', 'Tablet', 'Audio', 'Wearable'];\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mọi route có mã sinh viên ở đầu\nimport { Navigate, Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport GadgetCollection from './pages/GadgetCollection';\nimport GadgetManagement from './pages/GadgetManagement';\nimport GadgetForm from './pages/GadgetForm';\nimport { ROLL } from './config';\n\nexport default function App() {\n  return (\n    <>\n      <AppNavbar />\n      <Routes>\n        <Route path=\"/\" element={<Navigate to={`/${ROLL}/gadgets`} replace />} />\n        <Route path={`/${ROLL}/gadgets`} element={<GadgetCollection />} />\n        <Route path={`/${ROLL}/manage`} element={<GadgetManagement />} />\n        {/* MỘT component cho cả thêm và sửa: có :id ⇒ chế độ sửa */}\n        <Route path={`/${ROLL}/add`} element={<GadgetForm />} />\n        <Route path={`/${ROLL}/edit/:id`} element={<GadgetForm />} />\n        <Route path=\"*\" element={<p className=\"container\">Page not found</p>} />\n      </Routes>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\nimport { ROLL } from '../config';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar bg=\"primary\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand>Gadget Store</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to={`/${ROLL}/gadgets`} id=\"nav-collection\">Gadget Collection</Nav.Link>\n          <Nav.Link as={NavLink} to={`/${ROLL}/manage`} id=\"nav-management\">Gadget Management</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"gadgets\": [\n    {\n      \"id\": 1,\n      \"gadgetName\": \"iPhone 16 Pro\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Phone\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=iphone16pro\",\n      \"priceK\": 28990,\n      \"isBestSeller\": true,\n      \"stock\": 12\n    },\n    {\n      \"id\": 2,\n      \"gadgetName\": \"Galaxy S25\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Phone\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxys25\",\n      \"priceK\": 22990,\n      \"isBestSeller\": true,\n      \"stock\": 0\n    },\n    {\n      \"id\": 3,\n      \"gadgetName\": \"MacBook Air M4\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Laptop\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=macbookair\",\n      \"priceK\": 27490,\n      \"isBestSeller\": false,\n      \"stock\": 5\n    },\n    {\n      \"id\": 4,\n      \"gadgetName\": \"WH-1000XM6\",\n      \"brandName\": \"Sony Group\",\n      \"category\": \"Audio\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=wh1000xm6\",\n      \"priceK\": 8990,\n      \"isBestSeller\": true,\n      \"stock\": 20\n    },\n    {\n      \"id\": 5,\n      \"gadgetName\": \"Redmi Pad 2\",\n      \"brandName\": \"Xiaomi Corp\",\n      \"category\": \"Tablet\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=redmipad2\",\n      \"priceK\": 5490,\n      \"isBestSeller\": false,\n      \"stock\": 8\n    },\n    {\n      \"id\": 6,\n      \"gadgetName\": \"Forerunner 265\",\n      \"brandName\": \"Garmin Ltd\",\n      \"category\": \"Wearable\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=forerunner\",\n      \"priceK\": 10490,\n      \"isBestSeller\": false,\n      \"stock\": 3\n    },\n    {\n      \"id\": 7,\n      \"gadgetName\": \"Legion 5\",\n      \"brandName\": \"Lenovo Group\",\n      \"category\": \"Laptop\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=legion5\",\n      \"priceK\": 32990,\n      \"isBestSeller\": false,\n      \"stock\": 2\n    },\n    {\n      \"id\": 8,\n      \"gadgetName\": \"Galaxy Tab S10\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Tablet\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxytab\",\n      \"priceK\": 18990,\n      \"isBestSeller\": false,\n      \"stock\": 0\n    },\n    {\n      \"id\": 9,\n      \"gadgetName\": \"AirPods Pro 3\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Audio\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=airpods3\",\n      \"priceK\": 6290,\n      \"isBestSeller\": true,\n      \"stock\": 30\n    },\n    {\n      \"id\": 10,\n      \"gadgetName\": \"Galaxy Watch 8\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Wearable\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxywatch\",\n      \"priceK\": 7990,\n      \"isBestSeller\": false,\n      \"stock\": 6\n    }\n  ]\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "VITE_API_URL=\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/pages/GadgetCollection.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetCollection.js — Câu 1: lưới thẻ, sắp giá giảm dần, định dạng tiền, nhãn, lọc\nimport { useEffect, useMemo, useState } from 'react';\nimport { Alert, Badge, Button, ButtonGroup, Card, Col, Container, Form, Row } from 'react-bootstrap';\nimport { getAllGadgets } from '../services/gadgetApi';\nimport { formatVnd } from '../utils/format';\n\nexport default function GadgetCollection() {\n  const [gadgets, setGadgets] = useState([]);\n  const [error, setError] = useState('');\n  const [category, setCategory] = useState('All');\n  const [onlyBest, setOnlyBest] = useState(false);\n\n  useEffect(() => {\n    getAllGadgets()\n      .then(setGadgets)\n      .catch(() => setError('Cannot load gadgets — check VITE_API_URL and json-server.'));\n  }, []);\n\n  // nút lọc lấy từ dữ liệu (không trùng, A→Z)\n  const categories = useMemo(() => ['All', ...[...new Set(gadgets.map((g) => g.category))].sort()], [gadgets]);\n\n  const visible = useMemo(\n    () =>\n      gadgets\n        .filter((g) => category === 'All' || g.category === category)\n        .filter((g) => !onlyBest || g.isBestSeller)\n        // giá giảm dần; bằng giá thì theo tên A→Z — filter() đã tạo mảng mới nên sort an toàn\n        .sort((a, b) => b.priceK - a.priceK || a.gadgetName.localeCompare(b.gadgetName)),\n    [gadgets, category, onlyBest],\n  );\n\n  return (\n    <Container>\n      <h2>Gadget Collection</h2>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n      <div className=\"d-flex flex-wrap align-items-center gap-3 mb-3\">\n        <ButtonGroup>\n          {categories.map((c) => (\n            <Button\n              key={c}\n              id={`cat-${c}`}\n              className=\"cat-btn\"\n              variant={c === category ? 'primary' : 'outline-primary'}\n              active={c === category}\n              onClick={() => setCategory(c)}\n            >\n              {c}\n            </Button>\n          ))}\n        </ButtonGroup>\n        <Form.Check type=\"switch\" id=\"only-best\" label=\"Best sellers only\" checked={onlyBest} onChange={(e) => setOnlyBest(e.target.checked)} />\n        <span id=\"gadget-count\" className=\"text-muted\">{visible.length} gadgets</span>\n      </div>\n\n      <Row xs={1} sm={2} lg={4} className=\"g-3\">\n        {visible.map((g) => (\n          <Col key={g.id}>\n            <Card id={`gadget-${g.id}`} className=\"gadget-card h-100\">\n              <Card.Img variant=\"top\" className=\"gadget-img\" src={g.imageUrl} alt={g.gadgetName} style={{ height: 140, objectFit: 'contain' }} />\n              <Card.Body>\n                <Card.Title className=\"gadget-name\">{g.gadgetName}</Card.Title>\n                <Card.Subtitle className=\"mb-2 text-muted\">{g.brandName} · {g.category}</Card.Subtitle>\n                <Card.Text className=\"gadget-price fw-bold\">{formatVnd(g.priceK)}</Card.Text>\n                {g.isBestSeller && <Badge bg=\"warning\" text=\"dark\" className=\"best-seller me-2\">Best Seller</Badge>}\n                {g.stock === 0 && <Badge bg=\"secondary\" className=\"sold-out\">Sold out</Badge>}\n              </Card.Body>\n            </Card>\n          </Col>\n        ))}\n      </Row>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/GadgetManagement.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetManagement.js — Câu 2: bảng quản lý, ảnh 70×70, sửa/xoá, thêm\nimport { useCallback, useEffect, useState } from 'react';\nimport { Alert, Button, Container, Table } from 'react-bootstrap';\nimport { Link, useNavigate } from 'react-router-dom';\nimport { ROLL } from '../config';\nimport { deleteGadget, getAllGadgets } from '../services/gadgetApi';\n\nexport default function GadgetManagement() {\n  const [gadgets, setGadgets] = useState([]);\n  const [error, setError] = useState('');\n  const navigate = useNavigate();\n\n  // useCallback ⇒ hàm ổn định, dùng được trong useEffect lẫn sau khi xoá (\"reload the list\")\n  const load = useCallback(async () => {\n    try {\n      const data = await getAllGadgets();\n      setGadgets([...data].sort((a, b) => Number(a.id) - Number(b.id))); // id tăng dần\n    } catch {\n      setError('Cannot load gadgets.');\n    }\n  }, []);\n\n  useEffect(() => {\n    load();\n  }, [load]);\n\n  const handleDelete = async (g) => {\n    if (!window.confirm(`Delete \"${g.gadgetName}\"?`)) return; // bấm Cancel ⇒ không làm gì\n    try {\n      await deleteGadget(g.id);\n      window.alert('Deleted successfully');\n      await load();\n    } catch {\n      setError('Delete failed.');\n    }\n  };\n\n  return (\n    <Container>\n      <div className=\"d-flex justify-content-between align-items-center mb-3\">\n        <h2 className=\"m-0\">Gadget Management</h2>\n        <Link id=\"btn-add\" className=\"btn btn-success\" to={`/${ROLL}/add`}>+ Add Gadget</Link>\n      </div>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n      <Table bordered hover responsive id=\"gadget-table\" className=\"align-middle\">\n        <thead>\n          <tr>\n            <th>ID</th>\n            <th>Name</th>\n            <th>Brand</th>\n            <th>Category</th>\n            <th>Image</th>\n            <th>Actions</th>\n          </tr>\n        </thead>\n        <tbody>\n          {gadgets.map((g) => (\n            <tr key={g.id} id={`gadget-row-${g.id}`}>\n              <td>{g.id}</td>\n              <td className=\"g-name\">{g.gadgetName}</td>\n              <td>{g.brandName}</td>\n              <td>{g.category}</td>\n              <td>\n                <img className=\"thumb\" src={g.imageUrl} alt={g.gadgetName} width={70} height={70} style={{ objectFit: 'cover' }} />\n              </td>\n              <td>\n                <Button size=\"sm\" variant=\"outline-primary\" className=\"btn-edit me-2\" onClick={() => navigate(`/${ROLL}/edit/${g.id}`)}>Edit</Button>\n                <Button size=\"sm\" variant=\"outline-danger\" className=\"btn-delete\" onClick={() => handleDelete(g)}>Delete</Button>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </Table>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/GadgetForm.js",
+          "language": "javascript",
+          "code": "// src/pages/GadgetForm.js — Câu 3: MỘT form cho Thêm (/add) và Sửa (/edit/:id)\nimport { useEffect, useState } from 'react';\nimport { Alert, Button, Card, Container, Form } from 'react-bootstrap';\nimport { Link, useNavigate, useParams } from 'react-router-dom';\nimport { CATEGORIES, ROLL } from '../config';\nimport { createGadget, getGadget, updateGadget } from '../services/gadgetApi';\nimport validateGadget from '../utils/validateGadget';\n\nconst EMPTY = { gadgetName: '', brandName: '', imageUrl: '', priceK: '', category: '', isBestSeller: false, stock: '0' };\n\nexport default function GadgetForm() {\n  const { id } = useParams();\n  const isEdit = id !== undefined;\n  const navigate = useNavigate();\n  const [form, setForm] = useState(EMPTY);\n  const [errors, setErrors] = useState({});\n  const [notFound, setNotFound] = useState(false);\n\n  // Sửa: điền sẵn dữ liệu cũ (số ⇒ chuỗi vì ô nhập luôn giữ chuỗi)\n  useEffect(() => {\n    if (!isEdit) return;\n    getGadget(id)\n      .then((g) => setForm({ ...g, priceK: String(g.priceK), stock: String(g.stock) }))\n      .catch(() => setNotFound(true));\n  }, [id, isEdit]);\n\n  const handleChange = (e) => {\n    const { name, value, type, checked } = e.target;\n    setForm((f) => ({ ...f, [name]: type === 'checkbox' ? checked : value }));\n  };\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    const errs = validateGadget(form);\n    setErrors(errs);\n    if (Object.keys(errs).length > 0) return; // còn lỗi ⇒ không gửi\n    // dữ liệu gửi đi đúng KIỂU: số là number, công tắc là boolean\n    const payload = {\n      gadgetName: form.gadgetName.trim(),\n      brandName: form.brandName.trim().replace(/\\s+/g, ' '),\n      category: form.category,\n      imageUrl: form.imageUrl.trim(),\n      priceK: Number(form.priceK),\n      isBestSeller: form.isBestSeller,\n      stock: Number(form.stock),\n    };\n    try {\n      if (isEdit) {\n        await updateGadget(id, payload);\n        window.alert('Updated successfully');\n      } else {\n        await createGadget(payload);\n        window.alert('Added successfully');\n      }\n      navigate(`/${ROLL}/manage`);\n    } catch {\n      setErrors({ form: 'Save failed. Please try again.' });\n    }\n  };\n\n  if (notFound) return <Container><Alert variant=\"danger\">Gadget not found</Alert></Container>;\n\n  // một ô nhập + câu lỗi của nó (React-Bootstrap: isInvalid ⇒ class is-invalid, Feedback hiện chữ)\n  const field = (name, label, props = {}) => (\n    <Form.Group className=\"mb-3\" controlId={name}>\n      <Form.Label>{label}</Form.Label>\n      <Form.Control name={name} value={form[name]} onChange={handleChange} isInvalid={!!errors[name]} {...props} />\n      <Form.Control.Feedback type=\"invalid\" id={`err-${name}`}>{errors[name]}</Form.Control.Feedback>\n    </Form.Group>\n  );\n\n  return (\n    <Container style={{ maxWidth: 640 }}>\n      <Card>\n        <Card.Body>\n          <Card.Title>{isEdit ? 'Edit Gadget' : 'Add Gadget'}</Card.Title>\n          {errors.form && <Alert variant=\"danger\">{errors.form}</Alert>}\n          <Form id=\"gadget-form\" noValidate onSubmit={handleSubmit}>\n            {field('gadgetName', 'Gadget name')}\n            {field('brandName', 'Brand name')}\n            {field('imageUrl', 'Image URL', { placeholder: 'https://...' })}\n            {field('priceK', 'Price (thousand VND)', { type: 'number' })}\n            <Form.Group className=\"mb-3\" controlId=\"category\">\n              <Form.Label>Category</Form.Label>\n              <Form.Select name=\"category\" value={form.category} onChange={handleChange} isInvalid={!!errors.category}>\n                <option value=\"\">-- Choose a category --</option>\n                {CATEGORIES.map((c) => (\n                  <option key={c} value={c}>{c}</option>\n                ))}\n              </Form.Select>\n              <Form.Control.Feedback type=\"invalid\" id=\"err-category\">{errors.category}</Form.Control.Feedback>\n            </Form.Group>\n            {field('stock', 'Stock', { type: 'number' })}\n            <Form.Check\n              className=\"mb-3\"\n              type=\"switch\"\n              id=\"isBestSeller\"\n              name=\"isBestSeller\"\n              label=\"Best seller\"\n              checked={form.isBestSeller}\n              onChange={handleChange}\n            />\n            <Button type=\"submit\" id=\"btn-save\">{isEdit ? 'Update' : 'Add'}</Button>{' '}\n            <Link to={`/${ROLL}/manage`} className=\"btn btn-link\">Back to list</Link>\n          </Form>\n        </Card.Body>\n      </Card>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/services/gadgetApi.js",
+          "language": "javascript",
+          "code": "// src/services/gadgetApi.js — mọi lời gọi HTTP của tài nguyên /gadgets nằm ở MỘT chỗ\nimport axios from 'axios';\nimport { API_URL } from '../config';\n\nconst http = axios.create({ baseURL: API_URL }); // axios tự ném lỗi khi status không phải 2xx\n\nexport const getAllGadgets = async () => (await http.get('/gadgets')).data;\nexport const getGadget = async (id) => (await http.get(`/gadgets/${id}`)).data;\nexport const createGadget = async (gadget) => (await http.post('/gadgets', gadget)).data;\nexport const updateGadget = async (id, gadget) => (await http.put(`/gadgets/${id}`, gadget)).data;\nexport const deleteGadget = async (id) => (await http.delete(`/gadgets/${id}`)).data;\n"
+        },
+        {
+          "name": "src/utils/validateGadget.js",
+          "language": "javascript",
+          "code": "// src/utils/validateGadget.js — luật kiểm của form Add/Edit (thuần JS ⇒ dễ kiểm, dùng chung hai trang)\nimport { CATEGORIES } from '../config';\n\nfunction isHttpUrl(value) {\n  try {\n    const u = new URL(value);\n    return u.protocol === 'http:' || u.protocol === 'https:';\n  } catch {\n    return false; // new URL() ném lỗi khi chuỗi không phải URL\n  }\n}\n\n// Trả về object { tênÔ: 'câu lỗi' } — rỗng nghĩa là hợp lệ\nexport default function validateGadget(form) {\n  const errors = {};\n  if (form.gadgetName.trim().length < 3) errors.gadgetName = 'Name must be at least 3 characters';\n  if (form.brandName.trim().split(/\\s+/).filter(Boolean).length < 2) errors.brandName = 'Brand must contain at least 2 words';\n  if (!isHttpUrl(form.imageUrl.trim())) errors.imageUrl = 'Image URL must be a valid URL';\n  // số nguyên dương, tối đa 5 chữ số: regex chặn \"12.5\", \"-5\", \"1e3\"; > 0 chặn \"0\"/\"00000\"\n  if (!/^\\d{1,5}$/.test(String(form.priceK).trim()) || Number(form.priceK) <= 0) errors.priceK = 'Price must be a positive integer (max 5 digits)';\n  if (!CATEGORIES.includes(form.category)) errors.category = 'Please choose a category';\n  if (!/^\\d+$/.test(String(form.stock).trim())) errors.stock = 'Stock must be a whole number (0 or more)';\n  return errors;\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js\n// priceK lưu theo NGHÌN đồng: 28990 ⇒ \"28,990,000 VND\" (dấu phẩy ngăn hàng nghìn như ví dụ của đề)\nexport function formatVnd(priceK) {\n  return `${(Number(priceK) * 1000).toLocaleString('en-US')} VND`;\n}\n"
+        },
+        {
+          "name": "src/config.js",
+          "language": "javascript",
+          "code": "// src/config.js — cấu hình chung: địa chỉ API đọc từ .env (Vite: biến phải bắt đầu bằng VITE_)\nexport const API_URL = import.meta.env.VITE_API_URL;\n// Mã sinh viên nằm trong MỌI đường dẫn (đề cho 0 điểm nếu sai URL)\nexport const ROLL = 'se123456';\nexport const CATEGORIES = ['Phone', 'Laptop', 'Tablet', 'Audio', 'Wearable'];\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mọi route có mã sinh viên ở đầu\nimport { Navigate, Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport GadgetCollection from './pages/GadgetCollection';\nimport GadgetManagement from './pages/GadgetManagement';\nimport GadgetForm from './pages/GadgetForm';\nimport { ROLL } from './config';\n\nexport default function App() {\n  return (\n    <>\n      <AppNavbar />\n      <Routes>\n        <Route path=\"/\" element={<Navigate to={`/${ROLL}/gadgets`} replace />} />\n        <Route path={`/${ROLL}/gadgets`} element={<GadgetCollection />} />\n        <Route path={`/${ROLL}/manage`} element={<GadgetManagement />} />\n        {/* MỘT component cho cả thêm và sửa: có :id ⇒ chế độ sửa */}\n        <Route path={`/${ROLL}/add`} element={<GadgetForm />} />\n        <Route path={`/${ROLL}/edit/:id`} element={<GadgetForm />} />\n        <Route path=\"*\" element={<p className=\"container\">Page not found</p>} />\n      </Routes>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\nimport { ROLL } from '../config';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar bg=\"primary\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand>Gadget Store</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to={`/${ROLL}/gadgets`} id=\"nav-collection\">Gadget Collection</Nav.Link>\n          <Nav.Link as={NavLink} to={`/${ROLL}/manage`} id=\"nav-management\">Gadget Management</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"gadgets\": [\n    {\n      \"id\": 1,\n      \"gadgetName\": \"iPhone 16 Pro\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Phone\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=iphone16pro\",\n      \"priceK\": 28990,\n      \"isBestSeller\": true,\n      \"stock\": 12\n    },\n    {\n      \"id\": 2,\n      \"gadgetName\": \"Galaxy S25\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Phone\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxys25\",\n      \"priceK\": 22990,\n      \"isBestSeller\": true,\n      \"stock\": 0\n    },\n    {\n      \"id\": 3,\n      \"gadgetName\": \"MacBook Air M4\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Laptop\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=macbookair\",\n      \"priceK\": 27490,\n      \"isBestSeller\": false,\n      \"stock\": 5\n    },\n    {\n      \"id\": 4,\n      \"gadgetName\": \"WH-1000XM6\",\n      \"brandName\": \"Sony Group\",\n      \"category\": \"Audio\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=wh1000xm6\",\n      \"priceK\": 8990,\n      \"isBestSeller\": true,\n      \"stock\": 20\n    },\n    {\n      \"id\": 5,\n      \"gadgetName\": \"Redmi Pad 2\",\n      \"brandName\": \"Xiaomi Corp\",\n      \"category\": \"Tablet\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=redmipad2\",\n      \"priceK\": 5490,\n      \"isBestSeller\": false,\n      \"stock\": 8\n    },\n    {\n      \"id\": 6,\n      \"gadgetName\": \"Forerunner 265\",\n      \"brandName\": \"Garmin Ltd\",\n      \"category\": \"Wearable\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=forerunner\",\n      \"priceK\": 10490,\n      \"isBestSeller\": false,\n      \"stock\": 3\n    },\n    {\n      \"id\": 7,\n      \"gadgetName\": \"Legion 5\",\n      \"brandName\": \"Lenovo Group\",\n      \"category\": \"Laptop\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=legion5\",\n      \"priceK\": 32990,\n      \"isBestSeller\": false,\n      \"stock\": 2\n    },\n    {\n      \"id\": 8,\n      \"gadgetName\": \"Galaxy Tab S10\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Tablet\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxytab\",\n      \"priceK\": 18990,\n      \"isBestSeller\": false,\n      \"stock\": 0\n    },\n    {\n      \"id\": 9,\n      \"gadgetName\": \"AirPods Pro 3\",\n      \"brandName\": \"Apple Inc\",\n      \"category\": \"Audio\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=airpods3\",\n      \"priceK\": 6290,\n      \"isBestSeller\": true,\n      \"stock\": 30\n    },\n    {\n      \"id\": 10,\n      \"gadgetName\": \"Galaxy Watch 8\",\n      \"brandName\": \"Samsung Electronics\",\n      \"category\": \"Wearable\",\n      \"imageUrl\": \"https://api.dicebear.com/9.x/icons/svg?seed=galaxywatch\",\n      \"priceK\": 7990,\n      \"isBestSeller\": false,\n      \"stock\": 6\n    }\n  ]\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "VITE_API_URL=http://localhost:9999\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba quyết định giữ bài gọn: (1) <code>config.js</code> + <code>gadgetApi.js</code> gom URL và mọi lời gọi axios về một chỗ (URL đọc từ <code>.env</code>); (2) <code>validateGadget</code> là hàm thuần trả object lỗi — form chỉ việc hiển thị (<code>isInvalid</code> + <code>Form.Control.Feedback</code>); (3) MỘT <code>GadgetForm</code> cho cả thêm và sửa, phân biệt bằng <code>useParams().id</code>, dữ liệu gửi đi được ép đúng kiểu (<code>Number</code>, boolean).</p><p>Trang quản lý tách <code>load</code> bằng <code>useCallback</code> để vừa gọi khi mount, vừa gọi lại sau khi xoá (đề yêu cầu \"reload the list\"). Trang bộ sưu tập chỉ tải một lần; lọc và sắp xếp là giá trị suy ra bằng <code>useMemo</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react-bootstrap.netlify.app/docs/forms/validation",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom",
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "url": "/se123456/gadgets",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "gadgets": [
+              {
+                "id": 1,
+                "gadgetName": "iPhone 16 Pro",
+                "brandName": "Apple Inc",
+                "category": "Phone",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=iphone16pro",
+                "priceK": 28990,
+                "isBestSeller": true,
+                "stock": 12
+              },
+              {
+                "id": 2,
+                "gadgetName": "Galaxy S25",
+                "brandName": "Samsung Electronics",
+                "category": "Phone",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=galaxys25",
+                "priceK": 22990,
+                "isBestSeller": true,
+                "stock": 0
+              },
+              {
+                "id": 3,
+                "gadgetName": "MacBook Air M4",
+                "brandName": "Apple Inc",
+                "category": "Laptop",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=macbookair",
+                "priceK": 27490,
+                "isBestSeller": false,
+                "stock": 5
+              },
+              {
+                "id": 4,
+                "gadgetName": "WH-1000XM6",
+                "brandName": "Sony Group",
+                "category": "Audio",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=wh1000xm6",
+                "priceK": 8990,
+                "isBestSeller": true,
+                "stock": 20
+              },
+              {
+                "id": 5,
+                "gadgetName": "Redmi Pad 2",
+                "brandName": "Xiaomi Corp",
+                "category": "Tablet",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=redmipad2",
+                "priceK": 5490,
+                "isBestSeller": false,
+                "stock": 8
+              },
+              {
+                "id": 6,
+                "gadgetName": "Forerunner 265",
+                "brandName": "Garmin Ltd",
+                "category": "Wearable",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=forerunner",
+                "priceK": 10490,
+                "isBestSeller": false,
+                "stock": 3
+              },
+              {
+                "id": 7,
+                "gadgetName": "Legion 5",
+                "brandName": "Lenovo Group",
+                "category": "Laptop",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=legion5",
+                "priceK": 32990,
+                "isBestSeller": false,
+                "stock": 2
+              },
+              {
+                "id": 8,
+                "gadgetName": "Galaxy Tab S10",
+                "brandName": "Samsung Electronics",
+                "category": "Tablet",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=galaxytab",
+                "priceK": 18990,
+                "isBestSeller": false,
+                "stock": 0
+              },
+              {
+                "id": 9,
+                "gadgetName": "AirPods Pro 3",
+                "brandName": "Apple Inc",
+                "category": "Audio",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=airpods3",
+                "priceK": 6290,
+                "isBestSeller": true,
+                "stock": 30
+              },
+              {
+                "id": 10,
+                "gadgetName": "Galaxy Watch 8",
+                "brandName": "Samsung Electronics",
+                "category": "Wearable",
+                "imageUrl": "https://api.dicebear.com/9.x/icons/svg?seed=galaxywatch",
+                "priceK": 7990,
+                "isBestSeller": false,
+                "stock": 6
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "\"/\" redirects to /se123456/gadgets",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/se123456/gadgets"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "10 gadget cards",
+            "kiem": "so-luong",
+            "selector": ".gadget-card",
+            "giaTri": 10
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Sorted by price, highest first",
+            "kiem": "danh-sach-text",
+            "selector": ".gadget-name",
+            "mongDoi": [
+              "Legion 5",
+              "iPhone 16 Pro",
+              "MacBook Air M4",
+              "Galaxy S25",
+              "Galaxy Tab S10",
+              "Forerunner 265",
+              "WH-1000XM6",
+              "Galaxy Watch 8",
+              "AirPods Pro 3",
+              "Redmi Pad 2"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Each card has an image with alt = gadget name",
+            "kiem": "thuoc-tinh",
+            "selector": "#gadget-7 img",
+            "thuocTinh": "alt",
+            "giaTri": "Legion 5"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "API URL comes from .env (VITE_API_URL)",
+            "kiem": "ma-nguon",
+            "khop": "import\\.meta\\.env\\.VITE_API_URL|process\\.env\\.REACT_APP_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "moTa": ".env sets VITE_API_URL=http://localhost:9999",
+            "kiem": "ma-nguon",
+            "tep": ".env",
+            "khop": "VITE_API_URL\\s*=\\s*http://localhost:9999"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Navbar links #nav-collection / #nav-management",
+            "kiem": "so-luong",
+            "selector": "#nav-collection, #nav-management",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Data is fetched from GET /gadgets",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/gadgets$"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Price formatted \"32,990,000 VND\"",
+            "kiem": "text",
+            "selector": "#gadget-7 .gadget-price",
+            "giaTri": "32,990,000 VND"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "4 \"Best Seller\" badges",
+            "kiem": "so-luong",
+            "selector": ".best-seller",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f2",
+            "moTa": "\"Sold out\" on stock 0 (gadgets 2 and 8)",
+            "kiem": "so-luong",
+            "selector": "#gadget-2 .sold-out, #gadget-8 .sold-out",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Only stock-0 gadgets are \"Sold out\"",
+            "kiem": "so-luong",
+            "selector": ".sold-out",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Category buttons from data: All + 5 sorted",
+            "kiem": "danh-sach-text",
+            "selector": ".cat-btn",
+            "mongDoi": [
+              "All",
+              "Audio",
+              "Laptop",
+              "Phone",
+              "Tablet",
+              "Wearable"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "#cat-Laptop ⇒ 2 laptops",
+            "kiem": "danh-sach-text",
+            "selector": ".gadget-name",
+            "mongDoi": [
+              "Legion 5",
+              "MacBook Air M4"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cat-Laptop"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Selected button has class active",
+            "kiem": "text",
+            "selector": ".cat-btn.active",
+            "giaTri": "Laptop",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cat-Laptop"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "#only-best ⇒ 4 best sellers, \"4 gadgets\"",
+            "kiem": "text",
+            "selector": "#gadget-count",
+            "khop": "^4 gadgets$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#only-best"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Audio + best sellers combine",
+            "kiem": "danh-sach-text",
+            "selector": ".gadget-name",
+            "mongDoi": [
+              "WH-1000XM6",
+              "AirPods Pro 3"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cat-Audio"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#only-best"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "#gadget-table has 10 rows, id ascending",
+            "url": "/se123456/manage",
+            "kiem": "danh-sach-text",
+            "selector": "#gadget-table tbody tr td:first-child",
+            "mongDoi": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10"
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Thumbnails are 70 × 70 px",
+            "url": "/se123456/manage",
+            "kiem": "kich-thuoc",
+            "selector": "#gadget-table img.thumb",
+            "thuocTinh": "width",
+            "giaTri": 70
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Each row has .btn-edit and .btn-delete",
+            "url": "/se123456/manage",
+            "kiem": "so-luong",
+            "selector": "#gadget-table .btn-edit, #gadget-table .btn-delete",
+            "giaTri": 20
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Edit navigates to /se123456/edit/4",
+            "url": "/se123456/manage",
+            "kiem": "duong-dan",
+            "giaTri": "/se123456/edit/4",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#gadget-row-4 .btn-edit"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Thumbnail height is 70 px too",
+            "url": "/se123456/manage",
+            "kiem": "kich-thuoc",
+            "selector": "#gadget-table img.thumb",
+            "thuocTinh": "height",
+            "giaTri": 70
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "#btn-add goes to /se123456/add",
+            "url": "/se123456/manage",
+            "kiem": "duong-dan",
+            "giaTri": "/se123456/add",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Delete (confirmed) removes the gadget on the server",
+            "url": "/se123456/manage",
+            "kiem": "du-lieu-server",
+            "bang": "gadgets",
+            "khongChua": {
+              "id": 2
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#gadget-row-2 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "The list reloads with 9 rows",
+            "url": "/se123456/manage",
+            "kiem": "so-luong",
+            "selector": "#gadget-table tbody tr",
+            "giaTri": 9,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#gadget-row-2 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Cancel in the confirm box ⇒ nothing is deleted",
+            "url": "/se123456/manage",
+            "confirm": false,
+            "kiem": "goi-fetch",
+            "khop": "^DELETE",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#gadget-row-2 .btn-delete"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "The user is notified (alert/toast)",
+            "kiem": "ma-nguon",
+            "khop": "\\balert\\s*\\(|toast"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Add page has every field",
+            "url": "/se123456/add",
+            "kiem": "so-luong",
+            "selector": "#gadgetName, #brandName, #imageUrl, #priceK, #category, #stock, #isBestSeller",
+            "giaTri": 7
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Category has an empty default and 5 options",
+            "url": "/se123456/add",
+            "kiem": "so-luong",
+            "selector": "#category option",
+            "giaTri": 6
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Best seller is a switch, off by default",
+            "url": "/se123456/add",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#isBestSeller",
+            "thuocTinh": "checked",
+            "giaTri": false
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "The switch uses .form-switch",
+            "url": "/se123456/add",
+            "kiem": "ton-tai",
+            "selector": ".form-switch #isBestSeller"
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Category default value is \"\"",
+            "url": "/se123456/add",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#category",
+            "thuocTinh": "value",
+            "giaTri": ""
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Empty form ⇒ 5 invalid fields (.is-invalid)",
+            "url": "/se123456/add",
+            "kiem": "so-luong",
+            "selector": ".is-invalid",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Name \"TV\" ⇒ \"Name must be at least 3 characters\"",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-gadgetName",
+            "giaTri": "Name must be at least 3 characters",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "TV"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Brand \"Apple\" ⇒ \"Brand must contain at least 2 words\"",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-brandName",
+            "giaTri": "Brand must contain at least 2 words",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Apple"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Bad URL ⇒ \"Image URL must be a valid URL\"",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-imageUrl",
+            "giaTri": "Image URL must be a valid URL",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "not a url"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Price 123456 ⇒ price error",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-priceK",
+            "giaTri": "Price must be a positive integer (max 5 digits)",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "123456"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "No category ⇒ \"Please choose a category\"",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-category",
+            "giaTri": "Please choose a category",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Price 0 is rejected",
+            "url": "/se123456/add",
+            "kiem": "ton-tai",
+            "selector": "#priceK.is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "0"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Price 12.5 is rejected",
+            "url": "/se123456/add",
+            "kiem": "ton-tai",
+            "selector": "#priceK.is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "12.5"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "ftp:// URL is rejected",
+            "url": "/se123456/add",
+            "kiem": "ton-tai",
+            "selector": "#imageUrl.is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "ftp://files.example.com/a.png"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Negative stock is rejected",
+            "url": "/se123456/add",
+            "kiem": "text",
+            "selector": "#err-stock",
+            "giaTri": "Stock must be a whole number (0 or more)",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "-1"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Invalid form sends no POST and does not reload",
+            "url": "/se123456/add",
+            "kiem": "goi-fetch",
+            "khop": "^POST",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Apple"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Price 99999 (5 digits) is accepted",
+            "url": "/se123456/add",
+            "kiem": "khong-ton-tai",
+            "selector": ".is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "99999"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Valid form ⇒ POST /gadgets with the right types",
+            "url": "/se123456/add",
+            "kiem": "du-lieu-server",
+            "bang": "gadgets",
+            "chua": {
+              "gadgetName": "Pixel 10",
+              "brandName": "Google LLC",
+              "category": "Phone",
+              "priceK": 19990,
+              "isBestSeller": true,
+              "stock": 7
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#isBestSeller"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Then back to /se123456/manage",
+            "url": "/se123456/add",
+            "kiem": "duong-dan",
+            "giaTri": "/se123456/manage",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#isBestSeller"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "The table now has 11 rows",
+            "url": "/se123456/add",
+            "kiem": "so-luong",
+            "selector": "#gadget-table tbody tr",
+            "giaTri": 11,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#isBestSeller"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Body sends priceK/stock as numbers and the switch as a boolean (strict types)",
+            "url": "/se123456/add",
+            "kiem": "goi-fetch",
+            "khop": "^POST http://localhost:9999/gadgets$",
+            "than": {
+              "priceK": 19990,
+              "stock": 7,
+              "isBestSeller": true
+            },
+            "chat": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#isBestSeller"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Submitting does not reload the page",
+            "url": "/se123456/add",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "Pixel 10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Google LLC"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#imageUrl",
+                "giaTri": "https://api.dicebear.com/9.x/icons/svg?seed=pixel10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "19990"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category",
+                "giaTri": "Phone"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#stock",
+                "giaTri": "7"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": "#isBestSeller"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Edit form is pre-filled",
+            "url": "/se123456/edit/4",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#gadgetName",
+            "thuocTinh": "value",
+            "giaTri": "WH-1000XM6"
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Pre-filled switch and category",
+            "url": "/se123456/edit/4",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#isBestSeller",
+            "thuocTinh": "checked",
+            "giaTri": true
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Update ⇒ PUT /gadgets/4 saves the new data",
+            "url": "/se123456/edit/4",
+            "kiem": "du-lieu-server",
+            "bang": "gadgets",
+            "chua": {
+              "id": 4,
+              "gadgetName": "WH-1000XM6 Silver",
+              "priceK": 9490,
+              "category": "Audio",
+              "isBestSeller": true
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "WH-1000XM6 Silver"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "9490"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "The table shows the updated name",
+            "url": "/se123456/edit/4",
+            "kiem": "text",
+            "selector": "#gadget-row-4 .g-name",
+            "giaTri": "WH-1000XM6 Silver",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "WH-1000XM6 Silver"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "9490"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "Edit uses PUT (not POST)",
+            "url": "/se123456/edit/4",
+            "kiem": "goi-fetch",
+            "khop": "^PUT http://localhost:9999/gadgets/4$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#gadgetName",
+                "giaTri": "WH-1000XM6 Silver"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#priceK",
+                "giaTri": "9490"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "Pre-filled category is \"Audio\"",
+            "url": "/se123456/edit/4",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#category",
+            "thuocTinh": "value",
+            "giaTri": "Audio"
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "Same validation in edit mode",
+            "url": "/se123456/edit/4",
+            "kiem": "ton-tai",
+            "selector": "#brandName.is-invalid",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#brandName",
+                "giaTri": "Sony"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#gadget-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. T1 · Collection page",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. T1 · Price format & labels",
+            "diem": 0.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. T1 · Filters",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. T2 · Management table",
+            "diem": 1.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. T2 · Delete",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. T3 · Form page",
+            "diem": 1
+          },
+          {
+            "ma": "f7",
+            "ten": "7. T3 · Validation",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. T3 · Add",
+            "diem": 1
+          },
+          {
+            "ma": "f9",
+            "ten": "9. T3 · Edit",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "pe",
+      "mistakesJson": [
+        {
+          "loi": "Đọc <code>process.env.REACT_APP_…</code> trong dự án Vite (luôn undefined) — Vite dùng <code>import.meta.env.VITE_…</code> và biến PHẢI bắt đầu bằng <code>VITE_</code>."
+        },
+        {
+          "loi": "Form sửa không điền sẵn vì <code>useState(gadget)</code> chỉ lấy giá trị LẦN ĐẦU — phải <code>setForm</code> sau khi tải xong (trong useEffect)."
+        },
+        {
+          "loi": "Ô số giữ chuỗi: gửi <code>priceK: \"19990\"</code> ⇒ dữ liệu lẫn chuỗi và số, sắp xếp sai."
+        },
+        {
+          "loi": "Kiểm \"ít nhất 2 từ\" bằng <code>split(\" \")</code> ⇒ \"Apple&nbsp;&nbsp;Inc\" (2 dấu cách) bị đếm 3 từ, \"Apple \" đếm 2 — dùng <code>trim().split(/\\s+/)</code>."
+        },
+        {
+          "loi": "Dùng <code>&lt;a href&gt;</code> thay <code>Link</code>/<code>navigate</code> ⇒ tải lại cả trang, mất state."
+        },
+        {
+          "loi": "Quên <code>noValidate</code> + <code>e.preventDefault()</code> ⇒ trình duyệt tự kiểm/gửi form theo kiểu của nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "roll number",
+          "vi": "mã số sinh viên (vd SE123456)"
+        },
+        {
+          "en": "gadget",
+          "vi": "thiết bị điện tử nhỏ"
+        },
+        {
+          "en": "best seller",
+          "vi": "bán chạy"
+        },
+        {
+          "en": "sold out",
+          "vi": "hết hàng"
+        },
+        {
+          "en": "switch control",
+          "vi": "công tắc bật/tắt (checkbox kiểu switch)"
+        },
+        {
+          "en": "whole number",
+          "vi": "số nguyên (không có phần thập phân)"
+        },
+        {
+          "en": "thumbnail",
+          "vi": "ảnh thu nhỏ"
+        },
+        {
+          "en": "confirmation prompt",
+          "vi": "hộp hỏi xác nhận (window.confirm)"
+        },
+        {
+          "en": "pre-fill",
+          "vi": "điền sẵn dữ liệu cũ vào form"
+        },
+        {
+          "en": "validate / validation",
+          "vi": "kiểm tra dữ liệu hợp lệ"
+        },
+        {
+          "en": "controlled input",
+          "vi": "ô nhập do state điều khiển (value + onChange)"
+        },
+        {
+          "en": "payload / request body",
+          "vi": "dữ liệu gửi kèm request"
+        },
+        {
+          "en": "redirect / navigate",
+          "vi": "chuyển sang trang khác bằng mã"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>PE Practice 2 — Gadget Store Management (Vite .env · axios · CRUD) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/pages/GadgetCollection.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/GadgetCollection.js — Câu 1: lưới thẻ, sắp giá giảm dần, định dạng tiền, nhãn, lọc\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _gadgetApi = require('../services/gadgetApi');\\nvar _format = require('../utils/format');\\n\\n function GadgetCollection() {\\n  const [gadgets, setGadgets] = _react.useState.call(void 0, []);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [category, setCategory] = _react.useState.call(void 0, 'All');\\n  const [onlyBest, setOnlyBest] = _react.useState.call(void 0, false);\\n\\n  _react.useEffect.call(void 0, () => {\\n    _gadgetApi.getAllGadgets.call(void 0, )\\n      .then(setGadgets)\\n      .catch(() => setError('Cannot load gadgets — check VITE_API_URL and json-server.'));\\n  }, []);\\n\\n  // nút lọc lấy từ dữ liệu (không trùng, A→Z)\\n  const categories = _react.useMemo.call(void 0, () => ['All', ...[...new Set(gadgets.map((g) => g.category))].sort()], [gadgets]);\\n\\n  const visible = _react.useMemo.call(void 0, \\n    () =>\\n      gadgets\\n        .filter((g) => category === 'All' || g.category === category)\\n        .filter((g) => !onlyBest || g.isBestSeller)\\n        // giá giảm dần; bằng giá thì theo tên A→Z — filter() đã tạo mảng mới nên sort an toàn\\n        .sort((a, b) => b.priceK - a.priceK || a.gadgetName.localeCompare(b.gadgetName)),\\n    [gadgets, category, onlyBest],\\n  );\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Gadget Collection\\\" })\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n      , _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"d-flex flex-wrap align-items-center gap-3 mb-3\\\"    , children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.ButtonGroup, { children: \\n          categories.map((c) => (\\n            _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, {\\n\\n              id: `cat-${c}`,\\n              className: \\\"cat-btn\\\",\\n              variant: c === category ? 'primary' : 'outline-primary',\\n              active: c === category,\\n              onClick: () => setCategory(c),\\n children: \\n              c\\n            }, c)\\n          ))\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Check, { type: \\\"switch\\\", id: \\\"only-best\\\", label: \\\"Best sellers only\\\"  , checked: onlyBest, onChange: (e) => setOnlyBest(e.target.checked),} )\\n        , _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"gadget-count\\\", className: \\\"text-muted\\\", children: [visible.length, \\\" gadgets\\\" ]})\\n      ]})\\n\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { xs: 1, sm: 2, lg: 4, className: \\\"g-3\\\", children: \\n        visible.map((g) => (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { children: \\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { id: `gadget-${g.id}`, className: \\\"gadget-card h-100\\\" , children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Img, { variant: \\\"top\\\", className: \\\"gadget-img\\\", src: g.imageUrl, alt: g.gadgetName, style: { height: 140, objectFit: 'contain' },} )\\n              , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { className: \\\"gadget-name\\\", children: g.gadgetName})\\n                , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"mb-2 text-muted\\\" , children: [g.brandName, \\\" · \\\"  , g.category]})\\n                , _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Text, { className: \\\"gadget-price fw-bold\\\" , children: _format.formatVnd.call(void 0, g.priceK)})\\n                , g.isBestSeller && _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"warning\\\", text: \\\"dark\\\", className: \\\"best-seller me-2\\\" , children: \\\"Best Seller\\\" })\\n                , g.stock === 0 && _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"secondary\\\", className: \\\"sold-out\\\", children: \\\"Sold out\\\" })\\n              ]})\\n            ]})\\n          }, g.id)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = GadgetCollection;\\n\",\"src/pages/GadgetManagement.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/GadgetManagement.js — Câu 2: bảng quản lý, ảnh 70×70, sửa/xoá, thêm\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _config = require('../config');\\nvar _gadgetApi = require('../services/gadgetApi');\\n\\n function GadgetManagement() {\\n  const [gadgets, setGadgets] = _react.useState.call(void 0, []);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n\\n  // useCallback ⇒ hàm ổn định, dùng được trong useEffect lẫn sau khi xoá (\\\"reload the list\\\")\\n  const load = _react.useCallback.call(void 0, async () => {\\n    try {\\n      const data = await _gadgetApi.getAllGadgets.call(void 0, );\\n      setGadgets([...data].sort((a, b) => Number(a.id) - Number(b.id))); // id tăng dần\\n    } catch (e) {\\n      setError('Cannot load gadgets.');\\n    }\\n  }, []);\\n\\n  _react.useEffect.call(void 0, () => {\\n    load();\\n  }, [load]);\\n\\n  const handleDelete = async (g) => {\\n    if (!window.confirm(`Delete \\\"${g.gadgetName}\\\"?`)) return; // bấm Cancel ⇒ không làm gì\\n    try {\\n      await _gadgetApi.deleteGadget.call(void 0, g.id);\\n      window.alert('Deleted successfully');\\n      await load();\\n    } catch (e2) {\\n      setError('Delete failed.');\\n    }\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsxs.call(void 0, 'div', { className: \\\"d-flex justify-content-between align-items-center mb-3\\\"   , children: [\\n        _jsxruntime.jsx.call(void 0, 'h2', { className: \\\"m-0\\\", children: \\\"Gadget Management\\\" })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { id: \\\"btn-add\\\", className: \\\"btn btn-success\\\" , to: `/${_config.ROLL}/add`, children: \\\"+ Add Gadget\\\"  })\\n      ]})\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { bordered: true, hover: true, responsive: true, id: \\\"gadget-table\\\", className: \\\"align-middle\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'thead', { children: \\n          _jsxruntime.jsxs.call(void 0, 'tr', { children: [\\n            _jsxruntime.jsx.call(void 0, 'th', { children: \\\"ID\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Name\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Brand\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Category\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Image\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Actions\\\"})\\n          ]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n          gadgets.map((g) => (\\n            _jsxruntime.jsxs.call(void 0, 'tr', { id: `gadget-row-${g.id}`, children: [\\n              _jsxruntime.jsx.call(void 0, 'td', { children: g.id})\\n              , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"g-name\\\", children: g.gadgetName})\\n              , _jsxruntime.jsx.call(void 0, 'td', { children: g.brandName})\\n              , _jsxruntime.jsx.call(void 0, 'td', { children: g.category})\\n              , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                _jsxruntime.jsx.call(void 0, 'img', { className: \\\"thumb\\\", src: g.imageUrl, alt: g.gadgetName, width: 70, height: 70, style: { objectFit: 'cover' },} )\\n              })\\n              , _jsxruntime.jsxs.call(void 0, 'td', { children: [\\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"outline-primary\\\", className: \\\"btn-edit me-2\\\" , onClick: () => navigate(`/${_config.ROLL}/edit/${g.id}`), children: \\\"Edit\\\"})\\n                , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"outline-danger\\\", className: \\\"btn-delete\\\", onClick: () => handleDelete(g), children: \\\"Delete\\\"})\\n              ]})\\n            ]}, g.id)\\n          ))\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = GadgetManagement;\\n\",\"src/pages/GadgetForm.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/GadgetForm.js — Câu 3: MỘT form cho Thêm (/add) và Sửa (/edit/:id)\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _config = require('../config');\\nvar _gadgetApi = require('../services/gadgetApi');\\nvar _validateGadget = require('../utils/validateGadget'); var _validateGadget2 = _interopRequireDefault(_validateGadget);\\n\\nconst EMPTY = { gadgetName: '', brandName: '', imageUrl: '', priceK: '', category: '', isBestSeller: false, stock: '0' };\\n\\n function GadgetForm() {\\n  const { id } = _reactrouterdom.useParams.call(void 0, );\\n  const isEdit = id !== undefined;\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const [form, setForm] = _react.useState.call(void 0, EMPTY);\\n  const [errors, setErrors] = _react.useState.call(void 0, {});\\n  const [notFound, setNotFound] = _react.useState.call(void 0, false);\\n\\n  // Sửa: điền sẵn dữ liệu cũ (số ⇒ chuỗi vì ô nhập luôn giữ chuỗi)\\n  _react.useEffect.call(void 0, () => {\\n    if (!isEdit) return;\\n    _gadgetApi.getGadget.call(void 0, id)\\n      .then((g) => setForm({ ...g, priceK: String(g.priceK), stock: String(g.stock) }))\\n      .catch(() => setNotFound(true));\\n  }, [id, isEdit]);\\n\\n  const handleChange = (e) => {\\n    const { name, value, type, checked } = e.target;\\n    setForm((f) => ({ ...f, [name]: type === 'checkbox' ? checked : value }));\\n  };\\n\\n  const handleSubmit = async (e) => {\\n    e.preventDefault();\\n    const errs = _validateGadget2.default.call(void 0, form);\\n    setErrors(errs);\\n    if (Object.keys(errs).length > 0) return; // còn lỗi ⇒ không gửi\\n    // dữ liệu gửi đi đúng KIỂU: số là number, công tắc là boolean\\n    const payload = {\\n      gadgetName: form.gadgetName.trim(),\\n      brandName: form.brandName.trim().replace(/\\\\s+/g, ' '),\\n      category: form.category,\\n      imageUrl: form.imageUrl.trim(),\\n      priceK: Number(form.priceK),\\n      isBestSeller: form.isBestSeller,\\n      stock: Number(form.stock),\\n    };\\n    try {\\n      if (isEdit) {\\n        await _gadgetApi.updateGadget.call(void 0, id, payload);\\n        window.alert('Updated successfully');\\n      } else {\\n        await _gadgetApi.createGadget.call(void 0, payload);\\n        window.alert('Added successfully');\\n      }\\n      navigate(`/${_config.ROLL}/manage`);\\n    } catch (e2) {\\n      setErrors({ form: 'Save failed. Please try again.' });\\n    }\\n  };\\n\\n  if (notFound) return _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { children: _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: \\\"Gadget not found\\\"  })});\\n\\n  // một ô nhập + câu lỗi của nó (React-Bootstrap: isInvalid ⇒ class is-invalid, Feedback hiện chữ)\\n  const field = (name, label, props = {}) => (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: name, children: [\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: label})\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: name, value: form[name], onChange: handleChange, isInvalid: !!errors[name], ...props,} )\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", id: `err-${name}`, children: errors[name]})\\n    ]})\\n  );\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { style: { maxWidth: 640 }, children: \\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { children: isEdit ? 'Edit Gadget' : 'Add Gadget'})\\n          , errors.form && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: errors.form})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"gadget-form\\\", noValidate: true, onSubmit: handleSubmit, children: [\\n            field('gadgetName', 'Gadget name')\\n            , field('brandName', 'Brand name')\\n            , field('imageUrl', 'Image URL', { placeholder: 'https://...' })\\n            , field('priceK', 'Price (thousand VND)', { type: 'number' })\\n            , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"category\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Category\\\"})\\n              , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { name: \\\"category\\\", value: form.category, onChange: handleChange, isInvalid: !!errors.category, children: [\\n                _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"-- Choose a category --\\\"    })\\n                , _config.CATEGORIES.map((c) => (\\n                  _jsxruntime.jsx.call(void 0, 'option', { value: c, children: c}, c)\\n                ))\\n              ]})\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control.Feedback, { type: \\\"invalid\\\", id: \\\"err-category\\\", children: errors.category})\\n            ]})\\n            , field('stock', 'Stock', { type: 'number' })\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Check, {\\n              className: \\\"mb-3\\\",\\n              type: \\\"switch\\\",\\n              id: \\\"isBestSeller\\\",\\n              name: \\\"isBestSeller\\\",\\n              label: \\\"Best seller\\\" ,\\n              checked: form.isBestSeller,\\n              onChange: handleChange,}\\n            )\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { type: \\\"submit\\\", id: \\\"btn-save\\\", children: isEdit ? 'Update' : 'Add'}), ' '\\n            , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: `/${_config.ROLL}/manage`, className: \\\"btn btn-link\\\" , children: \\\"Back to list\\\"  })\\n          ]})\\n        ]})\\n      })\\n    })\\n  );\\n} exports.default = GadgetForm;\\n\",\"src/services/gadgetApi.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/services/gadgetApi.js — mọi lời gọi HTTP của tài nguyên /gadgets nằm ở MỘT chỗ\\nvar _axios = require('axios'); var _axios2 = _interopRequireDefault(_axios);\\nvar _config = require('../config');\\n\\nconst http = _axios2.default.create({ baseURL: _config.API_URL }); // axios tự ném lỗi khi status không phải 2xx\\n\\n const getAllGadgets = async () => (await http.get('/gadgets')).data; exports.getAllGadgets = getAllGadgets;\\n const getGadget = async (id) => (await http.get(`/gadgets/${id}`)).data; exports.getGadget = getGadget;\\n const createGadget = async (gadget) => (await http.post('/gadgets', gadget)).data; exports.createGadget = createGadget;\\n const updateGadget = async (id, gadget) => (await http.put(`/gadgets/${id}`, gadget)).data; exports.updateGadget = updateGadget;\\n const deleteGadget = async (id) => (await http.delete(`/gadgets/${id}`)).data; exports.deleteGadget = deleteGadget;\\n\",\"src/utils/validateGadget.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/validateGadget.js — luật kiểm của form Add/Edit (thuần JS ⇒ dễ kiểm, dùng chung hai trang)\\nvar _config = require('../config');\\n\\nfunction isHttpUrl(value) {\\n  try {\\n    const u = new URL(value);\\n    return u.protocol === 'http:' || u.protocol === 'https:';\\n  } catch (e) {\\n    return false; // new URL() ném lỗi khi chuỗi không phải URL\\n  }\\n}\\n\\n// Trả về object { tênÔ: 'câu lỗi' } — rỗng nghĩa là hợp lệ\\n function validateGadget(form) {\\n  const errors = {};\\n  if (form.gadgetName.trim().length \\u003c 3) errors.gadgetName = 'Name must be at least 3 characters';\\n  if (form.brandName.trim().split(/\\\\s+/).filter(Boolean).length \\u003c 2) errors.brandName = 'Brand must contain at least 2 words';\\n  if (!isHttpUrl(form.imageUrl.trim())) errors.imageUrl = 'Image URL must be a valid URL';\\n  // số nguyên dương, tối đa 5 chữ số: regex chặn \\\"12.5\\\", \\\"-5\\\", \\\"1e3\\\"; > 0 chặn \\\"0\\\"/\\\"00000\\\"\\n  if (!/^\\\\d{1,5}$/.test(String(form.priceK).trim()) || Number(form.priceK) \\u003c= 0) errors.priceK = 'Price must be a positive integer (max 5 digits)';\\n  if (!_config.CATEGORIES.includes(form.category)) errors.category = 'Please choose a category';\\n  if (!/^\\\\d+$/.test(String(form.stock).trim())) errors.stock = 'Stock must be a whole number (0 or more)';\\n  return errors;\\n} exports.default = validateGadget;\\n\",\"src/utils/format.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/format.js\\n// priceK lưu theo NGHÌN đồng: 28990 ⇒ \\\"28,990,000 VND\\\" (dấu phẩy ngăn hàng nghìn như ví dụ của đề)\\n function formatVnd(priceK) {\\n  return `${(Number(priceK) * 1000).toLocaleString('en-US')} VND`;\\n} exports.formatVnd = formatVnd;\\n\",\"src/config.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/config.js — cấu hình chung: địa chỉ API đọc từ .env (Vite: biến phải bắt đầu bằng VITE_)\\n const API_URL = window.__CL_ENV__.VITE_API_URL; exports.API_URL = API_URL;\\n// Mã sinh viên nằm trong MỌI đường dẫn (đề cho 0 điểm nếu sai URL)\\n const ROLL = 'se123456'; exports.ROLL = ROLL;\\n const CATEGORIES = ['Phone', 'Laptop', 'Tablet', 'Audio', 'Wearable']; exports.CATEGORIES = CATEGORIES;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — mọi route có mã sinh viên ở đầu\\nvar _reactrouterdom = require('react-router-dom');\\nvar _AppNavbar = require('./components/AppNavbar'); var _AppNavbar2 = _interopRequireDefault(_AppNavbar);\\nvar _GadgetCollection = require('./pages/GadgetCollection'); var _GadgetCollection2 = _interopRequireDefault(_GadgetCollection);\\nvar _GadgetManagement = require('./pages/GadgetManagement'); var _GadgetManagement2 = _interopRequireDefault(_GadgetManagement);\\nvar _GadgetForm = require('./pages/GadgetForm'); var _GadgetForm2 = _interopRequireDefault(_GadgetForm);\\nvar _config = require('./config');\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _AppNavbar2.default, {} )\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Routes, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/\\\", element: _jsxruntime.jsx.call(void 0, _reactrouterdom.Navigate, { to: `/${_config.ROLL}/gadgets`, replace: true,} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: `/${_config.ROLL}/gadgets`, element: _jsxruntime.jsx.call(void 0, _GadgetCollection2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: `/${_config.ROLL}/manage`, element: _jsxruntime.jsx.call(void 0, _GadgetManagement2.default, {} ),} )\\n        /* MỘT component cho cả thêm và sửa: có :id ⇒ chế độ sửa */\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: `/${_config.ROLL}/add`, element: _jsxruntime.jsx.call(void 0, _GadgetForm2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: `/${_config.ROLL}/edit/:id`, element: _jsxruntime.jsx.call(void 0, _GadgetForm2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"*\\\", element: _jsxruntime.jsx.call(void 0, 'p', { className: \\\"container\\\", children: \\\"Page not found\\\"  }),} )\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/AppNavbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/AppNavbar.js\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _config = require('../config');\\n\\n function AppNavbar() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { bg: \\\"primary\\\", 'data-bs-theme': \\\"dark\\\", className: \\\"mb-4\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { children: \\\"Gadget Store\\\" })\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"me-auto\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: `/${_config.ROLL}/gadgets`, id: \\\"nav-collection\\\", children: \\\"Gadget Collection\\\" })\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: `/${_config.ROLL}/manage`, id: \\\"nav-management\\\", children: \\\"Gadget Management\\\" })\\n        ]})\\n      ]})\\n    })\\n  );\\n} exports.default = AppNavbar;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\"database.json\":\"{\\n  \\\"gadgets\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"gadgetName\\\": \\\"iPhone 16 Pro\\\",\\n      \\\"brandName\\\": \\\"Apple Inc\\\",\\n      \\\"category\\\": \\\"Phone\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=iphone16pro\\\",\\n      \\\"priceK\\\": 28990,\\n      \\\"isBestSeller\\\": true,\\n      \\\"stock\\\": 12\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"gadgetName\\\": \\\"Galaxy S25\\\",\\n      \\\"brandName\\\": \\\"Samsung Electronics\\\",\\n      \\\"category\\\": \\\"Phone\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=galaxys25\\\",\\n      \\\"priceK\\\": 22990,\\n      \\\"isBestSeller\\\": true,\\n      \\\"stock\\\": 0\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"gadgetName\\\": \\\"MacBook Air M4\\\",\\n      \\\"brandName\\\": \\\"Apple Inc\\\",\\n      \\\"category\\\": \\\"Laptop\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=macbookair\\\",\\n      \\\"priceK\\\": 27490,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 5\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"gadgetName\\\": \\\"WH-1000XM6\\\",\\n      \\\"brandName\\\": \\\"Sony Group\\\",\\n      \\\"category\\\": \\\"Audio\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=wh1000xm6\\\",\\n      \\\"priceK\\\": 8990,\\n      \\\"isBestSeller\\\": true,\\n      \\\"stock\\\": 20\\n    },\\n    {\\n      \\\"id\\\": 5,\\n      \\\"gadgetName\\\": \\\"Redmi Pad 2\\\",\\n      \\\"brandName\\\": \\\"Xiaomi Corp\\\",\\n      \\\"category\\\": \\\"Tablet\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=redmipad2\\\",\\n      \\\"priceK\\\": 5490,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 8\\n    },\\n    {\\n      \\\"id\\\": 6,\\n      \\\"gadgetName\\\": \\\"Forerunner 265\\\",\\n      \\\"brandName\\\": \\\"Garmin Ltd\\\",\\n      \\\"category\\\": \\\"Wearable\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=forerunner\\\",\\n      \\\"priceK\\\": 10490,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 3\\n    },\\n    {\\n      \\\"id\\\": 7,\\n      \\\"gadgetName\\\": \\\"Legion 5\\\",\\n      \\\"brandName\\\": \\\"Lenovo Group\\\",\\n      \\\"category\\\": \\\"Laptop\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=legion5\\\",\\n      \\\"priceK\\\": 32990,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 2\\n    },\\n    {\\n      \\\"id\\\": 8,\\n      \\\"gadgetName\\\": \\\"Galaxy Tab S10\\\",\\n      \\\"brandName\\\": \\\"Samsung Electronics\\\",\\n      \\\"category\\\": \\\"Tablet\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=galaxytab\\\",\\n      \\\"priceK\\\": 18990,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 0\\n    },\\n    {\\n      \\\"id\\\": 9,\\n      \\\"gadgetName\\\": \\\"AirPods Pro 3\\\",\\n      \\\"brandName\\\": \\\"Apple Inc\\\",\\n      \\\"category\\\": \\\"Audio\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=airpods3\\\",\\n      \\\"priceK\\\": 6290,\\n      \\\"isBestSeller\\\": true,\\n      \\\"stock\\\": 30\\n    },\\n    {\\n      \\\"id\\\": 10,\\n      \\\"gadgetName\\\": \\\"Galaxy Watch 8\\\",\\n      \\\"brandName\\\": \\\"Samsung Electronics\\\",\\n      \\\"category\\\": \\\"Wearable\\\",\\n      \\\"imageUrl\\\": \\\"https://api.dicebear.com/9.x/icons/svg?seed=galaxywatch\\\",\\n      \\\"priceK\\\": 7990,\\n      \\\"isBestSeller\\\": false,\\n      \\\"stock\\\": 6\\n    }\\n  ]\\n}\\n\",\".env\":\"VITE_API_URL=http://localhost:9999\\n\"};var CSS={};var DB={\"gadgets\":[{\"id\":1,\"gadgetName\":\"iPhone 16 Pro\",\"brandName\":\"Apple Inc\",\"category\":\"Phone\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=iphone16pro\",\"priceK\":28990,\"isBestSeller\":true,\"stock\":12},{\"id\":2,\"gadgetName\":\"Galaxy S25\",\"brandName\":\"Samsung Electronics\",\"category\":\"Phone\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=galaxys25\",\"priceK\":22990,\"isBestSeller\":true,\"stock\":0},{\"id\":3,\"gadgetName\":\"MacBook Air M4\",\"brandName\":\"Apple Inc\",\"category\":\"Laptop\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=macbookair\",\"priceK\":27490,\"isBestSeller\":false,\"stock\":5},{\"id\":4,\"gadgetName\":\"WH-1000XM6\",\"brandName\":\"Sony Group\",\"category\":\"Audio\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=wh1000xm6\",\"priceK\":8990,\"isBestSeller\":true,\"stock\":20},{\"id\":5,\"gadgetName\":\"Redmi Pad 2\",\"brandName\":\"Xiaomi Corp\",\"category\":\"Tablet\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=redmipad2\",\"priceK\":5490,\"isBestSeller\":false,\"stock\":8},{\"id\":6,\"gadgetName\":\"Forerunner 265\",\"brandName\":\"Garmin Ltd\",\"category\":\"Wearable\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=forerunner\",\"priceK\":10490,\"isBestSeller\":false,\"stock\":3},{\"id\":7,\"gadgetName\":\"Legion 5\",\"brandName\":\"Lenovo Group\",\"category\":\"Laptop\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=legion5\",\"priceK\":32990,\"isBestSeller\":false,\"stock\":2},{\"id\":8,\"gadgetName\":\"Galaxy Tab S10\",\"brandName\":\"Samsung Electronics\",\"category\":\"Tablet\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=galaxytab\",\"priceK\":18990,\"isBestSeller\":false,\"stock\":0},{\"id\":9,\"gadgetName\":\"AirPods Pro 3\",\"brandName\":\"Apple Inc\",\"category\":\"Audio\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=airpods3\",\"priceK\":6290,\"isBestSeller\":true,\"stock\":30},{\"id\":10,\"gadgetName\":\"Galaxy Watch 8\",\"brandName\":\"Samsung Electronics\",\"category\":\"Wearable\",\"imageUrl\":\"https://api.dicebear.com/9.x/icons/svg?seed=galaxywatch\",\"priceK\":7990,\"isBestSeller\":false,\"stock\":6}]};var BASE=\"http://localhost:9999\";var URL0=\"/se123456/gadgets\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

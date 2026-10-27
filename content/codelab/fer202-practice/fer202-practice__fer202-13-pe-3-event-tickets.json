@@ -1,0 +1,2082 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-13-pe-3-event-tickets",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-pe10-2-cau-2"
+  },
+  "exercises": [
+    {
+      "title": "PE Practice 3 — Event Ticketing System (Context · useReducer · checkout)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 85,
+      "points": 100,
+      "concepts": [
+        "Context API",
+        "useReducer",
+        "global cart",
+        "localStorage",
+        "derived totals",
+        "POST + PATCH",
+        "React Router",
+        "React-Bootstrap Table"
+      ],
+      "prerequisites": [
+        "useState / useEffect",
+        "reduce",
+        "React Router"
+      ],
+      "tags": [
+        "fer202",
+        "pe",
+        "context",
+        "usereducer",
+        "json-server"
+      ],
+      "problemHtml": "<h1>PE PRACTICE 3 — Event Ticketing System</h1>\n<p class=\"bi-phu\">FER202 · Practical Exam practice (SP25 Shopping-System format) · Duration: 85 minutes · Total: 10 marks · Context + useReducer + json-server</p>\n<h2>1. Overview</h2>\n<p><b>TicketHub</b> sells tickets for concerts, workshops, sport and theatre. json-server serves <code>events</code> and <code>orders</code> at <code>http://localhost:9999</code>; the URL lives in <code>.env</code> (<code>REACT_APP_API_URL</code>).</p><p>The cart is <b>global state</b>: the navbar badge, the events table and the cart page all read the same cart, implemented with <b>React Context + useReducer</b> and saved in Local Storage. Orders store only their lines — every total must be <b>computed</b>.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Question 1 (4 marks) — <code>/events</code>: table, filters, average price, add to cart with limits.</li>\n  <li>Question 2 (3.5 marks) — <code>/cart</code>: quantities, totals, Local Storage, checkout (POST + PATCH).</li>\n  <li>Question 3 (2.5 marks) — <code>/orders</code>: history with computed totals, revenue and details.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>API URL from <code>.env</code>; React-Bootstrap for the UI; axios or fetch.</li>\n  <li>The cart MUST be a Context provided at the top of the app and updated through a reducer (<code>useReducer</code>).</li>\n  <li>Money: <code>priceK</code> is in thousands of VND ⇒ show <code>450,000 VND</code>. Dates: <code>dd/MM/yyyy</code>.</li>\n  <li>Never store totals in state or in the database — derive them from the lines.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>database.json            # given — events, orders\n.env                     # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── api.js               # axios.create({ baseURL })   (given)\n├── context/\n│   └── CartContext.js   # cartReducer · CartProvider · useCart\n├── utils/\n│   └── format.js        # formatVnd · formatDate · todayISO · orderTotalK\n├── components/\n│   └── AppNavbar.js     # Events · Cart [n] · Orders   (given)\n├── pages/\n│   ├── EventList.js     # Q1  /events\n│   ├── CartPage.js      # Q2  /cart\n│   └── OrderHistory.js  # Q3  /orders\n├── App.js               # CartProvider + routes   (given)\n└── index.js</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------------+\n| TicketHub   Events   Cart [3]   Orders                                        |\n+-------------------------------------------------------------------------------+\n| Upcoming Events                                                               |\n| [All cities v] [All categories v]          Average ticket price: 310,000 VND  |\n| No | Event                  | Date       | City  | Category | Price   | Seats |      |\n| 1  | UI/UX Bootcamp         | 15/11/2026 | HCMC  | Workshop | 250,000 | 8     | [Add to cart]\n| 6  | Swan Lake              | 18/12/2026 | HCMC  | Theatre  | 600,000 | 0     | [Sold out]\n+-------------------------------------------------------------------------------+\n| Your Cart                                   | Order History                   |\n| Event        Unit     Qty        Subtotal   | Total revenue: 2,130,000 VND    |\n| React Wor..  150,000  [-] 2 [+]  300,000 [x]| #  Customer   Date  Tickets Total [Details]\n| Hanoi Jazz   450,000  [-] 1 [+]  450,000 [x]| 2  Tran Quoc  05/10/2026  1  250,000\n| Total: 750,000 VND                          |    - UI/UX Bootcamp × 1         |\n| Full name [        ]  Email [        ]      |                                 |\n| [Place order]                               |                                 |\n+-------------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>events · orders</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>events.id</code></td><td>number</td><td></td></tr><tr><td><code>events.title / venue / city / category</code></td><td>string</td><td>cities and categories must be read from the data</td></tr><tr><td><code>events.date</code></td><td>string 'yyyy-mm-dd'</td><td></td></tr><tr><td><code>events.priceK</code></td><td>number</td><td>thousands of VND</td></tr><tr><td><code>events.seatsLeft</code></td><td>number</td><td>0 ⇒ sold out</td></tr><tr><td><code>orders.id / customerName / email</code></td><td>number / string</td><td></td></tr><tr><td><code>orders.orderDate</code></td><td>string 'yyyy-mm-dd'</td><td>today for new orders</td></tr><tr><td><code>orders.items[]</code></td><td>{ eventId, title, quantity, priceK }</td><td>no stored total</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>events: 1 Hanoi Jazz Night (Hanoi, 2026-12-05, 450, seats 20) · 2 React Workshop: Hooks in Depth (Hanoi, 150, seats 3)\n        3 Saigon Marathon Expo · 4 Swan Lake (seats 0) · 5 Da Nang Rock Fest · 6 UI/UX Bootcamp\n        7 V-League Final · 8 Hamlet\norders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final × 1 @180]\n        2 Tran Quoc Bao 2026-10-05 [UI/UX Bootcamp × 1 @250]\n        3 Le Mai Anh   2026-10-02 [Saigon Marathon Expo × 4 @200]</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Q1 · Events table <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Route <code>/events</code> (<code>/</code> redirects). Table <code>#event-table</code>: <code>No | Event | Date | City | Category | Price | Seats left | (button)</code>; rows <code>#event-row-{id}</code>.</li>\n  <li>Event cell: <code>.ev-title</code> (title) with <code>.ev-venue</code> (venue, small, below). Sorted by <code>date</code>, soonest first.</li>\n  <li><code>.ev-date</code> as <code>dd/MM/yyyy</code>; <code>.ev-price</code> as <code>450,000 VND</code>; <code>.ev-seats</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">useMemo</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Q1 · Filters &amp; average price <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#city-filter</code> (<code>All cities</code> + cities from the data, A → Z) and <code>#category-filter</code> (<code>All categories</code> + categories) — combined.</li>\n  <li><code>#summary</code>: <code>Average ticket price: X VND</code> over the <b>visible</b> rows (rounded to 1 VND); <code>N/A</code> when none.</li>\n  <li>No row ⇒ <code>.no-result</code> <code>No events found</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>All ⇒ 310,000 VND · Hanoi ⇒ (450 + 150 + 180) / 3 = 260,000 VND</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Q1 · Cart with Context + useReducer <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>CartProvider</code> wraps the app; <code>useCart()</code> exposes <code>items</code>, <code>count</code>, <code>totalK</code>, <code>dispatch</code>.</li>\n  <li><code>.btn-add</code> \"Add to cart\" adds one ticket; the same event twice ⇒ one cart line with quantity 2.</li>\n  <li>Navbar <code>#cart-count</code> shows the total number of tickets.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">createContext</span> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">useReducer</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. Q1 · Ticket limits <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>At most <b>4</b> tickets per event and never more than <code>seatsLeft</code>; when reached, <code>.btn-add</code> is disabled.</li>\n  <li><code>seatsLeft</code> 0 ⇒ the button is disabled and reads <code>Sold out</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Q2 · Cart page <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Route <code>/cart</code>. Table <code>#cart-table</code>, rows <code>#cart-row-{eventId}</code>: title, unit price, <code>.btn-dec</code> <code>.qty</code> <code>.btn-inc</code>, <code>.subtotal</code>, <code>.btn-remove</code>.</li>\n  <li>+ respects the same limits; − at 1 removes the line. <code>#cart-total</code>: <code>Total: X VND</code>.</li>\n  <li>Empty cart ⇒ <code>.empty-cart</code> <code>Your cart is empty</code> and the checkout button is disabled.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. Q2 · Persist the cart <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Save the cart lines (JSON array) in Local Storage key <code>cart</code>; a reload keeps the cart.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">lazy init</span></p>\n<p><b>Local Storage key:</b> <code>cart</code></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Q2 · Checkout <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Form <code>#checkout-form</code>: <code>#customerName</code>, <code>#email</code>, button <code>#btn-checkout</code> \"Place order\". Errors in <code>#checkout-error</code>: <code>Please enter your full name</code> · <code>Please enter a valid email</code>.</li>\n  <li><code>POST /orders</code> <code>{ customerName, email, orderDate: today, items: [{ eventId, title, quantity, priceK }] }</code> (cart order).</li>\n  <li>For every line <code>PATCH /events/:id { seatsLeft: seatsLeft - quantity }</code>; then clear the cart and navigate to <code>/orders</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">async/await</span> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. Q3 · Order history <span class=\"bi-diem\">1.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Route <code>/orders</code>. Table <code>#order-table</code>: <code>Order # | Customer | Date | Tickets | Total</code>; rows <code>#order-row-{id}</code>, cells <code>.o-customer .o-date .o-tickets .o-total</code>; newest <code>orderDate</code> first.</li>\n  <li>Tickets = Σ quantity; Total = Σ quantity × priceK (VND format).</li>\n  <li><code>#orders-revenue</code>: <code>Total revenue: X VND</code> over all orders.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">reduce</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. Q3 · Order details <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>.btn-detail</code> toggles a list <code>#order-items-{id}</code> of <code>.order-item</code> lines <code>title × quantity</code> under the row (click again to hide).</li>\n</ul>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#nav-events · #nav-cart · #cart-count · #nav-orders</code></td><td>navbar</td></tr><tr><td><code>#event-table · #event-row-{id} · .ev-title · .ev-date · .ev-price · .ev-seats · .btn-add</code></td><td>events table</td></tr><tr><td><code>#city-filter · #category-filter · #summary · .no-result</code></td><td>filters + average</td></tr><tr><td><code>#cart-table · #cart-row-{eventId} · .qty · .btn-inc · .btn-dec · .btn-remove · .subtotal · #cart-total · .empty-cart</code></td><td>cart page</td></tr><tr><td><code>#checkout-form · #customerName · #email · #btn-checkout · #checkout-error</code></td><td>checkout</td></tr><tr><td><code>#order-table · #order-row-{id} · .o-customer · .o-date · .o-tickets · .o-total · #orders-revenue · .btn-detail · #order-items-{id} · .order-item</code></td><td>orders page</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Q1 · Events table</td><td>1.5</td></tr><tr><td>2</td><td>Q1 · Filters &amp; average price</td><td>1.5</td></tr><tr><td>3</td><td>Q1 · Cart with Context + useReducer</td><td>1</td></tr><tr><td>4</td><td>Q1 · Ticket limits</td><td>0.5</td></tr><tr><td>5</td><td>Q2 · Cart page</td><td>1.5</td></tr><tr><td>6</td><td>Q2 · Persist the cart</td><td>0.5</td></tr><tr><td>7</td><td>Q2 · Checkout</td><td>1.5</td></tr><tr><td>8</td><td>Q3 · Order history</td><td>1.5</td></tr><tr><td>9</td><td>Q3 · Order details</td><td>0.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Cart kept in a page component (lost when you navigate) instead of a Context — Q1 cart + Q2 marks lost.</li>\n  <li>Pushing into the state array inside the reducer (<code>state.push</code>) — React does not re-render.</li>\n  <li>Average computed over ALL events instead of the visible ones.</li>\n  <li>Reading a stored \"total\" field instead of computing it from the items.</li>\n  <li>Forgetting to PATCH <code>seatsLeft</code> — the event never sells out.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LUYỆN PE 3 — Hệ thống bán vé sự kiện</h1>\n<p class=\"bi-phu\">FER202 · Luyện thi thực hành (dạng SP25 Shopping System) · Thời gian: 85 phút · Tổng: 10 điểm · Context + useReducer + json-server</p>\n<h2>1. Tổng quan</h2>\n<p><b>TicketHub</b> bán vé hoà nhạc, workshop, thể thao và kịch. json-server phục vụ <code>events</code> và <code>orders</code> tại <code>http://localhost:9999</code>; địa chỉ nằm trong <code>.env</code> (<code>REACT_APP_API_URL</code>).</p><p>Giỏ vé là <b>state toàn cục</b>: badge trên navbar, bảng sự kiện và trang giỏ cùng đọc MỘT giỏ, làm bằng <b>React Context + useReducer</b> và lưu Local Storage. Đơn hàng chỉ lưu các dòng — mọi tổng tiền phải <b>tính ra</b>.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Câu 1 (4 điểm) — <code>/events</code>: bảng, bộ lọc, giá trung bình, thêm vào giỏ có giới hạn.</li>\n  <li>Câu 2 (3,5 điểm) — <code>/cart</code>: số lượng, tổng, Local Storage, thanh toán (POST + PATCH).</li>\n  <li>Câu 3 (2,5 điểm) — <code>/orders</code>: lịch sử với tổng tính ra, doanh thu và chi tiết.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Địa chỉ API từ <code>.env</code>; giao diện React-Bootstrap; axios hoặc fetch.</li>\n  <li>Giỏ PHẢI là một Context cung cấp ở gốc ứng dụng và cập nhật qua reducer (<code>useReducer</code>).</li>\n  <li>Tiền: <code>priceK</code> tính theo nghìn đồng ⇒ hiện <code>450,000 VND</code>. Ngày: <code>dd/MM/yyyy</code>.</li>\n  <li>Không lưu tổng tiền vào state hay vào CSDL — luôn tính từ các dòng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>database.json            # given — events, orders\n.env                     # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── api.js               # axios.create({ baseURL })   (given)\n├── context/\n│   └── CartContext.js   # cartReducer · CartProvider · useCart\n├── utils/\n│   └── format.js        # formatVnd · formatDate · todayISO · orderTotalK\n├── components/\n│   └── AppNavbar.js     # Events · Cart [n] · Orders   (given)\n├── pages/\n│   ├── EventList.js     # Q1  /events\n│   ├── CartPage.js      # Q2  /cart\n│   └── OrderHistory.js  # Q3  /orders\n├── App.js               # CartProvider + routes   (given)\n└── index.js</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-------------------------------------------------------------------------------+\n| TicketHub   Events   Cart [3]   Orders                                        |\n+-------------------------------------------------------------------------------+\n| Upcoming Events                                                               |\n| [All cities v] [All categories v]          Average ticket price: 310,000 VND  |\n| No | Event                  | Date       | City  | Category | Price   | Seats |      |\n| 1  | UI/UX Bootcamp         | 15/11/2026 | HCMC  | Workshop | 250,000 | 8     | [Add to cart]\n| 6  | Swan Lake              | 18/12/2026 | HCMC  | Theatre  | 600,000 | 0     | [Sold out]\n+-------------------------------------------------------------------------------+\n| Your Cart                                   | Order History                   |\n| Event        Unit     Qty        Subtotal   | Total revenue: 2,130,000 VND    |\n| React Wor..  150,000  [-] 2 [+]  300,000 [x]| #  Customer   Date  Tickets Total [Details]\n| Hanoi Jazz   450,000  [-] 1 [+]  450,000 [x]| 2  Tran Quoc  05/10/2026  1  250,000\n| Total: 750,000 VND                          |    - UI/UX Bootcamp × 1         |\n| Full name [        ]  Email [        ]      |                                 |\n| [Place order]                               |                                 |\n+-------------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>events · orders</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>events.id</code></td><td>number</td><td></td></tr><tr><td><code>events.title / venue / city / category</code></td><td>string</td><td>thành phố và loại phải lấy từ dữ liệu</td></tr><tr><td><code>events.date</code></td><td>string 'yyyy-mm-dd'</td><td></td></tr><tr><td><code>events.priceK</code></td><td>number</td><td>nghìn đồng</td></tr><tr><td><code>events.seatsLeft</code></td><td>number</td><td>0 ⇒ hết vé</td></tr><tr><td><code>orders.id / customerName / email</code></td><td>number / string</td><td></td></tr><tr><td><code>orders.orderDate</code></td><td>string 'yyyy-mm-dd'</td><td>đơn mới: hôm nay</td></tr><tr><td><code>orders.items[]</code></td><td>{ eventId, title, quantity, priceK }</td><td>không lưu tổng</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>events: 1 Hanoi Jazz Night (Hanoi, 2026-12-05, 450, seats 20) · 2 React Workshop: Hooks in Depth (Hanoi, 150, seats 3)\n        3 Saigon Marathon Expo · 4 Swan Lake (seats 0) · 5 Da Nang Rock Fest · 6 UI/UX Bootcamp\n        7 V-League Final · 8 Hamlet\norders: 1 Nguyen Thu Ha 2026-09-28 [Hanoi Jazz Night × 2 @450, V-League Final × 1 @180]\n        2 Tran Quoc Bao 2026-10-05 [UI/UX Bootcamp × 1 @250]\n        3 Le Mai Anh   2026-10-02 [Saigon Marathon Expo × 4 @200]</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. C1 · Bảng sự kiện <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Route <code>/events</code> (<code>/</code> chuyển sang). Bảng <code>#event-table</code>: <code>No | Event | Date | City | Category | Price | Seats left | (nút)</code>; hàng <code>#event-row-{id}</code>.</li>\n  <li>Ô Event: <code>.ev-title</code> (tên) và <code>.ev-venue</code> (địa điểm, chữ nhỏ bên dưới). Sắp theo <code>date</code>, gần nhất trước.</li>\n  <li><code>.ev-date</code> dạng <code>dd/MM/yyyy</code>; <code>.ev-price</code> dạng <code>450,000 VND</code>; <code>.ev-seats</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">useMemo</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. C1 · Bộ lọc &amp; giá trung bình <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#city-filter</code> (<code>All cities</code> + các thành phố trong dữ liệu, A → Z) và <code>#category-filter</code> (<code>All categories</code> + các loại) — kết hợp.</li>\n  <li><code>#summary</code>: <code>Average ticket price: X VND</code> trên các dòng <b>đang hiện</b> (làm tròn đồng); <code>N/A</code> khi không có dòng nào.</li>\n  <li>Không có dòng ⇒ <code>.no-result</code> <code>No events found</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>All ⇒ 310,000 VND · Hanoi ⇒ (450 + 150 + 180) / 3 = 260,000 VND</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. C1 · Giỏ bằng Context + useReducer <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>CartProvider</code> bọc ứng dụng; <code>useCart()</code> trả <code>items</code>, <code>count</code>, <code>totalK</code>, <code>dispatch</code>.</li>\n  <li><code>.btn-add</code> \"Add to cart\" thêm một vé; cùng sự kiện hai lần ⇒ một dòng giỏ số lượng 2.</li>\n  <li>Navbar <code>#cart-count</code> hiện tổng số vé.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">createContext</span> <span class=\"bi-hook\">useContext</span> <span class=\"bi-hook\">useReducer</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. C1 · Giới hạn vé <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Tối đa <b>4</b> vé mỗi sự kiện và không quá <code>seatsLeft</code>; đạt giới hạn ⇒ <code>.btn-add</code> bị vô hiệu.</li>\n  <li><code>seatsLeft</code> = 0 ⇒ nút bị vô hiệu và ghi <code>Sold out</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. C2 · Trang giỏ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Route <code>/cart</code>. Bảng <code>#cart-table</code>, hàng <code>#cart-row-{eventId}</code>: tên, đơn giá, <code>.btn-dec</code> <code>.qty</code> <code>.btn-inc</code>, <code>.subtotal</code>, <code>.btn-remove</code>.</li>\n  <li>+ theo cùng giới hạn; − khi còn 1 thì bỏ dòng. <code>#cart-total</code>: <code>Total: X VND</code>.</li>\n  <li>Giỏ trống ⇒ <code>.empty-cart</code> <code>Your cart is empty</code> và nút thanh toán bị vô hiệu.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>6. C2 · Lưu bền giỏ <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Lưu các dòng giỏ (mảng JSON) vào Local Storage khoá <code>cart</code>; tải lại trang vẫn còn giỏ.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">lazy init</span></p>\n<p><b>Khoá Local Storage:</b> <code>cart</code></p>\n</div>\n<div class=\"bi-cn\"><h3>7. C2 · Thanh toán <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Form <code>#checkout-form</code>: <code>#customerName</code>, <code>#email</code>, nút <code>#btn-checkout</code> \"Place order\". Lỗi trong <code>#checkout-error</code>: <code>Please enter your full name</code> · <code>Please enter a valid email</code>.</li>\n  <li><code>POST /orders</code> <code>{ customerName, email, orderDate: hôm nay, items: [{ eventId, title, quantity, priceK }] }</code> (đúng thứ tự giỏ).</li>\n  <li>Mỗi dòng <code>PATCH /events/:id { seatsLeft: seatsLeft - quantity }</code>; rồi xoá giỏ và chuyển tới <code>/orders</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">async/await</span> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>8. C3 · Lịch sử đơn <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Route <code>/orders</code>. Bảng <code>#order-table</code>: <code>Order # | Customer | Date | Tickets | Total</code>; hàng <code>#order-row-{id}</code>, ô <code>.o-customer .o-date .o-tickets .o-total</code>; <code>orderDate</code> mới nhất trước.</li>\n  <li>Tickets = Σ quantity; Total = Σ quantity × priceK (định dạng VND).</li>\n  <li><code>#orders-revenue</code>: <code>Total revenue: X VND</code> của mọi đơn.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">reduce</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. C3 · Chi tiết đơn <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>.btn-detail</code> bật/tắt danh sách <code>#order-items-{id}</code> gồm các dòng <code>.order-item</code> <code>title × quantity</code> dưới hàng (bấm lần nữa để ẩn).</li>\n</ul>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#nav-events · #nav-cart · #cart-count · #nav-orders</code></td><td>navbar</td></tr><tr><td><code>#event-table · #event-row-{id} · .ev-title · .ev-date · .ev-price · .ev-seats · .btn-add</code></td><td>bảng sự kiện</td></tr><tr><td><code>#city-filter · #category-filter · #summary · .no-result</code></td><td>bộ lọc + trung bình</td></tr><tr><td><code>#cart-table · #cart-row-{eventId} · .qty · .btn-inc · .btn-dec · .btn-remove · .subtotal · #cart-total · .empty-cart</code></td><td>trang giỏ</td></tr><tr><td><code>#checkout-form · #customerName · #email · #btn-checkout · #checkout-error</code></td><td>thanh toán</td></tr><tr><td><code>#order-table · #order-row-{id} · .o-customer · .o-date · .o-tickets · .o-total · #orders-revenue · .btn-detail · #order-items-{id} · .order-item</code></td><td>trang đơn</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>C1 · Bảng sự kiện</td><td>1.5</td></tr><tr><td>2</td><td>C1 · Bộ lọc &amp; giá trung bình</td><td>1.5</td></tr><tr><td>3</td><td>C1 · Giỏ bằng Context + useReducer</td><td>1</td></tr><tr><td>4</td><td>C1 · Giới hạn vé</td><td>0.5</td></tr><tr><td>5</td><td>C2 · Trang giỏ</td><td>1.5</td></tr><tr><td>6</td><td>C2 · Lưu bền giỏ</td><td>0.5</td></tr><tr><td>7</td><td>C2 · Thanh toán</td><td>1.5</td></tr><tr><td>8</td><td>C3 · Lịch sử đơn</td><td>1.5</td></tr><tr><td>9</td><td>C3 · Chi tiết đơn</td><td>0.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Giỏ để trong component của một trang (mất khi chuyển trang) thay vì Context — mất điểm giỏ C1 + C2.</li>\n  <li><code>state.push</code> trong reducer — React không vẽ lại.</li>\n  <li>Tính trung bình trên MỌI sự kiện thay vì các dòng đang hiện.</li>\n  <li>Đọc trường \"total\" lưu sẵn thay vì tính từ các dòng.</li>\n  <li>Quên PATCH <code>seatsLeft</code> — sự kiện không bao giờ hết vé.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "API URL from <code>.env</code>; React-Bootstrap for the UI; axios or fetch.|||Địa chỉ API từ <code>.env</code>; giao diện React-Bootstrap; axios hoặc fetch.\nThe cart MUST be a Context provided at the top of the app and updated through a reducer (<code>useReducer</code>).|||Giỏ PHẢI là một Context cung cấp ở gốc ứng dụng và cập nhật qua reducer (<code>useReducer</code>).\nMoney: <code>priceK</code> is in thousands of VND ⇒ show <code>450,000 VND</code>. Dates: <code>dd/MM/yyyy</code>.|||Tiền: <code>priceK</code> tính theo nghìn đồng ⇒ hiện <code>450,000 VND</code>. Ngày: <code>dd/MM/yyyy</code>.\nNever store totals in state or in the database — derive them from the lines.|||Không lưu tổng tiền vào state hay vào CSDL — luôn tính từ các dòng.",
+      "examplesJson": [
+        {
+          "input": "Q1 · Filters & average price|||C1 · Bộ lọc & giá trung bình",
+          "output": "All ⇒ 310,000 VND · Hanoi ⇒ (450 + 150 + 180) / 3 = 260,000 VND",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ CartContext: viết cartReducer thuần (ADD/INC/DEC/REMOVE/CLEAR) rồi CartProvider dùng useReducer(cartReducer, undefined, init) — init đọc localStorage.",
+        "count và totalK là giá trị suy ra từ items (reduce) — đừng tạo state riêng cho chúng.",
+        "Bảng sự kiện: nút disabled = soldOut || qtyOf(e.id) >= Math.min(4, e.seatsLeft). Trung bình tính trên mảng visible, rỗng ⇒ \"N/A\".",
+        "Thanh toán: POST /orders trước, rồi với mỗi dòng GET /events/:id lấy seatsLeft mới nhất và PATCH; xong dispatch CLEAR và navigate(\"/orders\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/context/CartContext.js",
+          "language": "javascript",
+          "code": "// src/context/CartContext.js — STARTER\nimport { createContext, useContext } from 'react';\n\nexport const MAX_PER_EVENT = 4;\nconst CartContext = createContext({ items: [], count: 0, totalK: 0, qtyOf: () => 0, dispatch: () => {} });\n\nexport function cartReducer(state, action) {\n  // TODO: ADD (tối đa 4 vé/sự kiện và ≤ seatsLeft) · INC · DEC (về 0 thì bỏ) · REMOVE · CLEAR\n  return state;\n}\n\nexport function CartProvider({ children }) {\n  // TODO: useReducer(cartReducer, …) + đọc/ghi localStorage \"cart\" + count/totalK suy ra\n  return <CartContext.Provider value={{ items: [], count: 0, totalK: 0, qtyOf: () => 0, dispatch: () => {} }}>{children}</CartContext.Provider>;\n}\n\nexport function useCart() {\n  return useContext(CartContext);\n}\n"
+        },
+        {
+          "name": "src/pages/EventList.js",
+          "language": "javascript",
+          "code": "// src/pages/EventList.js — STARTER (Câu 1)\nimport { Container } from 'react-bootstrap';\n\nexport default function EventList() {\n  // TODO: GET /events, bảng #event-table (sắp theo ngày), #city-filter, #category-filter, #summary, nút .btn-add\n  return (\n    <Container>\n      <h2>Upcoming Events</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CartPage.js",
+          "language": "javascript",
+          "code": "// src/pages/CartPage.js — STARTER (Câu 2)\nimport { Container } from 'react-bootstrap';\n\nexport default function CartPage() {\n  // TODO: bảng #cart-table (.qty .btn-inc .btn-dec .btn-remove .subtotal), #cart-total, form #checkout-form\n  return (\n    <Container>\n      <h2>Your Cart</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/OrderHistory.js",
+          "language": "javascript",
+          "code": "// src/pages/OrderHistory.js — STARTER (Câu 3)\nimport { Container } from 'react-bootstrap';\n\nexport default function OrderHistory() {\n  // TODO: GET /orders, bảng #order-table (mới nhất trước), tổng tính từ items, #orders-revenue, .btn-detail\n  return (\n    <Container>\n      <h2>Order History</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js — STARTER\nexport const formatVnd = (priceK) => `${priceK} VND`; // TODO: 450 ⇒ \"450,000 VND\"\nexport const formatDate = (iso) => iso; // TODO: \"2026-12-05\" ⇒ \"05/12/2026\"\nexport const todayISO = () => new Date().toISOString().slice(0, 10); // ⚠ UTC — sửa theo giờ máy\nexport const orderTotalK = (items) => 0; // TODO: Σ quantity × priceK\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — CartProvider bọc mọi trang (navbar, danh sách, giỏ đều đọc chung một giỏ)\nimport { Navigate, Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport { CartProvider } from './context/CartContext';\nimport EventList from './pages/EventList';\nimport CartPage from './pages/CartPage';\nimport OrderHistory from './pages/OrderHistory';\n\nexport default function App() {\n  return (\n    <CartProvider>\n      <AppNavbar />\n      <Routes>\n        <Route path=\"/\" element={<Navigate to=\"/events\" replace />} />\n        <Route path=\"/events\" element={<EventList />} />\n        <Route path=\"/cart\" element={<CartPage />} />\n        <Route path=\"/orders\" element={<OrderHistory />} />\n        <Route path=\"*\" element={<p className=\"container\">Page not found</p>} />\n      </Routes>\n    </CartProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — badge số vé đọc thẳng từ Context\nimport { Badge, Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\nimport { useCart } from '../context/CartContext';\n\nexport default function AppNavbar() {\n  const { count } = useCart();\n  return (\n    <Navbar bg=\"dark\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand>TicketHub</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to=\"/events\" id=\"nav-events\">Events</Nav.Link>\n          <Nav.Link as={NavLink} to=\"/cart\" id=\"nav-cart\">\n            Cart <Badge bg=\"warning\" text=\"dark\" id=\"cart-count\">{count}</Badge>\n          </Nav.Link>\n          <Nav.Link as={NavLink} to=\"/orders\" id=\"nav-orders\">Orders</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — axios dùng chung, baseURL đọc từ .env\nimport axios from 'axios';\n\nconst api = axios.create({ baseURL: process.env.REACT_APP_API_URL });\nexport default api;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"events\": [\n    {\n      \"id\": 1,\n      \"title\": \"Hanoi Jazz Night\",\n      \"venue\": \"Hanoi Opera House\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-12-05\",\n      \"category\": \"Concert\",\n      \"priceK\": 450,\n      \"seatsLeft\": 20\n    },\n    {\n      \"id\": 2,\n      \"title\": \"React Workshop: Hooks in Depth\",\n      \"venue\": \"FPT University\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-11-20\",\n      \"category\": \"Workshop\",\n      \"priceK\": 150,\n      \"seatsLeft\": 3\n    },\n    {\n      \"id\": 3,\n      \"title\": \"Saigon Marathon Expo\",\n      \"venue\": \"SECC\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2027-01-10\",\n      \"category\": \"Sport\",\n      \"priceK\": 200,\n      \"seatsLeft\": 50\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Swan Lake\",\n      \"venue\": \"Saigon Opera House\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2026-12-18\",\n      \"category\": \"Theatre\",\n      \"priceK\": 600,\n      \"seatsLeft\": 0\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Da Nang Rock Fest\",\n      \"venue\": \"Han River Park\",\n      \"city\": \"Da Nang\",\n      \"date\": \"2026-11-28\",\n      \"category\": \"Concert\",\n      \"priceK\": 350,\n      \"seatsLeft\": 12\n    },\n    {\n      \"id\": 6,\n      \"title\": \"UI/UX Bootcamp\",\n      \"venue\": \"Dreamplex\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2026-11-15\",\n      \"category\": \"Workshop\",\n      \"priceK\": 250,\n      \"seatsLeft\": 8\n    },\n    {\n      \"id\": 7,\n      \"title\": \"V-League Final\",\n      \"venue\": \"My Dinh Stadium\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-12-12\",\n      \"category\": \"Sport\",\n      \"priceK\": 180,\n      \"seatsLeft\": 100\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Hamlet\",\n      \"venue\": \"Trung Vuong Theatre\",\n      \"city\": \"Da Nang\",\n      \"date\": \"2027-02-14\",\n      \"category\": \"Theatre\",\n      \"priceK\": 300,\n      \"seatsLeft\": 6\n    }\n  ],\n  \"orders\": [\n    {\n      \"id\": 1,\n      \"customerName\": \"Nguyen Thu Ha\",\n      \"email\": \"ha.nt@example.com\",\n      \"orderDate\": \"2026-09-28\",\n      \"items\": [\n        {\n          \"eventId\": 1,\n          \"title\": \"Hanoi Jazz Night\",\n          \"quantity\": 2,\n          \"priceK\": 450\n        },\n        {\n          \"eventId\": 7,\n          \"title\": \"V-League Final\",\n          \"quantity\": 1,\n          \"priceK\": 180\n        }\n      ]\n    },\n    {\n      \"id\": 2,\n      \"customerName\": \"Tran Quoc Bao\",\n      \"email\": \"bao.tq@example.com\",\n      \"orderDate\": \"2026-10-05\",\n      \"items\": [\n        {\n          \"eventId\": 6,\n          \"title\": \"UI/UX Bootcamp\",\n          \"quantity\": 1,\n          \"priceK\": 250\n        }\n      ]\n    },\n    {\n      \"id\": 3,\n      \"customerName\": \"Le Mai Anh\",\n      \"email\": \"anh.lm@example.com\",\n      \"orderDate\": \"2026-10-02\",\n      \"items\": [\n        {\n          \"eventId\": 3,\n          \"title\": \"Saigon Marathon Expo\",\n          \"quantity\": 4,\n          \"priceK\": 200\n        }\n      ]\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/context/CartContext.js",
+          "language": "javascript",
+          "code": "// src/context/CartContext.js — giỏ vé dùng chung cả app: Context (chia sẻ) + useReducer (logic) + localStorage (lưu bền)\nimport { createContext, useContext, useEffect, useMemo, useReducer } from 'react';\n\nexport const MAX_PER_EVENT = 4;\nconst CartContext = createContext(null);\n\n// Reducer THUẦN: (state cũ, action) ⇒ state MỚI. Không sửa mảng cũ, không gọi API ở đây.\nexport function cartReducer(state, action) {\n  switch (action.type) {\n    case 'ADD': {\n      const ev = action.event;\n      const max = Math.min(MAX_PER_EVENT, ev.seatsLeft); // giới hạn: 4 vé / sự kiện và không quá số ghế còn\n      const found = state.find((i) => i.eventId === ev.id);\n      if (!found) return max > 0 ? [...state, { eventId: ev.id, title: ev.title, priceK: ev.priceK, quantity: 1, max }] : state;\n      if (found.quantity >= found.max) return state;\n      return state.map((i) => (i.eventId === ev.id ? { ...i, quantity: i.quantity + 1 } : i));\n    }\n    case 'INC':\n      return state.map((i) => (i.eventId === action.id && i.quantity < i.max ? { ...i, quantity: i.quantity + 1 } : i));\n    case 'DEC': // về 0 ⇒ bỏ khỏi giỏ\n      return state.map((i) => (i.eventId === action.id ? { ...i, quantity: i.quantity - 1 } : i)).filter((i) => i.quantity > 0);\n    case 'REMOVE':\n      return state.filter((i) => i.eventId !== action.id);\n    case 'CLEAR':\n      return [];\n    default:\n      return state;\n  }\n}\n\n// Khởi tạo lười: đọc localStorage MỘT lần lúc mount\nfunction init() {\n  try {\n    const raw = localStorage.getItem('cart');\n    return raw ? JSON.parse(raw) : [];\n  } catch {\n    return [];\n  }\n}\n\nexport function CartProvider({ children }) {\n  const [items, dispatch] = useReducer(cartReducer, undefined, init);\n\n  useEffect(() => {\n    localStorage.setItem('cart', JSON.stringify(items)); // giỏ đổi ⇒ ghi lại\n  }, [items]);\n\n  // số vé và tổng tiền là giá trị SUY RA — không lưu thành state riêng\n  const value = useMemo(() => {\n    const count = items.reduce((n, i) => n + i.quantity, 0);\n    const totalK = items.reduce((s, i) => s + i.quantity * i.priceK, 0);\n    const qtyOf = (eventId) => items.find((i) => i.eventId === eventId)?.quantity ?? 0;\n    return { items, count, totalK, qtyOf, dispatch };\n  }, [items]);\n\n  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;\n}\n\nexport function useCart() {\n  const ctx = useContext(CartContext);\n  if (!ctx) throw new Error('useCart must be used inside <CartProvider>');\n  return ctx;\n}\n"
+        },
+        {
+          "name": "src/pages/EventList.js",
+          "language": "javascript",
+          "code": "// src/pages/EventList.js — Câu 1: bảng sự kiện, lọc thành phố/loại, giá trung bình, thêm vào giỏ\nimport { useEffect, useMemo, useState } from 'react';\nimport { Alert, Button, Col, Container, Form, Row, Table } from 'react-bootstrap';\nimport api from '../api';\nimport { useCart } from '../context/CartContext';\nimport { formatDate, formatVnd } from '../utils/format';\n\nconst uniqueSorted = (list, key) => [...new Set(list.map((x) => x[key]))].sort();\n\nexport default function EventList() {\n  const [events, setEvents] = useState([]);\n  const [error, setError] = useState('');\n  const [city, setCity] = useState('All');\n  const [category, setCategory] = useState('All');\n  const { qtyOf, dispatch } = useCart();\n\n  useEffect(() => {\n    api.get('/events')\n      .then((res) => setEvents(res.data))\n      .catch(() => setError('Cannot load events.'));\n  }, []);\n\n  const cities = useMemo(() => uniqueSorted(events, 'city'), [events]);\n  const categories = useMemo(() => uniqueSorted(events, 'category'), [events]);\n\n  const visible = useMemo(\n    () =>\n      events\n        .filter((e) => (city === 'All' || e.city === city) && (category === 'All' || e.category === category))\n        .sort((a, b) => a.date.localeCompare(b.date)), // \"yyyy-mm-dd\" so chuỗi = so ngày\n    [events, city, category],\n  );\n\n  // trung bình trên các dòng ĐANG HIỆN; không dòng nào ⇒ N/A (tránh chia cho 0 ra NaN)\n  const average = visible.length ? visible.reduce((s, e) => s + e.priceK, 0) / visible.length : null;\n\n  return (\n    <Container>\n      <h2>Upcoming Events</h2>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n      <Row className=\"g-2 mb-3\">\n        <Col md={4}>\n          <Form.Select id=\"city-filter\" value={city} onChange={(e) => setCity(e.target.value)}>\n            <option value=\"All\">All cities</option>\n            {cities.map((c) => <option key={c} value={c}>{c}</option>)}\n          </Form.Select>\n        </Col>\n        <Col md={4}>\n          <Form.Select id=\"category-filter\" value={category} onChange={(e) => setCategory(e.target.value)}>\n            <option value=\"All\">All categories</option>\n            {categories.map((c) => <option key={c} value={c}>{c}</option>)}\n          </Form.Select>\n        </Col>\n        <Col md={4} className=\"d-flex align-items-center\">\n          <span id=\"summary\">Average ticket price: {average === null ? 'N/A' : formatVnd(average)}</span>\n        </Col>\n      </Row>\n      {visible.length === 0 ? (\n        <Alert variant=\"warning\" className=\"no-result\">No events found</Alert>\n      ) : (\n        <Table striped bordered hover responsive id=\"event-table\" className=\"align-middle\">\n          <thead>\n            <tr>\n              <th>No</th><th>Event</th><th>Date</th><th>City</th><th>Category</th><th>Price</th><th>Seats left</th><th />\n            </tr>\n          </thead>\n          <tbody>\n            {visible.map((e, i) => {\n              const inCart = qtyOf(e.id);\n              const max = Math.min(4, e.seatsLeft);\n              const soldOut = e.seatsLeft === 0;\n              return (\n                <tr key={e.id} id={`event-row-${e.id}`}>\n                  <td>{i + 1}</td>\n                  <td>\n                    <span className=\"ev-title\">{e.title}</span>\n                    <div className=\"small text-muted ev-venue\">{e.venue}</div>\n                  </td>\n                  <td className=\"ev-date\">{formatDate(e.date)}</td>\n                  <td>{e.city}</td>\n                  <td>{e.category}</td>\n                  <td className=\"ev-price\">{formatVnd(e.priceK)}</td>\n                  <td className=\"ev-seats\">{e.seatsLeft}</td>\n                  <td>\n                    <Button\n                      size=\"sm\"\n                      className=\"btn-add\"\n                      variant={soldOut ? 'secondary' : 'primary'}\n                      disabled={soldOut || inCart >= max}\n                      onClick={() => dispatch({ type: 'ADD', event: e })}\n                    >\n                      {soldOut ? 'Sold out' : 'Add to cart'}\n                    </Button>\n                  </td>\n                </tr>\n              );\n            })}\n          </tbody>\n        </Table>\n      )}\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CartPage.js",
+          "language": "javascript",
+          "code": "// src/pages/CartPage.js — Câu 2: giỏ vé (+/−/xoá, tổng) và thanh toán (POST đơn + PATCH ghế)\nimport { useState } from 'react';\nimport { Alert, Button, ButtonGroup, Card, Container, Form, Table } from 'react-bootstrap';\nimport { useNavigate } from 'react-router-dom';\nimport api from '../api';\nimport { useCart } from '../context/CartContext';\nimport { formatVnd, todayISO } from '../utils/format';\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function CartPage() {\n  const { items, totalK, dispatch } = useCart();\n  const [customer, setCustomer] = useState({ customerName: '', email: '' });\n  const [error, setError] = useState('');\n  const [saving, setSaving] = useState(false);\n  const navigate = useNavigate();\n\n  const update = (e) => setCustomer({ ...customer, [e.target.name]: e.target.value });\n\n  const checkout = async (e) => {\n    e.preventDefault();\n    if (!customer.customerName.trim()) return setError('Please enter your full name');\n    if (!EMAIL_RE.test(customer.email.trim())) return setError('Please enter a valid email');\n    setSaving(true);\n    try {\n      await api.post('/orders', {\n        customerName: customer.customerName.trim(),\n        email: customer.email.trim(),\n        orderDate: todayISO(),\n        // chỉ gửi những gì đơn hàng cần (không gửi \"max\" — đó là chi tiết của giỏ)\n        items: items.map(({ eventId, title, quantity, priceK }) => ({ eventId, title, quantity, priceK })),\n      });\n      // trừ ghế của TỪNG sự kiện: đọc số ghế mới nhất rồi PATCH\n      for (const it of items) {\n        const { data: ev } = await api.get(`/events/${it.eventId}`);\n        await api.patch(`/events/${it.eventId}`, { seatsLeft: ev.seatsLeft - it.quantity });\n      }\n      dispatch({ type: 'CLEAR' });\n      navigate('/orders');\n    } catch {\n      setError('Checkout failed. Please try again.');\n    } finally {\n      setSaving(false);\n    }\n  };\n\n  return (\n    <Container>\n      <h2>Your Cart</h2>\n      {items.length === 0 ? (\n        <Alert variant=\"info\" className=\"empty-cart\">Your cart is empty</Alert>\n      ) : (\n        <Table bordered responsive id=\"cart-table\" className=\"align-middle\">\n          <thead>\n            <tr><th>Event</th><th>Unit price</th><th>Quantity</th><th>Subtotal</th><th /></tr>\n          </thead>\n          <tbody>\n            {items.map((it) => (\n              <tr key={it.eventId} id={`cart-row-${it.eventId}`}>\n                <td>{it.title}</td>\n                <td>{formatVnd(it.priceK)}</td>\n                <td>\n                  <ButtonGroup size=\"sm\">\n                    <Button variant=\"outline-secondary\" className=\"btn-dec\" onClick={() => dispatch({ type: 'DEC', id: it.eventId })}>−</Button>\n                    <Button variant=\"light\" disabled className=\"qty\">{it.quantity}</Button>\n                    <Button variant=\"outline-secondary\" className=\"btn-inc\" disabled={it.quantity >= it.max} onClick={() => dispatch({ type: 'INC', id: it.eventId })}>+</Button>\n                  </ButtonGroup>\n                </td>\n                <td className=\"subtotal\">{formatVnd(it.quantity * it.priceK)}</td>\n                <td>\n                  <Button size=\"sm\" variant=\"outline-danger\" className=\"btn-remove\" onClick={() => dispatch({ type: 'REMOVE', id: it.eventId })}>Remove</Button>\n                </td>\n              </tr>\n            ))}\n          </tbody>\n        </Table>\n      )}\n      <h4 id=\"cart-total\">Total: {formatVnd(totalK)}</h4>\n\n      <Card className=\"mt-3\" style={{ maxWidth: 520 }}>\n        <Card.Body>\n          <Card.Title>Checkout</Card.Title>\n          {error && <Alert variant=\"danger\" id=\"checkout-error\">{error}</Alert>}\n          <Form id=\"checkout-form\" noValidate onSubmit={checkout}>\n            <Form.Group className=\"mb-2\" controlId=\"customerName\">\n              <Form.Label>Full name</Form.Label>\n              <Form.Control name=\"customerName\" value={customer.customerName} onChange={update} />\n            </Form.Group>\n            <Form.Group className=\"mb-3\" controlId=\"email\">\n              <Form.Label>Email</Form.Label>\n              <Form.Control name=\"email\" type=\"email\" value={customer.email} onChange={update} />\n            </Form.Group>\n            <Button type=\"submit\" id=\"btn-checkout\" disabled={items.length === 0 || saving}>Place order</Button>\n          </Form>\n        </Card.Body>\n      </Card>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/OrderHistory.js",
+          "language": "javascript",
+          "code": "// src/pages/OrderHistory.js — Câu 3: lịch sử đơn (mới nhất trước), tổng TÍNH từ dòng, doanh thu, chi tiết\nimport { Fragment, useEffect, useMemo, useState } from 'react';\nimport { Alert, Button, Container, Table } from 'react-bootstrap';\nimport api from '../api';\nimport { formatDate, formatVnd, orderTotalK } from '../utils/format';\n\nexport default function OrderHistory() {\n  const [orders, setOrders] = useState([]);\n  const [error, setError] = useState('');\n  const [openId, setOpenId] = useState(null); // đơn đang mở chi tiết (một lúc một đơn)\n\n  useEffect(() => {\n    api.get('/orders')\n      .then((res) => setOrders(res.data))\n      .catch(() => setError('Cannot load orders.'));\n  }, []);\n\n  // mới nhất trước; cùng ngày ⇒ id lớn hơn trước\n  const rows = useMemo(\n    () => [...orders].sort((a, b) => b.orderDate.localeCompare(a.orderDate) || Number(b.id) - Number(a.id)),\n    [orders],\n  );\n  const revenueK = useMemo(() => orders.reduce((s, o) => s + orderTotalK(o.items), 0), [orders]);\n\n  return (\n    <Container>\n      <h2>Order History</h2>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n      <p id=\"orders-revenue\" className=\"fw-bold\">Total revenue: {formatVnd(revenueK)}</p>\n      <Table bordered hover responsive id=\"order-table\" className=\"align-middle\">\n        <thead>\n          <tr><th>Order #</th><th>Customer</th><th>Date</th><th>Tickets</th><th>Total</th><th /></tr>\n        </thead>\n        <tbody>\n          {rows.map((o) => (\n            <Fragment key={o.id}>\n              <tr id={`order-row-${o.id}`}>\n                <td>{o.id}</td>\n                <td className=\"o-customer\">{o.customerName}</td>\n                <td className=\"o-date\">{formatDate(o.orderDate)}</td>\n                <td className=\"o-tickets\">{o.items.reduce((n, it) => n + it.quantity, 0)}</td>\n                <td className=\"o-total\">{formatVnd(orderTotalK(o.items))}</td>\n                <td>\n                  <Button size=\"sm\" variant=\"link\" className=\"btn-detail\" onClick={() => setOpenId(openId === o.id ? null : o.id)}>\n                    {openId === o.id ? 'Hide' : 'Details'}\n                  </Button>\n                </td>\n              </tr>\n              {openId === o.id && (\n                <tr>\n                  <td colSpan={6}>\n                    <ul id={`order-items-${o.id}`} className=\"mb-0\">\n                      {o.items.map((it) => (\n                        <li key={it.eventId} className=\"order-item\">{it.title} × {it.quantity}</li>\n                      ))}\n                    </ul>\n                  </td>\n                </tr>\n              )}\n            </Fragment>\n          ))}\n        </tbody>\n      </Table>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/format.js",
+          "language": "javascript",
+          "code": "// src/utils/format.js\n// priceK theo NGHÌN đồng ⇒ \"450,000 VND\"\nexport const formatVnd = (priceK) => `${Math.round(Number(priceK) * 1000).toLocaleString('en-US')} VND`;\n\n// \"2026-12-05\" ⇒ \"05/12/2026\" (cắt chuỗi ⇒ không lệch múi giờ)\nexport function formatDate(iso) {\n  const [y, m, d] = String(iso).slice(0, 10).split('-');\n  return `${d}/${m}/${y}`;\n}\n\nexport function todayISO() {\n  const d = new Date();\n  const p = (n) => String(n).padStart(2, '0');\n  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;\n}\n\n// Tổng tiền của một đơn TÍNH từ các dòng (không tin con số lưu sẵn)\nexport const orderTotalK = (items) => items.reduce((sum, it) => sum + it.quantity * it.priceK, 0);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — CartProvider bọc mọi trang (navbar, danh sách, giỏ đều đọc chung một giỏ)\nimport { Navigate, Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport { CartProvider } from './context/CartContext';\nimport EventList from './pages/EventList';\nimport CartPage from './pages/CartPage';\nimport OrderHistory from './pages/OrderHistory';\n\nexport default function App() {\n  return (\n    <CartProvider>\n      <AppNavbar />\n      <Routes>\n        <Route path=\"/\" element={<Navigate to=\"/events\" replace />} />\n        <Route path=\"/events\" element={<EventList />} />\n        <Route path=\"/cart\" element={<CartPage />} />\n        <Route path=\"/orders\" element={<OrderHistory />} />\n        <Route path=\"*\" element={<p className=\"container\">Page not found</p>} />\n      </Routes>\n    </CartProvider>\n  );\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — badge số vé đọc thẳng từ Context\nimport { Badge, Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\nimport { useCart } from '../context/CartContext';\n\nexport default function AppNavbar() {\n  const { count } = useCart();\n  return (\n    <Navbar bg=\"dark\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand>TicketHub</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to=\"/events\" id=\"nav-events\">Events</Nav.Link>\n          <Nav.Link as={NavLink} to=\"/cart\" id=\"nav-cart\">\n            Cart <Badge bg=\"warning\" text=\"dark\" id=\"cart-count\">{count}</Badge>\n          </Nav.Link>\n          <Nav.Link as={NavLink} to=\"/orders\" id=\"nav-orders\">Orders</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — axios dùng chung, baseURL đọc từ .env\nimport axios from 'axios';\n\nconst api = axios.create({ baseURL: process.env.REACT_APP_API_URL });\nexport default api;\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"events\": [\n    {\n      \"id\": 1,\n      \"title\": \"Hanoi Jazz Night\",\n      \"venue\": \"Hanoi Opera House\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-12-05\",\n      \"category\": \"Concert\",\n      \"priceK\": 450,\n      \"seatsLeft\": 20\n    },\n    {\n      \"id\": 2,\n      \"title\": \"React Workshop: Hooks in Depth\",\n      \"venue\": \"FPT University\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-11-20\",\n      \"category\": \"Workshop\",\n      \"priceK\": 150,\n      \"seatsLeft\": 3\n    },\n    {\n      \"id\": 3,\n      \"title\": \"Saigon Marathon Expo\",\n      \"venue\": \"SECC\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2027-01-10\",\n      \"category\": \"Sport\",\n      \"priceK\": 200,\n      \"seatsLeft\": 50\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Swan Lake\",\n      \"venue\": \"Saigon Opera House\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2026-12-18\",\n      \"category\": \"Theatre\",\n      \"priceK\": 600,\n      \"seatsLeft\": 0\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Da Nang Rock Fest\",\n      \"venue\": \"Han River Park\",\n      \"city\": \"Da Nang\",\n      \"date\": \"2026-11-28\",\n      \"category\": \"Concert\",\n      \"priceK\": 350,\n      \"seatsLeft\": 12\n    },\n    {\n      \"id\": 6,\n      \"title\": \"UI/UX Bootcamp\",\n      \"venue\": \"Dreamplex\",\n      \"city\": \"Ho Chi Minh City\",\n      \"date\": \"2026-11-15\",\n      \"category\": \"Workshop\",\n      \"priceK\": 250,\n      \"seatsLeft\": 8\n    },\n    {\n      \"id\": 7,\n      \"title\": \"V-League Final\",\n      \"venue\": \"My Dinh Stadium\",\n      \"city\": \"Hanoi\",\n      \"date\": \"2026-12-12\",\n      \"category\": \"Sport\",\n      \"priceK\": 180,\n      \"seatsLeft\": 100\n    },\n    {\n      \"id\": 8,\n      \"title\": \"Hamlet\",\n      \"venue\": \"Trung Vuong Theatre\",\n      \"city\": \"Da Nang\",\n      \"date\": \"2027-02-14\",\n      \"category\": \"Theatre\",\n      \"priceK\": 300,\n      \"seatsLeft\": 6\n    }\n  ],\n  \"orders\": [\n    {\n      \"id\": 1,\n      \"customerName\": \"Nguyen Thu Ha\",\n      \"email\": \"ha.nt@example.com\",\n      \"orderDate\": \"2026-09-28\",\n      \"items\": [\n        {\n          \"eventId\": 1,\n          \"title\": \"Hanoi Jazz Night\",\n          \"quantity\": 2,\n          \"priceK\": 450\n        },\n        {\n          \"eventId\": 7,\n          \"title\": \"V-League Final\",\n          \"quantity\": 1,\n          \"priceK\": 180\n        }\n      ]\n    },\n    {\n      \"id\": 2,\n      \"customerName\": \"Tran Quoc Bao\",\n      \"email\": \"bao.tq@example.com\",\n      \"orderDate\": \"2026-10-05\",\n      \"items\": [\n        {\n          \"eventId\": 6,\n          \"title\": \"UI/UX Bootcamp\",\n          \"quantity\": 1,\n          \"priceK\": 250\n        }\n      ]\n    },\n    {\n      \"id\": 3,\n      \"customerName\": \"Le Mai Anh\",\n      \"email\": \"anh.lm@example.com\",\n      \"orderDate\": \"2026-10-02\",\n      \"items\": [\n        {\n          \"eventId\": 3,\n          \"title\": \"Saigon Marathon Expo\",\n          \"quantity\": 4,\n          \"priceK\": 200\n        }\n      ]\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trái tim của đề là <code>CartContext</code>: một reducer thuần quyết định mọi thay đổi giỏ (kể cả giới hạn 4 vé/sự kiện và số ghế còn), <code>useReducer</code> giữ state, <code>useEffect</code> ghi Local Storage, và <code>count</code>/<code>totalK</code> là giá trị suy ra bằng <code>useMemo</code>. Vì Provider bọc toàn ứng dụng, navbar, bảng sự kiện và trang giỏ cùng đọc một nguồn.</p><p>Thanh toán đi đúng thứ tự: kiểm form → <code>POST /orders</code> (chỉ gửi các trường của đơn) → <code>PATCH</code> ghế của từng sự kiện → xoá giỏ → chuyển trang. Trang lịch sử không tin bất kỳ \"tổng\" nào lưu sẵn: <code>orderTotalK</code> tính từ các dòng, doanh thu là tổng của các tổng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/scaling-up-with-reducer-and-context",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom",
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "url": "/events",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "events": [
+              {
+                "id": 1,
+                "title": "Hanoi Jazz Night",
+                "venue": "Hanoi Opera House",
+                "city": "Hanoi",
+                "date": "2026-12-05",
+                "category": "Concert",
+                "priceK": 450,
+                "seatsLeft": 20
+              },
+              {
+                "id": 2,
+                "title": "React Workshop: Hooks in Depth",
+                "venue": "FPT University",
+                "city": "Hanoi",
+                "date": "2026-11-20",
+                "category": "Workshop",
+                "priceK": 150,
+                "seatsLeft": 3
+              },
+              {
+                "id": 3,
+                "title": "Saigon Marathon Expo",
+                "venue": "SECC",
+                "city": "Ho Chi Minh City",
+                "date": "2027-01-10",
+                "category": "Sport",
+                "priceK": 200,
+                "seatsLeft": 50
+              },
+              {
+                "id": 4,
+                "title": "Swan Lake",
+                "venue": "Saigon Opera House",
+                "city": "Ho Chi Minh City",
+                "date": "2026-12-18",
+                "category": "Theatre",
+                "priceK": 600,
+                "seatsLeft": 0
+              },
+              {
+                "id": 5,
+                "title": "Da Nang Rock Fest",
+                "venue": "Han River Park",
+                "city": "Da Nang",
+                "date": "2026-11-28",
+                "category": "Concert",
+                "priceK": 350,
+                "seatsLeft": 12
+              },
+              {
+                "id": 6,
+                "title": "UI/UX Bootcamp",
+                "venue": "Dreamplex",
+                "city": "Ho Chi Minh City",
+                "date": "2026-11-15",
+                "category": "Workshop",
+                "priceK": 250,
+                "seatsLeft": 8
+              },
+              {
+                "id": 7,
+                "title": "V-League Final",
+                "venue": "My Dinh Stadium",
+                "city": "Hanoi",
+                "date": "2026-12-12",
+                "category": "Sport",
+                "priceK": 180,
+                "seatsLeft": 100
+              },
+              {
+                "id": 8,
+                "title": "Hamlet",
+                "venue": "Trung Vuong Theatre",
+                "city": "Da Nang",
+                "date": "2027-02-14",
+                "category": "Theatre",
+                "priceK": 300,
+                "seatsLeft": 6
+              }
+            ],
+            "orders": [
+              {
+                "id": 1,
+                "customerName": "Nguyen Thu Ha",
+                "email": "ha.nt@example.com",
+                "orderDate": "2026-09-28",
+                "items": [
+                  {
+                    "eventId": 1,
+                    "title": "Hanoi Jazz Night",
+                    "quantity": 2,
+                    "priceK": 450
+                  },
+                  {
+                    "eventId": 7,
+                    "title": "V-League Final",
+                    "quantity": 1,
+                    "priceK": 180
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "customerName": "Tran Quoc Bao",
+                "email": "bao.tq@example.com",
+                "orderDate": "2026-10-05",
+                "items": [
+                  {
+                    "eventId": 6,
+                    "title": "UI/UX Bootcamp",
+                    "quantity": 1,
+                    "priceK": 250
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "customerName": "Le Mai Anh",
+                "email": "anh.lm@example.com",
+                "orderDate": "2026-10-02",
+                "items": [
+                  {
+                    "eventId": 3,
+                    "title": "Saigon Marathon Expo",
+                    "quantity": 4,
+                    "priceK": 200
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "\"/\" redirects to /events",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/events"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "#event-table lists 8 events",
+            "kiem": "so-luong",
+            "selector": "#event-table tbody tr",
+            "giaTri": 8
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Sorted by date (soonest first)",
+            "kiem": "danh-sach-text",
+            "selector": ".ev-title",
+            "mongDoi": [
+              "UI/UX Bootcamp",
+              "React Workshop: Hooks in Depth",
+              "Da Nang Rock Fest",
+              "Hanoi Jazz Night",
+              "V-League Final",
+              "Swan Lake",
+              "Saigon Marathon Expo",
+              "Hamlet"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Date dd/MM/yyyy and price in VND",
+            "kiem": "danh-sach-text",
+            "selector": "#event-row-1 .ev-date, #event-row-1 .ev-price",
+            "mongDoi": [
+              "05/12/2026",
+              "450,000 VND"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "API URL read from .env",
+            "kiem": "ma-nguon",
+            "khop": "process\\.env\\.REACT_APP_API_URL|import\\.meta\\.env\\.VITE_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Events loaded with GET /events",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/events$"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "City options from data",
+            "kiem": "danh-sach-text",
+            "selector": "#city-filter option",
+            "mongDoi": [
+              "All cities",
+              "Da Nang",
+              "Hanoi",
+              "Ho Chi Minh City"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Average of all events: 310,000 VND",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "Average ticket price: 310,000 VND"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "City \"Hanoi\" ⇒ 3 rows, average 260,000 VND",
+            "kiem": "text",
+            "selector": "#summary",
+            "giaTri": "Average ticket price: 260,000 VND",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city-filter",
+                "giaTri": "Hanoi"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Category \"Workshop\" ⇒ 2 rows",
+            "kiem": "so-luong",
+            "selector": "#event-table tbody tr",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "Workshop"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Category options from data",
+            "kiem": "danh-sach-text",
+            "selector": "#category-filter option",
+            "mongDoi": [
+              "All categories",
+              "Concert",
+              "Sport",
+              "Theatre",
+              "Workshop"
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "City + category combine",
+            "kiem": "danh-sach-text",
+            "selector": ".ev-title",
+            "mongDoi": [
+              "Swan Lake"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city-filter",
+                "giaTri": "Ho Chi Minh City"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "Theatre"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "No match ⇒ \"No events found\" and N/A average",
+            "kiem": "text",
+            "selector": ".no-result, #summary",
+            "khop": "No events found|Average ticket price: N/A",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#city-filter",
+                "giaTri": "Da Nang"
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "Sport"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Navbar badge #cart-count starts at 0",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "0"
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Add to cart ⇒ #cart-count 1",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "1",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-5 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Adding the same event twice ⇒ one cart row, quantity 2",
+            "kiem": "text",
+            "selector": "#cart-row-5 .qty",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-5 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-5 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Cart is shared with Context + useReducer",
+            "kiem": "ma-nguon",
+            "khop": "createContext[\\s\\S]*useReducer|useReducer[\\s\\S]*createContext"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Sold-out event: button disabled and reads \"Sold out\"",
+            "kiem": "text",
+            "selector": "#event-row-4 .btn-add:disabled",
+            "giaTri": "Sold out"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Only 3 seats left ⇒ the 4th ticket cannot be added",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "At most 4 tickets per event",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "4",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "an": true,
+            "moTa": "Button disabled once the limit is reached",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#event-row-2 .btn-add",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Cart table shows both events",
+            "kiem": "so-luong",
+            "selector": "#cart-table tbody tr",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Subtotal and total are computed",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-row-2 .subtotal, #cart-total",
+            "mongDoi": [
+              "300,000 VND",
+              "Total: 750,000 VND"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "+ raises the quantity (and the total)",
+            "kiem": "text",
+            "selector": "#cart-total",
+            "giaTri": "Total: 1,200,000 VND",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cart-row-1 .btn-inc",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Remove deletes the row",
+            "kiem": "so-luong",
+            "selector": "#cart-table tbody tr",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cart-row-2 .btn-remove",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "− down to 0 removes the item",
+            "kiem": "so-luong",
+            "selector": "#cart-row-1",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cart-row-1 .btn-dec",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "+ stops at the seat limit (3)",
+            "kiem": "text",
+            "selector": "#cart-row-2 .qty",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cart-row-2 .btn-inc",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#cart-row-2 .btn-inc",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Empty cart ⇒ \"Your cart is empty\", checkout disabled",
+            "url": "/cart",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-checkout",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Cart saved in localStorage \"cart\"",
+            "kiem": "kho-cuc-bo",
+            "khoa": "cart",
+            "doDai": 2,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Cart survives a reload",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Empty name ⇒ \"Please enter your full name\"",
+            "kiem": "text",
+            "selector": "#checkout-error",
+            "giaTri": "Please enter your full name",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Bad email ⇒ \"Please enter a valid email\"",
+            "kiem": "text",
+            "selector": "#checkout-error",
+            "giaTri": "Please enter a valid email",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long@"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "POST /orders stores customer, today and the items",
+            "kiem": "du-lieu-server",
+            "bang": "orders",
+            "chua": {
+              "customerName": "Pham Thanh Long",
+              "email": "long.pt@example.com",
+              "items": [
+                {
+                  "eventId": 2,
+                  "title": "React Workshop: Hooks in Depth",
+                  "quantity": 2,
+                  "priceK": 150
+                },
+                {
+                  "eventId": 1,
+                  "title": "Hanoi Jazz Night",
+                  "quantity": 1,
+                  "priceK": 450
+                }
+              ]
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Seats are reduced on the server (PATCH)",
+            "kiem": "du-lieu-server",
+            "bang": "events",
+            "chua": {
+              "id": 2,
+              "seatsLeft": 1
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Then: cart cleared and redirect to /orders",
+            "kiem": "duong-dan",
+            "giaTri": "/orders",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Cart badge back to 0 after checkout",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Event 1 seats 20 → 19",
+            "kiem": "du-lieu-server",
+            "bang": "events",
+            "chua": {
+              "id": 1,
+              "seatsLeft": 19
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Invalid checkout sends nothing",
+            "kiem": "goi-fetch",
+            "khop": "^POST",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 100
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Orders newest first",
+            "url": "/orders",
+            "kiem": "danh-sach-text",
+            "selector": ".o-customer",
+            "mongDoi": [
+              "Tran Quoc Bao",
+              "Le Mai Anh",
+              "Nguyen Thu Ha"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Order 1: date, tickets and computed total",
+            "url": "/orders",
+            "kiem": "danh-sach-text",
+            "selector": "#order-row-1 .o-date, #order-row-1 .o-tickets, #order-row-1 .o-total",
+            "mongDoi": [
+              "28/09/2026",
+              "3",
+              "1,080,000 VND"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Total revenue 2,130,000 VND",
+            "url": "/orders",
+            "kiem": "text",
+            "selector": "#orders-revenue",
+            "khop": "2,130,000 VND"
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "A new order appears first with today's date",
+            "kiem": "text",
+            "selector": "#order-table tbody tr:first-child .o-customer",
+            "giaTri": "Pham Thanh Long",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Its total is 750,000 VND",
+            "kiem": "text",
+            "selector": "#order-table tbody tr:first-child .o-total",
+            "giaTri": "750,000 VND",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-2 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#event-row-1 .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 60
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#nav-cart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#customerName",
+                "giaTri": "Pham Thanh Long"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "long.pt@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#checkout-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Details lists \"title × quantity\"",
+            "url": "/orders",
+            "kiem": "danh-sach-text",
+            "selector": "#order-items-1 .order-item",
+            "mongDoi": [
+              "Hanoi Jazz Night × 2",
+              "V-League Final × 1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#order-row-1 .btn-detail",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "Clicking again hides the details",
+            "url": "/orders",
+            "kiem": "so-luong",
+            "selector": "#order-items-1",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#order-row-1 .btn-detail",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#order-row-1 .btn-detail",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Q1 · Events table",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Q1 · Filters & average price",
+            "diem": 1.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Q1 · Cart with Context + useReducer",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Q1 · Ticket limits",
+            "diem": 0.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Q2 · Cart page",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Q2 · Persist the cart",
+            "diem": 0.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Q2 · Checkout",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Q3 · Order history",
+            "diem": 1.5
+          },
+          {
+            "ma": "f9",
+            "ten": "9. Q3 · Order details",
+            "diem": 0.5
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "pe",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>useState</code> giỏ trong trang Events ⇒ sang trang Cart giỏ rỗng (state của component bị huỷ khi rời trang)."
+        },
+        {
+          "loi": "Reducer sửa tại chỗ (<code>found.quantity++</code>; <code>return state</code>) ⇒ cùng tham chiếu, React bỏ qua lần render."
+        },
+        {
+          "loi": "<code>useReducer(reducer, JSON.parse(localStorage.getItem(\"cart\")))</code> ⇒ đọc lại mỗi lần render và vỡ khi khoá chưa có (<code>null</code>)."
+        },
+        {
+          "loi": "Tính trung bình rồi chia cho 0 khi lọc không còn dòng ⇒ hiện <code>NaN VND</code>."
+        },
+        {
+          "loi": "Gửi cả trường <code>max</code> (chi tiết nội bộ của giỏ) lên <code>/orders</code>."
+        },
+        {
+          "loi": "Sắp xếp ngày bằng <code>new Date(a) - new Date(b)</code> trên chuỗi dd/MM/yyyy đã định dạng ⇒ sai thứ tự; sắp trên chuỗi gốc yyyy-mm-dd."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cart",
+          "vi": "giỏ hàng / giỏ vé"
+        },
+        {
+          "en": "checkout",
+          "vi": "thanh toán, đặt đơn"
+        },
+        {
+          "en": "subtotal / total",
+          "vi": "thành tiền một dòng / tổng cộng"
+        },
+        {
+          "en": "revenue",
+          "vi": "doanh thu"
+        },
+        {
+          "en": "seats left",
+          "vi": "số ghế còn"
+        },
+        {
+          "en": "reducer / dispatch / action",
+          "vi": "hàm tính state mới / gửi lệnh / lệnh {type, …}"
+        },
+        {
+          "en": "global state",
+          "vi": "state dùng chung toàn ứng dụng"
+        },
+        {
+          "en": "derived value",
+          "vi": "giá trị suy ra từ state/props — tính lại, không lưu state riêng"
+        },
+        {
+          "en": "persist",
+          "vi": "lưu bền — còn sau khi tải lại trang"
+        },
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo object/mảng MỚI"
+        },
+        {
+          "en": "redirect / navigate",
+          "vi": "chuyển sang trang khác bằng mã"
+        },
+        {
+          "en": "payload / request body",
+          "vi": "dữ liệu gửi kèm request"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>PE Practice 3 — Event Ticketing System (Context · useReducer · checkout) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/context/CartContext.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/context/CartContext.js — giỏ vé dùng chung cả app: Context (chia sẻ) + useReducer (logic) + localStorage (lưu bền)\\nvar _react = require('react');\\n\\n const MAX_PER_EVENT = 4; exports.MAX_PER_EVENT = MAX_PER_EVENT;\\nconst CartContext = _react.createContext.call(void 0, null);\\n\\n// Reducer THUẦN: (state cũ, action) ⇒ state MỚI. Không sửa mảng cũ, không gọi API ở đây.\\n function cartReducer(state, action) {\\n  switch (action.type) {\\n    case 'ADD': {\\n      const ev = action.event;\\n      const max = Math.min(exports.MAX_PER_EVENT, ev.seatsLeft); // giới hạn: 4 vé / sự kiện và không quá số ghế còn\\n      const found = state.find((i) => i.eventId === ev.id);\\n      if (!found) return max > 0 ? [...state, { eventId: ev.id, title: ev.title, priceK: ev.priceK, quantity: 1, max }] : state;\\n      if (found.quantity >= found.max) return state;\\n      return state.map((i) => (i.eventId === ev.id ? { ...i, quantity: i.quantity + 1 } : i));\\n    }\\n    case 'INC':\\n      return state.map((i) => (i.eventId === action.id && i.quantity \\u003c i.max ? { ...i, quantity: i.quantity + 1 } : i));\\n    case 'DEC': // về 0 ⇒ bỏ khỏi giỏ\\n      return state.map((i) => (i.eventId === action.id ? { ...i, quantity: i.quantity - 1 } : i)).filter((i) => i.quantity > 0);\\n    case 'REMOVE':\\n      return state.filter((i) => i.eventId !== action.id);\\n    case 'CLEAR':\\n      return [];\\n    default:\\n      return state;\\n  }\\n} exports.cartReducer = cartReducer;\\n\\n// Khởi tạo lười: đọc localStorage MỘT lần lúc mount\\nfunction init() {\\n  try {\\n    const raw = localStorage.getItem('cart');\\n    return raw ? JSON.parse(raw) : [];\\n  } catch (e) {\\n    return [];\\n  }\\n}\\n\\n function CartProvider({ children }) {\\n  const [items, dispatch] = _react.useReducer.call(void 0, cartReducer, undefined, init);\\n\\n  _react.useEffect.call(void 0, () => {\\n    localStorage.setItem('cart', JSON.stringify(items)); // giỏ đổi ⇒ ghi lại\\n  }, [items]);\\n\\n  // số vé và tổng tiền là giá trị SUY RA — không lưu thành state riêng\\n  const value = _react.useMemo.call(void 0, () => {\\n    const count = items.reduce((n, i) => n + i.quantity, 0);\\n    const totalK = items.reduce((s, i) => s + i.quantity * i.priceK, 0);\\n    const qtyOf = (eventId) => _nullishCoalesce(_optionalChain([items, 'access', _ => _.find, 'call', _2 => _2((i) => i.eventId === eventId), 'optionalAccess', _3 => _3.quantity]), () => ( 0));\\n    return { items, count, totalK, qtyOf, dispatch };\\n  }, [items]);\\n\\n  return _jsxruntime.jsx.call(void 0, CartContext.Provider, { value: value, children: children});\\n} exports.CartProvider = CartProvider;\\n\\n function useCart() {\\n  const ctx = _react.useContext.call(void 0, CartContext);\\n  if (!ctx) throw new Error('useCart must be used inside \\u003cCartProvider>');\\n  return ctx;\\n} exports.useCart = useCart;\\n\",\"src/pages/EventList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/EventList.js — Câu 1: bảng sự kiện, lọc thành phố/loại, giá trung bình, thêm vào giỏ\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _api = require('../api'); var _api2 = _interopRequireDefault(_api);\\nvar _CartContext = require('../context/CartContext');\\nvar _format = require('../utils/format');\\n\\nconst uniqueSorted = (list, key) => [...new Set(list.map((x) => x[key]))].sort();\\n\\n function EventList() {\\n  const [events, setEvents] = _react.useState.call(void 0, []);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [city, setCity] = _react.useState.call(void 0, 'All');\\n  const [category, setCategory] = _react.useState.call(void 0, 'All');\\n  const { qtyOf, dispatch } = _CartContext.useCart.call(void 0, );\\n\\n  _react.useEffect.call(void 0, () => {\\n    _api2.default.get('/events')\\n      .then((res) => setEvents(res.data))\\n      .catch(() => setError('Cannot load events.'));\\n  }, []);\\n\\n  const cities = _react.useMemo.call(void 0, () => uniqueSorted(events, 'city'), [events]);\\n  const categories = _react.useMemo.call(void 0, () => uniqueSorted(events, 'category'), [events]);\\n\\n  const visible = _react.useMemo.call(void 0, \\n    () =>\\n      events\\n        .filter((e) => (city === 'All' || e.city === city) && (category === 'All' || e.category === category))\\n        .sort((a, b) => a.date.localeCompare(b.date)), // \\\"yyyy-mm-dd\\\" so chuỗi = so ngày\\n    [events, city, category],\\n  );\\n\\n  // trung bình trên các dòng ĐANG HIỆN; không dòng nào ⇒ N/A (tránh chia cho 0 ra NaN)\\n  const average = visible.length ? visible.reduce((s, e) => s + e.priceK, 0) / visible.length : null;\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Upcoming Events\\\" })\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Row, { className: \\\"g-2 mb-3\\\" , children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 4, children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { id: \\\"city-filter\\\", value: city, onChange: (e) => setCity(e.target.value), children: [\\n            _jsxruntime.jsx.call(void 0, 'option', { value: \\\"All\\\", children: \\\"All cities\\\" })\\n            , cities.map((c) => _jsxruntime.jsx.call(void 0, 'option', { value: c, children: c}, c))\\n          ]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 4, children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { id: \\\"category-filter\\\", value: category, onChange: (e) => setCategory(e.target.value), children: [\\n            _jsxruntime.jsx.call(void 0, 'option', { value: \\\"All\\\", children: \\\"All categories\\\" })\\n            , categories.map((c) => _jsxruntime.jsx.call(void 0, 'option', { value: c, children: c}, c))\\n          ]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 4, className: \\\"d-flex align-items-center\\\" , children: \\n          _jsxruntime.jsxs.call(void 0, 'span', { id: \\\"summary\\\", children: [\\\"Average ticket price: \\\"   , average === null ? 'N/A' : _format.formatVnd.call(void 0, average)]})\\n        })\\n      ]})\\n      , visible.length === 0 ? (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"warning\\\", className: \\\"no-result\\\", children: \\\"No events found\\\"  })\\n      ) : (\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { striped: true, bordered: true, hover: true, responsive: true, id: \\\"event-table\\\", className: \\\"align-middle\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'thead', { children: \\n            _jsxruntime.jsxs.call(void 0, 'tr', { children: [\\n              _jsxruntime.jsx.call(void 0, 'th', { children: \\\"No\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Event\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Date\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"City\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Category\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Price\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Seats left\\\" }), _jsxruntime.jsx.call(void 0, 'th', {} )\\n            ]})\\n          })\\n          , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n            visible.map((e, i) => {\\n              const inCart = qtyOf(e.id);\\n              const max = Math.min(4, e.seatsLeft);\\n              const soldOut = e.seatsLeft === 0;\\n              return (\\n                _jsxruntime.jsxs.call(void 0, 'tr', { id: `event-row-${e.id}`, children: [\\n                  _jsxruntime.jsx.call(void 0, 'td', { children: i + 1})\\n                  , _jsxruntime.jsxs.call(void 0, 'td', { children: [\\n                    _jsxruntime.jsx.call(void 0, 'span', { className: \\\"ev-title\\\", children: e.title})\\n                    , _jsxruntime.jsx.call(void 0, 'div', { className: \\\"small text-muted ev-venue\\\"  , children: e.venue})\\n                  ]})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"ev-date\\\", children: _format.formatDate.call(void 0, e.date)})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { children: e.city})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { children: e.category})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"ev-price\\\", children: _format.formatVnd.call(void 0, e.priceK)})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"ev-seats\\\", children: e.seatsLeft})\\n                  , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                    _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, {\\n                      size: \\\"sm\\\",\\n                      className: \\\"btn-add\\\",\\n                      variant: soldOut ? 'secondary' : 'primary',\\n                      disabled: soldOut || inCart >= max,\\n                      onClick: () => dispatch({ type: 'ADD', event: e }),\\n children: \\n                      soldOut ? 'Sold out' : 'Add to cart'\\n                    })\\n                  })\\n                ]}, e.id)\\n              );\\n            })\\n          })\\n        ]})\\n      )\\n    ]})\\n  );\\n} exports.default = EventList;\\n\",\"src/pages/CartPage.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/CartPage.js — Câu 2: giỏ vé (+/−/xoá, tổng) và thanh toán (POST đơn + PATCH ghế)\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api'); var _api2 = _interopRequireDefault(_api);\\nvar _CartContext = require('../context/CartContext');\\nvar _format = require('../utils/format');\\n\\nconst EMAIL_RE = /^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$/;\\n\\n function CartPage() {\\n  const { items, totalK, dispatch } = _CartContext.useCart.call(void 0, );\\n  const [customer, setCustomer] = _react.useState.call(void 0, { customerName: '', email: '' });\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [saving, setSaving] = _react.useState.call(void 0, false);\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n\\n  const update = (e) => setCustomer({ ...customer, [e.target.name]: e.target.value });\\n\\n  const checkout = async (e) => {\\n    e.preventDefault();\\n    if (!customer.customerName.trim()) return setError('Please enter your full name');\\n    if (!EMAIL_RE.test(customer.email.trim())) return setError('Please enter a valid email');\\n    setSaving(true);\\n    try {\\n      await _api2.default.post('/orders', {\\n        customerName: customer.customerName.trim(),\\n        email: customer.email.trim(),\\n        orderDate: _format.todayISO.call(void 0, ),\\n        // chỉ gửi những gì đơn hàng cần (không gửi \\\"max\\\" — đó là chi tiết của giỏ)\\n        items: items.map(({ eventId, title, quantity, priceK }) => ({ eventId, title, quantity, priceK })),\\n      });\\n      // trừ ghế của TỪNG sự kiện: đọc số ghế mới nhất rồi PATCH\\n      for (const it of items) {\\n        const { data: ev } = await _api2.default.get(`/events/${it.eventId}`);\\n        await _api2.default.patch(`/events/${it.eventId}`, { seatsLeft: ev.seatsLeft - it.quantity });\\n      }\\n      dispatch({ type: 'CLEAR' });\\n      navigate('/orders');\\n    } catch (e2) {\\n      setError('Checkout failed. Please try again.');\\n    } finally {\\n      setSaving(false);\\n    }\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Your Cart\\\" })\\n      , items.length === 0 ? (\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"info\\\", className: \\\"empty-cart\\\", children: \\\"Your cart is empty\\\"   })\\n      ) : (\\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { bordered: true, responsive: true, id: \\\"cart-table\\\", className: \\\"align-middle\\\", children: [\\n          _jsxruntime.jsx.call(void 0, 'thead', { children: \\n            _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'th', { children: \\\"Event\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Unit price\\\" }), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Quantity\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Subtotal\\\"}), _jsxruntime.jsx.call(void 0, 'th', {} )]})\\n          })\\n          , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n            items.map((it) => (\\n              _jsxruntime.jsxs.call(void 0, 'tr', { id: `cart-row-${it.eventId}`, children: [\\n                _jsxruntime.jsx.call(void 0, 'td', { children: it.title})\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: _format.formatVnd.call(void 0, it.priceK)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                  _jsxruntime.jsxs.call(void 0, _reactbootstrap.ButtonGroup, { size: \\\"sm\\\", children: [\\n                    _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"outline-secondary\\\", className: \\\"btn-dec\\\", onClick: () => dispatch({ type: 'DEC', id: it.eventId }), children: \\\"−\\\"})\\n                    , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"light\\\", disabled: true, className: \\\"qty\\\", children: it.quantity})\\n                    , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { variant: \\\"outline-secondary\\\", className: \\\"btn-inc\\\", disabled: it.quantity >= it.max, onClick: () => dispatch({ type: 'INC', id: it.eventId }), children: \\\"+\\\"})\\n                  ]})\\n                })\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"subtotal\\\", children: _format.formatVnd.call(void 0, it.quantity * it.priceK)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                  _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"outline-danger\\\", className: \\\"btn-remove\\\", onClick: () => dispatch({ type: 'REMOVE', id: it.eventId }), children: \\\"Remove\\\"})\\n                })\\n              ]}, it.eventId)\\n            ))\\n          })\\n        ]})\\n      )\\n      , _jsxruntime.jsxs.call(void 0, 'h4', { id: \\\"cart-total\\\", children: [\\\"Total: \\\" , _format.formatVnd.call(void 0, totalK)]})\\n\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { className: \\\"mt-3\\\", style: { maxWidth: 520 }, children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { children: \\\"Checkout\\\"})\\n          , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", id: \\\"checkout-error\\\", children: error})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"checkout-form\\\", noValidate: true, onSubmit: checkout, children: [\\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-2\\\", controlId: \\\"customerName\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Full name\\\" })\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"customerName\\\", value: customer.customerName, onChange: update,} )\\n            ]})\\n            , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"email\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Email\\\"})\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { name: \\\"email\\\", type: \\\"email\\\", value: customer.email, onChange: update,} )\\n            ]})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { type: \\\"submit\\\", id: \\\"btn-checkout\\\", disabled: items.length === 0 || saving, children: \\\"Place order\\\" })\\n          ]})\\n        ]})\\n      })\\n    ]})\\n  );\\n} exports.default = CartPage;\\n\",\"src/pages/OrderHistory.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/pages/OrderHistory.js — Câu 3: lịch sử đơn (mới nhất trước), tổng TÍNH từ dòng, doanh thu, chi tiết\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _api = require('../api'); var _api2 = _interopRequireDefault(_api);\\nvar _format = require('../utils/format');\\n\\n function OrderHistory() {\\n  const [orders, setOrders] = _react.useState.call(void 0, []);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [openId, setOpenId] = _react.useState.call(void 0, null); // đơn đang mở chi tiết (một lúc một đơn)\\n\\n  _react.useEffect.call(void 0, () => {\\n    _api2.default.get('/orders')\\n      .then((res) => setOrders(res.data))\\n      .catch(() => setError('Cannot load orders.'));\\n  }, []);\\n\\n  // mới nhất trước; cùng ngày ⇒ id lớn hơn trước\\n  const rows = _react.useMemo.call(void 0, \\n    () => [...orders].sort((a, b) => b.orderDate.localeCompare(a.orderDate) || Number(b.id) - Number(a.id)),\\n    [orders],\\n  );\\n  const revenueK = _react.useMemo.call(void 0, () => orders.reduce((s, o) => s + _format.orderTotalK.call(void 0, o.items), 0), [orders]);\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Order History\\\" })\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"orders-revenue\\\", className: \\\"fw-bold\\\", children: [\\\"Total revenue: \\\"  , _format.formatVnd.call(void 0, revenueK)]})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { bordered: true, hover: true, responsive: true, id: \\\"order-table\\\", className: \\\"align-middle\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'thead', { children: \\n          _jsxruntime.jsxs.call(void 0, 'tr', { children: [_jsxruntime.jsx.call(void 0, 'th', { children: \\\"Order #\\\" }), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Customer\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Date\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Tickets\\\"}), _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Total\\\"}), _jsxruntime.jsx.call(void 0, 'th', {} )]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n          rows.map((o) => (\\n            _jsxruntime.jsxs.call(void 0, _react.Fragment, { children: [\\n              _jsxruntime.jsxs.call(void 0, 'tr', { id: `order-row-${o.id}`, children: [\\n                _jsxruntime.jsx.call(void 0, 'td', { children: o.id})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"o-customer\\\", children: o.customerName})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"o-date\\\", children: _format.formatDate.call(void 0, o.orderDate)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"o-tickets\\\", children: o.items.reduce((n, it) => n + it.quantity, 0)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"o-total\\\", children: _format.formatVnd.call(void 0, _format.orderTotalK.call(void 0, o.items))})\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                  _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"link\\\", className: \\\"btn-detail\\\", onClick: () => setOpenId(openId === o.id ? null : o.id), children: \\n                    openId === o.id ? 'Hide' : 'Details'\\n                  })\\n                })\\n              ]})\\n              , openId === o.id && (\\n                _jsxruntime.jsx.call(void 0, 'tr', { children: \\n                  _jsxruntime.jsx.call(void 0, 'td', { colSpan: 6, children: \\n                    _jsxruntime.jsx.call(void 0, 'ul', { id: `order-items-${o.id}`, className: \\\"mb-0\\\", children: \\n                      o.items.map((it) => (\\n                        _jsxruntime.jsxs.call(void 0, 'li', { className: \\\"order-item\\\", children: [it.title, \\\" × \\\"  , it.quantity]}, it.eventId)\\n                      ))\\n                    })\\n                  })\\n                })\\n              )\\n            ]}, o.id)\\n          ))\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = OrderHistory;\\n\",\"src/utils/format.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/format.js\\n// priceK theo NGHÌN đồng ⇒ \\\"450,000 VND\\\"\\n const formatVnd = (priceK) => `${Math.round(Number(priceK) * 1000).toLocaleString('en-US')} VND`; exports.formatVnd = formatVnd;\\n\\n// \\\"2026-12-05\\\" ⇒ \\\"05/12/2026\\\" (cắt chuỗi ⇒ không lệch múi giờ)\\n function formatDate(iso) {\\n  const [y, m, d] = String(iso).slice(0, 10).split('-');\\n  return `${d}/${m}/${y}`;\\n} exports.formatDate = formatDate;\\n\\n function todayISO() {\\n  const d = new Date();\\n  const p = (n) => String(n).padStart(2, '0');\\n  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;\\n} exports.todayISO = todayISO;\\n\\n// Tổng tiền của một đơn TÍNH từ các dòng (không tin con số lưu sẵn)\\n const orderTotalK = (items) => items.reduce((sum, it) => sum + it.quantity * it.priceK, 0); exports.orderTotalK = orderTotalK;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — CartProvider bọc mọi trang (navbar, danh sách, giỏ đều đọc chung một giỏ)\\nvar _reactrouterdom = require('react-router-dom');\\nvar _AppNavbar = require('./components/AppNavbar'); var _AppNavbar2 = _interopRequireDefault(_AppNavbar);\\nvar _CartContext = require('./context/CartContext');\\nvar _EventList = require('./pages/EventList'); var _EventList2 = _interopRequireDefault(_EventList);\\nvar _CartPage = require('./pages/CartPage'); var _CartPage2 = _interopRequireDefault(_CartPage);\\nvar _OrderHistory = require('./pages/OrderHistory'); var _OrderHistory2 = _interopRequireDefault(_OrderHistory);\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _CartContext.CartProvider, { children: [\\n      _jsxruntime.jsx.call(void 0, _AppNavbar2.default, {} )\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Routes, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/\\\", element: _jsxruntime.jsx.call(void 0, _reactrouterdom.Navigate, { to: \\\"/events\\\", replace: true,} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/events\\\", element: _jsxruntime.jsx.call(void 0, _EventList2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/cart\\\", element: _jsxruntime.jsx.call(void 0, _CartPage2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/orders\\\", element: _jsxruntime.jsx.call(void 0, _OrderHistory2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"*\\\", element: _jsxruntime.jsx.call(void 0, 'p', { className: \\\"container\\\", children: \\\"Page not found\\\"  }),} )\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/components/AppNavbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/AppNavbar.js — badge số vé đọc thẳng từ Context\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _CartContext = require('../context/CartContext');\\n\\n function AppNavbar() {\\n  const { count } = _CartContext.useCart.call(void 0, );\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { bg: \\\"dark\\\", 'data-bs-theme': \\\"dark\\\", className: \\\"mb-4\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { children: \\\"TicketHub\\\"})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"me-auto\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/events\\\", id: \\\"nav-events\\\", children: \\\"Events\\\"})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/cart\\\", id: \\\"nav-cart\\\", children: [\\\"Cart \\\"\\n             , _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"warning\\\", text: \\\"dark\\\", id: \\\"cart-count\\\", children: count})\\n          ]})\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/orders\\\", id: \\\"nav-orders\\\", children: \\\"Orders\\\"})\\n        ]})\\n      ]})\\n    })\\n  );\\n} exports.default = AppNavbar;\\n\",\"src/api.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/api.js — axios dùng chung, baseURL đọc từ .env\\nvar _axios = require('axios'); var _axios2 = _interopRequireDefault(_axios);\\n\\nconst api = _axios2.default.create({ baseURL: process.env.REACT_APP_API_URL });\\nexports. default = api;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"database.json\":\"{\\n  \\\"events\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"title\\\": \\\"Hanoi Jazz Night\\\",\\n      \\\"venue\\\": \\\"Hanoi Opera House\\\",\\n      \\\"city\\\": \\\"Hanoi\\\",\\n      \\\"date\\\": \\\"2026-12-05\\\",\\n      \\\"category\\\": \\\"Concert\\\",\\n      \\\"priceK\\\": 450,\\n      \\\"seatsLeft\\\": 20\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"title\\\": \\\"React Workshop: Hooks in Depth\\\",\\n      \\\"venue\\\": \\\"FPT University\\\",\\n      \\\"city\\\": \\\"Hanoi\\\",\\n      \\\"date\\\": \\\"2026-11-20\\\",\\n      \\\"category\\\": \\\"Workshop\\\",\\n      \\\"priceK\\\": 150,\\n      \\\"seatsLeft\\\": 3\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"title\\\": \\\"Saigon Marathon Expo\\\",\\n      \\\"venue\\\": \\\"SECC\\\",\\n      \\\"city\\\": \\\"Ho Chi Minh City\\\",\\n      \\\"date\\\": \\\"2027-01-10\\\",\\n      \\\"category\\\": \\\"Sport\\\",\\n      \\\"priceK\\\": 200,\\n      \\\"seatsLeft\\\": 50\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"title\\\": \\\"Swan Lake\\\",\\n      \\\"venue\\\": \\\"Saigon Opera House\\\",\\n      \\\"city\\\": \\\"Ho Chi Minh City\\\",\\n      \\\"date\\\": \\\"2026-12-18\\\",\\n      \\\"category\\\": \\\"Theatre\\\",\\n      \\\"priceK\\\": 600,\\n      \\\"seatsLeft\\\": 0\\n    },\\n    {\\n      \\\"id\\\": 5,\\n      \\\"title\\\": \\\"Da Nang Rock Fest\\\",\\n      \\\"venue\\\": \\\"Han River Park\\\",\\n      \\\"city\\\": \\\"Da Nang\\\",\\n      \\\"date\\\": \\\"2026-11-28\\\",\\n      \\\"category\\\": \\\"Concert\\\",\\n      \\\"priceK\\\": 350,\\n      \\\"seatsLeft\\\": 12\\n    },\\n    {\\n      \\\"id\\\": 6,\\n      \\\"title\\\": \\\"UI/UX Bootcamp\\\",\\n      \\\"venue\\\": \\\"Dreamplex\\\",\\n      \\\"city\\\": \\\"Ho Chi Minh City\\\",\\n      \\\"date\\\": \\\"2026-11-15\\\",\\n      \\\"category\\\": \\\"Workshop\\\",\\n      \\\"priceK\\\": 250,\\n      \\\"seatsLeft\\\": 8\\n    },\\n    {\\n      \\\"id\\\": 7,\\n      \\\"title\\\": \\\"V-League Final\\\",\\n      \\\"venue\\\": \\\"My Dinh Stadium\\\",\\n      \\\"city\\\": \\\"Hanoi\\\",\\n      \\\"date\\\": \\\"2026-12-12\\\",\\n      \\\"category\\\": \\\"Sport\\\",\\n      \\\"priceK\\\": 180,\\n      \\\"seatsLeft\\\": 100\\n    },\\n    {\\n      \\\"id\\\": 8,\\n      \\\"title\\\": \\\"Hamlet\\\",\\n      \\\"venue\\\": \\\"Trung Vuong Theatre\\\",\\n      \\\"city\\\": \\\"Da Nang\\\",\\n      \\\"date\\\": \\\"2027-02-14\\\",\\n      \\\"category\\\": \\\"Theatre\\\",\\n      \\\"priceK\\\": 300,\\n      \\\"seatsLeft\\\": 6\\n    }\\n  ],\\n  \\\"orders\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"customerName\\\": \\\"Nguyen Thu Ha\\\",\\n      \\\"email\\\": \\\"ha.nt@example.com\\\",\\n      \\\"orderDate\\\": \\\"2026-09-28\\\",\\n      \\\"items\\\": [\\n        {\\n          \\\"eventId\\\": 1,\\n          \\\"title\\\": \\\"Hanoi Jazz Night\\\",\\n          \\\"quantity\\\": 2,\\n          \\\"priceK\\\": 450\\n        },\\n        {\\n          \\\"eventId\\\": 7,\\n          \\\"title\\\": \\\"V-League Final\\\",\\n          \\\"quantity\\\": 1,\\n          \\\"priceK\\\": 180\\n        }\\n      ]\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"customerName\\\": \\\"Tran Quoc Bao\\\",\\n      \\\"email\\\": \\\"bao.tq@example.com\\\",\\n      \\\"orderDate\\\": \\\"2026-10-05\\\",\\n      \\\"items\\\": [\\n        {\\n          \\\"eventId\\\": 6,\\n          \\\"title\\\": \\\"UI/UX Bootcamp\\\",\\n          \\\"quantity\\\": 1,\\n          \\\"priceK\\\": 250\\n        }\\n      ]\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"customerName\\\": \\\"Le Mai Anh\\\",\\n      \\\"email\\\": \\\"anh.lm@example.com\\\",\\n      \\\"orderDate\\\": \\\"2026-10-02\\\",\\n      \\\"items\\\": [\\n        {\\n          \\\"eventId\\\": 3,\\n          \\\"title\\\": \\\"Saigon Marathon Expo\\\",\\n          \\\"quantity\\\": 4,\\n          \\\"priceK\\\": 200\\n        }\\n      ]\\n    }\\n  ]\\n}\\n\"};var CSS={};var DB={\"events\":[{\"id\":1,\"title\":\"Hanoi Jazz Night\",\"venue\":\"Hanoi Opera House\",\"city\":\"Hanoi\",\"date\":\"2026-12-05\",\"category\":\"Concert\",\"priceK\":450,\"seatsLeft\":20},{\"id\":2,\"title\":\"React Workshop: Hooks in Depth\",\"venue\":\"FPT University\",\"city\":\"Hanoi\",\"date\":\"2026-11-20\",\"category\":\"Workshop\",\"priceK\":150,\"seatsLeft\":3},{\"id\":3,\"title\":\"Saigon Marathon Expo\",\"venue\":\"SECC\",\"city\":\"Ho Chi Minh City\",\"date\":\"2027-01-10\",\"category\":\"Sport\",\"priceK\":200,\"seatsLeft\":50},{\"id\":4,\"title\":\"Swan Lake\",\"venue\":\"Saigon Opera House\",\"city\":\"Ho Chi Minh City\",\"date\":\"2026-12-18\",\"category\":\"Theatre\",\"priceK\":600,\"seatsLeft\":0},{\"id\":5,\"title\":\"Da Nang Rock Fest\",\"venue\":\"Han River Park\",\"city\":\"Da Nang\",\"date\":\"2026-11-28\",\"category\":\"Concert\",\"priceK\":350,\"seatsLeft\":12},{\"id\":6,\"title\":\"UI/UX Bootcamp\",\"venue\":\"Dreamplex\",\"city\":\"Ho Chi Minh City\",\"date\":\"2026-11-15\",\"category\":\"Workshop\",\"priceK\":250,\"seatsLeft\":8},{\"id\":7,\"title\":\"V-League Final\",\"venue\":\"My Dinh Stadium\",\"city\":\"Hanoi\",\"date\":\"2026-12-12\",\"category\":\"Sport\",\"priceK\":180,\"seatsLeft\":100},{\"id\":8,\"title\":\"Hamlet\",\"venue\":\"Trung Vuong Theatre\",\"city\":\"Da Nang\",\"date\":\"2027-02-14\",\"category\":\"Theatre\",\"priceK\":300,\"seatsLeft\":6}],\"orders\":[{\"id\":1,\"customerName\":\"Nguyen Thu Ha\",\"email\":\"ha.nt@example.com\",\"orderDate\":\"2026-09-28\",\"items\":[{\"eventId\":1,\"title\":\"Hanoi Jazz Night\",\"quantity\":2,\"priceK\":450},{\"eventId\":7,\"title\":\"V-League Final\",\"quantity\":1,\"priceK\":180}]},{\"id\":2,\"customerName\":\"Tran Quoc Bao\",\"email\":\"bao.tq@example.com\",\"orderDate\":\"2026-10-05\",\"items\":[{\"eventId\":6,\"title\":\"UI/UX Bootcamp\",\"quantity\":1,\"priceK\":250}]},{\"id\":3,\"customerName\":\"Le Mai Anh\",\"email\":\"anh.lm@example.com\",\"orderDate\":\"2026-10-02\",\"items\":[{\"eventId\":3,\"title\":\"Saigon Marathon Expo\",\"quantity\":4,\"priceK\":200}]}]};var BASE=\"http://localhost:9999\";var URL0=\"/events\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

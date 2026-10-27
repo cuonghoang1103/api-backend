@@ -1,0 +1,1467 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-13-pe-1-library-loans",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-pe18-sp26-chua-tron-de"
+  },
+  "exercises": [
+    {
+      "title": "PE Practice 1 — Library Loan System (json-server · Router · Bootstrap)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 85,
+      "points": 100,
+      "concepts": [
+        "json-server REST",
+        "React Router v6",
+        "useSearchParams",
+        "useParams",
+        "useNavigate",
+        "controlled form",
+        "validation",
+        "fetch",
+        "React-Bootstrap",
+        ".env"
+      ],
+      "prerequisites": [
+        "useState / useEffect",
+        "map / filter / sort",
+        "Promise & async/await"
+      ],
+      "tags": [
+        "fer202",
+        "pe",
+        "json-server",
+        "router",
+        "react-bootstrap"
+      ],
+      "problemHtml": "<h1>PE PRACTICE 1 — Library Loan System</h1>\n<p class=\"bi-phu\">FER202 · Practical Exam practice (SP26/SU26 format) · Duration: 85 minutes · Total: 10 marks · json-server + React Router + React-Bootstrap</p>\n<h2>1. Overview</h2>\n<p>A small library wants a React front-end for its loan desk. The REST API is served by <b>json-server</b> from the given <code>database.json</code> at <code>http://localhost:9999</code> (<code>npx json-server --watch database.json --port 9999</code>); the React app runs at <code>http://localhost:3000</code>.</p><p>Build three pages: a <b>Book Catalog</b> (search, category filter with a URL query parameter), a <b>Borrow</b> form with business rules, and a <b>Loans</b> table where a librarian records returns. <b>0 marks</b> for a page whose URL differs from the paper.</p>\n<h3>Main features</h3>\n<ul>\n  <li>Question 1 (4 marks) — <code>/books</code>: catalog, search, category filter + <code>?category=</code>.</li>\n  <li>Question 2 (3.5 marks) — <code>/books/:id/borrow</code>: borrow form, 7 business rules, POST + PATCH, redirect.</li>\n  <li>Question 3 (2.5 marks) — <code>/loans</code>: joined table, dd/MM/yyyy dates, status, Return.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Store the API URL in <code>.env</code> as <code>REACT_APP_API_URL</code> (Vite: <code>VITE_API_URL</code>) — hard-coding it costs all marks.</li>\n  <li>Use <b>Bootstrap or React-Bootstrap</b> for the UI.</li>\n  <li>Function components + Hooks; <code>react-router-dom</code> v6 for routing; <code>fetch</code> or <code>axios</code> for HTTP.</li>\n  <li>Search and filtering happen on the client — <b>no extra API call</b> per keystroke.</li>\n  <li>Ids in <code>database.json</code> are numbers; route parameters are strings — convert when you compare or save.</li>\n  <li>Keep the ids / class names of section 6 exactly — the auto-grader relies on them.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>database.json              # given — run json-server on port 9999\n.env                       # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── api.js                 # API_URL + getJSON / sendJSON helpers\n├── utils/\n│   └── date.js            # todayISO · formatDate · daysBetween\n├── components/\n│   └── AppNavbar.js       # given\n├── pages/\n│   ├── BookList.js        # Q1  /books\n│   ├── BorrowBook.js      # Q2  /books/:id/borrow\n│   └── LoanList.js        # Q3  /loans\n├── App.js                 # routes\n└── index.js               # given (BrowserRouter + bootstrap.css)</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| Library   Books   Loans                                                     |\n+-----------------------------------------------------------------------------+\n| Book Catalog                                                                |\n| [Search by title...                          ] [All categories       v]    |\n| Showing 8 of 8 books                                                        |\n| +----------------------+ +----------------------+ +----------------------+  |\n| | A Brief History of   | | Clean Code           | | Cosmos               |  |\n| | Time                 | | Robert C. Martin     | | Carl Sagan           |  |\n| | Stephen Hawking      | | Software · 2008      | | Science · 1980       |  |\n| | Science · 1988       | | [Available: 2]       | | [Available: 2]       |  |\n| | [Available: 4]       | |----------------------| |----------------------|  |\n| |----------------------| | [Borrow]             | | [Borrow]             |  |\n| | [Borrow]             | +----------------------+ +----------------------+  |\n| +----------------------+   ... 3 cards per row (md and up)                  |\n+-----------------------------------------------------------------------------+\n| /books/3/borrow                       | /loans                              |\n| Borrow a book                         | No Book    Member  Borrow Due  Status|\n| A Brief History of Time — S. Hawking  | 1  Sapiens An    20/10/2026 ...  [On loan] [Return]\n| Available: 4                          | 2  Clean.. An    02/03/2026 ...  [Overdue] [Return]\n| Member      [-- Select member --  v]  | 3  A Brief Binh  01/02/2026 ...  [Returned]\n| Borrow date [2026-10-29]              |                                     |\n| Due date    [          ]              |                                     |\n| [Confirm borrow]  Cancel              |                                     |\n+-----------------------------------------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>books · members · loans (database.json)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>books.id</code></td><td>number</td><td>primary key</td></tr><tr><td><code>books.title / author / category</code></td><td>string</td><td>category ∈ Software, Science, History (read it from the data)</td></tr><tr><td><code>books.publishedYear</code></td><td>number</td><td></td></tr><tr><td><code>books.totalCopies / availableCopies</code></td><td>number</td><td>availableCopies = 0 ⇒ out of stock</td></tr><tr><td><code>members.id / code / fullName / email</code></td><td>number / string</td><td></td></tr><tr><td><code>members.status</code></td><td>'ACTIVE' | 'SUSPENDED'</td><td>only ACTIVE members may borrow</td></tr><tr><td><code>loans.id / bookId / memberId</code></td><td>number</td><td>foreign keys to books / members</td></tr><tr><td><code>loans.borrowDate / dueDate</code></td><td>string 'yyyy-mm-dd'</td><td></td></tr><tr><td><code>loans.returnDate</code></td><td>string | null</td><td>null ⇒ not returned yet</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre>books (8):  1 Clean Code (avail 2) · 2 The Pragmatic Programmer (avail 0) · 3 A Brief History of Time (avail 4)\n            4 Sapiens (avail 1) · 5 Cosmos (avail 2) · 6 Design Patterns (avail 1)\n            7 Guns, Germs, and Steel (avail 1) · 8 The Selfish Gene (avail 0)\nmembers:    1 M001 Nguyen Van An (ACTIVE) · 2 M002 Tran Thi Binh (ACTIVE)\n            3 M003 Le Hoang Cuong (SUSPENDED) · 4 M004 Pham Minh Duc (ACTIVE)\nloans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null\n            2 book 4 / member 1  2026-10-20 → 2026-11-03  returnDate null\n            3 book 3 / member 2  2026-02-01 → 2026-02-10  returnDate 2026-02-09</pre>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Q1 · Book catalog page <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>Route <code>/books</code> (and <code>/</code> redirects there). Fetch <code>GET /books</code> once.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Navbar with links <code>#nav-books</code> (Books) and <code>#nav-loans</code> (Loans).</li>\n  <li>Cards in a grid, <b>3 per row</b> on medium screens, sorted by <code>title</code> A → Z.</li>\n  <li>Each card <code>#book-{id}.book-card</code> shows <code>.book-title</code>, author, <code>category · publishedYear</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">fetch / axios</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. Q1 · Search by title <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Input <code>#search</code>: title <b>contains</b> the keyword, case-insensitive, updates while typing.</li>\n  <li><code>#result-count</code> reads <code>Showing X of Y books</code>.</li>\n  <li>No match ⇒ <code>.no-result</code> with the text <code>No books found</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Example:</b></p>\n<pre>Type \"the\"  ⇒  The Pragmatic Programmer, The Selfish Gene  ·  Showing 2 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. Q1 · Category filter + query parameter <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#category-filter</code>: first option <code>All categories</code> (value <code>All</code>), then the <b>unique categories from the data</b>, A → Z. Do not hard-code them.</li>\n  <li>Selecting a category updates the URL to <code>/books?category=Science</code>; \"All\" removes the parameter.</li>\n  <li>Opening <code>/books?category=Science</code> directly pre-selects and applies the filter. Search and filter combine.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useSearchParams</span></p>\n<p><b>Example:</b></p>\n<pre>Science + \"the\"  ⇒  The Selfish Gene  ·  Showing 1 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. Q1 · Availability &amp; Borrow button <span class=\"bi-diem\">0.5 marks</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Badge <code>.book-availability</code>: <code>Available: N</code> (green) or <code>Out of stock</code> (gray) when <code>availableCopies</code> is 0.</li>\n  <li>Button <code>.btn-borrow</code> navigates to <code>/books/:id/borrow</code>; it is <b>disabled</b> when out of stock.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. Q2 · Borrow page — load data <span class=\"bi-diem\">1 mark</span></h3>\n<p>Route <code>/books/:id/borrow</code>. Fetch <code>GET /books/:id</code> and the members.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>#book-info</code> shows the title, author and <code>Available: N</code>.</li>\n  <li>Form <code>#borrow-form</code>: select <code>#member</code> (placeholder <code>-- Select member --</code> with value \"\", then <code>code — fullName</code> of <b>ACTIVE</b> members only), <code>#borrowDate</code> (type date, defaults to <b>today</b>), <code>#dueDate</code> (type date, empty).</li>\n  <li>Unknown id (API answers 404) ⇒ a red alert <code>.alert-danger</code> <code>Book not found</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useParams</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. Q2 · Business rules <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>On submit, check the rules <b>in this order</b> and show only the first message in <code>#form-error</code> (an <code>.alert-danger</code>). Nothing is sent while a rule fails; the page never reloads.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>No member ⇒ <code>Please select a member.</code></li>\n  <li>Empty date ⇒ <code>Please choose a borrow date.</code> / <code>Please choose a due date.</code></li>\n  <li>Borrow date after today ⇒ <code>Borrow date cannot be in the future.</code></li>\n  <li>Due date not after the borrow date ⇒ <code>Due date must be after the borrow date.</code></li>\n  <li>More than 14 days ⇒ <code>A loan cannot exceed 14 days.</code> (exactly 14 is allowed)</li>\n  <li><code>availableCopies</code> is 0 ⇒ <code>This book is out of stock.</code></li>\n  <li>The member already has 2 loans with <code>returnDate: null</code> ⇒ <code>This member already has 2 open loans.</code></li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">controlled form</span> <span class=\"bi-hook\">e.preventDefault()</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. Q2 · Save the loan <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>POST /loans</code> with <code>{ bookId, memberId, borrowDate, dueDate, returnDate: null }</code> (ids as numbers).</li>\n  <li><code>PATCH /books/:id</code> with <code>{ availableCopies: current - 1 }</code>.</li>\n  <li>Then navigate to <code>/loans</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useNavigate</span> <span class=\"bi-hook\">async/await</span></p>\n<p><b>Example:</b></p>\n<pre>POST /loans  { \"bookId\": 3, \"memberId\": 4, \"borrowDate\": \"2026-01-10\", \"dueDate\": \"2026-01-20\", \"returnDate\": null }</pre>\n</div>\n<div class=\"bi-cn\"><h3>8. Q3 · Loans table <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>Route <code>/loans</code>.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Table <code>#loan-table</code>: <code>No | Book | Member | Borrow date | Due date | Status | Action</code>; row id <code>loan-row-{id}</code>; cells <code>.loan-book</code>, <code>.loan-member</code>, <code>.loan-borrow</code>, <code>.loan-due</code>, <code>.loan-status</code>.</li>\n  <li>Show the book <b>title</b> and member <b>fullName</b> (not the ids). Newest <code>borrowDate</code> first.</li>\n  <li>Dates as <code>dd/MM/yyyy</code>.</li>\n  <li>Status badge: <code>Returned</code> (returnDate set) · <code>Overdue</code> (not returned, dueDate before today) · <code>On loan</code>.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. Q3 · Return a book <span class=\"bi-diem\">1 mark</span></h3>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Rows not returned have a <code>.btn-return</code> button.</li>\n  <li>Click ⇒ <code>PATCH /loans/:id { returnDate: today }</code> and <code>PATCH /books/:bookId { availableCopies: +1 }</code>.</li>\n  <li>The row shows <code>Returned</code> immediately (no full page reload) and the button disappears.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">useState (immutable update)</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>#nav-books · #nav-loans</code></td><td>navbar links</td></tr><tr><td><code>#search · #category-filter · #result-count · .no-result</code></td><td>catalog toolbar</td></tr><tr><td><code>#book-{id}.book-card · .book-title · .book-availability · .btn-borrow</code></td><td>one card per shown book</td></tr><tr><td><code>#book-info · #borrow-form · #member · #borrowDate · #dueDate · #form-error</code></td><td>borrow page</td></tr><tr><td><code>#loan-table · #loan-row-{id} · .loan-book · .loan-member · .loan-borrow · .loan-due · .loan-status · .btn-return</code></td><td>loans page</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Q1 · Book catalog page</td><td>1.5</td></tr><tr><td>2</td><td>Q1 · Search by title</td><td>1</td></tr><tr><td>3</td><td>Q1 · Category filter + query parameter</td><td>1</td></tr><tr><td>4</td><td>Q1 · Availability &amp; Borrow button</td><td>0.5</td></tr><tr><td>5</td><td>Q2 · Borrow page — load data</td><td>1</td></tr><tr><td>6</td><td>Q2 · Business rules</td><td>1.5</td></tr><tr><td>7</td><td>Q2 · Save the loan</td><td>1</td></tr><tr><td>8</td><td>Q3 · Loans table</td><td>1.5</td></tr><tr><td>9</td><td>Q3 · Return a book</td><td>1</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>URL in the code instead of <code>.env</code> — the whole paper is 0.</li>\n  <li>Wrong route (e.g. <code>/borrow/:id</code>) — that question is 0.</li>\n  <li>Categories hard-coded in the dropdown — the filter mark is lost.</li>\n  <li>Comparing the route <code>id</code> (string) with <code>book.id</code> (number) using <code>===</code> — nothing matches.</li>\n  <li>Missing <code>e.preventDefault()</code> — the page reloads and the error never shows.</li>\n  <li>Date shown as <code>2026-03-02</code> or shifted by one day (<code>toISOString()</code> uses UTC).</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Work directly in the editor (files on the right) or download the starter, run it locally with Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> when the paper uses an API) and paste the files back. Press <b>Run</b> for the sample checks and <b>Submit</b> for full grading (hidden checks included).</p>",
+      "problemHtmlVi": "<h1>LUYỆN PE 1 — Hệ thống mượn sách thư viện</h1>\n<p class=\"bi-phu\">FER202 · Luyện thi thực hành (dạng SP26/SU26) · Thời gian: 85 phút · Tổng: 10 điểm · json-server + React Router + React-Bootstrap</p>\n<h2>1. Tổng quan</h2>\n<p>Một thư viện nhỏ cần giao diện React cho quầy mượn sách. API REST do <b>json-server</b> phục vụ từ tệp <code>database.json</code> đã cho tại <code>http://localhost:9999</code> (<code>npx json-server --watch database.json --port 9999</code>); ứng dụng React chạy ở <code>http://localhost:3000</code>.</p><p>Làm ba trang: <b>Danh mục sách</b> (tìm, lọc thể loại có tham số URL), form <b>Mượn sách</b> có luật nghiệp vụ, và bảng <b>Phiếu mượn</b> nơi thủ thư ghi nhận trả sách. Trang sai URL so với đề ⇒ <b>0 điểm</b> phần đó.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>Câu 1 (4 điểm) — <code>/books</code>: danh mục, tìm, lọc thể loại + <code>?category=</code>.</li>\n  <li>Câu 2 (3,5 điểm) — <code>/books/:id/borrow</code>: form mượn, 7 luật nghiệp vụ, POST + PATCH, chuyển trang.</li>\n  <li>Câu 3 (2,5 điểm) — <code>/loans</code>: bảng nối dữ liệu, ngày dd/MM/yyyy, trạng thái, Trả sách.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Lưu địa chỉ API trong <code>.env</code> với tên <code>REACT_APP_API_URL</code> (Vite: <code>VITE_API_URL</code>) — viết cứng URL là mất hết điểm.</li>\n  <li>Giao diện dùng <b>Bootstrap hoặc React-Bootstrap</b>.</li>\n  <li>Function component + Hooks; <code>react-router-dom</code> v6 cho định tuyến; <code>fetch</code> hoặc <code>axios</code> cho HTTP.</li>\n  <li>Tìm và lọc làm ở client — <b>không gọi API thêm</b> mỗi lần gõ.</li>\n  <li>Id trong <code>database.json</code> là số; tham số route là chuỗi — đổi kiểu khi so sánh hoặc lưu.</li>\n  <li>Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>database.json              # given — run json-server on port 9999\n.env                       # REACT_APP_API_URL=http://localhost:9999\nsrc/\n├── api.js                 # API_URL + getJSON / sendJSON helpers\n├── utils/\n│   └── date.js            # todayISO · formatDate · daysBetween\n├── components/\n│   └── AppNavbar.js       # given\n├── pages/\n│   ├── BookList.js        # Q1  /books\n│   ├── BorrowBook.js      # Q2  /books/:id/borrow\n│   └── LoanList.js        # Q3  /loans\n├── App.js                 # routes\n└── index.js               # given (BrowserRouter + bootstrap.css)</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------------------------------------+\n| Library   Books   Loans                                                     |\n+-----------------------------------------------------------------------------+\n| Book Catalog                                                                |\n| [Search by title...                          ] [All categories       v]    |\n| Showing 8 of 8 books                                                        |\n| +----------------------+ +----------------------+ +----------------------+  |\n| | A Brief History of   | | Clean Code           | | Cosmos               |  |\n| | Time                 | | Robert C. Martin     | | Carl Sagan           |  |\n| | Stephen Hawking      | | Software · 2008      | | Science · 1980       |  |\n| | Science · 1988       | | [Available: 2]       | | [Available: 2]       |  |\n| | [Available: 4]       | |----------------------| |----------------------|  |\n| |----------------------| | [Borrow]             | | [Borrow]             |  |\n| | [Borrow]             | +----------------------+ +----------------------+  |\n| +----------------------+   ... 3 cards per row (md and up)                  |\n+-----------------------------------------------------------------------------+\n| /books/3/borrow                       | /loans                              |\n| Borrow a book                         | No Book    Member  Borrow Due  Status|\n| A Brief History of Time — S. Hawking  | 1  Sapiens An    20/10/2026 ...  [On loan] [Return]\n| Available: 4                          | 2  Clean.. An    02/03/2026 ...  [Overdue] [Return]\n| Member      [-- Select member --  v]  | 3  A Brief Binh  01/02/2026 ...  [Returned]\n| Borrow date [2026-10-29]              |                                     |\n| Due date    [          ]              |                                     |\n| [Confirm borrow]  Cancel              |                                     |\n+-----------------------------------------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>books · members · loans (database.json)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>books.id</code></td><td>number</td><td>khoá chính</td></tr><tr><td><code>books.title / author / category</code></td><td>string</td><td>category ∈ Software, Science, History (lấy từ dữ liệu)</td></tr><tr><td><code>books.publishedYear</code></td><td>number</td><td></td></tr><tr><td><code>books.totalCopies / availableCopies</code></td><td>number</td><td>availableCopies = 0 ⇒ hết sách</td></tr><tr><td><code>members.id / code / fullName / email</code></td><td>number / string</td><td></td></tr><tr><td><code>members.status</code></td><td>'ACTIVE' | 'SUSPENDED'</td><td>chỉ thành viên ACTIVE được mượn</td></tr><tr><td><code>loans.id / bookId / memberId</code></td><td>number</td><td>khoá ngoại tới books / members</td></tr><tr><td><code>loans.borrowDate / dueDate</code></td><td>string 'yyyy-mm-dd'</td><td></td></tr><tr><td><code>loans.returnDate</code></td><td>string | null</td><td>null ⇒ chưa trả</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre>books (8):  1 Clean Code (avail 2) · 2 The Pragmatic Programmer (avail 0) · 3 A Brief History of Time (avail 4)\n            4 Sapiens (avail 1) · 5 Cosmos (avail 2) · 6 Design Patterns (avail 1)\n            7 Guns, Germs, and Steel (avail 1) · 8 The Selfish Gene (avail 0)\nmembers:    1 M001 Nguyen Van An (ACTIVE) · 2 M002 Tran Thi Binh (ACTIVE)\n            3 M003 Le Hoang Cuong (SUSPENDED) · 4 M004 Pham Minh Duc (ACTIVE)\nloans:      1 book 1 / member 1  2026-03-02 → 2026-03-16  returnDate null\n            2 book 4 / member 1  2026-10-20 → 2026-11-03  returnDate null\n            3 book 3 / member 2  2026-02-01 → 2026-02-10  returnDate 2026-02-09</pre>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. C1 · Trang danh mục sách <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Route <code>/books</code> (và <code>/</code> chuyển sang đó). Gọi <code>GET /books</code> một lần.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Navbar có link <code>#nav-books</code> (Books) và <code>#nav-loans</code> (Loans).</li>\n  <li>Thẻ trong lưới, <b>3 thẻ một hàng</b> ở màn hình vừa, sắp theo <code>title</code> A → Z.</li>\n  <li>Mỗi thẻ <code>#book-{id}.book-card</code> có <code>.book-title</code>, tác giả, <code>category · publishedYear</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">useState</span> <span class=\"bi-hook\">fetch / axios</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. C1 · Tìm theo tên sách <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ô <code>#search</code>: tên sách <b>chứa</b> từ khoá, không phân biệt hoa/thường, cập nhật khi gõ.</li>\n  <li><code>#result-count</code> ghi <code>Showing X of Y books</code>.</li>\n  <li>Không có kết quả ⇒ <code>.no-result</code> ghi <code>No books found</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>Gõ \"the\"  ⇒  The Pragmatic Programmer, The Selfish Gene  ·  Showing 2 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. C1 · Lọc thể loại + tham số URL <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#category-filter</code>: lựa chọn đầu <code>All categories</code> (value <code>All</code>), rồi các <b>thể loại không trùng lấy từ dữ liệu</b>, A → Z. Không viết cứng.</li>\n  <li>Chọn thể loại ⇒ URL thành <code>/books?category=Science</code>; chọn \"All\" ⇒ bỏ tham số.</li>\n  <li>Mở thẳng <code>/books?category=Science</code> ⇒ dropdown chọn sẵn và đã lọc. Tìm và lọc kết hợp được.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useSearchParams</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>Science + \"the\"  ⇒  The Selfish Gene  ·  Showing 1 of 8 books</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. C1 · Tình trạng &amp; nút Mượn <span class=\"bi-diem\">0.5 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Badge <code>.book-availability</code>: <code>Available: N</code> (xanh) hoặc <code>Out of stock</code> (xám) khi <code>availableCopies</code> = 0.</li>\n  <li>Nút <code>.btn-borrow</code> chuyển tới <code>/books/:id/borrow</code>; <b>bị vô hiệu</b> khi hết sách.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useNavigate</span></p>\n</div>\n<div class=\"bi-cn\"><h3>5. C2 · Trang mượn — tải dữ liệu <span class=\"bi-diem\">1 điểm</span></h3>\n<p>Route <code>/books/:id/borrow</code>. Gọi <code>GET /books/:id</code> và danh sách thành viên.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>#book-info</code> hiện tên sách, tác giả và <code>Available: N</code>.</li>\n  <li>Form <code>#borrow-form</code>: select <code>#member</code> (dòng gợi ý <code>-- Select member --</code> value \"\", rồi <code>code — fullName</code> của thành viên <b>ACTIVE</b>), <code>#borrowDate</code> (kiểu date, mặc định <b>hôm nay</b>), <code>#dueDate</code> (kiểu date, trống).</li>\n  <li>Id không có (API trả 404) ⇒ cảnh báo đỏ <code>.alert-danger</code> <code>Book not found</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useParams</span> <span class=\"bi-hook\">useEffect</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>6. C2 · Luật nghiệp vụ <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Khi gửi, kiểm các luật <b>theo đúng thứ tự</b> và chỉ hiện câu lỗi đầu tiên trong <code>#form-error</code> (một <code>.alert-danger</code>). Còn lỗi thì không gửi gì; trang không bao giờ tải lại.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chưa chọn thành viên ⇒ <code>Please select a member.</code></li>\n  <li>Thiếu ngày ⇒ <code>Please choose a borrow date.</code> / <code>Please choose a due date.</code></li>\n  <li>Ngày mượn sau hôm nay ⇒ <code>Borrow date cannot be in the future.</code></li>\n  <li>Ngày hẹn trả không sau ngày mượn ⇒ <code>Due date must be after the borrow date.</code></li>\n  <li>Quá 14 ngày ⇒ <code>A loan cannot exceed 14 days.</code> (đúng 14 ngày vẫn được)</li>\n  <li><code>availableCopies</code> = 0 ⇒ <code>This book is out of stock.</code></li>\n  <li>Thành viên đã có 2 phiếu <code>returnDate: null</code> ⇒ <code>This member already has 2 open loans.</code></li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">controlled form</span> <span class=\"bi-hook\">e.preventDefault()</span></p>\n</div>\n<div class=\"bi-cn\"><h3>7. C2 · Lưu phiếu mượn <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>POST /loans</code> với <code>{ bookId, memberId, borrowDate, dueDate, returnDate: null }</code> (id là số).</li>\n  <li><code>PATCH /books/:id</code> với <code>{ availableCopies: hiện tại - 1 }</code>.</li>\n  <li>Rồi chuyển tới <code>/loans</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useNavigate</span> <span class=\"bi-hook\">async/await</span></p>\n<p><b>Ví dụ:</b></p>\n<pre>POST /loans  { \"bookId\": 3, \"memberId\": 4, \"borrowDate\": \"2026-01-10\", \"dueDate\": \"2026-01-20\", \"returnDate\": null }</pre>\n</div>\n<div class=\"bi-cn\"><h3>8. C3 · Bảng phiếu mượn <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Route <code>/loans</code>.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Bảng <code>#loan-table</code>: <code>No | Book | Member | Borrow date | Due date | Status | Action</code>; id hàng <code>loan-row-{id}</code>; ô <code>.loan-book</code>, <code>.loan-member</code>, <code>.loan-borrow</code>, <code>.loan-due</code>, <code>.loan-status</code>.</li>\n  <li>Hiện <b>tên sách</b> và <b>họ tên</b> thành viên (không hiện id). <code>borrowDate</code> mới nhất lên đầu.</li>\n  <li>Ngày dạng <code>dd/MM/yyyy</code>.</li>\n  <li>Badge trạng thái: <code>Returned</code> (đã có returnDate) · <code>Overdue</code> (chưa trả, dueDate trước hôm nay) · <code>On loan</code>.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useMemo</span> <span class=\"bi-hook\">Promise.all</span></p>\n</div>\n<div class=\"bi-cn\"><h3>9. C3 · Trả sách <span class=\"bi-diem\">1 điểm</span></h3>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Hàng chưa trả có nút <code>.btn-return</code>.</li>\n  <li>Bấm ⇒ <code>PATCH /loans/:id { returnDate: hôm nay }</code> và <code>PATCH /books/:bookId { availableCopies: +1 }</code>.</li>\n  <li>Hàng hiện <code>Returned</code> ngay (không tải lại cả trang) và nút biến mất.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">useState (immutable update)</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>#nav-books · #nav-loans</code></td><td>link navbar</td></tr><tr><td><code>#search · #category-filter · #result-count · .no-result</code></td><td>thanh công cụ danh mục</td></tr><tr><td><code>#book-{id}.book-card · .book-title · .book-availability · .btn-borrow</code></td><td>mỗi sách đang hiện một thẻ</td></tr><tr><td><code>#book-info · #borrow-form · #member · #borrowDate · #dueDate · #form-error</code></td><td>trang mượn</td></tr><tr><td><code>#loan-table · #loan-row-{id} · .loan-book · .loan-member · .loan-borrow · .loan-due · .loan-status · .btn-return</code></td><td>trang phiếu mượn</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>C1 · Trang danh mục sách</td><td>1.5</td></tr><tr><td>2</td><td>C1 · Tìm theo tên sách</td><td>1</td></tr><tr><td>3</td><td>C1 · Lọc thể loại + tham số URL</td><td>1</td></tr><tr><td>4</td><td>C1 · Tình trạng &amp; nút Mượn</td><td>0.5</td></tr><tr><td>5</td><td>C2 · Trang mượn — tải dữ liệu</td><td>1</td></tr><tr><td>6</td><td>C2 · Luật nghiệp vụ</td><td>1.5</td></tr><tr><td>7</td><td>C2 · Lưu phiếu mượn</td><td>1</td></tr><tr><td>8</td><td>C3 · Bảng phiếu mượn</td><td>1.5</td></tr><tr><td>9</td><td>C3 · Trả sách</td><td>1</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>URL viết trong mã thay vì <code>.env</code> — cả bài 0 điểm.</li>\n  <li>Sai route (vd <code>/borrow/:id</code>) — câu đó 0 điểm.</li>\n  <li>Viết cứng thể loại trong dropdown — mất điểm lọc.</li>\n  <li>So <code>id</code> trên route (chuỗi) với <code>book.id</code> (số) bằng <code>===</code> — không khớp gì.</li>\n  <li>Thiếu <code>e.preventDefault()</code> — trang tải lại, câu lỗi không bao giờ hiện.</li>\n  <li>Ngày hiện <code>2026-03-02</code> hoặc lệch một ngày (<code>toISOString()</code> dùng giờ UTC).</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Làm thẳng trong editor (các tệp bên phải) hoặc tải starter, chạy trên máy bằng Vite/CRA (+ <code>npx json-server --watch database.json --port 9999</code> khi đề dùng API) rồi dán lại tệp. Bấm <b>Chạy thử</b> để chạy kiểm mẫu, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Store the API URL in <code>.env</code> as <code>REACT_APP_API_URL</code> (Vite: <code>VITE_API_URL</code>) — hard-coding it costs all marks.|||Lưu địa chỉ API trong <code>.env</code> với tên <code>REACT_APP_API_URL</code> (Vite: <code>VITE_API_URL</code>) — viết cứng URL là mất hết điểm.\nUse <b>Bootstrap or React-Bootstrap</b> for the UI.|||Giao diện dùng <b>Bootstrap hoặc React-Bootstrap</b>.\nFunction components + Hooks; <code>react-router-dom</code> v6 for routing; <code>fetch</code> or <code>axios</code> for HTTP.|||Function component + Hooks; <code>react-router-dom</code> v6 cho định tuyến; <code>fetch</code> hoặc <code>axios</code> cho HTTP.\nSearch and filtering happen on the client — <b>no extra API call</b> per keystroke.|||Tìm và lọc làm ở client — <b>không gọi API thêm</b> mỗi lần gõ.\nIds in <code>database.json</code> are numbers; route parameters are strings — convert when you compare or save.|||Id trong <code>database.json</code> là số; tham số route là chuỗi — đổi kiểu khi so sánh hoặc lưu.\nKeep the ids / class names of section 6 exactly — the auto-grader relies on them.|||Giữ đúng id / class ở mục 6 — máy chấm dựa vào chúng.",
+      "examplesJson": [
+        {
+          "input": "Q1 · Search by title|||C1 · Tìm theo tên sách",
+          "output": "Type \"the\"  ⇒  The Pragmatic Programmer, The Selfish Gene  ·  Showing 2 of 8 books|||Gõ \"the\"  ⇒  The Pragmatic Programmer, The Selfish Gene  ·  Showing 2 of 8 books",
+          "explanation": "See the brief / Xem đề."
+        }
+      ],
+      "hintsJson": [
+        "Làm theo thứ tự điểm: Câu 1 trước (4 điểm, dễ nhất). Viết api.js + date.js trước — ba trang đều dùng.",
+        "Câu 1: một state books + một state search; category KHÔNG để state — đọc từ useSearchParams. Danh sách hiển thị = useMemo(filter → filter → sort).",
+        "Câu 2: luật nào chỉ cần dữ liệu form ⇒ kiểm đồng bộ trước; luật \"2 phiếu chưa trả\" cần GET /loans?memberId=… ⇒ để cuối, trong async.",
+        "Câu 3: tải loans + books + members bằng Promise.all, dựng Map id → object rồi tra; trả sách xong dùng setLoans(list => list.map(…)) để chỉ đổi một dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/pages/BookList.js",
+          "language": "javascript",
+          "code": "// src/pages/BookList.js — STARTER (Câu 1)\nimport { Container } from 'react-bootstrap';\n\nexport default function BookList() {\n  // TODO: tải /books, sắp xếp A→Z, ô #search, #category-filter (+ ?category=), #result-count, thẻ .book-card\n  return (\n    <Container>\n      <h2>Book Catalog</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/BorrowBook.js",
+          "language": "javascript",
+          "code": "// src/pages/BorrowBook.js — STARTER (Câu 2)\nimport { Container } from 'react-bootstrap';\n\nexport default function BorrowBook() {\n  // TODO: useParams() lấy :id, tải sách + thành viên ACTIVE, form #borrow-form, luật kiểm, POST /loans + PATCH /books/:id\n  return (\n    <Container>\n      <h2>Borrow a book</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/LoanList.js",
+          "language": "javascript",
+          "code": "// src/pages/LoanList.js — STARTER (Câu 3)\nimport { Container } from 'react-bootstrap';\n\nexport default function LoanList() {\n  // TODO: bảng #loan-table: No | Book | Member | Borrow date | Due date | Status | Action, nút .btn-return\n  return (\n    <Container>\n      <h2>Loans</h2>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER: route đã khai, chưa có \"/\" ⇒ \"/books\"\nimport { Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport BookList from './pages/BookList';\nimport BorrowBook from './pages/BorrowBook';\nimport LoanList from './pages/LoanList';\n\nexport default function App() {\n  return (\n    <>\n      <AppNavbar />\n      <Routes>\n        <Route path=\"/books\" element={<BookList />} />\n        <Route path=\"/books/:id/borrow\" element={<BorrowBook />} />\n        <Route path=\"/loans\" element={<LoanList />} />\n      </Routes>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — STARTER\n// Đọc địa chỉ API từ .env (REACT_APP_API_URL). Viết cứng \"http://localhost:9999\" ⇒ đề cho 0 điểm.\nexport const API_URL = '';\n\nexport async function getJSON(path) {\n  // TODO: fetch(API_URL + path), kiểm res.ok, trả res.json()\n  return [];\n}\n\nexport async function sendJSON(method, path, body) {\n  // TODO: fetch với method, header Content-Type: application/json, body JSON.stringify(body)\n  return null;\n}\n"
+        },
+        {
+          "name": "src/utils/date.js",
+          "language": "javascript",
+          "code": "// src/utils/date.js — STARTER\nexport function todayISO() {\n  // TODO: \"yyyy-mm-dd\" của hôm nay theo giờ máy\n  return '';\n}\n\nexport function formatDate(iso) {\n  // TODO: \"2026-03-02\" → \"02/03/2026\"\n  return iso;\n}\n\nexport function daysBetween(a, b) {\n  // TODO: số ngày từ a đến b\n  return 0;\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — NavLink tự gắn class \"active\" cho trang đang mở\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar bg=\"dark\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand as={NavLink} to=\"/books\">Library</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to=\"/books\" id=\"nav-books\">Books</Nav.Link>\n          <Nav.Link as={NavLink} to=\"/loans\" id=\"nav-loans\">Loans</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"books\": [\n    {\n      \"id\": 1,\n      \"title\": \"Clean Code\",\n      \"author\": \"Robert C. Martin\",\n      \"category\": \"Software\",\n      \"publishedYear\": 2008,\n      \"totalCopies\": 3,\n      \"availableCopies\": 2\n    },\n    {\n      \"id\": 2,\n      \"title\": \"The Pragmatic Programmer\",\n      \"author\": \"David Thomas\",\n      \"category\": \"Software\",\n      \"publishedYear\": 1999,\n      \"totalCopies\": 2,\n      \"availableCopies\": 0\n    },\n    {\n      \"id\": 3,\n      \"title\": \"A Brief History of Time\",\n      \"author\": \"Stephen Hawking\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1988,\n      \"totalCopies\": 4,\n      \"availableCopies\": 4\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Sapiens\",\n      \"author\": \"Yuval Noah Harari\",\n      \"category\": \"History\",\n      \"publishedYear\": 2011,\n      \"totalCopies\": 3,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Cosmos\",\n      \"author\": \"Carl Sagan\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1980,\n      \"totalCopies\": 2,\n      \"availableCopies\": 2\n    },\n    {\n      \"id\": 6,\n      \"title\": \"Design Patterns\",\n      \"author\": \"Erich Gamma\",\n      \"category\": \"Software\",\n      \"publishedYear\": 1994,\n      \"totalCopies\": 2,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 7,\n      \"title\": \"Guns, Germs, and Steel\",\n      \"author\": \"Jared Diamond\",\n      \"category\": \"History\",\n      \"publishedYear\": 1997,\n      \"totalCopies\": 1,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 8,\n      \"title\": \"The Selfish Gene\",\n      \"author\": \"Richard Dawkins\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1976,\n      \"totalCopies\": 2,\n      \"availableCopies\": 0\n    }\n  ],\n  \"members\": [\n    {\n      \"id\": 1,\n      \"code\": \"M001\",\n      \"fullName\": \"Nguyen Van An\",\n      \"email\": \"an.nv@example.com\",\n      \"status\": \"ACTIVE\"\n    },\n    {\n      \"id\": 2,\n      \"code\": \"M002\",\n      \"fullName\": \"Tran Thi Binh\",\n      \"email\": \"binh.tt@example.com\",\n      \"status\": \"ACTIVE\"\n    },\n    {\n      \"id\": 3,\n      \"code\": \"M003\",\n      \"fullName\": \"Le Hoang Cuong\",\n      \"email\": \"cuong.lh@example.com\",\n      \"status\": \"SUSPENDED\"\n    },\n    {\n      \"id\": 4,\n      \"code\": \"M004\",\n      \"fullName\": \"Pham Minh Duc\",\n      \"email\": \"duc.pm@example.com\",\n      \"status\": \"ACTIVE\"\n    }\n  ],\n  \"loans\": [\n    {\n      \"id\": 1,\n      \"bookId\": 1,\n      \"memberId\": 1,\n      \"borrowDate\": \"2026-03-02\",\n      \"dueDate\": \"2026-03-16\",\n      \"returnDate\": null\n    },\n    {\n      \"id\": 2,\n      \"bookId\": 4,\n      \"memberId\": 1,\n      \"borrowDate\": \"2026-10-20\",\n      \"dueDate\": \"2026-11-03\",\n      \"returnDate\": null\n    },\n    {\n      \"id\": 3,\n      \"bookId\": 3,\n      \"memberId\": 2,\n      \"borrowDate\": \"2026-02-01\",\n      \"dueDate\": \"2026-02-10\",\n      \"returnDate\": \"2026-02-09\"\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/pages/BookList.js",
+          "language": "javascript",
+          "code": "// src/pages/BookList.js — Câu 1: danh mục sách (tải, sắp xếp, tìm, lọc theo thể loại + tham số URL)\nimport { useEffect, useMemo, useState } from 'react';\nimport { Alert, Badge, Button, Card, Col, Container, Form, Row } from 'react-bootstrap';\nimport { useNavigate, useSearchParams } from 'react-router-dom';\nimport { getJSON } from '../api';\n\nexport default function BookList() {\n  const [books, setBooks] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState('');\n  const [search, setSearch] = useState('');\n  const [searchParams, setSearchParams] = useSearchParams();\n  const navigate = useNavigate();\n\n  // Thể loại đang chọn SỐNG TRÊN URL (?category=Science): mở link là thấy đúng bộ lọc, F5 không mất.\n  // URL là nguồn sự thật ⇒ không chép sang một state thứ hai.\n  const category = searchParams.get('category') || 'All';\n\n  useEffect(() => {\n    getJSON('/books')\n      .then(setBooks)\n      .catch(() => setError('Cannot load books — is json-server running on port 9999?'))\n      .finally(() => setLoading(false));\n  }, []); // [] ⇒ gọi API đúng MỘT lần; tìm/lọc làm ở client, không gọi lại\n\n  // Danh sách thể loại lấy TỪ DỮ LIỆU (không viết cứng): Set bỏ trùng, sort A→Z\n  const categories = useMemo(() => [...new Set(books.map((b) => b.category))].sort(), [books]);\n\n  // Danh sách hiển thị là giá trị SUY RA từ books + search + category\n  const visible = useMemo(() => {\n    const q = search.trim().toLowerCase();\n    return books\n      .filter((b) => b.title.toLowerCase().includes(q))\n      .filter((b) => category === 'All' || b.category === category)\n      .sort((a, b) => a.title.localeCompare(b.title)); // filter() đã tạo mảng mới ⇒ sort không đụng state\n  }, [books, search, category]);\n\n  const changeCategory = (value) => setSearchParams(value === 'All' ? {} : { category: value });\n\n  return (\n    <Container>\n      <h2>Book Catalog</h2>\n      <p className=\"text-muted\">Browse the library and borrow a book</p>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n\n      <Row className=\"g-2 mb-3\">\n        <Col md={8}>\n          <Form.Control\n            id=\"search\"\n            placeholder=\"Search by title...\"\n            value={search}\n            onChange={(e) => setSearch(e.target.value)}\n          />\n        </Col>\n        <Col md={4}>\n          <Form.Select id=\"category-filter\" value={category} onChange={(e) => changeCategory(e.target.value)}>\n            <option value=\"All\">All categories</option>\n            {categories.map((c) => (\n              <option key={c} value={c}>{c}</option>\n            ))}\n          </Form.Select>\n        </Col>\n      </Row>\n\n      <p id=\"result-count\">Showing {visible.length} of {books.length} books</p>\n      {!loading && visible.length === 0 && <Alert variant=\"warning\" className=\"no-result\">No books found</Alert>}\n\n      <Row xs={1} md={3} className=\"g-3\">\n        {visible.map((b) => (\n          <Col key={b.id}>\n            <Card id={`book-${b.id}`} className=\"book-card h-100\">\n              <Card.Body>\n                <Card.Title className=\"book-title\">{b.title}</Card.Title>\n                <Card.Subtitle className=\"mb-2 text-muted\">{b.author}</Card.Subtitle>\n                <Card.Text className=\"mb-2\">{b.category} · {b.publishedYear}</Card.Text>\n                {b.availableCopies > 0 ? (\n                  <Badge bg=\"success\" className=\"book-availability\">Available: {b.availableCopies}</Badge>\n                ) : (\n                  <Badge bg=\"secondary\" className=\"book-availability\">Out of stock</Badge>\n                )}\n              </Card.Body>\n              <Card.Footer>\n                <Button\n                  size=\"sm\"\n                  className=\"btn-borrow\"\n                  disabled={b.availableCopies === 0}\n                  onClick={() => navigate(`/books/${b.id}/borrow`)}\n                >\n                  Borrow\n                </Button>\n              </Card.Footer>\n            </Card>\n          </Col>\n        ))}\n      </Row>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/BorrowBook.js",
+          "language": "javascript",
+          "code": "// src/pages/BorrowBook.js — Câu 2: form mượn sách + luật nghiệp vụ + POST/PATCH + chuyển trang\nimport { useEffect, useState } from 'react';\nimport { Alert, Button, Card, Container, Form, Spinner } from 'react-bootstrap';\nimport { Link, useNavigate, useParams } from 'react-router-dom';\nimport { getJSON, sendJSON } from '../api';\nimport { daysBetween, todayISO } from '../utils/date';\n\nconst MAX_DAYS = 14;\nconst MAX_OPEN_LOANS = 2;\n\nexport default function BorrowBook() {\n  const { id } = useParams(); // id trên URL luôn là CHUỖI\n  const navigate = useNavigate();\n  const [book, setBook] = useState(null);\n  const [members, setMembers] = useState([]);\n  const [notFound, setNotFound] = useState(false);\n  const [form, setForm] = useState({ memberId: '', borrowDate: todayISO(), dueDate: '' });\n  const [error, setError] = useState('');\n  const [saving, setSaving] = useState(false);\n\n  useEffect(() => {\n    // hai request độc lập ⇒ chạy song song bằng Promise.all; sách không có ⇒ 404 ⇒ getJSON ném lỗi\n    Promise.all([getJSON(`/books/${id}`), getJSON('/members?status=ACTIVE')])\n      .then(([b, m]) => {\n        setBook(b);\n        setMembers(m);\n      })\n      .catch(() => setNotFound(true));\n  }, [id]); // đổi :id (sang sách khác) ⇒ tải lại\n\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\n\n  // Câu lỗi ĐẦU TIÊN theo đúng thứ tự luật trong đề; '' = hợp lệ\n  const validate = () => {\n    if (!form.memberId) return 'Please select a member.';\n    if (!form.borrowDate) return 'Please choose a borrow date.';\n    if (!form.dueDate) return 'Please choose a due date.';\n    if (form.borrowDate > todayISO()) return 'Borrow date cannot be in the future.'; // so chuỗi yyyy-mm-dd = so ngày\n    const days = daysBetween(form.borrowDate, form.dueDate);\n    if (days <= 0) return 'Due date must be after the borrow date.';\n    if (days > MAX_DAYS) return `A loan cannot exceed ${MAX_DAYS} days.`;\n    if (book.availableCopies === 0) return 'This book is out of stock.';\n    return '';\n  };\n\n  const handleSubmit = async (e) => {\n    e.preventDefault(); // không có dòng này: trình duyệt gửi form và TẢI LẠI trang\n    const msg = validate();\n    if (msg) {\n      setError(msg);\n      return;\n    }\n    setSaving(true);\n    try {\n      // Luật cần dữ liệu máy chủ: đếm phiếu CHƯA trả của thành viên (lọc returnDate ở client cho chắc)\n      const loans = await getJSON(`/loans?memberId=${form.memberId}`);\n      if (loans.filter((l) => !l.returnDate).length >= MAX_OPEN_LOANS) {\n        setError(`This member already has ${MAX_OPEN_LOANS} open loans.`);\n        return;\n      }\n      await sendJSON('POST', '/loans', {\n        bookId: book.id,\n        memberId: Number(form.memberId), // <select> trả chuỗi — id trong database.json là số\n        borrowDate: form.borrowDate,\n        dueDate: form.dueDate,\n        returnDate: null,\n      });\n      await sendJSON('PATCH', `/books/${book.id}`, { availableCopies: book.availableCopies - 1 });\n      navigate('/loans');\n    } catch {\n      setError('Could not save the loan. Please try again.');\n    } finally {\n      setSaving(false);\n    }\n  };\n\n  if (notFound) {\n    return (\n      <Container>\n        <Alert variant=\"danger\">Book not found</Alert>\n        <Link to=\"/books\">← Back to books</Link>\n      </Container>\n    );\n  }\n  if (!book) {\n    return (\n      <Container>\n        <Spinner animation=\"border\" role=\"status\" />\n      </Container>\n    );\n  }\n\n  return (\n    <Container style={{ maxWidth: 560 }}>\n      <Card>\n        <Card.Body>\n          <Card.Title>Borrow a book</Card.Title>\n          <div id=\"book-info\" className=\"mb-3\">\n            <b>{book.title}</b> — {book.author}\n            <br />\n            <span className=\"text-muted\">Available: {book.availableCopies}</span>\n          </div>\n          {error && <Alert variant=\"danger\" id=\"form-error\">{error}</Alert>}\n          <Form id=\"borrow-form\" onSubmit={handleSubmit} noValidate>\n            <Form.Group className=\"mb-3\" controlId=\"member\">\n              <Form.Label>Member</Form.Label>\n              <Form.Select name=\"memberId\" value={form.memberId} onChange={update}>\n                <option value=\"\">-- Select member --</option>\n                {members.map((m) => (\n                  <option key={m.id} value={m.id}>{m.code} — {m.fullName}</option>\n                ))}\n              </Form.Select>\n            </Form.Group>\n            <Form.Group className=\"mb-3\" controlId=\"borrowDate\">\n              <Form.Label>Borrow date</Form.Label>\n              <Form.Control type=\"date\" name=\"borrowDate\" value={form.borrowDate} onChange={update} />\n            </Form.Group>\n            <Form.Group className=\"mb-3\" controlId=\"dueDate\">\n              <Form.Label>Due date</Form.Label>\n              <Form.Control type=\"date\" name=\"dueDate\" value={form.dueDate} onChange={update} />\n            </Form.Group>\n            <Button type=\"submit\" disabled={saving}>Confirm borrow</Button>{' '}\n            <Link to=\"/books\" className=\"btn btn-link\">Cancel</Link>\n          </Form>\n        </Card.Body>\n      </Card>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/LoanList.js",
+          "language": "javascript",
+          "code": "// src/pages/LoanList.js — Câu 3: bảng phiếu mượn (nối sách/thành viên, định dạng ngày, trạng thái) + trả sách\nimport { useEffect, useMemo, useState } from 'react';\nimport { Alert, Badge, Button, Container, Table } from 'react-bootstrap';\nimport { getJSON, sendJSON } from '../api';\nimport { formatDate, todayISO } from '../utils/date';\n\nconst BADGE = { Returned: 'secondary', Overdue: 'danger', 'On loan': 'primary' };\n\nexport default function LoanList() {\n  const [loans, setLoans] = useState([]);\n  const [books, setBooks] = useState([]);\n  const [members, setMembers] = useState([]);\n  const [error, setError] = useState('');\n  const today = todayISO();\n\n  useEffect(() => {\n    // Nối ở CLIENT (không dùng _expand: json-server 1.x đã bỏ) — ba request song song\n    Promise.all([getJSON('/loans'), getJSON('/books'), getJSON('/members')])\n      .then(([l, b, m]) => {\n        setLoans(l);\n        setBooks(b);\n        setMembers(m);\n      })\n      .catch(() => setError('Cannot load loans.'));\n  }, []);\n\n  // Bảng tra cứu theo id (khoá chuỗi ⇒ không vướng 1 vs \"1\")\n  const bookById = useMemo(() => new Map(books.map((b) => [String(b.id), b])), [books]);\n  const memberById = useMemo(() => new Map(members.map((m) => [String(m.id), m])), [members]);\n\n  // Mới nhất lên đầu — sort trên BẢN SAO\n  const rows = useMemo(() => [...loans].sort((a, b) => b.borrowDate.localeCompare(a.borrowDate)), [loans]);\n\n  const statusOf = (l) => {\n    if (l.returnDate) return 'Returned';\n    return l.dueDate < today ? 'Overdue' : 'On loan';\n  };\n\n  const handleReturn = async (loan) => {\n    const book = bookById.get(String(loan.bookId));\n    try {\n      await sendJSON('PATCH', `/loans/${loan.id}`, { returnDate: today });\n      if (book) {\n        const saved = await sendJSON('PATCH', `/books/${book.id}`, { availableCopies: book.availableCopies + 1 });\n        setBooks((list) => list.map((b) => (b.id === saved.id ? saved : b)));\n      }\n      // cập nhật ĐÚNG một dòng bằng map (mảng mới) — không tải lại cả trang\n      setLoans((list) => list.map((l) => (l.id === loan.id ? { ...l, returnDate: today } : l)));\n    } catch {\n      setError('Could not return the book.');\n    }\n  };\n\n  return (\n    <Container>\n      <h2>Loans</h2>\n      {error && <Alert variant=\"danger\">{error}</Alert>}\n      <Table striped bordered hover responsive id=\"loan-table\">\n        <thead>\n          <tr>\n            <th>No</th>\n            <th>Book</th>\n            <th>Member</th>\n            <th>Borrow date</th>\n            <th>Due date</th>\n            <th>Status</th>\n            <th>Action</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((l, i) => {\n            const st = statusOf(l);\n            return (\n              <tr key={l.id} id={`loan-row-${l.id}`}>\n                <td>{i + 1}</td>\n                <td className=\"loan-book\">{bookById.get(String(l.bookId))?.title ?? 'Unknown book'}</td>\n                <td className=\"loan-member\">{memberById.get(String(l.memberId))?.fullName ?? 'Unknown member'}</td>\n                <td className=\"loan-borrow\">{formatDate(l.borrowDate)}</td>\n                <td className=\"loan-due\">{formatDate(l.dueDate)}</td>\n                <td>\n                  <Badge bg={BADGE[st]} className=\"loan-status\">{st}</Badge>\n                </td>\n                <td>\n                  {!l.returnDate && (\n                    <Button size=\"sm\" variant=\"outline-success\" className=\"btn-return\" onClick={() => handleReturn(l)}>\n                      Return\n                    </Button>\n                  )}\n                </td>\n              </tr>\n            );\n          })}\n        </tbody>\n      </Table>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — khai báo route của cả ứng dụng\nimport { Navigate, Route, Routes } from 'react-router-dom';\nimport AppNavbar from './components/AppNavbar';\nimport BookList from './pages/BookList';\nimport BorrowBook from './pages/BorrowBook';\nimport LoanList from './pages/LoanList';\n\nexport default function App() {\n  return (\n    <>\n      <AppNavbar />\n      <Routes>\n        {/* \"/\" chuyển thẳng sang /books — replace để nút Back không quay lại \"/\" rồi bị đẩy đi lần nữa */}\n        <Route path=\"/\" element={<Navigate to=\"/books\" replace />} />\n        <Route path=\"/books\" element={<BookList />} />\n        <Route path=\"/books/:id/borrow\" element={<BorrowBook />} />\n        <Route path=\"/loans\" element={<LoanList />} />\n        <Route path=\"*\" element={<p className=\"container\">Page not found</p>} />\n      </Routes>\n    </>\n  );\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "// src/api.js — MỘT chỗ duy nhất biết địa chỉ API (đọc từ .env — đề cho 0 điểm nếu viết cứng URL)\nexport const API_URL = process.env.REACT_APP_API_URL;\n\n// GET: fetch KHÔNG tự ném lỗi khi 404/500 ⇒ phải tự kiểm res.ok\nexport async function getJSON(path) {\n  const res = await fetch(`${API_URL}${path}`);\n  if (!res.ok) throw new Error(`GET ${path} failed with status ${res.status}`);\n  return res.json();\n}\n\n// POST / PUT / PATCH / DELETE kèm body JSON (nhớ header Content-Type, nếu không json-server lưu body rỗng)\nexport async function sendJSON(method, path, body) {\n  const res = await fetch(`${API_URL}${path}`, {\n    method,\n    headers: { 'Content-Type': 'application/json' },\n    body: body === undefined ? undefined : JSON.stringify(body),\n  });\n  if (!res.ok) throw new Error(`${method} ${path} failed with status ${res.status}`);\n  return res.json();\n}\n"
+        },
+        {
+          "name": "src/utils/date.js",
+          "language": "javascript",
+          "code": "// src/utils/date.js — xử lý ngày dạng chuỗi \"yyyy-mm-dd\" (đúng định dạng của <input type=\"date\">)\n\n// Hôm nay theo giờ MÁY. Không dùng new Date().toISOString(): đó là giờ UTC — 6h sáng ở Việt Nam vẫn là \"hôm qua\".\nexport function todayISO() {\n  const d = new Date();\n  const p = (n) => String(n).padStart(2, '0');\n  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;\n}\n\n// \"2026-03-02\" → \"02/03/2026\": cắt chuỗi, không qua new Date() ⇒ không bao giờ lệch múi giờ\nexport function formatDate(iso) {\n  if (!iso) return '';\n  const [y, m, d] = iso.slice(0, 10).split('-');\n  return `${d}/${m}/${y}`;\n}\n\n// Số ngày từ a đến b. Date.UTC ⇒ một ngày luôn đúng 86 400 000 ms (không vướng giờ mùa hè)\nexport function daysBetween(a, b) {\n  const t = (s) => {\n    const [y, m, d] = s.split('-').map(Number);\n    return Date.UTC(y, m - 1, d);\n  };\n  return Math.round((t(b) - t(a)) / 86400000);\n}\n"
+        },
+        {
+          "name": "src/components/AppNavbar.js",
+          "language": "javascript",
+          "code": "// src/components/AppNavbar.js — NavLink tự gắn class \"active\" cho trang đang mở\nimport { Container, Nav, Navbar } from 'react-bootstrap';\nimport { NavLink } from 'react-router-dom';\n\nexport default function AppNavbar() {\n  return (\n    <Navbar bg=\"dark\" data-bs-theme=\"dark\" className=\"mb-4\">\n      <Container>\n        <Navbar.Brand as={NavLink} to=\"/books\">Library</Navbar.Brand>\n        <Nav className=\"me-auto\">\n          <Nav.Link as={NavLink} to=\"/books\" id=\"nav-books\">Books</Nav.Link>\n          <Nav.Link as={NavLink} to=\"/loans\" id=\"nav-loans\">Loans</Nav.Link>\n        </Nav>\n      </Container>\n    </Navbar>\n  );\n}\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        },
+        {
+          "name": ".env",
+          "language": "text",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"books\": [\n    {\n      \"id\": 1,\n      \"title\": \"Clean Code\",\n      \"author\": \"Robert C. Martin\",\n      \"category\": \"Software\",\n      \"publishedYear\": 2008,\n      \"totalCopies\": 3,\n      \"availableCopies\": 2\n    },\n    {\n      \"id\": 2,\n      \"title\": \"The Pragmatic Programmer\",\n      \"author\": \"David Thomas\",\n      \"category\": \"Software\",\n      \"publishedYear\": 1999,\n      \"totalCopies\": 2,\n      \"availableCopies\": 0\n    },\n    {\n      \"id\": 3,\n      \"title\": \"A Brief History of Time\",\n      \"author\": \"Stephen Hawking\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1988,\n      \"totalCopies\": 4,\n      \"availableCopies\": 4\n    },\n    {\n      \"id\": 4,\n      \"title\": \"Sapiens\",\n      \"author\": \"Yuval Noah Harari\",\n      \"category\": \"History\",\n      \"publishedYear\": 2011,\n      \"totalCopies\": 3,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 5,\n      \"title\": \"Cosmos\",\n      \"author\": \"Carl Sagan\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1980,\n      \"totalCopies\": 2,\n      \"availableCopies\": 2\n    },\n    {\n      \"id\": 6,\n      \"title\": \"Design Patterns\",\n      \"author\": \"Erich Gamma\",\n      \"category\": \"Software\",\n      \"publishedYear\": 1994,\n      \"totalCopies\": 2,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 7,\n      \"title\": \"Guns, Germs, and Steel\",\n      \"author\": \"Jared Diamond\",\n      \"category\": \"History\",\n      \"publishedYear\": 1997,\n      \"totalCopies\": 1,\n      \"availableCopies\": 1\n    },\n    {\n      \"id\": 8,\n      \"title\": \"The Selfish Gene\",\n      \"author\": \"Richard Dawkins\",\n      \"category\": \"Science\",\n      \"publishedYear\": 1976,\n      \"totalCopies\": 2,\n      \"availableCopies\": 0\n    }\n  ],\n  \"members\": [\n    {\n      \"id\": 1,\n      \"code\": \"M001\",\n      \"fullName\": \"Nguyen Van An\",\n      \"email\": \"an.nv@example.com\",\n      \"status\": \"ACTIVE\"\n    },\n    {\n      \"id\": 2,\n      \"code\": \"M002\",\n      \"fullName\": \"Tran Thi Binh\",\n      \"email\": \"binh.tt@example.com\",\n      \"status\": \"ACTIVE\"\n    },\n    {\n      \"id\": 3,\n      \"code\": \"M003\",\n      \"fullName\": \"Le Hoang Cuong\",\n      \"email\": \"cuong.lh@example.com\",\n      \"status\": \"SUSPENDED\"\n    },\n    {\n      \"id\": 4,\n      \"code\": \"M004\",\n      \"fullName\": \"Pham Minh Duc\",\n      \"email\": \"duc.pm@example.com\",\n      \"status\": \"ACTIVE\"\n    }\n  ],\n  \"loans\": [\n    {\n      \"id\": 1,\n      \"bookId\": 1,\n      \"memberId\": 1,\n      \"borrowDate\": \"2026-03-02\",\n      \"dueDate\": \"2026-03-16\",\n      \"returnDate\": null\n    },\n    {\n      \"id\": 2,\n      \"bookId\": 4,\n      \"memberId\": 1,\n      \"borrowDate\": \"2026-10-20\",\n      \"dueDate\": \"2026-11-03\",\n      \"returnDate\": null\n    },\n    {\n      \"id\": 3,\n      \"bookId\": 3,\n      \"memberId\": 2,\n      \"borrowDate\": \"2026-02-01\",\n      \"dueDate\": \"2026-02-10\",\n      \"returnDate\": \"2026-02-09\"\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lời giải chia đúng ba câu thành ba trang và hai tiện ích dùng chung: <code>api.js</code> (đọc <code>REACT_APP_API_URL</code>, kiểm <code>res.ok</code>) và <code>utils/date.js</code> (ngày theo giờ máy, định dạng bằng cắt chuỗi để không lệch múi giờ).</p><p><b>Câu 1</b>: dữ liệu tải một lần; tìm/lọc/sắp xếp là giá trị suy ra bằng <code>useMemo</code>; thể loại sống trên URL qua <code>useSearchParams</code> nên mở link có <code>?category=</code> là thấy đúng bộ lọc. <b>Câu 2</b>: kiểm các luật đồng bộ theo thứ tự, luật cần máy chủ (2 phiếu chưa trả) để cuối; lưu bằng POST rồi PATCH, xong <code>navigate('/loans')</code>. <b>Câu 3</b>: nối dữ liệu ở client bằng <code>Map</code> (json-server 1.x bỏ <code>_expand</code>), trạng thái là giá trị tính, trả sách cập nhật đúng một dòng bằng <code>map</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://reactrouter.com/en/6.26.2/hooks/use-search-params",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom",
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "url": "/books",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "books": [
+              {
+                "id": 1,
+                "title": "Clean Code",
+                "author": "Robert C. Martin",
+                "category": "Software",
+                "publishedYear": 2008,
+                "totalCopies": 3,
+                "availableCopies": 2
+              },
+              {
+                "id": 2,
+                "title": "The Pragmatic Programmer",
+                "author": "David Thomas",
+                "category": "Software",
+                "publishedYear": 1999,
+                "totalCopies": 2,
+                "availableCopies": 0
+              },
+              {
+                "id": 3,
+                "title": "A Brief History of Time",
+                "author": "Stephen Hawking",
+                "category": "Science",
+                "publishedYear": 1988,
+                "totalCopies": 4,
+                "availableCopies": 4
+              },
+              {
+                "id": 4,
+                "title": "Sapiens",
+                "author": "Yuval Noah Harari",
+                "category": "History",
+                "publishedYear": 2011,
+                "totalCopies": 3,
+                "availableCopies": 1
+              },
+              {
+                "id": 5,
+                "title": "Cosmos",
+                "author": "Carl Sagan",
+                "category": "Science",
+                "publishedYear": 1980,
+                "totalCopies": 2,
+                "availableCopies": 2
+              },
+              {
+                "id": 6,
+                "title": "Design Patterns",
+                "author": "Erich Gamma",
+                "category": "Software",
+                "publishedYear": 1994,
+                "totalCopies": 2,
+                "availableCopies": 1
+              },
+              {
+                "id": 7,
+                "title": "Guns, Germs, and Steel",
+                "author": "Jared Diamond",
+                "category": "History",
+                "publishedYear": 1997,
+                "totalCopies": 1,
+                "availableCopies": 1
+              },
+              {
+                "id": 8,
+                "title": "The Selfish Gene",
+                "author": "Richard Dawkins",
+                "category": "Science",
+                "publishedYear": 1976,
+                "totalCopies": 2,
+                "availableCopies": 0
+              }
+            ],
+            "members": [
+              {
+                "id": 1,
+                "code": "M001",
+                "fullName": "Nguyen Van An",
+                "email": "an.nv@example.com",
+                "status": "ACTIVE"
+              },
+              {
+                "id": 2,
+                "code": "M002",
+                "fullName": "Tran Thi Binh",
+                "email": "binh.tt@example.com",
+                "status": "ACTIVE"
+              },
+              {
+                "id": 3,
+                "code": "M003",
+                "fullName": "Le Hoang Cuong",
+                "email": "cuong.lh@example.com",
+                "status": "SUSPENDED"
+              },
+              {
+                "id": 4,
+                "code": "M004",
+                "fullName": "Pham Minh Duc",
+                "email": "duc.pm@example.com",
+                "status": "ACTIVE"
+              }
+            ],
+            "loans": [
+              {
+                "id": 1,
+                "bookId": 1,
+                "memberId": 1,
+                "borrowDate": "2026-03-02",
+                "dueDate": "2026-03-16",
+                "returnDate": null
+              },
+              {
+                "id": 2,
+                "bookId": 4,
+                "memberId": 1,
+                "borrowDate": "2026-10-20",
+                "dueDate": "2026-11-03",
+                "returnDate": null
+              },
+              {
+                "id": 3,
+                "bookId": 3,
+                "memberId": 2,
+                "borrowDate": "2026-02-01",
+                "dueDate": "2026-02-10",
+                "returnDate": "2026-02-09"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "\"/\" redirects to /books",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/books"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "8 book cards are rendered",
+            "kiem": "so-luong",
+            "selector": ".book-card",
+            "giaTri": 8
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Cards are sorted by title A → Z",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "A Brief History of Time",
+              "Clean Code",
+              "Cosmos",
+              "Design Patterns",
+              "Guns, Germs, and Steel",
+              "Sapiens",
+              "The Pragmatic Programmer",
+              "The Selfish Gene"
+            ]
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Card #book-1 shows author, category and year",
+            "kiem": "text",
+            "selector": "#book-1",
+            "khop": "Robert C\\. Martin[\\s\\S]*Software[\\s\\S]*2008"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Navbar has #nav-books and #nav-loans",
+            "kiem": "so-luong",
+            "selector": "#nav-books, #nav-loans",
+            "giaTri": 2
+          },
+          {
+            "nhom": "f1",
+            "moTa": ".env defines REACT_APP_API_URL=http://localhost:9999",
+            "kiem": "ma-nguon",
+            "tep": ".env",
+            "khop": "REACT_APP_API_URL\\s*=\\s*http://localhost:9999"
+          },
+          {
+            "nhom": "f1",
+            "moTa": "Code reads the API URL from the environment",
+            "kiem": "ma-nguon",
+            "khop": "process\\.env\\.REACT_APP_API_URL|import\\.meta\\.env\\.VITE_API_URL"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "UI uses React-Bootstrap / Bootstrap",
+            "kiem": "ma-nguon",
+            "khop": "from\\s+['\"]react-bootstrap['\"]|className=\"[^\"]*\\b(card|row|container|table)\\b"
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Books are loaded with GET /books",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/books$"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Counter reads \"Showing 8 of 8 books\"",
+            "kiem": "text",
+            "selector": "#result-count",
+            "khop": "Showing 8 of 8 books"
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Search \"the\" ⇒ 2 books",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "The Pragmatic Programmer",
+              "The Selfish Gene"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "the"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "moTa": "Counter updates: \"Showing 2 of 8 books\"",
+            "kiem": "text",
+            "selector": "#result-count",
+            "khop": "Showing 2 of 8 books",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "the"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Search is case-insensitive",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "Cosmos"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "COSMOS"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "No match ⇒ .no-result \"No books found\"",
+            "kiem": "text",
+            "selector": ".no-result",
+            "khop": "No books found",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "zzz"
+              }
+            ]
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Searching does not call the API again",
+            "kiem": "goi-fetch",
+            "khop": "^GET .*/books",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "c"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "co"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Dropdown options come from the data",
+            "kiem": "danh-sach-text",
+            "selector": "#category-filter option",
+            "mongDoi": [
+              "All categories",
+              "History",
+              "Science",
+              "Software"
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Choosing \"Science\" ⇒ 3 books",
+            "kiem": "danh-sach-text",
+            "selector": ".book-title",
+            "mongDoi": [
+              "A Brief History of Time",
+              "Cosmos",
+              "The Selfish Gene"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "Science"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Choosing a category writes ?category= to the URL",
+            "kiem": "duong-dan",
+            "khop": "^/books\\?category=History$",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "History"
+              }
+            ]
+          },
+          {
+            "nhom": "f3",
+            "moTa": "/books?category=Science pre-selects the dropdown",
+            "url": "/books?category=Science",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#category-filter",
+            "thuocTinh": "value",
+            "giaTri": "Science"
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "/books?category=Science shows only 3 cards",
+            "url": "/books?category=Science",
+            "kiem": "so-luong",
+            "selector": ".book-card",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "Search + filter combine",
+            "kiem": "text",
+            "selector": "#result-count",
+            "khop": "Showing 1 of 8 books",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#category-filter",
+                "giaTri": "Science"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "the"
+              }
+            ]
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Out-of-stock badge on #book-2",
+            "kiem": "text",
+            "selector": "#book-2 .book-availability",
+            "khop": "^Out of stock$"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "\"Available: 2\" badge on #book-1",
+            "kiem": "text",
+            "selector": "#book-1 .book-availability",
+            "khop": "^Available: 2$"
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Borrow is disabled when out of stock",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#book-2 .btn-borrow",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Borrow navigates to /books/3/borrow",
+            "kiem": "duong-dan",
+            "giaTri": "/books/3/borrow",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#book-3 .btn-borrow"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#book-info shows the title and \"Available: 4\"",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#book-info",
+            "khop": "A Brief History of Time[\\s\\S]*Available: 4"
+          },
+          {
+            "nhom": "f5",
+            "moTa": "#member lists the 3 ACTIVE members + a placeholder",
+            "url": "/books/3/borrow",
+            "kiem": "so-luong",
+            "selector": "#member option",
+            "giaTri": 4
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Suspended member M003 is not offered",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#member",
+            "khop": "^(?![\\s\\S]*Le Hoang Cuong)[\\s\\S]*Pham Minh Duc"
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Borrow date defaults to today (yyyy-mm-dd)",
+            "url": "/books/3/borrow",
+            "kiem": "thuoc-tinh",
+            "selector": "#borrowDate",
+            "thuocTinh": "value",
+            "khop": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Unknown id ⇒ \"Book not found\"",
+            "url": "/books/99/borrow",
+            "kiem": "text",
+            "selector": ".alert-danger",
+            "khop": "Book not found"
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Nothing selected ⇒ \"Please select a member.\"",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "^Please select a member\\.$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "No due date ⇒ \"Please choose a due date.\"",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "^Please choose a due date\\.$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Due before borrow ⇒ \"Due date must be after the borrow date.\"",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "Due date must be after the borrow date",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-05"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "20 days ⇒ \"A loan cannot exceed 14 days.\"",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "A loan cannot exceed 14 days",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-30"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Submitting does not reload the page",
+            "url": "/books/3/borrow",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-30"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Future borrow date is rejected",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "Borrow date cannot be in the future",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2099-01-01"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2099-01-05"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Out-of-stock book is rejected",
+            "url": "/books/2/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "This book is out of stock",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "Member with 2 open loans is rejected",
+            "url": "/books/3/borrow",
+            "kiem": "text",
+            "selector": "#form-error",
+            "khop": "This member already has 2 open loans",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "1"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "an": true,
+            "moTa": "An invalid form sends no POST",
+            "url": "/books/3/borrow",
+            "kiem": "goi-fetch",
+            "khop": "^POST",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-30"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Valid loan ⇒ redirect to /loans",
+            "url": "/books/3/borrow",
+            "kiem": "duong-dan",
+            "giaTri": "/loans",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "POST /loans stores the new loan",
+            "url": "/books/3/borrow",
+            "kiem": "du-lieu-server",
+            "bang": "loans",
+            "chua": {
+              "bookId": 3,
+              "memberId": 4,
+              "borrowDate": "2026-01-10",
+              "dueDate": "2026-01-20"
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "PATCH /books/3 decreases availableCopies to 3",
+            "url": "/books/3/borrow",
+            "kiem": "du-lieu-server",
+            "bang": "books",
+            "chua": {
+              "id": 3,
+              "availableCopies": 3
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Exactly 14 days is allowed",
+            "url": "/books/3/borrow",
+            "kiem": "du-lieu-server",
+            "bang": "loans",
+            "chua": {
+              "dueDate": "2026-01-24"
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-24"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "The loan table then shows 4 rows",
+            "url": "/books/3/borrow",
+            "kiem": "so-luong",
+            "selector": "#loan-table tbody tr",
+            "giaTri": 4,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "doi",
+                "selector": "#member",
+                "giaTri": "4"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#borrowDate",
+                "giaTri": "2026-01-10"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#dueDate",
+                "giaTri": "2026-01-20"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#borrow-form"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "#loan-table has 3 rows",
+            "url": "/loans",
+            "kiem": "so-luong",
+            "selector": "#loan-table tbody tr",
+            "giaTri": 3
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Book titles are joined, newest borrow first",
+            "url": "/loans",
+            "kiem": "danh-sach-text",
+            "selector": ".loan-book",
+            "mongDoi": [
+              "Sapiens",
+              "Clean Code",
+              "A Brief History of Time"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Member names are joined",
+            "url": "/loans",
+            "kiem": "danh-sach-text",
+            "selector": ".loan-member",
+            "mongDoi": [
+              "Nguyen Van An",
+              "Nguyen Van An",
+              "Tran Thi Binh"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Dates are dd/MM/yyyy",
+            "url": "/loans",
+            "kiem": "text",
+            "selector": "#loan-row-1 .loan-borrow",
+            "giaTri": "02/03/2026"
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Loan 1 is \"Overdue\", loan 3 is \"Returned\"",
+            "url": "/loans",
+            "kiem": "danh-sach-text",
+            "selector": "#loan-row-1 .loan-status, #loan-row-3 .loan-status",
+            "mongDoi": [
+              "Overdue",
+              "Returned"
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Returned loans have no Return button",
+            "url": "/loans",
+            "kiem": "so-luong",
+            "selector": "#loan-row-3 .btn-return",
+            "giaTri": 0
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "Due date formatted too",
+            "url": "/loans",
+            "kiem": "text",
+            "selector": "#loan-row-3 .loan-due",
+            "giaTri": "10/02/2026"
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Return ⇒ status becomes \"Returned\"",
+            "url": "/loans",
+            "kiem": "text",
+            "selector": "#loan-row-1 .loan-status",
+            "giaTri": "Returned",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#loan-row-1 .btn-return"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Return ⇒ PATCH /loans/1",
+            "url": "/loans",
+            "kiem": "goi-fetch",
+            "khop": "^PATCH http://localhost:9999/loans/1$",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#loan-row-1 .btn-return"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "Return ⇒ book 1 availableCopies goes back to 3",
+            "url": "/loans",
+            "kiem": "du-lieu-server",
+            "bang": "books",
+            "chua": {
+              "id": 1,
+              "availableCopies": 3
+            },
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#loan-row-1 .btn-return"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "The change survives a reload (saved on the server)",
+            "url": "/loans",
+            "kiem": "text",
+            "selector": "#loan-row-1 .loan-status",
+            "giaTri": "Returned",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#loan-row-1 .btn-return"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              },
+              {
+                "hanhDong": "tai-lai"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "The Return button disappears from that row",
+            "url": "/loans",
+            "kiem": "so-luong",
+            "selector": "#loan-row-1 .btn-return",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#loan-row-1 .btn-return"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Q1 · Book catalog page",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Q1 · Search by title",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Q1 · Category filter + query parameter",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Q1 · Availability & Borrow button",
+            "diem": 0.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Q2 · Borrow page — load data",
+            "diem": 1
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Q2 · Business rules",
+            "diem": 1.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Q2 · Save the loan",
+            "diem": 1
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Q3 · Loans table",
+            "diem": 1.5
+          },
+          {
+            "ma": "f9",
+            "ten": "9. Q3 · Return a book",
+            "diem": 1
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "pe",
+      "mistakesJson": [
+        {
+          "loi": "Lưu thể loại vào state riêng rồi quên đồng bộ với URL ⇒ mở <code>/books?category=Science</code> không chọn sẵn."
+        },
+        {
+          "loi": "So <code>book.id === id</code> với <code>id</code> từ <code>useParams()</code> (chuỗi) ⇒ luôn false; dùng <code>String(book.id) === id</code> hoặc <code>Number(id)</code>."
+        },
+        {
+          "loi": "Gọi <code>fetch</code> rồi quên <code>res.ok</code>: 404 không ném lỗi ⇒ trang \"Book not found\" không bao giờ hiện."
+        },
+        {
+          "loi": "<code>new Date().toISOString().slice(0, 10)</code> làm ngày mặc định ⇒ trước 7 giờ sáng ở VN ra ngày HÔM QUA."
+        },
+        {
+          "loi": "Hiện <code>bookId</code>/<code>memberId</code> thay vì tên sách/tên thành viên ở bảng phiếu mượn."
+        },
+        {
+          "loi": "Trả sách xong gọi <code>window.location.reload()</code> — mất điểm \"không tải lại trang\", và chậm."
+        },
+        {
+          "loi": "PATCH availableCopies bằng chuỗi (<code>\"3\"</code>) hoặc quên PATCH sách ⇒ số bản sai lệch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loan",
+          "vi": "phiếu mượn"
+        },
+        {
+          "en": "borrow / return",
+          "vi": "mượn / trả"
+        },
+        {
+          "en": "due date",
+          "vi": "hạn trả"
+        },
+        {
+          "en": "overdue",
+          "vi": "quá hạn"
+        },
+        {
+          "en": "out of stock",
+          "vi": "hết sách (không còn bản nào)"
+        },
+        {
+          "en": "business rule",
+          "vi": "luật nghiệp vụ"
+        },
+        {
+          "en": "join (client-side)",
+          "vi": "nối dữ liệu hai bảng ở phía client"
+        },
+        {
+          "en": "query parameter",
+          "vi": "tham số sau dấu ? trên URL (vd ?status=ACTIVE)"
+        },
+        {
+          "en": "route parameter",
+          "vi": "phần động của đường dẫn (vd :id trong /books/:id)"
+        },
+        {
+          "en": "redirect / navigate",
+          "vi": "chuyển sang trang khác bằng mã"
+        },
+        {
+          "en": "controlled input",
+          "vi": "ô nhập do state điều khiển (value + onChange)"
+        },
+        {
+          "en": "case-insensitive",
+          "vi": "không phân biệt chữ hoa/thường"
+        },
+        {
+          "en": "payload / request body",
+          "vi": "dữ liệu gửi kèm request"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang điểm theo tiêu chí"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>PE Practice 1 — Library Loan System (json-server · Router · Bootstrap) — Live demo</title>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@remix-run/router@1.19.2/dist/router.umd.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router@6.26.2/dist/umd/react-router.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-router-dom@6.26.2/dist/umd/react-router-dom.production.min.js\" crossorigin=\"anonymous\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-bootstrap@2.10.5/dist/react-bootstrap.min.js\" crossorigin=\"anonymous\"></script>\n<script>fetch(\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\").then(function(r){return r.text()}).then(function(t){var s=document.createElement('style');s.textContent=t;document.head.insertBefore(s,document.head.firstChild)}).catch(function(){})</script>\n</head><body><div id=\"root\"></div><script>(function(){\nvar M={\"src/pages/BookList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/BookList.js — Câu 1: danh mục sách (tải, sắp xếp, tìm, lọc theo thể loại + tham số URL)\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\n\\n function BookList() {\\n  const [books, setBooks] = _react.useState.call(void 0, []);\\n  const [loading, setLoading] = _react.useState.call(void 0, true);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [search, setSearch] = _react.useState.call(void 0, '');\\n  const [searchParams, setSearchParams] = _reactrouterdom.useSearchParams.call(void 0, );\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n\\n  // Thể loại đang chọn SỐNG TRÊN URL (?category=Science): mở link là thấy đúng bộ lọc, F5 không mất.\\n  // URL là nguồn sự thật ⇒ không chép sang một state thứ hai.\\n  const category = searchParams.get('category') || 'All';\\n\\n  _react.useEffect.call(void 0, () => {\\n    _api.getJSON.call(void 0, '/books')\\n      .then(setBooks)\\n      .catch(() => setError('Cannot load books — is json-server running on port 9999?'))\\n      .finally(() => setLoading(false));\\n  }, []); // [] ⇒ gọi API đúng MỘT lần; tìm/lọc làm ở client, không gọi lại\\n\\n  // Danh sách thể loại lấy TỪ DỮ LIỆU (không viết cứng): Set bỏ trùng, sort A→Z\\n  const categories = _react.useMemo.call(void 0, () => [...new Set(books.map((b) => b.category))].sort(), [books]);\\n\\n  // Danh sách hiển thị là giá trị SUY RA từ books + search + category\\n  const visible = _react.useMemo.call(void 0, () => {\\n    const q = search.trim().toLowerCase();\\n    return books\\n      .filter((b) => b.title.toLowerCase().includes(q))\\n      .filter((b) => category === 'All' || b.category === category)\\n      .sort((a, b) => a.title.localeCompare(b.title)); // filter() đã tạo mảng mới ⇒ sort không đụng state\\n  }, [books, search, category]);\\n\\n  const changeCategory = (value) => setSearchParams(value === 'All' ? {} : { category: value });\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Book Catalog\\\" })\\n      , _jsxruntime.jsx.call(void 0, 'p', { className: \\\"text-muted\\\", children: \\\"Browse the library and borrow a book\\\"      })\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Row, { className: \\\"g-2 mb-3\\\" , children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 8, children: \\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, {\\n            id: \\\"search\\\",\\n            placeholder: \\\"Search by title...\\\"  ,\\n            value: search,\\n            onChange: (e) => setSearch(e.target.value),}\\n          )\\n        })\\n        , _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { md: 4, children: \\n          _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { id: \\\"category-filter\\\", value: category, onChange: (e) => changeCategory(e.target.value), children: [\\n            _jsxruntime.jsx.call(void 0, 'option', { value: \\\"All\\\", children: \\\"All categories\\\" })\\n            , categories.map((c) => (\\n              _jsxruntime.jsx.call(void 0, 'option', { value: c, children: c}, c)\\n            ))\\n          ]})\\n        })\\n      ]})\\n\\n      , _jsxruntime.jsxs.call(void 0, 'p', { id: \\\"result-count\\\", children: [\\\"Showing \\\" , visible.length, \\\" of \\\"  , books.length, \\\" books\\\" ]})\\n      , !loading && visible.length === 0 && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"warning\\\", className: \\\"no-result\\\", children: \\\"No books found\\\"  })\\n\\n      , _jsxruntime.jsx.call(void 0, _reactbootstrap.Row, { xs: 1, md: 3, className: \\\"g-3\\\", children: \\n        visible.map((b) => (\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Col, { children: \\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card, { id: `book-${b.id}`, className: \\\"book-card h-100\\\" , children: [\\n              _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { className: \\\"book-title\\\", children: b.title})\\n                , _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Subtitle, { className: \\\"mb-2 text-muted\\\" , children: b.author})\\n                , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Text, { className: \\\"mb-2\\\", children: [b.category, \\\" · \\\"  , b.publishedYear]})\\n                , b.availableCopies > 0 ? (\\n                  _jsxruntime.jsxs.call(void 0, _reactbootstrap.Badge, { bg: \\\"success\\\", className: \\\"book-availability\\\", children: [\\\"Available: \\\" , b.availableCopies]})\\n                ) : (\\n                  _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: \\\"secondary\\\", className: \\\"book-availability\\\", children: \\\"Out of stock\\\"  })\\n                )\\n              ]})\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Footer, { children: \\n                _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, {\\n                  size: \\\"sm\\\",\\n                  className: \\\"btn-borrow\\\",\\n                  disabled: b.availableCopies === 0,\\n                  onClick: () => navigate(`/books/${b.id}/borrow`),\\n children: \\\"Borrow\\\"\\n\\n                })\\n              })\\n            ]})\\n          }, b.id)\\n        ))\\n      })\\n    ]})\\n  );\\n} exports.default = BookList;\\n\",\"src/pages/BorrowBook.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/pages/BorrowBook.js — Câu 2: form mượn sách + luật nghiệp vụ + POST/PATCH + chuyển trang\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _api = require('../api');\\nvar _date = require('../utils/date');\\n\\nconst MAX_DAYS = 14;\\nconst MAX_OPEN_LOANS = 2;\\n\\n function BorrowBook() {\\n  const { id } = _reactrouterdom.useParams.call(void 0, ); // id trên URL luôn là CHUỖI\\n  const navigate = _reactrouterdom.useNavigate.call(void 0, );\\n  const [book, setBook] = _react.useState.call(void 0, null);\\n  const [members, setMembers] = _react.useState.call(void 0, []);\\n  const [notFound, setNotFound] = _react.useState.call(void 0, false);\\n  const [form, setForm] = _react.useState.call(void 0, { memberId: '', borrowDate: _date.todayISO.call(void 0, ), dueDate: '' });\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const [saving, setSaving] = _react.useState.call(void 0, false);\\n\\n  _react.useEffect.call(void 0, () => {\\n    // hai request độc lập ⇒ chạy song song bằng Promise.all; sách không có ⇒ 404 ⇒ getJSON ném lỗi\\n    Promise.all([_api.getJSON.call(void 0, `/books/${id}`), _api.getJSON.call(void 0, '/members?status=ACTIVE')])\\n      .then(([b, m]) => {\\n        setBook(b);\\n        setMembers(m);\\n      })\\n      .catch(() => setNotFound(true));\\n  }, [id]); // đổi :id (sang sách khác) ⇒ tải lại\\n\\n  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });\\n\\n  // Câu lỗi ĐẦU TIÊN theo đúng thứ tự luật trong đề; '' = hợp lệ\\n  const validate = () => {\\n    if (!form.memberId) return 'Please select a member.';\\n    if (!form.borrowDate) return 'Please choose a borrow date.';\\n    if (!form.dueDate) return 'Please choose a due date.';\\n    if (form.borrowDate > _date.todayISO.call(void 0, )) return 'Borrow date cannot be in the future.'; // so chuỗi yyyy-mm-dd = so ngày\\n    const days = _date.daysBetween.call(void 0, form.borrowDate, form.dueDate);\\n    if (days \\u003c= 0) return 'Due date must be after the borrow date.';\\n    if (days > MAX_DAYS) return `A loan cannot exceed ${MAX_DAYS} days.`;\\n    if (book.availableCopies === 0) return 'This book is out of stock.';\\n    return '';\\n  };\\n\\n  const handleSubmit = async (e) => {\\n    e.preventDefault(); // không có dòng này: trình duyệt gửi form và TẢI LẠI trang\\n    const msg = validate();\\n    if (msg) {\\n      setError(msg);\\n      return;\\n    }\\n    setSaving(true);\\n    try {\\n      // Luật cần dữ liệu máy chủ: đếm phiếu CHƯA trả của thành viên (lọc returnDate ở client cho chắc)\\n      const loans = await _api.getJSON.call(void 0, `/loans?memberId=${form.memberId}`);\\n      if (loans.filter((l) => !l.returnDate).length >= MAX_OPEN_LOANS) {\\n        setError(`This member already has ${MAX_OPEN_LOANS} open loans.`);\\n        return;\\n      }\\n      await _api.sendJSON.call(void 0, 'POST', '/loans', {\\n        bookId: book.id,\\n        memberId: Number(form.memberId), // \\u003cselect> trả chuỗi — id trong database.json là số\\n        borrowDate: form.borrowDate,\\n        dueDate: form.dueDate,\\n        returnDate: null,\\n      });\\n      await _api.sendJSON.call(void 0, 'PATCH', `/books/${book.id}`, { availableCopies: book.availableCopies - 1 });\\n      navigate('/loans');\\n    } catch (e2) {\\n      setError('Could not save the loan. Please try again.');\\n    } finally {\\n      setSaving(false);\\n    }\\n  };\\n\\n  if (notFound) {\\n    return (\\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: \\\"Book not found\\\"  })\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/books\\\", children: \\\"← Back to books\\\"   })\\n      ]})\\n    );\\n  }\\n  if (!book) {\\n    return (\\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { children: \\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Spinner, { animation: \\\"border\\\", role: \\\"status\\\",} )\\n      })\\n    );\\n  }\\n\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Container, { style: { maxWidth: 560 }, children: \\n      _jsxruntime.jsx.call(void 0, _reactbootstrap.Card, { children: \\n        _jsxruntime.jsxs.call(void 0, _reactbootstrap.Card.Body, { children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Card.Title, { children: \\\"Borrow a book\\\"  })\\n          , _jsxruntime.jsxs.call(void 0, 'div', { id: \\\"book-info\\\", className: \\\"mb-3\\\", children: [\\n            _jsxruntime.jsx.call(void 0, 'b', { children: book.title}), \\\" — \\\"  , book.author\\n            , _jsxruntime.jsx.call(void 0, 'br', {} )\\n            , _jsxruntime.jsxs.call(void 0, 'span', { className: \\\"text-muted\\\", children: [\\\"Available: \\\" , book.availableCopies]})\\n          ]})\\n          , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", id: \\\"form-error\\\", children: error})\\n          , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form, { id: \\\"borrow-form\\\", onSubmit: handleSubmit, noValidate: true, children: [\\n            _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"member\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Member\\\"})\\n              , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Select, { name: \\\"memberId\\\", value: form.memberId, onChange: update, children: [\\n                _jsxruntime.jsx.call(void 0, 'option', { value: \\\"\\\", children: \\\"-- Select member --\\\"   })\\n                , members.map((m) => (\\n                  _jsxruntime.jsxs.call(void 0, 'option', { value: m.id, children: [m.code, \\\" — \\\"  , m.fullName]}, m.id)\\n                ))\\n              ]})\\n            ]})\\n            , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"borrowDate\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Borrow date\\\" })\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { type: \\\"date\\\", name: \\\"borrowDate\\\", value: form.borrowDate, onChange: update,} )\\n            ]})\\n            , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Form.Group, { className: \\\"mb-3\\\", controlId: \\\"dueDate\\\", children: [\\n              _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Label, { children: \\\"Due date\\\" })\\n              , _jsxruntime.jsx.call(void 0, _reactbootstrap.Form.Control, { type: \\\"date\\\", name: \\\"dueDate\\\", value: form.dueDate, onChange: update,} )\\n            ]})\\n            , _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { type: \\\"submit\\\", disabled: saving, children: \\\"Confirm borrow\\\" }), ' '\\n            , _jsxruntime.jsx.call(void 0, _reactrouterdom.Link, { to: \\\"/books\\\", className: \\\"btn btn-link\\\" , children: \\\"Cancel\\\"})\\n          ]})\\n        ]})\\n      })\\n    })\\n  );\\n} exports.default = BorrowBook;\\n\",\"src/pages/LoanList.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i \\u003c ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }// src/pages/LoanList.js — Câu 3: bảng phiếu mượn (nối sách/thành viên, định dạng ngày, trạng thái) + trả sách\\nvar _react = require('react');\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _api = require('../api');\\nvar _date = require('../utils/date');\\n\\nconst BADGE = { Returned: 'secondary', Overdue: 'danger', 'On loan': 'primary' };\\n\\n function LoanList() {\\n  const [loans, setLoans] = _react.useState.call(void 0, []);\\n  const [books, setBooks] = _react.useState.call(void 0, []);\\n  const [members, setMembers] = _react.useState.call(void 0, []);\\n  const [error, setError] = _react.useState.call(void 0, '');\\n  const today = _date.todayISO.call(void 0, );\\n\\n  _react.useEffect.call(void 0, () => {\\n    // Nối ở CLIENT (không dùng _expand: json-server 1.x đã bỏ) — ba request song song\\n    Promise.all([_api.getJSON.call(void 0, '/loans'), _api.getJSON.call(void 0, '/books'), _api.getJSON.call(void 0, '/members')])\\n      .then(([l, b, m]) => {\\n        setLoans(l);\\n        setBooks(b);\\n        setMembers(m);\\n      })\\n      .catch(() => setError('Cannot load loans.'));\\n  }, []);\\n\\n  // Bảng tra cứu theo id (khoá chuỗi ⇒ không vướng 1 vs \\\"1\\\")\\n  const bookById = _react.useMemo.call(void 0, () => new Map(books.map((b) => [String(b.id), b])), [books]);\\n  const memberById = _react.useMemo.call(void 0, () => new Map(members.map((m) => [String(m.id), m])), [members]);\\n\\n  // Mới nhất lên đầu — sort trên BẢN SAO\\n  const rows = _react.useMemo.call(void 0, () => [...loans].sort((a, b) => b.borrowDate.localeCompare(a.borrowDate)), [loans]);\\n\\n  const statusOf = (l) => {\\n    if (l.returnDate) return 'Returned';\\n    return l.dueDate \\u003c today ? 'Overdue' : 'On loan';\\n  };\\n\\n  const handleReturn = async (loan) => {\\n    const book = bookById.get(String(loan.bookId));\\n    try {\\n      await _api.sendJSON.call(void 0, 'PATCH', `/loans/${loan.id}`, { returnDate: today });\\n      if (book) {\\n        const saved = await _api.sendJSON.call(void 0, 'PATCH', `/books/${book.id}`, { availableCopies: book.availableCopies + 1 });\\n        setBooks((list) => list.map((b) => (b.id === saved.id ? saved : b)));\\n      }\\n      // cập nhật ĐÚNG một dòng bằng map (mảng mới) — không tải lại cả trang\\n      setLoans((list) => list.map((l) => (l.id === loan.id ? { ...l, returnDate: today } : l)));\\n    } catch (e) {\\n      setError('Could not return the book.');\\n    }\\n  };\\n\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n      _jsxruntime.jsx.call(void 0, 'h2', { children: \\\"Loans\\\"})\\n      , error && _jsxruntime.jsx.call(void 0, _reactbootstrap.Alert, { variant: \\\"danger\\\", children: error})\\n      , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Table, { striped: true, bordered: true, hover: true, responsive: true, id: \\\"loan-table\\\", children: [\\n        _jsxruntime.jsx.call(void 0, 'thead', { children: \\n          _jsxruntime.jsxs.call(void 0, 'tr', { children: [\\n            _jsxruntime.jsx.call(void 0, 'th', { children: \\\"No\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Book\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Member\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Borrow date\\\" })\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Due date\\\" })\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Status\\\"})\\n            , _jsxruntime.jsx.call(void 0, 'th', { children: \\\"Action\\\"})\\n          ]})\\n        })\\n        , _jsxruntime.jsx.call(void 0, 'tbody', { children: \\n          rows.map((l, i) => {\\n            const st = statusOf(l);\\n            return (\\n              _jsxruntime.jsxs.call(void 0, 'tr', { id: `loan-row-${l.id}`, children: [\\n                _jsxruntime.jsx.call(void 0, 'td', { children: i + 1})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"loan-book\\\", children: _nullishCoalesce(_optionalChain([bookById, 'access', _ => _.get, 'call', _2 => _2(String(l.bookId)), 'optionalAccess', _3 => _3.title]), () => ( 'Unknown book'))})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"loan-member\\\", children: _nullishCoalesce(_optionalChain([memberById, 'access', _4 => _4.get, 'call', _5 => _5(String(l.memberId)), 'optionalAccess', _6 => _6.fullName]), () => ( 'Unknown member'))})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"loan-borrow\\\", children: _date.formatDate.call(void 0, l.borrowDate)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { className: \\\"loan-due\\\", children: _date.formatDate.call(void 0, l.dueDate)})\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                  _jsxruntime.jsx.call(void 0, _reactbootstrap.Badge, { bg: BADGE[st], className: \\\"loan-status\\\", children: st})\\n                })\\n                , _jsxruntime.jsx.call(void 0, 'td', { children: \\n                  !l.returnDate && (\\n                    _jsxruntime.jsx.call(void 0, _reactbootstrap.Button, { size: \\\"sm\\\", variant: \\\"outline-success\\\", className: \\\"btn-return\\\", onClick: () => handleReturn(l), children: \\\"Return\\\"\\n\\n                    })\\n                  )\\n                })\\n              ]}, l.id)\\n            );\\n          })\\n        })\\n      ]})\\n    ]})\\n  );\\n} exports.default = LoanList;\\n\",\"src/App.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/App.js — khai báo route của cả ứng dụng\\nvar _reactrouterdom = require('react-router-dom');\\nvar _AppNavbar = require('./components/AppNavbar'); var _AppNavbar2 = _interopRequireDefault(_AppNavbar);\\nvar _BookList = require('./pages/BookList'); var _BookList2 = _interopRequireDefault(_BookList);\\nvar _BorrowBook = require('./pages/BorrowBook'); var _BorrowBook2 = _interopRequireDefault(_BorrowBook);\\nvar _LoanList = require('./pages/LoanList'); var _LoanList2 = _interopRequireDefault(_LoanList);\\n\\n function App() {\\n  return (\\n    _jsxruntime.jsxs.call(void 0, _jsxruntime.Fragment, { children: [\\n      _jsxruntime.jsx.call(void 0, _AppNavbar2.default, {} )\\n      , _jsxruntime.jsxs.call(void 0, _reactrouterdom.Routes, { children: [\\n        /* \\\"/\\\" chuyển thẳng sang /books — replace để nút Back không quay lại \\\"/\\\" rồi bị đẩy đi lần nữa */\\n        _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/\\\", element: _jsxruntime.jsx.call(void 0, _reactrouterdom.Navigate, { to: \\\"/books\\\", replace: true,} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/books\\\", element: _jsxruntime.jsx.call(void 0, _BookList2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/books/:id/borrow\\\", element: _jsxruntime.jsx.call(void 0, _BorrowBook2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"/loans\\\", element: _jsxruntime.jsx.call(void 0, _LoanList2.default, {} ),} )\\n        , _jsxruntime.jsx.call(void 0, _reactrouterdom.Route, { path: \\\"*\\\", element: _jsxruntime.jsx.call(void 0, 'p', { className: \\\"container\\\", children: \\\"Page not found\\\"  }),} )\\n      ]})\\n    ]})\\n  );\\n} exports.default = App;\\n\",\"src/api.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/api.js — MỘT chỗ duy nhất biết địa chỉ API (đọc từ .env — đề cho 0 điểm nếu viết cứng URL)\\n const API_URL = process.env.REACT_APP_API_URL; exports.API_URL = API_URL;\\n\\n// GET: fetch KHÔNG tự ném lỗi khi 404/500 ⇒ phải tự kiểm res.ok\\n async function getJSON(path) {\\n  const res = await fetch(`${exports.API_URL}${path}`);\\n  if (!res.ok) throw new Error(`GET ${path} failed with status ${res.status}`);\\n  return res.json();\\n} exports.getJSON = getJSON;\\n\\n// POST / PUT / PATCH / DELETE kèm body JSON (nhớ header Content-Type, nếu không json-server lưu body rỗng)\\n async function sendJSON(method, path, body) {\\n  const res = await fetch(`${exports.API_URL}${path}`, {\\n    method,\\n    headers: { 'Content-Type': 'application/json' },\\n    body: body === undefined ? undefined : JSON.stringify(body),\\n  });\\n  if (!res.ok) throw new Error(`${method} ${path} failed with status ${res.status}`);\\n  return res.json();\\n} exports.sendJSON = sendJSON;\\n\",\"src/utils/date.js\":\"\\\"use strict\\\";Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/utils/date.js — xử lý ngày dạng chuỗi \\\"yyyy-mm-dd\\\" (đúng định dạng của \\u003cinput type=\\\"date\\\">)\\n\\n// Hôm nay theo giờ MÁY. Không dùng new Date().toISOString(): đó là giờ UTC — 6h sáng ở Việt Nam vẫn là \\\"hôm qua\\\".\\n function todayISO() {\\n  const d = new Date();\\n  const p = (n) => String(n).padStart(2, '0');\\n  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;\\n} exports.todayISO = todayISO;\\n\\n// \\\"2026-03-02\\\" → \\\"02/03/2026\\\": cắt chuỗi, không qua new Date() ⇒ không bao giờ lệch múi giờ\\n function formatDate(iso) {\\n  if (!iso) return '';\\n  const [y, m, d] = iso.slice(0, 10).split('-');\\n  return `${d}/${m}/${y}`;\\n} exports.formatDate = formatDate;\\n\\n// Số ngày từ a đến b. Date.UTC ⇒ một ngày luôn đúng 86 400 000 ms (không vướng giờ mùa hè)\\n function daysBetween(a, b) {\\n  const t = (s) => {\\n    const [y, m, d] = s.split('-').map(Number);\\n    return Date.UTC(y, m - 1, d);\\n  };\\n  return Math.round((t(b) - t(a)) / 86400000);\\n} exports.daysBetween = daysBetween;\\n\",\"src/components/AppNavbar.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\");Object.defineProperty(exports, \\\"__esModule\\\", {value: true});// src/components/AppNavbar.js — NavLink tự gắn class \\\"active\\\" cho trang đang mở\\nvar _reactbootstrap = require('react-bootstrap');\\nvar _reactrouterdom = require('react-router-dom');\\n\\n function AppNavbar() {\\n  return (\\n    _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar, { bg: \\\"dark\\\", 'data-bs-theme': \\\"dark\\\", className: \\\"mb-4\\\", children: \\n      _jsxruntime.jsxs.call(void 0, _reactbootstrap.Container, { children: [\\n        _jsxruntime.jsx.call(void 0, _reactbootstrap.Navbar.Brand, { as: _reactrouterdom.NavLink, to: \\\"/books\\\", children: \\\"Library\\\"})\\n        , _jsxruntime.jsxs.call(void 0, _reactbootstrap.Nav, { className: \\\"me-auto\\\", children: [\\n          _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/books\\\", id: \\\"nav-books\\\", children: \\\"Books\\\"})\\n          , _jsxruntime.jsx.call(void 0, _reactbootstrap.Nav.Link, { as: _reactrouterdom.NavLink, to: \\\"/loans\\\", id: \\\"nav-loans\\\", children: \\\"Loans\\\"})\\n        ]})\\n      ]})\\n    })\\n  );\\n} exports.default = AppNavbar;\\n\",\"src/index.js\":\"\\\"use strict\\\";var _jsxruntime = require(\\\"react/jsx-runtime\\\"); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\\nvar _react = require('react'); var _react2 = _interopRequireDefault(_react);\\nvar _client = require('react-dom/client'); var _client2 = _interopRequireDefault(_client);\\nrequire('bootstrap/dist/css/bootstrap.min.css');\\nvar _reactrouterdom = require('react-router-dom');\\nvar _App = require('./App'); var _App2 = _interopRequireDefault(_App);\\n\\nconst root = _client2.default.createRoot(document.getElementById('root'));\\nroot.render(\\n  _jsxruntime.jsx.call(void 0, _react2.default.StrictMode, { children: \\n    _jsxruntime.jsx.call(void 0, _reactrouterdom.BrowserRouter, { children: \\n        _jsxruntime.jsx.call(void 0, _App2.default, {} )\\n      })\\n  })\\n);\\n\",\".env\":\"REACT_APP_API_URL=http://localhost:9999\\n\",\"database.json\":\"{\\n  \\\"books\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"title\\\": \\\"Clean Code\\\",\\n      \\\"author\\\": \\\"Robert C. Martin\\\",\\n      \\\"category\\\": \\\"Software\\\",\\n      \\\"publishedYear\\\": 2008,\\n      \\\"totalCopies\\\": 3,\\n      \\\"availableCopies\\\": 2\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"title\\\": \\\"The Pragmatic Programmer\\\",\\n      \\\"author\\\": \\\"David Thomas\\\",\\n      \\\"category\\\": \\\"Software\\\",\\n      \\\"publishedYear\\\": 1999,\\n      \\\"totalCopies\\\": 2,\\n      \\\"availableCopies\\\": 0\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"title\\\": \\\"A Brief History of Time\\\",\\n      \\\"author\\\": \\\"Stephen Hawking\\\",\\n      \\\"category\\\": \\\"Science\\\",\\n      \\\"publishedYear\\\": 1988,\\n      \\\"totalCopies\\\": 4,\\n      \\\"availableCopies\\\": 4\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"title\\\": \\\"Sapiens\\\",\\n      \\\"author\\\": \\\"Yuval Noah Harari\\\",\\n      \\\"category\\\": \\\"History\\\",\\n      \\\"publishedYear\\\": 2011,\\n      \\\"totalCopies\\\": 3,\\n      \\\"availableCopies\\\": 1\\n    },\\n    {\\n      \\\"id\\\": 5,\\n      \\\"title\\\": \\\"Cosmos\\\",\\n      \\\"author\\\": \\\"Carl Sagan\\\",\\n      \\\"category\\\": \\\"Science\\\",\\n      \\\"publishedYear\\\": 1980,\\n      \\\"totalCopies\\\": 2,\\n      \\\"availableCopies\\\": 2\\n    },\\n    {\\n      \\\"id\\\": 6,\\n      \\\"title\\\": \\\"Design Patterns\\\",\\n      \\\"author\\\": \\\"Erich Gamma\\\",\\n      \\\"category\\\": \\\"Software\\\",\\n      \\\"publishedYear\\\": 1994,\\n      \\\"totalCopies\\\": 2,\\n      \\\"availableCopies\\\": 1\\n    },\\n    {\\n      \\\"id\\\": 7,\\n      \\\"title\\\": \\\"Guns, Germs, and Steel\\\",\\n      \\\"author\\\": \\\"Jared Diamond\\\",\\n      \\\"category\\\": \\\"History\\\",\\n      \\\"publishedYear\\\": 1997,\\n      \\\"totalCopies\\\": 1,\\n      \\\"availableCopies\\\": 1\\n    },\\n    {\\n      \\\"id\\\": 8,\\n      \\\"title\\\": \\\"The Selfish Gene\\\",\\n      \\\"author\\\": \\\"Richard Dawkins\\\",\\n      \\\"category\\\": \\\"Science\\\",\\n      \\\"publishedYear\\\": 1976,\\n      \\\"totalCopies\\\": 2,\\n      \\\"availableCopies\\\": 0\\n    }\\n  ],\\n  \\\"members\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"code\\\": \\\"M001\\\",\\n      \\\"fullName\\\": \\\"Nguyen Van An\\\",\\n      \\\"email\\\": \\\"an.nv@example.com\\\",\\n      \\\"status\\\": \\\"ACTIVE\\\"\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"code\\\": \\\"M002\\\",\\n      \\\"fullName\\\": \\\"Tran Thi Binh\\\",\\n      \\\"email\\\": \\\"binh.tt@example.com\\\",\\n      \\\"status\\\": \\\"ACTIVE\\\"\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"code\\\": \\\"M003\\\",\\n      \\\"fullName\\\": \\\"Le Hoang Cuong\\\",\\n      \\\"email\\\": \\\"cuong.lh@example.com\\\",\\n      \\\"status\\\": \\\"SUSPENDED\\\"\\n    },\\n    {\\n      \\\"id\\\": 4,\\n      \\\"code\\\": \\\"M004\\\",\\n      \\\"fullName\\\": \\\"Pham Minh Duc\\\",\\n      \\\"email\\\": \\\"duc.pm@example.com\\\",\\n      \\\"status\\\": \\\"ACTIVE\\\"\\n    }\\n  ],\\n  \\\"loans\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"bookId\\\": 1,\\n      \\\"memberId\\\": 1,\\n      \\\"borrowDate\\\": \\\"2026-03-02\\\",\\n      \\\"dueDate\\\": \\\"2026-03-16\\\",\\n      \\\"returnDate\\\": null\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"bookId\\\": 4,\\n      \\\"memberId\\\": 1,\\n      \\\"borrowDate\\\": \\\"2026-10-20\\\",\\n      \\\"dueDate\\\": \\\"2026-11-03\\\",\\n      \\\"returnDate\\\": null\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"bookId\\\": 3,\\n      \\\"memberId\\\": 2,\\n      \\\"borrowDate\\\": \\\"2026-02-01\\\",\\n      \\\"dueDate\\\": \\\"2026-02-10\\\",\\n      \\\"returnDate\\\": \\\"2026-02-09\\\"\\n    }\\n  ]\\n}\\n\"};var CSS={};var DB={\"books\":[{\"id\":1,\"title\":\"Clean Code\",\"author\":\"Robert C. Martin\",\"category\":\"Software\",\"publishedYear\":2008,\"totalCopies\":3,\"availableCopies\":2},{\"id\":2,\"title\":\"The Pragmatic Programmer\",\"author\":\"David Thomas\",\"category\":\"Software\",\"publishedYear\":1999,\"totalCopies\":2,\"availableCopies\":0},{\"id\":3,\"title\":\"A Brief History of Time\",\"author\":\"Stephen Hawking\",\"category\":\"Science\",\"publishedYear\":1988,\"totalCopies\":4,\"availableCopies\":4},{\"id\":4,\"title\":\"Sapiens\",\"author\":\"Yuval Noah Harari\",\"category\":\"History\",\"publishedYear\":2011,\"totalCopies\":3,\"availableCopies\":1},{\"id\":5,\"title\":\"Cosmos\",\"author\":\"Carl Sagan\",\"category\":\"Science\",\"publishedYear\":1980,\"totalCopies\":2,\"availableCopies\":2},{\"id\":6,\"title\":\"Design Patterns\",\"author\":\"Erich Gamma\",\"category\":\"Software\",\"publishedYear\":1994,\"totalCopies\":2,\"availableCopies\":1},{\"id\":7,\"title\":\"Guns, Germs, and Steel\",\"author\":\"Jared Diamond\",\"category\":\"History\",\"publishedYear\":1997,\"totalCopies\":1,\"availableCopies\":1},{\"id\":8,\"title\":\"The Selfish Gene\",\"author\":\"Richard Dawkins\",\"category\":\"Science\",\"publishedYear\":1976,\"totalCopies\":2,\"availableCopies\":0}],\"members\":[{\"id\":1,\"code\":\"M001\",\"fullName\":\"Nguyen Van An\",\"email\":\"an.nv@example.com\",\"status\":\"ACTIVE\"},{\"id\":2,\"code\":\"M002\",\"fullName\":\"Tran Thi Binh\",\"email\":\"binh.tt@example.com\",\"status\":\"ACTIVE\"},{\"id\":3,\"code\":\"M003\",\"fullName\":\"Le Hoang Cuong\",\"email\":\"cuong.lh@example.com\",\"status\":\"SUSPENDED\"},{\"id\":4,\"code\":\"M004\",\"fullName\":\"Pham Minh Duc\",\"email\":\"duc.pm@example.com\",\"status\":\"ACTIVE\"}],\"loans\":[{\"id\":1,\"bookId\":1,\"memberId\":1,\"borrowDate\":\"2026-03-02\",\"dueDate\":\"2026-03-16\",\"returnDate\":null},{\"id\":2,\"bookId\":4,\"memberId\":1,\"borrowDate\":\"2026-10-20\",\"dueDate\":\"2026-11-03\",\"returnDate\":null},{\"id\":3,\"bookId\":3,\"memberId\":2,\"borrowDate\":\"2026-02-01\",\"dueDate\":\"2026-02-10\",\"returnDate\":\"2026-02-09\"}]};var BASE=\"http://localhost:9999\";var URL0=\"/books\";var THANH=true;\nfunction kho(){var m={};var k={getItem:function(x){x=String(x);return Object.prototype.hasOwnProperty.call(m,x)?m[x]:null},setItem:function(x,v){m[String(x)]=String(v)},removeItem:function(x){delete m[String(x)]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null}};Object.defineProperty(k,'length',{get:function(){return Object.keys(m).length}});return k}\ntry{Object.defineProperty(window,'localStorage',{value:kho(),configurable:true})}catch(e){}\ntry{Object.defineProperty(window,'sessionStorage',{value:kho(),configurable:true})}catch(e){}\nwindow.confirm=function(){return true};window.alert=function(m){console.log('[alert]',m);var t=document.getElementById('cl-demo-alert');if(!t){t=document.createElement('div');t.id='cl-demo-alert';t.style.cssText='position:fixed;right:12px;bottom:12px;z-index:99999;max-width:320px;padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;font:13px system-ui;box-shadow:0 6px 24px rgba(0,0,0,.25)';document.body.appendChild(t)}t.textContent='alert: '+m;clearTimeout(t.__h);t.__h=setTimeout(function(){t.remove()},2600)};\nvar ENV={NODE_ENV:'production',MODE:'production',PROD:true,DEV:false,BASE_URL:'/'};\nString(M['.env']||'').split(/\\r?\\n/).forEach(function(d){var m=/^\\s*(?:export\\s+)?([A-Za-z_][A-Za-z0-9_]*)\\s*=\\s*(.*)\\s*$/.exec(d);if(m)ENV[m[1]]=m[2].replace(/^(['\"])(.*)\\1$/,'$2')});\nwindow.__CL_ENV__=ENV;if(!window.process)window.process={env:ENV};\n// json-server giả (bản sao domAgent.ts)\nvar jsDb=DB?JSON.parse(JSON.stringify(DB)):null;\nfunction tl(st,b){return new Response(b===undefined?'{}':JSON.stringify(b),{status:st,headers:{'content-type':'application/json'}})}\nfunction lay(o,k){return String(k).split('.').reduce(function(a,p){return a==null?undefined:a[p]},o)}\nfunction mot(t){return /ies$/.test(t)?t.slice(0,-3)+'y':t.replace(/s$/,'')}\nfunction xuLy(method,url,body){var u=new URL(url);var ph=u.pathname.replace(/^\\/+|\\/+$/g,'').split('/').filter(Boolean).map(decodeURIComponent);var ten=ph[0],id=ph[1];\nif(!ten||!(ten in jsDb))return tl(404,{});var bang=jsDb[ten];var dl=null;if(body!=null&&body!==''){try{dl=JSON.parse(body)}catch(e){return tl(400,{})}}\nif(!Array.isArray(bang)){if(method==='GET')return tl(200,bang);if(method==='PUT'||method==='POST'){jsDb[ten]=dl||{};return tl(200,jsDb[ten])}if(method==='PATCH'){jsDb[ten]=Object.assign({},bang,dl||{});return tl(200,jsDb[ten])}return tl(404,{})}\nvar vt=function(x){return bang.findIndex(function(r){return String(r.id)===String(x)})};\nvar mr=function(r){var o=Object.assign({},r);u.searchParams.getAll('_expand').forEach(function(e){var b=jsDb[e+'s']||jsDb[e];if(Array.isArray(b))o[e]=b.find(function(x){return String(x.id)===String(r[e+'Id'])})});u.searchParams.getAll('_embed').forEach(function(e){var b=jsDb[e];if(Array.isArray(b)){var k=mot(ten)+'Id';o[e]=b.filter(function(x){return String(x[k])===String(r.id)})}});return o};\nif(method==='GET'){if(id!=null){var i=vt(id);return i<0?tl(404,{}):tl(200,mr(bang[i]))}var ds=bang.slice();var loc={};u.searchParams.forEach(function(v,k){if(k.charAt(0)!=='_'&&k!=='q')(loc[k]=loc[k]||[]).push(v)});\nObject.keys(loc).forEach(function(k){var vs=loc[k],m=/^(.*)_(like|gte|lte|ne)$/.exec(k);ds=ds.filter(function(r){if(m){var gv=lay(r,m[1]);return vs.every(function(v){if(m[2]==='like')return new RegExp(v,'i').test(String(gv));if(m[2]==='ne')return String(gv)!==v;var a=Number(gv),b=Number(v);var so=!isNaN(a)&&!isNaN(b);return m[2]==='gte'?(so?a>=b:String(gv)>=v):(so?a<=b:String(gv)<=v)})}var g=lay(r,k);return vs.some(function(v){return String(g)===v})})});\nvar qq=u.searchParams.get('q');if(qq)ds=ds.filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(qq.toLowerCase())>=0});\nvar sx=u.searchParams.get('_sort');if(sx){var tr=sx.split(','),th=(u.searchParams.get('_order')||'asc').split(',');ds.sort(function(a,b){for(var t=0;t<tr.length;t++){var f=tr[t].replace(/^-/,''),gi=tr[t].charAt(0)==='-'||(th[t]||th[0])==='desc';var x=lay(a,f),y=lay(b,f);var c=(typeof x==='number'&&typeof y==='number')?x-y:String(x).localeCompare(String(y));if(c)return gi?-c:c}return 0})}\nvar gh=u.searchParams.get('_limit'),pg=u.searchParams.get('_page');if(pg){var n=Number(gh)||10;ds=ds.slice((Number(pg)-1)*n,Number(pg)*n)}else if(gh)ds=ds.slice(0,Number(gh));return tl(200,ds.map(mr))}\nif(method==='POST'){if(id!=null)return tl(404,{});var mo=Object.assign({},dl||{});if(mo.id==null){var so2=bang.length&&bang.every(function(r){return typeof r.id==='number'});mo.id=so2||!bang.length?bang.reduce(function(mx,r){return Math.max(mx,Number(r.id)||0)},0)+1:Math.random().toString(16).slice(2,6)}bang.push(mo);return tl(201,mo)}\nif(id==null)return tl(404,{});var j=vt(id);if(j<0)return tl(404,{});\nif(method==='PUT'){bang[j]=Object.assign({},dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='PATCH'){bang[j]=Object.assign({},bang[j],dl||{},{id:bang[j].id});return tl(200,bang[j])}if(method==='DELETE'){bang.splice(j,1);return tl(200,{})}return tl(404,{})}\nif(jsDb){window.fetch=function(url,init){init=init||{};var s=String(url&&url.url?url.url:url);var me=String(init.method||'GET').toUpperCase();return new Promise(function(res){setTimeout(function(){if(s.indexOf(BASE+'/')!==0)return res(new Response('Not Found',{status:404}));try{res(xuLy(me,s,init.body))}catch(e){res(tl(500,{error:String(e)}))}},120)})}}\nfunction axiosGia(){function goi(method,url,data,cfg){cfg=cfg||{};var u=(cfg.baseURL||'')+url;if(cfg.params){var sp=new URLSearchParams(cfg.params).toString();if(sp)u+=(u.indexOf('?')>=0?'&':'?')+sp}var init={method:method.toUpperCase(),headers:Object.assign({'Content-Type':'application/json'},cfg.headers||{})};if(data!==undefined)init.body=typeof data==='string'?data:JSON.stringify(data);\nreturn window.fetch(u,init).then(function(res){return res.text().then(function(t){var d;try{d=JSON.parse(t)}catch(e){d=t}var out={data:d,status:res.status,statusText:res.statusText,headers:{},config:cfg};if(res.status>=200&&res.status<300)return out;var err=new Error('Request failed with status code '+res.status);err.response=out;err.name='AxiosError';throw err})})}\nfunction tao(base){var a=function(cfg){return goi(cfg.method||'get',cfg.url,cfg.data,Object.assign({},base,cfg))};['get','delete','head'].forEach(function(m){a[m]=function(url,cfg){return goi(m,url,undefined,Object.assign({},base,cfg))}});['post','put','patch'].forEach(function(m){a[m]=function(url,data,cfg){return goi(m,url,data,Object.assign({},base,cfg))}});a.create=function(c){return tao(Object.assign({},base,c))};a.defaults=base;a.interceptors={request:{use:function(){}},response:{use:function(){}}};a.isAxiosError=function(e){return!!(e&&e.name==='AxiosError')};return a}\nvar ax=tao({});ax.default=ax;return ax}\nvar R=window.React;var tach=function(p,k){var q=Object.assign({},p);var c=q.children;delete q.children;if(k!==undefined)q.key=k;return[q,c]};\nvar j=function(t,p,k){var x=tach(p,k);return x[1]===undefined?R.createElement(t,x[0]):R.createElement(t,x[0],x[1])};\nvar js=function(t,p,k){var x=tach(p,k);return R.createElement.apply(null,[t,x[0]].concat(x[1]||[]))};\n// React Router: MemoryRouter + thanh địa chỉ (gõ URL được — thử ?status=ACTIVE, /items/2…)\nvar viTri=null,routerBoc=null,dieuHuong=null;\nfunction datThanh(v){var o=document.getElementById('cl-demo-url');if(o&&document.activeElement!==o)o.value='http://localhost:3000'+v}\nfunction routerGia(){var RRD=window.ReactRouterDOM;if(!RRD)return null;if(routerBoc)return routerBoc;\nfunction Ghi(){var l=RRD.useLocation();var nav=RRD.useNavigate();dieuHuong=nav;viTri=l.pathname+l.search+l.hash;R.useEffect(function(){datThanh(viTri)});return null}\nfunction RG(p){var d=R.useState(function(){return[viTri||URL0||'/']})[0];return R.createElement(RRD.MemoryRouter,{initialEntries:d,basename:p.basename},R.createElement(Ghi),p.children)}\nfunction tr(routes,opts){var r=RRD.createMemoryRouter(routes,Object.assign({},opts||{},{initialEntries:[viTri||URL0||'/']}));var g=function(s){viTri=s.location.pathname+s.location.search+s.location.hash;datThanh(viTri)};g(r.state);r.subscribe(g);dieuHuong=function(to){r.navigate(to)};return r}\nrouterBoc=Object.assign({},RRD,{BrowserRouter:RG,HashRouter:RG,createBrowserRouter:tr,createHashRouter:tr});return routerBoc}\nvar thunk=function(api){return function(next){return function(a){return typeof a==='function'?a(api.dispatch,api.getState):next(a)}}};\nvar LIB={'react':R,'react-dom':window.ReactDOM,'react-dom/client':window.ReactDOM,'react/jsx-runtime':{jsx:j,jsxs:js,Fragment:R.Fragment},'react/jsx-dev-runtime':{jsxDEV:j,Fragment:R.Fragment},'prop-types':window.PropTypes,'react-bootstrap':window.ReactBootstrap,'@reduxjs/toolkit':window.RTK,'redux':window.RTK,'react-redux':window.ReactRedux,'redux-thunk':{'default':thunk,thunk:thunk}};\nvar C={};\nfunction dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(x){if(x==='.'||x==='')return;if(x==='..')p.pop();else p.push(x)});return p.join('/')}\nfunction tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}\nfunction req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\\.css$/.test(s)&&!/^\\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}\nfunction nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}\nif(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style=\"color:#475569\">URL</span><input id=\"cl-demo-url\" style=\"flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace\" aria-label=\"Address bar\"><button style=\"padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer\">Go</button>';\nbar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\\/\\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}\nnap(\"src/index.js\");\n})();</script></body></html>"
+    }
+  ]
+}

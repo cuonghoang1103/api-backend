@@ -14,6 +14,24 @@
       "name": "Lab 8 — Movie Management System (React Hooks)",
       "level": "INTERMEDIATE",
       "description": "Lab chương 8 (Hooks): ứng dụng quản lý phim đủ 8 chức năng — useState, useEffect, useRef, useMemo, useContext + custom hook useLocalStorage. Chấm tự động theo thang điểm 10 như PE."
+    },
+    {
+      "slug": "fer202-13-pe-1-library-loans",
+      "name": "PE Practice 1 — Library Loan System",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng SP26/SU26: json-server + React Router (route param, query param) + React-Bootstrap + form 7 luật nghiệp vụ + POST/PATCH. Thang 10, chấm tự động từng chức năng."
+    },
+    {
+      "slug": "fer202-13-pe-2-gadget-store",
+      "name": "PE Practice 2 — Gadget Store Management",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng PE17 (SU26): Vite .env, route có mã sinh viên, axios CRUD, bảng quản lý ảnh 70×70 + xoá có xác nhận, form thêm/sửa dùng chung 6 luật kiểm."
+    },
+    {
+      "slug": "fer202-13-pe-3-event-tickets",
+      "name": "PE Practice 3 — Event Ticketing System",
+      "level": "ADVANCED",
+      "description": "Đề luyện PE 85 phút dạng SP25 Shopping System: giỏ vé toàn cục Context + useReducer + localStorage, giới hạn vé, thanh toán POST/PATCH, lịch sử đơn tổng tính từ dòng."
     }
   ]
 }

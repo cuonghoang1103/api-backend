@@ -1,0 +1,735 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-ex15-usereducer",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-ex15-usereducer"
+  },
+  "exercises": [
+    {
+      "title": "Counter reducer with a lazy init function",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "useReducer(reducer, arg, init)",
+        "RESET to initial",
+        "action types as constants"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer",
+        "exercise-15"
+      ],
+      "problemHtml": "<p>The handout counter (<code>INCREMENT</code>, <code>DECREMENT</code>, <code>RESET</code>) with a twist: the start value comes from a prop <code>start</code>, and <code>RESET</code> must go back to THAT value. Use the third argument of <code>useReducer</code> — an <code>init</code> function — so the same function computes the initial state and the reset state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>&lt;Counter start={10} /&gt;</code> and <code>&lt;Counter start={0} /&gt;</code> in <code>.counter</code> blocks, each with <code>.value</code>, <code>.inc</code>, <code>.dec</code>, <code>.reset</code>.</li>\n  <li>Action types as constants (<code>const INCREMENT = \"INCREMENT\"</code> …). RESET dispatches <code>{ type: RESET, payload: start }</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ đếm của handout (<code>INCREMENT</code>, <code>DECREMENT</code>, <code>RESET</code>) có thêm một điểm: giá trị bắt đầu lấy từ prop <code>start</code>, và <code>RESET</code> phải về ĐÚNG giá trị đó. Dùng tham số thứ ba của <code>useReducer</code> — hàm <code>init</code> — để cùng một hàm tính state ban đầu lẫn state khi reset.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>&lt;Counter start={10} /&gt;</code> và <code>&lt;Counter start={0} /&gt;</code> trong khối <code>.counter</code>, mỗi khối có <code>.value</code>, <code>.inc</code>, <code>.dec</code>, <code>.reset</code>.</li>\n  <li>Kiểu action là hằng (<code>const INCREMENT = \"INCREMENT\"</code> …). RESET gửi <code>{ type: RESET, payload: start }</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "start 10: +, +, reset",
+          "output": "10",
+          "explanation": "init(10) ⇒ { count: 10 } for both mount and reset.|||init(10) ⇒ { count: 10 } cho cả lúc mount lẫn reset."
+        }
+      ],
+      "hintsJson": [
+        "function init(start) { return { count: start }; } … useReducer(reducer, start, init)",
+        "case RESET: return init(action.payload);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useReducer } from 'react';\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case 'INCREMENT': return { count: state.count + 1 };\n    case 'DECREMENT': return { count: state.count - 1 };\n    case 'RESET': return { count: 0 };\n    default: return state;\n  }\n}\n\nfunction Counter({ start }) {\n  const [state, dispatch] = useReducer(reducer, { count: 0 });\n  return (\n    <div className=\"counter\">\n      <span className=\"value\">{state.count}</span>\n      <button className=\"inc\" onClick={() => dispatch({ type: 'INCREMENT' })}>+</button>\n      <button className=\"dec\" onClick={() => dispatch({ type: 'DECREMENT' })}>−</button>\n      <button className=\"reset\" onClick={() => dispatch({ type: 'RESET' })}>Reset</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (<div><Counter start={10} /><Counter start={0} /></div>);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useReducer(reducer, start, init): init dùng cho cả mount và RESET\nimport { useReducer } from 'react';\n\nconst INCREMENT = 'INCREMENT';\nconst DECREMENT = 'DECREMENT';\nconst RESET = 'RESET';\n\nfunction init(start) {\n  return { count: start };\n}\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case INCREMENT:\n      return { count: state.count + 1 };\n    case DECREMENT:\n      return { count: state.count - 1 };\n    case RESET:\n      return init(action.payload);\n    default:\n      return state;\n  }\n}\n\nfunction Counter({ start }) {\n  const [state, dispatch] = useReducer(reducer, start, init);\n  return (\n    <div className=\"counter\">\n      <span className=\"value\">{state.count}</span>\n      <button type=\"button\" className=\"inc\" onClick={() => dispatch({ type: INCREMENT })}>+</button>\n      <button type=\"button\" className=\"dec\" onClick={() => dispatch({ type: DECREMENT })}>−</button>\n      <button type=\"button\" className=\"reset\" onClick={() => dispatch({ type: RESET, payload: start })}>Reset</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Counter start={10} />\n      <Counter start={0} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>useReducer(reducer, arg, init)</code> gọi <code>init(arg)</code> một lần lúc mount. Dùng lại <code>init</code> trong nhánh RESET giữ một nguồn sự thật cho \"state ban đầu là gì\".</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Starts from the prop",
+            "kiem": "danh-sach-text",
+            "selector": ".counter .value",
+            "mongDoi": [
+              "10",
+              "0"
+            ]
+          },
+          {
+            "moTa": "Counters are independent",
+            "kiem": "danh-sach-text",
+            "selector": ".counter .value",
+            "mongDoi": [
+              "12",
+              "-1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".counter:nth-child(1) .inc",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".counter:nth-child(2) .dec",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Reset returns to start",
+            "kiem": "text",
+            "selector": ".counter:nth-child(1) .value",
+            "giaTri": "10",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".counter:nth-child(1) .inc",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".counter:nth-child(1) .reset",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses the init argument",
+            "kiem": "ma-nguon",
+            "khop": "useReducer\\(\\s*reducer\\s*,\\s*start\\s*,\\s*init\\s*\\)"
+          },
+          {
+            "an": true,
+            "moTa": "Action type constants",
+            "kiem": "ma-nguon",
+            "khop": "const\\s+INCREMENT\\s*=\\s*['\"]INCREMENT['\"]"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "RESET về 0 cứng ⇒ sai với counter bắt đầu từ 10."
+        },
+        {
+          "loi": "Gõ sai chuỗi \"INCREMNT\" ở một chỗ ⇒ action rơi vào default, im lặng; hằng số giúp bắt lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "init function",
+          "vi": "hàm tạo state ban đầu (tham số 3 của useReducer)"
+        }
+      ]
+    },
+    {
+      "title": "Question Bank reducer (pure)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "state machine",
+        "action with data",
+        "immutability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer",
+        "exercise-15",
+        "javascript"
+      ],
+      "problemHtml": "<p>The handout's Question Bank, logic first. Write <code>quizReducer</code> for state <code>{ current, selected, score, finished }</code> (initial <code>initialState</code>, also defined by you). <code>NEXT_QUESTION</code> receives the <code>questions</code> array in the action so the reducer stays pure.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SELECT_OPTION {option}</code> ⇒ <code>selected</code> (ignored when finished).</li>\n  <li><code>NEXT_QUESTION {questions}</code>: nothing selected ⇒ same state; else +1 score if <code>selected === questions[current].answer</code>, clear <code>selected</code>, go to the next question or set <code>finished: true</code> after the last one.</li>\n  <li><code>RESTART_QUIZ</code> ⇒ <code>initialState</code>; unknown ⇒ same state.</li>\n</ul>",
+      "problemHtmlVi": "<p>Question Bank của handout, làm phần logic trước. Viết <code>quizReducer</code> cho state <code>{ current, selected, score, finished }</code> (ban đầu là <code>initialState</code>, bạn tự khai báo). <code>NEXT_QUESTION</code> nhận mảng <code>questions</code> trong action để reducer vẫn thuần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SELECT_OPTION {option}</code> ⇒ <code>selected</code> (bỏ qua khi đã xong).</li>\n  <li><code>NEXT_QUESTION {questions}</code>: chưa chọn ⇒ giữ nguyên state; ngược lại +1 điểm nếu <code>selected === questions[current].answer</code>, xoá <code>selected</code>, sang câu kế hoặc đặt <code>finished: true</code> sau câu cuối.</li>\n  <li><code>RESTART_QUIZ</code> ⇒ <code>initialState</code>; action lạ ⇒ giữ nguyên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "select correct option, NEXT_QUESTION",
+          "output": "{ current: 1, selected: null, score: 1, finished: false }",
+          "explanation": "Score is decided at NEXT, not at SELECT — the user may change their mind.|||Điểm tính lúc NEXT, không phải lúc SELECT — người dùng có thể đổi ý."
+        }
+      ],
+      "hintsJson": [
+        "const correct = state.selected === action.questions[state.current].answer;",
+        "const last = state.current === action.questions.length - 1;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — STARTER\nconst initialState = { current: 0, selected: null, score: 0, finished: false };\n\nfunction quizReducer(state, action) {\n  switch (action.type) {\n    case 'SELECT_OPTION':\n      state.selected = action.option;\n      if (action.option === 'A') state.score++;\n      return state;\n    default:\n      return state;\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — máy trạng thái của Question Bank (thuần, không đột biến)\nconst initialState = { current: 0, selected: null, score: 0, finished: false };\n\nfunction quizReducer(state, action) {\n  switch (action.type) {\n    case 'SELECT_OPTION':\n      if (state.finished) return state;\n      return { ...state, selected: action.option };\n    case 'NEXT_QUESTION': {\n      if (state.selected === null || state.finished) return state;\n      const correct = state.selected === action.questions[state.current].answer;\n      const score = state.score + (correct ? 1 : 0);\n      const last = state.current === action.questions.length - 1;\n      return last\n        ? { ...state, score, selected: null, finished: true }\n        : { ...state, score, selected: null, current: state.current + 1 };\n    }\n    case 'RESTART_QUIZ':\n      return initialState;\n    default:\n      return state;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reducer là máy trạng thái nhỏ: mọi chuyển tiếp hợp lệ nằm trong một switch, chuyển tiếp không hợp lệ (NEXT khi chưa chọn) trả lại state cũ. Test bằng cách gọi hàm như dưới đây.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "SELECT_OPTION stores the choice",
+            "goi": "quizReducer(initialState, { type: \"SELECT_OPTION\", option: \"B\" })",
+            "mongDoi": {
+              "current": 0,
+              "selected": "B",
+              "score": 0,
+              "finished": false
+            }
+          },
+          {
+            "moTa": "NEXT scores a correct answer",
+            "goi": "quizReducer({ current: 0, selected: \"B\", score: 0, finished: false }, { type: \"NEXT_QUESTION\", questions: [{ answer: \"B\" }, { answer: \"A\" }] })",
+            "mongDoi": {
+              "current": 1,
+              "selected": null,
+              "score": 1,
+              "finished": false
+            }
+          },
+          {
+            "moTa": "Last question finishes",
+            "goi": "quizReducer({ current: 1, selected: \"C\", score: 1, finished: false }, { type: \"NEXT_QUESTION\", questions: [{ answer: \"B\" }, { answer: \"A\" }] })",
+            "mongDoi": {
+              "current": 1,
+              "selected": null,
+              "score": 1,
+              "finished": true
+            }
+          },
+          {
+            "moTa": "RESTART_QUIZ",
+            "goi": "quizReducer({ current: 1, selected: null, score: 2, finished: true }, { type: \"RESTART_QUIZ\" })",
+            "mongDoi": {
+              "current": 0,
+              "selected": null,
+              "score": 0,
+              "finished": false
+            }
+          },
+          {
+            "an": true,
+            "moTa": "NEXT without a selection ⇒ same state",
+            "goi": "(() => { const s = { current: 0, selected: null, score: 0, finished: false }; return quizReducer(s, { type: \"NEXT_QUESTION\", questions: [{ answer: \"A\" }] }) === s; })()",
+            "mongDoi": true
+          },
+          {
+            "an": true,
+            "moTa": "Changing the selection gives no extra points",
+            "goi": "(() => { let s = initialState; for (const o of [\"A\", \"B\", \"A\"]) s = quizReducer(s, { type: \"SELECT_OPTION\", option: o }); return quizReducer(s, { type: \"NEXT_QUESTION\", questions: [{ answer: \"A\" }, { answer: \"A\" }] }).score; })()",
+            "mongDoi": 1
+          },
+          {
+            "an": true,
+            "moTa": "Does not mutate",
+            "goi": "(() => { const s = { current: 0, selected: null, score: 0, finished: false }; quizReducer(s, { type: \"SELECT_OPTION\", option: \"A\" }); return s.selected; })()",
+            "mongDoi": null
+          },
+          {
+            "an": true,
+            "moTa": "Ignores SELECT when finished",
+            "goi": "(() => { const s = { current: 1, selected: null, score: 1, finished: true }; return quizReducer(s, { type: \"SELECT_OPTION\", option: \"A\" }) === s; })()",
+            "mongDoi": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng điểm ở SELECT_OPTION ⇒ đổi đáp án ba lần được ba điểm."
+        },
+        {
+          "loi": "Đọc mảng câu hỏi từ biến toàn cục trong reducer ⇒ khó test, không thuần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state machine",
+          "vi": "máy trạng thái: các trạng thái + chuyển tiếp hợp lệ"
+        }
+      ]
+    },
+    {
+      "title": "Question Bank app with useReducer",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "useReducer in UI",
+        "disabled until valid",
+        "result screen"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer",
+        "exercise-15"
+      ],
+      "problemHtml": "<p>Now the UI. Three questions; clicking an option dispatches <code>SELECT_OPTION</code> and highlights it; <b>Next</b> is disabled until something is selected; after the last question show the score and a Restart button.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Questions: \"What is ReactJS?\" (A JavaScript library ✔), \"What is JSX?\" (A syntax extension ✔), \"Which hook manages complex state?\" (useReducer ✔). Each has 3 options, rendered as <code>button.option</code>.</li>\n  <li><code>#question</code> text, <code>#progress</code> <code>Question 1/3</code>, selected option has class <code>selected</code>, <code>#btn-next</code> (label <code>Finish</code> on the last question). Result: <code>#score</code> <code>Your score: 2/3</code>, <code>#btn-restart</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giờ đến giao diện. Ba câu hỏi; bấm một lựa chọn gửi <code>SELECT_OPTION</code> và tô sáng nó; nút <b>Next</b> bị vô hiệu tới khi đã chọn; sau câu cuối hiện điểm và nút Restart.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Câu hỏi: \"What is ReactJS?\" (A JavaScript library ✔), \"What is JSX?\" (A syntax extension ✔), \"Which hook manages complex state?\" (useReducer ✔). Mỗi câu 3 lựa chọn, vẽ bằng <code>button.option</code>.</li>\n  <li><code>#question</code> nội dung, <code>#progress</code> <code>Question 1/3</code>, lựa chọn đang chọn có class <code>selected</code>, <code>#btn-next</code> (câu cuối ghi <code>Finish</code>). Kết quả: <code>#score</code> <code>Your score: 2/3</code>, <code>#btn-restart</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "answer 1st and 3rd correctly",
+          "output": "Your score: 2/3",
+          "explanation": "Each NEXT carries the questions array to the reducer.|||Mỗi NEXT mang mảng câu hỏi tới reducer."
+        }
+      ],
+      "hintsJson": [
+        "const [state, dispatch] = useReducer(quizReducer, initialState); const q = QUESTIONS[state.current];",
+        "<button className={opt === state.selected ? \"option selected\" : \"option\"} …>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst QUESTIONS = [\n  { question: 'What is ReactJS?', options: ['A JavaScript library', 'A database', 'A CSS framework'], answer: 'A JavaScript library' },\n  { question: 'What is JSX?', options: ['A syntax extension', 'A server', 'A test runner'], answer: 'A syntax extension' },\n  { question: 'Which hook manages complex state?', options: ['useRef', 'useReducer', 'useId'], answer: 'useReducer' },\n];\n\nexport default function App() {\n  const [current, setCurrent] = useState(0);\n  const q = QUESTIONS[current];\n  return (\n    <div>\n      <h2 id=\"question\">{q.question}</h2>\n      {q.options.map((o) => <button key={o} className=\"option\">{o}</button>)}\n      <button id=\"btn-next\" onClick={() => setCurrent(current + 1)}>Next</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Question Bank: reducer giữ logic, component chỉ hiển thị + dispatch\nimport { useReducer } from 'react';\n\nconst QUESTIONS = [\n  { question: 'What is ReactJS?', options: ['A JavaScript library', 'A database', 'A CSS framework'], answer: 'A JavaScript library' },\n  { question: 'What is JSX?', options: ['A syntax extension', 'A server', 'A test runner'], answer: 'A syntax extension' },\n  { question: 'Which hook manages complex state?', options: ['useRef', 'useReducer', 'useId'], answer: 'useReducer' },\n];\n\nconst initialState = { current: 0, selected: null, score: 0, finished: false };\n\nfunction quizReducer(state, action) {\n  switch (action.type) {\n    case 'SELECT_OPTION':\n      if (state.finished) return state;\n      return { ...state, selected: action.option };\n    case 'NEXT_QUESTION': {\n      if (state.selected === null || state.finished) return state;\n      const correct = state.selected === action.questions[state.current].answer;\n      const score = state.score + (correct ? 1 : 0);\n      const last = state.current === action.questions.length - 1;\n      return last\n        ? { ...state, score, selected: null, finished: true }\n        : { ...state, score, selected: null, current: state.current + 1 };\n    }\n    case 'RESTART_QUIZ':\n      return initialState;\n    default:\n      return state;\n  }\n}\n\nexport default function App() {\n  const [state, dispatch] = useReducer(quizReducer, initialState);\n\n  if (state.finished) {\n    return (\n      <div>\n        <p id=\"score\">Your score: {state.score}/{QUESTIONS.length}</p>\n        <button id=\"btn-restart\" type=\"button\" onClick={() => dispatch({ type: 'RESTART_QUIZ' })}>Restart</button>\n      </div>\n    );\n  }\n\n  const q = QUESTIONS[state.current];\n  const last = state.current === QUESTIONS.length - 1;\n  return (\n    <div>\n      <p id=\"progress\">Question {state.current + 1}/{QUESTIONS.length}</p>\n      <h2 id=\"question\">{q.question}</h2>\n      {q.options.map((opt) => (\n        <button\n          key={opt}\n          type=\"button\"\n          className={opt === state.selected ? 'option selected' : 'option'}\n          onClick={() => dispatch({ type: 'SELECT_OPTION', option: opt })}\n        >\n          {opt}\n        </button>\n      ))}\n      <button id=\"btn-next\" type=\"button\" disabled={state.selected === null} onClick={() => dispatch({ type: 'NEXT_QUESTION', questions: QUESTIONS })}>\n        {last ? 'Finish' : 'Next'}\n      </button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reducer đã viết ở bài trước được dùng nguyên vẹn — component chỉ hiển thị state và gửi action. Đó là lợi ích chính của useReducer: logic test riêng, UI mỏng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Next disabled until a choice",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-next",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "Selected option highlighted",
+            "kiem": "text",
+            "selector": ".option.selected",
+            "giaTri": "A database",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Progress moves on",
+            "kiem": "danh-sach-text",
+            "selector": "#progress, #question",
+            "mongDoi": [
+              "Question 2/3",
+              "What is JSX?"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Score 2/3",
+            "kiem": "text",
+            "selector": "#score",
+            "giaTri": "Your score: 2/3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(3)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Last button reads Finish",
+            "kiem": "text",
+            "selector": "#btn-next",
+            "giaTri": "Finish",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Restart goes back to question 1",
+            "kiem": "text",
+            "selector": "#progress",
+            "giaTri": "Question 1/3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".option:nth-of-type(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-restart",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses useReducer with the three action types",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*useReducer\\()(?=[\\s\\S]*SELECT_OPTION)(?=[\\s\\S]*NEXT_QUESTION)[\\s\\S]*RESTART_QUIZ"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm đúng/sai và cộng điểm trong component ⇒ logic chia đôi, reducer không còn là nguồn sự thật."
+        },
+        {
+          "loi": "Next không disabled ⇒ bấm Next khi chưa chọn bị tính sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "result screen",
+          "vi": "màn hình kết quả"
+        }
+      ]
+    },
+    {
+      "title": "Undo / redo with a history reducer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "past/present/future",
+        "higher-order reducer idea",
+        "disabled states"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer"
+      ],
+      "problemHtml": "<p>A small \"pixel row\" editor: 5 cells you can toggle. Keep history as <code>{ past: [], present, future: [] }</code> so <b>Undo</b> and <b>Redo</b> work. A new edit after undoing clears <code>future</code>. History length is limited to the last <b>10</b> states.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Cells <code>button.cell</code> (class <code>on</code> when on); <code>#undo</code> / <code>#redo</code> disabled when nothing to undo/redo; <code>#history</code> = <code>Undo: 2 · Redo: 1</code>.</li>\n  <li>Actions: <code>TOGGLE {index}</code>, <code>UNDO</code>, <code>REDO</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trình sửa \"hàng điểm ảnh\" nhỏ: 5 ô bật/tắt được. Giữ lịch sử dạng <code>{ past: [], present, future: [] }</code> để <b>Undo</b> và <b>Redo</b> chạy. Sửa mới sau khi undo thì xoá <code>future</code>. Lịch sử chỉ giữ <b>10</b> trạng thái gần nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ô <code>button.cell</code> (class <code>on</code> khi bật); <code>#undo</code> / <code>#redo</code> vô hiệu khi không có gì để undo/redo; <code>#history</code> = <code>Undo: 2 · Redo: 1</code>.</li>\n  <li>Action: <code>TOGGLE {index}</code>, <code>UNDO</code>, <code>REDO</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toggle 0, toggle 1, undo",
+          "output": "only cell 0 on · Undo: 1 · Redo: 1",
+          "explanation": "UNDO moves present to the front of future and pops past.|||UNDO đưa present lên đầu future và lấy phần tử cuối của past."
+        }
+      ],
+      "hintsJson": [
+        "TOGGLE: const next = present.map((v, i) => i === action.index ? !v : v); return { past: [...past, present].slice(-10), present: next, future: [] };",
+        "UNDO: if (!past.length) return state; return { past: past.slice(0, -1), present: past[past.length - 1], future: [present, ...future] };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [cells, setCells] = useState([false, false, false, false, false]);\n  const toggle = (i) => { cells[i] = !cells[i]; setCells([...cells]); };\n  return (\n    <div>\n      {cells.map((on, i) => <button key={i} className={on ? 'cell on' : 'cell'} onClick={() => toggle(i)}>{i}</button>)}\n      <button id=\"undo\">Undo</button>\n      <button id=\"redo\">Redo</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — reducer lịch sử { past, present, future } cho Undo/Redo\nimport { useReducer } from 'react';\n\nconst LIMIT = 10;\nconst initialState = { past: [], present: [false, false, false, false, false], future: [] };\n\nfunction historyReducer(state, action) {\n  const { past, present, future } = state;\n  switch (action.type) {\n    case 'TOGGLE': {\n      const next = present.map((v, i) => (i === action.index ? !v : v));\n      return { past: [...past, present].slice(-LIMIT), present: next, future: [] };\n    }\n    case 'UNDO':\n      if (past.length === 0) return state;\n      return { past: past.slice(0, -1), present: past[past.length - 1], future: [present, ...future] };\n    case 'REDO':\n      if (future.length === 0) return state;\n      return { past: [...past, present].slice(-LIMIT), present: future[0], future: future.slice(1) };\n    default:\n      return state;\n  }\n}\n\nexport default function App() {\n  const [state, dispatch] = useReducer(historyReducer, initialState);\n  return (\n    <div>\n      <div>\n        {state.present.map((on, i) => (\n          <button key={i} type=\"button\" className={on ? 'cell on' : 'cell'} onClick={() => dispatch({ type: 'TOGGLE', index: i })}>{i}</button>\n        ))}\n      </div>\n      <button id=\"undo\" type=\"button\" disabled={state.past.length === 0} onClick={() => dispatch({ type: 'UNDO' })}>Undo</button>\n      <button id=\"redo\" type=\"button\" disabled={state.future.length === 0} onClick={() => dispatch({ type: 'REDO' })}>Redo</button>\n      <p id=\"history\">Undo: {state.past.length} · Redo: {state.future.length}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lịch sử là ba phần: quá khứ, hiện tại, tương lai. Undo/Redo chỉ dời phần tử giữa ba phần đó — vì mọi trạng thái đều bất biến, lưu tham chiếu là đủ, không cần sao chép sâu.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Undo reverts the last edit",
+            "kiem": "so-luong",
+            "selector": ".cell.on",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "History counters",
+            "kiem": "text",
+            "selector": "#history",
+            "giaTri": "Undo: 1 · Redo: 1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Redo re-applies",
+            "kiem": "so-luong",
+            "selector": ".cell.on",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(2)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#redo",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Buttons disabled at start",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#undo, #redo",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "an": true,
+            "moTa": "New edit clears redo",
+            "kiem": "text",
+            "selector": "#history",
+            "giaTri": "Undo: 1 · Redo: 0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(3)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "History limited to 10",
+            "kiem": "text",
+            "selector": "#history",
+            "giaTri": "Undo: 10 · Redo: 0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 12
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Undo all the way restores the start",
+            "kiem": "so-luong",
+            "selector": ".cell.on",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(1)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".cell:nth-child(4)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#undo",
+                "lan": 3
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên xoá future khi sửa mới ⇒ Redo đưa về một nhánh lịch sử không còn hợp lệ."
+        },
+        {
+          "loi": "Lưu tham chiếu tới cùng một mảng present rồi sửa nó ⇒ mọi mục lịch sử đổi theo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "undo stack",
+          "vi": "ngăn xếp các trạng thái trước"
+        }
+      ]
+    }
+  ]
+}

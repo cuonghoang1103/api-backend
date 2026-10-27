@@ -1,0 +1,798 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-1-usestate-useeffect",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-1-usestate-useeffect"
+  },
+  "exercises": [
+    {
+      "title": "Lazy initial state from localStorage",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "useState initializer",
+        "localStorage",
+        "JSON.parse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState"
+      ],
+      "problemHtml": "<p>A \"visits\" counter that starts from the value saved in localStorage key <code>visits</code> (or 0). Read storage ONCE with a lazy initializer <code>useState(() =&gt; …)</code>, not on every render.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#visits</code> shows the number; <code>#btn-visit</code> adds 1 (two fast clicks = +2) and the value is saved to <code>visits</code>.</li>\n  <li>Corrupted storage (not a number) ⇒ start from 0.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ đếm \"lượt ghé\" bắt đầu từ giá trị lưu ở localStorage khoá <code>visits</code> (hoặc 0). Đọc storage MỘT lần bằng khởi tạo lười <code>useState(() =&gt; …)</code>, không đọc mỗi lần render.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#visits</code> hiện số; <code>#btn-visit</code> cộng 1 (bấm nhanh hai lần = +2) và giá trị được lưu vào <code>visits</code>.</li>\n  <li>Storage hỏng (không phải số) ⇒ bắt đầu từ 0.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "localStorage.visits = \"41\", click once",
+          "output": "42 (saved)",
+          "explanation": "useState(() => Number(localStorage.getItem(\"visits\")) || 0)|||useState(() => Number(localStorage.getItem(\"visits\")) || 0)"
+        }
+      ],
+      "hintsJson": [
+        "const [visits, setVisits] = useState(() => { const n = Number(localStorage.getItem(\"visits\")); return Number.isFinite(n) ? n : 0; });",
+        "Bấm: setVisits((v) => v + 1); ghi storage trong useEffect(() => localStorage.setItem(\"visits\", String(visits)), [visits])."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [visits, setVisits] = useState(0);\n  return (\n    <div>\n      <p id=\"visits\">{visits}</p>\n      <button id=\"btn-visit\" onClick={() => setVisits(visits + 1)}>Visit</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — khởi tạo LƯỜI: hàm chỉ chạy ở lần render đầu\nimport { useEffect, useState } from 'react';\n\nfunction readVisits() {\n  const n = Number(localStorage.getItem('visits'));\n  return Number.isFinite(n) ? n : 0; // null ⇒ 0, \"abc\" ⇒ NaN ⇒ 0\n}\n\nexport default function App() {\n  const [visits, setVisits] = useState(readVisits); // truyền HÀM, không gọi\n\n  useEffect(() => {\n    localStorage.setItem('visits', String(visits)); // ghi sau mỗi lần đổi\n  }, [visits]);\n\n  const visit = () => setVisits((v) => v + 1); // dạng hàm ⇒ bấm nhanh 2 lần vẫn đúng\n\n  return (\n    <div>\n      <p id=\"visits\">{visits}</p>\n      <button id=\"btn-visit\" type=\"button\" onClick={visit}>Visit</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Truyền HÀM cho <code>useState</code> khiến React chỉ gọi nó ở lần render đầu. Biểu thức truyền thẳng thì bị tính lại mỗi lần render dù kết quả bị bỏ qua.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Starts from the saved value",
+            "khoCucBo": {
+              "visits": "41"
+            },
+            "kiem": "text",
+            "selector": "#visits",
+            "giaTri": "41"
+          },
+          {
+            "moTa": "Click adds 1 and saves",
+            "khoCucBo": {
+              "visits": "41"
+            },
+            "kiem": "kho-cuc-bo",
+            "khoa": "visits",
+            "khop": "^42$",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-visit",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Corrupted storage ⇒ 0",
+            "khoCucBo": {
+              "visits": "abc"
+            },
+            "kiem": "text",
+            "selector": "#visits",
+            "giaTri": "0"
+          },
+          {
+            "an": true,
+            "moTa": "Survives a reload",
+            "kiem": "text",
+            "selector": "#visits",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-visit",
+                "lan": 2
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Lazy initializer (function passed to useState)",
+            "kiem": "ma-nguon",
+            "khop": "useState\\(\\s*(\\(\\)\\s*=>|readVisits|function)"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>useState(Number(localStorage.getItem('visits')))</code> ⇒ đọc storage ở MỌI lần render (thừa, có thể chậm)."
+        },
+        {
+          "loi": "Quên đổi chuỗi sang số ⇒ \"41\" + 1 = \"411\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lazy initializer",
+          "vi": "hàm khởi tạo chỉ chạy một lần lúc mount"
+        }
+      ]
+    },
+    {
+      "title": "useEffect with dependencies: sync the document title",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "useEffect",
+        "dependency array",
+        "synchronising with outside systems"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect"
+      ],
+      "problemHtml": "<p>An inbox shows unread messages. Keep the browser tab title in sync: <code>(3) Inbox</code>, or just <code>Inbox</code> when there are none. The effect must run only when the count changes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#unread</code> + <code>#btn-read</code> (−1, not below 0) + <code>#btn-new</code> (+1). <code>document.title</code> follows; <code>#title</code> shows it too.</li>\n  <li>Dependency array <code>[unread]</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hộp thư hiển thị số thư chưa đọc. Giữ tiêu đề tab đồng bộ: <code>(3) Inbox</code>, hoặc chỉ <code>Inbox</code> khi không còn thư. Effect chỉ được chạy khi số đếm đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#unread</code> + <code>#btn-read</code> (−1, không dưới 0) + <code>#btn-new</code> (+1). <code>document.title</code> theo kịp; <code>#title</code> cũng hiện nó.</li>\n  <li>Mảng phụ thuộc <code>[unread]</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "unread 3 → read one",
+          "output": "title \"(2) Inbox\"",
+          "explanation": "Effects run AFTER the commit, so the DOM/title update follows the screen.|||Effect chạy SAU commit nên tiêu đề cập nhật theo màn hình."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { document.title = unread ? `(${unread}) Inbox` : \"Inbox\"; }, [unread]);",
+        "Để test nhìn thấy: hiển thị luôn chuỗi tiêu đề trong #title (tính cùng công thức)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [unread, setUnread] = useState(3);\n  return (\n    <div>\n      <p id=\"unread\">{unread}</p>\n      <button id=\"btn-read\" onClick={() => setUnread(unread - 1)}>Read one</button>\n      <button id=\"btn-new\" onClick={() => setUnread(unread + 1)}>New mail</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useEffect đồng bộ tiêu đề tab mỗi khi unread đổi\nimport { useEffect, useState } from 'react';\n\nconst titleFor = (n) => (n > 0 ? `(${n}) Inbox` : 'Inbox');\n\nexport default function App() {\n  const [unread, setUnread] = useState(3);\n\n  useEffect(() => {\n    document.title = titleFor(unread);\n  }, [unread]); // chỉ chạy lại khi unread đổi\n\n  return (\n    <div>\n      <p id=\"unread\">{unread}</p>\n      <p id=\"title\">{titleFor(unread)}</p>\n      <button id=\"btn-read\" type=\"button\" onClick={() => setUnread((n) => Math.max(0, n - 1))}>Read one</button>\n      <button id=\"btn-new\" type=\"button\" onClick={() => setUnread((n) => n + 1)}>New mail</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>useEffect</code> dùng để đồng bộ React với thứ bên ngoài (tiêu đề tab). Mảng phụ thuộc cho React biết khi nào cần đồng bộ lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "document.title set on mount",
+            "kiem": "ma-nguon",
+            "khop": "useEffect\\([\\s\\S]*document\\.title\\s*=[\\s\\S]*\\[\\s*unread\\s*\\]"
+          },
+          {
+            "moTa": "Reading one ⇒ (2) Inbox",
+            "kiem": "text",
+            "selector": "#title",
+            "giaTri": "(2) Inbox",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-read",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Never below 0; title \"Inbox\"",
+            "kiem": "danh-sach-text",
+            "selector": "#unread, #title",
+            "mongDoi": [
+              "0",
+              "Inbox"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-read",
+                "lan": 5
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt <code>document.title = …</code> thẳng trong thân component ⇒ chạy cả khi render không được commit; effect là chỗ đúng."
+        },
+        {
+          "loi": "Quên mảng phụ thuộc ⇒ chạy sau MỌI lần render."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "external system",
+          "vi": "hệ thống bên ngoài React (DOM, tiêu đề, storage, mạng)"
+        }
+      ]
+    },
+    {
+      "title": "Effect with cleanup: a keyboard shortcut",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "addEventListener",
+        "cleanup function",
+        "stale closures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect"
+      ],
+      "problemHtml": "<p>Press <b>/</b> anywhere to focus the search box (like GitHub). Subscribe to <code>keydown</code> on <code>document</code> in an effect, and <b>remove</b> the listener in the cleanup — otherwise every re-mount adds another listener.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#search</code> receives focus on <b>/</b> (and the \"/\" is not typed); <code>#shortcut-count</code> counts how many times the shortcut fired.</li>\n  <li>A <code>#toggle</code> button unmounts/mounts the search panel; after remounting, one \"/\" still counts once (cleanup works).</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhấn <b>/</b> ở bất kỳ đâu để focus ô tìm (như GitHub). Đăng ký <code>keydown</code> trên <code>document</code> trong effect, và <b>gỡ</b> listener trong cleanup — nếu không mỗi lần mount lại sẽ thêm một listener.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#search</code> nhận focus khi nhấn <b>/</b> (và không gõ ký tự \"/\"); <code>#shortcut-count</code> đếm số lần phím tắt chạy.</li>\n  <li>Nút <code>#toggle</code> gỡ/gắn lại khung tìm; sau khi gắn lại, một lần \"/\" vẫn chỉ đếm một (cleanup hoạt động).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toggle off, toggle on, press \"/\"",
+          "output": "Shortcut used 1 time",
+          "explanation": "Without cleanup the old listener would still run.|||Không có cleanup thì listener cũ vẫn chạy."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { const onKey = (e) => { if (e.key === \"/\") { e.preventDefault(); ref.current.focus(); setCount(c => c + 1); } }; document.addEventListener(\"keydown\", onKey); return () => document.removeEventListener(\"keydown\", onKey); }, []);",
+        "Dùng useRef cho ô tìm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction SearchPanel() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <input id=\"search\" placeholder=\"Press / to search\" />\n      <p id=\"shortcut-count\">Shortcut used {count} times</p>\n    </div>\n  );\n}\n\nexport default function App() {\n  const [show, setShow] = useState(true);\n  return (\n    <div>\n      <button id=\"toggle\" onClick={() => setShow(!show)}>Toggle panel</button>\n      {show && <SearchPanel />}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — listener mở trong effect, ĐÓNG trong cleanup\nimport { useEffect, useRef, useState } from 'react';\n\nfunction SearchPanel() {\n  const [count, setCount] = useState(0);\n  const inputRef = useRef(null);\n\n  useEffect(() => {\n    const onKey = (e) => {\n      if (e.key === '/' && document.activeElement !== inputRef.current) {\n        e.preventDefault(); // không gõ \"/\" vào ô\n        inputRef.current.focus();\n        setCount((c) => c + 1);\n      }\n    };\n    document.addEventListener('keydown', onKey);\n    return () => document.removeEventListener('keydown', onKey); // gỡ khi unmount\n  }, []);\n\n  return (\n    <div>\n      <input id=\"search\" ref={inputRef} placeholder=\"Press / to search\" />\n      <p id=\"shortcut-count\">Shortcut used {count} times</p>\n    </div>\n  );\n}\n\nexport default function App() {\n  const [show, setShow] = useState(true);\n  return (\n    <div>\n      <button id=\"toggle\" type=\"button\" onClick={() => setShow((s) => !s)}>Toggle panel</button>\n      {show && <SearchPanel />}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi thứ effect \"mở\" (listener, interval, kết nối) phải được \"đóng\" trong hàm cleanup. React gọi cleanup khi component bị gỡ và trước mỗi lần chạy lại effect.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "\"/\" focuses the search box",
+            "kiem": "focus",
+            "selector": "#search",
+            "truoc": [
+              {
+                "hanhDong": "phim",
+                "selector": "#toggle",
+                "phim": "/"
+              }
+            ]
+          },
+          {
+            "moTa": "Counter increments",
+            "kiem": "text",
+            "selector": "#shortcut-count",
+            "giaTri": "Shortcut used 1 times",
+            "truoc": [
+              {
+                "hanhDong": "phim",
+                "selector": "#toggle",
+                "phim": "/"
+              }
+            ]
+          },
+          {
+            "moTa": "After remount, one key press counts once",
+            "kiem": "text",
+            "selector": "#shortcut-count",
+            "giaTri": "Shortcut used 1 times",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#toggle",
+                "lan": 1
+              },
+              {
+                "hanhDong": "phim",
+                "selector": "#toggle",
+                "phim": "/"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Cleanup removes the listener",
+            "kiem": "ma-nguon",
+            "khop": "return\\s*\\(\\)\\s*=>\\s*document\\.removeEventListener\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không return cleanup ⇒ listener nhân lên sau mỗi lần mount; StrictMode ở dev lộ lỗi ngay."
+        },
+        {
+          "loi": "Đăng ký listener trong thân component (không trong effect) ⇒ thêm mới mỗi lần render."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cleanup",
+          "vi": "hàm dọn dẹp chạy khi unmount hoặc trước khi effect chạy lại"
+        },
+        {
+          "en": "subscription",
+          "vi": "đăng ký nghe sự kiện"
+        }
+      ]
+    },
+    {
+      "title": "Fetch on mount with loading and error states",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "useEffect + fetch",
+        "async function inside effect",
+        "loading/error"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "fetch"
+      ],
+      "problemHtml": "<p>Load <code>GET http://localhost:9999/courses</code> once when the component mounts. Show <code>#loading</code> while waiting, the list when done, and <code>#error</code> if the request fails (check <code>res.ok</code>!).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Define an async function INSIDE the effect and call it (the effect itself must not be async). Dependency array <code>[]</code>.</li>\n  <li><code>ul#courses li</code>; error text <code>Could not load courses</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tải <code>GET http://localhost:9999/courses</code> một lần khi component mount. Hiện <code>#loading</code> lúc chờ, danh sách khi xong, và <code>#error</code> nếu request lỗi (nhớ kiểm <code>res.ok</code>!).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khai báo hàm async BÊN TRONG effect rồi gọi (bản thân effect không được async). Mảng phụ thuộc <code>[]</code>.</li>\n  <li><code>ul#courses li</code>; chữ lỗi <code>Could not load courses</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "server answers 404",
+          "output": "Could not load courses",
+          "explanation": "fetch only rejects on network errors — 404 resolves, so check res.ok.|||fetch chỉ reject khi lỗi mạng — 404 vẫn resolve, nên phải kiểm res.ok."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { async function load() { … } load(); }, []);",
+        "try { const res = await fetch(url); if (!res.ok) throw new Error(res.status); setCourses(await res.json()); } catch { setError(true); } finally { setLoading(false); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [courses, setCourses] = useState([]);\n  useEffect(async () => {\n    const res = await fetch('http://localhost:9999/courses');\n    setCourses(await res.json());\n  });\n  return <ul id=\"courses\">{courses.map((c) => <li key={c.id}>{c.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — hàm async BÊN TRONG effect; [] ⇒ chạy một lần; kiểm res.ok\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [courses, setCourses] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(false);\n\n  useEffect(() => {\n    async function load() {\n      try {\n        const res = await fetch('http://localhost:9999/courses');\n        if (!res.ok) throw new Error(`HTTP ${res.status}`);\n        setCourses(await res.json());\n      } catch {\n        setError(true);\n      } finally {\n        setLoading(false);\n      }\n    }\n    load();\n  }, []);\n\n  if (loading) return <p id=\"loading\">Loading...</p>;\n  if (error) return <p id=\"error\">Could not load courses</p>;\n  return <ul id=\"courses\">{courses.map((c) => <li key={c.id}>{c.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Effect chạy sau lần render đầu; <code>[]</code> nghĩa là chỉ một lần. Ba state (dữ liệu, đang tải, lỗi) mô tả đầy đủ vòng đời của request.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "courses": [
+              {
+                "id": 1,
+                "title": "React Basics"
+              },
+              {
+                "id": 2,
+                "title": "React Router"
+              },
+              {
+                "id": 3,
+                "title": "Redux Toolkit"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Courses listed",
+            "kiem": "danh-sach-text",
+            "selector": "#courses li",
+            "mongDoi": [
+              "React Basics",
+              "React Router",
+              "Redux Toolkit"
+            ]
+          },
+          {
+            "moTa": "Loading shown while waiting",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {
+                "courses": []
+              },
+              "treMs": 1500
+            },
+            "kiem": "ton-tai",
+            "selector": "#loading"
+          },
+          {
+            "moTa": "HTTP error ⇒ #error",
+            "jsonServer": {
+              "base": "http://localhost:9999",
+              "db": {}
+            },
+            "kiem": "text",
+            "selector": "#error",
+            "giaTri": "Could not load courses"
+          },
+          {
+            "an": true,
+            "moTa": "Only one request (no infinite loop)",
+            "kiem": "goi-fetch",
+            "khop": "/courses",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 300
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "The effect callback is not async",
+            "kiem": "ma-nguon",
+            "khop": "useEffect\\(\\s*async",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>useEffect(async () =&gt; …)</code> ⇒ effect trả Promise, React cảnh báo và cleanup hỏng."
+        },
+        {
+          "loi": "Không có mảng phụ thuộc + setState trong effect ⇒ vòng lặp gọi API vô hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "on mount",
+          "vi": "khi component vừa xuất hiện"
+        }
+      ]
+    },
+    {
+      "title": "useRef: autofocus and the previous value",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "useRef DOM",
+        "useRef value",
+        "usePrevious"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useRef"
+      ],
+      "problemHtml": "<p>Two uses of <code>useRef</code>: (1) focus the amount input on mount; (2) remember the previous amount between renders to show \"was 100 → now 150\" — a ref changes without causing a render.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#amount</code> (number input) focused on mount; buttons <code>#plus50</code> and <code>#minus50</code>.</li>\n  <li><code>#change</code>: \"was X → now Y\" (X = value of the previous render). Write a <code>usePrevious(value)</code> hook.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai cách dùng <code>useRef</code>: (1) focus ô số tiền khi mount; (2) nhớ số tiền trước đó giữa các lần render để hiện \"was 100 → now 150\" — ref đổi mà không gây render.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#amount</code> (ô số) được focus khi mount; nút <code>#plus50</code> và <code>#minus50</code>.</li>\n  <li><code>#change</code>: \"was X → now Y\" (X = giá trị ở lần render trước). Viết hook <code>usePrevious(value)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "100 → +50",
+          "output": "was 100 → now 150",
+          "explanation": "The ref is updated in an effect after render, so during render it still holds the old value.|||Ref được cập nhật trong effect SAU render, nên lúc render nó vẫn giữ giá trị cũ."
+        }
+      ],
+      "hintsJson": [
+        "function usePrevious(value) { const ref = useRef(); useEffect(() => { ref.current = value; }, [value]); return ref.current; }",
+        "Focus: const inputRef = useRef(null); useEffect(() => inputRef.current.focus(), []);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [amount, setAmount] = useState(100);\n  return (\n    <div>\n      <input id=\"amount\" type=\"number\" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />\n      <button id=\"plus50\" onClick={() => setAmount(amount + 50)}>+50</button>\n      <button id=\"minus50\" onClick={() => setAmount(amount - 50)}>−50</button>\n      <p id=\"change\">now {amount}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useRef cho nút DOM (focus) và cho giá trị trước (usePrevious)\nimport { useEffect, useRef, useState } from 'react';\n\nfunction usePrevious(value) {\n  const ref = useRef(undefined);\n  useEffect(() => {\n    ref.current = value; // cập nhật SAU render ⇒ trong render ta còn thấy giá trị cũ\n  }, [value]);\n  return ref.current;\n}\n\nexport default function App() {\n  const [amount, setAmount] = useState(100);\n  const prev = usePrevious(amount);\n  const inputRef = useRef(null);\n\n  useEffect(() => {\n    inputRef.current.focus();\n  }, []);\n\n  return (\n    <div>\n      <input id=\"amount\" ref={inputRef} type=\"number\" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />\n      <button id=\"plus50\" type=\"button\" onClick={() => setAmount((a) => a + 50)}>+50</button>\n      <button id=\"minus50\" type=\"button\" onClick={() => setAmount((a) => a - 50)}>−50</button>\n      <p id=\"change\">{prev === undefined ? `now ${amount}` : `was ${prev} → now ${amount}`}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>useRef</code> trả về cùng một object <code>{ current }</code> suốt đời component: gắn vào thẻ để có nút DOM, hoặc dùng làm \"biến instance\". Cập nhật ref trong effect (sau render) để lần render sau vẫn đọc được giá trị cũ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Amount input focused on mount",
+            "kiem": "focus",
+            "selector": "#amount"
+          },
+          {
+            "moTa": "Shows previous and current",
+            "kiem": "text",
+            "selector": "#change",
+            "giaTri": "was 100 → now 150",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus50",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Previous follows each change",
+            "kiem": "text",
+            "selector": "#change",
+            "giaTri": "was 150 → now 100",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus50",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 50
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#minus50",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "usePrevious custom hook",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+usePrevious\\s*\\([\\s\\S]*useRef\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu giá trị trước bằng useState ⇒ thêm một lần render mỗi lần đổi."
+        },
+        {
+          "loi": "Gán <code>ref.current = value</code> trong thân component ⇒ lúc đọc đã là giá trị mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutable ref",
+          "vi": "hộp giá trị đổi được, sống qua các lần render"
+        }
+      ]
+    },
+    {
+      "title": "Custom hook: useLocalStorage",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "custom hook",
+        "generic state + persistence",
+        "JSON"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "custom-hooks"
+      ],
+      "problemHtml": "<p>Extract the \"state that survives a reload\" pattern into <code>useLocalStorage(key, initialValue)</code> returning <code>[value, setValue]</code> — exactly like <code>useState</code>, including functional updates. Use it for a notes app and a \"compact view\" switch.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Lazy read with JSON.parse (corrupted ⇒ initialValue); write with JSON.stringify in an effect on <code>[key, value]</code>.</li>\n  <li>Notes: <code>#note-input</code> + <code>#btn-add</code> ⇒ <code>li.note</code> (key <code>notes</code>); switch <code>#compact</code> (key <code>compact</code>) adds class <code>compact</code> to <code>#notes</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Rút mẫu \"state còn sau khi tải lại\" thành <code>useLocalStorage(key, initialValue)</code> trả về <code>[value, setValue]</code> — y như <code>useState</code>, kể cả cập nhật dạng hàm. Dùng nó cho app ghi chú và công tắc \"xem gọn\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc lười bằng JSON.parse (hỏng ⇒ initialValue); ghi bằng JSON.stringify trong effect theo <code>[key, value]</code>.</li>\n  <li>Ghi chú: <code>#note-input</code> + <code>#btn-add</code> ⇒ <code>li.note</code> (khoá <code>notes</code>); công tắc <code>#compact</code> (khoá <code>compact</code>) thêm class <code>compact</code> cho <code>#notes</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add 2 notes, reload",
+          "output": "both notes still there",
+          "explanation": "setNotes((n) => [...n, text]) works because the hook returns React's own setter.|||setNotes((n) => [...n, text]) chạy được vì hook trả về chính hàm đặt của React."
+        }
+      ],
+      "hintsJson": [
+        "function useLocalStorage(key, initialValue) { const [value, setValue] = useState(() => { try { const raw = localStorage.getItem(key); return raw === null ? initialValue : JSON.parse(raw); } catch { return initialValue; } }); useEffect(() => { localStorage.setItem(key, JSON.stringify(value)); }, [key, value]); return [value, setValue]; }",
+        "Dùng: const [notes, setNotes] = useLocalStorage(\"notes\", []);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [notes, setNotes] = useState([]);\n  const [compact, setCompact] = useState(false);\n  const [text, setText] = useState('');\n  return (\n    <div>\n      <input id=\"note-input\" value={text} onChange={(e) => setText(e.target.value)} />\n      <button id=\"btn-add\" onClick={() => setNotes([...notes, text])}>Add</button>\n      <label><input id=\"compact\" type=\"checkbox\" checked={compact} onChange={(e) => setCompact(e.target.checked)} /> Compact</label>\n      <ul id=\"notes\">{notes.map((n, i) => <li key={i} className=\"note\">{n}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useLocalStorage: giống useState nhưng còn sau khi tải lại trang\nimport { useEffect, useState } from 'react';\n\nfunction useLocalStorage(key, initialValue) {\n  const [value, setValue] = useState(() => {\n    try {\n      const raw = localStorage.getItem(key);\n      return raw === null ? initialValue : JSON.parse(raw);\n    } catch {\n      return initialValue; // JSON hỏng\n    }\n  });\n  useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n  return [value, setValue]; // setter gốc của React ⇒ hỗ trợ cả setValue(prev => …)\n}\n\nexport default function App() {\n  const [notes, setNotes] = useLocalStorage('notes', []);\n  const [compact, setCompact] = useLocalStorage('compact', false);\n  const [text, setText] = useState('');\n\n  const add = () => {\n    const t = text.trim();\n    if (!t) return;\n    setNotes((n) => [...n, { id: Date.now() + Math.random(), text: t }]);\n    setText('');\n  };\n\n  return (\n    <div>\n      <input id=\"note-input\" value={text} onChange={(e) => setText(e.target.value)} />\n      <button id=\"btn-add\" type=\"button\" onClick={add}>Add</button>\n      <label><input id=\"compact\" type=\"checkbox\" checked={compact} onChange={(e) => setCompact(e.target.checked)} /> Compact</label>\n      <ul id=\"notes\" className={compact ? 'compact' : ''}>{notes.map((n) => <li key={n.id} className=\"note\">{n.text}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Custom hook là hàm JavaScript gọi hook khác — mỗi component dùng nó có state RIÊNG. Trả về đúng setter của React nên mọi cách dùng của <code>useState</code> (kể cả dạng hàm) đều chạy.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Notes survive a reload",
+            "kiem": "danh-sach-text",
+            "selector": ".note",
+            "mongDoi": [
+              "Buy milk",
+              "Call mom"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#note-input",
+                "giaTri": "Buy milk"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#note-input",
+                "giaTri": "Call mom"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "moTa": "Compact switch survives a reload",
+            "kiem": "ton-tai",
+            "selector": "#notes.compact",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#compact"
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "moTa": "Stored as JSON",
+            "kiem": "kho-cuc-bo",
+            "khoa": "compact",
+            "khop": "^true$",
+            "truoc": [
+              {
+                "hanhDong": "chon-o",
+                "selector": "#compact"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Corrupted JSON falls back to the initial value",
+            "khoCucBo": {
+              "notes": "[oops"
+            },
+            "kiem": "so-luong",
+            "selector": ".note",
+            "giaTri": 0
+          },
+          {
+            "an": true,
+            "moTa": "A useLocalStorage hook is defined and used twice",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+useLocalStorage[\\s\\S]*useLocalStorage\\([\\s\\S]*useLocalStorage\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tự viết setValue riêng không hỗ trợ dạng hàm ⇒ <code>setNotes(n =&gt; …)</code> lưu nguyên một hàm."
+        },
+        {
+          "loi": "Đặt tên không bắt đầu bằng <code>use</code> ⇒ linter không kiểm luật hooks."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "custom hook",
+          "vi": "hàm use… gom state + effect để dùng lại"
+        }
+      ]
+    }
+  ]
+}

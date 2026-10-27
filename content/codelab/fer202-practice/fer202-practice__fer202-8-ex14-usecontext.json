@@ -1,0 +1,658 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-ex14-usecontext",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-ex14-usecontext"
+  },
+  "exercises": [
+    {
+      "title": "ThemeProvider and useTheme (light/dark)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "createContext",
+        "Provider",
+        "custom hook",
+        "nearest provider"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext",
+        "exercise-14"
+      ],
+      "problemHtml": "<p>Handout task 1. <code>ThemeProvider</code> stores <code>\"light\"</code> or <code>\"dark\"</code> and a <code>toggleTheme</code> function; <code>useTheme()</code> reads them. The page wrapper, a deeply nested <code>Card</code> and the toggle button all read the same theme — no props passed down.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Wrapper <code>#app</code> has class <code>light</code> or <code>dark</code>; <code>#btn-theme</code> reads <code>Switch to dark</code> / <code>Switch to light</code>.</li>\n  <li><code>Layout → Sidebar → Card</code>: <code>.card-theme</code> shows <code>Current theme: dark</code>. A second <code>ThemeProvider initial=\"dark\"</code> wraps <code>#preview</code>, whose card is always dark (nearest provider).</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1 của handout. <code>ThemeProvider</code> giữ <code>\"light\"</code> hoặc <code>\"dark\"</code> và hàm <code>toggleTheme</code>; <code>useTheme()</code> đọc chúng. Khung trang, một <code>Card</code> nằm sâu và nút đổi đều đọc cùng theme — không truyền props xuống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khung <code>#app</code> có class <code>light</code> hoặc <code>dark</code>; <code>#btn-theme</code> ghi <code>Switch to dark</code> / <code>Switch to light</code>.</li>\n  <li><code>Layout → Sidebar → Card</code>: <code>.card-theme</code> hiện <code>Current theme: dark</code>. Một <code>ThemeProvider initial=\"dark\"</code> thứ hai bọc <code>#preview</code>, card trong đó luôn tối (provider gần nhất).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click Switch to dark",
+          "output": "#app.dark · Current theme: dark",
+          "explanation": "All consumers of the outer provider update.|||Mọi nơi dùng provider ngoài đều cập nhật."
+        }
+      ],
+      "hintsJson": [
+        "const ThemeContext = createContext(null); function ThemeProvider({ initial = \"light\", children }) { const [theme, setTheme] = useState(initial); … }",
+        "useTheme: const ctx = useContext(ThemeContext); if (!ctx) throw new Error(…); return ctx;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction Card({ theme }) {\n  return <div className=\"card-theme\">Current theme: {theme}</div>;\n}\nfunction Sidebar({ theme }) { return <aside><Card theme={theme} /></aside>; }\nfunction Layout({ theme }) { return <main><Sidebar theme={theme} /></main>; }\n\nexport default function App() {\n  const [theme, setTheme] = useState('light');\n  return (\n    <div id=\"app\">\n      <button id=\"btn-theme\" onClick={() => setTheme('dark')}>Switch</button>\n      <Layout theme={theme} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ThemeProvider + useTheme; provider lồng cho vùng xem trước\nimport { createContext, useContext, useState } from 'react';\n\nconst ThemeContext = createContext(null);\n\nfunction ThemeProvider({ initial = 'light', children }) {\n  const [theme, setTheme] = useState(initial);\n  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));\n  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;\n}\n\nfunction useTheme() {\n  const ctx = useContext(ThemeContext);\n  if (!ctx) throw new Error('useTheme must be used inside ThemeProvider');\n  return ctx;\n}\n\nfunction Card() {\n  const { theme } = useTheme();\n  return <div className={`card-theme ${theme}`}>Current theme: {theme}</div>;\n}\nfunction Sidebar() { return <aside><Card /></aside>; }\nfunction Layout() { return <main><Sidebar /></main>; }\n\nfunction ThemeButton() {\n  const { theme, toggleTheme } = useTheme();\n  return (\n    <button id=\"btn-theme\" type=\"button\" onClick={toggleTheme}>\n      {theme === 'light' ? 'Switch to dark' : 'Switch to light'}\n    </button>\n  );\n}\n\nfunction Shell() {\n  const { theme } = useTheme();\n  return (\n    <div id=\"app\" className={theme}>\n      <ThemeButton />\n      <Layout />\n      <section id=\"preview\">\n        <ThemeProvider initial=\"dark\">\n          <Card />\n        </ThemeProvider>\n      </section>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <ThemeProvider>\n      <Shell />\n    </ThemeProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>useContext tìm Provider GẦN NHẤT phía trên. Provider lồng nhau cho phép một vùng (bản xem trước) dùng theme riêng mà không ảnh hưởng phần còn lại.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Light by default",
+            "kiem": "ton-tai",
+            "selector": "#app.light"
+          },
+          {
+            "moTa": "Toggle switches wrapper and label",
+            "kiem": "danh-sach-text",
+            "selector": "#btn-theme, main .card-theme",
+            "mongDoi": [
+              "Switch to light",
+              "Current theme: dark"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-theme",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Wrapper class becomes dark",
+            "kiem": "ton-tai",
+            "selector": "#app.dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-theme",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Preview uses the nearest provider",
+            "kiem": "text",
+            "selector": "#preview .card-theme",
+            "giaTri": "Current theme: dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-theme",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No theme prop drilling",
+            "kiem": "ma-nguon",
+            "khop": "<(Layout|Sidebar|Card)\\s+theme=",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truyền theme qua props Layout → Sidebar → Card (prop drilling) — đúng là điều Context giải quyết."
+        },
+        {
+          "loi": "Dùng class <code>dark</code> của Tailwind/Bootstrap mà không có CSS ⇒ không thấy đổi; ở đây chỉ cần class đúng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "consumer",
+          "vi": "component đọc context"
+        }
+      ]
+    },
+    {
+      "title": "Cart with CartContext (handout tasks 2–3)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "context with state + actions",
+        "derived total",
+        "conditional rendering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext",
+        "exercise-14"
+      ],
+      "problemHtml": "<p>Handout tasks 2–3: a list of dishes and a cart in different components, sharing <code>CartContext</code> (state with <code>useState</code>, actions <code>addToCart</code>, <code>removeFromCart</code>, <code>clearCart</code>). Each click adds one cart line — the same dish can appear twice.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Dishes: <code>Uthappizza 4.99</code>, <code>Zucchipakoda 1.99</code>, <code>Vadonut 1.99</code>, <code>ElaiCheese Cake 2.99</code>; buttons <code>.btn-add</code> in that order.</li>\n  <li>Cart lines <code>li.cart-item</code> (<code>.name</code> + <code>.btn-remove</code>); <code>#cart-total</code> <code>Total: $6.98</code> (2 decimals); <code>#btn-clear</code>; empty ⇒ <code>#cart-empty</code> <code>Your cart is empty</code>; <code>#cart-count</code> in the header = number of lines.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 2–3 của handout: danh sách món và giỏ hàng ở hai component khác nhau, dùng chung <code>CartContext</code> (state bằng <code>useState</code>, hành động <code>addToCart</code>, <code>removeFromCart</code>, <code>clearCart</code>). Mỗi lần bấm thêm một dòng — cùng món có thể xuất hiện hai lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Món: <code>Uthappizza 4.99</code>, <code>Zucchipakoda 1.99</code>, <code>Vadonut 1.99</code>, <code>ElaiCheese Cake 2.99</code>; nút <code>.btn-add</code> theo thứ tự đó.</li>\n  <li>Dòng giỏ <code>li.cart-item</code> (<code>.name</code> + <code>.btn-remove</code>); <code>#cart-total</code> <code>Total: $6.98</code> (2 chữ số thập phân); <code>#btn-clear</code>; rỗng ⇒ <code>#cart-empty</code> <code>Your cart is empty</code>; <code>#cart-count</code> ở header = số dòng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add Uthappizza, Zucchipakoda",
+          "output": "Total: $6.98",
+          "explanation": "(4.99 + 1.99).toFixed(2)|||(4.99 + 1.99).toFixed(2)"
+        }
+      ],
+      "hintsJson": [
+        "addToCart: setItems((c) => [...c, { ...dish, cartId: Date.now() + Math.random() }])",
+        "Tổng: items.reduce((s, d) => s + d.price, 0).toFixed(2)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst DISHES = [\n  { id: 0, name: 'Uthappizza', price: 4.99 },\n  { id: 1, name: 'Zucchipakoda', price: 1.99 },\n  { id: 2, name: 'Vadonut', price: 1.99 },\n  { id: 3, name: 'ElaiCheese Cake', price: 2.99 },\n];\n\nfunction DishesList() {\n  return <div>{DISHES.map((d) => <button key={d.id} className=\"btn-add\">{d.name}</button>)}</div>;\n}\n\nfunction Cart() {\n  return <p id=\"cart-empty\">Your cart is empty</p>;\n}\n\nexport default function App() {\n  return (<div><DishesList /><Cart /></div>);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — CartContext giữ state + hành động; hai component dùng chung\nimport { createContext, useContext, useState } from 'react';\n\nconst DISHES = [\n  { id: 0, name: 'Uthappizza', price: 4.99 },\n  { id: 1, name: 'Zucchipakoda', price: 1.99 },\n  { id: 2, name: 'Vadonut', price: 1.99 },\n  { id: 3, name: 'ElaiCheese Cake', price: 2.99 },\n];\n\nconst CartContext = createContext(null);\n\nfunction CartProvider({ children }) {\n  const [items, setItems] = useState([]);\n  const addToCart = (dish) => setItems((c) => [...c, { ...dish, cartId: Date.now() + Math.random() }]);\n  const removeFromCart = (cartId) => setItems((c) => c.filter((d) => d.cartId !== cartId));\n  const clearCart = () => setItems([]);\n  return (\n    <CartContext.Provider value={{ items, addToCart, removeFromCart, clearCart }}>\n      {children}\n    </CartContext.Provider>\n  );\n}\n\nconst useCart = () => useContext(CartContext);\n\nfunction Header() {\n  const { items } = useCart();\n  return <header>Cart (<span id=\"cart-count\">{items.length}</span>)</header>;\n}\n\nfunction DishesList() {\n  const { addToCart } = useCart();\n  return (\n    <div>\n      {DISHES.map((d) => (\n        <div key={d.id}>\n          <span>{d.name} — ${d.price}</span>\n          <button type=\"button\" className=\"btn-add\" onClick={() => addToCart(d)}>Add to cart</button>\n        </div>\n      ))}\n    </div>\n  );\n}\n\nfunction Cart() {\n  const { items, removeFromCart, clearCart } = useCart();\n  if (items.length === 0) return <p id=\"cart-empty\">Your cart is empty</p>;\n  const total = items.reduce((s, d) => s + d.price, 0);\n  return (\n    <div>\n      <ul>\n        {items.map((d) => (\n          <li key={d.cartId} className=\"cart-item\">\n            <span className=\"name\">{d.name}</span>\n            <button type=\"button\" className=\"btn-remove\" onClick={() => removeFromCart(d.cartId)}>Remove</button>\n          </li>\n        ))}\n      </ul>\n      <p id=\"cart-total\">Total: ${total.toFixed(2)}</p>\n      <button id=\"btn-clear\" type=\"button\" onClick={clearCart}>Clear cart</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <CartProvider>\n      <Header />\n      <DishesList />\n      <Cart />\n    </CartProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Context cung cấp cả DỮ LIỆU lẫn HÀNH ĐỘNG; component chỉ gọi <code>addToCart(dish)</code> mà không cần biết state nằm đâu. Tổng tiền và số dòng là dữ liệu suy ra.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Total with two decimals",
+            "kiem": "text",
+            "selector": "#cart-total",
+            "giaTri": "Total: $6.98",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(1) > .btn-add",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(2) > .btn-add",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Same dish twice = two lines",
+            "kiem": "danh-sach-text",
+            "selector": "li.cart-item .name",
+            "mongDoi": [
+              "Vadonut",
+              "Vadonut"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(3) > .btn-add",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Header count follows",
+            "kiem": "text",
+            "selector": "#cart-count",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(4) > .btn-add",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Empty message at start",
+            "kiem": "text",
+            "selector": "#cart-empty",
+            "giaTri": "Your cart is empty"
+          },
+          {
+            "an": true,
+            "moTa": "Remove deletes only that line",
+            "kiem": "so-luong",
+            "selector": "li.cart-item",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(3) > .btn-add",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.cart-item:nth-child(1) .btn-remove",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Clear empties the cart",
+            "kiem": "danh-sach-text",
+            "selector": "#cart-count, #cart-empty",
+            "mongDoi": [
+              "0",
+              "Your cart is empty"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "div:nth-child(1) > .btn-add",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-clear",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses a CartContext Provider",
+            "kiem": "ma-nguon",
+            "khop": "CartContext\\.Provider"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá theo <code>id</code> của món ⇒ xoá mất cả hai dòng cùng món; cần mã dòng riêng (cartId)."
+        },
+        {
+          "loi": "Cộng số thực rồi in thẳng ⇒ 6.9799999…; dùng toFixed(2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cart line",
+          "vi": "một dòng trong giỏ"
+        }
+      ]
+    },
+    {
+      "title": "Language context: a tiny i18n",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "context value as function",
+        "dictionary lookup",
+        "fallback"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext",
+        "exercise-14"
+      ],
+      "problemHtml": "<p>Make the page bilingual. <code>LanguageProvider</code> keeps <code>lang</code> (<code>en</code>/<code>vi</code>) and provides <code>t(key)</code> that looks up a dictionary; unknown keys fall back to English, then to the key itself. The choice survives a reload (localStorage <code>lang</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Dictionary: <code>title</code> (Course list / Danh sách khoá học), <code>enroll</code> (Enroll / Đăng ký), <code>greeting</code> (Welcome back! / Chào mừng trở lại!), <code>footer</code> (en only: © CuongThai.com).</li>\n  <li>Elements <code>#title</code>, <code>#greeting</code>, <code>.btn-enroll</code> (×2), <code>#footer</code>, <code>#missing</code> (key <code>not.translated</code>); buttons <code>#lang-en</code>, <code>#lang-vi</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm trang song ngữ. <code>LanguageProvider</code> giữ <code>lang</code> (<code>en</code>/<code>vi</code>) và cung cấp <code>t(key)</code> tra từ điển; khoá không có thì lùi về tiếng Anh, rồi về chính khoá. Lựa chọn còn sau khi tải lại (localStorage <code>lang</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Từ điển: <code>title</code> (Course list / Danh sách khoá học), <code>enroll</code> (Enroll / Đăng ký), <code>greeting</code> (Welcome back! / Chào mừng trở lại!), <code>footer</code> (chỉ có en: © CuongThai.com).</li>\n  <li>Phần tử <code>#title</code>, <code>#greeting</code>, <code>.btn-enroll</code> (×2), <code>#footer</code>, <code>#missing</code> (khoá <code>not.translated</code>); nút <code>#lang-en</code>, <code>#lang-vi</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click VI",
+          "output": "Danh sách khoá học · footer stays \"© CuongThai.com\"",
+          "explanation": "Fallback chain: vi → en → key.|||Chuỗi lùi: vi → en → khoá."
+        }
+      ],
+      "hintsJson": [
+        "const t = (key) => DICT[lang][key] ?? DICT.en[key] ?? key;",
+        "Khởi tạo lười: useState(() => localStorage.getItem(\"lang\") || \"en\"); ghi lại trong useEffect."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  return (\n    <div>\n      <h1 id=\"title\">Course list</h1>\n      <p id=\"greeting\">Welcome back!</p>\n      <button className=\"btn-enroll\">Enroll</button>\n      <button className=\"btn-enroll\">Enroll</button>\n      <button id=\"lang-en\">EN</button>\n      <button id=\"lang-vi\">VI</button>\n      <p id=\"missing\">not.translated</p>\n      <footer id=\"footer\">© CuongThai.com</footer>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — LanguageProvider cung cấp lang + t(key) có chuỗi lùi vi → en → key\nimport { createContext, useContext, useEffect, useState } from 'react';\n\nconst DICT = {\n  en: { title: 'Course list', enroll: 'Enroll', greeting: 'Welcome back!', footer: '© CuongThai.com' },\n  vi: { title: 'Danh sách khoá học', enroll: 'Đăng ký', greeting: 'Chào mừng trở lại!' },\n};\n\nconst LanguageContext = createContext(null);\n\nfunction LanguageProvider({ children }) {\n  const [lang, setLang] = useState(() => (localStorage.getItem('lang') === 'vi' ? 'vi' : 'en'));\n  useEffect(() => {\n    localStorage.setItem('lang', lang);\n  }, [lang]);\n  const t = (key) => DICT[lang][key] ?? DICT.en[key] ?? key;\n  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;\n}\n\nconst useLang = () => useContext(LanguageContext);\n\nfunction CourseCard({ name }) {\n  const { t } = useLang();\n  return (\n    <div>\n      <span>{name}</span> <button type=\"button\" className=\"btn-enroll\">{t('enroll')}</button>\n    </div>\n  );\n}\n\nfunction Page() {\n  const { t, setLang } = useLang();\n  return (\n    <div>\n      <button id=\"lang-en\" type=\"button\" onClick={() => setLang('en')}>EN</button>\n      <button id=\"lang-vi\" type=\"button\" onClick={() => setLang('vi')}>VI</button>\n      <h1 id=\"title\">{t('title')}</h1>\n      <p id=\"greeting\">{t('greeting')}</p>\n      <CourseCard name=\"FER202\" />\n      <CourseCard name=\"SWT301\" />\n      <p id=\"missing\">{t('not.translated')}</p>\n      <footer id=\"footer\">{t('footer')}</footer>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <LanguageProvider>\n      <Page />\n    </LanguageProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Giá trị context có thể là HÀM (<code>t</code>). Khi <code>lang</code> đổi, provider tạo hàm t mới ⇒ mọi nơi gọi t vẽ lại với ngôn ngữ mới.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Vietnamese texts",
+            "kiem": "danh-sach-text",
+            "selector": "#title, #greeting, .btn-enroll",
+            "mongDoi": [
+              "Danh sách khoá học",
+              "Chào mừng trở lại!",
+              "Đăng ký",
+              "Đăng ký"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lang-vi",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Falls back to English",
+            "kiem": "text",
+            "selector": "#footer",
+            "giaTri": "© CuongThai.com",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lang-vi",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Falls back to the key",
+            "kiem": "text",
+            "selector": "#missing",
+            "giaTri": "not.translated",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lang-vi",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Back to English",
+            "kiem": "text",
+            "selector": "#title",
+            "giaTri": "Course list",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lang-vi",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#lang-en",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Choice survives a reload",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Chào mừng trở lại!",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#lang-vi",
+                "lan": 1
+              },
+              {
+                "hanhDong": "tai-lai"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses a Provider",
+            "kiem": "ma-nguon",
+            "khop": "createContext\\([\\s\\S]*\\.Provider"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>||</code> thay <code>??</code> ⇒ bản dịch chuỗi rỗng bị coi là thiếu (ở đây không sao, nhưng nên biết)."
+        },
+        {
+          "loi": "Mỗi component tự đọc localStorage ⇒ không đồng bộ khi đổi ngôn ngữ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "i18n",
+          "vi": "quốc tế hoá (internationalization: 18 chữ giữa i và n)"
+        },
+        {
+          "en": "fallback",
+          "vi": "giá trị dự phòng"
+        }
+      ]
+    },
+    {
+      "title": "Toast notifications through context",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "context for actions",
+        "auto-dismiss with effect",
+        "list of timers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext",
+        "useEffect"
+      ],
+      "problemHtml": "<p>Any component should be able to call <code>showToast(message, type)</code> without knowing where toasts are drawn. <code>ToastProvider</code> renders a <code>#toasts</code> stack after its children; each toast disappears after <b>1500 ms</b> or when its × is clicked. Several toasts can be on screen at once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Toast element <code>.toast.toast-success</code> / <code>.toast-error</code>, text in <code>.toast-text</code>, close button <code>.toast-close</code>.</li>\n  <li>Buttons in nested components: <code>#btn-save</code> ⇒ success <code>Saved!</code>; <code>#btn-fail</code> ⇒ error <code>Something went wrong</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component nào cũng gọi được <code>showToast(message, type)</code> mà không cần biết toast vẽ ở đâu. <code>ToastProvider</code> vẽ chồng <code>#toasts</code> sau children; mỗi toast tự biến mất sau <b>1500 ms</b> hoặc khi bấm ×. Có thể nhiều toast cùng lúc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phần tử toast <code>.toast.toast-success</code> / <code>.toast-error</code>, chữ trong <code>.toast-text</code>, nút đóng <code>.toast-close</code>.</li>\n  <li>Nút trong component lồng nhau: <code>#btn-save</code> ⇒ success <code>Saved!</code>; <code>#btn-fail</code> ⇒ error <code>Something went wrong</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Save, Fail",
+          "output": "two toasts; both gone after ~1.5 s",
+          "explanation": "Each toast owns its own timer (cleared on unmount).|||Mỗi toast có hẹn giờ riêng (xoá khi unmount)."
+        }
+      ],
+      "hintsJson": [
+        "showToast = (message, type = \"success\") => setToasts((t) => [...t, { id: Date.now() + Math.random(), message, type }])",
+        "Component Toast: useEffect(() => { const id = setTimeout(() => onClose(toast.id), 1500); return () => clearTimeout(id); }, []);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction SaveButton() {\n  return <button id=\"btn-save\" onClick={() => alert('Saved!')}>Save</button>;\n}\nfunction Toolbar() { return <div><SaveButton /><button id=\"btn-fail\">Fail</button></div>; }\n\nexport default function App() {\n  const [toasts] = useState([]);\n  return (\n    <div>\n      <Toolbar />\n      <div id=\"toasts\">{toasts.map((t) => <div key={t.id} className=\"toast\">{t.message}</div>)}</div>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ToastProvider: showToast qua context, mỗi toast tự hẹn giờ biến mất\nimport { createContext, useContext, useEffect, useState } from 'react';\n\nconst ToastContext = createContext(null);\n\nfunction Toast({ toast, onClose }) {\n  useEffect(() => {\n    const id = setTimeout(() => onClose(toast.id), 1500);\n    return () => clearTimeout(id); // đóng tay / unmount ⇒ huỷ hẹn giờ\n  }, [toast.id]); // eslint-disable-line react-hooks/exhaustive-deps\n  return (\n    <div className={`toast toast-${toast.type}`}>\n      <span className=\"toast-text\">{toast.message}</span>\n      <button type=\"button\" className=\"toast-close\" onClick={() => onClose(toast.id)}>×</button>\n    </div>\n  );\n}\n\nfunction ToastProvider({ children }) {\n  const [toasts, setToasts] = useState([]);\n  const showToast = (message, type = 'success') =>\n    setToasts((t) => [...t, { id: Date.now() + Math.random(), message, type }]);\n  const close = (id) => setToasts((t) => t.filter((x) => x.id !== id));\n  return (\n    <ToastContext.Provider value={{ showToast }}>\n      {children}\n      <div id=\"toasts\">\n        {toasts.map((t) => <Toast key={t.id} toast={t} onClose={close} />)}\n      </div>\n    </ToastContext.Provider>\n  );\n}\n\nfunction useToast() {\n  const ctx = useContext(ToastContext);\n  if (!ctx) throw new Error('useToast must be used inside ToastProvider');\n  return ctx.showToast;\n}\n\nfunction SaveButton() {\n  const showToast = useToast();\n  return <button id=\"btn-save\" type=\"button\" onClick={() => showToast('Saved!')}>Save</button>;\n}\n\nfunction Toolbar() {\n  const showToast = useToast();\n  return (\n    <div>\n      <SaveButton />\n      <button id=\"btn-fail\" type=\"button\" onClick={() => showToast('Something went wrong', 'error')}>Fail</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <ToastProvider>\n      <Toolbar />\n    </ToastProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Context ở đây chủ yếu chuyển HÀNH ĐỘNG (showToast). Đặt effect hẹn giờ trong từng component Toast: mỗi toast tự quản thời gian sống, unmount thì cleanup huỷ hẹn giờ.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Two toasts with types",
+            "kiem": "danh-sach-text",
+            "selector": ".toast-success .toast-text, .toast-error .toast-text",
+            "mongDoi": [
+              "Saved!",
+              "Something went wrong"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-fail",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Auto-dismiss after 1.5 s",
+            "kiem": "khong-ton-tai",
+            "selector": ".toast",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1900
+              }
+            ]
+          },
+          {
+            "moTa": "Close button removes only that toast",
+            "kiem": "danh-sach-text",
+            "selector": ".toast-text",
+            "mongDoi": [
+              "Something went wrong"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-fail",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".toast:nth-child(1) .toast-close",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Each toast keeps its own timer",
+            "kiem": "danh-sach-text",
+            "selector": ".toast-text",
+            "mongDoi": [
+              "Something went wrong"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-fail",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No alert()",
+            "kiem": "ma-nguon",
+            "khop": "\\balert\\(",
+            "phuDinh": true
+          },
+          {
+            "an": true,
+            "moTa": "clearTimeout in a cleanup",
+            "kiem": "ma-nguon",
+            "khop": "return\\s*\\(\\)\\s*=>\\s*clearTimeout\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Một setTimeout chung xoá \"toast cuối\" ⇒ xoá nhầm khi có nhiều toast."
+        },
+        {
+          "loi": "Không clearTimeout khi đóng tay ⇒ hẹn giờ gọi setState trên toast đã mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "toast",
+          "vi": "thông báo nhỏ hiện tạm rồi tự tắt"
+        }
+      ]
+    }
+  ]
+}

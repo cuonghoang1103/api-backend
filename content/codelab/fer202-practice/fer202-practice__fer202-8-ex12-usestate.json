@@ -1,0 +1,794 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-ex12-usestate",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-ex12-usestate"
+  },
+  "exercises": [
+    {
+      "title": "Counter, Echo and Toggle",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "useState",
+        "controlled input",
+        "boolean toggle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState",
+        "exercise-12"
+      ],
+      "problemHtml": "<p>The first three components of the handout, on one page: a <b>Counter</b> (+1), an <b>Echo</b> input that shows what you type in real time, and a <b>Toggle</b> button that shows/hides a paragraph.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Counter: <code>#count</code> starts at 0, <code>#btn-count</code> adds 1.</li>\n  <li>Echo: <code>#echo-input</code> (controlled) and <code>#echo</code> = <code>You typed: …</code>.</li>\n  <li>Toggle: <code>#btn-toggle</code> reads <code>Show</code>/<code>Hide</code>; <code>#secret</code> visible only when shown.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba component đầu của handout, trên một trang: <b>Counter</b> (+1), ô <b>Echo</b> hiện ngay điều bạn gõ, và nút <b>Toggle</b> ẩn/hiện một đoạn văn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Counter: <code>#count</code> bắt đầu 0, <code>#btn-count</code> cộng 1.</li>\n  <li>Echo: <code>#echo-input</code> (controlled) và <code>#echo</code> = <code>You typed: …</code>.</li>\n  <li>Toggle: <code>#btn-toggle</code> ghi <code>Show</code>/<code>Hide</code>; <code>#secret</code> chỉ có khi đang hiện.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"abc\"",
+          "output": "You typed: abc",
+          "explanation": "value + onChange = controlled input.|||value + onChange = ô nhập được điều khiển."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi component một useState riêng.",
+        "Toggle: setShow((s) => !s); nhãn {show ? \"Hide\" : \"Show\"}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  let count = 0;\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <button id=\"btn-count\" onClick={() => { count++; }}>+1</button>\n      <input id=\"echo-input\" />\n      <p id=\"echo\">You typed: </p>\n      <button id=\"btn-toggle\">Show</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — ba component, mỗi cái một mẩu state\nimport { useState } from 'react';\n\nfunction Counter() {\n  const [n, setN] = useState(0);\n  return (\n    <div>\n      <p id=\"count\">{n}</p>\n      <button id=\"btn-count\" type=\"button\" onClick={() => setN((x) => x + 1)}>+1</button>\n    </div>\n  );\n}\n\nfunction Echo() {\n  const [text, setText] = useState('');\n  return (\n    <div>\n      <input id=\"echo-input\" value={text} onChange={(e) => setText(e.target.value)} />\n      <p id=\"echo\">You typed: {text}</p>\n    </div>\n  );\n}\n\nfunction Toggle() {\n  const [show, setShow] = useState(false);\n  return (\n    <div>\n      <button id=\"btn-toggle\" type=\"button\" onClick={() => setShow((s) => !s)}>{show ? 'Hide' : 'Show'}</button>\n      {show && <p id=\"secret\">React re-renders when state changes.</p>}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div>\n      <Counter />\n      <Echo />\n      <Toggle />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vòng bốn bước của useState: state → JSX hiển thị → sự kiện gọi setter → React vẽ lại. Ba component dùng đúng vòng đó với kiểu dữ liệu khác nhau (số, chuỗi, boolean).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Counter +3",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-count",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Echo shows the text",
+            "kiem": "text",
+            "selector": "#echo",
+            "giaTri": "You typed: abc",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#echo-input",
+                "giaTri": "abc"
+              }
+            ]
+          },
+          {
+            "moTa": "Toggle shows the paragraph and relabels",
+            "kiem": "danh-sach-text",
+            "selector": "#btn-toggle",
+            "mongDoi": [
+              "Hide"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-toggle",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Hidden by default",
+            "kiem": "khong-ton-tai",
+            "selector": "#secret"
+          },
+          {
+            "an": true,
+            "moTa": "Toggle twice hides again",
+            "kiem": "khong-ton-tai",
+            "selector": "#secret",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-toggle",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Có <code>value</code> mà thiếu <code>onChange</code> ⇒ ô không gõ được."
+        },
+        {
+          "loi": "Dùng biến thường <code>let n = 0</code> ⇒ không vẽ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "controlled input",
+          "vi": "ô nhập mà giá trị do state React quyết định"
+        }
+      ]
+    },
+    {
+      "title": "Todo List: add and delete",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "array state",
+        "spread",
+        "filter",
+        "key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState",
+        "exercise-12"
+      ],
+      "problemHtml": "<p>Handout task 4. Add todos from an input (button or Enter), delete them individually, and show a counter. Never mutate the array: use spread to add, <code>filter</code> to delete, and stable <code>id</code>s for <code>key</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Form <code>#todo-form</code> with <code>#todo-input</code>; blank (after trim) is ignored; the input clears after adding.</li>\n  <li>Items <code>li.todo</code> with text in <code>span</code> and a <code>.btn-delete</code>; <code>#todo-count</code> = <code>2 todos</code> / <code>1 todo</code> / <code>No todos</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 4 của handout. Thêm việc từ ô nhập (nút hoặc Enter), xoá từng việc, và hiện bộ đếm. Không đột biến mảng: spread để thêm, <code>filter</code> để xoá, <code>id</code> ổn định làm <code>key</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Form <code>#todo-form</code> có <code>#todo-input</code>; chuỗi rỗng (sau trim) bị bỏ qua; ô nhập xoá trắng sau khi thêm.</li>\n  <li>Dòng <code>li.todo</code> chữ trong <code>span</code> và nút <code>.btn-delete</code>; <code>#todo-count</code> = <code>2 todos</code> / <code>1 todo</code> / <code>No todos</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add A, B, C; delete B",
+          "output": "A, C · 2 todos",
+          "explanation": "filter returns a new array without B.|||filter trả về mảng mới không có B."
+        }
+      ],
+      "hintsJson": [
+        "setTodos((t) => [...t, { id: Date.now() + Math.random(), title: text.trim() }])",
+        "Xoá: setTodos((t) => t.filter((x) => x.id !== id))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [todos, setTodos] = useState([]);\n  const [text, setText] = useState('');\n  const add = () => { todos.push(text); setTodos(todos); };\n  return (\n    <form id=\"todo-form\">\n      <input id=\"todo-input\" value={text} onChange={(e) => setText(e.target.value)} />\n      <button onClick={add}>Add</button>\n      <ul>{todos.map((t, i) => <li key={i} className=\"todo\"><span>{t}</span></li>)}</ul>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — thêm bằng spread, xoá bằng filter, key = id\nimport { useState } from 'react';\n\nexport default function App() {\n  const [todos, setTodos] = useState([]);\n  const [text, setText] = useState('');\n\n  const add = (e) => {\n    e.preventDefault();\n    const title = text.trim();\n    if (!title) return;\n    setTodos((t) => [...t, { id: Date.now() + Math.random(), title }]);\n    setText('');\n  };\n  const remove = (id) => setTodos((t) => t.filter((x) => x.id !== id));\n\n  const label = todos.length === 0 ? 'No todos' : `${todos.length} ${todos.length === 1 ? 'todo' : 'todos'}`;\n\n  return (\n    <form id=\"todo-form\" onSubmit={add}>\n      <input id=\"todo-input\" value={text} onChange={(e) => setText(e.target.value)} placeholder=\"What to do?\" />\n      <button type=\"submit\">Add</button>\n      <p id=\"todo-count\">{label}</p>\n      <ul>\n        {todos.map((t) => (\n          <li key={t.id} className=\"todo\">\n            <span>{t.title}</span>\n            <button type=\"button\" className=\"btn-delete\" onClick={() => remove(t.id)}>Delete</button>\n          </li>\n        ))}\n      </ul>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>React chỉ vẽ lại khi setter nhận một mảng MỚI. Spread và filter đều trả mảng mới; <code>push</code>/<code>splice</code> sửa mảng cũ nên không đáng tin.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Adds todos",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo span",
+            "mongDoi": [
+              "A",
+              "B"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "moTa": "Deletes the right one",
+            "kiem": "danh-sach-text",
+            "selector": "li.todo span",
+            "mongDoi": [
+              "A",
+              "C"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "C"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.todo:nth-child(2) .btn-delete",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Counter wording",
+            "kiem": "text",
+            "selector": "#todo-count",
+            "giaTri": "1 todo",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Blank ignored, \"No todos\"",
+            "kiem": "danh-sach-text",
+            "selector": "#todo-count",
+            "mongDoi": [
+              "No todos"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Input cleared after adding",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#todo-input",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No reload on submit",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#todo-input",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#todo-form"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>key={index}</code> ⇒ xoá dòng giữa làm React gắn nhầm state các dòng sau."
+        },
+        {
+          "loi": "Quên <code>e.preventDefault()</code> ⇒ form tải lại trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "immutable update",
+          "vi": "cập nhật bằng cách tạo bản mới, không sửa bản cũ"
+        }
+      ]
+    },
+    {
+      "title": "Color Switcher",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "state drives style",
+        "select",
+        "inline style"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState",
+        "exercise-12"
+      ],
+      "problemHtml": "<p>Handout task 5. A select changes the background colour of a preview box; a \"Random\" button picks the next colour in the list (cycling). The chosen colour name is shown in the box.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Colours: <code>white, lightblue, lightgreen, pink</code>. <code>#color</code> (select, controlled), <code>#box</code> with inline <code>backgroundColor</code> and its text = colour name.</li>\n  <li><code>#btn-next</code> moves to the next colour (after pink comes white) and the select follows.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 5 của handout. Select đổi màu nền hộp xem trước; nút \"Random\" chọn màu kế tiếp trong danh sách (quay vòng). Tên màu đang chọn hiện trong hộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Màu: <code>white, lightblue, lightgreen, pink</code>. <code>#color</code> (select, controlled), <code>#box</code> có <code>backgroundColor</code> inline và chữ = tên màu.</li>\n  <li><code>#btn-next</code> sang màu kế (sau pink là white) và select cũng đổi theo.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "select pink → Next",
+          "output": "white",
+          "explanation": "(i + 1) % colors.length|||(i + 1) % colors.length"
+        }
+      ],
+      "hintsJson": [
+        "style={{ backgroundColor: color }}",
+        "Next: const i = COLORS.indexOf(color); setColor(COLORS[(i + 1) % COLORS.length]);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nconst COLORS = ['white', 'lightblue', 'lightgreen', 'pink'];\n\nexport default function App() {\n  return (\n    <div>\n      <select id=\"color\">{COLORS.map((c) => <option key={c}>{c}</option>)}</select>\n      <button id=\"btn-next\">Next</button>\n      <div id=\"box\" style=\"background: white\">white</div>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một state color điều khiển select, hộp và chữ\nimport { useState } from 'react';\n\nconst COLORS = ['white', 'lightblue', 'lightgreen', 'pink'];\n\nexport default function App() {\n  const [color, setColor] = useState(COLORS[0]);\n  const next = () => setColor((c) => COLORS[(COLORS.indexOf(c) + 1) % COLORS.length]);\n  return (\n    <div>\n      <select id=\"color\" value={color} onChange={(e) => setColor(e.target.value)}>\n        {COLORS.map((c) => <option key={c} value={c}>{c}</option>)}\n      </select>\n      <button id=\"btn-next\" type=\"button\" onClick={next}>Next</button>\n      <div id=\"box\" style={{ backgroundColor: color, padding: 24, border: '1px solid #ccc' }}>{color}</div>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một mẩu state (<code>color</code>) quyết định cả giá trị select, màu hộp và chữ — mọi nơi luôn khớp nhau vì cùng đọc một nguồn.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Select changes the box",
+            "kiem": "css",
+            "selector": "#box",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(255, 192, 203)",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#color",
+                "giaTri": "pink"
+              }
+            ]
+          },
+          {
+            "moTa": "Box text = colour name",
+            "kiem": "text",
+            "selector": "#box",
+            "giaTri": "lightblue",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#color",
+                "giaTri": "lightblue"
+              }
+            ]
+          },
+          {
+            "moTa": "Next cycles back to white",
+            "kiem": "text",
+            "selector": "#box",
+            "giaTri": "white",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#color",
+                "giaTri": "pink"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Select follows Next",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#color",
+            "thuocTinh": "value",
+            "giaTri": "lightgreen",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-next",
+                "lan": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết <code>style=\"background: red\"</code> (chuỗi) ⇒ React báo lỗi; style là object camelCase."
+        },
+        {
+          "loi": "Select không có <code>value</code> ⇒ không theo kịp khi bấm Next."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inline style",
+          "vi": "style viết trực tiếp trên thẻ (object trong JSX)"
+        }
+      ]
+    },
+    {
+      "title": "Search Filter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "derived list",
+        "case-insensitive search",
+        "empty state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState",
+        "exercise-12"
+      ],
+      "problemHtml": "<p>Handout task 6. Filter a list of students while typing. Store only the <b>query</b> in state; the filtered list is <b>derived</b> during render (no second state). Matching is case-insensitive on name OR student code.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Students: <code>Nguyen Van An (HE170001)</code>, <code>Tran Thi Binh (HE170002)</code>, <code>Le Van Cuong (SE160003)</code>, <code>Pham Thi Dung (SE160004)</code>.</li>\n  <li><code>#search</code>; rows <code>li.student</code> text <code>Name (CODE)</code>; <code>#result-count</code> <code>2 result(s)</code>; nothing ⇒ <code>#no-result</code> <code>No students found</code>. Leading/trailing spaces ignored.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 6 của handout. Lọc danh sách sinh viên khi gõ. Chỉ lưu <b>chuỗi tìm</b> trong state; danh sách đã lọc được <b>tính ra</b> lúc render (không có state thứ hai). So khớp không phân biệt hoa thường, theo tên HOẶC mã SV.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sinh viên: <code>Nguyen Van An (HE170001)</code>, <code>Tran Thi Binh (HE170002)</code>, <code>Le Van Cuong (SE160003)</code>, <code>Pham Thi Dung (SE160004)</code>.</li>\n  <li><code>#search</code>; dòng <code>li.student</code> chữ <code>Tên (MÃ)</code>; <code>#result-count</code> <code>2 result(s)</code>; không có ⇒ <code>#no-result</code> <code>No students found</code>. Bỏ khoảng trắng đầu/cuối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "\"se16\"",
+          "output": "Le Van Cuong, Pham Thi Dung",
+          "explanation": "Code matched case-insensitively.|||Khớp mã không phân biệt hoa thường."
+        }
+      ],
+      "hintsJson": [
+        "const q = query.trim().toLowerCase(); const shown = STUDENTS.filter(s => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));",
+        "Không cần useEffect hay state thứ hai cho shown."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst STUDENTS = [\n  { code: 'HE170001', name: 'Nguyen Van An' },\n  { code: 'HE170002', name: 'Tran Thi Binh' },\n  { code: 'SE160003', name: 'Le Van Cuong' },\n  { code: 'SE160004', name: 'Pham Thi Dung' },\n];\n\nexport default function App() {\n  const [list, setList] = useState(STUDENTS);\n  return (\n    <div>\n      <input id=\"search\" onChange={(e) => setList(list.filter((s) => s.name.includes(e.target.value)))} />\n      <ul>{list.map((s) => <li key={s.code} className=\"student\">{s.name}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — state chỉ là chuỗi tìm; danh sách lọc TÍNH RA lúc render\nimport { useState } from 'react';\n\nconst STUDENTS = [\n  { code: 'HE170001', name: 'Nguyen Van An' },\n  { code: 'HE170002', name: 'Tran Thi Binh' },\n  { code: 'SE160003', name: 'Le Van Cuong' },\n  { code: 'SE160004', name: 'Pham Thi Dung' },\n];\n\nexport default function App() {\n  const [query, setQuery] = useState('');\n  const q = query.trim().toLowerCase();\n  const shown = STUDENTS.filter((s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));\n\n  return (\n    <div>\n      <input id=\"search\" value={query} onChange={(e) => setQuery(e.target.value)} placeholder=\"Name or code\" />\n      <p id=\"result-count\">{shown.length} result(s)</p>\n      {shown.length === 0 ? (\n        <p id=\"no-result\">No students found</p>\n      ) : (\n        <ul>\n          {shown.map((s) => <li key={s.code} className=\"student\">{s.name} ({s.code})</li>)}\n        </ul>\n      )}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nguyên tắc \"state tối thiểu\": chỉ lưu thứ không tính ra được (chuỗi tìm). Danh sách lọc tính lại mỗi lần render — luôn đúng, không bao giờ lệch.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Filters by code, case-insensitive",
+            "kiem": "danh-sach-text",
+            "selector": "li.student",
+            "mongDoi": [
+              "Le Van Cuong (SE160003)",
+              "Pham Thi Dung (SE160004)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "se16"
+              }
+            ]
+          },
+          {
+            "moTa": "Filters by name",
+            "kiem": "danh-sach-text",
+            "selector": "li.student",
+            "mongDoi": [
+              "Tran Thi Binh (HE170002)"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "BINH"
+              }
+            ]
+          },
+          {
+            "moTa": "Count text",
+            "kiem": "text",
+            "selector": "#result-count",
+            "giaTri": "4 result(s)"
+          },
+          {
+            "moTa": "No result message",
+            "kiem": "text",
+            "selector": "#no-result",
+            "giaTri": "No students found",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "zzz"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Deleting characters brings results back",
+            "kiem": "so-luong",
+            "selector": "li.student",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "thi d"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "thi"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Spaces trimmed",
+            "kiem": "so-luong",
+            "selector": "li.student",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "  dung  "
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>filtered</code> vào state rồi lọc tiếp trên nó ⇒ xoá bớt chữ không hiện lại kết quả cũ."
+        },
+        {
+          "loi": "Quên toLowerCase một phía ⇒ \"an\" không khớp \"An\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "derived data",
+          "vi": "dữ liệu tính từ state, không lưu riêng"
+        }
+      ]
+    },
+    {
+      "title": "Reorderable list (Drag and Drop task)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "reorder array immutably",
+        "HTML5 drag events",
+        "accessible alternative"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useState",
+        "exercise-12"
+      ],
+      "problemHtml": "<p>Handout task 7 asks for a drag-and-drop list. The core is a pure function <code>move(list, from, to)</code> that returns a NEW array. Wire it to HTML5 drag events (<code>draggable</code>, <code>onDragStart</code>, <code>onDragOver</code>, <code>onDrop</code>) <b>and</b> to ▲/▼ buttons — the keyboard-accessible alternative the grader uses.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Items <code>li.item</code> (text in <code>.label</code>): <code>HTML, CSS, JavaScript, React</code>. Each has <code>.btn-up</code> and <code>.btn-down</code>; disabled at the ends.</li>\n  <li>Items are <code>draggable</code>; dropping item i onto item j calls <code>move(list, i, j)</code>. <code>#order</code> shows the order joined by <code> → </code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 7 của handout là danh sách kéo-thả. Lõi là hàm thuần <code>move(list, from, to)</code> trả về mảng MỚI. Nối nó vào sự kiện kéo-thả HTML5 (<code>draggable</code>, <code>onDragStart</code>, <code>onDragOver</code>, <code>onDrop</code>) <b>và</b> vào nút ▲/▼ — phương án dùng được bằng bàn phím mà máy chấm dùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng <code>li.item</code> (chữ trong <code>.label</code>): <code>HTML, CSS, JavaScript, React</code>. Mỗi dòng có <code>.btn-up</code>, <code>.btn-down</code>; vô hiệu ở hai đầu.</li>\n  <li>Dòng có <code>draggable</code>; thả dòng i lên dòng j gọi <code>move(list, i, j)</code>. <code>#order</code> hiện thứ tự nối bằng <code> → </code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "React ▲ twice",
+          "output": "HTML → React → CSS → JavaScript",
+          "explanation": "move(list, 3, 2) then move(list, 2, 1).|||move(list, 3, 2) rồi move(list, 2, 1)."
+        }
+      ],
+      "hintsJson": [
+        "function move(list, from, to) { const copy = [...list]; const [item] = copy.splice(from, 1); copy.splice(to, 0, item); return copy; }",
+        "Kéo: onDragStart={() => setDragIndex(i)} onDragOver={(e) => e.preventDefault()} onDrop={() => setItems((l) => move(l, dragIndex, i))}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [items, setItems] = useState(['HTML', 'CSS', 'JavaScript', 'React']);\n  const up = (i) => { const t = items[i]; items[i] = items[i - 1]; items[i - 1] = t; setItems(items); };\n  return (\n    <ul>\n      {items.map((it, i) => (\n        <li key={it} className=\"item\"><span className=\"label\">{it}</span><button className=\"btn-up\" onClick={() => up(i)}>▲</button></li>\n      ))}\n    </ul>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một hàm move thuần; kéo-thả và nút ▲/▼ đều gọi nó\nimport { useState } from 'react';\n\nexport function move(list, from, to) {\n  if (from === to || from < 0 || to < 0 || from >= list.length || to >= list.length) return list;\n  const copy = [...list];\n  const [item] = copy.splice(from, 1);\n  copy.splice(to, 0, item);\n  return copy;\n}\n\nexport default function App() {\n  const [items, setItems] = useState(['HTML', 'CSS', 'JavaScript', 'React']);\n  const [dragIndex, setDragIndex] = useState(null);\n\n  return (\n    <div>\n      <ul>\n        {items.map((it, i) => (\n          <li\n            key={it}\n            className=\"item\"\n            draggable\n            onDragStart={() => setDragIndex(i)}\n            onDragOver={(e) => e.preventDefault()}\n            onDrop={() => { setItems((l) => move(l, dragIndex, i)); setDragIndex(null); }}\n          >\n            <span className=\"label\">{it}</span>\n            <button type=\"button\" className=\"btn-up\" disabled={i === 0} onClick={() => setItems((l) => move(l, i, i - 1))}>▲</button>\n            <button type=\"button\" className=\"btn-down\" disabled={i === items.length - 1} onClick={() => setItems((l) => move(l, i, i + 1))}>▼</button>\n          </li>\n        ))}\n      </ul>\n      <p id=\"order\">{items.join(' → ')}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kéo-thả và nút ▲/▼ chỉ là hai cách \"gọi\" cùng một phép biến đổi thuần trên mảng. Viết phép biến đổi riêng giúp test được và dùng lại cho mọi kiểu tương tác.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Up twice moves React to position 2",
+            "kiem": "text",
+            "selector": "#order",
+            "giaTri": "HTML → React → CSS → JavaScript",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li.item:nth-child(4) .btn-up",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.item:nth-child(3) .btn-up",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Down moves HTML after CSS",
+            "kiem": "danh-sach-text",
+            "selector": "li.item .label",
+            "mongDoi": [
+              "CSS",
+              "HTML",
+              "JavaScript",
+              "React"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "li.item:nth-child(1) .btn-down",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "First ▲ is disabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "li.item:nth-child(1) .btn-up",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "an": true,
+            "moTa": "Last ▼ is disabled",
+            "kiem": "thuoc-tinh-js",
+            "selector": "li.item:nth-child(4) .btn-down",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "an": true,
+            "moTa": "Items are draggable with drop handlers",
+            "kiem": "ma-nguon",
+            "khop": "draggable[\\s\\S]*onDragOver=\\{\\s*\\(e\\)\\s*=>\\s*e\\.preventDefault\\(\\)[\\s\\S]*onDrop"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "splice trực tiếp trên state ⇒ đột biến, React có thể không vẽ lại."
+        },
+        {
+          "loi": "Quên <code>e.preventDefault()</code> trong onDragOver ⇒ trình duyệt không cho thả (onDrop không chạy)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "drop target",
+          "vi": "phần tử nhận thả"
+        },
+        {
+          "en": "accessible",
+          "vi": "dùng được bằng bàn phím / trình đọc màn hình"
+        }
+      ]
+    }
+  ]
+}

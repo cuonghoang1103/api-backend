@@ -1,0 +1,515 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-3-slot9-hooks-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-3-slot9-hooks-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: the rules and the five core hooks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 14,
+      "points": 10,
+      "concepts": [
+        "rules of hooks",
+        "useState",
+        "useEffect",
+        "useContext",
+        "useReducer",
+        "useRef"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "quiz"
+      ],
+      "problemHtml": "<p>Twelve questions on Slot 9–10: why hooks exist, the two rules of hooks, and when to use useState, useEffect, useContext, useReducer and useRef. These are the questions FE multiple-choice papers ask most often.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười hai câu về Slot 9–10: vì sao có hooks, hai luật của hooks, và khi nào dùng useState, useEffect, useContext, useReducer, useRef. Đây là nhóm câu đề trắc nghiệm FE hỏi nhiều nhất.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Luật hooks: chỉ gọi ở cấp cao nhất, chỉ gọi trong function component hoặc custom hook.",
+        "Mảng phụ thuộc: không có ⇒ mỗi render; [] ⇒ một lần; [x] ⇒ khi x đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: the rules and the five core hooks\n\nAnswer in the panel on the left (no code needed).\n\n1. Hooks were introduced in React…\n2. Which call breaks the rules of hooks?\n3. What does useState return?\n4. useEffect(fn) with NO dependency array runs…\n5. The function returned from an effect is…\n6. Why must the effect callback not be async?\n7. useContext(MyContext) returns…\n8. Signature of useReducer?\n9. When is useReducer preferred over useState? (choose all)\n10. Changing ref.current…\n11. A custom hook is…\n12. Two clicks call setCount(count + 1) twice in one handler (count = 0). Result?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: the rules and the five core hooks — answer key\n\n1. Hooks were introduced in React…\n   Answer: b) 16.8\n   React 16.8 (February 2019). / React 16.8 (tháng 2/2019).\n\n2. Which call breaks the rules of hooks?\n   Answer: b) if (open) { useEffect(…) }\n   Hooks must be called in the same order every render — never inside conditions or loops. / Hook phải được gọi cùng thứ tự mỗi lần render — không đặt trong điều kiện hay vòng lặp.\n\n3. What does useState return?\n   Answer: b) An array: [value, setter]\n   Destructure it: const [count, setCount] = useState(0). / Tách ra: const [count, setCount] = useState(0).\n\n4. useEffect(fn) with NO dependency array runs…\n   Answer: b) after every render\n   No array ⇒ after every commit. [] ⇒ once after mount. / Không có mảng ⇒ sau mỗi lần commit. [] ⇒ một lần sau mount.\n\n5. The function returned from an effect is…\n   Answer: b) the cleanup — run before the effect re-runs and on unmount\n   Remove listeners, clear timers, cancel requests there. / Gỡ listener, xoá timer, huỷ request ở đó.\n\n6. Why must the effect callback not be async?\n   Answer: b) An async function returns a Promise, but React expects nothing or a cleanup function\n   Define an async function inside and call it. / Khai báo hàm async bên trong rồi gọi.\n\n7. useContext(MyContext) returns…\n   Answer: b) the value of the nearest MyContext.Provider above, or the default\n   The nearest provider wins. / Provider gần nhất thắng.\n\n8. Signature of useReducer?\n   Answer: a) const [state, dispatch] = useReducer(reducer, initialArg, init?)\n   The optional third argument computes the initial state lazily. / Tham số thứ ba (tuỳ chọn) tính state ban đầu một cách lười.\n\n9. When is useReducer preferred over useState? (choose all)\n   Answer: a) Many related state fields + b) Next state depends on the previous one in several ways + d) You want to test the update logic as a pure function\n   A single boolean is simpler with useState. / Một boolean đơn giản thì useState gọn hơn.\n\n10. Changing ref.current…\n   Answer: b) does not trigger a re-render\n   Refs are for values that should not affect rendering (DOM nodes, timer ids). / Ref dùng cho giá trị không ảnh hưởng hiển thị (nút DOM, mã timer).\n\n11. A custom hook is…\n   Answer: b) a function whose name starts with \"use\" and may call other hooks\n   Each component calling it gets its own state. / Mỗi component gọi nó có state riêng.\n\n12. Two clicks call setCount(count + 1) twice in one handler (count = 0). Result?\n   Answer: b) 1\n   Both read the same snapshot. Use setCount(c => c + 1) to get 2. / Cả hai đọc cùng một ảnh chụp. Dùng setCount(c => c + 1) để được 2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Hooks were introduced in React…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "15.0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "16.8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "17.0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "18.0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>React 16.8 (February 2019).</p><p><i>🇻🇳 React 16.8 (tháng 2/2019).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "Which call breaks the rules of hooks?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>const [a, setA] = useState(0)</code> at the top of a component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>if (open) { useEffect(…) }</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Calling <code>useState</code> inside a custom hook"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Calling two <code>useState</code> in a row"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hooks must be called in the same order every render — never inside conditions or loops.</p><p><i>🇻🇳 Hook phải được gọi cùng thứ tự mỗi lần render — không đặt trong điều kiện hay vòng lặp.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "What does <code>useState</code> return?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The state value only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An array: [value, setter]"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An object {value, set}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A Promise"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Destructure it: const [count, setCount] = useState(0).</p><p><i>🇻🇳 Tách ra: const [count, setCount] = useState(0).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<code>useEffect(fn)</code> with NO dependency array runs…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "after every render"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only on unmount"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No array ⇒ after every commit. [] ⇒ once after mount.</p><p><i>🇻🇳 Không có mảng ⇒ sau mỗi lần commit. [] ⇒ một lần sau mount.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "The function returned from an effect is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ignored"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the cleanup — run before the effect re-runs and on unmount"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the next state"
+              },
+              {
+                "ma": "d",
+                "noiDung": "called before render"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Remove listeners, clear timers, cancel requests there.</p><p><i>🇻🇳 Gỡ listener, xoá timer, huỷ request ở đó.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Why must the effect callback not be <code>async</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is slower"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An async function returns a Promise, but React expects nothing or a cleanup function"
+              },
+              {
+                "ma": "c",
+                "noiDung": "React forbids await anywhere"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is fine"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Define an async function inside and call it.</p><p><i>🇻🇳 Khai báo hàm async bên trong rồi gọi.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "<code>useContext(MyContext)</code> returns…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the Provider component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the value of the nearest MyContext.Provider above, or the default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "all providers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "undefined always"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The nearest provider wins.</p><p><i>🇻🇳 Provider gần nhất thắng.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Signature of <code>useReducer</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>const [state, dispatch] = useReducer(reducer, initialArg, init?)</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>const dispatch = useReducer(state)</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>useReducer(action)</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>const [state] = useReducer()</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The optional third argument computes the initial state lazily.</p><p><i>🇻🇳 Tham số thứ ba (tuỳ chọn) tính state ban đầu một cách lười.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "When is <code>useReducer</code> preferred over <code>useState</code>? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Many related state fields"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Next state depends on the previous one in several ways"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A single boolean toggle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "You want to test the update logic as a pure function"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>A single boolean is simpler with useState.</p><p><i>🇻🇳 Một boolean đơn giản thì useState gọn hơn.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q10",
+            "de": "Changing <code>ref.current</code>…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "re-renders the component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "does not trigger a re-render"
+              },
+              {
+                "ma": "c",
+                "noiDung": "throws an error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "resets state"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Refs are for values that should not affect rendering (DOM nodes, timer ids).</p><p><i>🇻🇳 Ref dùng cho giá trị không ảnh hưởng hiển thị (nút DOM, mã timer).</i></p>"
+          },
+          {
+            "ma": "q11",
+            "de": "A custom hook is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a class"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a function whose name starts with \"use\" and may call other hooks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a component that returns JSX"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a Redux middleware"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each component calling it gets its own state.</p><p><i>🇻🇳 Mỗi component gọi nó có state riêng.</i></p>"
+          },
+          {
+            "ma": "q12",
+            "de": "Two clicks call <code>setCount(count + 1)</code> twice in one handler (count = 0). Result?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both read the same snapshot. Use setCount(c => c + 1) to get 2.</p><p><i>🇻🇳 Cả hai đọc cùng một ảnh chụp. Dùng setCount(c => c + 1) để được 2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm \"effect chạy trước khi vẽ\" — useEffect chạy SAU khi trình duyệt vẽ."
+        },
+        {
+          "loi": "Nghĩ đổi ref.current làm component vẽ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hook",
+          "vi": "hàm use… cho phép function component dùng state và tính năng React"
+        }
+      ]
+    },
+    {
+      "title": "Order the life of an effect",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "render",
+        "commit",
+        "effect",
+        "cleanup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "order"
+      ],
+      "problemHtml": "<p>A component with <code>useEffect(() =&gt; { subscribe(id); return () =&gt; unsubscribe(id); }, [id])</code> mounts with id 1, then id changes to 2, then the component is removed. Put the events in the order they happen.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component có <code>useEffect(() =&gt; { subscribe(id); return () =&gt; unsubscribe(id); }, [id])</code> mount với id 1, rồi id đổi thành 2, rồi component bị gỡ. Sắp các sự kiện theo đúng thứ tự xảy ra.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Effect chạy SAU khi DOM đã cập nhật.",
+        "Cleanup của lần cũ chạy trước effect của lần mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the life of an effect\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the events\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Order the life of an effect — answer key\n\n1. Order the events\n   Answer: m1) Render with id = 1 and commit to the DOM  →  m2) subscribe(1)  →  m3) Render with id = 2 and commit to the DOM  →  m4) unsubscribe(1)  →  m5) subscribe(2)  →  m6) Component removed: unsubscribe(2)\n   Render/commit → cleanup of the old effect → new effect; on removal only the cleanup runs. / Render/commit → cleanup của effect cũ → effect mới; khi gỡ chỉ còn cleanup.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi lần phụ thuộc đổi: render → commit DOM → cleanup cũ → effect mới. Khi gỡ: chỉ còn cleanup.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "e1",
+            "de": "Order the events",
+            "muc": [
+              {
+                "ma": "m3",
+                "noiDung": "Render with id = 2 and commit to the DOM"
+              },
+              {
+                "ma": "m1",
+                "noiDung": "Render with id = 1 and commit to the DOM"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "subscribe(2)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "subscribe(1)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Component removed: unsubscribe(2)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "unsubscribe(1)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m5",
+              "m6"
+            ],
+            "giaiThich": "<p>Render/commit → cleanup of the old effect → new effect; on removal only the cleanup runs.</p><p><i>🇻🇳 Render/commit → cleanup của effect cũ → effect mới; khi gỡ chỉ còn cleanup.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt cleanup của id 1 sau subscribe(2)."
+        },
+        {
+          "loi": "Nghĩ effect chạy trước render."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "commit",
+          "vi": "React áp thay đổi vào DOM thật"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,664 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-ex13-useeffect",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-ex13-useeffect"
+  },
+  "exercises": [
+    {
+      "title": "Fetch posts by user (re-fetch when userId changes)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "dependency array",
+        "re-fetch",
+        "race condition / ignore flag"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "exercise-13"
+      ],
+      "problemHtml": "<p>The main task of Exercise 13: a select chooses the user, and an effect loads <code>GET http://localhost:9999/posts?userId=&lt;id&gt;</code> every time <code>userId</code> changes. Because responses can arrive out of order, the effect's cleanup sets an <code>ignore</code> flag so an old response never overwrites a newer one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#user</code> select with users 1 and 2 (default 1). Posts in <code>li.post</code>; <code>#post-count</code> = <code>User 1 has 2 posts</code>.</li>\n  <li>Dependency array <code>[userId]</code>; <code>#loading</code> while loading.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài chính của Exercise 13: select chọn người dùng, effect tải <code>GET http://localhost:9999/posts?userId=&lt;id&gt;</code> mỗi khi <code>userId</code> đổi. Vì phản hồi có thể về sai thứ tự, cleanup của effect bật cờ <code>ignore</code> để phản hồi cũ không bao giờ ghi đè phản hồi mới.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Select <code>#user</code> có user 1 và 2 (mặc định 1). Bài viết trong <code>li.post</code>; <code>#post-count</code> = <code>User 1 has 2 posts</code>.</li>\n  <li>Mảng phụ thuộc <code>[userId]</code>; <code>#loading</code> khi đang tải.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "select user 2",
+          "output": "Routing basics, Redux in one hour, Testing components",
+          "explanation": "Changing the dependency re-runs the effect.|||Đổi phụ thuộc ⇒ effect chạy lại."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { let ignore = false; setLoading(true); fetch(`…/posts?userId=${userId}`).then(r => r.json()).then(data => { if (!ignore) { setPosts(data); setLoading(false); } }); return () => { ignore = true; }; }, [userId]);",
+        "Giá trị select là chuỗi; đổi bằng Number()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [userId, setUserId] = useState(1);\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/posts?userId=' + userId).then((r) => r.json()).then(setPosts);\n  }, []);\n  return (\n    <div>\n      <select id=\"user\" value={userId} onChange={(e) => setUserId(e.target.value)}>\n        <option value=\"1\">User 1</option><option value=\"2\">User 2</option>\n      </select>\n      <ul>{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — effect phụ thuộc [userId] + cờ ignore chống phản hồi cũ đè phản hồi mới\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [userId, setUserId] = useState(1);\n  const [posts, setPosts] = useState([]);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() => {\n    let ignore = false;\n    setLoading(true);\n    fetch(`http://localhost:9999/posts?userId=${userId}`)\n      .then((r) => r.json())\n      .then((data) => {\n        if (!ignore) {\n          setPosts(data);\n          setLoading(false);\n        }\n      });\n    return () => {\n      ignore = true; // effect cũ bị huỷ ⇒ bỏ qua phản hồi của nó\n    };\n  }, [userId]);\n\n  return (\n    <div>\n      <select id=\"user\" value={userId} onChange={(e) => setUserId(Number(e.target.value))}>\n        <option value=\"1\">User 1</option>\n        <option value=\"2\">User 2</option>\n      </select>\n      {loading ? (\n        <p id=\"loading\">Loading...</p>\n      ) : (\n        <>\n          <p id=\"post-count\">User {userId} has {posts.length} posts</p>\n          <ul>{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>\n        </>\n      )}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi lần <code>userId</code> đổi, React chạy cleanup của effect cũ (bật ignore) rồi chạy effect mới. Phản hồi của lần cũ có về muộn cũng bị bỏ qua.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "posts": [
+              {
+                "id": 1,
+                "userId": 1,
+                "title": "Hello React"
+              },
+              {
+                "id": 2,
+                "userId": 1,
+                "title": "Hooks are functions"
+              },
+              {
+                "id": 3,
+                "userId": 2,
+                "title": "Routing basics"
+              },
+              {
+                "id": 4,
+                "userId": 2,
+                "title": "Redux in one hour"
+              },
+              {
+                "id": 5,
+                "userId": 2,
+                "title": "Testing components"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "User 1 posts on mount",
+            "kiem": "danh-sach-text",
+            "selector": "li.post",
+            "mongDoi": [
+              "Hello React",
+              "Hooks are functions"
+            ]
+          },
+          {
+            "moTa": "Changing user re-fetches",
+            "kiem": "danh-sach-text",
+            "selector": "li.post",
+            "mongDoi": [
+              "Routing basics",
+              "Redux in one hour",
+              "Testing components"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#user",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Count text",
+            "kiem": "text",
+            "selector": "#post-count",
+            "giaTri": "User 2 has 3 posts",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#user",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Requested userId=2",
+            "kiem": "goi-fetch",
+            "khop": "/posts\\?userId=2",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#user",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Cleanup with an ignore flag",
+            "kiem": "ma-nguon",
+            "khop": "return\\s*\\(\\)\\s*=>\\s*\\{?\\s*ignore\\s*=\\s*true[\\s\\S]*\\[\\s*userId\\s*\\]"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mảng phụ thuộc <code>[]</code> ⇒ đổi user không tải lại."
+        },
+        {
+          "loi": "Không có cờ ignore ⇒ bấm đổi user nhanh, phản hồi chậm của user cũ đè lên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "race condition",
+          "vi": "kết quả phụ thuộc thứ tự về của các request"
+        }
+      ]
+    },
+    {
+      "title": "Countdown Timer with setInterval cleanup",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "setInterval",
+        "clearInterval",
+        "functional update in timers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "exercise-13"
+      ],
+      "problemHtml": "<p>A countdown: type seconds, press Start, the number goes down once per second and shows <code>Time's up!</code> at 0. The interval lives in an effect that depends on <code>running</code> and is cleared in the cleanup — pressing Start twice must not make it run twice as fast.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#seconds</code> (number, default 3), <code>#btn-start</code>, <code>#btn-pause</code>, <code>#display</code>.</li>\n  <li>At 0: stop and show <code>Time's up!</code> in <code>#display</code>. Pause keeps the current number.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồng hồ đếm ngược: nhập số giây, bấm Start, số giảm mỗi giây và hiện <code>Time's up!</code> khi về 0. Interval nằm trong effect phụ thuộc <code>running</code> và được xoá ở cleanup — bấm Start hai lần không được làm nó chạy nhanh gấp đôi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#seconds</code> (số, mặc định 3), <code>#btn-start</code>, <code>#btn-pause</code>, <code>#display</code>.</li>\n  <li>Về 0: dừng và hiện <code>Time's up!</code> trong <code>#display</code>. Pause giữ nguyên số hiện tại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "seconds 2, Start, wait 2 s",
+          "output": "Time's up!",
+          "explanation": "setLeft((s) => s - 1) inside the interval avoids the stale closure.|||setLeft((s) => s - 1) trong interval tránh closure cũ."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { if (!running) return; const id = setInterval(() => setLeft((s) => s - 1), 1000); return () => clearInterval(id); }, [running]);",
+        "Một effect khác: if (left <= 0) setRunning(false)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [seconds, setSeconds] = useState(3);\n  const [left, setLeft] = useState(3);\n  const start = () => { setLeft(seconds); setInterval(() => setLeft(left - 1), 1000); };\n  return (\n    <div>\n      <input id=\"seconds\" type=\"number\" value={seconds} onChange={(e) => setSeconds(Number(e.target.value))} />\n      <button id=\"btn-start\" onClick={start}>Start</button>\n      <button id=\"btn-pause\">Pause</button>\n      <p id=\"display\">{left}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — interval trong effect phụ thuộc [running], cleanup xoá interval\nimport { useEffect, useState } from 'react';\n\nexport default function App() {\n  const [seconds, setSeconds] = useState(3);\n  const [left, setLeft] = useState(3);\n  const [running, setRunning] = useState(false);\n\n  useEffect(() => {\n    if (!running) return undefined;\n    const id = setInterval(() => setLeft((s) => s - 1), 1000);\n    return () => clearInterval(id);\n  }, [running]);\n\n  useEffect(() => {\n    if (left <= 0) setRunning(false);\n  }, [left]);\n\n  const start = () => {\n    if (running) return; // đang chạy ⇒ không tạo thêm\n    if (left <= 0 || left > seconds) setLeft(seconds);\n    setRunning(true);\n  };\n\n  return (\n    <div>\n      <input id=\"seconds\" type=\"number\" min=\"1\" value={seconds} onChange={(e) => { setSeconds(Number(e.target.value)); setLeft(Number(e.target.value)); }} />\n      <button id=\"btn-start\" type=\"button\" onClick={start}>Start</button>\n      <button id=\"btn-pause\" type=\"button\" onClick={() => setRunning(false)}>Pause</button>\n      <p id=\"display\">{left <= 0 ? \"Time's up!\" : left}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Effect phụ thuộc <code>running</code>: bật ⇒ tạo đúng MỘT interval; tắt hoặc unmount ⇒ cleanup xoá nó. Cập nhật dạng hàm giúp interval luôn đọc giá trị mới nhất.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Counts down to Time's up!",
+            "kiem": "text",
+            "selector": "#display",
+            "giaTri": "Time's up!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#seconds",
+                "giaTri": "2"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-start",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 2600
+              }
+            ]
+          },
+          {
+            "moTa": "Ticks once per second",
+            "kiem": "text",
+            "selector": "#display",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-start",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "moTa": "Pause keeps the number",
+            "kiem": "text",
+            "selector": "#display",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-start",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-pause",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1300
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Start twice does not double the speed",
+            "kiem": "text",
+            "selector": "#display",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-start",
+                "lan": 2
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 1400
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "clearInterval in the cleanup",
+            "kiem": "ma-nguon",
+            "khop": "return\\s*\\(\\)\\s*=>\\s*clearInterval\\("
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>setLeft(left - 1)</code> trong interval ⇒ left luôn là giá trị lúc tạo interval (closure cũ), đứng yên ở n−1."
+        },
+        {
+          "loi": "Gọi setInterval trong onClick mà không lưu id ⇒ bấm hai lần chạy hai interval."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interval id",
+          "vi": "mã của bộ hẹn giờ, dùng để huỷ"
+        }
+      ]
+    },
+    {
+      "title": "Window Resize Listener",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "window events",
+        "cleanup",
+        "breakpoints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "exercise-13"
+      ],
+      "problemHtml": "<p>Show the current window width and a layout label that updates on resize. Subscribe to <code>resize</code> in an effect with <code>[]</code> and unsubscribe in the cleanup. Wrap it in a reusable <code>useWindowWidth()</code> hook.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#width</code> = <code>Width: 1024px</code> (the real <code>window.innerWidth</code>).</li>\n  <li><code>#layout</code>: <code>Mobile</code> (&lt; 576), <code>Tablet</code> (&lt; 992) or <code>Desktop</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiện độ rộng cửa sổ hiện tại và nhãn bố cục, cập nhật khi đổi kích thước. Đăng ký <code>resize</code> trong effect <code>[]</code> và huỷ đăng ký ở cleanup. Bọc trong hook dùng lại được <code>useWindowWidth()</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#width</code> = <code>Width: 1024px</code> (đúng <code>window.innerWidth</code>).</li>\n  <li><code>#layout</code>: <code>Mobile</code> (&lt; 576), <code>Tablet</code> (&lt; 992) hoặc <code>Desktop</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "window 800 px wide",
+          "output": "Width: 800px · Tablet",
+          "explanation": "Breakpoints follow Bootstrap (sm 576, lg 992).|||Mốc theo Bootstrap (sm 576, lg 992)."
+        }
+      ],
+      "hintsJson": [
+        "function useWindowWidth() { const [w, setW] = useState(window.innerWidth); useEffect(() => { const on = () => setW(window.innerWidth); window.addEventListener(\"resize\", on); return () => window.removeEventListener(\"resize\", on); }, []); return w; }",
+        "Nhãn tính từ w, không lưu state riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nexport default function App() {\n  const width = 0;\n  window.addEventListener('resize', () => {});\n  return (\n    <div>\n      <p id=\"width\">Width: {width}px</p>\n      <p id=\"layout\">Desktop</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — custom hook nghe resize, gỡ listener khi unmount\nimport { useEffect, useState } from 'react';\n\nfunction useWindowWidth() {\n  const [width, setWidth] = useState(window.innerWidth);\n  useEffect(() => {\n    const onResize = () => setWidth(window.innerWidth);\n    window.addEventListener('resize', onResize);\n    return () => window.removeEventListener('resize', onResize);\n  }, []);\n  return width;\n}\n\nconst layoutFor = (w) => (w < 576 ? 'Mobile' : w < 992 ? 'Tablet' : 'Desktop');\n\nexport default function App() {\n  const width = useWindowWidth();\n  return (\n    <div>\n      <p id=\"width\">Width: {width}px</p>\n      <p id=\"layout\">{layoutFor(width)}</p>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>removeEventListener chỉ gỡ được nếu truyền đúng CÙNG một hàm đã đăng ký — vì vậy khai báo handler trong effect rồi dùng nó cho cả hai lời gọi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Shows a real width",
+            "kiem": "text",
+            "selector": "#width",
+            "khop": "^Width: [1-9]\\d*px$"
+          },
+          {
+            "moTa": "Layout label is one of the three",
+            "kiem": "text",
+            "selector": "#layout",
+            "khop": "^(Mobile|Tablet|Desktop)$"
+          },
+          {
+            "moTa": "Listens to resize in an effect",
+            "kiem": "ma-nguon",
+            "khop": "useEffect\\([\\s\\S]*addEventListener\\(\\s*['\"]resize['\"]"
+          },
+          {
+            "an": true,
+            "moTa": "Removes the same handler in the cleanup",
+            "kiem": "ma-nguon",
+            "khop": "return\\s*\\(\\)\\s*=>\\s*window\\.removeEventListener\\(\\s*['\"]resize['\"]\\s*,\\s*[A-Za-z_]\\w*\\s*\\)"
+          },
+          {
+            "an": true,
+            "moTa": "A useWindowWidth hook",
+            "kiem": "ma-nguon",
+            "khop": "function\\s+useWindowWidth"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc <code>window.innerWidth</code> một lần, không nghe resize ⇒ số đứng yên."
+        },
+        {
+          "loi": "removeEventListener với một hàm KHÁC (viết lại arrow) ⇒ không gỡ được gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breakpoint",
+          "vi": "mốc độ rộng đổi bố cục"
+        }
+      ]
+    },
+    {
+      "title": "Form Input Validation with a debounced availability check",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "debounce with setTimeout",
+        "cleanup cancels",
+        "validation + async check"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useEffect",
+        "exercise-13"
+      ],
+      "problemHtml": "<p>A sign-up username field. Rules are checked instantly (≥ 3 chars, letters/digits only). Only when the format is valid, wait <b>500 ms after the user stops typing</b> and ask the server <code>GET /users?username=&lt;name&gt;</code> whether it is taken. Each keystroke cancels the previous timer through the effect cleanup, so fast typing sends ONE request.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#username</code>; <code>#message</code>: <code>At least 3 characters</code> / <code>Letters and digits only</code> / <code>Checking...</code> / <code>Username is taken</code> / <code>Username is available</code>.</li>\n  <li><code>#btn-register</code> is disabled unless the name is available. Empty field ⇒ no message.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ô tên đăng nhập. Luật kiểm ngay (≥ 3 ký tự, chỉ chữ/số). Chỉ khi đúng định dạng, đợi <b>500 ms sau khi người dùng ngừng gõ</b> rồi hỏi server <code>GET /users?username=&lt;tên&gt;</code> xem đã có người dùng chưa. Mỗi lần gõ, cleanup của effect huỷ hẹn giờ cũ, nên gõ nhanh chỉ gửi MỘT request.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#username</code>; <code>#message</code>: <code>At least 3 characters</code> / <code>Letters and digits only</code> / <code>Checking...</code> / <code>Username is taken</code> / <code>Username is available</code>.</li>\n  <li><code>#btn-register</code> bị vô hiệu trừ khi tên còn trống. Ô rỗng ⇒ không có thông báo.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"l\", \"la\", \"lan\" quickly",
+          "output": "one request → Username is taken",
+          "explanation": "Two timers were cancelled by the cleanup.|||Hai hẹn giờ đã bị cleanup huỷ."
+        }
+      ],
+      "hintsJson": [
+        "useEffect(() => { if (!valid) return; setStatus(\"checking\"); const id = setTimeout(async () => { const r = await fetch(…); const list = await r.json(); setStatus(list.length ? \"taken\" : \"available\"); }, 500); return () => clearTimeout(id); }, [username]);",
+        "Lỗi định dạng là dữ liệu suy ra — tính trong render, không cần effect."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [username, setUsername] = useState('');\n  const [message, setMessage] = useState('');\n  const onChange = async (e) => {\n    setUsername(e.target.value);\n    const r = await fetch('http://localhost:9999/users?username=' + e.target.value);\n    setMessage((await r.json()).length ? 'Username is taken' : 'Username is available');\n  };\n  return (\n    <div>\n      <input id=\"username\" value={username} onChange={onChange} />\n      <p id=\"message\">{message}</p>\n      <button id=\"btn-register\">Register</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lỗi định dạng tính ngay; kiểm trùng tên debounce 500 ms bằng effect + clearTimeout\nimport { useEffect, useState } from 'react';\n\nfunction formatError(name) {\n  if (name.length < 3) return 'At least 3 characters';\n  if (!/^[A-Za-z0-9]+$/.test(name)) return 'Letters and digits only';\n  return null;\n}\n\nexport default function App() {\n  const [username, setUsername] = useState('');\n  const [status, setStatus] = useState('idle'); // idle | checking | taken | available\n  const error = username ? formatError(username) : null;\n\n  useEffect(() => {\n    if (!username || formatError(username)) {\n      setStatus('idle');\n      return undefined;\n    }\n    setStatus('checking');\n    let ignore = false;\n    const id = setTimeout(async () => {\n      const res = await fetch(`http://localhost:9999/users?username=${encodeURIComponent(username)}`);\n      const list = await res.json();\n      if (!ignore) setStatus(list.length ? 'taken' : 'available');\n    }, 500);\n    return () => {\n      ignore = true;\n      clearTimeout(id); // gõ tiếp ⇒ huỷ lần kiểm trước\n    };\n  }, [username]);\n\n  const TEXT = { checking: 'Checking...', taken: 'Username is taken', available: 'Username is available' };\n  const message = error || TEXT[status] || '';\n\n  return (\n    <div>\n      <input id=\"username\" value={username} onChange={(e) => setUsername(e.target.value.trim())} />\n      <p id=\"message\">{message}</p>\n      <button id=\"btn-register\" type=\"button\" disabled={status !== 'available' || !!error}>Register</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cleanup chạy trước mỗi lần effect chạy lại — đúng thời điểm để huỷ hẹn giờ của lần gõ trước. Đây là cách debounce không cần thư viện.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "username": "admin"
+              },
+              {
+                "id": 2,
+                "username": "lan"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Too short",
+            "kiem": "text",
+            "selector": "#message",
+            "giaTri": "At least 3 characters",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "ab"
+              }
+            ]
+          },
+          {
+            "moTa": "Invalid characters",
+            "kiem": "text",
+            "selector": "#message",
+            "giaTri": "Letters and digits only",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lan!"
+              }
+            ]
+          },
+          {
+            "moTa": "Taken name after the debounce",
+            "kiem": "text",
+            "selector": "#message",
+            "giaTri": "Username is taken",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lan"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "moTa": "Available name enables Register",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-register",
+            "thuocTinh": "disabled",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "cuong2026"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Fast typing sends one request",
+            "kiem": "goi-fetch",
+            "khop": "/users\\?username=",
+            "min": 1,
+            "max": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lan"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lanh"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lanh2"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Shows Checking... before the answer",
+            "kiem": "text",
+            "selector": "#message",
+            "giaTri": "Checking...",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "lan"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Register disabled while invalid",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#btn-register",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#username",
+                "giaTri": "ab"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi fetch trực tiếp trong onChange ⇒ mỗi phím một request."
+        },
+        {
+          "loi": "Không clearTimeout ⇒ hẹn giờ cũ vẫn chạy, kết quả nhảy lung tung."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "debounce",
+          "vi": "đợi người dùng ngừng thao tác rồi mới chạy"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-interview-hooks",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-1-usestate-useeffect"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — React Hooks (Chapter 8)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "React Hooks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>React Hooks</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>React Hooks</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React Hooks (Chapter 8)\n\nAnswer in the panel on the left (no code needed).\n\n1. Why do the rules of hooks exist?\n2. Explain the dependency array of useEffect.\n3. What is a stale closure, and how do you avoid it?\n4. useState vs useReducer — how do you choose?\n5. When do you need a cleanup function?\n6. useRef vs useState?\n7. How would you fetch data in a component correctly?\n8. What makes a good custom hook?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — React Hooks (Chapter 8) — answer key\n\n1. Why do the rules of hooks exist?\n   Answer: b) React identifies each hook by its call order; conditions or loops would shift the order between renders and mix up state.\n   Model answer: \"React stores hook state in a list per component and matches them by call order. If a hook is inside an if, the order changes when the condition flips and React hands the wrong state to the wrong hook. That is why hooks go at the top level, and the ESLint plugin enforces it.\" / Trả lời mẫu: \"React lưu state của hook thành danh sách theo từng component và khớp theo thứ tự gọi. Đặt hook trong if thì thứ tự đổi khi điều kiện đổi, React trao nhầm state. Vì vậy hook phải ở cấp cao nhất, và plugin ESLint kiểm việc đó.\"\n\n2. Explain the dependency array of useEffect.\n   Answer: b) It lists the reactive values the effect uses; React re-runs the effect when any of them changes. Empty ⇒ once after mount; missing ⇒ after every render.\n   Model answer: \"The array lists every prop, state or derived value the effect reads. React compares them with Object.is after each render and re-runs the effect if one changed. Leaving values out creates stale data bugs, so I keep the linter rule on.\" / Trả lời mẫu: \"Mảng liệt kê mọi prop, state hay giá trị suy ra mà effect đọc. Sau mỗi render React so bằng Object.is và chạy lại effect nếu có cái đổi. Bỏ sót sẽ gây lỗi dữ liệu cũ, nên tôi luôn bật luật linter.\"\n\n3. What is a stale closure, and how do you avoid it?\n   Answer: b) A function that captured an old render's values (e.g. inside setInterval); fix with functional updates, correct dependencies or a ref.\n   Model answer: \"Each render has its own props and state, and functions created in that render see those values forever. An interval created once keeps reading count = 0. I use setCount(c => c + 1), add the value to the dependencies, or read it from a ref.\" / Trả lời mẫu: \"Mỗi lần render có props và state riêng, hàm tạo trong lần đó nhìn thấy các giá trị đó mãi mãi. Interval tạo một lần sẽ đọc mãi count = 0. Tôi dùng setCount(c => c + 1), thêm giá trị vào phụ thuộc, hoặc đọc qua ref.\"\n\n4. useState vs useReducer — how do you choose?\n   Answer: b) useState for independent simple values; useReducer when several values change together or updates have many cases — the reducer is pure and easy to test.\n   Model answer: \"For a toggle or an input I use useState. When state is an object whose fields change together — a form with errors and status, a quiz — I use useReducer: all transitions live in one pure function I can unit-test, and components just dispatch actions.\" / Trả lời mẫu: \"Công tắc hay ô nhập thì tôi dùng useState. Khi state là object mà các trường đổi cùng nhau — form có lỗi và trạng thái, bài quiz — tôi dùng useReducer: mọi chuyển tiếp nằm trong một hàm thuần test được, component chỉ việc dispatch.\"\n\n5. When do you need a cleanup function?\n   Answer: b) Whenever the effect starts something that outlives the render: subscriptions, timers, sockets, requests whose result might arrive after unmount.\n   Model answer: \"If the effect opens something, the cleanup closes it: removeEventListener, clearInterval, closing a socket, or ignoring/aborting a fetch. Strict Mode mounts components twice in development precisely to expose missing cleanups.\" / Trả lời mẫu: \"Effect mở thứ gì thì cleanup đóng thứ đó: removeEventListener, clearInterval, đóng socket, hay bỏ qua/huỷ fetch. Strict Mode ở dev mount hai lần chính là để lộ chỗ thiếu cleanup.\"\n\n6. useRef vs useState?\n   Answer: b) Both persist across renders, but changing a ref does not re-render; use refs for DOM nodes and values not shown on screen.\n   Model answer: \"Use state for anything displayed. Use a ref for things React does not need to render: a DOM node to focus, an interval id, the previous value. Mutating ref.current is allowed and silent.\" / Trả lời mẫu: \"Thứ gì hiển thị thì dùng state. Thứ React không cần vẽ — nút DOM để focus, mã interval, giá trị trước — thì dùng ref. Gán ref.current được phép và không gây render.\"\n\n7. How would you fetch data in a component correctly?\n   Answer: b) In an effect with the right dependencies, with loading/error state, checking res.ok, and ignoring/aborting outdated responses — or use a library like React Query in real projects.\n   Model answer: \"In plain React: an effect depending on the query params, an async function inside, loading and error states, res.ok check, and a cleanup flag or AbortController. In production I prefer TanStack Query for caching, retries and deduplication.\" / Trả lời mẫu: \"React thuần: effect phụ thuộc tham số truy vấn, hàm async bên trong, state loading và error, kiểm res.ok, cleanup bằng cờ hoặc AbortController. Dự án thật tôi thích TanStack Query vì có cache, thử lại, gộp request.\"\n\n8. What makes a good custom hook?\n   Answer: b) Its name starts with use, it encapsulates one piece of stateful logic, and it returns a simple API (value + actions) — e.g. useLocalStorage, useFetch, useDebounce.\n   Model answer: \"A custom hook extracts logic that more than one component needs, like syncing with localStorage or debouncing input. It starts with use so the linter checks it, has a focused purpose and returns something easy to use, often the same shape as useState.\" / Trả lời mẫu: \"Custom hook rút phần logic nhiều component cần, như đồng bộ localStorage hay debounce. Tên bắt đầu bằng use để linter kiểm, mục đích gọn, trả về thứ dễ dùng, thường cùng dạng với useState.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Why do the rules of hooks exist?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For performance only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "React identifies each hook by its call order; conditions or loops would shift the order between renders and mix up state."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because hooks are classes."
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make code shorter."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"React stores hook state in a list per component and matches them by call order. If a hook is inside an if, the order changes when the condition flips and React hands the wrong state to the wrong hook. That is why hooks go at the top level, and the ESLint plugin enforces it.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React lưu state của hook thành danh sách theo từng component và khớp theo thứ tự gọi. Đặt hook trong if thì thứ tự đổi khi điều kiện đổi, React trao nhầm state. Vì vậy hook phải ở cấp cao nhất, và plugin ESLint kiểm việc đó.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "Explain the dependency array of useEffect.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It lists variables to ignore."
+              },
+              {
+                "ma": "b",
+                "noiDung": "It lists the reactive values the effect uses; React re-runs the effect when any of them changes. Empty ⇒ once after mount; missing ⇒ after every render."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is optional and has no effect."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It stores the result of the effect."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"The array lists every prop, state or derived value the effect reads. React compares them with Object.is after each render and re-runs the effect if one changed. Leaving values out creates stale data bugs, so I keep the linter rule on.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Mảng liệt kê mọi prop, state hay giá trị suy ra mà effect đọc. Sau mỗi render React so bằng Object.is và chạy lại effect nếu có cái đổi. Bỏ sót sẽ gây lỗi dữ liệu cũ, nên tôi luôn bật luật linter.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "What is a stale closure, and how do you avoid it?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A closed browser tab."
+              },
+              {
+                "ma": "b",
+                "noiDung": "A function that captured an old render's values (e.g. inside setInterval); fix with functional updates, correct dependencies or a ref."
+              },
+              {
+                "ma": "c",
+                "noiDung": "A memory leak in CSS."
+              },
+              {
+                "ma": "d",
+                "noiDung": "A closure that is never called."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Each render has its own props and state, and functions created in that render see those values forever. An interval created once keeps reading count = 0. I use setCount(c => c + 1), add the value to the dependencies, or read it from a ref.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Mỗi lần render có props và state riêng, hàm tạo trong lần đó nhìn thấy các giá trị đó mãi mãi. Interval tạo một lần sẽ đọc mãi count = 0. Tôi dùng setCount(c => c + 1), thêm giá trị vào phụ thuộc, hoặc đọc qua ref.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "useState vs useReducer — how do you choose?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "useReducer is always better."
+              },
+              {
+                "ma": "b",
+                "noiDung": "useState for independent simple values; useReducer when several values change together or updates have many cases — the reducer is pure and easy to test."
+              },
+              {
+                "ma": "c",
+                "noiDung": "useReducer is only for Redux."
+              },
+              {
+                "ma": "d",
+                "noiDung": "They cannot be used together."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"For a toggle or an input I use useState. When state is an object whose fields change together — a form with errors and status, a quiz — I use useReducer: all transitions live in one pure function I can unit-test, and components just dispatch actions.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Công tắc hay ô nhập thì tôi dùng useState. Khi state là object mà các trường đổi cùng nhau — form có lỗi và trạng thái, bài quiz — tôi dùng useReducer: mọi chuyển tiếp nằm trong một hàm thuần test được, component chỉ việc dispatch.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "When do you need a cleanup function?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whenever the effect starts something that outlives the render: subscriptions, timers, sockets, requests whose result might arrive after unmount."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for class components."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only when using Redux."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"If the effect opens something, the cleanup closes it: removeEventListener, clearInterval, closing a socket, or ignoring/aborting a fetch. Strict Mode mounts components twice in development precisely to expose missing cleanups.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Effect mở thứ gì thì cleanup đóng thứ đó: removeEventListener, clearInterval, đóng socket, hay bỏ qua/huỷ fetch. Strict Mode ở dev mount hai lần chính là để lộ chỗ thiếu cleanup.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "useRef vs useState?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Identical."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both persist across renders, but changing a ref does not re-render; use refs for DOM nodes and values not shown on screen."
+              },
+              {
+                "ma": "c",
+                "noiDung": "useRef is only for forms."
+              },
+              {
+                "ma": "d",
+                "noiDung": "useState cannot store objects."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Use state for anything displayed. Use a ref for things React does not need to render: a DOM node to focus, an interval id, the previous value. Mutating ref.current is allowed and silent.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Thứ gì hiển thị thì dùng state. Thứ React không cần vẽ — nút DOM để focus, mã interval, giá trị trước — thì dùng ref. Gán ref.current được phép và không gây render.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "How would you fetch data in a component correctly?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Call fetch in the component body."
+              },
+              {
+                "ma": "b",
+                "noiDung": "In an effect with the right dependencies, with loading/error state, checking res.ok, and ignoring/aborting outdated responses — or use a library like React Query in real projects."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use useEffect(async () => …)."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fetch inside useState."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"In plain React: an effect depending on the query params, an async function inside, loading and error states, res.ok check, and a cleanup flag or AbortController. In production I prefer TanStack Query for caching, retries and deduplication.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"React thuần: effect phụ thuộc tham số truy vấn, hàm async bên trong, state loading và error, kiểm res.ok, cleanup bằng cờ hoặc AbortController. Dự án thật tôi thích TanStack Query vì có cache, thử lại, gộp request.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "What makes a good custom hook?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It returns JSX."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its name starts with use, it encapsulates one piece of stateful logic, and it returns a simple API (value + actions) — e.g. useLocalStorage, useFetch, useDebounce."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It must use Context."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It must be a class."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"A custom hook extracts logic that more than one component needs, like syncing with localStorage or debouncing input. It starts with use so the linter checks it, has a focused purpose and returns something easy to use, often the same shape as useState.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Custom hook rút phần logic nhiều component cần, như đồng bộ localStorage hay debounce. Tên bắt đầu bằng use để linter kiểm, mục đích gọn, trả về thứ dễ dùng, thường cùng dạng với useState.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

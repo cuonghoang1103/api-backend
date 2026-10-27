@@ -308,6 +308,54 @@
       "name": "Interview corner — Context & reuse patterns",
       "level": "INTERMEDIATE",
       "description": "8 câu phỏng vấn kèm câu trả lời mẫu về Context, Redux, re-render, render props/HOC/hooks, composition, kiểm thử."
+    },
+    {
+      "slug": "fer202-8-1-usestate-useeffect",
+      "name": "8.1 useState & useEffect",
+      "level": "EASY",
+      "description": "Luyện useState khởi tạo lười, useEffect phụ thuộc + cleanup, fetch khi mount, useRef, custom hook useLocalStorage."
+    },
+    {
+      "slug": "fer202-8-2-usecontext-usereducer",
+      "name": "8.2 useContext & useReducer",
+      "level": "MEDIUM",
+      "description": "Reducer thuần, useReducer có payload, AuthContext + useAuth có chốt, form bằng reducer, giỏ hàng Context + reducer."
+    },
+    {
+      "slug": "fer202-8-ex12-usestate",
+      "name": "Exercise 12 — useState",
+      "level": "EASY",
+      "description": "Bảy component của handout: Counter/Echo/Toggle, Todo, Color Switcher, Search Filter, danh sách sắp lại (kéo-thả)."
+    },
+    {
+      "slug": "fer202-8-ex13-useeffect",
+      "name": "Exercise 13 — useEffect",
+      "level": "MEDIUM",
+      "description": "Fetch theo userId (cờ ignore), Countdown có clearInterval, nghe resize, kiểm tên đăng nhập debounce."
+    },
+    {
+      "slug": "fer202-8-ex14-usecontext",
+      "name": "Exercise 14 — useContext",
+      "level": "MEDIUM",
+      "description": "ThemeProvider + useTheme, CartContext của handout, i18n bằng context, toast qua context."
+    },
+    {
+      "slug": "fer202-8-ex15-usereducer",
+      "name": "Exercise 15 — useReducer",
+      "level": "MEDIUM",
+      "description": "Counter có hàm init, reducer Question Bank thuần, app Question Bank, undo/redo bằng reducer lịch sử."
+    },
+    {
+      "slug": "fer202-8-3-slot9-hooks-slides",
+      "name": "8.3 Slide check — React Hooks",
+      "level": "EASY",
+      "description": "Trắc nghiệm Slot 9–10: luật hooks, năm hook chính, vòng đời effect."
+    },
+    {
+      "slug": "fer202-8-interview-hooks",
+      "name": "Interview corner — React Hooks",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về hooks kèm câu trả lời mẫu."
     }
   ]
 }

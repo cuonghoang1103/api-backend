@@ -1,0 +1,860 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-8-2-usecontext-usereducer",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-8-2-usecontext-usereducer"
+  },
+  "exercises": [
+    {
+      "title": "A pure todos reducer",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "reducer",
+        "pure function",
+        "immutable update"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer",
+        "javascript"
+      ],
+      "problemHtml": "<p>Write <code>todosReducer(state, action)</code> for a todo list — the function you would pass to <code>useReducer</code>. It must be <b>pure</b>: never mutate <code>state</code>, always return a new array when something changes, and return the SAME state for unknown actions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>{type:\"added\", id, text}</code> appends <code>{id, text, done:false}</code>; <code>{type:\"toggled\", id}</code> flips <code>done</code>; <code>{type:\"removed\", id}</code> deletes.</li>\n  <li>Blank text (after trim) ⇒ no change (same reference). Unknown type ⇒ return <code>state</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>todosReducer(state, action)</code> cho danh sách việc — chính là hàm bạn truyền vào <code>useReducer</code>. Nó phải <b>thuần</b>: không sửa <code>state</code>, luôn trả mảng mới khi có thay đổi, và trả LẠI CHÍNH state khi gặp action lạ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>{type:\"added\", id, text}</code> thêm <code>{id, text, done:false}</code> vào cuối; <code>{type:\"toggled\", id}</code> đảo <code>done</code>; <code>{type:\"removed\", id}</code> xoá.</li>\n  <li>Text rỗng (sau trim) ⇒ không đổi (cùng tham chiếu). Type lạ ⇒ trả <code>state</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "todosReducer([], {type:\"added\", id:1, text:\" Learn hooks \"})",
+          "output": "[{ id: 1, text: \"Learn hooks\", done: false }]",
+          "explanation": "Trim the text; the original [] is untouched.|||Cắt khoảng trắng; mảng [] gốc không bị đổi."
+        }
+      ],
+      "hintsJson": [
+        "switch (action.type) { case \"added\": … return [...state, {…}]; case \"toggled\": return state.map(t => t.id === action.id ? { ...t, done: !t.done } : t); … default: return state; }",
+        "removed: state.filter(t => t.id !== action.id)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — STARTER\nfunction todosReducer(state, action) {\n  if (action.type === 'added') {\n    state.push({ id: action.id, text: action.text, done: false });\n  }\n  return state;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — reducer THUẦN: không đột biến, action lạ trả nguyên state\nfunction todosReducer(state, action) {\n  switch (action.type) {\n    case 'added': {\n      const text = String(action.text ?? '').trim();\n      if (!text) return state; // không đổi ⇒ cùng tham chiếu\n      return [...state, { id: action.id, text, done: false }];\n    }\n    case 'toggled':\n      return state.map((t) => (t.id === action.id ? { ...t, done: !t.done } : t));\n    case 'removed':\n      return state.filter((t) => t.id !== action.id);\n    default:\n      return state;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reducer gom mọi cách state thay đổi vào MỘT hàm thuần, dễ test như hàm thường (bài này máy chấm gọi trực tiếp). React so sánh tham chiếu: trả object/mảng mới ⇒ vẽ lại, trả state cũ ⇒ bỏ qua.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "added appends a trimmed todo",
+            "goi": "todosReducer([], { type: \"added\", id: 1, text: \" Learn hooks \" })",
+            "mongDoi": [
+              {
+                "id": 1,
+                "text": "Learn hooks",
+                "done": false
+              }
+            ]
+          },
+          {
+            "moTa": "toggled flips done",
+            "goi": "todosReducer([{ id: 1, text: \"A\", done: false }, { id: 2, text: \"B\", done: false }], { type: \"toggled\", id: 2 })",
+            "mongDoi": [
+              {
+                "id": 1,
+                "text": "A",
+                "done": false
+              },
+              {
+                "id": 2,
+                "text": "B",
+                "done": true
+              }
+            ]
+          },
+          {
+            "moTa": "removed deletes by id",
+            "goi": "todosReducer([{ id: 1, text: \"A\", done: false }, { id: 2, text: \"B\", done: true }], { type: \"removed\", id: 1 })",
+            "mongDoi": [
+              {
+                "id": 2,
+                "text": "B",
+                "done": true
+              }
+            ]
+          },
+          {
+            "moTa": "Does not mutate the old state",
+            "goi": "(() => { const s = [{ id: 1, text: \"A\", done: false }]; todosReducer(s, { type: \"toggled\", id: 1 }); todosReducer(s, { type: \"added\", id: 2, text: \"B\" }); return s; })()",
+            "mongDoi": [
+              {
+                "id": 1,
+                "text": "A",
+                "done": false
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Unknown action ⇒ same reference",
+            "goi": "(() => { const s = []; return todosReducer(s, { type: \"weird\" }) === s; })()",
+            "mongDoi": true
+          },
+          {
+            "an": true,
+            "moTa": "Blank text ⇒ same reference",
+            "goi": "(() => { const s = []; return todosReducer(s, { type: \"added\", id: 3, text: \"   \" }) === s; })()",
+            "mongDoi": true
+          },
+          {
+            "an": true,
+            "moTa": "toggled returns a new array",
+            "goi": "(() => { const s = [{ id: 1, text: \"A\", done: false }]; return todosReducer(s, { type: \"toggled\", id: 1 }) !== s; })()",
+            "mongDoi": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>state.push(...)</code> rồi <code>return state</code> ⇒ cùng tham chiếu, React KHÔNG vẽ lại."
+        },
+        {
+          "loi": "<code>t.done = !t.done</code> trong map ⇒ sửa object cũ (đột biến ngầm)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reducer",
+          "vi": "hàm (state, action) ⇒ state mới"
+        },
+        {
+          "en": "action",
+          "vi": "object mô tả \"chuyện gì đã xảy ra\""
+        }
+      ]
+    },
+    {
+      "title": "useReducer counter with a step payload",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "useReducer",
+        "dispatch",
+        "action payload"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer"
+      ],
+      "problemHtml": "<p>Rewrite a counter with <code>useReducer</code>. The step (1, 5 or 10) is chosen with a select and travels in the action <b>payload</b>. Count must stay between 0 and 100.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#count</code>, <code>#step</code> (select 1/5/10), <code>#inc</code>, <code>#dec</code>, <code>#reset</code>. Actions: <code>INCREMENT</code>/<code>DECREMENT</code> with <code>payload</code> = step, <code>RESET</code>.</li>\n  <li>Clamp to [0, 100] inside the reducer.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết lại bộ đếm bằng <code>useReducer</code>. Bước (1, 5 hoặc 10) chọn bằng select và đi theo <b>payload</b> của action. Số đếm phải nằm trong 0–100.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#count</code>, <code>#step</code> (select 1/5/10), <code>#inc</code>, <code>#dec</code>, <code>#reset</code>. Action: <code>INCREMENT</code>/<code>DECREMENT</code> có <code>payload</code> = bước, <code>RESET</code>.</li>\n  <li>Kẹp trong [0, 100] ngay trong reducer.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "step 10, +10 ×11",
+          "output": "100",
+          "explanation": "The 11th increment is clamped.|||Lần cộng thứ 11 bị kẹp lại."
+        }
+      ],
+      "hintsJson": [
+        "function reducer(state, action) { switch (action.type) { case \"INCREMENT\": return { count: Math.min(100, state.count + action.payload) }; … } }",
+        "const [state, dispatch] = useReducer(reducer, { count: 0 }); onClick={() => dispatch({ type: \"INCREMENT\", payload: step })}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  const [step, setStep] = useState(1);\n  return (\n    <div>\n      <p id=\"count\">{count}</p>\n      <select id=\"step\" value={step} onChange={(e) => setStep(e.target.value)}>\n        <option value=\"1\">1</option><option value=\"5\">5</option><option value=\"10\">10</option>\n      </select>\n      <button id=\"inc\" onClick={() => setCount(count + step)}>+</button>\n      <button id=\"dec\" onClick={() => setCount(count - step)}>−</button>\n      <button id=\"reset\" onClick={() => setCount(0)}>Reset</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — useReducer: component dispatch, reducer giữ quy tắc\nimport { useReducer, useState } from 'react';\n\nconst initialState = { count: 0 };\nconst clamp = (n) => Math.max(0, Math.min(100, n));\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case 'INCREMENT':\n      return { count: clamp(state.count + action.payload) };\n    case 'DECREMENT':\n      return { count: clamp(state.count - action.payload) };\n    case 'RESET':\n      return initialState;\n    default:\n      return state;\n  }\n}\n\nexport default function App() {\n  const [state, dispatch] = useReducer(reducer, initialState);\n  const [step, setStep] = useState(1);\n  return (\n    <div>\n      <p id=\"count\">{state.count}</p>\n      <select id=\"step\" value={step} onChange={(e) => setStep(Number(e.target.value))}>\n        <option value=\"1\">1</option><option value=\"5\">5</option><option value=\"10\">10</option>\n      </select>\n      <button id=\"inc\" type=\"button\" onClick={() => dispatch({ type: 'INCREMENT', payload: step })}>+</button>\n      <button id=\"dec\" type=\"button\" onClick={() => dispatch({ type: 'DECREMENT', payload: step })}>−</button>\n      <button id=\"reset\" type=\"button\" onClick={() => dispatch({ type: 'RESET' })}>Reset</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với useReducer, component chỉ <b>mô tả sự kiện</b> (dispatch action); mọi quy tắc (cộng bao nhiêu, kẹp biên) nằm trong reducer. Đây là mẫu bài Exercise 15 của trường.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Step 5 adds 5",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "10",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#step",
+                "giaTri": "5"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Clamped at 100",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "100",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#step",
+                "giaTri": "10"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 11
+              }
+            ]
+          },
+          {
+            "moTa": "Never below 0",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#dec",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Reset",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#inc",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#reset",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses useReducer with INCREMENT + payload",
+            "kiem": "ma-nguon",
+            "khop": "useReducer\\([\\s\\S]*type:\\s*['\"]INCREMENT['\"]\\s*,\\s*payload"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giá trị select là CHUỖI ⇒ \"0\" + \"5\" = \"05\"; nhớ Number()."
+        },
+        {
+          "loi": "Kẹp ở component thay vì reducer ⇒ logic rải rác, dễ sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "payload",
+          "vi": "dữ liệu kèm theo action"
+        },
+        {
+          "en": "dispatch",
+          "vi": "gửi action tới reducer"
+        }
+      ]
+    },
+    {
+      "title": "AuthContext with a safe useAuth hook",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "createContext",
+        "Provider value",
+        "custom hook guard"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext"
+      ],
+      "problemHtml": "<p>Build <code>AuthProvider</code> holding the current user, with <code>login(name)</code> and <code>logout()</code>. Components read it through <code>useAuth()</code>, which <b>throws</b> <code>useAuth must be used inside AuthProvider</code> when there is no provider. A navbar and a login panel live in DIFFERENT components but share the user.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Navbar <code>#greeting</code>: <code>Hello, Lan</code> or <code>Guest</code>; <code>#btn-logout</code> only when logged in.</li>\n  <li>LoginPanel: <code>#name</code> + <code>#btn-login</code> (ignore blank), hidden when logged in. Export <code>useAuth</code> for the hidden test.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng <code>AuthProvider</code> giữ người dùng hiện tại, có <code>login(name)</code> và <code>logout()</code>. Component đọc qua <code>useAuth()</code>, hook này <b>ném lỗi</b> <code>useAuth must be used inside AuthProvider</code> khi không có provider. Navbar và khung đăng nhập là các component KHÁC nhau nhưng dùng chung user.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Navbar <code>#greeting</code>: <code>Hello, Lan</code> hoặc <code>Guest</code>; <code>#btn-logout</code> chỉ hiện khi đã đăng nhập.</li>\n  <li>LoginPanel: <code>#name</code> + <code>#btn-login</code> (bỏ qua chuỗi rỗng), ẩn khi đã đăng nhập.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "type \"Lan\", Login",
+          "output": "Hello, Lan · login panel hidden",
+          "explanation": "Both components re-render because they consume the same context.|||Cả hai component vẽ lại vì cùng dùng một context."
+        }
+      ],
+      "hintsJson": [
+        "const AuthContext = createContext(null); function useAuth() { const ctx = useContext(AuthContext); if (!ctx) throw new Error(\"useAuth must be used inside AuthProvider\"); return ctx; }",
+        "Provider: const [user, setUser] = useState(null); value={{ user, login: (n) => setUser({ name: n }), logout: () => setUser(null) }}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nfunction Navbar() {\n  const [user] = useState(null);\n  return <nav><span id=\"greeting\">{user ? 'Hello, ' + user.name : 'Guest'}</span></nav>;\n}\n\nfunction LoginPanel() {\n  const [name, setName] = useState('');\n  return (\n    <div>\n      <input id=\"name\" value={name} onChange={(e) => setName(e.target.value)} />\n      <button id=\"btn-login\">Login</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (<div><Navbar /><LoginPanel /></div>);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một nguồn sự thật (AuthProvider), đọc qua useAuth có chốt kiểm\nimport { createContext, useContext, useState } from 'react';\n\nconst AuthContext = createContext(null);\n\nfunction AuthProvider({ children }) {\n  const [user, setUser] = useState(null);\n  const login = (name) => setUser({ name });\n  const logout = () => setUser(null);\n  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;\n}\n\nexport function useAuth() {\n  const ctx = useContext(AuthContext);\n  if (!ctx) throw new Error('useAuth must be used inside AuthProvider');\n  return ctx;\n}\n\nfunction Navbar() {\n  const { user, logout } = useAuth();\n  return (\n    <nav>\n      <span id=\"greeting\">{user ? `Hello, ${user.name}` : 'Guest'}</span>\n      {user && <button id=\"btn-logout\" type=\"button\" onClick={logout}>Logout</button>}\n    </nav>\n  );\n}\n\nfunction LoginPanel() {\n  const { user, login } = useAuth();\n  const [name, setName] = useState('');\n  if (user) return null;\n  const submit = () => {\n    if (name.trim()) login(name.trim());\n  };\n  return (\n    <div id=\"login-panel\">\n      <input id=\"name\" value={name} onChange={(e) => setName(e.target.value)} />\n      <button id=\"btn-login\" type=\"button\" onClick={submit}>Login</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <AuthProvider>\n      <Navbar />\n      <LoginPanel />\n    </AuthProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mặc định <code>null</code> + custom hook ném lỗi biến lỗi \"quên bọc Provider\" thành thông báo rõ ràng ngay lần render đầu, thay vì lỗi <code>cannot read properties of undefined</code> ở đâu đó sâu bên trong.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Guest by default",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Guest"
+          },
+          {
+            "moTa": "Login updates the navbar",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Hello, Lan",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-login",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Login panel hidden after login",
+            "kiem": "khong-ton-tai",
+            "selector": "#btn-login",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-login",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Logout returns to Guest",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Guest",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-login",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-logout",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Blank name ignored",
+            "kiem": "text",
+            "selector": "#greeting",
+            "giaTri": "Guest",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-login",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "useAuth throws outside the provider",
+            "kiem": "ma-nguon",
+            "khop": "createContext\\(\\s*(null|undefined)?\\s*\\)[\\s\\S]*throw new Error\\(\\s*['\"`]useAuth must be used inside AuthProvider"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mỗi component tự <code>useState(user)</code> ⇒ hai bản sao không đồng bộ."
+        },
+        {
+          "loi": "Để default context là object rỗng ⇒ dùng ngoài provider không báo lỗi, bug âm thầm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "guard",
+          "vi": "chốt kiểm điều kiện, báo lỗi sớm"
+        }
+      ]
+    },
+    {
+      "title": "Form state with useReducer",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "useReducer for forms",
+        "computed field names",
+        "validation in reducer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useReducer",
+        "forms"
+      ],
+      "problemHtml": "<p>A sign-up form with three fields and a status. Instead of four <code>useState</code> calls, keep one object in <code>useReducer</code> with actions <code>FIELD_CHANGED</code> (<code>{name, value}</code>), <code>SUBMITTED</code> and <code>RESET</code>. Validation errors are calculated on submit inside the reducer.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Inputs <code>name=\"username\"</code> (≥ 3 chars), <code>name=\"email\"</code> (contains <code>@</code>), <code>name=\"password\"</code> (≥ 6 chars); ONE change handler for all three.</li>\n  <li>Submit (<code>#btn-submit</code>): errors in <code>.error</code> elements (messages: <code>Username too short</code>, <code>Invalid email</code>, <code>Password too short</code>); if none ⇒ <code>#status</code> <code>Welcome, &lt;username&gt;!</code>. <code>#btn-reset</code> clears everything.</li>\n</ul>",
+      "problemHtmlVi": "<p>Form đăng ký có ba ô và một trạng thái. Thay vì bốn lần <code>useState</code>, giữ một object trong <code>useReducer</code> với action <code>FIELD_CHANGED</code> (<code>{name, value}</code>), <code>SUBMITTED</code> và <code>RESET</code>. Lỗi kiểm hợp lệ tính lúc nộp, ngay trong reducer.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ô <code>name=\"username\"</code> (≥ 3 ký tự), <code>name=\"email\"</code> (có <code>@</code>), <code>name=\"password\"</code> (≥ 6 ký tự); MỘT hàm onChange cho cả ba.</li>\n  <li>Nộp (<code>#btn-submit</code>): lỗi trong các phần tử <code>.error</code> (chữ: <code>Username too short</code>, <code>Invalid email</code>, <code>Password too short</code>); không lỗi ⇒ <code>#status</code> <code>Welcome, &lt;username&gt;!</code>. <code>#btn-reset</code> xoá hết.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "username \"ab\", email \"x\", password \"123456\", submit",
+          "output": "Username too short · Invalid email",
+          "explanation": "Errors appear in field order.|||Lỗi hiện theo thứ tự ô."
+        }
+      ],
+      "hintsJson": [
+        "dispatch({ type: \"FIELD_CHANGED\", name: e.target.name, value: e.target.value }) — reducer: { ...state, values: { ...state.values, [action.name]: action.value } }",
+        "SUBMITTED: tính errors = {}; nếu Object.keys(errors).length === 0 ⇒ status \"success\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nexport default function App() {\n  const [username, setUsername] = useState('');\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n  return (\n    <form>\n      <input name=\"username\" value={username} onChange={(e) => setUsername(e.target.value)} />\n      <input name=\"email\" value={email} onChange={(e) => setEmail(e.target.value)} />\n      <input name=\"password\" type=\"password\" value={password} onChange={(e) => setPassword(e.target.value)} />\n      <button id=\"btn-submit\">Sign up</button>\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — một reducer cho giá trị + lỗi + trạng thái\nimport { useReducer } from 'react';\n\nconst initialState = { values: { username: '', email: '', password: '' }, errors: {}, status: 'editing' };\n\nfunction validate(v) {\n  const errors = {};\n  if (v.username.trim().length < 3) errors.username = 'Username too short';\n  if (!v.email.includes('@')) errors.email = 'Invalid email';\n  if (v.password.length < 6) errors.password = 'Password too short';\n  return errors;\n}\n\nfunction reducer(state, action) {\n  switch (action.type) {\n    case 'FIELD_CHANGED':\n      return { ...state, values: { ...state.values, [action.name]: action.value }, status: 'editing' };\n    case 'SUBMITTED': {\n      const errors = validate(state.values);\n      return { ...state, errors, status: Object.keys(errors).length ? 'invalid' : 'success' };\n    }\n    case 'RESET':\n      return initialState;\n    default:\n      return state;\n  }\n}\n\nconst FIELDS = [\n  { name: 'username', type: 'text' },\n  { name: 'email', type: 'email' },\n  { name: 'password', type: 'password' },\n];\n\nexport default function App() {\n  const [state, dispatch] = useReducer(reducer, initialState);\n  const onChange = (e) => dispatch({ type: 'FIELD_CHANGED', name: e.target.name, value: e.target.value });\n  const onSubmit = (e) => {\n    e.preventDefault();\n    dispatch({ type: 'SUBMITTED' });\n  };\n\n  return (\n    <form onSubmit={onSubmit} noValidate>\n      {FIELDS.map((f) => (\n        <div key={f.name}>\n          <input name={f.name} type={f.type} placeholder={f.name} value={state.values[f.name]} onChange={onChange} />\n          {state.errors[f.name] && <small className=\"error\">{state.errors[f.name]}</small>}\n        </div>\n      ))}\n      <button id=\"btn-submit\" type=\"submit\">Sign up</button>\n      <button id=\"btn-reset\" type=\"button\" onClick={() => dispatch({ type: 'RESET' })}>Reset</button>\n      {state.status === 'success' && <p id=\"status\">Welcome, {state.values.username}!</p>}\n    </form>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi các mẩu state liên quan nhau (giá trị, lỗi, trạng thái nộp), một reducer giữ chúng nhất quán: mọi chuyển trạng thái đi qua một chỗ, dễ đọc và dễ test.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Errors in field order",
+            "kiem": "danh-sach-text",
+            "selector": ".error",
+            "mongDoi": [
+              "Username too short",
+              "Invalid email"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=username]",
+                "giaTri": "ab"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=email]",
+                "giaTri": "x"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=password]",
+                "giaTri": "123456"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Valid form ⇒ welcome",
+            "kiem": "text",
+            "selector": "#status",
+            "giaTri": "Welcome, lan99!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=username]",
+                "giaTri": "lan99"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=email]",
+                "giaTri": "lan@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=password]",
+                "giaTri": "secret1"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "All three errors on empty submit",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Reset clears values and errors",
+            "kiem": "so-luong",
+            "selector": ".error",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-submit",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reset",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Reset clears the inputs",
+            "kiem": "thuoc-tinh-js",
+            "selector": "[name=username]",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "[name=username]",
+                "giaTri": "lan"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-reset",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "One reducer with FIELD_CHANGED and a computed key",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*useReducer\\()(?=[\\s\\S]*FIELD_CHANGED)[\\s\\S]*\\[\\s*action\\.name\\s*\\]"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết ba handler riêng cho ba ô ⇒ lặp code; computed key <code>[name]</code> giải quyết."
+        },
+        {
+          "loi": "Ghi đè cả <code>values</code> bằng một trường ⇒ mất hai ô kia."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "computed property name",
+          "vi": "tên thuộc tính tính từ biến: { [name]: value }"
+        }
+      ]
+    },
+    {
+      "title": "Context + reducer: a shared shopping cart",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "useReducer + Context",
+        "derived data",
+        "splitting components"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "hooks",
+        "useContext",
+        "useReducer"
+      ],
+      "problemHtml": "<p>The classic \"Context + reducer\" architecture: <code>CartProvider</code> owns <code>useReducer(cartReducer, [])</code> and exposes <code>{ items, dispatch }</code>. Three separate components use it: <b>Menu</b> (add dishes), <b>CartBadge</b> in the header (total quantity) and <b>CartPanel</b> (lines, remove, total, clear).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Dishes: Pho 45000, Banh mi 25000, Tra da 5000. Menu buttons <code>.btn-add</code> (in that order). Adding an existing dish increases its quantity.</li>\n  <li><code>#badge</code> = total quantity. Panel lines <code>li.line</code> text <code>Pho x2</code>; each has <code>.btn-remove</code> (−1, removes the line at 0). <code>#total</code> = <code>Total: 95,000</code> (en-US grouping). <code>#btn-clear</code>; empty ⇒ <code>#empty</code> <code>Cart is empty</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiến trúc kinh điển \"Context + reducer\": <code>CartProvider</code> giữ <code>useReducer(cartReducer, [])</code> và cung cấp <code>{ items, dispatch }</code>. Ba component riêng dùng nó: <b>Menu</b> (thêm món), <b>CartBadge</b> ở header (tổng số lượng) và <b>CartPanel</b> (dòng, xoá, tổng tiền, làm rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Món: Pho 45000, Banh mi 25000, Tra da 5000. Nút <code>.btn-add</code> theo thứ tự đó. Thêm món đã có ⇒ tăng số lượng.</li>\n  <li><code>#badge</code> = tổng số lượng. Dòng <code>li.line</code> chữ <code>Pho x2</code>; mỗi dòng có <code>.btn-remove</code> (−1, về 0 thì bỏ dòng). <code>#total</code> = <code>Total: 95,000</code> (nhóm số kiểu en-US). <code>#btn-clear</code>; rỗng ⇒ <code>#empty</code> <code>Cart is empty</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "add Pho, Pho, Banh mi",
+          "output": "badge 3 · Total: 115,000",
+          "explanation": "Badge and total are DERIVED from items — never stored separately.|||Badge và tổng là dữ liệu SUY RA từ items — không lưu riêng."
+        }
+      ],
+      "hintsJson": [
+        "case \"ADD\": const found = state.find(i => i.id === action.dish.id); return found ? state.map(i => i.id === found.id ? { ...i, qty: i.qty + 1 } : i) : [...state, { ...action.dish, qty: 1 }];",
+        "Tổng: items.reduce((s, i) => s + i.price * i.qty, 0).toLocaleString(\"en-US\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\n\nconst DISHES = [\n  { id: 1, name: 'Pho', price: 45000 },\n  { id: 2, name: 'Banh mi', price: 25000 },\n  { id: 3, name: 'Tra da', price: 5000 },\n];\n\nfunction Menu({ onAdd }) {\n  return <div>{DISHES.map((d) => <button key={d.id} className=\"btn-add\" onClick={() => onAdd(d)}>{d.name}</button>)}</div>;\n}\n\nexport default function App() {\n  const [items, setItems] = useState([]);\n  return (\n    <div>\n      <header>Cart <span id=\"badge\">{items.length}</span></header>\n      <Menu onAdd={(d) => setItems([...items, d])} />\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Context chuyển dữ liệu, reducer đổi dữ liệu\nimport { createContext, useContext, useReducer } from 'react';\n\nconst DISHES = [\n  { id: 1, name: 'Pho', price: 45000 },\n  { id: 2, name: 'Banh mi', price: 25000 },\n  { id: 3, name: 'Tra da', price: 5000 },\n];\n\nfunction cartReducer(state, action) {\n  switch (action.type) {\n    case 'ADD': {\n      const found = state.find((i) => i.id === action.dish.id);\n      if (found) return state.map((i) => (i.id === found.id ? { ...i, qty: i.qty + 1 } : i));\n      return [...state, { ...action.dish, qty: 1 }];\n    }\n    case 'REMOVE_ONE':\n      return state\n        .map((i) => (i.id === action.id ? { ...i, qty: i.qty - 1 } : i))\n        .filter((i) => i.qty > 0);\n    case 'CLEAR':\n      return [];\n    default:\n      return state;\n  }\n}\n\nconst CartContext = createContext(null);\n\nfunction CartProvider({ children }) {\n  const [items, dispatch] = useReducer(cartReducer, []);\n  return <CartContext.Provider value={{ items, dispatch }}>{children}</CartContext.Provider>;\n}\n\nfunction useCart() {\n  const ctx = useContext(CartContext);\n  if (!ctx) throw new Error('useCart must be used inside CartProvider');\n  return ctx;\n}\n\nfunction CartBadge() {\n  const { items } = useCart();\n  const qty = items.reduce((s, i) => s + i.qty, 0); // suy ra, không lưu riêng\n  return <span id=\"badge\">{qty}</span>;\n}\n\nfunction Menu() {\n  const { dispatch } = useCart();\n  return (\n    <div>\n      {DISHES.map((d) => (\n        <button key={d.id} type=\"button\" className=\"btn-add\" onClick={() => dispatch({ type: 'ADD', dish: d })}>{d.name}</button>\n      ))}\n    </div>\n  );\n}\n\nfunction CartPanel() {\n  const { items, dispatch } = useCart();\n  if (items.length === 0) return <p id=\"empty\">Cart is empty</p>;\n  const total = items.reduce((s, i) => s + i.price * i.qty, 0);\n  return (\n    <div>\n      <ul>\n        {items.map((i) => (\n          <li key={i.id} className=\"line\">\n            <span>{i.name} x{i.qty}</span>\n            <button type=\"button\" className=\"btn-remove\" onClick={() => dispatch({ type: 'REMOVE_ONE', id: i.id })}>−</button>\n          </li>\n        ))}\n      </ul>\n      <p id=\"total\">Total: {total.toLocaleString('en-US')}</p>\n      <button id=\"btn-clear\" type=\"button\" onClick={() => dispatch({ type: 'CLEAR' })}>Clear</button>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <CartProvider>\n      <header>Cart <CartBadge /></header>\n      <Menu />\n      <CartPanel />\n    </CartProvider>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Context lo việc <b>chuyển</b> dữ liệu, reducer lo việc <b>đổi</b> dữ liệu. Ghép hai thứ là \"Redux mini\" có sẵn trong React — đủ cho app vừa phải, và là bước đệm trước Redux Toolkit ở chương 12.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Badge counts quantities",
+            "kiem": "text",
+            "selector": "#badge",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Same dish merges into one line",
+            "kiem": "danh-sach-text",
+            "selector": "li.line > span",
+            "mongDoi": [
+              "Pho x2",
+              "Banh mi x1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Total formatted",
+            "kiem": "text",
+            "selector": "#total",
+            "giaTri": "Total: 115,000",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(2)",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Empty cart message",
+            "kiem": "text",
+            "selector": "#empty",
+            "giaTri": "Cart is empty"
+          },
+          {
+            "an": true,
+            "moTa": "Remove one, line disappears at 0",
+            "kiem": "danh-sach-text",
+            "selector": "li.line > span",
+            "mongDoi": [
+              "Pho x1"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(1)",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(3)",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.line:nth-of-type(1) .btn-remove",
+                "lan": 1
+              },
+              {
+                "hanhDong": "click",
+                "selector": "li.line:nth-of-type(2) .btn-remove",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Clear empties the cart and the badge",
+            "kiem": "danh-sach-text",
+            "selector": "#badge, #empty",
+            "mongDoi": [
+              "0",
+              "Cart is empty"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".btn-add:nth-of-type(3)",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-clear",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Provider holds useReducer",
+            "kiem": "ma-nguon",
+            "khop": "useReducer\\(\\s*cartReducer[\\s\\S]*\\.Provider"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu <code>total</code> thành state riêng ⇒ quên cập nhật khi xoá, số lệch."
+        },
+        {
+          "loi": "Truyền <code>dispatch</code> qua props ba tầng thay vì lấy từ context."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "derived state",
+          "vi": "dữ liệu tính ra từ state, không cần lưu"
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,8 @@ import ch6 from './dbi202/ch6.mjs';
 import ch7 from './dbi202/ch7.mjs';
 import ch8 from './dbi202/ch8.mjs';
 import cs from './dbi202/chuyen-sau.mjs';
+// ⭐ Cầu nối "Từ DBI202 đi làm" — sửa tay, ngoài bộ sinh (27/10/2026)
+import cauNoi from './dbi202/cauNoi.mjs';
 import fe from './dbi202/fe.mjs';
 // 🎬 Hai mục chữa đề (PE / FE) — NẰM NGOÀI bộ sinh flm-nguon/DBI202/gen, sửa tay ở ./dbi202/chuaDe*.mjs.
 import chuaDePe from './dbi202/chuaDePe.mjs';
@@ -2653,7 +2655,7 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
     {
       title: "⭐ Advanced — Beyond the syllabus: history, internals, expert SQL, design & interviews|||⭐ Chuyên sâu — Ngoài giáo trình: lịch sử, bên trong DBMS, SQL chuyên gia, thiết kế & phỏng vấn",
       description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): lịch sử & hệ sinh thái, bên trong DBMS, chỉ mục, giao dịch & đồng thời, SQL nâng cao, thiết kế CSDL thực chiến, bảo mật & vận hành, phỏng vấn — chạy thật trên SQL Server và PostgreSQL.",
-      lessons: cs.lessons,
+      lessons: [...cs.lessons, ...cauNoi.lessons],
     },
     {
       title: 'Exam preparation (Lab · PE · FE)|||Ôn thi (Lab · PE · FE)',

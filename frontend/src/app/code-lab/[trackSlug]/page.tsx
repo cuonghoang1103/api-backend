@@ -42,6 +42,22 @@ import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
 import { LabRoomBar } from '@/components/code-lab/LabRoomBar';
 import { LabRoomBeacon } from '@/components/code-lab/LabRoomBeacon';
 
+const TEN_DANG_NGAN: Record<string, string> = { lab: 'LAB', 'deep-lab': 'DEEP', pe: 'PE', project: 'DỰ ÁN', practice: '' };
+const THU_DANG: Record<string, number> = { practice: 0, lab: 1, 'deep-lab': 2, pe: 3, project: 4 };
+
+/** Dạng của một module: mọi đề cùng một dạng khác "practice" ⇒ dạng đó (Lab/Deep Lab/PE/Dự án), không thì luyện tập. */
+function dangCuaModule(m: CodeModule): string {
+  const ds = m.exercises || [];
+  if (!ds.length) return 'practice';
+  const k = ds[0].kind || 'practice';
+  return ds.every((e) => (e.kind || 'practice') === k) ? k : 'practice';
+}
+
+/** Trong một chương: bài luyện theo bài học trước, rồi Lab → Deep Lab → PE → Dự án (giữ thứ tự gốc trong cùng dạng). */
+function sapTheoDang<T extends { module: CodeModule }>(ds: T[]): T[] {
+  return ds.map((d, i) => ({ d, i })).sort((a, b) => (THU_DANG[dangCuaModule(a.d.module)] ?? 0) - (THU_DANG[dangCuaModule(b.d.module)] ?? 0) || a.i - b.i).map((x) => x.d);
+}
+
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
   const slug = params.trackSlug;
@@ -370,6 +386,12 @@ export default function TrackRoadmapPage() {
                 {dangChon && loc > 0 && (
                   <span className="shrink-0 text-xs font-semibold tabular-nums" style={{ color: ticked ? accent : 'var(--text-muted)' }}>{loc} LOC</span>
                 )}
+                {!dangChon && ex.kind && ex.kind !== 'practice' && (
+                  <span className="cl-toc-kind" data-kind={ex.kind}>{TEN_DANG_NGAN[ex.kind] || ex.kind}</span>
+                )}
+                {!dangChon && ex.gradeKind && ex.gradeKind !== 'manual' && (
+                  <span className="cl-toc-cham hidden sm:inline-flex" title="Có máy chấm tự động"><FlaskConical size={11} /> Tự chấm</span>
+                )}
                 {!dangChon && ex.estimatedMinutes ? (
                   <span className="hidden items-center gap-1 text-xs sm:flex" style={{ color: 'var(--text-muted)' }}>
                     <Clock size={12} />{ex.estimatedMinutes}m
@@ -400,25 +422,33 @@ export default function TrackRoadmapPage() {
     );
   };
 
-  /** Một dòng của mục lục = một bài học. */
-  const renderDong = (d: DongMucLuc<CodeModule>) => {
+  /** Một dòng của mục lục = một bài học (hoặc một Lab / Deep Lab / PE của chương). */
+  const renderDong = (d: DongMucLuc<CodeModule>, idx = 0, ds: DongMucLuc<CodeModule>[] = []) => {
     const m = d.module;
     const { soDe, doKho, phut, daLam } = d.tk;
     const xong = soDe > 0 && daLam === soDe;
     const pctBai = soDe ? Math.round((daLam / soDe) * 100) : 0;
     const laBatDau = batDauTu?.dong.module.id === m.id;
+    const dang = dangCuaModule(m);
+    const coCham = (m.exercises || []).length > 0 && (m.exercises || []).every((e) => !!e.gradeKind && e.gradeKind !== 'manual');
+    // Lab/PE một đề ⇒ vào thẳng đề (không qua trang danh sách một dòng)
+    const motDe = dang !== 'practice' && soDe === 1 ? (m.exercises || [])[0] : null;
+    const href = motDe ? `/code-lab/${slug}/${motDe.slug}${mangTheo.ref ? `?ref=${encodeURIComponent(mangTheo.ref)}${mangTheo.reflabel ? `&reflabel=${encodeURIComponent(mangTheo.reflabel)}` : ''}` : ''}` : duongBaiHoc(slug, m.slug, mangTheo);
+    const truocLaLuyen = idx > 0 && dangCuaModule(ds[idx - 1].module) === 'practice';
     return (
-      <li key={m.id} className="cl-toc-row" data-start={laBatDau ? 'true' : undefined}>
-        <Link href={duongBaiHoc(slug, m.slug, mangTheo)} className="cl-toc-link">
-          <span className="cl-toc-num" data-done={xong ? 'true' : undefined}>
-            {xong ? <CheckCircle2 size={16} /> : (d.soBai ?? d.stt)}
+      <li key={m.id} className="cl-toc-row" data-start={laBatDau ? 'true' : undefined} data-kind={dang}>
+        {dang !== 'practice' && (idx === 0 || truocLaLuyen) && <div className="cl-toc-sub">Lab &amp; luyện sâu của chương</div>}
+        <Link href={href} className="cl-toc-link">
+          <span className="cl-toc-num" data-done={xong ? 'true' : undefined} data-kind={dang !== 'practice' ? dang : undefined}>
+            {xong ? <CheckCircle2 size={16} /> : dang !== 'practice' ? TEN_DANG_NGAN[dang] : (d.soBai ?? d.stt)}
           </span>
           <span className="min-w-0 flex-1">
             <span className="cl-toc-title">{d.soBai ? tenBoSo(m.name) : m.name}</span>
             <span className="cl-toc-meta">
               {soDe > 0 ? (
                 <>
-                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>{soDe} đề</span>
+                  {coCham && <span className="cl-toc-cham" title="Có máy chấm tự động"><FlaskConical size={11} /> Tự chấm</span>}
+                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>{dang !== 'practice' && soDe === 1 ? 'Đề lớn' : `${soDe} đề`}</span>
                   {DIFF_ORDER.filter((k) => doKho[k] > 0).map((k) => (
                     <span key={k} className="cl-toc-diff" style={{ color: DIFF_UI[k].color, background: DIFF_UI[k].bg }}>
                       {DIFF_UI[k].label} {doKho[k]}
@@ -719,14 +749,22 @@ export default function TrackRoadmapPage() {
                         {g.dong.length} bài học · {g.soDe} đề
                       </span>
                     </span>
+                    {g.dong.some((d) => dangCuaModule(d.module) !== 'practice') && (
+                      <span className="cl-toc-cokind hidden sm:inline-flex">
+                        {[...new Set(g.dong.map((d) => dangCuaModule(d.module)).filter((k) => k !== 'practice'))].map((k) => <span key={k} data-kind={k}>{TEN_DANG_NGAN[k]}</span>)}
+                      </span>
+                    )}
                     {isAuthed && g.soDe > 0 && (
-                      <span className="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums"
-                        style={{ background: 'var(--bg-surface)', color: xongChuong ? '#22c55e' : 'var(--text-muted)' }}>
-                        {g.daLam}/{g.soDe}
+                      <span className="cl-toc-chprog" title={`Đã giải ${g.daLam}/${g.soDe} đề của chương`}>
+                        <span className="cl-toc-bar"><span style={{ width: `${Math.round((g.daLam / g.soDe) * 100)}%`, background: xongChuong ? '#22c55e' : accent }} /></span>
+                        <span className="tabular-nums" style={{ color: xongChuong ? '#22c55e' : 'var(--text-muted)' }}>{g.daLam}/{g.soDe}</span>
                       </span>
                     )}
                   </button>
-                  {mo && <ul className="cl-toc-list">{g.dong.map(renderDong)}</ul>}
+                  {mo && (() => {
+                    const ds = sapTheoDang(g.dong);
+                    return <ul className="cl-toc-list">{ds.map((d, i) => renderDong(d, i, ds))}</ul>;
+                  })()}
                 </section>
               );
             })}

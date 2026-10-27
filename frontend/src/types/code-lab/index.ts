@@ -97,7 +97,18 @@ export interface CodeExerciseListItem {
   solveCount: number;
   tags?: string[] | null;
   track?: { slug: string };
+  /** Dạng bài trên lộ trình chương (đợt Academy 28/10/2026). */
+  kind?: CodeExerciseKind | null;
+  /** Loại chấm: dom/js/console/module/react/choice/order/table/… — null = tự đánh dấu. */
+  gradeKind?: string | null;
 }
+
+export type CodeExerciseKind = 'practice' | 'lab' | 'deep-lab' | 'pe' | 'project';
+
+/** "Lỗi hay gặp" của một đề. */
+export interface CodeMistake { loi: string; viDu?: string; cachSua?: string }
+/** Thuật ngữ EN → VI. */
+export interface CodeGlossaryItem { en: string; vi: string; giaiThich?: string }
 
 export interface CodeExercise extends CodeExerciseListItem {
   problemHtml?: string | null;
@@ -127,6 +138,42 @@ export interface CodeExercise extends CodeExerciseListItem {
   module?: { id: number; name: string; slug: string };
   track?: { id: number; name: string; slug: string; language: string; color?: string | null; groupId: number };
   author?: { id: number; username: string; fullName?: string | null; avatarUrl?: string | null } | null;
+  // ─── máy chấm + bộ luyện (đợt Academy 28/10/2026) ───
+  /** Bộ kiểm CÔNG KHAI: chỉ kiểm mẫu (Chạy thử) + soKiem/soAn; đáp án tĩnh chỉ là băm. */
+  testsJson?: import('@/components/code-lab/cham/kieu').TestsJson | null;
+  mistakesJson?: CodeMistake[] | null;
+  glossaryJson?: CodeGlossaryItem[] | null;
+  videoRef?: { courseSlug: string; lessonSlug: string; giay?: number } | null;
+  hasDemo?: boolean;
+}
+
+/** Một lượt Nộp đã lưu. */
+export interface CodeSubmission {
+  id: number;
+  mode: string;
+  gradeKind: string | null;
+  passed: number;
+  total: number;
+  score: number | null;
+  maxScore: number | null;
+  accepted: boolean;
+  ms: number | null;
+  createdAt: string;
+  results: Array<{ i: number; dat: boolean; an?: boolean; nhom?: string | null; moTa?: string; thay?: string; ms?: number }> | null;
+  code: unknown;
+}
+
+/** Một lối vào trang chủ Code Lab (Academy / Courses). */
+export interface CodeCatalogEntry {
+  loai: 'academy' | 'course';
+  ma: string | null;
+  ten: string;
+  courseSlug: string;
+  trackSlug: string;
+  track: null | {
+    id: number; name: string; slug: string; color: string | null; language: string; description: string | null;
+    moduleCount: number; exerciseCount: number; byKind: Record<string, number>; byDifficulty: Record<string, number>; graded: number;
+  };
 }
 
 export interface CodeProgress {

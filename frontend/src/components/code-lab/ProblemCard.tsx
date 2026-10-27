@@ -79,9 +79,11 @@ interface Props {
   /** "Bài 3/5" — vị trí trong bộ/track; bỏ trống thì không hiện. */
   orderLabel?: string | null;
   isLab211: boolean;
+  /** Gợi ý đã có tab riêng (trang làm bài đợt Academy) ⇒ không in lại trong thẻ đề. */
+  anGoiY?: boolean;
 }
 
-export function ProblemCard({ ex, lang, onPickLang, solved, orderLabel, isLab211 }: Props) {
+export function ProblemCard({ ex, lang, onPickLang, solved, orderLabel, isLab211, anGoiY }: Props) {
   const L = (s: string | null | undefined) => pickLang(s, lang);
   const bilingual = hasBilingual(ex);
 
@@ -103,7 +105,8 @@ export function ProblemCard({ ex, lang, onPickLang, solved, orderLabel, isLab211
   }, [rawBody, isHtml, ex.examplesJson, lang]);
 
   const constraints = useMemo(() => splitConstraints(L(ex.constraints)), [ex.constraints, lang]); // eslint-disable-line react-hooks/exhaustive-deps
-  const hints = (ex.hintsJson || []).map((h) => L(h)).filter(Boolean);
+  const hints = anGoiY ? [] : (ex.hintsJson || []).map((h) => L(h)).filter(Boolean);
+  const thuatNgu = ex.glossaryJson || [];
   const topics = Array.from(new Set([...(ex.tags || []), ...(ex.concepts || [])].filter(Boolean)));
   const prereqs = ex.prerequisites || [];
   const figures = ex.imagesJson || [];
@@ -192,6 +195,21 @@ export function ProblemCard({ ex, lang, onPickLang, solved, orderLabel, isLab211
               {constraints.map((c, i) => <li key={i}>{c}</li>)}
             </ul>
           </section>
+        )}
+
+        {/* ── Thuật ngữ EN → VI (đề tiếng Anh — trợ giúp, không thay bản EN) ── */}
+        {thuatNgu.length > 0 && (
+          <details className="cl-pcard-sec cl-gloss" open={lang === 'en'}>
+            <summary className="cl-pcard-h"><Tag size={14} /> Thuật ngữ (EN → VI) · {thuatNgu.length}<ChevronRight size={14} className="cl-caret" /></summary>
+            <dl className="cl-gloss-list">
+              {thuatNgu.map((t) => (
+                <div key={t.en}>
+                  <dt>{t.en}</dt>
+                  <dd>{t.vi}{t.giaiThich ? <span className="cl-gloss-why"> — {t.giaiThich}</span> : null}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
         )}
 
         {/* ── Gợi ý: mở/đóng TỪNG cái ── */}

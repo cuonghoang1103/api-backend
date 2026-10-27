@@ -30,7 +30,10 @@ import type {
   LabRoomGuide,
   LabRoomChatTurn,
   ChecklistThayMuc,
+  CodeSubmission,
+  CodeCatalogEntry,
 } from '@/types/code-lab';
+import type { Diem, KetQuaKiem, TestsJson } from '@/components/code-lab/cham/kieu';
 import type { DocBlock } from '@/types/exp-hub';
 
 const BASE = '/code-lab';
@@ -65,6 +68,17 @@ export const codeLabApi = {
   askLesson: (moduleId: number, body: { question: string; muc?: string; history?: Array<{ role: 'user' | 'assistant'; content: string }> }) =>
     api.post<Ok<{ answer: string }>>(`${BASE}/modules/${moduleId}/lesson/ask`, body, { timeout: 180_000 }),
   getStats: () => api.get<Ok<CodeStats>>(`${BASE}/stats`),
+
+  // ─── Máy chấm + lượt nộp (đợt Academy 28/10/2026) ───
+  /** Lối vào trang chủ: Môn học (Academy) + Khoá học (Courses); `mine` = tiến độ theo track khi đăng nhập. */
+  getCatalog: () => api.get<Ok<{ catalog: CodeCatalogEntry[]; mine: Record<number, { solved: number; inProgress: number }> | null }>>(`${BASE}/catalog`),
+  /** Bộ kiểm ĐỦ (cả kiểm ẩn) — chỉ gọi khi Nộp. */
+  getSubmitTests: (exerciseId: number) =>
+    api.get<Ok<{ id: number; gradeKind: string | null; testsJson: TestsJson }>>(`${BASE}/exercises/${exerciseId}/tests`),
+  getDemo: (exerciseId: number) => api.get<Ok<{ id: number; html: string }>>(`${BASE}/exercises/${exerciseId}/demo`),
+  submit: (exerciseId: number, body: { code?: CodeBlock[]; results?: Array<Pick<KetQuaKiem, 'dat' | 'thay' | 'ms'>>; answers?: Record<string, unknown>; ms?: number }) =>
+    api.post<Ok<{ submission: CodeSubmission; diem: Diem; ketQua: KetQuaKiem[]; status: 'IN_PROGRESS' | 'SOLVED' }>>(`${BASE}/exercises/${exerciseId}/submissions`, body),
+  mySubmissions: (exerciseId: number) => api.get<Ok<CodeSubmission[]>>(`${BASE}/exercises/${exerciseId}/submissions`),
 
   // AI explanation of one exercise. Reading a cached one is free; generating it
   // and asking follow-ups is Pro-gated on the server.

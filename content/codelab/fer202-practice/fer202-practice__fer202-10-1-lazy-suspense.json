@@ -1,0 +1,698 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-1-lazy-suspense",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-1-lazy-suspense"
+  },
+  "exercises": [
+    {
+      "title": "Load a heavy component only when needed",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "React.lazy",
+        "dynamic import()",
+        "Suspense fallback"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "Suspense"
+      ],
+      "problemHtml": "<p>The chart library is heavy but only some users open the chart. Load <code>BigChart</code> with <code>React.lazy(() =&gt; import(…))</code> so it lives in its own chunk, and show a fallback while it loads. Use the given <code>withDelay(factory, 600)</code> to simulate a slow network.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#btn-chart</code> toggles the chart (<code>Show chart</code> / <code>Hide chart</code>). While loading: <code>#chart-loading</code> <code>Loading chart...</code>.</li>\n  <li>No static <code>import BigChart</code> anywhere — only the lazy one, declared at module top level.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thư viện biểu đồ nặng nhưng chỉ một số người mở biểu đồ. Tải <code>BigChart</code> bằng <code>React.lazy(() =&gt; import(…))</code> để nó nằm ở chunk riêng, và hiện fallback trong lúc tải. Dùng <code>withDelay(factory, 600)</code> có sẵn để giả lập mạng chậm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#btn-chart</code> bật/tắt biểu đồ (<code>Show chart</code> / <code>Hide chart</code>). Đang tải: <code>#chart-loading</code> <code>Loading chart...</code>.</li>\n  <li>Không có <code>import BigChart</code> tĩnh ở đâu — chỉ có bản lazy, khai báo ở cấp đầu module.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click Show chart",
+          "output": "Loading chart... → 📈 Revenue chart",
+          "explanation": "The second time it is instant: the chunk is cached.|||Lần thứ hai hiện ngay: chunk đã được nhớ."
+        }
+      ],
+      "hintsJson": [
+        "const BigChart = lazy(withDelay(() => import('./components/BigChart'), 600));",
+        "<Suspense fallback={<p id=\"chart-loading\">Loading chart...</p>}>{show && <BigChart />}</Suspense>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport BigChart from './components/BigChart';\n\nexport default function App() {\n  const [show, setShow] = useState(false);\n  return (\n    <div>\n      <button id=\"btn-chart\" onClick={() => setShow(!show)}>Show chart</button>\n      {show && <BigChart />}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/components/BigChart.js",
+          "language": "javascript",
+          "code": "// src/components/BigChart.js (cho sẵn) — giả sử import một thư viện biểu đồ nặng 300 KB\nexport default function BigChart() {\n  return <div id=\"chart\">📈 Revenue chart (heavy library)</div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lazy ở cấp module + Suspense quanh chỗ dùng\nimport { Suspense, lazy, useState } from 'react';\nimport { withDelay } from './utils/withDelay';\n\nconst BigChart = lazy(withDelay(() => import('./components/BigChart'), 600));\n\nexport default function App() {\n  const [show, setShow] = useState(false);\n  return (\n    <div>\n      <button id=\"btn-chart\" type=\"button\" onClick={() => setShow((s) => !s)}>{show ? 'Hide chart' : 'Show chart'}</button>\n      <Suspense fallback={<p id=\"chart-loading\">Loading chart...</p>}>\n        {show && <BigChart />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/components/BigChart.js",
+          "language": "javascript",
+          "code": "// src/components/BigChart.js (cho sẵn) — giả sử import một thư viện biểu đồ nặng 300 KB\nexport default function BigChart() {\n  return <div id=\"chart\">📈 Revenue chart (heavy library)</div>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>import()</code> động trả Promise của module; bundler (Vite/webpack) tách module đó thành chunk riêng. <code>lazy</code> biến Promise đó thành component; <code>Suspense</code> hiện fallback cho tới khi chunk về.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Fallback while loading",
+            "kiem": "text",
+            "selector": "#chart-loading",
+            "giaTri": "Loading chart...",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-chart",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Chart appears after loading",
+            "kiem": "ton-tai",
+            "selector": "#chart",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-chart",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "moTa": "Not loaded before clicking",
+            "kiem": "khong-ton-tai",
+            "selector": "#chart, #chart-loading"
+          },
+          {
+            "an": true,
+            "moTa": "Button label toggles",
+            "kiem": "text",
+            "selector": "#btn-chart",
+            "giaTri": "Hide chart",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-chart",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No static import of BigChart",
+            "kiem": "ma-nguon",
+            "khop": "import\\s+BigChart\\s+from",
+            "phuDinh": true
+          },
+          {
+            "an": true,
+            "moTa": "lazy + dynamic import",
+            "kiem": "ma-nguon",
+            "khop": "lazy\\([\\s\\S]*import\\(\\s*['\"]\\./components/BigChart"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi <code>lazy()</code> bên trong component ⇒ mỗi lần render tạo component mới, state bị xoá và tải lại."
+        },
+        {
+          "loi": "Giữ dòng <code>import BigChart from …</code> ở đầu tệp ⇒ thư viện vẫn nằm trong bundle chính, lazy vô nghĩa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chunk",
+          "vi": "một tệp JS tách riêng, tải khi cần"
+        },
+        {
+          "en": "code splitting",
+          "vi": "chia mã thành nhiều phần tải theo nhu cầu"
+        }
+      ]
+    },
+    {
+      "title": "Lazy routes with Suspense inside the layout",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "route-based splitting",
+        "Suspense placement",
+        "keeping the shell visible"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "Suspense",
+        "router"
+      ],
+      "problemHtml": "<p>Split by route: <code>Reports</code> and <code>Settings</code> are lazy, <code>Home</code> stays in the main bundle. Put <code>Suspense</code> <b>inside</b> the layout around the <code>Outlet</code>, so the navbar never disappears while a page chunk loads.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Layout: <code>#navbar</code> with NavLinks <code>#nav-home</code>, <code>#nav-reports</code>, <code>#nav-settings</code>; fallback <code>#page-loading</code> <code>Loading page...</code> inside <code>#page</code>.</li>\n  <li>Lazy pages use <code>withDelay(…, 600)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chia theo route: <code>Reports</code> và <code>Settings</code> tải lười, <code>Home</code> nằm trong bundle chính. Đặt <code>Suspense</code> <b>bên trong</b> layout quanh <code>Outlet</code>, để navbar không bao giờ biến mất khi chunk của trang đang tải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Layout: <code>#navbar</code> có NavLink <code>#nav-home</code>, <code>#nav-reports</code>, <code>#nav-settings</code>; fallback <code>#page-loading</code> <code>Loading page...</code> nằm trong <code>#page</code>.</li>\n  <li>Trang lười dùng <code>withDelay(…, 600)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click Reports",
+          "output": "navbar stays · Loading page... → Reports",
+          "explanation": "A Suspense ABOVE the layout would replace the whole screen with the fallback.|||Suspense đặt TRÊN layout sẽ thay cả màn hình bằng fallback."
+        }
+      ],
+      "hintsJson": [
+        "const Reports = lazy(withDelay(() => import('./pages/Reports'), 600));",
+        "Layout: <nav …/><main id=\"page\"><Suspense fallback={…}><Outlet /></Suspense></main>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Suspense } from 'react';\nimport { NavLink, Route, Routes } from 'react-router-dom';\nimport Home from './pages/Home';\nimport Reports from './pages/Reports';\nimport Settings from './pages/Settings';\n\nexport default function App() {\n  return (\n    <Suspense fallback={<p id=\"page-loading\">Loading page...</p>}>\n      <nav id=\"navbar\">\n        <NavLink to=\"/\" end id=\"nav-home\">Home</NavLink>\n        <NavLink to=\"/reports\" id=\"nav-reports\">Reports</NavLink>\n        <NavLink to=\"/settings\" id=\"nav-settings\">Settings</NavLink>\n      </nav>\n      <Routes>\n        <Route path=\"/\" element={<Home />} />\n        <Route path=\"/reports\" element={<Reports />} />\n        <Route path=\"/settings\" element={<Settings />} />\n      </Routes>\n    </Suspense>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js (cho sẵn — trang chủ tải ngay)\nexport default function Home() { return <h1 id=\"home\">Home</h1>; }\n"
+        },
+        {
+          "name": "src/pages/Reports.js",
+          "language": "javascript",
+          "code": "// src/pages/Reports.js (cho sẵn)\nexport default function Reports() { return <h1 id=\"reports\">Reports</h1>; }\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js (cho sẵn)\nexport default function Settings() { return <h1 id=\"settings\">Settings</h1>; }\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lazy theo route; Suspense quanh Outlet trong layout\nimport { Suspense, lazy } from 'react';\nimport { NavLink, Outlet, Route, Routes } from 'react-router-dom';\nimport Home from './pages/Home';\nimport { withDelay } from './utils/withDelay';\n\nconst Reports = lazy(withDelay(() => import('./pages/Reports'), 600));\nconst Settings = lazy(withDelay(() => import('./pages/Settings'), 600));\n\nfunction Layout() {\n  return (\n    <div>\n      <nav id=\"navbar\">\n        <NavLink to=\"/\" end id=\"nav-home\">Home</NavLink>{' '}\n        <NavLink to=\"/reports\" id=\"nav-reports\">Reports</NavLink>{' '}\n        <NavLink to=\"/settings\" id=\"nav-settings\">Settings</NavLink>\n      </nav>\n      <main id=\"page\">\n        <Suspense fallback={<p id=\"page-loading\">Loading page...</p>}>\n          <Outlet />\n        </Suspense>\n      </main>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route element={<Layout />}>\n        <Route path=\"/\" element={<Home />} />\n        <Route path=\"/reports\" element={<Reports />} />\n        <Route path=\"/settings\" element={<Settings />} />\n      </Route>\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/pages/Home.js",
+          "language": "javascript",
+          "code": "// src/pages/Home.js (cho sẵn — trang chủ tải ngay)\nexport default function Home() { return <h1 id=\"home\">Home</h1>; }\n"
+        },
+        {
+          "name": "src/pages/Reports.js",
+          "language": "javascript",
+          "code": "// src/pages/Reports.js (cho sẵn)\nexport default function Reports() { return <h1 id=\"reports\">Reports</h1>; }\n"
+        },
+        {
+          "name": "src/pages/Settings.js",
+          "language": "javascript",
+          "code": "// src/pages/Settings.js (cho sẵn)\nexport default function Settings() { return <h1 id=\"settings\">Settings</h1>; }\n"
+        },
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "// src/index.js — điểm vào của ứng dụng (đã cho sẵn, không cần sửa)\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <BrowserRouter>\n        <App />\n      </BrowserRouter>\n  </React.StrictMode>\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Suspense hiện fallback ở chỗ GẦN NHẤT phía trên component đang chờ. Đặt nó quanh Outlet nghĩa là chỉ vùng nội dung chờ, khung app vẫn dùng được.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom"
+        ],
+        "kiem": [
+          {
+            "moTa": "Navbar stays while the page loads",
+            "kiem": "danh-sach-text",
+            "selector": "#navbar, #page-loading",
+            "mongDoi": [
+              "Home Reports Settings",
+              "Loading page..."
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-reports",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Fallback is inside #page",
+            "kiem": "ton-tai",
+            "selector": "#page #page-loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-settings",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Page appears",
+            "kiem": "ton-tai",
+            "selector": "#page #reports",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nav-reports",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "moTa": "Home loads instantly",
+            "kiem": "ton-tai",
+            "selector": "#home"
+          },
+          {
+            "an": true,
+            "moTa": "Reports and Settings are lazy",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*lazy\\([\\s\\S]*import\\(\\s*['\"]\\./pages/Reports)(?=[\\s\\S]*lazy\\([\\s\\S]*import\\(\\s*['\"]\\./pages/Settings)"
+          },
+          {
+            "an": true,
+            "moTa": "Home is not lazy",
+            "kiem": "ma-nguon",
+            "khop": "import\\(\\s*['\"]\\./pages/Home",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bọc Suspense quanh cả <code>&lt;Routes&gt;</code> ở App ⇒ navbar biến mất mỗi lần đổi trang."
+        },
+        {
+          "loi": "Lazy luôn cả trang chủ ⇒ lần đầu vào thấy spinner không cần thiết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "app shell",
+          "vi": "khung app (navbar, sidebar) luôn hiện"
+        }
+      ]
+    },
+    {
+      "title": "Lazy-loading a named export",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "lazy requires default export",
+        "mapping a named export",
+        "two components from one chunk"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "Suspense"
+      ],
+      "problemHtml": "<p><code>React.lazy</code> expects the module to have a <b>default</b> export. <code>editors.js</code> only has named exports (<code>MarkdownEditor</code>, <code>CodeEditor</code>). Map them: <code>import(…).then((m) =&gt; ({ default: m.MarkdownEditor }))</code>. A select chooses which editor to show.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#editor-type</code> select (<code>none</code> default, <code>markdown</code>, <code>code</code>). Fallback <code>#editor-loading</code> <code>Loading editor...</code>.</li>\n  <li>Two lazy components from the same file, each with <code>withDelay(…, 500)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>React.lazy</code> cần module có export <b>default</b>. <code>editors.js</code> chỉ có export có tên (<code>MarkdownEditor</code>, <code>CodeEditor</code>). Ánh xạ lại: <code>import(…).then((m) =&gt; ({ default: m.MarkdownEditor }))</code>. Select chọn trình soạn thảo nào hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Select <code>#editor-type</code> (<code>none</code> mặc định, <code>markdown</code>, <code>code</code>). Fallback <code>#editor-loading</code> <code>Loading editor...</code>.</li>\n  <li>Hai component lười từ cùng tệp, mỗi cái <code>withDelay(…, 500)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "choose code",
+          "output": "Loading editor... → console.log('hi');",
+          "explanation": "Without the mapping React throws: \"Element type is invalid… got: undefined\".|||Không ánh xạ thì React báo lỗi \"Element type is invalid… got: undefined\"."
+        }
+      ],
+      "hintsJson": [
+        "const CodeEditor = lazy(withDelay(() => import('./components/editors').then((m) => ({ default: m.CodeEditor })), 500));",
+        "Hai lazy cùng một tệp ⇒ bundler chỉ tạo MỘT chunk; lần tải thứ hai dùng lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Suspense, lazy, useState } from 'react';\n\nconst MarkdownEditor = lazy(() => import('./components/editors'));\n\nexport default function App() {\n  const [type, setType] = useState('none');\n  return (\n    <div>\n      <select id=\"editor-type\" value={type} onChange={(e) => setType(e.target.value)}>\n        <option value=\"none\">None</option><option value=\"markdown\">Markdown</option><option value=\"code\">Code</option>\n      </select>\n      <Suspense fallback={<p id=\"editor-loading\">Loading editor...</p>}>\n        {type === 'markdown' && <MarkdownEditor />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/components/editors.js",
+          "language": "javascript",
+          "code": "// src/components/editors.js (cho sẵn) — module có NHIỀU export có tên, KHÔNG có default\nexport function MarkdownEditor() {\n  return <textarea id=\"md-editor\" defaultValue=\"# Hello\" />;\n}\nexport function CodeEditor() {\n  return <pre id=\"code-editor\">console.log('hi');</pre>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lazy cho export có tên: ánh xạ về { default }\nimport { Suspense, lazy, useState } from 'react';\nimport { withDelay } from './utils/withDelay';\n\nconst MarkdownEditor = lazy(withDelay(() => import('./components/editors').then((m) => ({ default: m.MarkdownEditor })), 500));\nconst CodeEditor = lazy(withDelay(() => import('./components/editors').then((m) => ({ default: m.CodeEditor })), 500));\n\nexport default function App() {\n  const [type, setType] = useState('none');\n  return (\n    <div>\n      <select id=\"editor-type\" value={type} onChange={(e) => setType(e.target.value)}>\n        <option value=\"none\">None</option>\n        <option value=\"markdown\">Markdown</option>\n        <option value=\"code\">Code</option>\n      </select>\n      <Suspense fallback={<p id=\"editor-loading\">Loading editor...</p>}>\n        {type === 'markdown' && <MarkdownEditor />}\n        {type === 'code' && <CodeEditor />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm để THẤY fallback (máy cục bộ tải quá nhanh)\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/components/editors.js",
+          "language": "javascript",
+          "code": "// src/components/editors.js (cho sẵn) — module có NHIỀU export có tên, KHÔNG có default\nexport function MarkdownEditor() {\n  return <textarea id=\"md-editor\" defaultValue=\"# Hello\" />;\n}\nexport function CodeEditor() {\n  return <pre id=\"code-editor\">console.log('hi');</pre>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm truyền vào <code>lazy</code> chỉ cần trả Promise của object có khoá <code>default</code> là component. <code>.then</code> cho phép tạo object đó từ bất kỳ export nào.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "Markdown editor loads",
+            "kiem": "ton-tai",
+            "selector": "#md-editor",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#editor-type",
+                "giaTri": "markdown"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "moTa": "Code editor loads",
+            "kiem": "text",
+            "selector": "#code-editor",
+            "giaTri": "console.log('hi');",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#editor-type",
+                "giaTri": "code"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "moTa": "Fallback while loading",
+            "kiem": "ton-tai",
+            "selector": "#editor-loading",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#editor-type",
+                "giaTri": "code"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No JS errors",
+            "kiem": "khong-loi-js",
+            "truoc": [
+              {
+                "hanhDong": "doi",
+                "selector": "#editor-type",
+                "giaTri": "markdown"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Maps the named export to default",
+            "kiem": "ma-nguon",
+            "khop": "\\.then\\(\\s*\\(?\\s*\\w+\\s*\\)?\\s*=>\\s*\\(\\s*\\{\\s*default\\s*:"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>lazy(() =&gt; import('./components/editors'))</code> ⇒ module không có default, React báo lỗi kiểu phần tử."
+        },
+        {
+          "loi": "Đổi tệp gốc sang export default chỉ để chiều lazy ⇒ phá chỗ khác đang import có tên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "named export",
+          "vi": "export có tên (export function X)"
+        }
+      ]
+    },
+    {
+      "title": "Error Boundary with \"Try again\" for a failed chunk",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Error Boundary (class)",
+        "getDerivedStateFromError",
+        "lazy caches failures",
+        "retry"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "error-boundary"
+      ],
+      "problemHtml": "<p>Chunks can fail to download (offline, new deploy). Wrap the lazy <code>Report</code> in an <b>Error Boundary</b> — it must be a class component — that shows <code>Could not load the report.</code> and a <b>Try again</b> button. A rejected <code>lazy</code> remembers its failure, so retrying must create a NEW lazy component and reset the boundary.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>#btn-open</code> shows the report. Loading: <code>#report-loading</code>. Error: <code>#report-error</code> (text <code>Could not load the report.</code>) + <code>#btn-retry</code>.</li>\n  <li>The boundary accepts an <code>onRetry</code> prop; retrying shows the loading state again and then <code>#report</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chunk có thể tải hỏng (mất mạng, vừa deploy bản mới). Bọc <code>Report</code> lười trong <b>Error Boundary</b> — bắt buộc là class component — hiện <code>Could not load the report.</code> và nút <b>Try again</b>. <code>lazy</code> đã thất bại thì nhớ luôn lỗi đó, nên thử lại phải tạo component lazy MỚI và reset boundary.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#btn-open</code> mở báo cáo. Đang tải: <code>#report-loading</code>. Lỗi: <code>#report-error</code> (chữ <code>Could not load the report.</code>) + <code>#btn-retry</code>.</li>\n  <li>Boundary nhận prop <code>onRetry</code>; thử lại thì hiện lại trạng thái tải rồi <code>#report</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Open → (fails) → Try again",
+          "output": "Loading... → Quarterly report",
+          "explanation": "setReport(() => lazy(loadReport)) + a new key for the boundary.|||setReport(() => lazy(loadReport)) + key mới cho boundary."
+        }
+      ],
+      "hintsJson": [
+        "class ReportBoundary extends Component { state = { error: null }; static getDerivedStateFromError(error) { return { error }; } render() { … } }",
+        "App: const [Report, setReport] = useState(() => lazy(loadReport)); const [attempt, setAttempt] = useState(0); retry = () => { setReport(() => lazy(loadReport)); setAttempt((a) => a + 1); } — <ReportBoundary key={attempt} …>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Suspense, lazy, useState } from 'react';\nimport { loadReport } from './api/loadReport';\n\nconst Report = lazy(loadReport);\n\nexport default function App() {\n  const [open, setOpen] = useState(false);\n  return (\n    <div>\n      <button id=\"btn-open\" onClick={() => setOpen(true)}>Open report</button>\n      {open && (\n        <Suspense fallback={<p id=\"report-loading\">Loading report...</p>}>\n          <Report />\n        </Suspense>\n      )}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/api/loadReport.js",
+          "language": "javascript",
+          "code": "// src/api/loadReport.js (cho sẵn) — giả lập mạng chập chờn: LẦN ĐẦU tải chunk hỏng, các lần sau thành công\nlet attempts = 0;\n\nexport function loadReport() {\n  attempts += 1;\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (attempts === 1) reject(new Error('ChunkLoadError: Loading chunk 3 failed'));\n      else resolve(import('../components/Report'));\n    }, 300);\n  });\n}\n"
+        },
+        {
+          "name": "src/components/Report.js",
+          "language": "javascript",
+          "code": "// src/components/Report.js (cho sẵn)\nexport default function Report() {\n  return <div id=\"report\">Quarterly report</div>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Error Boundary (class) + thử lại bằng lazy mới và key mới\nimport { Component, Suspense, lazy, useState } from 'react';\nimport { loadReport } from './api/loadReport';\n\nclass ReportBoundary extends Component {\n  constructor(props) {\n    super(props);\n    this.state = { error: null };\n  }\n\n  static getDerivedStateFromError(error) {\n    return { error };\n  }\n\n  componentDidCatch(error) {\n    console.warn('Report chunk failed:', error.message);\n  }\n\n  render() {\n    if (this.state.error) {\n      return (\n        <div id=\"report-error\">\n          <p>Could not load the report.</p>\n          <button id=\"btn-retry\" type=\"button\" onClick={this.props.onRetry}>Try again</button>\n        </div>\n      );\n    }\n    return this.props.children;\n  }\n}\n\nexport default function App() {\n  const [open, setOpen] = useState(false);\n  const [Report, setReport] = useState(() => lazy(loadReport));\n  const [attempt, setAttempt] = useState(0);\n\n  const retry = () => {\n    setReport(() => lazy(loadReport)); // lazy mới ⇒ gọi lại loadReport\n    setAttempt((a) => a + 1); // key mới ⇒ boundary sạch lỗi\n  };\n\n  return (\n    <div>\n      <button id=\"btn-open\" type=\"button\" onClick={() => setOpen(true)}>Open report</button>\n      {open && (\n        <ReportBoundary key={attempt} onRetry={retry}>\n          <Suspense fallback={<p id=\"report-loading\">Loading report...</p>}>\n            <Report />\n          </Suspense>\n        </ReportBoundary>\n      )}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/api/loadReport.js",
+          "language": "javascript",
+          "code": "// src/api/loadReport.js (cho sẵn) — giả lập mạng chập chờn: LẦN ĐẦU tải chunk hỏng, các lần sau thành công\nlet attempts = 0;\n\nexport function loadReport() {\n  attempts += 1;\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (attempts === 1) reject(new Error('ChunkLoadError: Loading chunk 3 failed'));\n      else resolve(import('../components/Report'));\n    }, 300);\n  });\n}\n"
+        },
+        {
+          "name": "src/components/Report.js",
+          "language": "javascript",
+          "code": "// src/components/Report.js (cho sẵn)\nexport default function Report() {\n  return <div id=\"report\">Quarterly report</div>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Suspense xử lý trạng thái \"đang chờ\", Error Boundary xử lý trạng thái \"hỏng\". <code>lazy</code> lưu kết quả Promise (kể cả lỗi), nên muốn thử lại phải tạo lazy mới; đổi <code>key</code> của boundary để React dựng lại nó sạch lỗi.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "kiem": [
+          {
+            "moTa": "First load fails gracefully",
+            "kiem": "text",
+            "selector": "#report-error p",
+            "giaTri": "Could not load the report.",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-open",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          },
+          {
+            "moTa": "Try again shows loading",
+            "kiem": "ton-tai",
+            "selector": "#report-loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-open",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-retry",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Try again eventually shows the report",
+            "kiem": "text",
+            "selector": "#report",
+            "giaTri": "Quarterly report",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-open",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-retry",
+                "lan": 1
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Loading first",
+            "kiem": "ton-tai",
+            "selector": "#report-loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-open",
+                "lan": 1
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Boundary is a class with getDerivedStateFromError",
+            "kiem": "ma-nguon",
+            "khop": "class\\s+\\w+\\s+extends\\s+(React\\.)?Component[\\s\\S]*static\\s+getDerivedStateFromError"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết boundary bằng function component + try/catch ⇒ không bắt được lỗi khi render; chỉ class có getDerivedStateFromError."
+        },
+        {
+          "loi": "Chỉ reset state của boundary mà dùng lại lazy cũ ⇒ nó ném lại đúng lỗi cũ ngay lập tức."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Error Boundary",
+          "vi": "component bắt lỗi render của cây con và hiện giao diện dự phòng"
+        }
+      ]
+    }
+  ]
+}

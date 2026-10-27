@@ -1,0 +1,340 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-2-slot15-lazy-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-2-slot15-lazy-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: React.lazy, import() and Suspense",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "bundle",
+        "code splitting",
+        "React.lazy",
+        "Suspense"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on Slot 15: why bundles get big, how dynamic <code>import()</code> splits code, what <code>React.lazy</code> needs, where to put <code>Suspense</code>, and the pitfalls of lazy-loading too much.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về Slot 15: vì sao bundle phình to, <code>import()</code> động chia mã thế nào, <code>React.lazy</code> cần gì, đặt <code>Suspense</code> ở đâu, và cái giá của lazy quá nhiều.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "lazy nhận HÀM trả Promise của module có default export.",
+        "Suspense hiện fallback khi component con đang \"treo\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: React.lazy, import() and Suspense\n\nAnswer in the panel on the left (no code needed).\n\n1. Main goal of code splitting?\n2. What does import(\"./Chart\") return?\n3. Correct use of React.lazy:\n4. React.lazy requires the module to…\n5. What happens if a lazy component renders without any Suspense above it?\n6. The fallback prop of Suspense is…\n7. Why do tutorials add an artificial delay when demonstrating lazy?\n8. One Suspense can wrap several lazy components.\n9. Best default place to split a React app?\n10. Downsides of too many lazy components? (choose all)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: React.lazy, import() and Suspense — answer key\n\n1. Main goal of code splitting?\n   Answer: b) Load less JavaScript up front so the first screen appears sooner\n   The total size stays similar; it is downloaded in pieces when needed. / Tổng dung lượng gần như giữ nguyên; chỉ được tải từng phần khi cần.\n\n2. What does import(\"./Chart\") return?\n   Answer: b) A Promise that resolves to the module object\n   Bundlers turn it into a separate chunk. / Bundler biến nó thành chunk riêng.\n\n3. Correct use of React.lazy:\n   Answer: b) const Chart = lazy(() => import(\"./Chart\"))\n   lazy takes a FUNCTION so loading starts only when the component first renders. / lazy nhận một HÀM để chỉ bắt đầu tải khi component render lần đầu.\n\n4. React.lazy requires the module to…\n   Answer: a) have a default export that is a component\n   For named exports, map with .then(m => ({ default: m.X })). / Export có tên thì ánh xạ bằng .then(m => ({ default: m.X })).\n\n5. What happens if a lazy component renders without any Suspense above it?\n   Answer: b) React throws an error (a component suspended without a Suspense boundary)\n   There must be a Suspense somewhere above. / Phải có Suspense ở đâu đó phía trên.\n\n6. The fallback prop of Suspense is…\n   Answer: b) any React element shown while children are loading\n   Usually a spinner or skeleton. / Thường là vòng xoay hoặc khung xương.\n\n7. Why do tutorials add an artificial delay when demonstrating lazy?\n   Answer: b) On localhost chunks load too fast to see the fallback\n   In production on a slow network the fallback is visible for real. / Trên production với mạng chậm thì fallback hiện thật.\n\n8. One Suspense can wrap several lazy components.\n   Answer: a) True — it shows the fallback until all of them are ready\n   Nest Suspense boundaries when parts should appear independently. / Lồng nhiều Suspense khi muốn các phần hiện độc lập.\n\n9. Best default place to split a React app?\n   Answer: b) Routes / pages\n   Users visit one page at a time; route splitting gives the biggest win for the least effort. / Người dùng mở từng trang một; chia theo route lợi nhiều nhất mà ít công nhất.\n\n10. Downsides of too many lazy components? (choose all)\n   Answer: a) More network requests + b) Many spinners / layout flashes + d) Waterfalls when nested lazy chunks load one after another\n   Total size barely changes; the cost is requests and UX. / Tổng dung lượng hầu như không đổi; cái giá là request và trải nghiệm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Main goal of code splitting?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Make the total code smaller"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Load less JavaScript up front so the first screen appears sooner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hide source code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Avoid using React"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The total size stays similar; it is downloaded in pieces when needed.</p><p><i>🇻🇳 Tổng dung lượng gần như giữ nguyên; chỉ được tải từng phần khi cần.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "What does <code>import(\"./Chart\")</code> return?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A Promise that resolves to the module object"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A string path"
+              },
+              {
+                "ma": "d",
+                "noiDung": "undefined"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Bundlers turn it into a separate chunk.</p><p><i>🇻🇳 Bundler biến nó thành chunk riêng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "Correct use of React.lazy:",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>const Chart = lazy(import(\"./Chart\"))</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>const Chart = lazy(() =&gt; import(\"./Chart\"))</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>const Chart = await lazy(\"./Chart\")</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>lazy.Chart()</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>lazy takes a FUNCTION so loading starts only when the component first renders.</p><p><i>🇻🇳 lazy nhận một HÀM để chỉ bắt đầu tải khi component render lần đầu.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "React.lazy requires the module to…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "have a default export that is a component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "use class components"
+              },
+              {
+                "ma": "c",
+                "noiDung": "be in node_modules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "export a function named lazy"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>For named exports, map with .then(m => ({ default: m.X })).</p><p><i>🇻🇳 Export có tên thì ánh xạ bằng .then(m => ({ default: m.X })).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "What happens if a lazy component renders without any Suspense above it?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It renders nothing silently"
+              },
+              {
+                "ma": "b",
+                "noiDung": "React throws an error (a component suspended without a Suspense boundary)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It loads synchronously"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The page reloads"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>There must be a Suspense somewhere above.</p><p><i>🇻🇳 Phải có Suspense ở đâu đó phía trên.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "The <code>fallback</code> prop of Suspense is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a function called on error"
+              },
+              {
+                "ma": "b",
+                "noiDung": "any React element shown while children are loading"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a CSS class"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the URL of the chunk"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Usually a spinner or skeleton.</p><p><i>🇻🇳 Thường là vòng xoay hoặc khung xương.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "Why do tutorials add an artificial delay when demonstrating lazy?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lazy requires it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "On localhost chunks load too fast to see the fallback"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To fix a bug"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To reduce bundle size"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>In production on a slow network the fallback is visible for real.</p><p><i>🇻🇳 Trên production với mạng chậm thì fallback hiện thật.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "One Suspense can wrap several lazy components.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True — it shows the fallback until all of them are ready"
+              },
+              {
+                "ma": "b",
+                "noiDung": "False — one Suspense per component"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Nest Suspense boundaries when parts should appear independently.</p><p><i>🇻🇳 Lồng nhiều Suspense khi muốn các phần hiện độc lập.</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "Best default place to split a React app?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Routes / pages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CSS files"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the App component"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Users visit one page at a time; route splitting gives the biggest win for the least effort.</p><p><i>🇻🇳 Người dùng mở từng trang một; chia theo route lợi nhiều nhất mà ít công nhất.</i></p>"
+          },
+          {
+            "ma": "q10",
+            "de": "Downsides of too many lazy components? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "More network requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Many spinners / layout flashes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Larger total download size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Waterfalls when nested lazy chunks load one after another"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Total size barely changes; the cost is requests and UX.</p><p><i>🇻🇳 Tổng dung lượng hầu như không đổi; cái giá là request và trải nghiệm.</i></p>",
+            "nhieu": true
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghĩ lazy làm giảm tổng dung lượng mã — nó chỉ chia ra, tổng gần như không đổi."
+        },
+        {
+          "loi": "Quên rằng lazy component phải nằm trong Suspense."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bundle",
+          "vi": "tệp JS gộp toàn bộ mã của app"
+        }
+      ]
+    }
+  ]
+}

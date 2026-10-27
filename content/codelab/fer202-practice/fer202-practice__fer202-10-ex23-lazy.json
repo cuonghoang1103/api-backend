@@ -1,0 +1,629 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-ex23-lazy",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-ex23-lazy"
+  },
+  "exercises": [
+    {
+      "title": "Lazy User and Post features (handout)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "lazy features",
+        "Suspense + data fetching",
+        "chunk loads once"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "exercise-23"
+      ],
+      "problemHtml": "<p>The handout exercise: two features, <b>User</b> and <b>Post</b>, each fetching its own data. Load each feature lazily only when its tab is opened (simulated 600 ms network), with one <code>Suspense</code> fallback. Switching back to a tab that was already loaded must not show the fallback again.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Tabs <code>#tab-users</code>, <code>#tab-posts</code> (no tab open at first ⇒ <code>#hint</code> <code>Choose a tab</code>). Fallback <code>#loading</code> <code>Loading feature...</code>.</li>\n  <li><code>const User = lazy(withDelay(() =&gt; import(\"./features/User\"), 600))</code> and the same for Post.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài của handout: hai tính năng <b>User</b> và <b>Post</b>, mỗi cái tự tải dữ liệu. Tải lười từng tính năng chỉ khi mở tab của nó (giả lập mạng 600 ms), dùng một fallback <code>Suspense</code>. Quay lại tab đã tải thì không được hiện fallback nữa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tab <code>#tab-users</code>, <code>#tab-posts</code> (ban đầu chưa mở tab ⇒ <code>#hint</code> <code>Choose a tab</code>). Fallback <code>#loading</code> <code>Loading feature...</code>.</li>\n  <li><code>const User = lazy(withDelay(() =&gt; import(\"./features/User\"), 600))</code> và tương tự cho Post.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Users → Posts → Users",
+          "output": "fallback twice (first time each), then instant",
+          "explanation": "A lazy component resolves its Promise only once.|||Component lazy chỉ giải Promise một lần."
+        }
+      ],
+      "hintsJson": [
+        "{tab === \"users\" && <User />}{tab === \"posts\" && <Post />} trong một <Suspense>",
+        "Fallback chỉ hiện khi chunk CHƯA tải; dữ liệu fetch bên trong do component tự lo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { useState } from 'react';\nimport User from './features/User';\nimport Post from './features/Post';\n\nexport default function App() {\n  const [tab, setTab] = useState(null);\n  return (\n    <div>\n      <button id=\"tab-users\" onClick={() => setTab('users')}>Users</button>\n      <button id=\"tab-posts\" onClick={() => setTab('posts')}>Posts</button>\n      {tab === 'users' && <User />}\n      {tab === 'posts' && <Post />}\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/features/User.js",
+          "language": "javascript",
+          "code": "// src/features/User.js (cho sẵn) — tính năng User: tự tải dữ liệu khi mount\nimport { useEffect, useState } from 'react';\n\nexport default function User() {\n  const [users, setUsers] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/users').then((r) => r.json()).then(setUsers);\n  }, []);\n  return <ul id=\"users\">{users.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n"
+        },
+        {
+          "name": "src/features/Post.js",
+          "language": "javascript",
+          "code": "// src/features/Post.js (cho sẵn) — tính năng Post\nimport { useEffect, useState } from 'react';\n\nexport default function Post() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/posts').then((r) => r.json()).then(setPosts);\n  }, []);\n  return <ul id=\"posts\">{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — mỗi tính năng một chunk, tải khi mở tab\nimport { Suspense, lazy, useState } from 'react';\nimport { withDelay } from './utils/withDelay';\n\nconst User = lazy(withDelay(() => import('./features/User'), 600));\nconst Post = lazy(withDelay(() => import('./features/Post'), 600));\n\nexport default function App() {\n  const [tab, setTab] = useState(null);\n  return (\n    <div>\n      <button id=\"tab-users\" type=\"button\" onClick={() => setTab('users')}>Users</button>\n      <button id=\"tab-posts\" type=\"button\" onClick={() => setTab('posts')}>Posts</button>\n      {tab === null && <p id=\"hint\">Choose a tab</p>}\n      <Suspense fallback={<p id=\"loading\">Loading feature...</p>}>\n        {tab === 'users' && <User />}\n        {tab === 'posts' && <Post />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/features/User.js",
+          "language": "javascript",
+          "code": "// src/features/User.js (cho sẵn) — tính năng User: tự tải dữ liệu khi mount\nimport { useEffect, useState } from 'react';\n\nexport default function User() {\n  const [users, setUsers] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/users').then((r) => r.json()).then(setUsers);\n  }, []);\n  return <ul id=\"users\">{users.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n"
+        },
+        {
+          "name": "src/features/Post.js",
+          "language": "javascript",
+          "code": "// src/features/Post.js (cho sẵn) — tính năng Post\nimport { useEffect, useState } from 'react';\n\nexport default function Post() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/posts').then((r) => r.json()).then(setPosts);\n  }, []);\n  return <ul id=\"posts\">{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tách theo tính năng: người chỉ xem User không phải tải mã của Post. Suspense lo phần chờ CHUNK; mỗi tính năng tự lo phần chờ DỮ LIỆU của nó.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "name": "Leanne Graham"
+              },
+              {
+                "id": 2,
+                "name": "Ervin Howell"
+              },
+              {
+                "id": 3,
+                "name": "Clementine Bauch"
+              }
+            ],
+            "posts": [
+              {
+                "id": 1,
+                "title": "sunt aut facere"
+              },
+              {
+                "id": 2,
+                "title": "qui est esse"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Hint before choosing",
+            "kiem": "text",
+            "selector": "#hint",
+            "giaTri": "Choose a tab"
+          },
+          {
+            "moTa": "Fallback while the feature loads",
+            "kiem": "text",
+            "selector": "#loading",
+            "giaTri": "Loading feature...",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              }
+            ]
+          },
+          {
+            "moTa": "Users feature with data",
+            "kiem": "danh-sach-text",
+            "selector": "li.user",
+            "mongDoi": [
+              "Leanne Graham",
+              "Ervin Howell",
+              "Clementine Bauch"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "moTa": "Posts feature with data",
+            "kiem": "so-luong",
+            "selector": "li.post",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-posts"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Already loaded tab is instant",
+            "kiem": "khong-ton-tai",
+            "selector": "#loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-posts"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Post not fetched until its tab opens",
+            "kiem": "goi-fetch",
+            "khop": "/posts",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 900
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "No static imports of the features",
+            "kiem": "ma-nguon",
+            "khop": "import\\s+(User|Post)\\s+from",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Import tĩnh User/Post ở đầu App ⇒ cả hai vào bundle chính."
+        },
+        {
+          "loi": "Tạo lazy trong hàm xử lý click ⇒ mỗi lần bấm một component mới, tải lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "feature chunk",
+          "vi": "chunk chứa trọn một tính năng"
+        }
+      ]
+    },
+    {
+      "title": "Preload a chunk on hover or focus",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "preloading",
+        "memoised import promise",
+        "perceived performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "exercise-23"
+      ],
+      "problemHtml": "<p>Make tabs feel instant: start downloading a feature's chunk as soon as the user <b>hovers or focuses</b> its tab, before the click. Write <code>lazyWithPreload(factory)</code> that returns a lazy component with a <code>.preload()</code> method — both must share the SAME promise so the chunk downloads once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Same UI as before (<code>#tab-users</code>, <code>#tab-posts</code>, <code>#loading</code>, 600 ms delay). <code>onMouseEnter</code> and <code>onFocus</code> call <code>X.preload()</code>.</li>\n  <li>Focus a tab, wait ~0.7 s, click ⇒ the fallback never appears.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm tab có cảm giác tức thì: bắt đầu tải chunk của tính năng ngay khi người dùng <b>rê chuột hoặc focus</b> vào tab, trước khi bấm. Viết <code>lazyWithPreload(factory)</code> trả về component lazy có phương thức <code>.preload()</code> — hai đường dùng CHUNG một promise để chunk chỉ tải một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giao diện như bài trước (<code>#tab-users</code>, <code>#tab-posts</code>, <code>#loading</code>, trễ 600 ms). <code>onMouseEnter</code> và <code>onFocus</code> gọi <code>X.preload()</code>.</li>\n  <li>Focus tab, đợi ~0,7 s, bấm ⇒ fallback không hề hiện.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "focus Posts, wait, click Posts",
+          "output": "posts shown immediately",
+          "explanation": "lazy(load) and preload() both call load(), which caches the promise.|||lazy(load) và preload() cùng gọi load(), hàm này nhớ promise."
+        }
+      ],
+      "hintsJson": [
+        "function lazyWithPreload(factory) { let p = null; const load = () => (p ??= factory()); const C = lazy(load); C.preload = load; return C; }",
+        "<button onMouseEnter={Post.preload} onFocus={Post.preload} …>"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport { Suspense, lazy, useState } from 'react';\nimport { withDelay } from './utils/withDelay';\n\nconst User = lazy(withDelay(() => import('./features/User'), 600));\nconst Post = lazy(withDelay(() => import('./features/Post'), 600));\n\nexport default function App() {\n  const [tab, setTab] = useState(null);\n  return (\n    <div>\n      <button id=\"tab-users\" onClick={() => setTab('users')}>Users</button>\n      <button id=\"tab-posts\" onClick={() => setTab('posts')}>Posts</button>\n      <Suspense fallback={<p id=\"loading\">Loading feature...</p>}>\n        {tab === 'users' && <User />}\n        {tab === 'posts' && <Post />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/features/User.js",
+          "language": "javascript",
+          "code": "// src/features/User.js (cho sẵn) — tính năng User: tự tải dữ liệu khi mount\nimport { useEffect, useState } from 'react';\n\nexport default function User() {\n  const [users, setUsers] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/users').then((r) => r.json()).then(setUsers);\n  }, []);\n  return <ul id=\"users\">{users.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n"
+        },
+        {
+          "name": "src/features/Post.js",
+          "language": "javascript",
+          "code": "// src/features/Post.js (cho sẵn) — tính năng Post\nimport { useEffect, useState } from 'react';\n\nexport default function Post() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/posts').then((r) => r.json()).then(setPosts);\n  }, []);\n  return <ul id=\"posts\">{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — lazyWithPreload: lazy và preload dùng CHUNG một promise\nimport { Suspense, lazy, useState } from 'react';\nimport { withDelay } from './utils/withDelay';\n\nfunction lazyWithPreload(factory) {\n  let promise = null;\n  const load = () => {\n    if (!promise) promise = factory();\n    return promise;\n  };\n  const Component = lazy(load);\n  Component.preload = load;\n  return Component;\n}\n\nconst User = lazyWithPreload(withDelay(() => import('./features/User'), 600));\nconst Post = lazyWithPreload(withDelay(() => import('./features/Post'), 600));\n\nexport default function App() {\n  const [tab, setTab] = useState(null);\n  return (\n    <div>\n      <button id=\"tab-users\" type=\"button\" onMouseEnter={User.preload} onFocus={User.preload} onClick={() => setTab('users')}>Users</button>\n      <button id=\"tab-posts\" type=\"button\" onMouseEnter={Post.preload} onFocus={Post.preload} onClick={() => setTab('posts')}>Posts</button>\n      <Suspense fallback={<p id=\"loading\">Loading feature...</p>}>\n        {tab === 'users' && <User />}\n        {tab === 'posts' && <Post />}\n      </Suspense>\n    </div>\n  );\n}\n"
+        },
+        {
+          "name": "src/utils/withDelay.js",
+          "language": "javascript",
+          "code": "// src/utils/withDelay.js (cho sẵn) — giả lập mạng chậm\nexport const withDelay = (factory, ms) => () =>\n  Promise.all([factory(), new Promise((r) => setTimeout(r, ms))]).then(([module]) => module);\n"
+        },
+        {
+          "name": "src/features/User.js",
+          "language": "javascript",
+          "code": "// src/features/User.js (cho sẵn) — tính năng User: tự tải dữ liệu khi mount\nimport { useEffect, useState } from 'react';\n\nexport default function User() {\n  const [users, setUsers] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/users').then((r) => r.json()).then(setUsers);\n  }, []);\n  return <ul id=\"users\">{users.map((u) => <li key={u.id} className=\"user\">{u.name}</li>)}</ul>;\n}\n"
+        },
+        {
+          "name": "src/features/Post.js",
+          "language": "javascript",
+          "code": "// src/features/Post.js (cho sẵn) — tính năng Post\nimport { useEffect, useState } from 'react';\n\nexport default function Post() {\n  const [posts, setPosts] = useState([]);\n  useEffect(() => {\n    fetch('http://localhost:9999/posts').then((r) => r.json()).then(setPosts);\n  }, []);\n  return <ul id=\"posts\">{posts.map((p) => <li key={p.id} className=\"post\">{p.title}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Người dùng mất ~200–300 ms từ lúc rê chuột tới lúc bấm — đủ để tải trước chunk nhỏ. Ghi nhớ promise bảo đảm cả preload lẫn lazy dùng chung một lần tải.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "users": [
+              {
+                "id": 1,
+                "name": "Leanne Graham"
+              },
+              {
+                "id": 2,
+                "name": "Ervin Howell"
+              },
+              {
+                "id": 3,
+                "name": "Clementine Bauch"
+              }
+            ],
+            "posts": [
+              {
+                "id": 1,
+                "title": "sunt aut facere"
+              },
+              {
+                "id": 2,
+                "title": "qui est esse"
+              }
+            ]
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Preloaded tab opens without fallback",
+            "kiem": "khong-ton-tai",
+            "selector": "#loading",
+            "truoc": [
+              {
+                "hanhDong": "focus",
+                "selector": "#tab-posts"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-posts"
+              }
+            ]
+          },
+          {
+            "moTa": "Preloaded tab shows data",
+            "kiem": "so-luong",
+            "selector": "li.post",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "focus",
+                "selector": "#tab-posts"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 800
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#tab-posts"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Without preload the fallback still works",
+            "kiem": "ton-tai",
+            "selector": "#loading",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tab-users"
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "preload wired to hover and focus",
+            "kiem": "ma-nguon",
+            "khop": "^(?=[\\s\\S]*onMouseEnter=\\{\\s*\\w+\\.preload)(?=[\\s\\S]*onFocus=\\{\\s*\\w+\\.preload)"
+          },
+          {
+            "an": true,
+            "moTa": "Promise is memoised",
+            "kiem": "ma-nguon",
+            "khop": "(if\\s*\\(\\s*!\\s*\\w+\\s*\\)\\s*\\w+\\s*=\\s*factory\\(\\)|\\?\\?=\\s*factory\\(\\))"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "preload gọi thẳng <code>factory()</code> còn lazy gọi lại factory lần nữa ⇒ tải hai lần (chậm và tốn)."
+        },
+        {
+          "loi": "Preload MỌI thứ lúc khởi động ⇒ mất lợi ích của chia nhỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "preload",
+          "vi": "tải trước tài nguyên sắp cần"
+        },
+        {
+          "en": "perceived performance",
+          "vi": "tốc độ người dùng cảm nhận"
+        }
+      ]
+    },
+    {
+      "title": "What should be lazy-loaded?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "bundle size",
+        "route splitting",
+        "too many chunks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "lazy",
+        "quiz",
+        "exercise-23"
+      ],
+      "problemHtml": "<p>Slot 15 warns against lazy-loading everything: each chunk is one more request and one more spinner. Decide, for each case, whether lazy loading helps. Think about how big the code is, how often it is needed and whether it is visible on first load.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slot 15 cảnh báo không nên lazy mọi thứ: mỗi chunk là thêm một request và một vòng xoay chờ. Với từng trường hợp, quyết định lazy có giúp không. Nghĩ tới mã nặng cỡ nào, có thường cần không và có hiện ngay lúc mở trang không.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lợi ích lớn nhất: route ít người vào + thư viện nặng.",
+        "Thứ hiện ngay khi mở trang (header, nút) không nên lazy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What should be lazy-loaded?\n\nAnswer in the panel on the left (no code needed).\n\n1. An admin dashboard route used by 2% of users\n2. The site header and navbar\n3. A rich-text editor (300 KB) shown only after clicking \"Write a post\"\n4. A 20-line Button component used everywhere\n5. Which are good reasons to code-split? (choose all)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What should be lazy-loaded? — answer key\n\n1. An admin dashboard route used by 2% of users\n   Answer: a) Lazy-load it\n   98% of users never download it. / 98% người dùng không phải tải nó.\n\n2. The site header and navbar\n   Answer: b) Keep it in the main bundle\n   Visible immediately on every page. / Hiện ngay ở mọi trang.\n\n3. A rich-text editor (300 KB) shown only after clicking \"Write a post\"\n   Answer: a) Lazy-load it\n   Heavy and on demand — a perfect candidate. / Nặng và dùng theo yêu cầu — ứng viên lý tưởng.\n\n4. A 20-line Button component used everywhere\n   Answer: b) Keep it in the main bundle\n   Tiny and always needed; a separate request costs more than it saves. / Nhỏ và luôn cần; request riêng tốn hơn phần tiết kiệm.\n\n5. Which are good reasons to code-split? (choose all)\n   Answer: a) Faster first load + b) Users download only what they use + d) Heavy third-party libraries used on one page\n   Splitting usually ADDS requests; the trade-off is worth it only for big, rarely used code. / Chia nhỏ thường THÊM request; chỉ đáng khi mã lớn, ít dùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lazy khi: mã lớn, ít dùng, không cần ngay. Không lazy khi: nhỏ, luôn hiện, hoặc cần ngay khi tải trang.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "An admin dashboard route used by 2% of users",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lazy-load it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep it in the main bundle"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>98% of users never download it.</p><p><i>🇻🇳 98% người dùng không phải tải nó.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "The site header and navbar",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lazy-load it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep it in the main bundle"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Visible immediately on every page.</p><p><i>🇻🇳 Hiện ngay ở mọi trang.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "A rich-text editor (300 KB) shown only after clicking \"Write a post\"",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lazy-load it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep it in the main bundle"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Heavy and on demand — a perfect candidate.</p><p><i>🇻🇳 Nặng và dùng theo yêu cầu — ứng viên lý tưởng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "A 20-line Button component used everywhere",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lazy-load it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep it in the main bundle"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Tiny and always needed; a separate request costs more than it saves.</p><p><i>🇻🇳 Nhỏ và luôn cần; request riêng tốn hơn phần tiết kiệm.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "Which are good reasons to code-split? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Faster first load"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Users download only what they use"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fewer HTTP requests overall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Heavy third-party libraries used on one page"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Splitting usually ADDS requests; the trade-off is worth it only for big, rarely used code.</p><p><i>🇻🇳 Chia nhỏ thường THÊM request; chỉ đáng khi mã lớn, ít dùng.</i></p>",
+            "nhieu": true
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lazy cả component 1 KB ⇒ thêm request còn chậm hơn."
+        },
+        {
+          "loi": "Lazy phần nằm trên màn hình đầu ⇒ trang nhấp nháy fallback."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "above the fold",
+          "vi": "phần thấy ngay khi mở trang, chưa cuộn"
+        }
+      ]
+    }
+  ]
+}

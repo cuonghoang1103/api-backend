@@ -1,0 +1,241 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-10-interview-lazy",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-10-1-lazy-suspense"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — Code splitting & loading performance (Chapter 10)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "Code splitting & loading performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>Code splitting & loading performance</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>Code splitting & loading performance</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Code splitting & loading performance (Chapter 10)\n\nAnswer in the panel on the left (no code needed).\n\n1. How would you reduce the initial bundle of a slow React app?\n2. What does Suspense actually do?\n3. How do you handle a chunk that fails to load after a new deploy?\n4. Where would you place Suspense boundaries in a dashboard?\n5. Is lazy loading always good?\n6. Name ways to make lazy pages feel faster.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Code splitting & loading performance (Chapter 10) — answer key\n\n1. How would you reduce the initial bundle of a slow React app?\n   Answer: b) Measure first (bundle analyzer, Lighthouse), then split by route with React.lazy, lazy-load heavy libraries used on few pages, and remove unused dependencies.\n   Model answer: \"I measure before changing: a bundle analyzer shows what is large, Lighthouse shows the impact. Then I split routes with React.lazy, load heavy libraries like charts or editors on demand, replace or drop big dependencies, and check the result again.\" / Trả lời mẫu: \"Tôi đo trước khi sửa: bundle analyzer cho thấy cái gì nặng, Lighthouse cho thấy ảnh hưởng. Rồi chia route bằng React.lazy, tải thư viện nặng như biểu đồ, trình soạn thảo theo yêu cầu, thay hoặc bỏ dependency lớn, và đo lại.\"\n\n2. What does Suspense actually do?\n   Answer: b) It catches components that \"suspend\" (throw a pending promise, like a lazy component loading) and shows a fallback until they can render.\n   Model answer: \"When a child is not ready — a lazy chunk still downloading, or a data library that supports Suspense — it suspends. The nearest Suspense boundary shows its fallback instead, then swaps in the real content when it resolves.\" / Trả lời mẫu: \"Khi một con chưa sẵn sàng — chunk lazy đang tải, hoặc thư viện dữ liệu hỗ trợ Suspense — nó tạm treo. Suspense gần nhất hiện fallback, rồi thay bằng nội dung thật khi xong.\"\n\n3. How do you handle a chunk that fails to load after a new deploy?\n   Answer: b) Wrap lazy parts in an Error Boundary with a retry or reload option; a new lazy instance is needed because lazy caches the rejection.\n   Model answer: \"After a deploy old chunk names may 404. An Error Boundary around lazy routes shows a friendly message with Try again — recreating the lazy component — or reloads the page to get the new manifest.\" / Trả lời mẫu: \"Sau deploy, tên chunk cũ có thể 404. Error Boundary quanh route lazy hiện thông báo thân thiện với nút Thử lại — tạo lại component lazy — hoặc tải lại trang để lấy danh sách chunk mới.\"\n\n4. Where would you place Suspense boundaries in a dashboard?\n   Answer: b) Around the content area (inside the layout) so navigation stays usable, plus smaller boundaries around independent widgets.\n   Model answer: \"Inside the layout around the Outlet, so the navbar never disappears. Independent widgets get their own boundaries with skeletons so one slow widget does not blank the whole page.\" / Trả lời mẫu: \"Trong layout quanh Outlet, để navbar không biến mất. Các widget độc lập có Suspense riêng với khung xương, để một widget chậm không làm trống cả trang.\"\n\n5. Is lazy loading always good?\n   Answer: b) No — tiny or always-visible components gain nothing and add requests and spinners; prefer splitting big, rarely used code.\n   Model answer: \"It is a trade-off. Each chunk is a request and a loading state. I split where the code is big and not needed immediately — routes, editors, charts — and keep small shared components in the main bundle.\" / Trả lời mẫu: \"Đó là đánh đổi. Mỗi chunk là một request và một trạng thái chờ. Tôi chia ở chỗ mã lớn và không cần ngay — route, trình soạn thảo, biểu đồ — và giữ component nhỏ dùng chung trong bundle chính.\"\n\n6. Name ways to make lazy pages feel faster.\n   Answer: b) Preload on hover/focus or when the browser is idle, use skeletons that match the layout, and keep chunks reasonably sized.\n   Model answer: \"Preload the chunk when the user hovers or focuses a link, or during idle time; show skeletons shaped like the final content so the layout does not jump; and avoid chains of nested lazy chunks that load one after another.\" / Trả lời mẫu: \"Tải trước chunk khi người dùng rê chuột hoặc focus link, hoặc lúc trình duyệt rảnh; dùng khung xương giống hình nội dung thật để bố cục không nhảy; tránh chuỗi chunk lazy lồng nhau tải nối đuôi.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "How would you reduce the initial bundle of a slow React app?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Minify CSS only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Measure first (bundle analyzer, Lighthouse), then split by route with React.lazy, lazy-load heavy libraries used on few pages, and remove unused dependencies."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rewrite in jQuery."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Turn off React."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"I measure before changing: a bundle analyzer shows what is large, Lighthouse shows the impact. Then I split routes with React.lazy, load heavy libraries like charts or editors on demand, replace or drop big dependencies, and check the result again.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tôi đo trước khi sửa: bundle analyzer cho thấy cái gì nặng, Lighthouse cho thấy ảnh hưởng. Rồi chia route bằng React.lazy, tải thư viện nặng như biểu đồ, trình soạn thảo theo yêu cầu, thay hoặc bỏ dependency lớn, và đo lại.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "What does Suspense actually do?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It fetches data automatically."
+              },
+              {
+                "ma": "b",
+                "noiDung": "It catches components that \"suspend\" (throw a pending promise, like a lazy component loading) and shows a fallback until they can render."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is an error handler."
+              },
+              {
+                "ma": "d",
+                "noiDung": "It delays rendering for animation."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"When a child is not ready — a lazy chunk still downloading, or a data library that supports Suspense — it suspends. The nearest Suspense boundary shows its fallback instead, then swaps in the real content when it resolves.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Khi một con chưa sẵn sàng — chunk lazy đang tải, hoặc thư viện dữ liệu hỗ trợ Suspense — nó tạm treo. Suspense gần nhất hiện fallback, rồi thay bằng nội dung thật khi xong.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "How do you handle a chunk that fails to load after a new deploy?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignore it."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Wrap lazy parts in an Error Boundary with a retry or reload option; a new lazy instance is needed because lazy caches the rejection."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use try/catch around JSX."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable caching forever."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"After a deploy old chunk names may 404. An Error Boundary around lazy routes shows a friendly message with Try again — recreating the lazy component — or reloads the page to get the new manifest.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Sau deploy, tên chunk cũ có thể 404. Error Boundary quanh route lazy hiện thông báo thân thiện với nút Thử lại — tạo lại component lazy — hoặc tải lại trang để lấy danh sách chunk mới.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Where would you place Suspense boundaries in a dashboard?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One at the very top only."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Around the content area (inside the layout) so navigation stays usable, plus smaller boundaries around independent widgets."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Around every div."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nowhere."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Inside the layout around the Outlet, so the navbar never disappears. Independent widgets get their own boundaries with skeletons so one slow widget does not blank the whole page.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Trong layout quanh Outlet, để navbar không biến mất. Các widget độc lập có Suspense riêng với khung xương, để một widget chậm không làm trống cả trang.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "Is lazy loading always good?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes."
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — tiny or always-visible components gain nothing and add requests and spinners; prefer splitting big, rarely used code."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for class components."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in development."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"It is a trade-off. Each chunk is a request and a loading state. I split where the code is big and not needed immediately — routes, editors, charts — and keep small shared components in the main bundle.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Đó là đánh đổi. Mỗi chunk là một request và một trạng thái chờ. Tôi chia ở chỗ mã lớn và không cần ngay — route, trình soạn thảo, biểu đồ — và giữ component nhỏ dùng chung trong bundle chính.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Name ways to make lazy pages feel faster.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Bigger spinners."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Preload on hover/focus or when the browser is idle, use skeletons that match the layout, and keep chunks reasonably sized."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Remove Suspense."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add setTimeout everywhere."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Preload the chunk when the user hovers or focuses a link, or during idle time; show skeletons shaped like the final content so the layout does not jump; and avoid chains of nested lazy chunks that load one after another.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Tải trước chunk khi người dùng rê chuột hoặc focus link, hoặc lúc trình duyệt rảnh; dùng khung xương giống hình nội dung thật để bố cục không nhảy; tránh chuỗi chunk lazy lồng nhau tải nối đuôi.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

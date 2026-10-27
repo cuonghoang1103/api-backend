@@ -392,6 +392,30 @@
       "name": "Interview corner — React Router",
       "level": "MEDIUM",
       "description": "Câu hỏi phỏng vấn về định tuyến SPA kèm câu trả lời mẫu."
+    },
+    {
+      "slug": "fer202-10-1-lazy-suspense",
+      "name": "10.1 Lazy loading & Suspense",
+      "level": "MEDIUM",
+      "description": "lazy + Suspense theo yêu cầu, lazy theo route với Suspense trong layout, export có tên, Error Boundary + thử lại."
+    },
+    {
+      "slug": "fer202-10-ex23-lazy",
+      "name": "Exercise 23 — Lazy loading",
+      "level": "MEDIUM",
+      "description": "Lazy hai tính năng User/Post (fetch API), preload khi rê chuột/focus, trắc nghiệm nên lazy cái gì."
+    },
+    {
+      "slug": "fer202-10-2-slot15-lazy-slides",
+      "name": "10.2 Slide check — Lazy loading",
+      "level": "EASY",
+      "description": "Trắc nghiệm Slot 15: bundle, import() động, React.lazy, Suspense, cái giá của lazy quá nhiều."
+    },
+    {
+      "slug": "fer202-10-interview-lazy",
+      "name": "Interview corner — Code splitting",
+      "level": "MEDIUM",
+      "description": "Câu hỏi phỏng vấn về chia mã và hiệu năng tải trang."
     }
   ]
 }

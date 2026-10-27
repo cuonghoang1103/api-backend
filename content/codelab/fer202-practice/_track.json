@@ -146,6 +146,60 @@
       "name": "Interview corner — JSX & rendering",
       "level": "BEGINNER",
       "description": "8 câu phỏng vấn về JSX, key, điều kiện, XSS, virtual DOM kèm câu trả lời mẫu."
+    },
+    {
+      "slug": "fer202-4-1-bootstrap",
+      "name": "4.1 Bootstrap grid & React-Bootstrap",
+      "level": "BEGINNER",
+      "description": "4 bài: Container/Row/Col, Button/Badge variant, lưới responsive theo mốc, class tiện ích flex/spacing/text."
+    },
+    {
+      "slug": "fer202-4-3-slot4-bootstrap-slides",
+      "name": "4.2 Slide check — Bootstrap layout & components",
+      "level": "BEGINNER",
+      "description": "10 câu trắc nghiệm slide Slot 4–5: lưới, container, mốc, offset, gutter, component."
+    },
+    {
+      "slug": "fer202-4-ex5-bootstrap-setup",
+      "name": "4.4 Exercise 5 — Getting started with Bootstrap",
+      "level": "BEGINNER",
+      "description": "Sắp xếp các bước cài Bootstrap vào dự án Vite + thứ tự mốc màn hình + 4 câu kiểm tra cài đặt."
+    },
+    {
+      "slug": "fer202-4-ex6-grid-layout",
+      "name": "4.5 Exercise 6 — Layouts with the Bootstrap grid",
+      "level": "BEGINNER",
+      "description": "4 bài: khung trang header/sidebar/main/footer, offset + order theo mốc, lưới lồng + cột tự động, gallery row-cols + gutter."
+    },
+    {
+      "slug": "fer202-4-ex7-cards",
+      "name": "4.6 Exercise 7 — Cards column",
+      "level": "BEGINNER",
+      "description": "3 bài: cấu tạo Card, cột thẻ cao bằng nhau, thẻ nằm ngang."
+    },
+    {
+      "slug": "fer202-4-ex8-form-controls",
+      "name": "4.7 Exercise 8 — Form controls",
+      "level": "BEGINNER",
+      "description": "4 bài: Form.Group + nhãn, select/radio/checkbox/switch controlled, InputGroup + FloatingLabel, phản hồi kiểm hợp lệ isInvalid."
+    },
+    {
+      "slug": "fer202-4-4-slot7-react-bootstrap-slides",
+      "name": "4.8 Slide check — React-Bootstrap",
+      "level": "BEGINNER",
+      "description": "8 câu trắc nghiệm slide Slot 7 React-Bootstrap."
+    },
+    {
+      "slug": "fer202-4-ex10-react-bootstrap",
+      "name": "4.9 Exercise 10 — React-Bootstrap components",
+      "level": "BEGINNER",
+      "description": "4 bài: Alert đóng/mở bằng state, Table có dòng tổng, Tabs controlled, Modal xác nhận xoá."
+    },
+    {
+      "slug": "fer202-4-interview-bootstrap",
+      "name": "Interview corner — Bootstrap & responsive UI",
+      "level": "BEGINNER",
+      "description": "8 câu phỏng vấn: mobile-first, lưới flexbox, React-Bootstrap vs JS Bootstrap, controlled/uncontrolled, ghi đè CSS, a11y, Tailwind."
     }
   ]
 }

@@ -1,0 +1,352 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-3-slot4-bootstrap-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-3-slot4-bootstrap-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: Bootstrap grid and components",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "grid",
+        "container",
+        "breakpoints",
+        "components"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "quiz"
+      ],
+      "problemHtml": "<p>Ten questions on the Bootstrap 5 grid and components — the kind that appear in the FE multiple-choice exam.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười câu về lưới và component Bootstrap 5 — đúng dạng câu hỏi trong đề trắc nghiệm FE.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mọi câu về số cột: tổng tối đa 12 mỗi hàng.",
+        "Class có mốc (col-md-6) áp từ mốc đó TRỞ LÊN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: Bootstrap grid and components\n\nAnswer in the panel on the left (no code needed).\n\n1. How many columns does the Bootstrap grid have per row?\n2. .container-fluid is…\n3. <div class=\"col-12 col-md-6\"> on a 1000px screen is…\n4. Which class centers a 6-column block in a row?\n5. What is the breakpoint of lg?\n6. Which class adds space BETWEEN columns of a row?\n7. Bootstrap 5 replaced ml-3 with…\n8. A green alert box is created with…\n9. Which components exist in Bootstrap 5? (choose all)\n10. <div class=\"d-none d-lg-block\"> is visible on…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: Bootstrap grid and components — answer key\n\n1. How many columns does the Bootstrap grid have per row?\n   Answer: b) 12\n   A row is divided into 12 columns. / Một hàng chia 12 cột.\n\n2. .container-fluid is…\n   Answer: b) 100% wide at every breakpoint\n   .container has a max-width per breakpoint; .container-fluid is always 100%. / .container có max-width theo mốc; .container-fluid luôn 100%.\n\n3. <div class=\"col-12 col-md-6\"> on a 1000px screen is…\n   Answer: b) 6 columns wide\n   1000px ≥ md (768px) so col-md-6 applies. / 1000px ≥ md (768px) nên col-md-6 có hiệu lực.\n\n4. Which class centers a 6-column block in a row?\n   Answer: b) col-6 offset-3\n   3 empty columns + 6 + 3 = 12 → centered. / 3 cột trống + 6 + 3 = 12 → ở giữa.\n\n5. What is the breakpoint of lg?\n   Answer: c) ≥ 992px\n   sm 576 · md 768 · lg 992 · xl 1200 · xxl 1400. / sm 576 · md 768 · lg 992 · xl 1200 · xxl 1400.\n\n6. Which class adds space BETWEEN columns of a row?\n   Answer: a) g-3 on the row\n   Gutters (g-*, gx-*, gy-*) control spacing between columns. / Gutter (g-*, gx-*, gy-*) điều khiển khoảng cách giữa các cột.\n\n7. Bootstrap 5 replaced ml-3 with…\n   Answer: b) ms-3\n   start/end (ms/me) supports right-to-left languages. / start/end (ms/me) hỗ trợ ngôn ngữ viết từ phải sang trái.\n\n8. A green alert box is created with…\n   Answer: a) alert alert-success\n   Contextual classes: alert-primary, -success, -danger, -warning, -info… / Class ngữ cảnh: alert-primary, -success, -danger, -warning, -info…\n\n9. Which components exist in Bootstrap 5? (choose all)\n   Answer: a) Card + c) Accordion + d) Offcanvas\n   Jumbotron was removed in v5 (use utilities instead); Accordion and Offcanvas are new. / Jumbotron bị bỏ ở v5 (thay bằng tiện ích); Accordion và Offcanvas là mới.\n\n10. <div class=\"d-none d-lg-block\"> is visible on…\n   Answer: b) large screens and up\n   Hidden by default, shown as block from lg upward. / Mặc định ẩn, hiện dạng block từ lg trở lên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "How many columns does the Bootstrap grid have per row?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A row is divided into 12 columns.</p><p><i>🇻🇳 Một hàng chia 12 cột.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<code>.container-fluid</code> is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fixed 1140px"
+              },
+              {
+                "ma": "b",
+                "noiDung": "100% wide at every breakpoint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "hidden on mobile"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a flex column"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><code>.container</code> has a max-width per breakpoint; <code>.container-fluid</code> is always 100%.</p><p><i>🇻🇳 .container có max-width theo mốc; .container-fluid luôn 100%.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<code>&lt;div class=\"col-12 col-md-6\"&gt;</code> on a 1000px screen is…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12 columns wide"
+              },
+              {
+                "ma": "b",
+                "noiDung": "6 columns wide"
+              },
+              {
+                "ma": "c",
+                "noiDung": "hidden"
+              },
+              {
+                "ma": "d",
+                "noiDung": "auto width"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>1000px ≥ md (768px) so <code>col-md-6</code> applies.</p><p><i>🇻🇳 1000px ≥ md (768px) nên col-md-6 có hiệu lực.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Which class centers a 6-column block in a row?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>col-6 center</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>col-6 offset-3</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>col-6 mx-6</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>col-6 offset-6</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>3 empty columns + 6 + 3 = 12 → centered.</p><p><i>🇻🇳 3 cột trống + 6 + 3 = 12 → ở giữa.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "What is the breakpoint of <code>lg</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "≥ 576px"
+              },
+              {
+                "ma": "b",
+                "noiDung": "≥ 768px"
+              },
+              {
+                "ma": "c",
+                "noiDung": "≥ 992px"
+              },
+              {
+                "ma": "d",
+                "noiDung": "≥ 1200px"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>sm 576 · md 768 · lg 992 · xl 1200 · xxl 1400.</p><p><i>🇻🇳 sm 576 · md 768 · lg 992 · xl 1200 · xxl 1400.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "Which class adds space BETWEEN columns of a row?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>g-3</code> on the row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>p-3</code> on the container"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>space-3</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>gap-row</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Gutters (<code>g-*</code>, <code>gx-*</code>, <code>gy-*</code>) control spacing between columns.</p><p><i>🇻🇳 Gutter (g-*, gx-*, gy-*) điều khiển khoảng cách giữa các cột.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "Bootstrap 5 replaced <code>ml-3</code> with…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>left-3</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>ms-3</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>ml-3</code> still works"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>mx-3</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>start/end (<code>ms</code>/<code>me</code>) supports right-to-left languages.</p><p><i>🇻🇳 start/end (ms/me) hỗ trợ ngôn ngữ viết từ phải sang trái.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "A green alert box is created with…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>alert alert-success</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>alert-green</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>box success</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>alert bg-success-alert</code>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Contextual classes: alert-primary, -success, -danger, -warning, -info…</p><p><i>🇻🇳 Class ngữ cảnh: alert-primary, -success, -danger, -warning, -info…</i></p>"
+          },
+          {
+            "ma": "q9",
+            "de": "Which components exist in Bootstrap 5? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Card"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Jumbotron"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Accordion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Offcanvas"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Jumbotron was removed in v5 (use utilities instead); Accordion and Offcanvas are new.</p><p><i>🇻🇳 Jumbotron bị bỏ ở v5 (thay bằng tiện ích); Accordion và Offcanvas là mới.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q10",
+            "de": "<code>&lt;div class=\"d-none d-lg-block\"&gt;</code> is visible on…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "phones only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "large screens and up"
+              },
+              {
+                "ma": "c",
+                "noiDung": "every screen"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no screen"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hidden by default, shown as block from lg upward.</p><p><i>🇻🇳 Mặc định ẩn, hiện dạng block từ lg trở lên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm <code>.container</code> (bề rộng cố định theo mốc) với <code>.container-fluid</code> (100%)."
+        },
+        {
+          "loi": "Nhầm tên class Bootstrap 4 (ml-, mr-, float-left) với Bootstrap 5 (ms-, me-, float-start)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fluid",
+          "vi": "co giãn 100% bề rộng"
+        },
+        {
+          "en": "offset",
+          "vi": "dịch cột sang phải bằng số cột trống"
+        }
+      ]
+    }
+  ]
+}

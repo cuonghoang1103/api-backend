@@ -96,6 +96,12 @@ export function tinh(q) {
     ? { loai, bang: q.bang.map((b) => ({ ...b, giaiThich: haiNgu(b.giaiThich) })) }
     : { loai, cauHoi: q.cauHoi.map((c) => ({ ...c, giaiThich: haiNgu(c.giaiThich) })) };
   const { cauHoi: _c, bang: _b, loai: _l, ...rest } = q;
+  // mẹo làm bài (cũng giữ đề ≥ 300 ký tự như seed yêu cầu)
+  const meo = {
+    en: '<p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>',
+    vi: '<p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>',
+  };
+  if (rest.moTa && typeof rest.moTa === 'object') rest.moTa = { en: rest.moTa.en + meo.en, vi: rest.moTa.vi + meo.vi };
   return {
     ngonNgu: 'text',
     yeuCau: q.yeuCau || [

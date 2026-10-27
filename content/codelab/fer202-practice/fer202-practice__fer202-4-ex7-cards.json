@@ -1,0 +1,312 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-ex7-cards",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-ex7-cards"
+  },
+  "exercises": [
+    {
+      "title": "Card anatomy: image, body, footer",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Card",
+        "Card.Img",
+        "Card.Body",
+        "Card.Footer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "card"
+      ],
+      "problemHtml": "<p>Build one complete card with every part in the right place: top image, body with title, subtitle, text and a button, and a muted footer.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Card#course</code> (<code>style={{ width: '18rem' }}</code>): <code>Card.Img variant=\"top\"</code>, <code>Card.Body</code> → <code>Card.Title</code> \"React Basics\", <code>Card.Subtitle</code> \"Beginner\", <code>Card.Text</code>, <code>Button</code> \"Enroll\".</li>\n  <li><code>Card.Footer className=\"text-muted\"</code> \"Updated 3 days ago\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng một thẻ đầy đủ, mỗi phần đúng chỗ: ảnh trên cùng, phần thân có tiêu đề, phụ đề, nội dung và nút, và chân thẻ chữ mờ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Card#course</code> (<code>style={{ width: '18rem' }}</code>): <code>Card.Img variant=\"top\"</code>, <code>Card.Body</code> → <code>Card.Title</code> \"React Basics\", <code>Card.Subtitle</code> \"Beginner\", <code>Card.Text</code>, <code>Button</code> \"Enroll\".</li>\n  <li><code>Card.Footer className=\"text-muted\"</code> \"Updated 3 days ago\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Card.Img variant=\"top\" src=… />",
+          "output": "<img class=\"card-img-top\">",
+          "explanation": "variant=\"top\" rounds only the top corners.|||variant=\"top\" chỉ bo hai góc trên."
+        }
+      ],
+      "hintsJson": [
+        "Card.Img nằm NGOÀI Card.Body; Title/Subtitle/Text/Button nằm TRONG Card.Body.",
+        "Card.Subtitle thường kèm className=\"mb-2 text-muted\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\n\nexport default function App() {\n  return (\n    <div id=\"course\">\n      <img src=\"https://api.dicebear.com/9.x/shapes/svg?seed=react\" alt=\"React\" />\n      <h5>React Basics</h5>\n      <p>Components, props and state.</p>\n      <button>Enroll</button>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — thẻ đầy đủ: Img (ngoài Body) → Body (Title, Subtitle, Text, Button) → Footer\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Button, Card } from 'react-bootstrap';\n\nexport default function App() {\n  return (\n    <div className=\"p-3\">\n      <Card id=\"course\" style={{ width: '18rem' }}>\n        <Card.Img variant=\"top\" src=\"https://api.dicebear.com/9.x/shapes/svg?seed=react\" alt=\"React\" />\n        <Card.Body>\n          <Card.Title>React Basics</Card.Title>\n          <Card.Subtitle className=\"mb-2 text-muted\">Beginner</Card.Subtitle>\n          <Card.Text>Components, props and state.</Card.Text>\n          <Button variant=\"primary\">Enroll</Button>\n        </Card.Body>\n        <Card.Footer className=\"text-muted\">Updated 3 days ago</Card.Footer>\n      </Card>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cấu trúc thẻ: <code>.card</code> → (<code>.card-img-top</code>) → <code>.card-body</code> chứa <code>.card-title</code>/<code>.card-subtitle</code>/<code>.card-text</code> → <code>.card-footer</code>. React-Bootstrap đặt đúng class cho từng phần.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Top image is a direct child of the card",
+            "kiem": "ton-tai",
+            "selector": "#course.card > img.card-img-top"
+          },
+          {
+            "moTa": "Body parts in order",
+            "kiem": "danh-sach-text",
+            "selector": "#course .card-body > *",
+            "mongDoi": [
+              "React Basics",
+              "Beginner",
+              "Components, props and state.",
+              "Enroll"
+            ]
+          },
+          {
+            "moTa": "Muted footer",
+            "kiem": "text",
+            "selector": "#course > .card-footer.text-muted",
+            "giaTri": "Updated 3 days ago"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt ảnh bên trong <code>Card.Body</code> ⇒ ảnh bị đệm lề, không sát mép thẻ."
+        },
+        {
+          "loi": "Dùng <code>&lt;h5&gt;</code> trơn thay cho <code>Card.Title</code> ⇒ mất class <code>card-title</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "card",
+          "vi": "thẻ nội dung"
+        },
+        {
+          "en": "muted",
+          "vi": "màu chữ nhạt"
+        }
+      ]
+    },
+    {
+      "title": "Cards column grid with equal heights",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "row-cols",
+        "h-100",
+        "Card list",
+        "Badge"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "card",
+        "grid"
+      ],
+      "problemHtml": "<p>Render the courses as a responsive \"cards column\": 1 per row on phones, 2 from <code>md</code>, 4 from <code>lg</code>, gutter 4. Cards in a row must have the same height even if their text differs (<code>h-100</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Row id=\"courses\" xs={1} md={2} lg={4} className=\"g-4\"</code>; each course a <code>Col</code> → <code>Card.course-card.h-100</code>.</li>\n  <li>Inside: image, title, text and a level <code>Badge</code> (Beginner = success, Intermediate = warning, Advanced = danger).</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiển thị các khoá học dạng \"cột thẻ\" responsive: 1 thẻ/hàng trên điện thoại, 2 từ <code>md</code>, 4 từ <code>lg</code>, gutter 4. Thẻ trong cùng hàng phải cao bằng nhau dù nội dung khác nhau (<code>h-100</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Row id=\"courses\" xs={1} md={2} lg={4} className=\"g-4\"</code>; mỗi khoá một <code>Col</code> → <code>Card.course-card.h-100</code>.</li>\n  <li>Bên trong: ảnh, tiêu đề, nội dung và <code>Badge</code> cấp độ (Beginner = success, Intermediate = warning, Advanced = danger).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "level: 'Advanced'",
+          "output": "<span class=\"badge bg-danger\">Advanced</span>",
+          "explanation": "Map level → colour with a lookup object.|||Ánh xạ cấp độ → màu bằng object tra cứu."
+        }
+      ],
+      "hintsJson": [
+        "<Row xs={1} md={2} lg={4} className=\"g-4\"> rồi COURSES.map(c => <Col key={c.id}><Card className=\"course-card h-100\">…</Card></Col>).",
+        "const LEVEL_BG = { Beginner: 'success', Intermediate: 'warning', Advanced: 'danger' };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nconst COURSES = [\n  { id: 1, title: 'React Basics', text: 'Components, props and state.', level: 'Beginner', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=react' },\n  { id: 2, title: 'React Router', text: 'Pages, params and nested routes.', level: 'Intermediate', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=router' },\n  { id: 3, title: 'Redux Toolkit', text: 'Global state the modern way.', level: 'Advanced', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=redux' },\n  { id: 4, title: 'Testing React', text: 'Jest and Testing Library.', level: 'Advanced', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=test' },\n];\n\nexport default function App() {\n  return (\n    <div id=\"courses\">\n      {COURSES.map((c) => <div key={c.id}>{c.title}</div>)}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — row-cols cho số thẻ mỗi hàng; h-100 cho thẻ cao bằng nhau\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Badge, Card, Col, Container, Row } from 'react-bootstrap';\n\nconst COURSES = [\n  { id: 1, title: 'React Basics', text: 'Components, props and state.', level: 'Beginner', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=react' },\n  { id: 2, title: 'React Router', text: 'Pages, params and nested routes.', level: 'Intermediate', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=router' },\n  { id: 3, title: 'Redux Toolkit', text: 'Global state the modern way.', level: 'Advanced', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=redux' },\n  { id: 4, title: 'Testing React', text: 'Jest and Testing Library.', level: 'Advanced', img: 'https://api.dicebear.com/9.x/shapes/svg?seed=test' },\n];\n\nconst LEVEL_BG = { Beginner: 'success', Intermediate: 'warning', Advanced: 'danger' };\n\nexport default function App() {\n  return (\n    <Container className=\"py-3\">\n      <Row id=\"courses\" xs={1} md={2} lg={4} className=\"g-4\">\n        {COURSES.map((c) => (\n          <Col key={c.id}>\n            <Card className=\"course-card h-100\">\n              <Card.Img variant=\"top\" src={c.img} alt={c.title} />\n              <Card.Body>\n                <Card.Title>{c.title}</Card.Title>\n                <Card.Text>{c.text}</Card.Text>\n                <Badge bg={LEVEL_BG[c.level]}>{c.level}</Badge>\n              </Card.Body>\n            </Card>\n          </Col>\n        ))}\n      </Row>\n    </Container>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cột flex trong hàng đã cao bằng nhau; <code>h-100</code> cho thẻ chiếm hết chiều cao cột đó. Màu badge theo cấp độ lấy từ object tra cứu — thêm cấp độ mới chỉ thêm một dòng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "row-cols 1 / md 2 / lg 4 with g-4",
+            "kiem": "ton-tai",
+            "selector": "#courses.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4"
+          },
+          {
+            "moTa": "4 equal-height cards inside cols",
+            "kiem": "so-luong",
+            "selector": "#courses > .col > .card.course-card.h-100",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Badge colours follow the level",
+            "kiem": "danh-sach-text",
+            "selector": ".course-card .badge.bg-success, .course-card .badge.bg-warning, .course-card .badge.bg-danger",
+            "mongDoi": [
+              "Beginner",
+              "Intermediate",
+              "Advanced",
+              "Advanced"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thiếu <code>h-100</code> ⇒ thẻ cao thấp lệch nhau trong cùng hàng."
+        },
+        {
+          "loi": "Map trực tiếp <code>Card</code> trong <code>Row</code> (không có <code>Col</code>) ⇒ gutter và row-cols không áp dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equal height",
+          "vi": "cao bằng nhau"
+        }
+      ]
+    },
+    {
+      "title": "Horizontal card with a nested grid",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "horizontal card",
+        "g-0",
+        "img-fluid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "card"
+      ],
+      "problemHtml": "<p>Make a horizontal card: image on the left (4 columns), content on the right (8 columns) from <code>md</code>; stacked on phones. Use a <code>Row className=\"g-0\"</code> inside the card so there is no gap between image and body.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Card#horizontal</code> → <code>Row.g-0</code> → <code>Col md={4}</code> with <code>img.img-fluid.rounded-start</code> + <code>Col md={8}</code> with <code>Card.Body</code> (title, text, <code>small.text-muted</code> \"Last updated 5 mins ago\").</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm thẻ nằm ngang: ảnh bên trái (4 cột), nội dung bên phải (8 cột) từ <code>md</code>; xếp chồng trên điện thoại. Dùng <code>Row className=\"g-0\"</code> trong thẻ để ảnh và thân thẻ sát nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Card#horizontal</code> → <code>Row.g-0</code> → <code>Col md={4}</code> chứa <code>img.img-fluid.rounded-start</code> + <code>Col md={8}</code> chứa <code>Card.Body</code> (tiêu đề, nội dung, <code>small.text-muted</code> \"Last updated 5 mins ago\").</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "<Row className=\"g-0\">",
+          "output": "no gutter between the two columns",
+          "explanation": "g-0 removes the default gutter.|||g-0 bỏ gutter mặc định."
+        }
+      ],
+      "hintsJson": [
+        "Dùng <img className=\"img-fluid rounded-start\"> thay vì Card.Img để ảnh nằm trong cột.",
+        "Lưới bên trong thẻ: <Card><Row className=\"g-0\"><Col md={4}>…</Col><Col md={8}>…</Col></Row></Card>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Card } from 'react-bootstrap';\n\nexport default function App() {\n  return (\n    <Card id=\"horizontal\">\n      <Card.Img src=\"https://api.dicebear.com/9.x/shapes/svg?seed=hz\" />\n      <Card.Body>\n        <Card.Title>Modern JavaScript</Card.Title>\n        <Card.Text>ES6+ features every React developer uses.</Card.Text>\n      </Card.Body>\n    </Card>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — thẻ ngang: lưới g-0 trong thẻ, ảnh 4 cột + thân 8 cột từ md\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Card, Col, Container, Row } from 'react-bootstrap';\n\nexport default function App() {\n  return (\n    <Container className=\"py-3\">\n      <Card id=\"horizontal\" style={{ maxWidth: 560 }}>\n        <Row className=\"g-0\">\n          <Col md={4}>\n            <img src=\"https://api.dicebear.com/9.x/shapes/svg?seed=hz\" className=\"img-fluid rounded-start\" alt=\"Modern JavaScript\" />\n          </Col>\n          <Col md={8}>\n            <Card.Body>\n              <Card.Title>Modern JavaScript</Card.Title>\n              <Card.Text>ES6+ features every React developer uses.</Card.Text>\n              <Card.Text><small className=\"text-muted\">Last updated 5 mins ago</small></Card.Text>\n            </Card.Body>\n          </Col>\n        </Row>\n      </Card>\n    </Container>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thẻ ngang là một lưới lồng trong thẻ: hàng không gutter, ảnh co giãn trong cột 4, thân thẻ trong cột 8. Dưới md hai cột thành 100% và xếp chồng.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Card contains a g-0 row",
+            "kiem": "ton-tai",
+            "selector": "#horizontal.card > .row.g-0"
+          },
+          {
+            "moTa": "Image column md-4, body column md-8",
+            "kiem": "so-luong",
+            "selector": "#horizontal .col-md-4 > img.img-fluid.rounded-start, #horizontal .col-md-8 > .card-body",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Muted \"last updated\" note",
+            "kiem": "text",
+            "selector": "#horizontal small.text-muted",
+            "giaTri": "Last updated 5 mins ago"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên <code>g-0</code> ⇒ khe trắng giữa ảnh và chữ."
+        },
+        {
+          "loi": "Ảnh không có <code>img-fluid</code> ⇒ tràn khỏi cột."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rounded-start",
+          "vi": "bo góc phía bắt đầu (bên trái)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-4-slot7-react-bootstrap-slides",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-4-slot7-react-bootstrap-slides"
+  },
+  "exercises": [
+    {
+      "title": "Slide check: React-Bootstrap components",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "react-bootstrap",
+        "props",
+        "controlled components"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react-bootstrap",
+        "quiz"
+      ],
+      "problemHtml": "<p>Eight questions on using Bootstrap through React components.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám câu về cách dùng Bootstrap qua component React.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prop của React-Bootstrap luôn được dịch thành class Bootstrap.",
+        "Component có trạng thái mở/đóng (Modal, Alert, Toast) nhận show + hàm đóng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: React-Bootstrap components\n\nAnswer in the panel on the left (no code needed).\n\n1. Correct import of a Button?\n2. <Button variant=\"outline-success\" size=\"lg\"> produces…\n3. How do you open a React-Bootstrap Modal?\n4. Which subcomponents belong to Card? (choose all)\n5. <Row xs={1} md={3}> means…\n6. What does the as prop do?\n7. Form validation styles appear when…\n8. Why prefer Navbar.Collapse + Navbar.Toggle over a plain list of links?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Slide check: React-Bootstrap components — answer key\n\n1. Correct import of a Button?\n   Answer: b) import { Button } from 'react-bootstrap'\n   Named import from react-bootstrap (or the per-component path react-bootstrap/Button). / Import có tên từ react-bootstrap (hoặc đường dẫn riêng react-bootstrap/Button).\n\n2. <Button variant=\"outline-success\" size=\"lg\"> produces…\n   Answer: a) btn btn-outline-success btn-lg\n   variant ⇒ btn-{variant}, size ⇒ btn-{size}. / variant ⇒ btn-{variant}, size ⇒ btn-{size}.\n\n3. How do you open a React-Bootstrap Modal?\n   Answer: b) Set a state to true and pass it as show\n   Modals are controlled: show={isOpen} and onHide={() => setOpen(false)}. / Modal là controlled: show={isOpen} và onHide={() => setOpen(false)}.\n\n4. Which subcomponents belong to Card? (choose all)\n   Answer: a) Card.Body + b) Card.Title + d) Card.Img\n   Card has Body, Title, Subtitle, Text, Img, Header, Footer, Link — no Row. / Card có Body, Title, Subtitle, Text, Img, Header, Footer, Link — không có Row.\n\n5. <Row xs={1} md={3}> means…\n   Answer: b) 1 column per row on phones, 3 per row from md\n   Numeric props on Row become row-cols-* classes. / Prop số trên Row thành class row-cols-*.\n\n6. What does the as prop do?\n   Answer: b) Changes the rendered HTML element/component while keeping the styles\n   e.g. <Nav.Link as={NavLink} to=\"/\"> renders a router link with Bootstrap styles. / vd vẽ link của router với giao diện Bootstrap.\n\n7. Form validation styles appear when…\n   Answer: a) You add validated to Form (after submit) or isInvalid to a control\n   validated adds .was-validated (browser rules); isInvalid/isValid are for your own rules. / validated thêm .was-validated (luật trình duyệt); isInvalid/isValid dành cho luật của bạn.\n\n8. Why prefer Navbar.Collapse + Navbar.Toggle over a plain list of links?\n   Answer: b) They collapse the menu into a hamburger on small screens\n   With expand=\"lg\", below lg the links hide behind the toggle button. / Với expand=\"lg\", dưới lg các link ẩn sau nút ☰.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "Correct import of a Button?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>import Button from 'bootstrap'</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>import { Button } from 'react-bootstrap'</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>import { Button } from 'react'</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>import 'react-bootstrap/Button.css'</code>"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Named import from react-bootstrap (or the per-component path <code>react-bootstrap/Button</code>).</p><p><i>🇻🇳 Import có tên từ react-bootstrap (hoặc đường dẫn riêng react-bootstrap/Button).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<code>&lt;Button variant=\"outline-success\" size=\"lg\"&gt;</code> produces…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>btn btn-outline-success btn-lg</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>button success outline large</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>btn-success-outline lg</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "inline styles"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>variant ⇒ btn-{variant}, size ⇒ btn-{size}.</p><p><i>🇻🇳 variant ⇒ btn-{variant}, size ⇒ btn-{size}.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "How do you open a React-Bootstrap Modal?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>$('#myModal').modal('show')</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Set a state to true and pass it as <code>show</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Call <code>Modal.open()</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add class <code>show</code> by hand"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Modals are controlled: <code>show={isOpen}</code> and <code>onHide={() =&gt; setOpen(false)}</code>.</p><p><i>🇻🇳 Modal là controlled: show={isOpen} và onHide={() => setOpen(false)}.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "Which subcomponents belong to Card? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>Card.Body</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>Card.Title</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>Card.Row</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>Card.Img</code>"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>Card has Body, Title, Subtitle, Text, Img, Header, Footer, Link — no Row.</p><p><i>🇻🇳 Card có Body, Title, Subtitle, Text, Img, Header, Footer, Link — không có Row.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "q5",
+            "de": "<code>&lt;Row xs={1} md={3}&gt;</code> means…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every Col is md-3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 column per row on phones, 3 per row from md"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the row is 3px tall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "invalid prop"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Numeric props on Row become row-cols-* classes.</p><p><i>🇻🇳 Prop số trên Row thành class row-cols-*.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "What does the <code>as</code> prop do?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Renames the component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Changes the rendered HTML element/component while keeping the styles"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Adds an alias import"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Sets aria-label"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>e.g. <code>&lt;Nav.Link as={NavLink} to=\"/\"&gt;</code> renders a router link with Bootstrap styles.</p><p><i>🇻🇳 vd <Nav.Link as={NavLink} to=\"/\"> vẽ link của router với giao diện Bootstrap.</i></p>"
+          },
+          {
+            "ma": "q7",
+            "de": "Form validation styles appear when…",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "You add <code>validated</code> to Form (after submit) or <code>isInvalid</code> to a control"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Always"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only with Formik"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in Bootstrap 4"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p><code>validated</code> adds .was-validated (browser rules); <code>isInvalid</code>/<code>isValid</code> are for your own rules.</p><p><i>🇻🇳 validated thêm .was-validated (luật trình duyệt); isInvalid/isValid dành cho luật của bạn.</i></p>"
+          },
+          {
+            "ma": "q8",
+            "de": "Why prefer <code>Navbar.Collapse</code> + <code>Navbar.Toggle</code> over a plain list of links?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They look nicer only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They collapse the menu into a hamburger on small screens"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They add routing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>With <code>expand=\"lg\"</code>, below lg the links hide behind the toggle button.</p><p><i>🇻🇳 Với expand=\"lg\", dưới lg các link ẩn sau nút ☰.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm <code>variant</code> (màu) với <code>bg</code> (màu nền của Badge/Navbar)."
+        },
+        {
+          "loi": "Quên import component từ <code>react-bootstrap</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subcomponent",
+          "vi": "component con dạng Card.Body, Modal.Header…"
+        }
+      ]
+    }
+  ]
+}

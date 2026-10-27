@@ -1,0 +1,534 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-ex10-react-bootstrap",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-ex10-react-bootstrap"
+  },
+  "exercises": [
+    {
+      "title": "Dismissible alert controlled by state",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Alert",
+        "dismissible",
+        "show/onClose"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react-bootstrap",
+        "alert"
+      ],
+      "problemHtml": "<p>React-Bootstrap components are <b>controlled</b>: you keep the \"is it visible?\" flag in state and pass it as <code>show</code>. Build an alert that can be closed and shown again.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Alert variant=\"warning\" dismissible id=\"notice\"</code> visible at start with heading \"Maintenance tonight\".</li>\n  <li>Closing it shows <code>Button#btn-show</code> \"Show notice\" which brings it back.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component React-Bootstrap là <b>controlled</b>: bạn giữ cờ \"có hiện không?\" trong state và truyền vào <code>show</code>. Làm một alert đóng được và mở lại được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Alert variant=\"warning\" dismissible id=\"notice\"</code> hiện lúc đầu với tiêu đề \"Maintenance tonight\".</li>\n  <li>Đóng nó thì hiện <code>Button#btn-show</code> \"Show notice\" để mở lại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click × on the alert",
+          "output": "alert gone, \"Show notice\" button visible",
+          "explanation": "onClose={() => setShow(false)}|||onClose={() => setShow(false)}"
+        }
+      ],
+      "hintsJson": [
+        "const [show, setShow] = useState(true);",
+        "<Alert show={show} onClose={() => setShow(false)} dismissible> … </Alert> {!show && <Button …>}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Alert } from 'react-bootstrap';\n\nexport default function App() {\n  return (\n    <Alert id=\"notice\" variant=\"warning\" dismissible>\n      <Alert.Heading>Maintenance tonight</Alert.Heading>\n      The site will be down from 23:00 to 01:00.\n    </Alert>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — show nằm trong state; × gọi onClose để đổi state\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { useState } from 'react';\nimport { Alert, Button } from 'react-bootstrap';\n\nexport default function App() {\n  const [show, setShow] = useState(true);\n  return (\n    <div className=\"p-3\">\n      <Alert id=\"notice\" variant=\"warning\" dismissible show={show} onClose={() => setShow(false)}>\n        <Alert.Heading>Maintenance tonight</Alert.Heading>\n        The site will be down from 23:00 to 01:00.\n      </Alert>\n      {!show && <Button id=\"btn-show\" onClick={() => setShow(true)}>Show notice</Button>}\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hiển thị là dữ liệu: <code>show</code> trong state quyết định alert có mặt hay không; nút × chỉ gọi <code>onClose</code> để đổi state.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Warning alert visible at start",
+            "kiem": "text",
+            "selector": "#notice.alert-warning .alert-heading",
+            "giaTri": "Maintenance tonight"
+          },
+          {
+            "moTa": "× closes it and shows the button",
+            "kiem": "danh-sach-text",
+            "selector": "#notice, #btn-show",
+            "mongDoi": [
+              "Show notice"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notice .btn-close"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "moTa": "Button brings it back",
+            "kiem": "ton-tai",
+            "selector": "#notice.alert-warning",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#notice .btn-close"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-show"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm <code>dismissible</code> mà không có <code>onClose</code>/<code>show</code> ⇒ bấm × không có tác dụng."
+        },
+        {
+          "loi": "Dùng <code>document.getElementById(...).remove()</code> ⇒ phá DOM do React quản lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dismissible",
+          "vi": "đóng được bằng nút ×"
+        }
+      ]
+    },
+    {
+      "title": "Data table with React-Bootstrap Table",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Table",
+        "striped/hover/responsive",
+        "tfoot totals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react-bootstrap",
+        "table"
+      ],
+      "problemHtml": "<p>Render the order lines as a responsive striped table with a computed total row in <code>tfoot</code>. Numbers are right-aligned (<code>text-end</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Table striped bordered hover responsive id=\"lines\"</code>: Item · Qty · Price · Amount; amounts = qty × price.</li>\n  <li><code>tfoot</code> row: \"Total\" spanning 3 columns + total amount <code>#grand-total</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vẽ các dòng đơn hàng thành bảng sọc responsive, có dòng tổng tính sẵn trong <code>tfoot</code>. Cột số căn phải (<code>text-end</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Table striped bordered hover responsive id=\"lines\"</code>: Item · Qty · Price · Amount; thành tiền = qty × price.</li>\n  <li>Dòng <code>tfoot</code>: \"Total\" gộp 3 cột + tổng <code>#grand-total</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Pen 3 × 5,000",
+          "output": "Amount 15,000",
+          "explanation": "Format with toLocaleString('en-US').|||Định dạng bằng toLocaleString('en-US')."
+        }
+      ],
+      "hintsJson": [
+        "<Table striped bordered hover responsive> tự bọc div.table-responsive.",
+        "Tổng: LINES.reduce((s, l) => s + l.qty * l.price, 0)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nconst LINES = [\n  { id: 1, item: 'Notebook', qty: 2, price: 25000 },\n  { id: 2, item: 'Pen', qty: 3, price: 5000 },\n  { id: 3, item: 'Backpack', qty: 1, price: 320000 },\n];\n\nexport default function App() {\n  return <ul>{LINES.map((l) => <li key={l.id}>{l.item}</li>)}</ul>;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Table của React-Bootstrap + dòng tổng trong tfoot\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Table } from 'react-bootstrap';\n\nconst LINES = [\n  { id: 1, item: 'Notebook', qty: 2, price: 25000 },\n  { id: 2, item: 'Pen', qty: 3, price: 5000 },\n  { id: 3, item: 'Backpack', qty: 1, price: 320000 },\n];\nconst fmt = (n) => n.toLocaleString('en-US');\n\nexport default function App() {\n  const total = LINES.reduce((s, l) => s + l.qty * l.price, 0);\n  return (\n    <div className=\"p-3\">\n      <Table striped bordered hover responsive id=\"lines\">\n        <thead>\n          <tr><th>Item</th><th className=\"text-end\">Qty</th><th className=\"text-end\">Price</th><th className=\"text-end\">Amount</th></tr>\n        </thead>\n        <tbody>\n          {LINES.map((l) => (\n            <tr key={l.id}>\n              <td>{l.item}</td>\n              <td className=\"text-end\">{l.qty}</td>\n              <td className=\"text-end\">{fmt(l.price)}</td>\n              <td className=\"text-end amount\">{fmt(l.qty * l.price)}</td>\n            </tr>\n          ))}\n        </tbody>\n        <tfoot>\n          <tr>\n            <th colSpan={3}>Total</th>\n            <th className=\"text-end\" id=\"grand-total\">{fmt(total)}</th>\n          </tr>\n        </tfoot>\n      </Table>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Các prop của <code>Table</code> thêm class <code>table-striped/bordered/hover</code>; <code>responsive</code> bọc bảng trong vùng cuộn ngang. Tổng là giá trị suy ra, đặt ở <code>tfoot</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Table classes + responsive wrapper",
+            "kiem": "ton-tai",
+            "selector": ".table-responsive > table#lines.table.table-striped.table-bordered.table-hover"
+          },
+          {
+            "moTa": "Amounts computed",
+            "kiem": "danh-sach-text",
+            "selector": "#lines tbody .amount",
+            "mongDoi": [
+              "50,000",
+              "15,000",
+              "320,000"
+            ]
+          },
+          {
+            "moTa": "Total in tfoot",
+            "kiem": "text",
+            "selector": "#lines tfoot #grand-total",
+            "giaTri": "385,000"
+          },
+          {
+            "an": true,
+            "moTa": "Numbers right-aligned",
+            "kiem": "so-luong",
+            "selector": "#lines tbody td.text-end",
+            "giaTri": 9
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt dòng tổng trong <code>tbody</code> ⇒ khi sắp xếp/lọc nó bị lẫn với dữ liệu."
+        },
+        {
+          "loi": "Quên <code>responsive</code> ⇒ bảng tràn ngang trên điện thoại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tfoot",
+          "vi": "phần chân bảng"
+        }
+      ]
+    },
+    {
+      "title": "Tabs with a controlled active key",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Tabs",
+        "Tab",
+        "activeKey",
+        "onSelect"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react-bootstrap",
+        "tabs"
+      ],
+      "problemHtml": "<p>Profile tabs: Overview, Courses, Settings. Control the active tab with state so another button (\"Edit settings\") can switch tabs from outside.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Tabs id=\"profile-tabs\" activeKey={key} onSelect={setKey}</code> with <code>Tab eventKey=\"overview|courses|settings\"</code>.</li>\n  <li>Panels contain <code>#overview-pane</code>, <code>#courses-pane</code> (3 <code>li</code>), <code>#settings-pane</code>; <code>#btn-edit</code> switches to settings.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tab hồ sơ: Overview, Courses, Settings. Điều khiển tab đang mở bằng state để một nút khác (\"Edit settings\") có thể chuyển tab từ bên ngoài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Tabs id=\"profile-tabs\" activeKey={key} onSelect={setKey}</code> với <code>Tab eventKey=\"overview|courses|settings\"</code>.</li>\n  <li>Các khung chứa <code>#overview-pane</code>, <code>#courses-pane</code> (3 <code>li</code>), <code>#settings-pane</code>; <code>#btn-edit</code> chuyển sang settings.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click \"Courses\" tab",
+          "output": "the courses pane becomes active",
+          "explanation": "Controlled: onSelect updates key, Tabs re-renders with the new activeKey.|||Controlled: onSelect cập nhật key, Tabs vẽ lại với activeKey mới."
+        }
+      ],
+      "hintsJson": [
+        "const [key, setKey] = useState(\"overview\");",
+        "<Tabs activeKey={key} onSelect={(k) => setKey(k)} id=\"profile-tabs\">"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { Tab, Tabs } from 'react-bootstrap';\n\nexport default function App() {\n  return (\n    <Tabs id=\"profile-tabs\" defaultActiveKey=\"overview\">\n      <Tab eventKey=\"overview\" title=\"Overview\"><p id=\"overview-pane\">Hello!</p></Tab>\n    </Tabs>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — Tabs CONTROLLED: activeKey trong state, đổi được từ bất kỳ đâu\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { useState } from 'react';\nimport { Button, Tab, Tabs } from 'react-bootstrap';\n\nexport default function App() {\n  const [key, setKey] = useState('overview');\n  return (\n    <div className=\"p-3\">\n      <Button id=\"btn-edit\" variant=\"outline-secondary\" size=\"sm\" className=\"mb-2\" onClick={() => setKey('settings')}>Edit settings</Button>\n      <Tabs id=\"profile-tabs\" activeKey={key} onSelect={(k) => setKey(k)} className=\"mb-3\">\n        <Tab eventKey=\"overview\" title=\"Overview\"><p id=\"overview-pane\">Hello! You joined in 2025.</p></Tab>\n        <Tab eventKey=\"courses\" title=\"Courses\">\n          <ul id=\"courses-pane\"><li>React Basics</li><li>React Router</li><li>Redux Toolkit</li></ul>\n        </Tab>\n        <Tab eventKey=\"settings\" title=\"Settings\"><p id=\"settings-pane\">Notification settings</p></Tab>\n      </Tabs>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>defaultActiveKey</code> để component tự nhớ (uncontrolled); <code>activeKey</code> + <code>onSelect</code> đưa quyền điều khiển cho bạn, nên mọi nơi khác đều chuyển tab được bằng <code>setKey</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Three tabs, Overview active",
+            "kiem": "danh-sach-text",
+            "selector": "#profile-tabs .nav-link.active",
+            "mongDoi": [
+              "Overview"
+            ]
+          },
+          {
+            "moTa": "Clicking Courses activates its pane",
+            "kiem": "so-luong",
+            "selector": ".tab-pane.active #courses-pane li",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#profile-tabs-tab-courses"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "moTa": "#btn-edit switches to Settings",
+            "kiem": "ton-tai",
+            "selector": ".tab-pane.active #settings-pane",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#btn-edit"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Uses activeKey (controlled)",
+            "kiem": "ma-nguon",
+            "khop": "activeKey=\\{"
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <code>defaultActiveKey</code> (uncontrolled) rồi muốn đổi tab từ nút ngoài ⇒ không được."
+        },
+        {
+          "loi": "Trùng <code>eventKey</code> giữa hai Tab."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "controlled vs uncontrolled",
+          "vi": "do state của bạn điều khiển / tự component giữ"
+        }
+      ]
+    },
+    {
+      "title": "Confirm-delete modal",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "Modal",
+        "pending action state",
+        "list update"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "react-bootstrap",
+        "modal"
+      ],
+      "problemHtml": "<p>Deleting must be confirmed in a <b>Modal</b>. Remember WHICH item is waiting for confirmation (state <code>toDelete</code>); the modal is open whenever that state is not null.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ListGroup#tasks</code> with <code>ListGroup.Item.task</code> and a <code>.btn-del</code> each.</li>\n  <li>Modal title \"Delete task?\", body shows the task title; <code>#btn-confirm</code> deletes, <code>#btn-cancel</code> keeps it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xoá phải được xác nhận trong <b>Modal</b>. Hãy nhớ phần tử NÀO đang chờ xác nhận (state <code>toDelete</code>); modal mở khi state đó khác null.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ListGroup#tasks</code> với các <code>ListGroup.Item.task</code>, mỗi mục một nút <code>.btn-del</code>.</li>\n  <li>Tiêu đề modal \"Delete task?\", thân hiện tên công việc; <code>#btn-confirm</code> xoá, <code>#btn-cancel</code> giữ lại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "click delete on \"Write tests\", then Confirm",
+          "output": "2 tasks left",
+          "explanation": "show={toDelete !== null}|||show={toDelete !== null}"
+        }
+      ],
+      "hintsJson": [
+        "const [toDelete, setToDelete] = useState(null); — lưu cả object task.",
+        "Confirm: setTasks(ts => ts.filter(t => t.id !== toDelete.id)); setToDelete(null);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — STARTER\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { useState } from 'react';\nimport { Button, ListGroup } from 'react-bootstrap';\n\nexport default function App() {\n  const [tasks, setTasks] = useState([{ id: 1, title: 'Write tests' }, { id: 2, title: 'Fix bug #42' }, { id: 3, title: 'Deploy' }]);\n  return (\n    <ListGroup id=\"tasks\">\n      {tasks.map((t) => (\n        <ListGroup.Item key={t.id} className=\"task\">\n          {t.title} <Button size=\"sm\" className=\"btn-del\" onClick={() => setTasks(tasks.filter((x) => x.id !== t.id))}>Delete</Button>\n        </ListGroup.Item>\n      ))}\n    </ListGroup>\n  );\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "// src/App.js — MỘT state toDelete: vừa mở modal, vừa nhớ xoá cái gì\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport { useState } from 'react';\nimport { Button, ListGroup, Modal } from 'react-bootstrap';\n\nexport default function App() {\n  const [tasks, setTasks] = useState([{ id: 1, title: 'Write tests' }, { id: 2, title: 'Fix bug #42' }, { id: 3, title: 'Deploy' }]);\n  const [toDelete, setToDelete] = useState(null);\n\n  const confirm = () => {\n    setTasks((ts) => ts.filter((t) => t.id !== toDelete.id));\n    setToDelete(null);\n  };\n\n  return (\n    <div className=\"p-3\">\n      <ListGroup id=\"tasks\">\n        {tasks.map((t) => (\n          <ListGroup.Item key={t.id} className=\"task d-flex justify-content-between align-items-center\">\n            <span className=\"task-title\">{t.title}</span>\n            <Button size=\"sm\" variant=\"outline-danger\" className=\"btn-del\" onClick={() => setToDelete(t)}>Delete</Button>\n          </ListGroup.Item>\n        ))}\n      </ListGroup>\n\n      <Modal show={toDelete !== null} onHide={() => setToDelete(null)} centered>\n        <Modal.Header closeButton>\n          <Modal.Title>Delete task?</Modal.Title>\n        </Modal.Header>\n        <Modal.Body id=\"modal-body\">\"{toDelete?.title}\" will be removed.</Modal.Body>\n        <Modal.Footer>\n          <Button id=\"btn-cancel\" variant=\"secondary\" onClick={() => setToDelete(null)}>Cancel</Button>\n          <Button id=\"btn-confirm\" variant=\"danger\" onClick={confirm}>Delete</Button>\n        </Modal.Footer>\n      </Modal>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một state duy nhất (<code>toDelete</code>) vừa cho biết modal có mở không, vừa cho biết xoá cái gì — không thể lệch nhau. Huỷ chỉ đặt lại null; xác nhận lọc khỏi danh sách rồi đặt null.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "renderTu": "src/App.js",
+        "thuVien": [
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "kiem": [
+          {
+            "moTa": "Delete opens a modal naming the task",
+            "kiem": "danh-sach-text",
+            "selector": ".modal.show .modal-title, .modal.show #modal-body",
+            "mongDoi": [
+              "Delete task?",
+              "\"Write tests\" will be removed."
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".task:first-child .btn-del"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "moTa": "Nothing is deleted before confirming",
+            "kiem": "so-luong",
+            "selector": "#tasks .task",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".task:first-child .btn-del"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "moTa": "Confirm removes that task",
+            "kiem": "danh-sach-text",
+            "selector": "#tasks .task-title",
+            "mongDoi": [
+              "Fix bug #42",
+              "Deploy"
+            ],
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".task:first-child .btn-del"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-confirm"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "an": true,
+            "moTa": "Cancel keeps all tasks and closes",
+            "kiem": "so-luong",
+            "selector": "#tasks .task, .modal.show",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": ".task:nth-child(2) .btn-del"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-cancel"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 700
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "react",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng hai state (<code>show</code> + <code>selectedId</code>) dễ lệch nhau; một state <code>toDelete</code> là đủ."
+        },
+        {
+          "loi": "<code>window.confirm</code> — chặn luồng và không theo giao diện của app."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "modal",
+          "vi": "hộp thoại che trang"
+        },
+        {
+          "en": "pending action",
+          "vi": "hành động đang chờ xác nhận"
+        }
+      ]
+    }
+  ]
+}

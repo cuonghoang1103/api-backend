@@ -1,0 +1,293 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-interview-bootstrap",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-1-bootstrap"
+  },
+  "exercises": [
+    {
+      "title": "Interview corner — Bootstrap & responsive UI (Chapter 4)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "interview",
+        "Bootstrap & responsive UI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "fer202",
+        "interview"
+      ],
+      "problemHtml": "<p>Questions a junior React interviewer actually asks about <b>Bootstrap & responsive UI</b>. Pick the best answer; after you submit, each question shows a <b>model answer</b> you can say out loud in an interview (30–60 seconds).</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi phỏng vấn React junior thường gặp về <b>Bootstrap & responsive UI</b>. Chọn đáp án đúng nhất; sau khi nộp, mỗi câu hiện <b>câu trả lời mẫu</b> để bạn nói lại khi phỏng vấn (30–60 giây).</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Loại trừ đáp án nói \"luôn luôn\"/\"không bao giờ\" khi thực tế có ngoại lệ.",
+        "Đọc kỹ câu hỏi hỏi \"vì sao\" hay \"khi nào\" — đáp án đúng thường nêu được lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Bootstrap & responsive UI (Chapter 4)\n\nAnswer in the panel on the left (no code needed).\n\n1. Explain \"mobile-first\" in Bootstrap.\n2. How does the grid work under the hood?\n3. Why use React-Bootstrap instead of Bootstrap’s own JavaScript in a React app?\n4. Controlled vs uncontrolled component in a UI library?\n5. How do you override Bootstrap styles safely?\n6. Accessibility basics for forms built with Bootstrap?\n7. Bootstrap vs Tailwind — how would you compare them?\n8. A row of cards has different heights. Fix?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Interview corner — Bootstrap & responsive UI (Chapter 4) — answer key\n\n1. Explain \"mobile-first\" in Bootstrap.\n   Answer: b) Base styles target small screens; breakpoint classes like col-md-6 add rules from that width upward.\n   Model answer: \"Bootstrap writes the default for the smallest screen and uses min-width media queries for bigger ones. So col-12 col-md-6 means full width on phones and half from 768px up. I design the phone layout first and add breakpoints as space grows.\" / Trả lời mẫu: \"Bootstrap viết mặc định cho màn nhỏ nhất và dùng media query min-width cho màn lớn. Nên col-12 col-md-6 là rộng hết trên điện thoại và một nửa từ 768px. Tôi thiết kế bố cục điện thoại trước rồi thêm mốc khi có thêm chỗ.\"\n\n2. How does the grid work under the hood?\n   Answer: b) Flexbox rows divided into 12 columns, with gutters made by padding and negative margins.\n   Model answer: \"A row is a flex container; each column gets a percentage of 12. Gutters come from horizontal padding on columns balanced by negative margins on the row. Modern Bootstrap also has CSS Grid utilities, but the classic grid is flexbox.\" / Trả lời mẫu: \"Row là flex container; mỗi cột chiếm phần trăm theo 12. Gutter tạo bởi padding ngang của cột cân bằng bằng margin âm của row. Bootstrap mới có thêm tiện ích CSS Grid, nhưng lưới truyền thống là flexbox.\"\n\n3. Why use React-Bootstrap instead of Bootstrap’s own JavaScript in a React app?\n   Answer: b) Bootstrap’s JS manipulates the DOM directly and fights React; React-Bootstrap implements the behaviour as React components driven by state.\n   Model answer: \"Bootstrap's scripts toggle classes on DOM nodes React also controls, which leads to out-of-sync UI. React-Bootstrap re-implements modals, dropdowns, collapse as React components with props like show, so the state lives in React.\" / Trả lời mẫu: \"Script của Bootstrap tự đổi class trên nút DOM mà React cũng quản lý, dễ lệch giao diện. React-Bootstrap viết lại modal, dropdown, collapse thành component React với prop như show, nên state nằm trong React.\"\n\n4. Controlled vs uncontrolled component in a UI library?\n   Answer: b) Controlled: the parent owns the value/visibility via props (activeKey, show); uncontrolled: the component keeps it (defaultActiveKey).\n   Model answer: \"Uncontrolled is simpler — I give a default and the component remembers. I switch to controlled when something else needs to read or change the value, for example opening a tab from a button or closing a modal after an API call.\" / Trả lời mẫu: \"Uncontrolled đơn giản hơn — đưa giá trị mặc định là component tự nhớ. Tôi chuyển sang controlled khi nơi khác cần đọc/đổi giá trị, vd mở một tab từ nút hoặc đóng modal sau khi gọi API.\"\n\n5. How do you override Bootstrap styles safely?\n   Answer: b) Import your CSS after Bootstrap, use more specific selectors or Sass variables/CSS custom properties; avoid !important.\n   Model answer: \"Order matters: my stylesheet comes after Bootstrap. For theme changes I prefer Sass variables or Bootstrap's CSS variables (--bs-primary). I avoid editing node_modules and keep !important as a last resort.\" / Trả lời mẫu: \"Thứ tự quan trọng: CSS của tôi nạp sau Bootstrap. Muốn đổi theme tôi dùng biến Sass hoặc biến CSS của Bootstrap (--bs-primary). Không sửa node_modules, !important chỉ là cách cuối.\"\n\n6. Accessibility basics for forms built with Bootstrap?\n   Answer: b) Every input has a linked label (controlId/htmlFor), errors are announced, buttons have text, colour is not the only signal.\n   Model answer: \"Placeholders disappear when you type, so each field needs a real label linked by controlId. Error messages sit next to the field, and I don't rely on red alone — the text explains the problem.\" / Trả lời mẫu: \"Placeholder biến mất khi gõ nên mỗi ô cần nhãn thật nối bằng controlId. Câu lỗi nằm cạnh ô, và tôi không chỉ dựa vào màu đỏ — chữ phải nói rõ lỗi.\"\n\n7. Bootstrap vs Tailwind — how would you compare them?\n   Answer: b) Bootstrap ships ready components and a grid; Tailwind gives low-level utility classes to compose your own design — faster prototyping vs more custom look.\n   Model answer: \"Bootstrap is great when I need standard components quickly — like in an exam or an admin panel. Tailwind is utility-first: more freedom for a unique design, but I build components myself. Both work with React; the choice depends on design needs and team habits.\" / Trả lời mẫu: \"Bootstrap hợp khi cần component chuẩn nhanh — như phòng thi hay trang quản trị. Tailwind là utility-first: tự do thiết kế riêng nhưng phải tự dựng component. Cả hai đều chạy với React; chọn theo nhu cầu thiết kế và thói quen nhóm.\"\n\n8. A row of cards has different heights. Fix?\n   Answer: b) Put each card in a Col and give the card h-100; columns in a flex row already stretch.\n   Model answer: \"Columns in a flex row stretch to the tallest one, so I only need the card to fill its column with h-100. Fixed heights break with longer text or translations.\" / Trả lời mẫu: \"Các cột trong hàng flex tự kéo bằng cột cao nhất, nên chỉ cần thẻ lấp đầy cột bằng h-100. Đặt chiều cao cố định sẽ vỡ khi chữ dài hơn hoặc khi dịch.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each question has a model answer shown after submission. Practise saying them aloud.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu có câu trả lời mẫu hiện sau khi nộp. Hãy luyện nói thành tiếng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "i1",
+            "de": "Explain \"mobile-first\" in Bootstrap.",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The site only works on phones."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Base styles target small screens; breakpoint classes like <code>col-md-6</code> add rules from that width upward."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mobile users load first."
+              },
+              {
+                "ma": "d",
+                "noiDung": "You must write media queries for phones."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Bootstrap writes the default for the smallest screen and uses min-width media queries for bigger ones. So <code>col-12 col-md-6</code> means full width on phones and half from 768px up. I design the phone layout first and add breakpoints as space grows.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Bootstrap viết mặc định cho màn nhỏ nhất và dùng media query min-width cho màn lớn. Nên col-12 col-md-6 là rộng hết trên điện thoại và một nửa từ 768px. Tôi thiết kế bố cục điện thoại trước rồi thêm mốc khi có thêm chỗ.\"</i></p>"
+          },
+          {
+            "ma": "i2",
+            "de": "How does the grid work under the hood?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tables."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Flexbox rows divided into 12 columns, with gutters made by padding and negative margins."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Floats only."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Absolute positioning."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"A row is a flex container; each column gets a percentage of 12. Gutters come from horizontal padding on columns balanced by negative margins on the row. Modern Bootstrap also has CSS Grid utilities, but the classic grid is flexbox.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Row là flex container; mỗi cột chiếm phần trăm theo 12. Gutter tạo bởi padding ngang của cột cân bằng bằng margin âm của row. Bootstrap mới có thêm tiện ích CSS Grid, nhưng lưới truyền thống là flexbox.\"</i></p>"
+          },
+          {
+            "ma": "i3",
+            "de": "Why use React-Bootstrap instead of Bootstrap’s own JavaScript in a React app?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is required by React."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bootstrap’s JS manipulates the DOM directly and fights React; React-Bootstrap implements the behaviour as React components driven by state."
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is lighter CSS."
+              },
+              {
+                "ma": "d",
+                "noiDung": "No reason."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Bootstrap's scripts toggle classes on DOM nodes React also controls, which leads to out-of-sync UI. React-Bootstrap re-implements modals, dropdowns, collapse as React components with props like <code>show</code>, so the state lives in React.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Script của Bootstrap tự đổi class trên nút DOM mà React cũng quản lý, dễ lệch giao diện. React-Bootstrap viết lại modal, dropdown, collapse thành component React với prop như show, nên state nằm trong React.\"</i></p>"
+          },
+          {
+            "ma": "i4",
+            "de": "Controlled vs uncontrolled component in a UI library?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Same thing."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Controlled: the parent owns the value/visibility via props (<code>activeKey</code>, <code>show</code>); uncontrolled: the component keeps it (<code>defaultActiveKey</code>)."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Controlled means validated."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Uncontrolled means disabled."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Uncontrolled is simpler — I give a default and the component remembers. I switch to controlled when something else needs to read or change the value, for example opening a tab from a button or closing a modal after an API call.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Uncontrolled đơn giản hơn — đưa giá trị mặc định là component tự nhớ. Tôi chuyển sang controlled khi nơi khác cần đọc/đổi giá trị, vd mở một tab từ nút hoặc đóng modal sau khi gọi API.\"</i></p>"
+          },
+          {
+            "ma": "i5",
+            "de": "How do you override Bootstrap styles safely?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Edit node_modules."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Import your CSS after Bootstrap, use more specific selectors or Sass variables/CSS custom properties; avoid <code>!important</code>."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Inline styles everywhere."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Copy the whole Bootstrap CSS."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Order matters: my stylesheet comes after Bootstrap. For theme changes I prefer Sass variables or Bootstrap's CSS variables (<code>--bs-primary</code>). I avoid editing node_modules and keep <code>!important</code> as a last resort.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Thứ tự quan trọng: CSS của tôi nạp sau Bootstrap. Muốn đổi theme tôi dùng biến Sass hoặc biến CSS của Bootstrap (--bs-primary). Không sửa node_modules, !important chỉ là cách cuối.\"</i></p>"
+          },
+          {
+            "ma": "i6",
+            "de": "Accessibility basics for forms built with Bootstrap?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Placeholders are enough."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every input has a linked label (controlId/htmlFor), errors are announced, buttons have text, colour is not the only signal."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use only icons."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Disable keyboard navigation."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Placeholders disappear when you type, so each field needs a real label linked by <code>controlId</code>. Error messages sit next to the field, and I don't rely on red alone — the text explains the problem.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Placeholder biến mất khi gõ nên mỗi ô cần nhãn thật nối bằng controlId. Câu lỗi nằm cạnh ô, và tôi không chỉ dựa vào màu đỏ — chữ phải nói rõ lỗi.\"</i></p>"
+          },
+          {
+            "ma": "i7",
+            "de": "Bootstrap vs Tailwind — how would you compare them?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tailwind is a component library."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bootstrap ships ready components and a grid; Tailwind gives low-level utility classes to compose your own design — faster prototyping vs more custom look."
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are identical."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Bootstrap cannot be customised."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Bootstrap is great when I need standard components quickly — like in an exam or an admin panel. Tailwind is utility-first: more freedom for a unique design, but I build components myself. Both work with React; the choice depends on design needs and team habits.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Bootstrap hợp khi cần component chuẩn nhanh — như phòng thi hay trang quản trị. Tailwind là utility-first: tự do thiết kế riêng nhưng phải tự dựng component. Cả hai đều chạy với React; chọn theo nhu cầu thiết kế và thói quen nhóm.\"</i></p>"
+          },
+          {
+            "ma": "i8",
+            "de": "A row of cards has different heights. Fix?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Set a fixed pixel height."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Put each card in a Col and give the card <code>h-100</code>; columns in a flex row already stretch."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use a table."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add more text to short cards."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p><b>Model answer:</b> \"Columns in a flex row stretch to the tallest one, so I only need the card to fill its column with <code>h-100</code>. Fixed heights break with longer text or translations.\"</p><p><i>🇻🇳 <b>Trả lời mẫu:</b> \"Các cột trong hàng flex tự kéo bằng cột cao nhất, nên chỉ cần thẻ lấp đầy cột bằng h-100. Đặt chiều cao cố định sẽ vỡ khi chữ dài hơn hoặc khi dịch.\"</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Học thuộc định nghĩa mà không nói được VÍ DỤ — người phỏng vấn sẽ hỏi tiếp \"cho ví dụ\"."
+        },
+        {
+          "loi": "Trả lời quá dài, lan man; hãy nói ý chính trước rồi mới giải thích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "model answer",
+          "vi": "câu trả lời mẫu"
+        },
+        {
+          "en": "trade-off",
+          "vi": "đánh đổi (được cái này, mất cái kia)"
+        }
+      ]
+    }
+  ]
+}

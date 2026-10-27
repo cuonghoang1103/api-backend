@@ -1,0 +1,345 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-4-ex5-bootstrap-setup",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-4-ex5-bootstrap-setup"
+  },
+  "exercises": [
+    {
+      "title": "Put the Bootstrap setup steps in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "npm",
+        "Vite",
+        "bootstrap",
+        "react-bootstrap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "setup"
+      ],
+      "problemHtml": "<p>Drag (or use ↑/↓) to put the steps in the correct order. These are the exact steps you type in the lab room at the start of a PE.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kéo (hoặc dùng ↑/↓) để xếp các bước đúng thứ tự. Đây đúng là các bước bạn gõ trong phòng thi lúc bắt đầu PE.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Không thể cài gói vào thư mục chưa tồn tại — tạo dự án trước.",
+        "CSS phải được import TRƯỚC khi component được vẽ — đặt ở điểm vào (main.jsx/index.js)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Put the Bootstrap setup steps in order\n\nAnswer in the panel on the left (no code needed).\n\n1. Order the steps to start a React + Bootstrap project with Vite.\n2. Order the Bootstrap 5 breakpoints from the smallest screen to the largest.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Put the Bootstrap setup steps in order — answer key\n\n1. Order the steps to start a React + Bootstrap project with Vite.\n   Answer: a) npm create vite@latest my-app -- --template react  →  b) cd my-app then npm install  →  c) npm install bootstrap react-bootstrap  →  d) import 'bootstrap/dist/css/bootstrap.min.css' in main.jsx  →  e) Use import { Button } from 'react-bootstrap' in a component  →  f) npm run dev and open the local URL\n   Create → install → add Bootstrap → import CSS once → use components → run. / Tạo → cài → thêm Bootstrap → import CSS một lần → dùng component → chạy.\n\n2. Order the Bootstrap 5 breakpoints from the smallest screen to the largest.\n   Answer: a) xs (< 576px)  →  b) sm (≥ 576px)  →  d) md (≥ 768px)  →  c) lg (≥ 992px)  →  e) xl (≥ 1200px)  →  f) xxl (≥ 1400px)\n   xs < sm 576 < md 768 < lg 992 < xl 1200 < xxl 1400. / xs < sm 576 < md 768 < lg 992 < xl 1200 < xxl 1400.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tạo dự án → vào thư mục + cài phụ thuộc → cài bootstrap + react-bootstrap → import CSS một lần ở điểm vào → dùng component → chạy dev server.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "s1",
+            "de": "Order the steps to start a React + Bootstrap project with Vite.",
+            "muc": [
+              {
+                "ma": "e",
+                "noiDung": "Use <code>import { Button } from 'react-bootstrap'</code> in a component"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>cd my-app</code> then <code>npm install</code>"
+              },
+              {
+                "ma": "f",
+                "noiDung": "<code>npm run dev</code> and open the local URL"
+              },
+              {
+                "ma": "a",
+                "noiDung": "<code>npm create vite@latest my-app -- --template react</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>import 'bootstrap/dist/css/bootstrap.min.css'</code> in <code>main.jsx</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>npm install bootstrap react-bootstrap</code>"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>Create → install → add Bootstrap → import CSS once → use components → run.</p><p><i>🇻🇳 Tạo → cài → thêm Bootstrap → import CSS một lần → dùng component → chạy.</i></p>"
+          },
+          {
+            "ma": "s2",
+            "de": "Order the Bootstrap 5 breakpoints from the smallest screen to the largest.",
+            "muc": [
+              {
+                "ma": "c",
+                "noiDung": "<code>lg</code> (≥ 992px)"
+              },
+              {
+                "ma": "a",
+                "noiDung": "<code>xs</code> (&lt; 576px)"
+              },
+              {
+                "ma": "e",
+                "noiDung": "<code>xl</code> (≥ 1200px)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>sm</code> (≥ 576px)"
+              },
+              {
+                "ma": "f",
+                "noiDung": "<code>xxl</code> (≥ 1400px)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>md</code> (≥ 768px)"
+              }
+            ],
+            "dapAn": [
+              "a",
+              "b",
+              "d",
+              "c",
+              "e",
+              "f"
+            ],
+            "giaiThich": "<p>xs < sm 576 < md 768 < lg 992 < xl 1200 < xxl 1400.</p><p><i>🇻🇳 xs < sm 576 < md 768 < lg 992 < xl 1200 < xxl 1400.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cài <code>react-bootstrap</code> mà quên <code>bootstrap</code> ⇒ component đúng nhưng không có CSS."
+        },
+        {
+          "loi": "Import CSS trong từng component thay vì một lần ở điểm vào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entry point",
+          "vi": "tệp điểm vào (main.jsx / index.js)"
+        },
+        {
+          "en": "dependency",
+          "vi": "gói phụ thuộc"
+        }
+      ]
+    },
+    {
+      "title": "Bootstrap setup check",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "CDN vs npm",
+        "react-bootstrap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "bootstrap",
+        "quiz"
+      ],
+      "problemHtml": "<p>Four questions about adding Bootstrap correctly to a React project.</p><p><i>Tip: read every option before choosing — the wrong options are real mistakes students make in the FE exam.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All questions must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn câu về cách thêm Bootstrap đúng vào dự án React.</p><p><i>Mẹo: đọc hết các lựa chọn rồi mới chọn — các phương án sai đều là lỗi thật sinh viên hay mắc trong đề FE.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose an option",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question is one check.|||Mỗi câu là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "react-bootstrap KHÔNG kèm CSS.",
+        "Bootstrap JS (bundle) chỉ cần khi dùng class thuần có hành vi (dropdown, collapse) mà không dùng react-bootstrap."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bootstrap setup check\n\nAnswer in the panel on the left (no code needed).\n\n1. You installed react-bootstrap but buttons look plain. Why?\n2. Where is the best place for import 'bootstrap/dist/css/bootstrap.min.css'?\n3. Which are TRUE about react-bootstrap? (choose all)\n4. The exam room has no internet. Which way of adding Bootstrap still works?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bootstrap setup check — answer key\n\n1. You installed react-bootstrap but buttons look plain. Why?\n   Answer: b) The Bootstrap CSS file was never imported.\n   react-bootstrap renders the markup; the styling comes from bootstrap.min.css which you import once. / react-bootstrap chỉ sinh markup; giao diện đến từ bootstrap.min.css bạn phải import một lần.\n\n2. Where is the best place for import 'bootstrap/dist/css/bootstrap.min.css'?\n   Answer: b) Once, in the entry file (main.jsx / index.js) before your own CSS.\n   Import global CSS once at the entry point, before your own styles so you can override Bootstrap. / Import CSS toàn cục một lần ở điểm vào, trước CSS của bạn để bạn ghi đè được Bootstrap.\n\n3. Which are TRUE about react-bootstrap? (choose all)\n   Answer: a) It replaces Bootstrap’s jQuery/JS with React components. + c) Props like variant become Bootstrap classes. + d) You can still use plain Bootstrap classes in className.\n   react-bootstrap re-implements the behaviour in React and maps props to classes; it does not ship CSS. / react-bootstrap viết lại hành vi bằng React và đổi prop thành class; nó không kèm CSS.\n\n4. The exam room has no internet. Which way of adding Bootstrap still works?\n   Answer: b) npm package already in node_modules of the given project\n   A CDN needs the network. The project template sent before the exam already contains the packages in node_modules. / CDN cần mạng. Dự án mẫu gửi trước kỳ thi đã có sẵn gói trong node_modules.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Xem giải thích từng câu sau khi nộp.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "You installed <code>react-bootstrap</code> but buttons look plain. Why?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "React 18 is not supported."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The Bootstrap CSS file was never imported."
+              },
+              {
+                "ma": "c",
+                "noiDung": "You must restart the computer."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Buttons need <code>className=\"btn\"</code> too."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>react-bootstrap renders the markup; the styling comes from bootstrap.min.css which you import once.</p><p><i>🇻🇳 react-bootstrap chỉ sinh markup; giao diện đến từ bootstrap.min.css bạn phải import một lần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "Where is the best place for <code>import 'bootstrap/dist/css/bootstrap.min.css'</code>?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In every component file."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Once, in the entry file (main.jsx / index.js) before your own CSS."
+              },
+              {
+                "ma": "c",
+                "noiDung": "In index.html as a script tag."
+              },
+              {
+                "ma": "d",
+                "noiDung": "In package.json."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Import global CSS once at the entry point, before your own styles so you can override Bootstrap.</p><p><i>🇻🇳 Import CSS toàn cục một lần ở điểm vào, trước CSS của bạn để bạn ghi đè được Bootstrap.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "Which are TRUE about react-bootstrap? (choose all)",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It replaces Bootstrap’s jQuery/JS with React components."
+              },
+              {
+                "ma": "b",
+                "noiDung": "It includes its own CSS."
+              },
+              {
+                "ma": "c",
+                "noiDung": "Props like <code>variant</code> become Bootstrap classes."
+              },
+              {
+                "ma": "d",
+                "noiDung": "You can still use plain Bootstrap classes in <code>className</code>."
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "giaiThich": "<p>react-bootstrap re-implements the behaviour in React and maps props to classes; it does not ship CSS.</p><p><i>🇻🇳 react-bootstrap viết lại hành vi bằng React và đổi prop thành class; nó không kèm CSS.</i></p>",
+            "nhieu": true
+          },
+          {
+            "ma": "c4",
+            "de": "The exam room has no internet. Which way of adding Bootstrap still works?",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CDN link in index.html"
+              },
+              {
+                "ma": "b",
+                "noiDung": "npm package already in node_modules of the given project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Google Fonts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Copy CSS from a website during the exam"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A CDN needs the network. The project template sent before the exam already contains the packages in node_modules.</p><p><i>🇻🇳 CDN cần mạng. Dự án mẫu gửi trước kỳ thi đã có sẵn gói trong node_modules.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm cả bootstrap.bundle.js lẫn react-bootstrap ⇒ hai bên cùng điều khiển một dropdown, chạy lỗi."
+        },
+        {
+          "loi": "Dùng CDN trong phòng thi không có mạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CDN",
+          "vi": "mạng phân phối nội dung (tải thư viện qua link)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-4-deep-combinatorial-cause-effect",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-use-case"
+  },
+  "exercises": [
+    {
+      "title": "Deep Lab 4 — Pairwise, Cause–Effect Graph and Domain Testing",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "pairwise testing",
+        "combinatorial testing",
+        "cause-effect graphing",
+        "domain testing"
+      ],
+      "prerequisites": [
+        "SWT301 4.2–4.5"
+      ],
+      "tags": [
+        "swt301",
+        "deep-lab",
+        "test-design"
+      ],
+      "problemHtml": "<h1>Deep Lab 4 — Combinatorial, Cause–Effect and Domain Testing</h1>\n<p class=\"bi-phu\">Beyond the syllabus · pairwise with constraints · cause–effect graph · 2-D domain boundaries · 10 marks</p>\n<h2>1. Overview</h2>\n<p>Three techniques that professional testers use when EP/BVA/decision tables become too large or too one-dimensional. They appear in the ISTQB Advanced Test Analyst syllabus and in every serious test-design interview. Each part is a real situation from the LabBook project.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Pairwise configuration testing of the LabBook web client with constraints.</li>\n  <li>B. Cause–effect graph → effects → collapsed decision table.</li>\n  <li>C. Domain testing of a two-variable rule: ON/OFF points, redundant constraint.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Answers are data structures; the grader checks properties, so any correct design is accepted.</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-pairwise.js      ← const CONFIGS = [ { browser, os, language, role } ]; const FULL_PRODUCT\n├── b-cause-effect.js  ← const EFFECTS = { 'TTTF': ['E1'], … }; const RULE_COUNT\n└── c-domain.js        ← const DOMAIN = { B1: { on: [s, d], off: [s, d] }, B3, B4, B5 }; const REDUNDANT</pre>\n<h2>3. Data model</h2>\n<p><b>Inputs of the three parts</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>browser · os · language · role</code></td><td>enum</td><td>Chrome/Firefox/Safari/Edge · Windows/macOS/Ubuntu · EN/VI · Student/Manager/Admin</td></tr><tr><td><code>C1…C4 / E1…E4</code></td><td>boolean</td><td>causes and effects of the exam-registration rule (Part B)</td></tr><tr><td><code>(start, duration)</code></td><td>integers</td><td>7 ≤ start ≤ 20 · 1 ≤ duration ≤ 3 · start + duration ≤ 21</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Pairwise configuration testing <span class=\"bi-diem\">4 marks</span></h3>\n<p><p>The LabBook web client must be checked on 4 browsers × 3 operating systems × 2 languages × 3 roles = 72 configurations. Testing all is too expensive; <b>pairwise</b> testing covers every pair of values of every two factors at least once. Constraints from the test lab: <b>Safari runs only on macOS</b>; <b>Edge is not installed on Ubuntu</b>. Impossible configurations must not appear, and their pairs need not be covered.</p></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Every valid pair of the 6 factor pairs appears in at least one row; no row breaks a constraint; at most 14 rows.</li>\n  <li>Why 13 at least? browser × role alone needs 12 rows, and only Chrome and Firefox can run on Ubuntu — think about Ubuntu × role.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">pairwise testing</span> <span class=\"bi-hook\">combinatorial testing</span> <span class=\"bi-hook\">constraints</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Cause–effect graph <span class=\"bi-diem\">3 marks</span></h3>\n<p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 660 330\" width=\"100%\" style=\"max-width:660px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Cause–effect graph — exam registration\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"660\" height=\"330\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"330\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Cause–effect graph — exam registration</text><path d=\"M90.0,59.0 L570.0,36.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"316.4\" y=\"38.5\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"330.0\" y=\"51.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M89.7,63.4 L275.9,95.8\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.8,132.0 L275.1,103.8\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"168.8\" y=\"108.9\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"182.4\" y=\"121.4\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M332.0,100.0 L570.0,100.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.5,214.4 L218.5,243.2\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.5,280.7 L218.3,252.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.0,66.3 L380.3,163.4\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.9,137.1 L373.3,167.2\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M256.1,240.1 L383.3,178.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M432.0,170.0 L570.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.5,253.4 L378.6,284.4\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"305.9\" y=\"259.9\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"319.5\" y=\"272.4\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M89.5,139.4 Q252.0,176.3 386.9,279.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M432.0,290.0 L570.0,290.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><circle cx=\"70\" cy=\"60\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"64.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C1</text><circle cx=\"70\" cy=\"135\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"139.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C2</text><circle cx=\"70\" cy=\"210\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"214.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C3</text><circle cx=\"70\" cy=\"285\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C4</text><polygon points=\"240,231 270,248 240,265 210,248\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"240\" y=\"252.0\" text-anchor=\"middle\" fill=\"#111827\">OR</text><polygon points=\"400,153 432,170 400,187 368,170\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><polygon points=\"300,83 332,100 300,117 268,100\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><polygon points=\"400,273 432,290 400,307 368,290\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"294.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><circle cx=\"590\" cy=\"170\" r=\"20\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E1</text><circle cx=\"590\" cy=\"100\" r=\"20\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E2</text><circle cx=\"590\" cy=\"35\" r=\"20\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"39.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E3</text><circle cx=\"590\" cy=\"290\" r=\"20\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"294.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E4</text><text x=\"330\" y=\"322\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">and3 also takes C1 (omitted for clarity): E4 = C1 AND C2 AND NOT(C3 OR C4)</text></svg><table><thead><tr><th>Cause</th><th>Meaning</th><th>Effect</th><th>Meaning</th></tr></thead><tbody><tr><td>C1</td><td>Student ID is valid</td><td>E1</td><td>Registered for the exam</td></tr><tr><td>C2</td><td>Tuition fee is paid</td><td>E2</td><td>Message “Please pay the tuition fee”</td></tr><tr><td>C3</td><td>Absence rate ≤ 20%</td><td>E3</td><td>Message “Invalid student ID”</td></tr><tr><td>C4</td><td>Approved retake request</td><td>E4</td><td>Message “Not eligible: too many absences”</td></tr></tbody></table><p>The graph says: E3 = NOT C1 · E2 = C1 AND NOT C2 · E1 = C1 AND C2 AND (C3 OR C4) · E4 = C1 AND C2 AND NOT (C3 OR C4).</p></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>EFFECTS</code>: for each cause combination written C1C2C3C4 (e.g. <code>\"TTFT\"</code>), the list of effects that fire: FTTT, TFTT, TTTF, TTFT, TTFF, TFFF, FFFF.</li>\n  <li><code>RULE_COUNT</code>: the number of rules of the decision table after collapsing with “–”.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">cause–effect graphing</span> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Domain testing (two variables) <span class=\"bi-diem\">3 marks</span></h3>\n<p><p>A booking is valid when <code>7 ≤ start ≤ 20</code>, <code>1 ≤ duration ≤ 3</code> and <code>start + duration ≤ 21</code> (integers). In domain testing each boundary gets an <b>ON point</b> (on the boundary, valid) and an <b>OFF point</b> (one step outside, breaking ONLY that boundary).</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 520 300\" width=\"100%\" style=\"max-width:520px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Valid domain of (start hour, duration) — integer points\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"520\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"260\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Valid domain of (start hour, duration) — integer points</text><path d=\"M70.0,235.0 L70.0,85.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"27.6\" y=\"151.0\" width=\"84.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"70.0\" y=\"163.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B1 start = 7</text><path d=\"M85.0,70.0 L373.0,70.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"177.0\" y=\"61.0\" width=\"104.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"229.0\" y=\"73.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B4 duration = 3</text><path d=\"M399.4,84.1 L440.6,145.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"409.6\" y=\"106.0\" width=\"20.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"118.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B5</text><path d=\"M455.4,176.1 L474.6,233.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"416.2\" y=\"196.0\" width=\"97.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"465.0\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">start+dur = 21</text><path d=\"M463.0,250.0 L85.0,250.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"222.0\" y=\"241.0\" width=\"104.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"274.0\" y=\"253.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B3 duration = 1</text><circle cx=\"70\" cy=\"250\" r=\"15\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"254.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">7,1</text><circle cx=\"70\" cy=\"70\" r=\"15\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">7,3</text><circle cx=\"390\" cy=\"70\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"390\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">18,3</text><circle cx=\"450\" cy=\"160\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"450\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">19,2</text><circle cx=\"480\" cy=\"250\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"480\" y=\"254.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">20,1</text><text x=\"250\" y=\"170\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"13\" font-weight=\"700\">valid bookings</text></svg></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>ON and OFF points for the four real boundaries B1 (start = 7), B3 (duration = 1), B4 (duration = 3), B5 (start + duration = 21).</li>\n  <li><code>REDUNDANT</code>: the constraint that never forms a boundary of the domain (write it like <code>\"start <= 20\"</code>).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">domain testing</span> <span class=\"bi-hook\">ON/OFF points</span></p>\n</div>\n<h2>5. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>CONFIGS · FULL_PRODUCT</code></td><td>answers/a-pairwise.js</td></tr><tr><td><code>EFFECTS · RULE_COUNT</code></td><td>answers/b-cause-effect.js</td></tr><tr><td><code>DOMAIN · REDUNDANT</code></td><td>answers/c-domain.js</td></tr></tbody></table>\n<h2>6. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Pairwise configuration testing</td><td>4</td></tr><tr><td>2</td><td>B. Cause–effect graph</td><td>3</td></tr><tr><td>3</td><td>C. Domain testing (two variables)</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A configuration matrix that includes Safari on Windows — it cannot be executed.</li>\n  <li>Treating OFF points of a slanted boundary like 1-D BVA (changing only one variable may cross another boundary).</li>\n</ul>\n<h2>7. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Deep Lab 4 — Combinatorial, Cause–Effect and Domain Testing</h1>\n<p class=\"bi-phu\">Vượt syllabus · pairwise có ràng buộc · đồ thị nhân–quả · biên miền 2 chiều · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Ba kỹ thuật tester chuyên nghiệp dùng khi EP/BVA/bảng quyết định quá lớn hoặc chỉ một chiều. Chúng nằm trong syllabus ISTQB Advanced Test Analyst và mọi buổi phỏng vấn thiết kế test nghiêm túc. Mỗi phần là một tình huống thật của dự án LabBook.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Kiểm thử cấu hình pairwise cho web client LabBook có ràng buộc.</li>\n  <li>B. Đồ thị nhân–quả → hiệu ứng → bảng quyết định rút gọn.</li>\n  <li>C. Kiểm thử miền của luật hai biến: điểm ON/OFF, ràng buộc thừa.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Câu trả lời là cấu trúc dữ liệu; máy chấm kiểm tính chất, nên mọi thiết kế đúng đều được nhận.</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-pairwise.js      ← const CONFIGS = [ { browser, os, language, role } ]; const FULL_PRODUCT\n├── b-cause-effect.js  ← const EFFECTS = { 'TTTF': ['E1'], … }; const RULE_COUNT\n└── c-domain.js        ← const DOMAIN = { B1: { on: [s, d], off: [s, d] }, B3, B4, B5 }; const REDUNDANT</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Inputs of the three parts</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>browser · os · language · role</code></td><td>enum</td><td>Chrome/Firefox/Safari/Edge · Windows/macOS/Ubuntu · EN/VI · Student/Manager/Admin</td></tr><tr><td><code>C1…C4 / E1…E4</code></td><td>boolean</td><td>nguyên nhân và hiệu ứng của luật đăng ký thi (Phần B)</td></tr><tr><td><code>(start, duration)</code></td><td>integers</td><td>7 ≤ start ≤ 20 · 1 ≤ duration ≤ 3 · start + duration ≤ 21</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Kiểm thử cấu hình pairwise <span class=\"bi-diem\">4 điểm</span></h3>\n<p><p>Web client LabBook phải kiểm trên 4 trình duyệt × 3 hệ điều hành × 2 ngôn ngữ × 3 vai trò = 72 cấu hình. Test hết quá tốn; kiểm thử <b>pairwise</b> phủ mọi cặp giá trị của mọi hai yếu tố ít nhất một lần. Ràng buộc của phòng test: <b>Safari chỉ chạy trên macOS</b>; <b>Ubuntu không cài Edge</b>. Cấu hình không thể có thì không được xuất hiện, và các cặp của nó không cần phủ.</p></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mọi cặp hợp lệ của 6 cặp yếu tố xuất hiện ít nhất một dòng; không dòng nào phạm ràng buộc; tối đa 14 dòng.</li>\n  <li>Vì sao tối thiểu 13? riêng browser × role cần 12 dòng, và chỉ Chrome, Firefox chạy được Ubuntu — nghĩ về Ubuntu × role.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">pairwise testing</span> <span class=\"bi-hook\">combinatorial testing</span> <span class=\"bi-hook\">constraints</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Đồ thị nhân–quả <span class=\"bi-diem\">3 điểm</span></h3>\n<p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 660 330\" width=\"100%\" style=\"max-width:660px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Cause–effect graph — exam registration\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"660\" height=\"330\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"330\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Cause–effect graph — exam registration</text><path d=\"M90.0,59.0 L570.0,36.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"316.4\" y=\"38.5\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"330.0\" y=\"51.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M89.7,63.4 L275.9,95.8\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.8,132.0 L275.1,103.8\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"168.8\" y=\"108.9\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"182.4\" y=\"121.4\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M332.0,100.0 L570.0,100.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.5,214.4 L218.5,243.2\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.5,280.7 L218.3,252.7\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.0,66.3 L380.3,163.4\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M89.9,137.1 L373.3,167.2\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M256.1,240.1 L383.3,178.1\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M432.0,170.0 L570.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M260.5,253.4 L378.6,284.4\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"305.9\" y=\"259.9\" width=\"27.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"319.5\" y=\"272.4\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">NOT</text><path d=\"M89.5,139.4 Q252.0,176.3 386.9,279.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M432.0,290.0 L570.0,290.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><circle cx=\"70\" cy=\"60\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"64.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C1</text><circle cx=\"70\" cy=\"135\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"139.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C2</text><circle cx=\"70\" cy=\"210\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"214.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C3</text><circle cx=\"70\" cy=\"285\" r=\"20\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"289.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">C4</text><polygon points=\"240,231 270,248 240,265 210,248\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"240\" y=\"252.0\" text-anchor=\"middle\" fill=\"#111827\">OR</text><polygon points=\"400,153 432,170 400,187 368,170\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><polygon points=\"300,83 332,100 300,117 268,100\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><polygon points=\"400,273 432,290 400,307 368,290\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"400\" y=\"294.0\" text-anchor=\"middle\" fill=\"#111827\">AND</text><circle cx=\"590\" cy=\"170\" r=\"20\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E1</text><circle cx=\"590\" cy=\"100\" r=\"20\" fill=\"#fef3c7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"104.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E2</text><circle cx=\"590\" cy=\"35\" r=\"20\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"39.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E3</text><circle cx=\"590\" cy=\"290\" r=\"20\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"590\" y=\"294.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">E4</text><text x=\"330\" y=\"322\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">and3 also takes C1 (omitted for clarity): E4 = C1 AND C2 AND NOT(C3 OR C4)</text></svg><table><thead><tr><th>Cause</th><th>Meaning</th><th>Effect</th><th>Meaning</th></tr></thead><tbody><tr><td>C1</td><td>Student ID is valid</td><td>E1</td><td>Registered for the exam</td></tr><tr><td>C2</td><td>Tuition fee is paid</td><td>E2</td><td>Message “Please pay the tuition fee”</td></tr><tr><td>C3</td><td>Absence rate ≤ 20%</td><td>E3</td><td>Message “Invalid student ID”</td></tr><tr><td>C4</td><td>Approved retake request</td><td>E4</td><td>Message “Not eligible: too many absences”</td></tr></tbody></table><p>Đồ thị nói: E3 = NOT C1 · E2 = C1 AND NOT C2 · E1 = C1 AND C2 AND (C3 OR C4) · E4 = C1 AND C2 AND NOT (C3 OR C4).</p></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>EFFECTS</code>: với mỗi tổ hợp C1C2C3C4 (vd <code>\"TTFT\"</code>), danh sách hiệu ứng xảy ra: FTTT, TFTT, TTTF, TTFT, TTFF, TFFF, FFFF.</li>\n  <li><code>RULE_COUNT</code>: số luật của bảng quyết định sau khi rút gọn bằng “–”.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">cause–effect graphing</span> <span class=\"bi-hook\">decision table</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Kiểm thử miền (hai biến) <span class=\"bi-diem\">3 điểm</span></h3>\n<p><p>Booking hợp lệ khi <code>7 ≤ start ≤ 20</code>, <code>1 ≤ duration ≤ 3</code> và <code>start + duration ≤ 21</code> (số nguyên). Trong kiểm thử miền mỗi biên có một <b>điểm ON</b> (trên biên, hợp lệ) và một <b>điểm OFF</b> (ra ngoài một bước, CHỈ phạm biên đó).</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 520 300\" width=\"100%\" style=\"max-width:520px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Valid domain of (start hour, duration) — integer points\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"520\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"260\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Valid domain of (start hour, duration) — integer points</text><path d=\"M70.0,235.0 L70.0,85.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"27.6\" y=\"151.0\" width=\"84.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"70.0\" y=\"163.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B1 start = 7</text><path d=\"M85.0,70.0 L373.0,70.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"177.0\" y=\"61.0\" width=\"104.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"229.0\" y=\"73.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B4 duration = 3</text><path d=\"M399.4,84.1 L440.6,145.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"409.6\" y=\"106.0\" width=\"20.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"118.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B5</text><path d=\"M455.4,176.1 L474.6,233.9\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"416.2\" y=\"196.0\" width=\"97.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"465.0\" y=\"208.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">start+dur = 21</text><path d=\"M463.0,250.0 L85.0,250.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"222.0\" y=\"241.0\" width=\"104.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"274.0\" y=\"253.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">B3 duration = 1</text><circle cx=\"70\" cy=\"250\" r=\"15\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"254.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">7,1</text><circle cx=\"70\" cy=\"70\" r=\"15\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"70\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">7,3</text><circle cx=\"390\" cy=\"70\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"390\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">18,3</text><circle cx=\"450\" cy=\"160\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"450\" y=\"164.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">19,2</text><circle cx=\"480\" cy=\"250\" r=\"17\" fill=\"#f3f4f6\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"480\" y=\"254.0\" text-anchor=\"middle\" fill=\"#111827\" font-weight=\"700\">20,1</text><text x=\"250\" y=\"170\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"13\" font-weight=\"700\">valid bookings</text></svg></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Điểm ON và OFF cho bốn biên thật B1 (start = 7), B3 (duration = 1), B4 (duration = 3), B5 (start + duration = 21).</li>\n  <li><code>REDUNDANT</code>: ràng buộc không bao giờ tạo biên của miền (ghi dạng <code>\"start <= 20\"</code>).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">domain testing</span> <span class=\"bi-hook\">ON/OFF points</span></p>\n</div>\n<h2>5. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>CONFIGS · FULL_PRODUCT</code></td><td>answers/a-pairwise.js</td></tr><tr><td><code>EFFECTS · RULE_COUNT</code></td><td>answers/b-cause-effect.js</td></tr><tr><td><code>DOMAIN · REDUNDANT</code></td><td>answers/c-domain.js</td></tr></tbody></table>\n<h2>6. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Kiểm thử cấu hình pairwise</td><td>4</td></tr><tr><td>2</td><td>B. Đồ thị nhân–quả</td><td>3</td></tr><tr><td>3</td><td>C. Kiểm thử miền (hai biến)</td><td>3</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Ma trận cấu hình có Safari trên Windows — không chạy được.</li>\n  <li>Coi điểm OFF của biên xiên như BVA một chiều (đổi một biến có thể vượt biên khác).</li>\n</ul>\n<h2>7. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Answers are data structures; the grader checks properties, so any correct design is accepted.|||Câu trả lời là cấu trúc dữ liệu; máy chấm kiểm tính chất, nên mọi thiết kế đúng đều được nhận.",
+      "examplesJson": [
+        {
+          "input": "{ browser: 'Safari', os: 'Windows', … }",
+          "output": "rejected: Safari runs only on macOS",
+          "explanation": "Constrained pairwise: impossible combinations are excluded, not covered.|||Pairwise có ràng buộc: tổ hợp không thể bị loại, không cần phủ."
+        }
+      ],
+      "hintsJson": [
+        "A: bắt đầu bằng 12 dòng browser × role (mỗi trình duyệt ba vai trò), rồi gán OS và ngôn ngữ để phủ các cặp còn lại; Safari luôn macOS. Thêm một dòng Chrome hoặc Firefox trên Ubuntu cho vai trò còn thiếu.",
+        "B: C1 = F ⇒ chỉ E3 (mọi thứ khác “–”) — một luật. C1 = T, C2 = F ⇒ E2 — một luật. Còn lại C3, C4 quyết định E1 hay E4.",
+        "C: tại start = 21 mọi duration ≥ 1 đều cho start + duration ≥ 22 ⇒ không có điểm nào CHỈ phạm “start ≤ 20”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-pairwise.js",
+          "language": "javascript",
+          "code": "// Pairwise configurations: { browser, os, language, role }\nconst CONFIGS = [\n  { browser: 'Chrome', os: 'Windows', language: 'EN', role: 'Student' },\n];\nconst FULL_PRODUCT = 0;\n"
+        },
+        {
+          "name": "answers/b-cause-effect.js",
+          "language": "javascript",
+          "code": "// Effects that fire for each cause combination C1C2C3C4.\nconst EFFECTS = {\n  FTTT: [],\n  TFTT: [],\n  TTTF: [],\n  TTFT: [],\n  TTFF: [],\n  TFFF: [],\n  FFFF: [],\n};\nconst RULE_COUNT = 0;\n"
+        },
+        {
+          "name": "answers/c-domain.js",
+          "language": "javascript",
+          "code": "// Points are [start, duration].\nconst DOMAIN = {\n  B1: { on: [7, 2], off: [] },   // start = 7\n  B3: { on: [], off: [] },       // duration = 1\n  B4: { on: [], off: [] },       // duration = 3\n  B5: { on: [], off: [] },       // start + duration = 21\n};\nconst REDUNDANT = '';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-pairwise.js",
+          "language": "javascript",
+          "code": "// 13 rows instead of 72. Rows 1–12 = every browser × role; row 13 adds the missing Ubuntu × Admin pair.\nconst CONFIGS = [\n  { browser: 'Chrome', os: 'Ubuntu', language: 'EN', role: 'Student' },\n  { browser: 'Chrome', os: 'Windows', language: 'VI', role: 'Manager' },\n  { browser: 'Chrome', os: 'macOS', language: 'EN', role: 'Admin' },\n  { browser: 'Firefox', os: 'Windows', language: 'EN', role: 'Student' },\n  { browser: 'Firefox', os: 'Ubuntu', language: 'VI', role: 'Manager' },\n  { browser: 'Firefox', os: 'macOS', language: 'VI', role: 'Admin' },\n  { browser: 'Safari', os: 'macOS', language: 'VI', role: 'Student' },\n  { browser: 'Safari', os: 'macOS', language: 'EN', role: 'Manager' },\n  { browser: 'Safari', os: 'macOS', language: 'EN', role: 'Admin' },\n  { browser: 'Edge', os: 'macOS', language: 'VI', role: 'Student' },\n  { browser: 'Edge', os: 'Windows', language: 'EN', role: 'Manager' },\n  { browser: 'Edge', os: 'Windows', language: 'VI', role: 'Admin' },\n  { browser: 'Chrome', os: 'Ubuntu', language: 'VI', role: 'Admin' },\n];\nconst FULL_PRODUCT = 72; // 4 × 3 × 2 × 3\n"
+        },
+        {
+          "name": "answers/b-cause-effect.js",
+          "language": "javascript",
+          "code": "// From the graph: E3 = ¬C1 · E2 = C1∧¬C2 · E1 = C1∧C2∧(C3∨C4) · E4 = C1∧C2∧¬(C3∨C4)\nconst EFFECTS = {\n  FTTT: ['E3'],\n  TFTT: ['E2'],\n  TTTF: ['E1'],\n  TTFT: ['E1'],   // the approved retake request (C4) makes up for too many absences\n  TTFF: ['E4'],\n  TFFF: ['E2'],\n  FFFF: ['E3'],\n};\nconst RULE_COUNT = 5; // (F,–,–,–) (T,F,–,–) (T,T,T,–) (T,T,F,T) (T,T,F,F)\n"
+        },
+        {
+          "name": "answers/c-domain.js",
+          "language": "javascript",
+          "code": "// ON point: valid, exactly on the boundary. OFF point: one step outside, breaking ONLY that boundary.\nconst DOMAIN = {\n  B1: { on: [7, 2], off: [6, 2] },     // start = 7\n  B3: { on: [10, 1], off: [10, 0] },   // duration = 1\n  B4: { on: [10, 3], off: [10, 4] },   // duration = 3 (10 + 4 = 14 still satisfies the sum)\n  B5: { on: [18, 3], off: [19, 3] },   // start + duration = 21\n};\n// start <= 20 is implied: start + duration <= 21 and duration >= 1 give start <= 20.\nconst REDUNDANT = 'start <= 20';\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> 13 rows: the 12 browser × role combinations plus one extra Ubuntu row (only Chrome and Firefox reach Ubuntu, so two rows cannot cover three roles). <b>B.</b> FTTT E3 · TFTT E2 · TTTF E1 · TTFT E1 · TTFF E4 · TFFF E2 · FFFF E3; collapsed table: (F,–,–,–) E3 · (T,F,–,–) E2 · (T,T,T,–) E1 · (T,T,F,T) E1 · (T,T,F,F) E4 = 5 rules. <b>C.</b> B1 on (7,2) off (6,2) · B3 on (10,1) off (10,0) · B4 on (10,3) off (10,4) · B5 on (18,3) off (19,3); “start ≤ 20” is implied by start + duration ≤ 21 with duration ≥ 1.</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> 13 dòng: 12 tổ hợp browser × role cộng một dòng Ubuntu (chỉ Chrome, Firefox chạy Ubuntu). <b>B.</b> 5 luật rút gọn. <b>C.</b> “start ≤ 20” bị start + duration ≤ 21 với duration ≥ 1 bao trọn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.istqb.org/certifications/test-analyst",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-pairwise.js",
+          "answers/b-cause-effect.js",
+          "answers/c-domain.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — every row respects the constraints (Safari only on macOS, no Edge on Ubuntu)",
+              "vi": "A — mọi dòng tôn trọng ràng buộc (Safari chỉ trên macOS, không có Edge trên Ubuntu)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},s=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(r);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(r[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+r[n].join(\", \");const S=(o,n)=>{const f=[];for(const e of r[o])for(const t of r[n]){const u={};u[o]=e,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!s({browser:e,os:t}))&&(CONFIGS.some(a=>a[o]===e&&a[n]===t)||f.push(e+\"+\"+t))}return f},i=CONFIGS.findIndex(o=>!s(o));return i<0?\"OK\":\"row #\"+(i+1)+\" is an impossible configuration\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid browser × os pair appears",
+              "vi": "A — mọi cặp browser × os hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(r);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(r[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+r[n].join(\", \");const t=((o,n)=>{const i=[];for(const e of r[o])for(const s of r[n]){const u={};u[o]=e,u[n]=s,!(o===\"browser\"&&n===\"os\"&&!a({browser:e,os:s}))&&(CONFIGS.some(f=>f[o]===e&&f[n]===s)||i.push(e+\"+\"+s))}return i})(\"browser\",\"os\");return t.length?\"missing pairs: \"+t.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid browser × language pair appears",
+              "vi": "A — mọi cặp browser × language hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(r);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(r[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+r[n].join(\", \");const s=((o,n)=>{const i=[];for(const e of r[o])for(const t of r[n]){const u={};u[o]=e,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!a({browser:e,os:t}))&&(CONFIGS.some(f=>f[o]===e&&f[n]===t)||i.push(e+\"+\"+t))}return i})(\"browser\",\"language\");return s.length?\"missing pairs: \"+s.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid browser × role pair appears",
+              "vi": "A — mọi cặp browser × role hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(r);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(r[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+r[n].join(\", \");const s=((o,n)=>{const i=[];for(const e of r[o])for(const t of r[n]){const u={};u[o]=e,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!a({browser:e,os:t}))&&(CONFIGS.some(f=>f[o]===e&&f[n]===t)||i.push(e+\"+\"+t))}return i})(\"browser\",\"role\");return s.length?\"missing pairs: \"+s.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid os × language pair appears",
+              "vi": "A — mọi cặp os × language hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(e);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(e[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+e[n].join(\", \");const s=((o,n)=>{const i=[];for(const r of e[o])for(const t of e[n]){const u={};u[o]=r,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!a({browser:r,os:t}))&&(CONFIGS.some(f=>f[o]===r&&f[n]===t)||i.push(r+\"+\"+t))}return i})(\"os\",\"language\");return s.length?\"missing pairs: \"+s.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid os × role pair appears",
+              "vi": "A — mọi cặp os × role hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(r);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(r[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+r[n].join(\", \");const s=((o,n)=>{const i=[];for(const e of r[o])for(const t of r[n]){const u={};u[o]=e,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!a({browser:e,os:t}))&&(CONFIGS.some(f=>f[o]===e&&f[n]===t)||i.push(e+\"+\"+t))}return i})(\"os\",\"role\");return s.length?\"missing pairs: \"+s.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — every valid language × role pair appears",
+              "vi": "A — mọi cặp language × role hợp lệ đều xuất hiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e={browser:[\"Chrome\",\"Firefox\",\"Safari\",\"Edge\"],os:[\"Windows\",\"macOS\",\"Ubuntu\"],language:[\"EN\",\"VI\"],role:[\"Student\",\"Manager\",\"Admin\"]},a=function(o){return!(o.browser===\"Safari\"&&o.os!==\"macOS\"||o.browser===\"Edge\"&&o.os===\"Ubuntu\")};if(!Array.isArray(CONFIGS)||!CONFIGS.length)return\"CONFIGS must be a non-empty array\";const c=Object.keys(e);for(let o=0;o<CONFIGS.length;o++)for(const n of c)if(e[n].indexOf(CONFIGS[o][n])<0)return\"row #\"+(o+1)+\": \"+n+\" must be one of \"+e[n].join(\", \");const s=((o,n)=>{const i=[];for(const r of e[o])for(const t of e[n]){const u={};u[o]=r,u[n]=t,!(o===\"browser\"&&n===\"os\"&&!a({browser:r,os:t}))&&(CONFIGS.some(f=>f[o]===r&&f[n]===t)||i.push(r+\"+\"+t))}return i})(\"language\",\"role\");return s.length?\"missing pairs: \"+s.slice(0,6).join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — at most 14 rows (the full product has 72; 13 is the minimum here)",
+              "vi": "A — tối đa 14 dòng (tích đầy đủ 72; tối thiểu ở đây là 13)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return CONFIGS.length<=14?\"OK\":CONFIGS.length+\" rows \\u2014 pairwise should need at most 14\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — size of the full (unconstrained) product",
+              "vi": "A — kích thước tích đầy đủ (chưa ràng buộc)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return FULL_PRODUCT===72?\"OK\":\"not right: 4 \\xD7 3 \\xD7 2 \\xD7 3\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes FTTT",
+              "vi": "B — hiệu ứng cho nguyên nhân FTTT"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(F){const[T,t,r,s]=F.split(\"\").map(c=>c===\"T\"),n=[];return T||n.push(\"E3\"),T&&!t&&n.push(\"E2\"),T&&t&&(r||s)&&n.push(\"E1\"),T&&t&&!r&&!s&&n.push(\"E4\"),n};if(!EFFECTS||!Array.isArray(EFFECTS.FTTT))return'EFFECTS[\"FTTT\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.FTTT.map(String))].sort().join(\",\"),E=o(\"FTTT\").sort().join(\",\");return i===E?\"OK\":\"not right for FTTT\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes TFTT",
+              "vi": "B — hiệu ứng cho nguyên nhân TFTT"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(F){const[T,t,r,s]=F.split(\"\").map(c=>c===\"T\"),n=[];return T||n.push(\"E3\"),T&&!t&&n.push(\"E2\"),T&&t&&(r||s)&&n.push(\"E1\"),T&&t&&!r&&!s&&n.push(\"E4\"),n};if(!EFFECTS||!Array.isArray(EFFECTS.TFTT))return'EFFECTS[\"TFTT\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.TFTT.map(String))].sort().join(\",\"),E=o(\"TFTT\").sort().join(\",\");return i===E?\"OK\":\"not right for TFTT\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes TTTF",
+              "vi": "B — hiệu ứng cho nguyên nhân TTTF"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(F){const[T,t,r,s]=F.split(\"\").map(c=>c===\"T\"),n=[];return T||n.push(\"E3\"),T&&!t&&n.push(\"E2\"),T&&t&&(r||s)&&n.push(\"E1\"),T&&t&&!r&&!s&&n.push(\"E4\"),n};if(!EFFECTS||!Array.isArray(EFFECTS.TTTF))return'EFFECTS[\"TTTF\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.TTTF.map(String))].sort().join(\",\"),E=o(\"TTTF\").sort().join(\",\");return i===E?\"OK\":\"not right for TTTF\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes TTFT",
+              "vi": "B — hiệu ứng cho nguyên nhân TTFT"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(F){const[T,t,r,s]=F.split(\"\").map(c=>c===\"T\"),n=[];return T||n.push(\"E3\"),T&&!t&&n.push(\"E2\"),T&&t&&(r||s)&&n.push(\"E1\"),T&&t&&!r&&!s&&n.push(\"E4\"),n};if(!EFFECTS||!Array.isArray(EFFECTS.TTFT))return'EFFECTS[\"TTFT\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.TTFT.map(String))].sort().join(\",\"),E=o(\"TTFT\").sort().join(\",\");return i===E?\"OK\":\"not right for TTFT\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes TTFF",
+              "vi": "B — hiệu ứng cho nguyên nhân TTFF"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(E){const[t,F,r,s]=E.split(\"\").map(c=>c===\"T\"),n=[];return t||n.push(\"E3\"),t&&!F&&n.push(\"E2\"),t&&F&&(r||s)&&n.push(\"E1\"),t&&F&&!r&&!s&&n.push(\"E4\"),n};if(!EFFECTS||!Array.isArray(EFFECTS.TTFF))return'EFFECTS[\"TTFF\"] must be an array such as [\"E1\"]';const T=[...new Set(EFFECTS.TTFF.map(String))].sort().join(\",\"),i=o(\"TTFF\").sort().join(\",\");return T===i?\"OK\":\"not right for TTFF\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes TFFF",
+              "vi": "B — hiệu ứng cho nguyên nhân TFFF"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(c){const[n,t,r,s]=c.split(\"\").map(u=>u===\"T\"),F=[];return n||F.push(\"E3\"),n&&!t&&F.push(\"E2\"),n&&t&&(r||s)&&F.push(\"E1\"),n&&t&&!r&&!s&&F.push(\"E4\"),F};if(!EFFECTS||!Array.isArray(EFFECTS.TFFF))return'EFFECTS[\"TFFF\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.TFFF.map(String))].sort().join(\",\"),E=o(\"TFFF\").sort().join(\",\");return i===E?\"OK\":\"not right for TFFF\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — effects for causes FFFF",
+              "vi": "B — hiệu ứng cho nguyên nhân FFFF"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(c){const[n,t,r,s]=c.split(\"\").map(u=>u===\"T\"),F=[];return n||F.push(\"E3\"),n&&!t&&F.push(\"E2\"),n&&t&&(r||s)&&F.push(\"E1\"),n&&t&&!r&&!s&&F.push(\"E4\"),F};if(!EFFECTS||!Array.isArray(EFFECTS.FFFF))return'EFFECTS[\"FFFF\"] must be an array such as [\"E1\"]';const i=[...new Set(EFFECTS.FFFF.map(String))].sort().join(\",\"),E=o(\"FFFF\").sort().join(\",\");return i===E?\"OK\":\"not right for FFFF\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — number of rules of the collapsed decision table derived from the graph",
+              "vi": "B — số luật của bảng quyết định rút gọn suy ra từ đồ thị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return RULE_COUNT===5?\"OK\":\"not right \\u2014 collapse with don't-care entries: an invalid ID decides everything by itself\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "C — ON point of start = 7",
+              "vi": "C — điểm ON của start = 7"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const[n,t]=s;return Number.isInteger(n)&&Number.isInteger(t)&&n>=7&&n<=20&&t>=1&&t<=3&&n+t<=21},r=DOMAIN&&DOMAIN.B1;if(!r||!Array.isArray(r.on))return\"DOMAIN.B1.on must be [start, duration]\";const e=r.on;return o(e)&&e[0]===7?\"OK\":\"the ON point must be VALID and lie exactly on start = 7\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — OFF point of start = 7",
+              "vi": "C — điểm OFF của start = 7"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const[n,r]=s;return Number.isInteger(n)&&Number.isInteger(r)&&n>=7&&n<=20&&r>=1&&r<=3&&n+r<=21},e=DOMAIN&&DOMAIN.B1;if(!e||!Array.isArray(e.off))return\"DOMAIN.B1.off must be [start, duration]\";const t=e.off;return o(t)?\"the OFF point must be INVALID\":t[0]===6&&t[1]>=1&&t[1]<=3&&t[0]+t[1]<=21?\"OK\":\"the OFF point must be one step outside start = 7 and break ONLY that constraint\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — ON point of duration = 1",
+              "vi": "C — điểm ON của duration = 1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=function(s){const[n,t]=s;return Number.isInteger(n)&&Number.isInteger(t)&&n>=7&&n<=20&&t>=1&&t<=3&&n+t<=21},r=DOMAIN&&DOMAIN.B3;if(!r||!Array.isArray(r.on))return\"DOMAIN.B3.on must be [start, duration]\";const o=r.on;return e(o)&&o[1]===1?\"OK\":\"the ON point must be VALID and lie exactly on duration = 1\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — OFF point of duration = 1",
+              "vi": "C — điểm OFF của duration = 1"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const[n,r]=s;return Number.isInteger(n)&&Number.isInteger(r)&&n>=7&&n<=20&&r>=1&&r<=3&&n+r<=21},e=DOMAIN&&DOMAIN.B3;if(!e||!Array.isArray(e.off))return\"DOMAIN.B3.off must be [start, duration]\";const t=e.off;return o(t)?\"the OFF point must be INVALID\":t[1]===0&&t[0]>=7&&t[0]<=20?\"OK\":\"the OFF point must be one step outside duration = 1 and break ONLY that constraint\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — ON point of duration = 3",
+              "vi": "C — điểm ON của duration = 3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=function(s){const[n,t]=s;return Number.isInteger(n)&&Number.isInteger(t)&&n>=7&&n<=20&&t>=1&&t<=3&&n+t<=21},r=DOMAIN&&DOMAIN.B4;if(!r||!Array.isArray(r.on))return\"DOMAIN.B4.on must be [start, duration]\";const o=r.on;return e(o)&&o[1]===3?\"OK\":\"the ON point must be VALID and lie exactly on duration = 3\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — OFF point of duration = 3",
+              "vi": "C — điểm OFF của duration = 3"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const[n,r]=s;return Number.isInteger(n)&&Number.isInteger(r)&&n>=7&&n<=20&&r>=1&&r<=3&&n+r<=21},e=DOMAIN&&DOMAIN.B4;if(!e||!Array.isArray(e.off))return\"DOMAIN.B4.off must be [start, duration]\";const t=e.off;return o(t)?\"the OFF point must be INVALID\":t[1]===4&&t[0]>=7&&t[0]<=20&&t[0]+t[1]<=21?\"OK\":\"the OFF point must be one step outside duration = 3 and break ONLY that constraint\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — ON point of start + duration = 21",
+              "vi": "C — điểm ON của start + duration = 21"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=function(s){const[n,t]=s;return Number.isInteger(n)&&Number.isInteger(t)&&n>=7&&n<=20&&t>=1&&t<=3&&n+t<=21},r=DOMAIN&&DOMAIN.B5;if(!r||!Array.isArray(r.on))return\"DOMAIN.B5.on must be [start, duration]\";const o=r.on;return e(o)&&o[0]+o[1]===21?\"OK\":\"the ON point must be VALID and lie exactly on start + duration = 21\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — OFF point of start + duration = 21",
+              "vi": "C — điểm OFF của start + duration = 21"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const[n,r]=s;return Number.isInteger(n)&&Number.isInteger(r)&&n>=7&&n<=20&&r>=1&&r<=3&&n+r<=21},e=DOMAIN&&DOMAIN.B5;if(!e||!Array.isArray(e.off))return\"DOMAIN.B5.off must be [start, duration]\";const t=e.off;return o(t)?\"the OFF point must be INVALID\":t[0]+t[1]===22&&t[0]>=7&&t[0]<=20&&t[1]>=1&&t[1]<=3?\"OK\":\"the OFF point must be one step outside start + duration = 21 and break ONLY that constraint\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — the redundant constraint",
+              "vi": "C — ràng buộc thừa"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return String(REDUNDANT).replace(/\\s+/g,\"\")===\"start<=20\"?\"OK\":\"not right \\u2014 which constraint can never be the ONLY one that a booking breaks?\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Pairwise configuration testing",
+            "diem": 4
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Cause–effect graph",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Domain testing (two variables)",
+            "diem": 3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "deep-lab",
+      "mistakesJson": [
+        {
+          "loi": "Phủ cặp Safari + Windows bằng cách thêm dòng Safari/Windows — cặp bị ràng buộc không cần phủ."
+        },
+        {
+          "loi": "B: cho TTFT ra E4 — C4 (có đơn thi lại được duyệt) cứu sinh viên vắng nhiều ⇒ E1."
+        },
+        {
+          "loi": "C: điểm OFF của B4 là (19, 4) — phạm cả duration ≤ 3 lẫn start + duration ≤ 21."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pairwise testing",
+          "vi": "kiểm thử theo cặp — mọi cặp giá trị của mọi hai yếu tố xuất hiện ít nhất một lần"
+        },
+        {
+          "en": "constraint",
+          "vi": "ràng buộc — tổ hợp không thể xảy ra"
+        },
+        {
+          "en": "cause–effect graph",
+          "vi": "đồ thị nhân–quả — nối nguyên nhân với hiệu ứng bằng AND/OR/NOT"
+        },
+        {
+          "en": "domain testing",
+          "vi": "kiểm thử miền — kiểm các biên của miền nhiều biến"
+        },
+        {
+          "en": "ON / OFF point",
+          "vi": "điểm trên biên (hợp lệ) / điểm ngay ngoài biên (không hợp lệ)"
+        },
+        {
+          "en": "redundant constraint",
+          "vi": "ràng buộc thừa — bị ràng buộc khác bao trọn"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        }
+      ]
+    }
+  ]
+}

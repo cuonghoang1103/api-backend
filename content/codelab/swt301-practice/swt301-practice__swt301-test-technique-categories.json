@@ -1,0 +1,809 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-test-technique-categories",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-test-technique-categories"
+  },
+  "exercises": [
+    {
+      "title": "Techniques 1 — Which family does each technique belong to?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "test technique categories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>ISTQB groups test techniques into three families: <b>black-box</b> (specification-based), <b>white-box</b> (structure-based) and <b>experience-based</b>. SWT301 teaches ten techniques. Put each one in its family.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ISTQB chia kỹ thuật test thành ba họ: <b>black-box</b> (dựa đặc tả), <b>white-box</b> (dựa cấu trúc) và <b>dựa kinh nghiệm</b>. SWT301 dạy mười kỹ thuật. Hãy xếp mỗi kỹ thuật vào họ của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: test được rút ra từ đâu — đặc tả, mã, hay đầu người tester?",
+        "“Decision table” (bảng quyết định nghiệp vụ) ≠ “decision” (if/else trong mã)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — Which family does each technique belong to?\n\nAnswer in the answer panel (no code needed).\n\n1. Family of each techniqueHọ của từng kỹ thuật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 1 — Which family does each technique belong to? — answer key\n\n1. Family of each techniqueHọ của từng kỹ thuật\n   - r0.h: Black-box\n   - r1.h: Black-box\n   - r2.h: Black-box\n   - r3.h: Black-box\n   - r4.h: Black-box\n   - r5.h: White-box\n   - r6.h: White-box\n   - r7.h: Experience-based\n   - r8.h: Experience-based\n   - r9.h: Experience-based\n   The five black-box techniques derive tests from the specification; statement and decision testing derive them from the code structure; error guessing, exploratory and checklist-based testing rely on the tester’s knowledge and experience. Careful: “decision TABLE testing” is black-box, “decision testing” is white-box.VI: Năm kỹ thuật black-box rút test từ đặc tả; statement và decision testing rút từ cấu trúc mã; error guessing, exploratory và checklist-based dựa vào kiến thức và kinh nghiệm của tester. Cẩn thận: “decision TABLE testing” là black-box, “decision testing” là white-box.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Black-box: EP, BVA, decision table, state transition, use case. White-box: statement, decision. Experience-based: error guessing, exploratory, checklist-based.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Family of each technique</p><p style=\"opacity:.75;font-size:.92em\"><i>Họ của từng kỹ thuật</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Technique"
+              },
+              {
+                "ma": "h",
+                "ten": "Family",
+                "luaChon": [
+                  "Black-box",
+                  "White-box",
+                  "Experience-based"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Equivalence partitioning"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "Boundary value analysis"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "Decision table testing"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "State transition testing"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "Use case testing"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "Statement testing"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "Decision testing"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "Error guessing"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "t": "Exploratory testing"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "t": "Checklist-based testing"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.h": "Black-box",
+              "r1.h": "Black-box",
+              "r2.h": "Black-box",
+              "r3.h": "Black-box",
+              "r4.h": "Black-box",
+              "r5.h": "White-box",
+              "r6.h": "White-box",
+              "r7.h": "Experience-based",
+              "r8.h": "Experience-based",
+              "r9.h": "Experience-based"
+            },
+            "giaiThich": "<p>The five black-box techniques derive tests from the specification; statement and decision testing derive them from the code structure; error guessing, exploratory and checklist-based testing rely on the tester’s knowledge and experience. Careful: “decision TABLE testing” is black-box, “decision testing” is white-box.</p><p><i>VI: Năm kỹ thuật black-box rút test từ đặc tả; statement và decision testing rút từ cấu trúc mã; error guessing, exploratory và checklist-based dựa vào kiến thức và kinh nghiệm của tester. Cẩn thận: “decision TABLE testing” là black-box, “decision testing” là white-box.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp decision table testing vào white-box vì có chữ “decision”."
+        },
+        {
+          "loi": "Xếp checklist-based vào black-box vì checklist “giống đặc tả” — checklist đến từ kinh nghiệm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "black-box technique",
+          "vi": "kỹ thuật hộp đen — dựa đặc tả, không nhìn mã"
+        },
+        {
+          "en": "white-box technique",
+          "vi": "kỹ thuật hộp trắng — dựa cấu trúc bên trong (mã)"
+        },
+        {
+          "en": "experience-based technique",
+          "vi": "kỹ thuật dựa kinh nghiệm"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 2 — Characteristics of the three families (K2)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "test technique categories",
+        "test basis",
+        "coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on LO-4.1.1: the <b>test basis</b>, what each family <b>finds</b>, how <b>coverage</b> is measured and at which <b>levels</b> it is used.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về LO-4.1.1: <b>test basis</b>, mỗi họ <b>tìm ra</b> gì, đo <b>độ phủ</b> thế nào và dùng ở <b>cấp test</b> nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Black-box ↔ đặc tả; white-box ↔ cấu trúc; experience ↔ người.",
+        "Độ phủ: black-box đếm phần tử test basis; white-box đếm phần tử cấu trúc; experience-based không đo chính thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — Characteristics of the three families (K2)\n\nAnswer in the answer panel (no code needed).\n\n1. Which is the typical test basis of WHITE-box techniques?Test basis điển hình của kỹ thuật WHITE-box là gì?\n2. How is coverage measured for black-box techniques?Độ phủ của kỹ thuật black-box được đo thế nào?\n3. Which statement about EXPERIENCE-based techniques is correct?Phát biểu nào về kỹ thuật DỰA KINH NGHIỆM là đúng?\n4. Black-box techniques are especially good at finding…Kỹ thuật black-box đặc biệt giỏi tìm…\n5. Which of these is NOT a factor the syllabus lists for choosing test techniques?Yếu tố nào KHÔNG nằm trong danh sách yếu tố chọn kỹ thuật test của syllabus?\n6. At which test levels can white-box techniques be applied?Kỹ thuật white-box áp dụng được ở cấp test nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 2 — Characteristics of the three families (K2) — answer key\n\n1. Which is the typical test basis of WHITE-box techniques?Test basis điển hình của kỹ thuật WHITE-box là gì?\n   Answer: b) Code, architecture, detailed design and internal structure\n   White-box = structure-based: code, architecture, detailed design. (a) and (d) are black-box bases; (c) is experience-based.VI: White-box = dựa cấu trúc: mã, kiến trúc, thiết kế chi tiết. (a), (d) là cơ sở của black-box; (c) là dựa kinh nghiệm.\n\n2. How is coverage measured for black-box techniques?Độ phủ của kỹ thuật black-box được đo thế nào?\n   Answer: b) By the items of the test basis that were tested, e.g. partitions, boundaries, rules, transitions\n   Black-box coverage = tested items of the test basis ÷ identified items. Statement % is white-box; “cannot be measured formally” is experience-based.VI: Độ phủ black-box = phần tử của test basis đã test ÷ đã xác định. % câu lệnh là white-box; “không đo chính thức được” là dựa kinh nghiệm.\n\n3. Which statement about EXPERIENCE-based techniques is correct?Phát biểu nào về kỹ thuật DỰA KINH NGHIỆM là đúng?\n   Answer: b) They are useful when the specification is poor or outdated, and they can find defects other techniques miss\n   Experience-based testing complements the systematic techniques; it works with little documentation; its coverage is hard to measure and its effectiveness depends on the tester.VI: Test dựa kinh nghiệm bổ trợ cho các kỹ thuật có hệ thống; dùng được khi ít tài liệu; độ phủ khó đo và hiệu quả phụ thuộc người test.\n\n4. Black-box techniques are especially good at finding…Kỹ thuật black-box đặc biệt giỏi tìm…\n   Answer: b) gaps and deviations between the requirements and their implementation\n   They check behaviour against the specification. Unexecuted code is found by white-box coverage; memory leaks and coding-standard violations by dynamic/static analysis.VI: Chúng kiểm hành vi so với đặc tả. Mã không bao giờ chạy do white-box phát hiện; rò bộ nhớ và vi phạm chuẩn mã do phân tích động/tĩnh.\n\n5. Which of these is NOT a factor the syllabus lists for choosing test techniques?Yếu tố nào KHÔNG nằm trong danh sách yếu tố chọn kỹ thuật test của syllabus?\n   Answer: d) The number of developers who wrote the code\n   Factors include: type and complexity of the component, regulatory standards, customer/contract requirements, risk levels and types, test objectives, available documentation, tester knowledge, tools, time and budget, SDLC model, expected use, past experience with defect types.VI: Các yếu tố: loại và độ phức tạp của thành phần, chuẩn quy định, yêu cầu khách hàng/hợp đồng, mức và loại rủi ro, mục tiêu test, tài liệu sẵn có, kiến thức tester, công cụ, thời gian và ngân sách, mô hình SDLC, cách dùng dự kiến, kinh nghiệm về loại lỗi.\n\n6. At which test levels can white-box techniques be applied?Kỹ thuật white-box áp dụng được ở cấp test nào?\n   Answer: b) All levels — most often component and integration testing\n   Structure can be code (component), call graphs (integration), menu structures or business process models (system/acceptance). Statement/decision coverage is most common at component level.VI: Cấu trúc có thể là mã (component), đồ thị gọi (integration), cấu trúc menu hay mô hình quy trình (system/acceptance). Độ phủ lệnh/quyết định hay gặp nhất ở component.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · b · d · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is the typical test basis of WHITE-box techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Test basis điển hình của kỹ thuật WHITE-box là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "User stories and acceptance criteria"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Code, architecture, detailed design and internal structure"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The tester’s knowledge of past defects"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use cases and business process models"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>White-box = structure-based: code, architecture, detailed design. (a) and (d) are black-box bases; (c) is experience-based.</p><p><i>VI: White-box = dựa cấu trúc: mã, kiến trúc, thiết kế chi tiết. (a), (d) là cơ sở của black-box; (c) là dựa kinh nghiệm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>How is coverage measured for black-box techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ phủ của kỹ thuật black-box được đo thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "By the percentage of statements executed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "By the items of the test basis that were tested, e.g. partitions, boundaries, rules, transitions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot be measured"
+              },
+              {
+                "ma": "d",
+                "noiDung": "By the number of defects found per hour"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Black-box coverage = tested items of the test basis ÷ identified items. Statement % is white-box; “cannot be measured formally” is experience-based.</p><p><i>VI: Độ phủ black-box = phần tử của test basis đã test ÷ đã xác định. % câu lệnh là white-box; “không đo chính thức được” là dựa kinh nghiệm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which statement about EXPERIENCE-based techniques is correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về kỹ thuật DỰA KINH NGHIỆM là đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They replace the need for black-box techniques"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are useful when the specification is poor or outdated, and they can find defects other techniques miss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Their coverage is measured as decision coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They can only be used at acceptance level"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Experience-based testing complements the systematic techniques; it works with little documentation; its coverage is hard to measure and its effectiveness depends on the tester.</p><p><i>VI: Test dựa kinh nghiệm bổ trợ cho các kỹ thuật có hệ thống; dùng được khi ít tài liệu; độ phủ khó đo và hiệu quả phụ thuộc người test.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Black-box techniques are especially good at finding…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật black-box đặc biệt giỏi tìm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "code that is never executed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "gaps and deviations between the requirements and their implementation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "memory leaks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "violations of the coding standard"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They check behaviour against the specification. Unexecuted code is found by white-box coverage; memory leaks and coding-standard violations by dynamic/static analysis.</p><p><i>VI: Chúng kiểm hành vi so với đặc tả. Mã không bao giờ chạy do white-box phát hiện; rò bộ nhớ và vi phạm chuẩn mã do phân tích động/tĩnh.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which of these is NOT a factor the syllabus lists for choosing test techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>Yếu tố nào KHÔNG nằm trong danh sách yếu tố chọn kỹ thuật test của syllabus?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Risk levels and types of risk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Available documentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Tester knowledge and skills"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The number of developers who wrote the code"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Factors include: type and complexity of the component, regulatory standards, customer/contract requirements, risk levels and types, test objectives, available documentation, tester knowledge, tools, time and budget, SDLC model, expected use, past experience with defect types.</p><p><i>VI: Các yếu tố: loại và độ phức tạp của thành phần, chuẩn quy định, yêu cầu khách hàng/hợp đồng, mức và loại rủi ro, mục tiêu test, tài liệu sẵn có, kiến thức tester, công cụ, thời gian và ngân sách, mô hình SDLC, cách dùng dự kiến, kinh nghiệm về loại lỗi.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>At which test levels can white-box techniques be applied?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật white-box áp dụng được ở cấp test nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only component testing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All levels — most often component and integration testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only system testing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only when no specification exists"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Structure can be code (component), call graphs (integration), menu structures or business process models (system/acceptance). Statement/decision coverage is most common at component level.</p><p><i>VI: Cấu trúc có thể là mã (component), đồ thị gọi (integration), cấu trúc menu hay mô hình quy trình (system/acceptance). Độ phủ lệnh/quyết định hay gặp nhất ở component.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng white-box chỉ dùng ở unit test — syllabus nói mọi cấp."
+        },
+        {
+          "loi": "Cho rằng kỹ thuật dựa kinh nghiệm thay được kỹ thuật hệ thống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test basis",
+          "vi": "cơ sở kiểm thử — tài liệu dùng để thiết kế test (đặc tả, mã, user story…)"
+        },
+        {
+          "en": "coverage",
+          "vi": "độ phủ — mức (%) phần tử đã được test"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 3 — Pick the technique for each situation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "choosing test techniques"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>For every situation choose the ONE technique that fits best. The words of the situation point to it: ranges → BVA, groups → EP, combinations → decision table, history/state → state transition, end-to-end actor flow → use case, “every line / every branch” → white-box, “likely mistakes / charter / list” → experience-based.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi tình huống chọn MỘT kỹ thuật phù hợp nhất. Từ khoá trong tình huống chỉ ra nó: khoảng → BVA, nhóm → EP, tổ hợp → bảng quyết định, lịch sử/trạng thái → chuyển trạng thái, luồng đầu-cuối của tác nhân → use case, “mọi dòng / mọi nhánh” → white-box, “lỗi hay gặp / charter / danh sách” → dựa kinh nghiệm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có ranh giới số cụ thể (17/18, 65/66) ⇒ BVA; chỉ cần một đại diện mỗi nhóm ⇒ EP.",
+        "“Mọi dòng” = statement; “mọi kết quả if/else” = decision."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 3 — Pick the technique for each situation\n\nAnswer in the answer panel (no code needed).\n\n1. Best technique for each situationKỹ thuật phù hợp nhất cho mỗi tình huống\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 3 — Pick the technique for each situation — answer key\n\n1. Best technique for each situationKỹ thuật phù hợp nhất cho mỗi tình huống\n   - r0.k: Boundary value analysis\n   - r1.k: Equivalence partitioning\n   - r2.k: Decision table testing\n   - r3.k: State transition testing\n   - r4.k: Use case testing\n   - r5.k: Statement testing\n   - r6.k: Decision testing\n   - r7.k: Error guessing\n   - r8.k: Exploratory testing\n   - r9.k: Checklist-based testing\n   Each situation uses the vocabulary of its technique (the slide 4.6 table “The specification talks about… → Use”).VI: Mỗi tình huống dùng đúng từ khoá của kỹ thuật (bảng “Đặc tả nói về… → Dùng” ở bài 4.6).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>BVA · EP · decision table · state transition · use case · statement · decision · error guessing · exploratory · checklist-based.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Best technique for each situation</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật phù hợp nhất cho mỗi tình huống</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation"
+              },
+              {
+                "ma": "k",
+                "ten": "Technique",
+                "luaChon": [
+                  "Equivalence partitioning",
+                  "Boundary value analysis",
+                  "Decision table testing",
+                  "State transition testing",
+                  "Use case testing",
+                  "Statement testing",
+                  "Decision testing",
+                  "Error guessing",
+                  "Exploratory testing",
+                  "Checklist-based testing"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "An age field accepts 18–65: test 17, 18, 65 and 66"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A 200-country dropdown is processed in 3 tax regions: one country per region"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "An insurance premium depends on combinations of age band, smoker status and previous claims"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A login locks after 3 failed attempts and unlocks after 30 minutes"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "“Customer withdraws cash” tested from start to end, with the main flow and every alternative"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Make sure every line of the new validateTax() method runs at least once"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Make sure every if/else outcome of calculateTax() has been executed"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A tester with years in banking lists likely mistakes: rounding, leap years, negative amounts"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "A 60-minute session with the charter “explore booking cancellation”"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "s": "Every new screen is checked against the team’s list of common UI defects"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Boundary value analysis",
+              "r1.k": "Equivalence partitioning",
+              "r2.k": "Decision table testing",
+              "r3.k": "State transition testing",
+              "r4.k": "Use case testing",
+              "r5.k": "Statement testing",
+              "r6.k": "Decision testing",
+              "r7.k": "Error guessing",
+              "r8.k": "Exploratory testing",
+              "r9.k": "Checklist-based testing"
+            },
+            "giaiThich": "<p>Each situation uses the vocabulary of its technique (the slide 4.6 table “The specification talks about… → Use”).</p><p><i>VI: Mỗi tình huống dùng đúng từ khoá của kỹ thuật (bảng “Đặc tả nói về… → Dùng” ở bài 4.6).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn EP cho 17/18/65/66 — đó là giá trị biên."
+        },
+        {
+          "loi": "Chọn use case cho khoá đăng nhập sau 3 lần sai — hành vi phụ thuộc lịch sử ⇒ state transition."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        },
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "statement coverage",
+          "vi": "độ phủ câu lệnh (C0)"
+        },
+        {
+          "en": "decision (branch) coverage",
+          "vi": "độ phủ quyết định / nhánh (C1)"
+        }
+      ]
+    },
+    {
+      "title": "Techniques 4 — Compare the families (harder, multi-answer)",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "test technique categories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Harder K2 questions. Some have <b>more than one</b> correct option — select all of them.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu K2 khó hơn. Có câu <b>nhiều</b> đáp án đúng — chọn đủ tất cả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Câu nhiều đáp án: kiểm từng phương án độc lập với câu chữ syllabus.",
+        "Ghép kỹ thuật ↔ phần tử độ phủ: partition, boundary, rule, transition, statement, decision."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 4 — Compare the families (harder, multi-answer)\n\nAnswer in the answer panel (no code needed).\n\n1. Which TWO are common characteristics of black-box techniques?HAI đặc điểm chung nào của kỹ thuật black-box?\n2. Which TWO are characteristics of white-box techniques?HAI đặc điểm nào của kỹ thuật white-box?\n3. A team has no written requirements, a tight deadline and an experienced tester. Which family will they most likely rely on?Nhóm không có yêu cầu viết, hạn gấp và một tester giàu kinh nghiệm. Họ có khả năng dựa vào họ kỹ thuật nào nhất?\n4. Why are test techniques combined rather than used alone?Vì sao kỹ thuật test thường được kết hợp chứ không dùng riêng lẻ?\n5. Which pair is correctly matched (technique → coverage item)?Cặp nào ghép đúng (kỹ thuật → phần tử độ phủ)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Techniques 4 — Compare the families (harder, multi-answer) — answer key\n\n1. Which TWO are common characteristics of black-box techniques?HAI đặc điểm chung nào của kỹ thuật black-box?\n   Answer: a) Test conditions, test cases and test data are derived from a test basis such as requirements or use cases + b) Test cases can detect gaps between the requirements and their implementation\n   (a) and (b) are the syllabus wording for black-box. (c) and (d) describe white-box.VI: (a) và (b) là đúng câu chữ syllabus cho black-box. (c), (d) mô tả white-box.\n\n2. Which TWO are characteristics of white-box techniques?HAI đặc điểm nào của kỹ thuật white-box?\n   Answer: a) Tests are derived from code, architecture, detailed design or other structural information + b) Coverage is measured on the items tested within a selected structure (e.g. statements, decisions)\n   White-box: structure-based basis and structural coverage. Working without documentation is a strength of experience-based testing.VI: White-box: cơ sở là cấu trúc và độ phủ cấu trúc. Làm việc không cần tài liệu là thế mạnh của test dựa kinh nghiệm.\n\n3. A team has no written requirements, a tight deadline and an experienced tester. Which family will they most likely rely on?Nhóm không có yêu cầu viết, hạn gấp và một tester giàu kinh nghiệm. Họ có khả năng dựa vào họ kỹ thuật nào nhất?\n   Answer: b) Experience-based, because it needs little documentation and uses the tester’s knowledge\n   Low documentation + time pressure + experienced tester are exactly the conditions under which experience-based techniques are recommended (combined with the others when possible).VI: Ít tài liệu + áp lực thời gian + tester giàu kinh nghiệm chính là điều kiện khuyên dùng kỹ thuật dựa kinh nghiệm (kết hợp kỹ thuật khác nếu có thể).\n\n4. Why are test techniques combined rather than used alone?Vì sao kỹ thuật test thường được kết hợp chứ không dùng riêng lẻ?\n   Answer: a) Because each technique is designed to find particular kinds of defects, so one technique alone leaves others undetected\n   The syllabus: “some techniques are more applicable to certain situations and test levels; others are applicable to all test levels” — using several gives the best results.VI: Syllabus: “một số kỹ thuật hợp với tình huống và cấp test nhất định; số khác dùng được ở mọi cấp” — dùng nhiều kỹ thuật cho kết quả tốt nhất.\n\n5. Which pair is correctly matched (technique → coverage item)?Cặp nào ghép đúng (kỹ thuật → phần tử độ phủ)?\n   Answer: b) State transition testing → transitions\n   Decision table → rules (columns); statement testing → executable statements; error guessing has no formal coverage item.VI: Bảng quyết định → rule (cột); statement testing → câu lệnh thực thi được; error guessing không có phần tử độ phủ chính thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a+b · a+b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "nhieu": true,
+            "de": "<p>Which TWO are common characteristics of black-box techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>HAI đặc điểm chung nào của kỹ thuật black-box?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Test conditions, test cases and test data are derived from a test basis such as requirements or use cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Test cases can detect gaps between the requirements and their implementation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Coverage is measured on the code structure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The tester must read the source code"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b"
+              ]
+            ],
+            "giaiThich": "<p>(a) and (b) are the syllabus wording for black-box. (c) and (d) describe white-box.</p><p><i>VI: (a) và (b) là đúng câu chữ syllabus cho black-box. (c), (d) mô tả white-box.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "nhieu": true,
+            "de": "<p>Which TWO are characteristics of white-box techniques?</p><p style=\"opacity:.75;font-size:.92em\"><i>HAI đặc điểm nào của kỹ thuật white-box?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tests are derived from code, architecture, detailed design or other structural information"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Coverage is measured on the items tested within a selected structure (e.g. statements, decisions)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They work best when no documentation exists at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are used only by business analysts"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "b"
+              ]
+            ],
+            "giaiThich": "<p>White-box: structure-based basis and structural coverage. Working without documentation is a strength of experience-based testing.</p><p><i>VI: White-box: cơ sở là cấu trúc và độ phủ cấu trúc. Làm việc không cần tài liệu là thế mạnh của test dựa kinh nghiệm.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A team has no written requirements, a tight deadline and an experienced tester. Which family will they most likely rely on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm không có yêu cầu viết, hạn gấp và một tester giàu kinh nghiệm. Họ có khả năng dựa vào họ kỹ thuật nào nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "White-box, because coverage is objective"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Experience-based, because it needs little documentation and uses the tester’s knowledge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Decision table testing, because it is systematic"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None — testing cannot start without requirements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Low documentation + time pressure + experienced tester are exactly the conditions under which experience-based techniques are recommended (combined with the others when possible).</p><p><i>VI: Ít tài liệu + áp lực thời gian + tester giàu kinh nghiệm chính là điều kiện khuyên dùng kỹ thuật dựa kinh nghiệm (kết hợp kỹ thuật khác nếu có thể).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why are test techniques combined rather than used alone?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao kỹ thuật test thường được kết hợp chứ không dùng riêng lẻ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because each technique is designed to find particular kinds of defects, so one technique alone leaves others undetected"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because standards forbid using a single technique"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because combining techniques always reduces the number of test cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because experience-based techniques need white-box results as input"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The syllabus: “some techniques are more applicable to certain situations and test levels; others are applicable to all test levels” — using several gives the best results.</p><p><i>VI: Syllabus: “một số kỹ thuật hợp với tình huống và cấp test nhất định; số khác dùng được ở mọi cấp” — dùng nhiều kỹ thuật cho kết quả tốt nhất.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which pair is correctly matched (technique → coverage item)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cặp nào ghép đúng (kỹ thuật → phần tử độ phủ)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Decision table testing → decisions in the code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "State transition testing → transitions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Statement testing → partitions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Error guessing → statements"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Decision table → rules (columns); statement testing → executable statements; error guessing has no formal coverage item.</p><p><i>VI: Bảng quyết định → rule (cột); statement testing → câu lệnh thực thi được; error guessing không có phần tử độ phủ chính thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn “không thể bắt đầu test khi chưa có yêu cầu” — tĩnh và dựa kinh nghiệm vẫn làm được."
+        },
+        {
+          "loi": "Nhầm “decision table” với “decision coverage”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "coverage item",
+          "vi": "phần tử độ phủ — thứ được đếm khi tính độ phủ"
+        }
+      ]
+    }
+  ]
+}

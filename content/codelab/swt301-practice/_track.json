@@ -10,40 +10,94 @@
   "description": "Bộ luyện môn SWT301 (Software Testing) theo ISTQB Foundation và slide trường — mỗi bài học một bộ đề từ dễ đến khó có máy chấm thật (viết test bị chấm bằng mutant, đo độ phủ statement/decision/MC/DC trên mã đã gắn đo, test case hộp đen chạy qua hệ thống tham chiếu), mỗi chương một Lab + Deep Lab dạng bản in, luyện Lab 2–4 của trường, PE luyện định dạng SU26 và dự án xuyên suốt LabBook.",
   "modules": [
     {
+      "slug": "swt301-test-technique-categories",
+      "name": "4.1 Categories of test techniques",
+      "level": "BEGINNER",
+      "description": "Ba họ kỹ thuật test (black-box · white-box · dựa kinh nghiệm): test basis, độ phủ, cấp test; chọn kỹ thuật theo tình huống — 4 đề trắc nghiệm/điền bảng có giải thích từng phương án."
+    },
+    {
+      "slug": "swt301-blackbox-ep-bva",
+      "name": "4.2 Equivalence partitioning",
+      "level": "BEGINNER",
+      "description": "Phân vùng tương đương: xếp giá trị vào vùng, một đại diện mỗi vùng (kể cả vùng \"không phải bội 1.000\"), câu hỏi ISTQB, viết test theo vùng giết 6 mutant, bộ test tối thiểu cho form ba trường (ghép vùng đúng, tách vùng sai)."
+    },
+    {
+      "slug": "swt301-blackbox-bva-template",
+      "name": "4.3 Boundary value analysis & the condition template",
+      "level": "BEGINNER",
+      "description": "BVA hai và ba giá trị (để ý độ chính xác), câu hỏi kiểu ISTQB, điền bảng condition template của PE câu 3 cũ (có vùng tuỳ chọn hai vùng hợp lệ) và viết test theo biên giết 9 mutant off-by-one."
+    },
+    {
+      "slug": "swt301-blackbox-decision-state",
+      "name": "4.4 Decision table testing",
+      "level": "BEGINNER",
+      "description": "Bảng quyết định đầy đủ và rút gọn (ví dụ thẻ tín dụng của sách giáo trình), test mỗi luật một ca có kết quả mong đợi đúng, viết test theo luật giết 6 mutant, câu hỏi kiểu ISTQB."
+    },
+    {
+      "slug": "swt301-blackbox-state-transition",
+      "name": "4.5 State transition testing",
+      "level": "BEGINNER",
+      "description": "Máy trạng thái đơn hàng (6 trạng thái, 8 chuyển đổi): bảng trạng thái, phủ 0-switch tối thiểu, test âm từ ô không hợp lệ, test lớp Order giết 7 mutant, câu hỏi ISTQB và phủ 1-switch."
+    },
+    {
+      "slug": "swt301-blackbox-use-case",
+      "name": "4.6 Use case testing & black-box review",
+      "level": "BEGINNER",
+      "description": "Use case testing: câu hỏi K2, test use case “Book a lab seat” chạy thật trên LabBook (đường chính + 5 nhánh, bắt 2 bản lỗi), thứ tự thiết kế test, và 7 câu ôn tổng hợp năm kỹ thuật black-box."
+    },
+    {
+      "slug": "swt301-4-lab-blackbox-canteen-card",
+      "name": "Lab 4 — Black-box Test Design (FPT Canteen Card)",
+      "level": "ADVANCED",
+      "description": "Lab chương 4 dạng bản in: thẻ căng tin FPT — condition template EP/BVA cho số tiền nạp, bảng quyết định rút gọn giá suất ăn, phủ 0-switch + test âm cho vòng đời thẻ, use case mua suất ăn chạy qua hệ thống tham chiếu. Thang 10."
+    },
+    {
+      "slug": "swt301-4-deep-combinatorial-cause-effect",
+      "name": "Deep Lab 4 — Pairwise, Cause–Effect & Domain Testing",
+      "level": "ADVANCED",
+      "description": "Deep Lab chương 4 (vượt syllabus): pairwise có ràng buộc cho ma trận cấu hình LabBook (72 → ≤ 14 dòng), đồ thị nhân–quả ra bảng quyết định rút gọn, kiểm thử miền hai biến với điểm ON/OFF và ràng buộc thừa."
+    },
+    {
+      "slug": "swt301-4-project-labbook-blackbox",
+      "name": "LabBook Project 4 — Black-box Test Design for Booking",
+      "level": "INTERMEDIATE",
+      "description": "Dự án xuyên suốt LabBook — mốc chương 4: thiết kế test hộp đen cho POST /api/bookings (BVA mọi trường, luật kết quả, vòng đời booking) chạy thật, bắt 4 bản lỗi; kèm góc phỏng vấn về thiết kế test."
+    },
+    {
       "slug": "swt301-10-lab2-unit-test-report51",
       "name": "Lab 2 Practice — Unit Test Report 5.1 (reserveSeat)",
-      "level": "INTERMEDIATE",
-      "description": "Luyện Lab 2 trường: lưới UTCID white-box (đo C0/C1/độ phủ điều kiện thật trên mã gắn đo), lưới black-box từ Detail Design với tỉ lệ Normal<20% · Abnormal>60% · Boundary>20%, script unit test kiểu JUnit phải giết 10 mutant, sheet Test Report 5.1."
+      "level": "ADVANCED",
+      "description": "Luyện Lab 2 (Report 5.1): lưới UTCID white-box đo C0/C1/điều kiện thật, lưới black-box từ Detail Design với tỉ lệ N:A:B, script unit test kiểu JUnit giết 10 mutant, sheet Test Report."
     },
     {
       "slug": "swt301-10-lab3-integration-report52",
       "name": "Lab 3 Practice — Integration Test Report 5.2 (LabBook)",
       "level": "ADVANCED",
-      "description": "Luyện Lab 3 trường: test case Report 5.2 chạy thật trên hệ thống LabBook (bộ lọc bảo mật ↔ controller ↔ service ↔ CSDL ↔ dịch vụ thư), đo phủ theo điểm tích hợp, bắt 9 lỗi giao tiếp, điền sheet Test Statistics (trừ N/A)."
+      "description": "Luyện Lab 3 (Report 5.2): viết test case tích hợp chạy thật trên LabBook — kiểm bộ lọc bảo mật, controller, service, CSDL và dịch vụ thư; bắt 9 lỗi giao tiếp; điền sheet thống kê."
     },
     {
       "slug": "swt301-10-lab4-system-report53",
       "name": "Lab 4 Practice — System Test Report 5.3 (LabBook)",
       "level": "ADVANCED",
-      "description": "Luyện Lab 4 trường: bốn sheet workflow (StudentBooking, Waitlist, LabClosure, AccountSecurity) với ba vai trò, mọi luật nghiệp vụ hai phía biên, bắt 8 lỗi mức hệ thống, thống kê Report 5.3 theo round mới nhất."
+      "description": "Luyện Lab 4 (Report 5.3): test hệ thống theo bốn workflow (StudentBooking, Waitlist, LabClosure, AccountSecurity) chạy thật trên LabBook, phủ mọi luật nghiệp vụ hai phía biên, bắt 8 lỗi mức hệ thống, điền thống kê có trừ N/A."
     },
     {
       "slug": "swt301-11-pe-1-grade-parking-library",
       "name": "PE Practice 1 — GradeCalculator · calcParkingFee · Library Fine",
       "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút định dạng SU26: review GradeCalculator (≥ 8 lỗi + sửa mã chạy thật) · bộ test tối thiểu statement/decision/MC/DC cho calcParkingFee (độ phủ đo thật) · test hộp đen Library Late-Return Fine (hợp lệ · bảng quyết định · BVA). Thang 10, chấm tự động từng phần."
+      "description": "PE luyện định dạng SU26: review GradeCalculator (≥8 lỗi + sửa mã chạy thật), bộ test tối thiểu MC/DC cho calcParkingFee đo độ phủ thật, test hộp đen Library Late-Return Fine chạy qua hệ thống tham chiếu."
     },
     {
       "slug": "swt301-11-pe-2-password-shipping-ride",
       "name": "PE Practice 2 — PasswordPolicy · calcShippingFee · Ride Fare",
       "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút định dạng SU26: review PasswordPolicy (chuỗi, vòng lặp, ưu tiên toán tử) · MC/DC cho điều kiện OR ba vế của calcShippingFee (tối thiểu 6 ca) · test hộp đen Ride Fare Estimate (trường tuỳ chọn, bảng quyết định 3 điều kiện + trần khuyến mãi, BVA số thập phân)."
+      "description": "PE luyện định dạng SU26: review PasswordPolicy (≥8 lỗi + sửa mã chạy thật), MC/DC cho điều kiện OR ba vế của calcShippingFee (tối thiểu 6 ca), test hộp đen Ride Fare Estimate với trường tuỳ chọn, bảng quyết định 3 điều kiện + trần khuyến mãi và BVA số thập phân."
     },
     {
       "slug": "swt301-11-pe-3-attendance-scholarship-gym",
       "name": "PE Practice 3 — ExamEligibility · checkScholarship · Gym Fee",
       "level": "ADVANCED",
-      "description": "Đề luyện PE 85 phút định dạng SU26: review ExamEligibility (== so chuỗi, static rò trạng thái, chia nguyên) · MC/DC AND ba vế có ngắn mạch cho checkScholarship (lỗi đặc tả lộ trong bộ tối thiểu) · test hộp đen Gym Membership Fee (bảng quyết định rút gọn có ô 'không quan tâm', BVA nhiều mốc)."
+      "description": "PE luyện định dạng SU26: review ExamEligibility (== so chuỗi, static rò trạng thái, chia nguyên hai lần…) + sửa mã chạy thật, MC/DC AND ba vế với ngắn mạch cho checkScholarship (tối thiểu 6 ca, lỗi đặc tả lộ trong bộ tối thiểu), test hộp đen Gym Membership Fee với bảng quyết định rút gọn và BVA nhiều mốc."
     }
   ]
 }

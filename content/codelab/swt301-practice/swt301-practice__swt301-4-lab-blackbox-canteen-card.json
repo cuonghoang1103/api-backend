@@ -1,0 +1,444 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-4-lab-blackbox-canteen-card",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-use-case"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 — Black-box Test Design for the FPT Canteen Card",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 100,
+      "points": 100,
+      "concepts": [
+        "equivalence partitioning",
+        "boundary value analysis",
+        "decision table testing",
+        "state transition testing",
+        "use case testing"
+      ],
+      "prerequisites": [
+        "SWT301 4.2–4.6"
+      ],
+      "tags": [
+        "swt301",
+        "lab",
+        "black-box"
+      ],
+      "problemHtml": "<h1>Lab 4 — Black-box Test Design: the FPT Canteen Card</h1>\n<p class=\"bi-phu\">Chapter 4 lab · EP + BVA · decision table · state transition · use case · 10 marks</p>\n<h2>1. Overview</h2>\n<p>The canteen of FPT University uses a prepaid card. You are the tester of its kiosk software and you only have the specification below (black-box). Design the tests with the right technique for each part, the way SWT4 teaches: <b>EP and BVA</b> for the input fields, a <b>decision table</b> for the business rule, <b>state transition testing</b> for the card life cycle and <b>use case testing</b> for the end-to-end purchase.</p>\n<h3>Main features</h3>\n<ul>\n  <li>A. Top-up amount — condition template (EP + BVA).</li>\n  <li>B. Meal price — collapsed decision table and its tests.</li>\n  <li>C. Card life cycle — 0-switch coverage and negative tests.</li>\n  <li>D. Use case “Buy a meal” — main scenario, extensions, boundaries.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>Concrete values everywhere; expected results from the specification.</li>\n  <li>Each part is graded on its own file — a mistake in one part does not cost marks in another (unless the file does not load).</li>\n</ul>\n<h2>2. Required project structure</h2>\n<pre>answers/\n├── a-topup.js        ← const TOPUP = { validPartitions, invalidPartitions, validBoundaries, invalidBoundaries, bonusAtThreshold }\n├── b-meal.js         ← const MEAL_TESTS = [ { isStudent, isCombo, beforeEleven, expected } ]\n├── c-card.js         ← const CARD_SEQUENCES = [ [...events] ]; const CARD_INVALID_COUNT; const CARD_NEGATIVE = { events, expectedState }\n└── d-usecase.js      ← const MEAL_UC_TESTS = [ { id, description, precondition, steps, data, expected } ]</pre>\n<h2>3. UI wireframe</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------+\n|  FPT CANTEEN KIOSK              [card reader] |\n+-----------------------------------------------+\n|  Card: ACTIVE        Balance: 100,000 VND     |\n|  [ Single meal 35,000 ]  [ Combo 50,000 ]     |\n|  Student price applied: -10%                  |\n|            [ Confirm payment ]                |\n|  Paid. New balance: 55,000 VND.               |\n+-----------------------------------------------+</pre>\n<h2>4. Data model</h2>\n<p><b>Specification</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>Top-up amount</code></td><td>whole VND</td><td>multiple of 1,000, from 20,000 to 2,000,000; from 500,000 a 5% bonus is credited</td></tr><tr><td><code>Meal price</code></td><td>VND</td><td>single 35,000 · combo 50,000 · students 10% off · combos bought before 11:00 cost 5,000 less (after the student discount)</td></tr><tr><td><code>Card state</code></td><td>ACTIVE · LOCKED · EXPIRED · BLOCKED</td><td>see the diagram; BLOCKED (reported lost) is final</td></tr><tr><td><code>Kiosk messages</code></td><td>text</td><td>see Part D</td></tr></tbody></table>\n<h2>5. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. A. Top-up amount — EP + BVA <span class=\"bi-diem\">2.5 marks</span></h3>\n<p>A top-up must be a <b>multiple of 1,000 VND</b> between <b>20,000</b> and <b>2,000,000</b>. Top-ups of <b>500,000 or more</b> receive a <b>5% bonus</b>.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One value per valid partition (no bonus / bonus) and per invalid partition (too small / too large / not a multiple of 1,000).</li>\n  <li>All two-value boundaries (the step is 1,000): valid ones — including both sides of the bonus boundary — and invalid ones. Plus the bonus credited at the bonus threshold.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">equivalence partitioning</span> <span class=\"bi-hook\">boundary value analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Meal price — decision table <span class=\"bi-diem\">2.5 marks</span></h3>\n<p>Conditions: Student? · Combo? · Before 11:00? <table><thead><tr><th>Meal</th><th>Base price</th><th>Student</th><th>Before 11:00</th></tr></thead><tbody><tr><td>Single meal</td><td>35,000</td><td>10% off</td><td>no change</td></tr><tr><td>Combo meal</td><td>50,000</td><td>10% off</td><td>−5,000 after the student discount</td></tr></tbody></table></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Build the full table (8 rules), collapse it (the time does not matter for single meals ⇒ 6 rules) and write ONE test per collapsed rule with the expected price.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">decision table testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Card life cycle — state transition <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 620 300\" width=\"100%\" style=\"max-width:620px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Canteen card — states\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"620\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"310\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Canteen card — states</text><path d=\"M38.0,150.0 L85.0,150.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M175.0,142.2 Q242.8,130.6 312.7,87.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"216.9\" y=\"113.6\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"243.3\" y=\"126.1\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 lock</text><path d=\"M295.0,77.8 Q227.2,89.4 157.3,133.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"193.9\" y=\"88.4\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"226.7\" y=\"100.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 unlock</text><path d=\"M175.0,150.0 L495.0,150.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"289.4\" y=\"141.0\" width=\"91.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"335.0\" y=\"153.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 reportLost</text><path d=\"M383.6,87.0 L501.4,133.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"396.9\" y=\"101.0\" width=\"91.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"442.5\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 reportLost</text><path d=\"M175.0,159.8 Q243.7,174.8 314.9,223.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"211.5\" y=\"174.1\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"244.3\" y=\"186.6\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 expire</text><path d=\"M340.0,87.0 L340.0,223.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"307.2\" y=\"146.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"340.0\" y=\"158.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 expire</text><path d=\"M290.0,229.1 Q226.3,215.2 155.1,167.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"194.8\" y=\"197.6\" width=\"59.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"224.4\" y=\"210.1\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 renew</text><circle cx=\"30\" cy=\"150\" r=\"8\" fill=\"#111827\"/><rect x=\"85\" y=\"133\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"130\" y=\"154.0\" text-anchor=\"middle\" fill=\"#111827\">ACTIVE</text><rect x=\"295\" y=\"53\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"340\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\">LOCKED</text><rect x=\"290\" y=\"223\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"340\" y=\"244.0\" text-anchor=\"middle\" fill=\"#111827\">EXPIRED</text><rect x=\"495\" y=\"133\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"545\" y=\"154.0\" text-anchor=\"middle\" fill=\"#111827\">BLOCKED</text><text x=\"545\" y=\"185\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final (cannot be undone)</text></svg></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>CARD_SEQUENCES</code>: the minimum number of event sequences (each from ACTIVE) that covers all 7 transitions.</li>\n  <li><code>CARD_INVALID_COUNT</code>: invalid state/event pairs. <code>CARD_NEGATIVE</code>: a test that shows a BLOCKED card rejects an event.</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">0-switch coverage</span> <span class=\"bi-hook\">invalid transitions</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Use case “Buy a meal” <span class=\"bi-diem\">2.5 marks</span></h3>\n<p><p>Main scenario: the student places an ACTIVE card on the reader, chooses a meal, the kiosk debits the price and shows <code>Paid. New balance: [x] VND.</code> Extensions: LOCKED card → <code>Card is locked. Unlock it at the counter.</code> · BLOCKED → <code>Card is blocked. Please contact the canteen office.</code> · EXPIRED → <code>Card has expired. Renew it for the new term.</code> · balance below the price → <code>Insufficient balance. Please top up [missing] VND.</code> (amounts with thousands separators).</p></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One test case per path (main + 4 extensions) and the two boundary cases of the balance check (balance = price; 1,000 VND short).</li>\n</ul>\n<p><b>Must use:</b> <span class=\"bi-hook\">use case testing</span> <span class=\"bi-hook\">BVA</span></p>\n</div>\n<h2>6. Element ids / classes used by the auto-grader</h2>\n<table><thead><tr><th>Selector</th><th>Purpose</th></tr></thead><tbody><tr><td><code>TOPUP</code></td><td>answers/a-topup.js</td></tr><tr><td><code>MEAL_TESTS</code></td><td>answers/b-meal.js</td></tr><tr><td><code>CARD_SEQUENCES · CARD_INVALID_COUNT · CARD_NEGATIVE</code></td><td>answers/c-card.js</td></tr><tr><td><code>MEAL_UC_TESTS</code></td><td>answers/d-usecase.js</td></tr></tbody></table>\n<h2>7. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>A. Top-up amount — EP + BVA</td><td>2.5</td></tr><tr><td>2</td><td>B. Meal price — decision table</td><td>2.5</td></tr><tr><td>3</td><td>C. Card life cycle — state transition</td><td>2.5</td></tr><tr><td>4</td><td>D. Use case “Buy a meal”</td><td>2.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Forgetting that 499,000 / 500,000 is a boundary although both values are valid (the bonus partition).</li>\n  <li>Testing all 8 rules of the full meal table — two of them are redundant after collapsing.</li>\n  <li>Applying the −5,000 before the student discount: (50,000 − 5,000) × 90% = 40,500, but the price table applies it AFTER the discount ⇒ 40,000.</li>\n  <li>One giant sequence for the card: BLOCKED is final, so two sequences are needed.</li>\n</ul>\n<h2>8. Submission</h2>\n<p>Write your answers in the answer files on the right (they mirror the official template: one JavaScript object per test case / issue). Press <b>Run</b> for the visible checks and <b>Submit</b> for full grading, hidden checks included. Your score per question appears in the rubric table.</p>",
+      "problemHtmlVi": "<h1>Lab 4 — Black-box Test Design: the FPT Canteen Card</h1>\n<p class=\"bi-phu\">Lab chương 4 · EP + BVA · bảng quyết định · chuyển trạng thái · use case · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p>Căng tin Đại học FPT dùng thẻ trả trước. Bạn là tester của phần mềm ki-ốt và chỉ có đặc tả bên dưới (black-box). Hãy thiết kế test bằng đúng kỹ thuật cho từng phần như SWT4 dạy: <b>EP và BVA</b> cho các trường nhập, <b>bảng quyết định</b> cho quy tắc nghiệp vụ, <b>chuyển trạng thái</b> cho vòng đời thẻ và <b>use case</b> cho việc mua hàng đầu-cuối.</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li>A. Số tiền nạp — condition template (EP + BVA).</li>\n  <li>B. Giá suất ăn — bảng quyết định rút gọn và test.</li>\n  <li>C. Vòng đời thẻ — phủ 0-switch và test âm.</li>\n  <li>D. Use case “Mua suất ăn” — kịch bản chính, nhánh, biên.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Giá trị cụ thể ở mọi chỗ; kết quả mong đợi theo đặc tả.</li>\n  <li>Mỗi phần chấm trên tệp riêng — sai ở phần này không mất điểm phần khác (trừ khi tệp không nạp được).</li>\n</ul>\n<h2>2. Cấu trúc thư mục bắt buộc</h2>\n<pre>answers/\n├── a-topup.js        ← const TOPUP = { validPartitions, invalidPartitions, validBoundaries, invalidBoundaries, bonusAtThreshold }\n├── b-meal.js         ← const MEAL_TESTS = [ { isStudent, isCombo, beforeEleven, expected } ]\n├── c-card.js         ← const CARD_SEQUENCES = [ [...events] ]; const CARD_INVALID_COUNT; const CARD_NEGATIVE = { events, expectedState }\n└── d-usecase.js      ← const MEAL_UC_TESTS = [ { id, description, precondition, steps, data, expected } ]</pre>\n<h2>3. Wireframe giao diện</h2>\n<pre class=\"bi-wire\">+-----------------------------------------------+\n|  FPT CANTEEN KIOSK              [card reader] |\n+-----------------------------------------------+\n|  Card: ACTIVE        Balance: 100,000 VND     |\n|  [ Single meal 35,000 ]  [ Combo 50,000 ]     |\n|  Student price applied: -10%                  |\n|            [ Confirm payment ]                |\n|  Paid. New balance: 55,000 VND.               |\n+-----------------------------------------------+</pre>\n<h2>4. Mô hình dữ liệu</h2>\n<p><b>Specification</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>Top-up amount</code></td><td>whole VND</td><td>bội của 1.000, từ 20.000 tới 2.000.000; từ 500.000 được cộng thưởng 5%</td></tr><tr><td><code>Meal price</code></td><td>VND</td><td>suất thường 35.000 · combo 50.000 · sinh viên giảm 10% · combo mua trước 11:00 bớt 5.000 (sau khi giảm sinh viên)</td></tr><tr><td><code>Card state</code></td><td>ACTIVE · LOCKED · EXPIRED · BLOCKED</td><td>xem sơ đồ; BLOCKED (báo mất) là trạng thái cuối</td></tr><tr><td><code>Kiosk messages</code></td><td>text</td><td>xem Phần D</td></tr></tbody></table>\n<h2>5. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. A. Số tiền nạp — EP + BVA <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p>Lần nạp phải là <b>bội của 1.000 đ</b> trong khoảng <b>20.000</b> tới <b>2.000.000</b>. Nạp <b>từ 500.000</b> được <b>thưởng 5%</b>.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi vùng hợp lệ (không thưởng / có thưởng) và mỗi vùng không hợp lệ (quá nhỏ / quá lớn / không phải bội 1.000) một giá trị.</li>\n  <li>Mọi biên hai giá trị (bước 1.000): biên hợp lệ — gồm cả hai phía của biên thưởng — và biên không hợp lệ. Cộng tiền thưởng ở ngưỡng thưởng.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">equivalence partitioning</span> <span class=\"bi-hook\">boundary value analysis</span></p>\n</div>\n<div class=\"bi-cn\"><h3>2. B. Giá suất ăn — bảng quyết định <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p>Điều kiện: Sinh viên? · Combo? · Trước 11:00? <table><thead><tr><th>Meal</th><th>Base price</th><th>Student</th><th>Before 11:00</th></tr></thead><tbody><tr><td>Single meal</td><td>35,000</td><td>10% off</td><td>no change</td></tr><tr><td>Combo meal</td><td>50,000</td><td>10% off</td><td>−5,000 after the student discount</td></tr></tbody></table></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Lập bảng đầy đủ (8 luật), rút gọn (giờ không ảnh hưởng suất thường ⇒ 6 luật) và viết MỘT test cho mỗi luật rút gọn kèm giá mong đợi.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">decision table testing</span></p>\n</div>\n<div class=\"bi-cn\"><h3>3. C. Vòng đời thẻ — chuyển trạng thái <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 620 300\" width=\"100%\" style=\"max-width:620px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Canteen card — states\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"620\" height=\"300\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"310\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Canteen card — states</text><path d=\"M38.0,150.0 L85.0,150.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M175.0,142.2 Q242.8,130.6 312.7,87.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"216.9\" y=\"113.6\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"243.3\" y=\"126.1\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 lock</text><path d=\"M295.0,77.8 Q227.2,89.4 157.3,133.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"193.9\" y=\"88.4\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"226.7\" y=\"100.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 unlock</text><path d=\"M175.0,150.0 L495.0,150.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"289.4\" y=\"141.0\" width=\"91.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"335.0\" y=\"153.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 reportLost</text><path d=\"M383.6,87.0 L501.4,133.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"396.9\" y=\"101.0\" width=\"91.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"442.5\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 reportLost</text><path d=\"M175.0,159.8 Q243.7,174.8 314.9,223.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"211.5\" y=\"174.1\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"244.3\" y=\"186.6\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 expire</text><path d=\"M340.0,87.0 L340.0,223.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"307.2\" y=\"146.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"340.0\" y=\"158.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 expire</text><path d=\"M290.0,229.1 Q226.3,215.2 155.1,167.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"194.8\" y=\"197.6\" width=\"59.2\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"224.4\" y=\"210.1\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 renew</text><circle cx=\"30\" cy=\"150\" r=\"8\" fill=\"#111827\"/><rect x=\"85\" y=\"133\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"130\" y=\"154.0\" text-anchor=\"middle\" fill=\"#111827\">ACTIVE</text><rect x=\"295\" y=\"53\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"340\" y=\"74.0\" text-anchor=\"middle\" fill=\"#111827\">LOCKED</text><rect x=\"290\" y=\"223\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"340\" y=\"244.0\" text-anchor=\"middle\" fill=\"#111827\">EXPIRED</text><rect x=\"495\" y=\"133\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"545\" y=\"154.0\" text-anchor=\"middle\" fill=\"#111827\">BLOCKED</text><text x=\"545\" y=\"185\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final (cannot be undone)</text></svg></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>CARD_SEQUENCES</code>: số chuỗi sự kiện tối thiểu (mỗi chuỗi từ ACTIVE) phủ đủ 7 chuyển đổi.</li>\n  <li><code>CARD_INVALID_COUNT</code>: số cặp trạng thái/sự kiện không hợp lệ. <code>CARD_NEGATIVE</code>: một test cho thấy thẻ BLOCKED từ chối sự kiện.</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">0-switch coverage</span> <span class=\"bi-hook\">invalid transitions</span></p>\n</div>\n<div class=\"bi-cn\"><h3>4. D. Use case “Mua suất ăn” <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p><p>Kịch bản chính: sinh viên đặt thẻ ACTIVE lên đầu đọc, chọn suất, ki-ốt trừ tiền và hiện <code>Paid. New balance: [x] VND.</code> Nhánh: thẻ LOCKED → <code>Card is locked. Unlock it at the counter.</code> · BLOCKED → <code>Card is blocked. Please contact the canteen office.</code> · EXPIRED → <code>Card has expired. Renew it for the new term.</code> · số dư nhỏ hơn giá → <code>Insufficient balance. Please top up [thiếu] VND.</code> (số tiền có dấu phân cách hàng nghìn).</p></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi đường một test case (chính + 4 nhánh) và hai ca biên của bước kiểm số dư (số dư = giá; thiếu 1.000 đ).</li>\n</ul>\n<p><b>Bắt buộc dùng:</b> <span class=\"bi-hook\">use case testing</span> <span class=\"bi-hook\">BVA</span></p>\n</div>\n<h2>6. id / class máy chấm dùng</h2>\n<table><thead><tr><th>Selector</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>TOPUP</code></td><td>answers/a-topup.js</td></tr><tr><td><code>MEAL_TESTS</code></td><td>answers/b-meal.js</td></tr><tr><td><code>CARD_SEQUENCES · CARD_INVALID_COUNT · CARD_NEGATIVE</code></td><td>answers/c-card.js</td></tr><tr><td><code>MEAL_UC_TESTS</code></td><td>answers/d-usecase.js</td></tr></tbody></table>\n<h2>7. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>A. Số tiền nạp — EP + BVA</td><td>2.5</td></tr><tr><td>2</td><td>B. Giá suất ăn — bảng quyết định</td><td>2.5</td></tr><tr><td>3</td><td>C. Vòng đời thẻ — chuyển trạng thái</td><td>2.5</td></tr><tr><td>4</td><td>D. Use case “Mua suất ăn”</td><td>2.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Quên 499.000 / 500.000 là biên dù cả hai đều hợp lệ (vùng có thưởng).</li>\n  <li>Test cả 8 luật của bảng đầy đủ — hai luật thừa sau khi rút gọn.</li>\n  <li>Trừ 5.000 trước khi giảm sinh viên: (50.000 − 5.000) × 90% = 40.500, nhưng bảng giá trừ SAU khi giảm ⇒ 40.000.</li>\n  <li>Một chuỗi khổng lồ cho thẻ: BLOCKED là trạng thái cuối nên cần hai chuỗi.</li>\n</ul>\n<h2>8. Nộp bài</h2>\n<p>Viết câu trả lời vào các tệp bên phải (giống template chính thức: mỗi test case / lỗi là một object JavaScript). Bấm <b>Chạy thử</b> để chạy kiểm hiện, <b>Nộp</b> để chấm đủ (kể cả kiểm ẩn). Điểm từng câu hiện trong bảng thang điểm.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "Concrete values everywhere; expected results from the specification.|||Giá trị cụ thể ở mọi chỗ; kết quả mong đợi theo đặc tả.\nEach part is graded on its own file — a mistake in one part does not cost marks in another (unless the file does not load).|||Mỗi phần chấm trên tệp riêng — sai ở phần này không mất điểm phần khác (trừ khi tệp không nạp được).",
+      "examplesJson": [
+        {
+          "input": "Combo, student, before 11:00",
+          "output": "50,000 × 90% − 5,000 = 40,000 VND",
+          "explanation": "Collapsed rule R3 of the meal decision table.|||Luật rút gọn R3 của bảng giá."
+        }
+      ],
+      "hintsJson": [
+        "A: vùng có thưởng tạo một biên NẰM GIỮA vùng hợp lệ: 499.000 (không thưởng) | 500.000 (có thưởng) — cả hai là biên hợp lệ.",
+        "B: suất thường không phụ thuộc giờ ⇒ 2 luật (sinh viên / nhân viên); combo phụ thuộc cả ba ⇒ 4 luật. Tổng 6.",
+        "C: hai chuyển đổi đi vào BLOCKED (T3, T4) ⇒ 2 chuỗi. Gắn mọi chuyển đổi còn lại vào hai chuỗi đó (EXPIRED không phải trạng thái cuối — renew đưa về ACTIVE).",
+        "D: dữ liệu là chuỗi như ki-ốt nhận: cardState, balance, price. Hai ca biên: balance = price và balance = price − 1.000."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers/a-topup.js",
+          "language": "javascript",
+          "code": "const TOPUP = {\n  validPartitions: [],\n  invalidPartitions: [],\n  validBoundaries: [],\n  invalidBoundaries: [],\n  bonusAtThreshold: 0,   // the bonus credited for the smallest top-up that earns a bonus\n};\n"
+        },
+        {
+          "name": "answers/b-meal.js",
+          "language": "javascript",
+          "code": "// One test per COLLAPSED rule of the meal-price decision table.\nconst MEAL_TESTS = [\n  { isStudent: false, isCombo: false, beforeEleven: false, expected: 35000 },\n];\n"
+        },
+        {
+          "name": "answers/c-card.js",
+          "language": "javascript",
+          "code": "// Event sequences, each starting from a new ACTIVE card.\nconst CARD_SEQUENCES = [\n  ['lock', 'unlock'],\n];\nconst CARD_INVALID_COUNT = 0;\nconst CARD_NEGATIVE = { events: [], expectedState: '' };\n"
+        },
+        {
+          "name": "answers/d-usecase.js",
+          "language": "javascript",
+          "code": "const MEAL_UC_TESTS = [\n  {\n    id: 'UC-MAIN', description: 'Main scenario: an active card with enough balance pays for the meal',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'ACTIVE', balance: '100000', price: '45000' },\n    expected: 'Paid. New balance: 55,000 VND.',\n  },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers/a-topup.js",
+          "language": "javascript",
+          "code": "// A. Top-up amount: 5 partitions (2 valid, 3 invalid), step 1,000.\nconst TOPUP = {\n  validPartitions: [100000, 800000],                 // 20,000–499,000 (no bonus) · 500,000–2,000,000 (bonus)\n  invalidPartitions: [10000, 2500000, 150500],       // too small · too large · not a multiple of 1,000\n  validBoundaries: [20000, 499000, 500000, 2000000], // edges of both valid partitions\n  invalidBoundaries: [19000, 2001000],\n  bonusAtThreshold: 25000,                           // 5% of 500,000\n};\n"
+        },
+        {
+          "name": "answers/b-meal.js",
+          "language": "javascript",
+          "code": "// B. Collapsed decision table: single meals ignore the time ⇒ 2 + 4 = 6 rules.\nconst MEAL_TESTS = [\n  { isStudent: true, isCombo: false, beforeEleven: false, expected: 31500 },  // R1 (time: don't care)\n  { isStudent: false, isCombo: false, beforeEleven: true, expected: 35000 },  // R2 (time: don't care)\n  { isStudent: true, isCombo: true, beforeEleven: true, expected: 40000 },    // R3 50,000 × 90% − 5,000\n  { isStudent: true, isCombo: true, beforeEleven: false, expected: 45000 },   // R4\n  { isStudent: false, isCombo: true, beforeEleven: true, expected: 45000 },   // R5\n  { isStudent: false, isCombo: true, beforeEleven: false, expected: 50000 },  // R6\n];\n"
+        },
+        {
+          "name": "answers/c-card.js",
+          "language": "javascript",
+          "code": "// C. Two transitions (T3, T4) enter the final state BLOCKED ⇒ two sequences.\nconst CARD_SEQUENCES = [\n  ['lock', 'unlock', 'expire', 'renew', 'lock', 'expire', 'renew', 'reportLost'], // T1 T2 T5 T7 T1 T6 T7 T3\n  ['lock', 'reportLost'],                                                        // T1 T4\n];\nconst CARD_INVALID_COUNT = 13;   // 4 states × 5 events = 20 − 7 valid\nconst CARD_NEGATIVE = { events: ['reportLost', 'unlock'], expectedState: 'BLOCKED' };\n"
+        },
+        {
+          "name": "answers/d-usecase.js",
+          "language": "javascript",
+          "code": "// D. Use case “Buy a meal”: main scenario + 4 extensions + 2 boundary cases of the balance check.\nconst MEAL_UC_TESTS = [\n  {\n    id: 'UC-MAIN', description: 'Main scenario: an active card with enough balance pays for the meal',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'ACTIVE', balance: '100000', price: '45000' },\n    expected: 'Paid. New balance: 55,000 VND.',\n  },\n  {\n    id: 'UC-E1', description: 'Extension: the card is locked',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'LOCKED', balance: '100000', price: '45000' },\n    expected: 'Card is locked. Unlock it at the counter.',\n  },\n  {\n    id: 'UC-E2', description: 'Extension: the card is blocked (reported lost)',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'BLOCKED', balance: '100000', price: '45000' },\n    expected: 'Card is blocked. Please contact the canteen office.',\n  },\n  {\n    id: 'UC-E3', description: 'Extension: the card has expired',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'EXPIRED', balance: '100000', price: '45000' },\n    expected: 'Card has expired. Renew it for the new term.',\n  },\n  {\n    id: 'UC-E4', description: 'Extension: the balance is lower than the price',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'ACTIVE', balance: '20000', price: '45000' },\n    expected: 'Insufficient balance. Please top up 25,000 VND.',\n  },\n  {\n    id: 'UC-B1', description: 'Boundary: the balance equals the price',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'ACTIVE', balance: '45000', price: '45000' },\n    expected: 'Paid. New balance: 0 VND.',\n  },\n  {\n    id: 'UC-B2', description: 'Boundary: the balance is 1,000 VND short',\n    precondition: 'Kiosk is open; the card is placed on the reader',\n    steps: ['Place the card on the reader', 'Choose a meal of 45,000 VND', 'Confirm the payment'],\n    data: { cardState: 'ACTIVE', balance: '44000', price: '45000' },\n    expected: 'Insufficient balance. Please top up 1,000 VND.',\n  },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>A.</b> Partitions: &lt; 20,000 · 20,000–499,000 · 500,000–2,000,000 · &gt; 2,000,000 · not a multiple of 1,000. VB 20,000 / 499,000 / 500,000 / 2,000,000, IB 19,000 / 2,001,000; bonus at 500,000 = 25,000. <b>B.</b> 6 collapsed rules: student single 31,500 · staff single 35,000 · student combo before 11 40,000 · student combo later 45,000 · staff combo before 11 45,000 · staff combo later 50,000. <b>C.</b> lock·unlock·expire·renew·lock·expire·renew·reportLost and lock·reportLost cover T1–T7; 20 − 7 = 13 invalid pairs; e.g. reportLost then unlock stays BLOCKED. <b>D.</b> one test per path + balance = price (0 left) + 1,000 short.</p>",
+      "solutionExplanationHtmlVi": "<p><b>A.</b> Vùng: &lt; 20.000 · 20.000–499.000 · 500.000–2.000.000 · &gt; 2.000.000 · không phải bội 1.000. VB 20.000 / 499.000 / 500.000 / 2.000.000, IB 19.000 / 2.001.000; thưởng tại 500.000 = 25.000. <b>B.</b> 6 luật rút gọn như bảng. <b>C.</b> hai chuỗi phủ T1–T7; 20 − 7 = 13 cặp sai. <b>D.</b> mỗi đường một ca + hai ca biên số dư.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answers/a-topup.js",
+          "answers/b-meal.js",
+          "answers/c-card.js",
+          "answers/d-usecase.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A — one value per valid partition (no bonus · bonus)",
+              "vi": "A — mỗi vùng hợp lệ một giá trị (không thưởng · có thưởng)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=typeof TOPUP!=\"undefined\"?TOPUP:null;if(!r)return\"TOPUP is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n%1e3!==0?\"MULT\":n<2e4?\"LOW\":n<5e5?\"NOBONUS\":n<=2e6?\"BONUS\":\"HIGH\"},t=r.validPartitions;if(!Array.isArray(t))return\"TOPUP.validPartitions must be an array\";const i=t.map(o),e=[\"NOBONUS\",\"BONUS\"];return i.some(n=>e.indexOf(n)<0)?\"a value is in the wrong kind of partition\":e.every(n=>i.filter(a=>a===n).length===1)&&t.length===e.length?\"OK\":\"need exactly one value in each of the \"+e.length+\" partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — one value per invalid partition (too small · too large · not a multiple of 1,000)",
+              "vi": "A — mỗi vùng không hợp lệ một giá trị (quá nhỏ · quá lớn · không phải bội 1.000)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=typeof TOPUP!=\"undefined\"?TOPUP:null;if(!r)return\"TOPUP is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n%1e3!==0?\"MULT\":n<2e4?\"LOW\":n<5e5?\"NOBONUS\":n<=2e6?\"BONUS\":\"HIGH\"},t=r.invalidPartitions;if(!Array.isArray(t))return\"TOPUP.invalidPartitions must be an array\";const i=t.map(o),e=[\"LOW\",\"HIGH\",\"MULT\"];return i.some(n=>e.indexOf(n)<0)?\"a value is in the wrong kind of partition\":e.every(n=>i.filter(a=>a===n).length===1)&&t.length===e.length?\"OK\":\"need exactly one value in each of the \"+e.length+\" partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — valid boundaries (including the bonus boundary)",
+              "vi": "A — biên hợp lệ (kể cả biên thưởng)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=typeof TOPUP!=\"undefined\"?TOPUP:null;if(!e)return\"TOPUP is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n%1e3!==0?\"MULT\":n<2e4?\"LOW\":n<5e5?\"NOBONUS\":n<=2e6?\"BONUS\":\"HIGH\"},r=e.validBoundaries;if(!Array.isArray(r))return\"TOPUP.validBoundaries must be an array\";const t=[2e4,499e3,5e5,2e6],i=[...new Set(r)].sort((n,s)=>n-s);return JSON.stringify(i)===JSON.stringify(t)&&r.length===t.length?\"OK\":\"expected \"+t.length+\" value(s) \\u2014 got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — invalid boundaries",
+              "vi": "A — biên không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=typeof TOPUP!=\"undefined\"?TOPUP:null;if(!e)return\"TOPUP is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n%1e3!==0?\"MULT\":n<2e4?\"LOW\":n<5e5?\"NOBONUS\":n<=2e6?\"BONUS\":\"HIGH\"},r=e.invalidBoundaries;if(!Array.isArray(r))return\"TOPUP.invalidBoundaries must be an array\";const t=[19e3,2001e3],i=[...new Set(r)].sort((n,s)=>n-s);return JSON.stringify(i)===JSON.stringify(t)&&r.length===t.length?\"OK\":\"expected \"+t.length+\" value(s) \\u2014 got \"+JSON.stringify(r)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "A — bonus of the smallest top-up that earns a bonus",
+              "vi": "A — tiền thưởng của lần nạp nhỏ nhất có thưởng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return TOPUP.bonusAtThreshold===25e3?\"OK\":\"not right: 5% of the smallest amount of the bonus partition\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "B — every expected price is right",
+              "vi": "B — mọi giá mong đợi đều đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const t=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(t>=0)return\"test #\"+(t+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const r=function(e){const n=e.isCombo?5e4:35e3;let s=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(s-=5e3),s},u=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"},o=MEAL_TESTS.findIndex(e=>Number(e.expected)!==r(e));return o<0?\"OK\":\"test #\"+(o+1)+\": expected \"+r(MEAL_TESTS[o])})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R1 student · single meal",
+              "vi": "B — luật rút gọn R1 student · single meal"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R1\"&&Number(e.expected)===t(e))?\"OK\":\"rule R1 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R2 staff · single meal",
+              "vi": "B — luật rút gọn R2 staff · single meal"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R2\"&&Number(e.expected)===t(e))?\"OK\":\"rule R2 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R3 student · combo · before 11:00",
+              "vi": "B — luật rút gọn R3 student · combo · before 11:00"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R3\"&&Number(e.expected)===t(e))?\"OK\":\"rule R3 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R4 student · combo · from 11:00",
+              "vi": "B — luật rút gọn R4 student · combo · from 11:00"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R4\"&&Number(e.expected)===t(e))?\"OK\":\"rule R4 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R5 staff · combo · before 11:00",
+              "vi": "B — luật rút gọn R5 staff · combo · before 11:00"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R5\"&&Number(e.expected)===t(e))?\"OK\":\"rule R5 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — collapsed rule R6 staff · combo · from 11:00",
+              "vi": "B — luật rút gọn R6 staff · combo · from 11:00"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const o=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(o>=0)return\"test #\"+(o+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const t=function(e){const n=e.isCombo?5e4:35e3;let r=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(r-=5e3),r},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.some(e=>s(e)===\"R6\"&&Number(e.expected)===t(e))?\"OK\":\"rule R6 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "B — one test per collapsed rule (6 tests)",
+              "vi": "B — mỗi luật rút gọn một test (6 test)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(MEAL_TESTS)||!MEAL_TESTS.length)return\"MEAL_TESTS must be a non-empty array\";const t=MEAL_TESTS.findIndex(e=>[\"isStudent\",\"isCombo\",\"beforeEleven\"].some(n=>typeof e[n]!=\"boolean\"));if(t>=0)return\"test #\"+(t+1)+\": isStudent, isCombo and beforeEleven must be true/false\";const i=function(e){const n=e.isCombo?5e4:35e3;let o=e.isStudent?n*90/100:n;return e.isCombo&&e.beforeEleven&&(o-=5e3),o},s=function(e){return e.isCombo?e.isStudent?e.beforeEleven?\"R3\":\"R4\":e.beforeEleven?\"R5\":\"R6\":e.isStudent?\"R1\":\"R2\"};return MEAL_TESTS.length===6&&new Set(MEAL_TESTS.map(s)).size===6?\"OK\":MEAL_TESTS.length+\" tests \\u2014 the collapsed table has 6 rules\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "C — every sequence is valid",
+              "vi": "C — mọi chuỗi hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:i}=(function(){const n=[[\"T1\",\"ACTIVE\",\"lock\",\"LOCKED\"],[\"T2\",\"LOCKED\",\"unlock\",\"ACTIVE\"],[\"T3\",\"ACTIVE\",\"reportLost\",\"BLOCKED\"],[\"T4\",\"LOCKED\",\"reportLost\",\"BLOCKED\"],[\"T5\",\"ACTIVE\",\"expire\",\"EXPIRED\"],[\"T6\",\"LOCKED\",\"expire\",\"EXPIRED\"],[\"T7\",\"EXPIRED\",\"renew\",\"ACTIVE\"]];return{T:n,buoc:(r,o)=>n.find(E=>E[1]===r&&E[2]===o)||null}})();if(!Array.isArray(CARD_SEQUENCES)||!CARD_SEQUENCES.length)return\"CARD_SEQUENCES must be a non-empty array\";const s=n=>{let r=\"ACTIVE\";const o=[];for(let E=0;E<n.length;E++){const e=i(r,n[E]);if(!e)return{loi:'\"'+n[E]+'\" is not valid in '+r};o.push(e[0]),r=e[3]}return{d:o,s:r}},C=CARD_SEQUENCES.map(n=>s(Array.isArray(n)?n:[])),t=C.findIndex(n=>n.loi);return t<0?\"OK\":\"sequence #\"+(t+1)+\": \"+C[t].loi})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — 0-switch coverage: all 7 valid transitions",
+              "vi": "C — phủ 0-switch: đủ 7 chuyển đổi hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:c,buoc:s}=(function(){const n=[[\"T1\",\"ACTIVE\",\"lock\",\"LOCKED\"],[\"T2\",\"LOCKED\",\"unlock\",\"ACTIVE\"],[\"T3\",\"ACTIVE\",\"reportLost\",\"BLOCKED\"],[\"T4\",\"LOCKED\",\"reportLost\",\"BLOCKED\"],[\"T5\",\"ACTIVE\",\"expire\",\"EXPIRED\"],[\"T6\",\"LOCKED\",\"expire\",\"EXPIRED\"],[\"T7\",\"EXPIRED\",\"renew\",\"ACTIVE\"]];return{T:n,buoc:(r,t)=>n.find(E=>E[1]===r&&E[2]===t)||null}})();if(!Array.isArray(CARD_SEQUENCES)||!CARD_SEQUENCES.length)return\"CARD_SEQUENCES must be a non-empty array\";const i=n=>{let r=\"ACTIVE\";const t=[];for(let E=0;E<n.length;E++){const o=s(r,n[E]);if(!o)return{loi:'\"'+n[E]+'\" is not valid in '+r};t.push(o[0]),r=o[3]}return{d:t,s:r}},a=CARD_SEQUENCES.map(n=>i(Array.isArray(n)?n:[])),e=new Set;a.forEach(n=>(n.d||[]).forEach(r=>e.add(r)));const C=c.map(n=>n[0]).filter(n=>!e.has(n));return C.length?\"not covered: \"+C.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — minimum number of sequences (2)",
+              "vi": "C — số chuỗi tối thiểu (2)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:i,buoc:e}=(function(){const E=[[\"T1\",\"ACTIVE\",\"lock\",\"LOCKED\"],[\"T2\",\"LOCKED\",\"unlock\",\"ACTIVE\"],[\"T3\",\"ACTIVE\",\"reportLost\",\"BLOCKED\"],[\"T4\",\"LOCKED\",\"reportLost\",\"BLOCKED\"],[\"T5\",\"ACTIVE\",\"expire\",\"EXPIRED\"],[\"T6\",\"LOCKED\",\"expire\",\"EXPIRED\"],[\"T7\",\"EXPIRED\",\"renew\",\"ACTIVE\"]];return{T:E,buoc:(t,r)=>E.find(n=>n[1]===t&&n[2]===r)||null}})();if(!Array.isArray(CARD_SEQUENCES)||!CARD_SEQUENCES.length)return\"CARD_SEQUENCES must be a non-empty array\";const C=E=>{let t=\"ACTIVE\";const r=[];for(let n=0;n<E.length;n++){const o=e(t,E[n]);if(!o)return{loi:'\"'+E[n]+'\" is not valid in '+t};r.push(o[0]),t=o[3]}return{d:r,s:t}},A=CARD_SEQUENCES.map(E=>C(Array.isArray(E)?E:[]));return CARD_SEQUENCES.length===2?\"OK\":CARD_SEQUENCES.length+\" sequences \\u2014 two transitions lead into the final state BLOCKED\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — number of invalid state/event pairs",
+              "vi": "C — số cặp trạng thái/sự kiện không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return CARD_INVALID_COUNT===13?\"OK\":\"not right \\u2014 4 states \\xD7 5 events, minus the valid transitions\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "C — the negative test for a BLOCKED card",
+              "vi": "C — test âm cho thẻ BLOCKED"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:E}=(function(){const t=[[\"T1\",\"ACTIVE\",\"lock\",\"LOCKED\"],[\"T2\",\"LOCKED\",\"unlock\",\"ACTIVE\"],[\"T3\",\"ACTIVE\",\"reportLost\",\"BLOCKED\"],[\"T4\",\"LOCKED\",\"reportLost\",\"BLOCKED\"],[\"T5\",\"ACTIVE\",\"expire\",\"EXPIRED\"],[\"T6\",\"LOCKED\",\"expire\",\"EXPIRED\"],[\"T7\",\"EXPIRED\",\"renew\",\"ACTIVE\"]];return{T:t,buoc:(r,o)=>t.find(s=>s[1]===r&&s[2]===o)||null}})(),e=CARD_NEGATIVE;if(!e||!Array.isArray(e.events)||!e.events.length)return\"CARD_NEGATIVE must be { events: [...], expectedState }\";let n=\"ACTIVE\";for(let t=0;t<e.events.length-1;t++){const r=E(n,e.events[t]);if(!r)return\"only the last event may be invalid\";n=r[3]}return n!==\"BLOCKED\"?\"the prefix must bring the card to BLOCKED (it reaches \"+n+\")\":E(n,e.events[e.events.length-1])?\"the last event must be invalid\":e.expectedState===\"BLOCKED\"?\"OK\":\"a rejected event leaves the card BLOCKED\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Every test case is complete: unique id, description, precondition, numbered steps, expected result",
+              "vi": "Mọi ca đủ trường: id duy nhất, mô tả, tiền điều kiện, các bước, kết quả mong đợi"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    var thay = {}, loi = [];\n    __T.forEach(function (t, i) {\n      var ten = t.id || ('#' + (i + 1));\n      if (!t.id) loi.push('#' + (i + 1) + ': no id');\n      else if (thay[t.id]) loi.push('duplicate id ' + t.id); thay[t.id] = 1;\n      if (!String(t.description || '').trim()) loi.push(ten + ': empty description');\n      if (!String(t.precondition || '').trim()) loi.push(ten + ': empty precondition');\n      if (!Array.isArray(t.steps) || !t.steps.length) loi.push(ten + ': steps must be a non-empty array');\n      if (!String(t.expected == null ? '' : t.expected).trim()) loi.push(ten + ': empty expected result');\n    });\n    if (__T.length > 20) loi.push(__T.length + ' cases — keep it under 20 (no padding)');\n    var trung = {}; __T.forEach(function (t) { var k = JSON.stringify(t.data); if (trung[k]) loi.push((t.id || '?') + ' repeats the data of ' + trung[k]); else trung[k] = t.id || '?'; });\n    return loi.length ? loi.slice(0, 4).join(' | ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Every expected result matches the specification exactly (message text / computed amount)",
+              "vi": "Mọi kết quả mong đợi khớp đặc tả (đúng chữ thông báo / đúng số tiền tính ra)"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    var sai = [];\n    __T.forEach(function (t, i) { if (!dung[i]) sai.push((t.id || '#' + (i + 1)) + ': expected \"' + t.expected + '\" — the specification gives \"' + thuc[i] + '\"'); });\n    return sai.length ? sai.slice(0, 3).join(' | ') : 'OK';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — main success scenario",
+              "vi": "D — đường của use case — main success scenario"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"MAIN\"] ? 'OK' : 'not covered yet: main success scenario (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — extension: card locked",
+              "vi": "D — đường của use case — extension: card locked"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"E_LOCKED\"] ? 'OK' : 'not covered yet: extension: card locked (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — extension: card blocked",
+              "vi": "D — đường của use case — extension: card blocked"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"E_BLOCKED\"] ? 'OK' : 'not covered yet: extension: card blocked (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — extension: card expired",
+              "vi": "D — đường của use case — extension: card expired"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"E_EXPIRED\"] ? 'OK' : 'not covered yet: extension: card expired (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — extension: insufficient balance",
+              "vi": "D — đường của use case — extension: insufficient balance"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"E_FUNDS\"] ? 'OK' : 'not covered yet: extension: insufficient balance (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — boundary: balance = price",
+              "vi": "D — đường của use case — boundary: balance = price"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"B_EXACT\"] ? 'OK' : 'not covered yet: boundary: balance = price (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "D — use case path — boundary: 1,000 VND short",
+              "vi": "D — đường của use case — boundary: 1,000 VND short"
+            },
+            "chuanBi": "\nfunction __n(s) { return String(s == null ? '' : s).toLowerCase().replace(/[\\s,.]/g, '').replace(/[\"'“”]/g, ''); }\n\nconst __HT = ((function(a){const t=e=>String(a[e]==null?\"\":a[e]).trim(),i=e=>String(e).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\",\"),n=t(\"cardState\");if(n===\"BLOCKED\")return\"Card is blocked. Please contact the canteen office.\";if(n===\"LOCKED\")return\"Card is locked. Unlock it at the counter.\";if(n===\"EXPIRED\")return\"Card has expired. Renew it for the new term.\";const r=Number(t(\"balance\")),c=Number(t(\"price\"));return r<c?\"Insufficient balance. Please top up \"+i(c-r)+\" VND.\":\"Paid. New balance: \"+i(r-c)+\" VND.\"}));\nconst __NHAN = ((function(f,e){const i=[];return e.indexOf(\"Card is blocked\")===0&&i.push(\"E_BLOCKED\"),e.indexOf(\"Card is locked\")===0&&i.push(\"E_LOCKED\"),e.indexOf(\"Card has expired\")===0&&i.push(\"E_EXPIRED\"),e.indexOf(\"Insufficient\")===0&&(i.push(\"E_FUNDS\"),Number(f.price)-Number(f.balance)===1e3&&i.push(\"B_SHORT_1000\")),e.indexOf(\"Paid\")===0&&(i.push(\"MAIN\"),Number(f.balance)===Number(f.price)&&i.push(\"B_EXACT\")),i}));\nconst __TRUONG = [\"cardState\",\"balance\",\"price\"];\nconst __T = (typeof MEAL_UC_TESTS !== 'undefined' && Array.isArray(MEAL_UC_TESTS)) ? MEAL_UC_TESTS : null;\nconst __KQ = (function () {\n  if (!__T) return 'MEAL_UC_TESTS is missing — declare: const MEAL_UC_TESTS = [ { id, description, precondition, steps: [...], data: {...}, expected }, … ]';\n  if (!__T.length) return 'MEAL_UC_TESTS is empty';\n  var loiCT = null;\n  for (var i = 0; i < __T.length; i++) {\n    var t = __T[i], ten = (t && t.id) || ('#' + (i + 1));\n    if (!t || typeof t !== 'object') { loiCT = ten + ' is not an object'; break; }\n    if (!t.data || typeof t.data !== 'object') { loiCT = ten + ': \"data\" object is missing'; break; }\n    var thieu = __TRUONG.filter(function (k) { return !(k in t.data); });\n    if (thieu.length) { loiCT = ten + ': data has no field ' + thieu.join(', ') + ' (use \"\" for an empty field)'; break; }\n  }\n  var thuc = loiCT ? [] : __T.map(function (t) { try { return String(__HT(t.data)); } catch (e) { return 'ERROR ' + e.message; } });\n  var dung = loiCT ? [] : __T.map(function (t, i) { return __n(t.expected) !== '' && __n(t.expected) === __n(thuc[i]); });\n  var phu = {};\n  if (!loiCT) __T.forEach(function (t, i) { if (dung[i]) (__NHAN(t.data, thuc[i]) || []).forEach(function (x) { phu[x] = (phu[x] || []).concat([t.id || '#' + (i + 1)]); }); });\n  function viec(k) {\n    if (loiCT) return loiCT;\n\n    return phu[\"B_SHORT_1000\"] ? 'OK' : 'not covered yet: boundary: 1,000 VND short (a test case whose data hits it AND whose expected result is right)';\n  }\n  return viec;\n})();\n",
+            "goi": "typeof __KQ === 'string' ? __KQ : __KQ()",
+            "mongDoi": "OK",
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. A. Top-up amount — EP + BVA",
+            "diem": 2.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. B. Meal price — decision table",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. C. Card life cycle — state transition",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. D. Use case “Buy a meal”",
+            "diem": 2.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "A: ghi validBoundaries = [20000, 2000000] mà quên cặp 499.000 / 500.000."
+        },
+        {
+          "loi": "B: tính combo sinh viên trước 11:00 = (50.000 − 5.000) × 90% = 40.500 — đặc tả trừ 5.000 SAU khi giảm sinh viên ⇒ 40.000."
+        },
+        {
+          "loi": "C: viết reportLost ở giữa chuỗi rồi tiếp tục sự kiện khác — BLOCKED không đi đâu được nữa."
+        },
+        {
+          "loi": "D: quên hai ca biên số dư — lỗi \"<\" thay vì \"<=\" khi so số dư với giá nằm đúng ở đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        },
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "precondition",
+          "vi": "tiền điều kiện — trạng thái phải có trước khi chạy ca"
+        }
+      ]
+    }
+  ]
+}

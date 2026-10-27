@@ -1,0 +1,1010 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-blackbox-bva-template",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-bva-template"
+  },
+  "exercises": [
+    {
+      "title": "BVA 1 — Two-value boundary values of five ranges",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "boundary value analysis",
+        "two-value BVA",
+        "precision"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Two-value BVA</b> (the CTFL default): every boundary gives two values — the edge of the partition and its closest neighbour in the next partition. For a range there are four values: <i>lower invalid · lower valid · upper valid · upper invalid</i>. Mind the <b>precision</b> of each field: the neighbour of 0.01 with two decimals is 0.00, not 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>BVA hai giá trị</b> (mặc định của CTFL): mỗi biên cho hai giá trị — mép của vùng và giá trị gần nhất ở vùng kế bên. Một khoảng có bốn giá trị: <i>biên dưới sai · biên dưới đúng · biên trên đúng · biên trên sai</i>. Để ý <b>độ chính xác</b> của từng trường: hàng xóm của 0.01 với hai chữ số thập phân là 0.00, không phải 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Biên đúng = min và max của vùng hợp lệ. Biên sai = bước kế tiếp ra ngoài.",
+        "Bước = độ chính xác: 0.01 cho giá, 0.1 cho điểm thi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 1 — Two-value boundary values of five ranges\n\nAnswer in the answer panel (no code needed).\n\n1. Fill the four boundary values of each range (use - for negative numbers).Điền bốn giá trị biên của mỗi khoảng (số âm dùng dấu -).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 1 — Two-value boundary values of five ranges — answer key\n\n1. Fill the four boundary values of each range (use - for negative numbers).Điền bốn giá trị biên của mỗi khoảng (số âm dùng dấu -).\n   - a.li: 17\n   - a.lv: 18\n   - a.uv: 60\n   - a.ui: 61\n   - b.li: 0\n   - b.lv: 1\n   - b.uv: 99\n   - b.ui: 100\n   - c.li: 0.00 / 0 / 0.0\n   - c.lv: 0.01\n   - c.uv: 999.99\n   - c.ui: 1000.00 / 1000 / 1000.0\n   - d.li: 7\n   - d.lv: 8\n   - d.uv: 64\n   - d.ui: 65\n   - e.li: -0.1 / −0.1\n   - e.lv: 0.0 / 0\n   - e.uv: 10.0 / 10\n   - e.ui: 10.1\n   Each neighbour is one step of the field’s precision away: 1 for whole numbers, 0.01 for two decimals, 0.1 for one decimal, one character for lengths.VI: Mỗi hàng xóm cách đúng một bước độ chính xác: 1 với số nguyên, 0.01 với hai chữ số thập phân, 0.1 với một chữ số, một ký tự với độ dài.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>17/18/60/61 · 0/1/99/100 · 0.00/0.01/999.99/1000.00 · 7/8/64/65 · −0.1/0.0/10.0/10.1.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fill the four boundary values of each range (use - for negative numbers).</p><p style=\"opacity:.75;font-size:.92em\"><i>Điền bốn giá trị biên của mỗi khoảng (số âm dùng dấu -).</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Range"
+              },
+              {
+                "ma": "li",
+                "ten": "Lower invalid"
+              },
+              {
+                "ma": "lv",
+                "ten": "Lower valid"
+              },
+              {
+                "ma": "uv",
+                "ten": "Upper valid"
+              },
+              {
+                "ma": "ui",
+                "ten": "Upper invalid"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "a",
+                "o": {
+                  "r": "Age: whole number 18–60"
+                }
+              },
+              {
+                "ma": "b",
+                "o": {
+                  "r": "Quantity: whole number 1–99"
+                }
+              },
+              {
+                "ma": "c",
+                "o": {
+                  "r": "Unit price: 0.01–999.99 (2 decimals)"
+                }
+              },
+              {
+                "ma": "d",
+                "o": {
+                  "r": "Password length: 8–64 characters"
+                }
+              },
+              {
+                "ma": "e",
+                "o": {
+                  "r": "Exam mark: 0.0–10.0 (1 decimal)"
+                }
+              }
+            ],
+            "dapAn": {
+              "a.li": "17",
+              "a.lv": "18",
+              "a.uv": "60",
+              "a.ui": "61",
+              "b.li": "0",
+              "b.lv": "1",
+              "b.uv": "99",
+              "b.ui": "100",
+              "c.li": [
+                "0.00",
+                "0",
+                "0.0"
+              ],
+              "c.lv": "0.01",
+              "c.uv": "999.99",
+              "c.ui": [
+                "1000.00",
+                "1000",
+                "1000.0"
+              ],
+              "d.li": "7",
+              "d.lv": "8",
+              "d.uv": "64",
+              "d.ui": "65",
+              "e.li": [
+                "-0.1",
+                "−0.1"
+              ],
+              "e.lv": [
+                "0.0",
+                "0"
+              ],
+              "e.uv": [
+                "10.0",
+                "10"
+              ],
+              "e.ui": "10.1"
+            },
+            "giaiThich": "<p>Each neighbour is one step of the field’s precision away: 1 for whole numbers, 0.01 for two decimals, 0.1 for one decimal, one character for lengths.</p><p><i>VI: Mỗi hàng xóm cách đúng một bước độ chính xác: 1 với số nguyên, 0.01 với hai chữ số thập phân, 0.1 với một chữ số, một ký tự với độ dài.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi 0 thay vì 0.00 rồi nghĩ “0 với 0.00 khác nhau” — cả hai đều được chấp nhận, nhưng 0.001 hay 0.009 thì sai bước."
+        },
+        {
+          "loi": "Lấy 999 làm biên trên sai của 0.01–999.99 — hàng xóm đúng là 1000.00."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên (min/max của một vùng có thứ tự)"
+        }
+      ]
+    },
+    {
+      "title": "BVA 2 — Three-value boundary values",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "three-value BVA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Three-value BVA</b> takes three values per boundary: just below, on, and just above the boundary. A range therefore gives six values. Fill them for three fields.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>BVA ba giá trị</b> lấy ba giá trị mỗi biên: ngay dưới, đúng biên, ngay trên. Một khoảng cho sáu giá trị. Điền cho ba trường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Với −10: dưới một bước là −11, trên một bước là −9.",
+        "Giảm giá theo bước 5% ⇒ hàng xóm của 0% là −5% và 5%."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 2 — Three-value boundary values\n\nAnswer in the answer panel (no code needed).\n\n1. Six three-value BVA values per rangeSáu giá trị BVA ba giá trị cho mỗi khoảng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 2 — Three-value boundary values — answer key\n\n1. Six three-value BVA values per rangeSáu giá trị BVA ba giá trị cho mỗi khoảng\n   - a.l1: -11 / −11\n   - a.l2: -10 / −10\n   - a.l3: -9 / −9\n   - a.u1: 39\n   - a.u2: 40\n   - a.u3: 41\n   - b.l1: 0\n   - b.l2: 1\n   - b.l3: 2\n   - b.u1: 6\n   - b.u2: 7\n   - b.u3: 8\n   - c.l1: -5 / −5 / -5% / −5%\n   - c.l2: 0 / 0%\n   - c.l3: 5 / 5%\n   - c.u1: 45 / 45%\n   - c.u2: 50 / 50%\n   - c.u3: 55 / 55%\n   The step is the smallest meaningful change: 1 °C, 1 day, 5 percentage points (the field only accepts multiples of 5).VI: Bước là thay đổi nhỏ nhất có nghĩa: 1 °C, 1 ngày, 5 điểm phần trăm (trường chỉ nhận bội của 5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>−11/−10/−9/39/40/41 · 0/1/2/6/7/8 · −5/0/5/45/50/55.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Six three-value BVA values per range</p><p style=\"opacity:.75;font-size:.92em\"><i>Sáu giá trị BVA ba giá trị cho mỗi khoảng</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Range"
+              },
+              {
+                "ma": "l1",
+                "ten": "Lower − 1 step"
+              },
+              {
+                "ma": "l2",
+                "ten": "Lower"
+              },
+              {
+                "ma": "l3",
+                "ten": "Lower + 1 step"
+              },
+              {
+                "ma": "u1",
+                "ten": "Upper − 1 step"
+              },
+              {
+                "ma": "u2",
+                "ten": "Upper"
+              },
+              {
+                "ma": "u3",
+                "ten": "Upper + 1 step"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "a",
+                "o": {
+                  "r": "Thermostat: whole °C from −10 to 40"
+                }
+              },
+              {
+                "ma": "b",
+                "o": {
+                  "r": "Delivery days: 1–7"
+                }
+              },
+              {
+                "ma": "c",
+                "o": {
+                  "r": "Discount: 0%–50% in steps of 5%"
+                }
+              }
+            ],
+            "dapAn": {
+              "a.l1": [
+                "-11",
+                "−11"
+              ],
+              "a.l2": [
+                "-10",
+                "−10"
+              ],
+              "a.l3": [
+                "-9",
+                "−9"
+              ],
+              "a.u1": "39",
+              "a.u2": "40",
+              "a.u3": "41",
+              "b.l1": "0",
+              "b.l2": "1",
+              "b.l3": "2",
+              "b.u1": "6",
+              "b.u2": "7",
+              "b.u3": "8",
+              "c.l1": [
+                "-5",
+                "−5",
+                "-5%",
+                "−5%"
+              ],
+              "c.l2": [
+                "0",
+                "0%"
+              ],
+              "c.l3": [
+                "5",
+                "5%"
+              ],
+              "c.u1": [
+                "45",
+                "45%"
+              ],
+              "c.u2": [
+                "50",
+                "50%"
+              ],
+              "c.u3": [
+                "55",
+                "55%"
+              ]
+            },
+            "giaiThich": "<p>The step is the smallest meaningful change: 1 °C, 1 day, 5 percentage points (the field only accepts multiples of 5).</p><p><i>VI: Bước là thay đổi nhỏ nhất có nghĩa: 1 °C, 1 ngày, 5 điểm phần trăm (trường chỉ nhận bội của 5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy −9 làm “dưới biên” của −10 (ngược chiều với số âm)."
+        },
+        {
+          "loi": "Dùng bước 1% cho trường chỉ nhận bội của 5%."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên (min/max của một vùng có thứ tự)"
+        }
+      ]
+    },
+    {
+      "title": "BVA 3 — ISTQB-style questions on boundary value analysis",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "boundary value analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six exam-style questions, including the classic traps (open-ended partitions, whole grams, 2-value vs 3-value counts).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu đề thi, gồm các bẫy kinh điển (vùng không có biên, đơn vị gam, đếm BVA 2 và 3 giá trị).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hai giá trị: (biên, hàng xóm ngoài). Ba giá trị: (dưới, tại, trên).",
+        "Bước = đơn vị nhỏ nhất của dữ liệu (gam, 0.01, 1 ngày…)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 3 — ISTQB-style questions on boundary value analysis\n\nAnswer in the answer panel (no code needed).\n\n1. A field accepts whole numbers 1–100. Which set contains exactly the two-value boundary values?Trường nhận số nguyên 1–100. Bộ nào đúng là các giá trị biên hai giá trị?\n2. With three-value BVA, how many values are tested for one range with a lower and an upper boundary?Với BVA ba giá trị, một khoảng có biên dưới và biên trên cần test bao nhiêu giá trị?\n3. Eight boundary values were identified and six were tested. What is the BVA coverage?Xác định 8 giá trị biên, đã test 6. Độ phủ BVA là bao nhiêu?\n4. Which statement about BVA is TRUE?Phát biểu nào về BVA là ĐÚNG?\n5. Parcels up to and including 2 kg cost 20,000 VND; heavier parcels up to 10 kg cost 35,000 VND. Weight is measured in whole grams. Which pair are the boundary values of the 2 kg boundary?Kiện tới 2 kg (tính cả 2 kg) giá 20.000 đ; nặng hơn tới 10 kg giá 35.000 đ. Cân theo gam nguyên. Cặp nào là giá trị biên của mốc 2 kg?\n6. A requirement says “age must be 18 or more” and gives no upper limit. What should the tester do about the upper boundary?Yêu cầu chỉ ghi “tuổi phải từ 18 trở lên”, không có giới hạn trên. Tester xử lý biên trên thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BVA 3 — ISTQB-style questions on boundary value analysis — answer key\n\n1. A field accepts whole numbers 1–100. Which set contains exactly the two-value boundary values?Trường nhận số nguyên 1–100. Bộ nào đúng là các giá trị biên hai giá trị?\n   Answer: b) 0, 1, 100, 101\n   Two values per boundary: (0, 1) and (100, 101). (c) is three-value BVA.VI: Hai giá trị mỗi biên: (0, 1) và (100, 101). (c) là BVA ba giá trị.\n\n2. With three-value BVA, how many values are tested for one range with a lower and an upper boundary?Với BVA ba giá trị, một khoảng có biên dưới và biên trên cần test bao nhiêu giá trị?\n   Answer: c) 6\n   Three per boundary × two boundaries = 6.VI: Ba mỗi biên × hai biên = 6.\n\n3. Eight boundary values were identified and six were tested. What is the BVA coverage?Xác định 8 giá trị biên, đã test 6. Độ phủ BVA là bao nhiêu?\n   Answer: c) 75%\n   BVA coverage = boundary values tested ÷ boundary values identified = 6/8.VI: Độ phủ BVA = số giá trị biên đã test ÷ số đã xác định = 6/8.\n\n4. Which statement about BVA is TRUE?Phát biểu nào về BVA là ĐÚNG?\n   Answer: b) It is an extension of EP that applies only when the partition is ordered (numbers, dates, lengths…)\n   BVA needs an ordering to have a minimum and a maximum; colours or a list of cities have no boundaries. It complements EP and is used at all levels.VI: BVA cần thứ tự để có min và max; màu sắc hay danh sách thành phố không có biên. Nó bổ sung cho EP và dùng ở mọi cấp.\n\n5. Parcels up to and including 2 kg cost 20,000 VND; heavier parcels up to 10 kg cost 35,000 VND. Weight is measured in whole grams. Which pair are the boundary values of the 2 kg boundary?Kiện tới 2 kg (tính cả 2 kg) giá 20.000 đ; nặng hơn tới 10 kg giá 35.000 đ. Cân theo gam nguyên. Cặp nào là giá trị biên của mốc 2 kg?\n   Answer: b) 2,000 g and 2,001 g\n   2,000 g is the last value of the 20,000 partition, 2,001 g the first of the 35,000 partition — the step is one gram.VI: 2.000 g là giá trị cuối của vùng 20.000, 2.001 g là giá trị đầu của vùng 35.000 — bước là một gam.\n\n6. A requirement says “age must be 18 or more” and gives no upper limit. What should the tester do about the upper boundary?Yêu cầu chỉ ghi “tuổi phải từ 18 trở lên”, không có giới hạn trên. Tester xử lý biên trên thế nào?\n   Answer: b) Ask for the missing limit, or state an assumption based on the implementation (e.g. the field size) and test it\n   An open-ended partition is a requirement gap: clarify it, or document an assumption (data-type or field-size limit) and test that boundary. Inventing 100 silently is a guess, not a test basis.VI: Vùng mở là lỗ hổng yêu cầu: hỏi lại, hoặc ghi giả định (giới hạn kiểu dữ liệu/độ dài trường) rồi test biên đó. Tự đặt 100 mà không nói là đoán, không phải test basis.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · c · c · b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A field accepts whole numbers 1–100. Which set contains exactly the two-value boundary values?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường nhận số nguyên 1–100. Bộ nào đúng là các giá trị biên hai giá trị?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1, 100"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0, 1, 100, 101"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0, 1, 2, 99, 100, 101"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1, 50, 100"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two values per boundary: (0, 1) and (100, 101). (c) is three-value BVA.</p><p><i>VI: Hai giá trị mỗi biên: (0, 1) và (100, 101). (c) là BVA ba giá trị.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>With three-value BVA, how many values are tested for one range with a lower and an upper boundary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với BVA ba giá trị, một khoảng có biên dưới và biên trên cần test bao nhiêu giá trị?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Three per boundary × two boundaries = 6.</p><p><i>VI: Ba mỗi biên × hai biên = 6.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Eight boundary values were identified and six were tested. What is the BVA coverage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Xác định 8 giá trị biên, đã test 6. Độ phủ BVA là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "60%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "75%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "80%"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>BVA coverage = boundary values tested ÷ boundary values identified = 6/8.</p><p><i>VI: Độ phủ BVA = số giá trị biên đã test ÷ số đã xác định = 6/8.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Which statement about BVA is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về BVA là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It can be applied to any partition, ordered or not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is an extension of EP that applies only when the partition is ordered (numbers, dates, lengths…)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It replaces equivalence partitioning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is applicable only at component level"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>BVA needs an ordering to have a minimum and a maximum; colours or a list of cities have no boundaries. It complements EP and is used at all levels.</p><p><i>VI: BVA cần thứ tự để có min và max; màu sắc hay danh sách thành phố không có biên. Nó bổ sung cho EP và dùng ở mọi cấp.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Parcels up to and including 2 kg cost 20,000 VND; heavier parcels up to 10 kg cost 35,000 VND. Weight is measured in whole grams. Which pair are the boundary values of the 2 kg boundary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiện tới 2 kg (tính cả 2 kg) giá 20.000 đ; nặng hơn tới 10 kg giá 35.000 đ. Cân theo gam nguyên. Cặp nào là giá trị biên của mốc 2 kg?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 kg and 2 kg"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2,000 g and 2,001 g"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1,999 g and 2,000 g"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2 kg and 3 kg"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2,000 g is the last value of the 20,000 partition, 2,001 g the first of the 35,000 partition — the step is one gram.</p><p><i>VI: 2.000 g là giá trị cuối của vùng 20.000, 2.001 g là giá trị đầu của vùng 35.000 — bước là một gam.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>A requirement says “age must be 18 or more” and gives no upper limit. What should the tester do about the upper boundary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu chỉ ghi “tuổi phải từ 18 trở lên”, không có giới hạn trên. Tester xử lý biên trên thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignore it — open partitions have no upper boundary to test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ask for the missing limit, or state an assumption based on the implementation (e.g. the field size) and test it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use 100 because people rarely live longer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use the value 18 twice"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An open-ended partition is a requirement gap: clarify it, or document an assumption (data-type or field-size limit) and test that boundary. Inventing 100 silently is a guess, not a test basis.</p><p><i>VI: Vùng mở là lỗ hổng yêu cầu: hỏi lại, hoặc ghi giả định (giới hạn kiểu dữ liệu/độ dài trường) rồi test biên đó. Tự đặt 100 mà không nói là đoán, không phải test basis.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chọn (c) ở câu 1 — đó là BVA ba giá trị."
+        },
+        {
+          "loi": "Ở câu 5 dùng kg làm đơn vị thay vì gam."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên (min/max của một vùng có thứ tự)"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        }
+      ]
+    },
+    {
+      "title": "BVA 4 — Fill the condition template (PE Table 3.1) for a room-booking form",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "boundary value analysis",
+        "equivalence partitioning",
+        "condition template"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Old PE papers (FA23, SU24) ask for the <b>condition template</b>: for every condition, the valid partitions, the invalid partitions, the valid boundaries (VB) and the invalid boundaries (IB). Fill it — with concrete values — for this form:</p>\n<ul><li><b>Guests</b>: whole number 1–4.</li><li><b>Nights</b>: whole number 1–30.</li><li><b>Discount code</b> (optional): either empty (no code) or <b>6–10 characters</b>. The condition is its <code>codeLength</code>.</li></ul>\n<p>Careful with the discount code: it has <b>two</b> valid partitions.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>validPartitions / invalidPartitions: exactly ONE concrete value from each partition.</li>\n  <li>validBoundaries / invalidBoundaries: every two-value boundary value, each once.</li>\n  <li>A whole-number field also has the invalid partition “not a whole number”.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đề PE cũ (FA23, SU24) yêu cầu <b>bảng condition template</b>: với mỗi điều kiện, các vùng hợp lệ, vùng không hợp lệ, biên hợp lệ (VB) và biên không hợp lệ (IB). Hãy điền — bằng giá trị cụ thể — cho form sau:</p>\n<ul><li><b>Guests</b>: số nguyên 1–4.</li><li><b>Nights</b>: số nguyên 1–30.</li><li><b>Mã giảm giá</b> (tuỳ chọn): để trống (không có mã) hoặc <b>6–10 ký tự</b>. Điều kiện là <code>codeLength</code>.</li></ul>\n<p>Cẩn thận với mã giảm giá: nó có <b>hai</b> vùng hợp lệ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>validPartitions / invalidPartitions: đúng MỘT giá trị cụ thể từ mỗi vùng.</li>\n  <li>validBoundaries / invalidBoundaries: mọi giá trị biên hai giá trị, mỗi cái một lần.</li>\n  <li>Trường số nguyên còn có vùng không hợp lệ “không phải số nguyên”.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "guests: whole number 1–4",
+          "output": "valid [2] · invalid [-1, 7, 2.5] · VB [1, 4] · IB [0, 5]",
+          "explanation": "Three invalid partitions: below, above, not a whole number.|||Ba vùng sai: dưới, trên, không phải số nguyên."
+        }
+      ],
+      "hintsJson": [
+        "Mã giảm giá: vùng {0} (không có mã) là hợp lệ VÀ là biên của chính nó; vùng 1–5 sai; 6–10 đúng; > 10 sai.",
+        "Biên của codeLength: VB 0, 6, 10 · IB 1, 5, 11."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// The condition template (PE Table 3.1) — one entry per condition.\n// Give CONCRETE values: one per partition, and every boundary value exactly once.\nconst TEMPLATE = {\n  guests: {\n    validPartitions: [2],          // one value from each VALID partition\n    invalidPartitions: [],         // one value from each INVALID partition\n    validBoundaries: [],           // every valid boundary value (VB)\n    invalidBoundaries: [],         // every invalid boundary value (IB)\n  },\n  nights: { validPartitions: [], invalidPartitions: [], validBoundaries: [], invalidBoundaries: [] },\n  codeLength: { validPartitions: [], invalidPartitions: [], validBoundaries: [], invalidBoundaries: [] },\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// The condition template (PE Table 3.1) for the room-booking form.\nconst TEMPLATE = {\n  guests: {                         // whole number 1–4\n    validPartitions: [2],           // 1–4\n    invalidPartitions: [-1, 7, 2.5],// < 1 · > 4 · not a whole number\n    validBoundaries: [1, 4],\n    invalidBoundaries: [0, 5],\n  },\n  nights: {                         // whole number 1–30\n    validPartitions: [10],\n    invalidPartitions: [-3, 45, 1.5],\n    validBoundaries: [1, 30],\n    invalidBoundaries: [0, 31],\n  },\n  codeLength: {                     // optional discount code: no code (length 0) OR 6–10 characters\n    validPartitions: [0, 8],        // two valid partitions: {0} and 6–10\n    invalidPartitions: [3, 15],     // 1–5 and > 10\n    validBoundaries: [0, 6, 10],    // 0 is a one-value partition — it is its own boundary\n    invalidBoundaries: [1, 5, 11],\n  },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>guests VB {1,4} IB {0,5}; nights VB {1,30} IB {0,31}; codeLength VB {0,6,10} IB {1,5,11}. Each invalid partition gets one representative; each valid partition one value.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "guests: valid boundaries",
+              "vi": "guests: biên hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=TEMPLATE&&TEMPLATE.guests;if(!e)return\"TEMPLATE.guests is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>4?\"HIGH\":\"OK\"},t=e.validBoundaries;if(!Array.isArray(t))return\"guests.validBoundaries must be an array\";const r=[1,4],s=[...new Set(t)].sort((n,i)=>n-i);return JSON.stringify(s)===JSON.stringify(r)&&t.length===r.length?\"OK\":\"guests: expected \"+r.length+\" valid boundary value(s) \\u2014 got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "guests: invalid boundaries",
+              "vi": "guests: biên không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=TEMPLATE&&TEMPLATE.guests;if(!e)return\"TEMPLATE.guests is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>4?\"HIGH\":\"OK\"},t=e.invalidBoundaries;if(!Array.isArray(t))return\"guests.invalidBoundaries must be an array\";const r=[0,5],s=[...new Set(t)].sort((n,i)=>n-i);return JSON.stringify(s)===JSON.stringify(r)&&t.length===r.length?\"OK\":\"guests: expected \"+r.length+\" invalid boundary value(s) \\u2014 got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "guests: one value per valid partition",
+              "vi": "guests: mỗi vùng hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i=TEMPLATE&&TEMPLATE.guests;if(!i)return\"TEMPLATE.guests is missing\";const s=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>4?\"HIGH\":\"OK\"},e=i.validPartitions;if(!Array.isArray(e))return\"guests.validPartitions must be an array\";const r=e.map(s),t=[\"OK\"];return r.some(n=>t.indexOf(n)<0)?\"guests: a value in validPartitions is not valid\":t.every(n=>r.filter(a=>a===n).length===1)&&e.length===t.length?\"OK\":\"guests: need exactly one value in each of the \"+t.length+\" valid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "guests: one value per invalid partition",
+              "vi": "guests: mỗi vùng không hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i=TEMPLATE&&TEMPLATE.guests;if(!i)return\"TEMPLATE.guests is missing\";const s=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>4?\"HIGH\":\"OK\"},e=i.invalidPartitions;if(!Array.isArray(e))return\"guests.invalidPartitions must be an array\";const r=e.map(s),t=[\"LOW\",\"HIGH\",\"NOT_INT\"];return r.some(n=>t.indexOf(n)<0)?\"guests: a value in invalidPartitions is not invalid (or not a number)\":t.every(n=>r.filter(a=>a===n).length===1)&&e.length===t.length?\"OK\":\"guests: need exactly one value in each of the \"+t.length+\" invalid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "nights: valid boundaries",
+              "vi": "nights: biên hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i=TEMPLATE&&TEMPLATE.nights;if(!i)return\"TEMPLATE.nights is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>30?\"HIGH\":\"OK\"},t=i.validBoundaries;if(!Array.isArray(t))return\"nights.validBoundaries must be an array\";const r=[1,30],e=[...new Set(t)].sort((n,s)=>n-s);return JSON.stringify(e)===JSON.stringify(r)&&t.length===r.length?\"OK\":\"nights: expected \"+r.length+\" valid boundary value(s) \\u2014 got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "nights: invalid boundaries",
+              "vi": "nights: biên không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=TEMPLATE&&TEMPLATE.nights;if(!r)return\"TEMPLATE.nights is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>30?\"HIGH\":\"OK\"},t=r.invalidBoundaries;if(!Array.isArray(t))return\"nights.invalidBoundaries must be an array\";const i=[0,31],e=[...new Set(t)].sort((n,s)=>n-s);return JSON.stringify(e)===JSON.stringify(i)&&t.length===i.length?\"OK\":\"nights: expected \"+i.length+\" invalid boundary value(s) \\u2014 got \"+JSON.stringify(t)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "nights: one value per valid partition",
+              "vi": "nights: mỗi vùng hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=TEMPLATE&&TEMPLATE.nights;if(!e)return\"TEMPLATE.nights is missing\";const a=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>30?\"HIGH\":\"OK\"},i=e.validPartitions;if(!Array.isArray(i))return\"nights.validPartitions must be an array\";const r=i.map(a),t=[\"OK\"];return r.some(n=>t.indexOf(n)<0)?\"nights: a value in validPartitions is not valid\":t.every(n=>r.filter(s=>s===n).length===1)&&i.length===t.length?\"OK\":\"nights: need exactly one value in each of the \"+t.length+\" valid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "nights: one value per invalid partition",
+              "vi": "nights: mỗi vùng không hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=TEMPLATE&&TEMPLATE.nights;if(!r)return\"TEMPLATE.nights is missing\";const a=function(n){return typeof n!=\"number\"||!Number.isInteger(n)?\"NOT_INT\":n<1?\"LOW\":n>30?\"HIGH\":\"OK\"},t=r.invalidPartitions;if(!Array.isArray(t))return\"nights.invalidPartitions must be an array\";const e=t.map(a),i=[\"LOW\",\"HIGH\",\"NOT_INT\"];return e.some(n=>i.indexOf(n)<0)?\"nights: a value in invalidPartitions is not invalid (or not a number)\":i.every(n=>e.filter(s=>s===n).length===1)&&t.length===i.length?\"OK\":\"nights: need exactly one value in each of the \"+i.length+\" invalid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "codeLength: valid boundaries",
+              "vi": "codeLength: biên hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const t=TEMPLATE&&TEMPLATE.codeLength;if(!t)return\"TEMPLATE.codeLength is missing\";const u=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n<0?\"BAD\":n===0?\"NONE\":n<=5?\"SHORT\":n<=10?\"OK\":\"LONG\"},e=t.validBoundaries;if(!Array.isArray(e))return\"codeLength.validBoundaries must be an array\";const r=[0,6,10],i=[...new Set(e)].sort((n,o)=>n-o);return JSON.stringify(i)===JSON.stringify(r)&&e.length===r.length?\"OK\":\"codeLength: expected \"+r.length+\" valid boundary value(s) \\u2014 got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "codeLength: invalid boundaries",
+              "vi": "codeLength: biên không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const t=TEMPLATE&&TEMPLATE.codeLength;if(!t)return\"TEMPLATE.codeLength is missing\";const u=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n<0?\"BAD\":n===0?\"NONE\":n<=5?\"SHORT\":n<=10?\"OK\":\"LONG\"},e=t.invalidBoundaries;if(!Array.isArray(e))return\"codeLength.invalidBoundaries must be an array\";const r=[1,5,11],i=[...new Set(e)].sort((n,o)=>n-o);return JSON.stringify(i)===JSON.stringify(r)&&e.length===r.length?\"OK\":\"codeLength: expected \"+r.length+\" invalid boundary value(s) \\u2014 got \"+JSON.stringify(e)})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "codeLength: one value per valid partition",
+              "vi": "codeLength: mỗi vùng hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const r=TEMPLATE&&TEMPLATE.codeLength;if(!r)return\"TEMPLATE.codeLength is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n<0?\"BAD\":n===0?\"NONE\":n<=5?\"SHORT\":n<=10?\"OK\":\"LONG\"},t=r.validPartitions;if(!Array.isArray(t))return\"codeLength.validPartitions must be an array\";const i=t.map(o),e=[\"NONE\",\"OK\"];return i.some(n=>e.indexOf(n)<0)?\"codeLength: a value in validPartitions is not valid\":e.every(n=>i.filter(a=>a===n).length===1)&&t.length===e.length?\"OK\":\"codeLength: need exactly one value in each of the \"+e.length+\" valid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "codeLength: one value per invalid partition",
+              "vi": "codeLength: mỗi vùng không hợp lệ một giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i=TEMPLATE&&TEMPLATE.codeLength;if(!i)return\"TEMPLATE.codeLength is missing\";const o=function(n){return typeof n!=\"number\"||!Number.isInteger(n)||n<0?\"BAD\":n===0?\"NONE\":n<=5?\"SHORT\":n<=10?\"OK\":\"LONG\"},t=i.invalidPartitions;if(!Array.isArray(t))return\"codeLength.invalidPartitions must be an array\";const r=t.map(o),e=[\"SHORT\",\"LONG\"];return r.some(n=>e.indexOf(n)<0)?\"codeLength: a value in invalidPartitions is not invalid (or not a number)\":e.every(n=>r.filter(a=>a===n).length===1)&&t.length===e.length?\"OK\":\"codeLength: need exactly one value in each of the \"+e.length+\" invalid partition(s)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi validBoundaries [1, 2, 3, 4] — đó là liệt kê cả vùng, không phải biên."
+        },
+        {
+          "loi": "Bỏ sót vùng {0} của mã giảm giá vì “trống là không có dữ liệu”."
+        },
+        {
+          "loi": "Quên vùng “không phải số nguyên” (2.5 khách)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        },
+        {
+          "en": "boundary value",
+          "vi": "giá trị biên (min/max của một vùng có thứ tự)"
+        },
+        {
+          "en": "condition template",
+          "vi": "bảng điều kiện (Bảng 3.1 của PE): vùng/biên đúng-sai cho từng điều kiện"
+        }
+      ]
+    },
+    {
+      "title": "BVA 5 — Boundary tests that kill off-by-one mutants (bookingOk)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><code>bookingOk(guests, nights, code)</code> returns <code>true</code> when the form of BVA 4 is valid (guests 1–4, nights 1–30, code empty or 6–10 characters), otherwise <code>false</code>.</p>\n<p>Nine mutants each move <b>one boundary by one step</b> (<code>&lt;</code> ↔ <code>&lt;=</code>, 4 → 5…). A test set with only “middle” values (EP) kills none of them — that is why BVA exists. Write boundary tests that kill them all.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use two-value BVA on every boundary: guests 0|1, 4|5; nights 0|1, 30|31; code length 0 (empty), 5|6, 10|11.</li>\n  <li>At least 8 tests (test.each rows count as tests).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>bookingOk(guests, nights, code)</code> trả <code>true</code> khi form của BVA 4 hợp lệ (khách 1–4, đêm 1–30, mã trống hoặc 6–10 ký tự), ngược lại <code>false</code>.</p>\n<p>Chín mutant, mỗi cái dời <b>một biên đi một bước</b> (<code>&lt;</code> ↔ <code>&lt;=</code>, 4 → 5…). Bộ test chỉ có giá trị “giữa vùng” (EP) không giết được cái nào — đó là lý do có BVA. Viết test theo biên để giết hết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng BVA hai giá trị cho mọi biên: khách 0|1, 4|5; đêm 0|1, 30|31; độ dài mã 0 (trống), 5|6, 10|11.</li>\n  <li>Ít nhất 8 test (mỗi dòng test.each là một test).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "expect(bookingOk(4, 2, '')).toBe(true); expect(bookingOk(5, 2, '')).toBe(false)",
+          "output": "kills both mutants on the guests upper boundary",
+          "explanation": "A mutant that rejects 4 fails the first, one that accepts 5 fails the second.|||Mutant từ chối 4 trượt câu đầu, mutant nhận 5 trượt câu sau."
+        }
+      ],
+      "hintsJson": [
+        "Viết hai test.each: một bảng các giá trị PHẢI được nhận (biên đúng), một bảng các giá trị PHẢI bị từ chối (biên sai).",
+        "Mã dài 6 ký tự: \"ABCDEF\"; 5 ký tự: \"ABCDE\"; 11 ký tự: \"ABCDEFGHIJK\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Write boundary-value tests for bookingOk(guests, nights, code).\ntest('a typical booking is accepted', () => {\n  expect(bookingOk(2, 10, 'SUMMER25')).toBe(true);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Two-value BVA on every boundary of bookingOk(guests, nights, code).\ndescribe('bookingOk — boundary values', () => {\n  test.each([\n    [1, 10, ''], [4, 10, ''],              // guests: lower and upper valid boundary\n    [2, 1, ''], [2, 30, ''],               // nights\n    [2, 10, 'ABCDEF'], [2, 10, 'ABCDEFGHIJ'], // code length 6 and 10\n  ])('accepts guests=%i nights=%i code=%p', (g, n, c) => {\n    expect(bookingOk(g, n, c)).toBe(true);\n  });\n\n  test.each([\n    [0, 10, ''], [5, 10, ''],              // guests: invalid boundaries\n    [2, 0, ''], [2, 31, ''],               // nights\n    [2, 10, 'ABCDE'], [2, 10, 'ABCDEFGHIJK'], // code length 5 and 11\n  ])('rejects guests=%i nights=%i code=%p', (g, n, c) => {\n    expect(bookingOk(g, n, c)).toBe(false);\n  });\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Eight valid boundary rows (1 and 4 guests, 1 and 30 nights, empty / 6 / 10-character code) and six invalid boundary rows (0, 5 guests; 0, 31 nights; 5, 11 characters) kill all nine mutants. JUnit 5: <code>@ParameterizedTest @ValueSource(ints = {1, 4})</code> for accepted guests, <code>@ValueSource(ints = {0, 5})</code> for rejected ones.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof bookingOk !== 'undefined' && bookingOk !== globalThis[\"bookingOk\"]) return 'tests.js must not declare bookingOk itself (let/const/class/copy of the code) — call the global bookingOk that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 8 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 8 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 8) return 'only ' + r.tong + ' test(s) — write at least 8';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: 1 guest rejected (guests <= 1)",
+              "vi": "Giết mutant M1: 1 khách bị từ chối (guests <= 1)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests <= 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: 4 guests rejected (guests >= 4)",
+              "vi": "Giết mutant M2: 4 khách bị từ chối (guests >= 4)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests >= 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: 5 guests accepted (guests > 5)",
+              "vi": "Giết mutant M3: 5 khách được nhận (guests > 5)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 5) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: 0 nights accepted (nights < 0)",
+              "vi": "Giết mutant M4: 0 đêm được nhận (nights < 0)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 0 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: 31 nights accepted (nights > 31)",
+              "vi": "Giết mutant M5: 31 đêm được nhận (nights > 31)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 31) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M6: a 6-character code rejected (n < 7)",
+              "vi": "Giết mutant M6: mã 6 ký tự bị từ chối (n < 7)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 7 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M7: an 11-character code accepted (n > 11)",
+              "vi": "Giết mutant M7: mã 11 ký tự được nhận (n > 11)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 11)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M8 is killed",
+              "vi": "Mutant ẩn M8 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if ((n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M9 is killed",
+              "vi": "Mutant ẩn M9 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 6 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction bookingOk(guests, nights, code) {\n  if (!Number.isInteger(guests) || guests < 1 || guests > 4) return false;\n  if (!Number.isInteger(nights) || nights < 1 || nights > 30) return false;\n  const n = String(code).length;\n  if (n !== 0 && (n < 5 || n > 10)) return false;\n  return true;\n}\nreturn { \"bookingOk\": bookingOk };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test 2 khách, 10 đêm, mã 8 ký tự — giữa vùng, không giết được mutant nào."
+        },
+        {
+          "loi": "Đổi nhiều giá trị cùng lúc trong một test — test trượt nhưng không biết biên nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "boundary value analysis (BVA)",
+          "vi": "phân tích giá trị biên — test ở mép các vùng"
+        },
+        {
+          "en": "off-by-one error",
+          "vi": "lỗi lệch một (dùng < thay vì <=, chạy thừa/thiếu một vòng)"
+        }
+      ]
+    }
+  ]
+}

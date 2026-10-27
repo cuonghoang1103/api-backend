@@ -1,0 +1,1123 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-blackbox-state-transition",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-state-transition"
+  },
+  "exercises": [
+    {
+      "title": "State transition 1 — Build the state table from the diagram",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "state transition testing",
+        "state table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>The <b>state table</b> lists every state × event pair — including the invalid ones, which the diagram does not show. Fill the rows of NEW, PAID and ON_HOLD.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p><b>Bảng trạng thái</b> liệt kê mọi cặp trạng thái × sự kiện — kể cả cặp không hợp lệ mà sơ đồ không vẽ. Điền các dòng NEW, PAID và ON_HOLD.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm mũi tên đi RA khỏi từng trạng thái trên sơ đồ.",
+        "Không có mũi tên ⇒ “— (invalid)”, kể cả pay khi đã PAID."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# State transition 1 — Build the state table from the diagram\n\nAnswer in the answer panel (no code needed).\n\n1. Next state for each (state, event) — or “— (invalid)”Trạng thái kế tiếp cho mỗi (trạng thái, sự kiện) — hoặc “— (invalid)”\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# State transition 1 — Build the state table from the diagram — answer key\n\n1. Next state for each (state, event) — or “— (invalid)”Trạng thái kế tiếp cho mỗi (trạng thái, sự kiện) — hoặc “— (invalid)”\n   - NEW.pay: PAID\n   - NEW.hold: — (invalid)\n   - NEW.release: — (invalid)\n   - NEW.ship: — (invalid)\n   - NEW.deliver: — (invalid)\n   - NEW.cancel: CANCELLED\n   - PAID.pay: — (invalid)\n   - PAID.hold: ON_HOLD\n   - PAID.release: — (invalid)\n   - PAID.ship: SHIPPED\n   - PAID.deliver: — (invalid)\n   - PAID.cancel: CANCELLED\n   - ON_HOLD.pay: — (invalid)\n   - ON_HOLD.hold: — (invalid)\n   - ON_HOLD.release: PAID\n   - ON_HOLD.ship: — (invalid)\n   - ON_HOLD.deliver: — (invalid)\n   - ON_HOLD.cancel: CANCELLED\n   Each row has as many valid cells as arrows leaving that state: NEW 2, PAID 3, ON_HOLD 2. All other cells are invalid transitions — the best source of negative tests.VI: Mỗi dòng có số ô hợp lệ bằng số mũi tên rời trạng thái đó: NEW 2, PAID 3, ON_HOLD 2. Các ô còn lại là chuyển đổi không hợp lệ — nguồn test âm tốt nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NEW: pay→PAID, cancel→CANCELLED. PAID: hold→ON_HOLD, ship→SHIPPED, cancel→CANCELLED. ON_HOLD: release→PAID, cancel→CANCELLED. Everything else invalid.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Next state for each (state, event) — or “— (invalid)”</p><p style=\"opacity:.75;font-size:.92em\"><i>Trạng thái kế tiếp cho mỗi (trạng thái, sự kiện) — hoặc “— (invalid)”</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "State \\ Event"
+              },
+              {
+                "ma": "pay",
+                "ten": "pay",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              },
+              {
+                "ma": "hold",
+                "ten": "hold",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              },
+              {
+                "ma": "release",
+                "ten": "release",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              },
+              {
+                "ma": "ship",
+                "ten": "ship",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              },
+              {
+                "ma": "deliver",
+                "ten": "deliver",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              },
+              {
+                "ma": "cancel",
+                "ten": "cancel",
+                "luaChon": [
+                  "NEW",
+                  "PAID",
+                  "ON_HOLD",
+                  "SHIPPED",
+                  "DELIVERED",
+                  "CANCELLED",
+                  "— (invalid)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "NEW",
+                "o": {
+                  "s": "NEW"
+                }
+              },
+              {
+                "ma": "PAID",
+                "o": {
+                  "s": "PAID"
+                }
+              },
+              {
+                "ma": "ON_HOLD",
+                "o": {
+                  "s": "ON_HOLD"
+                }
+              }
+            ],
+            "dapAn": {
+              "NEW.pay": "PAID",
+              "NEW.hold": "— (invalid)",
+              "NEW.release": "— (invalid)",
+              "NEW.ship": "— (invalid)",
+              "NEW.deliver": "— (invalid)",
+              "NEW.cancel": "CANCELLED",
+              "PAID.pay": "— (invalid)",
+              "PAID.hold": "ON_HOLD",
+              "PAID.release": "— (invalid)",
+              "PAID.ship": "SHIPPED",
+              "PAID.deliver": "— (invalid)",
+              "PAID.cancel": "CANCELLED",
+              "ON_HOLD.pay": "— (invalid)",
+              "ON_HOLD.hold": "— (invalid)",
+              "ON_HOLD.release": "PAID",
+              "ON_HOLD.ship": "— (invalid)",
+              "ON_HOLD.deliver": "— (invalid)",
+              "ON_HOLD.cancel": "CANCELLED"
+            },
+            "giaiThich": "<p>Each row has as many valid cells as arrows leaving that state: NEW 2, PAID 3, ON_HOLD 2. All other cells are invalid transitions — the best source of negative tests.</p><p><i>VI: Mỗi dòng có số ô hợp lệ bằng số mũi tên rời trạng thái đó: NEW 2, PAID 3, ON_HOLD 2. Các ô còn lại là chuyển đổi không hợp lệ — nguồn test âm tốt nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi PAID cho (PAID, pay) vì “trả tiền lần nữa vẫn là đã trả” — sơ đồ không có mũi tên đó ⇒ không hợp lệ."
+        },
+        {
+          "loi": "Quên cancel ở ON_HOLD (mũi tên T7 vòng sang phải)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "state table",
+          "vi": "bảng trạng thái — mọi cặp trạng thái × sự kiện, gồm cả cặp không hợp lệ"
+        },
+        {
+          "en": "invalid transition",
+          "vi": "chuyển đổi không hợp lệ — sự kiện không được phép ở trạng thái đó"
+        }
+      ]
+    },
+    {
+      "title": "State transition 2 — Cover every valid transition (0-switch) with the fewest sequences",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "state transition testing",
+        "0-switch coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>A test is a sequence of events starting from a new order. Write the <b>minimum</b> number of sequences that together exercise all 8 valid transitions (<b>0-switch coverage</b>), each with the state the order must end in.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SEQUENCES = [{ events: [\"pay\", \"ship\", \"deliver\"], expectedFinal: \"DELIVERED\" }, …]</code> — every event must be valid at that point.</li>\n  <li>Hint for the minimum: a final state ends a sequence, so count how many transitions lead into a final state.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>Một test là chuỗi sự kiện bắt đầu từ đơn mới. Viết số chuỗi <b>tối thiểu</b> mà gộp lại chạy qua cả 8 chuyển đổi hợp lệ (<b>độ phủ 0-switch</b>), mỗi chuỗi kèm trạng thái cuối mà đơn phải ở.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SEQUENCES = [{ events: [\"pay\", \"ship\", \"deliver\"], expectedFinal: \"DELIVERED\" }, …]</code> — mọi sự kiện phải hợp lệ tại thời điểm đó.</li>\n  <li>Gợi ý số tối thiểu: trạng thái cuối kết thúc chuỗi, nên đếm có bao nhiêu chuyển đổi đi vào trạng thái cuối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ events: ['pay', 'hold', 'release', 'ship', 'deliver'], expectedFinal: 'DELIVERED' }",
+          "output": "covers T1, T3, T4, T5, T8",
+          "explanation": "A loop (hold/release) can be taken inside a longer sequence.|||Vòng (hold/release) đi được bên trong một chuỗi dài."
+        }
+      ],
+      "hintsJson": [
+        "Ba chuyển đổi cancel (T2, T6, T7) và deliver (T8) đều đi vào trạng thái cuối ⇒ mỗi cái kết thúc một chuỗi riêng ⇒ ít nhất 4 chuỗi.",
+        "Gắn T3, T4, T5 vào chuỗi kết thúc bằng deliver."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Each sequence starts from a NEW order.\nconst SEQUENCES = [\n  { events: ['pay', 'ship', 'deliver'], expectedFinal: 'DELIVERED' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// 0-switch coverage with the minimum number of sequences (4 transitions end in a final state).\nconst SEQUENCES = [\n  { events: ['pay', 'hold', 'release', 'ship', 'deliver'], expectedFinal: 'DELIVERED' }, // T1 T3 T4 T5 T8\n  { events: ['cancel'], expectedFinal: 'CANCELLED' },                                 // T2\n  { events: ['pay', 'cancel'], expectedFinal: 'CANCELLED' },                          // T1 T6\n  { events: ['pay', 'hold', 'cancel'], expectedFinal: 'CANCELLED' },                  // T1 T3 T7\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four sequences: pay·hold·release·ship·deliver (T1 T3 T4 T5 T8) · cancel (T2) · pay·cancel (T1 T6) · pay·hold·cancel (T1 T3 T7). Four transitions enter a final state, so four is the minimum.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every sequence is valid and ends in its expected state",
+              "vi": "Mọi chuỗi hợp lệ và kết thúc đúng trạng thái mong đợi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:l,buoc:r}=(function(){const e=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:e,buoc:(o,n)=>e.find(t=>t[1]===o&&t[2]===n)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=e=>{let s=\"NEW\";const o=[];for(let n=0;n<(e.events||[]).length;n++){const t=r(s,e.events[n]);if(!t)return{loi:'event \"'+e.events[n]+'\" is not valid in state '+s+\" (step \"+(n+1)+\")\"};o.push(t[0]),s=t[3]}return{s,dung:o}},E=SEQUENCES.map(c);for(let e=0;e<E.length;e++){if(E[e].loi)return\"sequence #\"+(e+1)+\": \"+E[e].loi;if(E[e].s!==SEQUENCES[e].expectedFinal)return\"sequence #\"+(e+1)+\" ends in \"+E[e].s+\", not \"+SEQUENCES[e].expectedFinal}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T1 is exercised",
+              "vi": "Chuyển đổi T1 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T1\")>=0)?\"OK\":\"T1 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T2 is exercised",
+              "vi": "Chuyển đổi T2 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T2\")>=0)?\"OK\":\"T2 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T3 is exercised",
+              "vi": "Chuyển đổi T3 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T3\")>=0)?\"OK\":\"T3 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T4 is exercised",
+              "vi": "Chuyển đổi T4 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T4\")>=0)?\"OK\":\"T4 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T5 is exercised",
+              "vi": "Chuyển đổi T5 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T5\")>=0)?\"OK\":\"T5 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T6 is exercised",
+              "vi": "Chuyển đổi T6 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T6\")>=0)?\"OK\":\"T6 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T7 is exercised",
+              "vi": "Chuyển đổi T7 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T7\")>=0)?\"OK\":\"T7 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Transition T8 is exercised",
+              "vi": "Chuyển đổi T8 được chạy qua"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:u,buoc:s}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(o,e)=>n.find(t=>t[1]===o&&t[2]===e)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const c=n=>{let E=\"NEW\";const o=[];for(let e=0;e<(n.events||[]).length;e++){const t=s(E,n.events[e]);if(!t)return{loi:'event \"'+n.events[e]+'\" is not valid in state '+E+\" (step \"+(e+1)+\")\"};o.push(t[0]),E=t[3]}return{s:E,dung:o}};return SEQUENCES.map(c).some(n=>n.dung&&n.dung.indexOf(\"T8\")>=0)?\"OK\":\"T8 not covered yet\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Minimum number of sequences (4)",
+              "vi": "Số chuỗi tối thiểu (4)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{T:c,buoc:o}=(function(){const e=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:e,buoc:(s,n)=>e.find(t=>t[1]===s&&t[2]===n)||null}})();if(!Array.isArray(SEQUENCES)||!SEQUENCES.length)return\"SEQUENCES must be a non-empty array\";const r=e=>{let E=\"NEW\";const s=[];for(let n=0;n<(e.events||[]).length;n++){const t=o(E,e.events[n]);if(!t)return{loi:'event \"'+e.events[n]+'\" is not valid in state '+E+\" (step \"+(n+1)+\")\"};s.push(t[0]),E=t[3]}return{s:E,dung:s}},i=SEQUENCES.map(r);return SEQUENCES.length===4?\"OK\":SEQUENCES.length+\" sequences \\u2014 four transitions lead into a final state, so 4 is the minimum\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết 8 chuỗi, mỗi chuỗi một chuyển đổi — đúng phủ nhưng không tối thiểu."
+        },
+        {
+          "loi": "Chuỗi [\"cancel\", \"pay\"] — pay sau CANCELLED là không hợp lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "0-switch coverage",
+          "vi": "độ phủ 0-switch — mọi chuyển đổi hợp lệ chạy ít nhất một lần"
+        }
+      ]
+    },
+    {
+      "title": "State transition 3 — Negative tests from invalid transitions",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "state transition testing",
+        "invalid transitions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>The state table has 6 states × 6 events = 36 cells. Count the <b>invalid</b> ones, then write negative tests: each reaches a state with valid events and then fires ONE invalid event; the expected result is that the event is rejected and the order <b>stays</b> in its state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>INVALID_COUNT</code> = number of invalid (state, event) pairs.</li>\n  <li><code>NEGATIVE = [{ events: [\"pay\", \"pay\"], expectedState: \"PAID\" }, …]</code>: only the LAST event is invalid; cover invalid events in at least 5 different states (including both final states).</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>Bảng trạng thái có 6 trạng thái × 6 sự kiện = 36 ô. Đếm số ô <b>không hợp lệ</b>, rồi viết test âm: mỗi test đi tới một trạng thái bằng các sự kiện hợp lệ rồi bắn MỘT sự kiện không hợp lệ; kết quả mong đợi là sự kiện bị từ chối và đơn <b>giữ nguyên</b> trạng thái.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>INVALID_COUNT</code> = số cặp (trạng thái, sự kiện) không hợp lệ.</li>\n  <li><code>NEGATIVE = [{ events: [\"pay\", \"pay\"], expectedState: \"PAID\" }, …]</code>: chỉ sự kiện CUỐI không hợp lệ; phủ sự kiện sai ở ít nhất 5 trạng thái khác nhau (gồm cả hai trạng thái cuối).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ events: ['pay', 'ship', 'cancel'], expectedState: 'SHIPPED' }",
+          "output": "a shipped order cannot be cancelled",
+          "explanation": "Valid prefix pay·ship, then the invalid event cancel.|||Phần đầu hợp lệ pay·ship, rồi sự kiện sai cancel."
+        }
+      ],
+      "hintsJson": [
+        "36 ô − 8 chuyển đổi hợp lệ.",
+        "Trạng thái cuối (DELIVERED, CANCELLED) từ chối MỌI sự kiện — test ít nhất một sự kiện ở mỗi trạng thái cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const INVALID_COUNT = 0;\n\n// Only the LAST event of each sequence is invalid.\nconst NEGATIVE = [\n  { events: ['pay', 'pay'], expectedState: 'PAID' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const INVALID_COUNT = 28;   // 6 states × 6 events = 36 cells − 8 valid transitions\n\n// One invalid event at the end of each sequence; the order must stay where it is.\nconst NEGATIVE = [\n  { events: ['ship'], expectedState: 'NEW' },\n  { events: ['pay', 'pay'], expectedState: 'PAID' },\n  { events: ['pay', 'hold', 'ship'], expectedState: 'ON_HOLD' },\n  { events: ['pay', 'ship', 'cancel'], expectedState: 'SHIPPED' },\n  { events: ['pay', 'ship', 'deliver', 'cancel'], expectedState: 'DELIVERED' },\n  { events: ['cancel', 'pay'], expectedState: 'CANCELLED' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>INVALID_COUNT = 36 − 8 = 28. Good negative tests: NEW·ship, pay·pay (PAID), pay·hold·ship (ON_HOLD), pay·ship·cancel (SHIPPED), pay·ship·deliver·cancel (DELIVERED), cancel·pay (CANCELLED).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "INVALID_COUNT is right",
+              "vi": "INVALID_COUNT đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return INVALID_COUNT===28?\"OK\":\"not right \\u2014 count all 36 cells of the state table, then remove the valid transitions\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every negative test has a valid prefix and ONE invalid last event",
+              "vi": "Mọi test âm có phần đầu hợp lệ và MỘT sự kiện cuối không hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:r}=(function(){const i=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:i,buoc:(n,t)=>i.find(l=>l[1]===n&&l[2]===t)||null}})();if(!Array.isArray(NEGATIVE)||!NEGATIVE.length)return\"NEGATIVE must be a non-empty array\";const a=i=>{const e=i.events||[];if(!e.length)return{loi:\"empty sequence\"};let n=\"NEW\";for(let t=0;t<e.length-1;t++){const l=r(n,e[t]);if(!l)return{loi:'event \"'+e[t]+'\" at step '+(t+1)+\" is already invalid \\u2014 only the last event may be invalid\"};n=l[3]}return r(n,e[e.length-1])?{loi:'the last event \"'+e[e.length-1]+'\" is VALID in '+n}:{s:n}},E=NEGATIVE.map(a),o=E.findIndex(i=>i.loi);return o<0?\"OK\":\"negative #\"+(o+1)+\": \"+E[o].loi})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Expected state = the state before the rejected event",
+              "vi": "Trạng thái mong đợi = trạng thái trước sự kiện bị từ chối"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:r}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(t,i)=>n.find(l=>l[1]===t&&l[2]===i)||null}})();if(!Array.isArray(NEGATIVE)||!NEGATIVE.length)return\"NEGATIVE must be a non-empty array\";const E=n=>{const e=n.events||[];if(!e.length)return{loi:\"empty sequence\"};let t=\"NEW\";for(let i=0;i<e.length-1;i++){const l=r(t,e[i]);if(!l)return{loi:'event \"'+e[i]+'\" at step '+(i+1)+\" is already invalid \\u2014 only the last event may be invalid\"};t=l[3]}return r(t,e[e.length-1])?{loi:'the last event \"'+e[e.length-1]+'\" is VALID in '+t}:{s:t}},s=NEGATIVE.map(E),o=s.findIndex((n,e)=>!n.loi&&n.s!==NEGATIVE[e].expectedState);return o<0?\"OK\":\"negative #\"+(o+1)+\": the order stays in \"+s[o].s})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Invalid events tested in at least 5 different states",
+              "vi": "Sự kiện sai được test ở ít nhất 5 trạng thái khác nhau"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:o}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(t,l)=>n.find(s=>s[1]===t&&s[2]===l)||null}})();if(!Array.isArray(NEGATIVE)||!NEGATIVE.length)return\"NEGATIVE must be a non-empty array\";const r=n=>{const e=n.events||[];if(!e.length)return{loi:\"empty sequence\"};let t=\"NEW\";for(let l=0;l<e.length-1;l++){const s=o(t,e[l]);if(!s)return{loi:'event \"'+e[l]+'\" at step '+(l+1)+\" is already invalid \\u2014 only the last event may be invalid\"};t=s[3]}return o(t,e[e.length-1])?{loi:'the last event \"'+e[e.length-1]+'\" is VALID in '+t}:{s:t}},a=NEGATIVE.map(r),i=new Set(a.filter(n=>!n.loi).map(n=>n.s));return i.size>=5?\"OK\":\"only \"+i.size+\" state(s): \"+[...i].join(\", \")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Both final states are shown to reject events",
+              "vi": "Cả hai trạng thái cuối đều được chứng minh từ chối sự kiện"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:a}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(t,E)=>n.find(s=>s[1]===t&&s[2]===E)||null}})();if(!Array.isArray(NEGATIVE)||!NEGATIVE.length)return\"NEGATIVE must be a non-empty array\";const r=n=>{const e=n.events||[];if(!e.length)return{loi:\"empty sequence\"};let t=\"NEW\";for(let E=0;E<e.length-1;E++){const s=a(t,e[E]);if(!s)return{loi:'event \"'+e[E]+'\" at step '+(E+1)+\" is already invalid \\u2014 only the last event may be invalid\"};t=s[3]}return a(t,e[e.length-1])?{loi:'the last event \"'+e[e.length-1]+'\" is VALID in '+t}:{s:t}},i=NEGATIVE.map(r),l=new Set(i.filter(n=>!n.loi).map(n=>n.s));return l.has(\"DELIVERED\")&&l.has(\"CANCELLED\")?\"OK\":\"test an event in \"+(l.has(\"DELIVERED\")?\"CANCELLED\":\"DELIVERED\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm số ô không hợp lệ chỉ ở ba trạng thái đầu."
+        },
+        {
+          "loi": "Viết expectedState là trạng thái \"sau lỗi\" khác đi — sự kiện bị từ chối thì trạng thái không đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "negative test",
+          "vi": "test âm — kiểm hệ thống từ chối đúng thao tác không hợp lệ"
+        }
+      ]
+    },
+    {
+      "title": "State transition 4 — Unit-test the Order state machine (kill the mutants)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p><code>new Order()</code> starts in <code>NEW</code>; methods <code>pay()</code>, <code>hold()</code>, <code>release()</code>, <code>ship()</code>, <code>deliver()</code>, <code>cancel()</code> fire the events; <code>order.state</code> is the current state; a rejected event throws <code>IllegalStateException</code> and leaves the state unchanged. Test every valid transition AND the important invalid ones.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A <code>beforeEach</code> that creates a fresh order keeps the tests independent.</li>\n  <li>For a rejected event check BOTH the exception and that <code>order.state</code> did not change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p><code>new Order()</code> bắt đầu ở <code>NEW</code>; các hàm <code>pay()</code>, <code>hold()</code>, <code>release()</code>, <code>ship()</code>, <code>deliver()</code>, <code>cancel()</code> bắn sự kiện; <code>order.state</code> là trạng thái hiện tại; sự kiện bị từ chối ném <code>IllegalStateException</code> và giữ nguyên trạng thái. Test mọi chuyển đổi hợp lệ VÀ các chuyển đổi không hợp lệ quan trọng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>beforeEach</code> tạo đơn mới giúp các test độc lập.</li>\n  <li>Với sự kiện bị từ chối kiểm CẢ exception lẫn việc <code>order.state</code> không đổi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "o.pay(); o.ship(); expect(() => o.cancel()).toThrow(IllegalStateException); expect(o.state).toBe(\"SHIPPED\")",
+          "output": "kills the mutant that allows cancelling a shipped order",
+          "explanation": "An invalid transition taken from the state table.|||Một chuyển đổi không hợp lệ lấy từ bảng trạng thái."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi chuyển đổi hợp lệ một test (8 test), kiểm order.state sau sự kiện.",
+        "Thêm test âm cho các ô nguy hiểm: ship khi NEW, deliver khi PAID, cancel khi SHIPPED, pay lần hai, hold khi NEW."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Unit tests for the Order state machine. new Order() starts in 'NEW'.\ntest('pay moves a new order to PAID', () => {\n  const o = new Order();\n  o.pay();\n  expect(o.state).toBe('PAID');\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "lib/sut.js",
+          "language": "javascript",
+          "code": "/* lib/sut.js — exception thrown by Order for a rejected event. Use it in toThrow(IllegalStateException). */\nclass IllegalStateException extends Error { constructor(m) { super(m); this.name = 'IllegalStateException'; } }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "describe('Order — state transitions', () => {\n  let o;\n  beforeEach(() => { o = new Order(); });\n\n  // every valid transition (0-switch)\n  test('T1 NEW -pay-> PAID', () => { o.pay(); expect(o.state).toBe('PAID'); });\n  test('T2 NEW -cancel-> CANCELLED', () => { o.cancel(); expect(o.state).toBe('CANCELLED'); });\n  test('T3 PAID -hold-> ON_HOLD', () => { o.pay(); o.hold(); expect(o.state).toBe('ON_HOLD'); });\n  test('T4 ON_HOLD -release-> PAID', () => { o.pay(); o.hold(); o.release(); expect(o.state).toBe('PAID'); });\n  test('T5 PAID -ship-> SHIPPED', () => { o.pay(); o.ship(); expect(o.state).toBe('SHIPPED'); });\n  test('T6 PAID -cancel-> CANCELLED', () => { o.pay(); o.cancel(); expect(o.state).toBe('CANCELLED'); });\n  test('T7 ON_HOLD -cancel-> CANCELLED', () => { o.pay(); o.hold(); o.cancel(); expect(o.state).toBe('CANCELLED'); });\n  test('T8 SHIPPED -deliver-> DELIVERED', () => { o.pay(); o.ship(); o.deliver(); expect(o.state).toBe('DELIVERED'); });\n\n  // invalid transitions from the state table: rejected, state unchanged\n  test.each([\n    [[], 'ship', 'NEW'],\n    [[], 'hold', 'NEW'],\n    [['pay'], 'pay', 'PAID'],\n    [['pay'], 'deliver', 'PAID'],\n    [['pay', 'ship'], 'cancel', 'SHIPPED'],\n    [['pay', 'ship', 'deliver'], 'cancel', 'DELIVERED'],\n  ])('after %p, %s is rejected and the order stays %s', (before, event, state) => {\n    before.forEach((e) => o[e]());\n    expect(() => o[event]()).toThrow(IllegalStateException);\n    expect(o.state).toBe(state);\n  });\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        },
+        {
+          "name": "lib/sut.js",
+          "language": "javascript",
+          "code": "/* lib/sut.js — exception thrown by Order for a rejected event. Use it in toThrow(IllegalStateException). */\nclass IllegalStateException extends Error { constructor(m) { super(m); this.name = 'IllegalStateException'; } }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>State-transition unit tests cover each valid transition (0-switch) plus the invalid cells that a careless implementation is likely to allow. JUnit 5: <code>assertThrows(IllegalStateException.class, order::cancel); assertEquals(SHIPPED, order.getState());</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "lib/sut.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof Order !== 'undefined' && Order !== globalThis[\"Order\"]) return 'tests.js must not declare Order itself (let/const/class/copy of the code) — call the global Order that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 8 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 8 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 8) return 'only ' + r.tong + ' test(s) — write at least 8';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: a NEW order can be shipped",
+              "vi": "Giết mutant M1: đơn NEW giao vận chuyển được"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['NEW', 'PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: a SHIPPED order can be cancelled",
+              "vi": "Giết mutant M2: đơn SHIPPED huỷ được"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD', 'SHIPPED'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: a PAID order can be delivered directly",
+              "vi": "Giết mutant M3: đơn PAID giao xong trực tiếp được"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED', 'PAID'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: an order ON_HOLD cannot be cancelled",
+              "vi": "Giết mutant M4: đơn ON_HOLD không huỷ được"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: release returns the order to NEW",
+              "vi": "Giết mutant M5: release đưa đơn về NEW"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'NEW'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW', 'PAID'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M7 is killed",
+              "vi": "Mutant ẩn M7 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    if (from.indexOf(this.state) < 0) throw new IllegalStateException(event + ' is not allowed in ' + this.state);\n    this.state = to;\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nclass Order {\n  constructor() { this.state = 'NEW'; }\n  _go(event, from, to) {\n    const cu = this.state; this.state = to;\n    if (from.indexOf(cu) < 0) throw new IllegalStateException(event + ' is not allowed in ' + cu);\n  }\n  pay() { this._go('pay', ['NEW'], 'PAID'); }\n  hold() { this._go('hold', ['PAID'], 'ON_HOLD'); }\n  release() { this._go('release', ['ON_HOLD'], 'PAID'); }\n  ship() { this._go('ship', ['PAID'], 'SHIPPED'); }\n  deliver() { this._go('deliver', ['SHIPPED'], 'DELIVERED'); }\n  cancel() { this._go('cancel', ['NEW', 'PAID', 'ON_HOLD'], 'CANCELLED'); }\n}\nreturn { \"Order\": Order };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test chuỗi thành công pay·ship·deliver — các mutant cho phép chuyển đổi sai sống sót."
+        },
+        {
+          "loi": "Kiểm toThrow() nhưng không kiểm state sau đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        }
+      ]
+    },
+    {
+      "title": "State transition 5 — ISTQB-style questions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "state transition testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>Six questions about the diagram above and about state transition coverage in general.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p>Sáu câu về sơ đồ trên và về độ phủ chuyển trạng thái nói chung.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm mũi tên giữa các trạng thái; mũi tên vào từ chấm đen không tính.",
+        "Hai trạng thái cuối ⇒ không chuỗi nào thăm được cả hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# State transition 5 — ISTQB-style questions\n\nAnswer in the answer panel (no code needed).\n\n1. How many valid transitions does the order diagram have?Sơ đồ đơn hàng có bao nhiêu chuyển đổi hợp lệ?\n2. What does 0-switch coverage require?Độ phủ 0-switch yêu cầu gì?\n3. Which statement is TRUE?Phát biểu nào ĐÚNG?\n4. Where do the best NEGATIVE tests of state transition testing come from?Test ÂM tốt nhất của kiểm thử chuyển trạng thái lấy từ đâu?\n5. Which sequence achieves 100% STATE coverage (all six states) in a single test?Chuỗi nào đạt 100% độ phủ TRẠNG THÁI (cả sáu trạng thái) chỉ trong một test?\n6. An ATM keeps the card after the third wrong PIN. Which technique fits this requirement best?Máy ATM giữ thẻ sau lần nhập sai PIN thứ ba. Kỹ thuật nào hợp nhất với yêu cầu này?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# State transition 5 — ISTQB-style questions — answer key\n\n1. How many valid transitions does the order diagram have?Sơ đồ đơn hàng có bao nhiêu chuyển đổi hợp lệ?\n   Answer: c) 8\n   T1–T8 — count the arrows (the start arrow is not a transition between states).VI: T1–T8 — đếm mũi tên (mũi tên khởi đầu không phải chuyển đổi giữa hai trạng thái).\n\n2. What does 0-switch coverage require?Độ phủ 0-switch yêu cầu gì?\n   Answer: b) Every valid transition exercised at least once\n   0-switch = single transitions. Pairs are 1-switch; visiting states is a weaker criterion.VI: 0-switch = từng chuyển đổi đơn. Cặp liên tiếp là 1-switch; đi qua mọi trạng thái là tiêu chí yếu hơn.\n\n3. Which statement is TRUE?Phát biểu nào ĐÚNG?\n   Answer: b) Covering all transitions guarantees covering all states reachable by a transition\n   Every transition ends in a state, so all-transitions implies all (reachable) states — not the other way round: pay·ship·deliver and cancel visit 5 of 6 states but skip T3–T7. 1-switch is stronger; invalid transitions appear only in the state table.VI: Mỗi chuyển đổi kết thúc ở một trạng thái nên phủ mọi chuyển đổi kéo theo phủ mọi trạng thái (tới được) — chiều ngược lại thì không. 1-switch mạnh hơn; chuyển đổi sai chỉ có trong bảng trạng thái.\n\n4. Where do the best NEGATIVE tests of state transition testing come from?Test ÂM tốt nhất của kiểm thử chuyển trạng thái lấy từ đâu?\n   Answer: b) From the empty (invalid) cells of the state table\n   The state table shows every state × event pair; the empty cells are the invalid transitions to try.VI: Bảng trạng thái có mọi cặp trạng thái × sự kiện; các ô trống là chuyển đổi sai cần thử.\n\n5. Which sequence achieves 100% STATE coverage (all six states) in a single test?Chuỗi nào đạt 100% độ phủ TRẠNG THÁI (cả sáu trạng thái) chỉ trong một test?\n   Answer: c) No single sequence can — DELIVERED and CANCELLED are both final\n   A sequence ends in one final state, so at least two tests are needed to visit both DELIVERED and CANCELLED. (d) is invalid after cancel.VI: Một chuỗi chỉ kết thúc ở một trạng thái cuối, nên cần ít nhất hai test để thăm cả DELIVERED và CANCELLED. (d) không hợp lệ sau cancel.\n\n6. An ATM keeps the card after the third wrong PIN. Which technique fits this requirement best?Máy ATM giữ thẻ sau lần nhập sai PIN thứ ba. Kỹ thuật nào hợp nhất với yêu cầu này?\n   Answer: b) State transition testing\n   The same input (a wrong PIN) gives a different result depending on history — the hallmark of a state machine (SWT4 slides 60–72).VI: Cùng một input (PIN sai) cho kết quả khác tuỳ lịch sử — dấu hiệu của máy trạng thái (slide SWT4 60–72).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · b · c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>How many valid transitions does the order diagram have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sơ đồ đơn hàng có bao nhiêu chuyển đổi hợp lệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6"
+              },
+              {
+                "ma": "b",
+                "noiDung": "7"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "28"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>T1–T8 — count the arrows (the start arrow is not a transition between states).</p><p><i>VI: T1–T8 — đếm mũi tên (mũi tên khởi đầu không phải chuyển đổi giữa hai trạng thái).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does 0-switch coverage require?</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ phủ 0-switch yêu cầu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Every state visited at least once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every valid transition exercised at least once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every pair of consecutive transitions exercised"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every invalid transition attempted"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>0-switch = single transitions. Pairs are 1-switch; visiting states is a weaker criterion.</p><p><i>VI: 0-switch = từng chuyển đổi đơn. Cặp liên tiếp là 1-switch; đi qua mọi trạng thái là tiêu chí yếu hơn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which statement is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Covering all states guarantees covering all transitions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Covering all transitions guarantees covering all states reachable by a transition"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1-switch coverage is weaker than 0-switch coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Invalid transitions are shown as arrows in the diagram"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Every transition ends in a state, so all-transitions implies all (reachable) states — not the other way round: pay·ship·deliver and cancel visit 5 of 6 states but skip T3–T7. 1-switch is stronger; invalid transitions appear only in the state table.</p><p><i>VI: Mỗi chuyển đổi kết thúc ở một trạng thái nên phủ mọi chuyển đổi kéo theo phủ mọi trạng thái (tới được) — chiều ngược lại thì không. 1-switch mạnh hơn; chuyển đổi sai chỉ có trong bảng trạng thái.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Where do the best NEGATIVE tests of state transition testing come from?</p><p style=\"opacity:.75;font-size:.92em\"><i>Test ÂM tốt nhất của kiểm thử chuyển trạng thái lấy từ đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "From the arrows of the diagram"
+              },
+              {
+                "ma": "b",
+                "noiDung": "From the empty (invalid) cells of the state table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "From the use case main scenario"
+              },
+              {
+                "ma": "d",
+                "noiDung": "From the code coverage report"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The state table shows every state × event pair; the empty cells are the invalid transitions to try.</p><p><i>VI: Bảng trạng thái có mọi cặp trạng thái × sự kiện; các ô trống là chuyển đổi sai cần thử.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which sequence achieves 100% STATE coverage (all six states) in a single test?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuỗi nào đạt 100% độ phủ TRẠNG THÁI (cả sáu trạng thái) chỉ trong một test?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "pay · hold · release · ship · deliver"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pay · hold · cancel"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No single sequence can — DELIVERED and CANCELLED are both final"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cancel · pay · ship · deliver"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A sequence ends in one final state, so at least two tests are needed to visit both DELIVERED and CANCELLED. (d) is invalid after cancel.</p><p><i>VI: Một chuỗi chỉ kết thúc ở một trạng thái cuối, nên cần ít nhất hai test để thăm cả DELIVERED và CANCELLED. (d) không hợp lệ sau cancel.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>An ATM keeps the card after the third wrong PIN. Which technique fits this requirement best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy ATM giữ thẻ sau lần nhập sai PIN thứ ba. Kỹ thuật nào hợp nhất với yêu cầu này?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Equivalence partitioning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "State transition testing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Statement coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pairwise testing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The same input (a wrong PIN) gives a different result depending on history — the hallmark of a state machine (SWT4 slides 60–72).</p><p><i>VI: Cùng một input (PIN sai) cho kết quả khác tuỳ lịch sử — dấu hiệu của máy trạng thái (slide SWT4 60–72).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng thăm hết trạng thái là đủ — bỏ sót chuyển đổi."
+        },
+        {
+          "loi": "Tìm chuyển đổi sai trên sơ đồ — chúng chỉ có trong bảng trạng thái."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        }
+      ]
+    },
+    {
+      "title": "State transition 6 — 1-switch coverage: every pair of consecutive transitions",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "state transition testing",
+        "1-switch coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Order lifecycle.</b> A new order can be paid or cancelled. A paid order can be put on hold (and released back to PAID), shipped, or cancelled; an order on hold can also be cancelled. A shipped order can only be delivered. DELIVERED and CANCELLED are final. Any other event in a state is <b>rejected</b> and the order stays in its state.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p><b>1-switch coverage</b> requires every <i>pair</i> of consecutive valid transitions (Tₐ then T_b where Tₐ ends in the state T_b starts from). List the pairs and write sequences that cover all of them — in <b>at most 5</b> sequences.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>PAIR_COUNT</code> = the number of valid transition pairs.</li>\n  <li><code>SEQUENCES1 = [[\"pay\", \"hold\", \"release\", …], …]</code> — event arrays from a NEW order, all events valid.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Vòng đời đơn hàng.</b> Đơn mới có thể được thanh toán hoặc huỷ. Đơn đã thanh toán có thể tạm giữ (rồi thả về PAID), giao vận chuyển, hoặc huỷ; đơn đang tạm giữ cũng huỷ được. Đơn đã giao vận chuyển chỉ có thể được giao xong. DELIVERED và CANCELLED là trạng thái cuối. Mọi sự kiện khác ở một trạng thái đều <b>bị từ chối</b> và đơn giữ nguyên trạng thái.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 340\" width=\"100%\" style=\"max-width:760px;display:block;margin:8px auto\" role=\"img\" aria-label=\"Order lifecycle — state transition diagram (8 valid transitions)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"mt\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"340\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"18\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">Order lifecycle — state transition diagram (8 valid transitions)</text><path d=\"M34.0,170.0 L65.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><path d=\"M155.0,170.0 L255.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"181.8\" y=\"161.0\" width=\"46.4\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T1 pay</text><path d=\"M136.9,153.0 L273.1,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"172.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"205.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T2 cancel</text><path d=\"M292.4,187.0 Q272.0,232.5 292.4,278.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"255.8\" y=\"223.5\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"282.2\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T3 hold</text><path d=\"M307.6,278.0 Q328.0,232.5 307.6,187.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"281.8\" y=\"223.5\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"317.8\" y=\"236.0\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T4 release</text><path d=\"M345.0,170.0 L450.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"371.1\" y=\"161.0\" width=\"52.8\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"397.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T5 ship</text><path d=\"M300.0,153.0 L300.0,67.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"267.2\" y=\"101.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"300.0\" y=\"113.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T6 cancel</text><path d=\"M350.0,295.0 L420,295 L420,50 L355.0,50.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"387.2\" y=\"278.0\" width=\"65.6\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"420.0\" y=\"290.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T7 cancel</text><path d=\"M550.0,170.0 L625.0,170.0\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.4\" marker-end=\"url(#mt)\"/><rect x=\"551.5\" y=\"161.0\" width=\"72.0\" height=\"16\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.92\"/><text x=\"587.5\" y=\"173.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"11\">T8 deliver</text><circle cx=\"26\" cy=\"170\" r=\"8\" fill=\"#111827\"/><rect x=\"65\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"110\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">NEW</text><rect x=\"255\" y=\"153\" width=\"90\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">PAID</text><rect x=\"250\" y=\"278\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"299.0\" text-anchor=\"middle\" fill=\"#111827\">ON_HOLD</text><rect x=\"450\" y=\"153\" width=\"100\" height=\"34\" rx=\"12\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"500\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">SHIPPED</text><rect x=\"625\" y=\"153\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#dcfce7\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"680\" y=\"174.0\" text-anchor=\"middle\" fill=\"#111827\">DELIVERED</text><rect x=\"245\" y=\"33\" width=\"110\" height=\"34\" rx=\"12\" fill=\"#fee2e2\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"300\" y=\"54.0\" text-anchor=\"middle\" fill=\"#111827\">CANCELLED</text><text x=\"680\" y=\"210\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text><text x=\"300\" y=\"85\" text-anchor=\"middle\" fill=\"#374151\" font-size=\"11\">final</text></svg><p><b>Độ phủ 1-switch</b> yêu cầu mọi <i>cặp</i> chuyển đổi hợp lệ liên tiếp (Tₐ rồi T_b, Tₐ kết thúc ở trạng thái T_b bắt đầu). Liệt kê các cặp và viết chuỗi phủ hết chúng — trong <b>tối đa 5</b> chuỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>PAIR_COUNT</code> = số cặp chuyển đổi hợp lệ.</li>\n  <li><code>SEQUENCES1 = [[\"pay\", \"hold\", \"release\", …], …]</code> — mảng sự kiện từ đơn NEW, mọi sự kiện hợp lệ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "['pay', 'hold', 'release', 'ship', 'deliver']",
+          "output": "pairs (T1,T3) (T3,T4) (T4,T5) (T5,T8)",
+          "explanation": "Each consecutive two transitions form one pair.|||Mỗi hai chuyển đổi liên tiếp là một cặp."
+        }
+      ],
+      "hintsJson": [
+        "Cặp bắt đầu bằng T1 (về PAID): (T1,T3) (T1,T5) (T1,T6); T3 (về ON_HOLD): (T3,T4) (T3,T7); T4 (về PAID): (T4,T3) (T4,T5) (T4,T6); T5: (T5,T8). Tổng 9.",
+        "Cặp kết thúc bằng T6, T7, T8 đi vào trạng thái cuối ⇒ mỗi cái kết thúc một chuỗi; (T1,T5) và (T4,T5) cần hai lần đi T5."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const PAIR_COUNT = 0;\n\nconst SEQUENCES1 = [\n  ['pay', 'ship', 'deliver'],\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const PAIR_COUNT = 9; // (T1,T3) (T1,T5) (T1,T6) (T3,T4) (T3,T7) (T4,T3) (T4,T5) (T4,T6) (T5,T8)\n\nconst SEQUENCES1 = [\n  ['pay', 'ship', 'deliver'],                       // (T1,T5) (T5,T8)\n  ['pay', 'hold', 'release', 'hold', 'cancel'],    // (T1,T3) (T3,T4) (T4,T3) (T3,T7)\n  ['pay', 'cancel'],                                // (T1,T6)\n  ['pay', 'hold', 'release', 'cancel'],             // (T4,T6)\n  ['pay', 'hold', 'release', 'ship', 'deliver'],    // (T4,T5)\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>9 pairs. Five sequences suffice: pay·ship·deliver · pay·hold·release·hold·cancel · pay·cancel · pay·hold·release·cancel · pay·hold·release·ship·deliver.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "PAIR_COUNT is right",
+              "vi": "PAIR_COUNT đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return PAIR_COUNT===9?\"OK\":\"not right \\u2014 for each transition, count the transitions that leave its target state\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every sequence is valid",
+              "vi": "Mọi chuỗi hợp lệ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:a}=(function(){const n=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:n,buoc:(r,E)=>n.find(e=>e[1]===r&&e[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const u=new Set;let t=null;return SEQUENCES1.forEach((n,o)=>{if(t)return;let r=\"NEW\",E=null;(Array.isArray(n)?n:[]).forEach((e,l)=>{if(t)return;const c=a(r,e);if(!c){t=\"sequence #\"+(o+1)+\" step \"+(l+1)+': \"'+e+'\" is not valid in '+r;return}E&&u.add(E+\",\"+c[0]),E=c[0],r=c[3]})}),t||\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T1,T3) is covered",
+              "vi": "Cặp (T1,T3) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T1,T3\")?\"OK\":\"pair (T1,T3) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T1,T5) is covered",
+              "vi": "Cặp (T1,T5) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T1,T5\")?\"OK\":\"pair (T1,T5) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T1,T6) is covered",
+              "vi": "Cặp (T1,T6) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T1,T6\")?\"OK\":\"pair (T1,T6) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T3,T4) is covered",
+              "vi": "Cặp (T3,T4) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T3,T4\")?\"OK\":\"pair (T3,T4) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T3,T7) is covered",
+              "vi": "Cặp (T3,T7) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T3,T7\")?\"OK\":\"pair (T3,T7) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T4,T3) is covered",
+              "vi": "Cặp (T4,T3) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T4,T3\")?\"OK\":\"pair (T4,T3) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T4,T5) is covered",
+              "vi": "Cặp (T4,T5) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T4,T5\")?\"OK\":\"pair (T4,T5) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T4,T6) is covered",
+              "vi": "Cặp (T4,T6) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T4,T6\")?\"OK\":\"pair (T4,T6) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Pair (T5,T8) is covered",
+              "vi": "Cặp (T5,T8) được phủ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const{buoc:u}=(function(){const r=[[\"T1\",\"NEW\",\"pay\",\"PAID\"],[\"T2\",\"NEW\",\"cancel\",\"CANCELLED\"],[\"T3\",\"PAID\",\"hold\",\"ON_HOLD\"],[\"T4\",\"ON_HOLD\",\"release\",\"PAID\"],[\"T5\",\"PAID\",\"ship\",\"SHIPPED\"],[\"T6\",\"PAID\",\"cancel\",\"CANCELLED\"],[\"T7\",\"ON_HOLD\",\"cancel\",\"CANCELLED\"],[\"T8\",\"SHIPPED\",\"deliver\",\"DELIVERED\"]];return{T:r,buoc:(e,E)=>r.find(t=>t[1]===e&&t[2]===E)||null}})();if(!Array.isArray(SEQUENCES1)||!SEQUENCES1.length)return\"SEQUENCES1 must be a non-empty array of event arrays\";const a=new Set;let n=null;return SEQUENCES1.forEach((r,c)=>{if(n)return;let e=\"NEW\",E=null;(Array.isArray(r)?r:[]).forEach((t,i)=>{if(n)return;const o=u(e,t);if(!o){n=\"sequence #\"+(c+1)+\" step \"+(i+1)+': \"'+t+'\" is not valid in '+e;return}E&&a.add(E+\",\"+o[0]),E=o[0],e=o[3]})}),n||(a.has(\"T5,T8\")?\"OK\":\"pair (T5,T8) not covered yet\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "At most 5 sequences",
+              "vi": "Tối đa 5 chuỗi"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return SEQUENCES1.length<=5?\"OK\":SEQUENCES1.length+\" sequences \\u2014 5 are enough\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm cả cặp đi ra từ trạng thái cuối (không có)."
+        },
+        {
+          "loi": "Quên cặp (T4,T3): hold lại sau khi release — cần vòng hold·release·hold."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state transition testing",
+          "vi": "kiểm thử chuyển trạng thái"
+        },
+        {
+          "en": "1-switch coverage",
+          "vi": "độ phủ 1-switch — mọi cặp hai chuyển đổi hợp lệ liên tiếp"
+        }
+      ]
+    }
+  ]
+}

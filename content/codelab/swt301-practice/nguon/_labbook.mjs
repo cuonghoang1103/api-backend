@@ -197,6 +197,7 @@ export function chayKichBan(tao, ca, M) {
   const mau = (p) => p.replace(/^(\/api\/bookings\/)(?!me$)[^/]+$/, '$1:code').replace(/^(\/api\/labs\/)[^/]+$/, '$1:lab').replace(/^(\/api\/admin\/users\/)[^/]+/, '$1:email');
   const tags = [];
   const suKien = [];
+  const chuyen = [];
   let loi = null, coKiem = 0;
   const steps = Array.isArray(ca.steps) ? ca.steps : [];
   for (let i = 0; i < steps.length; i++) {
@@ -204,15 +205,26 @@ export function chayKichBan(tao, ca, M) {
     const mm = /^(GET|POST|PUT|PATCH|DELETE)\s+(\S+)$/.exec(String(s.call || '').trim());
     if (!mm) { loi = 'step ' + (i + 1) + ': call must look like "POST /api/bookings"'; break; }
     const truocAudit = app.db.audit.length;
+    const truocTT = {}; app.db.bookings.forEach((x) => { truocTT[x.code] = x.status; });
     let r;
     try { r = app.handle(mm[1], mm[2], { token: layTok(s.as), body: s.body }); } catch (e) { loi = 'step ' + (i + 1) + ': ' + e.message; break; }
     app.db.audit.slice(truocAudit).forEach((a) => suKien.push({ buoc: i, ten: 'EVENT ' + a.split(' ')[0] }));
+    // chuyển trạng thái của booking do bước này gây ra (NONE = vừa tạo) — tính khi bước này hoặc bước sau có expect
+    app.db.bookings.forEach((x) => { const cu = truocTT[x.code] || 'NONE'; if (cu !== x.status) chuyen.push({ buoc: i, ten: 'TRANS ' + cu + '->' + x.status }); });
     if (s.expect !== undefined) {
       coKiem++;
       const tag = mm[1] + ' ' + mau(mm[2]) + ' ' + r.status + (r.body && r.body.error ? ' ' + r.body.error : (r.body && r.body.status && !Array.isArray(r.body) ? ' ' + r.body.status : ''));
       if (!khop(s.expect, r)) { loi = 'step ' + (i + 1) + ' (' + s.call + '): expected ' + JSON.stringify(s.expect) + ' — got ' + JSON.stringify(r).slice(0, 220); break; }
       tags.push(tag);
+      if (mm[1] === 'POST' && mm[2] === '/api/bookings' && s.body && typeof s.body === 'object') {
+        const bd = s.body;
+        tags.push('IN startHour=' + bd.startHour, 'IN duration=' + bd.duration);
+        if (Number.isInteger(bd.startHour) && Number.isInteger(bd.duration)) tags.push('IN end=' + (bd.startHour + bd.duration));
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(bd.date || ''));
+        if (m) tags.push('IN day=' + Math.round((Date.UTC(+m[1], +m[2] - 1, +m[3]) - Date.UTC(2026, 10, 2)) / 86400000));
+      }
       suKien.filter((e) => e.buoc < i).forEach((e) => { if (tags.indexOf(e.ten) < 0) tags.push(e.ten); });
+      chuyen.filter((e) => e.buoc <= i).forEach((e) => { if (tags.indexOf(e.ten) < 0) tags.push(e.ten); });
     }
   }
   if (!loi && !coKiem) loi = 'no step has an "expect" — a test case must check something';

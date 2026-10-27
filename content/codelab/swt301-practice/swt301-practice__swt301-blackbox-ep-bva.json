@@ -1,0 +1,907 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-blackbox-ep-bva",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-ep-bva"
+  },
+  "exercises": [
+    {
+      "title": "EP 1 — Classify each value into its partition (youth card age)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "equivalence partitioning",
+        "valid partition",
+        "invalid partition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification.</b> A youth bus card is sold to people aged <b>12 to 25</b> (inclusive). Age is typed as a whole number of years.</p><p>Equivalence partitioning groups inputs that the system must treat <i>the same way</i>. Here there is one valid partition and three invalid ones (too young, too old, and input that is not a whole number). Classify each value.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả.</b> Thẻ xe buýt thanh niên bán cho người từ <b>12 tới 25</b> tuổi (tính cả hai đầu). Tuổi nhập dạng số nguyên.</p><p>Phân vùng tương đương gom các input mà hệ thống phải xử lý <i>như nhau</i>. Ở đây có một vùng hợp lệ và ba vùng không hợp lệ (quá nhỏ, quá lớn, và input không phải số nguyên). Hãy xếp từng giá trị vào vùng của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: hệ thống làm gì với giá trị này? Hai giá trị bị xử lý giống hệt nhau ⇒ cùng vùng.",
+        "−3 và 11 đều \"nhỏ hơn 12\"; 17.5 và \"twelve\" đều \"không phải số nguyên\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EP 1 — Classify each value into its partition (youth card age)\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the partition of every value.Chọn vùng cho từng giá trị.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EP 1 — Classify each value into its partition (youth card age) — answer key\n\n1. Choose the partition of every value.Chọn vùng cho từng giá trị.\n   - r1.p: invalid: below 12\n   - r2.p: valid: 12–25\n   - r3.p: valid: 12–25\n   - r4.p: valid: 12–25\n   - r5.p: invalid: above 25\n   - r6.p: invalid: below 12\n   - r7.p: invalid: not an integer\n   - r8.p: invalid: not an integer\n   12, 18 and 25 are all treated the same (accepted) — one partition. −3 is below 12 just like 11: a negative age is not a new partition unless the specification says so. 17.5 and \"twelve\" are both rejected for not being a whole number.VI: 12, 18, 25 được xử lý như nhau (chấp nhận) — một vùng. −3 cũng nhỏ hơn 12 như 11: tuổi âm không thành vùng mới trừ khi đặc tả nói vậy. 17.5 và \"twelve\" đều bị từ chối vì không phải số nguyên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four partitions: valid 12–25, invalid &lt; 12, invalid &gt; 25, invalid non-integer. Boundaries (12, 25) belong to the valid partition.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the partition of every value.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn vùng cho từng giá trị.</i></p>",
+            "cot": [
+              {
+                "ma": "v",
+                "ten": "Value"
+              },
+              {
+                "ma": "p",
+                "ten": "Partition",
+                "luaChon": [
+                  "valid: 12–25",
+                  "invalid: below 12",
+                  "invalid: above 25",
+                  "invalid: not an integer"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "v": "11"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "v": "12"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "v": "18"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "v": "25"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "v": "26"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "v": "-3"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "v": "17.5"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "v": "twelve"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "invalid: below 12",
+              "r2.p": "valid: 12–25",
+              "r3.p": "valid: 12–25",
+              "r4.p": "valid: 12–25",
+              "r5.p": "invalid: above 25",
+              "r6.p": "invalid: below 12",
+              "r7.p": "invalid: not an integer",
+              "r8.p": "invalid: not an integer"
+            },
+            "giaiThich": "<p>12, 18 and 25 are all treated the same (accepted) — one partition. −3 is below 12 just like 11: a negative age is not a new partition unless the specification says so. 17.5 and \"twelve\" are both rejected for not being a whole number.</p><p><i>VI: 12, 18, 25 được xử lý như nhau (chấp nhận) — một vùng. −3 cũng nhỏ hơn 12 như 11: tuổi âm không thành vùng mới trừ khi đặc tả nói vậy. 17.5 và \"twelve\" đều bị từ chối vì không phải số nguyên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tách 12 và 25 thành vùng riêng — đó là GIÁ TRỊ BIÊN (bài 4.3), không phải vùng mới."
+        },
+        {
+          "loi": "Coi số âm là một vùng riêng dù đặc tả không phân biệt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        }
+      ]
+    },
+    {
+      "title": "EP 2 — One representative per partition (mobile top-up bonus)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "equivalence partitioning",
+        "EP coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification — top-up bonus.</b> A mobile operator accepts top-ups that are a <b>multiple of 1,000 VND</b> between <b>10,000 and 500,000 VND</b>. The bonus is <b>0%</b> for 10,000–49,000, <b>10%</b> for 50,000–199,000 and <b>20%</b> for 200,000–500,000. Any other amount is rejected.</p>\n<p>Identify every equivalence partition (valid AND invalid) and give <b>exactly one representative value per partition</b> in <code>VALUES</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Every partition — the three bonus bands, too small, too large and “not a multiple of 1,000” — has exactly one value.</li>\n  <li>No two values from the same partition (that adds a test without adding coverage).</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả — thưởng nạp tiền.</b> Nhà mạng nhận các lần nạp là <b>bội số của 1.000 đ</b> trong khoảng <b>10.000 tới 500.000 đ</b>. Thưởng <b>0%</b> cho 10.000–49.000, <b>10%</b> cho 50.000–199.000 và <b>20%</b> cho 200.000–500.000. Mọi số tiền khác bị từ chối.</p>\n<p>Xác định mọi vùng tương đương (hợp lệ VÀ không hợp lệ) và đưa <b>đúng một giá trị đại diện cho mỗi vùng</b> vào <code>VALUES</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi vùng — ba mức thưởng, quá nhỏ, quá lớn và “không phải bội của 1.000” — có đúng một giá trị.</li>\n  <li>Không có hai giá trị cùng vùng (thêm test mà không thêm độ phủ).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "VALUES = [5000, 20000, …]",
+          "output": "5000 → \"below 10,000\" · 20000 → \"0% band\"",
+          "explanation": "One value per partition; any value inside the partition is as good as any other.|||Mỗi vùng một giá trị; giá trị nào trong vùng cũng tốt như nhau."
+        }
+      ],
+      "hintsJson": [
+        "Có 3 vùng hợp lệ (ba mức thưởng) và 3 vùng không hợp lệ.",
+        "Vùng \"không phải bội 1.000\" nằm trên MỘT khía cạnh khác (đơn vị) — chọn một số lẻ như 25.500 để nó chỉ vi phạm luật bội số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// One representative value per equivalence partition (valid and invalid).\nconst VALUES = [\n  20000,\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Six partitions → six values.\nconst VALUES = [\n  5000,    // invalid: below 10,000\n  20000,   // valid: 0% band\n  100000,  // valid: 10% band\n  300000,  // valid: 20% band\n  600000,  // invalid: above 500,000\n  25500,   // invalid: not a multiple of 1,000\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Six partitions: &lt; 10,000 · 10,000–49,000 (0%) · 50,000–199,000 (10%) · 200,000–500,000 (20%) · &gt; 500,000 · not a multiple of 1,000. EP coverage = 6/6 = 100% with six values, e.g. 5,000 · 20,000 · 100,000 · 300,000 · 600,000 · 25,500.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A value in the 0% band",
+              "vi": "Một giá trị ở mức 0%"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"B0\")?\"OK\":\"no value yet for: \"+u.B0})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "A value in the 10% band",
+              "vi": "Một giá trị ở mức 10%"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"B10\")?\"OK\":\"no value yet for: \"+u.B10})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "A value in the 20% band",
+              "vi": "Một giá trị ở mức 20%"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"B20\")?\"OK\":\"no value yet for: \"+u.B20})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The invalid partition below 10,000",
+              "vi": "Vùng không hợp lệ dưới 10.000"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"LOW\")?\"OK\":\"no value yet for: \"+u.LOW})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The invalid partition above 500,000",
+              "vi": "Vùng không hợp lệ trên 500.000"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"HIGH\")?\"OK\":\"no value yet for: \"+u.HIGH})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The invalid partition “not a multiple of 1,000”",
+              "vi": "Vùng không hợp lệ “không phải bội 1.000”"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const e=(function(){return r=>typeof r!=\"number\"||!Number.isFinite(r)?\"NaN\":!Number.isInteger(r)||r%1e3!==0?\"MULT\":r<1e4?\"LOW\":r<=49e3?\"B0\":r<=199e3?\"B10\":r<=5e5?\"B20\":\"HIGH\"})(),u={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const n=VALUES.map(e);return n.includes(\"NaN\")?\"every value must be a number\":n.includes(\"MULT\")?\"OK\":\"no value yet for: \"+u.MULT})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Exactly one value per partition (6 values)",
+              "vi": "Đúng một giá trị mỗi vùng (6 giá trị)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const i=(function(){return n=>typeof n!=\"number\"||!Number.isFinite(n)?\"NaN\":!Number.isInteger(n)||n%1e3!==0?\"MULT\":n<1e4?\"LOW\":n<=49e3?\"B0\":n<=199e3?\"B10\":n<=5e5?\"B20\":\"HIGH\"})(),r={LOW:\"below 10,000\",B0:\"0% band\",B10:\"10% band\",B20:\"20% band\",HIGH:\"above 500,000\",MULT:\"not a multiple of 1,000\"};if(!Array.isArray(VALUES))return\"VALUES must be an array of numbers\";const t=VALUES.map(i);if(t.includes(\"NaN\"))return\"every value must be a number\";const u=Object.keys(r).filter(e=>t.filter(n=>n===e).length>1);return u.length?\"more than one value in: \"+u.map(e=>r[e]).join(\", \"):VALUES.length===6?\"OK\":VALUES.length+\" values \\u2014 the minimum is one per partition\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên vùng \"không phải bội 1.000\" vì chỉ nhìn trục số."
+        },
+        {
+          "loi": "Đưa 10.000 và 49.000 cùng lúc — hai giá trị cùng một vùng 0%."
+        },
+        {
+          "loi": "Dùng 9.999 làm đại diện \"quá nhỏ\" — nó vi phạm CẢ HAI luật (nhỏ hơn 10.000 và không phải bội 1.000), máy chấm xếp nó vào vùng \"không phải bội\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        }
+      ]
+    },
+    {
+      "title": "EP 3 — ISTQB-style questions on equivalence partitioning",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "equivalence partitioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six exam-style questions (ISTQB Foundation, K2–K3). Read each option carefully — the traps are the ones the SWT301 final exam uses: forgotten invalid partitions, boundaries mistaken for partitions, and coverage arithmetic.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu kiểu đề thi (ISTQB Foundation, K2–K3). Đọc kỹ từng phương án — bẫy chính là các bẫy đề FE SWT301 hay dùng: quên vùng không hợp lệ, nhầm biên thành vùng, và tính độ phủ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm vùng = đếm cách hệ thống phản ứng khác nhau; biên KHÔNG phải vùng.",
+        "Độ phủ = đã test ÷ đã xác định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EP 3 — ISTQB-style questions on equivalence partitioning\n\nAnswer in the answer panel (no code needed).\n\n1. A field accepts whole numbers from 1 to 99. What is the minimum number of equivalence partitions (valid and invalid) for the numeric range?Một trường nhận số nguyên từ 1 tới 99. Số vùng tương đương tối thiểu (hợp lệ và không hợp lệ) cho khoảng số là bao nhiêu?\n2. A shop gives 0% discount below 100 items, 5% for 100–499 items and 10% for 500 or more (whole numbers ≥ 0). Which set covers ALL valid partitions with the fewest values?Cửa hàng giảm 0% dưới 100 sản phẩm, 5% cho 100–499 và 10% từ 500 trở lên (số nguyên ≥ 0). Bộ nào phủ MỌI vùng hợp lệ với ít giá trị nhất?\n3. Why should each INVALID partition be tested in its own test case?Vì sao mỗi vùng KHÔNG hợp lệ nên được test trong một test case riêng?\n4. Eight partitions were identified; the tests exercise six of them. What is the equivalence-partition coverage?Đã xác định 8 vùng; các test chạm 6 vùng. Độ phủ phân vùng là bao nhiêu?\n5. Which statement about equivalence partitioning is TRUE?Phát biểu nào về phân vùng tương đương là ĐÚNG?\n6. A month field accepts 1–12. Which of these is NOT a separate equivalence partition according to the specification?Trường tháng nhận 1–12. Cái nào KHÔNG phải một vùng tương đương riêng theo đặc tả?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EP 3 — ISTQB-style questions on equivalence partitioning — answer key\n\n1. A field accepts whole numbers from 1 to 99. What is the minimum number of equivalence partitions (valid and invalid) for the numeric range?Một trường nhận số nguyên từ 1 tới 99. Số vùng tương đương tối thiểu (hợp lệ và không hợp lệ) cho khoảng số là bao nhiêu?\n   Answer: c) 3\n   Below 1 (invalid), 1–99 (valid), above 99 (invalid) = 3. Boundary values are not extra partitions.VI: Dưới 1 (sai), 1–99 (đúng), trên 99 (sai) = 3. Giá trị biên không phải vùng thêm.\n\n2. A shop gives 0% discount below 100 items, 5% for 100–499 items and 10% for 500 or more (whole numbers ≥ 0). Which set covers ALL valid partitions with the fewest values?Cửa hàng giảm 0% dưới 100 sản phẩm, 5% cho 100–499 và 10% từ 500 trở lên (số nguyên ≥ 0). Bộ nào phủ MỌI vùng hợp lệ với ít giá trị nhất?\n   Answer: b) 50, 250, 750\n   Three valid partitions → three values, one in each. (a) misses 500+, (c) uses four values (boundary values), (d) misses two partitions.VI: Ba vùng hợp lệ → ba giá trị, mỗi vùng một. (a) thiếu 500+, (c) dùng bốn giá trị (biên), (d) thiếu hai vùng.\n\n3. Why should each INVALID partition be tested in its own test case?Vì sao mỗi vùng KHÔNG hợp lệ nên được test trong một test case riêng?\n   Answer: b) Because one rejection can mask another — you cannot tell which invalid value caused the error\n   Defect masking: if two invalid values are in one test and the system rejects it, you do not know whether BOTH checks work. Valid partitions may be combined.VI: Che lỗi: nếu hai giá trị sai nằm chung một test và hệ thống từ chối, bạn không biết CẢ HAI bước kiểm có chạy đúng không. Vùng hợp lệ thì được ghép chung.\n\n4. Eight partitions were identified; the tests exercise six of them. What is the equivalence-partition coverage?Đã xác định 8 vùng; các test chạm 6 vùng. Độ phủ phân vùng là bao nhiêu?\n   Answer: b) 75%\n   EP coverage = partitions tested ÷ partitions identified = 6 / 8 = 75%.VI: Độ phủ EP = số vùng đã test ÷ số vùng xác định = 6 / 8 = 75%.\n\n5. Which statement about equivalence partitioning is TRUE?Phát biểu nào về phân vùng tương đương là ĐÚNG?\n   Answer: b) It can be applied to inputs, outputs, internal values and time-related values\n   EP applies to any data the system treats in groups — inputs, outputs, internal values, time, interface parameters. It is black-box; one value per partition is enough.VI: EP áp dụng cho mọi dữ liệu được xử lý theo nhóm — input, output, giá trị nội bộ, thời gian, tham số giao diện. Nó là black-box; mỗi vùng một giá trị là đủ.\n\n6. A month field accepts 1–12. Which of these is NOT a separate equivalence partition according to the specification?Trường tháng nhận 1–12. Cái nào KHÔNG phải một vùng tương đương riêng theo đặc tả?\n   Answer: d) The value 12\n   12 is a member (and a boundary) of the valid partition 1–12, not a partition of its own.VI: 12 là phần tử (và là biên) của vùng hợp lệ 1–12, không phải một vùng riêng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · b · b · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A field accepts whole numbers from 1 to 99. What is the minimum number of equivalence partitions (valid and invalid) for the numeric range?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một trường nhận số nguyên từ 1 tới 99. Số vùng tương đương tối thiểu (hợp lệ và không hợp lệ) cho khoảng số là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Below 1 (invalid), 1–99 (valid), above 99 (invalid) = 3. Boundary values are not extra partitions.</p><p><i>VI: Dưới 1 (sai), 1–99 (đúng), trên 99 (sai) = 3. Giá trị biên không phải vùng thêm.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A shop gives 0% discount below 100 items, 5% for 100–499 items and 10% for 500 or more (whole numbers ≥ 0). Which set covers ALL valid partitions with the fewest values?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cửa hàng giảm 0% dưới 100 sản phẩm, 5% cho 100–499 và 10% từ 500 trở lên (số nguyên ≥ 0). Bộ nào phủ MỌI vùng hợp lệ với ít giá trị nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0, 99, 100"
+              },
+              {
+                "ma": "b",
+                "noiDung": "50, 250, 750"
+              },
+              {
+                "ma": "c",
+                "noiDung": "99, 100, 499, 500"
+              },
+              {
+                "ma": "d",
+                "noiDung": "100, 499"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Three valid partitions → three values, one in each. (a) misses 500+, (c) uses four values (boundary values), (d) misses two partitions.</p><p><i>VI: Ba vùng hợp lệ → ba giá trị, mỗi vùng một. (a) thiếu 500+, (c) dùng bốn giá trị (biên), (d) thiếu hai vùng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why should each INVALID partition be tested in its own test case?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mỗi vùng KHÔNG hợp lệ nên được test trong một test case riêng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because invalid partitions are more important than valid ones"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because one rejection can mask another — you cannot tell which invalid value caused the error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because the ISTQB syllabus forbids combining partitions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because invalid inputs are slower to execute"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Defect masking: if two invalid values are in one test and the system rejects it, you do not know whether BOTH checks work. Valid partitions may be combined.</p><p><i>VI: Che lỗi: nếu hai giá trị sai nằm chung một test và hệ thống từ chối, bạn không biết CẢ HAI bước kiểm có chạy đúng không. Vùng hợp lệ thì được ghép chung.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Eight partitions were identified; the tests exercise six of them. What is the equivalence-partition coverage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đã xác định 8 vùng; các test chạm 6 vùng. Độ phủ phân vùng là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "75%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "80%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "133%"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>EP coverage = partitions tested ÷ partitions identified = 6 / 8 = 75%.</p><p><i>VI: Độ phủ EP = số vùng đã test ÷ số vùng xác định = 6 / 8 = 75%.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which statement about equivalence partitioning is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về phân vùng tương đương là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It applies only to numeric inputs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It can be applied to inputs, outputs, internal values and time-related values"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a white-box technique"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Each partition must be tested with at least two values"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>EP applies to any data the system treats in groups — inputs, outputs, internal values, time, interface parameters. It is black-box; one value per partition is enough.</p><p><i>VI: EP áp dụng cho mọi dữ liệu được xử lý theo nhóm — input, output, giá trị nội bộ, thời gian, tham số giao diện. Nó là black-box; mỗi vùng một giá trị là đủ.</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>A month field accepts 1–12. Which of these is NOT a separate equivalence partition according to the specification?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường tháng nhận 1–12. Cái nào KHÔNG phải một vùng tương đương riêng theo đặc tả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Values below 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Values from 1 to 12"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Values above 12"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The value 12"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>12 is a member (and a boundary) of the valid partition 1–12, not a partition of its own.</p><p><i>VI: 12 là phần tử (và là biên) của vùng hợp lệ 1–12, không phải một vùng riêng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm biên (1 và 99) thành vùng."
+        },
+        {
+          "loi": "Ghép nhiều giá trị sai trong một test."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        }
+      ]
+    },
+    {
+      "title": "EP 4 — Unit tests from partitions (topUpBonus) — kill the mutants",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><code>topUpBonus(amount)</code> implements the specification of EP 2: it returns the bonus in VND, or throws <code>RangeError</code> for an amount that is not a multiple of 1,000 or is outside 10,000–500,000.</p>\n<p>Write tests in <code>tests.js</code> — <b>one test per equivalence partition</b> is the goal. The grader runs your tests against the correct function and against six faulty versions (mutants), each of which mishandles a whole partition. A mutant is <i>killed</i> when at least one of your tests passes on the correct code and fails on the mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Call <code>topUpBonus(...)</code> inside each test. Values: <code>expect(topUpBonus(100000)).toBe(10000)</code>; errors: <code>expect(() => topUpBonus(600000)).toThrow(RangeError)</code>.</li>\n  <li>At least 6 tests, all passing on the correct function; every mutant killed.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>topUpBonus(amount)</code> cài đặt đặc tả của EP 2: trả tiền thưởng (VND), hoặc ném <code>RangeError</code> khi số tiền không phải bội 1.000 hoặc ngoài 10.000–500.000.</p>\n<p>Viết test trong <code>tests.js</code> — mục tiêu là <b>mỗi vùng tương đương một test</b>. Máy chấm chạy test của bạn trên hàm đúng và trên sáu bản lỗi (mutant), mỗi bản xử lý sai cả một vùng. Mutant bị <i>giết</i> khi có ít nhất một test đạt trên mã đúng mà trượt trên mutant.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gọi <code>topUpBonus(...)</code> trong từng test. Giá trị: <code>expect(topUpBonus(100000)).toBe(10000)</code>; lỗi: <code>expect(() => topUpBonus(600000)).toThrow(RangeError)</code>.</li>\n  <li>Ít nhất 6 test, đạt hết trên hàm đúng; giết mọi mutant.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "test(\"10% band\", () => expect(topUpBonus(100000)).toBe(10000))",
+          "output": "passes on the correct code; kills the mutant that pays 20% in the 10% band",
+          "explanation": "One representative per partition is enough to catch partition-level faults.|||Mỗi vùng một đại diện là đủ bắt lỗi mức vùng."
+        }
+      ],
+      "hintsJson": [
+        "Sáu vùng của EP 2 ⇒ sáu test. Ba vùng hợp lệ kiểm giá trị trả về; ba vùng không hợp lệ kiểm RangeError.",
+        "Mutant ẩn chấp nhận số tiền dưới 10.000 — vùng \"quá nhỏ\" phải có test riêng (vd 5.000)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Write one test per equivalence partition of topUpBonus(amount).\ntest('10% band: 100,000 earns 10,000', () => {\n  expect(topUpBonus(100000)).toBe(10000);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// One test per equivalence partition (3 valid bands + 3 invalid partitions).\ndescribe('topUpBonus — equivalence partitions', () => {\n  test.each([\n    [20000, 0],        // 0% band\n    [100000, 10000],   // 10% band\n    [300000, 60000],   // 20% band\n  ])('valid partition: %i earns %i', (amount, bonus) => {\n    expect(topUpBonus(amount)).toBe(bonus);\n  });\n\n  test.each([\n    [5000],     // below 10,000\n    [600000],   // above 500,000\n    [25500],    // not a multiple of 1,000\n  ])('invalid partition: %i is rejected', (amount) => {\n    expect(() => topUpBonus(amount)).toThrow(RangeError);\n  });\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One value per partition kills every partition-level mutant. JUnit 5 equivalent: <code>@ParameterizedTest @CsvSource({\"20000,0\",\"100000,10000\",\"300000,60000\"})</code> for the valid bands and <code>assertThrows(IllegalArgumentException.class, () -&gt; topUpBonus(600000))</code> for each invalid partition.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof topUpBonus !== 'undefined' && topUpBonus !== globalThis[\"topUpBonus\"]) return 'tests.js must not declare topUpBonus itself (let/const/class/copy of the code) — call the global topUpBonus that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 6 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 6 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 6) return 'only ' + r.tong + ' test(s) — write at least 6';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: the 10% band pays 20%",
+              "vi": "Giết mutant M1: mức 10% trả 20%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 20 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: amounts that are not a multiple of 1,000 are accepted",
+              "vi": "Giết mutant M2: chấp nhận số tiền không phải bội 1.000"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount)) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: the upper limit is 200,000 instead of 500,000",
+              "vi": "Giết mutant M3: giới hạn trên là 200.000 thay vì 500.000"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 200000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: the 0% band pays 10%",
+              "vi": "Giết mutant M4: mức 0% trả 10%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return amount * 10 / 100;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: the 20% band pays 15%",
+              "vi": "Giết mutant M5: mức 20% trả 15%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 15 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount < 10000 || amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction topUpBonus(amount) {\n  if (!Number.isInteger(amount) || amount % 1000 !== 0) throw new RangeError('amount must be a multiple of 1,000');\n  if (amount > 500000) throw new RangeError('amount out of range');\n  if (amount >= 200000) return amount * 20 / 100;\n  if (amount >= 50000) return amount * 10 / 100;\n  return 0;\n}\nreturn { \"topUpBonus\": topUpBonus };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết toThrow() cho số 25.500 nhưng lại gọi topUpBonus(25500) trực tiếp (không bọc trong hàm) ⇒ test văng lỗi thay vì kiểm lỗi."
+        },
+        {
+          "loi": "Chỉ test các vùng hợp lệ — mutant chấp nhận số tiền lẻ (bỏ kiểm bội số) sống sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        }
+      ]
+    },
+    {
+      "title": "EP 5 — Minimal EP test set for a three-field form (one invalid partition per test)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "equivalence partitioning",
+        "combining partitions",
+        "defect masking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification — sign-up form.</b></p>\n<ul><li><b>Username</b>: 4–16 characters, letters and digits only.</li><li><b>Age</b>: a whole number from 18 to 60.</li><li><b>Country</b>: VN, SG or TH (all three are processed identically).</li></ul>\n<p>The form is <code>ACCEPTED</code> when every field is valid, otherwise <code>REJECTED</code>. Design the <b>minimum</b> set of test cases that covers every equivalence partition of every field, following the rule from the slides: <b>valid partitions may be combined in one test; each invalid partition is tested on its own</b> (all other fields valid).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Partitions: Username valid · too short · too long · invalid characters; Age valid · below 18 · above 60 · not a whole number; Country valid · other.</li>\n  <li>Each test: <code>{ username, age, country, expected }</code> with <code>expected</code> \"ACCEPTED\" or \"REJECTED\". A test may contain at most ONE invalid value, and that value must break only one rule.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả — form đăng ký.</b></p>\n<ul><li><b>Username</b>: 4–16 ký tự, chỉ chữ và số.</li><li><b>Age</b>: số nguyên từ 18 tới 60.</li><li><b>Country</b>: VN, SG hoặc TH (ba giá trị được xử lý như nhau).</li></ul>\n<p>Form <code>ACCEPTED</code> khi mọi trường hợp lệ, ngược lại <code>REJECTED</code>. Thiết kế bộ test <b>tối thiểu</b> phủ mọi vùng tương đương của mọi trường, theo luật trên slide: <b>vùng hợp lệ được ghép chung một test; mỗi vùng không hợp lệ test riêng</b> (các trường khác hợp lệ).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Các vùng: Username hợp lệ · quá ngắn · quá dài · ký tự sai; Age hợp lệ · dưới 18 · trên 60 · không phải số nguyên; Country hợp lệ · khác.</li>\n  <li>Mỗi test: <code>{ username, age, country, expected }</code> với <code>expected</code> \"ACCEPTED\" hoặc \"REJECTED\". Mỗi test chứa tối đa MỘT giá trị sai, và giá trị đó chỉ phạm một luật.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ username: 'abc', age: 30, country: 'VN', expected: 'REJECTED' }",
+          "output": "covers “username too short”",
+          "explanation": "Only the username is invalid, so a rejection proves the length check works.|||Chỉ username sai, nên bị từ chối chứng minh bước kiểm độ dài chạy đúng."
+        }
+      ],
+      "hintsJson": [
+        "Đếm: 1 ca toàn hợp lệ + số vùng không hợp lệ (3 + 3 + 1).",
+        "Ký tự sai nhưng độ dài phải hợp lệ (vd \"abc_12\" có 6 ký tự) — nếu không, một giá trị phạm hai luật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// One object per test case: { username, age, country, expected: 'ACCEPTED' | 'REJECTED' }\nconst TESTS = [\n  { username: 'an2025', age: 30, country: 'VN', expected: 'ACCEPTED' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Minimum EP set: 1 all-valid test + 7 tests with exactly one invalid partition each.\nconst TESTS = [\n  { username: 'an2025', age: 30, country: 'VN', expected: 'ACCEPTED' },      // all valid partitions\n  { username: 'abc', age: 30, country: 'VN', expected: 'REJECTED' },         // username too short\n  { username: 'abcdefghijklmnopq', age: 30, country: 'VN', expected: 'REJECTED' }, // username too long (17)\n  { username: 'an_2025', age: 30, country: 'VN', expected: 'REJECTED' },     // invalid character\n  { username: 'an2025', age: 17, country: 'VN', expected: 'REJECTED' },      // age below 18\n  { username: 'an2025', age: 61, country: 'VN', expected: 'REJECTED' },      // age above 60\n  { username: 'an2025', age: 30.5, country: 'VN', expected: 'REJECTED' },    // age not a whole number\n  { username: 'an2025', age: 30, country: 'US', expected: 'REJECTED' },      // country not supported\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10 partitions, 7 of them invalid ⇒ minimum = 1 all-valid test + 7 single-invalid tests = <b>8</b>. Example: (\"an2025\", 30, \"VN\") ACCEPTED; (\"abc\", 30, \"VN\"), (\"a\".repeat(17), 30, \"VN\"), (\"an_2025\", 30, \"VN\"), (\"an2025\", 17, \"VN\"), (\"an2025\", 61, \"VN\"), (\"an2025\", 30.5, \"VN\"), (\"an2025\", 30, \"US\") all REJECTED.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No test mixes two invalid values (or one value that breaks two rules)",
+              "vi": "Không test nào trộn hai giá trị sai (hoặc một giá trị phạm hai luật)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const a=function(n){const e=[],s=n.username;typeof s!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(s)||e.push(\"U_CHARS\"),s.length<4&&e.push(\"U_SHORT\"),s.length>16&&e.push(\"U_LONG\"));const o=n.age;return typeof o!=\"number\"||!Number.isInteger(o)?e.push(\"A_NOTINT\"):(o<18&&e.push(\"A_LOW\"),o>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},u={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};if(!Array.isArray(TESTS)||!TESTS.length)return\"TESTS must be a non-empty array\";const r=TESTS.map(a),t=r.findIndex(n=>n.length>1);return t<0?\"OK\":\"test #\"+(t+1)+\" breaks \"+r[t].length+\" rules at once (\"+r[t].map(n=>u[n]||n).join(\" + \")+\") \\u2014 the rejection masks one of them\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every expected result is right (ACCEPTED only when all fields are valid)",
+              "vi": "Mọi kết quả mong đợi đúng (ACCEPTED chỉ khi mọi trường hợp lệ)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const u=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},T={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};if(!Array.isArray(TESTS)||!TESTS.length)return\"TESTS must be a non-empty array\";const r=TESTS.map(u),o=TESTS.findIndex((n,e)=>String(n.expected).toUpperCase()!==(r[e].length?\"REJECTED\":\"ACCEPTED\"));return o<0?\"OK\":\"test #\"+(o+1)+\": expected should be \"+(r[o].length?\"REJECTED\":\"ACCEPTED\")})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers all valid partitions together",
+              "vi": "Phủ mọi vùng hợp lệ trong một test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===0&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.VALID})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: username too short",
+              "vi": "Phủ: username quá ngắn"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"U_SHORT\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.U_SHORT})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: username too long",
+              "vi": "Phủ: username quá dài"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"U_LONG\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.U_LONG})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: username with invalid characters",
+              "vi": "Phủ: username có ký tự sai"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"U_CHARS\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.U_CHARS})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: age below 18",
+              "vi": "Phủ: tuổi dưới 18"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"A_LOW\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.A_LOW})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: age above 60",
+              "vi": "Phủ: tuổi trên 60"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"A_HIGH\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.A_HIGH})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: age not a whole number",
+              "vi": "Phủ: tuổi không phải số nguyên"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"A_NOTINT\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.A_NOTINT})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Covers: unsupported country",
+              "vi": "Phủ: quốc gia không hỗ trợ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(n){const e=[],t=n.username;typeof t!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(t)||e.push(\"U_CHARS\"),t.length<4&&e.push(\"U_SHORT\"),t.length>16&&e.push(\"U_LONG\"));const s=n.age;return typeof s!=\"number\"||!Number.isInteger(s)?e.push(\"A_NOTINT\"):(s<18&&e.push(\"A_LOW\"),s>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(n.country)<0&&e.push(\"C_BAD\"),e},r={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};return!Array.isArray(TESTS)||!TESTS.length?\"TESTS must be a non-empty array\":TESTS.map(o).some((n,e)=>n.length===1&&n[0]===\"C_BAD\"&&String(TESTS[e].expected).toUpperCase()===(n.length?\"REJECTED\":\"ACCEPTED\"))?\"OK\":\"not covered yet: \"+r.C_BAD})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Minimum size: exactly 8 tests",
+              "vi": "Kích thước tối thiểu: đúng 8 test"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){const o=function(s){const e=[],n=s.username;typeof n!=\"string\"?e.push(\"U_TYPE\"):(/^[A-Za-z0-9]*$/.test(n)||e.push(\"U_CHARS\"),n.length<4&&e.push(\"U_SHORT\"),n.length>16&&e.push(\"U_LONG\"));const t=s.age;return typeof t!=\"number\"||!Number.isInteger(t)?e.push(\"A_NOTINT\"):(t<18&&e.push(\"A_LOW\"),t>60&&e.push(\"A_HIGH\")),[\"VN\",\"SG\",\"TH\"].indexOf(s.country)<0&&e.push(\"C_BAD\"),e},a={U_SHORT:\"username too short\",U_LONG:\"username too long\",U_CHARS:\"username with invalid characters\",A_LOW:\"age below 18\",A_HIGH:\"age above 60\",A_NOTINT:\"age not a whole number\",C_BAD:\"unsupported country\",VALID:\"all-valid test\"};if(!Array.isArray(TESTS)||!TESTS.length)return\"TESTS must be a non-empty array\";const i=TESTS.map(o);return TESTS.length===8?\"OK\":TESTS.length+\" tests \\u2014 the minimum is 1 all-valid + 7 single-invalid = 8\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Một test vừa username quá ngắn vừa tuổi 17 — che lỗi."
+        },
+        {
+          "loi": "Ba test hợp lệ cho VN, SG, TH — đặc tả nói ba nước xử lý như nhau ⇒ một vùng."
+        },
+        {
+          "loi": "Nhập tuổi \"25\" (chuỗi) cho ca hợp lệ — máy chấm coi đó là \"không phải số nguyên\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence partitioning (EP)",
+          "vi": "phân vùng tương đương — chia miền dữ liệu thành các vùng được xử lý như nhau"
+        },
+        {
+          "en": "partition / equivalence class",
+          "vi": "vùng (lớp) tương đương"
+        },
+        {
+          "en": "defect masking",
+          "vi": "che lỗi — một lỗi/từ chối che mất lỗi khác"
+        }
+      ]
+    }
+  ]
+}

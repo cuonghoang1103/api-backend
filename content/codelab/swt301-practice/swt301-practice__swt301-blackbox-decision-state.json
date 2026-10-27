@@ -1,0 +1,938 @@
+{
+  "trackSlug": "swt301-practice",
+  "moduleSlug": "swt301-blackbox-decision-state",
+  "lesson": {
+    "course": "software-testing",
+    "slug": "swt301-blackbox-decision-state"
+  },
+  "exercises": [
+    {
+      "title": "Decision table 1 — Fill the actions of the full table (credit-card discount)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "decision table testing",
+        "full decision table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification (credit-card discount).</b> A <b>new customer</b> opening a credit-card account gets <b>15%</b> off all purchases today. An <b>existing customer</b> holding a <b>loyalty card</b> gets <b>10%</b>. A customer with a <b>coupon</b> gets <b>20%</b> today, but the coupon <b>cannot be combined with the new-customer discount</b>. Discounts are <b>added</b> when they apply. A new customer cannot already hold a loyalty card.</p><p>Three conditions ⇒ 2³ = 8 rules. Fill the action (discount) of every rule; mark rules that cannot happen as <i>impossible</i>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả (giảm giá thẻ tín dụng).</b> <b>Khách mới</b> mở thẻ được giảm <b>15%</b> mọi món hôm nay. <b>Khách cũ</b> có <b>thẻ thân thiết</b> được <b>10%</b>. Khách có <b>coupon</b> được <b>20%</b> hôm nay, nhưng coupon <b>không dùng chung với ưu đãi khách mới</b>. Các mức giảm <b>cộng dồn</b> khi được áp. Khách mới không thể đã có thẻ thân thiết.</p><p>Ba điều kiện ⇒ 2³ = 8 luật. Điền hành động (mức giảm) của từng luật; luật không thể xảy ra ghi <i>impossible</i>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đi từng dòng: điều kiện nào đúng ⇒ những mức nào áp ⇒ có luật cấm kết hợp không ⇒ cộng lại.",
+        "Dòng có New = T và Loyalty = T không thể xảy ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 1 — Fill the actions of the full table (credit-card discount)\n\nAnswer in the answer panel (no code needed).\n\n1. Full decision table — one row per rule (T = true, F = false)Bảng quyết định đầy đủ — mỗi dòng một luật (T = đúng, F = sai)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 1 — Fill the actions of the full table (credit-card discount) — answer key\n\n1. Full decision table — one row per rule (T = true, F = false)Bảng quyết định đầy đủ — mỗi dòng một luật (T = đúng, F = sai)\n   - R1.a: impossible\n   - R2.a: impossible\n   - R3.a: 20%\n   - R4.a: 15%\n   - R5.a: 30%\n   - R6.a: 10%\n   - R7.a: 20%\n   - R8.a: 0%\n   R1–R2: a new customer cannot hold a loyalty card. R3: coupon and new-customer discount cannot be combined, the customer takes the better one (20%). R5: 10% + 20% = 30% (discounts add up). R8: no discount.VI: R1–R2: khách mới không thể có thẻ thân thiết. R3: coupon và ưu đãi khách mới không dùng chung, khách lấy mức tốt hơn (20%). R5: 10% + 20% = 30% (cộng dồn). R8: không giảm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>impossible · impossible · 20% · 15% · 30% · 10% · 20% · 0% — 6 feasible rules.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Full decision table — one row per rule (T = true, F = false)</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng quyết định đầy đủ — mỗi dòng một luật (T = đúng, F = sai)</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Rule"
+              },
+              {
+                "ma": "n",
+                "ten": "New customer?"
+              },
+              {
+                "ma": "l",
+                "ten": "Loyalty card?"
+              },
+              {
+                "ma": "c",
+                "ten": "Coupon?"
+              },
+              {
+                "ma": "a",
+                "ten": "Discount",
+                "luaChon": [
+                  "impossible",
+                  "0%",
+                  "10%",
+                  "15%",
+                  "20%",
+                  "30%"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "R1",
+                "o": {
+                  "r": "R1",
+                  "n": "T",
+                  "l": "T",
+                  "c": "T"
+                }
+              },
+              {
+                "ma": "R2",
+                "o": {
+                  "r": "R2",
+                  "n": "T",
+                  "l": "T",
+                  "c": "F"
+                }
+              },
+              {
+                "ma": "R3",
+                "o": {
+                  "r": "R3",
+                  "n": "T",
+                  "l": "F",
+                  "c": "T"
+                }
+              },
+              {
+                "ma": "R4",
+                "o": {
+                  "r": "R4",
+                  "n": "T",
+                  "l": "F",
+                  "c": "F"
+                }
+              },
+              {
+                "ma": "R5",
+                "o": {
+                  "r": "R5",
+                  "n": "F",
+                  "l": "T",
+                  "c": "T"
+                }
+              },
+              {
+                "ma": "R6",
+                "o": {
+                  "r": "R6",
+                  "n": "F",
+                  "l": "T",
+                  "c": "F"
+                }
+              },
+              {
+                "ma": "R7",
+                "o": {
+                  "r": "R7",
+                  "n": "F",
+                  "l": "F",
+                  "c": "T"
+                }
+              },
+              {
+                "ma": "R8",
+                "o": {
+                  "r": "R8",
+                  "n": "F",
+                  "l": "F",
+                  "c": "F"
+                }
+              }
+            ],
+            "dapAn": {
+              "R1.a": "impossible",
+              "R2.a": "impossible",
+              "R3.a": "20%",
+              "R4.a": "15%",
+              "R5.a": "30%",
+              "R6.a": "10%",
+              "R7.a": "20%",
+              "R8.a": "0%"
+            },
+            "giaiThich": "<p>R1–R2: a new customer cannot hold a loyalty card. R3: coupon and new-customer discount cannot be combined, the customer takes the better one (20%). R5: 10% + 20% = 30% (discounts add up). R8: no discount.</p><p><i>VI: R1–R2: khách mới không thể có thẻ thân thiết. R3: coupon và ưu đãi khách mới không dùng chung, khách lấy mức tốt hơn (20%). R5: 10% + 20% = 30% (cộng dồn). R8: không giảm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi R3 = 35% (cộng 15 + 20) — đặc tả cấm dùng coupon cùng ưu đãi khách mới."
+        },
+        {
+          "loi": "Ghi R5 = 20% (chỉ lấy mức lớn) — đặc tả nói các mức cộng dồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        },
+        {
+          "en": "rule",
+          "vi": "luật — một cột (tổ hợp điều kiện + hành động) của bảng quyết định"
+        },
+        {
+          "en": "infeasible / impossible rule",
+          "vi": "luật không thể xảy ra"
+        }
+      ]
+    },
+    {
+      "title": "Decision table 2 — Rationalise (collapse) a table with “don’t care” entries",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "decision table testing",
+        "collapsed decision table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification (cinema price).</b> Children under 12 always pay <b>50,000</b>, whatever the day and membership. Otherwise members pay <b>70,000</b> on any day; non-members pay <b>90,000</b> at the weekend and <b>80,000</b> on weekdays.</p>\n<p>The full table has 8 rules. Collapse it: whenever the action does not depend on a condition, that condition becomes “–” (don’t care) and the rules merge. Fill the conditions of the 4 collapsed rules.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả (giá vé xem phim).</b> Trẻ dưới 12 tuổi luôn trả <b>50.000</b>, bất kể ngày và thẻ thành viên. Còn lại thành viên trả <b>70.000</b> mọi ngày; người không phải thành viên trả <b>90.000</b> cuối tuần và <b>80.000</b> ngày thường.</p>\n<p>Bảng đầy đủ có 8 luật. Hãy rút gọn: khi hành động không phụ thuộc một điều kiện thì điều kiện đó thành “–” (không quan tâm) và các luật gộp lại. Điền điều kiện cho 4 luật đã rút gọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ điều kiện “mạnh” nhất: trẻ em ⇒ giá cố định.",
+        "“–” chỉ dùng khi MỌI giá trị của điều kiện đó cho cùng một hành động."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 2 — Rationalise (collapse) a table with “don’t care” entries\n\nAnswer in the answer panel (no code needed).\n\n1. Collapsed decision table (T / F / –)Bảng quyết định đã rút gọn (T / F / –)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 2 — Rationalise (collapse) a table with “don’t care” entries — answer key\n\n1. Collapsed decision table (T / F / –)Bảng quyết định đã rút gọn (T / F / –)\n   - C1.c: T\n   - C1.m: –\n   - C1.w: –\n   - C2.c: F\n   - C2.m: T\n   - C2.w: –\n   - C3.c: F\n   - C3.m: F\n   - C3.w: T\n   - C4.c: F\n   - C4.m: F\n   - C4.w: F\n   Child = T merges 4 rules (member and weekend do not matter). Child = F, Member = T merges 2 rules (weekend does not matter). The two remaining rules need every condition. 8 → 4 rules, so 4 test cases give 100% coverage of the collapsed table.VI: Child = T gộp 4 luật (thành viên và cuối tuần không quan trọng). Child = F, Member = T gộp 2 luật (cuối tuần không quan trọng). Hai luật còn lại cần đủ mọi điều kiện. 8 → 4 luật, nên 4 test case cho 100% độ phủ bảng rút gọn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>C1: T – – · C2: F T – · C3: F F T · C4: F F F.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Collapsed decision table (T / F / –)</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng quyết định đã rút gọn (T / F / –)</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Rule"
+              },
+              {
+                "ma": "c",
+                "ten": "Child?",
+                "luaChon": [
+                  "T",
+                  "F",
+                  "–"
+                ]
+              },
+              {
+                "ma": "m",
+                "ten": "Member?",
+                "luaChon": [
+                  "T",
+                  "F",
+                  "–"
+                ]
+              },
+              {
+                "ma": "w",
+                "ten": "Weekend?",
+                "luaChon": [
+                  "T",
+                  "F",
+                  "–"
+                ]
+              },
+              {
+                "ma": "p",
+                "ten": "Price"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "C1",
+                "o": {
+                  "r": "C1",
+                  "p": "50,000"
+                }
+              },
+              {
+                "ma": "C2",
+                "o": {
+                  "r": "C2",
+                  "p": "70,000"
+                }
+              },
+              {
+                "ma": "C3",
+                "o": {
+                  "r": "C3",
+                  "p": "90,000"
+                }
+              },
+              {
+                "ma": "C4",
+                "o": {
+                  "r": "C4",
+                  "p": "80,000"
+                }
+              }
+            ],
+            "dapAn": {
+              "C1.c": "T",
+              "C1.m": "–",
+              "C1.w": "–",
+              "C2.c": "F",
+              "C2.m": "T",
+              "C2.w": "–",
+              "C3.c": "F",
+              "C3.m": "F",
+              "C3.w": "T",
+              "C4.c": "F",
+              "C4.m": "F",
+              "C4.w": "F"
+            },
+            "giaiThich": "<p>Child = T merges 4 rules (member and weekend do not matter). Child = F, Member = T merges 2 rules (weekend does not matter). The two remaining rules need every condition. 8 → 4 rules, so 4 test cases give 100% coverage of the collapsed table.</p><p><i>VI: Child = T gộp 4 luật (thành viên và cuối tuần không quan trọng). Child = F, Member = T gộp 2 luật (cuối tuần không quan trọng). Hai luật còn lại cần đủ mọi điều kiện. 8 → 4 luật, nên 4 test case cho 100% độ phủ bảng rút gọn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghi “–” cho Weekend ở C3/C4 — với người không phải thành viên giá phụ thuộc ngày."
+        },
+        {
+          "loi": "Ghi F cho Member ở C1 — trẻ em thành viên cũng trả 50.000 nên là “–”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        },
+        {
+          "en": "don't care (–)",
+          "vi": "không quan tâm — kết quả không phụ thuộc điều kiện này"
+        },
+        {
+          "en": "collapse / rationalise",
+          "vi": "rút gọn bảng — gộp luật, bỏ luật không thể"
+        }
+      ]
+    },
+    {
+      "title": "Decision table 3 — One test per feasible rule, with the right expected discount",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "decision table testing",
+        "decision table coverage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification (credit-card discount).</b> A <b>new customer</b> opening a credit-card account gets <b>15%</b> off all purchases today. An <b>existing customer</b> holding a <b>loyalty card</b> gets <b>10%</b>. A customer with a <b>coupon</b> gets <b>20%</b> today, but the coupon <b>cannot be combined with the new-customer discount</b>. Discounts are <b>added</b> when they apply. A new customer cannot already hold a loyalty card.</p><p>Write the decision-table test cases: <b>one test per feasible rule</b> of the full table of Decision table 1, each with the expected discount (number, e.g. <code>30</code>). Impossible combinations cannot be executed — leave them out.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>TESTS = [{ rule: \"R3\", isNew: true, hasLoyalty: false, hasCoupon: true, expected: 20 }, …]</code></li>\n  <li>Decision-table coverage = rules tested ÷ feasible rules — reach 100% with exactly 6 tests.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả (giảm giá thẻ tín dụng).</b> <b>Khách mới</b> mở thẻ được giảm <b>15%</b> mọi món hôm nay. <b>Khách cũ</b> có <b>thẻ thân thiết</b> được <b>10%</b>. Khách có <b>coupon</b> được <b>20%</b> hôm nay, nhưng coupon <b>không dùng chung với ưu đãi khách mới</b>. Các mức giảm <b>cộng dồn</b> khi được áp. Khách mới không thể đã có thẻ thân thiết.</p><p>Viết test case từ bảng quyết định: <b>mỗi luật khả thi một test</b> của bảng đầy đủ ở Decision table 1, kèm mức giảm mong đợi (số, vd <code>30</code>). Tổ hợp không thể xảy ra không chạy được — bỏ ra.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>TESTS = [{ rule: \"R3\", isNew: true, hasLoyalty: false, hasCoupon: true, expected: 20 }, …]</code></li>\n  <li>Độ phủ bảng quyết định = luật đã test ÷ luật khả thi — đạt 100% với đúng 6 test.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ rule: \"R5\", isNew: false, hasLoyalty: true, hasCoupon: true, expected: 30 }",
+          "output": "covers R5",
+          "explanation": "10% + 20%, discounts are added.|||10% + 20%, cộng dồn."
+        }
+      ],
+      "hintsJson": [
+        "Luật khả thi: R3–R8 (R1, R2 có khách mới + thẻ thân thiết).",
+        "Trường rule chỉ để đọc cho dễ — máy chấm suy luật từ ba điều kiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// One test per FEASIBLE rule of the full decision table.\nconst TESTS = [\n  { rule: 'R8', isNew: false, hasLoyalty: false, hasCoupon: false, expected: 0 },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Six feasible rules (R1 and R2 are impossible: a new customer has no loyalty card yet).\nconst TESTS = [\n  { rule: 'R3', isNew: true, hasLoyalty: false, hasCoupon: true, expected: 20 },   // coupon, not combined with 15%\n  { rule: 'R4', isNew: true, hasLoyalty: false, hasCoupon: false, expected: 15 },\n  { rule: 'R5', isNew: false, hasLoyalty: true, hasCoupon: true, expected: 30 },   // 10% + 20%\n  { rule: 'R6', isNew: false, hasLoyalty: true, hasCoupon: false, expected: 10 },\n  { rule: 'R7', isNew: false, hasLoyalty: false, hasCoupon: true, expected: 20 },\n  { rule: 'R8', isNew: false, hasLoyalty: false, hasCoupon: false, expected: 0 },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>R3 (T,F,T) 20 · R4 (T,F,F) 15 · R5 (F,T,T) 30 · R6 (F,T,F) 10 · R7 (F,F,T) 20 · R8 (F,F,F) 0.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No impossible combination (new customer with a loyalty card)",
+              "vi": "Không có tổ hợp không thể (khách mới có thẻ thân thiết)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const s=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",t={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},n=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");if(n>=0)return\"test #\"+(n+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\";const a=TESTS.findIndex(o=>o.isNew&&o.hasLoyalty);return a<0?\"OK\":\"test #\"+(a+1)+\" is rule \"+s(TESTS[a])+\", which cannot happen \\u2014 you cannot create such test data\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Every expected discount is right",
+              "vi": "Mọi mức giảm mong đợi đều đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var u;if(!Array.isArray(TESTS))return\"TESTS must be an array\";const n=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",e={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},s=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");if(s>=0)return\"test #\"+(s+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\";const a=TESTS.findIndex(o=>!(n(o)in e)||Number(o.expected)!==e[n(o)]);return a<0?\"OK\":\"test #\"+(a+1)+\" (\"+n(TESTS[a])+\"): expected \"+((u=e[n(TESTS[a])])!=null?u:\"n/a\")+\"%\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R3 is covered with the right expected discount",
+              "vi": "Luật R3 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R3\"&&Number(o.expected)===n.R3)?\"OK\":\"rule R3 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R4 is covered with the right expected discount",
+              "vi": "Luật R4 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R4\"&&Number(o.expected)===n.R4)?\"OK\":\"rule R4 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R5 is covered with the right expected discount",
+              "vi": "Luật R5 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R5\"&&Number(o.expected)===n.R5)?\"OK\":\"rule R5 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R6 is covered with the right expected discount",
+              "vi": "Luật R6 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R6\"&&Number(o.expected)===n.R6)?\"OK\":\"rule R6 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R7 is covered with the right expected discount",
+              "vi": "Luật R7 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R7\"&&Number(o.expected)===n.R7)?\"OK\":\"rule R7 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Rule R8 is covered with the right expected discount",
+              "vi": "Luật R8 được phủ với mức giảm mong đợi đúng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const a=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",n={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},e=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");return e>=0?\"test #\"+(e+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\":TESTS.some(o=>a(o)===\"R8\"&&Number(o.expected)===n.R8)?\"OK\":\"rule R8 not covered (or its expected discount is wrong)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Exactly one test per feasible rule (6 tests)",
+              "vi": "Đúng một test mỗi luật khả thi (6 test)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(!Array.isArray(TESTS))return\"TESTS must be an array\";const n=o=>o.isNew?o.hasLoyalty?o.hasCoupon?\"R1\":\"R2\":o.hasCoupon?\"R3\":\"R4\":o.hasLoyalty?o.hasCoupon?\"R5\":\"R6\":o.hasCoupon?\"R7\":\"R8\",t={R3:20,R4:15,R5:30,R6:10,R7:20,R8:0},s=TESTS.findIndex(o=>typeof o.isNew!=\"boolean\"||typeof o.hasLoyalty!=\"boolean\"||typeof o.hasCoupon!=\"boolean\");if(s>=0)return\"test #\"+(s+1)+\": isNew, hasLoyalty and hasCoupon must be true/false\";const e=TESTS.map(n);return e.length===6&&new Set(e).size===6?\"OK\":TESTS.length+\" test(s), \"+new Set(e).size+\" distinct rule(s) \\u2014 aim for 6 tests, one per rule\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm ca isNew = true, hasLoyalty = true — không thể tạo dữ liệu đó."
+        },
+        {
+          "loi": "Ghi expected 35 cho R3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        },
+        {
+          "en": "decision table coverage",
+          "vi": "độ phủ bảng quyết định = luật đã test / luật khả thi"
+        }
+      ]
+    },
+    {
+      "title": "Decision table 4 — Rule-based unit tests for discountPercent (kill the mutants)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "unit testing",
+        "mutation testing",
+        "assertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p><b>Specification (credit-card discount).</b> A <b>new customer</b> opening a credit-card account gets <b>15%</b> off all purchases today. An <b>existing customer</b> holding a <b>loyalty card</b> gets <b>10%</b>. A customer with a <b>coupon</b> gets <b>20%</b> today, but the coupon <b>cannot be combined with the new-customer discount</b>. Discounts are <b>added</b> when they apply. A new customer cannot already hold a loyalty card.</p><p><code>discountPercent(isNew, hasLoyalty, hasCoupon)</code> returns the discount (a number) and throws an <code>Error</code> whose message starts with <code>INVALID</code> for the impossible combination. Write one test per rule (including the impossible one — it must be rejected) and kill all six mutants.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>test.each</code> with one row per feasible rule, plus one test that the impossible combination throws <code>\"INVALID\"</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Đặc tả (giảm giá thẻ tín dụng).</b> <b>Khách mới</b> mở thẻ được giảm <b>15%</b> mọi món hôm nay. <b>Khách cũ</b> có <b>thẻ thân thiết</b> được <b>10%</b>. Khách có <b>coupon</b> được <b>20%</b> hôm nay, nhưng coupon <b>không dùng chung với ưu đãi khách mới</b>. Các mức giảm <b>cộng dồn</b> khi được áp. Khách mới không thể đã có thẻ thân thiết.</p><p><code>discountPercent(isNew, hasLoyalty, hasCoupon)</code> trả mức giảm (số) và ném <code>Error</code> có thông báo bắt đầu bằng <code>INVALID</code> cho tổ hợp không thể. Viết mỗi luật một test (kể cả luật không thể — phải bị từ chối) và giết cả sáu mutant.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng <code>test.each</code> mỗi luật khả thi một dòng, cộng một test cho tổ hợp không thể ném <code>\"INVALID\"</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "expect(discountPercent(false, true, true)).toBe(30)",
+          "output": "kills the mutant that takes only the larger discount",
+          "explanation": "Rule R5: discounts are added.|||Luật R5: cộng dồn."
+        }
+      ],
+      "hintsJson": [
+        "Sáu luật khả thi ⇒ sáu dòng test.each; thêm một test cho (true, true, …) ném lỗi.",
+        "Mỗi mutant làm sai đúng một cột của bảng — test theo luật sẽ bắt hết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// One test per rule of the decision table of discountPercent(isNew, hasLoyalty, hasCoupon).\ntest('R6: existing customer with a loyalty card gets 10%', () => {\n  expect(discountPercent(false, true, false)).toBe(10);\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "tests.js",
+          "language": "javascript",
+          "code": "// Decision-table coverage: every feasible rule + the infeasible combination.\ndescribe('discountPercent — decision table', () => {\n  test.each([\n    ['R3', true, false, true, 20],\n    ['R4', true, false, false, 15],\n    ['R5', false, true, true, 30],\n    ['R6', false, true, false, 10],\n    ['R7', false, false, true, 20],\n    ['R8', false, false, false, 0],\n  ])('%s: new=%p loyalty=%p coupon=%p → %i%', (rule, isNew, loyalty, coupon, expected) => {\n    expect(discountPercent(isNew, loyalty, coupon)).toBe(expected);\n  });\n\n  test('R1/R2: a new customer with a loyalty card is rejected', () => {\n    expect(() => discountPercent(true, true, false)).toThrow('INVALID');\n  });\n});\n"
+        },
+        {
+          "name": "lib/testkit.js",
+          "language": "javascript",
+          "code": "/* lib/testkit.js — a tiny Jest-compatible test kit (describe · test/it · test.each · beforeEach/afterEach ·\n * expect(...).toBe/toEqual/toBeCloseTo/toThrow/toContain/toMatch/… · .not · .resolves/.rejects · jest.fn()).\n * Loaded BEFORE tests.js. DO NOT EDIT — the grader relies on it.\n * Bộ test nhỏ tương thích Jest, nạp trước tests.js. KHÔNG SỬA tệp này — máy chấm dùng nó.\n */\n(function (G) {\n  if (G.__KIT_DA_NAP__) return; G.__KIT_DA_NAP__ = true;\n  var REG = G.__REG__ = [];\n  var GOC = { ten: null, be: [], ae: [] };\n  var CHONG = [GOC];\n  function show(v) {\n    if (typeof v === 'string') return JSON.stringify(v);\n    if (typeof v === 'function') return '[Function]';\n    if (v instanceof Error) return v.name + ': ' + v.message;\n    if (typeof v === 'number' && !isFinite(v)) return String(v);\n    if (v === undefined) return 'undefined';\n    try { var s = JSON.stringify(v); return s && s.length > 140 ? s.slice(0, 137) + '...' : s; } catch (e) { return String(v); }\n  }\n  function deepEq(a, b) {\n    if (Object.is(a, b)) return true;\n    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();\n    if (Array.isArray(a) !== Array.isArray(b)) return false;\n    if (a instanceof Map && b instanceof Map) { if (a.size !== b.size) return false; var ok = true; a.forEach(function (v, k) { if (!b.has(k) || !deepEq(v, b.get(k))) ok = false; }); return ok; }\n    if (a instanceof Set && b instanceof Set) { if (a.size !== b.size) return false; var ok2 = true; a.forEach(function (v) { if (!b.has(v)) ok2 = false; }); return ok2; }\n    var ka = Object.keys(a).filter(function (k) { return a[k] !== undefined; });\n    var kb = Object.keys(b).filter(function (k) { return b[k] !== undefined; });\n    if (ka.length !== kb.length) return false;\n    for (var i = 0; i < ka.length; i++) if (!Object.prototype.hasOwnProperty.call(b, ka[i]) || !deepEq(a[ka[i]], b[ka[i]])) return false;\n    return true;\n  }\n  function Loi(m) { var e = new Error(m); e.name = 'AssertionError'; return e; }\n  function khopLoi(err, x) {\n    if (x === undefined) return true;\n    var msg = err && err.message !== undefined ? String(err.message) : String(err);\n    if (typeof x === 'string') return msg.indexOf(x) >= 0;\n    if (x instanceof RegExp) return x.test(msg);\n    if (typeof x === 'function') return err instanceof x || (err && err.name === x.name);\n    if (x && typeof x === 'object' && 'message' in x) return msg === String(x.message);\n    return false;\n  }\n  function make(actual, neg) {\n    var m = {};\n    function chk(pass, msg) { if (!!pass === neg) throw Loi('expected ' + (neg ? 'NOT ' : '') + msg); }\n    function laMock(f) { if (!f || !f.__laMock) throw Loi('this matcher needs a jest.fn() mock, got ' + show(f)); }\n    m.toBe = function (e) { chk(Object.is(actual, e), show(actual) + ' to be ' + show(e)); };\n    m.toEqual = m.toStrictEqual = function (e) { chk(deepEq(actual, e), show(actual) + ' to equal ' + show(e)); };\n    m.toBeCloseTo = function (e, d) { d = d == null ? 2 : d; chk(typeof actual === 'number' && Math.abs(actual - e) < Math.pow(10, -d) / 2, show(actual) + ' to be close to ' + show(e)); };\n    m.toBeTruthy = function () { chk(!!actual, show(actual) + ' to be truthy'); };\n    m.toBeFalsy = function () { chk(!actual, show(actual) + ' to be falsy'); };\n    m.toBeNull = function () { chk(actual === null, show(actual) + ' to be null'); };\n    m.toBeUndefined = function () { chk(actual === undefined, show(actual) + ' to be undefined'); };\n    m.toBeDefined = function () { chk(actual !== undefined, show(actual) + ' to be defined'); };\n    m.toBeNaN = function () { chk(Number.isNaN(actual), show(actual) + ' to be NaN'); };\n    m.toBeGreaterThan = function (n) { chk(actual > n, show(actual) + ' > ' + show(n)); };\n    m.toBeGreaterThanOrEqual = function (n) { chk(actual >= n, show(actual) + ' >= ' + show(n)); };\n    m.toBeLessThan = function (n) { chk(actual < n, show(actual) + ' < ' + show(n)); };\n    m.toBeLessThanOrEqual = function (n) { chk(actual <= n, show(actual) + ' <= ' + show(n)); };\n    m.toContain = function (x) { chk(actual != null && (typeof actual === 'string' ? actual.indexOf(x) >= 0 : Array.prototype.some.call(actual, function (y) { return Object.is(y, x); })), show(actual) + ' to contain ' + show(x)); };\n    m.toContainEqual = function (x) { chk(actual != null && Array.prototype.some.call(actual, function (y) { return deepEq(y, x); }), show(actual) + ' to contain an item equal to ' + show(x)); };\n    m.toHaveLength = function (n) { chk(actual != null && actual.length === n, show(actual) + ' to have length ' + n); };\n    m.toMatch = function (r) { chk(typeof actual === 'string' && (r instanceof RegExp ? r.test(actual) : actual.indexOf(r) >= 0), show(actual) + ' to match ' + String(r)); };\n    m.toHaveProperty = function (p, v) {\n      var ds = Array.isArray(p) ? p : String(p).split('.'); var o = actual, co = true;\n      for (var i = 0; i < ds.length; i++) { if (o == null || !(ds[i] in Object(o))) { co = false; break; } o = o[ds[i]]; }\n      chk(co && (arguments.length < 2 || deepEq(o, v)), show(actual) + ' to have property ' + String(p) + (arguments.length < 2 ? '' : ' = ' + show(v)));\n    };\n    m.toThrow = m.toThrowError = function (x) {\n      if (typeof actual !== 'function') throw Loi('toThrow() needs a function: write expect(() => fn(...)).toThrow()');\n      var threw = false, err;\n      try { actual(); } catch (e) { threw = true; err = e; }\n      chk(threw && khopLoi(err, x), 'the function to throw' + (x === undefined ? '' : ' ' + (typeof x === 'function' ? x.name : show(x instanceof RegExp ? String(x) : x))) + (threw ? ' (it threw ' + show(err) + ')' : ' (it returned normally)'));\n    };\n    m.toHaveBeenCalled = function () { laMock(actual); chk(actual.mock.calls.length > 0, 'the mock to have been called'); };\n    m.toHaveBeenCalledTimes = function (n) { laMock(actual); chk(actual.mock.calls.length === n, 'the mock to be called ' + n + ' time(s), it was called ' + actual.mock.calls.length); };\n    m.toHaveBeenCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); chk(actual.mock.calls.some(function (c) { return deepEq(c, a); }), 'the mock to have been called with ' + show(a) + ' — calls: ' + show(actual.mock.calls)); };\n    m.toHaveBeenLastCalledWith = function () { laMock(actual); var a = Array.prototype.slice.call(arguments); var c = actual.mock.calls[actual.mock.calls.length - 1]; chk(!!c && deepEq(c, a), 'the last call to be ' + show(a)); };\n    return m;\n  }\n  function boc(p, neg, laTuChoi) {\n    var mau = make(undefined, false), o = {};\n    Object.keys(mau).forEach(function (k) {\n      o[k] = function () {\n        var args = arguments;\n        return Promise.resolve(p).then(function (v) {\n          if (laTuChoi) throw Loi('expected the promise to reject, it resolved with ' + show(v));\n          return make(v, neg)[k].apply(null, args);\n        }, function (e) {\n          if (!laTuChoi) throw Loi('expected the promise to resolve, it rejected with ' + show(e));\n          return make(k === 'toThrow' || k === 'toThrowError' ? function () { throw e; } : e, neg)[k].apply(null, args);\n        });\n      };\n    });\n    return o;\n  }\n  G.expect = function (actual) {\n    G.__soExpect = (G.__soExpect || 0) + 1;\n    var o = make(actual, false); o.not = make(actual, true);\n    o.resolves = boc(actual, false, false); o.resolves.not = boc(actual, true, false);\n    o.rejects = boc(actual, false, true); o.rejects.not = boc(actual, true, true);\n    return o;\n  };\n  function fn(impl) {\n    var f = function () {\n      var args = Array.prototype.slice.call(arguments); f.mock.calls.push(args);\n      try {\n        var g = f.__mot.length ? f.__mot.shift() : f.__impl;\n        var r = g ? g.apply(this, args) : f.__tra;\n        f.mock.results.push({ type: 'return', value: r }); return r;\n      } catch (e) { f.mock.results.push({ type: 'throw', value: e }); throw e; }\n    };\n    f.__laMock = true; f.mock = { calls: [], results: [] }; f.__impl = impl || null; f.__mot = []; f.__tra = undefined;\n    f.mockReturnValue = function (v) { f.__impl = null; f.__tra = v; return f; };\n    f.mockReturnValueOnce = function (v) { f.__mot.push(function () { return v; }); return f; };\n    f.mockImplementation = function (g) { f.__impl = g; return f; };\n    f.mockImplementationOnce = function (g) { f.__mot.push(g); return f; };\n    f.mockResolvedValue = function (v) { f.__impl = function () { return Promise.resolve(v); }; return f; };\n    f.mockRejectedValue = function (v) { f.__impl = function () { return Promise.reject(v); }; return f; };\n    f.mockClear = f.mockReset = function () { f.mock.calls = []; f.mock.results = []; return f; };\n    return f;\n  }\n  G.jest = { fn: fn, spyOn: function (obj, ten) { var goc = obj[ten]; var s = fn(function () { return goc.apply(this, arguments); }); obj[ten] = s; s.mockRestore = function () { obj[ten] = goc; }; return s; } };\n  G.describe = function (ten, f) { var k = { ten: String(ten), be: [], ae: [] }; CHONG.push(k); try { f(); } finally { CHONG.pop(); } };\n  G.beforeEach = function (f) { CHONG[CHONG.length - 1].be.push(f); };\n  G.afterEach = function (f) { CHONG[CHONG.length - 1].ae.push(f); };\n  G.test = G.it = function (ten, f) {\n    if (typeof f !== 'function') throw new Error('test(\"' + ten + '\") needs a function body');\n    var duong = CHONG.slice(1).map(function (k) { return k.ten; }).concat([String(ten)]).join(' > ');\n    REG.push({ ten: duong, fn: f, khung: CHONG.slice() });\n  };\n  function dinhDang(ten, args, i) {\n    var j = 0;\n    var s = String(ten).replace(/%[sdipjfo#%]/g, function (m) {\n      if (m === '%%') return '%'; if (m === '%#') return String(i);\n      var v = args[j++]; return m === '%p' || m === '%j' || m === '%o' ? show(v) : String(v);\n    });\n    if (args.length === 1 && args[0] && typeof args[0] === 'object' && !Array.isArray(args[0])) s = s.replace(/\\$([A-Za-z_][A-Za-z0-9_]*)/g, function (m, k) { return k in args[0] ? String(args[0][k]) : m; });\n    return s;\n  }\n  G.test.each = G.it.each = function (rows) {\n    return function (ten, f) {\n      rows.forEach(function (r, i) {\n        var args = Array.isArray(r) ? r : [r];\n        G.test(dinhDang(ten, args, i), function () { return f.apply(null, args); });\n      });\n    };\n  };\n  G.test.skip = G.it.skip = function () {};\n  G.describe.skip = function () {};\n  /** Máy chấm: chạy mọi test đã đăng ký sau khi gán các tên toàn cục trong gan. */\n  G.__chayBo = async function (gan) {\n    for (var k in gan) G[k] = gan[k];\n    var kq = { tong: REG.length, dat: [], truot: [] };\n    for (var i = 0; i < REG.length; i++) {\n      var t = REG[i]; G.__soExpect = 0;\n      try {\n        var be = [], ae = [];\n        t.khung.forEach(function (fr) { be = be.concat(fr.be); ae = fr.ae.concat(ae); });\n        for (var a = 0; a < be.length; a++) await be[a]();\n        await t.fn();\n        for (var b = 0; b < ae.length; b++) await ae[b]();\n        if (!G.__soExpect) kq.truot.push({ ten: t.ten, loi: 'no expect() in this test', rong: true });\n        else kq.dat.push(t.ten);\n      } catch (e) {\n        kq.truot.push({ ten: t.ten, loi: e && e.message !== undefined ? (e.name === 'AssertionError' ? '' : e.name + ': ') + e.message : String(e) });\n      }\n    }\n    return kq;\n  };\n})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Testing every rule of the decision table — including the infeasible combination, which the code must reject — is exactly decision-table coverage. JUnit: <code>@ParameterizedTest @CsvSource({\"true,false,true,20\", \"true,false,false,15\", \"false,true,true,30\", …})</code> + <code>assertThrows(IllegalArgumentException.class, …)</code>.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "lib/testkit.js",
+          "tests.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Every test passes against the CORRECT implementation (your expected values are right)",
+              "vi": "Mọi test ĐẠT trên bản cài đặt ĐÚNG (giá trị mong đợi của bạn đúng)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r = await __chayBo(__DUNG);\nif (typeof discountPercent !== 'undefined' && discountPercent !== globalThis[\"discountPercent\"]) return 'tests.js must not declare discountPercent itself (let/const/class/copy of the code) — call the global discountPercent that the grader provides';\nif (!r.tong) return 'No tests found — write test(...) blocks in tests.js';\nif (r.truot.length) return r.truot.length + ' of ' + r.tong + ' test(s) FAIL on the correct code: ' + r.truot.slice(0, 3).map(function (x) { return '\"' + x.ten + '\" — ' + x.loi; }).join(' | ');\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "The suite has at least 6 tests, each with at least one expect()",
+              "vi": "Bộ test có ít nhất 6 test, mỗi test có ít nhất một expect()"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r = await __chayBo(__DUNG);\nconst rong = r.truot.filter(function (x) { return x.rong; });\nif (rong.length) return 'test without any expect(): \"' + rong[0].ten + '\"';\nif (r.tong < 6) return 'only ' + r.tong + ' test(s) — write at least 6';\nreturn 'OK';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M1: a new customer with a coupon gets 35% (discounts combined)",
+              "vi": "Giết mutant M1: khách mới có coupon được 35% (cộng dồn)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 35 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M2: loyalty + coupon gives only the larger discount (20%)",
+              "vi": "Giết mutant M2: thẻ + coupon chỉ lấy mức lớn (20%)"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d = Math.max(d, 20);\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M3: the loyalty discount is 5%",
+              "vi": "Giết mutant M3: giảm thẻ thân thiết là 5%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 5;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M4: a new customer without a coupon gets 10%",
+              "vi": "Giết mutant M4: khách mới không coupon được 10%"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 10;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Kills mutant M5: the impossible combination is accepted",
+              "vi": "Giết mutant M5: tổ hợp không thể được chấp nhận"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  \n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED"
+          },
+          {
+            "moTa": {
+              "en": "Hidden mutant M6 is killed",
+              "vi": "Mutant ẩn M6 bị giết"
+            },
+            "chuanBi": "const __KQ = await (async () => {\nif (typeof __chayBo !== \"function\") return \"lib/testkit.js is missing or was edited — restore it from the starter\";\nconst __DUNG = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = 0;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r1 = await __chayBo(__DUNG);\nif (!r1.dat.length) return 'no test passes on the correct code yet — fix your expected values first';\nconst __DB = (function () {\nfunction discountPercent(isNew, hasLoyalty, hasCoupon) {\n  if (isNew && hasLoyalty) throw new Error('INVALID: a new customer cannot hold a loyalty card');\n  if (isNew) return hasCoupon ? 20 : 15;\n  let d = hasLoyalty || hasCoupon ? 0 : 5;\n  if (hasLoyalty) d += 10;\n  if (hasCoupon) d += 20;\n  return d;\n}\nreturn { \"discountPercent\": discountPercent };\n})();\nconst r2 = await __chayBo(__DB);\nconst chet = r1.dat.filter(function (t) { return r2.dat.indexOf(t) < 0; });\nreturn chet.length ? 'KILLED' : 'SURVIVED — all ' + r1.dat.length + ' passing test(s) also pass on this faulty version. Add a test that tells them apart.';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "KILLED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ test các tổ hợp “có giảm” — mutant cho R8 giảm 5% sống sót."
+        },
+        {
+          "loi": "Không test tổ hợp không thể ⇒ mutant bỏ kiểm tra hợp lệ sống sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "bản đột biến — bản mã cố ý cài một lỗi nhỏ để thử độ mạnh của bộ test"
+        },
+        {
+          "en": "kill a mutant",
+          "vi": "\"giết\" mutant — có test đạt trên mã đúng nhưng trượt trên mutant"
+        },
+        {
+          "en": "assertion",
+          "vi": "phép khẳng định (expect/assertEquals) — so thực tế với mong đợi"
+        },
+        {
+          "en": "Arrange–Act–Assert (AAA)",
+          "vi": "mẫu viết test 3 bước: chuẩn bị – gọi – khẳng định"
+        },
+        {
+          "en": "parameterized test",
+          "vi": "test tham số hoá — một thân test, nhiều bộ dữ liệu (@ParameterizedTest / test.each)"
+        },
+        {
+          "en": "expected result",
+          "vi": "kết quả mong đợi — lấy từ ĐẶC TẢ, không lấy từ mã"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        }
+      ]
+    },
+    {
+      "title": "Decision table 5 — ISTQB-style questions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "decision table testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swt301"
+      ],
+      "problemHtml": "<p>Six questions on decision tables: counting rules, coverage, collapsing and what the technique is good for.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu về bảng quyết định: đếm luật, độ phủ, rút gọn và kỹ thuật này mạnh ở đâu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "n điều kiện Boolean ⇒ 2ⁿ luật.",
+        "Độ phủ = luật đã test ÷ tổng luật (của bảng đang dùng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 5 — ISTQB-style questions\n\nAnswer in the answer panel (no code needed).\n\n1. A business rule has 4 Boolean conditions. How many rules does the FULL decision table have?Một quy tắc nghiệp vụ có 4 điều kiện Boolean. Bảng quyết định ĐẦY ĐỦ có bao nhiêu luật?\n2. A collapsed decision table has 6 rules; the tests exercise 4 of them. What is the decision-table coverage?Bảng rút gọn có 6 luật; test chạm 4 luật. Độ phủ bảng quyết định là bao nhiêu?\n3. What is the main strength of decision table testing?Thế mạnh chính của kiểm thử bảng quyết định là gì?\n4. In a collapsed decision table, what does “–” in a condition row mean?Trong bảng đã rút gọn, dấu “–” ở một dòng điều kiện nghĩa là gì?\n5. Which of the following is the typical MINIMUM coverage standard for decision table testing?Chuẩn độ phủ TỐI THIỂU thường gặp của kiểm thử bảng quyết định là gì?\n6. According to the teacher’s note on slide 43, decision tables and state transition testing mainly target…Theo ghi chú của thầy/cô ở slide 43, bảng quyết định và chuyển trạng thái chủ yếu nhắm vào…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision table 5 — ISTQB-style questions — answer key\n\n1. A business rule has 4 Boolean conditions. How many rules does the FULL decision table have?Một quy tắc nghiệp vụ có 4 điều kiện Boolean. Bảng quyết định ĐẦY ĐỦ có bao nhiêu luật?\n   Answer: c) 16\n   2⁴ = 16 combinations.VI: 2⁴ = 16 tổ hợp.\n\n2. A collapsed decision table has 6 rules; the tests exercise 4 of them. What is the decision-table coverage?Bảng rút gọn có 6 luật; test chạm 4 luật. Độ phủ bảng quyết định là bao nhiêu?\n   Answer: c) 67%\n   4 / 6 ≈ 67%.VI: 4 / 6 ≈ 67%.\n\n3. What is the main strength of decision table testing?Thế mạnh chính của kiểm thử bảng quyết định là gì?\n   Answer: b) It systematically identifies combinations of conditions, including ones the requirements forgot\n   Decision tables record business rules as combinations; writing every column reveals gaps and contradictions in the requirements.VI: Bảng quyết định ghi quy tắc nghiệp vụ dạng tổ hợp; viết đủ mọi cột làm lộ lỗ hổng và mâu thuẫn trong yêu cầu.\n\n4. In a collapsed decision table, what does “–” in a condition row mean?Trong bảng đã rút gọn, dấu “–” ở một dòng điều kiện nghĩa là gì?\n   Answer: c) The value of that condition does not affect the outcome of the rule\n   “Don’t care”: true and false lead to the same action, so the rules were merged.VI: “Không quan tâm”: đúng hay sai đều cho cùng hành động, nên các luật được gộp.\n\n5. Which of the following is the typical MINIMUM coverage standard for decision table testing?Chuẩn độ phủ TỐI THIỂU thường gặp của kiểm thử bảng quyết định là gì?\n   Answer: b) At least one test case per decision rule (column)\n   The common minimum is one test case per rule in the (possibly collapsed) table.VI: Mức tối thiểu phổ biến là mỗi luật (cột) một test case trong bảng (có thể đã rút gọn).\n\n6. According to the teacher’s note on slide 43, decision tables and state transition testing mainly target…Theo ghi chú của thầy/cô ở slide 43, bảng quyết định và chuyển trạng thái chủ yếu nhắm vào…\n   Answer: b) the business logic and business rules\n   EP and BVA mostly target UI fields; decision tables and state transition target business logic.VI: EP và BVA chủ yếu nhắm các trường giao diện; bảng quyết định và chuyển trạng thái nhắm logic nghiệp vụ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · c · b · c · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A business rule has 4 Boolean conditions. How many rules does the FULL decision table have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một quy tắc nghiệp vụ có 4 điều kiện Boolean. Bảng quyết định ĐẦY ĐỦ có bao nhiêu luật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2⁴ = 16 combinations.</p><p><i>VI: 2⁴ = 16 tổ hợp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A collapsed decision table has 6 rules; the tests exercise 4 of them. What is the decision-table coverage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng rút gọn có 6 luật; test chạm 4 luật. Độ phủ bảng quyết định là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "50%"
+              },
+              {
+                "ma": "c",
+                "noiDung": "67%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "150%"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>4 / 6 ≈ 67%.</p><p><i>VI: 4 / 6 ≈ 67%.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What is the main strength of decision table testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thế mạnh chính của kiểm thử bảng quyết định là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It finds the boundaries of numeric ranges"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It systematically identifies combinations of conditions, including ones the requirements forgot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It measures statement coverage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It models the history of a system"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Decision tables record business rules as combinations; writing every column reveals gaps and contradictions in the requirements.</p><p><i>VI: Bảng quyết định ghi quy tắc nghiệp vụ dạng tổ hợp; viết đủ mọi cột làm lộ lỗ hổng và mâu thuẫn trong yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>In a collapsed decision table, what does “–” in a condition row mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bảng đã rút gọn, dấu “–” ở một dòng điều kiện nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The condition is false"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The rule is impossible"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The value of that condition does not affect the outcome of the rule"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The condition has not been tested yet"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>“Don’t care”: true and false lead to the same action, so the rules were merged.</p><p><i>VI: “Không quan tâm”: đúng hay sai đều cho cùng hành động, nên các luật được gộp.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Which of the following is the typical MINIMUM coverage standard for decision table testing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuẩn độ phủ TỐI THIỂU thường gặp của kiểm thử bảng quyết định là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One test per condition"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At least one test case per decision rule (column)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One test per action"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All 2ⁿ combinations, always"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The common minimum is one test case per rule in the (possibly collapsed) table.</p><p><i>VI: Mức tối thiểu phổ biến là mỗi luật (cột) một test case trong bảng (có thể đã rút gọn).</i></p>"
+          },
+          {
+            "ma": "q6",
+            "de": "<p>According to the teacher’s note on slide 43, decision tables and state transition testing mainly target…</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo ghi chú của thầy/cô ở slide 43, bảng quyết định và chuyển trạng thái chủ yếu nhắm vào…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the user interface fields"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the business logic and business rules"
+              },
+              {
+                "ma": "c",
+                "noiDung": "performance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the database schema"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>EP and BVA mostly target UI fields; decision tables and state transition target business logic.</p><p><i>VI: EP và BVA chủ yếu nhắm các trường giao diện; bảng quyết định và chuyển trạng thái nhắm logic nghiệp vụ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm 4 điều kiện thành 8 luật (nhầm 2×4)."
+        },
+        {
+          "loi": "Nghĩ “–” là điều kiện sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — tổ hợp điều kiện ⇒ hành động"
+        }
+      ]
+    }
+  ]
+}

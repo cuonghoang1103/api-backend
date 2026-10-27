@@ -16,11 +16,16 @@ export interface EmailPayload {
   attachments?: Array<{ filename: string; content: string; contentType?: string }>;
   /** Tên người gửi hiển thị (giữ ĐÚNG địa chỉ của RESEND_FROM_EMAIL, chỉ thay tên) — CT Work: "CT Work · CuongThai". */
   fromName?: string;
+  /** Địa chỉ gửi khác (cùng tên miền đã xác minh ở Resend) — CT Work: `ctwork@cuongthai.com` (avatar riêng trong Gmail). */
+  fromAddress?: string;
   /** Reply-To (CT Work: email người mời — người nhận trả lời thẳng người quen, không vào hộp noreply). */
   replyTo?: string;
   /** Header thêm (vd. X-Entity-Ref-ID để Gmail không gộp các thư mời khác nhau vào một chuỗi). */
   headers?: Record<string, string>;
 }
+
+/** Tên người gửi mặc định của web (27/10/2026: thay "CuongHoangDev"). */
+export const SITE_FROM_NAME = 'CuongThai.com';
 
 /** "Tên <a@b>" hoặc "a@b" ⇒ "Tên mới <a@b>" (bỏ ký tự có thể bẻ header). */
 export function withFromName(from: string, name: string): string {
@@ -74,7 +79,8 @@ export class EmailService {
 
     try {
       const result = await resend.emails.send({
-        from: payload.fromName ? withFromName(config.resendFromEmail, payload.fromName) : config.resendFromEmail,
+        // 27/10/2026: tên người gửi LUÔN theo thương hiệu (env prod còn "CuongHoangDev <noreply@…>") — giữ địa chỉ, thay tên.
+        from: withFromName(payload.fromAddress ?? config.resendFromEmail, payload.fromName ?? SITE_FROM_NAME),
         to: payload.to,
         ...(payload.replyTo ? { replyTo: payload.replyTo } : {}),
         ...(payload.headers ? { headers: payload.headers } : {}),
@@ -130,7 +136,7 @@ export class EmailService {
   <div class="container">
     <h1>Xác thực email của bạn</h1>
     <p>${greeting}</p>
-    <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>CuongHoangDev</strong>.</p>
+    <p>Cảm ơn bạn đã đăng ký tài khoản tại <strong>CuongThai.com</strong>.</p>
     <p>Vui lòng click vào nút bên dưới để xác thực email — link này có hiệu lực trong <strong>24 giờ</strong>:</p>
     <p style="text-align: center; margin: 32px 0;">
       <a href="${verifyUrl}" class="button">Xác thực email ngay</a>
@@ -138,14 +144,14 @@ export class EmailService {
     <p>Hoặc copy link này vào trình duyệt:</p>
     <p class="link">${verifyUrl}</p>
     <p>Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
   </div>
 </body>
 </html>`.trim();
 
     return this.send({
       to: opts.to,
-      subject: 'Xác thực email tài khoản CuongHoangDev',
+      subject: 'Xác thực email tài khoản CuongThai.com',
       html,
       text: `${greeting}\n\nVui lòng truy cập link sau để xác thực email (có hiệu lực 24h):\n${verifyUrl}\n\nNếu bạn không đăng ký, vui lòng bỏ qua email này.`,
     });
@@ -167,7 +173,7 @@ export class EmailService {
     const ttl = opts.ttlMinutes ?? (isVerify ? 5 : 10);
     const heading = isVerify ? 'Xác thực email của bạn' : 'Đặt lại mật khẩu';
     const intro = isVerify
-      ? 'Cảm ơn bạn đã đăng ký tài khoản tại CuongHoangDev. Sử dụng mã bên dưới để xác thực email:'
+      ? 'Cảm ơn bạn đã đăng ký tài khoản tại CuongThai.com. Sử dụng mã bên dưới để xác thực email:'
       : 'Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Sử dụng mã bên dưới để tiếp tục:';
     const footer = isVerify
       ? 'Nếu bạn không đăng ký tài khoản này, vui lòng bỏ qua email này.'
@@ -201,10 +207,10 @@ export class EmailService {
     </div>
     ${!isVerify ? `
     <div class="warning">
-      <strong>Cảnh báo bảo mật:</strong> Không chia sẻ mã này cho bất kỳ ai. Nhân viên CuongHoangDev sẽ không bao giờ yêu cầu mã này.
+      <strong>Cảnh báo bảo mật:</strong> Không chia sẻ mã này cho bất kỳ ai. Nhân viên CuongThai.com sẽ không bao giờ yêu cầu mã này.
     </div>` : ''}
     <p>${footer}</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
   </div>
 </body>
 </html>`.trim();
@@ -259,14 +265,14 @@ export class EmailService {
     <div class="warning">
       <strong>Cảnh báo bảo mật:</strong> Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này. Tài khoản của bạn vẫn an toàn.
     </div>
-    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
   </div>
 </body>
 </html>`.trim();
 
     return this.send({
       to: opts.to,
-      subject: 'Đặt lại mật khẩu — CuongHoangDev',
+      subject: 'Đặt lại mật khẩu — CuongThai.com',
       html,
       text: `${greeting}\n\nTruy cập link sau để đặt lại mật khẩu (có hiệu lực 1h):\n${resetUrl}\n\nNếu bạn không yêu cầu, vui lòng bỏ qua email này.`,
     });
@@ -321,7 +327,7 @@ export class EmailService {
   <div class="container">
     <h1>Thanh toán thành công!</h1>
     <p>${greeting}</p>
-    <p>Cảm ơn bạn đã đăng ký khóa học tại <strong>CuongHoangDev</strong>. Đơn hàng của bạn đã được xác nhận và khóa học đã được mở khóa trong tài khoản.</p>
+    <p>Cảm ơn bạn đã đăng ký khóa học tại <strong>CuongThai.com</strong>. Đơn hàng của bạn đã được xác nhận và khóa học đã được mở khóa trong tài khoản.</p>
     <div class="receipt">
       <div class="receipt-row">
         <span class="receipt-label">Khóa học</span>
@@ -344,7 +350,7 @@ export class EmailService {
       <a href="${learnUrl}" class="button">Vào học ngay</a>
     </p>
     <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng phản hồi email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
   </div>
 </body>
 </html>`.trim();
@@ -526,7 +532,7 @@ export class EmailService {
     <div class="reason-box">${opts.reason}</div>
     <p>Tiền sẽ được chuyển về phương thức thanh toán ban đầu trong vòng 3-7 ngày làm việc (tuỳ ngân hàng).</p>
     <p>Nếu bạn có thắc mắc, vui lòng phản hồi email này.</p>
-    <div class="footer">© ${new Date().getFullYear()} CuongHoangDev. All rights reserved.</div>
+    <div class="footer">© ${new Date().getFullYear()} CuongThai.com. All rights reserved.</div>
   </div>
 </body>
 </html>`.trim();

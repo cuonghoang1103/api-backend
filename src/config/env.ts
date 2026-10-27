@@ -121,7 +121,7 @@ const envSchema = z.object({
 
   // Email
   RESEND_API_KEY: z.string().optional().default(''),
-  RESEND_FROM_EMAIL: z.string().default('CuongHoangDev <noreply@cuongthai.com>'),
+  RESEND_FROM_EMAIL: z.string().default('CuongThai.com <noreply@cuongthai.com>'),
   SMTP_HOST: z.string().default('smtp.gmail.com'),
   SMTP_PORT: z.string().regex(/^\d+$/).default('587'),
   SMTP_USER: z.string().optional().default(''),

@@ -18,7 +18,7 @@ import { emailService } from '../email.service.js';
 import { logger } from '../../utils/logger.js';
 import { presetIdOf } from './covers.js';
 
-export const WORK_FROM_NAME = 'CT Work · CuongThai';
+export const WORK_FROM_NAME = 'CT Work · CuongThai.com';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
@@ -183,11 +183,23 @@ ${p.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:
   return { html, text };
 }
 
+/**
+ * Địa chỉ gửi của CT Work (27/10/2026): `ctwork@cuongthai.com` — tách khỏi `noreply@` của web để Gmail hiện AVATAR riêng
+ * (ảnh của tài khoản Google đứng tên địa chỉ đó: logo cute CT Work; noreply@ = favicon CuongThai.com). Cùng tên miền đã
+ * xác minh ở Resend nên gửi được ngay. `WORK_FROM_EMAIL=` (rỗng) ⇒ quay về địa chỉ của RESEND_FROM_EMAIL.
+ */
+export function workFromAddress(env: NodeJS.ProcessEnv = process.env): string | undefined {
+  const v = env.WORK_FROM_EMAIL;
+  if (v === '') return undefined;
+  const addr = (v ?? 'ctwork@cuongthai.com').trim();
+  return /^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i.test(addr) ? addr : undefined;
+}
+
 /** Gửi một thư CT Work đã dựng. Không bao giờ ném lỗi (email hỏng không làm hỏng lệnh mời/giao việc). */
 export async function deliverWorkEmail(opts: { to: string; subject: string; html: string; text: string; replyTo?: string | null; refId?: string; attachments?: Array<{ filename: string; content: string; contentType?: string }> }): Promise<void> {
   try {
     await emailService.send({
-      to: opts.to, subject: opts.subject, html: opts.html, text: opts.text, fromName: WORK_FROM_NAME,
+      to: opts.to, subject: opts.subject, html: opts.html, text: opts.text, fromName: WORK_FROM_NAME, fromAddress: workFromAddress(),
       ...(opts.replyTo && validReplyTo(opts.replyTo) ? { replyTo: opts.replyTo } : {}),
       ...(opts.refId ? { headers: { 'X-Entity-Ref-ID': opts.refId } } : {}),
       ...(opts.attachments?.length ? { attachments: opts.attachments } : {}),

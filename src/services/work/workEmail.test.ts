@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import { config } from '../../config/env.js';
 import { emailService, withFromName } from '../email.service.js';
-import { buildInviteEmail, deliverWorkEmail, emailCoverUrl, renderWorkEmail, shortLink, validReplyTo, WORK_FROM_NAME } from './workEmail.js';
+import { buildInviteEmail, deliverWorkEmail, emailCoverUrl, renderWorkEmail, shortLink, validReplyTo, WORK_FROM_NAME, workFromAddress } from './workEmail.js';
 import { sendWorkEmail } from './common.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -79,7 +79,7 @@ describe('UX-D email CT Work', () => {
     assert.ok(noCover.html.includes('background:#16a34a'));
   });
 
-  it('khung chung (sendWorkEmail) giữ API cũ, From "CT Work · CuongThai", Reply-To hợp lệ mới gắn', async () => {
+  it('khung chung (sendWorkEmail) giữ API cũ, From "CT Work · CuongThai.com", Reply-To hợp lệ mới gắn', async () => {
     const sent: any[] = [];
     const orig = emailService.send.bind(emailService);
     (emailService as any).send = async (m: any) => { sent.push(m); return { success: true }; };
@@ -94,7 +94,12 @@ describe('UX-D email CT Work', () => {
     assert.equal(sent[1].replyTo, undefined);
     assert.equal(sent[2].replyTo, 'teacher@fe.edu.vn');
     assert.deepEqual(sent[2].headers, { 'X-Entity-Ref-ID': 'r1' });
-    assert.equal(withFromName('CuongHoangDev <noreply@cuongthai.com>', WORK_FROM_NAME), '"CT Work · CuongThai" <noreply@cuongthai.com>');
+    assert.equal(withFromName('CuongHoangDev <noreply@cuongthai.com>', WORK_FROM_NAME), '"CT Work · CuongThai.com" <noreply@cuongthai.com>');
+    // 27/10/2026: CT Work gửi từ ctwork@ (avatar riêng); WORK_FROM_EMAIL rỗng ⇒ về địa chỉ chung; giá trị hỏng ⇒ bỏ qua.
+    assert.equal(workFromAddress({}), 'ctwork@cuongthai.com');
+    assert.equal(workFromAddress({ WORK_FROM_EMAIL: '' }), undefined);
+    assert.equal(workFromAddress({ WORK_FROM_EMAIL: 'x <y>' }), undefined);
+    assert.equal(sent[0].fromAddress, workFromAddress());
     assert.equal(withFromName('noreply@cuongthai.com', 'A"\r\nBcc: x'), '"ABcc: x" <noreply@cuongthai.com>');
     assert.equal(validReplyTo('x@y'), false);
     const g = renderWorkEmail({ heading: 'H', lines: [], reason: 'R' });

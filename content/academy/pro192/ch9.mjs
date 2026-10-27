@@ -2,13 +2,16 @@
  * PRO192 · Chương 9 — luồng & tệp (pro14).
  * Bài 📑 học theo từng slide: pro14 (tmp_14.pptx, slide 1–59).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch9.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-9-luu-tep.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch9).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab9', { code: 'PRO192 Lab 9', en: 'Lab 9 — CT Library: saving to a file', vi: 'Lab 9 — CT Library: lưu dữ liệu ra tệp', total: 17, w: 1280, h: 720 });
 
 /* ───────── 9.A — 📑 Slide by slide · I/O Streams (1/3): streams, Unicode and UTF-8, java.io, the File class (slides 1–11) ───────── */
 const L_pro14_1 = {
@@ -6494,6 +6497,2523 @@ Q6: 44 -1</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 9 — 🏗️ CT Library: saving to a file (FileBookRepository, CSV in UTF-8, broken lines, temp file, one line to switch) ───────── */
+const L_lab9 = {
+  title: 'Lab 9 — 🏗️ CT Library: saving to a file (FileBookRepository, CSV in UTF-8, broken lines, temp file, one line to switch)|||Lab 9 — 🏗️ CT Library: lưu dữ liệu ra tệp (FileBookRepository, CSV UTF-8, dòng hỏng, tệp tạm, đổi một dòng)',
+  slug: 'pro192-lab-9-luu-tep',
+  type: 'VIDEO',
+  description: 'Lab 9 của dự án CT Library (sau Chương 9), chuẩn review LAB211: dữ liệu sống qua lần tắt máy. FileBookRepository cài cùng interface IBookRepository trên tệp data/books.csv bảng mã UTF-8 — nạp khi mở (bỏ BOM, bỏ qua dòng hỏng kèm số dòng và lý do), ghi lại sau mỗi thay đổi qua một tệp tạm rồi mới thay tệp thật, tên có dấu phẩy nằm trong ngoặc kép. Nó GIỮ một InMemoryBookRepository để làm CRUD thay vì chép lại hay kế thừa. Chương trình chuyển sang kho trên tệp bằng đúng một dòng new trong BookController; Main không đổi. Bộ chấm chạy hai lần — lưu rồi mở lại — và đòi kho y nguyên. Kèm năm bẫy chạy thật: split(",") cắt đôi tên sách, bảng mã mặc định của máy, BOM vô hình, quên close() ra tệp 0 byte, PrintWriter nuốt lỗi. Starter + đáp án tải về, bộ chấm 260 dòng, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 9 · Lab 9 · CT Library</span>
+<h2>Lab 9 — saving to a file</h2>
+<p class="lead">Eight labs of CT Library, and every one of them forgets everything the moment the program stops. Chapter 9 gave you the tools to fix that: character streams with a named encoding, BufferedReader and PrintWriter, try-with-resources, files that are read line by line. Lab 9 puts the shelf into a CSV file — and finds out that the interface you wrote in Lab 5 was a promise: the switch from memory to file is one line.</p>
+<p>The starter is a fresh project: Lab 8 finished, the storage exception, the extended contract, the CSV constants and the skeleton of <code>FileBookRepository</code> given, a sample <code>data/books.csv</code> with four broken lines, five TODOs marked <code>TODO Lab 9.x</code>. Plan about <strong>3 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 9 · Lab 9 · CT Library</span>
+<h2>Lab 9 — lưu dữ liệu ra tệp</h2>
+<p class="lead">Tám lab CT Library, và lab nào cũng quên sạch mọi thứ ngay khi chương trình dừng. Chương 9 đã đưa bạn đồ nghề để sửa chuyện đó: luồng ký tự có gọi tên bảng mã, BufferedReader và PrintWriter, try-with-resources, tệp đọc từng dòng. Lab 9 đặt kệ sách vào một tệp CSV — và phát hiện ra rằng interface bạn viết từ Lab 5 là một lời hứa: chuyển từ bộ nhớ sang tệp chỉ là một dòng.</p>
+<p>Starter là một dự án sạch: Lab 8 đã xong, ngoại lệ lưu trữ, hợp đồng mở rộng, các hằng của CSV và bộ khung <code>FileBookRepository</code> cho sẵn, một tệp mẫu <code>data/books.csv</code> có bốn dòng hỏng, năm TODO đánh dấu <code>TODO Lab 9.x</code>. Dành khoảng <strong>3 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 9 (17 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 9 (17 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab9', [
+      [1, 'Lab 9 — CT Library: saving to a file',
+        `<p class="y-chinh">🎯 Lab 9 = Chapter 9 on a real codebase: the shelf survives a restart.</p>
+<p>Five TODOs — read a CSV line with quotes, load the file, quote on the way out, save through a temporary file, and the one line that switches the program over — plus five traps of text files, each run for real.</p>`,
+        `<p class="y-chinh">🎯 Lab 9 = Chương 9 trên một bộ mã thật: kệ sách sống qua lần khởi động lại.</p>
+<p>Năm TODO — đọc một dòng CSV có ngoặc kép, nạp tệp, bọc ngoặc kép khi ghi, lưu qua một tệp tạm, và một dòng chuyển cả chương trình sang kho mới — cộng năm cái bẫy của tệp văn bản, cái nào cũng chạy thật.</p>`],
+      [2, 'Ticket CTL-9 — close the app, lose the shelf',
+        `<p class="y-chinh">🎯 Keep the items in <code>data/books.csv</code> (UTF-8): load at start, save after every change, survive broken lines and titles with commas — and switch to it without touching <code>Main</code>.</p>
+<p>Done means: PASS 260/260 — the grader runs the program, then runs it AGAIN in the same folder and expects the same shelf; <code>lint.py</code> silent; the four broken lines of the sample file reported with their line numbers; "Mắt Biếc" printed with its accents; and exactly one line of <code>BookController</code> changed to switch.</p>`,
+        `<p class="y-chinh">🎯 Giữ tài liệu trong <code>data/books.csv</code> (UTF-8): nạp khi mở, lưu sau mỗi thay đổi, sống sót qua dòng hỏng và tên có dấu phẩy — và chuyển sang đó mà không chạm vào <code>Main</code>.</p>
+<p>Xong nghĩa là: PASS 260/260 — bộ chấm chạy chương trình, rồi chạy LẠI trong cùng thư mục và đòi đúng kệ sách cũ; <code>lint.py</code> im lặng; bốn dòng hỏng của tệp mẫu được báo kèm số dòng; "Mắt Biếc" in ra đủ dấu; và đúng một dòng của <code>BookController</code> đổi để chuyển kho.</p>`],
+      [3, 'The seam from Lab 5 pays off: one line',
+        `<p class="y-chinh">🎯 Since Lab 5 the controller holds a field of type <code>IBookRepository</code>, and only its constructor says which class sits behind it. Lab 9 writes a second class behind the same contract and changes that one <code>new</code>.</p>
+<p>Every other line of the controller, the service and the views calls the interface, so none of them changes; <code>Main</code> never knew a repository existed. That is what "program to an interface" buys — and why Spring Boot injects a <code>JpaRepository</code> the same way (Lab 9 is the hand-made version). The import line follows the <code>new</code> (NetBeans: Ctrl+Shift+I).</p>`,
+        `<p class="y-chinh">🎯 Từ Lab 5, controller giữ một trường kiểu <code>IBookRepository</code>, và chỉ constructor của nó nói lớp nào đứng sau. Lab 9 viết lớp thứ hai sau cùng hợp đồng và đổi đúng chữ <code>new</code> đó.</p>
+<p>Mọi dòng khác của controller, service và view đều gọi qua interface nên không dòng nào đổi; <code>Main</code> chưa bao giờ biết có repository. Đó là cái "lập trình theo interface" mua được — và là cách Spring Boot tiêm một <code>JpaRepository</code> (Lab 9 là bản làm tay). Dòng import đi theo chữ <code>new</code> (NetBeans: Ctrl+Shift+I).</p>`],
+      [4, 'FileBookRepository HAS an InMemoryBookRepository',
+        `<p class="y-chinh">🎯 The file repository keeps an in-memory repository inside and delegates every search, add, update and delete to it; its own code is only "load the file" and "save the file".</p>
+<p>Why not copy the CRUD? Two copies drift apart. Why not <code>extends InMemoryBookRepository</code>? Its methods promise to throw only <code>DuplicateKeyException</code> or <code>ItemNotFoundException</code>, and an override may not add <code>StorageException</code> — so the subclass could not report a failed save. Composition ("has-a") avoids both: the interface declares <code>StorageException</code> on the four writing methods, the memory version simply never throws it (allowed: an implementation may throw less).</p>`,
+        `<p class="y-chinh">🎯 Kho trên tệp giữ một kho bộ nhớ bên trong và uỷ quyền mọi việc tìm, thêm, sửa, xoá cho nó; mã của chính nó chỉ là "nạp tệp" và "ghi tệp".</p>
+<p>Sao không chép lại CRUD? Hai bản chép sẽ lệch nhau. Sao không <code>extends InMemoryBookRepository</code>? Các phương thức của nó hứa chỉ ném <code>DuplicateKeyException</code> hay <code>ItemNotFoundException</code>, và bản ghi đè không được thêm <code>StorageException</code> — lớp con sẽ không báo được lần lưu thất bại. Kết hợp ("có một") tránh được cả hai: interface khai <code>StorageException</code> ở bốn phương thức ghi, bản bộ nhớ đơn giản là không bao giờ ném (hợp lệ: bản cài được ném ít hơn).</p>`],
+      [5, 'The file: books.csv, one item per line',
+        `<p class="y-chinh">🎯 Line 1 is the header; each item is 5 common columns (type, id, title, year, copies) followed by its own: a book adds ISBN and author, a magazine its issue, a DVD its minutes.</p>
+<p>The columns of each type come from the object itself — <code>getExtraValueArray()</code>, abstract in <code>LibraryItem</code> — so the file code needs no <code>instanceof</code>. A title with a comma is written inside quotes. The real file after the grader's first run is shown below: the BOM of the sample is gone, the broken lines too (kept in <code>books.csv.bak</code>).</p>`,
+        `<p class="y-chinh">🎯 Dòng 1 là tiêu đề; mỗi tài liệu là 5 cột chung (loại, mã, tên, năm, số bản) rồi tới cột riêng: sách thêm ISBN và tác giả, tạp chí thêm kỳ số, DVD thêm số phút.</p>
+<p>Cột riêng của mỗi loại do chính đối tượng trả lời — <code>getExtraValueArray()</code>, trừu tượng ở <code>LibraryItem</code> — nên mã tệp không cần <code>instanceof</code>. Tên có dấu phẩy được ghi trong ngoặc kép. Tệp thật sau lần chạy đầu của bộ chấm in bên dưới: BOM của tệp mẫu đã mất, các dòng hỏng cũng vậy (giữ lại trong <code>books.csv.bak</code>).</p>`],
+      [6, 'TODO 9.1 — a CSV line is not split(",")',
+        `<p class="y-chinh">🎯 <code>split(",")</code> cuts "Refactoring, Second Edition" into two columns: 8 instead of 7. Read the line character by character with an "inside quotes" flag: a comma inside quotes is text, <code>""</code> inside quotes is one real quote.</p>
+<p>The real run of <code>LabTachCsv</code> shows both on the same line, and a title that contains quotes going out and back unchanged. A quote opened and never closed makes the line broken — <code>splitLine</code> throws, the loader reports it.</p>`,
+        `<p class="y-chinh">🎯 <code>split(",")</code> cắt "Refactoring, Second Edition" thành hai cột: 8 thay vì 7. Đọc dòng từng ký tự với một cờ "đang trong ngoặc kép": dấu phẩy trong ngoặc là chữ, <code>""</code> trong ngoặc là một dấu ngoặc kép thật.</p>
+<p>Lần chạy thật <code>LabTachCsv</code> cho thấy cả hai trên cùng một dòng, và một tên có chứa ngoặc kép đi ra rồi đọc về y nguyên. Ngoặc kép mở mà không đóng là dòng hỏng — <code>splitLine</code> ném lỗi, bộ nạp báo lại.</p>`],
+      [7, 'TODO 9.2 — load: name the encoding, count the lines',
+        `<p class="y-chinh">🎯 <code>new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))</code> in a try-with-resources; <code>readLine()</code> until <code>null</code>; strip the BOM from line 1, skip the header and blank lines, load the rest one by one.</p>
+<p>No file yet (first run) is not an error: the shelf starts empty and the first save creates the file. The real start of the grader's run: four lines skipped, each with the file, the line number and the reason, then "Kho co 7 tai lieu sau khi nap".</p>`,
+        `<p class="y-chinh">🎯 <code>new BufferedReader(new InputStreamReader(new FileInputStream(tep), StandardCharsets.UTF_8))</code> trong try-with-resources; <code>readLine()</code> tới khi <code>null</code>; bỏ BOM ở dòng 1, bỏ qua dòng tiêu đề và dòng trống, nạp phần còn lại từng dòng một.</p>
+<p>Chưa có tệp (lần chạy đầu) không phải lỗi: kho bắt đầu rỗng và lần lưu đầu tiên tạo tệp. Phần mở đầu thật của lần chạy chấm: bốn dòng bị bỏ qua, mỗi dòng kèm tên tệp, số dòng và lý do, rồi "Kho co 7 tai lieu sau khi nap".</p>`],
+      [8, 'One bad line never sinks the shelf',
+        `<p class="y-chinh">🎯 Each data line is loaded inside its own <code>try</code>: a broken line becomes one message and the loop goes on — the 7 good lines are all there.</p>
+<p>The reasons come from the same rules as the keyboard: <code>Validation.getYear</code> refuses "20O5" (a letter O), the column count catches the magazine with no issue, the type check catches type 4, and the repository refuses a second book with B002's ISBN. The "Moi nhap lai" at the end of the keyboard messages is cut off — a file cannot be asked again. The first save after a load with broken lines copies the original to <code>books.csv.bak</code>, because those lines will not be written back.</p>`,
+        `<p class="y-chinh">🎯 Mỗi dòng dữ liệu được nạp trong <code>try</code> của riêng nó: dòng hỏng thành một câu báo và vòng lặp đi tiếp — 7 dòng tốt vẫn đủ cả.</p>
+<p>Lý do lấy từ đúng các luật của bàn phím: <code>Validation.getYear</code> từ chối "20O5" (chữ O), số cột bắt tạp chí thiếu kỳ số, kiểm loại bắt loại 4, và kho từ chối cuốn thứ hai trùng ISBN với B002. Đuôi "Moi nhap lai" của câu báo bàn phím bị cắt — tệp thì không hỏi lại được. Lần lưu đầu sau khi nạp có dòng hỏng chép tệp gốc sang <code>books.csv.bak</code>, vì những dòng đó sẽ không được ghi lại.</p>`],
+      [9, "Trap: the machine's default encoding",
+        `<p class="y-chinh">🎯 On JDK 8, <code>new FileReader(file)</code> decodes with the machine's default charset — on a Windows machine typically Cp1252 — so the UTF-8 bytes of "Mắt Biếc" come back as "Máº¯t Biáº¿c" (real run of <code>LabBangMa</code>).</p>
+<p>8 characters are 12 bytes in UTF-8: <code>ắ</code> and <code>ế</code> take three each. The lab's own runs pass <code>-Dfile.encoding=UTF-8</code>, which hides the bug on the grader — on a classmate's Windows laptop it appears. Name the charset in both directions, every time (<code>FileReader(file, charset)</code> exists only from Java 11; Java 18 made UTF-8 the default).</p>`,
+        `<p class="y-chinh">🎯 Trên JDK 8, <code>new FileReader(tep)</code> giải mã bằng bảng mã mặc định của máy — máy Windows thường là Cp1252 — nên các byte UTF-8 của "Mắt Biếc" quay về thành "Máº¯t Biáº¿c" (lần chạy thật <code>LabBangMa</code>).</p>
+<p>8 ký tự là 12 byte UTF-8: <code>ắ</code> và <code>ế</code> mỗi chữ ba byte. Các lần chạy của lab tự truyền <code>-Dfile.encoding=UTF-8</code>, nên bộ chấm không thấy lỗi — lên máy Windows của bạn cùng lớp thì nó hiện ra. Gọi tên bảng mã ở cả hai chiều, mọi lúc (<code>FileReader(tep, charset)</code> chỉ có từ Java 11; Java 18 mới lấy UTF-8 làm mặc định).</p>`],
+      [10, 'Trap: the BOM nobody sees',
+        `<p class="y-chinh">🎯 Excel's "CSV UTF-8" and Notepad put three bytes EF BB BF at the start of the file; Java reads them as one invisible character, <code>﻿</code>. Forget to remove it and the header no longer equals the header (project <code>bay/quen-bom</code>).</p>
+<p>The real output reports "dong 1: loai 'loai' khong hop le" — the two words look identical on screen and are not: <code>"﻿loai".equals("loai")</code> is <code>false</code>, length 5 (real run of <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> on line 1 is the whole cure.</p>`,
+        `<p class="y-chinh">🎯 "CSV UTF-8" của Excel và Notepad đặt ba byte EF BB BF ở đầu tệp; Java đọc chúng thành một ký tự vô hình, <code>﻿</code>. Quên bỏ nó thì dòng tiêu đề không còn bằng dòng tiêu đề (dự án <code>bay/quen-bom</code>).</p>
+<p>Output thật báo "dong 1: loai 'loai' khong hop le" — hai chữ trông giống hệt trên màn hình mà không bằng nhau: <code>"﻿loai".equals("loai")</code> là <code>false</code>, độ dài 5 (lần chạy thật <code>LabBangMa</code>). <code>line.replace(Constants.BOM, "")</code> ở dòng 1 là toàn bộ thuốc chữa.</p>`],
+      [11, 'TODO 9.3 — quote what needs quoting',
+        `<p class="y-chinh">🎯 A value with a comma or a quote is written as <code>"…"</code>, with every inner quote doubled; any other value is written as it is.</p>
+<p>Skip it (project <code>bay/khong-quote</code>) and nothing goes wrong — until the program is opened again: lines 4 and 7 of the saved file now have 8 columns, both books with a comma in the title are skipped, the shelf has 4 items instead of 6, and the search for "code" finds nothing. The bug is written in the first run and only seen in the second — that is why the grader reopens.</p>`,
+        `<p class="y-chinh">🎯 Giá trị có dấu phẩy hoặc ngoặc kép được ghi thành <code>"…"</code>, mọi ngoặc kép bên trong nhân đôi; giá trị khác ghi nguyên.</p>
+<p>Bỏ qua bước này (dự án <code>bay/khong-quote</code>) thì chẳng có gì hỏng — cho tới khi mở lại chương trình: dòng 4 và 7 của tệp đã lưu giờ có 8 cột, cả hai cuốn có dấu phẩy trong tên bị bỏ qua, kho còn 4 thay vì 6, và tìm "code" không ra gì. Con bọ được ghi ở lần chạy đầu và chỉ lộ ở lần thứ hai — vì thế bộ chấm phải mở lại.</p>`],
+      [12, 'TODO 9.4 — save through a temporary file',
+        `<p class="y-chinh">🎯 Write the whole shelf to <code>books.csv.tmp</code> inside a try-with-resources; only after it is complete and closed, <code>Files.move(tmp, real, REPLACE_EXISTING)</code>.</p>
+<p>If the program dies half-way, the real file is still the old, complete one; only the .tmp is broken. The real run of <code>LabTepTam</code> "cuts the power" after 1 of 3 rows: writing in place leaves a 1-line file, writing through a temp file leaves the 3 lines untouched. Saving after every change costs one full write — fine for 300 members, and the reason a database (Lab "PostgreSQL" later) writes only the row that changed.</p>`,
+        `<p class="y-chinh">🎯 Ghi cả kệ ra <code>books.csv.tmp</code> trong try-with-resources; chỉ khi tệp đã đủ và đã đóng mới <code>Files.move(tam, that, REPLACE_EXISTING)</code>.</p>
+<p>Chương trình chết giữa chừng thì tệp thật vẫn là bản cũ nguyên vẹn; chỉ tệp .tmp hỏng. Lần chạy thật <code>LabTepTam</code> "cắt điện" sau 1 trên 3 dòng: ghi thẳng để lại tệp 1 dòng, ghi qua tệp tạm để 3 dòng nguyên. Lưu sau mỗi thay đổi tốn một lần ghi cả tệp — ổn với 300 thành viên, và là lý do cơ sở dữ liệu (khoá PostgreSQL sau này) chỉ ghi đúng dòng thay đổi.</p>`],
+      [13, 'Trap: forget close() — a file of 0 bytes',
+        `<p class="y-chinh">🎯 Without try-with-resources (and without <code>close()</code>), the text stays in the writer's buffer: the .tmp has 0 bytes, it replaces the real file, and the next start finds an empty shelf (project <code>bay/quen-close</code>).</p>
+<p>The real files after the run: <code>books.csv (0 byte)</code>. On reopening, the program sees an empty repository and quietly loads the Lab 8 sample items — the grader catches it on line 187 ("Effective Java" where "Clean Code, A Handbook" should be). <code>close()</code> is what pushes the buffer to the disk; try-with-resources calls it for you, even when an exception flies.</p>`,
+        `<p class="y-chinh">🎯 Không try-with-resources (và không <code>close()</code>), chữ nằm lại trong bộ đệm của writer: tệp .tmp có 0 byte, nó thay tệp thật, và lần mở sau thấy kệ rỗng (dự án <code>bay/quen-close</code>).</p>
+<p>Các tệp thật sau lần chạy: <code>books.csv (0 byte)</code>. Lúc mở lại, chương trình thấy kho rỗng và lặng lẽ nạp tài liệu mẫu của Lab 8 — bộ chấm bắt được ở dòng 187 ("Effective Java" đứng chỗ của "Clean Code, A Handbook"). <code>close()</code> là thứ đẩy bộ đệm xuống đĩa; try-with-resources gọi nó hộ bạn, kể cả khi có ngoại lệ bay ra.</p>`],
+      [14, 'PrintWriter never throws — ask it',
+        `<p class="y-chinh">🎯 <code>PrintWriter</code> swallows every <code>IOException</code> and only raises a flag: the real run of <code>LabPrintWriterImLang</code> prints twice into a closed stream — no exception, <code>checkError()</code> true, file 0 bytes.</p>
+<p>So <code>saveToFile</code> asks <code>writer.checkError()</code> before the move and turns a failure into an <code>IOException</code>, then wraps every <code>IOException</code> into a <code>StorageException</code> that keeps it as the cause. The controller catches it with the rest of <code>LibraryException</code>: the user reads "Khong ghi duoc tep data/books.csv …", the menu goes on, the change is still in memory.</p>`,
+        `<p class="y-chinh">🎯 <code>PrintWriter</code> nuốt mọi <code>IOException</code> và chỉ bật một cờ: lần chạy thật <code>LabPrintWriterImLang</code> in hai lần vào một luồng đã đóng — không ngoại lệ nào, <code>checkError()</code> là true, tệp 0 byte.</p>
+<p>Vì thế <code>saveToFile</code> hỏi <code>writer.checkError()</code> trước khi move và biến thất bại thành <code>IOException</code>, rồi bọc mọi <code>IOException</code> vào một <code>StorageException</code> giữ nó làm nguyên nhân. Controller bắt nó cùng phần còn lại của <code>LibraryException</code>: người dùng đọc "Khong ghi duoc tep data/books.csv …", menu chạy tiếp, thay đổi vẫn còn trong bộ nhớ.</p>`],
+      [15, 'TODO 9.5 — the one line, then save and reopen',
+        `<p class="y-chinh">🎯 <code>bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);</code> — and the grader's second run, in the same folder, prints the same six items, finds "Clean Code, A Handbook" and keeps Joshua Bloch at 2 titles.</p>
+<p>Not saved yet, on purpose: members and loans are still in memory, so after a restart B-items that were on loan show their lowered copies but nobody holds them. The harness avoids borrowing for that reason; saving <code>members.csv</code> and <code>loans.csv</code> with the same pattern is the first challenge below — and the final project of the course.</p>`,
+        `<p class="y-chinh">🎯 <code>bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);</code> — và lần chạy thứ hai của bộ chấm, cùng thư mục, in đúng sáu tài liệu, tìm thấy "Clean Code, A Handbook" và giữ Joshua Bloch ở 2 đầu sách.</p>
+<p>Chưa lưu, có chủ ý: thành viên và lượt mượn vẫn ở bộ nhớ, nên sau khi khởi động lại, cuốn đang được mượn còn số bản đã trừ mà không ai giữ. Bộ chấm tránh việc mượn vì lý do đó; lưu <code>members.csv</code> và <code>loans.csv</code> theo cùng khuôn là thử thách đầu tiên bên dưới — và là dự án cuối khoá.</p>`],
+      [16, 'Green: PASS 260/260 and a silent reviewer',
+        `<p class="y-chinh">🎯 Green = the grader at 260/260 across the two runs and <code>lint.py</code> silent.</p>
+<p>A good order: 9.1 (test it on the B003 line), 9.3 (it is the mirror of 9.1), 9.2, 9.4, and 9.5 last — switching before the load and save work only moves the red to other lines. Then delete <code>data/books.csv</code> and run once by hand: "Chua co tep …", the samples, and a new file appears.</p>`,
+        `<p class="y-chinh">🎯 Xanh = bộ chấm 260/260 qua cả hai lần chạy và <code>lint.py</code> im lặng.</p>
+<p>Thứ tự nên làm: 9.1 (thử ngay trên dòng B003), 9.3 (nó là ảnh gương của 9.1), 9.2, 9.4, và 9.5 cuối cùng — đổi dòng trước khi nạp và lưu chạy được thì chỉ dời màu đỏ sang dòng khác. Rồi xoá <code>data/books.csv</code> và tự chạy một lần: "Chua co tep …", tài liệu mẫu, và một tệp mới xuất hiện.</p>`],
+      [17, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 The oral question: "what did you change to move from memory to a file — and why was it so little?".</p>
+<p>Answer in two sentences: one line in the controller's constructor, because every other class talks to the <code>IBookRepository</code> interface, never to the class behind it; the new class keeps the same contract, so nothing above it can tell the difference.</p>`,
+        `<p class="y-chinh">🎯 Câu vấn đáp: "em đã đổi gì để chuyển từ bộ nhớ sang tệp — và vì sao ít vậy?".</p>
+<p>Trả lời bằng hai câu: một dòng trong constructor của controller, vì mọi lớp khác chỉ nói chuyện với interface <code>IBookRepository</code>, không bao giờ với lớp đứng sau; lớp mới giữ đúng hợp đồng đó nên không ai ở phía trên phân biệt được.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-9 · CT Library · priority: high.</strong> "We typed in forty books on Saturday, closed the laptop, and on Monday the shelf was empty. Keep the items in a file the club can also open in Excel. Our old list was exported from Excel, so expect a few broken lines in it — do not lose the good ones because of them. Some titles have commas, some have Vietnamese accents. And please do not rewrite the program: you told us in Lab 5 that this would be a small change." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>streams, characters vs bytes, UTF-8 takes 1–4 bytes</td><td>9.A (pro14 slides 1–11)</td></tr>
+<tr><td>reading and writing text files, BufferedReader / PrintWriter, case studies</td><td>9.B (pro14 slides 12–34)</td></tr>
+<tr><td>try-with-resources, IOException, end of file = readLine() returns null</td><td>9.B, 9.2 🧪 (Bài 2 students.csv)</td></tr>
+<tr><td>the interface seam IBookRepository</td><td>Lab 5</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-9 · CT Library · ưu tiên: cao.</strong> "Thứ bảy cả nhóm gõ vào bốn mươi cuốn sách, gập máy, thứ hai mở ra kệ trống trơn. Giữ tài liệu trong một tệp mà câu lạc bộ mở được bằng Excel. Danh sách cũ của chúng tôi xuất từ Excel, nên chắc chắn có vài dòng hỏng — đừng vì chúng mà mất các dòng tốt. Có tên sách có dấu phẩy, có tên có dấu tiếng Việt. Và làm ơn đừng viết lại chương trình: ở Lab 5 các bạn đã nói đây sẽ là một thay đổi nhỏ." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>luồng, ký tự và byte, UTF-8 mất 1–4 byte</td><td>9.A (pro14 slide 1–11)</td></tr>
+<tr><td>đọc ghi tệp văn bản, BufferedReader / PrintWriter, case study</td><td>9.B (pro14 slide 12–34)</td></tr>
+<tr><td>try-with-resources, IOException, hết tệp = readLine() trả null</td><td>9.B, 9.2 🧪 (Bài 2 students.csv)</td></tr>
+<tr><td>đường nối interface IBookRepository</td><td>Lab 5</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Same contract</strong>: <code>FileBookRepository implements IBookRepository</code>; CRUD delegated to an <code>InMemoryBookRepository</code> it holds; no CRUD code copied.</li>
+<li><strong>CSV in UTF-8</strong>: <code>data/books.csv</code>, header line, 5 common columns + the type's own columns; the encoding named on read AND write; a BOM on line 1 removed.</li>
+<li><strong>Quotes</strong>: a value with a comma or a quote is written quoted (inner quotes doubled) and read back as one value.</li>
+<li><strong>Broken lines</strong>: skipped, each reported as "file, line number, reason"; the good lines all loaded; the original kept as <code>.bak</code> before the first save.</li>
+<li><strong>Safe save</strong>: after every change; through a <code>.tmp</code> file, then <code>Files.move</code>; a failure becomes a <code>StorageException</code>, the menu goes on.</li>
+<li><strong>One line</strong>: the controller's <code>new</code> switches the storage; <code>Main</code> unchanged.</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 260/260 dong khop expected.txt</code> (two runs: save, then reopen) · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · <code>git diff</code> of <code>BookController</code> against the starter shows the one <code>new</code> (and its import) · you can explain why the save goes through a temporary file.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Cùng hợp đồng</strong>: <code>FileBookRepository implements IBookRepository</code>; CRUD uỷ quyền cho một <code>InMemoryBookRepository</code> nó giữ; không chép mã CRUD nào.</li>
+<li><strong>CSV UTF-8</strong>: <code>data/books.csv</code>, dòng tiêu đề, 5 cột chung + cột riêng của loại; gọi tên bảng mã khi đọc LẪN khi ghi; bỏ BOM ở dòng 1.</li>
+<li><strong>Ngoặc kép</strong>: giá trị có dấu phẩy hoặc ngoặc kép được ghi trong ngoặc kép (ngoặc kép bên trong nhân đôi) và đọc về thành một giá trị.</li>
+<li><strong>Dòng hỏng</strong>: bỏ qua, mỗi dòng báo "tệp, số dòng, lý do"; mọi dòng tốt đều nạp đủ; tệp gốc giữ thành <code>.bak</code> trước lần lưu đầu.</li>
+<li><strong>Lưu an toàn</strong>: sau mỗi thay đổi; qua tệp <code>.tmp</code> rồi <code>Files.move</code>; thất bại thành <code>StorageException</code>, menu chạy tiếp.</li>
+<li><strong>Một dòng</strong>: chữ <code>new</code> của controller chuyển nơi lưu; <code>Main</code> không đổi.</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 260/260 dong khop expected.txt</code> (hai lần chạy: lưu rồi mở lại) · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · <code>git diff</code> của <code>BookController</code> so với starter chỉ là chữ <code>new</code> đó (và dòng import của nó) · bạn giải thích được vì sao lưu phải qua tệp tạm.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab9-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab9-starter.zip</span><span class="lc-sub">Lab 8 solution + StorageException, extended IBookRepository, FileBookRepository skeleton, data/books.csv · TODO 9.1–9.5 · harness (2 runs, 260 lines)</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab9-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab9-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab9/
+  data/books.csv                         sample shelf: BOM, a quoted title, "Mắt Biếc", 4 broken lines
+  harness/input.txt, harness/input-2.txt run 1 (change things), run 2 (reopen and look)
+  harness/data/books.csv                 copied over data/ before every grading run
+  src/ (new or changed since Lab 8)
+    repository/FileBookRepository.java   TODO 9.2 loadFromFile · TODO 9.4 saveToFile (rest given)
+    utils/CsvUtils.java                  TODO 9.1 splitLine · TODO 9.3 toCsvValue
+    controller/BookController.java       TODO 9.5 the one line · load messages, catch LibraryException (given)
+    repository/IBookRepository.java      StorageException on 4 writes + findLoadErrorList (given)
+    repository/InMemoryBookRepository    addLoadedItem, findAllItems (given) · exceptions/StorageException (given)
+    model/LibraryItem + 3 subclasses     getExtraValueArray (given) · constants: file, CSV, messages (given)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab9-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab9-starter.zip</span><span class="lc-sub">đáp án Lab 8 + StorageException, IBookRepository mở rộng, khung FileBookRepository, data/books.csv · TODO 9.1–9.5 · harness (2 lần chạy, 260 dòng)</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab9-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab9-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab9/
+  data/books.csv                         kệ mẫu: BOM, một tên trong ngoặc kép, "Mắt Biếc", 4 dòng hỏng
+  harness/input.txt, harness/input-2.txt lần chạy 1 (thay đổi), lần 2 (mở lại và xem)
+  harness/data/books.csv                 chép đè lên data/ trước mỗi lần chấm
+  src/ (mới hoặc đổi so với Lab 8)
+    repository/FileBookRepository.java   TODO 9.2 loadFromFile · TODO 9.4 saveToFile (phần còn lại cho sẵn)
+    utils/CsvUtils.java                  TODO 9.1 splitLine · TODO 9.3 toCsvValue
+    controller/BookController.java       TODO 9.5 một dòng · in câu báo nạp, catch LibraryException (cho sẵn)
+    repository/IBookRepository.java      StorageException ở 4 phương thức ghi + findLoadErrorList (cho sẵn)
+    repository/InMemoryBookRepository    addLoadedItem, findAllItems (cho sẵn) · exceptions/StorageException (cho sẵn)
+    model/LibraryItem + 3 lớp con        getExtraValueArray (cho sẵn) · constants: tệp, CSV, câu báo (cho sẵn)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — lint the starter, run it twice (10 min)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab9</code></pre>
+<div class="out">✓ CTLibrary-Lab9 — sạch</div>
+<p>Clean for the reviewer's tool, useless for the club: the starter still uses the memory repository, so the first run starts from the Lab 8 samples, "Clean Code, A Handbook" is added — and the second run (the reopen) shows the samples again.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Step 1 — TODO 9.1 read a CSV line (30 min)</h4>
+<details><summary>Hint</summary><p>A <code>while</code> over the characters, an index you advance yourself (you must skip the second quote of <code>""</code>), a <code>StringBuilder</code> for the current value and a <code>boolean isInQuotes</code>. Five cases: inside quotes and <code>""</code> · inside quotes and <code>"</code> · inside quotes, anything else · outside and <code>"</code> · outside and <code>,</code>. Do not forget the last value after the loop.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Tach 1 dong CSV thanh cac gia tri; dau phay NAM TRONG ngoac kep la chu, khong phai dau
+// ngan. Ngoac kep mo ma khong dong thi dong hong: nem InvalidInputException
+public static ArrayList&lt;String&gt; splitLine(String line) throws InvalidInputException {
+    // Cac gia tri da tach, gia tri dang gom, dang o trong ngoac kep hay khong, vi tri doc
+    ArrayList&lt;String&gt; valueList = new ArrayList&lt;&gt;();
+    StringBuilder valueBuilder = new StringBuilder();
+    boolean isInQuotes = false;
+    int index = 0;
+
+    // Doc tung ky tu tu trai sang phai
+    while (index &lt; line.length()) {
+        // Ky tu dang doc
+        char character = line.charAt(index);
+
+        // Trong ngoac kep: "" la 1 dau ngoac kep that, " don le la dong ngoac
+        if (isInQuotes) {
+            // Gap dau ngoac kep: xem ky tu ke tiep
+            if (character == Constants.CSV_QUOTE_CHAR) {
+                // Ngoac kep doi: giu 1 dau, nhay qua dau thu hai
+                if ((index + 1 &lt; line.length())
+                        &amp;&amp; (line.charAt(index + 1) == Constants.CSV_QUOTE_CHAR)) {
+                    valueBuilder.append(character);
+                    index++;
+                } else {
+                    // Ngoac kep don: het phan trong ngoac
+                    isInQuotes = false;
+                }
+            } else {
+                // Moi ky tu khac trong ngoac (ke ca dau phay) la chu cua gia tri
+                valueBuilder.append(character);
+            }
+        } else if (character == Constants.CSV_QUOTE_CHAR) {
+            // Ngoai ngoac kep gap dau ngoac kep: mo phan trong ngoac
+            isInQuotes = true;
+        } else if (character == Constants.CSV_SEPARATOR_CHAR) {
+            // Dau phay ngoai ngoac: het 1 gia tri, bat dau gia tri moi
+            valueList.add(valueBuilder.toString());
+            valueBuilder.setLength(0);
+        } else {
+            // Ky tu thuong
+            valueBuilder.append(character);
+        }
+        index++;
+    }
+
+    // Het dong ma ngoac kep chua dong: dong hong
+    if (isInQuotes) {
+        throw new InvalidInputException(Message.ERROR_CSV_QUOTE);
+    }
+
+    // Gia tri cuoi cung (sau dau phay cuoi)
+    valueList.add(valueBuilder.toString());
+    return valueList;
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 9 — split(",") vs a CSV reader that understands quotes
+import java.util.ArrayList;
+
+public class LabTachCsv {
+    public static void main(String[] args) {
+        String line = "1,B003,\\"Refactoring, Second Edition\\",2018,1,9780134757599,Martin Fowler";
+        System.out.println("line      : " + line);
+        String[] naive = line.split(",");
+        System.out.println("split(\\",\\"): " + naive.length + " columns: " + String.join(" | ", naive));
+        ArrayList&lt;String&gt; good = splitLine(line);
+        System.out.println("splitLine : " + good.size() + " columns: " + String.join(" | ", good));
+
+        // writing: double the quotes inside, then wrap
+        String title = "Say \\"Hi\\", Java";
+        String cell = toCsvValue(title);
+        System.out.println("toCsvValue(" + title + ") = " + cell);
+        System.out.println("read back : " + String.join(" | ", splitLine("1," + cell + ",2020")));
+    }
+
+    static ArrayList&lt;String&gt; splitLine(String line) {
+        ArrayList&lt;String&gt; values = new ArrayList&lt;&gt;();
+        StringBuilder value = new StringBuilder();
+        boolean inQuotes = false;
+        int i = 0;
+        while (i &lt; line.length()) {
+            char ch = line.charAt(i);
+            if (inQuotes) {
+                if (ch == '"' &amp;&amp; i + 1 &lt; line.length() &amp;&amp; line.charAt(i + 1) == '"') {
+                    value.append('"');
+                    i++;
+                } else if (ch == '"') {
+                    inQuotes = false;
+                } else {
+                    value.append(ch);
+                }
+            } else if (ch == '"') {
+                inQuotes = true;
+            } else if (ch == ',') {
+                values.add(value.toString());
+                value.setLength(0);
+            } else {
+                value.append(ch);
+            }
+            i++;
+        }
+        values.add(value.toString());
+        return values;
+    }
+
+    static String toCsvValue(String value) {
+        if (!value.contains(",") &amp;&amp; !value.contains("\\"")) {
+            return value;
+        }
+        return "\\"" + value.replace("\\"", "\\"\\"") + "\\"";
+    }
+}</code></pre>
+<div class="out">line &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+split(","): 8 columns: 1 | B003 | "Refactoring | &nbsp;Second Edition" | 2018 | 1 | 9780134757599 | Martin Fowler<br>
+splitLine : 7 columns: 1 | B003 | Refactoring, Second Edition | 2018 | 1 | 9780134757599 | Martin Fowler<br>
+toCsvValue(Say "Hi", Java) = "Say ""Hi"", Java"<br>
+read back : 1 | Say "Hi", Java | 2020</div>
+
+<h4>Step 2 — TODO 9.3 quote on the way out (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Doi 1 gia tri thanh dang ghi duoc vao CSV: co dau phay hoac ngoac kep thi nhan doi moi
+// ngoac kep roi boc ca gia tri trong ngoac kep; khong co thi giu nguyen
+public static String toCsvValue(String value) {
+    // Gia tri thuong (khong dau phay, khong ngoac kep) ghi nguyen
+    if ((!value.contains(Constants.CSV_SEPARATOR)) &amp;&amp; (!value.contains(Constants.CSV_QUOTE))) {
+        return value;
+    }
+
+    // Nhan doi ngoac kep ben trong, roi boc ca gia tri
+    return Constants.CSV_QUOTE + value.replace(Constants.CSV_QUOTE,
+            Constants.CSV_QUOTE + Constants.CSV_QUOTE) + Constants.CSV_QUOTE;
+}</code></pre>
+</details>
+
+<h4>Step 3 — TODO 9.2 load the file (35 min)</h4>
+<details><summary>Hint</summary><p>Build the reader from the inside out: <code>FileInputStream</code> (bytes) → <code>InputStreamReader</code> with <code>StandardCharsets.UTF_8</code> (bytes to characters) → <code>BufferedReader</code> (whole lines). Keep your own line counter. The <code>try</code> around <code>loadLine</code> sits INSIDE the loop; the <code>catch (IOException e)</code> of the reader sits outside.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// NAP tep: dong 1 (bo BOM) phai la tieu de; moi dong sau la 1 tai lieu. Dong hong bi BO
+// QUA va ghi lai "dong N: ly do" — mot dong hong khong bao gio lam hong ca kho
+private void loadFromFile() {
+    // Tep can doc; so dong dang doc (de bao loi); dong vua doc
+    File dataFile = new File(filePath);
+    int lineNumber = 0;
+    String line = "";
+
+    // Lan chay dau tien: chua co tep — kho rong, lan ghi dau tien se tao tep
+    if (!dataFile.exists()) {
+        loadErrorList.add(String.format(Message.FILE_NOT_FOUND, filePath));
+        return;
+    }
+
+    // try-with-resources: tu dong close() ke ca khi loi. Bang ma GHI RO UTF-8 — FileReader
+    // cua Java 8 dung bang ma mac dinh cua may (Windows: Cp1252, hong chu tieng Viet)
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+            new FileInputStream(dataFile), StandardCharsets.UTF_8))) {
+        // readLine() tra null khi het tep
+        while ((line = reader.readLine()) != null) {
+            lineNumber++;
+
+            // Dong 1: bo dau BOM (Excel, Notepad hay them) roi bo qua dong tieu de
+            if (lineNumber == Constants.CSV_HEADER_LINE) {
+                line = line.replace(Constants.BOM, "");
+
+                // Dung tieu de thi sang dong sau (khong phai tieu de: nap nhu dong du lieu)
+                if (line.equals(Constants.CSV_HEADER)) {
+                    continue;
+                }
+            }
+
+            // Dong trong: bo qua, khong bao
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+
+            // Nap 1 dong; hong thi ghi ly do kem so dong roi doc tiep dong sau
+            try {
+                loadLine(line);
+            } catch (InvalidInputException | LibraryException e) {
+                // Cau bao cua Validation viet cho nguoi go phim: bo duoi "Moi nhap lai."
+                loadErrorList.add(String.format(Message.ERROR_CSV_LINE, filePath, lineNumber,
+                        e.getMessage().replace(Message.RETRY_HINT, "")));
+                isBackupNeeded = true;
+            }
+        }
+    } catch (IOException e) {
+        // Tep co ma khong doc duoc (bi khoa, khong co quyen...): bao 1 cau, kho dung du lieu
+        // da nap duoc toi luc do
+        loadErrorList.add(String.format(Message.ERROR_FILE_READ, filePath, e.getMessage()));
+    }
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 10: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong.<br>
+Bo qua data/books.csv dong 11: can 6 cot, co 5 (ten co dau phay phai nam trong ngoac kep).<br>
+Bo qua data/books.csv dong 12: loai '4' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+Bo qua data/books.csv dong 13: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+Kho co 7 tai lieu sau khi nap.<br>
+…</div>
+
+<h4>Step 4 — TODO 9.4 save through a temp file (35 min)</h4>
+<details><summary>Hint</summary><p>Three files: the real one, the <code>.tmp</code> next to it, the <code>.bak</code>. The writer lives only inside its try-with-resources; the <code>Files.move</code> comes after that block, when the .tmp is closed. One <code>catch (IOException e)</code> around everything turns into <code>StorageException</code>.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// GHI tep: viet ca kho ra TEP TAM, dong tep tam, roi moi doi ten de len tep that. Sap giua
+// chung thi tep that van la ban cu nguyen ven, khong bao gio con mot nua
+private void saveToFile() throws StorageException {
+    // Tep that, tep tam canh no, tep sao luu
+    File dataFile = new File(filePath);
+    File tempFile = new File(filePath + Constants.TEMP_SUFFIX);
+    File backupFile = new File(filePath + Constants.BACKUP_SUFFIX);
+
+    try {
+        // Lan ghi dau sau khi nap co dong hong: giu tep goc (dong hong se khong duoc ghi lai)
+        if (isBackupNeeded &amp;&amp; dataFile.exists()) {
+            Files.copy(dataFile.toPath(), backupFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            isBackupNeeded = false;
+        }
+
+        // Thu muc chua tep chua co thi tao (lan chay dau tien)
+        if (dataFile.getAbsoluteFile().getParentFile() != null) {
+            dataFile.getAbsoluteFile().getParentFile().mkdirs();
+        }
+
+        // try-with-resources: close() day bo dem xuong dia; bang ma GHI RO UTF-8
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                new FileOutputStream(tempFile), StandardCharsets.UTF_8))) {
+            writer.println(Constants.CSV_HEADER);
+
+            // Moi tai lieu 1 dong
+            for (LibraryItem item : memoryRepository.findAllItems()) {
+                writer.println(toCsvLine(item));
+            }
+
+            // PrintWriter KHONG nem IOException — no chi bat co loi, phai tu hoi
+            if (writer.checkError()) {
+                throw new IOException(Message.ERROR_WRITER);
+            }
+        }
+
+        // Tep tam da du va da dong: thay tep that (ghi de neu da co)
+        Files.move(tempFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException e) {
+        // Boc IOException thanh loi cua kho, giu nguyen nhan goc
+        throw new StorageException(String.format(Message.ERROR_FILE_WRITE, filePath,
+                e.getMessage()), e);
+    }
+}</code></pre>
+</details>
+
+<h4>Step 5 — TODO 9.5 the one line, then grade (10 min)</h4>
+<pre class="trich"><code class="language-java">// Dong DUY NHAT biet kho cat o dau: Lab 9 doi dung dong nay tu bo nho sang tep CSV
+bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);</code></pre>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 260/260 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab9-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab9-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — lint starter, chạy hai lần (10 phút)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab9</code></pre>
+<div class="out">✓ CTLibrary-Lab9 — sạch</div>
+<p>Sạch với công cụ của thầy, vô dụng với câu lạc bộ: starter vẫn dùng kho bộ nhớ, nên lần chạy đầu bắt đầu từ tài liệu mẫu của Lab 8, thêm được "Clean Code, A Handbook" — và lần chạy thứ hai (mở lại) lại thấy đúng tài liệu mẫu cũ.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Head First Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathy Sierra, ISBN 9780596009205<br>
+3 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2006 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Concurrency In Practice &nbsp;Brian Goetz, ISBN 9780321349606<br>
+4 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+5 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+6 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+…</div>
+
+<h4>Bước 1 — TODO 9.1 đọc một dòng CSV (30 phút)</h4>
+<details><summary>Gợi ý</summary><p>Một vòng <code>while</code> qua các ký tự, chỉ số tự tăng (vì phải nhảy qua dấu ngoặc kép thứ hai của <code>""</code>), một <code>StringBuilder</code> cho giá trị đang gom và một <code>boolean isInQuotes</code>. Năm trường hợp: trong ngoặc gặp <code>""</code> · trong ngoặc gặp <code>"</code> · trong ngoặc, ký tự khác · ngoài ngoặc gặp <code>"</code> · ngoài ngoặc gặp <code>,</code>. Đừng quên giá trị cuối cùng sau vòng lặp.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Tach 1 dong CSV thanh cac gia tri; dau phay NAM TRONG ngoac kep la chu, khong phai dau
+// ngan. Ngoac kep mo ma khong dong thi dong hong: nem InvalidInputException
+public static ArrayList&lt;String&gt; splitLine(String line) throws InvalidInputException {
+    // Cac gia tri da tach, gia tri dang gom, dang o trong ngoac kep hay khong, vi tri doc
+    ArrayList&lt;String&gt; valueList = new ArrayList&lt;&gt;();
+    StringBuilder valueBuilder = new StringBuilder();
+    boolean isInQuotes = false;
+    int index = 0;
+
+    // Doc tung ky tu tu trai sang phai
+    while (index &lt; line.length()) {
+        // Ky tu dang doc
+        char character = line.charAt(index);
+
+        // Trong ngoac kep: "" la 1 dau ngoac kep that, " don le la dong ngoac
+        if (isInQuotes) {
+            // Gap dau ngoac kep: xem ky tu ke tiep
+            if (character == Constants.CSV_QUOTE_CHAR) {
+                // Ngoac kep doi: giu 1 dau, nhay qua dau thu hai
+                if ((index + 1 &lt; line.length())
+                        &amp;&amp; (line.charAt(index + 1) == Constants.CSV_QUOTE_CHAR)) {
+                    valueBuilder.append(character);
+                    index++;
+                } else {
+                    // Ngoac kep don: het phan trong ngoac
+                    isInQuotes = false;
+                }
+            } else {
+                // Moi ky tu khac trong ngoac (ke ca dau phay) la chu cua gia tri
+                valueBuilder.append(character);
+            }
+        } else if (character == Constants.CSV_QUOTE_CHAR) {
+            // Ngoai ngoac kep gap dau ngoac kep: mo phan trong ngoac
+            isInQuotes = true;
+        } else if (character == Constants.CSV_SEPARATOR_CHAR) {
+            // Dau phay ngoai ngoac: het 1 gia tri, bat dau gia tri moi
+            valueList.add(valueBuilder.toString());
+            valueBuilder.setLength(0);
+        } else {
+            // Ky tu thuong
+            valueBuilder.append(character);
+        }
+        index++;
+    }
+
+    // Het dong ma ngoac kep chua dong: dong hong
+    if (isInQuotes) {
+        throw new InvalidInputException(Message.ERROR_CSV_QUOTE);
+    }
+
+    // Gia tri cuoi cung (sau dau phay cuoi)
+    valueList.add(valueBuilder.toString());
+    return valueList;
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 9 — split(",") so với bộ đọc CSV hiểu ngoặc kép
+import java.util.ArrayList;
+
+public class LabTachCsv {
+    public static void main(String[] args) {
+        String line = "1,B003,\\"Refactoring, Second Edition\\",2018,1,9780134757599,Martin Fowler";
+        System.out.println("line      : " + line);
+        String[] naive = line.split(",");
+        System.out.println("split(\\",\\"): " + naive.length + " columns: " + String.join(" | ", naive));
+        ArrayList&lt;String&gt; good = splitLine(line);
+        System.out.println("splitLine : " + good.size() + " columns: " + String.join(" | ", good));
+
+        // khi ghi: nhân đôi ngoặc kép bên trong rồi bọc
+        String title = "Say \\"Hi\\", Java";
+        String cell = toCsvValue(title);
+        System.out.println("toCsvValue(" + title + ") = " + cell);
+        System.out.println("read back : " + String.join(" | ", splitLine("1," + cell + ",2020")));
+    }
+
+    static ArrayList&lt;String&gt; splitLine(String line) {
+        ArrayList&lt;String&gt; values = new ArrayList&lt;&gt;();
+        StringBuilder value = new StringBuilder();
+        boolean inQuotes = false;
+        int i = 0;
+        while (i &lt; line.length()) {
+            char ch = line.charAt(i);
+            if (inQuotes) {
+                if (ch == '"' &amp;&amp; i + 1 &lt; line.length() &amp;&amp; line.charAt(i + 1) == '"') {
+                    value.append('"');
+                    i++;
+                } else if (ch == '"') {
+                    inQuotes = false;
+                } else {
+                    value.append(ch);
+                }
+            } else if (ch == '"') {
+                inQuotes = true;
+            } else if (ch == ',') {
+                values.add(value.toString());
+                value.setLength(0);
+            } else {
+                value.append(ch);
+            }
+            i++;
+        }
+        values.add(value.toString());
+        return values;
+    }
+
+    static String toCsvValue(String value) {
+        if (!value.contains(",") &amp;&amp; !value.contains("\\"")) {
+            return value;
+        }
+        return "\\"" + value.replace("\\"", "\\"\\"") + "\\"";
+    }
+}</code></pre>
+<div class="out">line &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+split(","): 8 columns: 1 | B003 | "Refactoring | &nbsp;Second Edition" | 2018 | 1 | 9780134757599 | Martin Fowler<br>
+splitLine : 7 columns: 1 | B003 | Refactoring, Second Edition | 2018 | 1 | 9780134757599 | Martin Fowler<br>
+toCsvValue(Say "Hi", Java) = "Say ""Hi"", Java"<br>
+read back : 1 | Say "Hi", Java | 2020</div>
+
+<h4>Bước 2 — TODO 9.3 bọc ngoặc kép khi ghi (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Doi 1 gia tri thanh dang ghi duoc vao CSV: co dau phay hoac ngoac kep thi nhan doi moi
+// ngoac kep roi boc ca gia tri trong ngoac kep; khong co thi giu nguyen
+public static String toCsvValue(String value) {
+    // Gia tri thuong (khong dau phay, khong ngoac kep) ghi nguyen
+    if ((!value.contains(Constants.CSV_SEPARATOR)) &amp;&amp; (!value.contains(Constants.CSV_QUOTE))) {
+        return value;
+    }
+
+    // Nhan doi ngoac kep ben trong, roi boc ca gia tri
+    return Constants.CSV_QUOTE + value.replace(Constants.CSV_QUOTE,
+            Constants.CSV_QUOTE + Constants.CSV_QUOTE) + Constants.CSV_QUOTE;
+}</code></pre>
+</details>
+
+<h4>Bước 3 — TODO 9.2 nạp tệp (35 phút)</h4>
+<details><summary>Gợi ý</summary><p>Dựng bộ đọc từ trong ra ngoài: <code>FileInputStream</code> (byte) → <code>InputStreamReader</code> với <code>StandardCharsets.UTF_8</code> (byte thành ký tự) → <code>BufferedReader</code> (cả dòng). Tự giữ bộ đếm dòng. Khối <code>try</code> quanh <code>loadLine</code> nằm TRONG vòng lặp; <code>catch (IOException e)</code> của bộ đọc nằm ngoài.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// NAP tep: dong 1 (bo BOM) phai la tieu de; moi dong sau la 1 tai lieu. Dong hong bi BO
+// QUA va ghi lai "dong N: ly do" — mot dong hong khong bao gio lam hong ca kho
+private void loadFromFile() {
+    // Tep can doc; so dong dang doc (de bao loi); dong vua doc
+    File dataFile = new File(filePath);
+    int lineNumber = 0;
+    String line = "";
+
+    // Lan chay dau tien: chua co tep — kho rong, lan ghi dau tien se tao tep
+    if (!dataFile.exists()) {
+        loadErrorList.add(String.format(Message.FILE_NOT_FOUND, filePath));
+        return;
+    }
+
+    // try-with-resources: tu dong close() ke ca khi loi. Bang ma GHI RO UTF-8 — FileReader
+    // cua Java 8 dung bang ma mac dinh cua may (Windows: Cp1252, hong chu tieng Viet)
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+            new FileInputStream(dataFile), StandardCharsets.UTF_8))) {
+        // readLine() tra null khi het tep
+        while ((line = reader.readLine()) != null) {
+            lineNumber++;
+
+            // Dong 1: bo dau BOM (Excel, Notepad hay them) roi bo qua dong tieu de
+            if (lineNumber == Constants.CSV_HEADER_LINE) {
+                line = line.replace(Constants.BOM, "");
+
+                // Dung tieu de thi sang dong sau (khong phai tieu de: nap nhu dong du lieu)
+                if (line.equals(Constants.CSV_HEADER)) {
+                    continue;
+                }
+            }
+
+            // Dong trong: bo qua, khong bao
+            if (line.trim().isEmpty()) {
+                continue;
+            }
+
+            // Nap 1 dong; hong thi ghi ly do kem so dong roi doc tiep dong sau
+            try {
+                loadLine(line);
+            } catch (InvalidInputException | LibraryException e) {
+                // Cau bao cua Validation viet cho nguoi go phim: bo duoi "Moi nhap lai."
+                loadErrorList.add(String.format(Message.ERROR_CSV_LINE, filePath, lineNumber,
+                        e.getMessage().replace(Message.RETRY_HINT, "")));
+                isBackupNeeded = true;
+            }
+        }
+    } catch (IOException e) {
+        // Tep co ma khong doc duoc (bi khoa, khong co quyen...): bao 1 cau, kho dung du lieu
+        // da nap duoc toi luc do
+        loadErrorList.add(String.format(Message.ERROR_FILE_READ, filePath, e.getMessage()));
+    }
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 10: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong.<br>
+Bo qua data/books.csv dong 11: can 6 cot, co 5 (ten co dau phay phai nam trong ngoac kep).<br>
+Bo qua data/books.csv dong 12: loai '4' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+Bo qua data/books.csv dong 13: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+Kho co 7 tai lieu sau khi nap.<br>
+…</div>
+
+<h4>Bước 4 — TODO 9.4 lưu qua tệp tạm (35 phút)</h4>
+<details><summary>Gợi ý</summary><p>Ba tệp: tệp thật, tệp <code>.tmp</code> cạnh nó, tệp <code>.bak</code>. Writer chỉ sống trong try-with-resources của nó; <code>Files.move</code> đứng SAU khối đó, khi tệp .tmp đã đóng. Một <code>catch (IOException e)</code> bao tất cả, đổi thành <code>StorageException</code>.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// GHI tep: viet ca kho ra TEP TAM, dong tep tam, roi moi doi ten de len tep that. Sap giua
+// chung thi tep that van la ban cu nguyen ven, khong bao gio con mot nua
+private void saveToFile() throws StorageException {
+    // Tep that, tep tam canh no, tep sao luu
+    File dataFile = new File(filePath);
+    File tempFile = new File(filePath + Constants.TEMP_SUFFIX);
+    File backupFile = new File(filePath + Constants.BACKUP_SUFFIX);
+
+    try {
+        // Lan ghi dau sau khi nap co dong hong: giu tep goc (dong hong se khong duoc ghi lai)
+        if (isBackupNeeded &amp;&amp; dataFile.exists()) {
+            Files.copy(dataFile.toPath(), backupFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            isBackupNeeded = false;
+        }
+
+        // Thu muc chua tep chua co thi tao (lan chay dau tien)
+        if (dataFile.getAbsoluteFile().getParentFile() != null) {
+            dataFile.getAbsoluteFile().getParentFile().mkdirs();
+        }
+
+        // try-with-resources: close() day bo dem xuong dia; bang ma GHI RO UTF-8
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                new FileOutputStream(tempFile), StandardCharsets.UTF_8))) {
+            writer.println(Constants.CSV_HEADER);
+
+            // Moi tai lieu 1 dong
+            for (LibraryItem item : memoryRepository.findAllItems()) {
+                writer.println(toCsvLine(item));
+            }
+
+            // PrintWriter KHONG nem IOException — no chi bat co loi, phai tu hoi
+            if (writer.checkError()) {
+                throw new IOException(Message.ERROR_WRITER);
+            }
+        }
+
+        // Tep tam da du va da dong: thay tep that (ghi de neu da co)
+        Files.move(tempFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException e) {
+        // Boc IOException thanh loi cua kho, giu nguyen nhan goc
+        throw new StorageException(String.format(Message.ERROR_FILE_WRITE, filePath,
+                e.getMessage()), e);
+    }
+}</code></pre>
+</details>
+
+<h4>Bước 5 — TODO 9.5 một dòng, rồi chấm (10 phút)</h4>
+<pre class="trich"><code class="language-java">// Dong DUY NHAT biet kho cat o dau: Lab 9 doi dung dong nay tu bo nho sang tep CSV
+bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);</code></pre>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">…<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 260/260 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab9-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab9-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8 (accents included), and 260/260 on the grader across both runs.</p>
+<details><summary>Full run — run 1, then the reopen (260 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 10: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong.<br>
+Bo qua data/books.csv dong 11: can 6 cot, co 5 (ten co dau phay phai nam trong ngoac kep).<br>
+Bo qua data/books.csv dong 12: loai '4' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+Bo qua data/books.csv dong 13: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+Kho co 7 tai lieu sau khi nap.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+3 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+4 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+5 &nbsp;&nbsp;T004 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+7 &nbsp;&nbsp;D005 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Da them B008 "Clean Code, A Handbook". Thu vien co 8 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua D005 "The Social Network": 1 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Xoa tai lieu ---<br>
+Ma tai lieu (vi du B001, T005, D006): Da xoa T004 "Tech Weekly". Ma T004 se khong duoc cap lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 1 tai lieu het ban (D005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tim tai lieu theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Bao cao tac gia ---<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Martin Fowler &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Robert Martin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.</div>
+</details>
+<details><summary>The files in data/ after the grader's runs</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (386 byte)<br>
+loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+1,B008,"Clean Code, A Handbook",2008,2,9780132350884,Robert Martin<br>
+── data/books.csv.bak (564 byte)<br>
+&lt;BOM&gt;loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+2,T004,Tech Weekly,2025,2,118<br>
+3,D005,The Social Network,2010,1,120<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+<br>
+1,B008,Head First Java,20O5,4,9780596009205,Kathy Sierra<br>
+2,T009,Java Magazine,2025,1<br>
+4,X010,Mystery Box,2020,1,1<br>
+1,B011,Effective Java Copy,2018,1,9780134685991,Joshua Bloch</div>
+</details>
+<details><summary>FileBookRepository — the whole class (CRUD delegated, only load and save are its own)</summary>
+<pre><code class="language-java">package repository;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import exceptions.DuplicateKeyException;
+import exceptions.InvalidInputException;
+import exceptions.ItemNotFoundException;
+import exceptions.LibraryException;
+import exceptions.StorageException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
+import model.LibraryItem;
+import utils.CsvUtils;
+import utils.Validation;
+
+/**
+ * Ban cai dat THU HAI cua hop dong IBookRepository (Lab 9): du lieu song qua lan tat may, trong
+ * tep CSV bang ma UTF-8 (mac dinh data/books.csv). Mo kho = NAP tep (dong hong bi bo qua, bao
+ * kem so dong); moi lan THAY DOI = GHI LAI ca tep qua 1 tep tam roi moi thay tep that.
+ * Thiet ke: CO (has-a) mot InMemoryBookRepository lam viec CRUD trong bo nho, lop nay chi them
+ * phan doc/ghi tep — khong chep lai CRUD, khong ke thua. Controller doi InMemory sang File
+ * bang DUNG MOT DONG new; Main khong biet gi.
+ *
+ * @author CuongThai Academy
+ */
+public class FileBookRepository implements IBookRepository {
+
+    // Kho trong bo nho lam moi viec CRUD (tim, them, sua, xoa) — lop nay uy quyen cho no
+    private InMemoryBookRepository memoryRepository;
+
+    // Duong dan tep du lieu (tuong doi voi thu muc chay chuong trinh)
+    private String filePath;
+
+    // Cau bao luc nap: dong hong da bo qua, hoac tep chua co
+    private ArrayList&lt;String&gt; loadErrorList;
+
+    // Lan nap co dong hong va CHUA sao luu: lan ghi dau tien phai giu tep goc thanh .bak
+    private boolean isBackupNeeded;
+
+    // Tao kho tren tep: kho bo nho rong roi nap tep (khong nem loi: loi nap la cau bao)
+    public FileBookRepository(String filePath) {
+        this.filePath = filePath;
+        memoryRepository = new InMemoryBookRepository();
+        loadErrorList = new ArrayList&lt;&gt;();
+        isBackupNeeded = false;
+        loadFromFile();
+    }
+
+    // Them 1 tai lieu (kho bo nho cap ma) roi ghi lai tep
+    @Override
+    public String addItem(BookRequestDTO bookRequestDTO)
+            throws DuplicateKeyException, StorageException {
+        // Them trong bo nho truoc (trung khoa thi nem, tep khong doi)
+        String newId = memoryRepository.addItem(bookRequestDTO);
+        saveToFile();
+        return newId;
+    }
+
+    // Sua so ban roi ghi lai tep
+    @Override
+    public void updateCopies(BookRequestDTO bookRequestDTO)
+            throws ItemNotFoundException, StorageException {
+        memoryRepository.updateCopies(bookRequestDTO);
+        saveToFile();
+    }
+
+    // Xoa 1 tai lieu roi ghi lai tep
+    @Override
+    public void deleteItem(String id) throws ItemNotFoundException, StorageException {
+        memoryRepository.deleteItem(id);
+        saveToFile();
+    }
+
+    // Lay ban sao 1 tai lieu theo ma (chi doc bo nho, khong dung toi tep)
+    @Override
+    public BookResponseDTO findById(String id) throws ItemNotFoundException {
+        return memoryRepository.findById(id);
+    }
+
+    // Dem so tai lieu
+    @Override
+    public int countItems() {
+        return memoryRepository.countItems();
+    }
+
+    // Lay ban sao moi tai lieu
+    @Override
+    public ArrayList&lt;BookResponseDTO&gt; findAll() {
+        return memoryRepository.findAll();
+    }
+
+    // Tim theo tu khoa trong ten
+    @Override
+    public ArrayList&lt;BookResponseDTO&gt; findByKeyword(String keyword) {
+        return memoryRepository.findByKeyword(keyword);
+    }
+
+    // Don kho trong bo nho; co xoa gi thi ghi lai tep
+    @Override
+    public ArrayList&lt;String&gt; deleteOutOfStock(HashSet&lt;String&gt; loanedIdSet)
+            throws StorageException {
+        // Cac ma da xoa (rong thi tep khong can ghi lai)
+        ArrayList&lt;String&gt; deletedIdList = memoryRepository.deleteOutOfStock(loanedIdSet);
+
+        // Co thay doi thi ghi
+        if (!deletedIdList.isEmpty()) {
+            saveToFile();
+        }
+
+        return deletedIdList;
+    }
+
+    // Cac cau bao luc nap (ban sao, de Controller in)
+    @Override
+    public ArrayList&lt;String&gt; findLoadErrorList() {
+        return new ArrayList&lt;&gt;(loadErrorList);
+    }
+
+    // NAP tep: dong 1 (bo BOM) phai la tieu de; moi dong sau la 1 tai lieu. Dong hong bi BO
+    // QUA va ghi lai "dong N: ly do" — mot dong hong khong bao gio lam hong ca kho
+    private void loadFromFile() {
+        // Tep can doc; so dong dang doc (de bao loi); dong vua doc
+        File dataFile = new File(filePath);
+        int lineNumber = 0;
+        String line = "";
+
+        // Lan chay dau tien: chua co tep — kho rong, lan ghi dau tien se tao tep
+        if (!dataFile.exists()) {
+            loadErrorList.add(String.format(Message.FILE_NOT_FOUND, filePath));
+            return;
+        }
+
+        // try-with-resources: tu dong close() ke ca khi loi. Bang ma GHI RO UTF-8 — FileReader
+        // cua Java 8 dung bang ma mac dinh cua may (Windows: Cp1252, hong chu tieng Viet)
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(dataFile), StandardCharsets.UTF_8))) {
+            // readLine() tra null khi het tep
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+
+                // Dong 1: bo dau BOM (Excel, Notepad hay them) roi bo qua dong tieu de
+                if (lineNumber == Constants.CSV_HEADER_LINE) {
+                    line = line.replace(Constants.BOM, "");
+
+                    // Dung tieu de thi sang dong sau (khong phai tieu de: nap nhu dong du lieu)
+                    if (line.equals(Constants.CSV_HEADER)) {
+                        continue;
+                    }
+                }
+
+                // Dong trong: bo qua, khong bao
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                // Nap 1 dong; hong thi ghi ly do kem so dong roi doc tiep dong sau
+                try {
+                    loadLine(line);
+                } catch (InvalidInputException | LibraryException e) {
+                    // Cau bao cua Validation viet cho nguoi go phim: bo duoi "Moi nhap lai."
+                    loadErrorList.add(String.format(Message.ERROR_CSV_LINE, filePath, lineNumber,
+                            e.getMessage().replace(Message.RETRY_HINT, "")));
+                    isBackupNeeded = true;
+                }
+            }
+        } catch (IOException e) {
+            // Tep co ma khong doc duoc (bi khoa, khong co quyen...): bao 1 cau, kho dung du lieu
+            // da nap duoc toi luc do
+            loadErrorList.add(String.format(Message.ERROR_FILE_READ, filePath, e.getMessage()));
+        }
+    }
+
+    // Nap 1 dong du lieu: tach cot (dung ngoac kep), kiem tung cot bang chinh Validation cua
+    // man hinh nhap, roi dua kho bo nho them GIU NGUYEN ma
+    private void loadLine(String line) throws InvalidInputException, DuplicateKeyException {
+        // Cac cot cua dong; phieu tai lieu se dien
+        ArrayList&lt;String&gt; columnList = CsvUtils.splitLine(line);
+        BookRequestDTO bookRequestDTO = new BookRequestDTO();
+
+        // It hon so cot chung thi chua biet ca loai: dong hong
+        if (columnList.size() &lt; Constants.CSV_COMMON_COLUMNS) {
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_COLUMNS,
+                    Constants.CSV_COMMON_COLUMNS, columnList.size()));
+        }
+
+        // Loai quyet dinh so cot rieng: sach 2, tap chi 1, DVD 1
+        bookRequestDTO.setItemType(readItemType(columnList.get(Constants.CSV_TYPE_INDEX)));
+        checkColumnCount(columnList, bookRequestDTO.getItemType());
+
+        // Phan chung: ten, nam, so ban (cung luat voi man hinh nhap)
+        bookRequestDTO.setTitle(Validation.getTitle(columnList.get(Constants.CSV_TITLE_INDEX)));
+        bookRequestDTO.setYear(Validation.getYear(columnList.get(Constants.CSV_YEAR_INDEX)));
+        bookRequestDTO.setCopies(Validation.getCopies(columnList.get(Constants.CSV_COPIES_INDEX)));
+
+        // Phan rieng cua loai (doc tu cot CSV_EXTRA_INDEX tro di)
+        switch (bookRequestDTO.getItemType()) {
+            // Sach: ISBN roi tac gia
+            case Constants.TYPE_BOOK:
+                bookRequestDTO.setIsbn(Validation.getIsbn(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                bookRequestDTO.setAuthor(Validation.getAuthor(
+                        columnList.get(Constants.CSV_EXTRA_INDEX + 1)));
+                break;
+
+            // Tap chi: ky so
+            case Constants.TYPE_MAGAZINE:
+                bookRequestDTO.setIssueNumber(Validation.getIssueNumber(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                break;
+
+            // DVD: so phut
+            case Constants.TYPE_DVD:
+                bookRequestDTO.setMinutes(Validation.getMinutes(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                break;
+
+            // Khong xay ra: readItemType chi tra ve 1 den 3
+            default:
+                break;
+        }
+
+        // Ma lay tu tep (kiem dang B/T/D + 3 so); kho bo nho bao trung ma / trung khoa
+        memoryRepository.addLoadedItem(bookRequestDTO,
+                Validation.getItemId(columnList.get(Constants.CSV_ID_INDEX)));
+    }
+
+    // Doc cot loai (1 sach, 2 tap chi, 3 DVD); sai thi bao bang loi rieng cua tep
+    private int readItemType(String column) throws InvalidInputException {
+        // Dung lai luat nhap loai cua man hinh, doi cau bao cho hop voi tep
+        try {
+            return Validation.getItemType(column);
+        } catch (InvalidInputException e) {
+            // Giu e lam nguyen nhan goc
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_TYPE, column), e);
+        }
+    }
+
+    // Kiem so cot dung voi loai: so cot chung + so cot rieng cua loai
+    private void checkColumnCount(ArrayList&lt;String&gt; columnList, int itemType)
+            throws InvalidInputException {
+        // So cot can co
+        int expectedCount = Constants.CSV_COMMON_COLUMNS
+                + Constants.CSV_EXTRA_COUNT_ARRAY[itemType - Constants.TYPE_BOOK];
+
+        // Thieu hay thua cot (vd dau phay trong ten ma khong co ngoac kep) deu la dong hong
+        if (columnList.size() != expectedCount) {
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_COLUMNS,
+                    expectedCount, columnList.size()));
+        }
+    }
+
+    // GHI tep: viet ca kho ra TEP TAM, dong tep tam, roi moi doi ten de len tep that. Sap giua
+    // chung thi tep that van la ban cu nguyen ven, khong bao gio con mot nua
+    private void saveToFile() throws StorageException {
+        // Tep that, tep tam canh no, tep sao luu
+        File dataFile = new File(filePath);
+        File tempFile = new File(filePath + Constants.TEMP_SUFFIX);
+        File backupFile = new File(filePath + Constants.BACKUP_SUFFIX);
+
+        try {
+            // Lan ghi dau sau khi nap co dong hong: giu tep goc (dong hong se khong duoc ghi lai)
+            if (isBackupNeeded &amp;&amp; dataFile.exists()) {
+                Files.copy(dataFile.toPath(), backupFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+                isBackupNeeded = false;
+            }
+
+            // Thu muc chua tep chua co thi tao (lan chay dau tien)
+            if (dataFile.getAbsoluteFile().getParentFile() != null) {
+                dataFile.getAbsoluteFile().getParentFile().mkdirs();
+            }
+
+            // try-with-resources: close() day bo dem xuong dia; bang ma GHI RO UTF-8
+            try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8))) {
+                writer.println(Constants.CSV_HEADER);
+
+                // Moi tai lieu 1 dong
+                for (LibraryItem item : memoryRepository.findAllItems()) {
+                    writer.println(toCsvLine(item));
+                }
+
+                // PrintWriter KHONG nem IOException — no chi bat co loi, phai tu hoi
+                if (writer.checkError()) {
+                    throw new IOException(Message.ERROR_WRITER);
+                }
+            }
+
+            // Tep tam da du va da dong: thay tep that (ghi de neu da co)
+            Files.move(tempFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            // Boc IOException thanh loi cua kho, giu nguyen nhan goc
+            throw new StorageException(String.format(Message.ERROR_FILE_WRITE, filePath,
+                    e.getMessage()), e);
+        }
+    }
+
+    // Doi 1 tai lieu thanh 1 dong CSV: loai, ma, ten, nam, so ban, roi cac cot rieng cua loai
+    // (da hinh: chinh doi tuong tra loi cot rieng cua no). Gia tri co dau phay duoc boc ngoac kep
+    private String toCsvLine(LibraryItem item) {
+        // Dong dang dung (khong noi chuoi bang +=)
+        StringBuilder lineBuilder = new StringBuilder();
+
+        // 5 cot chung
+        lineBuilder.append(item.getItemType()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getId()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(CsvUtils.toCsvValue(item.getTitle())).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getYear()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getCopies());
+
+        // Cac cot rieng (sach 2, tap chi 1, DVD 1)
+        for (String value : item.getExtraValueArray()) {
+            lineBuilder.append(Constants.CSV_SEPARATOR).append(CsvUtils.toCsvValue(value));
+        }
+
+        return lineBuilder.toString();
+    }
+}</code></pre>
+</details>
+<details><summary>BookController constructor — load messages, samples only for an empty shelf</summary>
+<pre class="trich"><code class="language-java">// Tao kho, service, cac view va nap du lieu mau (sach, tap chi, DVD)
+public BookController() {
+    // Dong DUY NHAT biet kho cat o dau: Lab 9 doi dung dong nay tu bo nho sang tep CSV
+    bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);
+    loanRepository = new LoanRepository();
+    bookService = new BookService();
+    bookView = new BookView();
+    reportView = new ReportView();
+    lateFeeView = new LateFeeView();
+    typeStatView = new TypeStatView();
+    historyView = new HistoryView();
+    authorView = new AuthorView();
+    topItemView = new TopItemView();
+
+    // Kho tren tep bao lai luc nap (dong hong, tep chua co); kho bo nho: khong co gi
+    showLoadResult();
+
+    // Kho rong (bo nho, hoac tep chua co) moi nap du lieu mau; tep da co du lieu thi giu
+    if (bookRepository.countItems() == Constants.EMPTY_COUNT) {
+        // Nap du lieu mau; loi (trung khoa, ghi tep that bai) thi in ra
+        try {
+            loadSampleItems();
+        } catch (LibraryException e) {
+            // Du lieu mau trung khoa hoac khong ghi duoc tep thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+}
+
+// In cac cau bao luc nap kho (moi cau 1 dong) roi so tai lieu; khong co cau nao thi im
+private void showLoadResult() {
+    // Cau bao cua kho (rong voi kho bo nho va voi tep sach)
+    ArrayList&lt;String&gt; loadErrorList = bookRepository.findLoadErrorList();
+
+    // Co cau bao thi in tat ca + dong tong ket trong 1 lan goi View
+    if (!loadErrorList.isEmpty()) {
+        loadErrorList.add(String.format(Message.LOAD_SUMMARY, bookRepository.countItems()));
+        showResult(String.join(Constants.NEW_LINE, loadErrorList),
+                new ArrayList&lt;BookResponseDTO&gt;());
+    }
+}</code></pre>
+</details>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt (cả chữ có dấu), và bộ chấm 260/260 qua cả hai lần chạy.</p>
+<details><summary>Trọn lần chạy — lần 1, rồi mở lại (260 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 10: Nam xuat ban phai la 1 so nguyen, khong nhap chu hay de trong.<br>
+Bo qua data/books.csv dong 11: can 6 cot, co 5 (ten co dau phay phai nam trong ngoac kep).<br>
+Bo qua data/books.csv dong 12: loai '4' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+Bo qua data/books.csv dong 13: Trung ISBN 9780134685991 voi Sach B002 "Effective Java". Moi tai lieu chi them 1 lan.<br>
+Kho co 7 tai lieu sau khi nap.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+3 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+4 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+5 &nbsp;&nbsp;T004 &nbsp;Tap chi &nbsp;2025 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7 &nbsp;&nbsp;&nbsp;&nbsp;1000 &nbsp;&nbsp;Tech Weekly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ky so 118<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+7 &nbsp;&nbsp;D005 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2010 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;The Social Network &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;120 phut<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Da them B008 "Clean Code, A Handbook". Thu vien co 8 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua D005 "The Social Network": 1 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Xoa tai lieu ---<br>
+Ma tai lieu (vi du B001, T005, D006): Da xoa T004 "Tech Weekly". Ma T004 se khong duoc cap lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 1 tai lieu het ban (D005). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.<br>
+===== MO LAI CHUONG TRINH (harness/input-2.txt) =====<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach tai lieu ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+2 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+3 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2005 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Java Puzzlers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780321336781<br>
+4 &nbsp;&nbsp;D006 &nbsp;DVD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;5000 &nbsp;&nbsp;Mắt Biếc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;117 phut<br>
+5 &nbsp;&nbsp;B003 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Refactoring, Second Edition &nbsp;&nbsp;Martin Fowler, ISBN 9780134757599<br>
+6 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2019 &nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;The Pragmatic Programmer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Thomas, ISBN 9780135957059<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tim tai lieu theo ten ---<br>
+Tu khoa: No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Year &nbsp;Copies Days &nbsp;Fee &nbsp;&nbsp;&nbsp;Title &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br>
+1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Bao cao tac gia ---<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Martin Fowler &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Robert Martin &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Hen gap lai o lan mo sau.</div>
+</details>
+<details><summary>Các tệp trong data/ sau các lần chạy của bộ chấm</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (386 byte)<br>
+loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+1,B008,"Clean Code, A Handbook",2008,2,9780132350884,Robert Martin<br>
+── data/books.csv.bak (564 byte)<br>
+&lt;BOM&gt;loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,"Refactoring, Second Edition",2018,1,9780134757599,Martin Fowler<br>
+2,T004,Tech Weekly,2025,2,118<br>
+3,D005,The Social Network,2010,1,120<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+<br>
+1,B008,Head First Java,20O5,4,9780596009205,Kathy Sierra<br>
+2,T009,Java Magazine,2025,1<br>
+4,X010,Mystery Box,2020,1,1<br>
+1,B011,Effective Java Copy,2018,1,9780134685991,Joshua Bloch</div>
+</details>
+<details><summary>FileBookRepository — trọn lớp (CRUD uỷ quyền, chỉ nạp và ghi là của riêng nó)</summary>
+<pre><code class="language-java">package repository;
+
+import constants.Constants;
+import constants.Message;
+import dto.BookRequestDTO;
+import dto.BookResponseDTO;
+import exceptions.DuplicateKeyException;
+import exceptions.InvalidInputException;
+import exceptions.ItemNotFoundException;
+import exceptions.LibraryException;
+import exceptions.StorageException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
+import model.LibraryItem;
+import utils.CsvUtils;
+import utils.Validation;
+
+/**
+ * Ban cai dat THU HAI cua hop dong IBookRepository (Lab 9): du lieu song qua lan tat may, trong
+ * tep CSV bang ma UTF-8 (mac dinh data/books.csv). Mo kho = NAP tep (dong hong bi bo qua, bao
+ * kem so dong); moi lan THAY DOI = GHI LAI ca tep qua 1 tep tam roi moi thay tep that.
+ * Thiet ke: CO (has-a) mot InMemoryBookRepository lam viec CRUD trong bo nho, lop nay chi them
+ * phan doc/ghi tep — khong chep lai CRUD, khong ke thua. Controller doi InMemory sang File
+ * bang DUNG MOT DONG new; Main khong biet gi.
+ *
+ * @author CuongThai Academy
+ */
+public class FileBookRepository implements IBookRepository {
+
+    // Kho trong bo nho lam moi viec CRUD (tim, them, sua, xoa) — lop nay uy quyen cho no
+    private InMemoryBookRepository memoryRepository;
+
+    // Duong dan tep du lieu (tuong doi voi thu muc chay chuong trinh)
+    private String filePath;
+
+    // Cau bao luc nap: dong hong da bo qua, hoac tep chua co
+    private ArrayList&lt;String&gt; loadErrorList;
+
+    // Lan nap co dong hong va CHUA sao luu: lan ghi dau tien phai giu tep goc thanh .bak
+    private boolean isBackupNeeded;
+
+    // Tao kho tren tep: kho bo nho rong roi nap tep (khong nem loi: loi nap la cau bao)
+    public FileBookRepository(String filePath) {
+        this.filePath = filePath;
+        memoryRepository = new InMemoryBookRepository();
+        loadErrorList = new ArrayList&lt;&gt;();
+        isBackupNeeded = false;
+        loadFromFile();
+    }
+
+    // Them 1 tai lieu (kho bo nho cap ma) roi ghi lai tep
+    @Override
+    public String addItem(BookRequestDTO bookRequestDTO)
+            throws DuplicateKeyException, StorageException {
+        // Them trong bo nho truoc (trung khoa thi nem, tep khong doi)
+        String newId = memoryRepository.addItem(bookRequestDTO);
+        saveToFile();
+        return newId;
+    }
+
+    // Sua so ban roi ghi lai tep
+    @Override
+    public void updateCopies(BookRequestDTO bookRequestDTO)
+            throws ItemNotFoundException, StorageException {
+        memoryRepository.updateCopies(bookRequestDTO);
+        saveToFile();
+    }
+
+    // Xoa 1 tai lieu roi ghi lai tep
+    @Override
+    public void deleteItem(String id) throws ItemNotFoundException, StorageException {
+        memoryRepository.deleteItem(id);
+        saveToFile();
+    }
+
+    // Lay ban sao 1 tai lieu theo ma (chi doc bo nho, khong dung toi tep)
+    @Override
+    public BookResponseDTO findById(String id) throws ItemNotFoundException {
+        return memoryRepository.findById(id);
+    }
+
+    // Dem so tai lieu
+    @Override
+    public int countItems() {
+        return memoryRepository.countItems();
+    }
+
+    // Lay ban sao moi tai lieu
+    @Override
+    public ArrayList&lt;BookResponseDTO&gt; findAll() {
+        return memoryRepository.findAll();
+    }
+
+    // Tim theo tu khoa trong ten
+    @Override
+    public ArrayList&lt;BookResponseDTO&gt; findByKeyword(String keyword) {
+        return memoryRepository.findByKeyword(keyword);
+    }
+
+    // Don kho trong bo nho; co xoa gi thi ghi lai tep
+    @Override
+    public ArrayList&lt;String&gt; deleteOutOfStock(HashSet&lt;String&gt; loanedIdSet)
+            throws StorageException {
+        // Cac ma da xoa (rong thi tep khong can ghi lai)
+        ArrayList&lt;String&gt; deletedIdList = memoryRepository.deleteOutOfStock(loanedIdSet);
+
+        // Co thay doi thi ghi
+        if (!deletedIdList.isEmpty()) {
+            saveToFile();
+        }
+
+        return deletedIdList;
+    }
+
+    // Cac cau bao luc nap (ban sao, de Controller in)
+    @Override
+    public ArrayList&lt;String&gt; findLoadErrorList() {
+        return new ArrayList&lt;&gt;(loadErrorList);
+    }
+
+    // NAP tep: dong 1 (bo BOM) phai la tieu de; moi dong sau la 1 tai lieu. Dong hong bi BO
+    // QUA va ghi lai "dong N: ly do" — mot dong hong khong bao gio lam hong ca kho
+    private void loadFromFile() {
+        // Tep can doc; so dong dang doc (de bao loi); dong vua doc
+        File dataFile = new File(filePath);
+        int lineNumber = 0;
+        String line = "";
+
+        // Lan chay dau tien: chua co tep — kho rong, lan ghi dau tien se tao tep
+        if (!dataFile.exists()) {
+            loadErrorList.add(String.format(Message.FILE_NOT_FOUND, filePath));
+            return;
+        }
+
+        // try-with-resources: tu dong close() ke ca khi loi. Bang ma GHI RO UTF-8 — FileReader
+        // cua Java 8 dung bang ma mac dinh cua may (Windows: Cp1252, hong chu tieng Viet)
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(dataFile), StandardCharsets.UTF_8))) {
+            // readLine() tra null khi het tep
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+
+                // Dong 1: bo dau BOM (Excel, Notepad hay them) roi bo qua dong tieu de
+                if (lineNumber == Constants.CSV_HEADER_LINE) {
+                    line = line.replace(Constants.BOM, "");
+
+                    // Dung tieu de thi sang dong sau (khong phai tieu de: nap nhu dong du lieu)
+                    if (line.equals(Constants.CSV_HEADER)) {
+                        continue;
+                    }
+                }
+
+                // Dong trong: bo qua, khong bao
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                // Nap 1 dong; hong thi ghi ly do kem so dong roi doc tiep dong sau
+                try {
+                    loadLine(line);
+                } catch (InvalidInputException | LibraryException e) {
+                    // Cau bao cua Validation viet cho nguoi go phim: bo duoi "Moi nhap lai."
+                    loadErrorList.add(String.format(Message.ERROR_CSV_LINE, filePath, lineNumber,
+                            e.getMessage().replace(Message.RETRY_HINT, "")));
+                    isBackupNeeded = true;
+                }
+            }
+        } catch (IOException e) {
+            // Tep co ma khong doc duoc (bi khoa, khong co quyen...): bao 1 cau, kho dung du lieu
+            // da nap duoc toi luc do
+            loadErrorList.add(String.format(Message.ERROR_FILE_READ, filePath, e.getMessage()));
+        }
+    }
+
+    // Nap 1 dong du lieu: tach cot (dung ngoac kep), kiem tung cot bang chinh Validation cua
+    // man hinh nhap, roi dua kho bo nho them GIU NGUYEN ma
+    private void loadLine(String line) throws InvalidInputException, DuplicateKeyException {
+        // Cac cot cua dong; phieu tai lieu se dien
+        ArrayList&lt;String&gt; columnList = CsvUtils.splitLine(line);
+        BookRequestDTO bookRequestDTO = new BookRequestDTO();
+
+        // It hon so cot chung thi chua biet ca loai: dong hong
+        if (columnList.size() &lt; Constants.CSV_COMMON_COLUMNS) {
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_COLUMNS,
+                    Constants.CSV_COMMON_COLUMNS, columnList.size()));
+        }
+
+        // Loai quyet dinh so cot rieng: sach 2, tap chi 1, DVD 1
+        bookRequestDTO.setItemType(readItemType(columnList.get(Constants.CSV_TYPE_INDEX)));
+        checkColumnCount(columnList, bookRequestDTO.getItemType());
+
+        // Phan chung: ten, nam, so ban (cung luat voi man hinh nhap)
+        bookRequestDTO.setTitle(Validation.getTitle(columnList.get(Constants.CSV_TITLE_INDEX)));
+        bookRequestDTO.setYear(Validation.getYear(columnList.get(Constants.CSV_YEAR_INDEX)));
+        bookRequestDTO.setCopies(Validation.getCopies(columnList.get(Constants.CSV_COPIES_INDEX)));
+
+        // Phan rieng cua loai (doc tu cot CSV_EXTRA_INDEX tro di)
+        switch (bookRequestDTO.getItemType()) {
+            // Sach: ISBN roi tac gia
+            case Constants.TYPE_BOOK:
+                bookRequestDTO.setIsbn(Validation.getIsbn(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                bookRequestDTO.setAuthor(Validation.getAuthor(
+                        columnList.get(Constants.CSV_EXTRA_INDEX + 1)));
+                break;
+
+            // Tap chi: ky so
+            case Constants.TYPE_MAGAZINE:
+                bookRequestDTO.setIssueNumber(Validation.getIssueNumber(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                break;
+
+            // DVD: so phut
+            case Constants.TYPE_DVD:
+                bookRequestDTO.setMinutes(Validation.getMinutes(
+                        columnList.get(Constants.CSV_EXTRA_INDEX)));
+                break;
+
+            // Khong xay ra: readItemType chi tra ve 1 den 3
+            default:
+                break;
+        }
+
+        // Ma lay tu tep (kiem dang B/T/D + 3 so); kho bo nho bao trung ma / trung khoa
+        memoryRepository.addLoadedItem(bookRequestDTO,
+                Validation.getItemId(columnList.get(Constants.CSV_ID_INDEX)));
+    }
+
+    // Doc cot loai (1 sach, 2 tap chi, 3 DVD); sai thi bao bang loi rieng cua tep
+    private int readItemType(String column) throws InvalidInputException {
+        // Dung lai luat nhap loai cua man hinh, doi cau bao cho hop voi tep
+        try {
+            return Validation.getItemType(column);
+        } catch (InvalidInputException e) {
+            // Giu e lam nguyen nhan goc
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_TYPE, column), e);
+        }
+    }
+
+    // Kiem so cot dung voi loai: so cot chung + so cot rieng cua loai
+    private void checkColumnCount(ArrayList&lt;String&gt; columnList, int itemType)
+            throws InvalidInputException {
+        // So cot can co
+        int expectedCount = Constants.CSV_COMMON_COLUMNS
+                + Constants.CSV_EXTRA_COUNT_ARRAY[itemType - Constants.TYPE_BOOK];
+
+        // Thieu hay thua cot (vd dau phay trong ten ma khong co ngoac kep) deu la dong hong
+        if (columnList.size() != expectedCount) {
+            throw new InvalidInputException(String.format(Message.ERROR_CSV_COLUMNS,
+                    expectedCount, columnList.size()));
+        }
+    }
+
+    // GHI tep: viet ca kho ra TEP TAM, dong tep tam, roi moi doi ten de len tep that. Sap giua
+    // chung thi tep that van la ban cu nguyen ven, khong bao gio con mot nua
+    private void saveToFile() throws StorageException {
+        // Tep that, tep tam canh no, tep sao luu
+        File dataFile = new File(filePath);
+        File tempFile = new File(filePath + Constants.TEMP_SUFFIX);
+        File backupFile = new File(filePath + Constants.BACKUP_SUFFIX);
+
+        try {
+            // Lan ghi dau sau khi nap co dong hong: giu tep goc (dong hong se khong duoc ghi lai)
+            if (isBackupNeeded &amp;&amp; dataFile.exists()) {
+                Files.copy(dataFile.toPath(), backupFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+                isBackupNeeded = false;
+            }
+
+            // Thu muc chua tep chua co thi tao (lan chay dau tien)
+            if (dataFile.getAbsoluteFile().getParentFile() != null) {
+                dataFile.getAbsoluteFile().getParentFile().mkdirs();
+            }
+
+            // try-with-resources: close() day bo dem xuong dia; bang ma GHI RO UTF-8
+            try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8))) {
+                writer.println(Constants.CSV_HEADER);
+
+                // Moi tai lieu 1 dong
+                for (LibraryItem item : memoryRepository.findAllItems()) {
+                    writer.println(toCsvLine(item));
+                }
+
+                // PrintWriter KHONG nem IOException — no chi bat co loi, phai tu hoi
+                if (writer.checkError()) {
+                    throw new IOException(Message.ERROR_WRITER);
+                }
+            }
+
+            // Tep tam da du va da dong: thay tep that (ghi de neu da co)
+            Files.move(tempFile.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            // Boc IOException thanh loi cua kho, giu nguyen nhan goc
+            throw new StorageException(String.format(Message.ERROR_FILE_WRITE, filePath,
+                    e.getMessage()), e);
+        }
+    }
+
+    // Doi 1 tai lieu thanh 1 dong CSV: loai, ma, ten, nam, so ban, roi cac cot rieng cua loai
+    // (da hinh: chinh doi tuong tra loi cot rieng cua no). Gia tri co dau phay duoc boc ngoac kep
+    private String toCsvLine(LibraryItem item) {
+        // Dong dang dung (khong noi chuoi bang +=)
+        StringBuilder lineBuilder = new StringBuilder();
+
+        // 5 cot chung
+        lineBuilder.append(item.getItemType()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getId()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(CsvUtils.toCsvValue(item.getTitle())).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getYear()).append(Constants.CSV_SEPARATOR);
+        lineBuilder.append(item.getCopies());
+
+        // Cac cot rieng (sach 2, tap chi 1, DVD 1)
+        for (String value : item.getExtraValueArray()) {
+            lineBuilder.append(Constants.CSV_SEPARATOR).append(CsvUtils.toCsvValue(value));
+        }
+
+        return lineBuilder.toString();
+    }
+}</code></pre>
+</details>
+<details><summary>Constructor của BookController — câu báo lúc nạp, tài liệu mẫu chỉ khi kho rỗng</summary>
+<pre class="trich"><code class="language-java">// Tao kho, service, cac view va nap du lieu mau (sach, tap chi, DVD)
+public BookController() {
+    // Dong DUY NHAT biet kho cat o dau: Lab 9 doi dung dong nay tu bo nho sang tep CSV
+    bookRepository = new FileBookRepository(Constants.BOOK_FILE_PATH);
+    loanRepository = new LoanRepository();
+    bookService = new BookService();
+    bookView = new BookView();
+    reportView = new ReportView();
+    lateFeeView = new LateFeeView();
+    typeStatView = new TypeStatView();
+    historyView = new HistoryView();
+    authorView = new AuthorView();
+    topItemView = new TopItemView();
+
+    // Kho tren tep bao lai luc nap (dong hong, tep chua co); kho bo nho: khong co gi
+    showLoadResult();
+
+    // Kho rong (bo nho, hoac tep chua co) moi nap du lieu mau; tep da co du lieu thi giu
+    if (bookRepository.countItems() == Constants.EMPTY_COUNT) {
+        // Nap du lieu mau; loi (trung khoa, ghi tep that bai) thi in ra
+        try {
+            loadSampleItems();
+        } catch (LibraryException e) {
+            // Du lieu mau trung khoa hoac khong ghi duoc tep thi bao loi
+            showResult(e.getMessage(), new ArrayList&lt;BookResponseDTO&gt;());
+        }
+    }
+}
+
+// In cac cau bao luc nap kho (moi cau 1 dong) roi so tai lieu; khong co cau nao thi im
+private void showLoadResult() {
+    // Cau bao cua kho (rong voi kho bo nho va voi tep sach)
+    ArrayList&lt;String&gt; loadErrorList = bookRepository.findLoadErrorList();
+
+    // Co cau bao thi in tat ca + dong tong ket trong 1 lan goi View
+    if (!loadErrorList.isEmpty()) {
+        loadErrorList.add(String.format(Message.LOAD_SUMMARY, bookRepository.countItems()));
+        showResult(String.join(Constants.NEW_LINE, loadErrorList),
+                new ArrayList&lt;BookResponseDTO&gt;());
+    }
+}</code></pre>
+</details>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — split(",").</strong> 8 columns instead of 7: see Step 1.</p></div>
+<div class="pitfall"><p><strong>Trap 2 — the machine's encoding.</strong> UTF-8 bytes read as windows-1252, and the invisible BOM:</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 9 — the same bytes read with two encodings
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+public class LabBangMa {
+    public static void main(String[] args) {
+        String title = "M\\u1eaft Bi\\u1ebfc";   // "Mắt Biếc" written with escapes
+        byte[] bytes = title.getBytes(StandardCharsets.UTF_8);
+        StringBuilder hex = new StringBuilder();
+        for (byte b : bytes) {
+            hex.append(String.format("%02X ", b));
+        }
+        System.out.println(title.length() + " chars -&gt; " + bytes.length + " bytes in UTF-8: " + hex.toString().trim());
+        System.out.println("read as UTF-8       : " + new String(bytes, StandardCharsets.UTF_8));
+        System.out.println("read as windows-1252: " + new String(bytes, Charset.forName("windows-1252")));
+        System.out.println("read as ISO-8859-1  : " + new String(bytes, StandardCharsets.ISO_8859_1).length() + " chars, still wrong");
+        // a BOM is three bytes EF BB BF, read back as one invisible char U+FEFF
+        byte[] bom = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'l', 'o', 'a', 'i'};
+        String first = new String(bom, StandardCharsets.UTF_8);
+        System.out.println("BOM + \\"loai\\": length " + first.length() + ", equals(\\"loai\\") " + first.equals("loai")
+                + ", after replace(\\"\\\\uFEFF\\", \\"\\") " + first.replace("\\uFEFF", "").equals("loai"));
+    }
+}</code></pre>
+<div class="out">8 chars -&gt; 12 bytes in UTF-8: 4D E1 BA AF 74 20 42 69 E1 BA BF 63<br>
+read as UTF-8 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Mắt Biếc<br>
+read as windows-1252: Máº¯t Biáº¿c<br>
+read as ISO-8859-1 &nbsp;: 12 chars, still wrong<br>
+BOM + "loai": length 5, equals("loai") false, after replace("\\uFEFF", "") true</div>
+<div class="pitfall"><p><strong>Trap 3 — keeping the BOM.</strong> The header becomes "data" with type "loai" (project <code>bay/quen-bom</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 1: loai '﻿loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+…</div>
+<div class="pitfall"><p><strong>Trap 4 — no quotes.</strong> Written without quotes, read back as 8 columns — two books lost at the reopen (project <code>bay/khong-quote</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (382 byte)<br>
+loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,Refactoring, Second Edition,2018,1,9780134757599,Martin Fowler<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+1,B008,Clean Code, A Handbook,2008,2,9780132350884,Robert Martin<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 166:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: ========== CT LIBRARY ==========<br>
+&nbsp;&nbsp;ban in : Bo qua data/books.csv dong 4: can 7 cot, co 8 (ten co dau phay phai nam trong ngoac kep).<br>
+…</div>
+<div class="pitfall"><p><strong>Trap 5 — forgetting close().</strong> The .tmp never received its buffer: 0 bytes replace the shelf (project <code>bay/quen-close</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (0 byte)<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 187:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+&nbsp;&nbsp;ban in : 1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+…</div>
+<p>And why a PrintWriter cannot warn you by itself — then why the temp file is worth it:</p>
+<pre><code class="language-java">// release: 8
+// Lab 9 — PrintWriter never throws: it only raises a flag
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+
+public class LabPrintWriterImLang {
+    public static void main(String[] args) throws IOException {
+        File file = File.createTempFile("lab9-", ".csv");
+        FileOutputStream stream = new FileOutputStream(file);
+        stream.close();   // the stream is already closed — every write will fail
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8));
+        writer.println("loai,ma,ten,nam,so_ban,rieng_1,rieng_2");
+        writer.println("1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas");
+        writer.flush();
+        System.out.println("println x2 + flush: no exception at all");
+        System.out.println("checkError()      : " + writer.checkError());
+        System.out.println("file size         : " + file.length() + " bytes");
+        writer.close();
+        file.delete();
+    }
+}</code></pre>
+<div class="out">println x2 + flush: no exception at all<br>
+checkError() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: true<br>
+file size &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 0 bytes</div>
+<pre><code class="language-java">// release: 8
+// Lab 9 — a save that crashes half-way: write in place vs write to a temp file then move
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
+public class LabTepTam {
+    static final String[] ROWS = {"1,B001,The Pragmatic Programmer", "1,B002,Effective Java", "1,B003,Clean Code"};
+
+    public static void main(String[] args) throws IOException {
+        File dir = Files.createTempDirectory("lab9").toFile();
+        File direct = new File(dir, "direct.csv");
+        File safe = new File(dir, "safe.csv");
+        save(direct, ROWS.length);
+        save(safe, ROWS.length);
+        System.out.println("before: direct " + lines(direct) + " lines, safe " + lines(safe) + " lines");
+
+        // the power goes off after 1 of 3 rows
+        try {
+            save(direct, 1);
+        } catch (IllegalStateException e) {
+            System.out.println("in place  : crash -&gt; direct.csv now has " + lines(direct) + " line(s)");
+        }
+        File tmp = new File(dir, "safe.csv.tmp");
+        try {
+            save(tmp, 1);
+            Files.move(tmp.toPath(), safe.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IllegalStateException e) {
+            System.out.println("temp+move : crash -&gt; safe.csv still has " + lines(safe) + " lines (the .tmp is the broken one)");
+        }
+    }
+
+    // writes ROWS but "crashes" after &#96;limit&#96; rows when limit &lt; ROWS.length
+    static void save(File file, int limit) throws IOException {
+        try (PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.name())) {
+            for (int i = 0; i &lt; ROWS.length; i++) {
+                if (i == limit) {
+                    throw new IllegalStateException("power off");
+                }
+                writer.println(ROWS[i]);
+            }
+        }
+    }
+
+    static int lines(File file) throws IOException {
+        return Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).size();
+    }
+}</code></pre>
+<div class="out">before: direct 3 lines, safe 3 lines<br>
+in place &nbsp;: crash -&gt; direct.csv now has 1 line(s)<br>
+temp+move : crash -&gt; safe.csv still has 3 lines (the .tmp is the broken one)</div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — split(",").</strong> 8 cột thay vì 7: xem Bước 1.</p></div>
+<div class="pitfall"><p><strong>Bẫy 2 — bảng mã của máy.</strong> Byte UTF-8 đọc bằng windows-1252, và BOM vô hình:</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 9 — cùng các byte, đọc bằng hai bảng mã
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+public class LabBangMa {
+    public static void main(String[] args) {
+        String title = "M\\u1eaft Bi\\u1ebfc";   // viết bằng mã thoát
+        byte[] bytes = title.getBytes(StandardCharsets.UTF_8);
+        StringBuilder hex = new StringBuilder();
+        for (byte b : bytes) {
+            hex.append(String.format("%02X ", b));
+        }
+        System.out.println(title.length() + " chars -&gt; " + bytes.length + " bytes in UTF-8: " + hex.toString().trim());
+        System.out.println("read as UTF-8       : " + new String(bytes, StandardCharsets.UTF_8));
+        System.out.println("read as windows-1252: " + new String(bytes, Charset.forName("windows-1252")));
+        System.out.println("read as ISO-8859-1  : " + new String(bytes, StandardCharsets.ISO_8859_1).length() + " chars, still wrong");
+        // BOM là ba byte EF BB BF, đọc ra một ký tự vô hình U+FEFF
+        byte[] bom = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'l', 'o', 'a', 'i'};
+        String first = new String(bom, StandardCharsets.UTF_8);
+        System.out.println("BOM + \\"loai\\": length " + first.length() + ", equals(\\"loai\\") " + first.equals("loai")
+                + ", after replace(\\"\\\\uFEFF\\", \\"\\") " + first.replace("\\uFEFF", "").equals("loai"));
+    }
+}</code></pre>
+<div class="out">8 chars -&gt; 12 bytes in UTF-8: 4D E1 BA AF 74 20 42 69 E1 BA BF 63<br>
+read as UTF-8 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Mắt Biếc<br>
+read as windows-1252: Máº¯t Biáº¿c<br>
+read as ISO-8859-1 &nbsp;: 12 chars, still wrong<br>
+BOM + "loai": length 5, equals("loai") false, after replace("\\uFEFF", "") true</div>
+<div class="pitfall"><p><strong>Bẫy 3 — giữ lại BOM.</strong> Dòng tiêu đề thành "dữ liệu" với loại "loai" (dự án <code>bay/quen-bom</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)</code></pre>
+<div class="out">Bo qua data/books.csv dong 1: loai '﻿loai' khong hop le (chi 1 Sach, 2 Tap chi, 3 DVD).<br>
+…</div>
+<div class="pitfall"><p><strong>Bẫy 4 — không ngoặc kép.</strong> Ghi không ngoặc kép, đọc về thành 8 cột — mất hai cuốn khi mở lại (dự án <code>bay/khong-quote</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (382 byte)<br>
+loai,ma,ten,nam,so_ban,rieng_1,rieng_2<br>
+1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas<br>
+1,B002,Effective Java,2018,2,9780134685991,Joshua Bloch<br>
+1,B003,Refactoring, Second Edition,2018,1,9780134757599,Martin Fowler<br>
+3,D006,Mắt Biếc,2019,1,117<br>
+1,B007,Java Puzzlers,2005,2,9780321336781,Joshua Bloch<br>
+1,B008,Clean Code, A Handbook,2008,2,9780132350884,Robert Martin<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 166:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: ========== CT LIBRARY ==========<br>
+&nbsp;&nbsp;ban in : Bo qua data/books.csv dong 4: can 7 cot, co 8 (ten co dau phay phai nam trong ngoac kep).<br>
+…</div>
+<div class="pitfall"><p><strong>Bẫy 5 — quên close().</strong> Tệp .tmp chưa bao giờ nhận được bộ đệm: 0 byte thay cả kệ sách (dự án <code>bay/quen-close</code>).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ mkdir -p data &amp;&amp; cp harness/data/* data/        # du lieu mau, nhu bo cham
+$ java -cp build main.Main &lt; harness/input.txt
+$ java -cp build main.Main &lt; harness/input-2.txt   # MO LAI chuong trinh (lan 2)
+$ cat data/*</code></pre>
+<div class="out">── data/books.csv (0 byte)<br>
+…</div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 187:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: 1 &nbsp;&nbsp;B008 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2008 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Clean Code, A Handbook &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Martin, ISBN 9780132350884<br>
+&nbsp;&nbsp;ban in : 1 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2018 &nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14 &nbsp;&nbsp;&nbsp;2000 &nbsp;&nbsp;Effective Java &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joshua Bloch, ISBN 9780134685991<br>
+…</div>
+<p>Và vì sao một PrintWriter tự nó không báo được cho bạn — rồi vì sao tệp tạm đáng công:</p>
+<pre><code class="language-java">// release: 8
+// Lab 9 — PrintWriter không bao giờ ném lỗi: nó chỉ bật một cờ
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+
+public class LabPrintWriterImLang {
+    public static void main(String[] args) throws IOException {
+        File file = File.createTempFile("lab9-", ".csv");
+        FileOutputStream stream = new FileOutputStream(file);
+        stream.close();   // luồng đã đóng — mọi lần ghi sẽ hỏng
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8));
+        writer.println("loai,ma,ten,nam,so_ban,rieng_1,rieng_2");
+        writer.println("1,B001,The Pragmatic Programmer,2019,3,9780135957059,David Thomas");
+        writer.flush();
+        System.out.println("println x2 + flush: no exception at all");
+        System.out.println("checkError()      : " + writer.checkError());
+        System.out.println("file size         : " + file.length() + " bytes");
+        writer.close();
+        file.delete();
+    }
+}</code></pre>
+<div class="out">println x2 + flush: no exception at all<br>
+checkError() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: true<br>
+file size &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 0 bytes</div>
+<pre><code class="language-java">// release: 8
+// Lab 9 — lần lưu sập giữa chừng: ghi thẳng vào tệp so với ghi tệp tạm rồi move
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
+public class LabTepTam {
+    static final String[] ROWS = {"1,B001,The Pragmatic Programmer", "1,B002,Effective Java", "1,B003,Clean Code"};
+
+    public static void main(String[] args) throws IOException {
+        File dir = Files.createTempDirectory("lab9").toFile();
+        File direct = new File(dir, "direct.csv");
+        File safe = new File(dir, "safe.csv");
+        save(direct, ROWS.length);
+        save(safe, ROWS.length);
+        System.out.println("before: direct " + lines(direct) + " lines, safe " + lines(safe) + " lines");
+
+        // mất điện sau 1 trên 3 dòng
+        try {
+            save(direct, 1);
+        } catch (IllegalStateException e) {
+            System.out.println("in place  : crash -&gt; direct.csv now has " + lines(direct) + " line(s)");
+        }
+        File tmp = new File(dir, "safe.csv.tmp");
+        try {
+            save(tmp, 1);
+            Files.move(tmp.toPath(), safe.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IllegalStateException e) {
+            System.out.println("temp+move : crash -&gt; safe.csv still has " + lines(safe) + " lines (the .tmp is the broken one)");
+        }
+    }
+
+    // ghi ROWS nhưng "sập" sau &#96;limit&#96; dòng khi limit &lt; ROWS.length
+    static void save(File file, int limit) throws IOException {
+        try (PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.name())) {
+            for (int i = 0; i &lt; ROWS.length; i++) {
+                if (i == limit) {
+                    throw new IllegalStateException("power off");
+                }
+                writer.println(ROWS[i]);
+            }
+        }
+    }
+
+    static int lines(File file) throws IOException {
+        return Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).size();
+    }
+}</code></pre>
+<div class="out">before: direct 3 lines, safe 3 lines<br>
+in place &nbsp;: crash -&gt; direct.csv now has 1 line(s)<br>
+temp+move : crash -&gt; safe.csv still has 3 lines (the .tmp is the broken one)</div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Quote-aware <code>splitLine</code> + <code>toCsvValue</code> (9.1, 9.3)</td><td>2</td><td>grader lines 140, 187, 214 + read</td></tr>
+<tr><td>Load: UTF-8 named, BOM, header, broken lines reported with numbers (9.2)</td><td>3</td><td>grader lines 1–5, 27–33</td></tr>
+<tr><td>Save: try-with-resources, .tmp then <code>Files.move</code>, <code>checkError</code>, <code>StorageException</code> (9.4)</td><td>2</td><td>grader lines 185–192 + read</td></tr>
+<tr><td>One line switches the storage, <code>Main</code> unchanged (9.5)</td><td>2</td><td><code>git diff</code> + read</td></tr>
+<tr><td>Oral: "why so little to change?"</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. Why must the encoding be named in InputStreamReader / OutputStreamWriter on JDK 8?</summary><p class="dap-an">✅ Without it Java uses the machine's default charset (Cp1252 on many Windows machines): the same file reads differently on different computers, and Vietnamese accents break.</p></details>
+<details><summary>2. Why write to books.csv.tmp first instead of straight to books.csv?</summary><p class="dap-an">✅ If the program stops half-way, only the temporary file is incomplete; the real file is replaced only after the new one is complete and closed.</p></details>
+<details><summary>3. Why does FileBookRepository hold an InMemoryBookRepository instead of extending it?</summary><p class="dap-an">✅ An override may not throw a new checked exception: the subclass could not report a failed save with StorageException. Holding one reuses all the CRUD and keeps the interface's contract.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td><code>splitLine</code> hiểu ngoặc kép + <code>toCsvValue</code> (9.1, 9.3)</td><td>2</td><td>dòng 140, 187, 214 của bộ chấm + đọc</td></tr>
+<tr><td>Nạp: gọi tên UTF-8, BOM, tiêu đề, báo dòng hỏng kèm số dòng (9.2)</td><td>3</td><td>dòng 1–5, 27–33 của bộ chấm</td></tr>
+<tr><td>Lưu: try-with-resources, .tmp rồi <code>Files.move</code>, <code>checkError</code>, <code>StorageException</code> (9.4)</td><td>2</td><td>dòng 185–192 của bộ chấm + đọc</td></tr>
+<tr><td>Một dòng chuyển nơi lưu, <code>Main</code> không đổi (9.5)</td><td>2</td><td><code>git diff</code> + đọc</td></tr>
+<tr><td>Vấn đáp: "vì sao đổi ít vậy?"</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. Vì sao trên JDK 8 phải gọi tên bảng mã ở InputStreamReader / OutputStreamWriter?</summary><p class="dap-an">✅ Không gọi tên thì Java dùng bảng mã mặc định của máy (nhiều máy Windows là Cp1252): cùng một tệp đọc ra khác nhau trên các máy khác nhau, và dấu tiếng Việt vỡ.</p></details>
+<details><summary>2. Vì sao ghi ra books.csv.tmp trước thay vì ghi thẳng vào books.csv?</summary><p class="dap-an">✅ Chương trình dừng giữa chừng thì chỉ tệp tạm thiếu; tệp thật chỉ bị thay sau khi tệp mới đã đủ và đã đóng.</p></details>
+<details><summary>3. Vì sao FileBookRepository giữ một InMemoryBookRepository thay vì kế thừa nó?</summary><p class="dap-an">✅ Bản ghi đè không được ném ngoại lệ checked mới: lớp con không báo được lần lưu thất bại bằng StorageException. Giữ một kho bộ nhớ thì dùng lại được toàn bộ CRUD mà vẫn đúng hợp đồng của interface.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Save members and loans too: <code>IMemberRepository</code> + <code>FileMemberRepository</code> (<code>members.csv</code>), <code>ILoanRepository</code> + <code>FileLoanRepository</code> (<code>loans.csv</code>) — the same pattern, and the end of "copies lowered but nobody holds it" after a restart.</li>
+<li>⭐ Keep the next item number in the file (a second header line, or a small <code>meta.csv</code>) so that a deleted highest id is never given again after a restart.</li>
+<li>⭐⭐ A binary backup with <code>DataOutputStream</code> (Chapter 9.C): write the count, then each item field by field; read it back mirror-wise, and compare the sizes of the two files.</li>
+</ul>
+<div class="callout"><p><strong>Next — the final project, CT Library 1.0:</strong> all three files, a report exported to a file, and the review checklist of LAB211 from start to end. After that, the same <code>IBookRepository</code> gets a third implementation on PostgreSQL — with <code>Main</code>, once more, unchanged.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Lưu cả thành viên và lượt mượn: <code>IMemberRepository</code> + <code>FileMemberRepository</code> (<code>members.csv</code>), <code>ILoanRepository</code> + <code>FileLoanRepository</code> (<code>loans.csv</code>) — cùng một khuôn, và hết cảnh "số bản đã trừ mà không ai giữ" sau khi khởi động lại.</li>
+<li>⭐ Giữ số thứ tự kế tiếp trong tệp (một dòng tiêu đề thứ hai, hoặc một tệp nhỏ <code>meta.csv</code>) để mã lớn nhất đã xoá không bao giờ được cấp lại sau khi khởi động lại.</li>
+<li>⭐⭐ Bản sao lưu nhị phân bằng <code>DataOutputStream</code> (Chương 9.C): ghi số lượng, rồi từng tài liệu theo từng trường; đọc về soi gương, và so kích thước hai tệp.</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — dự án cuối khoá CT Library 1.0:</strong> đủ cả ba tệp, một báo cáo xuất ra tệp, và checklist review LAB211 từ đầu tới cuối. Sau đó, cùng <code>IBookRepository</code> có bản cài thứ ba trên PostgreSQL — và <code>Main</code>, một lần nữa, không đổi.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch9) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -6626,6 +9146,7 @@ System.out.println(p.x + " " + p.y);`,
 export default {
   slides: [L_pro14_1, L_pro14_2, L_pro14_3],
   practice: L_on_ch9,
+  labs: [L_lab9],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 9 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ; câu "in ra gì" đã chạy thật trên JDK 8: lớp java.io.File chỉ mô tả file, readLine trả dòng kế tiếp, FileReader dùng bảng mã mặc định nên tiếng Việt vỡ trên máy Windows tiếng Anh, FileWriter ghi đè và ghi nối, RandomAccessFile writeInt + writeChar dài 6 byte, trường static và transient không được tuần tự hoá, trường transient trở về giá trị mặc định, readObject hết file ném EOFException chứ không trả null, chế độ "rws", và dòng code nào biên dịch được trên JDK 8 của phòng thi.',
 };

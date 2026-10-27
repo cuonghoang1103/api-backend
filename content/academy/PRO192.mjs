@@ -1443,6 +1443,8 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch8.mjs */
         ch8.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch8.mjs */
+        ...ch8.labs,
         {
           title: 'Chapter 8 Quiz|||Quiz chương 8',
           slug: 'pro192-quiz-ch8',
@@ -1547,6 +1549,8 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
         },
         /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch9.mjs */
         ch9.practice,
+        /* 🏗️ LAB CT Library (chuẩn LAB211) — ./pro192/ch9.mjs */
+        ...ch9.labs,
         {
           title: 'Chapter 9 Quiz|||Quiz chương 9',
           slug: 'pro192-quiz-ch9',

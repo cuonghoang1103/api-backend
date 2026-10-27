@@ -2,13 +2,16 @@
  * PRO192 · Chương 8 — Collections (pro13).
  * Bài 📑 học theo từng slide: pro13 (tmp_13.pptx, slide 1–27).
  * Bài 🧪 thực hành + 🗂 thuật ngữ + 📌 tóm tắt: pro192-on-ch8.
+ * Bài 🏗️ LAB CT Library (chuẩn LAB211, deck tự dựng): pro192-lab-8-collections.
  * Quiz viết lại (10 câu, giữ slug pro192-quiz-ch8).
  *
  * ⚠️ FILE SINH TỰ ĐỘNG bởi flm-nguon/PRO192/gen/gen.mjs từ gen/src/**, gen/java/** và gen/uml/**.
  * Đừng sửa tay: sửa nguồn rồi chạy lại `node PRO192/gen/gen.mjs`.
  */
 
-import { walk, walkHead, books, bi } from './_slides.mjs';
+import { walk, walkHead, books, registerDeck, bi } from './_slides.mjs';
+
+registerDeck('lab8', { code: 'PRO192 Lab 8', en: 'Lab 8 — CT Library: Collections for real', vi: 'Lab 8 — CT Library: dùng Collections thật sự', total: 17, w: 1280, h: 720 });
 
 /* ───────── 8.A — 📑 Slide by slide · Collections (1/2): framework, generics, List, ArrayList, LinkedList (slides 1–11) ───────── */
 const L_pro13_1 = {
@@ -4749,6 +4752,2517 @@ Q6 [An, Binh, Dung] visited=3</div>
   ].join('\n'),
 };
 
+/* ───────── Lab 8 — 🏗️ CT Library: Collections for real (HashSet + equals/hashCode, map of lists, HashMap by id, TreeMap, top 5) ───────── */
+const L_lab8 = {
+  title: 'Lab 8 — 🏗️ CT Library: Collections for real (HashSet + equals/hashCode, map of lists, HashMap by id, TreeMap, top 5)|||Lab 8 — 🏗️ CT Library: dùng Collections thật sự (HashSet + equals/hashCode, Map của các danh sách, HashMap theo mã, TreeMap, top 5)',
+  slug: 'pro192-lab-8-collections',
+  type: 'VIDEO',
+  description: 'Lab 8 của dự án CT Library (sau Chương 8), chuẩn review LAB211: mỗi câu hỏi của chương trình chọn đúng một collection. Lượt mượn đang mở vào một HashSet<Loan> — Loan ghi đè equals và hashCode nên mượn trùng bị add() từ chối, còn trả bằng một phiếu mới vẫn tìm thấy; lịch sử mượn là một HashMap<String, ArrayList<Loan>> (lần đầu get trả null, phải tạo danh sách); thành viên vào HashMap theo mã (một lần get thay cho cả vòng lặp); báo cáo tác giả bằng TreeMap tự sắp A–Z; top 5 tài liệu mượn nhiều nhất đếm bằng HashMap rồi sắp ba khoá. Khai báo bằng kiểu cụ thể (ArrayList, HashMap) theo luật thầy. Kèm năm bẫy chạy thật: equals thiếu hashCode, đổi khoá khi đang nằm trong Set, get trả null ra NullPointerException, TreeSet nuốt phần tử hoà, thứ tự HashMap không phải lời hứa. Starter + đáp án tải về, bộ chấm kiểu PE 588 dòng, rubric 10 điểm.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 8 · Lab 8 · CT Library</span>
+<h2>Lab 8 — Collections for real</h2>
+<p class="lead">Chapter 8 gave you a toolbox: List keeps order and duplicates, Set refuses duplicates, Map looks a value up by its key, and the hash- and tree-based versions answer those questions in different ways. Lab 8 uses each tool exactly where CT Library asks its question — and meets the bug that every hash structure is famous for: <code>equals</code> without <code>hashCode</code>.</p>
+<p>The starter is a fresh project: Lab 7 finished, the new menu options (15–17), their data classes and views given, five TODOs marked <code>TODO Lab 8.x</code>. Plan about <strong>2.5 hours</strong>.</p>`,
+    `<span class="eyebrow">Chương 8 · Lab 8 · CT Library</span>
+<h2>Lab 8 — dùng Collections thật sự</h2>
+<p class="lead">Chương 8 đưa bạn một hộp đồ nghề: List giữ thứ tự và cho trùng, Set từ chối phần tử trùng, Map tra giá trị theo khoá, và các bản dựa trên băm hay trên cây trả lời những câu đó theo những cách khác nhau. Lab 8 dùng từng món đúng chỗ CT Library đặt câu hỏi — và gặp con bọ nổi tiếng nhất của mọi cấu trúc băm: có <code>equals</code> mà không có <code>hashCode</code>.</p>
+<p>Starter là một dự án sạch: Lab 7 đã xong, các lựa chọn menu mới (15–17) cùng lớp dữ liệu và view của chúng cho sẵn, năm TODO đánh dấu <code>TODO Lab 8.x</code>. Dành khoảng <strong>2,5 giờ</strong>.</p>`),
+    bi(`<h2>📑 Slide by slide — PRO192 Lab 8 (17 slides)</h2>
+<p>The deck of this lab, made for CT Library (it is not a school deck). Each slide is followed by its key idea and the explanation; every piece of code and every output on the slides comes from the real project, compiled with <code>javac --release 8</code> and run — the same runs you find in the steps below.</p>`,
+    `<h2>📑 Học theo từng slide — PRO192 Lab 8 (17 slide)</h2>
+<p>Bộ slide của lab này, dựng riêng cho CT Library (không phải slide của trường). Dưới mỗi slide là ý chính và lời giảng; mọi đoạn code, mọi output trên slide đều lấy từ dự án thật, biên dịch bằng <code>javac --release 8</code> rồi chạy — đúng những lần chạy bạn gặp lại ở các bước bên dưới.</p>`),
+    walk('lab8', [
+      [1, 'Lab 8 — CT Library: Collections for real',
+        `<p class="y-chinh">🎯 Lab 8 = Chapter 8 on a real codebase: one question, one collection.</p>
+<p>Five TODOs — equals and hashCode, a map of lists, a lookup by key, a sorted map, a top-5 report — and five traps that come with hash and tree structures, each run for real.</p>`,
+        `<p class="y-chinh">🎯 Lab 8 = Chương 8 trên một bộ mã thật: một câu hỏi, một collection.</p>
+<p>Năm TODO — equals và hashCode, một Map của các danh sách, tra theo khoá, một Map có thứ tự, một báo cáo top 5 — và năm cái bẫy đi kèm cấu trúc băm và cấu trúc cây, cái nào cũng chạy thật.</p>`],
+      [2, 'Ticket CTL-8 — the club wants answers',
+        `<p class="y-chinh">🎯 Refuse a member borrowing the same item twice, keep every member's loan history, list the authors A–Z, and show the five most borrowed items.</p>
+<p>Done means: PASS 588/588, <code>lint.py</code> silent (so: <code>ArrayList</code>, <code>HashMap</code>, <code>HashSet</code>, <code>TreeMap</code> in every declaration), the second "M001 borrows B001" refused, M001 able to return B001 with a brand-new <code>Loan</code> object, and the top 5 cutting D006 — the sixth item with one loan.</p>`,
+        `<p class="y-chinh">🎯 Từ chối thành viên mượn cùng một tài liệu hai lần, giữ lịch sử mượn của từng thành viên, liệt kê tác giả A–Z, và cho xem năm tài liệu được mượn nhiều nhất.</p>
+<p>Xong nghĩa là: PASS 588/588, <code>lint.py</code> im lặng (tức là mọi khai báo đều <code>ArrayList</code>, <code>HashMap</code>, <code>HashSet</code>, <code>TreeMap</code>), lần "M001 mượn B001" thứ hai bị từ chối, M001 trả được B001 bằng một đối tượng <code>Loan</code> mới tinh, và top 5 cắt D006 — tài liệu thứ sáu có một lượt.</p>`],
+      [3, 'One question, one collection',
+        `<p class="y-chinh">🎯 "Is this loan already open?" → <code>HashSet&lt;Loan&gt;</code>. "What did M001 borrow?" → <code>HashMap&lt;String, ArrayList&lt;Loan&gt;&gt;</code>. "Who is M003?" → <code>HashMap&lt;String, Member&gt;</code>. "Authors A–Z?" → <code>TreeMap&lt;String, Integer&gt;</code>. "How many loans per item?" → <code>HashMap&lt;String, Integer&gt;</code>.</p>
+<p>The shelf itself stays an <code>ArrayList&lt;LibraryItem&gt;</code>: it is walked, filtered, sorted and removed from by index — list jobs. Choosing is the skill: a Set answers "is it there?" in one step, a Map answers "what belongs to this key?", a Tree keeps its keys sorted.</p>`,
+        `<p class="y-chinh">🎯 "Lượt mượn này đang mở chưa?" → <code>HashSet&lt;Loan&gt;</code>. "M001 đã mượn gì?" → <code>HashMap&lt;String, ArrayList&lt;Loan&gt;&gt;</code>. "M003 là ai?" → <code>HashMap&lt;String, Member&gt;</code>. "Tác giả A–Z?" → <code>TreeMap&lt;String, Integer&gt;</code>. "Mỗi tài liệu mấy lượt?" → <code>HashMap&lt;String, Integer&gt;</code>.</p>
+<p>Bản thân kệ sách vẫn là <code>ArrayList&lt;LibraryItem&gt;</code>: nó được duyệt, lọc, sắp, xoá theo chỉ số — việc của danh sách. Kỹ năng nằm ở chỗ chọn: Set trả lời "có trong đó không?" trong một bước, Map trả lời "thứ gì thuộc về khoá này?", cây giữ khoá luôn có thứ tự.</p>`],
+      [4, 'ArrayList, not List — the textbook and the reviewer',
+        `<p class="y-chinh">🎯 Chapter 8 (and every Java book) says "declare with the interface": <code>List&lt;Loan&gt; list = new ArrayList&lt;&gt;()</code>. The LAB211 reviewer says the opposite: declare the concrete type, <code>ArrayList&lt;Loan&gt;</code> — <code>lint.py</code> rule COLLECTION.</p>
+<p>Both have a reason. The book: code that only knows <code>List</code> can switch to <code>LinkedList</code> by changing one <code>new</code>. The reviewer: in a first-year lab, <code>List</code>/<code>Map</code> everywhere is the fingerprint of copied or AI-written code, and you must show you know which class you chose. In this course the labs follow the reviewer; when a PE brief itself dictates a signature with <code>List</code>, keep it and mark the line <code>// brief: …</code> — the lint accepts that.</p>`,
+        `<p class="y-chinh">🎯 Chương 8 (và mọi sách Java) nói "khai báo bằng interface": <code>List&lt;Loan&gt; list = new ArrayList&lt;&gt;()</code>. Thầy review LAB211 nói ngược lại: khai báo kiểu cụ thể, <code>ArrayList&lt;Loan&gt;</code> — luật COLLECTION của <code>lint.py</code>.</p>
+<p>Cả hai đều có lý. Sách: mã chỉ biết <code>List</code> thì đổi sang <code>LinkedList</code> bằng một chữ <code>new</code>. Thầy: ở lab năm nhất, <code>List</code>/<code>Map</code> khắp nơi là dấu vân tay của mã chép hoặc mã AI viết, và bạn phải cho thấy mình biết đã chọn lớp nào. Trong khoá này lab theo luật thầy; khi chính đề PE bắt một chữ ký dùng <code>List</code> thì giữ nguyên và đánh dấu dòng đó <code>// brief: …</code> — lint chấp nhận.</p>`],
+      [5, 'TODO 8.1 — a Loan needs equals AND hashCode',
+        `<p class="y-chinh">🎯 Two <code>Loan</code> objects with the same member id and the same item id are the same loan: override <code>equals</code> on those two fields, and <code>hashCode</code> from the very same two fields.</p>
+<p><code>Objects.hash(memberId, itemId)</code> computes <code>31 × (31 + memberId.hashCode()) + itemId.hashCode()</code> — the real run prints 74603564 both ways. The contract: equal objects must have equal hash codes. The reverse is not required — two different loans may share a bucket, and then <code>equals</code> decides.</p>`,
+        `<p class="y-chinh">🎯 Hai đối tượng <code>Loan</code> cùng mã thành viên và cùng mã tài liệu là cùng một lượt mượn: ghi đè <code>equals</code> theo hai trường đó, và <code>hashCode</code> từ đúng hai trường đó.</p>
+<p><code>Objects.hash(memberId, itemId)</code> tính <code>31 × (31 + memberId.hashCode()) + itemId.hashCode()</code> — lần chạy thật in 74603564 theo cả hai cách. Hợp đồng: hai đối tượng bằng nhau phải có mã băm bằng nhau. Chiều ngược lại không bắt buộc — hai lượt khác nhau có thể chung một ô, khi đó <code>equals</code> quyết định.</p>`],
+      [6, 'Inside a HashSet: hashCode picks, equals confirms',
+        `<p class="y-chinh">🎯 <code>add</code>, <code>contains</code> and <code>remove</code> all do the same two steps: compute the bucket from <code>hashCode()</code>, then ask <code>equals</code> only of the elements already in that bucket.</p>
+<p>That is why <code>add</code> returns <code>false</code> for the second "M001 borrows B001" (same bucket, equals true), and why <code>remove(new Loan("M001", "B001"))</code> finds the stored loan although it is a different object. The real run of <code>LabHashSetLoan</code>: with no override, the set keeps both and the remove fails; with equals only — the same; with both, the second add is refused and the remove succeeds.</p>`,
+        `<p class="y-chinh">🎯 <code>add</code>, <code>contains</code> và <code>remove</code> đều làm cùng hai bước: tính ô từ <code>hashCode()</code>, rồi chỉ hỏi <code>equals</code> với các phần tử đã nằm trong ô đó.</p>
+<p>Vì thế <code>add</code> trả <code>false</code> cho lần "M001 mượn B001" thứ hai (cùng ô, equals đúng), và <code>remove(new Loan("M001", "B001"))</code> tìm được lượt đang lưu dù là một đối tượng khác. Lần chạy thật <code>LabHashSetLoan</code>: không ghi đè gì thì Set giữ cả hai và remove thất bại; chỉ có equals — y như vậy; có cả hai thì lần add thứ hai bị từ chối và remove thành công.</p>`],
+      [7, 'Trap: equals without hashCode',
+        `<p class="y-chinh">🎯 Delete only <code>hashCode()</code> from Loan (project <code>bay/thieu-hashcode</code>): it compiles, it runs, nothing crashes — and the grader reports 13 wrong lines.</p>
+<p>Without <code>hashCode</code>, each new Loan gets an identity hash, almost surely another bucket, so <code>equals</code> is never asked. Line 110: the second B001 is lent ("Con 1 ban") instead of refused; line 215: M001 cannot return B001 ("khong muon B001"); and the loan counts drift from there. This is the bug Chapter 8's Bài 5 showed on <code>ProductBug</code>, now inside a real program.</p>`,
+        `<p class="y-chinh">🎯 Chỉ xoá <code>hashCode()</code> khỏi Loan (dự án <code>bay/thieu-hashcode</code>): biên dịch được, chạy được, không sập gì — và bộ chấm báo 13 dòng sai.</p>
+<p>Không có <code>hashCode</code>, mỗi Loan mới nhận mã băm theo danh tính, gần như chắc chắn rơi vào ô khác, nên <code>equals</code> không bao giờ được hỏi. Dòng 110: cuốn B001 thứ hai được cho mượn ("Con 1 ban") thay vì bị từ chối; dòng 215: M001 không trả được B001 ("khong muon B001"); và số đang mượn lệch dần từ đó. Đây chính là con bọ Bài 5 Chương 8 cho thấy trên <code>ProductBug</code>, giờ nằm trong một chương trình thật.</p>`],
+      [8, 'Trap: changing a key while it is stored',
+        `<p class="y-chinh">🎯 A Loan stored in bucket 14 that then gets <code>setItemId("B002")</code> now hashes to bucket 15 — and the set can no longer find it, by either id (real run of <code>LabKhoaBiSua</code>).</p>
+<p><code>contains(loan)</code>, <code>contains(new M001-B002)</code>, <code>contains(new M001-B001)</code> and <code>remove(loan)</code> are all <code>false</code>, while the set still prints <code>[M001-B002]</code> with size 1 — a ghost no method can reach. The rule: fields used by <code>equals</code>/<code>hashCode</code> must not change while the object is a key of a Set or a Map. CT Library never calls those setters on a stored Loan; the comments in <code>Loan.java</code> say so.</p>`,
+        `<p class="y-chinh">🎯 Một Loan cất ở ô 14 rồi bị <code>setItemId("B002")</code> giờ băm ra ô 15 — và Set không còn tìm thấy nó nữa, bằng mã nào cũng không (lần chạy thật <code>LabKhoaBiSua</code>).</p>
+<p><code>contains(loan)</code>, <code>contains(new M001-B002)</code>, <code>contains(new M001-B001)</code> và <code>remove(loan)</code> đều <code>false</code>, trong khi Set vẫn in <code>[M001-B002]</code> với size 1 — một bóng ma không phương thức nào chạm tới. Luật: các trường dùng trong <code>equals</code>/<code>hashCode</code> không được đổi khi đối tượng đang là khoá của một Set hay Map. CT Library không bao giờ gọi các setter đó trên một Loan đã cất; chú thích trong <code>Loan.java</code> ghi rõ điều đó.</p>`],
+      [9, 'TODO 8.2 — a map of lists: the loan history',
+        `<p class="y-chinh">🎯 <code>historyMap.get(memberId)</code> returns that member's list — or <code>null</code> the first time. Create the list, <code>put</code> it, then add: the list inside the map is the same object, so the map "sees" every later add.</p>
+<p>Real result: M001 has 3 loans in borrow order (B001, T005, B001 — borrowed again after returning), holding 2 of 3; M003's third loan is D006, which was deleted from the shelf afterwards — the history keeps it and prints "(da xoa khoi kho)". History is never removed; the open-loan Set is.</p>`,
+        `<p class="y-chinh">🎯 <code>historyMap.get(memberId)</code> trả về danh sách của thành viên đó — hoặc <code>null</code> ở lần đầu. Tạo danh sách, <code>put</code> nó vào, rồi mới add: danh sách nằm trong Map là cùng một đối tượng, nên Map "thấy" mọi lần add sau đó.</p>
+<p>Kết quả thật: M001 có 3 lượt theo thứ tự mượn (B001, T005, B001 — mượn lại sau khi trả), đang giữ 2 trên 3; lượt thứ ba của M003 là D006, tài liệu bị xoá khỏi kệ sau đó — lịch sử vẫn giữ và in "(da xoa khoi kho)". Lịch sử không bao giờ bị xoá; Set lượt đang mở thì có.</p>`],
+      [10, 'Trap: get() returns null — NPE on the first borrow',
+        `<p class="y-chinh">🎯 The "short" version <code>historyMap.get(memberId).add(loan)</code> crashes on the very first borrow of the program (project <code>bay/get-null</code>): nobody has put a list for M001 yet.</p>
+<p>JDK 21 explains it: "Cannot invoke "java.util.ArrayList.add(Object)" because the return value of "java.util.HashMap.get(Object)" is null"; JDK 8 prints only <code>java.lang.NullPointerException</code> and the line. The same null hides in counting: <code>map.get(id) + 1</code> on a new key unboxes <code>null</code> (real JDK 8 run of <code>LabDemTanSuat</code>). Three correct ways: check null, <code>getOrDefault(id, 0)</code>, or <code>merge(id, 1, Integer::sum)</code> — same map.</p>`,
+        `<p class="y-chinh">🎯 Bản "gọn" <code>historyMap.get(memberId).add(loan)</code> sập ngay lượt mượn đầu tiên của chương trình (dự án <code>bay/get-null</code>): chưa ai put danh sách nào cho M001.</p>
+<p>JDK 21 giải thích: "Cannot invoke "java.util.ArrayList.add(Object)" because the return value of "java.util.HashMap.get(Object)" is null"; JDK 8 chỉ in <code>java.lang.NullPointerException</code> và số dòng. Cái null đó cũng nấp trong phép đếm: <code>map.get(id) + 1</code> với khoá mới là unboxing <code>null</code> (lần chạy JDK 8 thật <code>LabDemTanSuat</code>). Ba cách đúng: kiểm null, <code>getOrDefault(id, 0)</code>, hoặc <code>merge(id, 1, Integer::sum)</code> — ra cùng một Map.</p>`],
+      [11, 'TODO 8.3 — one get instead of a loop',
+        `<p class="y-chinh">🎯 Members now live in <code>HashMap&lt;String, Member&gt;</code> keyed by id: <code>findById</code> is one <code>memberMap.get(id)</code>, <code>null</code> means "no such member".</p>
+<p>The starter's loop over <code>memberMap.values()</code> still gives the right answer — that is why this TODO is checked in the rubric, not by the grader. And a HashMap makes no promise about order: the same four puts print <code>[M010, M021, M002, M001]</code> from a HashMap, insertion order from a LinkedHashMap, sorted order from a TreeMap (real run of <code>LabThuTuMap</code>). Option 7 still prints members A–Z because the service sorts.</p>`,
+        `<p class="y-chinh">🎯 Thành viên giờ nằm trong <code>HashMap&lt;String, Member&gt;</code> theo mã: <code>findById</code> là một lần <code>memberMap.get(id)</code>, <code>null</code> nghĩa là "không có thành viên đó".</p>
+<p>Vòng lặp trên <code>memberMap.values()</code> của starter vẫn cho đúng kết quả — vì thế TODO này kiểm bằng rubric, không bằng bộ chấm. Và HashMap không hứa gì về thứ tự: cùng bốn lần put, HashMap in <code>[M010, M021, M002, M001]</code>, LinkedHashMap giữ thứ tự thêm vào, TreeMap theo thứ tự khoá (lần chạy thật <code>LabThuTuMap</code>). Lựa chọn 7 vẫn in thành viên A–Z vì service sắp.</p>`],
+      [12, 'TODO 8.4 — authors in a TreeMap',
+        `<p class="y-chinh">🎯 For every item with an author, <code>authorMap.put(author, authorMap.getOrDefault(author, 0) + 1)</code>; a <code>TreeMap</code> keeps the keys unique and sorted, so the view prints A–Z with no sort call.</p>
+<p>Real result: 4 authors, Joshua Bloch with 2 titles — "joshua bloch" typed for Java Puzzlers was normalised to Title Case by <code>Validation</code>, so it lands on the same key as Effective Java. Magazines and DVDs answer <code>getAuthor()</code> with an empty string (the default in <code>LibraryItem</code>; only <code>Book</code> overrides it), and are skipped.</p>`,
+        `<p class="y-chinh">🎯 Với mỗi tài liệu có tác giả, <code>authorMap.put(tacGia, authorMap.getOrDefault(tacGia, 0) + 1)</code>; <code>TreeMap</code> giữ khoá không trùng và luôn có thứ tự, nên view in A–Z mà không cần gọi sort.</p>
+<p>Kết quả thật: 4 tác giả, Joshua Bloch có 2 đầu sách — "joshua bloch" gõ cho Java Puzzlers được <code>Validation</code> chuẩn hoá thành Title Case, nên rơi vào cùng khoá với Effective Java. Tạp chí và DVD trả lời <code>getAuthor()</code> bằng chuỗi rỗng (câu trả lời mặc định ở <code>LibraryItem</code>; chỉ <code>Book</code> ghi đè), và bị bỏ qua.</p>`],
+      [13, 'TODO 8.5 — count, sort on three keys, keep five',
+        `<p class="y-chinh">🎯 Count each id of every loan ever made into a <code>HashMap&lt;String, Integer&gt;</code>; turn each item still on the shelf that has a count into a row; sort by loans descending, then title A–Z, then id; keep the first <code>TOP_LIMIT</code> (5).</p>
+<p>Real result: B001 3 loans, B007 2, then four items tie on 1 — the title decides: Effective Java, Head First Java, Tech Weekly … and The Social Network (D006) is sixth, so it is cut. The counts include returned loans: the report answers "how popular", not "who holds it now".</p>`,
+        `<p class="y-chinh">🎯 Đếm mã của mọi lượt từng mượn vào một <code>HashMap&lt;String, Integer&gt;</code>; mỗi tài liệu còn trên kệ có số đếm thành một dòng; sắp theo số lượt giảm dần, rồi tên A–Z, rồi mã; giữ <code>TOP_LIMIT</code> (5) dòng đầu.</p>
+<p>Kết quả thật: B001 3 lượt, B007 2, rồi bốn tài liệu hoà ở 1 — tên quyết định: Effective Java, Head First Java, Tech Weekly … và The Social Network (D006) đứng thứ sáu nên bị cắt. Số đếm tính cả lượt đã trả: báo cáo trả lời "được ưa chuộng thế nào", không phải "ai đang giữ".</p>`],
+      [14, 'Trap: a TreeSet that swallows ties',
+        `<p class="y-chinh">🎯 "A TreeSet sorts for me" — but with a comparator on loans only, three of the four items with 1 loan are refused: <code>add</code> returns <code>false</code>, size 3 instead of 6 (real run of <code>LabTreeSetNuot</code>).</p>
+<p>For a TreeSet (and a TreeMap), <code>compare(a, b) == 0</code> means "the same element". Chapter 8's Q3 showed it with string lengths; here it would silently delete books from a report. Sort an <code>ArrayList</code> with a comparator whose last key is unique (the id), then cut — exactly what TODO 8.5 does.</p>`,
+        `<p class="y-chinh">🎯 "TreeSet sắp hộ mình" — nhưng với bộ so sánh chỉ theo số lượt, ba trong bốn tài liệu có 1 lượt bị từ chối: <code>add</code> trả <code>false</code>, size 3 thay vì 6 (lần chạy thật <code>LabTreeSetNuot</code>).</p>
+<p>Với TreeSet (và TreeMap), <code>compare(a, b) == 0</code> nghĩa là "cùng một phần tử". Câu Q3 Chương 8 đã cho thấy điều đó với độ dài chuỗi; ở đây nó sẽ lặng lẽ xoá sách khỏi báo cáo. Sắp một <code>ArrayList</code> bằng bộ so sánh có khoá cuối là duy nhất (mã), rồi cắt — đúng việc TODO 8.5 làm.</p>`],
+      [15, 'One request through the layers: "17 — top 5"',
+        `<p class="y-chinh">🎯 Main calls the controller once; the controller takes a copy of the shelf from <code>IBookRepository</code> and the id of every loan ever from <code>LoanRepository</code>, and gives both to <code>BookService.buildTopBorrowed</code>; the view prints the rows.</p>
+<p>Same layering as Lab 5–7: repositories hold the data, the service holds none and only computes, the controller is the only class holding both repositories — and still never imports a model class. Borrowing changed order too: the loan is recorded first (a duplicate throws before any copy is taken), then the copies go down.</p>`,
+        `<p class="y-chinh">🎯 Main gọi controller một lần; controller lấy bản sao kệ sách từ <code>IBookRepository</code> và mã của mọi lượt từng mượn từ <code>LoanRepository</code>, đưa cả hai cho <code>BookService.buildTopBorrowed</code>; view in các dòng.</p>
+<p>Cùng cách chia tầng như Lab 5–7: repository giữ dữ liệu, service không giữ gì và chỉ tính, controller là lớp duy nhất giữ cả hai repository — và vẫn không import lớp model nào. Việc mượn cũng đổi thứ tự: ghi lượt mượn trước (trùng thì ném lỗi trước khi trừ bản nào), rồi mới trừ số bản.</p>`],
+      [16, 'Green: PASS 588/588 and a silent reviewer',
+        `<p class="y-chinh">🎯 Green = the grader at 588/588 and <code>lint.py</code> silent; TODO 8.3 changes no output, 8.1, 8.2, 8.4 and 8.5 each turn their lines green.</p>
+<p>A good order: 8.1 first (it moves the most lines — the whole borrow/return story depends on it), then 8.2, 8.4, 8.5, and 8.3 last as a clean-up. Then search the project for <code>List&lt;</code>, <code>Map&lt;</code>, <code>Set&lt;</code> in declarations: zero hits, or the lint tells you where.</p>`,
+        `<p class="y-chinh">🎯 Xanh = bộ chấm 588/588 và <code>lint.py</code> im lặng; TODO 8.3 không đổi output, mỗi TODO 8.1, 8.2, 8.4, 8.5 làm xanh phần dòng của nó.</p>
+<p>Thứ tự nên làm: 8.1 trước (nó kéo nhiều dòng nhất — cả câu chuyện mượn/trả dựa vào nó), rồi 8.2, 8.4, 8.5, và 8.3 cuối cùng như một lần dọn mã. Rồi tìm trong dự án các chữ <code>List&lt;</code>, <code>Map&lt;</code>, <code>Set&lt;</code> ở khai báo: không còn chỗ nào, hoặc lint sẽ chỉ ra.</p>`],
+      [17, 'Rubric — 10 points, PE style',
+        `<p class="y-chinh">🎯 The oral question is the classic of hash structures: "you overrode equals — why must you also override hashCode?".</p>
+<p>Answer in two sentences: a HashSet or HashMap first picks the bucket with hashCode and asks equals only inside that bucket; two equal objects with different hash codes land in different buckets, so equals is never asked and the duplicate — or the lookup — slips through.</p>`,
+        `<p class="y-chinh">🎯 Câu vấn đáp là câu kinh điển của cấu trúc băm: "em đã ghi đè equals — vì sao phải ghi đè cả hashCode?".</p>
+<p>Trả lời bằng hai câu: HashSet hay HashMap chọn ô bằng hashCode trước và chỉ hỏi equals bên trong ô đó; hai đối tượng bằng nhau mà mã băm khác nhau thì rơi vào hai ô khác nhau, equals không bao giờ được hỏi, và phần tử trùng — hoặc lần tra cứu — lọt qua.</p>`],
+    ]),
+    bi(`<h2>1. The ticket</h2>
+<div class="callout"><p><strong>CTL-8 · CT Library · priority: medium.</strong> "Three complaints and two wishes. (1) Somebody borrowed two copies of the same book on one card — one card, one copy per title, please. (2) Returns sometimes fail with 'you did not borrow this' — check it. (3) Looking up a member is a full scan; we will have 300. (4) The board wants a list of our authors A–Z and how many titles each. (5) And a 'top 5 most borrowed' for the newsletter." — the team lead</p></div>
+<table>
+<thead><tr><th>You need</th><th>From</th></tr></thead>
+<tbody>
+<tr><td>List, Set, Map — which question each answers; ArrayList vs LinkedList</td><td>8.A (pro13 slides 1–11)</td></tr>
+<tr><td>HashSet, bucket = hashCode, equals inside the bucket; TreeSet + Comparator</td><td>8.B (pro13 slides 12–21)</td></tr>
+<tr><td>HashMap, TreeMap, keySet / entrySet, iterating a Map</td><td>8.B (pro13 slides 22–27)</td></tr>
+<tr><td>equals without hashCode, keys that change, counting with a Map</td><td>8.2 🧪 (Bài 3, Bài 5)</td></tr>
+</tbody>
+</table>`,
+    `<h2>1. Ticket</h2>
+<div class="callout"><p><strong>CTL-8 · CT Library · ưu tiên: trung bình.</strong> "Ba lời phàn nàn và hai mong muốn. (1) Có người mượn hai bản của cùng một cuốn trên một thẻ — một thẻ, mỗi đầu sách một bản thôi. (2) Trả sách đôi khi báo 'bạn không mượn cuốn này' — kiểm lại giúp. (3) Tìm một thành viên là duyệt hết danh sách; sắp tới sẽ có 300 người. (4) Ban chủ nhiệm muốn danh sách tác giả A–Z và mỗi người bao nhiêu đầu sách. (5) Và một bảng 'top 5 được mượn nhiều nhất' cho bản tin." — trưởng nhóm</p></div>
+<table>
+<thead><tr><th>Bạn cần</th><th>Học ở</th></tr></thead>
+<tbody>
+<tr><td>List, Set, Map — mỗi loại trả lời câu hỏi nào; ArrayList hay LinkedList</td><td>8.A (pro13 slide 1–11)</td></tr>
+<tr><td>HashSet, ô = hashCode, equals trong ô; TreeSet + Comparator</td><td>8.B (pro13 slide 12–21)</td></tr>
+<tr><td>HashMap, TreeMap, keySet / entrySet, duyệt Map</td><td>8.B (pro13 slide 22–27)</td></tr>
+<tr><td>equals thiếu hashCode, khoá bị đổi, đếm bằng Map</td><td>8.2 🧪 (Bài 3, Bài 5)</td></tr>
+</tbody>
+</table>`),
+    bi(`<h2>2. Requirements and acceptance criteria</h2>
+<ol>
+<li><strong>Loan equality</strong>: <code>Loan</code> overrides <code>equals</code> (same member id and same item id) and <code>hashCode</code> from the same two fields; open loans live in a <code>HashSet&lt;Loan&gt;</code>; borrowing the same item twice is refused; returning works with a new <code>Loan</code> object.</li>
+<li><strong>Loan history (15)</strong>: <code>HashMap&lt;String, ArrayList&lt;Loan&gt;&gt;</code> from member id to every loan in borrow order, never removed; deleted items show as "(da xoa khoi kho)".</li>
+<li><strong>Members by id</strong>: <code>HashMap&lt;String, Member&gt;</code>; <code>findById</code> is a single <code>get</code>.</li>
+<li><strong>Authors (16)</strong>: <code>TreeMap&lt;String, Integer&gt;</code> author → number of titles, printed A–Z.</li>
+<li><strong>Top 5 (17)</strong>: loans per item counted with a <code>HashMap</code>, sorted by loans ↓, title A–Z, id; at most 5 rows.</li>
+<li><strong>Concrete types</strong>: no <code>List&lt;</code>, <code>Map&lt;</code>, <code>Set&lt;</code> in any declaration (lint rule COLLECTION).</li>
+</ol>
+<div class="callout ok"><p><strong>Done means:</strong> <code>check.sh</code> prints <code>PASS: 588/588 dong khop expected.txt</code> · <code>lint.py</code> 0 violations · <code>javac --release 8</code> compiles · <code>MemberRepository</code> has no loop that searches by id · you can explain why equals needs hashCode.</p></div>`,
+    `<h2>2. Yêu cầu và tiêu chí đạt</h2>
+<ol>
+<li><strong>Lượt mượn bằng nhau</strong>: <code>Loan</code> ghi đè <code>equals</code> (cùng mã thành viên và cùng mã tài liệu) và <code>hashCode</code> từ đúng hai trường đó; lượt đang mở nằm trong <code>HashSet&lt;Loan&gt;</code>; mượn cùng tài liệu lần hai bị từ chối; trả được bằng một đối tượng <code>Loan</code> mới.</li>
+<li><strong>Lịch sử mượn (15)</strong>: <code>HashMap&lt;String, ArrayList&lt;Loan&gt;&gt;</code> từ mã thành viên tới mọi lượt theo thứ tự mượn, không bao giờ xoá; tài liệu đã xoá hiện "(da xoa khoi kho)".</li>
+<li><strong>Thành viên theo mã</strong>: <code>HashMap&lt;String, Member&gt;</code>; <code>findById</code> là đúng một lần <code>get</code>.</li>
+<li><strong>Tác giả (16)</strong>: <code>TreeMap&lt;String, Integer&gt;</code> tác giả → số đầu sách, in A–Z.</li>
+<li><strong>Top 5 (17)</strong>: số lượt mỗi tài liệu đếm bằng <code>HashMap</code>, sắp theo số lượt ↓, tên A–Z, mã; tối đa 5 dòng.</li>
+<li><strong>Kiểu cụ thể</strong>: không có <code>List&lt;</code>, <code>Map&lt;</code>, <code>Set&lt;</code> ở bất kỳ khai báo nào (luật COLLECTION của lint).</li>
+</ol>
+<div class="callout ok"><p><strong>Xong nghĩa là:</strong> <code>check.sh</code> in <code>PASS: 588/588 dong khop expected.txt</code> · <code>lint.py</code> 0 vi phạm · <code>javac --release 8</code> biên dịch được · <code>MemberRepository</code> không còn vòng lặp tìm theo mã · bạn giải thích được vì sao equals cần hashCode.</p></div>`),
+    bi(`<h2>3. Files</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab8-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab8-starter.zip</span><span class="lc-sub">Lab 7 solution + menu 15–17, HistoryRowDTO, TopItemDTO, 3 views · TODO 8.1–8.5 · harness (588 lines) · CheckHarness</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab8-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab8-solution.zip</span><span class="lc-sub">the full solution — open it only after your own attempt</span></span>
+<span class="lc-cta">Download</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab8/src/  (new or changed since Lab 7)
+  model/Loan.java                    TODO 8.1 equals + hashCode
+  repository/LoanRepository.java     HashSet&lt;Loan&gt; + HashMap&lt;String, ArrayList&lt;Loan&gt;&gt; · TODO 8.2 addLoan history
+  repository/MemberRepository.java   HashMap&lt;String, Member&gt; · TODO 8.3 findById = one get
+  service/BookService.java           TODO 8.4 buildAuthorReport · TODO 8.5 buildTopBorrowed · buildHistory (given)
+  repository/IBookRepository.java    deleteOutOfStock(HashSet&lt;String&gt;) (given)
+  dto/HistoryRowDTO, dto/TopItemDTO, view/HistoryView, view/AuthorView, view/TopItemView, main/Main   (given)</code></pre>`,
+    `<h2>3. Tệp tải về</h2>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab8-starter.zip" target="_blank" rel="noopener">
+<span class="lc-ico">🧰</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab8-starter.zip</span><span class="lc-sub">đáp án Lab 7 + menu 15–17, HistoryRowDTO, TopItemDTO, 3 view · TODO 8.1–8.5 · harness (588 dòng) · CheckHarness</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/PRO192/labs/v1/CTLibrary-Lab8-solution.zip" target="_blank" rel="noopener">
+<span class="lc-ico">✅</span>
+<span class="lc-body"><span class="lc-title">CTLibrary-Lab8-solution.zip</span><span class="lc-sub">đáp án đầy đủ — chỉ mở sau khi đã tự làm</span></span>
+<span class="lc-cta">Tải về</span>
+</a>
+<pre><code class="language-plaintext">CTLibrary-Lab8/src/  (mới hoặc đổi so với Lab 7)
+  model/Loan.java                    TODO 8.1 equals + hashCode
+  repository/LoanRepository.java     HashSet&lt;Loan&gt; + HashMap&lt;String, ArrayList&lt;Loan&gt;&gt; · TODO 8.2 lịch sử trong addLoan
+  repository/MemberRepository.java   HashMap&lt;String, Member&gt; · TODO 8.3 findById = một lần get
+  service/BookService.java           TODO 8.4 buildAuthorReport · TODO 8.5 buildTopBorrowed · buildHistory (cho sẵn)
+  repository/IBookRepository.java    deleteOutOfStock(HashSet&lt;String&gt;) (cho sẵn)
+  dto/HistoryRowDTO, dto/TopItemDTO, view/HistoryView, view/AuthorView, view/TopItemView, main/Main   (cho sẵn)</code></pre>`),
+    bi(`<h2>4. Step by step</h2>
+<h4>Step 0 — lint the starter, run it (10 min)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab8</code></pre>
+<div class="out">✓ CTLibrary-Lab8 — sạch</div>
+<p>Clean for the reviewer's tool, wrong for the user: the second B001 is lent, M001 cannot return B001, the author report is empty, the history says "chua muon", and the top 5 is empty.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 khong muon B001 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Chua co sach nao co tac gia. Hay chon 1 de them sach.<br>
+…</div>
+
+<h4>Step 1 — TODO 8.1 equals and hashCode (25 min)</h4>
+<details><summary>Hint</summary><p>Follow the shape of Chapter 8's <code>Product</code>: <code>this == other</code> → true; <code>null</code> or another class → false; then compare the two Strings with <code>equals</code>. For the hash, <code>Objects.hash(memberId, itemId)</code> (Java 7) — the same two fields, nothing else.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Hai luot muon BANG NHAU khi cung ma thanh vien va cung ma tai lieu
+@Override
+public boolean equals(Object other) {
+    // Cung mot doi tuong thi chac chan bang nhau
+    if (this == other) {
+        return true;
+    }
+
+    // null hoac khac lop thi khong bang
+    if ((other == null) || (getClass() != other.getClass())) {
+        return false;
+    }
+
+    // So tung truong bang equals (chuoi khong bao gio so bang ==)
+    Loan otherLoan = (Loan) other;
+    return (memberId.equals(otherLoan.memberId)) &amp;&amp; (itemId.equals(otherLoan.itemId));
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ma bam tu DUNG hai truong ma equals so: bang nhau thi ma bam phai bang nhau
+@Override
+public int hashCode() {
+    return Objects.hash(memberId, itemId);
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 8 — the same Loan three ways: no override, equals only, equals + hashCode
+import java.util.HashSet;
+import java.util.Objects;
+
+class LoanPlain {
+    final String memberId, itemId;
+    LoanPlain(String m, String i) { memberId = m; itemId = i; }
+}
+
+class LoanEquals {
+    final String memberId, itemId;
+    LoanEquals(String m, String i) { memberId = m; itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoanEquals)) { return false; }
+        LoanEquals x = (LoanEquals) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+}
+
+class LoanBoth {
+    final String memberId, itemId;
+    LoanBoth(String m, String i) { memberId = m; itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoanBoth)) { return false; }
+        LoanBoth x = (LoanBoth) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+    @Override
+    public int hashCode() { return Objects.hash(memberId, itemId); }
+}
+
+public class LabHashSetLoan {
+    public static void main(String[] args) {
+        // borrow twice, then "return" with a NEW object
+        HashSet&lt;LoanPlain&gt; a = new HashSet&lt;&gt;();
+        boolean a1 = a.add(new LoanPlain("M001", "B001"));
+        boolean a2 = a.add(new LoanPlain("M001", "B001"));
+        boolean a3 = a.remove(new LoanPlain("M001", "B001"));
+        System.out.println("no override    : add " + a1 + ", add again " + a2 + ", remove(new) " + a3 + ", size " + a.size());
+
+        HashSet&lt;LoanEquals&gt; b = new HashSet&lt;&gt;();
+        boolean b1 = b.add(new LoanEquals("M001", "B001"));
+        boolean b2 = b.add(new LoanEquals("M001", "B001"));
+        boolean b3 = b.remove(new LoanEquals("M001", "B001"));
+        System.out.println("equals only    : add " + b1 + ", add again " + b2 + ", remove(new) " + b3 + ", size " + b.size());
+
+        HashSet&lt;LoanBoth&gt; c = new HashSet&lt;&gt;();
+        boolean c1 = c.add(new LoanBoth("M001", "B001"));
+        boolean c2 = c.add(new LoanBoth("M001", "B001"));
+        boolean c3 = c.remove(new LoanBoth("M001", "B001"));
+        System.out.println("equals+hashCode: add " + c1 + ", add again " + c2 + ", remove(new) " + c3 + ", size " + c.size());
+
+        // equals is asked only when the hash codes meet in the same bucket
+        System.out.println("hashCode equal? plain " + (new LoanPlain("M001", "B001").hashCode() == new LoanPlain("M001", "B001").hashCode())
+                + ", both " + (new LoanBoth("M001", "B001").hashCode() == new LoanBoth("M001", "B001").hashCode()));
+        System.out.println("Objects.hash(\\"M001\\", \\"B001\\") = " + Objects.hash("M001", "B001")
+                + " = 31 * (31 + \\"M001\\".hashCode()) + \\"B001\\".hashCode() = " + (31 * (31 + "M001".hashCode()) + "B001".hashCode()));
+    }
+}</code></pre>
+<div class="out">no override &nbsp;&nbsp;&nbsp;: add true, add again true, remove(new) false, size 2<br>
+equals only &nbsp;&nbsp;&nbsp;: add true, add again true, remove(new) false, size 2<br>
+equals+hashCode: add true, add again false, remove(new) true, size 0<br>
+hashCode equal? plain false, both true<br>
+Objects.hash("M001", "B001") = 74603564 = 31 * (31 + "M001".hashCode()) + "B001".hashCode() = 74603564</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B001 "The Pragmatic Programmer". Con 2 ban tren ke. M001 dang muon 1/3.<br>
+…</div>
+
+<h4>Step 2 — TODO 8.2 the map of lists (15 min)</h4>
+<details><summary>Hint</summary><p><code>get</code> once into a local variable; if it is <code>null</code>, create the list and <code>put</code> it; then <code>add</code>. Do not <code>put</code> again after adding — the map already holds that very list.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Ghi 1 luot muon moi vao ca hai cau truc; thanh vien dang muon dung tai lieu nay thi
+// nem loi (Controller goi TRUOC khi giam so ban, nen bi tu choi la chua tru ban nao)
+public void addLoan(LoanRequestDTO loanRequestDTO) throws DuplicateKeyException {
+    // Luot muon moi; danh sach lich su cua thanh vien nay (null neu chua muon lan nao)
+    Loan loan = new Loan(loanRequestDTO.getMemberId(), loanRequestDTO.getItemId());
+    ArrayList&lt;Loan&gt; memberHistoryList = historyMap.get(loan.getMemberId());
+
+    // add() cua Set tra false khi DA CO phan tu bang no (equals + hashCode cua Loan)
+    if (!openLoanSet.add(loan)) {
+        throw new DuplicateKeyException(String.format(Message.ERROR_ALREADY_BORROWED,
+                loan.getMemberId(), loan.getItemId()));
+    }
+
+    // Lan muon dau tien cua thanh vien nay: get tra null — tao danh sach roi put vao Map
+    if (memberHistoryList == null) {
+        memberHistoryList = new ArrayList&lt;&gt;();
+        historyMap.put(loan.getMemberId(), memberHistoryList);
+    }
+
+    // Danh sach dang nam trong Map (cung mot doi tuong), them vao la Map thay ngay
+    memberHistoryList.add(loan);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Lich su muon cua M001: 3 luot (dang giu 2/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tech Weekly<br>
+3 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Lich su muon cua M003: 3 luot (dang giu 1/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B007 &nbsp;Java Puzzlers<br>
+2 &nbsp;&nbsp;B002 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;D006 &nbsp;(da xoa khoi kho)<br>
+…</div>
+
+<h4>Step 3 — TODO 8.3 one get (10 min)</h4>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Lay BAN SAO 1 thanh vien theo ma: 1 lan get(ma); khong co ma thi nem loi
+public MemberResponseDTO findById(String id) throws MemberNotFoundException {
+    // get() tra null khi Map khong co khoa nay
+    Member member = memberMap.get(id);
+
+    // Khong co ma: bao ro ma nao khong co
+    if (member == null) {
+        throw new MemberNotFoundException(String.format(Message.ERROR_MEMBER_NOT_FOUND, id));
+    }
+
+    return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail());
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 8 — the same four puts into HashMap, LinkedHashMap, TreeMap
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
+public class LabThuTuMap {
+    public static void main(String[] args) {
+        String[] idArray = {"M010", "M002", "M001", "M021"};
+        String[] nameArray = {"Dung", "An", "Binh", "Chi"};
+        HashMap&lt;String, String&gt; hash = new HashMap&lt;&gt;();
+        LinkedHashMap&lt;String, String&gt; linked = new LinkedHashMap&lt;&gt;();
+        TreeMap&lt;String, String&gt; tree = new TreeMap&lt;&gt;();
+        for (int i = 0; i &lt; idArray.length; i++) {
+            hash.put(idArray[i], nameArray[i]);
+            linked.put(idArray[i], nameArray[i]);
+            tree.put(idArray[i], nameArray[i]);
+        }
+        System.out.println("put order    : M010, M002, M001, M021");
+        System.out.println("HashMap      : " + hash.keySet() + "   (bucket order — no promise)");
+        System.out.println("LinkedHashMap: " + linked.keySet() + "   (insertion order)");
+        System.out.println("TreeMap      : " + tree.keySet() + "   (sorted keys)");
+        System.out.println("get(\\"M001\\")  : " + hash.get("M001") + ", get(\\"M009\\"): " + hash.get("M009"));
+        System.out.println("put M001 again returns the old value: " + hash.put("M001", "Binh 2") + ", size " + hash.size());
+    }
+}</code></pre>
+<div class="out">put order &nbsp;&nbsp;&nbsp;: M010, M002, M001, M021<br>
+HashMap &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [M010, M021, M002, M001] &nbsp;&nbsp;(bucket order — no promise)<br>
+LinkedHashMap: [M010, M002, M001, M021] &nbsp;&nbsp;(insertion order)<br>
+TreeMap &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [M001, M002, M010, M021] &nbsp;&nbsp;(sorted keys)<br>
+get("M001") &nbsp;: Binh, get("M009"): null<br>
+put M001 again returns the old value: Binh, size 4</div>
+
+<h4>Step 4 — TODO 8.4 authors in a TreeMap (15 min)</h4>
+<details><summary>Hint</summary><p>Skip items whose <code>getAuthor()</code> is empty. <code>getOrDefault(author, 0) + 1</code> avoids the null of a new key.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Bao cao tac gia bang TreeMap: tac gia -&gt; so dau sach. TreeMap giu khoa KHONG trung va
+// luon sap A-Z, nen in ra la dung thu tu, khong can Collections.sort
+public TreeMap&lt;String, Integer&gt; buildAuthorReport(ArrayList&lt;BookResponseDTO&gt; itemList) {
+    // Ket qua; tac gia trung (2 sach cung tac gia) se cong vao cung 1 khoa
+    TreeMap&lt;String, Integer&gt; authorMap = new TreeMap&lt;&gt;();
+
+    // Duyet tung tai lieu, chi sach co tac gia
+    for (BookResponseDTO item : itemList) {
+        // Tac gia cua tai lieu nay (tap chi, DVD: chuoi rong)
+        String author = item.getAuthor();
+
+        // Co tac gia thi cong 1; get() tra null neu tac gia chua co: getOrDefault cho 0
+        if (!author.isEmpty()) {
+            authorMap.put(author, authorMap.getOrDefault(author, 0) + 1);
+        }
+    }
+
+    return authorMap;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+…</div>
+
+<h4>Step 5 — TODO 8.5 top 5 (25 min)</h4>
+<details><summary>Hint</summary><p>Four steps: count; build the candidate rows (only items still on the shelf, <code>containsKey</code>); <code>Collections.sort</code> with a three-key comparator (swap the arguments for "descending"); copy at most <code>TOP_LIMIT</code> rows while numbering them.</p></details>
+<details><summary>Solution</summary>
+<pre class="trich"><code class="language-java">// Top tai lieu duoc muon nhieu nhat: dem luot muon cua tung ma bang HashMap, giu tai lieu
+// con trong kho co it nhat 1 luot, sap so luot GIAM -&gt; ten A-Z -&gt; ma, lay TOP_LIMIT dong
+public ArrayList&lt;TopItemDTO&gt; buildTopBorrowed(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; borrowedIdList) {
+    // Ma -&gt; so luot muon; cac dong ung vien; ket qua sau khi cat
+    HashMap&lt;String, Integer&gt; borrowCountMap = new HashMap&lt;&gt;();
+    ArrayList&lt;TopItemDTO&gt; candidateList = new ArrayList&lt;&gt;();
+    ArrayList&lt;TopItemDTO&gt; topList = new ArrayList&lt;&gt;();
+
+    // Dem: moi ma gap them 1 lan thi so cua no tang 1
+    for (String itemId : borrowedIdList) {
+        borrowCountMap.put(itemId, borrowCountMap.getOrDefault(itemId, 0) + 1);
+    }
+
+    // Moi tai lieu con trong kho va da tung duoc muon thanh 1 dong ung vien
+    for (BookResponseDTO item : itemList) {
+        // containsKey: ma nay co trong bang dem (da tung duoc muon)
+        if (borrowCountMap.containsKey(item.getId())) {
+            candidateList.add(toTopItemDTO(item, borrowCountMap.get(item.getId())));
+        }
+    }
+
+    // Sap nhieu khoa (luot muon giam dan, roi ten, roi ma) — 2 tai lieu cung so luot van
+    // la 2 dong (sap DANH SACH; TreeSet voi bo so sanh chi so luot se nuot mat 1 dong)
+    Collections.sort(candidateList, new Comparator&lt;TopItemDTO&gt;() {
+        // So luot muon (giam dan), roi ten A-Z, roi ma
+        @Override
+        public int compare(TopItemDTO first, TopItemDTO second) {
+            // Khoa 1: nhieu luot hon dung truoc (dao thu tu second, first)
+            int result = Integer.compare(second.getBorrowCount(), first.getBorrowCount());
+
+            // Khoa 2: hoa so luot thi ten A-Z khong phan biet hoa thuong
+            if (result == 0) {
+                result = first.getTitle().compareToIgnoreCase(second.getTitle());
+            }
+
+            // Khoa 3: hoa ca ten thi ma chot thu tu
+            if (result == 0) {
+                result = first.getId().compareTo(second.getId());
+            }
+            return result;
+        }
+    });
+
+    // Chi giu TOP_LIMIT dong dau (hoac it hon neu it ung vien), danh so hang tu 1
+    for (int i = 0; (i &lt; candidateList.size()) &amp;&amp; (i &lt; Constants.TOP_LIMIT); i++) {
+        candidateList.get(i).setNo(i + 1);
+        topList.add(candidateList.get(i));
+    }
+
+    return topList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Top 5 tai lieu duoc muon nhieu nhat (tinh ca luot da tra):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Loans &nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Puzzlers<br>
+3 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly<br>
+…</div>
+
+<h4>Step 6 — grade, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 588/588 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab8-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab8-Solution — sạch</div>`,
+    `<h2>4. Làm từng bước</h2>
+<h4>Bước 0 — lint starter, chạy thử (10 phút)</h4>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab8</code></pre>
+<div class="out">✓ CTLibrary-Lab8 — sạch</div>
+<p>Sạch với công cụ của thầy, sai với người dùng: cuốn B001 thứ hai vẫn được mượn, M001 không trả được B001, báo cáo tác giả trống, lịch sử báo "chua muon", và top 5 trống.</p>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 khong muon B001 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Chua co sach nao co tac gia. Hay chon 1 de them sach.<br>
+…</div>
+
+<h4>Bước 1 — TODO 8.1 equals và hashCode (25 phút)</h4>
+<details><summary>Gợi ý</summary><p>Theo đúng dáng <code>Product</code> của Chương 8: <code>this == other</code> → true; <code>null</code> hoặc khác lớp → false; rồi so hai chuỗi bằng <code>equals</code>. Mã băm: <code>Objects.hash(memberId, itemId)</code> (Java 7) — đúng hai trường đó, không thêm gì.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Hai luot muon BANG NHAU khi cung ma thanh vien va cung ma tai lieu
+@Override
+public boolean equals(Object other) {
+    // Cung mot doi tuong thi chac chan bang nhau
+    if (this == other) {
+        return true;
+    }
+
+    // null hoac khac lop thi khong bang
+    if ((other == null) || (getClass() != other.getClass())) {
+        return false;
+    }
+
+    // So tung truong bang equals (chuoi khong bao gio so bang ==)
+    Loan otherLoan = (Loan) other;
+    return (memberId.equals(otherLoan.memberId)) &amp;&amp; (itemId.equals(otherLoan.itemId));
+}</code></pre>
+<pre class="trich"><code class="language-java">// Ma bam tu DUNG hai truong ma equals so: bang nhau thi ma bam phai bang nhau
+@Override
+public int hashCode() {
+    return Objects.hash(memberId, itemId);
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 8 — cùng một Loan ba cách: không ghi đè, chỉ equals, equals + hashCode
+import java.util.HashSet;
+import java.util.Objects;
+
+class LoanPlain {
+    final String memberId, itemId;
+    LoanPlain(String m, String i) { memberId = m; itemId = i; }
+}
+
+class LoanEquals {
+    final String memberId, itemId;
+    LoanEquals(String m, String i) { memberId = m; itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoanEquals)) { return false; }
+        LoanEquals x = (LoanEquals) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+}
+
+class LoanBoth {
+    final String memberId, itemId;
+    LoanBoth(String m, String i) { memberId = m; itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoanBoth)) { return false; }
+        LoanBoth x = (LoanBoth) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+    @Override
+    public int hashCode() { return Objects.hash(memberId, itemId); }
+}
+
+public class LabHashSetLoan {
+    public static void main(String[] args) {
+        // mượn hai lần, rồi "trả" bằng một đối tượng MỚI
+        HashSet&lt;LoanPlain&gt; a = new HashSet&lt;&gt;();
+        boolean a1 = a.add(new LoanPlain("M001", "B001"));
+        boolean a2 = a.add(new LoanPlain("M001", "B001"));
+        boolean a3 = a.remove(new LoanPlain("M001", "B001"));
+        System.out.println("no override    : add " + a1 + ", add again " + a2 + ", remove(new) " + a3 + ", size " + a.size());
+
+        HashSet&lt;LoanEquals&gt; b = new HashSet&lt;&gt;();
+        boolean b1 = b.add(new LoanEquals("M001", "B001"));
+        boolean b2 = b.add(new LoanEquals("M001", "B001"));
+        boolean b3 = b.remove(new LoanEquals("M001", "B001"));
+        System.out.println("equals only    : add " + b1 + ", add again " + b2 + ", remove(new) " + b3 + ", size " + b.size());
+
+        HashSet&lt;LoanBoth&gt; c = new HashSet&lt;&gt;();
+        boolean c1 = c.add(new LoanBoth("M001", "B001"));
+        boolean c2 = c.add(new LoanBoth("M001", "B001"));
+        boolean c3 = c.remove(new LoanBoth("M001", "B001"));
+        System.out.println("equals+hashCode: add " + c1 + ", add again " + c2 + ", remove(new) " + c3 + ", size " + c.size());
+
+        // equals chỉ được hỏi khi hai mã băm gặp nhau trong cùng một ô
+        System.out.println("hashCode equal? plain " + (new LoanPlain("M001", "B001").hashCode() == new LoanPlain("M001", "B001").hashCode())
+                + ", both " + (new LoanBoth("M001", "B001").hashCode() == new LoanBoth("M001", "B001").hashCode()));
+        System.out.println("Objects.hash(\\"M001\\", \\"B001\\") = " + Objects.hash("M001", "B001")
+                + " = 31 * (31 + \\"M001\\".hashCode()) + \\"B001\\".hashCode() = " + (31 * (31 + "M001".hashCode()) + "B001".hashCode()));
+    }
+}</code></pre>
+<div class="out">no override &nbsp;&nbsp;&nbsp;: add true, add again true, remove(new) false, size 2<br>
+equals only &nbsp;&nbsp;&nbsp;: add true, add again true, remove(new) false, size 2<br>
+equals+hashCode: add true, add again false, remove(new) true, size 0<br>
+hashCode equal? plain false, both true<br>
+Objects.hash("M001", "B001") = 74603564 = 31 * (31 + "M001".hashCode()) + "B001".hashCode() = 74603564</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B001 "The Pragmatic Programmer". Con 2 ban tren ke. M001 dang muon 1/3.<br>
+…</div>
+
+<h4>Bước 2 — TODO 8.2 Map của các danh sách (15 phút)</h4>
+<details><summary>Gợi ý</summary><p><code>get</code> một lần vào biến cục bộ; nếu <code>null</code> thì tạo danh sách và <code>put</code> vào; rồi mới <code>add</code>. Đừng <code>put</code> lại sau khi add — Map đang giữ chính danh sách đó rồi.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Ghi 1 luot muon moi vao ca hai cau truc; thanh vien dang muon dung tai lieu nay thi
+// nem loi (Controller goi TRUOC khi giam so ban, nen bi tu choi la chua tru ban nao)
+public void addLoan(LoanRequestDTO loanRequestDTO) throws DuplicateKeyException {
+    // Luot muon moi; danh sach lich su cua thanh vien nay (null neu chua muon lan nao)
+    Loan loan = new Loan(loanRequestDTO.getMemberId(), loanRequestDTO.getItemId());
+    ArrayList&lt;Loan&gt; memberHistoryList = historyMap.get(loan.getMemberId());
+
+    // add() cua Set tra false khi DA CO phan tu bang no (equals + hashCode cua Loan)
+    if (!openLoanSet.add(loan)) {
+        throw new DuplicateKeyException(String.format(Message.ERROR_ALREADY_BORROWED,
+                loan.getMemberId(), loan.getItemId()));
+    }
+
+    // Lan muon dau tien cua thanh vien nay: get tra null — tao danh sach roi put vao Map
+    if (memberHistoryList == null) {
+        memberHistoryList = new ArrayList&lt;&gt;();
+        historyMap.put(loan.getMemberId(), memberHistoryList);
+    }
+
+    // Danh sach dang nam trong Map (cung mot doi tuong), them vao la Map thay ngay
+    memberHistoryList.add(loan);
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Lich su muon cua M001: 3 luot (dang giu 2/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tech Weekly<br>
+3 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+…</div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Lich su muon cua M003: 3 luot (dang giu 1/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B007 &nbsp;Java Puzzlers<br>
+2 &nbsp;&nbsp;B002 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;D006 &nbsp;(da xoa khoi kho)<br>
+…</div>
+
+<h4>Bước 3 — TODO 8.3 một lần get (10 phút)</h4>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Lay BAN SAO 1 thanh vien theo ma: 1 lan get(ma); khong co ma thi nem loi
+public MemberResponseDTO findById(String id) throws MemberNotFoundException {
+    // get() tra null khi Map khong co khoa nay
+    Member member = memberMap.get(id);
+
+    // Khong co ma: bao ro ma nao khong co
+    if (member == null) {
+        throw new MemberNotFoundException(String.format(Message.ERROR_MEMBER_NOT_FOUND, id));
+    }
+
+    return new MemberResponseDTO(member.getId(), member.getName(), member.getEmail());
+}</code></pre>
+</details>
+<pre><code class="language-java">// release: 8
+// Lab 8 — cùng bốn lần put vào HashMap, LinkedHashMap, TreeMap
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
+public class LabThuTuMap {
+    public static void main(String[] args) {
+        String[] idArray = {"M010", "M002", "M001", "M021"};
+        String[] nameArray = {"Dung", "An", "Binh", "Chi"};
+        HashMap&lt;String, String&gt; hash = new HashMap&lt;&gt;();
+        LinkedHashMap&lt;String, String&gt; linked = new LinkedHashMap&lt;&gt;();
+        TreeMap&lt;String, String&gt; tree = new TreeMap&lt;&gt;();
+        for (int i = 0; i &lt; idArray.length; i++) {
+            hash.put(idArray[i], nameArray[i]);
+            linked.put(idArray[i], nameArray[i]);
+            tree.put(idArray[i], nameArray[i]);
+        }
+        System.out.println("put order    : M010, M002, M001, M021");
+        System.out.println("HashMap      : " + hash.keySet() + "   (bucket order — no promise)");
+        System.out.println("LinkedHashMap: " + linked.keySet() + "   (insertion order)");
+        System.out.println("TreeMap      : " + tree.keySet() + "   (sorted keys)");
+        System.out.println("get(\\"M001\\")  : " + hash.get("M001") + ", get(\\"M009\\"): " + hash.get("M009"));
+        System.out.println("put M001 again returns the old value: " + hash.put("M001", "Binh 2") + ", size " + hash.size());
+    }
+}</code></pre>
+<div class="out">put order &nbsp;&nbsp;&nbsp;: M010, M002, M001, M021<br>
+HashMap &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [M010, M021, M002, M001] &nbsp;&nbsp;(bucket order — no promise)<br>
+LinkedHashMap: [M010, M002, M001, M021] &nbsp;&nbsp;(insertion order)<br>
+TreeMap &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [M001, M002, M010, M021] &nbsp;&nbsp;(sorted keys)<br>
+get("M001") &nbsp;: Binh, get("M009"): null<br>
+put M001 again returns the old value: Binh, size 4</div>
+
+<h4>Bước 4 — TODO 8.4 tác giả trong TreeMap (15 phút)</h4>
+<details><summary>Gợi ý</summary><p>Bỏ qua tài liệu có <code>getAuthor()</code> rỗng. <code>getOrDefault(tacGia, 0) + 1</code> tránh cái null của khoá mới.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Bao cao tac gia bang TreeMap: tac gia -&gt; so dau sach. TreeMap giu khoa KHONG trung va
+// luon sap A-Z, nen in ra la dung thu tu, khong can Collections.sort
+public TreeMap&lt;String, Integer&gt; buildAuthorReport(ArrayList&lt;BookResponseDTO&gt; itemList) {
+    // Ket qua; tac gia trung (2 sach cung tac gia) se cong vao cung 1 khoa
+    TreeMap&lt;String, Integer&gt; authorMap = new TreeMap&lt;&gt;();
+
+    // Duyet tung tai lieu, chi sach co tac gia
+    for (BookResponseDTO item : itemList) {
+        // Tac gia cua tai lieu nay (tap chi, DVD: chuoi rong)
+        String author = item.getAuthor();
+
+        // Co tac gia thi cong 1; get() tra null neu tac gia chua co: getOrDefault cho 0
+        if (!author.isEmpty()) {
+            authorMap.put(author, authorMap.getOrDefault(author, 0) + 1);
+        }
+    }
+
+    return authorMap;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+…</div>
+
+<h4>Bước 5 — TODO 8.5 top 5 (25 phút)</h4>
+<details><summary>Gợi ý</summary><p>Bốn bước: đếm; dựng các dòng ứng viên (chỉ tài liệu còn trên kệ, <code>containsKey</code>); <code>Collections.sort</code> với bộ so sánh ba khoá (đổi chỗ đối số để có "giảm dần"); chép tối đa <code>TOP_LIMIT</code> dòng đồng thời đánh số.</p></details>
+<details><summary>Lời giải</summary>
+<pre class="trich"><code class="language-java">// Top tai lieu duoc muon nhieu nhat: dem luot muon cua tung ma bang HashMap, giu tai lieu
+// con trong kho co it nhat 1 luot, sap so luot GIAM -&gt; ten A-Z -&gt; ma, lay TOP_LIMIT dong
+public ArrayList&lt;TopItemDTO&gt; buildTopBorrowed(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; borrowedIdList) {
+    // Ma -&gt; so luot muon; cac dong ung vien; ket qua sau khi cat
+    HashMap&lt;String, Integer&gt; borrowCountMap = new HashMap&lt;&gt;();
+    ArrayList&lt;TopItemDTO&gt; candidateList = new ArrayList&lt;&gt;();
+    ArrayList&lt;TopItemDTO&gt; topList = new ArrayList&lt;&gt;();
+
+    // Dem: moi ma gap them 1 lan thi so cua no tang 1
+    for (String itemId : borrowedIdList) {
+        borrowCountMap.put(itemId, borrowCountMap.getOrDefault(itemId, 0) + 1);
+    }
+
+    // Moi tai lieu con trong kho va da tung duoc muon thanh 1 dong ung vien
+    for (BookResponseDTO item : itemList) {
+        // containsKey: ma nay co trong bang dem (da tung duoc muon)
+        if (borrowCountMap.containsKey(item.getId())) {
+            candidateList.add(toTopItemDTO(item, borrowCountMap.get(item.getId())));
+        }
+    }
+
+    // Sap nhieu khoa (luot muon giam dan, roi ten, roi ma) — 2 tai lieu cung so luot van
+    // la 2 dong (sap DANH SACH; TreeSet voi bo so sanh chi so luot se nuot mat 1 dong)
+    Collections.sort(candidateList, new Comparator&lt;TopItemDTO&gt;() {
+        // So luot muon (giam dan), roi ten A-Z, roi ma
+        @Override
+        public int compare(TopItemDTO first, TopItemDTO second) {
+            // Khoa 1: nhieu luot hon dung truoc (dao thu tu second, first)
+            int result = Integer.compare(second.getBorrowCount(), first.getBorrowCount());
+
+            // Khoa 2: hoa so luot thi ten A-Z khong phan biet hoa thuong
+            if (result == 0) {
+                result = first.getTitle().compareToIgnoreCase(second.getTitle());
+            }
+
+            // Khoa 3: hoa ca ten thi ma chot thu tu
+            if (result == 0) {
+                result = first.getId().compareTo(second.getId());
+            }
+            return result;
+        }
+    });
+
+    // Chi giu TOP_LIMIT dong dau (hoac it hon neu it ung vien), danh so hang tu 1
+    for (int i = 0; (i &lt; candidateList.size()) &amp;&amp; (i &lt; Constants.TOP_LIMIT); i++) {
+        candidateList.get(i).setNo(i + 1);
+        topList.add(candidateList.get(i));
+    }
+
+    return topList;
+}</code></pre>
+</details>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Top 5 tai lieu duoc muon nhieu nhat (tinh ca luot da tra):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Loans &nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Puzzlers<br>
+3 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly<br>
+…</div>
+
+<h4>Bước 6 — chấm, lint, commit</h4>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">PASS: 588/588 dong khop expected.txt</div>
+<pre><code class="language-bash">$ python3 lint.py CTLibrary-Lab8-Solution</code></pre>
+<div class="out">✓ CTLibrary-Lab8-Solution — sạch</div>`),
+    bi(`<h2>5. The full solution — and the proof it is right</h2>
+<p>The solution zip is the complete project: <code>lint.py</code> 0 violations, <code>javac --release 8</code>, the same output on a real JDK 8, and 588/588 on the grader.</p>
+<details><summary>Full run — java -cp build main.Main &lt; harness/input.txt (588 lines)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Da them B007 "Java Puzzlers". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Da them thanh vien M003 "Le Van Chi". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Bao cao tac gia ---<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B007 "Java Puzzlers", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon B007 "Java Puzzlers", han tra 14 ngay. Con 0 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B001 "The Pragmatic Programmer". Con 2 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 khong muon B002 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co thanh vien nao mang ma M009. Hay chon 7 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B004 "Head First Java", han tra 14 ngay. Con 3 ban tren ke. M002 dang muon 3/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da tra B007 "Java Puzzlers". Con 1 ban tren ke. M003 dang muon 0/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon B002 "Effective Java", han tra 14 ngay. Con 1 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon D006 "The Social Network", han tra 3 ngay. Con 0 ban tren ke. M003 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da tra D006 "The Social Network". Con 1 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Top tai lieu duoc muon nhieu nhat ---<br>
+Top 5 tai lieu duoc muon nhieu nhat (tinh ca luot da tra):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Loans &nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Puzzlers<br>
+3 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Xoa tai lieu ---<br>
+Ma tai lieu (vi du B001, T005, D006): Da xoa D006 "The Social Network". Ma D006 se khong duoc cap lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Lich su muon ---<br>
+Ma thanh vien (vi du M001): Lich su muon cua M001: 3 luot (dang giu 2/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tech Weekly<br>
+3 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Lich su muon ---<br>
+Ma thanh vien (vi du M001): Lich su muon cua M003: 3 luot (dang giu 1/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B007 &nbsp;Java Puzzlers<br>
+2 &nbsp;&nbsp;B002 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;D006 &nbsp;(da xoa khoi kho)<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B003 "Java Concurrency In Practice": 1 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 1 tai lieu het ban (B003). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Chi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chi.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 8 chi nam trong bo nho (Lab 9 se luu ra tep).</div>
+</details>
+<details><summary>BookController.borrowItem — the loan is recorded BEFORE the copies go down</summary>
+<pre class="trich"><code class="language-java">// Muon 1 tai lieu (phieu dien ma thanh vien + ma tai lieu; thanh vien da kiem truoc):
+// kho tim tai lieu, Service kiem 2 luat, roi giam 1 ban va ghi luot muon
+public void borrowItem(LoanRequestDTO loanRequestDTO) {
+    // Cau ket qua se in
+    String resultMessage = "";
+
+    // Buoc nao nem loi nghiep vu thi cac buoc SAU no khong chay (khong giam ban oan)
+    try {
+        BookResponseDTO item = bookRepository.findById(loanRequestDTO.getItemId());
+        int loanCount = loanRepository.countLoansOfMember(loanRequestDTO.getMemberId());
+
+        // Hai luat cua Service: con han muc, con ban tren ke
+        bookService.checkLoanLimit(loanRequestDTO.getMemberId(), loanCount);
+        bookService.checkAvailable(item);
+
+        // Du luat: ghi luot muon TRUOC (dang muon dung tai lieu nay thi kho nem loi trung,
+        // chua tru ban nao), roi moi giam 1 ban tren ke
+        loanRepository.addLoan(loanRequestDTO);
+        bookRepository.updateCopies(toCopiesRequestDTO(item.getId(), item.getCopies() - 1));
+        resultMessage = String.format(Message.SUCCESS_BORROW, loanRequestDTO.getMemberId(),
+                item.getId(), item.getTitle(), item.getLoanDays(), item.getCopies() - 1,
+                loanRequestDTO.getMemberId(), loanCount + 1, Constants.MAX_LOANS_PER_MEMBER);
+    } catch (LibraryException e) {
+        // Khong co ma, qua han muc, het ban hay dang muon roi: loi nao cung mang san cau bao
+        resultMessage = e.getMessage();
+    }
+
+    // In ket qua 1 lan
+    showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+}</code></pre>
+</details>
+<details><summary>BookService.buildHistory — a HashMap index instead of a nested loop (given)</summary>
+<pre class="trich"><code class="language-java">// Lich su muon: moi ma trong lich su thanh 1 dong co ten. Dung HashMap CHI MUC (ma -&gt; ten)
+// dung 1 lan, roi moi luot chi 1 lan get — thay cho vong lap long nhau tim tung ma
+public ArrayList&lt;HistoryRowDTO&gt; buildHistory(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; historyIdList) {
+    // Chi muc ma -&gt; ten; cac dong lich su tra ve
+    HashMap&lt;String, String&gt; titleMap = new HashMap&lt;&gt;();
+    ArrayList&lt;HistoryRowDTO&gt; rowList = new ArrayList&lt;&gt;();
+
+    // Dung chi muc tu kho hien tai
+    for (BookResponseDTO item : itemList) {
+        titleMap.put(item.getId(), item.getTitle());
+    }
+
+    // Moi luot muon thanh 1 dong; tai lieu da bi xoa khoi kho thi get tra null
+    for (String itemId : historyIdList) {
+        rowList.add(new HistoryRowDTO(rowList.size() + 1, itemId,
+                titleMap.getOrDefault(itemId, Message.DELETED_ITEM)));
+    }
+
+    return rowList;
+}</code></pre>
+</details>
+<p>Counting with a HashMap three ways — and the null of a new key (a real JDK 8):</p>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Lab 8 — counting with a HashMap: three ways, and the null that unboxing hides
+import java.util.HashMap;
+
+public class LabDemTanSuat {
+    public static void main(String[] args) {
+        String[] borrowedArray = {"B001", "B007", "B001", "T005", "B007", "B001"};
+
+        HashMap&lt;String, Integer&gt; classic = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            if (classic.containsKey(id)) {
+                classic.put(id, classic.get(id) + 1);
+            } else {
+                classic.put(id, 1);
+            }
+        }
+        HashMap&lt;String, Integer&gt; orDefault = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            orDefault.put(id, orDefault.getOrDefault(id, 0) + 1);
+        }
+        HashMap&lt;String, Integer&gt; merged = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            merged.merge(id, 1, Integer::sum);
+        }
+        System.out.println("containsKey + put: " + classic);
+        System.out.println("getOrDefault     : " + orDefault);
+        System.out.println("merge            : " + merged + "   same map? " + (classic.equals(orDefault) &amp;&amp; orDefault.equals(merged)));
+
+        // the trap: get() of a new key is null, and null + 1 needs unboxing
+        HashMap&lt;String, Integer&gt; broken = new HashMap&lt;&gt;();
+        try {
+            broken.put(borrowedArray[0], broken.get(borrowedArray[0]) + 1);
+        } catch (NullPointerException e) {
+            System.out.println("get(\\"B001\\") + 1 on an empty map: " + e + " at line " + e.getStackTrace()[0].getLineNumber());
+        }
+    }
+}</code></pre>
+<div class="out">containsKey + put: {B001=3, T005=1, B007=2}<br>
+getOrDefault &nbsp;&nbsp;&nbsp;&nbsp;: {B001=3, T005=1, B007=2}<br>
+merge &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {B001=3, T005=1, B007=2} &nbsp;&nbsp;same map? true<br>
+get("B001") + 1 on an empty map: java.lang.NullPointerException at line 33</div>`,
+    `<h2>5. Đáp án đầy đủ — và bằng chứng là đúng</h2>
+<p>Tệp zip đáp án là trọn dự án: <code>lint.py</code> 0 vi phạm, <code>javac --release 8</code>, chạy trên JDK 8 thật ra y hệt, và bộ chấm 588/588.</p>
+<details><summary>Trọn lần chạy — java -cp build main.Main &lt; harness/input.txt (588 dòng)</summary>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them tai lieu ---<br>
+Loai (1 Sach, 2 Tap chi, 3 DVD): Ten: Nam xuat ban: So ban: ISBN-13: Tac gia: Da them B007 "Java Puzzlers". Thu vien co 7 tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Them thanh vien ---<br>
+Ho ten: Email: Da them thanh vien M003 "Le Van Chi". Cau lac bo co 3 thanh vien.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Bao cao tac gia ---<br>
+Co 4 tac gia (sap A-Z, khong trung):<br>
+Author &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titles<br>
+Brian Goetz &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+David Thomas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+Joshua Bloch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2<br>
+Kathy Sierra &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 2 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B007 "Java Puzzlers", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon B007 "Java Puzzlers", han tra 14 ngay. Con 0 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da tra B001 "The Pragmatic Programmer". Con 2 ban tren ke. M001 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 khong muon B002 nen khong tra duoc. Kiem lai ma thanh vien va ma tai lieu.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Khong co thanh vien nao mang ma M009. Hay chon 7 de xem ma roi thu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B004 "Head First Java", han tra 14 ngay. Con 3 ban tren ke. M002 dang muon 3/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 dang muon 3 tai lieu, da cham muc toi da 3. Hay tra bot roi muon tiep.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da tra B007 "Java Puzzlers". Con 1 ban tren ke. M003 dang muon 0/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon B002 "Effective Java", han tra 14 ngay. Con 1 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Muon tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da muon D006 "The Social Network", han tra 3 ngay. Con 0 ban tren ke. M003 dang muon 2/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Tra tai lieu ---<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M003 da tra D006 "The Social Network". Con 1 ban tren ke. M003 dang muon 1/3.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Top tai lieu duoc muon nhieu nhat ---<br>
+Top 5 tai lieu duoc muon nhieu nhat (tinh ca luot da tra):<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Type &nbsp;&nbsp;&nbsp;&nbsp;Loans &nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;B007 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java Puzzlers<br>
+3 &nbsp;&nbsp;B002 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Effective Java<br>
+4 &nbsp;&nbsp;B004 &nbsp;Sach &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Head First Java<br>
+5 &nbsp;&nbsp;T005 &nbsp;Tap chi &nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tech Weekly<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Xoa tai lieu ---<br>
+Ma tai lieu (vi du B001, T005, D006): Da xoa D006 "The Social Network". Ma D006 se khong duoc cap lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Lich su muon ---<br>
+Ma thanh vien (vi du M001): Lich su muon cua M001: 3 luot (dang giu 2/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+2 &nbsp;&nbsp;T005 &nbsp;Tech Weekly<br>
+3 &nbsp;&nbsp;B001 &nbsp;The Pragmatic Programmer<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Lich su muon ---<br>
+Ma thanh vien (vi du M001): Lich su muon cua M003: 3 luot (dang giu 1/3), theo thu tu muon:<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Title<br>
+1 &nbsp;&nbsp;B007 &nbsp;Java Puzzlers<br>
+2 &nbsp;&nbsp;B002 &nbsp;Effective Java<br>
+3 &nbsp;&nbsp;D006 &nbsp;(da xoa khoi kho)<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Cap nhat so ban ---<br>
+Ma tai lieu (vi du B001, T005, D006): So ban: Da cap nhat so ban cua B003 "Java Concurrency In Practice": 1 -&gt; 0.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Don kho ---<br>
+Da don kho: xoa 1 tai lieu het ban (B003). Tai lieu het ban dang co nguoi muon duoc giu lai.<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: --- Danh sach thanh vien ---<br>
+No &nbsp;Id &nbsp;&nbsp;&nbsp;Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br>
+1 &nbsp;&nbsp;M003 &nbsp;Le Van Chi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chi.le@ctlib.vn<br>
+2 &nbsp;&nbsp;M002 &nbsp;Nguyen Van An &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an.nguyen@ctlib.vn<br>
+3 &nbsp;&nbsp;M001 &nbsp;Tran Thi Binh &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binh.tran@ctlib.vn<br>
+========== CT LIBRARY ==========<br>
+1. Them tai lieu (sach, tap chi, DVD)<br>
+2. Danh sach tai lieu (sap theo ten)<br>
+3. Tim tai lieu theo ten<br>
+4. Cap nhat so ban<br>
+5. Xoa tai lieu<br>
+6. Them thanh vien<br>
+7. Danh sach thanh vien<br>
+8. Thong ke thu vien<br>
+9. Tinh phi tre han<br>
+10. Muon tai lieu<br>
+11. Tra tai lieu<br>
+12. Tim nang cao (loai, khoang nam, tu khoa)<br>
+13. Thong ke theo loai<br>
+14. Don kho (xoa tai lieu het ban khong ai muon)<br>
+15. Lich su muon cua thanh vien<br>
+16. Bao cao tac gia<br>
+17. Top 5 tai lieu duoc muon nhieu nhat<br>
+0. Thoat<br>
+Lua chon: Tam biet! Du lieu Lab 8 chi nam trong bo nho (Lab 9 se luu ra tep).</div>
+</details>
+<details><summary>BookController.borrowItem — ghi lượt mượn TRƯỚC khi trừ số bản</summary>
+<pre class="trich"><code class="language-java">// Muon 1 tai lieu (phieu dien ma thanh vien + ma tai lieu; thanh vien da kiem truoc):
+// kho tim tai lieu, Service kiem 2 luat, roi giam 1 ban va ghi luot muon
+public void borrowItem(LoanRequestDTO loanRequestDTO) {
+    // Cau ket qua se in
+    String resultMessage = "";
+
+    // Buoc nao nem loi nghiep vu thi cac buoc SAU no khong chay (khong giam ban oan)
+    try {
+        BookResponseDTO item = bookRepository.findById(loanRequestDTO.getItemId());
+        int loanCount = loanRepository.countLoansOfMember(loanRequestDTO.getMemberId());
+
+        // Hai luat cua Service: con han muc, con ban tren ke
+        bookService.checkLoanLimit(loanRequestDTO.getMemberId(), loanCount);
+        bookService.checkAvailable(item);
+
+        // Du luat: ghi luot muon TRUOC (dang muon dung tai lieu nay thi kho nem loi trung,
+        // chua tru ban nao), roi moi giam 1 ban tren ke
+        loanRepository.addLoan(loanRequestDTO);
+        bookRepository.updateCopies(toCopiesRequestDTO(item.getId(), item.getCopies() - 1));
+        resultMessage = String.format(Message.SUCCESS_BORROW, loanRequestDTO.getMemberId(),
+                item.getId(), item.getTitle(), item.getLoanDays(), item.getCopies() - 1,
+                loanRequestDTO.getMemberId(), loanCount + 1, Constants.MAX_LOANS_PER_MEMBER);
+    } catch (LibraryException e) {
+        // Khong co ma, qua han muc, het ban hay dang muon roi: loi nao cung mang san cau bao
+        resultMessage = e.getMessage();
+    }
+
+    // In ket qua 1 lan
+    showResult(resultMessage, new ArrayList&lt;BookResponseDTO&gt;());
+}</code></pre>
+</details>
+<details><summary>BookService.buildHistory — chỉ mục HashMap thay cho vòng lặp lồng nhau (cho sẵn)</summary>
+<pre class="trich"><code class="language-java">// Lich su muon: moi ma trong lich su thanh 1 dong co ten. Dung HashMap CHI MUC (ma -&gt; ten)
+// dung 1 lan, roi moi luot chi 1 lan get — thay cho vong lap long nhau tim tung ma
+public ArrayList&lt;HistoryRowDTO&gt; buildHistory(ArrayList&lt;BookResponseDTO&gt; itemList,
+        ArrayList&lt;String&gt; historyIdList) {
+    // Chi muc ma -&gt; ten; cac dong lich su tra ve
+    HashMap&lt;String, String&gt; titleMap = new HashMap&lt;&gt;();
+    ArrayList&lt;HistoryRowDTO&gt; rowList = new ArrayList&lt;&gt;();
+
+    // Dung chi muc tu kho hien tai
+    for (BookResponseDTO item : itemList) {
+        titleMap.put(item.getId(), item.getTitle());
+    }
+
+    // Moi luot muon thanh 1 dong; tai lieu da bi xoa khoi kho thi get tra null
+    for (String itemId : historyIdList) {
+        rowList.add(new HistoryRowDTO(rowList.size() + 1, itemId,
+                titleMap.getOrDefault(itemId, Message.DELETED_ITEM)));
+    }
+
+    return rowList;
+}</code></pre>
+</details>
+<p>Đếm bằng HashMap theo ba cách — và cái null của khoá mới (JDK 8 thật):</p>
+<pre><code class="language-java">// release: 8
+// chay: jdk8
+// Lab 8 — đếm bằng HashMap: ba cách, và cái null mà unboxing che đi
+import java.util.HashMap;
+
+public class LabDemTanSuat {
+    public static void main(String[] args) {
+        String[] borrowedArray = {"B001", "B007", "B001", "T005", "B007", "B001"};
+
+        HashMap&lt;String, Integer&gt; classic = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            if (classic.containsKey(id)) {
+                classic.put(id, classic.get(id) + 1);
+            } else {
+                classic.put(id, 1);
+            }
+        }
+        HashMap&lt;String, Integer&gt; orDefault = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            orDefault.put(id, orDefault.getOrDefault(id, 0) + 1);
+        }
+        HashMap&lt;String, Integer&gt; merged = new HashMap&lt;&gt;();
+        for (String id : borrowedArray) {
+            merged.merge(id, 1, Integer::sum);
+        }
+        System.out.println("containsKey + put: " + classic);
+        System.out.println("getOrDefault     : " + orDefault);
+        System.out.println("merge            : " + merged + "   same map? " + (classic.equals(orDefault) &amp;&amp; orDefault.equals(merged)));
+
+        // bẫy: get() của khoá mới là null, và null + 1 phải unboxing
+        HashMap&lt;String, Integer&gt; broken = new HashMap&lt;&gt;();
+        try {
+            broken.put(borrowedArray[0], broken.get(borrowedArray[0]) + 1);
+        } catch (NullPointerException e) {
+            System.out.println("get(\\"B001\\") + 1 on an empty map: " + e + " at line " + e.getStackTrace()[0].getLineNumber());
+        }
+    }
+}</code></pre>
+<div class="out">containsKey + put: {B001=3, T005=1, B007=2}<br>
+getOrDefault &nbsp;&nbsp;&nbsp;&nbsp;: {B001=3, T005=1, B007=2}<br>
+merge &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {B001=3, T005=1, B007=2} &nbsp;&nbsp;same map? true<br>
+get("B001") + 1 on an empty map: java.lang.NullPointerException at line 33</div>`),
+    bi(`<h2>6. Traps (with real output)</h2>
+<div class="pitfall"><p><strong>Trap 1 — equals without hashCode.</strong> No crash, 13 wrong lines: duplicates lent, returns refused (project <code>bay/thieu-hashcode</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 110:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+Dong 131:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 1/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 0 ban tren ke. M002 dang muon 1/3.<br>
+Dong 194:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 3/3.<br>
+…</div>
+<div class="pitfall"><p><strong>Trap 2 — a key that changes.</strong> The loan is still in the set, and no method can reach it.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 8 — never change a key while it sits in a HashSet
+import java.util.HashSet;
+import java.util.Objects;
+
+class Loan {
+    private String memberId, itemId;
+    Loan(String m, String i) { memberId = m; itemId = i; }
+    void setItemId(String i) { itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Loan)) { return false; }
+        Loan x = (Loan) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+    @Override
+    public int hashCode() { return Objects.hash(memberId, itemId); }
+    @Override
+    public String toString() { return memberId + "-" + itemId; }
+}
+
+public class LabKhoaBiSua {
+    public static void main(String[] args) {
+        HashSet&lt;Loan&gt; openLoanSet = new HashSet&lt;&gt;();
+        Loan loan = new Loan("M001", "B001");
+        openLoanSet.add(loan);
+        // bucket = (hash ^ hash &gt;&gt;&gt; 16) &amp; 15 for 16 buckets
+        System.out.println("stored in bucket " + bucket(loan) + ": " + openLoanSet);
+
+        loan.setItemId("B002");   // the key changes AFTER it was stored
+        System.out.println("after setItemId : " + openLoanSet + ", now hashes to bucket " + bucket(loan));
+        System.out.println("contains(loan)            : " + openLoanSet.contains(loan));
+        System.out.println("contains(new M001-B002)   : " + openLoanSet.contains(new Loan("M001", "B002")));
+        System.out.println("contains(new M001-B001)   : " + openLoanSet.contains(new Loan("M001", "B001")));
+        System.out.println("remove(loan)              : " + openLoanSet.remove(loan) + ", size " + openLoanSet.size());
+    }
+
+    static int bucket(Object o) {
+        int h = o.hashCode();
+        return (h ^ (h &gt;&gt;&gt; 16)) &amp; 15;
+    }
+}</code></pre>
+<div class="out">stored in bucket 14: [M001-B001]<br>
+after setItemId : [M001-B002], now hashes to bucket 15<br>
+contains(loan) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false<br>
+contains(new M001-B002) &nbsp;&nbsp;: false<br>
+contains(new M001-B001) &nbsp;&nbsp;: false<br>
+remove(loan) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false, size 1</div>
+<div class="pitfall"><p><strong>Trap 3 — get() returns null.</strong> The first borrow of the program crashes the whole menu (project <code>bay/get-null</code>, JDK 21 message).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Exception in thread "main" java.lang.NullPointerException: Cannot invoke "java.util.ArrayList.add(Object)" because the return value of "java.util.HashMap.get(Object)" is null<br>
+	at repository.LoanRepository.addLoan(LoanRepository.java:50)<br>
+	at controller.BookController.borrowItem(BookController.java:189)<br>
+	at main.Main.runMenu(Main.java:115)<br>
+	at main.Main.main(Main.java:34)</div>
+<div class="pitfall"><p><strong>Trap 4 — a TreeSet sorted on one key.</strong> Every tie is "the same element" and is refused.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 8 — a TreeSet sorted by "loans" only swallows every tie
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeSet;
+
+class Row {
+    final String id, title;
+    final int loans;
+    Row(String id, int loans, String title) { this.id = id; this.loans = loans; this.title = title; }
+    @Override
+    public String toString() { return id + "(" + loans + ")"; }
+}
+
+public class LabTreeSetNuot {
+    public static void main(String[] args) {
+        Row[] rowArray = {new Row("B001", 3, "The Pragmatic Programmer"), new Row("B007", 2, "Java Puzzlers"),
+            new Row("B002", 1, "Effective Java"), new Row("B004", 1, "Head First Java"),
+            new Row("T005", 1, "Tech Weekly"), new Row("D006", 1, "The Social Network")};
+        Comparator&lt;Row&gt; byLoans = new Comparator&lt;Row&gt;() {
+            @Override
+            public int compare(Row a, Row b) { return Integer.compare(b.loans, a.loans); }
+        };
+        TreeSet&lt;Row&gt; set = new TreeSet&lt;&gt;(byLoans);
+        for (Row r : rowArray) {
+            System.out.println("add " + r + " -&gt; " + set.add(r));
+        }
+        System.out.println("TreeSet (loans only): " + set + "  size " + set.size());
+
+        // compare(...) == 0 means "the same element" to a TreeSet
+        ArrayList&lt;Row&gt; list = new ArrayList&lt;&gt;();
+        Collections.addAll(list, rowArray);
+        Collections.sort(list, byLoans.thenComparing(new Comparator&lt;Row&gt;() {
+            @Override
+            public int compare(Row a, Row b) { return a.title.compareToIgnoreCase(b.title); }
+        }));
+        System.out.println("sorted ArrayList    : " + list + "  size " + list.size());
+        System.out.println("top 5               : " + list.subList(0, 5));
+    }
+}</code></pre>
+<div class="out">add B001(3) -&gt; true<br>
+add B007(2) -&gt; true<br>
+add B002(1) -&gt; true<br>
+add B004(1) -&gt; false<br>
+add T005(1) -&gt; false<br>
+add D006(1) -&gt; false<br>
+TreeSet (loans only): [B001(3), B007(2), B002(1)] &nbsp;size 3<br>
+sorted ArrayList &nbsp;&nbsp;&nbsp;: [B001(3), B007(2), B002(1), B004(1), T005(1), D006(1)] &nbsp;size 6<br>
+top 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001(3), B007(2), B002(1), B004(1), T005(1)]</div>
+<div class="pitfall"><p><strong>Trap 5 — trusting HashMap order.</strong> It is the bucket order: it changes with the keys, the capacity and the Java version. Need an order? LinkedHashMap (insertion), TreeMap (keys), or sort a list — see Step 3.</p></div>`,
+    `<h2>6. Bẫy (kèm output thật)</h2>
+<div class="pitfall"><p><strong>Bẫy 1 — equals thiếu hashCode.</strong> Không sập, 13 dòng sai: mượn trùng lọt qua, trả bị từ chối (dự án <code>bay/thieu-hashcode</code>).</p></div>
+<pre><code class="language-bash">$ ./check.sh        # Windows: check.bat · NetBeans: Run File on test/harness/CheckHarness.java</code></pre>
+<div class="out">Dong 110:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 dang muon B001 roi. Moi thanh vien giu toi da 1 ban cua 1 tai lieu; tra roi moi muon lai.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+Dong 131:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 1 ban tren ke. M002 dang muon 1/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M002 da muon B001 "The Pragmatic Programmer", han tra 14 ngay. Con 0 ban tren ke. M002 dang muon 1/3.<br>
+Dong 194:<br>
+&nbsp;&nbsp;can &nbsp;&nbsp;&nbsp;: Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 2/3.<br>
+&nbsp;&nbsp;ban in : Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): M001 da muon T005 "Tech Weekly", han tra 7 ngay. Con 1 ban tren ke. M001 dang muon 3/3.<br>
+…</div>
+<div class="pitfall"><p><strong>Bẫy 2 — khoá bị đổi.</strong> Lượt mượn vẫn nằm trong Set, và không phương thức nào chạm tới được.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 8 — đừng bao giờ đổi khoá khi nó đang nằm trong HashSet
+import java.util.HashSet;
+import java.util.Objects;
+
+class Loan {
+    private String memberId, itemId;
+    Loan(String m, String i) { memberId = m; itemId = i; }
+    void setItemId(String i) { itemId = i; }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Loan)) { return false; }
+        Loan x = (Loan) o;
+        return memberId.equals(x.memberId) &amp;&amp; itemId.equals(x.itemId);
+    }
+    @Override
+    public int hashCode() { return Objects.hash(memberId, itemId); }
+    @Override
+    public String toString() { return memberId + "-" + itemId; }
+}
+
+public class LabKhoaBiSua {
+    public static void main(String[] args) {
+        HashSet&lt;Loan&gt; openLoanSet = new HashSet&lt;&gt;();
+        Loan loan = new Loan("M001", "B001");
+        openLoanSet.add(loan);
+        // ô = (băm ^ băm &gt;&gt;&gt; 16) &amp; 15 khi có 16 ô
+        System.out.println("stored in bucket " + bucket(loan) + ": " + openLoanSet);
+
+        loan.setItemId("B002");   // khoá đổi SAU khi đã cất
+        System.out.println("after setItemId : " + openLoanSet + ", now hashes to bucket " + bucket(loan));
+        System.out.println("contains(loan)            : " + openLoanSet.contains(loan));
+        System.out.println("contains(new M001-B002)   : " + openLoanSet.contains(new Loan("M001", "B002")));
+        System.out.println("contains(new M001-B001)   : " + openLoanSet.contains(new Loan("M001", "B001")));
+        System.out.println("remove(loan)              : " + openLoanSet.remove(loan) + ", size " + openLoanSet.size());
+    }
+
+    static int bucket(Object o) {
+        int h = o.hashCode();
+        return (h ^ (h &gt;&gt;&gt; 16)) &amp; 15;
+    }
+}</code></pre>
+<div class="out">stored in bucket 14: [M001-B001]<br>
+after setItemId : [M001-B002], now hashes to bucket 15<br>
+contains(loan) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false<br>
+contains(new M001-B002) &nbsp;&nbsp;: false<br>
+contains(new M001-B001) &nbsp;&nbsp;: false<br>
+remove(loan) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: false, size 1</div>
+<div class="pitfall"><p><strong>Bẫy 3 — get() trả null.</strong> Lượt mượn đầu tiên của chương trình làm sập cả menu (dự án <code>bay/get-null</code>, câu báo của JDK 21).</p></div>
+<pre><code class="language-bash">$ javac --release 8 -encoding UTF-8 -d build $(find src -name "*.java")
+$ java -cp build main.Main &lt; harness/input.txt</code></pre>
+<div class="out">…<br>
+Ma thanh vien (vi du M001): Ma tai lieu (vi du B001, T005, D006): Exception in thread "main" java.lang.NullPointerException: Cannot invoke "java.util.ArrayList.add(Object)" because the return value of "java.util.HashMap.get(Object)" is null<br>
+	at repository.LoanRepository.addLoan(LoanRepository.java:50)<br>
+	at controller.BookController.borrowItem(BookController.java:189)<br>
+	at main.Main.runMenu(Main.java:115)<br>
+	at main.Main.main(Main.java:34)</div>
+<div class="pitfall"><p><strong>Bẫy 4 — TreeSet sắp theo một khoá.</strong> Mọi phần tử hoà đều là "cùng một phần tử" và bị từ chối.</p></div>
+<pre><code class="language-java">// release: 8
+// Lab 8 — TreeSet sắp chỉ theo "số lượt" nuốt mất mọi phần tử hoà
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeSet;
+
+class Row {
+    final String id, title;
+    final int loans;
+    Row(String id, int loans, String title) { this.id = id; this.loans = loans; this.title = title; }
+    @Override
+    public String toString() { return id + "(" + loans + ")"; }
+}
+
+public class LabTreeSetNuot {
+    public static void main(String[] args) {
+        Row[] rowArray = {new Row("B001", 3, "The Pragmatic Programmer"), new Row("B007", 2, "Java Puzzlers"),
+            new Row("B002", 1, "Effective Java"), new Row("B004", 1, "Head First Java"),
+            new Row("T005", 1, "Tech Weekly"), new Row("D006", 1, "The Social Network")};
+        Comparator&lt;Row&gt; byLoans = new Comparator&lt;Row&gt;() {
+            @Override
+            public int compare(Row a, Row b) { return Integer.compare(b.loans, a.loans); }
+        };
+        TreeSet&lt;Row&gt; set = new TreeSet&lt;&gt;(byLoans);
+        for (Row r : rowArray) {
+            System.out.println("add " + r + " -&gt; " + set.add(r));
+        }
+        System.out.println("TreeSet (loans only): " + set + "  size " + set.size());
+
+        // với TreeSet, compare(...) == 0 nghĩa là "cùng một phần tử"
+        ArrayList&lt;Row&gt; list = new ArrayList&lt;&gt;();
+        Collections.addAll(list, rowArray);
+        Collections.sort(list, byLoans.thenComparing(new Comparator&lt;Row&gt;() {
+            @Override
+            public int compare(Row a, Row b) { return a.title.compareToIgnoreCase(b.title); }
+        }));
+        System.out.println("sorted ArrayList    : " + list + "  size " + list.size());
+        System.out.println("top 5               : " + list.subList(0, 5));
+    }
+}</code></pre>
+<div class="out">add B001(3) -&gt; true<br>
+add B007(2) -&gt; true<br>
+add B002(1) -&gt; true<br>
+add B004(1) -&gt; false<br>
+add T005(1) -&gt; false<br>
+add D006(1) -&gt; false<br>
+TreeSet (loans only): [B001(3), B007(2), B002(1)] &nbsp;size 3<br>
+sorted ArrayList &nbsp;&nbsp;&nbsp;: [B001(3), B007(2), B002(1), B004(1), T005(1), D006(1)] &nbsp;size 6<br>
+top 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [B001(3), B007(2), B002(1), B004(1), T005(1)]</div>
+<div class="pitfall"><p><strong>Bẫy 5 — tin vào thứ tự của HashMap.</strong> Đó là thứ tự các ô: nó đổi theo khoá, theo sức chứa và theo phiên bản Java. Cần thứ tự? LinkedHashMap (thứ tự thêm), TreeMap (theo khoá), hoặc sắp một danh sách — xem Bước 3.</p></div>`),
+    bi(`<h2>7. Rubric (10 points) and self-check</h2>
+<table>
+<thead><tr><th>Part</th><th>Points</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td><code>Loan.equals</code> + <code>hashCode</code> from the same 2 fields (8.1)</td><td>3</td><td>grader lines 110, 215, 341 + read</td></tr>
+<tr><td>History as a map of lists, null handled (8.2)</td><td>2</td><td>grader lines 473–477, 498–502</td></tr>
+<tr><td><code>findById</code> = one <code>get</code>, no search loop (8.3)</td><td>1</td><td>read</td></tr>
+<tr><td>TreeMap author report (8.4)</td><td>1</td><td>grader lines 63–68</td></tr>
+<tr><td>Top 5: HashMap count, 3-key sort, cut at 5 (8.5)</td><td>2</td><td>grader lines 425–431</td></tr>
+<tr><td>Oral: "why does equals need hashCode?"</td><td>1</td><td>one question</td></tr>
+</tbody>
+</table>
+<details><summary>1. A HashSet already holds new Loan("M001", "B001"). Why does add(new Loan("M001", "B001")) return false?</summary><p class="dap-an">✅ The new object has the same hash code (same two fields), so it lands in the same bucket; equals is asked there and says true; a Set keeps no duplicates, so add refuses it.</p></details>
+<details><summary>2. What does historyMap.get("M004") return if M004 never borrowed?</summary><p class="dap-an">✅ <code>null</code> — not an empty list. Calling <code>add</code> on it throws NullPointerException; check null (or use <code>getOrDefault</code>) first.</p></details>
+<details><summary>3. Why sort an ArrayList for the top 5 instead of putting the rows into a TreeSet?</summary><p class="dap-an">✅ A TreeSet treats compare(a, b) == 0 as a duplicate: with ties on the loan count, rows would vanish. A list keeps every row; the sort's last key (the id) only fixes their order.</p></details>`,
+    `<h2>7. Rubric (10 điểm) và tự kiểm</h2>
+<table>
+<thead><tr><th>Phần</th><th>Điểm</th><th>Kiểm bằng</th></tr></thead>
+<tbody>
+<tr><td><code>Loan.equals</code> + <code>hashCode</code> từ cùng 2 trường (8.1)</td><td>3</td><td>dòng 110, 215, 341 của bộ chấm + đọc</td></tr>
+<tr><td>Lịch sử là Map của các danh sách, xử lý null (8.2)</td><td>2</td><td>dòng 473–477, 498–502 của bộ chấm</td></tr>
+<tr><td><code>findById</code> = một lần <code>get</code>, không vòng lặp tìm (8.3)</td><td>1</td><td>đọc</td></tr>
+<tr><td>Báo cáo tác giả bằng TreeMap (8.4)</td><td>1</td><td>dòng 63–68 của bộ chấm</td></tr>
+<tr><td>Top 5: đếm bằng HashMap, sắp 3 khoá, cắt ở 5 (8.5)</td><td>2</td><td>dòng 425–431 của bộ chấm</td></tr>
+<tr><td>Vấn đáp: "vì sao equals cần hashCode?"</td><td>1</td><td>một câu hỏi</td></tr>
+</tbody>
+</table>
+<details><summary>1. HashSet đã có new Loan("M001", "B001"). Vì sao add(new Loan("M001", "B001")) trả false?</summary><p class="dap-an">✅ Đối tượng mới có cùng mã băm (cùng hai trường) nên rơi vào cùng ô; equals được hỏi ở đó và trả true; Set không giữ phần tử trùng nên add từ chối.</p></details>
+<details><summary>2. historyMap.get("M004") trả gì nếu M004 chưa từng mượn?</summary><p class="dap-an">✅ <code>null</code> — không phải danh sách rỗng. Gọi <code>add</code> trên nó là NullPointerException; kiểm null (hoặc dùng <code>getOrDefault</code>) trước.</p></details>
+<details><summary>3. Vì sao top 5 sắp một ArrayList chứ không bỏ các dòng vào TreeSet?</summary><p class="dap-an">✅ TreeSet coi compare(a, b) == 0 là trùng: các dòng hoà số lượt sẽ biến mất. Danh sách giữ mọi dòng; khoá cuối của bộ so sánh (mã) chỉ chốt thứ tự của chúng.</p></details>`),
+    bi(`<h2>8. Extra challenges and what comes next</h2>
+<ul>
+<li>⭐ Add a second index <code>HashMap&lt;String, String&gt;</code> email → member id, so that the duplicate-email check in <code>addMember</code> is one <code>containsKey</code> too. What must <code>addMember</code> keep in sync?</li>
+<li>⭐ Rewrite the counting of TODO 8.5 with <code>merge(id, 1, Integer::sum)</code>. Then make the report "top 5 per type" with a <code>TreeMap&lt;String, ArrayList&lt;TopItemDTO&gt;&gt;</code>.</li>
+<li>⭐⭐ Make <code>Loan</code> immutable: <code>final</code> fields, no setters. Which trap of this lab becomes impossible, and which classes have to change?</li>
+</ul>
+<div class="callout"><p><strong>Next — Lab 9 (after Chapter 9):</strong> the data survives a restart. A <code>FileBookRepository</code> implements the same <code>IBookRepository</code> on a <code>books.csv</code> file in UTF-8: it loads at start, skips (and reports) broken lines, saves through a temporary file — and the program switches to it by changing one line.</p></div>`,
+    `<h2>8. Thử thách thêm và việc tiếp theo</h2>
+<ul>
+<li>⭐ Thêm chỉ mục thứ hai <code>HashMap&lt;String, String&gt;</code> email → mã thành viên, để kiểm trùng email trong <code>addMember</code> cũng chỉ là một lần <code>containsKey</code>. <code>addMember</code> phải giữ đồng bộ những gì?</li>
+<li>⭐ Viết lại phép đếm của TODO 8.5 bằng <code>merge(id, 1, Integer::sum)</code>. Rồi làm báo cáo "top 5 theo từng loại" bằng một <code>TreeMap&lt;String, ArrayList&lt;TopItemDTO&gt;&gt;</code>.</li>
+<li>⭐⭐ Biến <code>Loan</code> thành bất biến: trường <code>final</code>, không setter. Cái bẫy nào của lab này trở thành không thể xảy ra, và những lớp nào phải đổi?</li>
+</ul>
+<div class="callout"><p><strong>Tiếp theo — Lab 9 (sau Chương 9):</strong> dữ liệu sống qua lần tắt máy. Một <code>FileBookRepository</code> cài cùng <code>IBookRepository</code> trên tệp <code>books.csv</code> bảng mã UTF-8: nạp khi khởi động, bỏ qua (và báo) dòng hỏng, lưu qua một tệp tạm — và chương trình chuyển sang nó bằng cách đổi một dòng.</p></div>`),
+  ].join('\n'),
+};
+
 /* ───────── Quiz (pro192-quiz-ch8) — 10 câu ───────── */
 const QUIZ = {
   timeLimitSeconds: 900,
@@ -4906,6 +7420,7 @@ try {
 export default {
   slides: [L_pro13_1, L_pro13_2],
   practice: L_on_ch8,
+  labs: [L_lab8],
   quiz: QUIZ,
   quizDescription: '10 câu ôn Chương 8 viết lại theo dạng câu FE PRO192, mỗi câu có giải thích song ngữ; câu "in ra gì" đã chạy thật trên JDK 8: ba kiểu nhóm List/Set/Map, remove(int) với remove(Object), đếm ký tự bằng HashMap, Arrays.asList cố định kích thước, equals mà thiếu hashCode, TreeSet coi compareTo bằng 0 là trùng, xoá trong for-each và ConcurrentModificationException, TreeMap.values(), null trong HashSet và TreeSet, và dòng code nào biên dịch được trên JDK 8 của phòng thi.',
 };

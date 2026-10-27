@@ -30,24 +30,29 @@
      xanh rất nhẹ để hợp màu nhấn chàm của site. */
   /* 27/10/2026 — phong cách aidev.edu.vn (chủ web chọn): nền XANH THAN đậm, thẻ nổi nhẹ ngả xanh,
      nhấn XANH DƯƠNG, chữ trắng rõ. Đổi ở đây là mọi trang admin đổi theo (lớp phủ bên dưới). */
-  --a-bg: #0c111b;               /* nền ứng dụng */
-  --a-panel: #111827;            /* khung nội dung */
-  --a-raised: #172033;           /* thẻ, ô nhập, menu */
-  --a-raised-2: #1f2a40;         /* hàng chọn, chip, nền phân đoạn, ô thông số */
-  --a-hover: rgba(148, 163, 184, 0.08);
-  --a-active: rgba(148, 163, 184, 0.14);
-  --a-border: rgba(148, 163, 184, 0.13);
-  --a-border-strong: rgba(148, 163, 184, 0.24);
-  --a-text: #f1f5f9;
-  --a-text-2: #b4bfd1;
-  --a-text-3: #7d8aa3;
+  /* 27/10/2026 (bản 2, chủ web chê bản 1 "không thay đổi gì") — ĐÚNG màu đo trên aidev.edu.vn:
+     nền chuyển 135° #141a21 → #021d6f → #063ba7, nút chính #0c68e9, nút trắng chữ #021d6f, thẻ xanh than trong
+     mờ viền trắng 12%, chữ trắng. Khung nội dung là kính tối đặt TRÊN nền chuyển màu ⇒ cả admin ngả xanh dương. */
+  --a-bg: #06122e;               /* nền đặc khi cần (menu, ngăn kéo) */
+  --a-panel: #0a1838;            /* khung nội dung (đặc) */
+  --a-raised: #0f2150;           /* thẻ, ô nhập, menu */
+  --a-raised-2: #16306b;         /* hàng chọn, chip, nền phân đoạn, đầu bảng */
+  --a-hover: rgba(255, 255, 255, 0.08);
+  --a-active: rgba(255, 255, 255, 0.14);
+  --a-border: rgba(255, 255, 255, 0.12);
+  --a-border-strong: rgba(255, 255, 255, 0.24);
+  --a-text: #ffffff;
+  --a-text-2: #c9d5ec;
+  --a-text-3: #8fa3c8;
 
-  /* Màu nhấn: xanh dương aidev */
-  --a-accent: #2563eb;
-  --a-accent-hover: #3b82f6;
-  --a-accent-text: #6ea8ff;
-  --a-accent-soft: rgba(37, 99, 235, 0.16);
-  --a-accent-border: rgba(59, 130, 246, 0.6);
+  /* Màu nhấn: xanh dương aidev (nút "Thuê máy này") */
+  --a-accent: #0c68e9;
+  --a-accent-hover: #2b7ef5;
+  --a-accent-text: #7cb3ff;
+  --a-accent-soft: rgba(12, 104, 233, 0.22);
+  --a-accent-border: rgba(80, 150, 255, 0.7);
+  --a-navy: #021d6f;             /* chữ trên nút trắng */
+  --a-gradient: linear-gradient(135deg, #141a21 0%, #021d6f 50%, #063ba7 100%);
 
   /* Trạng thái — hệ màu iOS (bản dark) */
   --a-green: #30d158;
@@ -94,16 +99,17 @@
   --bg-glass: var(--a-raised);
 
   /* Bo góc kiểu iOS: điều khiển 10, thẻ 14, tấm nổi 18 */
-  --a-radius: 10px;
-  --a-radius-lg: 16px;
-  --a-radius-xl: 20px;
+  --a-radius: 8px;
+  --a-radius-lg: 20px;
+  --a-radius-xl: 24px;
   /* Nhịp chuyển động của iOS — chậm dần rất mượt ở cuối */
   --a-ease: cubic-bezier(0.32, 0.72, 0, 1);
 
-  background: var(--a-bg);
+  background: var(--a-gradient);
+  background-attachment: fixed;
   color: var(--a-text);
   font-family: var(--font-admin), var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: -0.003em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -114,7 +120,7 @@
 .admin-root table td,
 .admin-root table th { font-variant-numeric: tabular-nums; }
 
-.admin-root ::selection { background: rgba(37, 99, 235, 0.4); }
+.admin-root ::selection { background: rgba(12, 104, 233, 0.5); }
 
 /* Thanh cuộn mảnh, không giành chỗ của nội dung. */
 .admin-root * { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.12) transparent; }
@@ -166,7 +172,7 @@
 .admin-root .rounded-3xl { border-radius: var(--a-radius-xl); }
 .admin-root .rounded-2xl { border-radius: var(--a-radius-lg); }
 .admin-root .rounded-xl { border-radius: 12px; }
-.admin-root .rounded-lg { border-radius: var(--a-radius); }
+.admin-root .rounded-lg { border-radius: 8px; }
 .admin-root .rounded-md { border-radius: 8px; }
 .admin-root .rounded-t-2xl { border-top-left-radius: var(--a-radius-lg); border-top-right-radius: var(--a-radius-lg); }
 .admin-root .rounded-b-2xl { border-bottom-left-radius: var(--a-radius-lg); border-bottom-right-radius: var(--a-radius-lg); }
@@ -190,15 +196,23 @@
 .admin-root .font-extrabold,
 .admin-root .font-black { font-weight: 800; }
 /* Tiêu đề kiểu aidev: to, đậm, rõ — nhưng vẫn gọn cho một công cụ. */
-.admin-root main h1 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.02em; }
+.admin-root main h1 { font-size: 32px; line-height: 40px; font-weight: 800; letter-spacing: -0.025em; color: #fff; }
 .admin-root main h1.text-2xl,
-.admin-root main h1.text-3xl { font-size: 24px; line-height: 32px; }
+.admin-root main h1.text-3xl,
+.admin-root main h1.text-xl { font-size: 32px; line-height: 40px; }
 .admin-root main h2.text-xl,
-.admin-root main h2.text-2xl { font-size: 19px; line-height: 26px; font-weight: 700; letter-spacing: -0.015em; }
+.admin-root main h2.text-2xl { font-size: 22px; line-height: 30px; font-weight: 800; letter-spacing: -0.02em; }
 .admin-root main h2.text-lg,
-.admin-root main h3.text-lg { font-size: 16px; line-height: 22px; font-weight: 650; }
+.admin-root main h3.text-lg,
+.admin-root main h2.text-base,
+.admin-root main h3.text-base { font-size: 17px; line-height: 24px; font-weight: 700; }
+/* Chữ nhỏ của trang cũ (text-xs/[11px]) quá bé trên màn lớn — nâng một nấc như aidev (15/13). */
+.admin-root main .text-xs { font-size: 13px; line-height: 18px; }
+.admin-root main .text-sm { font-size: 14.5px; line-height: 21px; }
+.admin-root main [class*="text-[10px]"],
+.admin-root main [class*="text-[11px]"] { font-size: 12px; }
 /* Nhãn nhỏ viết hoa màu xanh phía trên tiêu đề (như "AIDEV CLOUD"). */
-.admin-root .a-eyebrow { font-size: 12px; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: var(--a-accent-text); }
+.admin-root .a-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--a-accent-text); }
 
 /* Màu nhấn: tím neon → một sắc chàm dịu. `[class^=…]`/`[class*=" …"]` bắt
    đúng lớp đứng một mình, không bắt nhầm biến thể hover:/focus:. */
@@ -212,7 +226,7 @@
 .admin-root [class^="bg-neon-indigo/"],
 .admin-root [class*=" bg-neon-indigo/"] { background-color: var(--a-accent-soft); }
 .admin-root [class*="hover:bg-neon-violet/"]:hover,
-.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(37, 99, 235, 0.24); }
+.admin-root [class*="hover:bg-neon-indigo/"]:hover { background-color: rgba(12, 104, 233, 0.32); }
 .admin-root [class^="border-neon-violet"],
 .admin-root [class*=" border-neon-violet"],
 .admin-root [class^="border-neon-indigo"],
@@ -220,7 +234,7 @@
 .admin-root [class*="focus:border-neon-violet"]:focus,
 .admin-root [class*="focus:border-neon-indigo"]:focus,
 .admin-root [class*="focus-within:border-neon-violet"]:focus-within { border-color: var(--a-accent-border); }
-.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(37, 99, 235, 0.4); }
+.admin-root [class*="focus:ring-neon-violet"]:focus { --tw-ring-color: rgba(12, 104, 233, 0.45); }
 .admin-root [class*="hover:text-neon-violet"]:hover { color: var(--a-accent-text); }
 .admin-root [class*="hover:border-neon-violet"]:hover { border-color: var(--a-accent-border); }
 
@@ -266,45 +280,44 @@
    về — phản hồi chạm, không phải trang trí. */
 .admin-root .a-nav-item {
   position: relative;
-  display: flex; align-items: center; gap: 10px;
-  height: 34px; padding: 0 10px; border-radius: 10px;
-  font-size: 13.5px; line-height: 1; color: var(--a-text-2);
+  display: flex; align-items: center; gap: 11px;
+  height: 40px; padding: 0 12px; border-radius: 8px;
+  font-size: 15px; line-height: 1; font-weight: 500; color: rgba(255, 255, 255, 0.78);
   white-space: nowrap;
   transition: background-color 160ms var(--a-ease), color 160ms var(--a-ease), transform 160ms var(--a-ease);
 }
-.admin-root .a-nav-item:hover { background: var(--a-hover); color: var(--a-text); }
-.admin-root .a-nav-item:active { transform: scale(0.972); }
+.admin-root .a-nav-item:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.admin-root .a-nav-item:active { transform: scale(0.98); }
+/* Mục đang mở = nút xanh đặc như "Đăng nhập" của aidev — nhìn là biết đang ở đâu. */
 .admin-root .a-nav-item[aria-current="page"] {
-  background: var(--a-raised-2);
-  color: var(--a-text);
-  font-weight: 550;
+  background: var(--a-accent);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 18px -6px rgba(12, 104, 233, 0.7);
 }
 .admin-root .a-tile {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 24px; flex-shrink: 0;
-  border-radius: 7px;
-  background: color-mix(in srgb, var(--n-hue, var(--a-text-3)) 22%, transparent);
-  transition: background-color 160ms var(--a-ease);
+  width: 20px; height: 20px; flex-shrink: 0;
 }
-.admin-root .a-tile svg { width: 14px; height: 14px; color: var(--n-hue, var(--a-text-2)); }
-.admin-root .a-nav-item[aria-current="page"] .a-tile { background: var(--n-hue, var(--a-accent)); }
+.admin-root .a-tile svg { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.62); }
+.admin-root .a-nav-item:hover .a-tile svg,
 .admin-root .a-nav-item[aria-current="page"] .a-tile svg { color: #fff; }
 
 /* Nút phẳng dùng chung — cao 32px cho dễ bấm, bo 10px, có phản hồi chạm */
 .admin-root .a-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 34px; padding: 0 14px; border-radius: 10px;
-  font-size: 13.5px; font-weight: 600; color: var(--a-text-2);
-  border: 1px solid var(--a-border-strong); background: rgba(255, 255, 255, 0.03);
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 40px; padding: 0 18px; border-radius: 8px;
+  font-size: 15px; font-weight: 700; color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.48); background: transparent;
   transition: background-color 160ms var(--a-ease), color 160ms var(--a-ease), transform 160ms var(--a-ease);
 }
-.admin-root .a-btn:hover { color: var(--a-text); background: var(--a-hover); }
+.admin-root .a-btn:hover { background: rgba(255, 255, 255, 0.08); }
 .admin-root .a-btn:active { transform: scale(0.97); }
 .admin-root .a-btn-primary { color: #fff; background: var(--a-accent); border-color: transparent; }
-/* Nút trắng nền chữ đậm kiểu "Thuê máy này" của aidev */
-.admin-root .a-btn-white { color: #0b1220; background: #fff; border-color: transparent; }
-.admin-root .a-btn-white:hover { color: #0b1220; background: #e8eefb; }
 .admin-root .a-btn-primary:hover { color: #fff; background: var(--a-accent-hover); }
+/* Nút trắng chữ xanh than — "Chọn GPU để thuê" của aidev */
+.admin-root .a-btn-white { color: var(--a-navy); background: #fff; border-color: transparent; }
+.admin-root .a-btn-white:hover { color: var(--a-navy); background: #e6eeff; }
 .admin-root .a-icon-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px; border-radius: 10px; color: var(--a-text-3);
@@ -317,7 +330,7 @@
    thấy mờ mờ qua nó. Đây là chỗ DUY NHẤT trong admin còn dùng kính mờ —
    ở đây nó có nghĩa (báo rằng còn nội dung bên dưới), không phải trang trí. */
 .admin-root .a-topbar {
-  background: color-mix(in srgb, var(--a-panel) 78%, transparent);
+  background: color-mix(in srgb, #08132e 70%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
@@ -352,24 +365,27 @@
    thay cho bóng đổ: mắt vẫn đọc được "đây là một mặt phẳng riêng" mà không
    quay lại kiểu thẻ nổi. */
 .admin-root main .bg-darkcard {
-  background-image: linear-gradient(180deg, rgba(148, 163, 184, 0.035), rgba(148, 163, 184, 0) 140px);
+  background-color: rgba(15, 33, 80, 0.72);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 160px);
+  border-color: rgba(255, 255, 255, 0.13);
 }
 
 /* Hàng bảng/danh sách: nền rê chuột ngả về màu nhấn thay vì trắng đục */
 .admin-root main tbody tr:hover,
 .admin-root main .divide-darkborder > *:hover {
-  background-color: rgba(37, 99, 235, 0.07);
+  background-color: rgba(12, 104, 233, 0.12);
 }
 /* Đầu bảng: nền ô thông số + chữ hoa nhỏ, dễ quét như bảng của aidev */
-.admin-root main thead { background-color: var(--a-raised-2); }
-.admin-root main thead th { color: var(--a-text-3); font-weight: 650; }
+.admin-root main thead { background-color: rgba(255, 255, 255, 0.06); }
+.admin-root main thead th { color: var(--a-text-2); font-weight: 700; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; }
+.admin-root main tbody td { padding-top: 12px; padding-bottom: 12px; }
 
 /* Ô nhập lõm xuống một nấc so với khung, viền sáng lên khi focus */
 .admin-root main input:focus,
 .admin-root main textarea:focus,
 .admin-root main select:focus {
   border-color: var(--a-accent-border);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 0 0 3px rgba(12, 104, 233, 0.3);
 }
 
 /* Thanh tiến trình của trang cũ (h-1/h-1.5/h-2 + rounded-full) giữ màu thật
@@ -377,3 +393,35 @@
 .admin-root main .rounded-full.h-1,
 .admin-root main .rounded-full.h-1\.5,
 .admin-root main .rounded-full.h-2 { background-image: none; }
+
+/* ── Nút cũ của các trang (bg-neon-violet / bg-blue-600 …) theo đúng dáng nút aidev ── */
+.admin-root main button.bg-neon-violet,
+.admin-root main a.bg-neon-violet,
+.admin-root main button.bg-blue-600,
+.admin-root main button.bg-indigo-600 {
+  background-color: var(--a-accent); color: #fff; font-weight: 700; border-radius: 8px;
+}
+.admin-root main button.bg-neon-violet:hover,
+.admin-root main button.bg-blue-600:hover,
+.admin-root main button.bg-indigo-600:hover { background-color: var(--a-accent-hover); }
+
+/* Huy hiệu trạng thái xanh lá kiểu "Còn máy" */
+.admin-root .a-badge-ok {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 8px;
+  font-size: 12.5px; font-weight: 700; color: #fff;
+  background: rgba(34, 197, 94, 0.24); border: 1px solid rgba(34, 197, 94, 0.48);
+}
+
+/* Khung nội dung: kính tối trên nền chuyển màu xanh (thẻ "Gói máy gợi ý" của aidev). */
+.admin-root .a-frame {
+  background: rgba(5, 13, 34, 0.66);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+@supports not (backdrop-filter: blur(1px)) { .admin-root .a-frame { background: #071330; } }
+/* Lớp nổi (menu, hộp thoại) phải ĐẶC để chữ bên dưới không lẫn vào. */
+.admin-root .fixed .bg-darkcard,
+.admin-root .absolute.bg-darkcard,
+.admin-root [role="dialog"] .bg-darkcard,
+.admin-root [role="dialog"].bg-darkcard,
+.admin-root [role="menu"] { background-color: #0d1d46; }

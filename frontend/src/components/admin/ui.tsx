@@ -21,11 +21,11 @@ export function PageHeader({
   eyebrow?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        {eyebrow && <p className="a-eyebrow mb-1.5">{eyebrow}</p>}
-        <h1 className="text-[26px] font-bold leading-8 tracking-[-0.02em] text-[var(--a-text)]">{title}</h1>
-        {description && <p className="mt-1 text-[14px] text-[var(--a-text-2)]">{description}</p>}
+        {eyebrow && <p className="a-eyebrow mb-2">{eyebrow}</p>}
+        <h1 className="text-[34px] font-extrabold leading-[42px] tracking-[-0.025em] text-white">{title}</h1>
+        {description && <p className="mt-2 text-[15.5px] text-[var(--a-text-2)]">{description}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
@@ -51,12 +51,12 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`rounded-2xl border border-[var(--a-border)] bg-[var(--a-raised)] p-4 ${className}`}>
-      <div className="mb-2 flex min-h-8 items-center justify-between gap-2">
-        <h2 className="flex items-center gap-2 text-[15px] font-bold text-[var(--a-text)]">
+    <section className={`rounded-[20px] border border-white/[0.13] bg-[rgba(15,33,80,0.72)] p-5 ${className}`}>
+      <div className="mb-3 flex min-h-9 items-center justify-between gap-2">
+        <h2 className="flex items-center gap-2.5 text-[17px] font-bold text-white">
           {Icon && (
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: `color-mix(in srgb, ${tone ?? 'var(--a-accent)'} 18%, transparent)` }}>
-              <Icon className="h-4 w-4" strokeWidth={2} style={{ color: tone ?? 'var(--a-accent-text)' }} />
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/15" style={{ background: `color-mix(in srgb, ${tone ?? 'var(--a-accent)'} 18%, transparent)` }}>
+              <Icon className="h-[18px] w-[18px]" strokeWidth={2} style={{ color: tone ?? 'var(--a-accent-text)' }} />
             </span>
           )}
           {title}
@@ -78,7 +78,7 @@ export function Tabs<T extends string>({
   items: { value: T; label: string; count?: number }[];
 }) {
   return (
-    <div className="flex items-center gap-0.5" role="tablist">
+    <div className="flex flex-wrap items-center gap-1.5" role="tablist">
       {items.map((it) => {
         const on = it.value === value;
         return (
@@ -87,13 +87,13 @@ export function Tabs<T extends string>({
             role="tab"
             aria-selected={on}
             onClick={() => onChange(it.value)}
-            className={`flex h-8 items-center gap-1.5 rounded-[10px] px-3 text-[13px] font-semibold ${
-              on ? 'bg-[var(--a-accent-soft)] text-[var(--a-accent-text)]' : 'text-[var(--a-text-3)] hover:bg-[var(--a-hover)] hover:text-[var(--a-text-2)]'
+            className={`flex h-10 items-center gap-1.5 rounded-[8px] px-4 text-[14.5px] font-bold ${
+              on ? 'bg-white text-[var(--a-navy)]' : 'border border-white/20 text-white/75 hover:border-white/40 hover:text-white'
             }`}
           >
             {it.label}
             {typeof it.count === 'number' && it.count > 0 && (
-              <span className="tabular-nums text-[11.5px] text-[var(--a-text-3)]">{it.count}</span>
+              <span className={`tabular-nums text-[12px] ${on ? 'text-[var(--a-navy)]/60' : 'text-white/50'}`}>{it.count}</span>
             )}
           </button>
         );
@@ -116,7 +116,7 @@ const TONE: Record<Tone, string> = {
 /** Chấm màu + nhãn — trạng thái nói bằng một chấm, không bằng cả viên thuốc màu. */
 export function Status({ tone, children }: { tone: Tone; children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] text-[var(--a-text-2)]">
+    <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--a-text-2)]">
       <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: TONE[tone] }} />
       {children}
     </span>
@@ -138,13 +138,13 @@ export function Metric({
 }) {
   const hintColor = up === undefined ? 'var(--a-text-3)' : up ? 'var(--a-green)' : 'var(--a-red)';
   return (
-    <div className="min-w-0 rounded-2xl border border-[var(--a-border)] bg-[var(--a-raised)] px-4 py-3.5">
-      <p className="flex items-center gap-1.5 text-[12.5px] font-medium leading-4 text-[var(--a-text-2)]">
+    <div className="min-w-0 rounded-[20px] border border-white/[0.13] bg-[rgba(15,33,80,0.72)] px-5 py-4">
+      <p className="flex items-center gap-1.5 text-[13px] font-bold uppercase leading-4 tracking-[0.06em] text-[var(--a-accent-text)]">
         {tone && <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: tone }} />}
         {label}
       </p>
-      <p className="mt-2 text-[24px] font-bold leading-8 tracking-[-0.02em] tabular-nums text-[var(--a-text)]">{value}</p>
-      {hint && <p className="mt-0.5 truncate text-[12px]" style={{ color: hintColor }}>{hint}</p>}
+      <p className="mt-2.5 text-[30px] font-extrabold leading-9 tracking-[-0.02em] tabular-nums text-white">{value}</p>
+      {hint && <p className="mt-1 truncate text-[13px]" style={{ color: hintColor }}>{hint}</p>}
     </div>
   );
 }
@@ -153,7 +153,7 @@ export function EmptyState({ icon: Icon, title, children }: { icon?: LucideIcon;
   return (
     <div className="flex flex-col items-center justify-center py-10 text-center">
       {Icon && <Icon className="mb-3 h-5 w-5 text-[var(--a-text-3)]" strokeWidth={1.5} />}
-      <p className="text-[13px] font-medium text-[var(--a-text-2)]">{title}</p>
+      <p className="text-[15px] font-semibold text-[var(--a-text-2)]">{title}</p>
       {children && <p className="mt-1 max-w-sm text-[12.5px] text-[var(--a-text-3)]">{children}</p>}
     </div>
   );

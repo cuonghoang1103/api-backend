@@ -68,15 +68,14 @@ export default function AdminSidebar({
   return (
     <div className="flex h-full w-full flex-col">
       {/* Không gian làm việc */}
-      <div className="flex h-12 shrink-0 items-center gap-2 px-3">
-        <div
-          className="flex h-[22px] w-[22px] items-center justify-center rounded-[6px] text-[11px] font-semibold text-white"
-          style={{ background: 'linear-gradient(140deg, #2563eb, #60a5fa)' }}
-        >
+      <div className="flex h-[68px] shrink-0 items-center gap-2.5 px-4">
+        {/* Logo kiểu aidev: ô vuông viền trắng + chữ in hoa giãn rộng */}
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border-2 border-white text-[17px] font-extrabold text-white">
           C
         </div>
-        <div className="min-w-0 flex-1 leading-tight">
-          <p className="truncate text-[14px] font-bold text-[var(--a-text)]">CuongThai<span className="text-[var(--a-accent-text)]">.com</span></p>
+        <div className="min-w-0 flex-1 leading-none">
+          <p className="truncate text-[17px] font-extrabold tracking-[0.14em] text-white">CUONGTHAI</p>
+          <p className="mt-1 text-[11px] font-bold tracking-[0.12em] text-[var(--a-accent-text)]">ADMIN</p>
         </div>
         {onCollapse && (
           <button onClick={onCollapse} className="a-icon-btn" title={`${t('hideSidebar')}  [`} aria-label={t('hideSidebar')}>
@@ -86,12 +85,12 @@ export default function AdminSidebar({
       </div>
 
       {/* Tìm kiếm / lệnh */}
-      <div className="px-2 pb-2">
+      <div className="px-3 pb-3">
         <button
           onClick={onOpenCommand}
-          className="flex h-8 w-full items-center gap-2 rounded-[6px] border border-[var(--a-border)] bg-white/[0.02] px-2.5 text-[13px] text-[var(--a-text-3)] hover:border-[var(--a-border-strong)] hover:text-[var(--a-text-2)]"
+          className="flex h-10 w-full items-center gap-2.5 rounded-[8px] border border-white/20 bg-white/[0.06] px-3 text-[14px] text-white/70 hover:border-white/40 hover:text-white"
         >
-          <Search className="h-[15px] w-[15px]" strokeWidth={2} />
+          <Search className="h-4 w-4" strokeWidth={2} />
           <span>{t('search')}</span>
           <span className="ml-auto flex items-center gap-0.5">
             <kbd className="a-kbd">⌘</kbd>
@@ -100,19 +99,19 @@ export default function AdminSidebar({
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 pb-3" aria-label="Admin">
+      <nav className="flex-1 overflow-y-auto px-3 pb-4" aria-label="Admin">
         {ADMIN_NAV.map((g) => {
           const collapsed = g.label ? !!gap[g.id] : false;
           return (
             <div
               key={g.id}
-              className={g.label ? 'mt-3.5' : ''}
+              className={g.label ? 'mt-5' : ''}
               style={g.hue ? ({ '--n-hue': g.hue } as React.CSSProperties) : undefined}
             >
               {g.label && (
                 <button
                   onClick={() => toggle(g.id)}
-                  className="group flex h-6 w-full items-center gap-1 rounded-[5px] px-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--a-text-3)] hover:text-[var(--a-text-2)]"
+                  className="group mb-1 flex h-7 w-full items-center gap-1 rounded-[5px] px-3 text-[12px] font-bold uppercase tracking-[0.1em] text-white/55 hover:text-white"
                   aria-expanded={!collapsed}
                 >
                   {vi && g.viLabel ? g.viLabel : g.label}
@@ -123,7 +122,7 @@ export default function AdminSidebar({
                 </button>
               )}
               {!collapsed && (
-                <div className="mt-0.5 space-y-px">
+                <div className="mt-0.5 space-y-1">
                   {g.items.map((it) => {
                     const isActive = current === it.href;
                     const badge = it.href === '/admin/thong-bao' && inboxCount > 0 ? inboxCount : 0;
@@ -141,7 +140,7 @@ export default function AdminSidebar({
                         <span className="truncate">{vi && it.vi ? it.vi : it.label}</span>
                         {it.external && <ArrowUpRight className="!h-3 !w-3 opacity-60" />}
                         {badge > 0 && (
-                          <span className="ml-auto rounded-[4px] bg-[var(--a-accent-soft)] px-1.5 py-[3px] text-[11px] font-medium tabular-nums text-[var(--a-accent-text)]">
+                          <span className="ml-auto rounded-[6px] bg-white px-1.5 py-[3px] text-[11.5px] font-bold tabular-nums text-[var(--a-navy)]">
                             {badge > 99 ? '99+' : badge}
                           </span>
                         )}
@@ -156,13 +155,13 @@ export default function AdminSidebar({
       </nav>
 
       {/* Người dùng */}
-      <div className="flex shrink-0 items-center gap-2 border-t border-[var(--a-border)] px-3 py-2.5">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[10.5px] font-semibold text-[var(--a-text-2)]">
+      <div className="flex shrink-0 items-center gap-2.5 border-t border-white/10 px-4 py-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--a-accent)] text-[13px] font-bold text-white">
           {initials}
         </div>
         <div className="min-w-0 flex-1 leading-tight">
-          <p className="truncate text-[12.5px] font-medium text-[var(--a-text)]">{user?.name ?? 'Admin'}</p>
-          {user?.email && <p className="truncate text-[11px] text-[var(--a-text-3)]">{user.email}</p>}
+          <p className="truncate text-[14px] font-semibold text-white">{user?.name ?? 'Admin'}</p>
+          {user?.email && <p className="truncate text-[12px] text-white/55">{user.email}</p>}
         </div>
         <Link href="/" className="a-icon-btn" title={t('openSite')} aria-label={t('openSite')}>
           <ArrowUpRight className="h-[15px] w-[15px]" strokeWidth={1.75} />

@@ -138,7 +138,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="admin-root flex h-dvh overflow-hidden">
         {/* Sidebar — desktop */}
         {!sidebarHidden && (
-          <aside className="hidden w-[232px] shrink-0 md:block">
+          <aside className="hidden w-[256px] shrink-0 md:block">
             <AdminSidebar {...sidebarProps} onCollapse={toggleSidebar} />
           </aside>
         )}
@@ -147,7 +147,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {mobileOpen && (
           <div className="fixed inset-0 z-[70] md:hidden">
             <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} aria-hidden />
-            <aside className="a-pop absolute inset-y-0 left-0 w-[264px] border-r border-[var(--a-border)] bg-[var(--a-bg)]">
+            <aside className="a-pop absolute inset-y-0 left-0 w-[272px] border-r border-[var(--a-border)]" style={{ background: 'var(--a-gradient)' }}>
               <AdminSidebar {...sidebarProps} onNavigate={() => setMobileOpen(false)} />
             </aside>
           </div>
@@ -155,11 +155,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Khung nội dung */}
         <div
-          className={`flex min-w-0 flex-1 flex-col overflow-hidden bg-[var(--a-panel)] md:my-2 md:mr-2 md:rounded-[14px] md:border md:border-[var(--a-border)] ${
-            sidebarHidden ? 'md:ml-2' : ''
+          className={`a-frame flex min-w-0 flex-1 flex-col overflow-hidden md:my-3 md:mr-3 md:rounded-[20px] md:border md:border-[var(--a-border)] ${
+            sidebarHidden ? 'md:ml-3' : ''
           }`}
         >
-          <header className="a-topbar flex h-12 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-4">
+          <header className="a-topbar flex h-14 shrink-0 items-center gap-2 border-b border-[var(--a-border)] px-3 md:px-6">
             <button onClick={() => setMobileOpen(true)} className="a-icon-btn md:hidden" aria-label={t('openMenu')}>
               <Menu className="h-[18px] w-[18px]" strokeWidth={2} />
             </button>
@@ -168,12 +168,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <PanelLeft className="h-4 w-4" strokeWidth={2} />
               </button>
             )}
-            <nav className="flex min-w-0 items-center gap-1.5 text-[13.5px]" aria-label="Breadcrumb">
+            <nav className="flex min-w-0 items-center gap-2 text-[15px]" aria-label="Breadcrumb">
               <span className="text-[var(--a-text-3)]">
                 {(vi ? group?.viLabel ?? group?.label : group?.label) ?? t('admin')}
               </span>
               <span className="text-[var(--a-text-3)]">/</span>
-              <span className="truncate font-semibold text-[var(--a-text)]">
+              <span className="truncate font-bold text-[var(--a-text)]">
                 {(vi ? item?.vi ?? item?.label : item?.label) ?? t('overview')}
               </span>
             </nav>
@@ -199,7 +199,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </header>
 
-          <main className="min-h-0 flex-1 overflow-y-auto px-4 py-5 md:px-6">
+          <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 md:px-8 md:py-8">
             {children}
           </main>
         </div>

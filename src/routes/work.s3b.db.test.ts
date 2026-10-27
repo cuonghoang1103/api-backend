@@ -317,7 +317,7 @@ describe('CT Work — đợt S3b: CR · RAID · họp (HTTP + DB thật)', { ski
     // Email mời kèm .ics (người tạo không tự nhận).
     const toClient = sent.find((s) => s.to === client.email);
     assert.ok(toClient?.attachments?.[0], 'khách nhận .ics');
-    assert.match(toClient!.html, /Client portal/);
+    assert.match(toClient!.html, /Cổng khách hàng/); // 28/10: thư mời họp tiếng Việt
     const ics = Buffer.from(toClient!.attachments![0].content, 'base64').toString('utf8');
     assert.match(ics, /BEGIN:VCALENDAR\r\n[\s\S]*BEGIN:VEVENT\r\n[\s\S]*END:VEVENT\r\nEND:VCALENDAR\r\n$/);
     const flat = ics.replace(/\r\n /g, '');

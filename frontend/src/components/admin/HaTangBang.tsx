@@ -385,9 +385,26 @@ function TheMayThue({ m }: { m: MayThue }) {
     : pt !== null && pt >= 85 ? { chu: 'Đang chạy hết công suất', mau: 'var(--a-green, #30d158)' }
     : v && v.luongGiong + v.luongRender > 0 ? { chu: 'Đang chạy (GPU nghỉ giữa tập)', mau: 'var(--a-yellow, #ffd60a)' }
     : { chu: 'RẢNH — đang lãng phí', mau: 'var(--a-red, #ff453a)' };
+  const vram = typeof g?.vramDung === 'number' && typeof g?.vramTong === 'number' && g.vramTong > 0 ? Math.round((g.vramDung / g.vramTong) * 100) : null;
   return (
     <div className="space-y-3">
-      <TheMay m={{ ...m, ten: m.tenHienThi }} icon={Cloud} />
+      {/* Đầu thẻ: % GPU ĐANG DÙNG thật to — vòng tròn bên dưới là NHIỆT ĐỘ, từng bị đọc nhầm là "đang rảnh". */}
+      <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-[13px] font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{m.tenHienThi} · GPU đang dùng</p>
+            <p className="text-[44px] font-extrabold leading-none tabular-nums" style={{ color: danhGia.mau }}>{pt !== null ? `${Math.round(pt)}%` : '—'}</p>
+          </div>
+          <div className="text-right text-[13px]" style={{ color: 'var(--text-muted)' }}>
+            {typeof g?.dien === 'number' && <p>Điện GPU {Math.round(g.dien)} W{typeof g?.dienToiDa === 'number' ? ` / ${Math.round(g.dienToiDa)} W` : ''}</p>}
+            {vram !== null && <p>VRAM {vram}% (làm giọng chỉ cần ~4 GB — thấp là bình thường)</p>}
+            {Array.isArray(m.cpu?.tai) && <p>Tải CPU {m.cpu.tai[0]} / {m.cpu.soNhan} nhân</p>}
+          </div>
+        </div>
+        <div className="mt-3 h-2 overflow-hidden rounded-full" style={{ background: 'var(--border-color)' }}>
+          <div className="h-full rounded-full" style={{ width: `${pt ?? 0}%`, background: danhGia.mau }} />
+        </div>
+      </div>
       <div className="rounded-2xl border p-4" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <span className="text-[15px] font-bold" style={{ color: danhGia.mau }}>● {danhGia.chu}</span>
@@ -403,6 +420,7 @@ function TheMayThue({ m }: { m: MayThue }) {
           <p className="mt-3 text-[13px]" style={{ color: 'var(--text-muted)' }}>Vừa xong: {v.ganNhat.join(' · ')}</p>
         ) : null}
       </div>
+      <TheMay m={{ ...m, ten: m.tenHienThi }} icon={Cloud} />
     </div>
   );
 }

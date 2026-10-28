@@ -317,8 +317,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Missing requirements are the hardest defects to spot: you cannot review what is not written. Match each discovery with the technique that found it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Yêu cầu thiếu là lỗi khó thấy nhất: không review được cái chưa viết. Ghép mỗi phát hiện với kỹ thuật đã tìm ra nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Missing requirements are the hardest defects to spot: you cannot review what is not written. Match each discovery with the technique that found it.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu thiếu là lỗi khó thấy nhất: không review được cái chưa viết. Ghép mỗi phát hiện với kỹ thuật đã tìm ra nó.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

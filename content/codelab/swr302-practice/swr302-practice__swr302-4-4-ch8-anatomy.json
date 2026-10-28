@@ -1,0 +1,681 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-4-ch8-anatomy",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-4-ch8-anatomy"
+  },
+  "exercises": [
+    {
+      "title": "Use case anatomy 1 — «include» or «extend»?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "«include»",
+        "«extend»"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>«include»</b>: the base use case ALWAYS uses the included one (shared behaviour factored out); the arrow goes from the base to the included use case. <b>«extend»</b>: optional or conditional behaviour inserted into the base use case at an extension point; the arrow goes from the extension to the base.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>«include»</b>: use case gốc LUÔN dùng use case được gộp (hành vi chung tách ra); mũi tên đi từ gốc tới use case được gộp. <b>«extend»</b>: hành vi tuỳ chọn hoặc có điều kiện chèn vào use case gốc tại điểm mở rộng; mũi tên đi từ use case mở rộng tới gốc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Luôn luôn\" ⇒ include (gốc → gộp). \"Có thể / chỉ khi\" ⇒ extend (mở rộng → gốc).",
+        "include/extend chỉ nối hai use case, nét đứt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 1 — «include» or «extend»?\n\nAnswer in the answer panel (no code needed).\n\n1. Every time a patient books an appointment, the system authenticates the patient. Booking ___ Authenticate.Mỗi lần đặt lịch, hệ thống xác thực bệnh nhân. Booking ___ Authenticate.\n2. A patient MAY add a referral letter when booking. Attach Referral ___ Book Appointment.Bệnh nhân CÓ THỂ đính kèm giấy giới thiệu khi đặt lịch. Attach Referral ___ Book Appointment.\n3. In PlantUML, which line is correct for \"Book Appointment always includes Pay Deposit\"?Trong PlantUML, dòng nào đúng cho \"Book Appointment luôn gộp Pay Deposit\"?\n4. A late-cancellation fee is charged only when a patient cancels less than 24 h before. Which is right?Phí huỷ muộn chỉ thu khi bệnh nhân huỷ trong vòng 24 giờ trước. Cái nào đúng?\n5. Can «include» connect an actor to a use case?«include» có nối actor với use case được không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 1 — «include» or «extend»? — answer key\n\n1. Every time a patient books an appointment, the system authenticates the patient. Booking ___ Authenticate.Mỗi lần đặt lịch, hệ thống xác thực bệnh nhân. Booking ___ Authenticate.\n   Answer: a) «include»\n   Always ⇒ include.VI: Luôn luôn ⇒ include.\n\n2. A patient MAY add a referral letter when booking. Attach Referral ___ Book Appointment.Bệnh nhân CÓ THỂ đính kèm giấy giới thiệu khi đặt lịch. Attach Referral ___ Book Appointment.\n   Answer: b) «extend»\n   Optional ⇒ extend, arrow from Attach Referral to Book Appointment.VI: Tuỳ chọn ⇒ extend, mũi tên từ Attach Referral tới Book Appointment.\n\n3. In PlantUML, which line is correct for \"Book Appointment always includes Pay Deposit\"?Trong PlantUML, dòng nào đúng cho \"Book Appointment luôn gộp Pay Deposit\"?\n   Answer: a) Book ..> Pay : <<include>>\n   Base → included, dashed.VI: Gốc → được gộp, nét đứt.\n\n4. A late-cancellation fee is charged only when a patient cancels less than 24 h before. Which is right?Phí huỷ muộn chỉ thu khi bệnh nhân huỷ trong vòng 24 giờ trước. Cái nào đúng?\n   Answer: b) Charge Late Fee ..> Cancel Appointment : <<extend>>\n   Conditional ⇒ extend, from the extension to the base.VI: Có điều kiện ⇒ extend, từ use case mở rộng tới gốc.\n\n5. Can «include» connect an actor to a use case?«include» có nối actor với use case được không?\n   Answer: b) No — include/extend only connect use cases; actors use plain associations\n   A frequent PE mistake.VI: Lỗi hay gặp trong PE.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Every time a patient books an appointment, the system authenticates the patient. Booking ___ Authenticate.</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi lần đặt lịch, hệ thống xác thực bệnh nhân. Booking ___ Authenticate.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "«include»"
+              },
+              {
+                "ma": "b",
+                "noiDung": "«extend»"
+              },
+              {
+                "ma": "c",
+                "noiDung": "generalization"
+              },
+              {
+                "ma": "d",
+                "noiDung": "association"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Always ⇒ include.</p><p><i>VI: Luôn luôn ⇒ include.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A patient MAY add a referral letter when booking. Attach Referral ___ Book Appointment.</p><p style=\"opacity:.75;font-size:.92em\"><i>Bệnh nhân CÓ THỂ đính kèm giấy giới thiệu khi đặt lịch. Attach Referral ___ Book Appointment.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "«include»"
+              },
+              {
+                "ma": "b",
+                "noiDung": "«extend»"
+              },
+              {
+                "ma": "c",
+                "noiDung": "generalization"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Optional ⇒ extend, arrow from Attach Referral to Book Appointment.</p><p><i>VI: Tuỳ chọn ⇒ extend, mũi tên từ Attach Referral tới Book Appointment.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>In PlantUML, which line is correct for \"Book Appointment always includes Pay Deposit\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong PlantUML, dòng nào đúng cho \"Book Appointment luôn gộp Pay Deposit\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Book ..> Pay : &lt;&lt;include&gt;&gt;"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Pay ..> Book : &lt;&lt;include&gt;&gt;"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Book --> Pay"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pay ..> Book : &lt;&lt;extend&gt;&gt;"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Base → included, dashed.</p><p><i>VI: Gốc → được gộp, nét đứt.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A late-cancellation fee is charged only when a patient cancels less than 24 h before. Which is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phí huỷ muộn chỉ thu khi bệnh nhân huỷ trong vòng 24 giờ trước. Cái nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Cancel Appointment ..> Charge Late Fee : &lt;&lt;include&gt;&gt;"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Charge Late Fee ..> Cancel Appointment : &lt;&lt;extend&gt;&gt;"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Charge Late Fee ..> Cancel Appointment : &lt;&lt;include&gt;&gt;"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cancel Appointment ..> Charge Late Fee : &lt;&lt;extend&gt;&gt;"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Conditional ⇒ extend, from the extension to the base.</p><p><i>VI: Có điều kiện ⇒ extend, từ use case mở rộng tới gốc.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Can «include» connect an actor to a use case?</p><p style=\"opacity:.75;font-size:.92em\"><i>«include» có nối actor với use case được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — include/extend only connect use cases; actors use plain associations"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for external systems"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only with a dashed line"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A frequent PE mistake.</p><p><i>VI: Lỗi hay gặp trong PE.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đảo chiều mũi tên extend."
+        },
+        {
+          "loi": "Dùng include để nối use case với actor như Payment Gateway."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "«include»",
+          "vi": "gộp — use case gốc LUÔN gọi use case được gộp; mũi tên gốc → được gộp"
+        },
+        {
+          "en": "«extend»",
+          "vi": "mở rộng — hành vi CÓ ĐIỀU KIỆN chèn vào use case gốc; mũi tên mở rộng → gốc"
+        }
+      ]
+    },
+    {
+      "title": "Use case anatomy 2 — normal flow, alternative flow or exception?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "use case flows"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>For the use case <b>Book Appointment</b>: the <b>normal flow</b> is the most common success path; an <b>alternative flow</b> is another way that still reaches the goal; an <b>exception</b> is a condition that prevents the goal (and how the system handles it). Classify each fragment.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với use case <b>Book Appointment</b>: <b>luồng chính</b> là đường thành công phổ biến nhất; <b>luồng thay thế</b> là cách khác vẫn đạt mục tiêu; <b>ngoại lệ</b> là điều kiện khiến không đạt mục tiêu (và cách hệ thống xử lý). Phân loại từng đoạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kết thúc có lịch hẹn được tạo không? Có ⇒ normal/alternative. Không ⇒ exception.",
+        "Luồng chính là đường phổ biến nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 2 — normal flow, alternative flow or exception?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 2 — normal flow, alternative flow or exception? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Normal flow\n   - r1.k: Alternative flow\n   - r2.k: Exception\n   - r3.k: Exception\n   - r4.k: Alternative flow\n   - r5.k: Normal flow\n   Alternative flows still end in a booked appointment; exceptions do not (or need recovery). Writing exceptions is where most missing requirements are found.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Alternative flows still end in a booked appointment; exceptions do not (or need recovery). Writing exceptions is where most missing requirements are found.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "Normal flow",
+                  "Alternative flow",
+                  "Exception"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The patient selects a doctor, a date and a free slot, and confirms."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The patient chooses \"any available doctor\" and the system picks the first free one."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The chosen slot is taken by someone else before confirmation; the system shows other slots."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The deposit payment is declined; no appointment is created."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The patient books for a family member instead of for herself."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The system creates the appointment and sends a confirmation."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Normal flow",
+              "r1.k": "Alternative flow",
+              "r2.k": "Exception",
+              "r3.k": "Exception",
+              "r4.k": "Alternative flow",
+              "r5.k": "Normal flow"
+            },
+            "giaiThich": "<p><p>Alternative flows still end in a booked appointment; exceptions do not (or need recovery). Writing exceptions is where most missing requirements are found.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"đặt cho người nhà\" là ngoại lệ — nó vẫn đạt mục tiêu."
+        },
+        {
+          "loi": "Chỉ viết luồng chính."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normal flow (main success scenario)",
+          "vi": "luồng chính — chuỗi bước thành công điển hình"
+        },
+        {
+          "en": "alternative flow",
+          "vi": "luồng thay thế — cách khác vẫn đạt mục tiêu"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        }
+      ]
+    },
+    {
+      "title": "Use case anatomy 4 — actor generalization and primary/secondary actors",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "actor generalization",
+        "primary vs secondary actor"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>primary actor</b> starts the use case to reach a goal; a <b>secondary actor</b> is needed by the system to complete it (often an external system). <b>Generalization</b> between actors (child --|> parent) means the child can do everything the parent can, plus more.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Actor chính</b> khởi động use case để đạt mục tiêu; <b>actor phụ</b> là bên hệ thống cần để hoàn tất (thường là hệ thống ngoài). <b>Tổng quát hoá</b> giữa actor (con --|> cha) nghĩa là con làm được mọi thứ cha làm, và hơn thế.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Actor chính khởi động; actor phụ được hệ thống gọi tới.",
+        "Mũi tên tổng quát hoá đi từ CON tới CHA."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 4 — actor generalization and primary/secondary actors\n\nAnswer in the answer panel (no code needed).\n\n1. In \"Pay Deposit\", the payment gateway is…Trong \"Pay Deposit\", cổng thanh toán là…\n2. A Head Receptionist can do everything a Receptionist can, plus approve refunds. How do you draw it?Lễ tân trưởng làm được mọi việc của lễ tân, thêm duyệt hoàn tiền. Vẽ thế nào?\n3. Which line is ILLEGAL in a use case diagram?Dòng nào SAI trong sơ đồ use case?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case anatomy 4 — actor generalization and primary/secondary actors — answer key\n\n1. In \"Pay Deposit\", the payment gateway is…Trong \"Pay Deposit\", cổng thanh toán là…\n   Answer: b) a secondary actor\n   The patient starts it; the gateway helps complete it.VI: Bệnh nhân khởi động; cổng thanh toán giúp hoàn tất.\n\n2. A Head Receptionist can do everything a Receptionist can, plus approve refunds. How do you draw it?Lễ tân trưởng làm được mọi việc của lễ tân, thêm duyệt hoàn tiền. Vẽ thế nào?\n   Answer: b) \"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund\n   Child --|> parent; the child adds its own use cases.VI: Con --|> cha; con thêm use case riêng.\n\n3. Which line is ILLEGAL in a use case diagram?Dòng nào SAI trong sơ đồ use case?\n   Answer: b) Patient --> Receptionist\n   Actors never interact with each other in a use case diagram.VI: Actor không bao giờ nối với nhau bằng association trong sơ đồ use case.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In \"Pay Deposit\", the payment gateway is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong \"Pay Deposit\", cổng thanh toán là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the primary actor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a secondary actor"
+              },
+              {
+                "ma": "c",
+                "noiDung": "not an actor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a use case"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The patient starts it; the gateway helps complete it.</p><p><i>VI: Bệnh nhân khởi động; cổng thanh toán giúp hoàn tất.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A Head Receptionist can do everything a Receptionist can, plus approve refunds. How do you draw it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lễ tân trưởng làm được mọi việc của lễ tân, thêm duyệt hoàn tiền. Vẽ thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Receptionist --|> \"Head Receptionist\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"Head Receptionist\" --|> Receptionist, and link Head Receptionist to Approve Refund"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two unrelated actors linked to all the same use cases"
+              },
+              {
+                "ma": "d",
+                "noiDung": "«include» between the actors"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Child --|> parent; the child adds its own use cases.</p><p><i>VI: Con --|> cha; con thêm use case riêng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which line is ILLEGAL in a use case diagram?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng nào SAI trong sơ đồ use case?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Patient --> UC1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Patient --> Receptionist"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UC3 ..> UC1 : <<extend>>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Doctor --|> Staff"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Actors never interact with each other in a use case diagram.</p><p><i>VI: Actor không bao giờ nối với nhau bằng association trong sơ đồ use case.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nối hai actor bằng đường thường để thể hiện \"nói chuyện với nhau\"."
+        },
+        {
+          "loi": "Đảo chiều tổng quát hoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "primary / secondary actor",
+          "vi": "tác nhân chính (khởi động use case để đạt mục tiêu) / phụ (hệ thống cần nó giúp)"
+        },
+        {
+          "en": "generalization",
+          "vi": "tổng quát hoá — actor/use case con kế thừa cha (mũi tên tam giác rỗng tới cha)"
+        }
+      ]
+    },
+    {
+      "title": "Use case anatomy 3 — model include and extend",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "«include»",
+        "«extend»"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>ClinicCare rules: (1) booking an appointment — by the patient or by the receptionist — ALWAYS requires a deposit, paid through the <b>payment gateway</b>; (2) when booking, a patient MAY attach a referral letter; (3) a patient cancels appointments; (4) if the cancellation is less than 24 hours before the appointment, a late fee is charged through the payment gateway. Draw the use case diagram with the right relationships.</p><p><b>PlantUML.</b> <code>actor Patient</code> · <code>actor \"Payment Gateway\" as PG</code> · the system boundary <code>rectangle \"ClinicCare\" { … }</code> holding <code>usecase \"Book Appointment\" as UC1</code> · association <code>Patient --> UC1</code> · <code>UC1 ..> UC2 : &lt;&lt;include&gt;&gt;</code> (base → included) · <code>UC3 ..> UC1 : &lt;&lt;extend&gt;&gt;</code> (extension → base) · actor generalisation <code>Child --|> Parent</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Deposit = «include»; referral letter and late fee = «extend»; the payment gateway linked to the payment use cases with plain associations.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật ClinicCare: (1) đặt lịch — do bệnh nhân hay lễ tân — LUÔN cần đặt cọc, trả qua <b>cổng thanh toán</b>; (2) khi đặt, bệnh nhân CÓ THỂ đính giấy giới thiệu; (3) bệnh nhân huỷ lịch; (4) nếu huỷ trong vòng 24 giờ trước giờ hẹn thì thu phí huỷ muộn qua cổng thanh toán. Vẽ sơ đồ use case với quan hệ đúng.</p><p><b>PlantUML.</b> <code>actor Patient</code> · <code>actor \"Payment Gateway\" as PG</code> · biên hệ thống <code>rectangle \"ClinicCare\" { … }</code> chứa <code>usecase \"Book Appointment\" as UC1</code> · liên kết <code>Patient --> UC1</code> · <code>UC1 ..> UC2 : &lt;&lt;include&gt;&gt;</code> (gốc → được gộp) · <code>UC3 ..> UC1 : &lt;&lt;extend&gt;&gt;</code> (mở rộng → gốc) · tổng quát hoá actor <code>Con --|> Cha</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đặt cọc = «include»; giấy giới thiệu và phí huỷ muộn = «extend»; cổng thanh toán nối với các use case trả tiền bằng association thường.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "UC1 ..> UC2 : <<include>>",
+          "output": "Book Appointment always uses Pay Deposit",
+          "explanation": "Base → included.|||Gốc → được gộp."
+        }
+      ],
+      "hintsJson": [
+        "Ba quan hệ: một include, hai extend.",
+        "Payment Gateway nối bằng đường thường (-->) tới use case trả tiền, không bằng include."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "usecase.js",
+          "language": "javascript",
+          "code": "const USE_CASE_DIAGRAM = `\n@startuml\nactor Patient\nrectangle \"ClinicCare\" {\n  usecase \"Book Appointment\" as UC1\n}\nPatient --> UC1\n@enduml\n`;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "usecase.js",
+          "language": "javascript",
+          "code": "const USE_CASE_DIAGRAM = `\n@startuml\nleft to right direction\nactor Patient\nactor Receptionist\nactor \"Payment Gateway\" as PG\nrectangle \"ClinicCare\" {\n  usecase \"Book Appointment\" as UC1\n  usecase \"Pay Deposit\" as UC2\n  usecase \"Attach Referral Letter\" as UC3\n  usecase \"Cancel Appointment\" as UC4\n  usecase \"Charge Late Cancellation Fee\" as UC5\n}\nPatient --> UC1\nReceptionist --> UC1\nUC1 ..> UC2 : <<include>>\nUC2 --> PG\nUC3 ..> UC1 : <<extend>>\nPatient --> UC4\nUC5 ..> UC4 : <<extend>>\nUC5 --> PG\n@enduml\n`;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Always ⇒ include from the base; optional or conditional ⇒ extend from the extension; actors connect with associations only.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 380\" width=\"100%\" style=\"max-width:760px;display:block;margin:10px auto\" role=\"img\" aria-label=\"Use case diagram — include and extend\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"swm\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker><marker id=\"swmo\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.3\"/></marker><marker id=\"swmt\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"11\" markerHeight=\"11\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11 z\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.2\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"380\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"20\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\" font-size=\"13\">Use case diagram — include and extend</text><rect x=\"150\" y=\"44\" width=\"460\" height=\"316\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"160\" y=\"60\" fill=\"#111827\" font-weight=\"700\">ClinicCare</text><ellipse cx=\"380.0\" cy=\"109.6\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"113.4\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Book Appointment</text><ellipse cx=\"380.0\" cy=\"263.2\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"267.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Pay Deposit</text><ellipse cx=\"380.0\" cy=\"160.8\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"164.6\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Attach Referral Letter</text><ellipse cx=\"380.0\" cy=\"212.0\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"215.8\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Cancel Appointment</text><ellipse cx=\"380.0\" cy=\"314.4\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"311.5\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Charge Late Cancellation</text><text x=\"380.0\" y=\"325.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Fee</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"70.0\" cy=\"138.8\" r=\"8\" fill=\"#ffffff\"/><path d=\"M70.0,146.8 V168.8 M56.0,154.8 H84.0 M70.0,168.8 L59.0,184.8 M70.0,168.8 L81.0,184.8\"/></g><text x=\"70.0\" y=\"202.6\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Patient</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"70.0\" cy=\"224.8\" r=\"8\" fill=\"#ffffff\"/><path d=\"M70.0,232.8 V254.8 M56.0,240.8 H84.0 M70.0,254.8 L59.0,270.8 M70.0,254.8 L81.0,270.8\"/></g><text x=\"70.0\" y=\"288.6\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Receptionist</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"690.0\" cy=\"266.8\" r=\"8\" fill=\"#ffffff\"/><path d=\"M690.0,274.8 V296.8 M676.0,282.8 H704.0 M690.0,296.8 L679.0,312.8 M690.0,296.8 L701.0,312.8\"/></g><text x=\"690.0\" y=\"330.6\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Payment Gateway</text><path d=\"M92.0,160.9 L289.1,124.6\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M92.0,240.8 L335.4,129.3\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M380.0,130.6 L380.0,242.2\" stroke=\"#1f2937\" stroke-width=\"1.2\" stroke-dasharray=\"6 4\" fill=\"none\" marker-end=\"url(#swmo)\"/><rect x=\"352.1\" y=\"175.9\" width=\"63.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"384.0\" y=\"187.9\" text-anchor=\"middle\" fill=\"#1d4ed8\" font-size=\"10.5\">«include»</text><path d=\"M495.8,272.8 L668.0,290.7\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M380.0,139.8 L380.0,130.6\" stroke=\"#1f2937\" stroke-width=\"1.2\" stroke-dasharray=\"6 4\" fill=\"none\" marker-end=\"url(#swmo)\"/><rect x=\"355.2\" y=\"124.7\" width=\"57.6\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"384.0\" y=\"136.7\" text-anchor=\"middle\" fill=\"#1d4ed8\" font-size=\"10.5\">«extend»</text><path d=\"M92.0,168.1 L289.1,197.0\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M380.0,293.4 L380.0,233.0\" stroke=\"#1f2937\" stroke-width=\"1.2\" stroke-dasharray=\"6 4\" fill=\"none\" marker-end=\"url(#swmo)\"/><rect x=\"355.2\" y=\"252.7\" width=\"57.6\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"384.0\" y=\"264.7\" text-anchor=\"middle\" fill=\"#1d4ed8\" font-size=\"10.5\">«extend»</text><path d=\"M495.8,304.8 L668.0,294.3\" stroke=\"#334155\" stroke-width=\"1.2\"/></svg><details><summary>Source / Mã nguồn</summary><pre>@startuml\nleft to right direction\nactor Patient\nactor Receptionist\nactor \"Payment Gateway\" as PG\nrectangle \"ClinicCare\" {\n  usecase \"Book Appointment\" as UC1\n  usecase \"Pay Deposit\" as UC2\n  usecase \"Attach Referral Letter\" as UC3\n  usecase \"Cancel Appointment\" as UC4\n  usecase \"Charge Late Cancellation Fee\" as UC5\n}\nPatient --&gt; UC1\nReceptionist --&gt; UC1\nUC1 ..&gt; UC2 : &lt;&lt;include&gt;&gt;\nUC2 --&gt; PG\nUC3 ..&gt; UC1 : &lt;&lt;extend&gt;&gt;\nPatient --&gt; UC4\nUC5 ..&gt; UC4 : &lt;&lt;extend&gt;&gt;\nUC5 --&gt; PG\n@enduml</pre></details>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "usecase.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Use case diagram — valid PlantUML, every line understood",
+              "vi": "Sơ đồ use case — đúng cú pháp PlantUML, mọi dòng đọc được"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(l,v,K){var m=function(d,h,E){var s=E[h.bien];if(typeof s!=\"string\"||!s.trim())return{loi:d.m(h.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",h.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var e=d.pu(s),g={},p={};e.actors.forEach(function(r){g[r.key]=r}),e.ucs.forEach(function(r){p[r.key]=r});function y(r){return e.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function O(r){var t=[r],i={},u;for(u=0;u<t.length;u++)y(t[u]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var c=[];for(e.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&c.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&c.push(n.tu))}),u=0;u<c.length;u++){var a=c[u];i[a]||(i[a]=!0,e.qh.forEach(function(n){n.loai===\"include\"&&n.tu===a&&c.push(n.den),n.loai===\"extend\"&&n.den===a&&c.push(n.tu)}))}return Object.keys(i)}function b(r){var t=[];return e.qh.forEach(function(i){i.loai===\"assoc\"&&(i.tu===r&&i.denK===\"actor\"&&t.push(i.den),i.den===r&&i.tuK===\"actor\"&&t.push(i.tu))}),t}return{p:e,act:g,uc:p,toiDuoc:O,actorCua:b}},f=m(l,v,K);if(f.loi)return f.loi;var o=f.p;return o.loi.length?o.loi[0]+(o.loi.length>1?\" (+\"+(o.loi.length-1)+\")\":\"\"):!o.actors.length||!o.ucs.length?l.m(\"declare actors and use cases\",\"khai actor v\\xE0 use case\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — ONE system boundary holds every use case; actors stay outside",
+              "vi": "Sơ đồ use case — MỘT biên hệ thống chứa mọi use case; actor ở ngoài"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,y,K){var E=function(p,l,O){var m=O[l.bien];if(typeof m!=\"string\"||!m.trim())return{loi:p.m(l.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",l.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var a=p.pu(m),b={},v={};a.actors.forEach(function(r){b[r.key]=r}),a.ucs.forEach(function(r){v[r.key]=r});function x(r){return a.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function D(r){var t=[r],i={},o;for(o=0;o<t.length;o++)x(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var s=[];for(a.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&s.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&s.push(n.tu))}),o=0;o<s.length;o++){var f=s[o];i[f]||(i[f]=!0,a.qh.forEach(function(n){n.loai===\"include\"&&n.tu===f&&s.push(n.den),n.loai===\"extend\"&&n.den===f&&s.push(n.tu)}))}return Object.keys(i)}function _(r){var t=[];return a.qh.forEach(function(i){i.loai===\"assoc\"&&(i.tu===r&&i.denK===\"actor\"&&t.push(i.den),i.den===r&&i.tuK===\"actor\"&&t.push(i.tu))}),t}return{p:a,act:b,uc:v,toiDuoc:D,actorCua:_}},h=E(u,y,K);if(h.loi)return h.loi;var c=h.p;if(c.bien.length===0)return u.m('no system boundary \\u2014 wrap the use cases in rectangle \"System name\" { \\u2026 }','ch\\u01B0a c\\xF3 bi\\xEAn h\\u1EC7 th\\u1ED1ng \\u2014 b\\u1ECDc use case trong rectangle \"T\\xEAn h\\u1EC7 th\\u1ED1ng\" { \\u2026 }');if(c.bien.length>1)return u.m(c.bien.length+\" boundaries \\u2014 one system, one rectangle\",c.bien.length+\" bi\\xEAn \\u2014 m\\u1ED9t h\\u1EC7 th\\u1ED1ng, m\\u1ED9t h\\xECnh ch\\u1EEF nh\\u1EADt\");var g=c.ucs.filter(function(e){return!e.trong});if(g.length)return u.m(\"use case \"+u.ds(g.map(function(e){return e.ten}))+\" is outside the boundary\",\"use case \"+u.ds(g.map(function(e){return e.ten}))+\" n\\u1EB1m ngo\\xE0i bi\\xEAn\");var d=c.actors.filter(function(e){return e.trong});return d.length?u.m(\"actor \"+u.ds(d.map(function(e){return e.ten}))+\" is inside the boundary \\u2014 actors are outside the system\",\"actor \"+u.ds(d.map(function(e){return e.ten}))+\" n\\u1EB1m trong bi\\xEAn \\u2014 actor \\u1EDF ngo\\xE0i h\\u1EC7 th\\u1ED1ng\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — links are legal: actor–use case associations, «include»/«extend» only between use cases, no actor–actor association",
+              "vi": "Sơ đồ use case — liên kết hợp lệ: actor–use case là association, «include»/«extend» chỉ giữa hai use case, không nối actor–actor"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,v,b){var w=function(p,h,x){var l=x[h.bien];if(typeof l!=\"string\"||!l.trim())return{loi:p.m(h.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",h.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var r=p.pu(l),K={},m={};r.actors.forEach(function(e){K[e.key]=e}),r.ucs.forEach(function(e){m[e.key]=e});function y(e){return r.qh.filter(function(o){return o.loai===\"gen\"&&o.tuK===\"actor\"&&o.tu===e}).map(function(o){return o.den})}function E(e){var o=[e],a={},i;for(i=0;i<o.length;i++)y(o[i]).forEach(function(t){o.indexOf(t)<0&&o.push(t)});var u=[];for(r.qh.forEach(function(t){t.loai===\"assoc\"&&(t.tuK===\"actor\"&&o.indexOf(t.tu)>=0&&t.denK===\"uc\"&&u.push(t.den),t.denK===\"actor\"&&o.indexOf(t.den)>=0&&t.tuK===\"uc\"&&u.push(t.tu))}),i=0;i<u.length;i++){var s=u[i];a[s]||(a[s]=!0,r.qh.forEach(function(t){t.loai===\"include\"&&t.tu===s&&u.push(t.den),t.loai===\"extend\"&&t.den===s&&u.push(t.tu)}))}return Object.keys(a)}function O(e){var o=[];return r.qh.forEach(function(a){a.loai===\"assoc\"&&(a.tu===e&&a.denK===\"actor\"&&o.push(a.den),a.den===e&&a.tuK===\"actor\"&&o.push(a.tu))}),o}return{p:r,act:K,uc:m,toiDuoc:E,actorCua:O}},d=w(c,v,b);if(d.loi)return d.loi;for(var g=d.p,f=0;f<g.qh.length;f++){var n=g.qh[f];if((n.loai===\"include\"||n.loai===\"extend\")&&(n.tuK!==\"uc\"||n.denK!==\"uc\"))return c.m(\"line \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB must connect two use cases \\u2014 an actor is linked with a plain association\",\"d\\xF2ng \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB ch\\u1EC9 n\\u1ED1i hai use case \\u2014 actor n\\u1ED1i b\\u1EB1ng association th\\u01B0\\u1EDDng\");if((n.loai===\"include\"||n.loai===\"extend\")&&n.net!==\"dut\")return c.m(\"line \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB is a dashed arrow (..>)\",\"d\\xF2ng \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB l\\xE0 m\\u0169i t\\xEAn n\\xE9t \\u0111\\u1EE9t (..>)\");if(n.loai===\"assoc\"&&n.tuK===\"actor\"&&n.denK===\"actor\")return c.m(\"line \"+n.dong+\": association between two actors \\u2014 actors only talk to the system (use --|> for generalization)\",\"d\\xF2ng \"+n.dong+\": association gi\\u1EEFa hai actor \\u2014 actor ch\\u1EC9 t\\u01B0\\u01A1ng t\\xE1c v\\u1EDBi h\\u1EC7 th\\u1ED1ng (t\\u1ED5ng qu\\xE1t ho\\xE1 d\\xF9ng --|>)\");if(n.loai===\"assoc\"&&n.tuK===\"uc\"&&n.denK===\"uc\")return c.m(\"line \"+n.dong+\": plain line between two use cases \\u2014 use \\xABinclude\\xBB or \\xABextend\\xBB\",\"d\\xF2ng \"+n.dong+\": \\u0111\\u01B0\\u1EDDng th\\u01B0\\u1EDDng gi\\u1EEFa hai use case \\u2014 d\\xF9ng \\xABinclude\\xBB ho\\u1EB7c \\xABextend\\xBB\");if(n.loai===\"gen\"&&n.tuK!==n.denK)return c.m(\"line \"+n.dong+\": generalization must be actor \\u2192 actor or use case \\u2192 use case\",\"d\\xF2ng \"+n.dong+\": t\\u1ED5ng qu\\xE1t ho\\xE1 ph\\u1EA3i actor \\u2192 actor ho\\u1EB7c use case \\u2192 use case\")}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — every actor takes part in a use case and every use case is reachable",
+              "vi": "Sơ đồ use case — actor nào cũng tham gia use case và use case nào cũng có người dùng tới"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,E,K){var b=function(r,p,x){var m=x[p.bien];if(typeof m!=\"string\"||!m.trim())return{loi:r.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var a=r.pu(m),y={},k={};a.actors.forEach(function(o){y[o.key]=o}),a.ucs.forEach(function(o){k[o.key]=o});function D(o){return a.qh.filter(function(e){return e.loai===\"gen\"&&e.tuK===\"actor\"&&e.tu===o}).map(function(e){return e.den})}function O(o){var e=[o],u={},i;for(i=0;i<e.length;i++)D(e[i]).forEach(function(n){e.indexOf(n)<0&&e.push(n)});var s=[];for(a.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&e.indexOf(n.tu)>=0&&n.denK===\"uc\"&&s.push(n.den),n.denK===\"actor\"&&e.indexOf(n.den)>=0&&n.tuK===\"uc\"&&s.push(n.tu))}),i=0;i<s.length;i++){var d=s[i];u[d]||(u[d]=!0,a.qh.forEach(function(n){n.loai===\"include\"&&n.tu===d&&s.push(n.den),n.loai===\"extend\"&&n.den===d&&s.push(n.tu)}))}return Object.keys(u)}function _(o){var e=[];return a.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===o&&u.denK===\"actor\"&&e.push(u.den),u.den===o&&u.tuK===\"actor\"&&e.push(u.tu))}),e}return{p:a,act:y,uc:k,toiDuoc:O,actorCua:_}},h=b(c,E,K);if(h.loi)return h.loi;var f=h.p,v={};f.actors.forEach(function(t){h.toiDuoc(t.key).forEach(function(r){v[r]=!0})});var l=f.actors.filter(function(t){return!f.qh.some(function(r){return r.loai===\"assoc\"&&(r.tu===t.key||r.den===t.key)})&&!f.qh.some(function(r){return r.loai===\"gen\"&&r.tu===t.key})&&!f.qh.some(function(r){return r.loai===\"gen\"&&r.den===t.key})});if(l.length)return c.m(\"actor \"+c.ds(l.map(function(t){return t.ten}))+\" is not linked to any use case\",\"actor \"+c.ds(l.map(function(t){return t.ten}))+\" kh\\xF4ng n\\u1ED1i use case n\\xE0o\");var g=f.ucs.filter(function(t){return!v[t.key]});return g.length?c.m(\"use case \"+c.ds(g.map(function(t){return t.ten}))+\" cannot be reached by any actor (no association, include or extend leads to it)\",\"use case \"+c.ds(g.map(function(t){return t.ten}))+\" kh\\xF4ng actor n\\xE0o t\\u1EDBi \\u0111\\u01B0\\u1EE3c (kh\\xF4ng association/include/extend n\\xE0o d\\u1EABn t\\u1EDBi)\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — use cases are named verb + object; actors are roles",
+              "vi": "Sơ đồ use case — use case đặt tên động từ + tân ngữ; actor là vai trò"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.tuVung=((function(t){var a=\"fix hand retire decommission write abort acknowledge activate adopt advise alert amend annotate appeal append appoint archive arrange assemble audit auto backup balance bid broadcast bulk calibrate cancel capture catalog catalogue categorize categorise certify check-in checkin cite clear clone close collect combine commit compile complain conduct consolidate contribute convert coordinate copy correct count crop customize customise deactivate declare delegate deliver deploy deregister describe destroy diagnose dial discard discount dismiss dispose distribute document draw drop duplicate earn edit elect email embed empty enqueue enter equip erase evaluate exclude execute expire explore extract fetch finalize finalise flag fulfil fulfill fund gather grant group guide hide highlight hold identify ignore import improve include increase initiate insert integrate interview invalidate investigate join justify label launch limit locate log maintain mark merge message migrate mint moderate monitor mute negotiate nominate note obtain onboard override own pair park pass patch payout pin pledge poll populate preview price print proceed procure promote propose protect provision publish purge qualify queue quote randomize randomise reallocate reassign rebook recalculate recall reclaim recognize recognise reconcile redeem redirect reduce refer register regulate reimburse reinstate relate release relocate rename renew repay repeat rephrase replenish request require reserve resize resolve restrict retract retry revise revise reward rollback route sanction save schedule screen seal search secure segment select serve settle shortlist sign simulate sort source specify sponsor stack stage stamp state stock stream submit summarize summarise supervise survey suspend swap tally terminate thank throttle tick toggle total trace transcribe transform translate transport trigger trim unblock undo unfollow unpublish unregister unsubscribe update upgrade validate verify view void waive warn weigh welcome whitelist withdraw accept access activate add adjust ask approve attach charge credit debit deduct dispute escalate notify pause reactivate rebook recharge refill reopen resubmit reward settle sponsor tokenize tokenise unlock verify vet allocate analyse analyze answer apply approve archive arrange ask assess assign attach attend audit authenticate authorize back backup bill block book borrow browse buy calculate call cancel capture change chat check checkout choose claim clean close collect comment compare complete compose compute configure confirm connect consult contact control convert create curate deactivate decide decline define delete deliver deposit design detect disable dispatch display dispense distribute do donate download draft edit enable end enrol enroll enter escalate estimate evaluate examine exchange export extend file fill filter find finish follow forecast forward generate get give grade grant handle help hire import inform input inspect install invite invoice issue join keep leave lend link list load lock log login logout look maintain make manage map mark match measure merge modify monitor move notify obtain offer open operate order organize organise pack participate pay perform pick place plan post predict prepare prescribe print prioritize process produce provide publish purchase push query raise rank rate read reassign receive recommend reconcile record recover redeem refund register reject release reload remind remove renew rent reorder repair replace reply report request reschedule reserve reset resolve respond restock restore resume retrieve return review revoke rotate run save scan schedule score screen search see select sell send serve set setup share ship show sign simulate skip sort split pause unpause start stop store submit subscribe suggest supply suspend swap switch sync synchronise synchronize take tag test top track trade train transfer translate triage unlock unsubscribe update upgrade upload use validate verify view visit vote waitlist watch withdraw write\".split(\" \"),s=\"accept add approve assign browse calculate cancel choose confirm create delete edit enter generate get give inform maintain manage make modify notify pay place provide receive register reject remove select send submit validate verify ask\".split(\" \"),o=\"pending waiting booking ongoing outstanding missing remaining upcoming incoming outgoing existing\".split(\" \");function n(e){var r=[e];return/ies$/.test(e)&&r.push(e.slice(0,-3)+\"y\"),/es$/.test(e)&&r.push(e.slice(0,-2)),/s$/.test(e)&&r.push(e.slice(0,-1)),r}function c(e){return e=t.norm(e),a.indexOf(e)>=0}function l(e){return e=t.norm(e),n(e).some(function(r){return s.indexOf(r)>=0})}function p(e){if(e=t.norm(e),!/ing$/.test(e)||o.indexOf(e)>=0)return!1;var r=e.slice(0,-3),i=[r,r+\"e\"];return/(.)\\1$/.test(r)&&i.push(r.slice(0,-1)),i.some(function(u){return a.indexOf(u)>=0})}return t.laDongTu=c,t.laHanhDong=l,t.laHoatDongIng=p,!0}))(C);C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(i,y,K){var k=function(f,p,E){var d=E[p.bien];if(typeof d!=\"string\"||!d.trim())return{loi:f.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var o=f.pu(d),v={},b={};o.actors.forEach(function(e){v[e.key]=e}),o.ucs.forEach(function(e){b[e.key]=e});function x(e){return o.qh.filter(function(n){return n.loai===\"gen\"&&n.tuK===\"actor\"&&n.tu===e}).map(function(n){return n.den})}function D(e){var n=[e],r={},a;for(a=0;a<n.length;a++)x(n[a]).forEach(function(t){n.indexOf(t)<0&&n.push(t)});var c=[];for(o.qh.forEach(function(t){t.loai===\"assoc\"&&(t.tuK===\"actor\"&&n.indexOf(t.tu)>=0&&t.denK===\"uc\"&&c.push(t.den),t.denK===\"actor\"&&n.indexOf(t.den)>=0&&t.tuK===\"uc\"&&c.push(t.tu))}),a=0;a<c.length;a++){var s=c[a];r[s]||(r[s]=!0,o.qh.forEach(function(t){t.loai===\"include\"&&t.tu===s&&c.push(t.den),t.loai===\"extend\"&&t.den===s&&c.push(t.tu)}))}return Object.keys(r)}function O(e){var n=[];return o.qh.forEach(function(r){r.loai===\"assoc\"&&(r.tu===e&&r.denK===\"actor\"&&n.push(r.den),r.den===e&&r.tuK===\"actor\"&&n.push(r.tu))}),n}return{p:o,act:v,uc:b,toiDuoc:D,actorCua:O}},l=k(i,y,K);if(l.loi)return l.loi;var m=l.p,u=m.ucs.filter(function(h){var f=i.tu(h.ten);return f.length<2||!i.laDongTu(f[0])});if(u.length)return i.m('use case \"'+u[0].ten+'\" \\u2014 start with a verb and name the goal, e.g. \"Book Appointment\", \"Make Payment\"'+(u.length>1?\" (\"+u.length+\" names)\":\"\"),'use case \"'+u[0].ten+'\" \\u2014 b\\u1EAFt \\u0111\\u1EA7u b\\u1EB1ng \\u0111\\u1ED9ng t\\u1EEB v\\xE0 n\\xEAu m\\u1EE5c ti\\xEAu, vd \"Book Appointment\"'+(u.length>1?\" (\"+u.length+\" t\\xEAn)\":\"\"));var g=m.actors.filter(function(h){return/^(the )?system$|database|\\bdb\\b|server|screen|website|app$/.test(i.norm(h.ten))});return g.length?i.m('\"'+g[0].ten+'\" is part of the system, not an actor','\"'+g[0].ten+'\" l\\xE0 m\\u1ED9t ph\\u1EA7n c\\u1EE7a h\\u1EC7 th\\u1ED1ng, kh\\xF4ng ph\\u1EA3i actor'):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — every actor of the case is present",
+              "vi": "Sơ đồ use case — đủ mọi actor của đề"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(a,g,K){var E=function(f,p,O){var l=O[p.bien];if(typeof l!=\"string\"||!l.trim())return{loi:f.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var o=f.pu(l),v={},m={};o.actors.forEach(function(r){v[r.key]=r}),o.ucs.forEach(function(r){m[r.key]=r});function b(r){return o.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function k(r){var t=[r],u={},i;for(i=0;i<t.length;i++)b(t[i]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var c=[];for(o.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&c.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&c.push(n.tu))}),i=0;i<c.length;i++){var h=c[i];u[h]||(u[h]=!0,o.qh.forEach(function(n){n.loai===\"include\"&&n.tu===h&&c.push(n.den),n.loai===\"extend\"&&n.den===h&&c.push(n.tu)}))}return Object.keys(u)}function x(r){var t=[];return o.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===r&&u.denK===\"actor\"&&t.push(u.den),u.den===r&&u.tuK===\"actor\"&&t.push(u.tu))}),t}return{p:o,act:v,uc:m,toiDuoc:k,actorCua:x}},s=E(a,g,K);if(s.loi)return s.loi;var y=s.p,d=g.actors.filter(function(e){return!y.actors.some(function(f){return a.khop(f.ten,e.khop)})});return d.length?a.m(\"missing actor: \"+a.ds(d.map(function(e){return e.ten}))+\" (or an equivalent name)\",\"thi\\u1EBFu actor: \"+a.ds(d.map(function(e){return e.ten}))+\" (ho\\u1EB7c t\\xEAn t\\u01B0\\u01A1ng \\u0111\\u01B0\\u01A1ng)\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"actors\":[{\"ten\":\"Patient\",\"khop\":[\"patient\"]},{\"ten\":\"Receptionist\",\"khop\":[\"reception\"]},{\"ten\":\"Payment Gateway\",\"khop\":[\"payment|gateway\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case coverage — Pay Deposit through the gateway · Charge the late fee through the gateway",
+              "vi": "Phủ use case — Pay Deposit through the gateway · Charge the late fee through the gateway"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,v,b){var _=function(l,y,M){var K=M[y.bien];if(typeof K!=\"string\"||!K.trim())return{loi:l.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var c=l.pu(K),O={},D={};c.actors.forEach(function(r){O[r.key]=r}),c.ucs.forEach(function(r){D[r.key]=r});function P(r){return c.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function U(r){var t=[r],e={},o;for(o=0;o<t.length;o++)P(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(c.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),o=0;o<h.length;o++){var p=h[o];e[p]||(e[p]=!0,c.qh.forEach(function(n){n.loai===\"include\"&&n.tu===p&&h.push(n.den),n.loai===\"extend\"&&n.den===p&&h.push(n.tu)}))}return Object.keys(e)}function j(r){var t=[];return c.qh.forEach(function(e){e.loai===\"assoc\"&&(e.tu===r&&e.denK===\"actor\"&&t.push(e.den),e.den===r&&e.tuK===\"actor\"&&t.push(e.tu))}),t}return{p:c,act:O,uc:D,toiDuoc:U,actorCua:j}},d=_(u,v,b);if(d.loi)return d.loi;for(var x=d.p,g=0;g<v.us.length;g++){var a=v.us[g],i=x.ucs.filter(function(f){return u.khop(f.ten,a.khop)});if(!i.length)return u.m(\"no use case for: \"+a.ten,\"ch\\u01B0a c\\xF3 use case cho: \"+(a.tenVi||a.ten));for(var k=0;k<(a.actor||[]).length;k++){var s=a.actor[k],E=x.actors.filter(function(f){return u.khop(f.ten,s.khop)});if(!E.length)return u.m('use case \"'+i[0].ten+'\" needs the actor '+s.ten,'use case \"'+i[0].ten+'\" c\\u1EA7n actor '+s.ten);var m=i.some(function(f){return E.some(function(l){return d.toiDuoc(l.key).indexOf(f.key)>=0})});if(!m)return u.m('\"'+i[0].ten+'\" is not linked to '+s.ten+\" (directly, through a parent actor, or through \\xABinclude\\xBB/\\xABextend\\xBB)\",'\"'+i[0].ten+'\" ch\\u01B0a n\\u1ED1i v\\u1EDBi '+s.ten+\" (tr\\u1EF1c ti\\u1EBFp, qua actor cha, ho\\u1EB7c qua \\xABinclude\\xBB/\\xABextend\\xBB)\")}}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"us\":[{\"ten\":\"Pay Deposit through the gateway\",\"khop\":[\"deposit\"],\"actor\":[{\"ten\":\"Payment Gateway\",\"khop\":[\"payment|gateway\"]}]},{\"ten\":\"Charge the late fee through the gateway\",\"khop\":[\"late|fee\"],\"actor\":[{\"ten\":\"Payment Gateway\",\"khop\":[\"payment|gateway\"]}]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "«include» — Book Appointment «include» Pay Deposit",
+              "vi": "«include» — Book Appointment «include» Pay Deposit"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,O,D){var E=function(r,y,x){var k=x[y.bien];if(typeof k!=\"string\"||!k.trim())return{loi:r.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var s=r.pu(k),b={},K={};s.actors.forEach(function(o){b[o.key]=o}),s.ucs.forEach(function(o){K[o.key]=o});function w(o){return s.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===o}).map(function(t){return t.den})}function M(o){var t=[o],u={},a;for(a=0;a<t.length;a++)w(t[a]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(s.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),a=0;a<h.length;a++){var l=h[a];u[l]||(u[l]=!0,s.qh.forEach(function(n){n.loai===\"include\"&&n.tu===l&&h.push(n.den),n.loai===\"extend\"&&n.den===l&&h.push(n.tu)}))}return Object.keys(u)}function _(o){var t=[];return s.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===o&&u.denK===\"actor\"&&t.push(u.den),u.den===o&&u.tuK===\"actor\"&&t.push(u.tu))}),t}return{p:s,act:b,uc:K,toiDuoc:M,actorCua:_}},d=E(c,O,D);if(d.loi)return d.loi;var g=d.p,e=O.r,p=g.ucs.filter(function(i){return c.khop(i.ten,e.tu)}),m=g.ucs.filter(function(i){return c.khop(i.ten,e.den)});if(!p.length||!m.length)return c.m(\"need both use cases: \"+e.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai use case: \"+(e.tenVi||e.ten));var v=g.qh.filter(function(i){return p.some(function(r){return r.key===i.tu||r.key===i.den})&&m.some(function(r){return r.key===i.tu||r.key===i.den})});if(!v.length)return c.m(\"no relationship yet: \"+e.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(e.tenVi||e.ten));var T=v.filter(function(i){return i.loai===e.loai&&p.some(function(r){return r.key===i.tu})&&m.some(function(r){return r.key===i.den})});if(T.length)return\"OK\";var f=v[0];return f.loai!==e.loai?c.m(\"line \"+f.dong+\": this is \\xAB\"+e.loai+\"\\xBB, not \\xAB\"+f.loai+\"\\xBB \\u2014 \"+e.lyDo,\"d\\xF2ng \"+f.dong+\": \\u0111\\xE2y l\\xE0 \\xAB\"+e.loai+\"\\xBB, kh\\xF4ng ph\\u1EA3i \\xAB\"+f.loai+\"\\xBB \\u2014 \"+(e.lyDoVi||e.lyDo)):c.m(\"line \"+f.dong+\": wrong direction \\u2014 \"+(e.loai===\"extend\"?\"the arrow goes FROM the extension TO the base use case\":\"the arrow goes FROM the base TO the included use case\"),\"d\\xF2ng \"+f.dong+\": sai chi\\u1EC1u \\u2014 \"+(e.loai===\"extend\"?\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case m\\u1EDF r\\u1ED9ng T\\u1EDAI use case g\\u1ED1c\":\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case g\\u1ED1c T\\u1EDAI use case \\u0111\\u01B0\\u1EE3c g\\u1ED9p\"))})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"r\":{\"loai\":\"include\",\"ten\":\"Book Appointment «include» Pay Deposit\",\"tu\":[\"book\"],\"den\":[\"deposit\"],\"lyDo\":\"every booking requires a deposit\",\"lyDoVi\":\"lượt đặt nào cũng cần đặt cọc\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "«extend» — Attach Referral Letter «extend» Book Appointment",
+              "vi": "«extend» — Attach Referral Letter «extend» Book Appointment"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,O,D){var E=function(r,y,x){var k=x[y.bien];if(typeof k!=\"string\"||!k.trim())return{loi:r.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var s=r.pu(k),b={},K={};s.actors.forEach(function(o){b[o.key]=o}),s.ucs.forEach(function(o){K[o.key]=o});function w(o){return s.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===o}).map(function(t){return t.den})}function M(o){var t=[o],u={},a;for(a=0;a<t.length;a++)w(t[a]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(s.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),a=0;a<h.length;a++){var l=h[a];u[l]||(u[l]=!0,s.qh.forEach(function(n){n.loai===\"include\"&&n.tu===l&&h.push(n.den),n.loai===\"extend\"&&n.den===l&&h.push(n.tu)}))}return Object.keys(u)}function _(o){var t=[];return s.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===o&&u.denK===\"actor\"&&t.push(u.den),u.den===o&&u.tuK===\"actor\"&&t.push(u.tu))}),t}return{p:s,act:b,uc:K,toiDuoc:M,actorCua:_}},d=E(c,O,D);if(d.loi)return d.loi;var g=d.p,e=O.r,p=g.ucs.filter(function(i){return c.khop(i.ten,e.tu)}),m=g.ucs.filter(function(i){return c.khop(i.ten,e.den)});if(!p.length||!m.length)return c.m(\"need both use cases: \"+e.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai use case: \"+(e.tenVi||e.ten));var v=g.qh.filter(function(i){return p.some(function(r){return r.key===i.tu||r.key===i.den})&&m.some(function(r){return r.key===i.tu||r.key===i.den})});if(!v.length)return c.m(\"no relationship yet: \"+e.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(e.tenVi||e.ten));var T=v.filter(function(i){return i.loai===e.loai&&p.some(function(r){return r.key===i.tu})&&m.some(function(r){return r.key===i.den})});if(T.length)return\"OK\";var f=v[0];return f.loai!==e.loai?c.m(\"line \"+f.dong+\": this is \\xAB\"+e.loai+\"\\xBB, not \\xAB\"+f.loai+\"\\xBB \\u2014 \"+e.lyDo,\"d\\xF2ng \"+f.dong+\": \\u0111\\xE2y l\\xE0 \\xAB\"+e.loai+\"\\xBB, kh\\xF4ng ph\\u1EA3i \\xAB\"+f.loai+\"\\xBB \\u2014 \"+(e.lyDoVi||e.lyDo)):c.m(\"line \"+f.dong+\": wrong direction \\u2014 \"+(e.loai===\"extend\"?\"the arrow goes FROM the extension TO the base use case\":\"the arrow goes FROM the base TO the included use case\"),\"d\\xF2ng \"+f.dong+\": sai chi\\u1EC1u \\u2014 \"+(e.loai===\"extend\"?\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case m\\u1EDF r\\u1ED9ng T\\u1EDAI use case g\\u1ED1c\":\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case g\\u1ED1c T\\u1EDAI use case \\u0111\\u01B0\\u1EE3c g\\u1ED9p\"))})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"r\":{\"loai\":\"extend\",\"ten\":\"Attach Referral Letter «extend» Book Appointment\",\"tu\":[\"referral|letter\"],\"den\":[\"book\"],\"lyDo\":\"the patient MAY attach it\",\"lyDoVi\":\"bệnh nhân CÓ THỂ đính kèm\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "«extend» — Charge Late Fee «extend» Cancel Appointment",
+              "vi": "«extend» — Charge Late Fee «extend» Cancel Appointment"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,O,D){var E=function(r,y,x){var k=x[y.bien];if(typeof k!=\"string\"||!k.trim())return{loi:r.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var s=r.pu(k),b={},K={};s.actors.forEach(function(o){b[o.key]=o}),s.ucs.forEach(function(o){K[o.key]=o});function w(o){return s.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===o}).map(function(t){return t.den})}function M(o){var t=[o],u={},a;for(a=0;a<t.length;a++)w(t[a]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(s.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),a=0;a<h.length;a++){var l=h[a];u[l]||(u[l]=!0,s.qh.forEach(function(n){n.loai===\"include\"&&n.tu===l&&h.push(n.den),n.loai===\"extend\"&&n.den===l&&h.push(n.tu)}))}return Object.keys(u)}function _(o){var t=[];return s.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===o&&u.denK===\"actor\"&&t.push(u.den),u.den===o&&u.tuK===\"actor\"&&t.push(u.tu))}),t}return{p:s,act:b,uc:K,toiDuoc:M,actorCua:_}},d=E(c,O,D);if(d.loi)return d.loi;var g=d.p,e=O.r,p=g.ucs.filter(function(i){return c.khop(i.ten,e.tu)}),m=g.ucs.filter(function(i){return c.khop(i.ten,e.den)});if(!p.length||!m.length)return c.m(\"need both use cases: \"+e.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai use case: \"+(e.tenVi||e.ten));var v=g.qh.filter(function(i){return p.some(function(r){return r.key===i.tu||r.key===i.den})&&m.some(function(r){return r.key===i.tu||r.key===i.den})});if(!v.length)return c.m(\"no relationship yet: \"+e.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(e.tenVi||e.ten));var T=v.filter(function(i){return i.loai===e.loai&&p.some(function(r){return r.key===i.tu})&&m.some(function(r){return r.key===i.den})});if(T.length)return\"OK\";var f=v[0];return f.loai!==e.loai?c.m(\"line \"+f.dong+\": this is \\xAB\"+e.loai+\"\\xBB, not \\xAB\"+f.loai+\"\\xBB \\u2014 \"+e.lyDo,\"d\\xF2ng \"+f.dong+\": \\u0111\\xE2y l\\xE0 \\xAB\"+e.loai+\"\\xBB, kh\\xF4ng ph\\u1EA3i \\xAB\"+f.loai+\"\\xBB \\u2014 \"+(e.lyDoVi||e.lyDo)):c.m(\"line \"+f.dong+\": wrong direction \\u2014 \"+(e.loai===\"extend\"?\"the arrow goes FROM the extension TO the base use case\":\"the arrow goes FROM the base TO the included use case\"),\"d\\xF2ng \"+f.dong+\": sai chi\\u1EC1u \\u2014 \"+(e.loai===\"extend\"?\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case m\\u1EDF r\\u1ED9ng T\\u1EDAI use case g\\u1ED1c\":\"m\\u0169i t\\xEAn \\u0111i T\\u1EEA use case g\\u1ED1c T\\u1EDAI use case \\u0111\\u01B0\\u1EE3c g\\u1ED9p\"))})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"r\":{\"loai\":\"extend\",\"ten\":\"Charge Late Fee «extend» Cancel Appointment\",\"tu\":[\"late|fee\"],\"den\":[\"cancel\"],\"lyDo\":\"only when cancelling less than 24 h before\",\"lyDoVi\":\"chỉ khi huỷ trong vòng 24 giờ trước\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đảo chiều extend (Cancel ..> Late Fee)."
+        },
+        {
+          "loi": "Vẽ Book Appointment ..> Payment Gateway : <<include>>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "«include»",
+          "vi": "gộp — use case gốc LUÔN gọi use case được gộp; mũi tên gốc → được gộp"
+        },
+        {
+          "en": "«extend»",
+          "vi": "mở rộng — hành vi CÓ ĐIỀU KIỆN chèn vào use case gốc; mũi tên mở rộng → gốc"
+        },
+        {
+          "en": "actor",
+          "vi": "tác nhân — vai trò (người hoặc hệ thống) bên ngoài tương tác với hệ thống"
+        }
+      ]
+    }
+  ]
+}

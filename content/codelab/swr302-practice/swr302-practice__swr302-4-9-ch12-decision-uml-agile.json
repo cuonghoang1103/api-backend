@@ -1,0 +1,602 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-9-ch12-decision-uml-agile",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-9-ch12-decision-uml-agile"
+  },
+  "exercises": [
+    {
+      "title": "Decision models 1 — table or tree?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "decision models"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A <b>decision table</b> lists every combination of conditions and the action for each — n independent yes/no conditions give 2ⁿ columns, which proves completeness. A <b>decision tree</b> shows nested conditions (B is only asked when A is true). An <b>event-response table</b> lists, for each external event (and system state), the expected response.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Bảng quyết định</b> liệt kê mọi tổ hợp điều kiện và hành động cho từng tổ hợp — n điều kiện có/không độc lập cho 2ⁿ cột, chứng minh được độ đầy đủ. <b>Cây quyết định</b> thể hiện điều kiện lồng nhau (B chỉ hỏi khi A đúng). <b>Bảng sự kiện – phản hồi</b> liệt kê, với mỗi sự kiện bên ngoài (và trạng thái hệ thống), phản hồi mong đợi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Độc lập ⇒ bảng; lồng nhau ⇒ cây.",
+        "n điều kiện ⇒ 2ⁿ cột trước khi rút gọn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 1 — table or tree?\n\nAnswer in the answer panel (no code needed).\n\n1. A discount rule has 4 independent yes/no conditions. How many columns does the full decision table have?Luật giảm giá có 4 điều kiện có/không độc lập. Bảng quyết định đầy đủ có bao nhiêu cột?\n2. The question \"is the member a student?\" is only asked when \"is the member under 25?\" is yes. Best model?Câu \"có phải sinh viên?\" chỉ hỏi khi \"dưới 25 tuổi?\" là có. Mô hình phù hợp nhất?\n3. What does \"–\" mean in a reduced decision table?\"–\" nghĩa là gì trong bảng quyết định rút gọn?\n4. For a thermostat, \"temperature drops below the set point while the heater is off ⇒ turn the heater on\" belongs in…Với bộ điều nhiệt, \"nhiệt độ xuống dưới mức đặt khi máy sưởi tắt ⇒ bật máy sưởi\" thuộc về…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 1 — table or tree? — answer key\n\n1. A discount rule has 4 independent yes/no conditions. How many columns does the full decision table have?Luật giảm giá có 4 điều kiện có/không độc lập. Bảng quyết định đầy đủ có bao nhiêu cột?\n   Answer: c) 16\n   2⁴ = 16.VI: 2⁴ = 16.\n\n2. The question \"is the member a student?\" is only asked when \"is the member under 25?\" is yes. Best model?Câu \"có phải sinh viên?\" chỉ hỏi khi \"dưới 25 tuổi?\" là có. Mô hình phù hợp nhất?\n   Answer: b) Decision tree\n   Nested conditions ⇒ tree.VI: Điều kiện lồng nhau ⇒ cây.\n\n3. What does \"–\" mean in a reduced decision table?\"–\" nghĩa là gì trong bảng quyết định rút gọn?\n   Answer: b) The condition does not matter for that rule\n   \"Don’t care\": both values give the same action.VI: \"Không quan trọng\": hai giá trị cho cùng hành động.\n\n4. For a thermostat, \"temperature drops below the set point while the heater is off ⇒ turn the heater on\" belongs in…Với bộ điều nhiệt, \"nhiệt độ xuống dưới mức đặt khi máy sưởi tắt ⇒ bật máy sưởi\" thuộc về…\n   Answer: a) an event-response table\n   Event + state ⇒ response.VI: Sự kiện + trạng thái ⇒ phản hồi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: c · b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A discount rule has 4 independent yes/no conditions. How many columns does the full decision table have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật giảm giá có 4 điều kiện có/không độc lập. Bảng quyết định đầy đủ có bao nhiêu cột?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2⁴ = 16.</p><p><i>VI: 2⁴ = 16.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The question \"is the member a student?\" is only asked when \"is the member under 25?\" is yes. Best model?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu \"có phải sinh viên?\" chỉ hỏi khi \"dưới 25 tuổi?\" là có. Mô hình phù hợp nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Decision table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Decision tree"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Context diagram"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ERD"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Nested conditions ⇒ tree.</p><p><i>VI: Điều kiện lồng nhau ⇒ cây.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What does \"–\" mean in a reduced decision table?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"–\" nghĩa là gì trong bảng quyết định rút gọn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The condition is false"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The condition does not matter for that rule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The action is missing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The rule is impossible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"Don’t care\": both values give the same action.</p><p><i>VI: \"Không quan trọng\": hai giá trị cho cùng hành động.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>For a thermostat, \"temperature drops below the set point while the heater is off ⇒ turn the heater on\" belongs in…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với bộ điều nhiệt, \"nhiệt độ xuống dưới mức đặt khi máy sưởi tắt ⇒ bật máy sưởi\" thuộc về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an event-response table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an ERD"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a feature tree"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a use case diagram"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Event + state ⇒ response.</p><p><i>VI: Sự kiện + trạng thái ⇒ phản hồi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rút gọn trước khi viết đủ 2ⁿ cột."
+        },
+        {
+          "loi": "Dùng cây cho điều kiện độc lập (lặp nhánh)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        },
+        {
+          "en": "decision tree",
+          "vi": "cây quyết định"
+        },
+        {
+          "en": "event-response table",
+          "vi": "bảng sự kiện – phản hồi"
+        }
+      ]
+    },
+    {
+      "title": "Decision models 2 — fill a decision table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "decision table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Gym day-pass rule: a visitor who is <b>a student</b> AND comes <b>before 10:00</b> enters free; a visitor who satisfies only one of the two pays half price; everyone else pays full price. Fill the action of each column (C1 = student, C2 = before 10:00).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật vé ngày phòng gym: khách là <b>sinh viên</b> VÀ đến <b>trước 10:00</b> vào miễn phí; khách chỉ thoả một trong hai trả nửa giá; còn lại trả đủ giá. Điền hành động của từng cột (C1 = sinh viên, C2 = trước 10:00).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "2 điều kiện ⇒ 4 cột.",
+        "\"Chỉ thoả một trong hai\" ⇒ Y,N và N,Y."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 2 — fill a decision table\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 2 — fill a decision table — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Free\n   - r1.k: Half price\n   - r2.k: Half price\n   - r3.k: Full price\n   Y,Y Free · Y,N Half price · N,Y Half price · N,N Full price.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Y,Y Free · Y,N Half price · N,Y Half price · N,N Full price.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Column (C1, C2)"
+              },
+              {
+                "ma": "k",
+                "ten": "Action",
+                "luaChon": [
+                  "Free",
+                  "Half price",
+                  "Full price"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Y, Y"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Y, N"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "N, Y"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "N, N"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Free",
+              "r1.k": "Half price",
+              "r2.k": "Half price",
+              "r3.k": "Full price"
+            },
+            "giaiThich": "<p><p>Y,Y Free · Y,N Half price · N,Y Half price · N,N Full price.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên cột N,N."
+        },
+        {
+          "loi": "Cho N,Y là full price vì không phải sinh viên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        }
+      ]
+    },
+    {
+      "title": "Decision models 4 — an event-response table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "event-response table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Event-response table of a smart parking barrier. For each <b>event</b> in a given <b>state</b>, choose the expected response.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng sự kiện – phản hồi của barrier bãi đỗ thông minh. Với mỗi <b>sự kiện</b> ở một <b>trạng thái</b>, chọn phản hồi mong đợi.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cùng một sự kiện có phản hồi khác nhau tuỳ trạng thái.",
+        "\"Không thể xảy ra\" khác \"phải từ chối\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 4 — an event-response table\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Decision models 4 — an event-response table — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Open the barrier and log the entry\n   - r1.k: Keep the barrier closed and show \"No permit\"\n   - r2.k: Close the barrier\n   - r3.k: Keep the barrier open and sound the alarm\n   - r4.k: Ignore (cannot happen in this state)\n   An event-response table makes the response to every event in every state explicit — including events that cannot happen in a state (which differ from events the system must refuse).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An event-response table makes the response to every event in every state explicit — including events that cannot happen in a state (which differ from events the system must refuse).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Event (state)"
+              },
+              {
+                "ma": "k",
+                "ten": "Response",
+                "luaChon": [
+                  "Open the barrier and log the entry",
+                  "Keep the barrier closed and show \"No permit\"",
+                  "Close the barrier",
+                  "Keep the barrier open and sound the alarm",
+                  "Ignore (cannot happen in this state)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A car with a valid permit plate arrives (barrier closed)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A car without a permit arrives (barrier closed)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The car has passed the sensor (barrier open)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "An object stays under the barrier for 60 s (barrier open)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "\"Car has passed\" signal (barrier closed)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Open the barrier and log the entry",
+              "r1.k": "Keep the barrier closed and show \"No permit\"",
+              "r2.k": "Close the barrier",
+              "r3.k": "Keep the barrier open and sound the alarm",
+              "r4.k": "Ignore (cannot happen in this state)"
+            },
+            "giaiThich": "<p><p>An event-response table makes the response to every event in every state explicit — including events that cannot happen in a state (which differ from events the system must refuse).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đóng barrier khi có vật cản (nguy hiểm)."
+        },
+        {
+          "loi": "Nhầm \"ignore\" với \"show No permit\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event-response table",
+          "vi": "bảng sự kiện – phản hồi"
+        }
+      ]
+    },
+    {
+      "title": "Decision models 3 — the full table of a three-condition rule",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "decision table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Library fine waiver rule: a fine is <b>waived</b> when the reader is a staff member and the book was returned within 3 days late; it is <b>halved</b> when exactly one of those two holds and the reader has no other unpaid fine; in every other case it is <b>charged in full</b>. Conditions: <code>staff</code>, <code>within3Days</code>, <code>otherUnpaid</code> (Y/N). Write all 8 columns in <code>TABLE</code> as objects <code>{ staff, within3Days, otherUnpaid, action }</code> with action ∈ \"Waive\" | \"Halve\" | \"Charge\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly 8 columns, every Y/N combination once.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật miễn phạt thư viện: <b>miễn</b> khi độc giả là cán bộ và trả trễ không quá 3 ngày; <b>giảm nửa</b> khi đúng MỘT trong hai điều đó và độc giả không còn khoản phạt nào chưa trả; mọi trường hợp khác <b>thu đủ</b>. Viết đủ 8 cột trong <code>TABLE</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng 8 cột, mỗi tổ hợp Y/N một lần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ staff: 'Y', within3Days: 'Y', otherUnpaid: 'Y' }",
+          "output": "'Waive'",
+          "explanation": "Staff and within 3 days ⇒ waived, whatever else.|||Cán bộ và trong 3 ngày ⇒ miễn, bất kể điều khác."
+        }
+      ],
+      "hintsJson": [
+        "Viết 8 cột trước (YYY … NNN), rồi điền hành động.",
+        "\"Đúng một trong hai\" ⇒ staff khác within3Days."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "table.js",
+          "language": "javascript",
+          "code": "const TABLE = [\n  { staff: 'Y', within3Days: 'Y', otherUnpaid: 'Y', action: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "table.js",
+          "language": "javascript",
+          "code": "// Write the 8 columns first; the third condition only matters when exactly one of the first two holds.\nconst TABLE = [\n  { staff: 'Y', within3Days: 'Y', otherUnpaid: 'Y', action: 'Waive' },\n  { staff: 'Y', within3Days: 'Y', otherUnpaid: 'N', action: 'Waive' },\n  { staff: 'Y', within3Days: 'N', otherUnpaid: 'Y', action: 'Charge' },\n  { staff: 'Y', within3Days: 'N', otherUnpaid: 'N', action: 'Halve' },\n  { staff: 'N', within3Days: 'Y', otherUnpaid: 'Y', action: 'Charge' },\n  { staff: 'N', within3Days: 'Y', otherUnpaid: 'N', action: 'Halve' },\n  { staff: 'N', within3Days: 'N', otherUnpaid: 'Y', action: 'Charge' },\n  { staff: 'N', within3Days: 'N', otherUnpaid: 'N', action: 'Charge' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>YYY, YYN ⇒ Waive; YNN, NYN ⇒ Halve; YNY, NYY, NNY, NNN ⇒ Charge. The table can later be reduced: YY- ⇒ Waive.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "table.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "all 8 combinations, each once",
+              "vi": "đủ 8 tổ hợp, mỗi cái một lần"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";for(var t={},n=0;n<TABLE.length;n++){var r=TABLE[n]||{},e=[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase();if(!/^[YN]{3}$/.test(e))return\"column \"+(n+1)+\": use Y or N\";if(t[e])return\"combination \"+e+\" twice\";t[e]=1}return TABLE.length===8?\"OK\":\"3 conditions \\u21D2 8 columns, you have \"+TABLE.length})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column YYY",
+              "vi": "hành động của cột YYY"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var i=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"YYY\"})[0];if(!i)return\"column YYY is missing\";var n=\"Waive\";return String(i.action).trim().toLowerCase()===n.toLowerCase()?\"OK\":\"reread the rule for YYY\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column YYN",
+              "vi": "hành động của cột YYN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var i=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"YYN\"})[0];if(!i)return\"column YYN is missing\";var n=\"Waive\";return String(i.action).trim().toLowerCase()===n.toLowerCase()?\"OK\":\"reread the rule for YYN\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column YNY",
+              "vi": "hành động của cột YNY"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"YNY\"})[0];if(!n)return\"column YNY is missing\";var e=\"Charge\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for YNY\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column YNN",
+              "vi": "hành động của cột YNN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"YNN\"})[0];if(!n)return\"column YNN is missing\";var e=\"Halve\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for YNN\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column NYY",
+              "vi": "hành động của cột NYY"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"NYY\"})[0];if(!n)return\"column NYY is missing\";var e=\"Charge\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for NYY\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column NYN",
+              "vi": "hành động của cột NYN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"NYN\"})[0];if(!n)return\"column NYN is missing\";var e=\"Halve\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for NYN\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "action of column NNY",
+              "vi": "hành động của cột NNY"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"NNY\"})[0];if(!n)return\"column NNY is missing\";var e=\"Charge\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for NNY\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "action of column NNN",
+              "vi": "hành động của cột NNN"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof TABLE==\"undefined\"||!Array.isArray(TABLE))return\"TABLE is missing\";var n=TABLE.filter(function(r){return r&&[r.staff,r.within3Days,r.otherUnpaid].join(\"\").toUpperCase()===\"NNN\"})[0];if(!n)return\"column NNN is missing\";var e=\"Charge\";return String(n.action).trim().toLowerCase()===e.toLowerCase()?\"OK\":\"reread the rule for NNN\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho YNN là Charge vì không trong 3 ngày."
+        },
+        {
+          "loi": "Bỏ qua điều kiện otherUnpaid ở cột YY."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

@@ -118,6 +118,78 @@
       "description": "Lab chương 3: chọn kỹ thuật khai thác cho 9 tình huống, xếp việc vào pha chuẩn bị/thực hiện/theo dõi, phân loại 12 câu đầu vào khách hàng vào 9 loại của Wiegers, câu hỏi mở/đóng/dẫn dắt, dấu hiệu khai thác đã gần đủ."
     },
     {
+      "slug": "swr302-4-1-use-case-user-story",
+      "name": "4.1 Use cases, user stories and actors",
+      "level": "BEGINNER",
+      "description": "Use case và user story, actor là gì (người, hệ thống, thiết bị ngoài), tự vẽ sơ đồ use case đầu tiên của ClinicCare bằng PlantUML có chấm, nhận ra \"không phải use case\" (màn hình, CRUD, bước kiểm tra)."
+    },
+    {
+      "slug": "swr302-4-4-ch8-anatomy",
+      "name": "4.2 Use case anatomy: flows, «include», «extend», generalization",
+      "level": "INTERMEDIATE",
+      "description": "Khi nào «include», khi nào «extend» và chiều mũi tên, luồng chính / thay thế / ngoại lệ, tự mô hình hoá include/extend của ClinicCare có chấm, actor chính/phụ và tổng quát hoá actor."
+    },
+    {
+      "slug": "swr302-4-6-ch8-template",
+      "name": "4.3 The use case specification template",
+      "level": "INTERMEDIATE",
+      "description": "Các trường của template use case Wiegers (ví dụ ATM), viết bước luồng chính tốt, ngoại lệ và luồng thay thế, tự viết đặc tả đầy đủ UC-07 Renew Loan có chấm theo luật thư viện."
+    },
+    {
+      "slug": "swr302-4-5-ch8-working",
+      "name": "4.4 From use cases to functional requirements",
+      "level": "INTERMEDIATE",
+      "description": "Rút yêu cầu chức năng từ bước, luồng thay thế, ngoại lệ và business rule của use case; xác định nguồn của từng FR; tự viết FR cho use case Check In Patient có chấm."
+    },
+    {
+      "slug": "swr302-4-2-domain-model-dfd",
+      "name": "4.5 Data flow diagrams: notation, levels and balancing",
+      "level": "INTERMEDIATE",
+      "description": "Bốn ký hiệu DFD, luồng hợp lệ và không hợp lệ, hố đen / phép màu / kho chỉ ghi / kho chỉ đọc / mất cân bằng, tự vẽ DFD mức 0 cân bằng với sơ đồ ngữ cảnh cho sẵn (chấm bằng máy đọc Mermaid)."
+    },
+    {
+      "slug": "swr302-4-8-ch12-flow-models",
+      "name": "4.6 Behaviour models: swimlane and state-transition diagrams",
+      "level": "INTERMEDIATE",
+      "description": "Trạng thái hay hoạt động, cơ bản về swimlane (lane là vai trò, điểm bàn giao), tự vẽ máy trạng thái Leave Request có guard và sự kiện thời gian, tự vẽ swimlane duyệt nghỉ phép có hai rẽ nhánh — chấm bằng máy đọc Mermaid/PlantUML."
+    },
+    {
+      "slug": "swr302-4-9-ch12-decision-uml-agile",
+      "name": "4.7 Decision models: decision tables, trees and event-response tables",
+      "level": "INTERMEDIATE",
+      "description": "Khi nào dùng bảng hay cây quyết định, điền bảng 2 điều kiện, tự viết đủ 2³ cột cho luật miễn phạt có chấm, bảng sự kiện – phản hồi của barrier bãi đỗ."
+    },
+    {
+      "slug": "swr302-4-10-ch13-data-models",
+      "name": "4.8 Data models: the conceptual ERD and cardinality",
+      "level": "INTERMEDIATE",
+      "description": "Đọc ký hiệu chân quạ Mermaid, thực thể / thuộc tính / quan hệ, bản số từ câu nghiệp vụ (cả quan hệ đệ quy), tự vẽ ERD khái niệm khách sạn có thực thể kết hợp Reservation — chấm bằng máy đọc erDiagram."
+    },
+    {
+      "slug": "swr302-4-11-ch13-dictionary-crud",
+      "name": "4.9 The data dictionary and CRUD analysis",
+      "level": "INTERMEDIATE",
+      "description": "Ký pháp data dictionary Wiegers (primitive, structure, nhóm lặp m:n{ }, tuỳ chọn ( )), tự viết từ điển cho đăng ký sự kiện có kiểm khép kín, điền ma trận CRUD và đọc ra yêu cầu thiếu."
+    },
+    {
+      "slug": "swr302-4-12-ch13-reports-dashboards",
+      "name": "4.10 Specifying reports and dashboards",
+      "level": "BEGINNER",
+      "description": "Các trường của đặc tả báo cáo Wiegers (mục đích, người dùng, trigger, định dạng, độ trễ, thân báo cáo, quyền), câu hỏi khai thác báo cáo, khác biệt báo cáo và dashboard."
+    },
+    {
+      "slug": "swr302-9r-1-ch9-taxonomy",
+      "name": "4.11 Business rules: the five types and the catalogue",
+      "level": "INTERMEDIATE",
+      "description": "Năm loại business rule của Wiegers (fact, constraint, action enabler, inference, computation), phân loại luật của shop trực tuyến, rule → yêu cầu chức năng và truy vết, rule tĩnh/động, tự viết danh mục business rule có chấm."
+    },
+    {
+      "slug": "swr302-4-7-ch12-why-model",
+      "name": "4.12 Choosing a model: which model answers which question",
+      "level": "BEGINNER",
+      "description": "Vì sao cần mô hình phân tích, chọn mô hình theo câu hỏi (context, ecosystem, use case, swimlane, DFD, ERD, state, bảng quyết định, dialog map) cho hệ thống đặt phòng khách sạn."
+    },
+    {
       "slug": "swr302-4-lab-behaviour-quickfix",
       "name": "Lab 4C — Behaviour Models: QuickFix IT Helpdesk",
       "level": "ADVANCED",

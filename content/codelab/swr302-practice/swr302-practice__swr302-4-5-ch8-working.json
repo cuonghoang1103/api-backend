@@ -1,0 +1,427 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-5-ch8-working",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-5-ch8-working"
+  },
+  "exercises": [
+    {
+      "title": "Working with use cases 1 — use cases and functional requirements",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "deriving functional requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Use cases capture what users need to do; functional requirements state what developers must build. Wiegers: derive functional requirements from each step, each alternative flow, each exception and each business rule of a use case — and write them in the SRS so that they can be tested.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Use case ghi điều người dùng cần làm; yêu cầu chức năng nêu điều dev phải xây. Wiegers: rút yêu cầu chức năng từ từng bước, từng luồng thay thế, từng ngoại lệ và từng business rule của use case — rồi ghi vào SRS để test được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi bước hệ thống, mỗi rẽ nhánh, mỗi luật ⇒ ứng viên yêu cầu chức năng.",
+        "Use case = bối cảnh; FR = hành vi chính xác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Working with use cases 1 — use cases and functional requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Where do most functional requirements come from in a use-case-driven project?Trong dự án lấy use case làm gốc, phần lớn yêu cầu chức năng đến từ đâu?\n2. Is a use case alone enough as a specification for developers?Một use case có đủ làm đặc tả cho dev không?\n3. An exception \"the slot was taken by someone else\" produces…Ngoại lệ \"khung giờ đã bị người khác lấy\" sinh ra…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Working with use cases 1 — use cases and functional requirements — answer key\n\n1. Where do most functional requirements come from in a use-case-driven project?Trong dự án lấy use case làm gốc, phần lớn yêu cầu chức năng đến từ đâu?\n   Answer: a) From the steps, alternative flows, exceptions and business rules of the use cases\n   Each of those produces system behaviour that must be specified.VI: Mỗi phần đó sinh hành vi hệ thống cần đặc tả.\n\n2. Is a use case alone enough as a specification for developers?Một use case có đủ làm đặc tả cho dev không?\n   Answer: b) Often not — details such as validations, messages, rules and data are added as functional requirements\n   The use case gives context; the FRs give precise, testable behaviour.VI: Use case cho bối cảnh; FR cho hành vi chính xác, test được.\n\n3. An exception \"the slot was taken by someone else\" produces…Ngoại lệ \"khung giờ đã bị người khác lấy\" sinh ra…\n   Answer: b) a functional requirement for how the system detects and responds to it\n   Exceptions are rich sources of functional requirements.VI: Ngoại lệ là nguồn yêu cầu chức năng phong phú.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Where do most functional requirements come from in a use-case-driven project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dự án lấy use case làm gốc, phần lớn yêu cầu chức năng đến từ đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "From the steps, alternative flows, exceptions and business rules of the use cases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "From the database design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "From the developers’ ideas"
+              },
+              {
+                "ma": "d",
+                "noiDung": "From the test cases"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each of those produces system behaviour that must be specified.</p><p><i>VI: Mỗi phần đó sinh hành vi hệ thống cần đặc tả.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Is a use case alone enough as a specification for developers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một use case có đủ làm đặc tả cho dev không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Often not — details such as validations, messages, rules and data are added as functional requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Never useful"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if it has a diagram"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The use case gives context; the FRs give precise, testable behaviour.</p><p><i>VI: Use case cho bối cảnh; FR cho hành vi chính xác, test được.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>An exception \"the slot was taken by someone else\" produces…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngoại lệ \"khung giờ đã bị người khác lấy\" sinh ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a functional requirement for how the system detects and responds to it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a business objective"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a quality attribute only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Exceptions are rich sources of functional requirements.</p><p><i>VI: Ngoại lệ là nguồn yêu cầu chức năng phong phú.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ viết FR cho luồng chính."
+        },
+        {
+          "loi": "Bỏ qua business rule khi rút FR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        }
+      ]
+    },
+    {
+      "title": "Working with use cases 2 — where does each FR come from?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "deriving functional requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Functional requirements derived from <b>UC-07 Renew Loan</b> (normal flow: view loans → select → system checks → system extends the due date; alternative flow: Renew all; exceptions: overdue, limit reached, reserved; business rules BR-04 +14 days, BR-05 max 2 renewals). Name the source of each.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu chức năng rút từ <b>UC-07 Renew Loan</b>. Gọi tên nguồn của từng yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Con số chính xác (14 ngày, 2 lần) thường đến từ business rule.",
+        "Từ chối + thông báo thường đến từ ngoại lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Working with use cases 2 — where does each FR come from?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Working with use cases 2 — where does each FR come from? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Normal flow\n   - r1.k: Alternative flow\n   - r2.k: Exception\n   - r3.k: Business rule\n   - r4.k: Exception\n   - r5.k: Business rule\n   Steps give display and processing requirements; the alternative flow gives batch behaviour; exceptions give refusals with messages; business rules give the precise values (14 days, 2 renewals).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Steps give display and processing requirements; the alternative flow gives batch behaviour; exceptions give refusals with messages; business rules give the precise values (14 days, 2 renewals).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Source",
+                "luaChon": [
+                  "Normal flow",
+                  "Alternative flow",
+                  "Exception",
+                  "Business rule"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "The system shall display each current loan with its title, due date and number of renewals."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The system shall renew every eligible loan when the reader chooses Renew all and report the loans that were not renewed."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The system shall refuse to renew an overdue loan and display the fine owed."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The system shall set the new due date to the current due date plus 14 days."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The system shall refuse a renewal when the book is reserved by another reader."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The system shall allow at most two renewals per loan."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Normal flow",
+              "r1.k": "Alternative flow",
+              "r2.k": "Exception",
+              "r3.k": "Business rule",
+              "r4.k": "Exception",
+              "r5.k": "Business rule"
+            },
+            "giaiThich": "<p><p>Steps give display and processing requirements; the alternative flow gives batch behaviour; exceptions give refusals with messages; business rules give the precise values (14 days, 2 renewals).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"tối đa hai lần\" là ngoại lệ — luật là nguồn, ngoại lệ là chỗ áp dụng."
+        },
+        {
+          "loi": "Bỏ qua yêu cầu từ luồng thay thế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "alternative flow",
+          "vi": "luồng thay thế — cách khác vẫn đạt mục tiêu"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Working with use cases 3 — derive the functional requirements",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "deriving functional requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>UC <b>Check In Patient</b> (ClinicCare): 1. Receptionist searches the patient by phone number or ID. 2. System shows today’s appointments of the patient. 3. Receptionist selects the appointment and confirms arrival. 4. System checks that the patient arrived no more than 15 minutes late (<b>BR-12</b>). 5. System marks the appointment Checked-in and gives a queue number. 6. System adds the patient to the doctor’s waiting list. <i>Exception at 4</i>: more than 15 minutes late ⇒ the system asks the receptionist to rebook. <i>Exception at 2</i>: no appointment today ⇒ the system offers a walk-in booking. Write at least 6 functional requirements in <code>FRS</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>\"The system shall …\", one requirement per statement, verifiable, covering search, the 15-minute rule, the queue number, the waiting list and both exceptions.</li>\n</ul>",
+      "problemHtmlVi": "<p>UC <b>Check In Patient</b> (ClinicCare) như bản tiếng Anh. Viết ít nhất 6 yêu cầu chức năng trong <code>FRS</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>\"The system shall …\", mỗi câu một yêu cầu, kiểm chứng được, phủ tìm kiếm, luật 15 phút, số thứ tự, danh sách chờ và hai ngoại lệ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Step 5",
+          "output": "The system shall assign a queue number to a patient when the receptionist confirms the arrival.",
+          "explanation": "One step, one testable requirement.|||Một bước, một yêu cầu test được."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi bước System và mỗi ngoại lệ ⇒ ít nhất một yêu cầu.",
+        "Ghi đúng con số 15 phút từ BR-12."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "frs.js",
+          "language": "javascript",
+          "code": "const FRS = [\n  'The system shall …',\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "frs.js",
+          "language": "javascript",
+          "code": "const FRS = [\n  'The system shall let the receptionist search a patient by phone number or patient ID.',\n  'The system shall display all appointments of the selected patient for the current day.',\n  'The system shall refuse a check-in more than 15 minutes after the appointment time and ask the receptionist to rebook the patient.',\n  'The system shall mark the appointment as Checked-in when the receptionist confirms the arrival.',\n  'The system shall assign a queue number to the patient when the appointment is checked in.',\n  'The system shall add a checked-in patient to the waiting list of the appointment\\'s doctor.',\n  'The system shall offer a walk-in booking when the patient has no appointment on the current day.',\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Search, display, refuse-late, mark checked-in, queue number, waiting list, walk-in: seven testable statements from one short use case.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "frs.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "at least 6 requirements, each \"The system shall …\", one per statement",
+              "vi": "ít nhất 6 yêu cầu, mỗi câu \"The system shall …\", mỗi câu một yêu cầu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS)||FRS.length<6)return\"write at least 6 requirements in FRS\";for(var e=0;e<FRS.length;e++){var t=String(FRS[e]).trim();if(!/^the system shall\\b/i.test(t))return\"FRS[\"+e+'] must start with \"The system shall\"';if((t.match(/\\bshall\\b/gi)||[]).length>2)return\"FRS[\"+e+\"] contains several requirements\";if(/\\b(etc|and\\/or|user[- ]friendly|fast|quickly|appropriate|properly)\\b/i.test(t))return\"FRS[\"+e+\"] uses a vague word\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the 15-minute rule (BR-12) is stated with its value",
+              "vi": "luật 15 phút (BR-12) có ghi đúng giá trị"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){return typeof FRS==\"undefined\"||!Array.isArray(FRS)?\"FRS is missing\":FRS.some(function(e){return/15 minutes|fifteen minutes/i.test(e)})?\"OK\":\"no requirement states the 15-minute late limit\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the queue number and the waiting list are covered",
+              "vi": "có số thứ tự và danh sách chờ"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var e=FRS.join(\" | \").toLowerCase();return/queue number|number/.test(e)?/waiting list|queue of the doctor|doctor.*list/.test(e)?\"OK\":\"no requirement for the doctor\\u2019s waiting list\":\"no requirement for the queue number\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "both exceptions produce requirements (rebook, walk-in)",
+              "vi": "hai ngoại lệ đều sinh yêu cầu (đặt lại, khám vãng lai)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof FRS==\"undefined\"||!Array.isArray(FRS))return\"FRS is missing\";var e=FRS.join(\" | \").toLowerCase();return/rebook|re-book|new appointment/.test(e)?/walk-in|walk in/.test(e)?\"OK\":\"no requirement for a patient without an appointment (walk-in)\":\"no requirement for the late patient (rebook)\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép lại bước use case (\"Receptionist searches…\") thay vì viết hành vi hệ thống."
+        },
+        {
+          "loi": "Bỏ ngoại lệ \"không có lịch hôm nay\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional requirement (FR)",
+          "vi": "yêu cầu chức năng — hành vi hệ thống thể hiện trong điều kiện cụ thể (\"The system shall…\"); ghi trong SRS"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

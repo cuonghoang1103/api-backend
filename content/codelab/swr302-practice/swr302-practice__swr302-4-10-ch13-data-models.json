@@ -1,0 +1,639 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-10-ch13-data-models",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-10-ch13-data-models"
+  },
+  "exercises": [
+    {
+      "title": "ERD 1 — read the crow’s foot",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "cardinality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>In Mermaid erDiagram the marker next to an entity says how many of THAT entity take part: <code>||</code> exactly one · <code>|o</code> / <code>o|</code> zero or one · <code>}o</code> / <code>o{</code> zero or many · <code>}|</code> / <code>|{</code> one or many. Read each relationship and choose its meaning.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong Mermaid erDiagram, ký hiệu sát một thực thể cho biết bao nhiêu thể hiện CỦA thực thể đó tham gia: <code>||</code> đúng một · <code>|o</code>/<code>o|</code> không hoặc một · <code>}o</code>/<code>o{</code> không hoặc nhiều · <code>}|</code>/<code>|{</code> một hoặc nhiều. Đọc mỗi quan hệ và chọn nghĩa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc hai chiều: \"một A có … B\" và \"một B thuộc … A\".",
+        "Ký hiệu sát thực thể nào thì đếm thực thể đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 1 — read the crow’s foot\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 1 — read the crow’s foot — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Each A has 0..many B; each B belongs to exactly one A\n   - r1.k: Each A has 1..many B; each B belongs to exactly one A\n   - r2.k: Each A has 0..1 B; each B belongs to exactly one A\n   - r3.k: Many-to-many\n   - r4.k: Each A has exactly one B and each B exactly one A\n   Read from each side: \"one customer places zero or many orders; one order is placed by exactly one customer\". The symbol nearest an entity counts that entity.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Read from each side: \"one customer places zero or many orders; one order is placed by exactly one customer\". The symbol nearest an entity counts that entity.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Meaning",
+                "luaChon": [
+                  "Each A has 0..many B; each B belongs to exactly one A",
+                  "Each A has 1..many B; each B belongs to exactly one A",
+                  "Each A has 0..1 B; each B belongs to exactly one A",
+                  "Many-to-many",
+                  "Each A has exactly one B and each B exactly one A"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "CUSTOMER ||--o{ ORDER : places"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "ORDER ||--|{ ORDER_LINE : contains"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "EMPLOYEE ||--o| PARKING_PERMIT : holds"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "STUDENT }o--o{ COURSE : \"enrols in\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "PERSON ||--|| PASSPORT_RECORD : \"is identified by\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Each A has 0..many B; each B belongs to exactly one A",
+              "r1.k": "Each A has 1..many B; each B belongs to exactly one A",
+              "r2.k": "Each A has 0..1 B; each B belongs to exactly one A",
+              "r3.k": "Many-to-many",
+              "r4.k": "Each A has exactly one B and each B exactly one A"
+            },
+            "giaiThich": "<p><p>Read from each side: \"one customer places zero or many orders; one order is placed by exactly one customer\". The symbol nearest an entity counts that entity.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc ký hiệu ở đầu xa (đảo nghĩa)."
+        },
+        {
+          "loi": "Nhầm o{ (0..nhiều) với |{ (1..nhiều)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cardinality",
+          "vi": "bản số — một-một, một-nhiều, nhiều-nhiều (và tuỳ chọn 0 hay bắt buộc 1)"
+        },
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        }
+      ]
+    },
+    {
+      "title": "ERD 2 — entity, attribute or relationship?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "conceptual ERD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Conceptual ERD (course LAB L.5): entities are things the business keeps data about, each with an identifier; attributes describe an entity; relationships link entities with a verb and a cardinality. No foreign keys, no data types — that is design.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>ERD khái niệm (LAB L.5): thực thể là thứ nghiệp vụ lưu dữ liệu, mỗi cái có định danh; thuộc tính mô tả thực thể; quan hệ nối thực thể bằng động từ và bản số. Không khoá ngoại, không kiểu dữ liệu — đó là thiết kế.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Có danh tính riêng và nhiều thể hiện ⇒ thực thể; mô tả một thực thể ⇒ thuộc tính.",
+        "Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 2 — entity, attribute or relationship?\n\nAnswer in the answer panel (no code needed).\n\n1. In a hotel system, \"room price\" is…Trong hệ thống khách sạn, \"giá phòng\" là…\n2. Each stay of a guest in a room has its own check-in and check-out dates. Guest–Room is…Mỗi lần khách ở một phòng có ngày nhận/trả riêng. Guest–Room là…\n3. Which line does NOT belong in a conceptual ERD?Dòng nào KHÔNG thuộc ERD khái niệm?\n4. The \"Payment Gateway\" that charges the guest is…\"Cổng thanh toán\" trừ tiền khách là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 2 — entity, attribute or relationship? — answer key\n\n1. In a hotel system, \"room price\" is…Trong hệ thống khách sạn, \"giá phòng\" là…\n   Answer: b) an attribute of Room (or of Room Type)\n   It describes a room; it has no identity of its own.VI: Nó mô tả phòng; không có danh tính riêng.\n\n2. Each stay of a guest in a room has its own check-in and check-out dates. Guest–Room is…Mỗi lần khách ở một phòng có ngày nhận/trả riêng. Guest–Room là…\n   Answer: b) many-to-many, best shown through an associative entity Stay (or Reservation)\n   A many-to-many link with its own data becomes an associative entity.VI: Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp.\n\n3. Which line does NOT belong in a conceptual ERD?Dòng nào KHÔNG thuộc ERD khái niệm?\n   Answer: c) string guestId FK (inside STAY)\n   The relationship line already says it; FKs are logical design.VI: Đường quan hệ đã nói điều đó; FK là thiết kế logic.\n\n4. The \"Payment Gateway\" that charges the guest is…\"Cổng thanh toán\" trừ tiền khách là…\n   Answer: b) an external system (an actor), not data the hotel keeps — the hotel keeps Payment records\n   Do not draw external systems as entities.VI: Không vẽ hệ thống ngoài thành thực thể.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · c · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In a hotel system, \"room price\" is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong hệ thống khách sạn, \"giá phòng\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an entity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an attribute of Room (or of Room Type)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an actor"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It describes a room; it has no identity of its own.</p><p><i>VI: Nó mô tả phòng; không có danh tính riêng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Each stay of a guest in a room has its own check-in and check-out dates. Guest–Room is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi lần khách ở một phòng có ngày nhận/trả riêng. Guest–Room là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one-to-one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "many-to-many, best shown through an associative entity Stay (or Reservation)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "not a relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an attribute of Guest"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A many-to-many link with its own data becomes an associative entity.</p><p><i>VI: Nhiều–nhiều có dữ liệu riêng ⇒ thực thể kết hợp.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which line does NOT belong in a conceptual ERD?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng nào KHÔNG thuộc ERD khái niệm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "GUEST ||--o{ STAY : makes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "string guestId PK"
+              },
+              {
+                "ma": "c",
+                "noiDung": "string guestId FK (inside STAY)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ROOM ||--o{ STAY : \"is used in\""
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The relationship line already says it; FKs are logical design.</p><p><i>VI: Đường quan hệ đã nói điều đó; FK là thiết kế logic.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The \"Payment Gateway\" that charges the guest is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Cổng thanh toán\" trừ tiền khách là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an entity of the ERD"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an external system (an actor), not data the hotel keeps — the hotel keeps Payment records"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an attribute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a relationship"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Do not draw external systems as entities.</p><p><i>VI: Không vẽ hệ thống ngoài thành thực thể.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến giá, trạng thái, ngày thành thực thể."
+        },
+        {
+          "loi": "Vẽ cổng thanh toán thành thực thể."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        },
+        {
+          "en": "associative entity",
+          "vi": "thực thể kết hợp — tách quan hệ nhiều-nhiều khi mỗi lần liên kết có dữ liệu riêng"
+        }
+      ]
+    },
+    {
+      "title": "ERD 4 — cardinality from business sentences",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "cardinality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Read each business sentence in both directions, then choose the Mermaid relationship that says the same thing.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc mỗi câu nghiệp vụ theo hai chiều rồi chọn quan hệ Mermaid nói đúng điều đó.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Viết hai câu: \"một A có … B\" và \"một B thuộc … A\", rồi đặt ký hiệu sát đúng thực thể.",
+        "\"at most one\" = o| ; \"one or more\" = |{."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 4 — cardinality from business sentences\n\nAnswer in the answer panel (no code needed).\n\n1. A department has one or more employees; an employee works in exactly one department.Một phòng có một hoặc nhiều nhân viên; một nhân viên thuộc đúng một phòng.\n2. A course may have no prerequisite or several; a course can be the prerequisite of several courses.Một môn có thể không có hoặc có nhiều môn tiên quyết; một môn có thể là tiên quyết của nhiều môn.\n3. An order has at most one invoice, issued after payment; an invoice belongs to exactly one order.Một đơn có tối đa một hoá đơn, xuất sau khi thanh toán; một hoá đơn thuộc đúng một đơn.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ERD 4 — cardinality from business sentences — answer key\n\n1. A department has one or more employees; an employee works in exactly one department.Một phòng có một hoặc nhiều nhân viên; một nhân viên thuộc đúng một phòng.\n   Answer: a) DEPARTMENT ||--|{ EMPLOYEE : employs\n   Department side ||, employee side |{.VI: Phía phòng ||, phía nhân viên |{.\n\n2. A course may have no prerequisite or several; a course can be the prerequisite of several courses.Một môn có thể không có hoặc có nhiều môn tiên quyết; một môn có thể là tiên quyết của nhiều môn.\n   Answer: b) COURSE }o--o{ COURSE : requires\n   A recursive many-to-many relationship (LAB L.5).VI: Quan hệ nhiều–nhiều đệ quy (LAB L.5).\n\n3. An order has at most one invoice, issued after payment; an invoice belongs to exactly one order.Một đơn có tối đa một hoá đơn, xuất sau khi thanh toán; một hoá đơn thuộc đúng một đơn.\n   Answer: a) ORDER ||--o| INVOICE : \"is billed by\"\n   Zero or one invoice per order (none before payment).VI: Mỗi đơn không hoặc một hoá đơn (chưa có trước khi trả).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A department has one or more employees; an employee works in exactly one department.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một phòng có một hoặc nhiều nhân viên; một nhân viên thuộc đúng một phòng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DEPARTMENT ||--|{ EMPLOYEE : employs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DEPARTMENT }|--|| EMPLOYEE : employs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DEPARTMENT ||--o| EMPLOYEE : employs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DEPARTMENT }o--o{ EMPLOYEE : employs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Department side ||, employee side |{.</p><p><i>VI: Phía phòng ||, phía nhân viên |{.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A course may have no prerequisite or several; a course can be the prerequisite of several courses.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một môn có thể không có hoặc có nhiều môn tiên quyết; một môn có thể là tiên quyết của nhiều môn.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "COURSE ||--|| COURSE : requires"
+              },
+              {
+                "ma": "b",
+                "noiDung": "COURSE }o--o{ COURSE : requires"
+              },
+              {
+                "ma": "c",
+                "noiDung": "COURSE ||--o{ PREREQUISITE_COURSE : has"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no relationship"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A recursive many-to-many relationship (LAB L.5).</p><p><i>VI: Quan hệ nhiều–nhiều đệ quy (LAB L.5).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>An order has at most one invoice, issued after payment; an invoice belongs to exactly one order.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đơn có tối đa một hoá đơn, xuất sau khi thanh toán; một hoá đơn thuộc đúng một đơn.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ORDER ||--o| INVOICE : \"is billed by\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "ORDER ||--|{ INVOICE : \"is billed by\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "ORDER }o--|| INVOICE : \"is billed by\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "ORDER ||--|| INVOICE : \"is billed by\""
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Zero or one invoice per order (none before payment).</p><p><i>VI: Mỗi đơn không hoặc một hoá đơn (chưa có trước khi trả).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên trường hợp \"chưa có\" (0) khi đơn vừa tạo."
+        },
+        {
+          "loi": "Không nhận ra quan hệ đệ quy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cardinality",
+          "vi": "bản số — một-một, một-nhiều, nhiều-nhiều (và tuỳ chọn 0 hay bắt buộc 1)"
+        }
+      ]
+    },
+    {
+      "title": "ERD 3 — draw the conceptual ERD of a small hotel",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "conceptual ERD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A small hotel keeps: <b>guests</b> (name, phone); <b>room types</b> (Standard, Deluxe… with a nightly price); <b>rooms</b> (number, floor), each of exactly one type; <b>reservations</b> — a guest reserves one specific room for a check-in and a check-out date, and a guest can have many reservations over time; <b>payments</b> — a reservation can be paid in several parts (deposit, balance). Draw the conceptual ERD.</p><p><b>Mermaid erDiagram.</b> Relationship <code>PATIENT ||--o{ APPOINTMENT : books</code> — the marker next to an entity says how many of THAT entity take part (<code>||</code> exactly one · <code>|o</code>/<code>o|</code> zero or one · <code>}o</code>/<code>o{</code> zero or many · <code>}|</code>/<code>|{</code> one or many). Entity block <code>PATIENT { string patientId PK  string fullName }</code> — conceptual level: an identifier (PK) and a few key attributes, NO foreign keys (Mermaid needs a type word before each attribute; it is not graded).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Five entities with identifiers, verb-labelled relationships, the \"many\" end on the right side, no foreign keys.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một khách sạn nhỏ lưu: <b>khách</b> (tên, điện thoại); <b>loại phòng</b> (Standard, Deluxe… có giá mỗi đêm); <b>phòng</b> (số, tầng), mỗi phòng đúng một loại; <b>đặt phòng</b> — khách đặt một phòng cụ thể cho ngày nhận và ngày trả, một khách có nhiều lượt đặt theo thời gian; <b>thanh toán</b> — một lượt đặt có thể trả nhiều lần (cọc, phần còn lại). Vẽ ERD khái niệm.</p><p><b>Mermaid erDiagram.</b> Quan hệ <code>PATIENT ||--o{ APPOINTMENT : books</code> — ký hiệu sát một thực thể cho biết bao nhiêu thể hiện CỦA thực thể đó tham gia (<code>||</code> đúng một · <code>|o</code>/<code>o|</code> không hoặc một · <code>}o</code>/<code>o{</code> không hoặc nhiều · <code>}|</code>/<code>|{</code> một hoặc nhiều). Khối thực thể <code>PATIENT { string patientId PK  string fullName }</code> — mức khái niệm: một định danh (PK) và vài thuộc tính chính, KHÔNG khoá ngoại (Mermaid cần một chữ kiểu trước mỗi thuộc tính; không chấm phần kiểu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Năm thực thể có định danh, quan hệ nhãn động từ, phía \"nhiều\" đúng chỗ, không khoá ngoại.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "GUEST ||--o{ RESERVATION : makes",
+          "output": "one guest makes zero or many reservations; each reservation is made by one guest",
+          "explanation": "Read both directions.|||Đọc hai chiều."
+        }
+      ],
+      "hintsJson": [
+        "Năm thực thể: GUEST, ROOM_TYPE, ROOM, RESERVATION, PAYMENT.",
+        "\"Trả nhiều lần\" ⇒ một lượt đặt — nhiều payment."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "erd.js",
+          "language": "javascript",
+          "code": "const ERD = `\nerDiagram\n  GUEST {\n    string guestId PK\n  }\n`;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "erd.js",
+          "language": "javascript",
+          "code": "const ERD = `\nerDiagram\n  GUEST ||--o{ RESERVATION : makes\n  ROOM_TYPE ||--o{ ROOM : classifies\n  ROOM ||--o{ RESERVATION : \"is booked in\"\n  RESERVATION ||--o{ PAYMENT : \"is paid by\"\n  GUEST {\n    string guestId PK\n    string fullName\n    string phone\n  }\n  ROOM_TYPE {\n    string typeCode PK\n    string name\n    decimal nightlyPrice\n  }\n  ROOM {\n    string roomNumber PK\n    int floor\n  }\n  RESERVATION {\n    string reservationId PK\n    date checkIn\n    date checkOut\n    string status\n  }\n  PAYMENT {\n    string paymentId PK\n    decimal amount\n    datetime paidAt\n  }\n`;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reservation is the associative entity between Guest and Room; Room Type classifies rooms; payments hang off the reservation.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 820 441\" width=\"100%\" style=\"max-width:820px;display:block;margin:10px auto\" role=\"img\" aria-label=\"Conceptual ERD — small hotel\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"swm\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker><marker id=\"swmo\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.3\"/></marker><marker id=\"swmt\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"11\" markerHeight=\"11\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11 z\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.2\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"820\" height=\"441\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"410\" y=\"20\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\" font-size=\"13\">Conceptual ERD — small hotel</text><path d=\"M626.0,276.9 L555.8,261.1\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><rect x=\"601.8\" y=\"253.3\" width=\"14.2\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"608.9\" y=\"265.3\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">1</text><rect x=\"561.3\" y=\"246.3\" width=\"32.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"577.7\" y=\"258.3\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">0..*</text><rect x=\"571.4\" y=\"269.5\" width=\"39.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"590.9\" y=\"281.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">makes</text><path d=\"M145.3,341.8 L201.5,283.8\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><rect x=\"160.1\" y=\"326.6\" width=\"14.2\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"167.2\" y=\"338.6\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">1</text><rect x=\"179.1\" y=\"297.3\" width=\"32.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"195.5\" y=\"309.3\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">0..*</text><rect x=\"138.4\" y=\"313.3\" width=\"70.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"173.4\" y=\"325.3\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">classifies</text><path d=\"M315.6,249.6 L385.8,246.2\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><rect x=\"329.0\" y=\"251.1\" width=\"14.2\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"336.1\" y=\"263.1\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">1</text><rect x=\"350.0\" y=\"249.6\" width=\"32.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"366.4\" y=\"261.6\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">0..*</text><rect x=\"309.5\" y=\"248.4\" width=\"82.4\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"350.7\" y=\"260.4\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">is booked in</text><path d=\"M498.2,197.0 L533.5,139.0\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><rect x=\"510.9\" y=\"177.1\" width=\"14.2\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"518.0\" y=\"189.1\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">1</text><rect x=\"516.1\" y=\"153.3\" width=\"32.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"532.5\" y=\"165.3\" text-anchor=\"middle\" fill=\"#065f46\" font-size=\"10.5\">0..*</text><rect x=\"480.9\" y=\"168.5\" width=\"70.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"515.9\" y=\"180.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">is paid by</text><rect x=\"626.0\" y=\"258.6\" width=\"170\" height=\"75.0\" rx=\"4\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><rect x=\"626.0\" y=\"258.6\" width=\"170\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"711.0\" y=\"274.6\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">GUEST</text><text x=\"634.0\" y=\"298.6\" fill=\"#111827\" font-size=\"11\" text-decoration=\"underline\" font-weight=\"700\">guestId (PK)</text><text x=\"634.0\" y=\"313.6\" fill=\"#111827\" font-size=\"11\">fullName</text><text x=\"634.0\" y=\"328.6\" fill=\"#111827\" font-size=\"11\">phone</text><rect x=\"385.8\" y=\"197.0\" width=\"170\" height=\"90.0\" rx=\"4\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><rect x=\"385.8\" y=\"197.0\" width=\"170\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"470.8\" y=\"213.0\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">RESERVATION</text><text x=\"393.8\" y=\"237.0\" fill=\"#111827\" font-size=\"11\" text-decoration=\"underline\" font-weight=\"700\">reservationId (PK)</text><text x=\"393.8\" y=\"252.0\" fill=\"#111827\" font-size=\"11\">checkIn</text><text x=\"393.8\" y=\"267.0\" fill=\"#111827\" font-size=\"11\">checkOut</text><text x=\"393.8\" y=\"282.0\" fill=\"#111827\" font-size=\"11\">status</text><rect x=\"24.0\" y=\"341.8\" width=\"170\" height=\"75.0\" rx=\"4\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><rect x=\"24.0\" y=\"341.8\" width=\"170\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"109.0\" y=\"357.8\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">ROOM_TYPE</text><text x=\"32.0\" y=\"381.8\" fill=\"#111827\" font-size=\"11\" text-decoration=\"underline\" font-weight=\"700\">typeCode (PK)</text><text x=\"32.0\" y=\"396.8\" fill=\"#111827\" font-size=\"11\">name</text><text x=\"32.0\" y=\"411.8\" fill=\"#111827\" font-size=\"11\">nightlyPrice</text><rect x=\"145.6\" y=\"223.8\" width=\"170\" height=\"60.0\" rx=\"4\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><rect x=\"145.6\" y=\"223.8\" width=\"170\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"230.6\" y=\"239.8\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">ROOM</text><text x=\"153.6\" y=\"263.8\" fill=\"#111827\" font-size=\"11\" text-decoration=\"underline\" font-weight=\"700\">roomNumber (PK)</text><text x=\"153.6\" y=\"278.8\" fill=\"#111827\" font-size=\"11\">floor</text><rect x=\"471.4\" y=\"64.0\" width=\"170\" height=\"75.0\" rx=\"4\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><rect x=\"471.4\" y=\"64.0\" width=\"170\" height=\"24\" rx=\"4\" fill=\"#dbeafe\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"556.4\" y=\"80.0\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\">PAYMENT</text><text x=\"479.4\" y=\"104.0\" fill=\"#111827\" font-size=\"11\" text-decoration=\"underline\" font-weight=\"700\">paymentId (PK)</text><text x=\"479.4\" y=\"119.0\" fill=\"#111827\" font-size=\"11\">amount</text><text x=\"479.4\" y=\"134.0\" fill=\"#111827\" font-size=\"11\">paidAt</text></svg><details><summary>Source / Mã nguồn</summary><pre>erDiagram\n  GUEST ||--o{ RESERVATION : makes\n  ROOM_TYPE ||--o{ ROOM : classifies\n  ROOM ||--o{ RESERVATION : \"is booked in\"\n  RESERVATION ||--o{ PAYMENT : \"is paid by\"\n  GUEST {\n    string guestId PK\n    string fullName\n    string phone\n  }\n  ROOM_TYPE {\n    string typeCode PK\n    string name\n    decimal nightlyPrice\n  }\n  ROOM {\n    string roomNumber PK\n    int floor\n  }\n  RESERVATION {\n    string reservationId PK\n    date checkIn\n    date checkOut\n    string status\n  }\n  PAYMENT {\n    string paymentId PK\n    decimal amount\n    datetime paidAt\n  }</pre></details>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "erd.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "ERD — valid Mermaid erDiagram, every line understood",
+              "vi": "ERD — đúng cú pháp Mermaid erDiagram, mọi dòng đọc được"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(f,c,l){var g=function(o,a,s){var m=s[a.bien];if(typeof m!=\"string\"||!m.trim())return{loi:o.m(a.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",a.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var h=o.pe(m);function d(n){return h.tt.filter(function(i){return o.khop(i.ten,n)||o.khop(i.id,n)})}function p(n,i){return h.qh.filter(function(e){return n.some(function(r){return r.id===e.a})&&i.some(function(r){return r.id===e.b})||n.some(function(r){return r.id===e.b})&&i.some(function(r){return r.id===e.a})})}function x(n,i){return i.some(function(e){return e.id===n.a})?{maxA:n.maxA,minA:n.minA,maxB:n.maxB,minB:n.minB}:{maxA:n.maxB,minA:n.minB,maxB:n.maxA,minB:n.minA}}return{p:h,the:d,giua:p,nhin:x}},u=g(f,c,l);if(u.loi)return u.loi;var t=u.p;return t.loi.length?t.loi[0]+(t.loi.length>1?\" (+\"+(t.loi.length-1)+\")\":\"\"):t.tt.length<2||!t.qh.length?f.m(\"declare entities and relationships\",\"khai th\\u1EF1c th\\u1EC3 v\\xE0 quan h\\u1EC7\"):\"OK\"})))(L, {\"bien\":\"ERD\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ERD — every entity has an identifier (PK) and takes part in a relationship; every relationship has a verb label",
+              "vi": "ERD — thực thể nào cũng có định danh (PK) và có quan hệ; quan hệ nào cũng có nhãn động từ"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(i,l,p){var v=function(r,d,x){var s=x[d.bien];if(typeof s!=\"string\"||!s.trim())return{loi:r.m(d.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",d.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var g=r.pe(s);function b(t){return g.tt.filter(function(e){return r.khop(e.ten,t)||r.khop(e.id,t)})}function A(t,e){return g.qh.filter(function(a){return t.some(function(u){return u.id===a.a})&&e.some(function(u){return u.id===a.b})||t.some(function(u){return u.id===a.b})&&e.some(function(u){return u.id===a.a})})}function B(t,e){return e.some(function(a){return a.id===t.a})?{maxA:t.maxA,minA:t.minA,maxB:t.maxB,minB:t.minB}:{maxA:t.maxB,minA:t.minB,maxB:t.maxA,minB:t.minA}}return{p:g,the:b,giua:A,nhin:B}},h=v(i,l,p);if(h.loi)return h.loi;var o=h.p,m=o.tt.filter(function(n){return!n.thuocTinh.some(function(r){return r.khoa.indexOf(\"PK\")>=0})});if(m.length)return i.m(\"entity \"+i.ds(m.map(function(n){return n.ten}))+\" has no identifier \\u2014 add an attribute marked PK in its { } block\",\"th\\u1EF1c th\\u1EC3 \"+i.ds(m.map(function(n){return n.ten}))+\" ch\\u01B0a c\\xF3 \\u0111\\u1ECBnh danh \\u2014 th\\xEAm thu\\u1ED9c t\\xEDnh \\u0111\\xE1nh d\\u1EA5u PK trong kh\\u1ED1i { }\");var c=o.tt.filter(function(n){return!o.qh.some(function(r){return r.a===n.id||r.b===n.id})});if(c.length)return i.m(\"entity \"+i.ds(c.map(function(n){return n.ten}))+\" is not related to anything\",\"th\\u1EF1c th\\u1EC3 \"+i.ds(c.map(function(n){return n.ten}))+\" kh\\xF4ng c\\xF3 quan h\\u1EC7 n\\xE0o\");var f=o.qh.filter(function(n){return i.soTu(n.nhan)<1});return f.length?i.m(\"line \"+f[0].dong+': name the relationship with a verb (\"places\", \"contains\")',\"d\\xF2ng \"+f[0].dong+': \\u0111\\u1EB7t t\\xEAn quan h\\u1EC7 b\\u1EB1ng \\u0111\\u1ED9ng t\\u1EEB (\"places\", \"contains\")'):\"OK\"})))(L, {\"bien\":\"ERD\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ERD — conceptual level: no foreign keys (the relationship line already says it)",
+              "vi": "ERD — mức khái niệm: không khoá ngoại (đường quan hệ đã nói điều đó)"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(o,s,g){var l=function(i,h,p){var c=p[h.bien];if(typeof c!=\"string\"||!c.trim())return{loi:i.m(h.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",h.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var f=i.pe(c);function x(n){return f.tt.filter(function(t){return i.khop(t.ten,n)||i.khop(t.id,n)})}function v(n,t){return f.qh.filter(function(e){return n.some(function(r){return r.id===e.a})&&t.some(function(r){return r.id===e.b})||n.some(function(r){return r.id===e.b})&&t.some(function(r){return r.id===e.a})})}function k(n,t){return t.some(function(e){return e.id===n.a})?{maxA:n.maxA,minA:n.minA,maxB:n.maxB,minB:n.minB}:{maxA:n.maxB,minA:n.minB,maxB:n.maxA,minB:n.minA}}return{p:f,the:x,giua:v,nhin:k}},a=l(o,s,g);if(a.loi)return a.loi;var d=a.p,u=[];return d.tt.forEach(function(m){m.thuocTinh.forEach(function(i){i.khoa.indexOf(\"FK\")>=0&&u.push(m.ten+\".\"+i.ten)})}),u.length?o.m(\"foreign key \"+o.ds(u)+\" \\u2014 a conceptual ERD shows the relationship, not the FK column (that is logical/physical design)\",\"kho\\xE1 ngo\\u1EA1i \"+o.ds(u)+\" \\u2014 ERD kh\\xE1i ni\\u1EC7m v\\u1EBD quan h\\u1EC7, kh\\xF4ng ghi c\\u1ED9t FK (\\u0111\\xF3 l\\xE0 thi\\u1EBFt k\\u1EBF logic/v\\u1EADt l\\xFD)\"):\"OK\"})))(L, {\"bien\":\"ERD\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ERD — every core entity of the case is present",
+              "vi": "ERD — đủ các thực thể cốt lõi của đề"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(u,s,g){var p=function(a,f,d){var c=d[f.bien];if(typeof c!=\"string\"||!c.trim())return{loi:a.m(f.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",f.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var h=a.pe(c);function l(n){return h.tt.filter(function(t){return a.khop(t.ten,n)||a.khop(t.id,n)})}function x(n,t){return h.qh.filter(function(e){return n.some(function(i){return i.id===e.a})&&t.some(function(i){return i.id===e.b})||n.some(function(i){return i.id===e.b})&&t.some(function(i){return i.id===e.a})})}function A(n,t){return t.some(function(e){return e.id===n.a})?{maxA:n.maxA,minA:n.minA,maxB:n.maxB,minB:n.minB}:{maxA:n.maxB,minA:n.minB,maxB:n.maxA,minB:n.minA}}return{p:h,the:l,giua:x,nhin:A}},m=p(u,s,g);if(m.loi)return m.loi;var v=m.p,o=s.tt.filter(function(r){return!m.the(r.khop).length});return o.length?u.m(\"missing entit\"+(o.length>1?\"ies\":\"y\")+\": \"+u.ds(o.map(function(r){return r.ten})),\"thi\\u1EBFu th\\u1EF1c th\\u1EC3: \"+u.ds(o.map(function(r){return r.ten}))):\"OK\"})))(L, {\"bien\":\"ERD\",\"tt\":[{\"ten\":\"Guest\",\"khop\":[\"guest|customer\"]},{\"ten\":\"Room type\",\"khop\":[\"type|category\"]},{\"ten\":\"Room\",\"khop\":[\"^room$\"]},{\"ten\":\"Reservation\",\"khop\":[\"reserv|booking|stay\"]},{\"ten\":\"Payment\",\"khop\":[\"payment\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ERD — no attribute, actor-role or the system itself drawn as an entity",
+              "vi": "ERD — không vẽ thuộc tính, hay chính hệ thống, thành thực thể"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(g,i,l){var d=function(m,c,p){var f=p[c.bien];if(typeof f!=\"string\"||!f.trim())return{loi:m.m(c.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",c.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var h=m.pe(f);function s(n){return h.tt.filter(function(t){return m.khop(t.ten,n)||m.khop(t.id,n)})}function D(n,t){return h.qh.filter(function(o){return n.some(function(r){return r.id===o.a})&&t.some(function(r){return r.id===o.b})||n.some(function(r){return r.id===o.b})&&t.some(function(r){return r.id===o.a})})}function v(n,t){return t.some(function(o){return o.id===n.a})?{maxA:n.maxA,minA:n.minA,maxB:n.maxB,minB:n.minB}:{maxA:n.maxB,minA:n.minB,maxB:n.maxA,minB:n.minA}}return{p:h,the:s,giua:D,nhin:v}},a=d(g,i,l);if(a.loi)return a.loi;for(var B=a.p,e=0;e<i.camTt.length;e++){var u=a.the(i.camTt[e].khop)[0];if(u)return g.m('\"'+u.ten+'\" should not be an entity \\u2014 '+i.camTt[e].lyDo,'\"'+u.ten+'\" kh\\xF4ng n\\xEAn l\\xE0 th\\u1EF1c th\\u1EC3 \\u2014 '+(i.camTt[e].lyDoVi||i.camTt[e].lyDo))}return\"OK\"})))(L, {\"bien\":\"ERD\",\"camTt\":[{\"ten\":\"Price / Date / Status\",\"khop\":[\"^price|^date|^status|nightly\"],\"lyDo\":\"that is an attribute\",\"lyDoVi\":\"đó là thuộc tính\"}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Relationship — Guest 1 — N Reservation",
+              "vi": "Quan hệ — Guest 1 — N Reservation"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(m,A,B){var D=function(f,y,v){var b=v[y.bien];if(typeof b!=\"string\"||!b.trim())return{loi:f.m(y.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var p=f.pe(b);function x(t){return p.tt.filter(function(o){return f.khop(o.ten,t)||f.khop(o.id,t)})}function V(t,o){return p.qh.filter(function(c){return t.some(function(a){return a.id===c.a})&&o.some(function(a){return a.id===c.b})||t.some(function(a){return a.id===c.b})&&o.some(function(a){return a.id===c.a})})}function k(t,o){return o.some(function(c){return c.id===t.a})?{maxA:t.maxA,minA:t.minA,maxB:t.maxB,minB:t.minB}:{maxA:t.maxB,minA:t.minB,maxB:t.maxA,minB:t.minA}}return{p,the:x,giua:V,nhin:k}},i=D(m,A,B);if(i.loi)return i.loi;var _=i.p,n=A.r,r=i.the(n.a),u=i.the(n.b);if(!r.length||!u.length)return m.m(\"need both entities for: \"+n.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai th\\u1EF1c th\\u1EC3 cho: \"+(n.tenVi||n.ten));var e=i.giua(r,u);if(!e.length)return m.m(\"no relationship yet: \"+n.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(n.tenVi||n.ten));var h=i.nhin(e[0],r),g=n.nhieu,s=h.maxA===\"N\"&&h.maxB===\"N\"?\"ca\":h.maxB===\"N\"?\"b\":h.maxA===\"N\"?\"a\":\"mot\",l=function(d){return d===\"b\"?\"one \"+r[0].ten+\" \\u2014 many \"+u[0].ten:d===\"a\"?\"many \"+r[0].ten+\" \\u2014 one \"+u[0].ten:d===\"ca\"?\"many-to-many\":\"one-to-one\"};return s!==g?m.m(\"line \"+e[0].dong+\": cardinality reads \"+l(s)+\", the case says \"+l(g)+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": b\\u1EA3n s\\u1ED1 \\u0111ang l\\xE0 \"+l(s)+\", \\u0111\\u1EC1 n\\xF3i \"+l(g)+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minB!=null&&h.minB!==n.minB?m.m(\"line \"+e[0].dong+\": optionality on the \"+u[0].ten+\" side should be \"+(n.minB===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\")+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+u[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minB===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minA!=null&&h.minA!==n.minA?m.m(\"line \"+e[0].dong+\": optionality on the \"+r[0].ten+\" side should be \"+(n.minA===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+r[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minA===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")):\"OK\"})))(L, {\"bien\":\"ERD\",\"r\":{\"ten\":\"Guest 1 — N Reservation\",\"a\":[\"guest|customer\"],\"b\":[\"reserv|booking|stay\"],\"nhieu\":\"b\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Relationship — Room type 1 — N Room",
+              "vi": "Quan hệ — Room type 1 — N Room"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(m,A,B){var D=function(f,y,v){var b=v[y.bien];if(typeof b!=\"string\"||!b.trim())return{loi:f.m(y.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var p=f.pe(b);function x(t){return p.tt.filter(function(o){return f.khop(o.ten,t)||f.khop(o.id,t)})}function V(t,o){return p.qh.filter(function(c){return t.some(function(a){return a.id===c.a})&&o.some(function(a){return a.id===c.b})||t.some(function(a){return a.id===c.b})&&o.some(function(a){return a.id===c.a})})}function k(t,o){return o.some(function(c){return c.id===t.a})?{maxA:t.maxA,minA:t.minA,maxB:t.maxB,minB:t.minB}:{maxA:t.maxB,minA:t.minB,maxB:t.maxA,minB:t.minA}}return{p,the:x,giua:V,nhin:k}},i=D(m,A,B);if(i.loi)return i.loi;var _=i.p,n=A.r,r=i.the(n.a),u=i.the(n.b);if(!r.length||!u.length)return m.m(\"need both entities for: \"+n.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai th\\u1EF1c th\\u1EC3 cho: \"+(n.tenVi||n.ten));var e=i.giua(r,u);if(!e.length)return m.m(\"no relationship yet: \"+n.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(n.tenVi||n.ten));var h=i.nhin(e[0],r),g=n.nhieu,s=h.maxA===\"N\"&&h.maxB===\"N\"?\"ca\":h.maxB===\"N\"?\"b\":h.maxA===\"N\"?\"a\":\"mot\",l=function(d){return d===\"b\"?\"one \"+r[0].ten+\" \\u2014 many \"+u[0].ten:d===\"a\"?\"many \"+r[0].ten+\" \\u2014 one \"+u[0].ten:d===\"ca\"?\"many-to-many\":\"one-to-one\"};return s!==g?m.m(\"line \"+e[0].dong+\": cardinality reads \"+l(s)+\", the case says \"+l(g)+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": b\\u1EA3n s\\u1ED1 \\u0111ang l\\xE0 \"+l(s)+\", \\u0111\\u1EC1 n\\xF3i \"+l(g)+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minB!=null&&h.minB!==n.minB?m.m(\"line \"+e[0].dong+\": optionality on the \"+u[0].ten+\" side should be \"+(n.minB===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\")+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+u[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minB===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minA!=null&&h.minA!==n.minA?m.m(\"line \"+e[0].dong+\": optionality on the \"+r[0].ten+\" side should be \"+(n.minA===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+r[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minA===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")):\"OK\"})))(L, {\"bien\":\"ERD\",\"r\":{\"ten\":\"Room type 1 — N Room\",\"a\":[\"type|category\"],\"b\":[\"^room$\"],\"nhieu\":\"b\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Relationship — Room 1 — N Reservation",
+              "vi": "Quan hệ — Room 1 — N Reservation"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(m,A,B){var D=function(f,y,v){var b=v[y.bien];if(typeof b!=\"string\"||!b.trim())return{loi:f.m(y.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var p=f.pe(b);function x(t){return p.tt.filter(function(o){return f.khop(o.ten,t)||f.khop(o.id,t)})}function V(t,o){return p.qh.filter(function(c){return t.some(function(a){return a.id===c.a})&&o.some(function(a){return a.id===c.b})||t.some(function(a){return a.id===c.b})&&o.some(function(a){return a.id===c.a})})}function k(t,o){return o.some(function(c){return c.id===t.a})?{maxA:t.maxA,minA:t.minA,maxB:t.maxB,minB:t.minB}:{maxA:t.maxB,minA:t.minB,maxB:t.maxA,minB:t.minA}}return{p,the:x,giua:V,nhin:k}},i=D(m,A,B);if(i.loi)return i.loi;var _=i.p,n=A.r,r=i.the(n.a),u=i.the(n.b);if(!r.length||!u.length)return m.m(\"need both entities for: \"+n.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai th\\u1EF1c th\\u1EC3 cho: \"+(n.tenVi||n.ten));var e=i.giua(r,u);if(!e.length)return m.m(\"no relationship yet: \"+n.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(n.tenVi||n.ten));var h=i.nhin(e[0],r),g=n.nhieu,s=h.maxA===\"N\"&&h.maxB===\"N\"?\"ca\":h.maxB===\"N\"?\"b\":h.maxA===\"N\"?\"a\":\"mot\",l=function(d){return d===\"b\"?\"one \"+r[0].ten+\" \\u2014 many \"+u[0].ten:d===\"a\"?\"many \"+r[0].ten+\" \\u2014 one \"+u[0].ten:d===\"ca\"?\"many-to-many\":\"one-to-one\"};return s!==g?m.m(\"line \"+e[0].dong+\": cardinality reads \"+l(s)+\", the case says \"+l(g)+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": b\\u1EA3n s\\u1ED1 \\u0111ang l\\xE0 \"+l(s)+\", \\u0111\\u1EC1 n\\xF3i \"+l(g)+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minB!=null&&h.minB!==n.minB?m.m(\"line \"+e[0].dong+\": optionality on the \"+u[0].ten+\" side should be \"+(n.minB===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\")+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+u[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minB===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minA!=null&&h.minA!==n.minA?m.m(\"line \"+e[0].dong+\": optionality on the \"+r[0].ten+\" side should be \"+(n.minA===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+r[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minA===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")):\"OK\"})))(L, {\"bien\":\"ERD\",\"r\":{\"ten\":\"Room 1 — N Reservation\",\"a\":[\"^room$\"],\"b\":[\"reserv|booking|stay\"],\"nhieu\":\"b\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Relationship — Reservation 1 — N Payment (paid in parts)",
+              "vi": "Quan hệ — Reservation 1 — N Payment (paid in parts)"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(m,A,B){var D=function(f,y,v){var b=v[y.bien];if(typeof b!=\"string\"||!b.trim())return{loi:f.m(y.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var p=f.pe(b);function x(t){return p.tt.filter(function(o){return f.khop(o.ten,t)||f.khop(o.id,t)})}function V(t,o){return p.qh.filter(function(c){return t.some(function(a){return a.id===c.a})&&o.some(function(a){return a.id===c.b})||t.some(function(a){return a.id===c.b})&&o.some(function(a){return a.id===c.a})})}function k(t,o){return o.some(function(c){return c.id===t.a})?{maxA:t.maxA,minA:t.minA,maxB:t.maxB,minB:t.minB}:{maxA:t.maxB,minA:t.minB,maxB:t.maxA,minB:t.minA}}return{p,the:x,giua:V,nhin:k}},i=D(m,A,B);if(i.loi)return i.loi;var _=i.p,n=A.r,r=i.the(n.a),u=i.the(n.b);if(!r.length||!u.length)return m.m(\"need both entities for: \"+n.ten,\"c\\u1EA7n \\u0111\\u1EE7 hai th\\u1EF1c th\\u1EC3 cho: \"+(n.tenVi||n.ten));var e=i.giua(r,u);if(!e.length)return m.m(\"no relationship yet: \"+n.ten,\"ch\\u01B0a c\\xF3 quan h\\u1EC7: \"+(n.tenVi||n.ten));var h=i.nhin(e[0],r),g=n.nhieu,s=h.maxA===\"N\"&&h.maxB===\"N\"?\"ca\":h.maxB===\"N\"?\"b\":h.maxA===\"N\"?\"a\":\"mot\",l=function(d){return d===\"b\"?\"one \"+r[0].ten+\" \\u2014 many \"+u[0].ten:d===\"a\"?\"many \"+r[0].ten+\" \\u2014 one \"+u[0].ten:d===\"ca\"?\"many-to-many\":\"one-to-one\"};return s!==g?m.m(\"line \"+e[0].dong+\": cardinality reads \"+l(s)+\", the case says \"+l(g)+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": b\\u1EA3n s\\u1ED1 \\u0111ang l\\xE0 \"+l(s)+\", \\u0111\\u1EC1 n\\xF3i \"+l(g)+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minB!=null&&h.minB!==n.minB?m.m(\"line \"+e[0].dong+\": optionality on the \"+u[0].ten+\" side should be \"+(n.minB===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\")+(n.lyDo?\" \\u2014 \"+n.lyDo:\"\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+u[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minB===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")+(n.lyDoVi?\" \\u2014 \"+n.lyDoVi:\"\")):n.minA!=null&&h.minA!==n.minA?m.m(\"line \"+e[0].dong+\": optionality on the \"+r[0].ten+\" side should be \"+(n.minA===0?\"zero-or-\\u2026 (o)\":\"exactly/at least one (|)\"),\"d\\xF2ng \"+e[0].dong+\": ph\\xEDa \"+r[0].ten+\" ph\\u1EA3i l\\xE0 \"+(n.minA===0?\"c\\xF3 th\\u1EC3 kh\\xF4ng c\\xF3 (o)\":\"b\\u1EAFt bu\\u1ED9c c\\xF3 (|)\")):\"OK\"})))(L, {\"bien\":\"ERD\",\"r\":{\"ten\":\"Reservation 1 — N Payment (paid in parts)\",\"a\":[\"reserv|booking|stay\"],\"b\":[\"payment\"],\"nhieu\":\"b\",\"lyDo\":\"a reservation can be paid in several parts\",\"lyDoVi\":\"một lượt đặt trả được nhiều lần\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "ERD — Guest–Room goes through Reservation",
+              "vi": "ERD — Guest–Room goes through Reservation"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pe=((function(c){var A={\"|o\":[0,1],\"||\":[1,1],\"}o\":[0,\"N\"],\"}|\":[1,\"N\"]},E={\"o|\":[0,1],\"||\":[1,1],\"o{\":[0,\"N\"],\"|{\":[1,\"N\"]},s='([A-Za-z][\\\\w-]*(?:\\\\[\"[^\"]*\"\\\\])?|\"[^\"]+\")',_=new RegExp(\"^\"+s+\"\\\\s*(\\\\|o|\\\\|\\\\||\\\\}o|\\\\}\\\\|)(--|\\\\.\\\\.)(o\\\\||\\\\|\\\\||o\\\\{|\\\\|\\\\{)\\\\s*\"+s+\"\\\\s*:\\\\s*(.*)$\");function y(r){var o=/^([A-Za-z][\\w-]*)\\[\"([^\"]*)\"\\]$/.exec(r);return o?{id:o[1],ten:o[2]}:/^\"/.test(r)?{id:r.slice(1,-1),ten:r.slice(1,-1)}:{id:r,ten:r}}return function(o){var u={},g=[],l=[],p=!1,h=null;function d(f,P){var i=y(f);return u[i.id]?i.ten!==i.id&&(u[i.id].ten=i.ten):u[i.id]={id:i.id,ten:i.ten,thuocTinh:[],dong:P},u[i.id]}for(var m=c.dong(o),v=0;v<m.length;v++){var t=v+1,n=m[v].replace(/%%.*$/,\"\").trim();if(n){if(h){if(/^\\}$/.test(n)){h=null;continue}for(var N=n.replace(/\"[^\"]*\"\\s*$/,\"\").trim(),e=N.split(/[\\s,]+/).filter(Boolean),x=[];e.length>1&&/^(PK|FK|UK)$/i.test(e[e.length-1]);)x.unshift(e.pop().toUpperCase());if(!e.length||e.length>2||!e.every(function(f){return/^[\\w()[\\]*-]+$/.test(f)})){l.push(c.kd(t,n,\"attribute: type name PK\"));continue}var R=e.length===2?e[1]:e[0],B=e.length===2?e[0]:\"\";h.thuocTinh.push({ten:R,kieu:B,khoa:x,dong:t});continue}if(/^erDiagram\\b/.test(n)){p=!0;continue}if(!/^(direction|title|classDef|class|style)\\b/.test(n)){var $=new RegExp(\"^\"+s+\"\\\\s*\\\\{\\\\s*$\").exec(n);if($){h=d($[1],t);continue}var a=_.exec(n);if(a){var D=d(a[1],t),K=d(a[5],t),b=A[a[2]],w=E[a[4]];g.push({a:D.id,b:K.id,minA:b[0],maxA:b[1],minB:w[0],maxB:w[1],xac:a[3]===\"--\",nhan:a[6].replace(/^\"|\"$/g,\"\").trim(),dong:t});continue}if(new RegExp(\"^\"+s+\"$\").test(n)){d(n,t);continue}l.push(c.kd(t,n,\"relationship: A ||--o{ B : verb\"))}}}return h&&l.push(c.m('an entity block \"{\" is never closed','kh\\u1ED1i th\\u1EF1c th\\u1EC3 \"{\" ch\\u01B0a \\u0111\\xF3ng')),p||l.unshift(c.m('the first line must be \"erDiagram\"','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"erDiagram\"')),{tt:Object.keys(u).map(function(f){return u[f]}),qh:g,loi:l}}}))(C);return C;})(); var A = {\"ERD\":(typeof ERD!=='undefined'?ERD:undefined)}; return (((function(g,h,d){var s=function(u,m,D){var f=D[m.bien];if(typeof f!=\"string\"||!f.trim())return{loi:u.m(m.bien+\" is empty \\u2014 write the ERD as a Mermaid erDiagram string\",m.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt ERD th\\xE0nh chu\\u1ED7i Mermaid erDiagram\")};var c=u.pe(f);function v(n){return c.tt.filter(function(r){return u.khop(r.ten,n)||u.khop(r.id,n)})}function x(n,r){return c.qh.filter(function(e){return n.some(function(i){return i.id===e.a})&&r.some(function(i){return i.id===e.b})||n.some(function(i){return i.id===e.b})&&r.some(function(i){return i.id===e.a})})}function A(n,r){return r.some(function(e){return e.id===n.a})?{maxA:n.maxA,minA:n.minA,maxB:n.maxB,minB:n.minB}:{maxA:n.maxB,minA:n.minB,maxB:n.maxA,minB:n.minA}}return{p:c,the:v,giua:x,nhin:A}},t=s(g,h,d);if(t.loi)return t.loi;var b=t.p,o=h.r,l=t.the(o.a),p=t.the(o.b),a=t.giua(l,p);return a.length?g.m(\"line \"+a[0].dong+\": \"+o.lyDo,\"d\\xF2ng \"+a[0].dong+\": \"+(o.lyDoVi||o.lyDo)):\"OK\"})))(L, {\"bien\":\"ERD\",\"r\":{\"ten\":\"Guest–Room goes through Reservation\",\"a\":[\"guest|customer\"],\"b\":[\"^room$\"],\"lyDo\":\"each stay has its own dates — link Guest and Room through RESERVATION\",\"lyDoVi\":\"mỗi lượt ở có ngày riêng — nối Guest và Room qua RESERVATION\"}}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nối thẳng GUEST với ROOM."
+        },
+        {
+          "loi": "Ghi roomNumber FK trong RESERVATION."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        },
+        {
+          "en": "cardinality",
+          "vi": "bản số — một-một, một-nhiều, nhiều-nhiều (và tuỳ chọn 0 hay bắt buộc 1)"
+        },
+        {
+          "en": "associative entity",
+          "vi": "thực thể kết hợp — tách quan hệ nhiều-nhiều khi mỗi lần liên kết có dữ liệu riêng"
+        }
+      ]
+    }
+  ]
+}

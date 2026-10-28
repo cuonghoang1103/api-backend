@@ -1,0 +1,654 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-2-domain-model-dfd",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-2-domain-model-dfd"
+  },
+  "exercises": [
+    {
+      "title": "DFD 1 — the four symbols and the rules",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "DFD notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A data flow diagram has four symbols: <b>process</b> (circle, numbered, verb phrase), <b>data store</b> (open rectangle, plural noun), <b>external entity</b> (rectangle) and <b>data flow</b> (labelled arrow). Data moves between entities and stores only THROUGH a process.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>DFD có bốn ký hiệu: <b>process</b> (hình tròn, đánh số, cụm động từ), <b>kho dữ liệu</b> (hình chữ nhật hở, danh từ số nhiều), <b>thực thể ngoài</b> (hình chữ nhật) và <b>luồng dữ liệu</b> (mũi tên có nhãn). Dữ liệu chỉ đi giữa thực thể và kho QUA một process.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Process = số + động từ; kho = danh từ số nhiều.",
+        "Hố đen: vào không ra; phép màu: ra không vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 1 — the four symbols and the rules\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a well-named process?Process nào đặt tên tốt?\n2. May a customer write directly into the Orders store?Khách hàng có được ghi thẳng vào kho Orders không?\n3. A process with inputs but no outputs is a…Process có vào mà không có ra là…\n4. A process with outputs but no inputs is a…Process có ra mà không có vào là…\n5. Balancing between levels means…Cân bằng giữa các mức nghĩa là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 1 — the four symbols and the rules — answer key\n\n1. Which is a well-named process?Process nào đặt tên tốt?\n   Answer: b) 2.0 Validate order\n   Number + verb phrase.VI: Số + cụm động từ.\n\n2. May a customer write directly into the Orders store?Khách hàng có được ghi thẳng vào kho Orders không?\n   Answer: b) No — data must pass through a process\n   Entity → store directly is illegal.VI: Thực thể → kho trực tiếp là sai.\n\n3. A process with inputs but no outputs is a…Process có vào mà không có ra là…\n   Answer: b) black hole\n   Inputs disappear — a black hole.VI: Dữ liệu vào biến mất — hố đen.\n\n4. A process with outputs but no inputs is a…Process có ra mà không có vào là…\n   Answer: a) miracle\n   Data from nowhere — a miracle.VI: Dữ liệu từ hư không — phép màu.\n\n5. Balancing between levels means…Cân bằng giữa các mức nghĩa là…\n   Answer: b) the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it\n   Nothing added, nothing dropped, same names.VI: Không thêm, không bớt, cùng tên.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which is a well-named process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Process nào đặt tên tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2.0 Orders"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2.0 Validate order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2.0 Order DB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2.0 Customer"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Number + verb phrase.</p><p><i>VI: Số + cụm động từ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>May a customer write directly into the Orders store?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách hàng có được ghi thẳng vào kho Orders không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — data must pass through a process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only on level 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if the store is small"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Entity → store directly is illegal.</p><p><i>VI: Thực thể → kho trực tiếp là sai.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A process with inputs but no outputs is a…</p><p style=\"opacity:.75;font-size:.92em\"><i>Process có vào mà không có ra là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "miracle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "black hole"
+              },
+              {
+                "ma": "c",
+                "noiDung": "grey hole"
+              },
+              {
+                "ma": "d",
+                "noiDung": "data store"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inputs disappear — a black hole.</p><p><i>VI: Dữ liệu vào biến mất — hố đen.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>A process with outputs but no inputs is a…</p><p style=\"opacity:.75;font-size:.92em\"><i>Process có ra mà không có vào là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "miracle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "black hole"
+              },
+              {
+                "ma": "c",
+                "noiDung": "context"
+              },
+              {
+                "ma": "d",
+                "noiDung": "balancing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Data from nowhere — a miracle.</p><p><i>VI: Dữ liệu từ hư không — phép màu.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Balancing between levels means…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cân bằng giữa các mức nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every level has the same number of processes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the flows into and out of a process appear, with the same names and directions, on the diagram that decomposes it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the diagram is symmetrical"
+              },
+              {
+                "ma": "d",
+                "noiDung": "stores are balanced in size"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Nothing added, nothing dropped, same names.</p><p><i>VI: Không thêm, không bớt, cùng tên.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tên process bằng danh từ."
+        },
+        {
+          "loi": "Cho thực thể ghi thẳng vào kho."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        },
+        {
+          "en": "data store",
+          "vi": "kho dữ liệu — nơi dữ liệu nằm lại (tên danh từ số nhiều)"
+        },
+        {
+          "en": "black hole / miracle",
+          "vi": "process chỉ có vào không có ra / chỉ có ra không có vào — lỗi DFD"
+        },
+        {
+          "en": "balancing (levelling)",
+          "vi": "cân bằng giữa các mức DFD — luồng vào/ra của process cha phải khớp sơ đồ con"
+        }
+      ]
+    },
+    {
+      "title": "DFD 2 — legal flow or not?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "DFD rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Library DFD elements: entities <b>Reader</b>, <b>Librarian</b>; processes <b>1.0 Lend book</b>, <b>2.0 Return book</b>; stores <b>D1 Loans</b>, <b>D2 Books</b>. Decide whether each flow is <b>Legal</b> or <b>Illegal</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thành phần DFD thư viện: thực thể <b>Reader</b>, <b>Librarian</b>; process <b>1.0 Lend book</b>, <b>2.0 Return book</b>; kho <b>D1 Loans</b>, <b>D2 Books</b>. Mỗi luồng là <b>Legal</b> (hợp lệ) hay <b>Illegal</b>?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi luồng hợp lệ có ít nhất một đầu là process.",
+        "Luồng không nhãn luôn sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 2 — legal flow or not?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 2 — legal flow or not? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Legal\n   - r1.k: Illegal\n   - r2.k: Legal\n   - r3.k: Illegal\n   - r4.k: Illegal\n   - r5.k: Legal\n   - r6.k: Legal\n   - r7.k: Illegal\n   Every legal flow has a process at one end and a label. Entity→store, store→store and entity→entity flows are illegal; so is an unlabelled flow.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every legal flow has a process at one end and a label. Entity→store, store→store and entity→entity flows are illegal; so is an unlabelled flow.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Verdict",
+                "luaChon": [
+                  "Legal",
+                  "Illegal"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Reader → 1.0 Lend book : loan request"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Reader → D1 Loans : loan record"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "1.0 Lend book → D1 Loans : new loan"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "D2 Books → D1 Loans : book status"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Reader → Librarian : book request"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "D1 Loans → 2.0 Return book : open loan"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "2.0 Return book → Reader : return receipt"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "1.0 Lend book → 2.0 Return book (no label)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Legal",
+              "r1.k": "Illegal",
+              "r2.k": "Legal",
+              "r3.k": "Illegal",
+              "r4.k": "Illegal",
+              "r5.k": "Legal",
+              "r6.k": "Legal",
+              "r7.k": "Illegal"
+            },
+            "giaiThich": "<p><p>Every legal flow has a process at one end and a label. Entity→store, store→store and entity→entity flows are illegal; so is an unlabelled flow.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho kho đọc từ kho khác trực tiếp."
+        },
+        {
+          "loi": "Vẽ luồng giữa hai thực thể ngoài trong DFD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        },
+        {
+          "en": "data flow",
+          "vi": "luồng dữ liệu — mũi tên có nhãn là DỮ LIỆU (cụm danh từ)"
+        },
+        {
+          "en": "data store",
+          "vi": "kho dữ liệu — nơi dữ liệu nằm lại (tên danh từ số nhiều)"
+        }
+      ]
+    },
+    {
+      "title": "DFD 4 — find the error in each fragment",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "DFD validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Each fragment of a student’s DFD has exactly one error. Name it.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đoạn DFD của một sinh viên có đúng một lỗi. Gọi tên lỗi.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đếm luồng vào/ra của từng process và từng kho.",
+        "Một luồng mới với thực thể ngoài ở mức con ⇒ mất cân bằng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 4 — find the error in each fragment\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DFD 4 — find the error in each fragment — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Black hole\n   - r1.k: Miracle\n   - r2.k: Store written but never read\n   - r3.k: Store read but never written\n   - r4.k: Unbalanced with the parent level\n   - r5.k: Process named as a noun\n   Each error is mechanical to detect: count what goes in and out of every process and store, compare levels side by side, read every process name as a verb phrase.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each error is mechanical to detect: count what goes in and out of every process and store, compare levels side by side, read every process name as a verb phrase.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Error",
+                "luaChon": [
+                  "Black hole",
+                  "Miracle",
+                  "Store written but never read",
+                  "Store read but never written",
+                  "Unbalanced with the parent level",
+                  "Process named as a noun"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "3.0 Archive loans receives \"closed loan\" and sends nothing anywhere."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "4.0 Print report sends \"monthly report\" to the Director but receives no data."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "D5 Audit log receives \"audit entry\" from three processes; no process reads it."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "D3 Exchange rates is read by 2.0 Compute fee; no process ever writes it."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "On the level-1 diagram of 2.0 a new flow \"SMS\" goes to the Reader; the context diagram has no such flow."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "5.0 Fines receives \"overdue loan\" and sends \"fine notice\"."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Black hole",
+              "r1.k": "Miracle",
+              "r2.k": "Store written but never read",
+              "r3.k": "Store read but never written",
+              "r4.k": "Unbalanced with the parent level",
+              "r5.k": "Process named as a noun"
+            },
+            "giaiThich": "<p><p>Each error is mechanical to detect: count what goes in and out of every process and store, compare levels side by side, read every process name as a verb phrase.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm hố đen với kho chỉ được ghi."
+        },
+        {
+          "loi": "Cho rằng kho đọc từ dữ liệu \"có sẵn\" là hợp lệ — phải có process ghi (hoặc thực thể cung cấp qua process)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "black hole / miracle",
+          "vi": "process chỉ có vào không có ra / chỉ có ra không có vào — lỗi DFD"
+        },
+        {
+          "en": "balancing (levelling)",
+          "vi": "cân bằng giữa các mức DFD — luồng vào/ra của process cha phải khớp sơ đồ con"
+        },
+        {
+          "en": "data store",
+          "vi": "kho dữ liệu — nơi dữ liệu nằm lại (tên danh từ số nhiều)"
+        }
+      ]
+    },
+    {
+      "title": "DFD 3 — draw a balanced level-0 DFD",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "levelled DFD",
+        "balancing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The context diagram of a canteen pre-order system is given:</p><pre>flowchart LR\n  S((Canteen Pre-order))\n  ST[Student]\n  KI[Kitchen]\n  EW[E-wallet]\n  ST -->|order| S\n  S -->|order confirmation| ST\n  S -->|kitchen ticket| KI\n  KI -->|ready notice| S\n  S -->|charge request| EW\n  EW -->|payment result| S</pre><p>Decompose it into a level-0 DFD with three processes — <b>take the order</b>, <b>collect the payment</b>, <b>prepare the order</b> — and the stores <b>Orders</b> and <b>Menu items</b>. The DFD must balance with the context diagram: the same external flows, same names, same directions.</p><p><b>Mermaid flowchart.</b> Process = circle with a number and a verb phrase <code>P1((1.0 Book appointment))</code>; data store = cylinder <code>D1[(D1 Appointments)]</code>; external entity = rectangle <code>E1[Patient]</code>; flow = <code>E1 -->|appointment request| P1</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Numbered verb-phrase processes, both stores written and read, no black hole or miracle, the six context flows unchanged.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho sơ đồ ngữ cảnh của hệ thống đặt món căng-tin (như trên). Phân rã thành DFD mức 0 với ba process — <b>nhận đơn</b>, <b>thu tiền</b>, <b>chuẩn bị món</b> — và các kho <b>Orders</b>, <b>Menu items</b>. DFD phải cân bằng với sơ đồ ngữ cảnh: cùng các luồng ngoài, cùng tên, cùng chiều.</p><p><b>Mermaid flowchart.</b> Process = hình tròn có số và cụm động từ <code>P1((1.0 Book appointment))</code>; kho dữ liệu = hình trụ <code>D1[(D1 Appointments)]</code>; thực thể ngoài = hình chữ nhật <code>E1[Patient]</code>; luồng = <code>E1 -->|appointment request| P1</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Process đánh số tên động từ, hai kho đều được ghi và đọc, không hố đen/phép màu, sáu luồng ngữ cảnh giữ nguyên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ST -->|order| P1",
+          "output": "the context flow \"order\" now enters process 1.0",
+          "explanation": "Same name, same direction.|||Cùng tên, cùng chiều."
+        }
+      ],
+      "hintsJson": [
+        "Chép nguyên tên sáu luồng ngoài: order, order confirmation, kitchen ticket, ready notice, charge request, payment result.",
+        "Kho Menu items phải có cả luồng vào (vd số lượng đã bán) và luồng ra (giá món)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "dfd.js",
+          "language": "javascript",
+          "code": "const DFD = `\nflowchart LR\n  ST[Student]\n  P1((1.0 Take order))\n  ST -->|order| P1\n`;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "dfd.js",
+          "language": "javascript",
+          "code": "// Every context flow keeps its name; each store is written by one process and read by another.\nconst DFD = `\nflowchart LR\n  ST[Student]\n  KI[Kitchen]\n  EW[E-wallet]\n  P1((1.0 Take order))\n  P2((2.0 Collect payment))\n  P3((3.0 Prepare order))\n  D1[(D1 Orders)]\n  D2[(D2 Menu items)]\n  ST -->|order| P1\n  D2 -->|dish price| P1\n  P1 -->|new order| D1\n  D1 -->|unpaid order| P2\n  P2 -->|charge request| EW\n  EW -->|payment result| P2\n  P2 -->|paid order| D1\n  D1 -->|paid orders| P3\n  P3 -->|kitchen ticket| KI\n  KI -->|ready notice| P3\n  P3 -->|order confirmation| ST\n  P3 -->|ready status| D1\n  P3 -->|sold quantity| D2\n`;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The three processes split the system’s work; the stores hold what is shared between them; the external flows are the context flows, unchanged.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 940 520\" width=\"100%\" style=\"max-width:940px;display:block;margin:10px auto\" role=\"img\" aria-label=\"Level-0 DFD — canteen pre-order\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"swm\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker><marker id=\"swmo\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.3\"/></marker><marker id=\"swmt\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"11\" markerHeight=\"11\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11 z\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.2\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"940\" height=\"520\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"470\" y=\"20\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\" font-size=\"13\">Level-0 DFD — canteen pre-order</text><path d=\"M190.0,126.3 L424.0,127.0\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"315.6\" y=\"118.3\" width=\"39.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"335.1\" y=\"130.3\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">order</text><path d=\"M741.0,153.4 L516.9,131.6\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"620.8\" y=\"136.7\" width=\"70.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"655.8\" y=\"148.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">dish price</text><path d=\"M514.0,155.7 L792.8,352.3\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"654.9\" y=\"269.1\" width=\"63.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"686.8\" y=\"281.1\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">new order</text><path d=\"M761.8,350.9 L517.3,277.5\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"627.7\" y=\"314.5\" width=\"82.4\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"668.9\" y=\"326.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">unpaid order</text><path d=\"M424.0,286.3 L190.0,287.0\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"231.5\" y=\"278.2\" width=\"94.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"278.9\" y=\"290.2\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">charge request</text><path d=\"M190.0,287.0 L424.0,286.3\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"231.5\" y=\"278.2\" width=\"94.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"278.9\" y=\"290.2\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">payment result</text><path d=\"M517.3,277.5 L761.8,350.9\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"633.9\" y=\"314.5\" width=\"70.0\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"668.9\" y=\"326.5\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">paid order</text><path d=\"M739.0,372.5 L514.6,395.8\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"615.6\" y=\"372.9\" width=\"76.2\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"653.7\" y=\"384.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">paid orders</text><path d=\"M424.0,423.0 L190.0,423.7\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"231.5\" y=\"414.9\" width=\"94.8\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"278.9\" y=\"426.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">kitchen ticket</text><path d=\"M190.0,423.7 L424.0,423.0\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"237.7\" y=\"414.9\" width=\"82.4\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"278.9\" y=\"426.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">ready notice</text><path d=\"M440.5,374.7 L155.7,152.5\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"272.5\" y=\"281.7\" width=\"119.6\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"332.3\" y=\"293.7\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">order confirmation</text><path d=\"M514.6,395.8 L739.0,372.5\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"612.5\" y=\"372.9\" width=\"82.4\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"653.7\" y=\"384.9\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">ready status</text><path d=\"M501.2,376.1 L778.8,181.3\" stroke=\"#1f2937\" stroke-width=\"1.3\" fill=\"none\" marker-end=\"url(#swm)\"/><rect x=\"629.0\" y=\"246.8\" width=\"88.6\" height=\"15.0\" rx=\"3\" fill=\"#ffffff\" opacity=\"0.93\"/><text x=\"673.3\" y=\"258.8\" text-anchor=\"middle\" fill=\"#7c2d12\" font-size=\"10.5\">sold quantity</text><rect x=\"50.0\" y=\"116.3\" width=\"140\" height=\"44\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"120.0\" y=\"142.3\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\">Student</text><rect x=\"50.0\" y=\"389.7\" width=\"140\" height=\"44\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"120.0\" y=\"415.7\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\">Kitchen</text><rect x=\"50.0\" y=\"253.0\" width=\"140\" height=\"44\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"120.0\" y=\"279.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\">E-wallet</text><circle cx=\"470.0\" cy=\"138.3\" r=\"46\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"470.0\" y=\"135.3\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">1.0 Take</text><text x=\"470.0\" y=\"149.3\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">order</text><circle cx=\"470.0\" cy=\"275.0\" r=\"46\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"470.0\" y=\"272.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">2.0 Collect</text><text x=\"470.0\" y=\"286.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">payment</text><circle cx=\"470.0\" cy=\"411.7\" r=\"46\" fill=\"#e0f2fe\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><text x=\"470.0\" y=\"408.7\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">3.0 Prepare</text><text x=\"470.0\" y=\"422.7\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\" font-weight=\"700\">order</text><path d=\"M740.0,360.5 H880.0 M740.0,394.5 H880.0\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><rect x=\"740.0\" y=\"360.5\" width=\"140\" height=\"34\" fill=\"#fef3c7\" opacity=\"0.6\"/><text x=\"810.0\" y=\"381.5\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\">D1 Orders</text><path d=\"M740.0,155.5 H880.0 M740.0,189.5 H880.0\" stroke=\"#1f2937\" stroke-width=\"1.5\"/><rect x=\"740.0\" y=\"155.5\" width=\"140\" height=\"34\" fill=\"#fef3c7\" opacity=\"0.6\"/><text x=\"810.0\" y=\"176.5\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"12\">D2 Menu items</text></svg><details><summary>Source / Mã nguồn</summary><pre>flowchart LR\n  ST[Student]\n  KI[Kitchen]\n  EW[E-wallet]\n  P1((1.0 Take order))\n  P2((2.0 Collect payment))\n  P3((3.0 Prepare order))\n  D1[(D1 Orders)]\n  D2[(D2 Menu items)]\n  ST --&gt;|order| P1\n  D2 --&gt;|dish price| P1\n  P1 --&gt;|new order| D1\n  D1 --&gt;|unpaid order| P2\n  P2 --&gt;|charge request| EW\n  EW --&gt;|payment result| P2\n  P2 --&gt;|paid order| D1\n  D1 --&gt;|paid orders| P3\n  P3 --&gt;|kitchen ticket| KI\n  KI --&gt;|ready notice| P3\n  P3 --&gt;|order confirmation| ST\n  P3 --&gt;|ready status| D1\n  P3 --&gt;|sold quantity| D2</pre></details>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "dfd.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "DFD — valid syntax; processes are numbered verb phrases, stores are named",
+              "vi": "DFD — đúng cú pháp; process có số và là cụm động từ, kho có tên"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.tuVung=((function(t){var a=\"fix hand retire decommission write abort acknowledge activate adopt advise alert amend annotate appeal append appoint archive arrange assemble audit auto backup balance bid broadcast bulk calibrate cancel capture catalog catalogue categorize categorise certify check-in checkin cite clear clone close collect combine commit compile complain conduct consolidate contribute convert coordinate copy correct count crop customize customise deactivate declare delegate deliver deploy deregister describe destroy diagnose dial discard discount dismiss dispose distribute document draw drop duplicate earn edit elect email embed empty enqueue enter equip erase evaluate exclude execute expire explore extract fetch finalize finalise flag fulfil fulfill fund gather grant group guide hide highlight hold identify ignore import improve include increase initiate insert integrate interview invalidate investigate join justify label launch limit locate log maintain mark merge message migrate mint moderate monitor mute negotiate nominate note obtain onboard override own pair park pass patch payout pin pledge poll populate preview price print proceed procure promote propose protect provision publish purge qualify queue quote randomize randomise reallocate reassign rebook recalculate recall reclaim recognize recognise reconcile redeem redirect reduce refer register regulate reimburse reinstate relate release relocate rename renew repay repeat rephrase replenish request require reserve resize resolve restrict retract retry revise revise reward rollback route sanction save schedule screen seal search secure segment select serve settle shortlist sign simulate sort source specify sponsor stack stage stamp state stock stream submit summarize summarise supervise survey suspend swap tally terminate thank throttle tick toggle total trace transcribe transform translate transport trigger trim unblock undo unfollow unpublish unregister unsubscribe update upgrade validate verify view void waive warn weigh welcome whitelist withdraw accept access activate add adjust ask approve attach charge credit debit deduct dispute escalate notify pause reactivate rebook recharge refill reopen resubmit reward settle sponsor tokenize tokenise unlock verify vet allocate analyse analyze answer apply approve archive arrange ask assess assign attach attend audit authenticate authorize back backup bill block book borrow browse buy calculate call cancel capture change chat check checkout choose claim clean close collect comment compare complete compose compute configure confirm connect consult contact control convert create curate deactivate decide decline define delete deliver deposit design detect disable dispatch display dispense distribute do donate download draft edit enable end enrol enroll enter escalate estimate evaluate examine exchange export extend file fill filter find finish follow forecast forward generate get give grade grant handle help hire import inform input inspect install invite invoice issue join keep leave lend link list load lock log login logout look maintain make manage map mark match measure merge modify monitor move notify obtain offer open operate order organize organise pack participate pay perform pick place plan post predict prepare prescribe print prioritize process produce provide publish purchase push query raise rank rate read reassign receive recommend reconcile record recover redeem refund register reject release reload remind remove renew rent reorder repair replace reply report request reschedule reserve reset resolve respond restock restore resume retrieve return review revoke rotate run save scan schedule score screen search see select sell send serve set setup share ship show sign simulate skip sort split pause unpause start stop store submit subscribe suggest supply suspend swap switch sync synchronise synchronize take tag test top track trade train transfer translate triage unlock unsubscribe update upgrade upload use validate verify view visit vote waitlist watch withdraw write\".split(\" \"),s=\"accept add approve assign browse calculate cancel choose confirm create delete edit enter generate get give inform maintain manage make modify notify pay place provide receive register reject remove select send submit validate verify ask\".split(\" \"),o=\"pending waiting booking ongoing outstanding missing remaining upcoming incoming outgoing existing\".split(\" \");function n(e){var r=[e];return/ies$/.test(e)&&r.push(e.slice(0,-3)+\"y\"),/es$/.test(e)&&r.push(e.slice(0,-2)),/s$/.test(e)&&r.push(e.slice(0,-1)),r}function c(e){return e=t.norm(e),a.indexOf(e)>=0}function l(e){return e=t.norm(e),n(e).some(function(r){return s.indexOf(r)>=0})}function p(e){if(e=t.norm(e),!/ing$/.test(e)||o.indexOf(e)>=0)return!1;var r=e.slice(0,-3),i=[r,r+\"e\"];return/(.)\\1$/.test(r)&&i.push(r.slice(0,-1)),i.some(function(u){return a.indexOf(u)>=0})}return t.laDongTu=c,t.laHanhDong=l,t.laHoatDongIng=p,!0}))(C);C.pf=((function(l){var b=[[\"tron\",/^\\(\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\)/],[\"kho\",/^\\[\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\]/],[\"svd\",/^\\(\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\)/],[\"con\",/^\\[\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\]/],[\"hcn\",/^\\[\\s*\"?([^\"\\]]*?)\"?\\s*\\]/],[\"bo\",/^\\(\\s*\"?([^\"()]*?)\"?\\s*\\)/],[\"thoi\",/^\\{\\s*\"?([^\"}]*?)\"?\\s*\\}/],[\"khac\",/^>\\s*\"?([^\"\\]]*?)\"?\\s*\\]/]],B=/^\\s*(<)?(-{2,}>|-{3,}|-\\.+->|-\\.+-|={2,}>|={3,}|--x|--o)\\s*(?:\\|\\s*\"?([^|\"]*?)\"?\\s*\\|)?\\s*/,D=/^\\s*(<)?(--|==|-\\.)\\s*\"?([^\"<>|]+?)\"?\\s*(-{2,}>|-{3,}|\\.+->|\\.+-|={2,}>|={3,})\\s*/;return function(F){var h={},$=[],c=[],y=[];function R(i,n){var a=/^\\s*([A-Za-z_][\\w-]*)/.exec(i);if(!a)return null;for(var f=a[1],r=i.slice(a[0].length),S=null,z=null,m=0;m<b.length;m++){var N=b[m][1].exec(r);if(N){S=b[m][0],z=N[1].trim(),r=r.slice(N[0].length);break}}return k.push({id:f,nhan:z,hinh:S,so:n}),{id:f,rest:r}}function O(i){var n=i.id,a=i.hinh,f=i.nhan,r=i.so;h[n]?a&&(h[n].hinh===\"chua\"?(h[n].hinh=a,h[n].nhan=f):h[n].hinh!==a&&c.push(l.m(\"line \"+r+': node \"'+n+'\" is declared twice with different shapes',\"d\\xF2ng \"+r+': n\\xFAt \"'+n+'\" khai hai l\\u1EA7n v\\u1EDBi hai h\\xECnh kh\\xE1c nhau'))):(h[n]={id:n,nhan:f==null?n:f,hinh:a||\"chua\",dong:r},y.push(n))}for(var k=[],x=l.dong(F),I=!1,d=0;d<x.length;d++)for(var s=d+1,A=x[d].split(\";\"),w=0;w<A.length;w++){var t=A[w].replace(/%%.*$/,\"\").trim();if(t){if(/^(flowchart|graph)\\b/i.test(t)){I=!0;continue}if(!/^(classDef|class|style|linkStyle|click|direction)\\b/.test(t)){if(/^subgraph\\b/.test(t)||/^end$/.test(t)){c.push(l.m(\"line \"+s+\": subgraph is not used in these models \\u2014 draw every node at the top level\",\"d\\xF2ng \"+s+\": kh\\xF4ng d\\xF9ng subgraph trong c\\xE1c m\\xF4 h\\xECnh n\\xE0y \\u2014 v\\u1EBD m\\u1ECDi n\\xFAt \\u1EDF m\\u1EE9c ngo\\xE0i c\\xF9ng\"));continue}k=[];var E=[],L=R(t,s);if(!L){c.push(l.kd(s,t));continue}for(var u=L.rest,H=L.id,o=!0;u.trim();){var e=B.exec(u),v=null,g=null,_=!1;if(e?(_=!!e[1],g=e[2],v=e[3]==null?null:e[3]):(e=D.exec(u),e&&(_=!!e[1],g=e[4],v=e[3])),!e){o=!1;break}u=u.slice(e[0].length);var p=R(u,s);if(!p){o=!1;break}var K=/>$/.test(g)||/x$|o$/.test(g);E.push({tu:H,den:p.id,nhan:v==null?\"\":String(v).trim(),huong:_&&K?\"hai\":K?\"mot\":\"khong\",dong:s}),H=p.id,u=p.rest}o&&(k.forEach(O),E.forEach(function(i){$.push(i)})),o||c.push(l.kd(s,t,\"use A -->|label| B\"))}}}return I||c.unshift(l.m('the first line must be \"flowchart LR\" (or \"graph LR\")','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"flowchart LR\" (ho\\u1EB7c \"graph LR\")')),{nut:h,ds:y.map(function(i){return h[i]}),canh:$,loi:c}}}))(C);return C;})(); var A = {\"DFD\":(typeof DFD!=='undefined'?DFD:undefined)}; return (((function(n,d,l){var g=function(u,s,m){var a=m[s.bien];if(typeof a!=\"string\"||!a.trim())return{loi:u.m(s.bien+\" is empty \\u2014 write the DFD as a Mermaid flowchart string\",s.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt DFD th\\xE0nh chu\\u1ED7i Mermaid flowchart\")};var o=u.pf(a),v=o.ds.filter(function(t){return t.hinh===\"tron\"}),D=o.ds.filter(function(t){return t.hinh===\"kho\"}),b=o.ds.filter(function(t){return t.hinh===\"hcn\"});return{p:o,proc:v,kho:D,ngoai:b}},r=g(n,d,l);if(r.loi)return r.loi;var i=r.p;if(i.loi.length)return i.loi[0];if(!r.proc.length)return n.m(\"no process \\u2014 processes are circles P1((1.0 Verb object))\",\"ch\\u01B0a c\\xF3 process \\u2014 process l\\xE0 h\\xECnh tr\\xF2n P1((1.0 \\u0110\\u1ED9ng t\\u1EEB + danh t\\u1EEB))\");var c=i.ds.filter(function(f){return[\"tron\",\"kho\",\"hcn\"].indexOf(f.hinh)<0});if(c.length)return n.m(\"node \"+c[0].id+\" has no DFD shape \\u2014 process ((\\u2026)), store [(\\u2026)], entity [\\u2026]\",\"n\\xFAt \"+c[0].id+\" ch\\u01B0a \\u0111\\xFAng h\\xECnh DFD \\u2014 process ((\\u2026)), kho [(\\u2026)], th\\u1EF1c th\\u1EC3 [\\u2026]\");for(var h=0;h<r.proc.length;h++){var e=r.proc[h].nhan,p=/^(\\d+(\\.\\d+)*)\\s+(.+)$/.exec(e);if(!p)return n.m('process \"'+e+'\" needs a number, e.g. \"1.0 Book appointment\"','process \"'+e+'\" c\\u1EA7n \\u0111\\xE1nh s\\u1ED1, vd \"1.0 Book appointment\"');if(!n.laDongTu(n.tu(p[3])[0]))return n.m('process \"'+e+'\" \\u2014 name it verb + object (\"Record payment\")','process \"'+e+'\" \\u2014 \\u0111\\u1EB7t t\\xEAn \\u0111\\u1ED9ng t\\u1EEB + t\\xE2n ng\\u1EEF (\"Record payment\")')}return\"OK\"})))(L, {\"bien\":\"DFD\",\"proc\":[{\"ten\":\"Take order\",\"khop\":[\"order|take|receive\"]},{\"ten\":\"Collect payment\",\"khop\":[\"pay|charge|collect\"]},{\"ten\":\"Prepare order\",\"khop\":[\"prepar|cook|kitchen|fulfil\"]}],\"kho\":[{\"ten\":\"Orders\",\"khop\":[\"order\"]},{\"ten\":\"Menu items\",\"khop\":[\"menu|dish|item\"]}],\"ngoai\":[],\"canBang\":[{\"thucThe\":\"Student\",\"huong\":\"vao\",\"nhan\":\"order\"},{\"thucThe\":\"Student\",\"huong\":\"ra\",\"nhan\":\"order confirmation\"},{\"thucThe\":\"Kitchen\",\"huong\":\"ra\",\"nhan\":\"kitchen ticket\"},{\"thucThe\":\"Kitchen\",\"huong\":\"vao\",\"nhan\":\"ready notice\"},{\"thucThe\":\"E-wallet\",\"huong\":\"ra\",\"nhan\":\"charge request\"},{\"thucThe\":\"E-wallet\",\"huong\":\"vao\",\"nhan\":\"payment result\"}],\"canBangVoi\":null}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "DFD — data only moves THROUGH a process: no entity–entity, entity–store or store–store flow; every flow labelled",
+              "vi": "DFD — dữ liệu chỉ đi QUA process: không luồng thực thể–thực thể, thực thể–kho, kho–kho; luồng nào cũng có nhãn"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pf=((function(l){var b=[[\"tron\",/^\\(\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\)/],[\"kho\",/^\\[\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\]/],[\"svd\",/^\\(\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\)/],[\"con\",/^\\[\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\]/],[\"hcn\",/^\\[\\s*\"?([^\"\\]]*?)\"?\\s*\\]/],[\"bo\",/^\\(\\s*\"?([^\"()]*?)\"?\\s*\\)/],[\"thoi\",/^\\{\\s*\"?([^\"}]*?)\"?\\s*\\}/],[\"khac\",/^>\\s*\"?([^\"\\]]*?)\"?\\s*\\]/]],B=/^\\s*(<)?(-{2,}>|-{3,}|-\\.+->|-\\.+-|={2,}>|={3,}|--x|--o)\\s*(?:\\|\\s*\"?([^|\"]*?)\"?\\s*\\|)?\\s*/,D=/^\\s*(<)?(--|==|-\\.)\\s*\"?([^\"<>|]+?)\"?\\s*(-{2,}>|-{3,}|\\.+->|\\.+-|={2,}>|={3,})\\s*/;return function(F){var h={},$=[],c=[],y=[];function R(i,n){var a=/^\\s*([A-Za-z_][\\w-]*)/.exec(i);if(!a)return null;for(var f=a[1],r=i.slice(a[0].length),S=null,z=null,m=0;m<b.length;m++){var N=b[m][1].exec(r);if(N){S=b[m][0],z=N[1].trim(),r=r.slice(N[0].length);break}}return k.push({id:f,nhan:z,hinh:S,so:n}),{id:f,rest:r}}function O(i){var n=i.id,a=i.hinh,f=i.nhan,r=i.so;h[n]?a&&(h[n].hinh===\"chua\"?(h[n].hinh=a,h[n].nhan=f):h[n].hinh!==a&&c.push(l.m(\"line \"+r+': node \"'+n+'\" is declared twice with different shapes',\"d\\xF2ng \"+r+': n\\xFAt \"'+n+'\" khai hai l\\u1EA7n v\\u1EDBi hai h\\xECnh kh\\xE1c nhau'))):(h[n]={id:n,nhan:f==null?n:f,hinh:a||\"chua\",dong:r},y.push(n))}for(var k=[],x=l.dong(F),I=!1,d=0;d<x.length;d++)for(var s=d+1,A=x[d].split(\";\"),w=0;w<A.length;w++){var t=A[w].replace(/%%.*$/,\"\").trim();if(t){if(/^(flowchart|graph)\\b/i.test(t)){I=!0;continue}if(!/^(classDef|class|style|linkStyle|click|direction)\\b/.test(t)){if(/^subgraph\\b/.test(t)||/^end$/.test(t)){c.push(l.m(\"line \"+s+\": subgraph is not used in these models \\u2014 draw every node at the top level\",\"d\\xF2ng \"+s+\": kh\\xF4ng d\\xF9ng subgraph trong c\\xE1c m\\xF4 h\\xECnh n\\xE0y \\u2014 v\\u1EBD m\\u1ECDi n\\xFAt \\u1EDF m\\u1EE9c ngo\\xE0i c\\xF9ng\"));continue}k=[];var E=[],L=R(t,s);if(!L){c.push(l.kd(s,t));continue}for(var u=L.rest,H=L.id,o=!0;u.trim();){var e=B.exec(u),v=null,g=null,_=!1;if(e?(_=!!e[1],g=e[2],v=e[3]==null?null:e[3]):(e=D.exec(u),e&&(_=!!e[1],g=e[4],v=e[3])),!e){o=!1;break}u=u.slice(e[0].length);var p=R(u,s);if(!p){o=!1;break}var K=/>$/.test(g)||/x$|o$/.test(g);E.push({tu:H,den:p.id,nhan:v==null?\"\":String(v).trim(),huong:_&&K?\"hai\":K?\"mot\":\"khong\",dong:s}),H=p.id,u=p.rest}o&&(k.forEach(O),E.forEach(function(i){$.push(i)})),o||c.push(l.kd(s,t,\"use A -->|label| B\"))}}}return I||c.unshift(l.m('the first line must be \"flowchart LR\" (or \"graph LR\")','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"flowchart LR\" (ho\\u1EB7c \"graph LR\")')),{nut:h,ds:y.map(function(i){return h[i]}),canh:$,loi:c}}}))(C);return C;})(); var A = {\"DFD\":(typeof DFD!=='undefined'?DFD:undefined)}; return (((function(t,s,c){var p=function(l,f,v){var d=v[f.bien];if(typeof d!=\"string\"||!d.trim())return{loi:l.m(f.bien+\" is empty \\u2014 write the DFD as a Mermaid flowchart string\",f.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt DFD th\\xE0nh chu\\u1ED7i Mermaid flowchart\")};var o=l.pf(d),m=o.ds.filter(function(r){return r.hinh===\"tron\"}),D=o.ds.filter(function(r){return r.hinh===\"kho\"}),k=o.ds.filter(function(r){return r.hinh===\"hcn\"});return{p:o,proc:m,kho:D,ngoai:k}},i=p(t,s,c);if(i.loi)return i.loi;for(var h=i.p,g=h.nut,e=0;e<h.canh.length;e++){var n=h.canh[e],a=g[n.tu],u=g[n.den];if(!n.nhan)return t.m(\"line \"+n.dong+\": unlabelled flow\",\"d\\xF2ng \"+n.dong+\": lu\\u1ED3ng kh\\xF4ng nh\\xE3n\");if(a.hinh!==\"tron\"&&u.hinh!==\"tron\")return t.m(\"line \"+n.dong+\": \"+a.nhan+\" \\u2192 \"+u.nhan+\" does not pass through a process\",\"d\\xF2ng \"+n.dong+\": \"+a.nhan+\" \\u2192 \"+u.nhan+\" kh\\xF4ng \\u0111i qua process n\\xE0o\")}return\"OK\"})))(L, {\"bien\":\"DFD\",\"proc\":[{\"ten\":\"Take order\",\"khop\":[\"order|take|receive\"]},{\"ten\":\"Collect payment\",\"khop\":[\"pay|charge|collect\"]},{\"ten\":\"Prepare order\",\"khop\":[\"prepar|cook|kitchen|fulfil\"]}],\"kho\":[{\"ten\":\"Orders\",\"khop\":[\"order\"]},{\"ten\":\"Menu items\",\"khop\":[\"menu|dish|item\"]}],\"ngoai\":[],\"canBang\":[{\"thucThe\":\"Student\",\"huong\":\"vao\",\"nhan\":\"order\"},{\"thucThe\":\"Student\",\"huong\":\"ra\",\"nhan\":\"order confirmation\"},{\"thucThe\":\"Kitchen\",\"huong\":\"ra\",\"nhan\":\"kitchen ticket\"},{\"thucThe\":\"Kitchen\",\"huong\":\"vao\",\"nhan\":\"ready notice\"},{\"thucThe\":\"E-wallet\",\"huong\":\"ra\",\"nhan\":\"charge request\"},{\"thucThe\":\"E-wallet\",\"huong\":\"vao\",\"nhan\":\"payment result\"}],\"canBangVoi\":null}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "DFD — no black hole or miracle; every store is both written and read",
+              "vi": "DFD — không \"hố đen\" hay \"phép màu\"; kho nào cũng được ghi và được đọc"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pf=((function(l){var b=[[\"tron\",/^\\(\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\)/],[\"kho\",/^\\[\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\]/],[\"svd\",/^\\(\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\)/],[\"con\",/^\\[\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\]/],[\"hcn\",/^\\[\\s*\"?([^\"\\]]*?)\"?\\s*\\]/],[\"bo\",/^\\(\\s*\"?([^\"()]*?)\"?\\s*\\)/],[\"thoi\",/^\\{\\s*\"?([^\"}]*?)\"?\\s*\\}/],[\"khac\",/^>\\s*\"?([^\"\\]]*?)\"?\\s*\\]/]],B=/^\\s*(<)?(-{2,}>|-{3,}|-\\.+->|-\\.+-|={2,}>|={3,}|--x|--o)\\s*(?:\\|\\s*\"?([^|\"]*?)\"?\\s*\\|)?\\s*/,D=/^\\s*(<)?(--|==|-\\.)\\s*\"?([^\"<>|]+?)\"?\\s*(-{2,}>|-{3,}|\\.+->|\\.+-|={2,}>|={3,})\\s*/;return function(F){var h={},$=[],c=[],y=[];function R(i,n){var a=/^\\s*([A-Za-z_][\\w-]*)/.exec(i);if(!a)return null;for(var f=a[1],r=i.slice(a[0].length),S=null,z=null,m=0;m<b.length;m++){var N=b[m][1].exec(r);if(N){S=b[m][0],z=N[1].trim(),r=r.slice(N[0].length);break}}return k.push({id:f,nhan:z,hinh:S,so:n}),{id:f,rest:r}}function O(i){var n=i.id,a=i.hinh,f=i.nhan,r=i.so;h[n]?a&&(h[n].hinh===\"chua\"?(h[n].hinh=a,h[n].nhan=f):h[n].hinh!==a&&c.push(l.m(\"line \"+r+': node \"'+n+'\" is declared twice with different shapes',\"d\\xF2ng \"+r+': n\\xFAt \"'+n+'\" khai hai l\\u1EA7n v\\u1EDBi hai h\\xECnh kh\\xE1c nhau'))):(h[n]={id:n,nhan:f==null?n:f,hinh:a||\"chua\",dong:r},y.push(n))}for(var k=[],x=l.dong(F),I=!1,d=0;d<x.length;d++)for(var s=d+1,A=x[d].split(\";\"),w=0;w<A.length;w++){var t=A[w].replace(/%%.*$/,\"\").trim();if(t){if(/^(flowchart|graph)\\b/i.test(t)){I=!0;continue}if(!/^(classDef|class|style|linkStyle|click|direction)\\b/.test(t)){if(/^subgraph\\b/.test(t)||/^end$/.test(t)){c.push(l.m(\"line \"+s+\": subgraph is not used in these models \\u2014 draw every node at the top level\",\"d\\xF2ng \"+s+\": kh\\xF4ng d\\xF9ng subgraph trong c\\xE1c m\\xF4 h\\xECnh n\\xE0y \\u2014 v\\u1EBD m\\u1ECDi n\\xFAt \\u1EDF m\\u1EE9c ngo\\xE0i c\\xF9ng\"));continue}k=[];var E=[],L=R(t,s);if(!L){c.push(l.kd(s,t));continue}for(var u=L.rest,H=L.id,o=!0;u.trim();){var e=B.exec(u),v=null,g=null,_=!1;if(e?(_=!!e[1],g=e[2],v=e[3]==null?null:e[3]):(e=D.exec(u),e&&(_=!!e[1],g=e[4],v=e[3])),!e){o=!1;break}u=u.slice(e[0].length);var p=R(u,s);if(!p){o=!1;break}var K=/>$/.test(g)||/x$|o$/.test(g);E.push({tu:H,den:p.id,nhan:v==null?\"\":String(v).trim(),huong:_&&K?\"hai\":K?\"mot\":\"khong\",dong:s}),H=p.id,u=p.rest}o&&(k.forEach(O),E.forEach(function(i){$.push(i)})),o||c.push(l.kd(s,t,\"use A -->|label| B\"))}}}return I||c.unshift(l.m('the first line must be \"flowchart LR\" (or \"graph LR\")','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"flowchart LR\" (ho\\u1EB7c \"graph LR\")')),{nut:h,ds:y.map(function(i){return h[i]}),canh:$,loi:c}}}))(C);return C;})(); var A = {\"DFD\":(typeof DFD!=='undefined'?DFD:undefined)}; return (((function(i,l,p){var v=function(g,d,k){var m=k[d.bien];if(typeof m!=\"string\"||!m.trim())return{loi:g.m(d.bien+\" is empty \\u2014 write the DFD as a Mermaid flowchart string\",d.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt DFD th\\xE0nh chu\\u1ED7i Mermaid flowchart\")};var a=g.pf(m),w=a.ds.filter(function(h){return h.hinh===\"tron\"}),b=a.ds.filter(function(h){return h.hinh===\"kho\"}),D=a.ds.filter(function(h){return h.hinh===\"hcn\"});return{p:a,proc:w,kho:b,ngoai:D}},t=v(i,l,p);if(t.loi)return t.loi;for(var o=t.p,c=0;c<t.proc.length;c++){var n=t.proc[c],u=o.canh.some(function(r){return r.den===n.id}),f=o.canh.some(function(r){return r.tu===n.id});if(u&&!f)return i.m('black hole: \"'+n.nhan+'\" takes data in and produces nothing','h\\u1ED1 \\u0111en: \"'+n.nhan+'\" nh\\u1EADn d\\u1EEF li\\u1EC7u m\\xE0 kh\\xF4ng sinh ra g\\xEC');if(f&&!u)return i.m('miracle: \"'+n.nhan+'\" produces data from nothing','ph\\xE9p m\\xE0u: \"'+n.nhan+'\" sinh d\\u1EEF li\\u1EC7u t\\u1EEB h\\u01B0 kh\\xF4ng');if(!f&&!u)return i.m('\"'+n.nhan+'\" has no flow','\"'+n.nhan+'\" kh\\xF4ng c\\xF3 lu\\u1ED3ng n\\xE0o')}for(var s=0;s<t.kho.length;s++){var e=t.kho[s];if(!o.canh.some(function(r){return r.den===e.id}))return i.m('store \"'+e.nhan+'\" is read but never written \\u2014 which process creates its data?','kho \"'+e.nhan+'\" \\u0111\\u01B0\\u1EE3c \\u0111\\u1ECDc m\\xE0 ch\\u01B0a ai ghi \\u2014 process n\\xE0o t\\u1EA1o d\\u1EEF li\\u1EC7u cho n\\xF3?');if(!o.canh.some(function(r){return r.tu===e.id}))return i.m('store \"'+e.nhan+'\" is written but never read \\u2014 why keep it?','kho \"'+e.nhan+'\" \\u0111\\u01B0\\u1EE3c ghi m\\xE0 kh\\xF4ng ai \\u0111\\u1ECDc \\u2014 gi\\u1EEF \\u0111\\u1EC3 l\\xE0m g\\xEC?')}return\"OK\"})))(L, {\"bien\":\"DFD\",\"proc\":[{\"ten\":\"Take order\",\"khop\":[\"order|take|receive\"]},{\"ten\":\"Collect payment\",\"khop\":[\"pay|charge|collect\"]},{\"ten\":\"Prepare order\",\"khop\":[\"prepar|cook|kitchen|fulfil\"]}],\"kho\":[{\"ten\":\"Orders\",\"khop\":[\"order\"]},{\"ten\":\"Menu items\",\"khop\":[\"menu|dish|item\"]}],\"ngoai\":[],\"canBang\":[{\"thucThe\":\"Student\",\"huong\":\"vao\",\"nhan\":\"order\"},{\"thucThe\":\"Student\",\"huong\":\"ra\",\"nhan\":\"order confirmation\"},{\"thucThe\":\"Kitchen\",\"huong\":\"ra\",\"nhan\":\"kitchen ticket\"},{\"thucThe\":\"Kitchen\",\"huong\":\"vao\",\"nhan\":\"ready notice\"},{\"thucThe\":\"E-wallet\",\"huong\":\"ra\",\"nhan\":\"charge request\"},{\"thucThe\":\"E-wallet\",\"huong\":\"vao\",\"nhan\":\"payment result\"}],\"canBangVoi\":null}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "DFD — the processes and stores the case needs are present",
+              "vi": "DFD — có đủ process và kho đề cần"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pf=((function(l){var b=[[\"tron\",/^\\(\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\)/],[\"kho\",/^\\[\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\]/],[\"svd\",/^\\(\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\)/],[\"con\",/^\\[\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\]/],[\"hcn\",/^\\[\\s*\"?([^\"\\]]*?)\"?\\s*\\]/],[\"bo\",/^\\(\\s*\"?([^\"()]*?)\"?\\s*\\)/],[\"thoi\",/^\\{\\s*\"?([^\"}]*?)\"?\\s*\\}/],[\"khac\",/^>\\s*\"?([^\"\\]]*?)\"?\\s*\\]/]],B=/^\\s*(<)?(-{2,}>|-{3,}|-\\.+->|-\\.+-|={2,}>|={3,}|--x|--o)\\s*(?:\\|\\s*\"?([^|\"]*?)\"?\\s*\\|)?\\s*/,D=/^\\s*(<)?(--|==|-\\.)\\s*\"?([^\"<>|]+?)\"?\\s*(-{2,}>|-{3,}|\\.+->|\\.+-|={2,}>|={3,})\\s*/;return function(F){var h={},$=[],c=[],y=[];function R(i,n){var a=/^\\s*([A-Za-z_][\\w-]*)/.exec(i);if(!a)return null;for(var f=a[1],r=i.slice(a[0].length),S=null,z=null,m=0;m<b.length;m++){var N=b[m][1].exec(r);if(N){S=b[m][0],z=N[1].trim(),r=r.slice(N[0].length);break}}return k.push({id:f,nhan:z,hinh:S,so:n}),{id:f,rest:r}}function O(i){var n=i.id,a=i.hinh,f=i.nhan,r=i.so;h[n]?a&&(h[n].hinh===\"chua\"?(h[n].hinh=a,h[n].nhan=f):h[n].hinh!==a&&c.push(l.m(\"line \"+r+': node \"'+n+'\" is declared twice with different shapes',\"d\\xF2ng \"+r+': n\\xFAt \"'+n+'\" khai hai l\\u1EA7n v\\u1EDBi hai h\\xECnh kh\\xE1c nhau'))):(h[n]={id:n,nhan:f==null?n:f,hinh:a||\"chua\",dong:r},y.push(n))}for(var k=[],x=l.dong(F),I=!1,d=0;d<x.length;d++)for(var s=d+1,A=x[d].split(\";\"),w=0;w<A.length;w++){var t=A[w].replace(/%%.*$/,\"\").trim();if(t){if(/^(flowchart|graph)\\b/i.test(t)){I=!0;continue}if(!/^(classDef|class|style|linkStyle|click|direction)\\b/.test(t)){if(/^subgraph\\b/.test(t)||/^end$/.test(t)){c.push(l.m(\"line \"+s+\": subgraph is not used in these models \\u2014 draw every node at the top level\",\"d\\xF2ng \"+s+\": kh\\xF4ng d\\xF9ng subgraph trong c\\xE1c m\\xF4 h\\xECnh n\\xE0y \\u2014 v\\u1EBD m\\u1ECDi n\\xFAt \\u1EDF m\\u1EE9c ngo\\xE0i c\\xF9ng\"));continue}k=[];var E=[],L=R(t,s);if(!L){c.push(l.kd(s,t));continue}for(var u=L.rest,H=L.id,o=!0;u.trim();){var e=B.exec(u),v=null,g=null,_=!1;if(e?(_=!!e[1],g=e[2],v=e[3]==null?null:e[3]):(e=D.exec(u),e&&(_=!!e[1],g=e[4],v=e[3])),!e){o=!1;break}u=u.slice(e[0].length);var p=R(u,s);if(!p){o=!1;break}var K=/>$/.test(g)||/x$|o$/.test(g);E.push({tu:H,den:p.id,nhan:v==null?\"\":String(v).trim(),huong:_&&K?\"hai\":K?\"mot\":\"khong\",dong:s}),H=p.id,u=p.rest}o&&(k.forEach(O),E.forEach(function(i){$.push(i)})),o||c.push(l.kd(s,t,\"use A -->|label| B\"))}}}return I||c.unshift(l.m('the first line must be \"flowchart LR\" (or \"graph LR\")','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"flowchart LR\" (ho\\u1EB7c \"graph LR\")')),{nut:h,ds:y.map(function(i){return h[i]}),canh:$,loi:c}}}))(C);return C;})(); var A = {\"DFD\":(typeof DFD!=='undefined'?DFD:undefined)}; return (((function(r,u,s){var p=function(t,c,d){var a=d[c.bien];if(typeof a!=\"string\"||!a.trim())return{loi:t.m(c.bien+\" is empty \\u2014 write the DFD as a Mermaid flowchart string\",c.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt DFD th\\xE0nh chu\\u1ED7i Mermaid flowchart\")};var e=t.pf(a),m=e.ds.filter(function(o){return o.hinh===\"tron\"}),l=e.ds.filter(function(o){return o.hinh===\"kho\"}),g=e.ds.filter(function(o){return o.hinh===\"hcn\"});return{p:e,proc:m,kho:l,ngoai:g}},i=p(r,u,s);if(i.loi)return i.loi;var v=i.p,h=u.proc.filter(function(n){return!i.proc.some(function(t){return r.khop(t.nhan,n.khop)})});if(h.length)return r.m(\"missing process for: \"+r.ds(h.map(function(n){return n.ten})),\"thi\\u1EBFu process cho: \"+r.ds(h.map(function(n){return n.ten})));var f=u.kho.filter(function(n){return!i.kho.some(function(t){return r.khop(t.nhan,n.khop)})});return f.length?r.m(\"missing data store: \"+r.ds(f.map(function(n){return n.ten})),\"thi\\u1EBFu kho d\\u1EEF li\\u1EC7u: \"+r.ds(f.map(function(n){return n.ten}))):\"OK\"})))(L, {\"bien\":\"DFD\",\"proc\":[{\"ten\":\"Take order\",\"khop\":[\"order|take|receive\"]},{\"ten\":\"Collect payment\",\"khop\":[\"pay|charge|collect\"]},{\"ten\":\"Prepare order\",\"khop\":[\"prepar|cook|kitchen|fulfil\"]}],\"kho\":[{\"ten\":\"Orders\",\"khop\":[\"order\"]},{\"ten\":\"Menu items\",\"khop\":[\"menu|dish|item\"]}],\"ngoai\":[],\"canBang\":[{\"thucThe\":\"Student\",\"huong\":\"vao\",\"nhan\":\"order\"},{\"thucThe\":\"Student\",\"huong\":\"ra\",\"nhan\":\"order confirmation\"},{\"thucThe\":\"Kitchen\",\"huong\":\"ra\",\"nhan\":\"kitchen ticket\"},{\"thucThe\":\"Kitchen\",\"huong\":\"vao\",\"nhan\":\"ready notice\"},{\"thucThe\":\"E-wallet\",\"huong\":\"ra\",\"nhan\":\"charge request\"},{\"thucThe\":\"E-wallet\",\"huong\":\"vao\",\"nhan\":\"payment result\"}],\"canBangVoi\":null}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "DFD — balanced with the context diagram: the same external flows, same names, same directions, nothing added",
+              "vi": "DFD — cân bằng với sơ đồ ngữ cảnh: đúng các luồng ngoài, cùng tên, cùng chiều, không thêm"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pf=((function(l){var b=[[\"tron\",/^\\(\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\)/],[\"kho\",/^\\[\\(\\s*\"?([^\"]*?)\"?\\s*\\)\\]/],[\"svd\",/^\\(\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\)/],[\"con\",/^\\[\\[\\s*\"?([^\"]*?)\"?\\s*\\]\\]/],[\"hcn\",/^\\[\\s*\"?([^\"\\]]*?)\"?\\s*\\]/],[\"bo\",/^\\(\\s*\"?([^\"()]*?)\"?\\s*\\)/],[\"thoi\",/^\\{\\s*\"?([^\"}]*?)\"?\\s*\\}/],[\"khac\",/^>\\s*\"?([^\"\\]]*?)\"?\\s*\\]/]],B=/^\\s*(<)?(-{2,}>|-{3,}|-\\.+->|-\\.+-|={2,}>|={3,}|--x|--o)\\s*(?:\\|\\s*\"?([^|\"]*?)\"?\\s*\\|)?\\s*/,D=/^\\s*(<)?(--|==|-\\.)\\s*\"?([^\"<>|]+?)\"?\\s*(-{2,}>|-{3,}|\\.+->|\\.+-|={2,}>|={3,})\\s*/;return function(F){var h={},$=[],c=[],y=[];function R(i,n){var a=/^\\s*([A-Za-z_][\\w-]*)/.exec(i);if(!a)return null;for(var f=a[1],r=i.slice(a[0].length),S=null,z=null,m=0;m<b.length;m++){var N=b[m][1].exec(r);if(N){S=b[m][0],z=N[1].trim(),r=r.slice(N[0].length);break}}return k.push({id:f,nhan:z,hinh:S,so:n}),{id:f,rest:r}}function O(i){var n=i.id,a=i.hinh,f=i.nhan,r=i.so;h[n]?a&&(h[n].hinh===\"chua\"?(h[n].hinh=a,h[n].nhan=f):h[n].hinh!==a&&c.push(l.m(\"line \"+r+': node \"'+n+'\" is declared twice with different shapes',\"d\\xF2ng \"+r+': n\\xFAt \"'+n+'\" khai hai l\\u1EA7n v\\u1EDBi hai h\\xECnh kh\\xE1c nhau'))):(h[n]={id:n,nhan:f==null?n:f,hinh:a||\"chua\",dong:r},y.push(n))}for(var k=[],x=l.dong(F),I=!1,d=0;d<x.length;d++)for(var s=d+1,A=x[d].split(\";\"),w=0;w<A.length;w++){var t=A[w].replace(/%%.*$/,\"\").trim();if(t){if(/^(flowchart|graph)\\b/i.test(t)){I=!0;continue}if(!/^(classDef|class|style|linkStyle|click|direction)\\b/.test(t)){if(/^subgraph\\b/.test(t)||/^end$/.test(t)){c.push(l.m(\"line \"+s+\": subgraph is not used in these models \\u2014 draw every node at the top level\",\"d\\xF2ng \"+s+\": kh\\xF4ng d\\xF9ng subgraph trong c\\xE1c m\\xF4 h\\xECnh n\\xE0y \\u2014 v\\u1EBD m\\u1ECDi n\\xFAt \\u1EDF m\\u1EE9c ngo\\xE0i c\\xF9ng\"));continue}k=[];var E=[],L=R(t,s);if(!L){c.push(l.kd(s,t));continue}for(var u=L.rest,H=L.id,o=!0;u.trim();){var e=B.exec(u),v=null,g=null,_=!1;if(e?(_=!!e[1],g=e[2],v=e[3]==null?null:e[3]):(e=D.exec(u),e&&(_=!!e[1],g=e[4],v=e[3])),!e){o=!1;break}u=u.slice(e[0].length);var p=R(u,s);if(!p){o=!1;break}var K=/>$/.test(g)||/x$|o$/.test(g);E.push({tu:H,den:p.id,nhan:v==null?\"\":String(v).trim(),huong:_&&K?\"hai\":K?\"mot\":\"khong\",dong:s}),H=p.id,u=p.rest}o&&(k.forEach(O),E.forEach(function(i){$.push(i)})),o||c.push(l.kd(s,t,\"use A -->|label| B\"))}}}return I||c.unshift(l.m('the first line must be \"flowchart LR\" (or \"graph LR\")','d\\xF2ng \\u0111\\u1EA7u ph\\u1EA3i l\\xE0 \"flowchart LR\" (ho\\u1EB7c \"graph LR\")')),{nut:h,ds:y.map(function(i){return h[i]}),canh:$,loi:c}}}))(C);return C;})(); var A = {\"DFD\":(typeof DFD!=='undefined'?DFD:undefined)}; return (((function(t,a,v){var f=function(r,m,p){var s=p[m.bien];if(typeof s!=\"string\"||!s.trim())return{loi:r.m(m.bien+\" is empty \\u2014 write the DFD as a Mermaid flowchart string\",m.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt DFD th\\xE0nh chu\\u1ED7i Mermaid flowchart\")};var u=r.pf(s),b=u.ds.filter(function(i){return i.hinh===\"tron\"}),w=u.ds.filter(function(i){return i.hinh===\"kho\"}),y=u.ds.filter(function(i){return i.hinh===\"hcn\"});return{p:u,proc:b,kho:w,ngoai:y}},c=f(t,a,v);if(c.loi)return c.loi;for(var l=c.p,o=l.nut,d=l.canh.filter(function(n){return o[n.tu].hinh===\"hcn\"||o[n.den].hinh===\"hcn\"}).map(function(n){var r=o[n.tu].hinh===\"hcn\"?o[n.tu]:o[n.den];return{e:t.norm(r.nhan),huong:o[n.tu].hinh===\"hcn\"?\"vao\":\"ra\",nhan:t.norm(n.nhan),dong:n.dong}}),g=0;g<a.canBang.length;g++){var h=a.canBang[g];if(!d.some(function(n){return n.e===t.norm(h.thucThe)&&n.huong===h.huong&&n.nhan===t.norm(h.nhan)}))return t.m('the context flow \"'+h.nhan+'\" ('+(h.huong===\"vao\"?h.thucThe+\" \\u2192 system\":\"system \\u2192 \"+h.thucThe)+\") is missing or renamed\",'lu\\u1ED3ng ng\\u1EEF c\\u1EA3nh \"'+h.nhan+'\" ('+(h.huong===\"vao\"?h.thucThe+\" \\u2192 h\\u1EC7 th\\u1ED1ng\":\"h\\u1EC7 th\\u1ED1ng \\u2192 \"+h.thucThe)+\") b\\u1ECB thi\\u1EBFu ho\\u1EB7c \\u0111\\u1ED5i t\\xEAn\")}var e=d.filter(function(n){return!a.canBang.some(function(r){return n.e===t.norm(r.thucThe)&&n.huong===r.huong&&n.nhan===t.norm(r.nhan)})});return e.length?t.m(\"line \"+e[0].dong+': flow \"'+e[0].nhan+'\" with an external entity is not in the context diagram \\u2014 levels must balance',\"d\\xF2ng \"+e[0].dong+': lu\\u1ED3ng \"'+e[0].nhan+'\" v\\u1EDBi th\\u1EF1c th\\u1EC3 ngo\\xE0i kh\\xF4ng c\\xF3 trong s\\u01A1 \\u0111\\u1ED3 ng\\u1EEF c\\u1EA3nh \\u2014 c\\xE1c m\\u1EE9c ph\\u1EA3i c\\xE2n b\\u1EB1ng'):\"OK\"})))(L, {\"bien\":\"DFD\",\"proc\":[{\"ten\":\"Take order\",\"khop\":[\"order|take|receive\"]},{\"ten\":\"Collect payment\",\"khop\":[\"pay|charge|collect\"]},{\"ten\":\"Prepare order\",\"khop\":[\"prepar|cook|kitchen|fulfil\"]}],\"kho\":[{\"ten\":\"Orders\",\"khop\":[\"order\"]},{\"ten\":\"Menu items\",\"khop\":[\"menu|dish|item\"]}],\"ngoai\":[],\"canBang\":[{\"thucThe\":\"Student\",\"huong\":\"vao\",\"nhan\":\"order\"},{\"thucThe\":\"Student\",\"huong\":\"ra\",\"nhan\":\"order confirmation\"},{\"thucThe\":\"Kitchen\",\"huong\":\"ra\",\"nhan\":\"kitchen ticket\"},{\"thucThe\":\"Kitchen\",\"huong\":\"vao\",\"nhan\":\"ready notice\"},{\"thucThe\":\"E-wallet\",\"huong\":\"ra\",\"nhan\":\"charge request\"},{\"thucThe\":\"E-wallet\",\"huong\":\"vao\",\"nhan\":\"payment result\"}],\"canBangVoi\":null}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi \"order\" thành \"order details\" trong DFD — mất cân bằng."
+        },
+        {
+          "loi": "Kho Menu items chỉ được đọc mà không ai ghi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        },
+        {
+          "en": "balancing (levelling)",
+          "vi": "cân bằng giữa các mức DFD — luồng vào/ra của process cha phải khớp sơ đồ con"
+        },
+        {
+          "en": "data store",
+          "vi": "kho dữ liệu — nơi dữ liệu nằm lại (tên danh từ số nhiều)"
+        },
+        {
+          "en": "black hole / miracle",
+          "vi": "process chỉ có vào không có ra / chỉ có ra không có vào — lỗi DFD"
+        }
+      ]
+    }
+  ]
+}

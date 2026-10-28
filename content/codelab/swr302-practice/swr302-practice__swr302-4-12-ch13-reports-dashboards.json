@@ -1,0 +1,625 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-12-ch13-reports-dashboards",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-12-ch13-reports-dashboards"
+  },
+  "exercises": [
+    {
+      "title": "Reports 1 — the parts of a report specification",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "report specification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ report specification template covers, among others: report ID and title, purpose, priority, users, trigger, delivery and format, latency, layout, header/footer, report body (fields, sorting, totals), end-of-report indicator, interactivity, and security access. Put each sentence of the \"Monthly overdue loans\" report spec in its field.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Template đặc tả báo cáo của Wiegers gồm (một phần): mã và tên, mục đích, độ ưu tiên, người dùng, trigger, cách gửi và định dạng, độ trễ dữ liệu, bố cục, đầu/chân trang, thân báo cáo (trường, sắp xếp, tổng), chỉ báo hết báo cáo, tương tác, quyền truy cập. Đặt mỗi câu của đặc tả báo cáo \"Monthly overdue loans\" vào đúng trường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Vì sao cần ⇒ purpose; khi nào sinh ⇒ trigger; dữ liệu cũ tới mức nào ⇒ latency.",
+        "Trường, sắp xếp, tổng ⇒ report body."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 1 — the parts of a report specification\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 1 — the parts of a report specification — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Purpose\n   - r1.k: Users\n   - r2.k: Trigger\n   - r3.k: Delivery and format\n   - r4.k: Latency\n   - r5.k: Report body\n   - r6.k: Security access\n   - r7.k: Interactivity\n   A report spec answers who needs it and why, when and how it is produced, what it contains and how it is ordered and totalled, how fresh the data is, and who may see it.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A report spec answers who needs it and why, when and how it is produced, what it contains and how it is ordered and totalled, how fresh the data is, and who may see it.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Field",
+                "luaChon": [
+                  "Purpose",
+                  "Users",
+                  "Trigger",
+                  "Delivery and format",
+                  "Latency",
+                  "Report body",
+                  "Security access",
+                  "Interactivity"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Help the library director decide whether to change the fine policy."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Library director and head librarian."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Generated automatically at 06:00 on the first day of every month."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "E-mailed as a PDF and available as an .xlsx download."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Data no older than the end of the previous day."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "One row per overdue loan: reader, title, days overdue, fine; sorted by days overdue, descending; total fine at the end."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Only staff with the Manager role can open it, because it shows readers’ names."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "Clicking a reader opens the reader’s loan history."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Purpose",
+              "r1.k": "Users",
+              "r2.k": "Trigger",
+              "r3.k": "Delivery and format",
+              "r4.k": "Latency",
+              "r5.k": "Report body",
+              "r6.k": "Security access",
+              "r7.k": "Interactivity"
+            },
+            "giaiThich": "<p><p>A report spec answers who needs it and why, when and how it is produced, what it contains and how it is ordered and totalled, how fresh the data is, and who may see it.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm trigger với latency."
+        },
+        {
+          "loi": "Bỏ quyền truy cập dù báo cáo có dữ liệu cá nhân."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "report specification",
+          "vi": "đặc tả báo cáo"
+        },
+        {
+          "en": "latency",
+          "vi": "độ trễ — dữ liệu trong báo cáo cũ tới mức nào"
+        }
+      ]
+    },
+    {
+      "title": "Reports 2 — questions to elicit a report",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "report elicitation",
+        "dashboards"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers suggests eliciting reports by asking about their use (who, why, what decisions) and then their content: data sources and selection criteria, user-selectable parameters, calculations, sorting, page breaks and totals, behaviour with no data, ad hoc reporting, and whether it can be a template for similar reports.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers gợi ý khai thác báo cáo bằng cách hỏi về việc dùng (ai, vì sao, quyết định gì) rồi về nội dung: nguồn dữ liệu và tiêu chí chọn, tham số người dùng chọn, phép tính, sắp xếp, ngắt trang và tổng, hành vi khi không có dữ liệu, báo cáo tuỳ biến, và có làm mẫu cho báo cáo tương tự được không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ quyết định mà báo cáo phục vụ.",
+        "Luôn hỏi \"khi không có dữ liệu thì sao?\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 2 — questions to elicit a report\n\nAnswer in the answer panel (no code needed).\n\n1. Which question should be asked FIRST?Câu hỏi nào nên hỏi TRƯỚC?\n2. A report shows nothing when no loan is overdue. The spec should…Báo cáo không hiện gì khi không có lượt quá hạn. Đặc tả nên…\n3. A dashboard differs from a report mainly because it…Dashboard khác báo cáo chủ yếu vì nó…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 2 — questions to elicit a report — answer key\n\n1. Which question should be asked FIRST?Câu hỏi nào nên hỏi TRƯỚC?\n   Answer: b) What decision will this report help you make?\n   Purpose first; layout later.VI: Mục đích trước; bố cục sau.\n\n2. A report shows nothing when no loan is overdue. The spec should…Báo cáo không hiện gì khi không có lượt quá hạn. Đặc tả nên…\n   Answer: b) state what the report shows when no data is returned (e.g. \"No overdue loans this month\")\n   The empty case is a requirement.VI: Trường hợp rỗng cũng là một yêu cầu.\n\n3. A dashboard differs from a report mainly because it…Dashboard khác báo cáo chủ yếu vì nó…\n   Answer: b) shows several key indicators at a glance, often updated frequently, with drill-down\n   Dashboards show multiple indicators at once.VI: Dashboard hiện nhiều chỉ số cùng lúc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which question should be asked FIRST?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu hỏi nào nên hỏi TRƯỚC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Which font should the report use?"
+              },
+              {
+                "ma": "b",
+                "noiDung": "What decision will this report help you make?"
+              },
+              {
+                "ma": "c",
+                "noiDung": "How many pages should it have?"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Which colour for the header?"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Purpose first; layout later.</p><p><i>VI: Mục đích trước; bố cục sau.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A report shows nothing when no loan is overdue. The spec should…</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo không hiện gì khi không có lượt quá hạn. Đặc tả nên…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ignore this case"
+              },
+              {
+                "ma": "b",
+                "noiDung": "state what the report shows when no data is returned (e.g. \"No overdue loans this month\")"
+              },
+              {
+                "ma": "c",
+                "noiDung": "show an error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not send the report"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The empty case is a requirement.</p><p><i>VI: Trường hợp rỗng cũng là một yêu cầu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A dashboard differs from a report mainly because it…</p><p style=\"opacity:.75;font-size:.92em\"><i>Dashboard khác báo cáo chủ yếu vì nó…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is printed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "shows several key indicators at a glance, often updated frequently, with drill-down"
+              },
+              {
+                "ma": "c",
+                "noiDung": "has no data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is only for developers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Dashboards show multiple indicators at once.</p><p><i>VI: Dashboard hiện nhiều chỉ số cùng lúc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bắt đầu bằng bố cục, màu sắc."
+        },
+        {
+          "loi": "Quên trường hợp không có dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dashboard",
+          "vi": "bảng điều khiển — nhiều chỉ số chính trên một màn hình"
+        },
+        {
+          "en": "drill-down",
+          "vi": "bấm vào để xem chi tiết hơn"
+        }
+      ]
+    },
+    {
+      "title": "Reports 3 — write the report body from a request",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "report body"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>The canteen manager asks: <i>\"Every Monday I want last week’s sales per dish, best sellers first, with the quantity, the revenue and the share of total revenue, a total line at the end, and one page per canteen.\"</i> Classify each element of the request.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quản lý căng-tin yêu cầu (bản tiếng Anh): mỗi thứ Hai muốn doanh số tuần trước theo món, món bán chạy trước, có số lượng, doanh thu và tỉ trọng, dòng tổng ở cuối, mỗi căng-tin một trang. Phân loại từng phần của yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Mỗi thứ Hai\" ⇒ trigger; \"tuần trước\" ⇒ tiêu chí chọn dữ liệu.",
+        "Tỉ trọng phải tính ra ⇒ calculated field."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 3 — write the report body from a request\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 3 — write the report body from a request — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Trigger\n   - r1.k: Selection criterion\n   - r2.k: Field\n   - r3.k: Calculated field\n   - r4.k: Sort order\n   - r5.k: Total\n   - r6.k: Page break\n   Turning a sentence into trigger, selection, fields, calculations, sorting, totals and page breaks is exactly what the report body of the template asks for.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Turning a sentence into trigger, selection, fields, calculations, sorting, totals and page breaks is exactly what the report body of the template asks for.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Element",
+                "luaChon": [
+                  "Trigger",
+                  "Selection criterion",
+                  "Field",
+                  "Calculated field",
+                  "Sort order",
+                  "Total",
+                  "Page break"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Every Monday"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "last week’s sales"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "the quantity sold of each dish"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "the share of total revenue"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "best sellers first"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "a total line at the end"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "one page per canteen"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Trigger",
+              "r1.k": "Selection criterion",
+              "r2.k": "Field",
+              "r3.k": "Calculated field",
+              "r4.k": "Sort order",
+              "r5.k": "Total",
+              "r6.k": "Page break"
+            },
+            "giaiThich": "<p><p>Turning a sentence into trigger, selection, fields, calculations, sorting, totals and page breaks is exactly what the report body of the template asks for.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"tuần trước\" là trigger."
+        },
+        {
+          "loi": "Coi tỉ trọng là trường lưu sẵn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "selection criterion",
+          "vi": "tiêu chí chọn dữ liệu"
+        },
+        {
+          "en": "calculated field",
+          "vi": "trường tính toán"
+        }
+      ]
+    },
+    {
+      "title": "Reports 4 — dashboards",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "dashboards"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers: a dashboard is a screen or report that shows several key indicators at once — often charts, gauges and tables — so a user can see the state of the business at a glance and drill down for detail. Specify each element: its data, its refresh rate, its thresholds and colours, and what clicking it does.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers: dashboard là màn hình/báo cáo hiện nhiều chỉ số chính cùng lúc — biểu đồ, đồng hồ đo, bảng — để người dùng nhìn là thấy tình hình và bấm vào xem chi tiết. Đặc tả từng phần tử: dữ liệu, tần suất làm mới, ngưỡng và màu, bấm vào thì làm gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ngưỡng và màu, tần suất làm mới, bấm vào làm gì — mỗi phần tử đều cần.",
+        "Drill-down = xem chi tiết đằng sau một chỉ số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 4 — dashboards\n\nAnswer in the answer panel (no code needed).\n\n1. A gauge \"today’s orders\" turns red below 300 orders. This is its…Đồng hồ \"đơn hôm nay\" chuyển đỏ khi dưới 300 đơn. Đây là… của nó\n2. \"The sales tile is updated every 5 minutes.\" This is its…\"Ô doanh số cập nhật mỗi 5 phút.\" Đây là… của nó\n3. Clicking the \"late deliveries\" chart shows the list of late orders. This is…Bấm vào biểu đồ \"giao trễ\" hiện danh sách đơn trễ. Đây là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reports 4 — dashboards — answer key\n\n1. A gauge \"today’s orders\" turns red below 300 orders. This is its…Đồng hồ \"đơn hôm nay\" chuyển đỏ khi dưới 300 đơn. Đây là… của nó\n   Answer: b) threshold\n   Thresholds and colours must be specified.VI: Ngưỡng và màu phải được đặc tả.\n\n2. \"The sales tile is updated every 5 minutes.\" This is its…\"Ô doanh số cập nhật mỗi 5 phút.\" Đây là… của nó\n   Answer: a) refresh rate (latency)\n   How fresh the data must be.VI: Dữ liệu phải mới tới mức nào.\n\n3. Clicking the \"late deliveries\" chart shows the list of late orders. This is…Bấm vào biểu đồ \"giao trễ\" hiện danh sách đơn trễ. Đây là…\n   Answer: a) drill-down\n   From the indicator to the details.VI: Từ chỉ số xuống chi tiết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A gauge \"today’s orders\" turns red below 300 orders. This is its…</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồng hồ \"đơn hôm nay\" chuyển đỏ khi dưới 300 đơn. Đây là… của nó</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "refresh rate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "threshold"
+              },
+              {
+                "ma": "c",
+                "noiDung": "drill-down"
+              },
+              {
+                "ma": "d",
+                "noiDung": "security"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Thresholds and colours must be specified.</p><p><i>VI: Ngưỡng và màu phải được đặc tả.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"The sales tile is updated every 5 minutes.\" This is its…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Ô doanh số cập nhật mỗi 5 phút.\" Đây là… của nó</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "refresh rate (latency)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "threshold"
+              },
+              {
+                "ma": "c",
+                "noiDung": "layout"
+              },
+              {
+                "ma": "d",
+                "noiDung": "purpose"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>How fresh the data must be.</p><p><i>VI: Dữ liệu phải mới tới mức nào.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Clicking the \"late deliveries\" chart shows the list of late orders. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bấm vào biểu đồ \"giao trễ\" hiện danh sách đơn trễ. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "drill-down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a business rule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a trigger"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a constraint"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>From the indicator to the details.</p><p><i>VI: Từ chỉ số xuống chi tiết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặc tả dashboard chỉ bằng ảnh chụp mock-up."
+        },
+        {
+          "loi": "Quên tần suất làm mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dashboard",
+          "vi": "bảng điều khiển"
+        },
+        {
+          "en": "drill-down",
+          "vi": "xem chi tiết"
+        },
+        {
+          "en": "threshold",
+          "vi": "ngưỡng"
+        }
+      ]
+    }
+  ]
+}

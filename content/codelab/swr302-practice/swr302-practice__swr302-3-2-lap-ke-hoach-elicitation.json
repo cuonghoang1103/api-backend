@@ -19,8 +19,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Wiegers splits each elicitation activity into <b>prepare → perform → follow up</b>. Put the steps of one interview with the head of a dormitory in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Wiegers chia mỗi hoạt động khai thác thành <b>chuẩn bị → thực hiện → theo dõi</b>. Sắp thứ tự các bước của một buổi phỏng vấn trưởng ký túc xá.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Wiegers splits each elicitation activity into <b>prepare → perform → follow up</b>. Put the steps of one interview with the head of a dormitory in order.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers chia mỗi hoạt động khai thác thành <b>chuẩn bị → thực hiện → theo dõi</b>. Sắp thứ tự các bước của một buổi phỏng vấn trưởng ký túc xá.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -131,8 +131,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Open questions invite a description; closed questions ask for a fact or a choice; leading questions suggest the answer the asker wants. Classify the questions a BA prepared for the dormitory interview.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Câu hỏi mở mời mô tả; câu hỏi đóng hỏi một dữ kiện hay một lựa chọn; câu hỏi dẫn dắt gợi sẵn câu trả lời người hỏi muốn. Phân loại câu hỏi BA chuẩn bị cho buổi phỏng vấn KTX.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Open questions invite a description; closed questions ask for a fact or a choice; leading questions suggest the answer the asker wants. Classify the questions a BA prepared for the dormitory interview.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi mở mời mô tả; câu hỏi đóng hỏi một dữ kiện hay một lựa chọn; câu hỏi dẫn dắt gợi sẵn câu trả lời người hỏi muốn. Phân loại câu hỏi BA chuẩn bị cho buổi phỏng vấn KTX.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -273,8 +273,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Common elicitation pitfalls and what a good BA does about them. Match each pitfall with its remedy.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Những cái bẫy thường gặp khi khai thác và cách BA giỏi xử lý. Ghép mỗi bẫy với cách khắc phục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Common elicitation pitfalls and what a good BA does about them. Match each pitfall with its remedy.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những cái bẫy thường gặp khi khai thác và cách BA giỏi xử lý. Ghép mỗi bẫy với cách khắc phục.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -411,8 +411,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>An elicitation plan states the objectives, the techniques and their order, the schedule and effort, the participants, the documents and systems to study, the expected products and the risks.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Kế hoạch khai thác nêu mục tiêu, kỹ thuật và thứ tự, lịch và công sức, người tham gia, tài liệu và hệ thống cần nghiên cứu, sản phẩm mong đợi và rủi ro.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>An elicitation plan states the objectives, the techniques and their order, the schedule and effort, the participants, the documents and systems to study, the expected products and the risks.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kế hoạch khai thác nêu mục tiêu, kỹ thuật và thứ tự, lịch và công sức, người tham gia, tài liệu và hệ thống cần nghiên cứu, sản phẩm mong đợi và rủi ro.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

@@ -1,0 +1,631 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-9r-1-ch9-taxonomy",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-9r-1-ch9-taxonomy"
+  },
+  "exercises": [
+    {
+      "title": "Business rules 1 — the five types",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "business rules taxonomy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ business-rules taxonomy: <b>facts</b> (statements that are true about the business), <b>constraints</b> (restrict the actions the system or users may perform), <b>action enablers</b> (if a condition is true, trigger an activity), <b>inferences</b> (if a condition is true, establish a new fact), <b>computations</b> (formulas and algorithms).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại business rule của Wiegers: <b>fact</b> (điều đúng về nghiệp vụ), <b>constraint</b> (hạn chế hành động hệ thống/người dùng được làm), <b>action enabler</b> (nếu điều kiện đúng thì kích hoạt một hoạt động), <b>inference</b> (nếu điều kiện đúng thì xác lập một sự thật mới), <b>computation</b> (công thức, thuật toán).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Action enabler kết thúc bằng một VIỆC; inference kết thúc bằng một SỰ THẬT mới.",
+        "Constraint thường có \"may not / must / only\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 1 — the five types\n\nAnswer in the answer panel (no code needed).\n\n1. \"Every course has exactly one course code.\" is a…\"Mỗi môn học có đúng một mã môn.\" là…\n2. \"A student may not register for more than 25 credits per semester.\" is a…\"Sinh viên không được đăng ký quá 25 tín chỉ mỗi kỳ.\" là…\n3. \"If a seat is freed, offer it to the first student on the waitlist.\" is an…\"Nếu có chỗ trống, mời sinh viên đầu danh sách chờ.\" là…\n4. \"If a student’s GPA is below 2.0, the student is on academic probation.\" is an…\"Nếu GPA dưới 2.0 thì sinh viên bị cảnh báo học vụ.\" là…\n5. \"Tuition = credits × price per credit − scholarship.\" is a…\"Học phí = số tín chỉ × đơn giá − học bổng.\" là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 1 — the five types — answer key\n\n1. \"Every course has exactly one course code.\" is a…\"Mỗi môn học có đúng một mã môn.\" là…\n   Answer: a) Fact\n   A statement that is simply true.VI: Một phát biểu đơn giản là đúng.\n\n2. \"A student may not register for more than 25 credits per semester.\" is a…\"Sinh viên không được đăng ký quá 25 tín chỉ mỗi kỳ.\" là…\n   Answer: b) Constraint\n   It restricts an action.VI: Nó hạn chế một hành động.\n\n3. \"If a seat is freed, offer it to the first student on the waitlist.\" is an…\"Nếu có chỗ trống, mời sinh viên đầu danh sách chờ.\" là…\n   Answer: c) Action enabler\n   If condition ⇒ do something.VI: Nếu điều kiện ⇒ làm gì đó.\n\n4. \"If a student’s GPA is below 2.0, the student is on academic probation.\" is an…\"Nếu GPA dưới 2.0 thì sinh viên bị cảnh báo học vụ.\" là…\n   Answer: d) Inference\n   If condition ⇒ a new fact (probation).VI: Nếu điều kiện ⇒ một sự thật mới (bị cảnh báo).\n\n5. \"Tuition = credits × price per credit − scholarship.\" is a…\"Học phí = số tín chỉ × đơn giá − học bổng.\" là…\n   Answer: e) Computation\n   A formula.VI: Một công thức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: a · b · c · d · e.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"Every course has exactly one course code.\" is a…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Mỗi môn học có đúng một mã môn.\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action enabler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inference"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Computation"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A statement that is simply true.</p><p><i>VI: Một phát biểu đơn giản là đúng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"A student may not register for more than 25 credits per semester.\" is a…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Sinh viên không được đăng ký quá 25 tín chỉ mỗi kỳ.\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action enabler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inference"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Computation"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It restricts an action.</p><p><i>VI: Nó hạn chế một hành động.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>\"If a seat is freed, offer it to the first student on the waitlist.\" is an…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Nếu có chỗ trống, mời sinh viên đầu danh sách chờ.\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action enabler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inference"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Computation"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>If condition ⇒ do something.</p><p><i>VI: Nếu điều kiện ⇒ làm gì đó.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>\"If a student’s GPA is below 2.0, the student is on academic probation.\" is an…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Nếu GPA dưới 2.0 thì sinh viên bị cảnh báo học vụ.\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action enabler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inference"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Computation"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>If condition ⇒ a new fact (probation).</p><p><i>VI: Nếu điều kiện ⇒ một sự thật mới (bị cảnh báo).</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>\"Tuition = credits × price per credit − scholarship.\" is a…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Học phí = số tín chỉ × đơn giá − học bổng.\" là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Fact"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action enabler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inference"
+              },
+              {
+                "ma": "e",
+                "noiDung": "Computation"
+              }
+            ],
+            "dapAn": [
+              "e"
+            ],
+            "giaiThich": "<p>A formula.</p><p><i>VI: Một công thức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm action enabler với inference."
+        },
+        {
+          "loi": "Coi computation là constraint."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Business rules 2 — classify the rules of an e-commerce shop",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "business rules taxonomy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Classify each business rule of an online shop with the five types of Wiegers.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng business rule của một shop trực tuyến theo năm loại của Wiegers.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"If … then send/add/notify\" ⇒ action enabler; \"… is a loyal customer\" ⇒ inference.",
+        "Công thức có dấu =, ×, + ⇒ computation."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 2 — classify the rules of an e-commerce shop\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 2 — classify the rules of an e-commerce shop — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Fact\n   - r1.k: Constraint\n   - r2.k: Action enabler\n   - r3.k: Inference\n   - r4.k: Computation\n   - r5.k: Constraint\n   - r6.k: Action enabler\n   - r7.k: Fact\n   Facts describe the business; constraints restrict; action enablers trigger work; inferences create new knowledge (loyal customer); computations calculate.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Facts describe the business; constraints restrict; action enablers trigger work; inferences create new knowledge (loyal customer); computations calculate.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Type",
+                "luaChon": [
+                  "Fact",
+                  "Constraint",
+                  "Action enabler",
+                  "Inference",
+                  "Computation"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Every order belongs to exactly one customer account."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Orders above 20,000,000 VND must be approved by a manager before shipping."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "If stock of a product falls below 10 units, send a reorder request to the supplier."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A customer with more than 5 orders in the last 12 months is a loyal customer."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Shipping fee = 15,000 VND + 5,000 VND per kg above 2 kg."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Alcohol may only be sold to customers aged 18 or older."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "If a loyal customer places an order, add a free gift wrap."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A product belongs to exactly one category."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Fact",
+              "r1.k": "Constraint",
+              "r2.k": "Action enabler",
+              "r3.k": "Inference",
+              "r4.k": "Computation",
+              "r5.k": "Constraint",
+              "r6.k": "Action enabler",
+              "r7.k": "Fact"
+            },
+            "giaiThich": "<p><p>Facts describe the business; constraints restrict; action enablers trigger work; inferences create new knowledge (loyal customer); computations calculate.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp \"loyal customer\" là action enabler."
+        },
+        {
+          "loi": "Xếp giới hạn tuổi là fact."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    },
+    {
+      "title": "Business rules 3 — rules and requirements",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "business rules and requirements"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Business rules are not software requirements: they exist outside any application. But they are the origin of many functional requirements, and each such requirement should trace back to its rule (Ch.9 slides 19–21). Keep rules in a separate catalogue with an ID, type, statement, source and whether they are static or dynamic.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Business rule không phải yêu cầu phần mềm: chúng tồn tại ngoài mọi ứng dụng. Nhưng chúng là nguồn của nhiều yêu cầu chức năng, và mỗi yêu cầu như vậy nên truy về rule của nó (Ch.9 slide 19–21). Giữ rule trong danh mục riêng có mã, loại, phát biểu, nguồn, tĩnh hay động.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Một rule — nhiều yêu cầu; rule đổi ⇒ truy ra yêu cầu bị ảnh hưởng.",
+        "Rule hay đổi ⇒ dynamic ⇒ cần cấu hình được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 3 — rules and requirements\n\nAnswer in the answer panel (no code needed).\n\n1. Why keep business rules in a separate catalogue instead of inside each requirement?Vì sao giữ business rule trong danh mục riêng thay vì trong từng yêu cầu?\n2. BR-7 \"Alcohol may only be sold to customers aged 18 or older\" leads to which functional requirement?BR-7 \"Rượu chỉ bán cho khách từ 18 tuổi\" dẫn tới yêu cầu chức năng nào?\n3. The VAT rate changes from time to time. In the catalogue this rule is…Thuế suất VAT thay đổi theo thời gian. Trong danh mục rule này là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Business rules 3 — rules and requirements — answer key\n\n1. Why keep business rules in a separate catalogue instead of inside each requirement?Vì sao giữ business rule trong danh mục riêng thay vì trong từng yêu cầu?\n   Answer: b) Because one rule can drive several requirements across projects, and when it changes you find every affected requirement through the trace\n   Reuse and change impact.VI: Tái sử dụng và phân tích ảnh hưởng khi thay đổi.\n\n2. BR-7 \"Alcohol may only be sold to customers aged 18 or older\" leads to which functional requirement?BR-7 \"Rượu chỉ bán cho khách từ 18 tuổi\" dẫn tới yêu cầu chức năng nào?\n   Answer: b) The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18.\n   A testable behaviour that enforces the rule.VI: Hành vi test được thực thi luật.\n\n3. The VAT rate changes from time to time. In the catalogue this rule is…Thuế suất VAT thay đổi theo thời gian. Trong danh mục rule này là…\n   Answer: b) dynamic — design the system so the value can be changed without new code\n   Dynamic rules lead to configurability requirements.VI: Rule động dẫn tới yêu cầu cấu hình được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Why keep business rules in a separate catalogue instead of inside each requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao giữ business rule trong danh mục riêng thay vì trong từng yêu cầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To make the SRS longer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because one rule can drive several requirements across projects, and when it changes you find every affected requirement through the trace"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because developers prefer it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "There is no reason"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reuse and change impact.</p><p><i>VI: Tái sử dụng và phân tích ảnh hưởng khi thay đổi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>BR-7 \"Alcohol may only be sold to customers aged 18 or older\" leads to which functional requirement?</p><p style=\"opacity:.75;font-size:.92em\"><i>BR-7 \"Rượu chỉ bán cho khách từ 18 tuổi\" dẫn tới yêu cầu chức năng nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The system shall use a beautiful age picker."
+              },
+              {
+                "ma": "b",
+                "noiDung": "The system shall ask for the date of birth before an alcohol product is added to the cart and refuse it for customers younger than 18."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The system shall sell alcohol."
+              },
+              {
+                "ma": "d",
+                "noiDung": "None"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A testable behaviour that enforces the rule.</p><p><i>VI: Hành vi test được thực thi luật.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The VAT rate changes from time to time. In the catalogue this rule is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuế suất VAT thay đổi theo thời gian. Trong danh mục rule này là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "static"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dynamic — design the system so the value can be changed without new code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a fact"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not a business rule"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Dynamic rules lead to configurability requirements.</p><p><i>VI: Rule động dẫn tới yêu cầu cấu hình được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép rule vào SRS mà không có mã để truy vết."
+        },
+        {
+          "loi": "Mã hoá cứng giá trị của rule động."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        },
+        {
+          "en": "requirements traceability matrix (RTM)",
+          "vi": "ma trận truy vết yêu cầu — nối nguồn ↔ yêu cầu ↔ thiết kế ↔ mã ↔ test"
+        }
+      ]
+    },
+    {
+      "title": "Business rules 4 — write a business rules catalogue",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "business rules catalogue"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>From the policy of a campus bike-sharing service, write a catalogue <code>RULES</code> with one entry per rule <code>{ id: \"BR-01\", type, statement, source }</code>, covering all five types: (1) every bike belongs to exactly one home station; (2) a rental may last at most 4 hours; (3) if a bike is not returned within 4 hours, notify security; (4) a member with 3 late returns in a semester is a high-risk member; (5) rental fee = 2,000 VND per started 30 minutes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Five entries with unique ids BR-01…, a type from the taxonomy (each type once), a statement and a source (who or which document).</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ chính sách của dịch vụ xe đạp chung trong trường, viết danh mục <code>RULES</code>, mỗi rule một mục <code>{ id, type, statement, source }</code>, phủ đủ năm loại: (1) mỗi xe thuộc đúng một trạm gốc; (2) một lượt thuê tối đa 4 giờ; (3) nếu quá 4 giờ chưa trả thì báo bảo vệ; (4) hội viên trả trễ 3 lần trong một kỳ là hội viên rủi ro cao; (5) phí thuê = 2.000 đ mỗi 30 phút bắt đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Năm mục có mã riêng BR-01…, loại theo phân loại (mỗi loại một lần), phát biểu và nguồn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(1) every bike belongs to exactly one home station",
+          "output": "{ id: 'BR-01', type: 'Fact', statement: 'Every bike belongs to exactly one home station.', source: 'Fleet policy' }",
+          "explanation": "A fact.|||Một fact."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi chính sách đúng một loại: fact, constraint, action enabler, inference, computation.",
+        "Nguồn = ai/tài liệu nào ra luật (để hỏi khi luật đổi)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "rules.js",
+          "language": "javascript",
+          "code": "const RULES = [\n  { id: 'BR-01', type: '', statement: '', source: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "rules.js",
+          "language": "javascript",
+          "code": "const RULES = [\n  { id: 'BR-01', type: 'Fact', statement: 'Every bike belongs to exactly one home station.', source: 'Fleet policy 2026' },\n  { id: 'BR-02', type: 'Constraint', statement: 'A rental may last at most 4 hours.', source: 'Rental terms' },\n  { id: 'BR-03', type: 'Action enabler', statement: 'If a bike is not returned within 4 hours of the start of the rental, notify campus security.', source: 'Security office' },\n  { id: 'BR-04', type: 'Inference', statement: 'A member with 3 late returns in one semester is a high-risk member.', source: 'Rental terms' },\n  { id: 'BR-05', type: 'Computation', statement: 'Rental fee = 2,000 VND × number of started 30-minute periods.', source: 'Price list 2026' },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One rule per type; the catalogue keeps id, type, statement and source so every functional requirement derived from a rule can trace back to it.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "rules.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "five well-formed entries with unique ids",
+              "vi": "năm mục đúng dạng, mã không trùng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RULES==\"undefined\"||!Array.isArray(RULES)||RULES.length<5)return\"write 5 rules in RULES\";for(var i={},e=0;e<RULES.length;e++){var t=RULES[e]||{};if(!/^BR-?\\d+$/i.test(String(t.id)))return\"rule \"+(e+1)+': id like \"BR-01\"';if(i[String(t.id).toUpperCase()])return\"duplicate id \"+t.id;if(i[String(t.id).toUpperCase()]=1,String(t.statement||\"\").trim().split(/\\s+/).length<5)return t.id+\": write the statement\";if(!String(t.source||\"\").trim())return t.id+\": give the source\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "each of the five types appears with the right statement",
+              "vi": "đủ năm loại, mỗi loại đúng phát biểu"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RULES==\"undefined\"||!Array.isArray(RULES))return\"RULES is missing\";var t=function(a){return RULES.filter(function(o){return o&&String(o.type).toLowerCase().trim()===a})[0]},e=t(\"fact\"),n=t(\"constraint\"),r=t(\"action enabler\"),i=t(\"inference\"),s=t(\"computation\");return!e||!/station/i.test(e.statement)?\"the Fact: every bike belongs to one home station\":!n||!/4 hours|four hours/i.test(n.statement)?\"the Constraint: at most 4 hours\":!r||!/security|notify/i.test(r.statement)?\"the Action enabler: notify security\":!i||!/high-risk|high risk|risk/i.test(i.statement)?\"the Inference: high-risk member\":!s||!/2,000|2000|30/.test(s.statement)?\"the Computation: the fee formula\":\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "every type is a type of the taxonomy and appears exactly once",
+              "vi": "mỗi loại thuộc phân loại và xuất hiện đúng một lần"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){if(typeof RULES==\"undefined\"||!Array.isArray(RULES))return\"RULES is missing\";for(var t=[\"fact\",\"constraint\",\"action enabler\",\"inference\",\"computation\"],n={},e=0;e<RULES.length;e++){var r=String((RULES[e]||{}).type).toLowerCase().trim();if(t.indexOf(r)<0)return'unknown type \"'+(RULES[e]||{}).type+'\"';n[r]=(n[r]||0)+1}var i=t.filter(function(o){return n[o]!==1});return i.length?\"each of the five types exactly once \\u2014 check: \"+i.join(\", \"):\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xếp (4) là action enabler — nó xác lập \"high-risk\", một sự thật mới."
+        },
+        {
+          "loi": "Bỏ trống nguồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

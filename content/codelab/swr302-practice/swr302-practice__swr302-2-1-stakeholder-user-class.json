@@ -198,8 +198,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p><b>MediBook</b> lets patients book appointments at a private clinic. Classify each party.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p><b>MediBook</b> cho bệnh nhân đặt lịch ở một phòng khám tư. Phân loại từng bên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p><b>MediBook</b> lets patients book appointments at a private clinic. Classify each party.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>MediBook</b> cho bệnh nhân đặt lịch ở một phòng khám tư. Phân loại từng bên.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -477,8 +477,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Wiegers recommends one <b>product champion</b> per major user class: a real member of that class who speaks for it to the BA, provides and reviews requirements, and makes decisions within the scope agreed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Wiegers khuyên mỗi lớp người dùng chính có một <b>product champion</b>: một thành viên thật của lớp đó, nói thay lớp với BA, cung cấp và review yêu cầu, ra quyết định trong phạm vi đã thống nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Wiegers recommends one <b>product champion</b> per major user class: a real member of that class who speaks for it to the BA, provides and reviews requirements, and makes decisions within the scope agreed.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers khuyên mỗi lớp người dùng chính có một <b>product champion</b>: một thành viên thật của lớp đó, nói thay lớp với BA, cung cấp và review yêu cầu, ra quyết định trong phạm vi đã thống nhất.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

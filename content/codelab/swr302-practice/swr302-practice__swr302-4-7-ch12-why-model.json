@@ -1,0 +1,632 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-7-ch12-why-model",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-7-ch12-why-model"
+  },
+  "exercises": [
+    {
+      "title": "Choosing a model 2 — why model at all?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "why model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers Ch.12: models represent requirements visually, at a different level of abstraction than text; drawing them reveals gaps, conflicts and errors that text hides. Models complement natural-language requirements — they do not replace them.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers Ch.12: mô hình biểu diễn yêu cầu bằng hình, ở mức trừu tượng khác văn bản; vẽ chúng làm lộ chỗ thiếu, mâu thuẫn, lỗi mà văn bản che giấu. Mô hình bổ sung cho yêu cầu viết bằng lời — không thay thế.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mô hình bổ sung văn bản, không thay thế.",
+        "Ký hiệu tự chế cần chú giải."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 2 — why model at all?\n\nAnswer in the answer panel (no code needed).\n\n1. The main benefit of drawing analysis models is…Lợi ích chính của vẽ mô hình phân tích là…\n2. Should you draw every model for every project?Có nên vẽ mọi mô hình cho mọi dự án?\n3. A diagram contains a symbol you invented. What must you do?Sơ đồ có ký hiệu bạn tự chế. Phải làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 2 — why model at all? — answer key\n\n1. The main benefit of drawing analysis models is…Lợi ích chính của vẽ mô hình phân tích là…\n   Answer: b) they reveal missing, conflicting and wrong requirements\n   A diagram shows holes that text hides.VI: Sơ đồ lộ ra lỗ hổng mà văn bản giấu.\n\n2. Should you draw every model for every project?Có nên vẽ mọi mô hình cho mọi dự án?\n   Answer: b) No — choose the models that answer the questions your project has\n   Select by need; a model nobody uses is waste.VI: Chọn theo nhu cầu; mô hình không ai dùng là lãng phí.\n\n3. A diagram contains a symbol you invented. What must you do?Sơ đồ có ký hiệu bạn tự chế. Phải làm gì?\n   Answer: b) Add a legend\n   You may deviate from the notation, not silently.VI: Được lệch ký pháp, không được lệch trong im lặng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The main benefit of drawing analysis models is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lợi ích chính của vẽ mô hình phân tích là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nicer documents"
+              },
+              {
+                "ma": "b",
+                "noiDung": "they reveal missing, conflicting and wrong requirements"
+              },
+              {
+                "ma": "c",
+                "noiDung": "they replace the SRS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the tool generates the code"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A diagram shows holes that text hides.</p><p><i>VI: Sơ đồ lộ ra lỗ hổng mà văn bản giấu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Should you draw every model for every project?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có nên vẽ mọi mô hình cho mọi dự án?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, always"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — choose the models that answer the questions your project has"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the ERD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Select by need; a model nobody uses is waste.</p><p><i>VI: Chọn theo nhu cầu; mô hình không ai dùng là lãng phí.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A diagram contains a symbol you invented. What must you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sơ đồ có ký hiệu bạn tự chế. Phải làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Add a legend"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Remove all labels"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Use colours only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>You may deviate from the notation, not silently.</p><p><i>VI: Được lệch ký pháp, không được lệch trong im lặng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vẽ đủ mọi mô hình cho đủ \"bộ\"."
+        },
+        {
+          "loi": "Bỏ văn bản vì đã có sơ đồ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "analysis model",
+          "vi": "mô hình phân tích — biểu diễn yêu cầu bằng hình"
+        },
+        {
+          "en": "legend",
+          "vi": "chú giải ký hiệu"
+        }
+      ]
+    },
+    {
+      "title": "Choosing a model 1 — which model answers the question?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "choosing a model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>LAB L.1: choose a model by the QUESTION you must answer, not by habit. For each question about a hotel booking system, choose the model.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LAB L.1: chọn mô hình theo CÂU HỎI cần trả lời, không theo thói quen. Với mỗi câu hỏi về hệ thống đặt phòng khách sạn, chọn mô hình.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ai làm gì, khi nào ⇒ swimlane; dữ liệu đi đâu ⇒ DFD; đời sống một đối tượng ⇒ state.",
+        "Các hệ thống khác nói chuyện với nhau ⇒ ecosystem map."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 1 — which model answers the question?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 1 — which model answers the question? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Context diagram\n   - r1.k: Use case diagram\n   - r2.k: Swimlane diagram\n   - r3.k: State-transition diagram\n   - r4.k: Entity-relationship diagram\n   - r5.k: Data flow diagram\n   - r6.k: Decision table\n   - r7.k: Dialog map\n   - r8.k: Ecosystem map\n   One question, one model. The first mark in a modelling exam is choosing the model that answers the question asked.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One question, one model. The first mark in a modelling exam is choosing the model that answers the question asked.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Question"
+              },
+              {
+                "ma": "k",
+                "ten": "Model",
+                "luaChon": [
+                  "Context diagram",
+                  "Ecosystem map",
+                  "Use case diagram",
+                  "Swimlane diagram",
+                  "Data flow diagram",
+                  "Entity-relationship diagram",
+                  "State-transition diagram",
+                  "Decision table",
+                  "Dialog map"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "What is inside the system, and who exchanges data with it?"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "What goals can each kind of user achieve with the system?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Who does what, and where does the work pass from one person to another, during a group booking?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "What states can a reservation be in, and what moves it from one to another?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Which things does the hotel keep data about, and how are they related?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Where does each piece of data come from, and where is it stored?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Which action applies for every combination of membership level, season and length of stay?"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "From which screen can a guest reach which other screen?"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "How do the channel manager, the booking sites and the hotel’s accounting system exchange data, even without us?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Context diagram",
+              "r1.k": "Use case diagram",
+              "r2.k": "Swimlane diagram",
+              "r3.k": "State-transition diagram",
+              "r4.k": "Entity-relationship diagram",
+              "r5.k": "Data flow diagram",
+              "r6.k": "Decision table",
+              "r7.k": "Dialog map",
+              "r8.k": "Ecosystem map"
+            },
+            "giaiThich": "<p><p>One question, one model. The first mark in a modelling exam is choosing the model that answers the question asked.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng DFD để trả lời \"ai làm gì\"."
+        },
+        {
+          "loi": "Dùng ERD để trả lời \"đối tượng đi qua những trạng thái nào\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "context diagram",
+          "vi": "sơ đồ ngữ cảnh — hệ thống là MỘT vòng tròn, các thực thể ngoài và luồng dữ liệu vào/ra"
+        },
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        },
+        {
+          "en": "entity-relationship diagram (ERD)",
+          "vi": "sơ đồ thực thể – quan hệ"
+        },
+        {
+          "en": "state-transition diagram",
+          "vi": "sơ đồ chuyển trạng thái — đời sống của MỘT đối tượng"
+        },
+        {
+          "en": "swimlane (activity) diagram",
+          "vi": "sơ đồ làn bơi — ai làm gì, theo thứ tự nào; lộ điểm bàn giao"
+        },
+        {
+          "en": "decision table",
+          "vi": "bảng quyết định — mọi tổ hợp điều kiện ⇒ hành động (n điều kiện ⇒ 2ⁿ cột)"
+        },
+        {
+          "en": "dialog map",
+          "vi": "sơ đồ hội thoại — trạng thái là màn hình, chuyển là hành động người dùng"
+        }
+      ]
+    },
+    {
+      "title": "Choosing a model 3 — the five rules every diagram must follow",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "modelling rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>LAB L.1 gives five rules for every diagram in this course: (1) label everything; (2) keep one level of abstraction; (3) draw the boundary; (4) show the unhappy path; (5) add a legend when you invent a symbol. Which rule does each faulty diagram break?</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LAB L.1 đưa năm luật cho mọi sơ đồ của môn: (1) ghi nhãn tất cả; (2) giữ một mức trừu tượng; (3) vẽ ranh giới; (4) vẽ đường không thuận; (5) có chú giải khi tự chế ký hiệu. Mỗi sơ đồ lỗi vi phạm luật nào?</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ có đường thành công ⇒ thiếu đường không thuận.",
+        "Hai hộp không cùng \"cỡ\" ⇒ trộn mức trừu tượng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 3 — the five rules every diagram must follow\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 3 — the five rules every diagram must follow — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Label everything\n   - r1.k: One level of abstraction\n   - r2.k: Draw the boundary\n   - r3.k: Show the unhappy path\n   - r4.k: Legend for invented symbols\n   All five are checked mechanically by graders — and by the auto-grader of this course.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All five are checked mechanically by graders — and by the auto-grader of this course.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Faulty diagram"
+              },
+              {
+                "ma": "k",
+                "ten": "Rule broken",
+                "luaChon": [
+                  "Label everything",
+                  "One level of abstraction",
+                  "Draw the boundary",
+                  "Show the unhappy path",
+                  "Legend for invented symbols"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "A DFD with five arrows that carry no name."
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A swimlane where \"Process the order\" sits next to \"Click Save\"."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A use case diagram with use cases floating without a system rectangle."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A state diagram of an order that only goes Placed → Paid → Shipped → Delivered."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "A context diagram where some entities are red triangles, with no explanation."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Label everything",
+              "r1.k": "One level of abstraction",
+              "r2.k": "Draw the boundary",
+              "r3.k": "Show the unhappy path",
+              "r4.k": "Legend for invented symbols"
+            },
+            "giaiThich": "<p><p>All five are checked mechanically by graders — and by the auto-grader of this course.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho rằng màu sắc tự giải thích được."
+        },
+        {
+          "loi": "Nghĩ sơ đồ trạng thái không cần trạng thái huỷ/lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "level of abstraction",
+          "vi": "mức trừu tượng — độ chi tiết của các phần tử trên cùng một sơ đồ"
+        },
+        {
+          "en": "unhappy path",
+          "vi": "đường không thuận — hỏng, bị từ chối, ngoại lệ"
+        }
+      ]
+    },
+    {
+      "title": "Choosing a model 4 — the swimlane / DFD trap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "swimlane vs DFD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Swimlanes and DFDs are both boxes joined by arrows, so students mix them up. A swimlane shows <b>who acts and when</b>; a DFD shows <b>what data moves and where it rests</b>. Mixing their symbols loses marks even when the picture looks right.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Swimlane và DFD đều là hộp nối mũi tên nên sinh viên hay lẫn. Swimlane cho thấy <b>ai hành động và khi nào</b>; DFD cho thấy <b>dữ liệu nào di chuyển và nằm lại ở đâu</b>. Trộn ký hiệu của chúng mất điểm dù hình trông đúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Swimlane = ai, khi nào; DFD = dữ liệu, ở đâu.",
+        "Kho dữ liệu chỉ có trong DFD."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 4 — the swimlane / DFD trap\n\nAnswer in the answer panel (no code needed).\n\n1. A DFD has a lane called \"Manager\". What is wrong?Một DFD có lane tên \"Manager\". Sai ở đâu?\n2. A swimlane has a data store \"Orders\". What is wrong?Một swimlane có kho dữ liệu \"Orders\". Sai ở đâu?\n3. You need to show how long approvals wait between the clerk and the manager. Which model?Cần thể hiện việc duyệt phải chờ bao lâu giữa nhân viên và quản lý. Mô hình nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choosing a model 4 — the swimlane / DFD trap — answer key\n\n1. A DFD has a lane called \"Manager\". What is wrong?Một DFD có lane tên \"Manager\". Sai ở đâu?\n   Answer: b) Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process\n   Do not draw roles as lanes in a DFD.VI: Không vẽ vai trò thành lane trong DFD.\n\n2. A swimlane has a data store \"Orders\". What is wrong?Một swimlane có kho dữ liệu \"Orders\". Sai ở đâu?\n   Answer: b) Data stores belong to DFDs; a swimlane shows actions in order\n   Each model answers its own question.VI: Mỗi mô hình trả lời câu hỏi của riêng nó.\n\n3. You need to show how long approvals wait between the clerk and the manager. Which model?Cần thể hiện việc duyệt phải chờ bao lâu giữa nhân viên và quản lý. Mô hình nào?\n   Answer: b) Swimlane\n   Hand-offs between roles are visible in a swimlane.VI: Bàn giao giữa các vai thấy rõ trong swimlane.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A DFD has a lane called \"Manager\". What is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một DFD có lane tên \"Manager\". Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Lanes and actors belong to swimlanes; in a DFD the manager is an external entity (if outside) and the work is a process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The lane should be called \"Managers\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "DFDs need two lanes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Do not draw roles as lanes in a DFD.</p><p><i>VI: Không vẽ vai trò thành lane trong DFD.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A swimlane has a data store \"Orders\". What is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một swimlane có kho dữ liệu \"Orders\". Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Data stores belong to DFDs; a swimlane shows actions in order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The store should be in the first lane"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Stores must be named in singular"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each model answers its own question.</p><p><i>VI: Mỗi mô hình trả lời câu hỏi của riêng nó.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>You need to show how long approvals wait between the clerk and the manager. Which model?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cần thể hiện việc duyệt phải chờ bao lâu giữa nhân viên và quản lý. Mô hình nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DFD"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Swimlane"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ERD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Context diagram"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hand-offs between roles are visible in a swimlane.</p><p><i>VI: Bàn giao giữa các vai thấy rõ trong swimlane.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vẽ lane trong DFD."
+        },
+        {
+          "loi": "Vẽ kho trong swimlane."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "swimlane (activity) diagram",
+          "vi": "sơ đồ làn bơi — ai làm gì, theo thứ tự nào; lộ điểm bàn giao"
+        },
+        {
+          "en": "data flow diagram (DFD)",
+          "vi": "sơ đồ luồng dữ liệu — process, kho dữ liệu, thực thể ngoài, luồng"
+        }
+      ]
+    }
+  ]
+}

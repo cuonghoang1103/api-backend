@@ -1,0 +1,529 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-11-ch13-dictionary-crud",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-11-ch13-dictionary-crud"
+  },
+  "exercises": [
+    {
+      "title": "Data dictionary 1 — the notation",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "data dictionary notation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ data dictionary notation: a <b>primitive</b> cannot be decomposed further (give its type, length and allowed values); a <b>structure</b> is a composition written with <code>+</code>; a <b>repeating group</b> is written <code>m:n{Element}</code>; an optional element is written in parentheses <code>(Element)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ký pháp data dictionary của Wiegers: <b>primitive</b> không phân rã thêm (ghi kiểu, độ dài, giá trị hợp lệ); <b>structure</b> là tổ hợp viết bằng <code>+</code>; <b>nhóm lặp</b> viết <code>m:n{Phần tử}</code>; phần tử tuỳ chọn viết trong ngoặc <code>(Phần tử)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "+ ghép; ( ) tuỳ chọn; m:n{ } lặp.",
+        "Primitive = một giá trị có kiểu/độ dài/giá trị hợp lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data dictionary 1 — the notation\n\nAnswer in the answer panel (no code needed).\n\n1. \"An order has one to ten order lines\" is written…\"Một đơn có từ một tới mười dòng\" viết là…\n2. \"A delivery note is optional\" is written…\"Ghi chú giao hàng là tuỳ chọn\" viết là…\n3. Which element is a primitive?Phần tử nào là primitive?\n4. Why keep a data dictionary at all?Vì sao cần data dictionary?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data dictionary 1 — the notation — answer key\n\n1. \"An order has one to ten order lines\" is written…\"Một đơn có từ một tới mười dòng\" viết là…\n   Answer: b) 1:10{Order Line}\n   m:n{…} is the repeating group.VI: m:n{…} là nhóm lặp.\n\n2. \"A delivery note is optional\" is written…\"Ghi chú giao hàng là tuỳ chọn\" viết là…\n   Answer: a) (Delivery Note)\n   Parentheses mark an optional element.VI: Ngoặc tròn đánh dấu phần tử tuỳ chọn.\n\n3. Which element is a primitive?Phần tử nào là primitive?\n   Answer: b) Phone Number: 10 digits starting with 0\n   A single value with a format.VI: Một giá trị đơn có định dạng.\n\n4. Why keep a data dictionary at all?Vì sao cần data dictionary?\n   Answer: b) So that every team member uses one definition of each data element (name, composition, type, allowed values)\n   One shared definition avoids two names for one thing.VI: Một định nghĩa chung tránh hai tên cho một thứ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · a · b · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"An order has one to ten order lines\" is written…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Một đơn có từ một tới mười dòng\" viết là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Order Line × 10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1:10{Order Line}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(Order Line)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Order Line + Order Line"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>m:n{…} is the repeating group.</p><p><i>VI: m:n{…} là nhóm lặp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"A delivery note is optional\" is written…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Ghi chú giao hàng là tuỳ chọn\" viết là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(Delivery Note)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{Delivery Note}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0{Delivery Note}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delivery Note?"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Parentheses mark an optional element.</p><p><i>VI: Ngoặc tròn đánh dấu phần tử tuỳ chọn.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which element is a primitive?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần tử nào là primitive?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customer Address = Street + City + (Postal Code)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Phone Number: 10 digits starting with 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Order = Order ID + 1:10{Order Line}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Order Line = Product ID + Quantity"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A single value with a format.</p><p><i>VI: Một giá trị đơn có định dạng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why keep a data dictionary at all?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cần data dictionary?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To replace the ERD"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So that every team member uses one definition of each data element (name, composition, type, allowed values)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for the database administrator"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the template requires it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One shared definition avoids two names for one thing.</p><p><i>VI: Một định nghĩa chung tránh hai tên cho một thứ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết số nhiều (\"Order Lines\") thay vì nhóm lặp."
+        },
+        {
+          "loi": "Định nghĩa primitive mà không có giá trị hợp lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data dictionary",
+          "vi": "từ điển dữ liệu — định nghĩa mọi phần tử dữ liệu (thành phần, kiểu, độ dài, giá trị hợp lệ)"
+        }
+      ]
+    },
+    {
+      "title": "CRUD 1 — fill the CRUD matrix",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CRUD matrix"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Events system: <b>Create Event</b> (organiser creates an event; reads the venue list) · <b>Register for Event</b> (student; reads the event, creates a registration, updates the event’s free seats) · <b>Cancel Registration</b> (deletes the registration, updates the free seats) · <b>Check In Attendee</b> (reads the registration, updates it as attended). Give the letters for each use case on the entity in the row title.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ thống sự kiện (bản tiếng Anh mô tả từng use case). Ghi các chữ CRUD của use case trên thực thể ghi ở tiêu đề dòng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Đọc từng động từ trong mô tả use case: creates ⇒ C, reads ⇒ R, updates ⇒ U, deletes ⇒ D.",
+        "Một use case có thể vừa đọc vừa sửa một thực thể (RU)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CRUD 1 — fill the CRUD matrix\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CRUD 1 — fill the CRUD matrix — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: C\n   - r1.k: R\n   - r2.k: RU\n   - r3.k: C\n   - r4.k: RD\n   - r5.k: U\n   - r6.k: RU\n   Reading what each use case does to each entity gives the cells; empty columns or missing letters then point to missing requirements (e.g. who deletes an event?).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reading what each use case does to each entity gives the cells; empty columns or missing letters then point to missing requirements (e.g. who deletes an event?).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Use case → entity"
+              },
+              {
+                "ma": "k",
+                "ten": "CRUD",
+                "luaChon": [
+                  "C",
+                  "R",
+                  "U",
+                  "D",
+                  "RU",
+                  "CR",
+                  "RD"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Create Event → Event"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Create Event → Venue"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Register for Event → Event"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Register for Event → Registration"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Cancel Registration → Registration"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Cancel Registration → Event"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Check In Attendee → Registration"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "C",
+              "r1.k": "R",
+              "r2.k": "RU",
+              "r3.k": "C",
+              "r4.k": "RD",
+              "r5.k": "U",
+              "r6.k": "RU"
+            },
+            "giaiThich": "<p><p>Reading what each use case does to each entity gives the cells; empty columns or missing letters then point to missing requirements (e.g. who deletes an event?).</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên chữ R khi use case phải đọc trước khi sửa."
+        },
+        {
+          "loi": "Quên Register for Event cũng cập nhật số chỗ trống của Event."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CRUD matrix",
+          "vi": "ma trận Create/Read/Update/Delete giữa use case (hoặc actor) và thực thể — tìm yêu cầu thiếu"
+        }
+      ]
+    },
+    {
+      "title": "Data dictionary 2 — define an event registration",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "data dictionary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Campus events: a student registers for an event and may bring <b>up to 3 guests</b> (their names are recorded); a <b>dietary note</b> is optional (≤ 100 characters); the registration ID is \"REG\" + 6 digits; the time of registration is stored. Write the data dictionary entries in <code>DATA_DICTIONARY</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One structure \"Event Registration\" in Wiegers notation; every element it uses defined as a primitive with dataType and length or values.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự kiện trong trường: sinh viên đăng ký một sự kiện và có thể dẫn <b>tối đa 3 khách</b> (ghi tên khách); <b>ghi chú ăn uống</b> là tuỳ chọn (≤ 100 ký tự); mã đăng ký là \"REG\" + 6 chữ số; lưu thời điểm đăng ký. Viết các mục data dictionary trong <code>DATA_DICTIONARY</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một structure \"Event Registration\" theo ký pháp Wiegers; mọi phần tử nó dùng được định nghĩa là primitive có dataType và length hoặc values.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "{ element: 'Guest Name', type: 'primitive', dataType: 'text', length: 60 }",
+          "output": "a primitive entry",
+          "explanation": "Type and length (or allowed values).|||Kiểu và độ dài (hoặc giá trị hợp lệ)."
+        }
+      ],
+      "hintsJson": [
+        "Structure: \"Registration ID + Student ID + Event ID + 1:3{Guest Name} + (Dietary Note) + Registration Time\".",
+        "Mỗi tên dùng trong composition phải có một mục primitive riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "dictionary.js",
+          "language": "javascript",
+          "code": "const DATA_DICTIONARY = [\n  { element: 'Event Registration', type: 'structure', composition: 'Registration ID + …', description: '' },\n];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "dictionary.js",
+          "language": "javascript",
+          "code": "const DATA_DICTIONARY = [\n  {\n    element: 'Event Registration',\n    type: 'structure',\n    composition: 'Registration ID + Student ID + Event ID + 1:3{Guest Name} + (Dietary Note) + Registration Time',\n    description: 'One student’s registration to a campus event, with up to three guests.',\n  },\n  {\n    element: 'Registration ID',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 9,\n    values: '\"REG\" followed by 6 digits',\n    description: 'Unique identifier of a registration.',\n  },\n  {\n    element: 'Student ID',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 8,\n    values: 'university student code, e.g. SE180123',\n    description: 'The student who registers.',\n  },\n  {\n    element: 'Event ID',\n    type: 'primitive',\n    dataType: 'alphanumeric',\n    length: 6,\n    values: '\"EV\" followed by 4 digits',\n    description: 'The event registered for.',\n  },\n  {\n    element: 'Guest Name',\n    type: 'primitive',\n    dataType: 'text',\n    length: 60,\n    values: 'any name, at most 60 characters',\n    description: 'Name of a guest the student brings.',\n  },\n  {\n    element: 'Dietary Note',\n    type: 'primitive',\n    dataType: 'text',\n    length: 100,\n    values: 'any text, at most 100 characters',\n    description: 'Optional food allergy or diet information.',\n  },\n  {\n    element: 'Registration Time',\n    type: 'primitive',\n    dataType: 'datetime',\n    length: 19,\n    values: 'yyyy-mm-dd hh:mm:ss',\n    description: 'When the registration was made.',\n  },\n];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One structure, six primitives; the repeating group and the optional element carry the business rules (≤ 3 guests, optional note).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "dictionary.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "the dictionary is closed and well formed",
+              "vi": "từ điển khép kín và đúng dạng"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var r=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var f=function(n){return String(n==null?\"\":n).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},A={};DATA_DICTIONARY.forEach(function(n){n&&n.element&&(A[f(n.element)]=n)});function c(n){for(var a=[],p=String(n||\"\").split(\"+\"),l=0;l<p.length;l++){var u=p[l].trim(),t;if(t=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(u))a.push({ten:t[1],tuyChon:!0});else if(t=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(u))a.push({ten:t[3],lap:[Number(t[1]),t[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(u))a.push({ten:u});else return'cannot read \"'+u+'\"'}return a}return{n:f,ten:A,tach:c}})();if(r.loi)return r.loi;for(var o=0;o<DATA_DICTIONARY.length;o++){var e=DATA_DICTIONARY[o]||{};if(e.type===\"structure\"){var i=r.tach(e.composition);if(typeof i==\"string\")return e.element+\": \"+i;for(var s=0;s<i.length;s++)if(!r.ten[r.n(i[s].ten)])return'\"'+i[s].ten+'\" is used but not defined'}else if(e.type===\"primitive\"){if(!e.dataType||!e.length&&!e.values)return e.element+\": dataType and length or values\"}else return e.element+\": type must be primitive or structure\"}return\"OK\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "guests are a repeating group 1:3 (or 0:3)",
+              "vi": "khách là nhóm lặp 1:3 (hoặc 0:3)"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var n=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var i=function(e){return String(e==null?\"\":e).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},l={};DATA_DICTIONARY.forEach(function(e){e&&e.element&&(l[i(e.element)]=e)});function c(e){for(var s=[],A=String(e||\"\").split(\"+\"),o=0;o<A.length;o++){var r=A[o].trim(),t;if(t=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(r))s.push({ten:t[1],tuyChon:!0});else if(t=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(r))s.push({ten:t[3],lap:[Number(t[1]),t[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(r))s.push({ten:r});else return'cannot read \"'+r+'\"'}return s}return{n:i,ten:l,tach:c}})();if(n.loi)return n.loi;var f=n.ten[\"event registration\"];if(!f)return'define \"Event Registration\"';var u=n.tach(f.composition);if(typeof u==\"string\")return u;var a=u.filter(function(i){return/guest/.test(n.n(i.ten))})[0];return!a||!a.lap?\"guests repeat: write m:n{Guest Name}\":a.lap[1]===\"3\"?\"OK\":\"at most 3 guests \\u21D2 the upper bound is 3\"})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the dietary note is optional and the ID format is stated",
+              "vi": "ghi chú ăn uống là tuỳ chọn và có định dạng mã"
+            },
+            "chuanBi": "const __KQ = (function () { try { return (((function(){var e=(function(){if(typeof DATA_DICTIONARY==\"undefined\"||!Array.isArray(DATA_DICTIONARY)||!DATA_DICTIONARY.length)return{loi:\"DATA_DICTIONARY is missing\"};var o=function(t){return String(t==null?\"\":t).toLowerCase().replace(/[^a-z0-9]+/g,\" \").trim()},A={};DATA_DICTIONARY.forEach(function(t){t&&t.element&&(A[o(t.element)]=t)});function c(t){for(var s=[],g=String(t||\"\").split(\"+\"),u=0;u<g.length;u++){var r=g[u].trim(),n;if(n=/^\\(\\s*([^(){}]+?)\\s*\\)$/.exec(r))s.push({ten:n[1],tuyChon:!0});else if(n=/^(\\d+)\\s*:\\s*(\\d+|n)\\s*\\{\\s*([^(){}]+?)\\s*\\}$/i.exec(r))s.push({ten:n[3],lap:[Number(n[1]),n[2]]});else if(/^[A-Za-z][\\w .'-]*$/.test(r))s.push({ten:r});else return'cannot read \"'+r+'\"'}return s}return{n:o,ten:A,tach:c}})();if(e.loi)return e.loi;var f=e.ten[\"event registration\"];if(!f)return'define \"Event Registration\"';var a=e.tach(f.composition);if(typeof a==\"string\")return a;var l=a.filter(function(o){return/diet|note/.test(e.n(o.ten))})[0];if(!l||!l.tuyChon)return\"the dietary note is optional: (Dietary Note)\";var i=e.ten[\"registration id\"];return i&&/reg/i.test(String(i.values))&&/6/.test(String(i.values)+\" \"+i.length)?\"OK\":'Registration ID: \"REG\" followed by 6 digits'})))(); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"Guests\" thay vì 1:3{Guest Name}."
+        },
+        {
+          "loi": "Quên định nghĩa một phần tử đã dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data dictionary",
+          "vi": "từ điển dữ liệu — định nghĩa mọi phần tử dữ liệu (thành phần, kiểu, độ dài, giá trị hợp lệ)"
+        }
+      ]
+    },
+    {
+      "title": "CRUD 2 — find what the matrix says is missing",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "CRUD analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>From the CRUD matrix of exercise \"CRUD 1\" (Event: C by Create Event, RU by Register, U by Cancel; Venue: R only; Registration: C by Register, RD by Cancel, RU by Check In), list in <code>MISSING</code>: <code>neverCreated</code> (entities nobody creates), <code>neverDeleted</code> (entities nobody deletes) and <code>newUseCases</code> — choose from: <code>MANAGE_VENUES</code>, <code>CANCEL_EVENT</code>, <code>PRINT_TICKET</code>, <code>RATE_EVENT</code> the two use cases that close those gaps.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Entity names Event, Venue, Registration; use case codes from the list.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ ma trận CRUD của bài trước, liệt kê trong <code>MISSING</code>: thực thể không ai tạo, thực thể không ai xoá, và hai use case mới lấp khoảng trống đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên thực thể Event, Venue, Registration; mã use case trong danh sách.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Venue has only R",
+          "output": "Venue is never created and never deleted",
+          "explanation": "Someone must manage venues.|||Phải có người quản lý địa điểm."
+        }
+      ],
+      "hintsJson": [
+        "Cột không có C ⇒ không ai tạo; không có D ⇒ không ai xoá.",
+        "Registration có D (huỷ đăng ký) nên không thiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "missing.js",
+          "language": "javascript",
+          "code": "const MISSING = { neverCreated: [], neverDeleted: [], newUseCases: [] };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "missing.js",
+          "language": "javascript",
+          "code": "// Venue: only R ⇒ never created or deleted. Event: no D ⇒ events cannot be cancelled.\nconst MISSING = { neverCreated: ['Venue'], neverDeleted: ['Venue', 'Event'], newUseCases: ['MANAGE_VENUES', 'CANCEL_EVENT'] };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Venue has only R ⇒ a Manage Venues use case is missing; Event has no D ⇒ events cannot be cancelled. The CRUD matrix found two missing requirements nobody mentioned.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "missing.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "entities never created",
+              "vi": "thực thể không ai tạo"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MISSING.neverCreated || []).map(String)); } catch (e) { return '(MISSING.neverCreated || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MISSING.neverCreated || []).map(String) is empty';\n  var chap = [[\"Venue\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "entities never deleted",
+              "vi": "thực thể không ai xoá"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MISSING.neverDeleted || []).map(String)); } catch (e) { return '(MISSING.neverDeleted || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MISSING.neverDeleted || []).map(String) is empty';\n  var chap = [[\"Venue\",\"Event\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "the two use cases that close the gaps",
+              "vi": "hai use case lấp khoảng trống"
+            },
+            "chuanBi": "const __KQ = (function () {\n  var v; try { v = ((MISSING.newUseCases || []).map(String)); } catch (e) { return '(MISSING.newUseCases || []).map(String) is not defined yet'; }\n  if (v === undefined || v === null || v === '') return '(MISSING.newUseCases || []).map(String) is empty';\n  var chap = [[\"MANAGE_VENUES\",\"CANCEL_EVENT\"]];\n  var n = function (s) { return String(s).trim().toLowerCase().replace(/\\s+/g, ' '); };\n  var ok;\n  if (\"tap\" === 'tap') { if (!Array.isArray(v)) return 'expected an array'; var a = v.map(n).sort().join('|'); ok = chap.some(function (c) { return c.map(n).sort().join('|') === a; }); }\n  else if (\"tap\" === 'so') { ok = chap.some(function (c) { return Math.abs(Number(v) - Number(c)) <= 1e-9; }); }\n  else if (\"tap\" === 'json') { ok = chap.some(function (c) { return JSON.stringify(c) === JSON.stringify(v); }); }\n  else ok = chap.some(function (c) { return n(c) === n(v); });\n  return ok ? 'OK' : 'not right yet';\n})();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Liệt kê Registration vào neverDeleted."
+        },
+        {
+          "loi": "Chọn PRINT_TICKET — không lấp khoảng trống CRUD nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CRUD matrix",
+          "vi": "ma trận Create/Read/Update/Delete giữa use case (hoặc actor) và thực thể — tìm yêu cầu thiếu"
+        }
+      ]
+    }
+  ]
+}

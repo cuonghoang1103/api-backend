@@ -235,8 +235,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>The textbook’s running example: an airline builds self-service check-in kiosks. Classify each statement with the types of Figure 1-1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Ví dụ xuyên suốt của giáo trình: một hãng bay xây kiosk tự check-in. Phân loại từng phát biểu theo các loại của Hình 1-1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>The textbook’s running example: an airline builds self-service check-in kiosks. Classify each statement with the types of Figure 1-1.</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ xuyên suốt của giáo trình: một hãng bay xây kiosk tự check-in. Phân loại từng phát biểu theo các loại của Hình 1-1.</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -427,8 +427,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Requirements at different levels must align: every functional requirement should trace up to a user requirement, which traces up to a business requirement. Put each chain in order, from the top level down.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Yêu cầu ở các cấp phải thẳng hàng: mỗi yêu cầu chức năng truy lên một yêu cầu người dùng, yêu cầu người dùng truy lên một yêu cầu nghiệp vụ. Sắp mỗi chuỗi theo thứ tự từ cấp trên xuống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Requirements at different levels must align: every functional requirement should trace up to a user requirement, which traces up to a business requirement. Put each chain in order, from the top level down.</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Yêu cầu ở các cấp phải thẳng hàng: mỗi yêu cầu chức năng truy lên một yêu cầu người dùng, yêu cầu người dùng truy lên một yêu cầu nghiệp vụ. Sắp mỗi chuỗi theo thứ tự từ cấp trên xuống.</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

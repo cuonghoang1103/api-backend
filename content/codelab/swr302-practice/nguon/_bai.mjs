@@ -10,6 +10,16 @@
 import { doiDau, KHOA, hai, giai, lc as lcGoc, tinhDe, jsDe } from './_chung.mjs';
 
 const LC = 'abcdefghij';
+/** Mô tả quá ngắn (< 220 ký tự EN) ⇒ thêm một câu hướng dẫn cách làm (bộ xuất đòi đề ≥ 300 ký tự). */
+function duMoTa(moTa, loai) {
+  if (!moTa || typeof moTa !== 'object' || String(moTa.en || '').length >= 220) return moTa;
+  const them = {
+    table: ['Each row is graded on its own; the explanation of every answer appears after you submit.', 'Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.'],
+    choice: ['Each question is graded on its own; the explanation appears after you submit.', 'Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.'],
+    order: ['Drag the items into the right order; the explanation appears after you submit.', 'Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.'],
+  }[loai];
+  return { en: `${moTa.en}<p>${them[0]}</p>`, vi: `${moTa.vi || ''}<p>${them[1]}</p>` };
+}
 
 export function phanLoai(q) {
   const { cot = 'Answer', luaChon, hang, deBang, ...rest } = q;
@@ -17,6 +27,7 @@ export function phanLoai(q) {
   hang.forEach(([, d], i) => { dapAn[`r${i}.k`] = d; });
   return tinhDe({
     ...rest,
+    moTa: duMoTa(rest.moTa, 'table'),
     loai: 'table',
     bang: [{
       ma: 'b1',
@@ -33,6 +44,7 @@ export function tracNghiem(q) {
   const { cau, ...rest } = q;
   return tinhDe({
     ...rest,
+    moTa: duMoTa(rest.moTa, 'choice'),
     loai: 'choice',
     cauHoi: cau.map((c, i) => ({
       ma: `q${i + 1}`,
@@ -49,6 +61,7 @@ export function sapXep(q) {
   const { cau, ...rest } = q;
   return tinhDe({
     ...rest,
+    moTa: duMoTa(rest.moTa, 'order'),
     loai: 'order',
     cauHoi: cau.map((c, i) => {
       const muc = c.dung.map((noiDung, j) => ({ ma: LC[j], noiDung }));

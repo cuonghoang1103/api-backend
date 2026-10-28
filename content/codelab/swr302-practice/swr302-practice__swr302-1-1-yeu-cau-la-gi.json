@@ -557,8 +557,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Stakeholders rarely speak in requirements. For each sentence from a LibraryLite meeting, choose the best reading of what it really asks for.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Bên liên quan hiếm khi nói bằng yêu cầu. Với mỗi câu trong buổi họp LibraryLite, chọn cách hiểu đúng nhất điều họ thật sự yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Stakeholders rarely speak in requirements. For each sentence from a LibraryLite meeting, choose the best reading of what it really asks for.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bên liên quan hiếm khi nói bằng yêu cầu. Với mỗi câu trong buổi họp LibraryLite, chọn cách hiểu đúng nhất điều họ thật sự yêu cầu.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

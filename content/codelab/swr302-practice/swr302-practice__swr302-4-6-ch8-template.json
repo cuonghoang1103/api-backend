@@ -1,0 +1,472 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-6-ch8-template",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-6-ch8-template"
+  },
+  "exercises": [
+    {
+      "title": "Use case template 1 — which field?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "use case template"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Wiegers’ use case template has: ID and name, primary and secondary actors, description, trigger, preconditions, postconditions, normal flow, alternative flows, exceptions, priority, frequency of use, business rules, other information, assumptions. For the ATM use case <b>Withdraw Cash</b>, put each sentence in its field.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Template use case của Wiegers gồm: mã và tên, actor chính và phụ, mô tả, trigger, tiền điều kiện, hậu điều kiện, luồng chính, luồng thay thế, ngoại lệ, độ ưu tiên, tần suất, business rule, thông tin khác, giả định. Với use case ATM <b>Withdraw Cash</b>, đặt mỗi câu vào đúng trường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Trigger = sự kiện khởi động; precondition = điều đã đúng TRƯỚC khi bắt đầu.",
+        "Postcondition = điều đúng SAU khi thành công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case template 1 — which field?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case template 1 — which field? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Primary actor\n   - r1.k: Secondary actor\n   - r2.k: Trigger\n   - r3.k: Precondition\n   - r4.k: Postcondition\n   - r5.k: Normal flow step\n   - r6.k: Exception\n   - r7.k: Business rule\n   - r8.k: Frequency of use\n   The trigger starts the use case; preconditions must already be true; postconditions are true after success; exceptions prevent the goal; the daily limit is a business rule the use case enforces.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The trigger starts the use case; preconditions must already be true; postconditions are true after success; exceptions prevent the goal; the daily limit is a business rule the use case enforces.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Field",
+                "luaChon": [
+                  "Primary actor",
+                  "Secondary actor",
+                  "Trigger",
+                  "Precondition",
+                  "Postcondition",
+                  "Normal flow step",
+                  "Exception",
+                  "Business rule",
+                  "Frequency of use"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Bank customer"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "The bank’s core banking system that authorises the withdrawal"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The customer inserts a card into the ATM."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The ATM is in service and has cash."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The account balance is reduced by the amount withdrawn and the cash has been dispensed."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The customer selects the amount to withdraw."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "The account has insufficient funds; the ATM shows the balance and returns the card."
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "A customer may not withdraw more than 20,000,000 VND per day."
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "s": "About 300 times per ATM per day."
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Primary actor",
+              "r1.k": "Secondary actor",
+              "r2.k": "Trigger",
+              "r3.k": "Precondition",
+              "r4.k": "Postcondition",
+              "r5.k": "Normal flow step",
+              "r6.k": "Exception",
+              "r7.k": "Business rule",
+              "r8.k": "Frequency of use"
+            },
+            "giaiThich": "<p><p>The trigger starts the use case; preconditions must already be true; postconditions are true after success; exceptions prevent the goal; the daily limit is a business rule the use case enforces.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhầm trigger với precondition."
+        },
+        {
+          "loi": "Ghi \"success\" làm postcondition thay vì trạng thái cụ thể."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trigger",
+          "vi": "sự kiện kích hoạt use case"
+        },
+        {
+          "en": "precondition / postcondition",
+          "vi": "tiền điều kiện (phải đúng trước khi bắt đầu) / hậu điều kiện (đúng sau khi xong)"
+        },
+        {
+          "en": "normal flow (main success scenario)",
+          "vi": "luồng chính — chuỗi bước thành công điển hình"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        },
+        {
+          "en": "primary / secondary actor",
+          "vi": "tác nhân chính (khởi động use case để đạt mục tiêu) / phụ (hệ thống cần nó giúp)"
+        }
+      ]
+    },
+    {
+      "title": "Use case template 2 — writing good flows",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "writing use case flows"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>A normal flow is a numbered dialogue between the actor and the system, written from the user’s point of view, free of UI details (\"click the blue button\"), and ending in success. Alternative flows and exceptions name the step where they branch.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luồng chính là đối thoại đánh số giữa actor và hệ thống, viết từ góc nhìn người dùng, không chi tiết giao diện (\"bấm nút xanh\"), và kết thúc thành công. Luồng thay thế và ngoại lệ ghi rõ bước rẽ nhánh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Viết ý định của người dùng, không phải thao tác giao diện.",
+        "Ngoại lệ ngăn mục tiêu; luồng thay thế vẫn đạt mục tiêu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case template 2 — writing good flows\n\nAnswer in the answer panel (no code needed).\n\n1. Which normal-flow step is written best?Bước luồng chính nào viết tốt nhất?\n2. Where does \"insufficient funds\" belong?\"Không đủ số dư\" thuộc về đâu?\n3. The customer may ask for a receipt. In the template this is…Khách có thể yêu cầu in hoá đơn. Trong template đây là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use case template 2 — writing good flows — answer key\n\n1. Which normal-flow step is written best?Bước luồng chính nào viết tốt nhất?\n   Answer: b) Customer confirms the withdrawal amount.\n   Intent, not UI or implementation.VI: Ý định, không phải giao diện hay hiện thực.\n\n2. Where does \"insufficient funds\" belong?\"Không đủ số dư\" thuộc về đâu?\n   Answer: b) Exception, attached to the step where the system checks the balance\n   It prevents the goal and branches at the check step.VI: Nó ngăn mục tiêu và rẽ nhánh ở bước kiểm tra.\n\n3. The customer may ask for a receipt. In the template this is…Khách có thể yêu cầu in hoá đơn. Trong template đây là…\n   Answer: a) an alternative flow (or an extension)\n   An optional variation that still reaches the goal.VI: Một biến thể tuỳ chọn vẫn đạt mục tiêu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which normal-flow step is written best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bước luồng chính nào viết tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customer clicks the green OK button at the bottom right."
+              },
+              {
+                "ma": "b",
+                "noiDung": "Customer confirms the withdrawal amount."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The SQL UPDATE runs on the accounts table."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Stuff happens."
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Intent, not UI or implementation.</p><p><i>VI: Ý định, không phải giao diện hay hiện thực.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Where does \"insufficient funds\" belong?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Không đủ số dư\" thuộc về đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Normal flow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exception, attached to the step where the system checks the balance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Precondition"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Postcondition"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>It prevents the goal and branches at the check step.</p><p><i>VI: Nó ngăn mục tiêu và rẽ nhánh ở bước kiểm tra.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The customer may ask for a receipt. In the template this is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách có thể yêu cầu in hoá đơn. Trong template đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an alternative flow (or an extension)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an exception"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a precondition"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a business rule"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>An optional variation that still reaches the goal.</p><p><i>VI: Một biến thể tuỳ chọn vẫn đạt mục tiêu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Luồng chính đầy chi tiết nút bấm, màu sắc."
+        },
+        {
+          "loi": "Không ghi bước rẽ nhánh của ngoại lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normal flow (main success scenario)",
+          "vi": "luồng chính — chuỗi bước thành công điển hình"
+        },
+        {
+          "en": "alternative flow",
+          "vi": "luồng thay thế — cách khác vẫn đạt mục tiêu"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        }
+      ]
+    },
+    {
+      "title": "Use case template 3 — write the specification of Renew Loan",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "use case specification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Library rules: a <b>reader</b> may renew a current loan, which extends the due date by 14 days (<b>BR-04</b>); a loan can be renewed at most twice, and never when it is overdue or when another reader has reserved the book (<b>BR-05</b>). A reader may also choose \"Renew all\". Write the full use case specification <b>UC-07 Renew Loan</b> in <code>UC_SPEC</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Every field of the template; numbered Reader/System steps; \"Renew all\" as an alternative flow; the three refusals as exceptions at the checking step; postconditions that state the new data.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật thư viện: <b>độc giả</b> được gia hạn lượt mượn đang có, gia hạn thêm 14 ngày (<b>BR-04</b>); một lượt mượn gia hạn tối đa hai lần, và không bao giờ khi đã quá hạn hoặc khi người khác đã đặt trước cuốn đó (<b>BR-05</b>). Độc giả cũng có thể chọn \"Renew all\". Viết đặc tả đầy đủ <b>UC-07 Renew Loan</b> trong <code>UC_SPEC</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đủ mọi trường; bước Reader/System đánh số; \"Renew all\" là luồng thay thế; ba trường hợp từ chối là ngoại lệ ở bước kiểm tra; hậu điều kiện nêu dữ liệu mới.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "exceptions: [{ id: 'E1', at: 4, condition: 'The loan is overdue', steps: [...] }]",
+          "output": "an exception attached to step 4",
+          "explanation": "\"at\" is the normal-flow step where it branches.|||\"at\" là bước luồng chính nơi rẽ nhánh."
+        }
+      ],
+      "hintsJson": [
+        "Ba trường hợp bị từ chối (quá hạn, đủ 2 lần, có người đặt trước) đều rẽ ở bước hệ thống KIỂM TRA.",
+        "Postcondition: hạn trả +14 ngày và số lần gia hạn +1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "uc-spec.js",
+          "language": "javascript",
+          "code": "const UC_SPEC = {\n  id: 'UC-07', name: 'Renew Loan', primaryActor: '', secondaryActors: [], description: '', trigger: '',\n  preconditions: [], postconditions: [], normalFlow: [], alternativeFlows: [], exceptions: [],\n  priority: '', frequency: '', businessRules: [], assumptions: [],\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "uc-spec.js",
+          "language": "javascript",
+          "code": "const UC_SPEC = {\n  id: 'UC-07',\n  name: 'Renew Loan',\n  primaryActor: 'Reader',\n  secondaryActors: [],\n  description: 'A reader extends the due date of a book they have borrowed so they can keep it longer without a fine.',\n  trigger: 'The reader chooses Renew on one of their current loans.',\n  preconditions: ['PRE-1. The reader is signed in.', 'PRE-2. The reader has at least one current loan.'],\n  postconditions: [\n    'POST-1. The due date of the loan is extended by 14 days.',\n    'POST-2. The renewal count of the loan is increased by one.',\n  ],\n  normalFlow: [\n    '1. Reader opens the list of current loans.',\n    '2. System displays each loan with title, due date and number of renewals.',\n    '3. Reader selects a loan and chooses Renew.',\n    '4. System checks that the loan is not overdue, has fewer than 2 renewals and is not reserved by another reader.',\n    '5. System extends the due date by 14 days and increases the renewal count.',\n    '6. System displays the new due date.',\n  ],\n  alternativeFlows: [\n    {\n      id: 'AF1',\n      at: 3,\n      name: 'Renew all loans',\n      steps: ['3a. Reader chooses Renew all.', '3b. System applies steps 4–5 to every loan and shows which were renewed.'],\n    },\n  ],\n  exceptions: [\n    {\n      id: 'E1',\n      at: 4,\n      condition: 'The loan is overdue',\n      steps: ['System explains that overdue loans cannot be renewed and shows the fine.'],\n    },\n    {\n      id: 'E2',\n      at: 4,\n      condition: 'The loan already has 2 renewals (limit reached)',\n      steps: ['System shows that the renewal limit is reached.'],\n    },\n    {\n      id: 'E3',\n      at: 4,\n      condition: 'Another reader has reserved the book',\n      steps: ['System shows that the book is reserved and must be returned by the due date.'],\n    },\n  ],\n  priority: 'High',\n  frequency: 'About 150 renewals per day',\n  businessRules: ['BR-04', 'BR-05'],\n  assumptions: ['Renewal periods are the same for every reader category.'],\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The checking step (4) is where BR-04/BR-05 are enforced; each refusal is an exception at that step; \"Renew all\" is an alternative path that still reaches the goal.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "uc-spec.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Use case specification — every template field is filled (no placeholders)",
+              "vi": "Đặc tả use case — điền đủ mọi trường của template (không còn chữ mẫu)"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.tuVung=((function(t){var a=\"fix hand retire decommission write abort acknowledge activate adopt advise alert amend annotate appeal append appoint archive arrange assemble audit auto backup balance bid broadcast bulk calibrate cancel capture catalog catalogue categorize categorise certify check-in checkin cite clear clone close collect combine commit compile complain conduct consolidate contribute convert coordinate copy correct count crop customize customise deactivate declare delegate deliver deploy deregister describe destroy diagnose dial discard discount dismiss dispose distribute document draw drop duplicate earn edit elect email embed empty enqueue enter equip erase evaluate exclude execute expire explore extract fetch finalize finalise flag fulfil fulfill fund gather grant group guide hide highlight hold identify ignore import improve include increase initiate insert integrate interview invalidate investigate join justify label launch limit locate log maintain mark merge message migrate mint moderate monitor mute negotiate nominate note obtain onboard override own pair park pass patch payout pin pledge poll populate preview price print proceed procure promote propose protect provision publish purge qualify queue quote randomize randomise reallocate reassign rebook recalculate recall reclaim recognize recognise reconcile redeem redirect reduce refer register regulate reimburse reinstate relate release relocate rename renew repay repeat rephrase replenish request require reserve resize resolve restrict retract retry revise revise reward rollback route sanction save schedule screen seal search secure segment select serve settle shortlist sign simulate sort source specify sponsor stack stage stamp state stock stream submit summarize summarise supervise survey suspend swap tally terminate thank throttle tick toggle total trace transcribe transform translate transport trigger trim unblock undo unfollow unpublish unregister unsubscribe update upgrade validate verify view void waive warn weigh welcome whitelist withdraw accept access activate add adjust ask approve attach charge credit debit deduct dispute escalate notify pause reactivate rebook recharge refill reopen resubmit reward settle sponsor tokenize tokenise unlock verify vet allocate analyse analyze answer apply approve archive arrange ask assess assign attach attend audit authenticate authorize back backup bill block book borrow browse buy calculate call cancel capture change chat check checkout choose claim clean close collect comment compare complete compose compute configure confirm connect consult contact control convert create curate deactivate decide decline define delete deliver deposit design detect disable dispatch display dispense distribute do donate download draft edit enable end enrol enroll enter escalate estimate evaluate examine exchange export extend file fill filter find finish follow forecast forward generate get give grade grant handle help hire import inform input inspect install invite invoice issue join keep leave lend link list load lock log login logout look maintain make manage map mark match measure merge modify monitor move notify obtain offer open operate order organize organise pack participate pay perform pick place plan post predict prepare prescribe print prioritize process produce provide publish purchase push query raise rank rate read reassign receive recommend reconcile record recover redeem refund register reject release reload remind remove renew rent reorder repair replace reply report request reschedule reserve reset resolve respond restock restore resume retrieve return review revoke rotate run save scan schedule score screen search see select sell send serve set setup share ship show sign simulate skip sort split pause unpause start stop store submit subscribe suggest supply suspend swap switch sync synchronise synchronize take tag test top track trade train transfer translate triage unlock unsubscribe update upgrade upload use validate verify view visit vote waitlist watch withdraw write\".split(\" \"),s=\"accept add approve assign browse calculate cancel choose confirm create delete edit enter generate get give inform maintain manage make modify notify pay place provide receive register reject remove select send submit validate verify ask\".split(\" \"),o=\"pending waiting booking ongoing outstanding missing remaining upcoming incoming outgoing existing\".split(\" \");function n(e){var r=[e];return/ies$/.test(e)&&r.push(e.slice(0,-3)+\"y\"),/es$/.test(e)&&r.push(e.slice(0,-2)),/s$/.test(e)&&r.push(e.slice(0,-1)),r}function c(e){return e=t.norm(e),a.indexOf(e)>=0}function l(e){return e=t.norm(e),n(e).some(function(r){return s.indexOf(r)>=0})}function p(e){if(e=t.norm(e),!/ing$/.test(e)||o.indexOf(e)>=0)return!1;var r=e.slice(0,-3),i=[r,r+\"e\"];return/(.)\\1$/.test(r)&&i.push(r.slice(0,-1)),i.some(function(u){return a.indexOf(u)>=0})}return t.laDongTu=c,t.laHanhDong=l,t.laHoatDongIng=p,!0}))(C);return C;})(); var A = {\"UC_SPEC\":(typeof UC_SPEC!=='undefined'?UC_SPEC:undefined)}; return (((function(t,l,g){var p=function(d,o,f){var c=f[o.bien];if(!c||typeof c!=\"object\")return{loi:d.m(o.bien+\" is missing \\u2014 declare const \"+o.bien+\" = { \\u2026 } with the template fields\",\"thi\\u1EBFu \"+o.bien+\" \\u2014 khai const \"+o.bien+\" = { \\u2026 } \\u0111\\u1EE7 c\\xE1c tr\\u01B0\\u1EDDng c\\u1EE7a template\")};function m(u){return Array.isArray(u)?u.map(function(r){return typeof r==\"string\"?r:r&&(r.text||r.step||r.description)||\"\"}):[]}function h(u){return m(u).map(function(r){return String(r).replace(/^\\s*\\d+[.)]\\s*/,\"\")})}return{s:c,ds:m,buoc:h}},a=p(t,l,g);if(a.loi)return a.loi;for(var s=a.s,i=[\"id\",\"name\",\"primaryActor\",\"description\",\"trigger\",\"preconditions\",\"postconditions\",\"normalFlow\",\"alternativeFlows\",\"exceptions\",\"priority\"],n=0;n<i.length;n++){var e=s[i[n]];if(e==null||typeof e==\"string\"&&!e.trim()||Array.isArray(e)&&!e.length)return t.m('field \"'+i[n]+'\" is empty','tr\\u01B0\\u1EDDng \"'+i[n]+'\" \\u0111ang tr\\u1ED1ng');if(/<[^>]*>|\\bTBD\\b|\\.\\.\\./.test(JSON.stringify(e)))return t.m('field \"'+i[n]+'\" still has template text (<\\u2026>, TBD, ...)','tr\\u01B0\\u1EDDng \"'+i[n]+'\" c\\xF2n ch\\u1EEF m\\u1EABu (<\\u2026>, TBD, ...)')}return/^UC-?\\d+$/i.test(String(s.id))?t.laDongTu(t.tu(s.name)[0])?/^(high|medium|low|must|should|could)/i.test(String(s.priority))?\"OK\":t.m(\"priority: High / Medium / Low\",\"\\u0111\\u1ED9 \\u01B0u ti\\xEAn: High / Medium / Low\"):t.m(\"use case name starts with a verb\",\"t\\xEAn use case b\\u1EAFt \\u0111\\u1EA7u b\\u1EB1ng \\u0111\\u1ED9ng t\\u1EEB\"):t.m(\"id must look like UC-05\",\"m\\xE3 ph\\u1EA3i d\\u1EA1ng UC-05\")})))(L, {\"bien\":\"UC_SPEC\",\"actorChinh\":{\"ten\":\"Reader\",\"khop\":[\"reader|member|borrower|student\"]},\"tienDK\":[{\"ten\":\"the reader is signed in\",\"khop\":[\"sign|log|authent\"]},{\"ten\":\"the reader has a current loan\",\"khop\":[\"loan|borrow\"]}],\"hauDK\":[{\"ten\":\"the due date is extended by 14 days\",\"khop\":[\"due date|14\"]},{\"ten\":\"the renewal count is increased\",\"khop\":[\"renewal|count|times\"]}],\"luongChinh\":{\"toiThieu\":5,\"su\":[{\"ten\":\"view current loans\",\"khop\":[\"loan|list\"]},{\"ten\":\"select a loan and choose Renew\",\"khop\":[\"select|choose\"]},{\"ten\":\"check the renewal rules\",\"khop\":[\"check|verif|validat\"]},{\"ten\":\"extend the due date\",\"khop\":[\"extend|new due|update\"]}]},\"thayThe\":[{\"ten\":\"Renew all\",\"khop\":[\"all\"]}],\"ngoaiLe\":[{\"ten\":\"loan overdue\",\"khop\":[\"overdue|late\"]},{\"ten\":\"renewal limit reached\",\"khop\":[\"limit|twice|2 renewals|two renewals|maximum\"]},{\"ten\":\"book reserved by another reader\",\"khop\":[\"reserv\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case specification — actors, trigger and conditions match the case",
+              "vi": "Đặc tả use case — actor, trigger và các điều kiện khớp đề"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();return C;})(); var A = {\"UC_SPEC\":(typeof UC_SPEC!=='undefined'?UC_SPEC:undefined)}; return (((function(t,r,g){var f=function(k,c,v){var u=v[c.bien];if(!u||typeof u!=\"object\")return{loi:k.m(c.bien+\" is missing \\u2014 declare const \"+c.bien+\" = { \\u2026 } with the template fields\",\"thi\\u1EBFu \"+c.bien+\" \\u2014 khai const \"+c.bien+\" = { \\u2026 } \\u0111\\u1EE7 c\\xE1c tr\\u01B0\\u1EDDng c\\u1EE7a template\")};function p(h){return Array.isArray(h)?h.map(function(n){return typeof n==\"string\"?n:n&&(n.text||n.step||n.description)||\"\"}):[]}function D(h){return p(h).map(function(n){return String(n).replace(/^\\s*\\d+[.)]\\s*/,\"\")})}return{s:u,ds:p,buoc:D}},o=f(t,r,g);if(o.loi)return o.loi;var i=o.s;if(!t.khop(i.primaryActor,r.actorChinh.khop))return t.m(\"primary actor: who starts this use case to reach a goal? (\"+r.actorChinh.ten+\")\",\"actor ch\\xEDnh: ai kh\\u1EDFi \\u0111\\u1ED9ng use case n\\xE0y \\u0111\\u1EC3 \\u0111\\u1EA1t m\\u1EE5c ti\\xEAu? (\"+r.actorChinh.ten+\")\");for(var m=(Array.isArray(i.secondaryActors)?i.secondaryActors:String(i.secondaryActors||\"\").split(/[,;]/)).join(\" | \"),e=0;e<(r.actorPhu||[]).length;e++)if(!t.khop(m,r.actorPhu[e].khop))return t.m(\"secondary actor missing: \"+r.actorPhu[e].ten,\"thi\\u1EBFu actor ph\\u1EE5: \"+r.actorPhu[e].ten);for(var d=o.ds(i.preconditions).join(\" | \"),a=0;a<(r.tienDK||[]).length;a++)if(!t.khop(d,r.tienDK[a].khop))return t.m(\"precondition missing: \"+r.tienDK[a].ten,\"thi\\u1EBFu ti\\u1EC1n \\u0111i\\u1EC1u ki\\u1EC7n: \"+r.tienDK[a].ten);for(var l=o.ds(i.postconditions).join(\" | \"),s=0;s<(r.hauDK||[]).length;s++)if(!t.khop(l,r.hauDK[s].khop))return t.m(\"postcondition missing: \"+r.hauDK[s].ten,\"thi\\u1EBFu h\\u1EADu \\u0111i\\u1EC1u ki\\u1EC7n: \"+r.hauDK[s].ten);return r.trigger&&!t.khop(i.trigger,r.trigger.khop)?t.m(\"trigger: \"+r.trigger.ten,\"trigger: \"+r.trigger.ten):\"OK\"})))(L, {\"bien\":\"UC_SPEC\",\"actorChinh\":{\"ten\":\"Reader\",\"khop\":[\"reader|member|borrower|student\"]},\"tienDK\":[{\"ten\":\"the reader is signed in\",\"khop\":[\"sign|log|authent\"]},{\"ten\":\"the reader has a current loan\",\"khop\":[\"loan|borrow\"]}],\"hauDK\":[{\"ten\":\"the due date is extended by 14 days\",\"khop\":[\"due date|14\"]},{\"ten\":\"the renewal count is increased\",\"khop\":[\"renewal|count|times\"]}],\"luongChinh\":{\"toiThieu\":5,\"su\":[{\"ten\":\"view current loans\",\"khop\":[\"loan|list\"]},{\"ten\":\"select a loan and choose Renew\",\"khop\":[\"select|choose\"]},{\"ten\":\"check the renewal rules\",\"khop\":[\"check|verif|validat\"]},{\"ten\":\"extend the due date\",\"khop\":[\"extend|new due|update\"]}]},\"thayThe\":[{\"ten\":\"Renew all\",\"khop\":[\"all\"]}],\"ngoaiLe\":[{\"ten\":\"loan overdue\",\"khop\":[\"overdue|late\"]},{\"ten\":\"renewal limit reached\",\"khop\":[\"limit|twice|2 renewals|two renewals|maximum\"]},{\"ten\":\"book reserved by another reader\",\"khop\":[\"reserv\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case specification — the normal flow is a numbered actor ↔ system dialogue covering the case, in order",
+              "vi": "Đặc tả use case — luồng chính là đối thoại actor ↔ hệ thống đánh số, phủ đề, đúng thứ tự"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();return C;})(); var A = {\"UC_SPEC\":(typeof UC_SPEC!=='undefined'?UC_SPEC:undefined)}; return (((function(n,m,v){var d=function(w,s,S){var h=S[s.bien];if(!h||typeof h!=\"object\")return{loi:w.m(s.bien+\" is missing \\u2014 declare const \"+s.bien+\" = { \\u2026 } with the template fields\",\"thi\\u1EBFu \"+s.bien+\" \\u2014 khai const \"+s.bien+\" = { \\u2026 } \\u0111\\u1EE7 c\\xE1c tr\\u01B0\\u1EDDng c\\u1EE7a template\")};function b(u){return Array.isArray(u)?u.map(function(t){return typeof t==\"string\"?t:t&&(t.text||t.step||t.description)||\"\"}):[]}function _(u){return b(u).map(function(t){return String(t).replace(/^\\s*\\d+[.)]\\s*/,\"\")})}return{s:h,ds:b,buoc:_}},i=d(n,m,v);if(i.loi)return i.loi;var y=i.s,e=i.buoc(y.normalFlow),r=m.luongChinh||{};if(e.length<(r.toiThieu||5))return n.m(\"only \"+e.length+\" steps \\u2014 the normal flow needs at least \"+(r.toiThieu||5),\"m\\u1EDBi \"+e.length+\" b\\u01B0\\u1EDBc \\u2014 lu\\u1ED3ng ch\\xEDnh c\\u1EA7n \\xEDt nh\\u1EA5t \"+(r.toiThieu||5));var f=e.filter(function(p){return/^(the )?system\\b/i.test(p.trim())}).length;if(f===0||f===e.length)return n.m('alternate actor steps and System steps (\"<Actor> selects\\u2026\", \"System displays\\u2026\")','xen k\\u1EBD b\\u01B0\\u1EDBc c\\u1EE7a actor v\\xE0 b\\u01B0\\u1EDBc \"System \\u2026\"');for(var g=-1,l=0;l<(r.su||[]).length;l++){for(var o=r.su[l],a=-1,c=0;c<e.length;c++)if(n.khop(e[c],o.khop)){a=c;break}if(a<0)return n.m(\"the normal flow never covers: \"+o.ten,\"lu\\u1ED3ng ch\\xEDnh ch\\u01B0a c\\xF3 b\\u01B0\\u1EDBc: \"+o.ten);if(a<g)return n.m('\"'+o.ten+'\" comes too early \\u2014 follow the order of the case','\"'+o.ten+'\" \\u0111\\u1EBFn qu\\xE1 s\\u1EDBm \\u2014 theo \\u0111\\xFAng th\\u1EE9 t\\u1EF1 trong \\u0111\\u1EC1');g=a}return\"OK\"})))(L, {\"bien\":\"UC_SPEC\",\"actorChinh\":{\"ten\":\"Reader\",\"khop\":[\"reader|member|borrower|student\"]},\"tienDK\":[{\"ten\":\"the reader is signed in\",\"khop\":[\"sign|log|authent\"]},{\"ten\":\"the reader has a current loan\",\"khop\":[\"loan|borrow\"]}],\"hauDK\":[{\"ten\":\"the due date is extended by 14 days\",\"khop\":[\"due date|14\"]},{\"ten\":\"the renewal count is increased\",\"khop\":[\"renewal|count|times\"]}],\"luongChinh\":{\"toiThieu\":5,\"su\":[{\"ten\":\"view current loans\",\"khop\":[\"loan|list\"]},{\"ten\":\"select a loan and choose Renew\",\"khop\":[\"select|choose\"]},{\"ten\":\"check the renewal rules\",\"khop\":[\"check|verif|validat\"]},{\"ten\":\"extend the due date\",\"khop\":[\"extend|new due|update\"]}]},\"thayThe\":[{\"ten\":\"Renew all\",\"khop\":[\"all\"]}],\"ngoaiLe\":[{\"ten\":\"loan overdue\",\"khop\":[\"overdue|late\"]},{\"ten\":\"renewal limit reached\",\"khop\":[\"limit|twice|2 renewals|two renewals|maximum\"]},{\"ten\":\"book reserved by another reader\",\"khop\":[\"reserv\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case specification — alternative flows and exceptions cover the case and point to a real step",
+              "vi": "Đặc tả use case — luồng thay thế và ngoại lệ phủ đề và trỏ đúng một bước có thật"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();return C;})(); var A = {\"UC_SPEC\":(typeof UC_SPEC!=='undefined'?UC_SPEC:undefined)}; return (((function(a,u,g){var w=function(y,c,A){var b=A[c.bien];if(!b||typeof b!=\"object\")return{loi:y.m(c.bien+\" is missing \\u2014 declare const \"+c.bien+\" = { \\u2026 } with the template fields\",\"thi\\u1EBFu \"+c.bien+\" \\u2014 khai const \"+c.bien+\" = { \\u2026 } \\u0111\\u1EE7 c\\xE1c tr\\u01B0\\u1EDDng c\\u1EE7a template\")};function d(l){return Array.isArray(l)?l.map(function(e){return typeof e==\"string\"?e:e&&(e.text||e.step||e.description)||\"\"}):[]}function _(l){return d(l).map(function(e){return String(e).replace(/^\\s*\\d+[.)]\\s*/,\"\")})}return{s:b,ds:d,buoc:_}},o=w(a,u,g);if(o.loi)return o.loi;for(var h=o.s,p=o.buoc(h.normalFlow),t=[[\"alternativeFlows\",u.thayThe||[]],[\"exceptions\",u.ngoaiLe||[]]],n=0;n<t.length;n++){for(var f=Array.isArray(h[t[n][0]])?h[t[n][0]]:[],r=0;r<f.length;r++){var m=f[r]||{},v=Number(String(m.at==null?\"\":m.at).replace(/[^0-9.]/g,\"\"));if(!(v>=1&&v<=p.length))return a.m(t[n][0]+\"[\"+r+']: \"at\" must be the number of the normal-flow step where it branches (1\\u2026'+p.length+\")\",t[n][0]+\"[\"+r+']: \"at\" ph\\u1EA3i l\\xE0 s\\u1ED1 b\\u01B0\\u1EDBc c\\u1EE7a lu\\u1ED3ng ch\\xEDnh n\\u01A1i r\\u1EBD nh\\xE1nh (1\\u2026'+p.length+\")\");if(!o.ds(m.steps).length)return a.m(t[n][0]+\"[\"+r+\"]: list its steps\",t[n][0]+\"[\"+r+\"]: li\\u1EC7t k\\xEA c\\xE1c b\\u01B0\\u1EDBc\")}for(var j=f.map(function(i){return[i&&i.name,i&&i.condition,o.ds(i&&i.steps).join(\" \")].join(\" \")}).join(\" | \"),s=0;s<t[n][1].length;s++)if(!a.khop(j,t[n][1][s].khop))return a.m((n?\"exception\":\"alternative flow\")+\" missing: \"+t[n][1][s].ten,\"thi\\u1EBFu \"+(n?\"ngo\\u1EA1i l\\u1EC7\":\"lu\\u1ED3ng thay th\\u1EBF\")+\": \"+t[n][1][s].ten)}return\"OK\"})))(L, {\"bien\":\"UC_SPEC\",\"actorChinh\":{\"ten\":\"Reader\",\"khop\":[\"reader|member|borrower|student\"]},\"tienDK\":[{\"ten\":\"the reader is signed in\",\"khop\":[\"sign|log|authent\"]},{\"ten\":\"the reader has a current loan\",\"khop\":[\"loan|borrow\"]}],\"hauDK\":[{\"ten\":\"the due date is extended by 14 days\",\"khop\":[\"due date|14\"]},{\"ten\":\"the renewal count is increased\",\"khop\":[\"renewal|count|times\"]}],\"luongChinh\":{\"toiThieu\":5,\"su\":[{\"ten\":\"view current loans\",\"khop\":[\"loan|list\"]},{\"ten\":\"select a loan and choose Renew\",\"khop\":[\"select|choose\"]},{\"ten\":\"check the renewal rules\",\"khop\":[\"check|verif|validat\"]},{\"ten\":\"extend the due date\",\"khop\":[\"extend|new due|update\"]}]},\"thayThe\":[{\"ten\":\"Renew all\",\"khop\":[\"all\"]}],\"ngoaiLe\":[{\"ten\":\"loan overdue\",\"khop\":[\"overdue|late\"]},{\"ten\":\"renewal limit reached\",\"khop\":[\"limit|twice|2 renewals|two renewals|maximum\"]},{\"ten\":\"book reserved by another reader\",\"khop\":[\"reserv\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết \"System renews the loan\" mà không có bước kiểm tra luật."
+        },
+        {
+          "loi": "Đưa \"loan not overdue\" vào tiền điều kiện thay vì ngoại lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "precondition / postcondition",
+          "vi": "tiền điều kiện (phải đúng trước khi bắt đầu) / hậu điều kiện (đúng sau khi xong)"
+        },
+        {
+          "en": "normal flow (main success scenario)",
+          "vi": "luồng chính — chuỗi bước thành công điển hình"
+        },
+        {
+          "en": "alternative flow",
+          "vi": "luồng thay thế — cách khác vẫn đạt mục tiêu"
+        },
+        {
+          "en": "exception",
+          "vi": "ngoại lệ — điều kiện làm use case không đạt mục tiêu, và cách xử lý"
+        },
+        {
+          "en": "business rule",
+          "vi": "quy tắc nghiệp vụ — chính sách, luật, chuẩn, công thức tồn tại NGOÀI phần mềm"
+        }
+      ]
+    }
+  ]
+}

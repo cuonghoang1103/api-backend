@@ -209,8 +209,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Even though the activities iterate, one pass for a single feature goes in a natural order. Order the steps for the feature \"quiz reminders\".</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Dù các hoạt động lặp lại, một lượt cho một tính năng vẫn có thứ tự tự nhiên. Sắp các bước cho tính năng \"nhắc làm quiz\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Even though the activities iterate, one pass for a single feature goes in a natural order. Order the steps for the feature \"quiz reminders\".</p><p>Drag the items into the right order; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dù các hoạt động lặp lại, một lượt cho một tính năng vẫn có thứ tự tự nhiên. Sắp các bước cho tính năng \"nhắc làm quiz\".</p><p>Kéo các mục về đúng thứ tự; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -312,8 +312,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Decide for each task of the e-learning team whether it is requirements <b>development</b> (creating the requirements) or requirements <b>management</b> (controlling them after the baseline).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Với mỗi việc của đội e-learning, xác định là <b>phát triển</b> yêu cầu (tạo ra yêu cầu) hay <b>quản lý</b> yêu cầu (kiểm soát sau baseline).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Decide for each task of the e-learning team whether it is requirements <b>development</b> (creating the requirements) or requirements <b>management</b> (controlling them after the baseline).</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi việc của đội e-learning, xác định là <b>phát triển</b> yêu cầu (tạo ra yêu cầu) hay <b>quản lý</b> yêu cầu (kiểm soát sau baseline).</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -468,8 +468,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Tasks from the plan of a team building an e-learning portal. Name the requirements activity of each (Wiegers slides 18–20 list the typical tasks of each activity).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Các việc trong kế hoạch của một đội xây cổng e-learning. Gọi tên hoạt động yêu cầu của từng việc (slide 18–20 liệt kê việc điển hình của mỗi hoạt động).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Tasks from the plan of a team building an e-learning portal. Name the requirements activity of each (Wiegers slides 18–20 list the typical tasks of each activity).</p><p>Each row is graded on its own; the explanation of every answer appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các việc trong kế hoạch của một đội xây cổng e-learning. Gọi tên hoạt động yêu cầu của từng việc (slide 18–20 liệt kê việc điển hình của mỗi hoạt động).</p><p>Mỗi dòng được chấm riêng; giải thích từng đáp án hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

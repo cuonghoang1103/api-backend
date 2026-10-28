@@ -1,0 +1,656 @@
+{
+  "trackSlug": "swr302-practice",
+  "moduleSlug": "swr302-4-1-use-case-user-story",
+  "lesson": {
+    "course": "software-requirements",
+    "slug": "swr302-4-1-use-case-user-story"
+  },
+  "exercises": [
+    {
+      "title": "Use cases 1 — use case or user story?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "use cases",
+        "user stories"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Both are <b>usage-centric</b>: they describe what users need to do with the system. A <b>use case</b> describes a sequence of interactions between an actor and the system that yields a result of value, with normal, alternative and exception flows. A <b>user story</b> is a short statement \"As a &lt;role&gt;, I want &lt;goal&gt; so that &lt;benefit&gt;\", detailed later through conversation and acceptance criteria.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cả hai đều <b>lấy việc sử dụng làm trung tâm</b>. <b>Use case</b> mô tả chuỗi tương tác giữa actor và hệ thống đem lại kết quả có giá trị, gồm luồng chính, luồng thay thế, ngoại lệ. <b>User story</b> là câu ngắn \"As a &lt;vai trò&gt;, I want &lt;mục tiêu&gt; so that &lt;lợi ích&gt;\", chi tiết hoá sau qua trao đổi và tiêu chí chấp nhận.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Use case = tương tác dẫn tới kết quả có giá trị; story = vai trò/mục tiêu/lợi ích.",
+        "Tên use case: động từ + tân ngữ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 1 — use case or user story?\n\nAnswer in the answer panel (no code needed).\n\n1. What does a use case describe?Use case mô tả gì?\n2. Which is a user story?Cái nào là một user story?\n3. Which name is a good use case name?Tên nào là tên use case tốt?\n4. Use cases are usually written…Use case thường được viết…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 1 — use case or user story? — answer key\n\n1. What does a use case describe?Use case mô tả gì?\n   Answer: b) A sequence of actor–system interactions that gives the actor a result of value\n   The value to the actor is what makes it a use case.VI: Giá trị cho actor là thứ làm nên một use case.\n\n2. Which is a user story?Cái nào là một user story?\n   Answer: b) As a patient, I want to book an appointment online so that I do not have to call the clinic.\n   Role, goal, benefit.VI: Vai trò, mục tiêu, lợi ích.\n\n3. Which name is a good use case name?Tên nào là tên use case tốt?\n   Answer: b) Book Appointment\n   Verb + object, from the actor’s point of view.VI: Động từ + tân ngữ, từ góc nhìn actor.\n\n4. Use cases are usually written…Use case thường được viết…\n   Answer: a) with more structure and detail before development, often on waterfall-style projects\n   User stories are lighter and detailed just in time; use cases carry more structure up front. Both can be used together.VI: User story nhẹ hơn, chi tiết hoá đúng lúc; use case có cấu trúc từ đầu. Có thể dùng cả hai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: b · b · b · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What does a use case describe?</p><p style=\"opacity:.75;font-size:.92em\"><i>Use case mô tả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A screen of the application"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A sequence of actor–system interactions that gives the actor a result of value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A database table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A class of the design"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The value to the actor is what makes it a use case.</p><p><i>VI: Giá trị cho actor là thứ làm nên một use case.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a user story?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào là một user story?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "UC-05 Book Appointment: normal flow 1…7, alternative flow 4a"
+              },
+              {
+                "ma": "b",
+                "noiDung": "As a patient, I want to book an appointment online so that I do not have to call the clinic."
+              },
+              {
+                "ma": "c",
+                "noiDung": "The system shall store appointments."
+              },
+              {
+                "ma": "d",
+                "noiDung": "Appointment: id, date, doctor"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Role, goal, benefit.</p><p><i>VI: Vai trò, mục tiêu, lợi ích.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which name is a good use case name?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tên nào là tên use case tốt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Appointment"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Book Appointment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Appointment Screen"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Database Insert"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Verb + object, from the actor’s point of view.</p><p><i>VI: Động từ + tân ngữ, từ góc nhìn actor.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Use cases are usually written…</p><p style=\"opacity:.75;font-size:.92em\"><i>Use case thường được viết…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "with more structure and detail before development, often on waterfall-style projects"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only on agile projects"
+              },
+              {
+                "ma": "c",
+                "noiDung": "after the code is written"
+              },
+              {
+                "ma": "d",
+                "noiDung": "by the testers only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>User stories are lighter and detailed just in time; use cases carry more structure up front. Both can be used together.</p><p><i>VI: User story nhẹ hơn, chi tiết hoá đúng lúc; use case có cấu trúc từ đầu. Có thể dùng cả hai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tên use case bằng danh từ hay tên màn hình."
+        },
+        {
+          "loi": "Coi một câu \"The system shall…\" là user story."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "user story",
+          "vi": "câu chuyện người dùng — \"As a <role>, I want <goal> so that <benefit>\""
+        },
+        {
+          "en": "actor",
+          "vi": "tác nhân — vai trò (người hoặc hệ thống) bên ngoài tương tác với hệ thống"
+        }
+      ]
+    },
+    {
+      "title": "Use cases 2 — actor or not?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "actors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>An <b>actor</b> is a person (playing a role), another software system or a hardware device that interacts with the system to achieve a goal. It is always OUTSIDE the system. Decide for each element of <b>ClinicCare</b>, an appointment system for a private clinic: <b>Actor</b>, or <b>Not an actor</b> (a part of the system, data, or someone who never interacts with it).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Actor</b> là người (đóng một vai trò), hệ thống phần mềm khác hoặc thiết bị phần cứng tương tác với hệ thống để đạt mục tiêu. Luôn ở NGOÀI hệ thống. Với mỗi thành phần của <b>ClinicCare</b> (hệ thống đặt lịch phòng khám tư): <b>Actor</b> hay <b>Not an actor</b> (một phần hệ thống, dữ liệu, hoặc người không bao giờ tương tác).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Actor ở NGOÀI hệ thống và TƯƠNG TÁC với nó.",
+        "Thiết bị và hệ thống ngoài cũng có thể là actor."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 2 — actor or not?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 2 — actor or not? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Actor\n   - r1.k: Actor\n   - r2.k: Not an actor\n   - r3.k: Actor\n   - r4.k: Actor\n   - r5.k: Not an actor\n   - r6.k: Not an actor\n   - r7.k: Actor\n   Roles, external systems and devices that exchange data with ClinicCare are actors. The database and screens are part of the system; someone who never interacts with it is not an actor.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Roles, external systems and devices that exchange data with ClinicCare are actors. The database and screens are part of the system; someone who never interacts with it is not an actor.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Actor?",
+                "luaChon": [
+                  "Actor",
+                  "Not an actor"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Patient who books online"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Receptionist"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "The appointment database"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "The insurance company’s claims API"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "The SMS gateway that delivers reminders"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "The booking confirmation screen"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "A patient’s relative who only accompanies the patient to the clinic"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "s": "The queue-number display in the waiting room (a device that receives numbers to show)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Actor",
+              "r1.k": "Actor",
+              "r2.k": "Not an actor",
+              "r3.k": "Actor",
+              "r4.k": "Actor",
+              "r5.k": "Not an actor",
+              "r6.k": "Not an actor",
+              "r7.k": "Actor"
+            },
+            "giaiThich": "<p><p>Roles, external systems and devices that exchange data with ClinicCare are actors. The database and screens are part of the system; someone who never interacts with it is not an actor.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vẽ CSDL thành actor."
+        },
+        {
+          "loi": "Vẽ người thân đi cùng thành actor dù họ không dùng hệ thống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "actor",
+          "vi": "tác nhân — vai trò (người hoặc hệ thống) bên ngoài tương tác với hệ thống"
+        },
+        {
+          "en": "system boundary",
+          "vi": "biên hệ thống — khung chữ nhật chứa mọi use case; actor ở ngoài"
+        }
+      ]
+    },
+    {
+      "title": "Use cases 4 — is it a good use case?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "use case granularity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p>Classic mistakes in student use case diagrams: a use case that is only a step of another one, a use case named after a screen or a CRUD operation, a use case that gives no value to any actor. Decide whether each candidate for ClinicCare is a <b>Good use case</b> or <b>Not a use case</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lỗi kinh điển trong sơ đồ use case của sinh viên: use case chỉ là một bước của use case khác, đặt tên theo màn hình hay thao tác CRUD, use case không đem lại giá trị cho actor nào. Với mỗi ứng viên của ClinicCare: <b>Good use case</b> hay <b>Not a use case</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi: actor có \"đạt được một điều có giá trị\" sau use case này không?",
+        "Một bước kiểm tra hay một nút bấm chỉ là một bước bên trong use case."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 4 — is it a good use case?\n\nAnswer in the answer panel (no code needed).\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Use cases 4 — is it a good use case? — answer key\n\n1. Choose the right value for every row.Chọn giá trị đúng cho mỗi dòng.\n   - r0.k: Good use case\n   - r1.k: Not a use case\n   - r2.k: Not a use case\n   - r3.k: Good use case\n   - r4.k: Not a use case\n   - r5.k: Good use case\n   - r6.k: Not a use case\n   A use case is a goal of an actor with a result of value. UI actions, screens, database operations and validation steps are parts of use cases, not use cases.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A use case is a goal of an actor with a result of value. UI actions, screens, database operations and validation steps are parts of use cases, not use cases.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choose the right value for every row.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn giá trị đúng cho mỗi dòng.</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Statement"
+              },
+              {
+                "ma": "k",
+                "ten": "Verdict",
+                "luaChon": [
+                  "Good use case",
+                  "Not a use case"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "s": "Book Appointment"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Click \"Next\" button"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Appointment Table Insert"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "View Day Schedule"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Validate Phone Number Format"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Pay Consultation Fee"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Home Page"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.k": "Good use case",
+              "r1.k": "Not a use case",
+              "r2.k": "Not a use case",
+              "r3.k": "Good use case",
+              "r4.k": "Not a use case",
+              "r5.k": "Good use case",
+              "r6.k": "Not a use case"
+            },
+            "giaiThich": "<p><p>A use case is a goal of an actor with a result of value. UI actions, screens, database operations and validation steps are parts of use cases, not use cases.</p></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mỗi màn hình một use case."
+        },
+        {
+          "loi": "Tách \"Validate…\" thành use case riêng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        }
+      ]
+    },
+    {
+      "title": "Use cases 3 — draw a first use case diagram",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "use case diagram"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "swr302"
+      ],
+      "problemHtml": "<p><b>ClinicCare</b>: a <b>patient</b> books and cancels appointments online; the <b>receptionist</b> can also book for patients who phone in, and checks patients in when they arrive; a <b>doctor</b> views the schedule of the day. The day before each appointment ClinicCare sends a reminder through the <b>SMS gateway</b>. Draw the use case diagram.</p><p><b>PlantUML.</b> <code>actor Patient</code> · <code>actor \"Payment Gateway\" as PG</code> · the system boundary <code>rectangle \"ClinicCare\" { … }</code> holding <code>usecase \"Book Appointment\" as UC1</code> · association <code>Patient --> UC1</code> · <code>UC1 ..> UC2 : &lt;&lt;include&gt;&gt;</code> (base → included) · <code>UC3 ..> UC1 : &lt;&lt;extend&gt;&gt;</code> (extension → base) · actor generalisation <code>Child --|> Parent</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One boundary, four actors, five use cases named verb + object, every actor linked.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>ClinicCare</b>: <b>bệnh nhân</b> đặt và huỷ lịch trực tuyến; <b>lễ tân</b> cũng đặt hộ người gọi điện và check-in bệnh nhân khi tới; <b>bác sĩ</b> xem lịch trong ngày. Một ngày trước mỗi lịch hẹn, ClinicCare gửi nhắc qua <b>cổng SMS</b>. Vẽ sơ đồ use case.</p><p><b>PlantUML.</b> <code>actor Patient</code> · <code>actor \"Payment Gateway\" as PG</code> · biên hệ thống <code>rectangle \"ClinicCare\" { … }</code> chứa <code>usecase \"Book Appointment\" as UC1</code> · liên kết <code>Patient --> UC1</code> · <code>UC1 ..> UC2 : &lt;&lt;include&gt;&gt;</code> (gốc → được gộp) · <code>UC3 ..> UC1 : &lt;&lt;extend&gt;&gt;</code> (mở rộng → gốc) · tổng quát hoá actor <code>Con --|> Cha</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một biên, bốn actor, năm use case tên động từ + tân ngữ, actor nào cũng được nối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Patient --> UC1",
+          "output": "the patient takes part in Book Appointment",
+          "explanation": "An association line.|||Đường liên kết."
+        }
+      ],
+      "hintsJson": [
+        "Bốn actor: Patient, Receptionist, Doctor, SMS Gateway.",
+        "Book Appointment nối với CẢ Patient và Receptionist."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "usecase.js",
+          "language": "javascript",
+          "code": "const USE_CASE_DIAGRAM = `\n@startuml\nactor Patient\nrectangle \"ClinicCare\" {\n}\n@enduml\n`;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "usecase.js",
+          "language": "javascript",
+          "code": "// The SMS gateway is a secondary actor of the reminder (a temporal use case with no human starter).\nconst USE_CASE_DIAGRAM = `\n@startuml\nleft to right direction\nactor Patient\nactor Receptionist\nactor Doctor\nactor \"SMS Gateway\" as SMS\nrectangle \"ClinicCare\" {\n  usecase \"Book Appointment\" as UC1\n  usecase \"Cancel Appointment\" as UC2\n  usecase \"Check In Patient\" as UC3\n  usecase \"View Day Schedule\" as UC4\n  usecase \"Send Reminder\" as UC5\n}\nPatient --> UC1\nPatient --> UC2\nReceptionist --> UC1\nReceptionist --> UC3\nDoctor --> UC4\nUC5 --> SMS\n@enduml\n`;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four actors, five use cases; the receptionist shares Book Appointment with the patient.</p><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 380\" width=\"100%\" style=\"max-width:760px;display:block;margin:10px auto\" role=\"img\" aria-label=\"Use case diagram — ClinicCare (first cut)\" font-family=\"Arial, Helvetica, sans-serif\" font-size=\"12\"><defs><marker id=\"swm\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1f2937\"/></marker><marker id=\"swmo\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"10\" markerHeight=\"10\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11\" fill=\"none\" stroke=\"#1f2937\" stroke-width=\"1.3\"/></marker><marker id=\"swmt\" viewBox=\"0 0 12 12\" refX=\"11\" refY=\"6\" markerWidth=\"11\" markerHeight=\"11\" orient=\"auto-start-reverse\"><path d=\"M1,1 L11,6 L1,11 z\" fill=\"#ffffff\" stroke=\"#1f2937\" stroke-width=\"1.2\"/></marker></defs><rect x=\"0\" y=\"0\" width=\"760\" height=\"380\" rx=\"10\" fill=\"#ffffff\" stroke=\"#d1d5db\"/><text x=\"380\" y=\"20\" text-anchor=\"middle\" font-weight=\"700\" fill=\"#111827\" font-size=\"13\">Use case diagram — ClinicCare (first cut)</text><rect x=\"150\" y=\"44\" width=\"460\" height=\"316\" rx=\"6\" fill=\"#f8fafc\" stroke=\"#1f2937\" stroke-width=\"1.4\"/><text x=\"160\" y=\"60\" fill=\"#111827\" font-weight=\"700\">ClinicCare</text><ellipse cx=\"380.0\" cy=\"109.6\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"113.4\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Book Appointment</text><ellipse cx=\"380.0\" cy=\"160.8\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"164.6\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Cancel Appointment</text><ellipse cx=\"380.0\" cy=\"212.0\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"215.8\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Check In Patient</text><ellipse cx=\"380.0\" cy=\"263.2\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"267.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">View Day Schedule</text><ellipse cx=\"380.0\" cy=\"314.4\" rx=\"130\" ry=\"21\" fill=\"#eef2ff\" stroke=\"#1f2937\" stroke-width=\"1.3\"/><text x=\"380.0\" y=\"318.2\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Send Reminder</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"70.0\" cy=\"113.2\" r=\"8\" fill=\"#ffffff\"/><path d=\"M70.0,121.2 V143.2 M56.0,129.2 H84.0 M70.0,143.2 L59.0,159.2 M70.0,143.2 L81.0,159.2\"/></g><text x=\"70.0\" y=\"177.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Patient</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"70.0\" cy=\"199.2\" r=\"8\" fill=\"#ffffff\"/><path d=\"M70.0,207.2 V229.2 M56.0,215.2 H84.0 M70.0,229.2 L59.0,245.2 M70.0,229.2 L81.0,245.2\"/></g><text x=\"70.0\" y=\"263.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Receptionist</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"70.0\" cy=\"285.2\" r=\"8\" fill=\"#ffffff\"/><path d=\"M70.0,293.2 V315.2 M56.0,301.2 H84.0 M70.0,315.2 L59.0,331.2 M70.0,315.2 L81.0,331.2\"/></g><text x=\"70.0\" y=\"349.0\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">Doctor</text><g stroke=\"#1f2937\" stroke-width=\"1.5\" fill=\"none\"><circle cx=\"690.0\" cy=\"288.0\" r=\"8\" fill=\"#ffffff\"/><path d=\"M690.0,296.0 V318.0 M676.0,304.0 H704.0 M690.0,318.0 L679.0,334.0 M690.0,318.0 L701.0,334.0\"/></g><text x=\"690.0\" y=\"351.8\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"11.5\">SMS Gateway</text><path d=\"M92.0,137.1 L264.2,119.2\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M92.0,140.7 L264.2,151.2\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M92.0,217.0 L326.8,128.8\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M92.0,224.3 L252.1,215.8\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M92.0,307.8 L282.3,277.1\" stroke=\"#334155\" stroke-width=\"1.2\"/><path d=\"M509.5,312.6 L668.0,314.0\" stroke=\"#334155\" stroke-width=\"1.2\"/></svg><details><summary>Source / Mã nguồn</summary><pre>@startuml\nleft to right direction\nactor Patient\nactor Receptionist\nactor Doctor\nactor \"SMS Gateway\" as SMS\nrectangle \"ClinicCare\" {\n  usecase \"Book Appointment\" as UC1\n  usecase \"Cancel Appointment\" as UC2\n  usecase \"Check In Patient\" as UC3\n  usecase \"View Day Schedule\" as UC4\n  usecase \"Send Reminder\" as UC5\n}\nPatient --&gt; UC1\nPatient --&gt; UC2\nReceptionist --&gt; UC1\nReceptionist --&gt; UC3\nDoctor --&gt; UC4\nUC5 --&gt; SMS\n@enduml</pre></details>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepNap": [
+          "usecase.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Use case diagram — valid PlantUML, every line understood",
+              "vi": "Sơ đồ use case — đúng cú pháp PlantUML, mọi dòng đọc được"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(l,v,K){var m=function(d,h,E){var s=E[h.bien];if(typeof s!=\"string\"||!s.trim())return{loi:d.m(h.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",h.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var e=d.pu(s),g={},p={};e.actors.forEach(function(r){g[r.key]=r}),e.ucs.forEach(function(r){p[r.key]=r});function y(r){return e.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function O(r){var t=[r],i={},u;for(u=0;u<t.length;u++)y(t[u]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var c=[];for(e.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&c.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&c.push(n.tu))}),u=0;u<c.length;u++){var a=c[u];i[a]||(i[a]=!0,e.qh.forEach(function(n){n.loai===\"include\"&&n.tu===a&&c.push(n.den),n.loai===\"extend\"&&n.den===a&&c.push(n.tu)}))}return Object.keys(i)}function b(r){var t=[];return e.qh.forEach(function(i){i.loai===\"assoc\"&&(i.tu===r&&i.denK===\"actor\"&&t.push(i.den),i.den===r&&i.tuK===\"actor\"&&t.push(i.tu))}),t}return{p:e,act:g,uc:p,toiDuoc:O,actorCua:b}},f=m(l,v,K);if(f.loi)return f.loi;var o=f.p;return o.loi.length?o.loi[0]+(o.loi.length>1?\" (+\"+(o.loi.length-1)+\")\":\"\"):!o.actors.length||!o.ucs.length?l.m(\"declare actors and use cases\",\"khai actor v\\xE0 use case\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — ONE system boundary holds every use case; actors stay outside",
+              "vi": "Sơ đồ use case — MỘT biên hệ thống chứa mọi use case; actor ở ngoài"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,y,K){var E=function(p,l,O){var m=O[l.bien];if(typeof m!=\"string\"||!m.trim())return{loi:p.m(l.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",l.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var a=p.pu(m),b={},v={};a.actors.forEach(function(r){b[r.key]=r}),a.ucs.forEach(function(r){v[r.key]=r});function x(r){return a.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function D(r){var t=[r],i={},o;for(o=0;o<t.length;o++)x(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var s=[];for(a.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&s.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&s.push(n.tu))}),o=0;o<s.length;o++){var f=s[o];i[f]||(i[f]=!0,a.qh.forEach(function(n){n.loai===\"include\"&&n.tu===f&&s.push(n.den),n.loai===\"extend\"&&n.den===f&&s.push(n.tu)}))}return Object.keys(i)}function _(r){var t=[];return a.qh.forEach(function(i){i.loai===\"assoc\"&&(i.tu===r&&i.denK===\"actor\"&&t.push(i.den),i.den===r&&i.tuK===\"actor\"&&t.push(i.tu))}),t}return{p:a,act:b,uc:v,toiDuoc:D,actorCua:_}},h=E(u,y,K);if(h.loi)return h.loi;var c=h.p;if(c.bien.length===0)return u.m('no system boundary \\u2014 wrap the use cases in rectangle \"System name\" { \\u2026 }','ch\\u01B0a c\\xF3 bi\\xEAn h\\u1EC7 th\\u1ED1ng \\u2014 b\\u1ECDc use case trong rectangle \"T\\xEAn h\\u1EC7 th\\u1ED1ng\" { \\u2026 }');if(c.bien.length>1)return u.m(c.bien.length+\" boundaries \\u2014 one system, one rectangle\",c.bien.length+\" bi\\xEAn \\u2014 m\\u1ED9t h\\u1EC7 th\\u1ED1ng, m\\u1ED9t h\\xECnh ch\\u1EEF nh\\u1EADt\");var g=c.ucs.filter(function(e){return!e.trong});if(g.length)return u.m(\"use case \"+u.ds(g.map(function(e){return e.ten}))+\" is outside the boundary\",\"use case \"+u.ds(g.map(function(e){return e.ten}))+\" n\\u1EB1m ngo\\xE0i bi\\xEAn\");var d=c.actors.filter(function(e){return e.trong});return d.length?u.m(\"actor \"+u.ds(d.map(function(e){return e.ten}))+\" is inside the boundary \\u2014 actors are outside the system\",\"actor \"+u.ds(d.map(function(e){return e.ten}))+\" n\\u1EB1m trong bi\\xEAn \\u2014 actor \\u1EDF ngo\\xE0i h\\u1EC7 th\\u1ED1ng\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — links are legal: actor–use case associations, «include»/«extend» only between use cases, no actor–actor association",
+              "vi": "Sơ đồ use case — liên kết hợp lệ: actor–use case là association, «include»/«extend» chỉ giữa hai use case, không nối actor–actor"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,v,b){var w=function(p,h,x){var l=x[h.bien];if(typeof l!=\"string\"||!l.trim())return{loi:p.m(h.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",h.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var r=p.pu(l),K={},m={};r.actors.forEach(function(e){K[e.key]=e}),r.ucs.forEach(function(e){m[e.key]=e});function y(e){return r.qh.filter(function(o){return o.loai===\"gen\"&&o.tuK===\"actor\"&&o.tu===e}).map(function(o){return o.den})}function E(e){var o=[e],a={},i;for(i=0;i<o.length;i++)y(o[i]).forEach(function(t){o.indexOf(t)<0&&o.push(t)});var u=[];for(r.qh.forEach(function(t){t.loai===\"assoc\"&&(t.tuK===\"actor\"&&o.indexOf(t.tu)>=0&&t.denK===\"uc\"&&u.push(t.den),t.denK===\"actor\"&&o.indexOf(t.den)>=0&&t.tuK===\"uc\"&&u.push(t.tu))}),i=0;i<u.length;i++){var s=u[i];a[s]||(a[s]=!0,r.qh.forEach(function(t){t.loai===\"include\"&&t.tu===s&&u.push(t.den),t.loai===\"extend\"&&t.den===s&&u.push(t.tu)}))}return Object.keys(a)}function O(e){var o=[];return r.qh.forEach(function(a){a.loai===\"assoc\"&&(a.tu===e&&a.denK===\"actor\"&&o.push(a.den),a.den===e&&a.tuK===\"actor\"&&o.push(a.tu))}),o}return{p:r,act:K,uc:m,toiDuoc:E,actorCua:O}},d=w(c,v,b);if(d.loi)return d.loi;for(var g=d.p,f=0;f<g.qh.length;f++){var n=g.qh[f];if((n.loai===\"include\"||n.loai===\"extend\")&&(n.tuK!==\"uc\"||n.denK!==\"uc\"))return c.m(\"line \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB must connect two use cases \\u2014 an actor is linked with a plain association\",\"d\\xF2ng \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB ch\\u1EC9 n\\u1ED1i hai use case \\u2014 actor n\\u1ED1i b\\u1EB1ng association th\\u01B0\\u1EDDng\");if((n.loai===\"include\"||n.loai===\"extend\")&&n.net!==\"dut\")return c.m(\"line \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB is a dashed arrow (..>)\",\"d\\xF2ng \"+n.dong+\": \\xAB\"+n.loai+\"\\xBB l\\xE0 m\\u0169i t\\xEAn n\\xE9t \\u0111\\u1EE9t (..>)\");if(n.loai===\"assoc\"&&n.tuK===\"actor\"&&n.denK===\"actor\")return c.m(\"line \"+n.dong+\": association between two actors \\u2014 actors only talk to the system (use --|> for generalization)\",\"d\\xF2ng \"+n.dong+\": association gi\\u1EEFa hai actor \\u2014 actor ch\\u1EC9 t\\u01B0\\u01A1ng t\\xE1c v\\u1EDBi h\\u1EC7 th\\u1ED1ng (t\\u1ED5ng qu\\xE1t ho\\xE1 d\\xF9ng --|>)\");if(n.loai===\"assoc\"&&n.tuK===\"uc\"&&n.denK===\"uc\")return c.m(\"line \"+n.dong+\": plain line between two use cases \\u2014 use \\xABinclude\\xBB or \\xABextend\\xBB\",\"d\\xF2ng \"+n.dong+\": \\u0111\\u01B0\\u1EDDng th\\u01B0\\u1EDDng gi\\u1EEFa hai use case \\u2014 d\\xF9ng \\xABinclude\\xBB ho\\u1EB7c \\xABextend\\xBB\");if(n.loai===\"gen\"&&n.tuK!==n.denK)return c.m(\"line \"+n.dong+\": generalization must be actor \\u2192 actor or use case \\u2192 use case\",\"d\\xF2ng \"+n.dong+\": t\\u1ED5ng qu\\xE1t ho\\xE1 ph\\u1EA3i actor \\u2192 actor ho\\u1EB7c use case \\u2192 use case\")}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — every actor takes part in a use case and every use case is reachable",
+              "vi": "Sơ đồ use case — actor nào cũng tham gia use case và use case nào cũng có người dùng tới"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(c,E,K){var b=function(r,p,x){var m=x[p.bien];if(typeof m!=\"string\"||!m.trim())return{loi:r.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var a=r.pu(m),y={},k={};a.actors.forEach(function(o){y[o.key]=o}),a.ucs.forEach(function(o){k[o.key]=o});function D(o){return a.qh.filter(function(e){return e.loai===\"gen\"&&e.tuK===\"actor\"&&e.tu===o}).map(function(e){return e.den})}function O(o){var e=[o],u={},i;for(i=0;i<e.length;i++)D(e[i]).forEach(function(n){e.indexOf(n)<0&&e.push(n)});var s=[];for(a.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&e.indexOf(n.tu)>=0&&n.denK===\"uc\"&&s.push(n.den),n.denK===\"actor\"&&e.indexOf(n.den)>=0&&n.tuK===\"uc\"&&s.push(n.tu))}),i=0;i<s.length;i++){var d=s[i];u[d]||(u[d]=!0,a.qh.forEach(function(n){n.loai===\"include\"&&n.tu===d&&s.push(n.den),n.loai===\"extend\"&&n.den===d&&s.push(n.tu)}))}return Object.keys(u)}function _(o){var e=[];return a.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===o&&u.denK===\"actor\"&&e.push(u.den),u.den===o&&u.tuK===\"actor\"&&e.push(u.tu))}),e}return{p:a,act:y,uc:k,toiDuoc:O,actorCua:_}},h=b(c,E,K);if(h.loi)return h.loi;var f=h.p,v={};f.actors.forEach(function(t){h.toiDuoc(t.key).forEach(function(r){v[r]=!0})});var l=f.actors.filter(function(t){return!f.qh.some(function(r){return r.loai===\"assoc\"&&(r.tu===t.key||r.den===t.key)})&&!f.qh.some(function(r){return r.loai===\"gen\"&&r.tu===t.key})&&!f.qh.some(function(r){return r.loai===\"gen\"&&r.den===t.key})});if(l.length)return c.m(\"actor \"+c.ds(l.map(function(t){return t.ten}))+\" is not linked to any use case\",\"actor \"+c.ds(l.map(function(t){return t.ten}))+\" kh\\xF4ng n\\u1ED1i use case n\\xE0o\");var g=f.ucs.filter(function(t){return!v[t.key]});return g.length?c.m(\"use case \"+c.ds(g.map(function(t){return t.ten}))+\" cannot be reached by any actor (no association, include or extend leads to it)\",\"use case \"+c.ds(g.map(function(t){return t.ten}))+\" kh\\xF4ng actor n\\xE0o t\\u1EDBi \\u0111\\u01B0\\u1EE3c (kh\\xF4ng association/include/extend n\\xE0o d\\u1EABn t\\u1EDBi)\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — use cases are named verb + object; actors are roles",
+              "vi": "Sơ đồ use case — use case đặt tên động từ + tân ngữ; actor là vai trò"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.tuVung=((function(t){var a=\"fix hand retire decommission write abort acknowledge activate adopt advise alert amend annotate appeal append appoint archive arrange assemble audit auto backup balance bid broadcast bulk calibrate cancel capture catalog catalogue categorize categorise certify check-in checkin cite clear clone close collect combine commit compile complain conduct consolidate contribute convert coordinate copy correct count crop customize customise deactivate declare delegate deliver deploy deregister describe destroy diagnose dial discard discount dismiss dispose distribute document draw drop duplicate earn edit elect email embed empty enqueue enter equip erase evaluate exclude execute expire explore extract fetch finalize finalise flag fulfil fulfill fund gather grant group guide hide highlight hold identify ignore import improve include increase initiate insert integrate interview invalidate investigate join justify label launch limit locate log maintain mark merge message migrate mint moderate monitor mute negotiate nominate note obtain onboard override own pair park pass patch payout pin pledge poll populate preview price print proceed procure promote propose protect provision publish purge qualify queue quote randomize randomise reallocate reassign rebook recalculate recall reclaim recognize recognise reconcile redeem redirect reduce refer register regulate reimburse reinstate relate release relocate rename renew repay repeat rephrase replenish request require reserve resize resolve restrict retract retry revise revise reward rollback route sanction save schedule screen seal search secure segment select serve settle shortlist sign simulate sort source specify sponsor stack stage stamp state stock stream submit summarize summarise supervise survey suspend swap tally terminate thank throttle tick toggle total trace transcribe transform translate transport trigger trim unblock undo unfollow unpublish unregister unsubscribe update upgrade validate verify view void waive warn weigh welcome whitelist withdraw accept access activate add adjust ask approve attach charge credit debit deduct dispute escalate notify pause reactivate rebook recharge refill reopen resubmit reward settle sponsor tokenize tokenise unlock verify vet allocate analyse analyze answer apply approve archive arrange ask assess assign attach attend audit authenticate authorize back backup bill block book borrow browse buy calculate call cancel capture change chat check checkout choose claim clean close collect comment compare complete compose compute configure confirm connect consult contact control convert create curate deactivate decide decline define delete deliver deposit design detect disable dispatch display dispense distribute do donate download draft edit enable end enrol enroll enter escalate estimate evaluate examine exchange export extend file fill filter find finish follow forecast forward generate get give grade grant handle help hire import inform input inspect install invite invoice issue join keep leave lend link list load lock log login logout look maintain make manage map mark match measure merge modify monitor move notify obtain offer open operate order organize organise pack participate pay perform pick place plan post predict prepare prescribe print prioritize process produce provide publish purchase push query raise rank rate read reassign receive recommend reconcile record recover redeem refund register reject release reload remind remove renew rent reorder repair replace reply report request reschedule reserve reset resolve respond restock restore resume retrieve return review revoke rotate run save scan schedule score screen search see select sell send serve set setup share ship show sign simulate skip sort split pause unpause start stop store submit subscribe suggest supply suspend swap switch sync synchronise synchronize take tag test top track trade train transfer translate triage unlock unsubscribe update upgrade upload use validate verify view visit vote waitlist watch withdraw write\".split(\" \"),s=\"accept add approve assign browse calculate cancel choose confirm create delete edit enter generate get give inform maintain manage make modify notify pay place provide receive register reject remove select send submit validate verify ask\".split(\" \"),o=\"pending waiting booking ongoing outstanding missing remaining upcoming incoming outgoing existing\".split(\" \");function n(e){var r=[e];return/ies$/.test(e)&&r.push(e.slice(0,-3)+\"y\"),/es$/.test(e)&&r.push(e.slice(0,-2)),/s$/.test(e)&&r.push(e.slice(0,-1)),r}function c(e){return e=t.norm(e),a.indexOf(e)>=0}function l(e){return e=t.norm(e),n(e).some(function(r){return s.indexOf(r)>=0})}function p(e){if(e=t.norm(e),!/ing$/.test(e)||o.indexOf(e)>=0)return!1;var r=e.slice(0,-3),i=[r,r+\"e\"];return/(.)\\1$/.test(r)&&i.push(r.slice(0,-1)),i.some(function(u){return a.indexOf(u)>=0})}return t.laDongTu=c,t.laHanhDong=l,t.laHoatDongIng=p,!0}))(C);C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(i,y,K){var k=function(f,p,E){var d=E[p.bien];if(typeof d!=\"string\"||!d.trim())return{loi:f.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var o=f.pu(d),v={},b={};o.actors.forEach(function(e){v[e.key]=e}),o.ucs.forEach(function(e){b[e.key]=e});function x(e){return o.qh.filter(function(n){return n.loai===\"gen\"&&n.tuK===\"actor\"&&n.tu===e}).map(function(n){return n.den})}function D(e){var n=[e],r={},a;for(a=0;a<n.length;a++)x(n[a]).forEach(function(t){n.indexOf(t)<0&&n.push(t)});var c=[];for(o.qh.forEach(function(t){t.loai===\"assoc\"&&(t.tuK===\"actor\"&&n.indexOf(t.tu)>=0&&t.denK===\"uc\"&&c.push(t.den),t.denK===\"actor\"&&n.indexOf(t.den)>=0&&t.tuK===\"uc\"&&c.push(t.tu))}),a=0;a<c.length;a++){var s=c[a];r[s]||(r[s]=!0,o.qh.forEach(function(t){t.loai===\"include\"&&t.tu===s&&c.push(t.den),t.loai===\"extend\"&&t.den===s&&c.push(t.tu)}))}return Object.keys(r)}function O(e){var n=[];return o.qh.forEach(function(r){r.loai===\"assoc\"&&(r.tu===e&&r.denK===\"actor\"&&n.push(r.den),r.den===e&&r.tuK===\"actor\"&&n.push(r.tu))}),n}return{p:o,act:v,uc:b,toiDuoc:D,actorCua:O}},l=k(i,y,K);if(l.loi)return l.loi;var m=l.p,u=m.ucs.filter(function(h){var f=i.tu(h.ten);return f.length<2||!i.laDongTu(f[0])});if(u.length)return i.m('use case \"'+u[0].ten+'\" \\u2014 start with a verb and name the goal, e.g. \"Book Appointment\", \"Make Payment\"'+(u.length>1?\" (\"+u.length+\" names)\":\"\"),'use case \"'+u[0].ten+'\" \\u2014 b\\u1EAFt \\u0111\\u1EA7u b\\u1EB1ng \\u0111\\u1ED9ng t\\u1EEB v\\xE0 n\\xEAu m\\u1EE5c ti\\xEAu, vd \"Book Appointment\"'+(u.length>1?\" (\"+u.length+\" t\\xEAn)\":\"\"));var g=m.actors.filter(function(h){return/^(the )?system$|database|\\bdb\\b|server|screen|website|app$/.test(i.norm(h.ten))});return g.length?i.m('\"'+g[0].ten+'\" is part of the system, not an actor','\"'+g[0].ten+'\" l\\xE0 m\\u1ED9t ph\\u1EA7n c\\u1EE7a h\\u1EC7 th\\u1ED1ng, kh\\xF4ng ph\\u1EA3i actor'):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\"}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — every actor of the case is present",
+              "vi": "Sơ đồ use case — đủ mọi actor của đề"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(a,g,K){var E=function(f,p,O){var l=O[p.bien];if(typeof l!=\"string\"||!l.trim())return{loi:f.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var o=f.pu(l),v={},m={};o.actors.forEach(function(r){v[r.key]=r}),o.ucs.forEach(function(r){m[r.key]=r});function b(r){return o.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function k(r){var t=[r],u={},i;for(i=0;i<t.length;i++)b(t[i]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var c=[];for(o.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&c.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&c.push(n.tu))}),i=0;i<c.length;i++){var h=c[i];u[h]||(u[h]=!0,o.qh.forEach(function(n){n.loai===\"include\"&&n.tu===h&&c.push(n.den),n.loai===\"extend\"&&n.den===h&&c.push(n.tu)}))}return Object.keys(u)}function x(r){var t=[];return o.qh.forEach(function(u){u.loai===\"assoc\"&&(u.tu===r&&u.denK===\"actor\"&&t.push(u.den),u.den===r&&u.tuK===\"actor\"&&t.push(u.tu))}),t}return{p:o,act:v,uc:m,toiDuoc:k,actorCua:x}},s=E(a,g,K);if(s.loi)return s.loi;var y=s.p,d=g.actors.filter(function(e){return!y.actors.some(function(f){return a.khop(f.ten,e.khop)})});return d.length?a.m(\"missing actor: \"+a.ds(d.map(function(e){return e.ten}))+\" (or an equivalent name)\",\"thi\\u1EBFu actor: \"+a.ds(d.map(function(e){return e.ten}))+\" (ho\\u1EB7c t\\xEAn t\\u01B0\\u01A1ng \\u0111\\u01B0\\u01A1ng)\"):\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"actors\":[{\"ten\":\"Patient\",\"khop\":[\"patient\"]},{\"ten\":\"Receptionist\",\"khop\":[\"reception|front desk\"]},{\"ten\":\"Doctor\",\"khop\":[\"doctor|physician\"]},{\"ten\":\"SMS Gateway\",\"khop\":[\"sms|message|notif\"]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case diagram — no internal component modelled as an actor",
+              "vi": "Sơ đồ use case — không vẽ thành phần bên trong thành actor"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(h,a,K){var D=function(v,p,k){var d=k[p.bien];if(typeof d!=\"string\"||!d.trim())return{loi:v.m(p.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",p.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var u=v.pu(d),m={},y={};u.actors.forEach(function(r){m[r.key]=r}),u.ucs.forEach(function(r){y[r.key]=r});function A(r){return u.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function O(r){var t=[r],o={},c;for(c=0;c<t.length;c++)A(t[c]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var e=[];for(u.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&e.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&e.push(n.tu))}),c=0;c<e.length;c++){var f=e[c];o[f]||(o[f]=!0,u.qh.forEach(function(n){n.loai===\"include\"&&n.tu===f&&e.push(n.den),n.loai===\"extend\"&&n.den===f&&e.push(n.tu)}))}return Object.keys(o)}function b(r){var t=[];return u.qh.forEach(function(o){o.loai===\"assoc\"&&(o.tu===r&&o.denK===\"actor\"&&t.push(o.den),o.den===r&&o.tuK===\"actor\"&&t.push(o.tu))}),t}return{p:u,act:m,uc:y,toiDuoc:O,actorCua:b}},s=D(h,a,K);if(s.loi)return s.loi;for(var E=s.p,i=0;i<a.camActor.length;i++){var l=E.actors.filter(function(g){return h.khop(g.ten,a.camActor[i].khop)})[0];if(l)return h.m('\"'+l.ten+'\" is not an actor \\u2014 '+a.camActor[i].lyDo,'\"'+l.ten+'\" kh\\xF4ng ph\\u1EA3i actor \\u2014 '+(a.camActor[i].lyDoVi||a.camActor[i].lyDo))}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"camActor\":[{\"ten\":\"Database / System\",\"khop\":[\"database|^system$|cliniccare|scheduler|timer\"],\"lyDo\":\"it is part of ClinicCare\",\"lyDoVi\":\"nó là một phần của ClinicCare\"}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case coverage — Book Appointment (patient and receptionist) · Cancel Appointment",
+              "vi": "Phủ use case — Book Appointment (patient and receptionist) · Cancel Appointment"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,v,b){var _=function(l,y,M){var K=M[y.bien];if(typeof K!=\"string\"||!K.trim())return{loi:l.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var c=l.pu(K),O={},D={};c.actors.forEach(function(r){O[r.key]=r}),c.ucs.forEach(function(r){D[r.key]=r});function P(r){return c.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function U(r){var t=[r],e={},o;for(o=0;o<t.length;o++)P(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(c.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),o=0;o<h.length;o++){var p=h[o];e[p]||(e[p]=!0,c.qh.forEach(function(n){n.loai===\"include\"&&n.tu===p&&h.push(n.den),n.loai===\"extend\"&&n.den===p&&h.push(n.tu)}))}return Object.keys(e)}function j(r){var t=[];return c.qh.forEach(function(e){e.loai===\"assoc\"&&(e.tu===r&&e.denK===\"actor\"&&t.push(e.den),e.den===r&&e.tuK===\"actor\"&&t.push(e.tu))}),t}return{p:c,act:O,uc:D,toiDuoc:U,actorCua:j}},d=_(u,v,b);if(d.loi)return d.loi;for(var x=d.p,g=0;g<v.us.length;g++){var a=v.us[g],i=x.ucs.filter(function(f){return u.khop(f.ten,a.khop)});if(!i.length)return u.m(\"no use case for: \"+a.ten,\"ch\\u01B0a c\\xF3 use case cho: \"+(a.tenVi||a.ten));for(var k=0;k<(a.actor||[]).length;k++){var s=a.actor[k],E=x.actors.filter(function(f){return u.khop(f.ten,s.khop)});if(!E.length)return u.m('use case \"'+i[0].ten+'\" needs the actor '+s.ten,'use case \"'+i[0].ten+'\" c\\u1EA7n actor '+s.ten);var m=i.some(function(f){return E.some(function(l){return d.toiDuoc(l.key).indexOf(f.key)>=0})});if(!m)return u.m('\"'+i[0].ten+'\" is not linked to '+s.ten+\" (directly, through a parent actor, or through \\xABinclude\\xBB/\\xABextend\\xBB)\",'\"'+i[0].ten+'\" ch\\u01B0a n\\u1ED1i v\\u1EDBi '+s.ten+\" (tr\\u1EF1c ti\\u1EBFp, qua actor cha, ho\\u1EB7c qua \\xABinclude\\xBB/\\xABextend\\xBB)\")}}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"us\":[{\"ten\":\"Book Appointment (patient and receptionist)\",\"khop\":[\"book\"],\"actor\":[{\"ten\":\"Patient\",\"khop\":[\"patient\"]},{\"ten\":\"Receptionist\",\"khop\":[\"reception|front desk\"]}]},{\"ten\":\"Cancel Appointment\",\"khop\":[\"cancel\"],\"actor\":[{\"ten\":\"Patient\",\"khop\":[\"patient\"]}]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case coverage — Check In Patient · View Day Schedule",
+              "vi": "Phủ use case — Check In Patient · View Day Schedule"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,v,b){var _=function(l,y,M){var K=M[y.bien];if(typeof K!=\"string\"||!K.trim())return{loi:l.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var c=l.pu(K),O={},D={};c.actors.forEach(function(r){O[r.key]=r}),c.ucs.forEach(function(r){D[r.key]=r});function P(r){return c.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function U(r){var t=[r],e={},o;for(o=0;o<t.length;o++)P(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(c.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),o=0;o<h.length;o++){var p=h[o];e[p]||(e[p]=!0,c.qh.forEach(function(n){n.loai===\"include\"&&n.tu===p&&h.push(n.den),n.loai===\"extend\"&&n.den===p&&h.push(n.tu)}))}return Object.keys(e)}function j(r){var t=[];return c.qh.forEach(function(e){e.loai===\"assoc\"&&(e.tu===r&&e.denK===\"actor\"&&t.push(e.den),e.den===r&&e.tuK===\"actor\"&&t.push(e.tu))}),t}return{p:c,act:O,uc:D,toiDuoc:U,actorCua:j}},d=_(u,v,b);if(d.loi)return d.loi;for(var x=d.p,g=0;g<v.us.length;g++){var a=v.us[g],i=x.ucs.filter(function(f){return u.khop(f.ten,a.khop)});if(!i.length)return u.m(\"no use case for: \"+a.ten,\"ch\\u01B0a c\\xF3 use case cho: \"+(a.tenVi||a.ten));for(var k=0;k<(a.actor||[]).length;k++){var s=a.actor[k],E=x.actors.filter(function(f){return u.khop(f.ten,s.khop)});if(!E.length)return u.m('use case \"'+i[0].ten+'\" needs the actor '+s.ten,'use case \"'+i[0].ten+'\" c\\u1EA7n actor '+s.ten);var m=i.some(function(f){return E.some(function(l){return d.toiDuoc(l.key).indexOf(f.key)>=0})});if(!m)return u.m('\"'+i[0].ten+'\" is not linked to '+s.ten+\" (directly, through a parent actor, or through \\xABinclude\\xBB/\\xABextend\\xBB)\",'\"'+i[0].ten+'\" ch\\u01B0a n\\u1ED1i v\\u1EDBi '+s.ten+\" (tr\\u1EF1c ti\\u1EBFp, qua actor cha, ho\\u1EB7c qua \\xABinclude\\xBB/\\xABextend\\xBB)\")}}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"us\":[{\"ten\":\"Check In Patient\",\"khop\":[\"check ?in|arriv|register arrival\"],\"actor\":[{\"ten\":\"Receptionist\",\"khop\":[\"reception|front desk\"]}]},{\"ten\":\"View Day Schedule\",\"khop\":[\"schedule|view\"],\"actor\":[{\"ten\":\"Doctor\",\"khop\":[\"doctor|physician\"]}]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Use case coverage — Send Reminder",
+              "vi": "Phủ use case — Send Reminder"
+            },
+            "chuanBi": "const __KQ = (function () { try { var L = (function(){var C=((function(){function u(n){return String(n==null?\"\":n).normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g,\"\").replace(/đ/g,\"d\").replace(/Đ/g,\"D\").toLowerCase().replace(/[_\\-/]+/g,\" \").replace(/[^a-z0-9 ]+/g,\" \").replace(/\\s+/g,\" \").trim()}function o(n,r){var t=u(n);return(r||[]).some(function(e){return new RegExp(e).test(t)})}function c(n){return u(n).split(\" \").filter(Boolean)}function i(n,r){return r?n+\" \\u2014 VI: \"+r:n}function l(n){return n.map(function(r){return'\"'+r+'\"'}).join(\", \")}function f(n){return c(n).length}function g(n,r){return n=String(n),n.length>r?n.slice(0,r-1)+\"\\u2026\":n}function a(n,r,t){for(var e=0;e<n.length;e++)if(o(t?t(n[e]):n[e],r))return n[e];return null}function p(n){return typeof n==\"string\"?n:\"\"}function m(n){return String(n).replace(/\\r/g,\"\").split(`\n`)}function h(n,r,t){return i(\"line \"+n+\" not understood: \"+g(r,50)+(t?\" (\"+t+\")\":\"\"),\"d\\xF2ng \"+n+\" kh\\xF4ng \\u0111\\u1ECDc \\u0111\\u01B0\\u1EE3c\")}return{norm:u,khop:o,tu:c,m:i,ds:l,soTu:f,cat:g,tim:a,chu:p,dong:m,kd:h}}))();C.pu=((function(c){return function(I){var h={},k={},z=[],A=[],b=[],L=[],x=0,J=String(I).replace(/\\r/g,\"\").replace(/\\/'[\\s\\S]*?'\\//g,function(e){return e.replace(/[^\\n]/g,\" \")}),M=J.split(`\n`),K=!1,B=0,T=!1;function Q(e){return\"n:\"+c.norm(e)}function s(e,n,o,l){n=String(n).trim();var w=e===\"actor\"?h:k;if(!o){for(var j in w)if(c.norm(w[j].ten)===c.norm(n))return j}var f=o||Q(n);return w[f]||(w[f]={key:f,ten:n,trong:x>0,dong:l}),f}var g=[];function U(e){e=e.trim();var n;return(n=/^\\u0001(\\d+)\\u0001$/.exec(e))?{loai:\"uc\",ten:g[+n[1]]}:(n=/^\\u0002(\\d+)\\u0002$/.exec(e))?{loai:\"actor\",ten:g[+n[1]]}:(n=/^\\u0003(\\d+)\\u0003$/.exec(e))?{loai:\"ten\",ten:g[+n[1]]}:(n=/^([A-Za-z_]\\w*)$/.exec(e))?{loai:\"id\",ten:n[1]}:null}function R(e){return e.replace(/\\(([^()]+)\\)/g,function(n,o){return g.push(o),\"\u0001\"+(g.length-1)+\"\u0001\"}).replace(/\"([^\"]+)\"/g,function(n,o){return g.push(o),\"\u0003\"+(g.length-1)+\"\u0003\"}).replace(/(^|[\\s>.-]):([^:]+):(?=\\s|$|[-.<])/g,function(n,o,l){return g.push(l),o+\"\u0002\"+(g.length-1)+\"\u0002\"})}for(var V=/^(.+?)\\s*(<\\|?[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?|[-.]+(?:(?:up|down|left|right|u|d|l|r)[-.]+)?(?:\\|?>)?)\\s*([^-.<>|].*)$/,D=0;D<M.length;D++){var a=D+1,t=M[D].trim();if(!(!t||/^'/.test(t))){if(K){/^end\\s*note$/i.test(t)&&(K=!1);continue}if(B){/\\{\\s*$/.test(t)&&B++,/^\\}/.test(t)&&B--;continue}if(/^@startuml/i.test(t)){T=!0;continue}if(!/^@enduml/i.test(t)&&!/^(left to right direction|top to bottom direction|title\\b|caption\\b|header\\b|footer\\b|legend\\b|endlegend|hide\\b|show\\b|!|scale\\b|actorStyle\\b)/i.test(t)){if(/^skinparam\\b/i.test(t)){/\\{\\s*$/.test(t)&&(B=1);continue}if(/^note\\b/i.test(t)){/:/.test(t)||(K=!0);continue}var u;if(u=/^(rectangle|package|frame|node|folder|cloud)\\s+(?:\"([^\"]+)\"|([^\\s{]+))(?:\\s+as\\s+\\w+)?(?:\\s+<<[^>]*>>)?\\s*\\{\\s*$/i.exec(t)){x++,A.push({ten:u[2]||u[3],loai:u[1].toLowerCase(),dong:a});continue}if(/^\\}$/.test(t)){x>0?x--:b.push(c.m(\"line \"+a+': \"}\" without an open rectangle',\"d\\xF2ng \"+a+': \"}\" th\\u1EEBa'));continue}if(u=/^actor\\/?\\s+(.+)$/i.exec(t)){var p=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),v=null,_=null,i;if((i=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec(p))||(i=/^:([^:]+):\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec(p))||(i=/^([\\w.]+)\\s+as\\s+:([^:]+):$/.exec(p))?(v=i[2],_=i[1]):(i=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec(p))?(v=i[1],_=i[2]):(i=/^\"([^\"]+)\"$/.exec(p))||(i=/^:([^:]+):$/.exec(p))?v=i[1]:(i=/^([\\w.]+)$/.exec(p))&&(v=i[1],_=i[1]),v==null){b.push(c.kd(a,t));continue}s(\"actor\",v,_,a);continue}if((u=/^usecase\\/?\\s+(.+)$/i.exec(t))||(u=/^(\\([^)]+\\)\\s+as\\s+[\\w.]+)$/.exec(t))){var $=u[1].replace(/<<[^>]*>>/g,\"\").replace(/#\\S+/g,\"\").trim(),d=null,S=null,r;if((r=/^\"([^\"]+)\"\\s+as\\s+([\\w.]+)$/.exec($))||(r=/^\\(([^)]+)\\)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^([\\w.]+)\\s+as\\s+\"([^\"]+)\"$/.exec($))||(r=/^([\\w.]+)\\s+as\\s+\\(([^)]+)\\)$/.exec($))?(d=r[2],S=r[1]):(r=/^([\\w.]+)\\s+as\\s+([\\w.]+)$/.exec($))?(d=r[1],S=r[2]):(r=/^\"([^\"]+)\"$/.exec($))||(r=/^\\(([^)]+)\\)$/.exec($))?d=r[1]:(r=/^([\\w.]+)$/.exec($))&&(d=r[1],S=r[1]),d==null){b.push(c.kd(a,t));continue}s(\"uc\",d,S,a);continue}if(u=/^\\(([^)]+)\\)$/.exec(t)){s(\"uc\",u[1],null,a);continue}if(u=/^:([^:]+):\\s+as\\s+(\\w+)$/.exec(t)){s(\"actor\",u[1],u[2],a);continue}if(u=/^:([^:]+):$/.exec(t)){s(\"actor\",u[1],null,a);continue}var Z=\"\",O=R(t),N=O.indexOf(\":\");N>=0&&(Z=O.slice(N+1).trim(),O=O.slice(0,N).trim());var E=V.exec(O);if(E){var P=U(E[1]),y=U(E[3]);if(P&&y){L.push({A:P,B:y,op:E[2],nhan:Z,so:a,sau:x}),[P,y].forEach(function(e){e.loai===\"uc\"?s(\"uc\",e.ten,null,a):e.loai===\"actor\"&&s(\"actor\",e.ten,null,a)});continue}}b.push(c.kd(a,t))}}}x>0&&b.push(c.m('a rectangle \"{\" is never closed with \"}\"','thi\\u1EBFu \"}\" \\u0111\\xF3ng rectangle'));function F(e){if(e.loai===\"uc\")return{k:\"uc\",key:s(\"uc\",e.ten,null,0)};if(e.loai===\"actor\")return{k:\"actor\",key:s(\"actor\",e.ten,null,0)};if(e.loai===\"id\"){if(h[e.ten])return{k:\"actor\",key:e.ten};if(k[e.ten])return{k:\"uc\",key:e.ten}}var n=\"n:\"+c.norm(e.ten);if(h[n])return{k:\"actor\",key:n};if(k[n])return{k:\"uc\",key:n};for(var o in h)if(c.norm(h[o].ten)===c.norm(e.ten))return{k:\"actor\",key:o};for(var l in k)if(c.norm(k[l].ten)===c.norm(e.ten))return{k:\"uc\",key:l};return h[e.loai===\"id\"?e.ten:n]={key:e.loai===\"id\"?e.ten:n,ten:e.ten,trong:!1,dong:0,ngam:!0},{k:\"actor\",key:e.loai===\"id\"?e.ten:n}}L.forEach(function(e){var n=F(e.A),o=F(e.B),l=e.op,w=c.norm(e.nhan),j=/^</.test(l),f;/\\|>|<\\|/.test(l)?f=\"gen\":/include/.test(w)?f=\"include\":/extend/.test(w)?f=\"extend\":f=\"assoc\";var G=j?o:n,H=j?n:o;z.push({loai:f,tu:G.key,tuK:G.k,den:H.key,denK:H.k,net:/\\./.test(l)?\"dut\":\"lien\",coMui:/>|</.test(l),nhan:e.nhan,dong:e.so})});var W=Object.keys(h).map(function(e){return h[e]}),X=Object.keys(k).map(function(e){return k[e]});return{actors:W,ucs:X,qh:z,bien:A,loi:b,coBatDau:T}}}))(C);return C;})(); var A = {\"USE_CASE_DIAGRAM\":(typeof USE_CASE_DIAGRAM!=='undefined'?USE_CASE_DIAGRAM:undefined)}; return (((function(u,v,b){var _=function(l,y,M){var K=M[y.bien];if(typeof K!=\"string\"||!K.trim())return{loi:l.m(y.bien+\" is empty \\u2014 write the diagram as a PlantUML string\",y.bien+\" \\u0111ang tr\\u1ED1ng \\u2014 vi\\u1EBFt s\\u01A1 \\u0111\\u1ED3 th\\xE0nh chu\\u1ED7i PlantUML\")};var c=l.pu(K),O={},D={};c.actors.forEach(function(r){O[r.key]=r}),c.ucs.forEach(function(r){D[r.key]=r});function P(r){return c.qh.filter(function(t){return t.loai===\"gen\"&&t.tuK===\"actor\"&&t.tu===r}).map(function(t){return t.den})}function U(r){var t=[r],e={},o;for(o=0;o<t.length;o++)P(t[o]).forEach(function(n){t.indexOf(n)<0&&t.push(n)});var h=[];for(c.qh.forEach(function(n){n.loai===\"assoc\"&&(n.tuK===\"actor\"&&t.indexOf(n.tu)>=0&&n.denK===\"uc\"&&h.push(n.den),n.denK===\"actor\"&&t.indexOf(n.den)>=0&&n.tuK===\"uc\"&&h.push(n.tu))}),o=0;o<h.length;o++){var p=h[o];e[p]||(e[p]=!0,c.qh.forEach(function(n){n.loai===\"include\"&&n.tu===p&&h.push(n.den),n.loai===\"extend\"&&n.den===p&&h.push(n.tu)}))}return Object.keys(e)}function j(r){var t=[];return c.qh.forEach(function(e){e.loai===\"assoc\"&&(e.tu===r&&e.denK===\"actor\"&&t.push(e.den),e.den===r&&e.tuK===\"actor\"&&t.push(e.tu))}),t}return{p:c,act:O,uc:D,toiDuoc:U,actorCua:j}},d=_(u,v,b);if(d.loi)return d.loi;for(var x=d.p,g=0;g<v.us.length;g++){var a=v.us[g],i=x.ucs.filter(function(f){return u.khop(f.ten,a.khop)});if(!i.length)return u.m(\"no use case for: \"+a.ten,\"ch\\u01B0a c\\xF3 use case cho: \"+(a.tenVi||a.ten));for(var k=0;k<(a.actor||[]).length;k++){var s=a.actor[k],E=x.actors.filter(function(f){return u.khop(f.ten,s.khop)});if(!E.length)return u.m('use case \"'+i[0].ten+'\" needs the actor '+s.ten,'use case \"'+i[0].ten+'\" c\\u1EA7n actor '+s.ten);var m=i.some(function(f){return E.some(function(l){return d.toiDuoc(l.key).indexOf(f.key)>=0})});if(!m)return u.m('\"'+i[0].ten+'\" is not linked to '+s.ten+\" (directly, through a parent actor, or through \\xABinclude\\xBB/\\xABextend\\xBB)\",'\"'+i[0].ten+'\" ch\\u01B0a n\\u1ED1i v\\u1EDBi '+s.ten+\" (tr\\u1EF1c ti\\u1EBFp, qua actor cha, ho\\u1EB7c qua \\xABinclude\\xBB/\\xABextend\\xBB)\")}}return\"OK\"})))(L, {\"bien\":\"USE_CASE_DIAGRAM\",\"us\":[{\"ten\":\"Send Reminder\",\"khop\":[\"remind\"],\"actor\":[{\"ten\":\"SMS Gateway\",\"khop\":[\"sms|message|notif\"]}]}]}, A); } catch (e) { return (e && e.name === 'ReferenceError' ? 'missing: ' : 'error: ') + (e && e.message ? e.message : String(e)); } })();",
+            "goi": "__KQ",
+            "mongDoi": "OK"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt use case ngoài khung rectangle."
+        },
+        {
+          "loi": "Thêm actor \"Scheduler\" cho việc gửi nhắc — đó là sự kiện thời gian trong hệ thống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "use case",
+          "vi": "ca sử dụng — một mục tiêu actor đạt được nhờ hệ thống (tên: động từ + danh từ)"
+        },
+        {
+          "en": "actor",
+          "vi": "tác nhân — vai trò (người hoặc hệ thống) bên ngoài tương tác với hệ thống"
+        },
+        {
+          "en": "system boundary",
+          "vi": "biên hệ thống — khung chữ nhật chứa mọi use case; actor ở ngoài"
+        }
+      ]
+    }
+  ]
+}

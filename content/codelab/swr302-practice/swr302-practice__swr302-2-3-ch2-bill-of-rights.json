@@ -311,8 +311,8 @@
       "tags": [
         "swr302"
       ],
-      "problemHtml": "<p>Wiegers Ch.2 ends with decision making: identify early who decides each kind of requirements issue, agree on a decision rule, and record the agreement as a requirements <b>baseline</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>Wiegers Ch.2 kết thúc bằng việc ra quyết định: xác định sớm ai quyết định từng loại vấn đề yêu cầu, thống nhất luật ra quyết định, và ghi thoả thuận thành <b>baseline</b> yêu cầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>Wiegers Ch.2 ends with decision making: identify early who decides each kind of requirements issue, agree on a decision rule, and record the agreement as a requirements <b>baseline</b>.</p><p>Each question is graded on its own; the explanation appears after you submit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Wiegers Ch.2 kết thúc bằng việc ra quyết định: xác định sớm ai quyết định từng loại vấn đề yêu cầu, thống nhất luật ra quyết định, và ghi thoả thuận thành <b>baseline</b> yêu cầu.</p><p>Mỗi câu được chấm riêng; giải thích hiện sau khi nộp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",

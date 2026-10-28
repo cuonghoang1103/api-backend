@@ -1,0 +1,50 @@
+$ gcc -O2 pingpong.c -o pingpong && gcc -O2 -pthread crowd.c -o crowd && gcc -O2 hog.c -o hog
+$ vmstat 1 3
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 1  0      0 295388 259772 4846952    0    0   183   320 2702    3  1  1 99  0  0  0
+ 0  0      0 295388 259772 4846936    0    0     0     4 1205 1309  0  0 100  0  0  0
+ 0  0      0 295388 259772 4846936    0    0     0     0  830  814  0  0 100  0  0  0
+$ ./pingpong 4000000 > /dev/null & sleep 0.5; vmstat 1 3; kill $!; wait
+procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu
+ 2  0      0 295388 259772 4847008    0    0   183   320 2704    3  1  1 99  0  0  0
+ 1  0      0 279472 260912 4872696    0    0 26440  1600 91298 217117  8  8 84  0  0  0
+ 1  0      0 279472 260916 4872712    0    0     0   240 93264 180095  1  5 94  0  0  0
+$ taskset -c 0 ./pingpong 200000
+200000 round trips: 1985 ns per round trip  (~992 ns per switch if both share one core)
+$ taskset -c 0,1 ./pingpong 200000
+200000 round trips: 23229 ns per round trip  (~11615 ns per switch if both share one core)
+$ perf stat -e context-switches,cpu-migrations,task-clock taskset -c 0 ./pingpong 100000 2>&1 | grep -E 'round|context|migrations|task-clock|elapsed'
+100000 round trips: 2156 ns per round trip  (~1078 ns per switch if both share one core)
+            200006      context-switches                                                      
+                 1      cpu-migrations                                                        
+            216.24 msec task-clock                                                            
+       0.217094500 seconds time elapsed
+$ taskset -c 0 ./hog A > /dev/null & taskset -c 0 ./hog B > /dev/null & sleep 3; grep ctxt /proc/$!/status; kill $(jobs -p); wait
+voluntary_ctxt_switches:	5
+nonvoluntary_ctxt_switches:	510
+$ sleep 2 & S=$!; ./pingpong 1 > /dev/null; grep ctxt /proc/$S/status; wait
+voluntary_ctxt_switches:	1
+nonvoluntary_ctxt_switches:	0
+$ taskset -c 0 ./pingpong 3000000 > /dev/null & sleep 0.5; pidstat -w -p $! 1 2 | sed -n '3,$p'; kill $!; wait
+16:23:48      UID       PID   cswch/s nvcswch/s  Command
+16:23:49        0        64 236734.00 249764.00  pingpong
+16:23:50        0        64 239020.79 248847.52  pingpong
+Average:        0        64 237883.08 249303.48  pingpong
+# Same total work split over more and more threads, on 4 cores ||| Cùng một khối việc chia cho càng lúc càng nhiều luồng, trên 4 lõi
+$ for t in 1 4 64 512; do taskset -c 0-3 ./crowd $t cpu; done
+cpu  threads=1        886 ms
+cpu  threads=4        225 ms
+cpu  threads=64       303 ms
+cpu  threads=512      271 ms
+$ for t in 1 4 64; do perf stat -e context-switches,task-clock taskset -c 0-3 ./crowd $t lock 2>&1 | grep -E 'threads=|context|task-clock'; done
+lock threads=1        118 ms
+                 5      context-switches                                                      
+            118.64 msec task-clock                                                            
+lock threads=4        617 ms
+             37709      context-switches                                                      
+           1837.69 msec task-clock                                                            
+lock threads=64      1086 ms
+            230378      context-switches                                                      
+           4315.47 msec task-clock                                                            

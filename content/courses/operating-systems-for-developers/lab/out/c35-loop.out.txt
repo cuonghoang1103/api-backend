@@ -1,0 +1,35 @@
+$ cat server.log
+listening on 8080, pid 11
+$ node load.js 'http://localhost:8080/io?ms=200' 100
+100 concurrent requests: all done in 277 ms  (fastest 231 ms, slowest 256 ms)
+$ curl -s 'http://localhost:8080/lag'
+worst event-loop delay since last check: 5 ms
+$ curl -s 'http://localhost:8080/cpu?ms=1500' > /dev/null & sleep 0.1; curl -s -o /dev/null -w 'GET /fast took %{time_total} s\n' http://localhost:8080/fast; wait $!
+GET /fast took 1.394734 s
+$ curl -s 'http://localhost:8080/lag'
+worst event-loop delay since last check: 1491 ms
+$ node load.js 'http://localhost:8080/cpu?ms=100' 10
+10 concurrent requests: all done in 1037 ms  (fastest 141 ms, slowest 1007 ms)
+$ grep Threads /proc/$(pgrep -f loop-server)/status
+Threads:	7
+$ node pool.js
+UV_THREADPOOL_SIZE=(default)  threads before: 7
+finished: #2@176ms #3@176ms #1@176ms #4@176ms #5@351ms #6@351ms #7@351ms #8@352ms
+threads after: 11 | names: node, DelayedTaskSche, libuv-worker
+$ UV_THREADPOOL_SIZE=8 node pool.js
+UV_THREADPOOL_SIZE=8  threads before: 7
+finished: #6@171ms #2@176ms #7@178ms #8@180ms #5@180ms #1@181ms #3@181ms #4@182ms
+threads after: 15 | names: node, DelayedTaskSche, libuv-worker
+$ javac -d . PoolServer.java
+$ cat j.log; node load.js http://localhost:8081/ 100; grep Threads /proc/$(pgrep -f PoolServer)/status
+PoolServer fixed 10 on 8081, pid 126
+100 concurrent requests: all done in 2166 ms  (fastest 311 ms, slowest 2129 ms)
+Threads:	30
+$ cat j.log; node load.js http://localhost:8081/ 100; grep Threads /proc/$(pgrep -f PoolServer)/status
+PoolServer fixed 200 on 8081, pid 181
+100 concurrent requests: all done in 570 ms  (fastest 512 ms, slowest 561 ms)
+Threads:	173
+$ cat j.log; node load.js http://localhost:8081/ 100; grep Threads /proc/$(pgrep -f PoolServer)/status
+PoolServer virtual on 8081, pid 400
+100 concurrent requests: all done in 359 ms  (fastest 306 ms, slowest 344 ms)
+Threads:	31

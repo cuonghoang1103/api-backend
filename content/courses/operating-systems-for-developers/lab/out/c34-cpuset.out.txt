@@ -1,0 +1,8 @@
+$ cat /sys/fs/cgroup/cpu.max /sys/fs/cgroup/cpuset.cpus.effective
+max 100000
+0-1
+$ bash cores.sh
+2
+node: os.cpus().length=10  os.availableParallelism()=2
+java: availableProcessors=2  ForkJoin commonPool parallelism=1
+python: os.cpu_count()=10  process_cpu_count()=2

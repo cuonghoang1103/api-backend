@@ -1,0 +1,26 @@
+$ gcc -O2 -pthread crowd.c -o crowd && gcc -O2 -pthread lat.c -o lat
+$ cat /sys/fs/cgroup/cpu.max
+150000 100000
+$ bash cores.sh
+2
+node: os.cpus().length=10  os.availableParallelism()=1
+java: availableProcessors=2  ForkJoin commonPool parallelism=1
+python: os.cpu_count()=10  process_cpu_count()=10
+$ cat /sys/fs/cgroup/cpu.stat | grep -E 'nr_periods|nr_throttled|throttled_usec'
+nr_periods 8
+nr_throttled 4
+throttled_usec 241065
+$ time ./crowd 4 cpu
+cpu  threads=4        574 ms
+
+real	0m0.576s
+user	0m0.903s
+sys	0m0.002s
+$ cat /sys/fs/cgroup/cpu.stat | grep -E 'nr_periods|nr_throttled|throttled_usec'
+nr_periods 14
+nr_throttled 10
+throttled_usec 1609825
+$ ./lat 0
+background burners=0  request (2 ms of CPU) latency: p50 2.0 ms  p99 2.4 ms  max 3.1 ms
+$ ./lat 3
+background burners=3  request (2 ms of CPU) latency: p50 2.0 ms  p99 60.4 ms  max 63.3 ms

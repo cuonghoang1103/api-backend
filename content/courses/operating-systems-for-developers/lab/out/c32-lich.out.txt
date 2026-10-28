@@ -1,0 +1,30 @@
+$ gcc -O2 hog.c -o hog && gcc -O2 wakeup.c -o wakeup
+# Two CPU hogs on 10 idle cores: nice changes nothing ||| Hai việc đốt CPU trên 10 lõi rảnh: nice chẳng đổi gì
+$ ./hog nice0 & ./hog nice5-free & sleep 0.1; renice -n 5 -p $! > /dev/null; sleep 4; kill $(jobs -p); wait
+nice5-free nice=5   loops= 12080 M  cpu=4.11 s
+nice0   nice=0   loops= 12079 M  cpu=4.11 s
+# Now force both onto ONE core (CPU 0) ||| Giờ ép cả hai lên MỘT lõi (CPU 0)
+$ taskset -c 0 ./hog nice0 & taskset -c 0 nice -n 5 ./hog nice5 & sleep 4; kill $(jobs -p); wait
+nice0   nice=0   loops=  8675 M  cpu=3.01 s
+nice5   nice=5   loops=  2850 M  cpu=0.99 s
+$ taskset -c 0 ./hog nice0 & taskset -c 0 nice -n 19 ./hog nice19 & sleep 4; kill $(jobs -p); wait
+nice0   nice=0   loops= 11538 M  cpu=3.94 s
+nice19  nice=19  loops=   174 M  cpu=0.06 s
+$ taskset -c 0 nice -n 5 ./hog w & sleep 0.3; grep -E 'load.weight|^prio|se.slice|^policy' /proc/$!/sched; chrt -p $!; kill $!; wait
+se.load.weight                               :               343040
+policy                                       :                    0
+prio                                         :                  125
+se.slice                                     :              2800000
+pid 43's current scheduling policy: SCHED_OTHER
+pid 43's current scheduling priority: 0
+pid 43's current runtime parameter: 2800000
+w       nice=5   loops=   884 M  cpu=0.30 s
+# Interactive task (sleep 1 ms, wake, repeat) sharing CPU 0 with CPU hogs ||| Việc tương tác (ngủ 1 ms, thức, lặp) chung CPU 0 với việc đốt CPU
+$ taskset -c 0 ./wakeup "alone on CPU 0"
+alone on CPU 0         wake-up delay: median  279 us   p99  1459 us   max  6741 us
+$ for i in 1 2 3; do taskset -c 0 ./hog bg > /dev/null & done; sleep 0.3; taskset -c 0 ./wakeup "+3 hogs (nice 0)"; kill $(jobs -p); wait
++3 hogs (nice 0)       wake-up delay: median   52 us   p99  2998 us   max  6586 us
+$ for i in 1 2 3; do taskset -c 0 nice -n 19 ./hog bg > /dev/null & done; sleep 0.3; taskset -c 0 ./wakeup "+3 hogs (nice 19)"; kill $(jobs -p); wait
++3 hogs (nice 19)      wake-up delay: median   51 us   p99  1289 us   max 10747 us
+$ for i in 1 2 3; do taskset -c 0 ./hog bg > /dev/null & done; sleep 0.3; taskset -c 0 chrt -f 10 ./wakeup "+3 hogs, me SCHED_FIFO"; kill $(jobs -p); wait
++3 hogs, me SCHED_FIFO wake-up delay: median    1 us   p99    29 us   max   612 us

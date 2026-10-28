@@ -116,6 +116,10 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
      `/code-lab/:trackSlug`, và `phong-lab/:id` cùng hình dạng với
      `/code-lab/:trackSlug/:exerciseSlug`. Đảo thứ tự là "phong-lab" bị đọc
      thành slug track — trang mở ra rồi báo "không tìm thấy track", hỏng CÂM. */
+  /* 28/10/2026 — phòng lab mô phỏng: CPU "Máy tính từ số 0", 3D hành trình vào máy tính, OS. Tĩnh `/cpu-lab/3d` trước. */
+  { mau: '/cpu-lab/3d', nap: () => import('@/app/cpu-lab/3d/page') },
+  { mau: '/cpu-lab', nap: () => import('@/app/cpu-lab/page') },
+  { mau: '/os-lab', nap: () => import('@/app/os-lab/page') },
   { mau: '/code-lab', nap: () => import('@/app/code-lab/page') },
   { mau: '/code-lab/search', nap: () => import('@/app/code-lab/search/page') },
   { mau: '/code-lab/phong-lab', nap: () => import('@/app/code-lab/phong-lab/page') },

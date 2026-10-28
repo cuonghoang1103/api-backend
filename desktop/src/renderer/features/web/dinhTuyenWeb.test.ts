@@ -316,7 +316,8 @@ describe('khopTuyenWeb', () => {
     // 20/10/2026: +1 Create with CuongMini (/work/:ws/setup — dựng dự án/không gian từ đề bài).
     // 21/10/2026: +2 Bảng tin nhóm (/work/:ws/feed, /work/:ws/:key/feed).
     // 27/10/2026: +1 chọn repo sau khi cài GitHub App CT Work (/work/github-app/done).
-    expect(thay.size).toBe(185);
+    // 28/10/2026: +3 phòng lab mô phỏng (/cpu-lab, /cpu-lab/3d, /os-lab).
+    expect(thay.size).toBe(188);
   });
 });
 
